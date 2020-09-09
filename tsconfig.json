@@ -1,0 +1,24 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"esModuleInterop": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"lib": [
+			"DOM",
+			"ES2015",
+			"ES2016",
+			"ES2017",
+			"ES2018",
+			"ES2019",
+			"ES2020",
+			"ESNext"
+		],
+		"module": "ESNext",
+		"moduleResolution": "node",
+		"noEmit": true,
+		"strict": true,
+		"target": "ESNext"
+	},
+	"exclude": ["node_modules", "dist", "coverage"]
+}
