@@ -13,11 +13,9 @@ jobs:
 
             - name: Use Node.js
               uses: actions/setup-node@v2.1.1
-              with:
-                  node-version: 14
 
             - name: Install dependencies
-              uses: bahmutov/npm-install@v1
+              uses: nvm install && yarn
 
             - name: Run unit tests
               run: 'yarn test --coverage --ci'
