@@ -15,7 +15,9 @@
 	"scripts": {
 		"lint": "eslint .",
 		"test": "jest",
-		"validate": "npm-run-all lint test"
+		"validate": "npm-run-all lint test",
+		"prepush:test": "jest --verbose --runInBand --onlyChanged",
+		"prepush:lint": "lint-staged"
 	},
 	"devDependencies": {
 		"@types/jest": "^26.0.13",
@@ -28,6 +30,7 @@
 		"eslint-plugin-prettier": "^3.1.4",
 		"husky": "^4.3.0",
 		"jest": "^26.4.2",
+		"lint-staged": "^10.3.0",
 		"npm-run-all": "^4.1.5",
 		"prettier": "^2.1.1",
 		"ts-jest": "^26.3.0",
@@ -35,7 +38,10 @@
 	},
 	"husky": {
 		"hooks": {
-			"pre-push": "yarn validate"
+			"pre-push": "npm-run-all prepush:*"
 		}
+	},
+	"lint-staged": {
+		"*": "eslint --fix"
 	}
 }
