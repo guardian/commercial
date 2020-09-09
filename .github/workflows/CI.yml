@@ -11,9 +11,12 @@ jobs:
             - name: Checkout repo
               uses: actions/checkout@v2
 
-            - name: Install dependencies
+            - name: Use Node.js
               shell: bash -l {0}
-              run: nvm install && yarn
+              run: nvm install
+
+            - name: Install dependencies
+              uses: bahmutov/npm-install@v1
 
             - name: Run unit tests
               run: 'yarn test --coverage --ci'
@@ -28,9 +31,8 @@ jobs:
               uses: actions/checkout@v2
 
             - name: Use Node.js
-              uses: actions/setup-node@v2.1.1
-              with:
-                  node-version: 14
+              shell: bash -l {0}
+              run: nvm install
 
             - name: Install dependencies
               uses: bahmutov/npm-install@v1
@@ -45,9 +47,8 @@ jobs:
               uses: actions/checkout@v2
 
             - name: Use Node.js
-              uses: actions/setup-node@v2.1.1
-              with:
-                  node-version: 14
+              shell: bash -l {0}
+              run: nvm install
 
             - name: Install dependencies
               uses: bahmutov/npm-install@v1
