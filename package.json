@@ -14,10 +14,18 @@
 	"main": "dist/index.js",
 	"scripts": {
 		"lint": "eslint .",
-		"test": "jest",
-		"validate": "npm-run-all lint test",
+		"prepush:lint": "lint-staged",
 		"prepush:test": "jest --verbose --runInBand --onlyChanged",
-		"prepush:lint": "lint-staged"
+		"test": "jest",
+		"validate": "npm-run-all lint test"
+	},
+	"husky": {
+		"hooks": {
+			"pre-push": "npm-run-all prepush:*"
+		}
+	},
+	"lint-staged": {
+		"*": "eslint --fix"
 	},
 	"devDependencies": {
 		"@types/jest": "^26.0.13",
@@ -35,13 +43,5 @@
 		"prettier": "^2.1.1",
 		"ts-jest": "^26.3.0",
 		"typescript": "^4.0.2"
-	},
-	"husky": {
-		"hooks": {
-			"pre-push": "npm-run-all prepush:*"
-		}
-	},
-	"lint-staged": {
-		"*": "eslint --fix"
 	}
 }
