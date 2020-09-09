@@ -16,7 +16,7 @@
 		"lint": "eslint .",
 		"prepush:lint": "lint-staged",
 		"prepush:test": "jest --verbose --runInBand --onlyChanged",
-		"test": "jest",
+		"test": "jest --coverage",
 		"validate": "npm-run-all lint test"
 	},
 	"husky": {
