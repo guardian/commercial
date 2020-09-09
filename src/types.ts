@@ -1,0 +1,21 @@
+export type TagAtrribute = {
+	name: string;
+	value: string;
+};
+
+export type GetThirdPartyTag = (arg0: {
+	featureSwitch: boolean;
+}) => ThirdPartyTag;
+
+export type ThirdPartyTag = {
+	async?: boolean;
+	attrs?: Array<TagAtrribute>;
+	beforeLoad?: () => void;
+	insertSnippet?: () => void;
+	loaded?: boolean;
+	onLoad?: () => void;
+	shouldRun: boolean;
+	sourcepointId?: string;
+	url?: string;
+	useImage?: boolean;
+};
