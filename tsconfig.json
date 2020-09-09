@@ -1,6 +1,7 @@
 {
 	"compilerOptions": {
 		"allowJs": true,
+		"declaration": true,
 		"esModuleInterop": true,
 		"isolatedModules": true,
 		"jsx": "preserve",
@@ -17,8 +18,10 @@
 		"module": "ESNext",
 		"moduleResolution": "node",
 		"noEmit": true,
+		"outDir": "dist",
 		"strict": true,
 		"target": "ESNext"
 	},
-	"exclude": ["node_modules", "dist", "coverage"]
+	"exclude": ["node_modules", "dist", "coverage", "**/*.spec.*"],
+	"include": ["src"]
 }

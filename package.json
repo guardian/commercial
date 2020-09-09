@@ -13,6 +13,9 @@
 	"license": "Apache-2.0",
 	"main": "dist/index.js",
 	"scripts": {
+		"build": "npm-run-all clean compile",
+		"compile": "tsc --noEmit false --rootDir src",
+		"clean": "rm -rf dist",
 		"lint": "eslint .",
 		"prepush:lint": "lint-staged",
 		"prepush:test": "jest --verbose --runInBand --onlyChanged",
