@@ -14,13 +14,13 @@
 	"main": "dist/index.js",
 	"scripts": {
 		"build": "npm-run-all clean compile",
-		"compile": "tsc --noEmit false --rootDir src",
+		"compile": "tsc --project ./tsconfig.build.json",
 		"clean": "rm -rf dist",
 		"lint": "eslint .",
 		"prepush:lint": "lint-staged",
 		"prepush:test": "jest --verbose --runInBand --onlyChanged",
 		"test": "jest --coverage",
-		"tsc": "tsc",
+		"tsc": "tsc --noEmit",
 		"validate": "npm-run-all lint test"
 	},
 	"husky": {
