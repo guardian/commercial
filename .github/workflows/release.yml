@@ -1,0 +1,27 @@
+name: Release
+on:
+    push:
+        branches:
+            - master
+jobs:
+    release:
+        name: Release
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+
+            - name: Use Node.js
+              shell: bash -l {0}
+              run: nvm install
+
+            - name: Install dependencies
+              uses: bahmutov/npm-install@v1
+
+            - name: Release
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+              run: npx semantic-release --dry-run
