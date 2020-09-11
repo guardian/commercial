@@ -102,6 +102,9 @@ jobs:
               shell: bash -l {0}
               run: nvm install
 
+            - name: Install dependencies
+              uses: bahmutov/npm-install@v1
+
             - name: Fetch build
               uses: actions/download-artifact@v2
               with:
