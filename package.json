@@ -1,6 +1,6 @@
 {
 	"name": "@guardian/commercial-core",
-	"version": "0.0.1",
+	"version": "0.0.0",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial-core#readme",
 	"bugs": {
@@ -11,10 +11,12 @@
 		"url": "git+https://github.com/guardian/commercial-core.git"
 	},
 	"license": "Apache-2.0",
-	"main": "dist/index.js",
+	"main": "dist/cjs/index.js",
+	"module": "dist/esm/index.js",
 	"scripts": {
-		"build": "npm-run-all clean compile",
-		"compile": "tsc --project ./tsconfig.build.json",
+		"build": "npm-run-all clean --parallel compile:*",
+		"compile:esm": "tsc --project ./tsconfig.build.json --outDir ./dist/esm",
+		"compile:common": "tsc --project ./tsconfig.build.json --outDir ./dist/cjs --module CommonJS",
 		"clean": "rm -rf dist",
 		"lint": "eslint .",
 		"prepush:lint": "lint-staged",
