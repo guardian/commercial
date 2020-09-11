@@ -21,7 +21,7 @@
 		"prepush:test": "jest --verbose --runInBand --onlyChanged",
 		"test": "jest --coverage",
 		"tsc": "tsc --noEmit",
-		"validate": "npm-run-all lint test"
+		"validate": "npm-run-all lint test compile"
 	},
 	"husky": {
 		"hooks": {
