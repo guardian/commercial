@@ -21,6 +21,12 @@ or
 npm install @guardian/commercial-core
 ```
 
+## Usage
+
+This package is built targeting `ES2020`.
+
+If your target environment is older than that, make sure your bundler includes this package for transpilation when building your application.
+
 ## Development
 
 ### Requirements
