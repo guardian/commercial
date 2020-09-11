@@ -1,7 +1,7 @@
 # @guardian/commercial-core
 
 ![npm (scoped)](https://img.shields.io/npm/v/@guardian/commercial-core)
-[![ES version](https://badgen.net/badge/ES/next/cyan)](https://coveralls.io/github/guardian/commercial-core)
+[![ES version](https://badgen.net/badge/ES/2020/cyan)](https://coveralls.io/github/guardian/commercial-core)
 ![npm type definitions](https://img.shields.io/npm/types/@guardian/commercial-core)
 [![Coverage Status](https://coveralls.io/repos/github/guardian/commercial-core/badge.svg)](https://coveralls.io/github/guardian/commercial-core)
 
