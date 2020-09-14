@@ -1,8 +1,8 @@
 # @guardian/commercial-core
 
-![npm (scoped)](https://img.shields.io/npm/v/@guardian/commercial-core)
-[![ES version](https://badgen.net/badge/ES/2020/cyan)](https://coveralls.io/github/guardian/commercial-core)
-![npm type definitions](https://img.shields.io/npm/types/@guardian/commercial-core)
+[![npm (scoped)](https://img.shields.io/npm/v/@guardian/commercial-core)](https://www.npmjs.com/package/@guardian/commercial-core)
+[![ES version](https://badgen.net/badge/ES/2020/cyan)](https://tc39.es/ecma262/2020/)
+[![npm type definitions](https://img.shields.io/npm/types/@guardian/commercial-core)](https://www.typescriptlang.org/)
 [![Coverage Status](https://coveralls.io/repos/github/guardian/commercial-core/badge.svg)](https://coveralls.io/github/guardian/commercial-core)
 
 > Guardian advertising business logic
@@ -44,7 +44,7 @@ Use `git commit` as normal and follow the prompts:
 
 <img src="https://user-images.githubusercontent.com/867233/92921122-65635080-f42b-11ea-86b1-93a82c1f156b.png" width=613 />
 
-> Note that this will not happen if you _commit_ changes with a GUI e.g. the GitHub app. However, you can use one as normal for staging changes etc and use `git commit` in the terminal to commit.
+> Note that this will not happen if you _commit_ changes with a GUI e.g. the GitHub Desktop app. However, you can use one as normal for staging changes etc and use `git commit` in the terminal to commit.
 
 If a commit is not in a conventional commit format, it will not trigger a release and your change will stay in `main` until the next release.
 
