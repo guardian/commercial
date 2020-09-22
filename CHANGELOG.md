@@ -1,3 +1,10 @@
+# [0.3.0](https://github.com/guardian/commercial-core/compare/v0.2.4...v0.3.0) (2020-09-22)
+
+
+### Features
+
+* export real things! ([1e7b907](https://github.com/guardian/commercial-core/commit/1e7b9072752a7186ce03dcf13c38d9ad369c4cd7))
+
 ## [0.2.4](https://github.com/guardian/commercial-core/compare/v0.2.3...v0.2.4) (2020-09-22)
 
 
