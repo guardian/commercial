@@ -33,7 +33,7 @@ or
 npm install @guardian/commercial-core
 ```
 
-## Usage
+### Bundling
 
 This package is published in `ES2020`.
 
