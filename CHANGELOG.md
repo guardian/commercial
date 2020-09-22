@@ -1,3 +1,10 @@
+## [0.2.2](https://github.com/guardian/commercial-core/compare/v0.2.1...v0.2.2) (2020-09-22)
+
+
+### Bug Fixes
+
+* **release:** add release to github releases too ([6926c50](https://github.com/guardian/commercial-core/commit/6926c50328da626ac2a049d17b665b6515bfa1be))
+
 ## [0.2.1](https://github.com/guardian/commercial-core/compare/v0.2.0...v0.2.1) (2020-09-22)
 
 
