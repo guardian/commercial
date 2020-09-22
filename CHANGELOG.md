@@ -1,3 +1,10 @@
+## [0.2.3](https://github.com/guardian/commercial-core/compare/v0.2.2...v0.2.3) (2020-09-22)
+
+
+### Bug Fixes
+
+* **package:** ensure build asset is used when packaging ([d2e258c](https://github.com/guardian/commercial-core/commit/d2e258c6b22f2654453f78074c57ae472609ffc4))
+
 ## [0.2.2](https://github.com/guardian/commercial-core/compare/v0.2.1...v0.2.2) (2020-09-22)
 
 
