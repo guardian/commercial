@@ -107,6 +107,6 @@ jobs:
 
             - name: Release
               env:
-                  GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
               run: npx semantic-release --dry-run
