@@ -57,6 +57,12 @@ jobs:
 
             - name: Check types
               run: yarn tsc
+    docs:
+        name: Docs
+        runs-on: ubuntu-latest
+        steps:
+            - name: TOC Generator
+              uses: technote-space/toc-generator@v2.4.0
     build:
         name: Build
         runs-on: ubuntu-latest
