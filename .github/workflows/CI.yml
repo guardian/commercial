@@ -4,8 +4,15 @@ on:
         branches-ignore:
             - 'gh-pages'
 jobs:
+    docs:
+        name: Docs
+        runs-on: ubuntu-latest
+        steps:
+            - name: TOC Generator
+              uses: technote-space/toc-generator@v2.4.0
     test:
         name: Tests
+        needs: [docs]
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
@@ -27,6 +34,7 @@ jobs:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
     lint:
         name: Linting
+        needs: [docs]
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
@@ -43,6 +51,7 @@ jobs:
               run: yarn lint
     types:
         name: Types
+        needs: [docs]
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
@@ -57,14 +66,9 @@ jobs:
 
             - name: Check types
               run: yarn tsc
-    docs:
-        name: Docs
-        runs-on: ubuntu-latest
-        steps:
-            - name: TOC Generator
-              uses: technote-space/toc-generator@v2.4.0
     build:
         name: Build
+        needs: [docs]
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
