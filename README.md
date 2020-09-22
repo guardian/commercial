@@ -35,7 +35,7 @@ npm install @guardian/commercial-core
 
 ### Bundling
 
-This package is published in `ES2020`.
+This package uses `ES2020`.
 
 If your target environment does not support that, make sure you transpile this package when bundling your application.
 
