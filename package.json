@@ -13,6 +13,9 @@
 	"license": "Apache-2.0",
 	"main": "dist/cjs/index.js",
 	"module": "dist/esm/index.js",
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "npm-run-all clean --parallel compile:*",
 		"clean": "rm -rf dist",
