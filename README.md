@@ -16,7 +16,6 @@
 - [Development](#development)
   - [Requirements](#requirements)
   - [Commit messages and releasing to NPM](#commit-messages-and-releasing-to-npm)
-    - [Details](#details)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
