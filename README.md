@@ -23,9 +23,9 @@ npm install @guardian/commercial-core
 
 ## Usage
 
-This package is built targeting `ES2020`.
+This package is published in `ES2020`.
 
-If your target environment is older than that, make sure your bundler includes this package for transpilation when building your application.
+If your target environment does not support that, make sure you transpile this package when bundling your application.
 
 ## Development
 
@@ -34,18 +34,21 @@ If your target environment is older than that, make sure your bundler includes t
 1. [Node 14](https://nodejs.org/en/download/) ([nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm) recommended)
 2. [Yarn](https://classic.yarnpkg.com/en/docs/install/)
 
-### Continuous delivery to NPM
+### Commit messages and releasing to NPM
 
-Pushing to `main` will automatically trigger a package release if the commit message follows the [conventional commits](https://www.conventionalcommits.org) format.
+_tl;dr_
 
-To help writing conventional commits, this repo uses [commitzen](https://github.com/commitizen/cz-cli) to intercept commits and act as the message editor.
+-   prefer `yarn commit` to `git commit`
+-   continuous delivery to NPM
 
-Use `git commit` as normal and follow the prompts:
+#### Details
 
-<img src="https://user-images.githubusercontent.com/867233/92921122-65635080-f42b-11ea-86b1-93a82c1f156b.png" width=613 />
+This repo uses [semantic-release](https://semantic-release.gitbook.io/) to automatically publish to NPM if you push suitable changes to `main` (e.g. a new feature).
 
-> Note that this will not happen if you _commit_ changes with a GUI e.g. the GitHub Desktop app. However, you can use one as normal for staging changes etc and use `git commit` in the terminal to commit.
+The version will be derived from the commit history, using [the conventional commit format](https://www.conventionalcommits.org/en/v1.0.0/#specification).
 
-If a commit is not in a conventional commit format, it will not trigger a release and your change will stay in `main` until the next release.
+Running `yarn commit` automates writing a well-formatted commit message with [commitizen](https://github.com/commitizen/cz-cli), which will prompt you for details then commit any staged changes.
 
-If this is something you want, you can `ctrl-c` out of it the commitzen editor and the `git commit` command will continue as normal.
+> Alternatively, you can also [install commitizen globally](https://github.com/commitizen/cz-cli#installing-the-command-line-tool).
+
+If you use `git commit` as normal, a `commit-msg` hook will ensure that your commit meets the convention, but won't help you write it.
