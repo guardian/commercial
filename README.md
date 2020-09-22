@@ -9,8 +9,18 @@
 
 ## Table of contents
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Development](#development)
+  - [Requirements](#requirements)
+  - [Commit messages and releasing to NPM](#commit-messages-and-releasing-to-npm)
+    - [Details](#details)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Installation
 
