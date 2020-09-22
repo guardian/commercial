@@ -10,6 +10,7 @@ jobs:
         steps:
             - name: TOC Generator
               uses: technote-space/toc-generator@v2.4.0
+              TOC_TITLE: '## Table of contents'
     test:
         name: Tests
         needs: [docs]
