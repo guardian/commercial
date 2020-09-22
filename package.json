@@ -16,6 +16,7 @@
 	"scripts": {
 		"build": "npm-run-all clean --parallel compile:*",
 		"clean": "rm -rf dist",
+		"commit": "cz",
 		"compile:common": "tsc --project ./tsconfig.build.json --outDir ./dist/cjs --module CommonJS",
 		"compile:esm": "tsc --project ./tsconfig.build.json --outDir ./dist/esm",
 		"lint": "eslint .",
@@ -53,6 +54,7 @@
 		"@types/jest": "^26.0.13",
 		"@typescript-eslint/eslint-plugin": "^4.1.0",
 		"@typescript-eslint/parser": "^4.1.0",
+		"commitizen": "^4.2.1",
 		"cz-conventional-changelog": "3.3.0",
 		"eslint": "^7.8.1",
 		"eslint-config-prettier": "^6.11.0",
