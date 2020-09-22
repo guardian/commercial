@@ -25,7 +25,7 @@
 		"lint": "eslint .",
 		"prepush:lint": "lint-staged",
 		"prepush:test": "jest --verbose --runInBand --onlyChanged",
-		"test": "jest --coverage",
+		"test": "jest",
 		"tsc": "tsc --noEmit",
 		"validate": "npm-run-all tsc lint test build"
 	},
