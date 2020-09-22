@@ -7,6 +7,19 @@
 
 > Guardian advertising business logic
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## Table of contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Development](#development)
+  - [Requirements](#requirements)
+  - [Commit messages and releasing to NPM](#commit-messages-and-releasing-to-npm)
+    - [Details](#details)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Installation
 
 [![Generic badge](https://img.shields.io/badge/google-chat-259082.svg)](https://chat.google.com/room/AAAAPL2MBvE)
