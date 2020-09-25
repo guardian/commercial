@@ -1,3 +1,10 @@
+# [0.4.0](https://github.com/guardian/commercial-core/compare/v0.3.0...v0.4.0) (2020-09-25)
+
+
+### Features
+
+* rename flag for third party tags ([e491d55](https://github.com/guardian/commercial-core/commit/e491d5502cb7017ecdeb3ffa364992c0119a0c26))
+
 # [0.3.0](https://github.com/guardian/commercial-core/compare/v0.2.4...v0.3.0) (2020-09-22)
 
 
