@@ -1,3 +1,17 @@
+# [0.6.0](https://github.com/guardian/commercial-core/compare/v0.5.0...v0.6.0) (2020-09-29)
+
+
+### Features
+
+* **facebook pixel:** actually export it ([c825e76](https://github.com/guardian/commercial-core/commit/c825e76d13e2f230f28d5d12831c21a358a84b53))
+
+# [0.5.0](https://github.com/guardian/commercial-core/compare/v0.4.0...v0.5.0) (2020-09-29)
+
+
+### Features
+
+* **third party tags:** add facebook pixel ([8ebc439](https://github.com/guardian/commercial-core/commit/8ebc4392adde8ab34d3f24c599a9910e8ea4d402))
+
 # [0.4.0](https://github.com/guardian/commercial-core/compare/v0.3.0...v0.4.0) (2020-09-25)
 
 
