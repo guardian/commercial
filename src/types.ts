@@ -5,7 +5,6 @@ export type TagAtrribute = {
 
 export type GetThirdPartyTag = (arg0: {
 	shouldRun: boolean;
-	facebookAccountId?: string;
 }) => ThirdPartyTag;
 
 export type ThirdPartyTag = {
