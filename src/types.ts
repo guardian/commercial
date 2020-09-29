@@ -3,10 +3,7 @@ export type TagAtrribute = {
 	value: string;
 };
 
-export type GetThirdPartyTag = (arg0: {
-	shouldRun: boolean;
-	facebookAccountId?: string;
-}) => ThirdPartyTag;
+export type GetThirdPartyTag = (arg0: { shouldRun: boolean }) => ThirdPartyTag;
 
 export type ThirdPartyTag = {
 	async?: boolean;
@@ -16,7 +13,7 @@ export type ThirdPartyTag = {
 	loaded?: boolean;
 	onLoad?: () => void;
 	shouldRun: boolean;
-	sourcepointId?: string;
+	name?: string;
 	url?: string;
 	useImage?: boolean;
 };
