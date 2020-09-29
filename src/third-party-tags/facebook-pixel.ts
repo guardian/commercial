@@ -1,11 +1,8 @@
 import { GetThirdPartyTag } from '../types';
 
-export const fbPixel: GetThirdPartyTag = ({
+export const fbPixel: GetThirdPartyTag = ({ shouldRun }) => ({
 	shouldRun,
-	facebookAccountId,
-}) => ({
-	shouldRun,
-	url: `https://www.facebook.com/tr?id=${facebookAccountId}&ev=PageView&noscript=1`,
-	sourcepointId: '5e7e1298b8e05c54a85c52d2',
+	url: `https://www.facebook.com/tr?id=279880532344561&ev=PageView&noscript=1`,
+	name: 'fb',
 	useImage: true,
 });
