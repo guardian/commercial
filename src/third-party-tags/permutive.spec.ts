@@ -1,6 +1,6 @@
 import { permutive } from './permutive';
 
-describe('index', () => {
+describe('permutive', () => {
 	it('should use the feature swtich option', () => {
 		expect(permutive({ shouldRun: true })).toStrictEqual({
 			shouldRun: true,

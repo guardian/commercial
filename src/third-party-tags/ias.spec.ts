@@ -1,6 +1,6 @@
 import { ias } from './ias';
 
-describe('index', () => {
+describe('ias', () => {
 	it('should use the feature swtich option', () => {
 		expect(ias({ shouldRun: true })).toStrictEqual({
 			shouldRun: true,
