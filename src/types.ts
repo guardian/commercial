@@ -13,6 +13,7 @@ export type ThirdPartyTag = {
 	loaded?: boolean;
 	onLoad?: () => void;
 	shouldRun: boolean;
+	sourcepointId?: undefined;
 	name?: string;
 	url?: string;
 	useImage?: boolean;
