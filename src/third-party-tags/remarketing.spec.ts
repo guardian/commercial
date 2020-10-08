@@ -5,7 +5,7 @@ describe('remarketing', () => {
 		expect(remarketing({ shouldRun: true })).toMatchObject({
 			shouldRun: true,
 			url: '//www.googleadservices.com/pagead/conversion_async.js',
-	        name: 'remarketing',
+			name: 'remarketing',
 		});
 	});
 });
