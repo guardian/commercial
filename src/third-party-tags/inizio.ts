@@ -14,9 +14,7 @@ const onLoad = () => {
 			console.log(`surveyAvailable: ${survey.measurementId}`);
 		}
 	};
-	// eslint-disable-next-line no-underscore-dangle
 	window._brandmetrics ||= [];
-	// eslint-disable-next-line no-underscore-dangle
 	window._brandmetrics.push({
 		cmd: '_querySurvey',
 		val: {
