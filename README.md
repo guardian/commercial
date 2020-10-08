@@ -58,7 +58,7 @@ _tl;dr_
 
 This repo uses [semantic-release](https://semantic-release.gitbook.io/) to automatically publish to NPM if you push suitable changes to `main` (e.g. a new feature).
 
-The version will be derived from the commit history, using [the conventional commit format](https://www.conventionalcommits.org/en/v1.0.0/#specification).
+The version will be derived from the commit history, using [the conventional commit format](https://www.conventionalcommits.org/en/v1.0.0).
 
 Running `yarn commit` automates writing a well-formatted commit message with [commitizen](https://github.com/commitizen/cz-cli), which will prompt you for details then commit any staged changes.
 
