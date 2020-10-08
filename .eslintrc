@@ -17,9 +17,12 @@
 		"plugin:prettier/recommended",
 		"plugin:import/errors",
 		"plugin:import/warnings",
-		"plugin:import/typescript"
+		"plugin:import/typescript",
+		"plugin:eslint-comments/recommended"
 	],
 	"rules": {
+		"eslint-comments/require-description": ["error", { "ignore": [] }],
+		"eslint-comments/disable-enable-pair": 0,
 		"import/no-default-export": 2,
 		"import/prefer-default-export": 0,
 		"import/newline-after-import": 2,
