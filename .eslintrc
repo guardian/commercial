@@ -20,6 +20,7 @@
 		"plugin:import/typescript",
 		"plugin:eslint-comments/recommended"
 	],
+	"globals": { "googletag": "readonly" },
 	"rules": {
 		"eslint-comments/require-description": ["error", { "ignore": [] }],
 		"eslint-comments/disable-enable-pair": 0,
