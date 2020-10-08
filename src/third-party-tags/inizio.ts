@@ -15,7 +15,7 @@ const onLoad = () => {
 		}
 	};
 	// eslint-disable-next-line no-underscore-dangle
-	window._brandmetrics = window._brandmetrics || [];
+	window._brandmetrics ||= [];
 	// eslint-disable-next-line no-underscore-dangle
 	window._brandmetrics.push({
 		cmd: '_querySurvey',
