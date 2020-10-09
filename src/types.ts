@@ -30,6 +30,7 @@ declare global {
 		google_trackConversion: (arg0: GoogleTrackConversionObject) => void;
 		google_tag_params: GoogleTagParams;
 		_brandmetrics?: { cmd: string; val: Record<string, unknown> }[];
-		googletag?: unknown;
+		// eslint-disable-next-line no-undef
+		googletag: googletag.Googletag;
 	}
 }
