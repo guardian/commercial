@@ -24,7 +24,7 @@
 		"compile:esm": "tsc --project ./tsconfig.build.json --outDir ./dist/esm",
 		"lint": "eslint .",
 		"precommit:lint": "lint-staged",
-		"precommit:test": "jest --verbose --runInBand --onlyChanged",
+		"prepush:test": "jest --verbose --runInBand --onlyChanged",
 		"test": "jest",
 		"tsc": "tsc --noEmit",
 		"validate": "npm-run-all tsc lint test build"
@@ -32,7 +32,9 @@
 	"husky": {
 		"hooks": {
 			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS HUSKY_USE_YARN > /dev/null 2>&1 || (echo \"\n\u001b[0;31m✖ Invalid commit message\u001b[0m \u001b[2mhttps://git.io/JUzbH\u001b[0m\nTry \u001b[0;36myarn commit\u001b[0m instead\n\" && exit 1)",
-			"pre-commit": "npm-run-all precommit:*"
+			"pre-commit": "npm-run-all precommit:*",
+			"pre-push": "npm-run-all prepush:*"
+
 		}
 	},
 	"commitlint": {
