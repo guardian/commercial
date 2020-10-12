@@ -31,10 +31,8 @@
 	},
 	"husky": {
 		"hooks": {
-			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS HUSKY_USE_YARN > /dev/null 2>&1 || (echo \"\n\u001b[0;31m✖ Invalid commit message\u001b[0m \u001b[2mhttps://git.io/JUzbH\u001b[0m\nTry \u001b[0;36myarn commit\u001b[0m instead\n\" && exit 1)",
 			"pre-commit": "npm-run-all precommit:*",
 			"pre-push": "npm-run-all prepush:*"
-
 		}
 	},
 	"commitlint": {
@@ -44,11 +42,6 @@
 	},
 	"lint-staged": {
 		"*.js|*.ts": "eslint --fix"
-	},
-	"config": {
-		"commitizen": {
-			"path": "cz-conventional-changelog"
-		}
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^11.0.0",
