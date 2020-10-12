@@ -1,3 +1,10 @@
+# [0.7.0](https://github.com/guardian/commercial-core/compare/v0.6.0...v0.7.0) (2020-10-12)
+
+
+### Features
+
+* **google remarketing tags:** added support for GoogleRemarketing tags as a thirdparty tag ([#52](https://github.com/guardian/commercial-core/issues/52)) ([97c54a9](https://github.com/guardian/commercial-core/commit/97c54a90775e493008604bef12056b43d7be5e30))
+
 # [0.6.0](https://github.com/guardian/commercial-core/compare/v0.5.0...v0.6.0) (2020-09-29)
 
 
