@@ -2,8 +2,7 @@
 	"root": true,
 	"env": {
 		"jest": true,
-		"browser": true,
-		"node": true
+		"browser": true
 	},
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
@@ -57,5 +56,17 @@
 			}
 		]
 	},
-	"ignorePatterns": ["dist", "coverage"]
+	"ignorePatterns": ["dist", "coverage"],
+	"overrides": [
+		{
+			"files": ["*.js"],
+			"env": {
+				"jest": true,
+				"node": true
+			},
+			"rules": {
+				"@typescript-eslint/no-var-requires": "off"
+			}
+		}
+	]
 }
