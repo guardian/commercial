@@ -4,5 +4,5 @@ import { GetThirdPartyTag } from '../types';
 export const twitter: GetThirdPartyTag = ({ shouldRun }) => ({
 	shouldRun,
 	name: 'twitter',
-	insertSnippet: insertSnippet,
+	insertSnippet,
 });
