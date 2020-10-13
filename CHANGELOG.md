@@ -1,3 +1,10 @@
+## [0.7.1](https://github.com/guardian/commercial-core/compare/v0.7.0...v0.7.1) (2020-10-13)
+
+
+### Bug Fixes
+
+* Create vendor dir and exclude it from coverage ([#55](https://github.com/guardian/commercial-core/issues/55)) ([85089f8](https://github.com/guardian/commercial-core/commit/85089f8396e78b4ac5f4e6f28c4f38e9696c139a))
+
 # [0.7.0](https://github.com/guardian/commercial-core/compare/v0.6.0...v0.7.0) (2020-10-12)
 
 
