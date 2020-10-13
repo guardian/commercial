@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-var-requires -- this really is a node file, it’s fine */
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
 
@@ -27,9 +27,7 @@ module.exports = {
 	// coverageDirectory: undefined,
 
 	// An array of regexp pattern strings used to skip coverage collection
-	// coveragePathIgnorePatterns: [
-	//   "/node_modules/"
-	// ],
+	coveragePathIgnorePatterns: ['vendor'],
 
 	// Indicates which provider should be used to instrument code for coverage
 	// coverageProvider: "babel",

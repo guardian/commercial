@@ -1,7 +1,7 @@
 import { fbPixel } from './facebook-pixel';
 
 describe('fbPixel', () => {
-	it('should use the feature swtich option', () => {
+	it('should use the feature switch option', () => {
 		expect(fbPixel({ shouldRun: true })).toStrictEqual({
 			shouldRun: true,
 			url:

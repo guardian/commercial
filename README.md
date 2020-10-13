@@ -16,7 +16,7 @@
   - [Bundling](#bundling)
 - [Development](#development)
   - [Requirements](#requirements)
-  - [Commit messages and releasing to NPM](#commit-messages-and-releasing-to-npm)
+  - [Releasing](#releasing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -47,21 +47,16 @@ If your target environment does not support that, make sure you transpile this p
 1. [Node 14](https://nodejs.org/en/download/) ([nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm) recommended)
 2. [Yarn](https://classic.yarnpkg.com/en/docs/install/)
 
-### Commit messages and releasing to NPM
+### Releasing
 
-_tl;dr_
+Changes are automatically released to NPM.
 
--   prefer `yarn commit` to `git commit`
--   continuous delivery to NPM
+The `main` branch on GitHub is analysed by [semantic-release](https://semantic-release.gitbook.io/) after every push.
 
-#### Details
+If a commit message follows the [conventional commit format](https://www.conventionalcommits.org/en/v1.0.0), semantic-release can determine what types of changes are included in that commit.
 
-This repo uses [semantic-release](https://semantic-release.gitbook.io/) to automatically publish to NPM if you push suitable changes to `main` (e.g. a new feature).
+If necessary, it will then automatically release a new, [semver](https://semver.org/)-compliant version of the package to NPM.
 
-The version will be derived from the commit history, using [the conventional commit format](https://www.conventionalcommits.org/en/v1.0.0/#specification).
+#### Pull requests
 
-Running `yarn commit` automates writing a well-formatted commit message with [commitizen](https://github.com/commitizen/cz-cli), which will prompt you for details then commit any staged changes.
-
-> Alternatively, you can also [install commitizen globally](https://github.com/commitizen/cz-cli#installing-the-command-line-tool).
-
-If you use `git commit` as normal, a `commit-msg` hook will ensure that your commit meets the convention, but won't help you write it.
+Try to write PR titles in the conventional commit format, and [squash and merge](https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/about-pull-request-merges#squash-and-merge-your-pull-request-commits) when merging. That way your PR will trigger a release when you merge it (if necessary).

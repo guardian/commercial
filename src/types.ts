@@ -17,3 +17,17 @@ export type ThirdPartyTag = {
 	url?: string;
 	useImage?: boolean;
 };
+
+export type GoogleTagParams = unknown;
+export type GoogleTrackConversionObject = {
+	google_conversion_id: number;
+	google_custom_params: GoogleTagParams;
+	google_remarketing_only: boolean;
+};
+
+declare global {
+	interface Window {
+		google_trackConversion: (arg0: GoogleTrackConversionObject) => void;
+		google_tag_params: GoogleTagParams;
+	}
+}
