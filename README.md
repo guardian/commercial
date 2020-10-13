@@ -10,14 +10,13 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 ## Table of contents
 
--   [Installation](#installation)
-    -   [Bundling](#bundling)
--   [Development](#development)
-    -   [Requirements](#requirements)
-    -   [Releases](#releases)
+- [Installation](#installation)
+  - [Bundling](#bundling)
+- [Development](#development)
+  - [Requirements](#requirements)
+  - [Releasing](#releasing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
