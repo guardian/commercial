@@ -3,12 +3,9 @@
 		"declaration": true,
 		"noEmit": false,
 		"outDir": "dist",
-		"rootDirs": [
-			"../../vendor",
-			"src",
-		  ]
+		"rootDirs": ["src"]
 	},
 	"extends": "./tsconfig.json",
-	"include": ["src"],
+	"include": ["src", "vendor"],
 	"exclude": ["**/*.spec.*"]
 }
