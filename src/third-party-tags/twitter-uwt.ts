@@ -1,4 +1,4 @@
-import { twitterScript as insertSnippet } from '../../vendor/twitter-script';
+import { twitterScript as insertSnippet } from '../__vendor/twitter-script';
 import { GetThirdPartyTag } from '../types';
 
 export const twitter: GetThirdPartyTag = ({ shouldRun }) => ({

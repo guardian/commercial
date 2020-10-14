@@ -1,3 +1,10 @@
+## [0.8.1](https://github.com/guardian/commercial-core/compare/v0.8.0...v0.8.1) (2020-10-14)
+
+
+### Bug Fixes
+
+* move vendor back into src ([#57](https://github.com/guardian/commercial-core/issues/57)) ([f27e108](https://github.com/guardian/commercial-core/commit/f27e1086dcf4407262e20d6ad1755f1b6325a186))
+
 # [0.8.0](https://github.com/guardian/commercial-core/compare/v0.7.1...v0.8.0) (2020-10-14)
 
 
