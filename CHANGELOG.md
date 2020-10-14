@@ -1,3 +1,10 @@
+## [0.8.2](https://github.com/guardian/commercial-core/compare/v0.8.1...v0.8.2) (2020-10-14)
+
+
+### Bug Fixes
+
+* export TPT type  ([#60](https://github.com/guardian/commercial-core/issues/60)) ([cf3d6de](https://github.com/guardian/commercial-core/commit/cf3d6dee134cada558e9e41efbdbbafc0b8b593b))
+
 ## [0.8.1](https://github.com/guardian/commercial-core/compare/v0.8.0...v0.8.1) (2020-10-14)
 
 

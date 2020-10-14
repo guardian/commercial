@@ -1,6 +1,6 @@
 {
 	"name": "@guardian/commercial-core",
-	"version": "0.8.1",
+	"version": "0.8.2",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial-core#readme",
 	"bugs": {
