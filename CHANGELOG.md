@@ -1,3 +1,10 @@
+# [0.8.0](https://github.com/guardian/commercial-core/compare/v0.7.1...v0.8.0) (2020-10-14)
+
+
+### Features
+
+* Export more lotame data ([#56](https://github.com/guardian/commercial-core/issues/56)) ([4120b69](https://github.com/guardian/commercial-core/commit/4120b69a177d0605628d89df449b3d306d5357fa))
+
 ## [0.7.1](https://github.com/guardian/commercial-core/compare/v0.7.0...v0.7.1) (2020-10-13)
 
 
