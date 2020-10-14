@@ -1,3 +1,10 @@
+## [0.8.3](https://github.com/guardian/commercial-core/compare/v0.8.2...v0.8.3) (2020-10-14)
+
+
+### Bug Fixes
+
+* test coverage fix ([#61](https://github.com/guardian/commercial-core/issues/61)) ([be88c20](https://github.com/guardian/commercial-core/commit/be88c205d5553323a44ea14c21271ce991b461bd))
+
 ## [0.8.2](https://github.com/guardian/commercial-core/compare/v0.8.1...v0.8.2) (2020-10-14)
 
 
