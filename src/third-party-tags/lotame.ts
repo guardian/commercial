@@ -1,4 +1,4 @@
-import { lotameScript } from '../../vendor/lotame-script';
+import { lotameScript } from '../__vendor/lotame-script';
 import { GetThirdPartyTag, LotameData } from '../types';
 
 let lotameData: LotameData;

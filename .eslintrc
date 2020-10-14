@@ -58,5 +58,5 @@
 			}
 		]
 	},
-	"ignorePatterns": ["dist", "coverage"]
+	"ignorePatterns": ["dist", "coverage", "src/__vendor"]
 }
