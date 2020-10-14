@@ -1,10 +1,5 @@
 import { lotameScript } from '../../vendor/lotame-script';
-import { GetThirdPartyTag } from '../types';
-
-export type LotameData = {
-	ozoneLotameData: Array<string>;
-	ozoneLotameProfileId: string;
-};
+import { GetThirdPartyTag, LotameData } from '../types';
 
 let lotameData: LotameData;
 

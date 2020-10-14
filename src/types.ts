@@ -31,3 +31,8 @@ declare global {
 		google_tag_params: GoogleTagParams;
 	}
 }
+
+export type LotameData = {
+	ozoneLotameData: Array<string>;
+	ozoneLotameProfileId: string;
+};
