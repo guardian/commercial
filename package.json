@@ -1,6 +1,6 @@
 {
 	"name": "@guardian/commercial-core",
-	"version": "0.0.0-this-never-updates-in-source-code-look-at-git-tags",
+	"version": "0.0.0-this-never-updates-in-source-code-refer-to-git-tags",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial-core#readme",
 	"bugs": {
