@@ -1,6 +1,6 @@
 {
 	"name": "@guardian/commercial-core",
-	"version": "0.7.1",
+	"version": "0.0.0-this-never-updates-in-source-code-refer-to-git-tags",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial-core#readme",
 	"bugs": {
@@ -46,8 +46,6 @@
 	"devDependencies": {
 		"@commitlint/cli": "^11.0.0",
 		"@commitlint/config-conventional": "^11.0.0",
-		"@semantic-release/changelog": "^5.0.1",
-		"@semantic-release/git": "^9.0.0",
 		"@semantic-release/github": "^7.1.1",
 		"@types/jest": "^26.0.14",
 		"@typescript-eslint/eslint-plugin": "^4.4.0",

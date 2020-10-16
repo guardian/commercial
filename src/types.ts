@@ -33,3 +33,8 @@ declare global {
 		googletag: googletag.Googletag;
 	}
 }
+
+export type LotameData = {
+	ozoneLotameData: Array<string>;
+	ozoneLotameProfileId: string;
+};
