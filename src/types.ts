@@ -29,6 +29,8 @@ declare global {
 	interface Window {
 		google_trackConversion: (arg0: GoogleTrackConversionObject) => void;
 		google_tag_params: GoogleTagParams;
+		_brandmetrics?: { cmd: string; val: Record<string, unknown> }[];
+		googletag: googletag.Googletag;
 	}
 }
 
