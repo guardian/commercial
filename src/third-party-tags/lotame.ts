@@ -1,10 +1,10 @@
 import { lotameScript } from '../__vendor/lotame-script';
-import { GetThirdPartyTag, LotameData } from '../types';
+import type { GetThirdPartyTag, LotameData } from '../types';
 
 let lotameData: LotameData;
 
 const ozoneLotameCallback = (obj: {
-	getAudiences: () => Array<string>;
+	getAudiences: () => string[];
 	getProfileId: () => string;
 }) => {
 	lotameData = {

@@ -1,11 +1,11 @@
 {
-	"compilerOptions": {
-		"declaration": true,
-		"noEmit": false,
-		"outDir": "dist",
-		"rootDir": "src"
-	},
-	"extends": "./tsconfig.json",
-	"include": ["src"],
-	"exclude": ["**/*.spec.*"]
+  "compilerOptions": {
+    "declaration": true,
+    "noEmit": false,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "extends": "./tsconfig.json",
+  "include": ["src"],
+  "exclude": ["**/*.spec.*"]
 }
