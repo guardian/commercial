@@ -6,9 +6,9 @@ const onLoad = () => {
 		survey: { measurementId: string; },
 	) => {
 		if (surveyAvailable) {
-			if (window && window.googletag) {
+			if (window.googletag) {
 				window.googletag.cmd.push(() => {
-					window.googletag.pubads().setTargeting('inizio', 't');
+					window.googletag?.pubads().setTargeting('inizio', 't');
 				});
 			}
 			console.log(`surveyAvailable: ${survey.measurementId}`);
