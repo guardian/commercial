@@ -1,4 +1,4 @@
-import { GetThirdPartyTag } from '../types';
+import type { GetThirdPartyTag } from '../types';
 
 const onLoad = () => {
 	window.google_trackConversion({
