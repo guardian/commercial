@@ -3,7 +3,7 @@
 // https://jestjs.io/docs/en/configuration.html
 
 module.exports = {
-	preset: 'ts-jest',
+	preset: 'ts-jest/presets/js-with-ts',
 
 	// All imported modules in your tests should be mocked automatically
 	// automock: false,
@@ -27,9 +27,7 @@ module.exports = {
 	// coverageDirectory: undefined,
 
 	// An array of regexp pattern strings used to skip coverage collection
-	// coveragePathIgnorePatterns: [
-	//   "/node_modules/"
-	// ],
+	coveragePathIgnorePatterns: ['vendor'],
 
 	// Indicates which provider should be used to instrument code for coverage
 	// coverageProvider: "babel",

@@ -1,6 +1,6 @@
 {
 	"name": "@guardian/commercial-core",
-	"version": "0.6.0",
+	"version": "0.0.0-this-never-updates-in-source-code-refer-to-git-tags",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial-core#readme",
 	"bugs": {
@@ -23,7 +23,7 @@
 		"compile:common": "tsc --project ./tsconfig.build.json --outDir ./dist/cjs --module CommonJS",
 		"compile:esm": "tsc --project ./tsconfig.build.json --outDir ./dist/esm",
 		"lint": "eslint .",
-		"prepush:lint": "lint-staged",
+		"precommit:lint": "lint-staged",
 		"prepush:test": "jest --verbose --runInBand --onlyChanged",
 		"test": "jest",
 		"tsc": "tsc --noEmit",
@@ -31,7 +31,7 @@
 	},
 	"husky": {
 		"hooks": {
-			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS HUSKY_USE_YARN > /dev/null 2>&1 || (echo \"\n\u001b[0;31m✖ Invalid commit message\u001b[0m \u001b[2mhttps://git.io/JUzbH\u001b[0m\nTry \u001b[0;36myarn commit\u001b[0m instead\n\" && exit 1)",
+			"pre-commit": "npm-run-all precommit:*",
 			"pre-push": "npm-run-all prepush:*"
 		}
 	},
@@ -41,22 +41,16 @@
 		]
 	},
 	"lint-staged": {
-		"*": "eslint --fix"
-	},
-	"config": {
-		"commitizen": {
-			"path": "cz-conventional-changelog"
-		}
+		"*.js|*.ts": "eslint --fix"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^11.0.0",
 		"@commitlint/config-conventional": "^11.0.0",
-		"@semantic-release/changelog": "^5.0.1",
-		"@semantic-release/git": "^9.0.0",
 		"@semantic-release/github": "^7.1.1",
 		"@types/jest": "^26.0.14",
 		"@typescript-eslint/eslint-plugin": "^4.4.0",
 		"@typescript-eslint/parser": "^4.4.0",
+		"@types/doubleclick-gpt": "^2019041801.0.3",
 		"commitizen": "^4.2.1",
 		"cz-conventional-changelog": "3.3.0",
 		"eslint": "^7.11.0",
