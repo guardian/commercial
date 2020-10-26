@@ -3,7 +3,7 @@ import type { GetThirdPartyTag } from '../types';
 const onLoad = () => {
 	const handleQuerySurveyDone = (
 		surveyAvailable: boolean,
-		survey: { measurementId: string; },
+		survey: { measurementId: string },
 	) => {
 		if (surveyAvailable) {
 			if (window.googletag) {

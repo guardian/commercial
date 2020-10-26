@@ -3,7 +3,7 @@ export type TagAtrribute = {
 	value: string;
 };
 
-export type GetThirdPartyTag = (arg0: { shouldRun: boolean; }) => ThirdPartyTag;
+export type GetThirdPartyTag = (arg0: { shouldRun: boolean }) => ThirdPartyTag;
 
 export type ThirdPartyTag = {
 	async?: boolean;
@@ -29,7 +29,10 @@ declare global {
 	interface Window {
 		google_trackConversion?: (arg0: GoogleTrackConversionObject) => void;
 		google_tag_params?: GoogleTagParams;
-		_brandmetrics?: Array<{ cmd: string; val: Record<string, unknown>; }>;
+		_brandmetrics?: Array<{
+			cmd: string;
+			val: Record<string, unknown>;
+		}>;
 		googletag?: googletag.Googletag;
 	}
 }
