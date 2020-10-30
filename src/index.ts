@@ -1,3 +1,5 @@
+/* istanbul ignore file -- there's no point check this for test coverage */
+
 export { ias } from './third-party-tags/ias';
 export { permutive } from './third-party-tags/permutive';
 export { fbPixel } from './third-party-tags/facebook-pixel';
