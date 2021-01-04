@@ -1,8 +1,8 @@
-name: auto-merge
+name: Merge Dependabot PRs automatically
 on:
   pull_request:
-    branches-ignore:
-      - 'gh-pages'
+    branches:
+      - 'dependabot/*'
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
