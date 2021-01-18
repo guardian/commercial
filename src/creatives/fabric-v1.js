@@ -7,9 +7,9 @@ import {
 import fastdom from '@guardian/frontend/static/src/javascripts/lib/fastdom-promise';
 import mediator from '@guardian/frontend/static/src/javascripts/lib/mediator';
 import template from 'lodash/template';
-import fabricV1Html from 'raw-loader!commercial/views/creatives/fabric-v1.html';
-import iframeVideoStr from 'raw-loader!commercial/views/creatives/iframe-video.html';
-import scrollBgStr from 'raw-loader!commercial/views/creatives/scrollbg.html';
+import fabricV1Html from '../views/creatives/fabric-v1.html';
+import iframeVideoStr from '../views/creatives/iframe-video.html';
+import scrollBgStr from '../views/creatives/scrollbg.html';
 import { addTrackingPixel } from './add-tracking-pixel';
 import { addViewabilityTracker } from './add-viewability-tracker';
 

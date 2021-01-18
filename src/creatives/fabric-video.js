@@ -9,7 +9,7 @@ import fastdom from '@guardian/frontend/static/src/javascripts/lib/fastdom-promi
 import template from 'lodash/template';
 import objectFitVideos from 'object-fit-videos';
 import qwery from 'qwery';
-import fabricVideoStr from 'raw-loader!commercial/views/creatives/fabric-video.html';
+import fabricVideoStr from '../views/creatives/fabric-video.html';
 import { addTrackingPixel } from './add-tracking-pixel';
 import { addViewabilityTracker } from './add-viewability-tracker';
 

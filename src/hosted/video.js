@@ -3,8 +3,8 @@ import reportError from '@guardian/frontend/static/src/javascripts/lib/report-er
 import { fullscreener } from '@guardian/frontend/static/src/javascripts/projects/common/modules/media/videojs-plugins/fullscreener';
 import events from '@guardian/frontend/static/src/javascripts/projects/common/modules/video/events';
 import videojsOptions from '@guardian/frontend/static/src/javascripts/projects/common/modules/video/videojs-options';
+import loadingTmpl from '@guardian/frontend/static/src/javascripts/projects/common/views/ui/loading.html';
 import fastdom from 'fastdom';
-import loadingTmpl from 'raw-loader!common/views/ui/loading.html';
 import {
 	canAutoplay,
 	init,

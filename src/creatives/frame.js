@@ -4,8 +4,8 @@ import fastdom from '@guardian/frontend/static/src/javascripts/lib/fastdom-promi
 import { Toggles } from '@guardian/frontend/static/src/javascripts/projects/common/modules/ui/toggles';
 import { addClassesAndTitle } from '@guardian/frontend/static/src/javascripts/projects/common/views/svg';
 import template from 'lodash/template';
-import frameStr from 'raw-loader!commercial/views/creatives/frame.html';
-import labelStr from 'raw-loader!commercial/views/creatives/gustyle-label.html';
+import frameStr from '../views/creatives/frame.html';
+import labelStr from '../views/creatives/gustyle-label.html';
 import { addTrackingPixel } from './add-tracking-pixel';
 import { addViewabilityTracker } from './add-viewability-tracker';
 

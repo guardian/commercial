@@ -13,8 +13,8 @@ import { storage } from '@guardian/libs';
 import bean from 'bean';
 import bindAll from 'lodash/bindAll';
 import template from 'lodash/template';
-import fabricExpandingV1Html from 'raw-loader!commercial/views/creatives/fabric-expanding-v1.html';
-import fabricExpandingVideoHtml from 'raw-loader!commercial/views/creatives/fabric-expanding-video.html';
+import fabricExpandingV1Html from '../views/creatives/fabric-expanding-v1.html';
+import fabricExpandingVideoHtml from '../views/creatives/fabric-expanding-video.html';
 import { addTrackingPixel } from './add-tracking-pixel';
 import { addViewabilityTracker } from './add-viewability-tracker';
 
