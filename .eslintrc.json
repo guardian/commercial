@@ -5,7 +5,21 @@
     "browser": true,
     "node": true
   },
-  "extends": ["@guardian/eslint-config-typescript"],
-  "globals": { "googletag": "readonly" },
-  "ignorePatterns": ["dist", "coverage", "src/__vendor"]
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "extends": ["@guardian/eslint-config"],
+  "plugins": ["jest"],
+  "globals": { "googletag": "readonly", "jsdom": "readonly" },
+  "ignorePatterns": ["dist", "coverage", "src/__vendor"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["@guardian/eslint-config-typescript"]
+    }
+  ]
 }
