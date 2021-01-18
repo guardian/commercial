@@ -1,5 +1,5 @@
+import crossIcon from '@guardian/frontend/static/src/inline-svgs/icon/cross.svg';
 import fastdom from '@guardian/frontend/static/src/javascripts/lib/fastdom-promise';
-import crossIcon from 'svgs/icon/cross.svg';
 
 const shouldRenderLabel = (adSlotNode) =>
 	!(

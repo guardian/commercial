@@ -10,8 +10,8 @@ import template from 'lodash/template';
 import fabricV1Html from 'raw-loader!commercial/views/creatives/fabric-v1.html';
 import iframeVideoStr from 'raw-loader!commercial/views/creatives/iframe-video.html';
 import scrollBgStr from 'raw-loader!commercial/views/creatives/scrollbg.html';
-import { addTrackingPixel } from '../creatives/add-tracking-pixel';
-import { addViewabilityTracker } from '../creatives/add-viewability-tracker';
+import { addTrackingPixel } from './add-tracking-pixel';
+import { addViewabilityTracker } from './add-viewability-tracker';
 
 const hasBackgroundFixedSupport = !isAndroid();
 const isIE10OrLess =

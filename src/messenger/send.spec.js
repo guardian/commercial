@@ -1,4 +1,4 @@
-import { postMessage } from '../messenger/post-message';
+import { postMessage } from './post-message';
 import { send } from './send';
 
 jest.mock('commercial/modules/messenger/post-message', () => ({

@@ -1,7 +1,7 @@
+import paidContent from '@guardian/frontend/static/src/inline-svgs/commercial/paid-content.svg';
+import crossIcon from '@guardian/frontend/static/src/inline-svgs/icon/cross.svg';
 import $ from '@guardian/frontend/static/src/javascripts/lib/$';
 import fastdom from '@guardian/frontend/static/src/javascripts/lib/fastdom-promise';
-import paidContent from 'svgs/commercial/paid-content.svg';
-import crossIcon from 'svgs/icon/cross.svg';
 
 const template = () => `
         <div class="survey-overlay-simple js-survey-overlay u-h" data-link-name="hosted page about overlay" role="dialog" aria-label="about hosted content">

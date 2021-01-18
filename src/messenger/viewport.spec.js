@@ -1,5 +1,5 @@
 import { getViewport as getViewport_ } from '@guardian/frontend/static/src/javascripts/lib/detect';
-import { _ as testExports } from '../messenger/viewport';
+import { _ as testExports } from './viewport';
 
 const getViewport = getViewport_;
 

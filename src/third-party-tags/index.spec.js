@@ -3,7 +3,7 @@ import {
 	onConsentChange as onConsentChange_,
 } from '@guardian/consent-management-platform';
 import { commercialFeatures } from '@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features';
-import { _, init } from './third-party-tags';
+import { _, init } from '.';
 
 const { insertScripts, loadOther } = _;
 

@@ -120,12 +120,12 @@ describe('initialise', () => {
 
 	test('should generate correct Prebid config when consent management off', () => {
 		config.set('switches.consentManagement', false);
-		prebid.initialise(window);
+		initialise(window);
 		expect(window.pbjs.getConfig().consentManagement).toEqual({});
 	});
 
 	test('should generate correct bidder settings', () => {
-		prebid.initialise(window);
+		initialise(window);
 		expect(window.pbjs.bidderSettings.xhb).toHaveProperty(
 			'adserverTargeting',
 		);
@@ -133,13 +133,13 @@ describe('initialise', () => {
 
 	test('should generate correct bidder settings when Xaxis off', () => {
 		config.set('switches.prebidXaxis', false);
-		prebid.initialise(window);
+		initialise(window);
 		expect(window.pbjs.bidderSettings).toEqual({});
 	});
 
 	test('should generate correct Prebid config when user-sync off', () => {
 		config.set('switches.prebidUserSync', false);
-		prebid.initialise(window);
+		initialise(window);
 		expect(window.pbjs.getConfig().userSync.syncEnabled).toEqual(false);
 	});
 
@@ -158,7 +158,7 @@ describe('initialise', () => {
 
 		getAdvertById.mockImplementation(() => dummyAdvert);
 
-		prebid.initialise(window);
+		initialise(window);
 
 		expect(bidWonEventName).toBe('bidWon');
 		expect(window.pbjs.onEvent).toHaveBeenCalledTimes(1);
@@ -186,7 +186,7 @@ describe('initialise', () => {
 			bidWonEventHandler = eventHandler;
 		});
 
-		prebid.initialise(window);
+		initialise(window);
 
 		expect(bidWonEventName).toBe('bidWon');
 		expect(window.pbjs.onEvent).toHaveBeenCalledTimes(1);
@@ -210,7 +210,7 @@ describe('initialise', () => {
 			bidWonEventHandler = eventHandler;
 		});
 
-		prebid.initialise(window);
+		initialise(window);
 
 		expect(bidWonEventName).toBe('bidWon');
 		expect(window.pbjs.onEvent).toHaveBeenCalledTimes(1);
@@ -234,7 +234,7 @@ describe('initialise', () => {
 			bidWonEventHandler = eventHandler;
 		});
 
-		prebid.initialise(window);
+		initialise(window);
 
 		expect(bidWonEventName).toBe('bidWon');
 		expect(window.pbjs.onEvent).toHaveBeenCalledTimes(1);

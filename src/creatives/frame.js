@@ -1,13 +1,13 @@
+import arrow from '@guardian/frontend/static/src/inline-svgs/icon/arrow.svg';
+import externalLink from '@guardian/frontend/static/src/inline-svgs/icon/external-link.svg';
 import fastdom from '@guardian/frontend/static/src/javascripts/lib/fastdom-promise';
 import { Toggles } from '@guardian/frontend/static/src/javascripts/projects/common/modules/ui/toggles';
-import { addClassesAndTitle } from 'common/views/svg';
+import { addClassesAndTitle } from '@guardian/frontend/static/src/javascripts/projects/common/views/svg';
 import template from 'lodash/template';
 import frameStr from 'raw-loader!commercial/views/creatives/frame.html';
 import labelStr from 'raw-loader!commercial/views/creatives/gustyle-label.html';
-import arrow from 'svgs/icon/arrow.svg';
-import externalLink from 'svgs/icon/external-link.svg';
-import { addTrackingPixel } from '../creatives/add-tracking-pixel';
-import { addViewabilityTracker } from '../creatives/add-viewability-tracker';
+import { addTrackingPixel } from './add-tracking-pixel';
+import { addViewabilityTracker } from './add-viewability-tracker';
 
 class Frame {
 	constructor(adSlot, params) {

@@ -1,7 +1,7 @@
 import fastdom from 'fastdom';
-import { addTrackingPixel } from '../creatives/add-tracking-pixel';
-import { addViewabilityTracker } from '../creatives/add-viewability-tracker';
-import { ScrollableMpu } from '../creatives/scrollable-mpu-v2';
+import { addTrackingPixel } from './add-tracking-pixel';
+import { addViewabilityTracker } from './add-viewability-tracker';
+import { ScrollableMpu } from './scrollable-mpu-v2';
 
 jest.mock('commercial/modules/creatives/add-tracking-pixel', () => ({
 	addTrackingPixel: jest.fn(),

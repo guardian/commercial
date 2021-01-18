@@ -1,6 +1,6 @@
 import { markTime } from '@guardian/frontend/static/src/javascripts/lib/user-timing';
-import a9 from '../header-bidding/a9/a9';
-import prebid from '../header-bidding/prebid/prebid';
+import { requestBids as requestA9Bids } from '../header-bidding/a9/a9';
+import { requestBids as requestPrebidBids } from '../header-bidding/prebid/prebid';
 
 const forcedSlotSize = (advert, hbSlot) => {
 	// We only fiddle with top-above-nav hbSlot(s)
@@ -35,8 +35,8 @@ export const loadAdvert = (advert) => {
 			markTime(`Commercial: Slot Ready: ${advert.id}`);
 			advert.startLoading();
 			return Promise.all([
-				prebid.requestBids(advert),
-				a9.requestBids(advert),
+				requestPrebidBids(advert),
+				requestA9Bids(advert),
 			]);
 		})
 		.then(() => {
@@ -48,11 +48,11 @@ export const refreshAdvert = (advert) => {
 	// advert.size contains the effective size being displayed prior to refreshing
 	advert.whenSlotReady
 		.then(() => {
-			const prebidPromise = prebid.requestBids(advert, (prebidSlot) =>
+			const prebidPromise = requestPrebidBids(advert, (prebidSlot) =>
 				forcedSlotSize(advert, prebidSlot),
 			);
 
-			const a9Promise = a9.requestBids(advert, (a9Slot) =>
+			const a9Promise = requestA9Bids(advert, (a9Slot) =>
 				forcedSlotSize(advert, a9Slot),
 			);
 			return Promise.all([prebidPromise, a9Promise]);

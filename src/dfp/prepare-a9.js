@@ -7,7 +7,7 @@ import { isGoogleProxy } from '@guardian/frontend/static/src/javascripts/lib/det
 import { commercialFeatures } from '@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features';
 import once from 'lodash/once';
 import { dfpEnv } from '../dfp/dfp-env';
-import a9 from '../header-bidding/a9/a9';
+import { initialise } from '../header-bidding/a9/a9';
 import { shouldIncludeOnlyA9 } from '../header-bidding/utils';
 
 const setupA9 = () => {
@@ -26,7 +26,7 @@ const setupA9 = () => {
 			!isGoogleProxy())
 	) {
 		moduleLoadResult = import('lib/a9-apstag.js').then(() => {
-			a9.initialise();
+			initialise();
 
 			return Promise.resolve();
 		});

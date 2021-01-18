@@ -1,3 +1,5 @@
+import arrowDown from '@guardian/frontend/static/src/inline-svgs/icon/arrow-down.svg';
+import closeCentral from '@guardian/frontend/static/src/inline-svgs/icon/close-central.svg';
 import $ from '@guardian/frontend/static/src/javascripts/lib/$';
 import {
 	getViewport,
@@ -13,10 +15,8 @@ import bindAll from 'lodash/bindAll';
 import template from 'lodash/template';
 import fabricExpandingV1Html from 'raw-loader!commercial/views/creatives/fabric-expanding-v1.html';
 import fabricExpandingVideoHtml from 'raw-loader!commercial/views/creatives/fabric-expanding-video.html';
-import arrowDown from 'svgs/icon/arrow-down.svg';
-import closeCentral from 'svgs/icon/close-central.svg';
-import { addTrackingPixel } from '../creatives/add-tracking-pixel';
-import { addViewabilityTracker } from '../creatives/add-viewability-tracker';
+import { addTrackingPixel } from './add-tracking-pixel';
+import { addViewabilityTracker } from './add-viewability-tracker';
 
 // Forked from expandable-v3.js
 class FabricExpandingV1 {

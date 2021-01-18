@@ -2,8 +2,8 @@ import $ from '@guardian/frontend/static/src/javascripts/lib/$';
 import { isAndroid } from '@guardian/frontend/static/src/javascripts/lib/detect';
 import mediator from '@guardian/frontend/static/src/javascripts/lib/mediator';
 import fastdom from 'fastdom';
-import { addTrackingPixel } from '../creatives/add-tracking-pixel';
-import { addViewabilityTracker } from '../creatives/add-viewability-tracker';
+import { addTrackingPixel } from './add-tracking-pixel';
+import { addViewabilityTracker } from './add-viewability-tracker';
 
 /**
  * TODO: rather blunt instrument this, due to the fact *most* mobile devices don't have a fixed

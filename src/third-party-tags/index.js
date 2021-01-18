@@ -7,14 +7,14 @@ import {
 import config from '@guardian/frontend/static/src/javascripts/lib/config';
 import fastdom from '@guardian/frontend/static/src/javascripts/lib/fastdom-promise';
 import { commercialFeatures } from '@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features';
-import { fbPixel } from '../third-party-tags/fbPixel';
-import { ias } from '../third-party-tags/ias';
-import { imrWorldwide } from '../third-party-tags/imr-worldwide';
-import { imrWorldwideLegacy } from '../third-party-tags/imr-worldwide-legacy';
-import { inizio } from '../third-party-tags/inizio';
-import { permutive } from '../third-party-tags/permutive';
-import { remarketing } from '../third-party-tags/remarketing';
-import { twitter } from '../third-party-tags/twitter';
+import { fbPixel } from './facebook-pixel';
+import { ias } from './ias';
+import { imrWorldwide } from './imr-worldwide';
+import { imrWorldwideLegacy } from './imr-worldwide-legacy';
+import { inizio } from './inizio';
+import { permutive } from './permutive';
+import { remarketing } from './remarketing';
+import { twitter } from './twitter-uwt';
 
 const addScripts = (tags) => {
 	const ref = document.scripts[0];

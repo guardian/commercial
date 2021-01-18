@@ -16,9 +16,9 @@ export const twitterScript = () => {
 			a.parentNode.insertBefore(u, a));
 	})(window, document, 'script');
 	// Insert Twitter Pixel ID and Standard Event data below
-	twq('init', 'nyl43'); // The Guardian ID
-	twq('track', 'PageView');
+	window.twq('init', 'nyl43'); // The Guardian ID
+	window.twq('track', 'PageView');
 
-	twq('init', 'ny4k9'); // PHD ID
-	twq('track', 'PageView');
+	window.twq('init', 'ny4k9'); // PHD ID
+	window.twq('track', 'PageView');
 };

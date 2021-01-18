@@ -8,7 +8,7 @@ import { getPageTargeting } from '@guardian/frontend/static/src/javascripts/proj
 import { commercialFeatures } from '@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features';
 import once from 'lodash/once';
 import { dfpEnv } from '../dfp/dfp-env';
-import prebid from '../header-bidding/prebid/prebid';
+import { initialise } from '../header-bidding/prebid/prebid';
 import { shouldIncludeOnlyA9 } from '../header-bidding/utils';
 
 const loadPrebid = () => {
@@ -24,7 +24,7 @@ const loadPrebid = () => {
 			/* webpackChunkName: "Prebid.js" */ 'prebid.js/build/dist/prebid'
 		).then(() => {
 			getPageTargeting();
-			prebid.initialise(window);
+			initialise(window);
 		});
 	}
 };

@@ -1,5 +1,5 @@
 import { getViewport as getViewport_ } from '@guardian/frontend/static/src/javascripts/lib/detect';
-import { _ as testExports } from '../messenger/scroll';
+import { _ as testExports } from './scroll';
 
 const getViewport = getViewport_;
 const addScrollListener = testExports.addScrollListener;

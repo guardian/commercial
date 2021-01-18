@@ -10,8 +10,8 @@ import template from 'lodash/template';
 import objectFitVideos from 'object-fit-videos';
 import qwery from 'qwery';
 import fabricVideoStr from 'raw-loader!commercial/views/creatives/fabric-video.html';
-import { addTrackingPixel } from '../creatives/add-tracking-pixel';
-import { addViewabilityTracker } from '../creatives/add-viewability-tracker';
+import { addTrackingPixel } from './add-tracking-pixel';
+import { addViewabilityTracker } from './add-viewability-tracker';
 
 class FabricVideo {
 	constructor(adSlot, params) {

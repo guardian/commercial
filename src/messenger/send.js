@@ -1,4 +1,4 @@
-import { postMessage } from '../messenger/post-message';
+import { postMessage } from './post-message';
 
 const send = (type, payload) => {
 	const msg = {

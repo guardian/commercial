@@ -6,7 +6,7 @@ import config from '@guardian/frontend/static/src/javascripts/lib/config';
 import { isGoogleProxy } from '@guardian/frontend/static/src/javascripts/lib/detect';
 import { commercialFeatures } from '@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features';
 import { dfpEnv } from '../dfp/dfp-env';
-import prebid from '../header-bidding/prebid/prebid';
+import { initialise } from '../header-bidding/prebid/prebid';
 import { _ } from './prepare-prebid';
 
 const { setupPrebid } = _;
@@ -96,7 +96,7 @@ describe('init', () => {
 		onConsentChange.mockImplementation(tcfv2WithConsentMock);
 		getConsentFor.mockReturnValue(true);
 		await setupPrebid();
-		expect(prebid.initialise).toBeCalled();
+		expect(initialise).toBeCalled();
 	});
 
 	it('should not initialise Prebid when useragent is Google Web Preview', async () => {
@@ -105,7 +105,7 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		fakeUserAgent('Google Web Preview');
 		await setupPrebid();
-		expect(prebid.initialise).not.toBeCalled();
+		expect(initialise).not.toBeCalled();
 	});
 
 	it('should not initialise Prebid when no header bidding switches are on', async () => {
@@ -113,7 +113,7 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		dfpEnv.hbImpl = { prebid: false, a9: false };
 		await setupPrebid();
-		expect(prebid.initialise).not.toBeCalled();
+		expect(initialise).not.toBeCalled();
 	});
 
 	it('should not initialise Prebid when advertising is switched off', async () => {
@@ -121,7 +121,7 @@ describe('init', () => {
 		commercialFeatures.dfpAdvertising = false;
 		commercialFeatures.adFree = false;
 		await setupPrebid();
-		expect(prebid.initialise).not.toBeCalled();
+		expect(initialise).not.toBeCalled();
 	});
 
 	it('should not initialise Prebid when ad-free is on', async () => {
@@ -129,7 +129,7 @@ describe('init', () => {
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = true;
 		await setupPrebid();
-		expect(prebid.initialise).not.toBeCalled();
+		expect(initialise).not.toBeCalled();
 	});
 
 	it('should not initialise Prebid when the page has a pageskin', async () => {
@@ -138,7 +138,7 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		config.set('page.hasPageSkin', true);
 		await setupPrebid();
-		expect(prebid.initialise).not.toBeCalled();
+		expect(initialise).not.toBeCalled();
 	});
 
 	it('should initialise Prebid when the page has no pageskin', async () => {
@@ -147,7 +147,7 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		config.set('page.hasPageSkin', false);
 		await setupPrebid();
-		expect(prebid.initialise).toBeCalled();
+		expect(initialise).toBeCalled();
 	});
 	it('should initialise Prebid if TCFv2 consent with correct Sourcepoint Id is true', async () => {
 		dfpEnv.hbImpl = { prebid: true, a9: false };
@@ -156,7 +156,7 @@ describe('init', () => {
 		onConsentChange.mockImplementation(tcfv2WithConsentMock);
 		getConsentFor.mockReturnValue(true);
 		await setupPrebid();
-		expect(prebid.initialise).toBeCalled();
+		expect(initialise).toBeCalled();
 	});
 
 	it('should not initialise Prebid if TCFv2 consent with correct Sourcepoint Id is false', async () => {
@@ -166,7 +166,7 @@ describe('init', () => {
 		onConsentChange.mockImplementation(tcfv2WithoutConsentMock);
 		getConsentFor.mockReturnValue(false);
 		await setupPrebid();
-		expect(prebid.initialise).not.toBeCalled();
+		expect(initialise).not.toBeCalled();
 	});
 
 	it('should initialise Prebid in CCPA if doNotSell is false', async () => {
@@ -176,7 +176,7 @@ describe('init', () => {
 		onConsentChange.mockImplementation(ccpaWithConsentMock);
 		getConsentFor.mockReturnValue(true); // TODO: Why do we need to mock this?
 		await setupPrebid();
-		expect(prebid.initialise).toBeCalled();
+		expect(initialise).toBeCalled();
 	});
 
 	it('should not initialise Prebid in CCPA if doNotSell is true', async () => {
@@ -186,7 +186,7 @@ describe('init', () => {
 		onConsentChange.mockImplementation(ccpaWithoutConsentMock);
 		getConsentFor.mockReturnValue(false);
 		await setupPrebid();
-		expect(prebid.initialise).not.toBeCalled();
+		expect(initialise).not.toBeCalled();
 	});
 
 	it('should initialise Prebid in AUS if Advertising is not rejected', async () => {
@@ -196,7 +196,7 @@ describe('init', () => {
 		onConsentChange.mockImplementation(ausWithConsentMock);
 		getConsentFor.mockReturnValue(true);
 		await setupPrebid();
-		expect(prebid.initialise).toBeCalled();
+		expect(initialise).toBeCalled();
 	});
 
 	it('should not initialise Prebid in AUS if Advertising is rejected', async () => {
@@ -206,7 +206,7 @@ describe('init', () => {
 		onConsentChange.mockImplementation(ausWithoutConsentMock);
 		getConsentFor.mockReturnValue(false);
 		await setupPrebid();
-		expect(prebid.initialise).not.toBeCalled();
+		expect(initialise).not.toBeCalled();
 	});
 
 	it('isGoogleWebPreview should return false with no navigator or useragent', () => {
