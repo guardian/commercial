@@ -48,7 +48,7 @@
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
-    "@guardian/consent-management-platform": "6.9.1",
+    "@guardian/consent-management-platform": "6.11.1",
     "@guardian/eslint-config": "^0.4.2",
     "@guardian/eslint-config-typescript": "^0.4.2",
     "@guardian/frontend": "guardian/frontend#53d09781daefeb8566bbeb8231efc922649f7983",
@@ -87,7 +87,7 @@
     "typescript": "^4.1.3"
   },
   "peerDependencies": {
-    "@guardian/consent-management-platform": "^6.9.0",
+    "@guardian/consent-management-platform": "^6.11.1",
     "@guardian/libs": "^1.4.0",
     "bean": "~1.0.0",
     "bonzo": "~2.0.0",
