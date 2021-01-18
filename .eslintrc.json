@@ -32,6 +32,20 @@
       }
     }
   },
+
+  "rules": {
+    // Temporary (they better be!) rule to flag the 'bad', legacy imports from
+    // frontend that get this working. At some point this codebase _will_ be
+    // detached from frontend entirely, and then it will make it's own decisions
+    // about what it uses.
+    "no-restricted-imports": [
+      "warn",
+      {
+        "paths": ["bonzo", "bean", "qwery", "fastdom"],
+        "patterns": ["@guardian/frontend/*", "lodash/*"]
+      }
+    ]
+  },
   "ignorePatterns": ["dist", "coverage", "src/__vendor"],
   "overrides": [
     {
