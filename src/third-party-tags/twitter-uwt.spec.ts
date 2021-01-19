@@ -1,4 +1,4 @@
-import { twitterScript } from '../__vendor/twitter-script';
+import { twitterScript } from '../__vendor__/twitter-script';
 import { twitter } from './twitter-uwt';
 
 describe('twitter', () => {
