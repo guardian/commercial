@@ -5,10 +5,10 @@ import { markTime } from '@guardian/frontend/static/src/javascripts/lib/user-tim
 import { fire } from '@guardian/frontend/static/src/javascripts/projects/common/modules/analytics/beacon';
 import once from 'lodash/once';
 import { adSizes } from '../ad-sizes';
-import { dfpEnv } from '../dfp/dfp-env';
-import { emptyAdvert } from '../dfp/empty-advert';
-import { getAdvertById } from '../dfp/get-advert-by-id';
-import { renderAdvert } from '../dfp/render-advert';
+import { dfpEnv } from './dfp-env';
+import { emptyAdvert } from './empty-advert';
+import { getAdvertById } from './get-advert-by-id';
+import { renderAdvert } from './render-advert';
 
 const recordFirstAdRendered = once(() => {
 	markTime('Commercial: First Ad Rendered');

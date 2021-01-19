@@ -7,9 +7,9 @@ import { isGoogleProxy } from '@guardian/frontend/static/src/javascripts/lib/det
 import { getPageTargeting } from '@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/build-page-targeting';
 import { commercialFeatures } from '@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features';
 import once from 'lodash/once';
-import { dfpEnv } from '../dfp/dfp-env';
 import { initialise } from '../header-bidding/prebid/prebid';
 import { shouldIncludeOnlyA9 } from '../header-bidding/utils';
+import { dfpEnv } from './dfp-env';
 
 const loadPrebid = () => {
 	if (

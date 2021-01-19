@@ -1,6 +1,6 @@
-import { dfpEnv } from '../dfp/dfp-env';
-import { enableLazyLoad } from '../dfp/lazy-load';
-import { loadAdvert } from '../dfp/load-advert';
+import { dfpEnv } from './dfp-env';
+import { enableLazyLoad } from './lazy-load';
+import { loadAdvert } from './load-advert';
 
 const advertsToInstantlyLoad = ['dfp-ad--im'];
 

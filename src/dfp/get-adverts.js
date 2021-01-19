@@ -1,5 +1,5 @@
-import { dfpEnv } from '../dfp/dfp-env';
-import { getAdvertById } from '../dfp/get-advert-by-id';
+import { dfpEnv } from './dfp-env';
+import { getAdvertById } from './get-advert-by-id';
 
 export const getAdverts = (withEmpty) =>
 	Object.keys(dfpEnv.advertIds).reduce((advertsById, id) => {

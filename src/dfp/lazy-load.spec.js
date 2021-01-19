@@ -1,7 +1,7 @@
-import { dfpEnv } from '../dfp/dfp-env';
-import { getAdvertById as getAdvertById_ } from '../dfp/get-advert-by-id';
-import { enableLazyLoad } from '../dfp/lazy-load';
-import { loadAdvert } from '../dfp/load-advert';
+import { dfpEnv } from './dfp-env';
+import { getAdvertById as getAdvertById_ } from './get-advert-by-id';
+import { enableLazyLoad } from './lazy-load';
+import { loadAdvert } from './load-advert';
 
 jest.mock(
 	'@guardian/frontend/static/src/javascripts/projects/common/modules/experiments/ab',

@@ -1,5 +1,5 @@
 import bonzo from 'bonzo';
-import { renderAdvertLabel } from '../dfp/render-advert-label';
+import { renderAdvertLabel } from './render-advert-label';
 
 jest.mock('@guardian/frontend/static/src/javascripts/lib/detect', () => {});
 jest.mock(

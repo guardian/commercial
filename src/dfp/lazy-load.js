@@ -1,7 +1,7 @@
 import once from 'lodash/once';
-import { dfpEnv } from '../dfp/dfp-env';
-import { getAdvertById } from '../dfp/get-advert-by-id';
-import { loadAdvert, refreshAdvert } from '../dfp/load-advert';
+import { dfpEnv } from './dfp-env';
+import { getAdvertById } from './get-advert-by-id';
+import { loadAdvert, refreshAdvert } from './load-advert';
 
 const displayAd = (advertId) => {
 	const advert = getAdvertById(advertId);

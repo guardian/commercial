@@ -1,5 +1,5 @@
 import { storage } from '@guardian/libs';
-import { getAdvertById } from '../dfp/get-advert-by-id';
+import { getAdvertById } from './get-advert-by-id';
 
 export const onSlotVisibilityChanged = (event) => {
 	if (storage.session.isAvailable()) {

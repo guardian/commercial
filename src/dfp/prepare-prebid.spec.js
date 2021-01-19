@@ -5,8 +5,8 @@ import {
 import config from '@guardian/frontend/static/src/javascripts/lib/config';
 import { isGoogleProxy } from '@guardian/frontend/static/src/javascripts/lib/detect';
 import { commercialFeatures } from '@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features';
-import { dfpEnv } from '../dfp/dfp-env';
 import { initialise } from '../header-bidding/prebid/prebid';
+import { dfpEnv } from './dfp-env';
 import { _ } from './prepare-prebid';
 
 const { setupPrebid } = _;

@@ -3,9 +3,9 @@ import {
 	hasCrossedBreakpoint,
 } from '@guardian/frontend/static/src/javascripts/lib/detect';
 import mediator from '@guardian/frontend/static/src/javascripts/lib/mediator';
-import { breakpointNameToAttribute } from '../dfp/breakpoint-name-to-attribute';
-import { dfpEnv } from '../dfp/dfp-env';
-import { refreshAdvert } from '../dfp/load-advert';
+import { breakpointNameToAttribute } from './breakpoint-name-to-attribute';
+import { dfpEnv } from './dfp-env';
+import { refreshAdvert } from './load-advert';
 
 /* hasBreakpointChanged: ((string, string) -> undefined) -> undefined. Invokes the callback if a breakpoint has been crossed since last invocation */
 const hasBreakpointChanged = hasCrossedBreakpoint(true);

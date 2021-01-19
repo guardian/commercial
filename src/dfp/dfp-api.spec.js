@@ -6,12 +6,12 @@ import $ from '@guardian/frontend/static/src/javascripts/lib/$';
 import config from '@guardian/frontend/static/src/javascripts/lib/config';
 import { getBreakpoint as getBreakpoint_ } from '@guardian/frontend/static/src/javascripts/lib/detect';
 import { commercialFeatures } from '@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features';
-import { dfpEnv } from '../dfp/dfp-env';
-import { fillAdvertSlots as fillAdvertSlots_ } from '../dfp/fill-advert-slots';
-import { getAdverts } from '../dfp/get-adverts';
-import { getCreativeIDs } from '../dfp/get-creative-ids';
-import { loadAdvert } from '../dfp/load-advert';
-import { init as prepareGoogletag } from '../dfp/prepare-googletag';
+import { dfpEnv } from './dfp-env';
+import { fillAdvertSlots as fillAdvertSlots_ } from './fill-advert-slots';
+import { getAdverts } from './get-adverts';
+import { getCreativeIDs } from './get-creative-ids';
+import { loadAdvert } from './load-advert';
+import { init as prepareGoogletag } from './prepare-googletag';
 
 const onConsentChange = onConsentChange_;
 const getConsentFor = getConsentFor_;
@@ -112,7 +112,7 @@ jest.mock(
 		geoMostPopular: { render: jest.fn() },
 	}),
 );
-jest.mock('./dfp/load-advert', () => ({
+jest.mock('./load-advert', () => ({
 	loadAdvert: jest.fn(),
 }));
 jest.mock('@guardian/consent-management-platform', () => ({

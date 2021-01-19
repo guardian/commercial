@@ -4,9 +4,9 @@ import reportError from '@guardian/frontend/static/src/javascripts/lib/report-er
 import { geoMostPopular } from '@guardian/frontend/static/src/javascripts/projects/common/modules/onward/geo-most-popular';
 import qwery from 'qwery';
 import { adSizes } from '../ad-sizes';
-import { applyCreativeTemplate } from '../dfp/apply-creative-template';
-import { renderAdvertLabel } from '../dfp/render-advert-label';
 import { stickyCommentsMpu, stickyMpu } from '../sticky-mpu';
+import { applyCreativeTemplate } from './apply-creative-template';
+import { renderAdvertLabel } from './render-advert-label';
 /**
  * ADVERT RENDERING
  * ----------------

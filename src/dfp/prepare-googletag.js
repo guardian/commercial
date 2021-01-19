@@ -12,13 +12,6 @@ import { getUserFromCookie } from '@guardian/frontend/static/src/javascripts/pro
 import { loadScript, storage } from '@guardian/libs';
 import qwery from 'qwery';
 import { adFreeSlotRemove } from '../ad-free-slot-remove';
-import { dfpEnv } from '../dfp/dfp-env';
-import { fillAdvertSlots } from '../dfp/fill-advert-slots';
-import { onSlotLoad } from '../dfp/on-slot-load';
-import { onSlotRender } from '../dfp/on-slot-render';
-import { onSlotViewableFunction } from '../dfp/on-slot-viewable';
-import { onSlotVisibilityChanged } from '../dfp/on-slot-visibility-changed';
-import { refreshOnResize } from '../dfp/refresh-on-resize';
 import { init as initMessenger } from '../messenger';
 import { init as background } from '../messenger/background';
 import { init as sendClick } from '../messenger/click';
@@ -31,6 +24,13 @@ import { init as resize } from '../messenger/resize';
 import { init as scroll } from '../messenger/scroll';
 import { init as type } from '../messenger/type';
 import { init as viewport } from '../messenger/viewport';
+import { dfpEnv } from './dfp-env';
+import { fillAdvertSlots } from './fill-advert-slots';
+import { onSlotLoad } from './on-slot-load';
+import { onSlotRender } from './on-slot-render';
+import { onSlotViewableFunction } from './on-slot-viewable';
+import { onSlotVisibilityChanged } from './on-slot-visibility-changed';
+import { refreshOnResize } from './refresh-on-resize';
 
 initMessenger(
 	type,

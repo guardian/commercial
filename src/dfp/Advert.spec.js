@@ -1,4 +1,4 @@
-import { _, Advert } from '../dfp/Advert';
+import { _, Advert } from './Advert';
 
 const { filterClasses } = _;
 

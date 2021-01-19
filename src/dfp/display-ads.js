@@ -1,6 +1,6 @@
 import { pageSkin } from '../creatives/page-skin';
-import { dfpEnv } from '../dfp/dfp-env';
-import { loadAdvert } from '../dfp/load-advert';
+import { dfpEnv } from './dfp-env';
+import { loadAdvert } from './load-advert';
 
 const displayAds = () => {
 	window.googletag.pubads().enableSingleRequest();

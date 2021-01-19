@@ -3,12 +3,12 @@ import { getBreakpoint } from '@guardian/frontend/static/src/javascripts/lib/det
 import { commercialFeatures } from '@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features';
 import qwery from 'qwery';
 import { closeDisabledSlots } from '../close-disabled-slots';
-import { Advert } from '../dfp/Advert';
-import { dfpEnv } from '../dfp/dfp-env';
-import { displayAds } from '../dfp/display-ads';
-import { displayLazyAds } from '../dfp/display-lazy-ads';
-import { setupPrebidOnce } from '../dfp/prepare-prebid';
-import { queueAdvert } from '../dfp/queue-advert';
+import { Advert } from './Advert';
+import { dfpEnv } from './dfp-env';
+import { displayAds } from './display-ads';
+import { displayLazyAds } from './display-lazy-ads';
+import { setupPrebidOnce } from './prepare-prebid';
+import { queueAdvert } from './queue-advert';
 
 // Pre-rendered ad slots that were rendered on the page by the server are collected here.
 // For dynamic ad slots that are created at js-runtime, see:

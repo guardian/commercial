@@ -1,5 +1,5 @@
 import memoize from 'lodash/memoize';
-import { getAdvertById } from '../dfp/get-advert-by-id';
+import { getAdvertById } from './get-advert-by-id';
 
 export const waitForAdvert = memoize(
 	(id) =>

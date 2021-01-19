@@ -1,6 +1,6 @@
 import { getUrlVars } from '@guardian/frontend/static/src/javascripts/lib/url';
-import { getAdvertById } from '../dfp/get-advert-by-id';
-import { enableLazyLoad } from '../dfp/lazy-load';
+import { getAdvertById } from './get-advert-by-id';
+import { enableLazyLoad } from './lazy-load';
 
 const setSlotAdRefresh = (event) => {
 	const advert = getAdvertById(event.slot.getSlotElementId());

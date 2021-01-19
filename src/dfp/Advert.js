@@ -1,7 +1,7 @@
 import { breakpoints } from '@guardian/frontend/static/src/javascripts/lib/detect';
 import { getCurrentTime } from '@guardian/frontend/static/src/javascripts/lib/user-timing';
-import { breakpointNameToAttribute } from '../dfp/breakpoint-name-to-attribute';
-import { defineSlot } from '../dfp/define-slot';
+import { breakpointNameToAttribute } from './breakpoint-name-to-attribute';
+import { defineSlot } from './define-slot';
 
 /** A breakpoint can have various sizes assigned to it. You can assign either on
  * set of sizes or multiple.
