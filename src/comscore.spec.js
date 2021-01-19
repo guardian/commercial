@@ -48,11 +48,14 @@ jest.mock('@guardian/libs', () => ({
 	loadScript: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock('common/modules/commercial/commercial-features', () => ({
-	commercialFeatures: {
-		comscore: true,
-	},
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features',
+	() => ({
+		commercialFeatures: {
+			comscore: true,
+		},
+	}),
+);
 
 describe('comscore init', () => {
 	it('should do nothing if the comscore is disabled in commercial features', () => {

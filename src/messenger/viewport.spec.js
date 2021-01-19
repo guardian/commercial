@@ -6,11 +6,11 @@ const getViewport = getViewport_;
 const addResizeListener = testExports.addResizeListener;
 const reset = testExports.reset;
 
-jest.mock('lib/detect', () => ({
+jest.mock('@guardian/frontend/static/src/javascripts/lib/detect', () => ({
 	getViewport: jest.fn(),
 }));
 
-jest.mock('commercial/modules/messenger', () => ({
+jest.mock('../messenger', () => ({
 	register: jest.fn(),
 }));
 

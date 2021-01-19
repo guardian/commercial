@@ -1,10 +1,13 @@
 import bonzo from 'bonzo';
 import { renderAdvertLabel } from '../dfp/render-advert-label';
 
-jest.mock('lib/detect', () => {});
-jest.mock('common/modules/commercial/commercial-features', () => ({
-	commercialFeatures: {},
-}));
+jest.mock('@guardian/frontend/static/src/javascripts/lib/detect', () => {});
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features',
+	() => ({
+		commercialFeatures: {},
+	}),
+);
 
 const adverts = {};
 const labelSelector = '.ad-slot__label';

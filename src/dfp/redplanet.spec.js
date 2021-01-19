@@ -21,29 +21,42 @@ const AusWithoutConsentMock = (callback) =>
 
 const onConsentChange = onConsentChange_;
 
-jest.mock('common/modules/commercial/commercial-features', () => ({
-	commercialFeatures: {},
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features',
+	() => ({
+		commercialFeatures: {},
+	}),
+);
 
-jest.mock('commercial/modules/dfp/Advert', () =>
+jest.mock('./Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
 );
 
-jest.mock('common/modules/commercial/geo-utils');
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/geo-utils',
+);
 
-jest.mock('common/modules/experiments/ab', () => ({
-	isInVariantSynchronous: jest.fn(),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/experiments/ab',
+	() => ({
+		isInVariantSynchronous: jest.fn(),
+	}),
+);
 
-jest.mock('lib/cookies', () => ({
+jest.mock('@guardian/frontend/static/src/javascripts/lib/cookies', () => ({
 	getCookie: jest.fn(),
 }));
 
-jest.mock('lib/launchpad', () => jest.fn());
+jest.mock('@guardian/frontend/static/src/javascripts/lib/launchpad', () =>
+	jest.fn(),
+);
 
-jest.mock('common/modules/commercial/build-page-targeting', () => ({
-	buildPageTargeting: jest.fn(),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/build-page-targeting',
+	() => ({
+		buildPageTargeting: jest.fn(),
+	}),
+);
 
 jest.mock('@guardian/libs', () => ({
 	loadScript: () => Promise.resolve(),
@@ -54,9 +67,12 @@ jest.mock('@guardian/consent-management-platform', () => ({
 	getConsentFor: jest.fn(),
 }));
 
-jest.mock('common/modules/experiments/ab', () => ({
-	isInVariantSynchronous: jest.fn(),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/experiments/ab',
+	() => ({
+		isInVariantSynchronous: jest.fn(),
+	}),
+);
 
 const CcpaWithConsentMock = (callback) =>
 	callback({ ccpa: { doNotSell: false } });

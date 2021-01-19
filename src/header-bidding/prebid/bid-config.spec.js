@@ -60,21 +60,29 @@ const {
 	indexExchangeBidders,
 } = _;
 
-jest.mock('common/modules/commercial/build-page-targeting', () => ({
-	buildAppNexusTargeting: () => 'someTestAppNexusTargeting',
-	buildAppNexusTargetingObject: () => 'someAppNexusTargetingObject',
-	getPageTargeting: () => 'bla',
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/build-page-targeting',
+	() => ({
+		buildAppNexusTargeting: () => 'someTestAppNexusTargeting',
+		buildAppNexusTargetingObject: () => 'someAppNexusTargetingObject',
+		getPageTargeting: () => 'bla',
+	}),
+);
 
 jest.mock('../utils');
 
-jest.mock('common/modules/commercial/geo-utils');
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/geo-utils',
+);
 
-jest.mock('common/modules/experiments/ab', () => ({
-	isInVariantSynchronous: jest.fn(),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/experiments/ab',
+	() => ({
+		isInVariantSynchronous: jest.fn(),
+	}),
+);
 
-jest.mock('lib/cookies', () => ({
+jest.mock('@guardian/frontend/static/src/javascripts/lib/cookies', () => ({
 	getCookie: jest.fn(),
 }));
 

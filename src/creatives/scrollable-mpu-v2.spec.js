@@ -3,15 +3,15 @@ import { addTrackingPixel } from './add-tracking-pixel';
 import { addViewabilityTracker } from './add-viewability-tracker';
 import { ScrollableMpu } from './scrollable-mpu-v2';
 
-jest.mock('commercial/modules/creatives/add-tracking-pixel', () => ({
+jest.mock('./add-tracking-pixel', () => ({
 	addTrackingPixel: jest.fn(),
 }));
 
-jest.mock('commercial/modules/creatives/add-viewability-tracker', () => ({
+jest.mock('./add-viewability-tracker', () => ({
 	addViewabilityTracker: jest.fn(),
 }));
 
-jest.mock('lib/detect', () => ({
+jest.mock('@guardian/frontend/static/src/javascripts/lib/detect', () => ({
 	isAndroid: jest.fn(),
 }));
 

@@ -9,7 +9,7 @@ const onLoad = imrWorldwide.onLoad;
  * that are dependent on config.
  * */
 
-jest.mock('lib/config', () => {
+jest.mock('@guardian/frontend/static/src/javascripts/lib/config', () => {
 	const defaultConfig = {
 		switches: {
 			imrWorldwide: true,
@@ -36,13 +36,19 @@ jest.mock('lib/config', () => {
 	});
 });
 
-jest.mock('common/modules/commercial/geo-utils', () => ({
-	isInAuOrNz: jest.fn().mockReturnValue(true),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/geo-utils',
+	() => ({
+		isInAuOrNz: jest.fn().mockReturnValue(true),
+	}),
+);
 
-jest.mock('common/modules/experiments/ab', () => ({
-	isInVariantSynchronous: jest.fn(),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/experiments/ab',
+	() => ({
+		isInVariantSynchronous: jest.fn(),
+	}),
+);
 
 const nSdkInstance = {
 	ggInitialize: jest.fn(),

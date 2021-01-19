@@ -6,8 +6,11 @@ import {
 	triggerEndSlate,
 } from '../hosted/next-video-autoplay';
 
-jest.mock('common/modules/analytics/google', () => {});
-jest.mock('commercial/modules/hosted/next-video', () => ({
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/analytics/google',
+	() => {},
+);
+jest.mock('../hosted/next-video', () => ({
 	init: () => Promise.resolve(),
 	load: () => Promise.resolve(),
 }));

@@ -2,7 +2,7 @@ import config from '@guardian/frontend/static/src/javascripts/lib/config';
 import fetchJson from '@guardian/frontend/static/src/javascripts/lib/fetch-json';
 import { load } from '../hosted/next-video';
 
-jest.mock('lib/fetch-json', () =>
+jest.mock('@guardian/frontend/static/src/javascripts/lib/fetch-json', () =>
 	jest.fn(() => Promise.resolve({ html: '<div class="video"></div>' })),
 );
 

@@ -16,34 +16,43 @@ Object.defineProperty(HTMLElement.prototype, 'dataset', {
 	value: {},
 });
 
-jest.mock('lib/mediator');
-jest.mock('lib/config', () => ({ page: {}, get: () => false }));
+jest.mock('@guardian/frontend/static/src/javascripts/lib/mediator');
+jest.mock('@guardian/frontend/static/src/javascripts/lib/config', () => ({
+	page: {},
+	get: () => false,
+}));
 
-jest.mock('commercial/modules/dfp/add-slot', () => ({
+jest.mock('./dfp/add-slot', () => ({
 	addSlot: jest.fn(),
 }));
 
-jest.mock('commercial/modules/dfp/load-advert', () => ({
+jest.mock('./dfp/load-advert', () => ({
 	refreshAdvert: jest.fn(),
 }));
 
-jest.mock('commercial/modules/dfp/get-advert-by-id', () => ({
+jest.mock('./dfp/get-advert-by-id', () => ({
 	getAdvertById: jest.fn(),
 }));
 
-jest.mock('lib/detect', () => ({
+jest.mock('@guardian/frontend/static/src/javascripts/lib/detect', () => ({
 	getBreakpoint: jest.fn(),
 }));
 
-jest.mock('common/modules/commercial/commercial-features', () => ({
-	commercialFeatures: {
-		commentAdverts: true,
-	},
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features',
+	() => ({
+		commercialFeatures: {
+			commentAdverts: true,
+		},
+	}),
+);
 
-jest.mock('common/modules/identity/api', () => ({
-	isUserLoggedIn: jest.fn(),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/identity/api',
+	() => ({
+		isUserLoggedIn: jest.fn(),
+	}),
+);
 
 const { createCommentSlots, runSecondStage, maybeUpgradeSlot } = _;
 const commercialFeaturesMock = commercialFeatures;

@@ -2,7 +2,7 @@ import { _, Advert } from '../dfp/Advert';
 
 const { filterClasses } = _;
 
-jest.mock('lib/raven');
+jest.mock('@guardian/frontend/static/src/javascripts/lib/raven');
 jest.mock('ophan/ng', () => null);
 
 describe('Filter classes', () => {

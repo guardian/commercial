@@ -19,6 +19,10 @@
     "strict": true,
     "target": "ES2020"
   },
-  "include": ["src", "src/@frontend.d.ts"],
+  "include": [
+    "src",
+    "src/@frontend.d.ts",
+    "node_modules/@guardian/frontend/static/src"
+  ],
   "exclude": ["node_modules", "dist", "coverage"]
 }

@@ -2,7 +2,7 @@ import fastdom from '@guardian/frontend/static/src/javascripts/lib/fastdom-promi
 import mediator from '@guardian/frontend/static/src/javascripts/lib/mediator';
 import { stickyCommentsMpu, stickyMpu } from './sticky-mpu';
 
-jest.mock('lib/raven');
+jest.mock('@guardian/frontend/static/src/javascripts/lib/raven');
 
 // Workaround to fix issue where dataset is missing from jsdom, and solve the
 // 'cannot set property [...] which has only a getter' TypeError

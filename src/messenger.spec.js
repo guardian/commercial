@@ -19,11 +19,13 @@ const removeEventListenerSpy = jest
 const jsonParseSpy = jest.spyOn(JSON, 'parse');
 const mockOrigin = 'someorigin.com';
 
-jest.mock('commercial/modules/messenger/post-message', () => ({
+jest.mock('./messenger/post-message', () => ({
 	postMessage: jest.fn(),
 }));
 
-jest.mock('lib/report-error', () => jest.fn());
+jest.mock('@guardian/frontend/static/src/javascripts/lib/report-error', () =>
+	jest.fn(),
+);
 
 describe('Cross-frame messenger', () => {
 	const routines = {

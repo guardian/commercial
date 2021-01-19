@@ -2,22 +2,28 @@ import { _, init } from './liveblog-adverts';
 
 const { getSlotName } = _;
 
-jest.mock('lib/detect', () => ({
+jest.mock('@guardian/frontend/static/src/javascripts/lib/detect', () => ({
 	getBreakpoint: jest.fn(),
 	hasPushStateSupport: jest.fn(),
 }));
 
-jest.mock('common/modules/article/space-filler', () => ({
-	fillSpace: jest.fn(),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/article/space-filler',
+	() => ({
+		fillSpace: jest.fn(),
+	}),
+);
 
-jest.mock('common/modules/commercial/commercial-features', () => ({
-	commercialFeatures: {
-		liveblogAdverts: true,
-	},
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features',
+	() => ({
+		commercialFeatures: {
+			liveblogAdverts: true,
+		},
+	}),
+);
 
-jest.mock('commercial/modules/dfp/add-slot', () => ({
+jest.mock('./dfp/add-slot', () => ({
 	addSlot: jest.fn(),
 }));
 

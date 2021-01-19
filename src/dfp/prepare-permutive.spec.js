@@ -1,6 +1,6 @@
 import { _ } from './prepare-permutive';
 
-jest.mock('lib/raven');
+jest.mock('@guardian/frontend/static/src/javascripts/lib/raven');
 
 describe('Generating Permutive payload utils', () => {
 	describe('isEmpty', () => {

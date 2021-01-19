@@ -12,32 +12,44 @@ const getViewport = getViewport_;
 const getBreakpoint = getBreakpoint_;
 const isBreakpoint = isBreakpoint_;
 
-jest.mock('commercial/modules/dfp/track-ad-render', () => (id) => {
+jest.mock('./dfp/track-ad-render', () => (id) => {
 	const ads = {
 		'dfp-ad--im': true,
 	};
 	return Promise.resolve(ads[id]);
 });
-jest.mock('commercial/modules/dfp/add-slot', () => ({
+jest.mock('./dfp/add-slot', () => ({
 	addSlot: jest.fn(),
 }));
-jest.mock('common/modules/commercial/commercial-features', () => ({
-	commercialFeatures: {},
-}));
-jest.mock('common/modules/article/space-filler', () => ({
-	spaceFiller: {
-		fillSpace: jest.fn(),
-	},
-}));
-jest.mock('lib/detect', () => ({
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features',
+	() => ({
+		commercialFeatures: {},
+	}),
+);
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/article/space-filler',
+	() => ({
+		spaceFiller: {
+			fillSpace: jest.fn(),
+		},
+	}),
+);
+jest.mock('@guardian/frontend/static/src/javascripts/lib/detect', () => ({
 	isBreakpoint: jest.fn(),
 	getBreakpoint: jest.fn(),
 	getViewport: jest.fn(),
 }));
-jest.mock('lib/config', () => ({ page: {}, get: () => false }));
-jest.mock('common/modules/experiments/ab', () => ({
-	isInVariantSynchronous: () => false,
+jest.mock('@guardian/frontend/static/src/javascripts/lib/config', () => ({
+	page: {},
+	get: () => false,
 }));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/experiments/ab',
+	() => ({
+		isInVariantSynchronous: () => false,
+	}),
+);
 
 const spaceFillerStub = spaceFiller.fillSpace;
 

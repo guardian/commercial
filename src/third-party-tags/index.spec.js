@@ -7,7 +7,7 @@ import { _, init } from '.';
 
 const { insertScripts, loadOther } = _;
 
-jest.mock('lib/raven');
+jest.mock('@guardian/frontend/static/src/javascripts/lib/raven');
 
 jest.mock('@guardian/consent-management-platform', () => ({
 	onConsentChange: jest.fn(),
@@ -90,13 +90,16 @@ afterEach(() => {
 
 jest.mock('ophan/ng', () => null);
 
-jest.mock('common/modules/commercial/commercial-features', () => ({
-	commercialFeatures: {
-		thirdPartyTags: true,
-	},
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features',
+	() => ({
+		commercialFeatures: {
+			thirdPartyTags: true,
+		},
+	}),
+);
 
-jest.mock('commercial/modules/third-party-tags/imr-worldwide', () => ({
+jest.mock('./imr-worldwide', () => ({
 	imrWorldwide: {
 		shouldRun: true,
 		url: '//fakeThirdPartyTag.js',

@@ -3,23 +3,24 @@ import { getAdvertById as getAdvertById_ } from '../dfp/get-advert-by-id';
 import { enableLazyLoad } from '../dfp/lazy-load';
 import { loadAdvert } from '../dfp/load-advert';
 
-jest.mock('common/modules/experiments/ab', () => ({
-	isInVariantSynchronous: jest.fn(),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/experiments/ab',
+	() => ({
+		isInVariantSynchronous: jest.fn(),
+	}),
+);
 
-jest.mock('lib/config', () => ({
+jest.mock('@guardian/frontend/static/src/javascripts/lib/config', () => ({
 	get: jest.fn(() => false),
 }));
 
-jest.mock('commercial/modules/dfp/Advert', () =>
-	jest.fn(() => ({ advert: jest.fn() })),
-);
+jest.mock('../dfp/Advert', () => jest.fn(() => ({ advert: jest.fn() })));
 
-jest.mock('commercial/modules/dfp/get-advert-by-id', () => ({
+jest.mock('../dfp/get-advert-by-id', () => ({
 	getAdvertById: jest.fn(),
 }));
 
-jest.mock('commercial/modules/dfp/load-advert', () => ({
+jest.mock('../dfp/load-advert', () => ({
 	refreshAdvert: jest.fn(),
 	loadAdvert: jest.fn(),
 }));

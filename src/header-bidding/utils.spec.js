@@ -28,17 +28,19 @@ const isBreakpoint = isBreakpoint_;
 
 jest.mock('lodash/once', () => (a) => a);
 
-jest.mock('lib/geolocation', () => ({
+jest.mock('@guardian/frontend/static/src/javascripts/lib/geolocation', () => ({
 	getSync: jest.fn(() => 'GB'),
 }));
 
-jest.mock('lib/detect', () => ({
+jest.mock('@guardian/frontend/static/src/javascripts/lib/detect', () => ({
 	getBreakpoint: jest.fn(() => 'mobile'),
 	hasPushStateSupport: jest.fn(() => true),
 	isBreakpoint: jest.fn(),
 }));
 
-jest.mock('common/modules/experiments/ab-tests');
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/experiments/ab-tests',
+);
 
 const resetConfig = () => {
 	config.set('switches.prebidAppnexus', true);

@@ -8,9 +8,12 @@ const { sendClick } = _;
 // `expect(register.mock.calls[0][0]).toBe('click');` to pass linting
 const foolFlow = (mockFn) => mockFn;
 
-jest.mock('common/modules/analytics/google', () => ({
-	trackNativeAdLinkClick: jest.fn(),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/analytics/google',
+	() => ({
+		trackNativeAdLinkClick: jest.fn(),
+	}),
+);
 
 describe('Cross-frame messenger: sendClick', () => {
 	it('should call trackNativeAdLinkClick', () => {

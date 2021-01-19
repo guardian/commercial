@@ -23,18 +23,24 @@ const { fillAdvertSlots: actualFillAdvertSlots } = jest.requireActual(
 const getBreakpoint = getBreakpoint_;
 const fillAdvertSlots = fillAdvertSlots_;
 
-jest.mock('commercial/modules/dfp/fill-advert-slots', () => ({
+jest.mock('./fill-advert-slots', () => ({
 	fillAdvertSlots: jest.fn(),
 }));
-jest.mock('lib/raven');
-jest.mock('common/modules/identity/api', () => ({
-	isUserLoggedIn: () => true,
-	getUserFromCookie: jest.fn(),
-	getUrl: jest.fn(),
-}));
+jest.mock('@guardian/frontend/static/src/javascripts/lib/raven');
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/identity/api',
+	() => ({
+		isUserLoggedIn: () => true,
+		getUserFromCookie: jest.fn(),
+		getUrl: jest.fn(),
+	}),
+);
 jest.mock('ophan/ng', () => null);
-jest.mock('common/modules/analytics/beacon', () => {});
-jest.mock('lib/detect', () => ({
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/analytics/beacon',
+	() => {},
+);
+jest.mock('@guardian/frontend/static/src/javascripts/lib/detect', () => ({
 	hasCrossedBreakpoint: jest.fn(),
 	isBreakpoint: jest.fn(),
 	getBreakpoint: jest.fn(),
@@ -65,17 +71,23 @@ jest.mock('lib/detect', () => ({
 	],
 	isGoogleProxy: jest.fn(() => false),
 }));
-jest.mock('common/modules/analytics/google', () => () => {});
-jest.mock('commercial/modules/dfp/display-lazy-ads', () => ({
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/analytics/google',
+	() => () => {},
+);
+jest.mock('./display-lazy-ads', () => ({
 	displayLazyAds: jest.fn(),
 }));
 
-jest.mock('common/modules/commercial/commercial-features', () => ({
-	commercialFeatures: {
-		dfpAdvertising: true,
-	},
-}));
-jest.mock('commercial/modules/dfp/apply-creative-template', () => ({
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features',
+	() => ({
+		commercialFeatures: {
+			dfpAdvertising: true,
+		},
+	}),
+);
+jest.mock('./apply-creative-template', () => ({
 	applyCreativeTemplate: () => Promise.resolve(true),
 }));
 jest.mock('@guardian/libs', () => ({
@@ -84,17 +96,23 @@ jest.mock('@guardian/libs', () => ({
 	storage: jest.requireActual('@guardian/libs').storage,
 }));
 jest.mock('lodash/once', () => (fn) => fn);
-jest.mock('commercial/modules/dfp/refresh-on-resize', () => ({
+jest.mock('./refresh-on-resize', () => ({
 	refreshOnResize: jest.fn(),
 }));
-jest.mock('common/modules/analytics/beacon', () => ({ fire: jest.fn() }));
-jest.mock('commercial/modules/sticky-mpu', () => ({
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/analytics/beacon',
+	() => ({ fire: jest.fn() }),
+);
+jest.mock('../sticky-mpu', () => ({
 	stickyMpu: jest.fn(),
 }));
-jest.mock('common/modules/onward/geo-most-popular', () => ({
-	geoMostPopular: { render: jest.fn() },
-}));
-jest.mock('commercial/modules/dfp/load-advert', () => ({
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/onward/geo-most-popular',
+	() => ({
+		geoMostPopular: { render: jest.fn() },
+	}),
+);
+jest.mock('./dfp/load-advert', () => ({
 	loadAdvert: jest.fn(),
 }));
 jest.mock('@guardian/consent-management-platform', () => ({

@@ -6,11 +6,11 @@ const addScrollListener = testExports.addScrollListener;
 const removeScrollListener = testExports.removeScrollListener;
 const reset = testExports.reset;
 
-jest.mock('commercial/modules/messenger', () => ({
+jest.mock('../messenger', () => ({
 	register: jest.fn(),
 }));
 
-jest.mock('lib/detect', () => ({
+jest.mock('@guardian/frontend/static/src/javascripts/lib/detect', () => ({
 	getViewport: jest.fn(),
 }));
 

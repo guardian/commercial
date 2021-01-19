@@ -13,27 +13,33 @@ const { setupPrebid } = _;
 const onConsentChange = onConsentChange_;
 const getConsentFor = getConsentFor_;
 
-jest.mock('common/modules/commercial/commercial-features', () => ({
-	commercialFeatures: {},
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features',
+	() => ({
+		commercialFeatures: {},
+	}),
+);
 
-jest.mock('commercial/modules/header-bidding/prebid/prebid', () => ({
+jest.mock('../header-bidding/prebid/prebid', () => ({
 	initialise: jest.fn(),
 }));
 
-jest.mock('commercial/modules/dfp/Advert', () =>
+jest.mock('./Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
 );
 
-jest.mock('common/modules/commercial/build-page-targeting', () => ({
-	getPageTargeting: jest.fn(),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/build-page-targeting',
+	() => ({
+		getPageTargeting: jest.fn(),
+	}),
+);
 
-jest.mock('commercial/modules/header-bidding/prebid/bid-config', () => ({
+jest.mock('../header-bidding/prebid/bid-config', () => ({
 	isInVariant: jest.fn(),
 }));
 
-jest.mock('commercial/modules/header-bidding/utils', () => ({
+jest.mock('../header-bidding/utils', () => ({
 	shouldIncludeOnlyA9: false,
 }));
 

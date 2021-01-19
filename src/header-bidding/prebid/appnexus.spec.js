@@ -6,15 +6,18 @@ import {
 import { getBreakpointKey as getBreakpointKey_ } from '../utils';
 import { _, getAppNexusDirectBidParams } from './appnexus';
 
-jest.mock('common/modules/commercial/build-page-targeting', () => ({
-	buildAppNexusTargeting: () => 'someTestAppNexusTargeting',
-	buildAppNexusTargetingObject: () => ({
-		url: 'gu.com',
-		sens: 'f',
-		edition: 'UK',
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/build-page-targeting',
+	() => ({
+		buildAppNexusTargeting: () => 'someTestAppNexusTargeting',
+		buildAppNexusTargetingObject: () => ({
+			url: 'gu.com',
+			sens: 'f',
+			edition: 'UK',
+		}),
+		getPageTargeting: () => 'pageTargeting',
 	}),
-	getPageTargeting: () => 'pageTargeting',
-}));
+);
 
 jest.mock('../utils', () => {
 	const original = jest.requireActual('../utils');
@@ -24,20 +27,26 @@ jest.mock('../utils', () => {
 	};
 });
 
-jest.mock('common/modules/commercial/geo-utils', () => ({
-	isInAuOrNz: jest.fn(),
-	isInUsOrCa: jest.fn(),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/geo-utils',
+	() => ({
+		isInAuOrNz: jest.fn(),
+		isInUsOrCa: jest.fn(),
+	}),
+);
 
-jest.mock('lib/cookies', () => ({
+jest.mock('@guardian/frontend/static/src/javascripts/lib/cookies', () => ({
 	getCookie: jest.fn(),
 }));
 
-jest.mock('common/modules/experiments/ab', () => ({
-	isInVariantSynchronous: jest.fn(
-		(testId, variantId) => variantId === 'variant',
-	),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/experiments/ab',
+	() => ({
+		isInVariantSynchronous: jest.fn(
+			(testId, variantId) => variantId === 'variant',
+		),
+	}),
+);
 
 const {
 	getAppNexusPlacementId,

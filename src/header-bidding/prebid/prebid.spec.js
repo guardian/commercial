@@ -5,25 +5,28 @@ import { initialise } from './prebid';
 
 const getAdvertById = getAdvertById_;
 
-jest.mock('lib/raven');
+jest.mock('@guardian/frontend/static/src/javascripts/lib/raven');
 
-jest.mock('commercial/modules/dfp/Advert', () =>
+jest.mock('../../dfp/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
 );
 
-jest.mock('commercial/modules/header-bidding/prebid/bid-config', () => ({
+jest.mock('./bid-config', () => ({
 	bids: jest.fn(),
 }));
 
-jest.mock('commercial/modules/dfp/get-advert-by-id', () => ({
+jest.mock('../../dfp/get-advert-by-id', () => ({
 	getAdvertById: jest.fn(),
 }));
 
-jest.mock('common/modules/experiments/ab', () => ({
-	isInVariantSynchronous: jest.fn(
-		(testId, variantId) => variantId === 'variant',
-	),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/experiments/ab',
+	() => ({
+		isInVariantSynchronous: jest.fn(
+			(testId, variantId) => variantId === 'variant',
+		),
+	}),
+);
 
 describe('initialise', () => {
 	beforeEach(() => {

@@ -16,12 +16,12 @@ const CcpaWithConsentMock = (callback) =>
 
 const getConsentFor = getConsentFor_;
 
-jest.mock('lib/raven');
-jest.mock('commercial/modules/dfp/Advert', () =>
+jest.mock('@guardian/frontend/static/src/javascripts/lib/raven');
+jest.mock('../../dfp/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
 );
 
-jest.mock('commercial/modules/header-bidding/slot-config', () => ({
+jest.mock('../slot-config', () => ({
 	slots: jest.fn().mockImplementation(() => [
 		{
 			key: 'top-above-nav',

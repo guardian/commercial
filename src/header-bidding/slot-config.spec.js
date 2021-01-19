@@ -20,13 +20,16 @@ jest.mock('./utils', () => {
 	};
 });
 
-jest.mock('common/modules/experiments/ab', () => ({
-	isInVariantSynchronous: jest.fn(
-		(testId, variantId) => variantId === 'variant',
-	),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/experiments/ab',
+	() => ({
+		isInVariantSynchronous: jest.fn(
+			(testId, variantId) => variantId === 'variant',
+		),
+	}),
+);
 
-jest.mock('lib/detect', () => ({
+jest.mock('@guardian/frontend/static/src/javascripts/lib/detect', () => ({
 	hasCrossedBreakpoint: jest.fn(),
 	isBreakpoint: jest.fn(),
 	getBreakpoint: jest.fn(),
@@ -35,7 +38,7 @@ jest.mock('lib/detect', () => ({
 	breakpoints: [],
 }));
 
-jest.mock('lib/cookies', () => ({
+jest.mock('@guardian/frontend/static/src/javascripts/lib/cookies', () => ({
 	getCookie: jest.fn(),
 }));
 

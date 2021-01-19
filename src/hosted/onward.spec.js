@@ -5,7 +5,9 @@ const { insertHTMLfromPlaceholders, generateUrlFromConfig } = _;
 
 const fetchJson = fetchJson_;
 
-jest.mock('lib/fetch-json', () => jest.fn());
+jest.mock('@guardian/frontend/static/src/javascripts/lib/fetch-json', () =>
+	jest.fn(),
+);
 
 describe('URL generator', () => {
 	it('generates correct URL from valid config', () => {

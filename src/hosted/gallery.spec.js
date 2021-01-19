@@ -3,17 +3,23 @@ import interactionTracking from '@guardian/frontend/static/src/javascripts/proje
 import { init } from './gallery';
 import { galleryHtml } from './gallery-html';
 
-jest.mock('lib/detect', () => ({
+jest.mock('@guardian/frontend/static/src/javascripts/lib/detect', () => ({
 	hasPushStateSupport: jest.fn(),
 	getBreakpoint: jest.fn(),
 	hasTouchScreen: jest.fn(),
 }));
-jest.mock('common/modules/analytics/interaction-tracking', () => ({
-	trackNonClickInteraction: jest.fn(() => Promise.resolve()),
-}));
-jest.mock('lib/load-css-promise', () => ({
-	loadCssPromise: Promise.resolve(),
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/analytics/interaction-tracking',
+	() => ({
+		trackNonClickInteraction: jest.fn(() => Promise.resolve()),
+	}),
+);
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/lib/load-css-promise',
+	() => ({
+		loadCssPromise: Promise.resolve(),
+	}),
+);
 
 let gallery;
 

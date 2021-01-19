@@ -4,11 +4,14 @@ import fakeMediator from '@guardian/frontend/static/src/javascripts/lib/mediator
 import qwery from 'qwery';
 import { init } from './article-aside-adverts';
 
-jest.mock('common/modules/commercial/commercial-features', () => ({
-	commercialFeatures: {
-		articleAsideAdverts: true,
-	},
-}));
+jest.mock(
+	'@guardian/frontend/static/src/javascripts/projects/common/modules/commercial/commercial-features',
+	() => ({
+		commercialFeatures: {
+			articleAsideAdverts: true,
+		},
+	}),
+);
 
 const fastdomMeasureSpy = jest.spyOn(fastdom, 'measure');
 
