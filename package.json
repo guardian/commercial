@@ -51,7 +51,7 @@
     "@guardian/consent-management-platform": "6.11.1",
     "@guardian/eslint-config": "^0.4.2",
     "@guardian/eslint-config-typescript": "^0.4.2",
-    "@guardian/frontend": "guardian/frontend#53d09781daefeb8566bbeb8231efc922649f7983",
+    "@guardian/frontend": "guardian/frontend#d49ec32159eee9b808c018977d584853920dde44",
     "@guardian/libs": "^1.4.2",
     "@guardian/prettier": "^0.4.2",
     "@octokit/core": "^3.2.4",

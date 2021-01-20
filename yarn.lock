@@ -1198,9 +1198,9 @@
   resolved "https://registry.yarnpkg.com/@guardian/eslint-config/-/eslint-config-0.4.2.tgz#0f07c3b951e0b5730ad3a3423d8cc508ff2c431e"
   integrity sha512-zDXdnGhY+5IomMc0zVLOquaxylWEFjWJz4Beg2UP+U2qPjr4yVVe2ekEjZM+hayADHIs9bH7OlQ8s2EHSgfK2g==
 
-"@guardian/frontend@guardian/frontend#53d09781daefeb8566bbeb8231efc922649f7983":
+"@guardian/frontend@guardian/frontend#d49ec32159eee9b808c018977d584853920dde44":
   version "0.1.0"
-  resolved "https://codeload.github.com/guardian/frontend/tar.gz/53d09781daefeb8566bbeb8231efc922649f7983"
+  resolved "https://codeload.github.com/guardian/frontend/tar.gz/d49ec32159eee9b808c018977d584853920dde44"
   dependencies:
     "@braze/web-sdk-core" "3.1.0"
     "@emotion/core" "^10.0.27"
