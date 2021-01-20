@@ -17,7 +17,7 @@ const onConsentChange = onConsentChange_;
 const getConsentFor = getConsentFor_;
 
 const { fillAdvertSlots: actualFillAdvertSlots } = jest.requireActual(
-	'commercial/modules/dfp/fill-advert-slots',
+	'./fill-advert-slots',
 );
 
 const getBreakpoint = getBreakpoint_;
