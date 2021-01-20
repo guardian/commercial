@@ -18,12 +18,10 @@ module.exports = {
 		'node_modules',
 	],
 	moduleNameMapper: {
-		videojs: 'video.js',
 		'^svgs/(.*)$': '<rootDir>/src/__mocks__/svgMock.js',
 		'^(.*)\\.svg$': '<rootDir>/src/__mocks__/svgMock.js',
 		'^(.*)\\.html$': '<rootDir>/src/__mocks__/templateMock.js',
 		'ophan/ng': 'ophan-tracker-js',
 		'ophan/embed': 'ophan-tracker-js/build/ophan.embed',
-		'preact/hooks': 'preact-x/hooks',
 	},
 };
