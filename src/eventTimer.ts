@@ -23,6 +23,21 @@ export class EventTimer {
 		'top-above-nav': SlotEventStatus;
 	};
 
+	/**
+	 * Initalise the EventTimer class on page.
+	 * Returns a singleton instance of the EventTimer class and binds
+	 * to window.guardian.commercialTimer. If it's been previously
+	 * initalised and bound it returns the original instance
+	 *
+	 * @returns {EventTimer} Instance of EventTimer
+	 */
+	static init(): EventTimer {
+		if (!window.guardian.commercialTimer) {
+			window.guardian.commercialTimer = new EventTimer();
+		}
+		return window.guardian.commercialTimer;
+	}
+
 	constructor() {
 		this.events = [];
 		this.startTS = performance.now();
