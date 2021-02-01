@@ -20,7 +20,7 @@ export class EventTimer {
 	startTS: DOMHighResTimeStamp;
 	triggers: {
 		first: SlotEventStatus;
-		topAboveNav: SlotEventStatus;
+		'top-above-nav': SlotEventStatus;
 	};
 
 	constructor() {
@@ -33,7 +33,7 @@ export class EventTimer {
 				slotInitalised: false,
 				adOnPage: false,
 			},
-			topAboveNav: {
+			'top-above-nav': {
 				prebidStart: false,
 				prebidEnd: false,
 				slotInitalised: false,
@@ -46,7 +46,7 @@ export class EventTimer {
 		const longName = `gu.commercial.${name}`;
 		performance.mark(longName);
 
-		//mark is the item we just created (most recent mark with the name we just set)
+		// Most recent mark with this name is the event we just created.
 		const mark = performance
 			.getEntriesByName(longName, 'mark')
 			.slice(-1)[0];
@@ -63,6 +63,7 @@ export class EventTimer {
 	 * @param {origin} [origin=page] - Either 'page' (default) or the name of the slot
 	 */
 	trigger(eventName: string, origin = 'page'): void {
+		const TRACKEDSLOTNAME = 'top-above-nav';
 		if (origin === 'page') {
 			this.mark(eventName);
 			return;
@@ -73,12 +74,14 @@ export class EventTimer {
 			this.triggers.first[eventName as keyof SlotEventStatus] = true;
 		}
 
-		if (origin === 'topAboveNav') {
+		if (origin === TRACKEDSLOTNAME) {
 			if (
-				!this.triggers.topAboveNav[eventName as keyof SlotEventStatus]
+				!this.triggers[TRACKEDSLOTNAME][
+					eventName as keyof SlotEventStatus
+				]
 			) {
-				this.mark(`topAboveNav-{eventName}`);
-				this.triggers.topAboveNav[
+				this.mark(`${TRACKEDSLOTNAME}-{eventName}`);
+				this.triggers[TRACKEDSLOTNAME][
 					eventName as keyof SlotEventStatus
 				] = true;
 			}
