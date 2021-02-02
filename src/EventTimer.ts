@@ -32,10 +32,7 @@ export class EventTimer {
 	 * @returns {EventTimer} Instance of EventTimer
 	 */
 	static init(): EventTimer {
-		if (!window.guardian.commercialTimer) {
-			window.guardian.commercialTimer = new EventTimer();
-		}
-		return window.guardian.commercialTimer;
+		return window.guardian.commercialTimer ||= new EventTimer();
 	}
 
 	constructor() {
