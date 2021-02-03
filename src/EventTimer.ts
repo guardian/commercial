@@ -25,14 +25,25 @@ export class EventTimer {
 
 	/**
 	 * Initalise the EventTimer class on page.
-	 * Returns a singleton instance of the EventTimer class and binds
+	 * Returns the singleton instance of the EventTimer class and binds
 	 * to window.guardian.commercialTimer. If it's been previously
 	 * initalised and bound it returns the original instance
+	 * Note: We save to window.guardian.commercialTimer because
+	 * different bundles (DCR / DCP) can use commercial core, and we want
+	 * all timer events saved to a single instance per-page
 	 *
 	 * @returns {EventTimer} Instance of EventTimer
 	 */
 	static init(): EventTimer {
 		return (window.guardian.commercialTimer ||= new EventTimer());
+	}
+
+	/**
+	 * Just a helper method to access the singleton instance of EventTimer.
+	 * Typical use case is EventTimer.get().trigger
+	 */
+	static get(): EventTimer {
+		return EventTimer.init();
 	}
 
 	constructor() {
