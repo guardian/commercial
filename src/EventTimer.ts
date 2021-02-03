@@ -93,7 +93,7 @@ export class EventTimer {
 		}
 
 		if (!this.triggers.first[eventName as keyof SlotEventStatus]) {
-			this.mark(`first-{eventName}`);
+			this.mark(`first-${eventName}`);
 			this.triggers.first[eventName as keyof SlotEventStatus] = true;
 		}
 
@@ -103,7 +103,7 @@ export class EventTimer {
 					eventName as keyof SlotEventStatus
 				]
 			) {
-				this.mark(`${TRACKEDSLOTNAME}-{eventName}`);
+				this.mark(`${TRACKEDSLOTNAME}-${eventName}`);
 				this.triggers[TRACKEDSLOTNAME][
 					eventName as keyof SlotEventStatus
 				] = true;
