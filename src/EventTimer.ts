@@ -14,7 +14,6 @@ interface SlotEventStatus {
 	slotInitalised: boolean;
 	adOnPage: boolean;
 }
-
 export class EventTimer {
 	events: Event[];
 	startTS: DOMHighResTimeStamp;
@@ -33,6 +32,13 @@ export class EventTimer {
 	 */
 	static init(): EventTimer {
 		return (window.guardian.commercialTimer ||= new EventTimer());
+	}
+	/**
+	 * Just a helper method to access the singleton instance of EventTimer.
+	 * Typical use case is EventTimer.get().trigger
+	 */
+	static get(): EventTimer {
+		return EventTimer.init();
 	}
 
 	constructor() {
