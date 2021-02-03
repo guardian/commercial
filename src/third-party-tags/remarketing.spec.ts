@@ -1,4 +1,4 @@
-import { ThirdPartyTag } from '../types';
+import type { ThirdPartyTag } from '../types';
 import { remarketing } from './remarketing';
 
 describe('remarketing', () => {

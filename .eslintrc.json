@@ -1,0 +1,11 @@
+{
+  "root": true,
+  "env": {
+    "jest": true,
+    "browser": true,
+    "node": true
+  },
+  "extends": ["@guardian/eslint-config-typescript"],
+  "globals": { "googletag": "readonly" },
+  "ignorePatterns": ["dist", "coverage", "src/__vendor"]
+}
