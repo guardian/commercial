@@ -11,7 +11,8 @@ class Event {
 interface SlotEventStatus {
 	prebidStart: boolean;
 	prebidEnd: boolean;
-	slotInitalised: boolean;
+	slotInitialised: boolean;
+	slotReady: boolean;
 	adOnPage: boolean;
 }
 
@@ -53,13 +54,15 @@ export class EventTimer {
 			first: {
 				prebidStart: false,
 				prebidEnd: false,
-				slotInitalised: false,
+				slotInitialised: false,
+				slotReady: false,
 				adOnPage: false,
 			},
 			'top-above-nav': {
 				prebidStart: false,
 				prebidEnd: false,
-				slotInitalised: false,
+				slotInitialised: false,
+				slotReady: false,
 				adOnPage: false,
 			},
 		};
