@@ -52,17 +52,17 @@ export class EventTimer {
 		this.startTS = performance.now();
 		this.triggers = {
 			first: {
+				slotReady: false,
 				prebidStart: false,
 				prebidEnd: false,
 				slotInitialised: false,
-				slotReady: false,
 				adOnPage: false,
 			},
 			'top-above-nav': {
+				slotReady: false,
 				prebidStart: false,
 				prebidEnd: false,
 				slotInitialised: false,
-				slotReady: false,
 				adOnPage: false,
 			},
 		};
