@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: TOC Generator
-        uses: technote-space/toc-generator@v3.1.3
+        uses: technote-space/toc-generator@v4
         with:
           TOC_TITLE: '## Table of contents'
           MAX_HEADER_LEVEL: 3
