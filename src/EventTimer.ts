@@ -7,6 +7,14 @@ class Event {
 		this.ts = mark.startTime;
 	}
 }
+interface GALogEvent {
+	name: string;
+	label: string;
+}
+
+interface GAConfig {
+	logEvents: GALogEvent[];
+}
 
 interface SlotEventStatus {
 	prebidStart: boolean;
@@ -23,6 +31,7 @@ export class EventTimer {
 		first: SlotEventStatus;
 		'top-above-nav': SlotEventStatus;
 	};
+	gaConfig: GAConfig;
 
 	/**
 	 * Initalise the EventTimer class on page.
@@ -49,7 +58,7 @@ export class EventTimer {
 
 	constructor() {
 		this.events = [];
-		this.startTS = performance.now();
+		this.startTS = window.performance.now();
 		this.triggers = {
 			first: {
 				slotReady: false,
@@ -66,14 +75,26 @@ export class EventTimer {
 				adOnPage: false,
 			},
 		};
+		this.gaConfig = {
+			logEvents: [
+				{
+					name: 'slotReady',
+					label: 'gu.commercial.slotReady',
+				},
+				{
+					name: 'slotInitialised',
+					label: 'gu.commercial.slotInitialised',
+				},
+			],
+		};
 	}
 
 	mark(name: string): PerformanceEntry {
 		const longName = `gu.commercial.${name}`;
-		performance.mark(longName);
+		window.performance.mark(longName);
 
 		// Most recent mark with this name is the event we just created.
-		const mark = performance
+		const mark = window.performance
 			.getEntriesByName(longName, 'mark')
 			.slice(-1)[0];
 		this.events.push(new Event(name, mark));
