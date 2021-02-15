@@ -1,3 +1,5 @@
+import { trackEvent } from './GoogleAnalytics';
+
 class Event {
 	name: string;
 	ts: DOMHighResTimeStamp;
@@ -116,11 +118,14 @@ export class EventTimer {
 		const TRACKEDSLOTNAME = 'top-above-nav';
 		if (origin === 'page') {
 			this.mark(eventName);
+			this.trackInGA(eventName, eventName);
 			return;
 		}
 
 		if (!this.triggers.first[eventName as keyof SlotEventStatus]) {
-			this.mark(`first-${eventName}`);
+			const trackLabel = `first-${eventName}`;
+			this.mark(trackLabel);
+			this.trackInGA(eventName, trackLabel);
 			this.triggers.first[eventName as keyof SlotEventStatus] = true;
 		}
 
@@ -130,11 +135,22 @@ export class EventTimer {
 					eventName as keyof SlotEventStatus
 				]
 			) {
-				this.mark(`${TRACKEDSLOTNAME}-${eventName}`);
+				const trackLabel = `${TRACKEDSLOTNAME}-${eventName}`;
+				this.mark(trackLabel);
+				this.trackInGA(eventName, trackLabel);
 				this.triggers[TRACKEDSLOTNAME][
 					eventName as keyof SlotEventStatus
 				] = true;
 			}
+		}
+	}
+
+	trackInGA(eventName: string, label: string) {
+		const gaEvent = this.gaConfig.logEvents.find(
+			(e) => e.name === eventName,
+		);
+		if (gaEvent) {
+			trackEvent(gaEvent.label, label, 'new', this.gaTrackerName);
 		}
 	}
 }

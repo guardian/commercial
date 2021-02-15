@@ -1,4 +1,7 @@
 import { EventTimer } from './EventTimer';
+import { trackEvent } from './GoogleAnalytics';
+
+jest.mock('./GoogleAnalytics');
 
 describe('EventTimer', () => {
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- delete performance to mock it as is readonly
@@ -35,6 +38,12 @@ describe('EventTimer', () => {
 		expect(window.performance.mark).toHaveBeenCalledWith(
 			'gu.commercial.first-slotReady',
 		);
+		expect(trackEvent).toHaveBeenCalledWith(
+			'gu.commercial.slotReady',
+			'first-slotReady',
+			'new',
+			'test',
+		);
 	});
 
 	it('trigger top-above-nav slotReady event', () => {
@@ -43,6 +52,12 @@ describe('EventTimer', () => {
 		// eslint-disable-next-line @typescript-eslint/unbound-method -- for test
 		expect(window.performance.mark).toHaveBeenCalledWith(
 			'gu.commercial.top-above-nav-slotReady',
+		);
+		expect(trackEvent).toHaveBeenCalledWith(
+			'gu.commercial.slotReady',
+			'top-above-nav-slotReady',
+			'new',
+			'test',
 		);
 	});
 });
