@@ -26,9 +26,12 @@ describe('EventTimer', () => {
 		writable: true,
 	});
 
+	EventTimer.init('test');
+
 	it('trigger first slotReady event', () => {
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger('slotReady', 'inline1');
+		// eslint-disable-next-line @typescript-eslint/unbound-method -- for test
 		expect(window.performance.mark).toHaveBeenCalledWith(
 			'gu.commercial.first-slotReady',
 		);
@@ -37,6 +40,7 @@ describe('EventTimer', () => {
 	it('trigger top-above-nav slotReady event', () => {
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger('slotReady', 'top-above-nav');
+		// eslint-disable-next-line @typescript-eslint/unbound-method -- for test
 		expect(window.performance.mark).toHaveBeenCalledWith(
 			'gu.commercial.top-above-nav-slotReady',
 		);

@@ -32,7 +32,7 @@ export class EventTimer {
 		'top-above-nav': SlotEventStatus;
 	};
 	gaConfig: GAConfig;
-
+	gaTrackerName: string;
 	/**
 	 * Initalise the EventTimer class on page.
 	 * Returns the singleton instance of the EventTimer class and binds
@@ -41,11 +41,13 @@ export class EventTimer {
 	 * Note: We save to window.guardian.commercialTimer because
 	 * different bundles (DCR / DCP) can use commercial core, and we want
 	 * all timer events saved to a single instance per-page
-	 *
+	 * @param {string} trackerName - Name of the GA tracker
 	 * @returns {EventTimer} Instance of EventTimer
 	 */
-	static init(): EventTimer {
-		return (window.guardian.commercialTimer ||= new EventTimer());
+	static init(gaTrackerName: string): EventTimer {
+		return (window.guardian.commercialTimer ||= new EventTimer(
+			gaTrackerName,
+		));
 	}
 
 	/**
@@ -53,10 +55,10 @@ export class EventTimer {
 	 * Typical use case is EventTimer.get().trigger
 	 */
 	static get(): EventTimer {
-		return EventTimer.init();
+		return <EventTimer>window.guardian.commercialTimer;
 	}
 
-	constructor() {
+	constructor(gaTrackerName: string) {
 		this.events = [];
 		this.startTS = window.performance.now();
 		this.triggers = {
@@ -87,6 +89,7 @@ export class EventTimer {
 				},
 			],
 		};
+		this.gaTrackerName = gaTrackerName;
 	}
 
 	mark(name: string): PerformanceEntry {
