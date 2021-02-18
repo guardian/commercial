@@ -60,4 +60,14 @@ describe('EventTimer', () => {
 			'test',
 		);
 	});
+
+	it('not trigget a GA event if not in GA config', () => {
+		const eventTimer = EventTimer.get();
+		eventTimer.trigger('adOnPage', 'inline1');
+		// eslint-disable-next-line @typescript-eslint/unbound-method -- for test
+		expect(window.performance.mark).toHaveBeenCalledWith(
+			'gu.commercial.first-adOnPage',
+		);
+		expect(trackEvent).not.toHaveBeenCalled();
+	});
 });
