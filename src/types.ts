@@ -39,6 +39,6 @@ declare global {
 		guardian: {
 			commercialTimer?: EventTimer;
 		};
-		//ga: UniversalAnalytics.ga;
+		ga: UniversalAnalytics.ga;
 	}
 }
