@@ -20,6 +20,14 @@ export type ThirdPartyTag = {
 	useImage?: boolean;
 };
 
+export type GuardianAnalyticsConfig = {
+	trackers: Record<string, string>;
+};
+
+export type GuardianWindowConfig = {
+	googleAnalytics?: GuardianAnalyticsConfig;
+};
+
 export type GoogleTagParams = unknown;
 export type GoogleTrackConversionObject = {
 	google_conversion_id: number;
@@ -38,6 +46,7 @@ declare global {
 		googletag?: googletag.Googletag;
 		guardian: {
 			commercialTimer?: EventTimer;
+			config?: GuardianWindowConfig;
 		};
 		ga: UniversalAnalytics.ga;
 	}

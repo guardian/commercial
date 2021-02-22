@@ -7,8 +7,6 @@ describe('EventTimer', () => {
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- delete performance to mock it as is readonly
 	delete (window as any).performance;
 
-	window.guardian = {};
-
 	const performance = {
 		now: jest.fn(),
 		mark: jest.fn(),
@@ -29,7 +27,19 @@ describe('EventTimer', () => {
 		writable: true,
 	});
 
-	EventTimer.init('test');
+	beforeEach(() => {
+		window.guardian = {
+			config: {
+				googleAnalytics: {
+					trackers: {
+						editorial: 'gaTrackerTest',
+					},
+				},
+			},
+		};
+
+		EventTimer.init();
+	});
 
 	it('trigger first slotReady event', () => {
 		const eventTimer = EventTimer.get();
@@ -42,7 +52,6 @@ describe('EventTimer', () => {
 			'gu.commercial.slotReady',
 			'first-slotReady',
 			'new',
-			'test',
 		);
 	});
 
@@ -57,7 +66,6 @@ describe('EventTimer', () => {
 			'gu.commercial.slotReady',
 			'top-above-nav-slotReady',
 			'new',
-			'test',
 		);
 	});
 
