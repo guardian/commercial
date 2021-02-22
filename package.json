@@ -53,6 +53,7 @@
     "@semantic-release/github": "7.2.0",
     "@types/doubleclick-gpt": "^2019041801.0.4",
     "@types/jest": "^26.0.20",
+    "@types/google.analytics": "^0.0.41",
     "@typescript-eslint/eslint-plugin": "^4.15.1",
     "@typescript-eslint/parser": "^4.15.1",
     "commitizen": "^4.2.3",
