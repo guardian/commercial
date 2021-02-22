@@ -69,7 +69,7 @@ describe('EventTimer', () => {
 		);
 	});
 
-	it('not trigget a GA event if not in GA config', () => {
+	it('not trigger a GA event if not in GA config', () => {
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger('adOnPage', 'inline1');
 		// eslint-disable-next-line @typescript-eslint/unbound-method -- for test
