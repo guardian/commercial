@@ -1,3 +1,5 @@
+import { trackEvent } from './GoogleAnalytics';
+
 class Event {
 	name: string;
 	ts: DOMHighResTimeStamp;
@@ -6,6 +8,14 @@ class Event {
 		this.name = name;
 		this.ts = mark.startTime;
 	}
+}
+interface GALogEvent {
+	name: string;
+	label: string;
+}
+
+interface GAConfig {
+	logEvents: GALogEvent[];
 }
 
 interface SlotEventStatus {
@@ -23,7 +33,7 @@ export class EventTimer {
 		first: SlotEventStatus;
 		'top-above-nav': SlotEventStatus;
 	};
-
+	gaConfig: GAConfig;
 	/**
 	 * Initalise the EventTimer class on page.
 	 * Returns the singleton instance of the EventTimer class and binds
@@ -32,7 +42,6 @@ export class EventTimer {
 	 * Note: We save to window.guardian.commercialTimer because
 	 * different bundles (DCR / DCP) can use commercial core, and we want
 	 * all timer events saved to a single instance per-page
-	 *
 	 * @returns {EventTimer} Instance of EventTimer
 	 */
 	static init(): EventTimer {
@@ -44,12 +53,12 @@ export class EventTimer {
 	 * Typical use case is EventTimer.get().trigger
 	 */
 	static get(): EventTimer {
-		return EventTimer.init();
+		return this.init();
 	}
 
 	constructor() {
 		this.events = [];
-		this.startTS = performance.now();
+		this.startTS = window.performance.now();
 		this.triggers = {
 			first: {
 				slotReady: false,
@@ -66,14 +75,26 @@ export class EventTimer {
 				adOnPage: false,
 			},
 		};
+		this.gaConfig = {
+			logEvents: [
+				{
+					name: 'slotReady',
+					label: 'gu.commercial.slotReady',
+				},
+				{
+					name: 'slotInitialised',
+					label: 'gu.commercial.slotInitialised',
+				},
+			],
+		};
 	}
 
 	mark(name: string): PerformanceEntry {
 		const longName = `gu.commercial.${name}`;
-		performance.mark(longName);
+		window.performance.mark(longName);
 
 		// Most recent mark with this name is the event we just created.
-		const mark = performance
+		const mark = window.performance
 			.getEntriesByName(longName, 'mark')
 			.slice(-1)[0];
 		this.events.push(new Event(name, mark));
@@ -92,11 +113,14 @@ export class EventTimer {
 		const TRACKEDSLOTNAME = 'top-above-nav';
 		if (origin === 'page') {
 			this.mark(eventName);
+			this.trackInGA(eventName, eventName);
 			return;
 		}
 
 		if (!this.triggers.first[eventName as keyof SlotEventStatus]) {
-			this.mark(`first-${eventName}`);
+			const trackLabel = `first-${eventName}`;
+			this.mark(trackLabel);
+			this.trackInGA(eventName, trackLabel);
 			this.triggers.first[eventName as keyof SlotEventStatus] = true;
 		}
 
@@ -106,11 +130,22 @@ export class EventTimer {
 					eventName as keyof SlotEventStatus
 				]
 			) {
-				this.mark(`${TRACKEDSLOTNAME}-${eventName}`);
+				const trackLabel = `${TRACKEDSLOTNAME}-${eventName}`;
+				this.mark(trackLabel);
+				this.trackInGA(eventName, trackLabel);
 				this.triggers[TRACKEDSLOTNAME][
 					eventName as keyof SlotEventStatus
 				] = true;
 			}
+		}
+	}
+
+	trackInGA(eventName: string, label: string): void {
+		const gaEvent = this.gaConfig.logEvents.find(
+			(e) => e.name === eventName,
+		);
+		if (gaEvent) {
+			trackEvent(gaEvent.label, label, 'new');
 		}
 	}
 }

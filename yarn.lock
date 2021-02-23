@@ -912,6 +912,11 @@
   resolved "https://registry.yarnpkg.com/@types/doubleclick-gpt/-/doubleclick-gpt-2019041801.0.4.tgz#6cd7abdb4b38216c5ee46d28b8f8d3054c83b365"
   integrity sha512-VZkwxAGKpKKgwf95T2NhB1MLo3uwMX1iN+KnfywCfpYVzjTtQREUoqtWf4pYmsSrub/st889oXE5JU1Qp1v6mQ==
 
+"@types/google.analytics@^0.0.41":
+  version "0.0.41"
+  resolved "https://registry.yarnpkg.com/@types/google.analytics/-/google.analytics-0.0.41.tgz#7905553890bb8651c93927c1ce4c1c4a26e41505"
+  integrity sha512-LE6AfJFJtxUl1d56oQ1PvQDEOtU+0fgqTVgmOw+T0eaz7FB4DTqKxbI6x8sq+7FDvAeIXOugZyGHJLR4CAxO4A==
+
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/@types/graceful-fs/-/graceful-fs-4.1.5.tgz#21ffba0d98da4350db64891f92a9e5db3cdb4e15"
