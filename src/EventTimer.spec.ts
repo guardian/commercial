@@ -1,7 +1,9 @@
 import { EventTimer } from './EventTimer';
 import { trackEvent } from './GoogleAnalytics';
 
-jest.mock('./GoogleAnalytics');
+jest.mock('./GoogleAnalytics', () => ({
+	trackEvent: jest.fn(),
+}));
 
 describe('EventTimer', () => {
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- delete performance to mock it as is readonly
@@ -44,38 +46,63 @@ describe('EventTimer', () => {
 	it('trigger first slotReady event', () => {
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger('slotReady', 'inline1');
-		// eslint-disable-next-line @typescript-eslint/unbound-method -- for test
-		expect(window.performance.mark).toHaveBeenCalledWith(
-			'gu.commercial.first-slotReady',
-		);
+		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
+			['gu.commercial.first-slotReady'],
+		]);
+
 		expect(trackEvent).toHaveBeenCalledWith(
-			'gu.commercial.slotReady',
+			'Commercial Events',
+			'slotReady',
 			'first-slotReady',
-			'new',
 		);
 	});
 
 	it('trigger top-above-nav slotReady event', () => {
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger('slotReady', 'top-above-nav');
-		// eslint-disable-next-line @typescript-eslint/unbound-method -- for test
-		expect(window.performance.mark).toHaveBeenCalledWith(
-			'gu.commercial.top-above-nav-slotReady',
-		);
-		expect(trackEvent).toHaveBeenCalledWith(
-			'gu.commercial.slotReady',
-			'top-above-nav-slotReady',
-			'new',
-		);
+		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
+			['gu.commercial.first-slotReady'],
+			['gu.commercial.top-above-nav-slotReady'],
+		]);
+
+		expect((trackEvent as jest.Mock).mock.calls).toEqual([
+			['Commercial Events', 'slotReady', 'first-slotReady'],
+			['Commercial Events', 'slotReady', 'top-above-nav-slotReady'],
+		]);
 	});
 
 	it('not trigger a GA event if not in GA config', () => {
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger('adOnPage', 'inline1');
-		// eslint-disable-next-line @typescript-eslint/unbound-method -- for test
-		expect(window.performance.mark).toHaveBeenCalledWith(
-			'gu.commercial.first-adOnPage',
-		);
+		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
+			['gu.commercial.first-adOnPage'],
+		]);
 		expect(trackEvent).not.toHaveBeenCalled();
+	});
+
+	it('trigger commercial start page event', () => {
+		const eventTimer = EventTimer.get();
+		eventTimer.trigger('commercialStart');
+		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
+			['gu.commercial.commercialStart'],
+		]);
+		expect(trackEvent).toHaveBeenCalledWith(
+			'Commercial Events',
+			'commercialStart',
+			'Commercial start parse time',
+		);
+	});
+
+	it('trigger commercial end page event', () => {
+		const eventTimer = EventTimer.get();
+		eventTimer.trigger('commercialEnd');
+		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
+			['gu.commercial.commercialEnd'],
+		]);
+		expect(trackEvent).toHaveBeenCalledWith(
+			'Commercial Events',
+			'commercialEnd',
+			'Commercial end parse time',
+		);
 	});
 });
