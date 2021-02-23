@@ -6,9 +6,6 @@ jest.mock('./GoogleAnalytics', () => ({
 }));
 
 describe('EventTimer', () => {
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- delete performance to mock it as is readonly
-	delete (window as any).performance;
-
 	const performance = {
 		now: jest.fn(),
 		mark: jest.fn(),
