@@ -27,13 +27,10 @@
     "prepush:test": "jest --verbose --runInBand --onlyChanged",
     "test": "jest",
     "tsc": "tsc --noEmit",
-    "validate": "npm-run-all tsc lint test build"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm-run-all precommit:*",
-      "pre-push": "npm-run-all prepush:*"
-    }
+    "validate": "npm-run-all tsc lint test build",
+    "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable"
   },
   "commitlint": {
     "extends": [
