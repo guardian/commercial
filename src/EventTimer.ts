@@ -10,8 +10,8 @@ class Event {
 	}
 }
 interface GALogEvent {
-	name: string;
-	label: string;
+	timingVariable: string;
+	timingLabel?: string;
 }
 
 interface GAConfig {
@@ -26,12 +26,18 @@ interface SlotEventStatus {
 	adOnPage: boolean;
 }
 
+interface PageEventStatus {
+	commercialStart: boolean;
+	commercialEnd: boolean;
+}
+
 export class EventTimer {
 	events: Event[];
 	startTS: DOMHighResTimeStamp;
 	triggers: {
 		first: SlotEventStatus;
 		'top-above-nav': SlotEventStatus;
+		page: PageEventStatus;
 	};
 	gaConfig: GAConfig;
 	/**
@@ -74,16 +80,27 @@ export class EventTimer {
 				slotInitialised: false,
 				adOnPage: false,
 			},
+			page: {
+				commercialStart: false,
+				commercialEnd: false,
+			},
 		};
+
 		this.gaConfig = {
 			logEvents: [
 				{
-					name: 'slotReady',
-					label: 'gu.commercial.slotReady',
+					timingVariable: 'slotReady',
 				},
 				{
-					name: 'slotInitialised',
-					label: 'gu.commercial.slotInitialised',
+					timingVariable: 'slotInitialised',
+				},
+				{
+					timingVariable: 'commercialStart',
+					timingLabel: 'Commercial start parse time',
+				},
+				{
+					timingVariable: 'commercialEnd',
+					timingLabel: 'Commercial end parse time',
 				},
 			],
 		};
@@ -111,9 +128,13 @@ export class EventTimer {
 	 */
 	trigger(eventName: string, origin = 'page'): void {
 		const TRACKEDSLOTNAME = 'top-above-nav';
-		if (origin === 'page') {
+		if (
+			origin === 'page' &&
+			!this.triggers.page[eventName as keyof PageEventStatus]
+		) {
 			this.mark(eventName);
-			this.trackInGA(eventName, eventName);
+			this.trackInGA(eventName);
+			this.triggers.page[eventName as keyof PageEventStatus] = true;
 			return;
 		}
 
@@ -140,12 +161,13 @@ export class EventTimer {
 		}
 	}
 
-	trackInGA(eventName: string, label: string): void {
+	trackInGA(eventName: string, label = ''): void {
 		const gaEvent = this.gaConfig.logEvents.find(
-			(e) => e.name === eventName,
+			(e) => e.timingVariable === eventName,
 		);
 		if (gaEvent) {
-			trackEvent(gaEvent.label, label, 'new');
+			const labelToUse = gaEvent.timingLabel ?? label;
+			trackEvent('Commercial Events', gaEvent.timingVariable, labelToUse);
 		}
 	}
 }
