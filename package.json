@@ -27,13 +27,8 @@
     "prepush:test": "jest --verbose --runInBand --onlyChanged",
     "test": "jest",
     "tsc": "tsc --noEmit",
-    "validate": "npm-run-all tsc lint test build"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm-run-all precommit:*",
-      "pre-push": "npm-run-all prepush:*"
-    }
+    "validate": "npm-run-all tsc lint test build",
+    "prepare": "husky install"
   },
   "commitlint": {
     "extends": [
