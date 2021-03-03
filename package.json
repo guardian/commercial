@@ -27,13 +27,8 @@
     "prepush:test": "jest --verbose --runInBand --onlyChanged",
     "test": "jest",
     "tsc": "tsc --noEmit",
-    "validate": "npm-run-all tsc lint test build"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm-run-all precommit:*",
-      "pre-push": "npm-run-all prepush:*"
-    }
+    "validate": "npm-run-all tsc lint test build",
+    "prepare": "husky install"
   },
   "commitlint": {
     "extends": [
@@ -64,7 +59,7 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jest": "24.1.5",
     "eslint-plugin-prettier": "^3.3.1",
-    "husky": "^4.3.8",
+    "husky": "^5.1.2",
     "jest": "^26.6.3",
     "lint-staged": "^10.5.4",
     "npm-run-all": "^4.1.5",
