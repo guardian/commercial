@@ -7,7 +7,6 @@ export const trackEvent = (
 	const trackerName: string | undefined =
 		guardian.config?.googleAnalytics?.trackers.editorial;
 	if (typeof ga === 'undefined') {
-		console.error("Can't track GA event - GA library not loaded");
 		return;
 	}
 	const timeSincePageLoad: number = Math.round(window.performance.now());
