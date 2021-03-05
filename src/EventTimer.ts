@@ -114,7 +114,9 @@ export class EventTimer {
 		const mark = window.performance
 			.getEntriesByName(longName, 'mark')
 			.slice(-1)[0];
-		this.events.push(new Event(name, mark));
+		if (typeof mark !== 'undefined') {
+			this.events.push(new Event(name, mark));
+		}
 		return mark;
 	}
 
