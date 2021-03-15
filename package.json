@@ -46,7 +46,7 @@
     "@guardian/prettier": "^0.5.0",
     "@octokit/core": "^3.2.5",
     "@semantic-release/github": "7.2.0",
-    "@types/doubleclick-gpt": "^2019041801.0.4",
+    "@types/doubleclick-gpt": "^2019111201.0.0",
     "@types/jest": "^26.0.20",
     "@types/google.analytics": "^0.0.41",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
