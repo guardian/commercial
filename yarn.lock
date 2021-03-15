@@ -902,10 +902,10 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/doubleclick-gpt@^2019041801.0.4":
-  version "2019041801.0.4"
-  resolved "https://registry.yarnpkg.com/@types/doubleclick-gpt/-/doubleclick-gpt-2019041801.0.4.tgz#6cd7abdb4b38216c5ee46d28b8f8d3054c83b365"
-  integrity sha512-VZkwxAGKpKKgwf95T2NhB1MLo3uwMX1iN+KnfywCfpYVzjTtQREUoqtWf4pYmsSrub/st889oXE5JU1Qp1v6mQ==
+"@types/doubleclick-gpt@^2019111201.0.0":
+  version "2019111201.0.0"
+  resolved "https://registry.yarnpkg.com/@types/doubleclick-gpt/-/doubleclick-gpt-2019111201.0.0.tgz#0028485d2efbb3b8c79a5c1cb107486bd6e56d33"
+  integrity sha512-SNhaQ5wUAWcDsO2QYzhCeAQnnBEqouhAPnNyfjrOZDulR8fWyLq/FHWboqXh9cIVi/V2JULnv9SXJOiHS2gEtw==
 
 "@types/google.analytics@^0.0.41":
   version "0.0.41"
