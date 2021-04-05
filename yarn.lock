@@ -680,9 +680,9 @@
     "@octokit/types" "^6.0.3"
 
 "@octokit/core@^3.2.3", "@octokit/core@^3.2.5":
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/@octokit/core/-/core-3.3.1.tgz#c6bb6ba171ad84a5f430853a98892cfe8f93d8cd"
-  integrity sha512-Dc5NNQOYjgZU5S1goN6A/E500yXOfDUFRGQB8/2Tl16AcfvS3H9PudyOe3ZNE/MaVyHPIfC0htReHMJb1tMrvw==
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@octokit/core/-/core-3.4.0.tgz#b48aa27d755b339fe7550548b340dcc2b513b742"
+  integrity sha512-6/vlKPP8NF17cgYXqucdshWqmMZGXkuvtcrWCgU5NOI0Pl2GjlmZyWgBMrU8zJ3v2MJlM6++CiB45VKYmhiWWg==
   dependencies:
     "@octokit/auth-token" "^2.4.4"
     "@octokit/graphql" "^4.5.8"
