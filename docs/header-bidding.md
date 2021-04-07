@@ -32,27 +32,32 @@ Most of this is done automatically via a Sonobi script (morpheus) that wraps the
 **Targeting data**
 
 Winner details are added as key-value pairs on the adslot's targeting. Prebid lets us map each key to a function of our
-own that takes the auction response JSON and returns some  string value:
+own that takes the auction response JSON and returns some string value:
 
  - a Prebid-specific identifier is passed as an `hb_adid` string
  - the winner's name (e.g. AppNexus) is passed under `hb_bidder`
  - the winning value is aliased to a bucket (e.g. $6.33 => '6.00') and passed as `hb_pb`.
 
-## Step 2: DFP executes a competition
+## Step 2: GAM executes a competition
 
-DFP doesn't know anything about Sonobi or any of the targeting values we pass. To make them work, Sonobi has created line
-items that target them and are configured with inherent price values that Doubleclick _can_ use.
+GAM doesn't know anything about Sonobi or any of the targeting values we pass. To make them work, Sonobi has created line
+items that target them and are configured with inherent price values that GAM _can_ use.
+
+Line items are set up in GAM to match particular header bidding price points and bidders.
+GAM can use the value data on these to see if the winning bid has higher value than other running campaigns.
+(GAM isn't smart enough to simply read the winning bid price on the advert, sadly)
 
 As an example, we might have a line item that:
 
  - matches when the bid equals "6.00", to represent a bid in the $6.00 to $6.49 bucket;
- - has a native value of $6.50, so that DFP can compare it to other line items and running campaigns;
+ - has a native value of $6.50, so that GAM can compare it to other line items and running campaigns;
 
 ## Step 3: Displaying the advert
 
-Each line item points to many creatives that have been created by Sonobi, which are 'proxy creatives' that have no content of their own, but only a script tag like
-the following:
+If the auction is won by prebid, GAM returns a “proxy creative” or “dummy creative”. Each line item points many such
+creatives that have been created by Sonobi, which have no content of their own, but only a `<script>` tag which tells
+the browser to fetch and render the creative from the advertiser. The look like the following:
 
-```
+```html
 <script type="text/javascript">try{var macros = %%PATTERN:TARGETINGMAP%%;macros.click_url="%%CLICK_URL_ESC_ESC%%";window.top.sbi_km.API.render(window, "%%PATTERN:sbi_kmid%%", macros);} catch(e) {}</script>
 ```
