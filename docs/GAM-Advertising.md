@@ -12,7 +12,8 @@ so many impressions of it, and it's running behind. This logic is configured by 
 
 ## Header Bidding
 
-Header bidding works along similar lines to the typical GAM flow, but with an extra step before we make the request to GAM:
+Header bidding works along similar lines to the typical GAM flow, but with extra steps before
+we make the request to GAM. [See more details in the header bidding document](./header-bidding.md).
 
 * We load the Prebid header bidding library to help us auction our adverts. This script wraps the GAM client library (Google tag)
 and intercepts calls to it to show an advert.
@@ -25,8 +26,6 @@ on these to see if the winning bid has higher value than other running campaigns
 * If the winning bid has a higher value than any existing campaign, DFP sends back a 'dummy creative'
 that contains nothing more than a `<script>` tag telling the browser to render whichever advert won the auction.
 * The browser requests the creative and renders it itself.
-
-![Header bidding workflow diagram](https://cloud.githubusercontent.com/assets/3148617/13568947/e35ab8cc-e45c-11e5-89a0-6413312e30e0.png)
 
 ### Responsive adverts
 Responsive ads are implemented as 'breakout scripts'. These use DFP-side templates that wrap a blob of JSON in a script tag with
