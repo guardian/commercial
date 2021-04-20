@@ -1,63 +1,220 @@
-# Header bidding
+# Header Bidding
 
-_This document assumes you're already familiar with how DFP advertising operates. If you aren't, take a look at Google's
-[DFP publisher university](http://g.co/PublisherU)._
+Header bidding is the process of running an auction for an ad slot with third party vendors.
 
-Normally, when we request an advert from DFP, Google compares different line items with different values, finds the most
-lucrative, and sends back its creative. This is how most publishers use DFP, and it works well - as long as your advertisers
-are all part of the DFP ecosystem.
+The objective is to maximize the potential ad revenue for our ad slots rather than solely relying on Google Ad Manager's (GAM) marketplace.
 
-What happens, though, if they aren't? _Header bidding_ allows the _browser_ to run an auction on an adslot before making
-a request to Google. DFP compares the value of the auction's winning bid to its own inventory, and can choose to either
-send back a creative that displays the auction's winning ad, or - if it can trump the bid - a creative of its own.
+The process is performed client side before making a request to GAM.
 
-This document will explain how the browser performs auctions, how DFP responds to them, and how the adverts are
-displayed.
+## Process
 
-## Overview
+![Process](assets/header-bidding-process.png)
 
-![Header bidding workflow diagram](./header-bidding-diagram.png)
+### 1. Auction Initialised
 
-## Step 1: The browser auctions an ad-slot via Sonobi
+The auction is initiated client side by the commercial.js bundle.
 
-The browser needs to
+We use prebid.js to orchestrate the auction with the third party ad vendors and return the winning advert.
 
- - ask Sonobi what exchanges can pay for an ad-slot that support particular sizes, with certain page targeting data
- - wait for the response
- - put information about the winning bid on the DFP slot's targeting data
- - dispatch a request for that advert as per usual
+### 2. Auction Complete
 
-Most of this is done automatically via a Sonobi script (morpheus) that wraps the googletag library.
+Once the auction has completed the details of the winning advert is set on the page targeting object which will be used by GAM.
 
-**Targeting data**
+### 3. GAM Request
 
-Winner details are added as key-value pairs on the adslot's targeting. Prebid lets us map each key to a function of our
-own that takes the auction response JSON and returns some string value:
+GAM is invoked to display an ad. It will use the page targeting object to try to match against a line item (i.e. an ad order).
 
- - a Prebid-specific identifier is passed as an `hb_adid` string
- - the winner's name (e.g. AppNexus) is passed under `hb_bidder`
- - the winning value is aliased to a bucket (e.g. $6.33 => '6.00') and passed as `hb_pb`.
+### 4. GAM Line Item Matching
 
-## Step 2: GAM executes a competition
+In GAM we have programmtically created line items for each third party vendor and price level (e.g £0.50, £0.55, £0.60 etc) to match against each possible winning auction bid.
 
-GAM doesn't know anything about Sonobi or any of the targeting values we pass. To make them work, Sonobi has created line
-items that target them and are configured with inherent price values that GAM _can_ use.
+### 5. GAM Renders Advert On Client
 
-Line items are set up in GAM to match particular header bidding price points and bidders.
-GAM can use the value data on these to see if the winning bid has higher value than other running campaigns.
-(GAM isn't smart enough to simply read the winning bid price on the advert, sadly)
+If a line item is matched, the result is a creative containing a script that will render the vendors ad using the information previously set on the page targeting object.
 
-As an example, we might have a line item that:
+## Code Process
 
- - matches when the bid equals "6.00", to represent a bid in the $6.00 to $6.49 bucket;
- - has a native value of $6.50, so that GAM can compare it to other line items and running campaigns;
+### 1. Auction Initialised
 
-## Step 3: Displaying the advert
+#### Commercial Bootstrap
 
-If the auction is won by prebid, GAM returns a “proxy creative” or “dummy creative”. Each line item points many such
-creatives that have been created by Sonobi, which have no content of their own, but only a `<script>` tag which tells
-the browser to fetch and render the creative from the advertiser. The look like the following:
+We have the following entry points in the commercial code:
+
+- [commercial.js](https://github.com/guardian/frontend/blob/main/static/src/javascripts/bootstraps/commercial.js)
+- [commercial.dcr.js](https://github.com/guardian/frontend/blob/main/static/src/javascripts/bootstraps/commercial.dcr.js)
+
+Both prepare an array of modules to invoke, amongst the first is the module `preparePrebid`:
+
+```js
+commercialModules.push(
+    ['cm-prepare-prebid', preparePrebid],
+```
+
+#### prepare-prebid.js
+
+The commercial bootstrap will invoke:
+
+[dfp/prepare-prebid.js init()](https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/commercial/modules/dfp/prepare-prebid.js)
+
+This does the following:
+
+- ensure prepare prebid is called only once
+- ensures that prebid can be run according to consent and various switches
+- loads prebid.js **dynamically**
+- invokes `getPageTargeting()` to create the page targeting object if not already present
+- invokes `prebid.initialise()`
+#### prebid.js
+
+`prepare-prebid.js` will invoke:
+
+[header-bidding/prebid/prebid.js/prebid.js intialise()](https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/commercial/modules/header-bidding/prebid/prebid.js)
+
+This does the following:
+
+- configure prebid.js including the current bidding timeout of 1500ms
+- register a callback for the `bidWon` event to set the size of the advert
+
+#### load-advert.js
+
+When an ad is loaded (or refreshed) all header bidding suppliers (prebid.js and a9) are called to request bids.
+
+[dfp/load-advert.js loadAdvert()](https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/commercial/modules/dfp/load-advert.js)
+
+
+```js
+// simplified
+export const loadAdvert = (advert) => {
+    advert.whenSlotReady
+        .then(() => {
+            advert.startLoading();
+            return Promise.all([
+                prebid.requestBids(advert),
+                a9.requestBids(advert),
+            ]);
+        })
+        .then(() => {
+            // display advert
+            window.googletag.display(advert.id);
+        });
+};
+```
+### 2. Auction Complete
+
+In `prebid.js requestBids()` there is a bid completion callback `bidsBackHandler()`
+
+This will in turn call `window.pbjs.setTargetingForGPTAsync()` to set the advert details on Google's Page Targeting (GPT) object:
+
+[header-bidding/prebid/prebid.js/prebid.js requestBids()](https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/commercial/modules/header-bidding/prebid/prebid.js)
+
+```js
+window.pbjs.requestBids({
+    adUnits,
+    bidsBackHandler() {
+        // set page targeting object
+        window.pbjs.setTargetingForGPTAsync([
+            adUnits[0].code,
+        ]);
+        adUnits.map(adUnit => eventTimer.trigger('prebidEnd', stripDfpAdPrefixFrom(adUnit.code)));
+        resolve();
+    },
+});
+```
+
+### 3. GAM Request
+
+As we saw previously in `load-advert.js` when all header bidding suppliers have resolved, GAM is called to display the advert.
+
+GAM will use the properties set by `prebid.js` on the page targetting object.
+
+```js
+// simplified
+export const loadAdvert = (advert) => {
+    advert.whenSlotReady
+        .then(() => {
+            advert.startLoading();
+            return Promise.all([
+                prebid.requestBids(advert),
+                a9.requestBids(advert),
+            ]);
+        })
+        .then(() => {
+            // display advert
+            window.googletag.display(advert.id);
+        });
+};
+```
+
+We can see this in action by inspecting network requests in the browser developer tools.
+
+Filtering by requests to GAM i.e. `https://securepubads.g.doubleclick.net/gampad/ads?`
+
+Amongst the **request url parameters** sent to GAM there is the `prev_scp` parameter which contains key value pairs prefixed with the string `hb-` which denotes header bidding parameters.
+
+Some of the more important ones that will be used by GAM are:
+
+```
+hb_pb=11.48                     // price bid
+hb_adid=333ff9cc105fcf71-2-0    // advert id
+hb_bidder=ozone                 // bidder
+```
+
+The **response header** contains the following useful parameters:
+
+```
+google-creative-id: 138269767681
+google-lineitem-id: 5058222438
+```
+
+Values of `-2` indicate that an ad was not matched.
+### 4. GAM Line Item Matching
+
+In [Google Ad Manager](https://admanager.google.com/) under line items, we can filter 'name' by 'prebid automated' to see all prebid line items.
+
+Notice there is a line item for each bid price:
+
+![](assets/header-bidding-gam-line-items.png)
+
+Opening a line item and inspecting the 'Ad targeting' section we can see how the line items are matched to the header bidding `hb_` parameters we saw earlier:
+
+![](assets/header-bidding-gam-line-item-match.png)
+
+### 5. GAM Renders Advert On Client
+
+The creative associated with the matched line item in GAM is typically a script which will load the correct ad via the header bidding provider.
+
+GAM will load this script in an iframe on the user's browser.
+
+Here is an example header bidding creative script which includes a parameter for `hb_adid`, i.e. the advert id:
 
 ```html
-<script type="text/javascript">try{var macros = %%PATTERN:TARGETINGMAP%%;macros.click_url="%%CLICK_URL_ESC_ESC%%";window.top.sbi_km.API.render(window, "%%PATTERN:sbi_kmid%%", macros);} catch(e) {}</script>
+<script>
+    try{
+        window.top.pbjs.renderAd(document, '%%PATTERN:hb_adid%%');
+    } catch(e) {
+    }
+</script>
 ```
+
+## Other
+
+### Generating GAM Line Items
+
+You may have noticed that there are separate line items for each bid price.
+
+Each of these line items are programatically created by scripts in the following repository:
+
+https://github.com/guardian/commercial-tools/tree/main/dfp-line-item-creator
+
+### prebid.js version
+
+The version of prebid.js used by commercial is a forked custom version:
+
+https://github.com/guardian/Prebid.js#681fbb
+
+The reasons for the custom verion is detailed here:
+
+https://github.com/guardian/Prebid.js/blob/master/modifications.md
+#### Debugging prebid.js
+
+Adding `?pbjs_debug=true` to the URL will output prebid.js debug information to the developer console.
+
