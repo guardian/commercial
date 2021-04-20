@@ -216,5 +216,5 @@ The reasons for the custom verion is detailed here:
 https://github.com/guardian/Prebid.js/blob/master/modifications.md
 #### Debugging prebid.js
 
-Adding `?pbjs_debug=true` to the URL will output prebid.js debug informationt to the developer console.
+Adding `?pbjs_debug=true` to the URL will output prebid.js debug information to the developer console.
 
