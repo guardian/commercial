@@ -4,8 +4,7 @@ describe('fbPixel', () => {
 	it('should use the feature switch option', () => {
 		expect(fbPixel({ shouldRun: true })).toStrictEqual({
 			shouldRun: true,
-			url:
-				'https://www.facebook.com/tr?id=279880532344561&ev=PageView&noscript=1',
+			url: 'https://www.facebook.com/tr?id=279880532344561&ev=PageView&noscript=1',
 			name: 'fb',
 			useImage: true,
 		});
