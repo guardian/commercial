@@ -25,8 +25,7 @@ const onLoad = () => {
 
 export const inizio: GetThirdPartyTag = ({ shouldRun }) => ({
 	shouldRun,
-	url:
-		'//cdn.brandmetrics.com/survey/script/e96d04c832084488a841a06b49b8fb2d.js',
+	url: '//cdn.brandmetrics.com/survey/script/e96d04c832084488a841a06b49b8fb2d.js',
 	name: 'inizio',
 	onLoad,
 });
