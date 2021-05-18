@@ -55,7 +55,6 @@ declare global {
 			config?: GuardianWindowConfig;
 		};
 		ga: UniversalAnalytics.ga;
-		// navigator must be readonly
 		readonly navigator: Navigator;
 	}
 }
