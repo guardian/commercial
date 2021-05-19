@@ -1,5 +1,5 @@
-import type { ThirdPartyTag } from '../types';
 import { remarketing } from './remarketing';
+import type { ThirdPartyTag } from '../types';
 
 describe('remarketing', () => {
 	it('should have expected properties', () => {
