@@ -40,6 +40,10 @@ export class EventTimer {
 		page: PageEventStatus;
 	};
 	gaConfig: GAConfig;
+	properties: {
+		downlink?: number;
+		effectiveType?: string;
+	};
 	/**
 	 * Initalise the EventTimer class on page.
 	 * Returns the singleton instance of the EventTimer class and binds
@@ -103,6 +107,11 @@ export class EventTimer {
 					timingLabel: 'Commercial end parse time',
 				},
 			],
+		};
+
+		this.properties = {
+			downlink: window.navigator.connection?.downlink,
+			effectiveType: window.navigator.connection?.effectiveType,
 		};
 	}
 

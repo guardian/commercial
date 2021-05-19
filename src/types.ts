@@ -36,6 +36,12 @@ export type GoogleTrackConversionObject = {
 };
 
 declare global {
+	interface Navigator {
+		connection?: {
+			downlink: number;
+			effectiveType: string;
+		};
+	}
 	interface Window {
 		google_trackConversion?: (arg0: GoogleTrackConversionObject) => void;
 		google_tag_params?: GoogleTagParams;
@@ -49,5 +55,6 @@ declare global {
 			config?: GuardianWindowConfig;
 		};
 		ga: UniversalAnalytics.ga;
+		readonly navigator: Navigator;
 	}
 }
