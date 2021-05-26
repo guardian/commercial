@@ -43,7 +43,9 @@
     "@commitlint/cli": "^12.0.1",
     "@commitlint/config-conventional": "^12.0.1",
     "@guardian/eslint-config-typescript": "^0.5.0",
+    "@guardian/libs": "^2.0.0",
     "@guardian/prettier": "^0.5.0",
+    "@guardian/types": "^6.1.0",
     "@octokit/core": "^3.2.5",
     "@semantic-release/github": "7.2.3",
     "@types/doubleclick-gpt": "^2019111201.0.0",
@@ -70,5 +72,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "peerDependencies": {
+    "@guardian/libs": "^2.0.0",
+    "@guardian/types": "^6.1.0"
   }
 }
