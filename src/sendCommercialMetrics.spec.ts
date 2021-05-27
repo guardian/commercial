@@ -18,9 +18,11 @@ describe('sendCommercialMetrics', () => {
 		writable: true,
 	});
 
-	Object.defineProperty(document, 'visibilityState', { value: 'hidden' });
-
 	it('send commercial metrics success', () => {
+		Object.defineProperty(document, 'visibilityState', {
+			value: 'hidden',
+			writable: true,
+		});
 		expect(
 			sendCommercialMetrics('page view id', 'browser id', true),
 		).toEqual(true);
@@ -43,5 +45,17 @@ describe('sendCommercialMetrics', () => {
 				}),
 			],
 		]);
+	});
+
+	it('commercial metrics not sent when window is visible', () => {
+		Object.defineProperty(document, 'visibilityState', {
+			value: 'visible',
+			writable: true,
+		});
+		expect(
+			sendCommercialMetrics('page view id', 'browser id', true),
+		).toEqual(false);
+
+		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([]);
 	});
 });
