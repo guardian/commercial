@@ -7,5 +7,5 @@ export { twitter } from './third-party-tags/twitter-uwt';
 export { inizio } from './third-party-tags/inizio';
 export { remarketing } from './third-party-tags/remarketing';
 export { EventTimer } from './EventTimer';
-
+export { sendCommercialMetrics } from './sendCommercialMetrics';
 export type { ThirdPartyTag } from './types';
