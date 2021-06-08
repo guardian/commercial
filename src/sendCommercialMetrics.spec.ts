@@ -37,11 +37,7 @@ describe('sendCommercialMetrics', () => {
 					received_date: '2021-01-01',
 					platform: 'NEXT_GEN',
 					metrics: [],
-					properties: [
-						{ name: 'downlink', value: 'undefined' },
-						{ name: 'effectiveType', value: 'undefined' },
-						{ name: 'isDev', value: 'localhost' },
-					],
+					properties: [{ name: 'isDev', value: 'localhost' }],
 				}),
 			],
 		]);
