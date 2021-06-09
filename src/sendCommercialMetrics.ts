@@ -42,15 +42,13 @@ export function sendCommercialMetrics(
 
 	const properties: Properties[] = Object.entries(eventTimer.properties)
 		.filter(([, value]) => typeof value !== 'undefined')
-		.map((property) => {
-			const [name, value] = property;
-			return { name, value: String(value) };
-		})
+		.map(([name, value]) => ({ name, value: String(value) }))
 		.concat(devProperties);
 
-	const metrics: Metrics[] = events.map((event) => {
-		return { name: event.name, value: Math.ceil(event.ts) };
-	});
+	const metrics: Metrics[] = events.map(({ name, ts }) => ({
+		name,
+		value: Math.ceil(ts),
+	}));
 
 	const commercialMetrics: CommercialMetrics = {
 		browser_id: browserId,
