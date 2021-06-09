@@ -1,9 +1,34 @@
 import MockDate from 'mockdate';
+import { EventTimer } from './EventTimer';
 import { sendCommercialMetrics } from './sendCommercialMetrics';
+
+const DEFAULT_DATE = '2021-01-01T12:00:00.000Z';
+const PAGE_VIEW_ID = 'pv_id_1234567890';
+const BROWSER_ID = 'bwid_abcdefghijklm';
+
+const defaultMetrics = {
+	browser_id: BROWSER_ID,
+	page_view_id: PAGE_VIEW_ID,
+	received_timestamp: DEFAULT_DATE,
+	received_date: DEFAULT_DATE.substr(0, 10), // 2021-01-01
+	platform: 'NEXT_GEN',
+	metrics: [],
+	properties: [],
+};
+
+const mockSendMetrics = () =>
+	sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, false);
+
+const setVisibility = (value: 'hidden' | 'visible' = 'hidden'): void => {
+	Object.defineProperty(document, 'visibilityState', {
+		value,
+		writable: true,
+	});
+};
 
 describe('sendCommercialMetrics', () => {
 	beforeAll(() => {
-		MockDate.set('Fri Jan 1 2021 12:00:00 GMT+0000 (Greenwich Mean Time)');
+		MockDate.set(DEFAULT_DATE);
 	});
 
 	afterAll(() => {
@@ -19,39 +44,108 @@ describe('sendCommercialMetrics', () => {
 	});
 
 	it('send commercial metrics success', () => {
-		Object.defineProperty(document, 'visibilityState', {
-			value: 'hidden',
-			writable: true,
-		});
-		expect(
-			sendCommercialMetrics('page view id', 'browser id', true),
-		).toEqual(true);
+		setVisibility();
+
+		expect(mockSendMetrics()).toEqual(true);
 
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 			[
-				'//performance-events.code.dev-guardianapis.com/commercial-metrics',
-				JSON.stringify({
-					browser_id: 'browser id',
-					page_view_id: 'page view id',
-					received_timestamp: '2021-01-01T12:00:00.000Z',
-					received_date: '2021-01-01',
-					platform: 'NEXT_GEN',
-					metrics: [],
-					properties: [{ name: 'isDev', value: 'localhost' }],
-				}),
+				'//performance-events.guardianapis.com/commercial-metrics',
+				JSON.stringify(defaultMetrics),
 			],
 		]);
 	});
 
 	it('commercial metrics not sent when window is visible', () => {
-		Object.defineProperty(document, 'visibilityState', {
-			value: 'visible',
-			writable: true,
-		});
-		expect(
-			sendCommercialMetrics('page view id', 'browser id', true),
-		).toEqual(false);
+		setVisibility('visible');
+
+		expect(mockSendMetrics()).toEqual(false);
 
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([]);
+	});
+
+	describe('handles various configurations', () => {
+		afterEach(() => {
+			// Reset the properties of the event timer for the purposes of this test
+			delete window.guardian.commercialTimer;
+			void EventTimer.get();
+		});
+
+		it('should handle endpoint in dev', () => {
+			setVisibility();
+
+			expect(
+				sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, true),
+			).toEqual(true);
+
+			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+				[
+					'//performance-events.code.dev-guardianapis.com/commercial-metrics',
+					JSON.stringify({
+						...defaultMetrics,
+						properties: [{ name: 'isDev', value: 'localhost' }],
+					}),
+				],
+			]);
+		});
+
+		it('should handle connection properties if they exist', () => {
+			const eventTimer = EventTimer.get();
+
+			// Fix the properties of the event timer for the purposes of this test
+			eventTimer.properties = {
+				downlink: 1,
+				effectiveType: '4g',
+			};
+
+			setVisibility();
+
+			expect(mockSendMetrics()).toEqual(true);
+
+			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+				[
+					'//performance-events.guardianapis.com/commercial-metrics',
+					JSON.stringify({
+						...defaultMetrics,
+						properties: [
+							{ name: 'downlink', value: '1' },
+							{ name: 'effectiveType', value: '4g' },
+						],
+					}),
+				],
+			]);
+		});
+
+		it('should merge properties adequately', () => {
+			const eventTimer = EventTimer.get();
+
+			// Fix the properties of the event timer for the purposes of this test
+			eventTimer.properties = {
+				downlink: 1,
+				effectiveType: '4g',
+			};
+
+			Object.defineProperty(document, 'visibilityState', {
+				value: 'hidden',
+				writable: true,
+			});
+			expect(
+				sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, true),
+			).toEqual(true);
+
+			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+				[
+					'//performance-events.code.dev-guardianapis.com/commercial-metrics',
+					JSON.stringify({
+						...defaultMetrics,
+						properties: [
+							{ name: 'downlink', value: '1' },
+							{ name: 'effectiveType', value: '4g' },
+							{ name: 'isDev', value: 'localhost' },
+						],
+					}),
+				],
+			]);
+		});
 	});
 });
