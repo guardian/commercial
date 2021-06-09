@@ -21,8 +21,6 @@ type Properties = {
 	value: string;
 };
 
-type PropertyEntry = [string, string | number | undefined];
-
 export function sendCommercialMetrics(
 	pageViewId: string,
 	browserId: string | undefined,
@@ -43,7 +41,7 @@ export function sendCommercialMetrics(
 	const events = eventTimer.events;
 
 	const properties: Properties[] = Object.entries(eventTimer.properties)
-		.filter(([, value]: PropertyEntry) => value !== undefined)
+		.filter(([, value]) => typeof value !== 'undefined')
 		.map((property) => {
 			const [name, value] = property;
 			return { name, value: String(value) };
