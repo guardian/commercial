@@ -2,6 +2,12 @@ import MockDate from 'mockdate';
 import { EventTimer } from './EventTimer';
 import { sendCommercialMetrics } from './sendCommercialMetrics';
 
+const PROD_ENDPOINT =
+	'//performance-events.guardianapis.com/commercial-metrics';
+
+const DEV_ENDPOINT =
+	'//performance-events.code.dev-guardianapis.com/commercial-metrics';
+
 const DEFAULT_DATE = '2021-01-01T12:00:00.000Z';
 const PAGE_VIEW_ID = 'pv_id_1234567890';
 const BROWSER_ID = 'bwid_abcdefghijklm';
@@ -49,10 +55,7 @@ describe('sendCommercialMetrics', () => {
 		expect(mockSendMetrics()).toEqual(true);
 
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
-			[
-				'//performance-events.guardianapis.com/commercial-metrics',
-				JSON.stringify(defaultMetrics),
-			],
+			[PROD_ENDPOINT, JSON.stringify(defaultMetrics)],
 		]);
 	});
 
@@ -80,7 +83,7 @@ describe('sendCommercialMetrics', () => {
 
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
-					'//performance-events.code.dev-guardianapis.com/commercial-metrics',
+					DEV_ENDPOINT,
 					JSON.stringify({
 						...defaultMetrics,
 						properties: [{ name: 'isDev', value: 'localhost' }],
@@ -104,7 +107,7 @@ describe('sendCommercialMetrics', () => {
 
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
-					'//performance-events.guardianapis.com/commercial-metrics',
+					PROD_ENDPOINT,
 					JSON.stringify({
 						...defaultMetrics,
 						properties: [
@@ -135,7 +138,7 @@ describe('sendCommercialMetrics', () => {
 
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
-					'//performance-events.code.dev-guardianapis.com/commercial-metrics',
+					DEV_ENDPOINT,
 					JSON.stringify({
 						...defaultMetrics,
 						properties: [
