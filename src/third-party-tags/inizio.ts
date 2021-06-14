@@ -1,6 +1,6 @@
 import type { GetThirdPartyTag } from '../types';
 
-export const handleQuerySurveyDone = (
+const handleQuerySurveyDone = (
 	surveyAvailable: boolean,
 	survey: { measurementId: string },
 ): void => {
@@ -14,7 +14,7 @@ export const handleQuerySurveyDone = (
 	}
 };
 
-export const onLoad = (): void => {
+const onLoad = (): void => {
 	window._brandmetrics ||= [];
 	window._brandmetrics.push({
 		cmd: '_querySurvey',
@@ -30,3 +30,8 @@ export const inizio: GetThirdPartyTag = ({ shouldRun }) => ({
 	name: 'inizio',
 	onLoad,
 });
+
+export const _ = {
+	onLoad,
+	handleQuerySurveyDone,
+};

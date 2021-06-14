@@ -1,4 +1,4 @@
-import { handleQuerySurveyDone, inizio, onLoad } from './inizio';
+import { _, inizio } from './inizio';
 
 describe('index', () => {
 	it('should use the feature switch option', () => {
@@ -36,13 +36,13 @@ describe('handleQuerySurveyDone', () => {
 		});
 
 		it('setTargeting and logging called when survey available', () => {
-			handleQuerySurveyDone(true, { measurementId: 'xyz' });
+			_.handleQuerySurveyDone(true, { measurementId: 'xyz' });
 			expect(console.log).toHaveBeenCalledWith('surveyAvailable: xyz');
 			expect(setTargeting).toHaveBeenLastCalledWith('inizio', 't');
 		});
 
 		it('setTargeting and logging not called when survey not available', () => {
-			handleQuerySurveyDone(false, { measurementId: 'xyz' });
+			_.handleQuerySurveyDone(false, { measurementId: 'xyz' });
 			expect(console.log).toHaveBeenCalledTimes(0);
 			expect(setTargeting).toHaveBeenCalledTimes(0);
 		});
@@ -58,7 +58,7 @@ describe('handleQuerySurveyDone', () => {
 			});
 		});
 		it('survey available and setTargeting not called', () => {
-			handleQuerySurveyDone(true, { measurementId: 'xyz' });
+			_.handleQuerySurveyDone(true, { measurementId: 'xyz' });
 			expect(console.log).toHaveBeenCalledWith('surveyAvailable: xyz');
 			expect(setTargeting).toHaveBeenCalledTimes(0);
 		});
@@ -71,7 +71,7 @@ describe('onLoad', () => {
 	});
 
 	it('onLoad called populates _brandmetrics', () => {
-		onLoad();
+		_.onLoad();
 		expect(window._brandmetrics).toHaveLength(1);
 		expect(window._brandmetrics).toMatchObject([
 			{
