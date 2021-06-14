@@ -41,7 +41,7 @@ describe('handleQuerySurveyDone', () => {
 			expect(setTargeting).toHaveBeenLastCalledWith('inizio', 't');
 		});
 
-		it('setTargeting and logging not called when survey available', () => {
+		it('setTargeting and logging not called when survey not available', () => {
 			handleQuerySurveyDone(false, { measurementId: 'xyz' });
 			expect(console.log).toHaveBeenCalledTimes(0);
 			expect(setTargeting).toHaveBeenCalledTimes(0);
