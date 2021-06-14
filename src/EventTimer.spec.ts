@@ -5,21 +5,21 @@ jest.mock('./GoogleAnalytics', () => ({
 	trackEvent: jest.fn(),
 }));
 
+const performance = {
+	now: jest.fn(),
+	mark: jest.fn(),
+	getEntriesByName: jest.fn().mockReturnValue([
+		{
+			duration: 1,
+			entryType: 'mark',
+			name: 'commercial event',
+			startTime: 1,
+		},
+	]),
+};
+
 describe('EventTimer', () => {
 	beforeEach(() => {
-		const performance = {
-			now: jest.fn(),
-			mark: jest.fn(),
-			getEntriesByName: jest.fn().mockReturnValue([
-				{
-					duration: 1,
-					entryType: 'mark',
-					name: 'commercial event',
-					startTime: 1,
-				},
-			]),
-		};
-
 		Object.defineProperty(window, 'performance', {
 			configurable: true,
 			enumerable: true,
