@@ -4,8 +4,6 @@ import { EventTimer } from './EventTimer';
 type CommercialMetrics = {
 	browser_id?: string;
 	page_view_id: string;
-	received_timestamp: string;
-	received_date: string;
 	platform: string;
 	metrics: Metrics[];
 	properties: Properties[];
@@ -35,8 +33,6 @@ export function sendCommercialMetrics(
 		: '//performance-events.guardianapis.com/commercial-metrics';
 	if (document.visibilityState !== 'hidden') return false;
 
-	const timestamp = new Date().toISOString();
-	const date = timestamp.slice(0, 10);
 	const eventTimer = EventTimer.get();
 	const events = eventTimer.events;
 
@@ -53,8 +49,6 @@ export function sendCommercialMetrics(
 	const commercialMetrics: CommercialMetrics = {
 		browser_id: browserId,
 		page_view_id: pageViewId,
-		received_timestamp: timestamp,
-		received_date: date,
 		platform: 'NEXT_GEN',
 		metrics,
 		properties,

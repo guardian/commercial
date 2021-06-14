@@ -8,15 +8,12 @@ const PROD_ENDPOINT =
 const DEV_ENDPOINT =
 	'//performance-events.code.dev-guardianapis.com/commercial-metrics';
 
-const DEFAULT_DATE = '2021-01-01T12:00:00.000Z';
 const PAGE_VIEW_ID = 'pv_id_1234567890';
 const BROWSER_ID = 'bwid_abcdefghijklm';
 
 const defaultMetrics = {
 	browser_id: BROWSER_ID,
 	page_view_id: PAGE_VIEW_ID,
-	received_timestamp: DEFAULT_DATE,
-	received_date: DEFAULT_DATE.substr(0, 10), // 2021-01-01
 	platform: 'NEXT_GEN',
 	metrics: [],
 	properties: [],
@@ -33,14 +30,6 @@ const setVisibility = (value: 'hidden' | 'visible' = 'hidden'): void => {
 };
 
 describe('sendCommercialMetrics', () => {
-	beforeAll(() => {
-		MockDate.set(DEFAULT_DATE);
-	});
-
-	afterAll(() => {
-		MockDate.reset();
-	});
-
 	const sendBeacon = jest.fn().mockReturnValue(true);
 	Object.defineProperty(navigator, 'sendBeacon', {
 		configurable: true,
