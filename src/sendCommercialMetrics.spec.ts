@@ -1,4 +1,3 @@
-import MockDate from 'mockdate';
 import { EventTimer } from './EventTimer';
 import { sendCommercialMetrics } from './sendCommercialMetrics';
 
