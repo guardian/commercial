@@ -35,6 +35,7 @@ export function sendCommercialMetrics(
 		: '//performance-events.guardianapis.com/commercial-metrics';
 	if (document.visibilityState !== 'hidden') return false;
 
+	// TODO: remove this
 	const timestamp = new Date().toISOString();
 	const date = timestamp.slice(0, 10);
 	const eventTimer = EventTimer.get();
