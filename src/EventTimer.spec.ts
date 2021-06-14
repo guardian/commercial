@@ -5,28 +5,28 @@ jest.mock('./GoogleAnalytics', () => ({
 	trackEvent: jest.fn(),
 }));
 
+const performance = {
+	now: jest.fn(),
+	mark: jest.fn(),
+	getEntriesByName: jest.fn().mockReturnValue([
+		{
+			duration: 1,
+			entryType: 'mark',
+			name: 'commercial event',
+			startTime: 1,
+		},
+	]),
+};
+
 describe('EventTimer', () => {
-	const performance = {
-		now: jest.fn(),
-		mark: jest.fn(),
-		getEntriesByName: jest.fn().mockReturnValue([
-			{
-				duration: 1,
-				entryType: 'mark',
-				name: 'commercial event',
-				startTime: 1,
-			},
-		]),
-	};
-
-	Object.defineProperty(window, 'performance', {
-		configurable: true,
-		enumerable: true,
-		value: performance,
-		writable: true,
-	});
-
 	beforeEach(() => {
+		Object.defineProperty(window, 'performance', {
+			configurable: true,
+			enumerable: true,
+			value: performance,
+			writable: true,
+		});
+
 		window.guardian = {
 			config: {
 				googleAnalytics: {
@@ -38,6 +38,43 @@ describe('EventTimer', () => {
 		};
 
 		EventTimer.init();
+	});
+
+	it('mark produces correct event', () => {
+		const eventTimer = EventTimer.get();
+		eventTimer.mark('mark_name');
+		expect(eventTimer.events).toHaveLength(1);
+		expect(eventTimer.events[0].name).toBe('mark_name');
+		expect(eventTimer.events[0].ts).toBe(1);
+	});
+
+	it('calling mark with performance undefined produces no events', () => {
+		Object.defineProperty(window, 'performance', {
+			configurable: true,
+			enumerable: true,
+			value: undefined,
+			writable: true,
+		});
+		const eventTimer = EventTimer.get();
+		eventTimer.mark('mark_name');
+		expect(eventTimer.events).toEqual([]);
+	});
+
+	it('when retrieved mark is undefined produce no events', () => {
+		const performance = {
+			now: jest.fn(),
+			mark: jest.fn(),
+			getEntriesByName: jest.fn().mockReturnValue([]),
+		};
+		Object.defineProperty(window, 'performance', {
+			configurable: true,
+			enumerable: true,
+			value: performance,
+			writable: true,
+		});
+		const eventTimer = EventTimer.get();
+		eventTimer.mark('mark_name');
+		expect(eventTimer.events).toEqual([]);
 	});
 
 	it('trigger first slotReady event', () => {
@@ -54,6 +91,24 @@ describe('EventTimer', () => {
 		);
 	});
 
+	it('triggering two slotReady events causes one mark and one track', () => {
+		const eventTimer = EventTimer.get();
+		eventTimer.trigger('slotReady', 'inline1');
+		eventTimer.trigger('slotReady', 'inline1');
+
+		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
+			['gu.commercial.first-slotReady'],
+		]);
+
+		expect(trackEvent).toHaveBeenCalledTimes(1);
+
+		expect(trackEvent).toHaveBeenCalledWith(
+			'Commercial Events',
+			'slotReady',
+			'first-slotReady',
+		);
+	});
+
 	it('trigger top-above-nav slotReady event', () => {
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger('slotReady', 'top-above-nav');
@@ -61,6 +116,24 @@ describe('EventTimer', () => {
 			['gu.commercial.first-slotReady'],
 			['gu.commercial.top-above-nav-slotReady'],
 		]);
+
+		expect((trackEvent as jest.Mock).mock.calls).toEqual([
+			['Commercial Events', 'slotReady', 'first-slotReady'],
+			['Commercial Events', 'slotReady', 'top-above-nav-slotReady'],
+		]);
+	});
+
+	it('trigger two top-above-nav slotReady events', () => {
+		const eventTimer = EventTimer.get();
+		eventTimer.trigger('slotReady', 'top-above-nav');
+		eventTimer.trigger('slotReady', 'top-above-nav');
+
+		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
+			['gu.commercial.first-slotReady'],
+			['gu.commercial.top-above-nav-slotReady'],
+		]);
+
+		expect(trackEvent).toHaveBeenCalledTimes(2);
 
 		expect((trackEvent as jest.Mock).mock.calls).toEqual([
 			['Commercial Events', 'slotReady', 'first-slotReady'],

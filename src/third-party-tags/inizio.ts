@@ -1,19 +1,20 @@
 import type { GetThirdPartyTag } from '../types';
 
-const onLoad = () => {
-	const handleQuerySurveyDone = (
-		surveyAvailable: boolean,
-		survey: { measurementId: string },
-	) => {
-		if (surveyAvailable) {
-			if (window.googletag) {
-				window.googletag.cmd.push(() => {
-					window.googletag?.pubads().setTargeting('inizio', 't');
-				});
-			}
-			console.log(`surveyAvailable: ${survey.measurementId}`);
+const handleQuerySurveyDone = (
+	surveyAvailable: boolean,
+	survey: { measurementId: string },
+): void => {
+	if (surveyAvailable) {
+		if (window.googletag) {
+			window.googletag.cmd.push(() => {
+				window.googletag?.pubads().setTargeting('inizio', 't');
+			});
 		}
-	};
+		console.log(`surveyAvailable: ${survey.measurementId}`);
+	}
+};
+
+const onLoad = (): void => {
 	window._brandmetrics ||= [];
 	window._brandmetrics.push({
 		cmd: '_querySurvey',
@@ -29,3 +30,8 @@ export const inizio: GetThirdPartyTag = ({ shouldRun }) => ({
 	name: 'inizio',
 	onLoad,
 });
+
+export const _ = {
+	onLoad,
+	handleQuerySurveyDone,
+};
