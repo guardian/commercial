@@ -44,8 +44,8 @@ describe('EventTimer', () => {
 		const eventTimer = EventTimer.get();
 		eventTimer.mark('mark_name');
 		expect(eventTimer.events).toHaveLength(1);
-		expect(eventTimer.events[0].name).toBe('mark_name');
-		expect(eventTimer.events[0].ts).toBe(1);
+		expect(eventTimer.events[0]?.name).toBe('mark_name');
+		expect(eventTimer.events[0]?.ts).toBe(1);
 	});
 
 	it('calling mark with performance undefined produces no events', () => {
