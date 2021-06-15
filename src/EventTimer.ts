@@ -95,7 +95,7 @@ export class EventTimer {
 						)
 						.filter((event) => event.ts > 0),
 			  ]
-			: [...this._events];
+			: this._events;
 	}
 
 	constructor() {
