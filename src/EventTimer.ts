@@ -80,7 +80,7 @@ export class EventTimer {
 	 */
 	public get events(): Event[] {
 		return typeof window.performance !== 'undefined' &&
-			'mark' in window.performance
+			'getEntriesByName' in window.performance
 			? [
 					...this._events,
 					...EventTimer._externallyDefinedEventNames
