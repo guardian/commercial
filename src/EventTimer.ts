@@ -84,16 +84,20 @@ export class EventTimer {
 			? [
 					...this._events,
 					...EventTimer._externallyDefinedEventNames
+						.filter(
+							(eventName) =>
+								window.performance.getEntriesByName(eventName)
+									.length,
+						)
 						.map(
 							(eventName) =>
 								new Event(
 									eventName,
 									window.performance.getEntriesByName(
 										eventName,
-									)[0] ?? 0,
+									)[0],
 								),
-						)
-						.filter((event) => event.ts > 0),
+						),
 			  ]
 			: this._events;
 	}
