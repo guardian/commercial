@@ -5,6 +5,20 @@ jest.mock('./GoogleAnalytics', () => ({
 	trackEvent: jest.fn(),
 }));
 
+const mockGetEntriesByName = (names: string[]) =>
+	jest.fn((name) =>
+		names.includes(name)
+			? [
+					{
+						duration: 1,
+						entryType: 'mark',
+						name: 'commercial event',
+						startTime: 1,
+					},
+			  ]
+			: [],
+	);
+
 const performance = {
 	now: jest.fn(),
 	mark: jest.fn(),
@@ -18,14 +32,7 @@ const performance = {
 				startTime: 1,
 			},
 		])
-		.mockReturnValue([
-			{
-				duration: 1,
-				entryType: 'mark',
-				name: 'commercial event',
-				startTime: 0,
-			},
-		]),
+		.mockReturnValue([]),
 };
 
 describe('EventTimer', () => {
@@ -48,6 +55,56 @@ describe('EventTimer', () => {
 		};
 
 		EventTimer.init();
+	});
+
+	it('get correct cmp events', () => {
+		const performanceCMP = {
+			now: jest.fn(),
+			mark: jest.fn(),
+			getEntriesByName: mockGetEntriesByName([
+				'cmp-tcfv2-init',
+				'cmp-tcfv2-got-consent',
+			]),
+		};
+		Object.defineProperty(window, 'performance', {
+			configurable: true,
+			enumerable: true,
+			value: performanceCMP,
+			writable: true,
+		});
+		const eventTimer = EventTimer.get();
+		expect(eventTimer.events).toHaveLength(2);
+		expect(eventTimer.events.map((event) => event.name)).toEqual(
+			expect.arrayContaining(['cmp-tcfv2-init', 'cmp-tcfv2-init']),
+		);
+	});
+
+	it('get correct cmp events with additional event mark', () => {
+		const performanceCMP = {
+			now: jest.fn(),
+			mark: jest.fn(),
+			getEntriesByName: mockGetEntriesByName([
+				'gu.commercial.mark_name',
+				'cmp-tcfv2-init',
+				'cmp-tcfv2-got-consent',
+			]),
+		};
+		Object.defineProperty(window, 'performance', {
+			configurable: true,
+			enumerable: true,
+			value: performanceCMP,
+			writable: true,
+		});
+		const eventTimer = EventTimer.get();
+		eventTimer.mark('mark_name');
+		expect(eventTimer.events).toHaveLength(3);
+		expect(eventTimer.events.map((event) => event.name)).toEqual(
+			expect.arrayContaining([
+				'cmp-tcfv2-init',
+				'cmp-tcfv2-got-consent',
+				'mark_name',
+			]),
+		);
 	});
 
 	it('mark produces correct event', () => {
