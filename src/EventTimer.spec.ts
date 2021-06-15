@@ -8,14 +8,24 @@ jest.mock('./GoogleAnalytics', () => ({
 const performance = {
 	now: jest.fn(),
 	mark: jest.fn(),
-	getEntriesByName: jest.fn().mockReturnValue([
-		{
-			duration: 1,
-			entryType: 'mark',
-			name: 'commercial event',
-			startTime: 1,
-		},
-	]),
+	getEntriesByName: jest
+		.fn()
+		.mockReturnValueOnce([
+			{
+				duration: 1,
+				entryType: 'mark',
+				name: 'commercial event',
+				startTime: 1,
+			},
+		])
+		.mockReturnValue([
+			{
+				duration: 1,
+				entryType: 'mark',
+				name: 'commercial event',
+				startTime: 0,
+			},
+		]),
 };
 
 describe('EventTimer', () => {
