@@ -467,9 +467,9 @@
   integrity sha512-THJn0wg7i9YjSVM9ofobsJgS+WH9ybrZH1+0CXLAebp0T53RGtgZUkek82mDg1h3DidsM+f7HSZqoQyrCbPzPw==
 
 "@guardian/libs@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-2.0.0.tgz#8582703eb510df2e1c29b4b57aa81213dd63fd6f"
-  integrity sha512-rcl6BnePEh/ecp1Vgd8lA2ZANLjLSiHyG4F7RnlLNsr+G0U756/YJpLZRZ5HevALLLrU+g02c51yiSEqpDXFZw==
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-2.2.0.tgz#9af5f4fda9d1d5750cf24df386cae7a3718526f6"
+  integrity sha512-oyWSyd3TTmq+3+K7ITcDlww/XLsBmFmY8G+SddXEfKaUbOnB1Uoy6RF5VBnYUIFR019/AJXR9XoxgPP6sZgchQ==
 
 "@guardian/prettier@^0.5.0":
   version "0.5.0"
