@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+	"noUncheckedIndexedAccess": true,
     "allowJs": true,
     "esModuleInterop": true,
     "isolatedModules": true,
