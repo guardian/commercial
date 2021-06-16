@@ -95,7 +95,7 @@ export class EventTimer {
 									eventName,
 									window.performance.getEntriesByName(
 										eventName,
-									)[0],
+									)[0] as PerformanceEntry,
 								),
 						),
 			  ]
