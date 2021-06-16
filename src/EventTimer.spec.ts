@@ -5,18 +5,40 @@ jest.mock('./GoogleAnalytics', () => ({
 	trackEvent: jest.fn(),
 }));
 
+const mockGetEntriesByName = (names: string[]) =>
+	jest.fn((name) =>
+		names.includes(name)
+			? [
+					{
+						duration: 1,
+						entryType: 'mark',
+						name: 'commercial event',
+						startTime: 1,
+					},
+			  ]
+			: [],
+	);
+
 const performance = {
 	now: jest.fn(),
 	mark: jest.fn(),
-	getEntriesByName: jest.fn().mockReturnValue([
-		{
-			duration: 1,
-			entryType: 'mark',
-			name: 'commercial event',
-			startTime: 1,
-		},
-	]),
+	getEntriesByName: jest
+		.fn()
+		.mockReturnValueOnce([
+			{
+				duration: 1,
+				entryType: 'mark',
+				name: 'commercial event',
+				startTime: 1,
+			},
+		])
+		.mockReturnValue([]),
 };
+
+const MARK_NAME = 'mark_name';
+const MARK_LONG_NAME = `gu.commercial.${MARK_NAME}`;
+const CMP_INIT = 'cmp-tcfv2-init';
+const CMP_GOT_CONSENT = 'cmp-tcfv2-got-consent';
 
 describe('EventTimer', () => {
 	beforeEach(() => {
@@ -40,9 +62,52 @@ describe('EventTimer', () => {
 		EventTimer.init();
 	});
 
+	it('get correct cmp events', () => {
+		const performanceCMP = {
+			now: jest.fn(),
+			mark: jest.fn(),
+			getEntriesByName: mockGetEntriesByName([CMP_INIT, CMP_GOT_CONSENT]),
+		};
+		Object.defineProperty(window, 'performance', {
+			configurable: true,
+			enumerable: true,
+			value: performanceCMP,
+			writable: true,
+		});
+		const eventTimer = EventTimer.get();
+		expect(eventTimer.events).toHaveLength(2);
+		expect(eventTimer.events.map((event) => event.name).sort()).toEqual(
+			[CMP_GOT_CONSENT, CMP_INIT].sort(),
+		);
+	});
+
+	it('get correct cmp events with additional event mark', () => {
+		const performanceCMP = {
+			now: jest.fn(),
+			mark: jest.fn(),
+			getEntriesByName: mockGetEntriesByName([
+				MARK_LONG_NAME,
+				CMP_INIT,
+				CMP_GOT_CONSENT,
+			]),
+		};
+		Object.defineProperty(window, 'performance', {
+			configurable: true,
+			enumerable: true,
+			value: performanceCMP,
+			writable: true,
+		});
+		const eventTimer = EventTimer.get();
+		eventTimer.mark(MARK_NAME);
+		expect(eventTimer.events).toHaveLength(3);
+		expect(eventTimer.events.map((event) => event.name).sort()).toEqual(
+			[CMP_INIT, CMP_GOT_CONSENT, MARK_NAME].sort(),
+		);
+	});
+
 	it('mark produces correct event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.mark('mark_name');
+		eventTimer.mark(MARK_NAME);
 		expect(eventTimer.events).toHaveLength(1);
 		expect(eventTimer.events[0]?.name).toBe('mark_name');
 		expect(eventTimer.events[0]?.ts).toBe(1);
@@ -56,7 +121,7 @@ describe('EventTimer', () => {
 			writable: true,
 		});
 		const eventTimer = EventTimer.get();
-		eventTimer.mark('mark_name');
+		eventTimer.mark(MARK_NAME);
 		expect(eventTimer.events).toEqual([]);
 	});
 
@@ -73,7 +138,7 @@ describe('EventTimer', () => {
 			writable: true,
 		});
 		const eventTimer = EventTimer.get();
-		eventTimer.mark('mark_name');
+		eventTimer.mark(MARK_NAME);
 		expect(eventTimer.events).toEqual([]);
 	});
 

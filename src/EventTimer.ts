@@ -32,7 +32,15 @@ interface PageEventStatus {
 }
 
 export class EventTimer {
-	events: Event[];
+	private _events: Event[];
+	private static _externallyDefinedEventNames = [
+		'cmp-tcfv2-init',
+		'cmp-tcfv2-got-consent',
+		'cmp-ccpa-init',
+		'cmp-ccpa-got-consent',
+		'cmp-aus-init',
+		'cmp-aus-got-consent',
+	];
 	startTS: DOMHighResTimeStamp;
 	triggers: {
 		first: SlotEventStatus;
@@ -66,8 +74,36 @@ export class EventTimer {
 		return this.init();
 	}
 
+	/**
+	 * Returns all commercial timers. CMP-related timers are not tracked
+	 * by EventTimer so they need to be concatenated to EventTimer's private events array.
+	 */
+	public get events(): Event[] {
+		return typeof window.performance !== 'undefined' &&
+			'getEntriesByName' in window.performance
+			? [
+					...this._events,
+					...EventTimer._externallyDefinedEventNames
+						.filter(
+							(eventName) =>
+								window.performance.getEntriesByName(eventName)
+									.length,
+						)
+						.map(
+							(eventName) =>
+								new Event(
+									eventName,
+									window.performance.getEntriesByName(
+										eventName,
+									)[0] as PerformanceEntry,
+								),
+						),
+			  ]
+			: this._events;
+	}
+
 	constructor() {
-		this.events = [];
+		this._events = [];
 		this.startTS = window.performance.now();
 		this.triggers = {
 			first: {
@@ -127,7 +163,7 @@ export class EventTimer {
 				.getEntriesByName(longName, 'mark')
 				.slice(-1)[0];
 			if (typeof mark !== 'undefined') {
-				this.events.push(new Event(name, mark));
+				this._events.push(new Event(name, mark));
 			}
 		}
 	}
