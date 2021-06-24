@@ -6,7 +6,8 @@ export const trackEvent = (
 	const { ga, guardian } = window;
 	const trackerName: string | undefined =
 		guardian.config?.googleAnalytics?.trackers.editorial;
-	if (typeof ga === 'undefined') {
+
+	if (typeof ga !== 'function') {
 		return;
 	}
 	const timeSincePageLoad: number = Math.round(window.performance.now());
