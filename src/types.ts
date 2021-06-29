@@ -24,9 +24,9 @@ export type GuardianAnalyticsConfig = {
 	trackers: Record<string, string>;
 };
 
-export interface GuardianWindowConfig {
+export type GuardianWindowConfig = {
 	googleAnalytics?: GuardianAnalyticsConfig;
-}
+};
 
 export type GoogleTagParams = unknown;
 export type GoogleTrackConversionObject = {
@@ -34,8 +34,3 @@ export type GoogleTrackConversionObject = {
 	google_custom_params: GoogleTagParams;
 	google_remarketing_only: boolean;
 };
-
-export interface GuardianCommercial {
-	commercialTimer?: EventTimer;
-	config?: GuardianWindowConfig;
-}

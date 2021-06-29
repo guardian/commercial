@@ -1,8 +1,9 @@
 import type {
 	GoogleTagParams,
 	GoogleTrackConversionObject,
-	GuardianCommercial,
+	GuardianWindowConfig,
 } from './types';
+import type { EventTimer } from '.';
 
 declare global {
 	interface Navigator {
@@ -19,7 +20,10 @@ declare global {
 			val: Record<string, unknown>;
 		}>;
 		googletag?: googletag.Googletag;
-		guardian: GuardianCommercial;
+		guardian: {
+			commercialTimer?: EventTimer;
+			config?: GuardianWindowConfig;
+		};
 		ga: UniversalAnalytics.ga | null;
 		readonly navigator: Navigator;
 	}
