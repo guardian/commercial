@@ -38,5 +38,4 @@ export type GoogleTrackConversionObject = {
 export interface GuardianCommercial {
 	commercialTimer?: EventTimer;
 	config?: GuardianWindowConfig;
-	[x: string]: unknown;
 }
