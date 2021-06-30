@@ -34,27 +34,3 @@ export type GoogleTrackConversionObject = {
 	google_custom_params: GoogleTagParams;
 	google_remarketing_only: boolean;
 };
-
-declare global {
-	interface Navigator {
-		connection?: {
-			downlink: number;
-			effectiveType: string;
-		};
-	}
-	interface Window {
-		google_trackConversion?: (arg0: GoogleTrackConversionObject) => void;
-		google_tag_params?: GoogleTagParams;
-		_brandmetrics?: Array<{
-			cmd: string;
-			val: Record<string, unknown>;
-		}>;
-		googletag?: googletag.Googletag;
-		guardian: {
-			commercialTimer?: EventTimer;
-			config?: GuardianWindowConfig;
-		};
-		ga: UniversalAnalytics.ga;
-		readonly navigator: Navigator;
-	}
-}
