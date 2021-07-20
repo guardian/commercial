@@ -49,7 +49,7 @@
     "@octokit/core": "^3",
     "@semantic-release/github": "^7",
     "@types/doubleclick-gpt": "^2019111201.0.0",
-    "@types/google.analytics": "^0.0.41",
+    "@types/google.analytics": "^0.0.42",
     "@types/jest": "^26",
     "@typescript-eslint/eslint-plugin": "^4",
     "@typescript-eslint/parser": "^4",
