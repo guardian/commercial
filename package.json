@@ -43,7 +43,7 @@
     "@commitlint/cli": "^12",
     "@commitlint/config-conventional": "^12",
     "@guardian/eslint-config-typescript": "^0.6",
-    "@guardian/libs": "^2",
+    "@guardian/libs": "^3",
     "@guardian/prettier": "^0.6",
     "@guardian/types": "^6",
     "@octokit/core": "^3",
@@ -75,7 +75,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@guardian/libs": "^2",
+    "@guardian/libs": "^3",
     "@guardian/types": "^6"
   }
 }
