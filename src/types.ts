@@ -1,5 +1,3 @@
-import type { EventTimer } from './EventTimer';
-
 export type TagAtrribute = {
 	name: string;
 	value: string;
