@@ -43,13 +43,13 @@
     "@commitlint/cli": "^12",
     "@commitlint/config-conventional": "^12",
     "@guardian/eslint-config-typescript": "^0.6",
-    "@guardian/libs": "^2",
+    "@guardian/libs": "^3",
     "@guardian/prettier": "^0.6",
     "@guardian/types": "^6",
     "@octokit/core": "^3",
     "@semantic-release/github": "^7",
     "@types/doubleclick-gpt": "^2019111201.0.0",
-    "@types/google.analytics": "^0.0.41",
+    "@types/google.analytics": "^0.0.42",
     "@types/jest": "^26",
     "@typescript-eslint/eslint-plugin": "^4",
     "@typescript-eslint/parser": "^4",
@@ -75,7 +75,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@guardian/libs": "^2",
+    "@guardian/libs": "^3",
     "@guardian/types": "^6"
   }
 }
