@@ -41,11 +41,11 @@
   "prettier": "@guardian/prettier",
   "devDependencies": {
     "@commitlint/cli": "^12",
-    "@commitlint/config-conventional": "^12",
+    "@commitlint/config-conventional": "^13",
     "@guardian/eslint-config-typescript": "^0.6",
     "@guardian/libs": "^3",
     "@guardian/prettier": "^0.6",
-    "@guardian/types": "^6",
+    "@guardian/types": "^7",
     "@octokit/core": "^3",
     "@semantic-release/github": "^7",
     "@types/doubleclick-gpt": "^2019111201.0.0",
