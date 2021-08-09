@@ -45,7 +45,7 @@
     "@guardian/eslint-config-typescript": "^0.6",
     "@guardian/libs": "^3",
     "@guardian/prettier": "^0.6",
-    "@guardian/types": "^7",
+    "@guardian/types": "^8",
     "@octokit/core": "^3",
     "@semantic-release/github": "^7",
     "@types/doubleclick-gpt": "^2019111201.0.0",
