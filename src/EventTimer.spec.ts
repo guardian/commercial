@@ -247,22 +247,37 @@ describe('EventTimer', () => {
 	});
 
 	describe('experimental window properties', () => {
-		beforeAll(() => {
+		it('sets connection', () => {
 			// @ts-expect-error -- we’re overriding a readonly value
-			window.navigator.connection = { type: 'other', downlink: 2 };
+			window.navigator.connection = {};
 		});
 
-		afterAll(() => {
-			// @ts-expect-error -- we’re resetting a readonly value
-			delete window.navigator.connection;
+		it('handles experimental property window.navigator.connection', () => {
+			const eventTimer = EventTimer.get();
+			expect(eventTimer.properties).toEqual({});
+		});
+
+		it('sets values', () => {
+			// @ts-expect-error -- we’re overriding a readonly value
+			window.navigator.connection = {
+				type: 'other',
+				downlink: 2,
+				effectiveType: '3g',
+			};
 		});
 
 		it('handles experimental property window.navigator.connection', () => {
 			const eventTimer = EventTimer.get();
 			expect(eventTimer.properties).toEqual({
-				type: 'other',
+				effectiveType: '3g',
 				downlink: 2,
+				type: 'other',
 			});
+		});
+
+		it('remove values', () => {
+			// @ts-expect-error -- we’re resetting a readonly value
+			delete window.navigator.connection;
 		});
 	});
 });
