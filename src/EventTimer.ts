@@ -146,11 +146,23 @@ export class EventTimer {
 			],
 		};
 
-		this.properties = {
-			type: window.navigator.connection.type,
-			downlink: window.navigator.connection.downlink,
-			effectiveType: window.navigator.connection.effectiveType,
-		};
+		this.properties =
+			'connection' in window.navigator
+				? {
+						type:
+							'type' in window.navigator.connection
+								? window.navigator.connection.type
+								: undefined,
+						downlink:
+							'downlink' in window.navigator.connection
+								? window.navigator.connection.downlink
+								: undefined,
+						effectiveType:
+							'effectiveType' in window.navigator.connection
+								? window.navigator.connection.effectiveType
+								: undefined,
+				  }
+				: {};
 	}
 
 	mark(name: string): void {
