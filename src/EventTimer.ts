@@ -49,6 +49,7 @@ export class EventTimer {
 	};
 	gaConfig: GAConfig;
 	properties: {
+		type?: ConnectionType;
 		downlink?: number;
 		effectiveType?: string;
 	};
@@ -145,10 +146,23 @@ export class EventTimer {
 			],
 		};
 
-		this.properties = {
-			downlink: window.navigator.connection?.downlink,
-			effectiveType: window.navigator.connection?.effectiveType,
-		};
+		this.properties =
+			'connection' in window.navigator
+				? {
+						type:
+							'type' in window.navigator.connection
+								? window.navigator.connection.type
+								: undefined,
+						downlink:
+							'downlink' in window.navigator.connection
+								? window.navigator.connection.downlink
+								: undefined,
+						effectiveType:
+							'effectiveType' in window.navigator.connection
+								? window.navigator.connection.effectiveType
+								: undefined,
+				  }
+				: {};
 	}
 
 	mark(name: string): void {
