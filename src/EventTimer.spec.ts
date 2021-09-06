@@ -240,4 +240,29 @@ describe('EventTimer', () => {
 			'Commercial end parse time',
 		);
 	});
+
+	it('handles no experimental properties', () => {
+		const eventTimer = EventTimer.get();
+		expect(eventTimer.properties).toEqual({});
+	});
+
+	describe('experimental window properties', () => {
+		beforeAll(() => {
+			// @ts-expect-error -- we’re overriding a readonly value
+			window.navigator.connection = { type: 'other', downlink: 2 };
+		});
+
+		afterAll(() => {
+			// @ts-expect-error -- we’re resetting a readonly value
+			delete window.navigator.connection;
+		});
+
+		it('handles experimental property window.navigator.connection', () => {
+			const eventTimer = EventTimer.get();
+			expect(eventTimer.properties).toEqual({
+				type: 'other',
+				downlink: 2,
+			});
+		});
+	});
 });
