@@ -6,11 +6,10 @@ import type {
 import type { EventTimer } from '.';
 
 declare global {
-	interface Navigator {
-		connection?: {
-			downlink: number;
-			effectiveType: string;
-		};
+	interface NetworkInformation extends EventTarget {
+		readonly type: ConnectionType;
+		readonly downlink?: number;
+		readonly effectiveType?: string;
 	}
 	interface Window {
 		google_trackConversion?: (arg0: GoogleTrackConversionObject) => void;
