@@ -1,9 +1,9 @@
-export type GuAdSizeString = 'fluid' | `${number},${number}`;
+export type AdSizeString = 'fluid' | `${number},${number}`;
 
-export type GuAdSize = Readonly<{
+export type AdSize = Readonly<{
 	width: number;
 	height: number;
-	toString: () => GuAdSizeString;
+	toString: () => AdSizeString;
 }>;
 
 export type SizeKeys =
@@ -34,8 +34,8 @@ export type SizeKeys =
 	| '300x1050'
 	| '160x600';
 
-const getAdSize = (width: number, height: number): GuAdSize => {
-	const toString = (): GuAdSizeString =>
+const getAdSize = (width: number, height: number): AdSize => {
+	const toString = (): AdSizeString =>
 		width === 0 && height === 0 ? 'fluid' : `${width},${height}`;
 
 	return Object.freeze({
@@ -73,7 +73,7 @@ const adSizesPartial = {
 	empty: getAdSize(2, 2),
 };
 
-export const adSizes: Record<SizeKeys, GuAdSize> = {
+export const adSizes: Record<SizeKeys, AdSize> = {
 	...adSizesPartial,
 	'970x250': adSizesPartial.billboard,
 	'728x90': adSizesPartial.leaderboard,
