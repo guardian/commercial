@@ -488,9 +488,9 @@
     eslint-plugin-prettier "3.4.0"
 
 "@guardian/libs@^3":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-3.2.0.tgz#6017421bb48118902bfdfe05a6d0eef836bf780a"
-  integrity sha512-/5c28BvfI+MKHAYYZ3jnvEbQc4TRiTE6T4e05kmwagNPlAgjy0r6z937tP307LhwYoctw37NUIjzVdCoBovY9w==
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-3.2.1.tgz#96368fcd76f63b842708ea1489275bd3200f5e4b"
+  integrity sha512-/o84jYYlodIfKs+aRj1QoluHnQ/OdgJN/v1FONwGCf7eGn6RYn9BCh5QvHRujpoSqzgq435tzx5Ug3EF1wWvfQ==
 
 "@guardian/prettier@^0.6":
   version "0.6.0"
