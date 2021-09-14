@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import type { ThirdPartyTag } from '../types';
 import { remarketing } from './remarketing';
 

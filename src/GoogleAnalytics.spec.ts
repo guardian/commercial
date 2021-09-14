@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { trackEvent } from './GoogleAnalytics';
 
 // Set parameters to be used in tests

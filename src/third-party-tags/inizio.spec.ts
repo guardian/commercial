@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { _, inizio } from './inizio';
 
 describe('index', () => {
