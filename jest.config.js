@@ -7,4 +7,5 @@ module.exports = {
 	collectCoverage: true,
 	collectCoverageFrom: ['src/**/*'],
 	coveragePathIgnorePatterns: ['vendor'],
+	testEnvironment: 'jsdom',
 };

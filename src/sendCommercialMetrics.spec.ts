@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { EventTimer } from './EventTimer';
 import { sendCommercialMetrics } from './sendCommercialMetrics';
 
