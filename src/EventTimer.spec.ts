@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { EventTimer } from './EventTimer';
 import { trackEvent } from './GoogleAnalytics';
 
