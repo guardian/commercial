@@ -19,7 +19,7 @@ const defaultMetrics = {
 };
 
 const mockSendMetrics = () =>
-	sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, false);
+	sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, false, false);
 
 const setVisibility = (value: 'hidden' | 'visible' = 'hidden'): void => {
 	Object.defineProperty(document, 'visibilityState', {
@@ -43,7 +43,13 @@ describe('sendCommercialMetrics', () => {
 		expect(mockSendMetrics()).toEqual(true);
 
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
-			[PROD_ENDPOINT, JSON.stringify(defaultMetrics)],
+			[
+				PROD_ENDPOINT,
+				JSON.stringify({
+					...defaultMetrics,
+					properties: [{ name: 'adBlockerInUse', value: 'false' }],
+				}),
+			],
 		]);
 	});
 
@@ -66,7 +72,7 @@ describe('sendCommercialMetrics', () => {
 			setVisibility();
 
 			expect(
-				sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, true),
+				sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, true, false),
 			).toEqual(true);
 
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
@@ -74,7 +80,10 @@ describe('sendCommercialMetrics', () => {
 					DEV_ENDPOINT,
 					JSON.stringify({
 						...defaultMetrics,
-						properties: [{ name: 'isDev', value: 'localhost' }],
+						properties: [
+							{ name: 'isDev', value: 'localhost' },
+							{ name: 'adBlockerInUse', value: 'false' },
+						],
 					}),
 				],
 			]);
@@ -101,6 +110,7 @@ describe('sendCommercialMetrics', () => {
 						properties: [
 							{ name: 'downlink', value: '1' },
 							{ name: 'effectiveType', value: '4g' },
+							{ name: 'adBlockerInUse', value: 'false' },
 						],
 					}),
 				],
@@ -121,7 +131,7 @@ describe('sendCommercialMetrics', () => {
 				writable: true,
 			});
 			expect(
-				sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, true),
+				sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, true, false),
 			).toEqual(true);
 
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
@@ -133,6 +143,7 @@ describe('sendCommercialMetrics', () => {
 							{ name: 'downlink', value: '1' },
 							{ name: 'effectiveType', value: '4g' },
 							{ name: 'isDev', value: 'localhost' },
+							{ name: 'adBlockerInUse', value: 'false' },
 						],
 					}),
 				],
