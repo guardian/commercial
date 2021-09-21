@@ -19,7 +19,7 @@ const defaultMetrics = {
 };
 
 const mockSendMetrics = () =>
-	sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, false, false);
+	sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, false);
 
 const setVisibility = (value: 'hidden' | 'visible' = 'hidden'): void => {
 	Object.defineProperty(document, 'visibilityState', {
@@ -43,13 +43,7 @@ describe('sendCommercialMetrics', () => {
 		expect(mockSendMetrics()).toEqual(true);
 
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
-			[
-				PROD_ENDPOINT,
-				JSON.stringify({
-					...defaultMetrics,
-					properties: [{ name: 'adBlockerInUse', value: 'false' }],
-				}),
-			],
+			[PROD_ENDPOINT, JSON.stringify(defaultMetrics)],
 		]);
 	});
 
@@ -110,7 +104,6 @@ describe('sendCommercialMetrics', () => {
 						properties: [
 							{ name: 'downlink', value: '1' },
 							{ name: 'effectiveType', value: '4g' },
-							{ name: 'adBlockerInUse', value: 'false' },
 						],
 					}),
 				],

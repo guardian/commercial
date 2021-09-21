@@ -23,7 +23,7 @@ export function sendCommercialMetrics(
 	pageViewId: string,
 	browserId: string | undefined,
 	isDev: boolean,
-	adBlockerInUse: boolean,
+	adBlockerInUse?: boolean,
 ): boolean {
 	const devProperties: Properties[] = isDev
 		? [{ name: 'isDev', value: window.location.hostname }]
@@ -42,10 +42,11 @@ export function sendCommercialMetrics(
 		.map(([name, value]) => ({ name, value: String(value) }))
 		.concat(devProperties);
 
-	properties.push({
-		name: 'adBlockerInUse',
-		value: adBlockerInUse.toString(),
-	});
+	if (adBlockerInUse !== undefined)
+		properties.push({
+			name: 'adBlockerInUse',
+			value: adBlockerInUse.toString(),
+		});
 
 	const metrics: Metrics[] = events.map(({ name, ts }) => ({
 		name,
