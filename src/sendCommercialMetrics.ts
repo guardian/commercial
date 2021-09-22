@@ -5,7 +5,7 @@ type CommercialMetrics = {
 	browser_id?: string;
 	page_view_id: string;
 	platform: string;
-	metrics: Metrics[];
+	metrics: readonly Metrics[];
 	properties: readonly Properties[];
 };
 
@@ -54,7 +54,7 @@ export function sendCommercialMetrics(
 		.concat(devProperties)
 		.concat(adBlockerProperties);
 
-	const metrics: Metrics[] = events.map(({ name, ts }) => ({
+	const metrics: readonly Metrics[] = events.map(({ name, ts }) => ({
 		name,
 		value: Math.ceil(ts),
 	}));
