@@ -28,6 +28,15 @@ export function sendCommercialMetrics(
 	const devProperties: Properties[] = isDev
 		? [{ name: 'isDev', value: window.location.hostname }]
 		: [];
+	const adBlockerProperties: Properties[] =
+		adBlockerInUse !== undefined
+			? [
+					{
+						name: 'adBlockerInUse',
+						value: adBlockerInUse.toString(),
+					},
+			  ]
+			: [];
 
 	const endpoint = isDev
 		? '//performance-events.code.dev-guardianapis.com/commercial-metrics'
@@ -40,13 +49,8 @@ export function sendCommercialMetrics(
 	const properties: Properties[] = Object.entries(eventTimer.properties)
 		.filter(([, value]) => typeof value !== 'undefined')
 		.map(([name, value]) => ({ name, value: String(value) }))
-		.concat(devProperties);
-
-	if (adBlockerInUse !== undefined)
-		properties.push({
-			name: 'adBlockerInUse',
-			value: adBlockerInUse.toString(),
-		});
+		.concat(devProperties)
+		.concat(adBlockerProperties);
 
 	const metrics: Metrics[] = events.map(({ name, ts }) => ({
 		name,
