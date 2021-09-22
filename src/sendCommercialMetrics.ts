@@ -5,8 +5,8 @@ type CommercialMetrics = {
 	browser_id?: string;
 	page_view_id: string;
 	platform: string;
-	metrics: Metrics[];
-	properties: Properties[];
+	metrics: readonly Metrics[];
+	properties: readonly Properties[];
 };
 
 type Metrics = {
@@ -23,10 +23,20 @@ export function sendCommercialMetrics(
 	pageViewId: string,
 	browserId: string | undefined,
 	isDev: boolean,
+	adBlockerInUse?: boolean,
 ): boolean {
 	const devProperties: Properties[] = isDev
 		? [{ name: 'isDev', value: window.location.hostname }]
 		: [];
+	const adBlockerProperties: Properties[] =
+		adBlockerInUse !== undefined
+			? [
+					{
+						name: 'adBlockerInUse',
+						value: adBlockerInUse.toString(),
+					},
+			  ]
+			: [];
 
 	const endpoint = isDev
 		? '//performance-events.code.dev-guardianapis.com/commercial-metrics'
@@ -36,12 +46,15 @@ export function sendCommercialMetrics(
 	const eventTimer = EventTimer.get();
 	const events = eventTimer.events;
 
-	const properties: Properties[] = Object.entries(eventTimer.properties)
+	const properties: readonly Properties[] = Object.entries(
+		eventTimer.properties,
+	)
 		.filter(([, value]) => typeof value !== 'undefined')
 		.map(([name, value]) => ({ name, value: String(value) }))
-		.concat(devProperties);
+		.concat(devProperties)
+		.concat(adBlockerProperties);
 
-	const metrics: Metrics[] = events.map(({ name, ts }) => ({
+	const metrics: readonly Metrics[] = events.map(({ name, ts }) => ({
 		name,
 		value: Math.ceil(ts),
 	}));
