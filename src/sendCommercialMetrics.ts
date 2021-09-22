@@ -6,7 +6,7 @@ type CommercialMetrics = {
 	page_view_id: string;
 	platform: string;
 	metrics: Metrics[];
-	properties: Properties[];
+	properties: readonly Properties[];
 };
 
 type Metrics = {
@@ -46,7 +46,9 @@ export function sendCommercialMetrics(
 	const eventTimer = EventTimer.get();
 	const events = eventTimer.events;
 
-	const properties: Properties[] = Object.entries(eventTimer.properties)
+	const properties: readonly Properties[] = Object.entries(
+		eventTimer.properties,
+	)
 		.filter(([, value]) => typeof value !== 'undefined')
 		.map(([name, value]) => ({ name, value: String(value) }))
 		.concat(devProperties)
