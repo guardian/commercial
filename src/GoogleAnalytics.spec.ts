@@ -34,6 +34,27 @@ describe('trackEvent', () => {
 		expect(ga.mock.calls.length).toBe(0);
 	});
 
+	it('trackEvent makes no call to ga when window.performance is undefined', () => {
+		const performance = window.performance;
+
+		Object.defineProperty(window, 'performance', {
+			configurable: true,
+			enumerable: true,
+			value: undefined,
+			writable: true,
+		});
+
+		trackEvent(TIMING_CATEGORY, TIMING_VAR, TIMING_LABEL);
+		expect(ga.mock.calls.length).toBe(0);
+
+		Object.defineProperty(window, 'performance', {
+			configurable: true,
+			enumerable: true,
+			value: performance,
+			writable: true,
+		});
+	});
+
 	it('trackEvent makes one call to ga with trackername from config', () => {
 		window.guardian = {
 			config: GUARDIAN_CONFIG,
