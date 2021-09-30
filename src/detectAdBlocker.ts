@@ -30,6 +30,11 @@ function adElementBlocked(ad: HTMLElement): boolean {
 	return false;
 }
 
+/**
+ * Determines whether or not the user has an ad blocking extension enabled.
+ * Note: positive results can be considered reliable while negative ones may not be.
+ * @returns Promise
+ */
 export function isAdBlockInUse(): Promise<boolean> {
 	if (adBlockInUse !== undefined) {
 		return Promise.resolve(adBlockInUse);
