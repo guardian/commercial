@@ -1,5 +1,5 @@
 /**
-Detect whether of not the user has an ad-blocking extension enabled.
+Detect whether or not the user has an ad blocking extension enabled.
 A few ad blockers are not detectable with this approach e.g. Safari / Adblock
 Code inspired by just-detect-adblock's: https://git.io/JgL4L
 */
