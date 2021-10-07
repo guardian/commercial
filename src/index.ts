@@ -12,3 +12,8 @@ export type { ThirdPartyTag } from './types';
 export { adSizes } from './ad-sizes';
 export type { SizeKeys, AdSizeString, AdSize } from './ad-sizes';
 export { isAdBlockInUse } from './detectAdBlocker';
+export {
+	clearPermutiveSegments,
+	getPermutiveSegments,
+	getPermutivePFPSegments,
+} from './permutive';
