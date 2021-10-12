@@ -58,7 +58,7 @@
     "eslint-config-prettier": "^8",
     "eslint-plugin-eslint-comments": "^3",
     "eslint-plugin-import": "^2",
-    "eslint-plugin-jest": "^24",
+    "eslint-plugin-jest": "^25",
     "eslint-plugin-prettier": "^4",
     "husky": "^7",
     "jest": "^27",
