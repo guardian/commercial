@@ -5,12 +5,19 @@ const PERMUTIVE_PFP_KEY = `_pdfps`;
 
 const getSegments = (key: string): string[] => {
 	try {
-		return (JSON.parse(storage.local.getRaw(key) ?? '[]') as string[])
+		const rawSegments = storage.local.getRaw(key);
+		const segments = rawSegments
+			? (JSON.parse(rawSegments) as unknown)
+			: null;
+
+		if (!Array.isArray(segments)) return [];
+
+		return segments
 			.slice(0, 250)
 			.map((s) => Number.parseInt(s, 10))
 			.filter((n) => typeof n === 'number' && !Number.isNaN(n))
 			.map(String);
-	} catch (e) {
+	} catch (err) {
 		return [];
 	}
 };
