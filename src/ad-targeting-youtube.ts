@@ -10,9 +10,8 @@ import type {
 	AdsConfigCCPAorAus,
 	AdsConfigDisabled,
 	AdsConfigTCFV2,
+	MaybeArray,
 } from './types';
-
-type MaybeArray<T> = T[] | T;
 
 type CustomParams = Record<string, MaybeArray<string | number | boolean>>;
 
@@ -58,9 +57,8 @@ const buildAdsConfig = (
 		} as AdsConfigCCPAorAus;
 	}
 
-	const tcfData = cmpConsent.tcfv2;
-	// ConsentState type allows for an undefined tcfv2
-	if (tcfData) {
+	if (cmpConsent.tcfv2) {
+		const tcfData = cmpConsent.tcfv2;
 		const canTarget = Object.values(tcfData.consents).every(Boolean);
 		const mergedAdTagParameters = {
 			...defaultAdsConfig.adTagParameters,
@@ -106,4 +104,4 @@ const buildAdsConfigWithConsent = async (
 		: disabledAds;
 };
 
-export { buildAdsConfigWithConsent };
+export { buildAdsConfigWithConsent, disabledAds };

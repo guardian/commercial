@@ -40,16 +40,16 @@ export type CustomParams = Record<
 	MaybeArray<string | number | boolean>
 >;
 
-export interface AdsConfigDisabled {
+export type AdsConfigDisabled = {
 	disableAds: true;
-}
+};
 
-export interface AdsConfigBasic {
+export type AdsConfigBasic = {
 	adTagParameters: {
 		iu: string;
 		cust_params: string;
 	};
-}
+};
 
 export type AdsConfigCCPAorAus = AdsConfigBasic & {
 	restrictedDataProcessor: boolean;
