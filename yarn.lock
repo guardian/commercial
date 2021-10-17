@@ -479,6 +479,13 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
   integrity sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==
 
+"@guardian/consent-management-platform@^8":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-8.0.0.tgz#91b26f941025043194e921d6f6f2914c5bbadaaa"
+  integrity sha512-eZDLKdibB/3htdOBO9Oz7ccffJg4MrIqwqBu1s15fWy18sIDpXdEgGeZRYx6yaOaqNgB2rbC4EsVJOM+LNldbA==
+  dependencies:
+    "@guardian/libs" "^1"
+
 "@guardian/eslint-config-typescript@^0.7":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@guardian/eslint-config-typescript/-/eslint-config-typescript-0.7.0.tgz#9b675639377bd71bc42f33741ea3bbbf20525c4a"
@@ -497,6 +504,11 @@
     eslint-plugin-eslint-comments "3.2.0"
     eslint-plugin-import "2.24.0"
     eslint-plugin-prettier "3.4.0"
+
+"@guardian/libs@^1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-1.8.1.tgz#22bccd66be7c5bf70cd5bbb1bf7700d94610ccb7"
+  integrity sha512-Q/JPLhNeYa5XhDPJhw/1+fbZmszopvovWW8I7dGEuFPGWeNUmXAbW8J3kzuonDu7l9/tuFZg8jljbKHZlrFx0A==
 
 "@guardian/libs@^3":
   version "3.3.0"

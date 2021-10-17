@@ -32,3 +32,43 @@ export type GoogleTrackConversionObject = {
 	google_custom_params: GoogleTagParams;
 	google_remarketing_only: boolean;
 };
+
+export type MaybeArray<T> = T | T[];
+
+export type CustomParams = Record<
+	string,
+	MaybeArray<string | number | boolean>
+>;
+
+export interface AdsConfigDisabled {
+	disableAds: true;
+}
+
+export interface AdsConfigBasic {
+	adTagParameters: {
+		iu: string;
+		cust_params: string;
+	};
+}
+
+export type AdsConfigCCPAorAus = AdsConfigBasic & {
+	restrictedDataProcessor: boolean;
+};
+
+export type AdsConfigTCFV2 = AdsConfigBasic & {
+	adTagParameters: {
+		cmpGdpr: number;
+		cmpVcd: string;
+		cmpGvcd: string;
+	};
+	nonPersonalizedAd: boolean;
+};
+
+export type AdsConfigEnabled =
+	| AdsConfigBasic
+	| AdsConfigCCPAorAus
+	| AdsConfigTCFV2;
+
+export type AdsConfig = AdsConfigEnabled | AdsConfigDisabled;
+
+export type AdTargetingBuilder = () => Promise<AdsConfig>;

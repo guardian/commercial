@@ -42,6 +42,7 @@
   "devDependencies": {
     "@commitlint/cli": "^13",
     "@commitlint/config-conventional": "^13",
+    "@guardian/consent-management-platform": "^8",
     "@guardian/eslint-config-typescript": "^0.7",
     "@guardian/libs": "^3",
     "@guardian/prettier": "^0.7",
