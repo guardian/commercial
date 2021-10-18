@@ -31,7 +31,7 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Run unit tests
-        run: 'yarn test --coverage --ci'
+        run: 'pnpm test --coverage --ci'
 
       - name: Report coverage
         uses: coverallsapp/github-action@master
@@ -52,7 +52,7 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Lint files
-        run: yarn lint
+        run: pnpm lint
   types:
     name: Types
     needs: [docs]
@@ -68,7 +68,7 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Check types
-        run: yarn tsc
+        run: pnpm tsc
   build:
     name: Build
     needs: [docs]
@@ -86,7 +86,7 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Build package
-        run: yarn build
+        run: pnpm build
 
       - name: Save build
         if: github.ref == 'refs/heads/main'
