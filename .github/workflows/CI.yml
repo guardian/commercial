@@ -31,7 +31,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install pnpm
         run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
@@ -61,7 +61,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install pnpm
         run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
@@ -86,7 +86,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install pnpm
         run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
@@ -113,7 +113,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install pnpm
         run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
@@ -149,7 +149,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install pnpm
         run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
