@@ -1,4 +1,3 @@
-import { onConsentChange } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { getCookie } from '@guardian/libs';
 import { canUseDom } from './lib/can-use-dom';
@@ -78,30 +77,16 @@ const buildAdsConfig = (
 
 const disabledAds: AdsConfigDisabled = { disableAds: true };
 
-const buildAdsConfigWithConsent = async (
+const buildAdsConfigWithConsent = (
 	isAdFreeUser: boolean,
 	adUnit: string,
-	customParams: CustomParams,
-): Promise<AdsConfig> => {
+	customParamsToMerge: CustomParams,
+	consentState: ConsentState,
+): AdsConfig => {
 	if (isAdFreeUser) {
 		return disabledAds;
 	}
-
-	const consentState = await new Promise<ConsentState | undefined>(
-		(resolve, reject) => {
-			try {
-				onConsentChange((cmpConsent: ConsentState) => {
-					resolve(cmpConsent);
-				});
-			} catch (err) {
-				reject(new Error('Error getting consent state'));
-			}
-		},
-	).catch(() => undefined);
-
-	return consentState
-		? buildAdsConfig(consentState, adUnit, customParams)
-		: disabledAds;
+	return buildAdsConfig(consentState, adUnit, customParamsToMerge);
 };
 
 export { buildAdsConfigWithConsent, disabledAds };
