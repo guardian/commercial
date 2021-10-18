@@ -21,17 +21,20 @@ topAboveNav. The experiment showed this change has a significant positive impact
 on CLS, and moves average CLS for the page from 0.09 to 0.07 (a 26% improvement
 from this one change). The other way we sliced the data was to look at the
 percent of pages that Google categorised as having 'good', 'needs improvement'
-or 'poor' CLS scores.
+or 'poor' CLS scores. The viewability for the page dropped by about 1%, and for
+that specific slot, by 4-6%.
 
 When the experiment ran, the breakdown was as follows:
 
 - 74% of our pages have a “good” CLS score
 - 12% have a “poor” CLS score.
+- 70% viewability for top-above-nav
 
 This change resulted in:
 
 - 84% “good”
 - 4% “poor”
+- 64% viewability for top-above-nav
 
 Relevant Pull Requests
 ----------------------
