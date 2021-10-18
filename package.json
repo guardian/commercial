@@ -26,6 +26,7 @@
     "precommit:lint": "lint-staged",
     "prepush:test": "jest --verbose --runInBand --onlyChanged",
     "test": "jest",
+		"test:ci": "jest --coverage --ci",
     "tsc": "tsc --noEmit",
     "validate": "npm-run-all tsc lint test build",
     "prepare": "husky install"
