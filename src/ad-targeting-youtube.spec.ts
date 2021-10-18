@@ -1,4 +1,4 @@
-import { onConsentChange } from '@guardian/consent-management-platform';
+import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { getCookie } from '@guardian/libs';
 import { buildAdsConfigWithConsent } from './ad-targeting-youtube';
 import { canUseDom } from './lib/can-use-dom';
@@ -7,7 +7,6 @@ import { getPermutivePFPSegments } from './permutive';
 jest.mock('./lib/can-use-dom');
 jest.mock('./permutive');
 jest.mock('@guardian/libs');
-jest.mock('@guardian/consent-management-platform');
 
 afterEach(() => {
 	jest.clearAllMocks();
@@ -20,7 +19,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			canUseDomReturn: true,
 			getCookieReturn: 'someUser',
 			getPermutiveReturn: ['1', '2', '3'],
-			onConsentChangeCallbackReturn: {
+			consentState: {
 				ccpa: {
 					doNotSell: false, // *
 				},
@@ -46,7 +45,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			canUseDomReturn: true,
 			getCookieReturn: 'someUser',
 			getPermutiveReturn: ['1', '2', '3'],
-			onConsentChangeCallbackReturn: {
+			consentState: {
 				ccpa: {
 					doNotSell: true, // *
 				},
@@ -72,11 +71,11 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			canUseDomReturn: false, // *
 			getCookieReturn: 'someUser',
 			getPermutiveReturn: ['1', '2', '3'],
-			onConsentChangeCallbackReturn: {
+			consentState: {
 				ccpa: {
 					doNotSell: false,
 				},
-			},
+			} as unknown as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
 			custParams: {
@@ -98,7 +97,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			canUseDomReturn: true,
 			getCookieReturn: undefined, // *
 			getPermutiveReturn: ['1', '2', '3'],
-			onConsentChangeCallbackReturn: {
+			consentState: {
 				ccpa: {
 					doNotSell: false,
 				},
@@ -124,7 +123,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			canUseDomReturn: true,
 			getCookieReturn: 'someUser',
 			getPermutiveReturn: ['1', '2', '3'],
-			onConsentChangeCallbackReturn: {
+			consentState: {
 				aus: {
 					personalisedAdvertising: true, // *
 				},
@@ -150,7 +149,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			canUseDomReturn: true,
 			getCookieReturn: 'someUser',
 			getPermutiveReturn: ['1', '2', '3'],
-			onConsentChangeCallbackReturn: {
+			consentState: {
 				aus: {
 					personalisedAdvertising: false, // *
 				},
@@ -176,14 +175,14 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			canUseDomReturn: true,
 			getCookieReturn: 'someUser',
 			getPermutiveReturn: ['1', '2', '3'],
-			onConsentChangeCallbackReturn: {
+			consentState: {
 				tcfv2: {
 					addtlConsent: 'someAddtlConsent',
 					consents: [true, true], // *
 					gdprApplies: true,
 					tcString: 'someTcString',
 				},
-			},
+			} as unknown as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
 			custParams: {
@@ -208,14 +207,14 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			canUseDomReturn: true,
 			getCookieReturn: 'someUser',
 			getPermutiveReturn: ['1', '2', '3'],
-			onConsentChangeCallbackReturn: {
+			consentState: {
 				tcfv2: {
 					addtlConsent: 'someAddtlConsent',
 					consents: [true, false], // *
 					gdprApplies: true,
 					tcString: 'someTcString',
 				},
-			},
+			} as unknown as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
 			custParams: {
@@ -240,14 +239,14 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			canUseDomReturn: true,
 			getCookieReturn: 'someUser',
 			getPermutiveReturn: ['1', '2', '3'],
-			onConsentChangeCallbackReturn: {
+			consentState: {
 				tcfv2: {
 					addtlConsent: 'someAddtlConsent',
 					consents: [true, true],
 					gdprApplies: false, // *
 					tcString: 'someTcString',
 				},
-			},
+			} as unknown as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
 			custParams: {
@@ -269,11 +268,11 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 		},
 	])(
 		'$msg',
-		async ({
+		({
 			canUseDomReturn,
 			getCookieReturn,
 			getPermutiveReturn,
-			onConsentChangeCallbackReturn,
+			consentState,
 			isAdFreeUser,
 			adUnit,
 			custParams,
@@ -284,15 +283,11 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			(getPermutivePFPSegments as jest.Mock).mockReturnValue(
 				getPermutiveReturn,
 			);
-			(onConsentChange as jest.Mock).mockImplementation(
-				(callback: (cmpConsent: unknown) => unknown) => {
-					callback(onConsentChangeCallbackReturn);
-				},
-			);
-			const adsConfig = await buildAdsConfigWithConsent(
+			const adsConfig = buildAdsConfigWithConsent(
 				isAdFreeUser,
 				adUnit,
 				custParams,
+				consentState,
 			);
 			expect(adsConfig).toEqual(expected);
 		},
@@ -300,27 +295,11 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 });
 
 describe('YouTube Ad Targeting Object when consent errors', () => {
-	test('creates disabled ads config when onConsentChange throws an error', async () => {
-		(onConsentChange as jest.Mock).mockImplementation(() => {
-			throw Error('Error from test');
-		});
-		const adsConfig = await buildAdsConfigWithConsent(
+	test('creates disabled ads config when consent does not have any matching framework', () => {
+		const adsConfig = buildAdsConfigWithConsent(
 			false,
 			'someAdUnit',
 			{},
-		);
-		expect(adsConfig).toEqual({ disableAds: true });
-	});
-
-	test('creates disabled ads config when consent does not have any matching framework', async () => {
-		(onConsentChange as jest.Mock).mockImplementation(
-			(callback: (cmpConsent: unknown) => unknown) => {
-				callback({});
-			},
-		);
-		const adsConfig = await buildAdsConfigWithConsent(
-			false,
-			'someAdUnit',
 			{},
 		);
 		expect(adsConfig).toEqual({ disableAds: true });
@@ -328,12 +307,8 @@ describe('YouTube Ad Targeting Object when consent errors', () => {
 });
 
 describe('YouTube Ad Targeting Object when ad free user', () => {
-	test('creates disabled ads config when ad free user', async () => {
-		const adsConfig = await buildAdsConfigWithConsent(
-			true,
-			'someAdUnit',
-			{},
-		);
+	test('creates disabled ads config when ad free user', () => {
+		const adsConfig = buildAdsConfigWithConsent(true, 'someAdUnit', {}, {});
 		expect(adsConfig).toEqual({ disableAds: true });
 	});
 });
