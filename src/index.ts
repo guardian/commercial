@@ -17,3 +17,10 @@ export {
 	getPermutiveSegments,
 	getPermutivePFPSegments,
 } from './permutive';
+export { buildAdsConfigWithConsent, disabledAds } from './ad-targeting-youtube';
+export type {
+	AdsConfig,
+	AdsConfigBasic,
+	AdsConfigDisabled,
+	AdTargetingBuilder,
+} from './types';
