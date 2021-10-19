@@ -23,4 +23,5 @@ export type {
 	AdsConfigBasic,
 	AdsConfigDisabled,
 	AdTargetingBuilder,
+	CustomParams,
 } from './types';
