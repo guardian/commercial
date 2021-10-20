@@ -54,6 +54,7 @@ type NotSureTargeting = {
 	slot: string; // (predefined list)
 	x: string; // kruX user segments (deprecated?)
 };
+let notSureTargeting: NotSureTargeting;
 
 // Always the same for a single page view. Comes from the server?
 // AVAILABLE: instantly
@@ -74,7 +75,9 @@ type ContentTargeting = {
 	urlkw: string[]; // URL KeyWords
 	vl: string; // Video Length
 };
+let contentTargeting: ContentTargeting;
 
+// Experiments / Platform
 // AVAILABLE: instantly
 type ServerTargeting = {
 	ab: string[];
@@ -82,8 +85,9 @@ type ServerTargeting = {
 	rp: 'dotcom-rendering' | 'dotcom-platform'; // Rendering Platform
 	su: string; // SUrging article
 };
+let serverTargeting: ServerTargeting;
 
-// User / PageView / Experiments. Cookies + localStorage
+// User / Browser / PageView. Cookies + localStorage
 // AVAILABLE: quickly
 type VisitorTargeting = {
 	af: 't'; // Ad Free
@@ -91,25 +95,32 @@ type VisitorTargeting = {
 	at: string; // Ad Test
 	cc: CountryCode; // Country Code
 	fr: Frequency; // FRequency
-	permutive: string[];
+	permutive: string[]; // does this include the current page view?
 	pv: string; // ophan Page View id
 	ref: string; // REFerrer
 	si: True | False; // Signed In
 };
+let visitorTargeting: VisitorTargeting;
 
-// AVAILABLE: quickly
+// AVAILABLE: quickly + may change
 type ViewportTargeting = Partial<{
 	bp: 'mobile' | 'tablet' | 'desktop'; // BreakPoint
 	inskin: True | False; // InSkin
 	skinsize: 'l' | 's';
 }>;
+let viewportTargeting: ViewportTargeting;
 
-// AVAILABLE: slowly
+// AVAILABLE: slowly + may change
 type ConsentTargeting = {
 	cmp_interaction?: string; // predefined? 'cmpuseraction' and others
 	consent_tcfv2: True | False | NotApplicable;
 	pa: True | False; // Personalised Ads consent
 	rdp: True | False | NotApplicable;
+};
+const consentTargeting: ConsentTargeting = {
+	pa: 'f',
+	consent_tcfv2: 'na',
+	rdp: 'na',
 };
 
 export type PageTargeting = NotSureTargeting &
@@ -119,18 +130,58 @@ export type PageTargeting = NotSureTargeting &
 	ViewportTargeting &
 	ConsentTargeting;
 
-const viewportTargeting: ViewportTargeting = {};
-
 export const onViewportChange = (): void => {
 	viewportTargeting.bp = 'desktop'; // something or other
-};
 
-const consentTargeting: ConsentTargeting = {
-	pa: 'f',
-	consent_tcfv2: 'na',
-	rdp: 'na',
+	triggerCallbacks();
 };
 
 export const onConsentChange = (): void => {
 	consentTargeting.cmp_interaction = 'something here';
+
+	// TODO: update consentTargeting
+	triggerCallbacks();
+};
+
+// const buildPageTargeting = (partial: Partial<PageTargeting>): PageTargeting => {
+// 	return {
+// 		...notSureTargeting,
+// 		...contentTargeting,
+// 		...serverTargeting,
+// 		...visitorTargeting,
+// 		...viewportTargeting,
+// 		...consentTargeting,
+// 		...partial.notSureTargeting,
+// 		...partial.contentTargeting,
+// 		...partial.serverTargeting,
+// 		...partial.visitorTargeting,
+// 		...partial.viewportTargeting,
+// 		...partial.consentTargeting,
+// 	};
+// };
+
+type Callback = (targeting: Promise<PageTargeting>) => void;
+const callbacks: Callback[] = [];
+
+const triggerCallbacks = (): void => {
+	const pageTargeting = {
+		...notSureTargeting,
+		...contentTargeting,
+		...serverTargeting,
+		...visitorTargeting,
+		...viewportTargeting,
+		...consentTargeting,
+	};
+
+	callbacks.forEach((callback) => {
+		callback(Promise.resolve(pageTargeting));
+	});
+};
+
+triggerCallbacks();
+
+export const onPageTargetingUpdate = (callback: Callback): void => {
+	// do something
+
+	callbacks.push(callback);
 };
