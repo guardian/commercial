@@ -56,6 +56,7 @@ type NotSureTargeting = {
 };
 
 // Always the same for a single page view. Comes from the server?
+// AVAILABLE: instantly
 type ContentTargeting = {
 	bl: string[]; // BLog tags
 	br: 's' | 'p' | 'f'; // BRanding
@@ -74,6 +75,7 @@ type ContentTargeting = {
 	vl: string; // Video Length
 };
 
+// AVAILABLE: instantly
 type ServerTargeting = {
 	ab: string[];
 	dcre: True | False; // DotCom-Rendering Eligible
@@ -82,6 +84,7 @@ type ServerTargeting = {
 };
 
 // User / PageView / Experiments. Cookies + localStorage
+// AVAILABLE: quickly
 type VisitorTargeting = {
 	af: 't'; // Ad Free
 	amtgrp: AdManagerGroup;
@@ -94,12 +97,14 @@ type VisitorTargeting = {
 	si: True | False; // Signed In
 };
 
+// AVAILABLE: quickly
 type ViewportTargeting = Partial<{
 	bp: 'mobile' | 'tablet' | 'desktop'; // BreakPoint
 	inskin: True | False; // InSkin
 	skinsize: 'l' | 's';
 }>;
 
+// AVAILABLE: slowly
 type ConsentTargeting = {
 	cmp_interaction?: string; // predefined? 'cmpuseraction' and others
 	consent_tcfv2: True | False | NotApplicable;
