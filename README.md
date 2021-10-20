@@ -24,7 +24,7 @@
 [![Generic badge](https://img.shields.io/badge/google-chat-259082.svg)](https://chat.google.com/room/AAAAPL2MBvE)
 
 ```bash
-yarn add @guardian/commercial-core
+pnpm add @guardian/commercial-core
 ```
 
 or
@@ -43,8 +43,11 @@ If your target environment does not support that, make sure you transpile this p
 
 ### Requirements
 
-1. [Node 14](https://nodejs.org/en/download/) ([nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm) recommended)
-2. [Yarn](https://classic.yarnpkg.com/en/docs/install/)
+1. [Node 14](https://nodejs.org/en/download/) ([nvm][] or [fnm][] recommended)
+2. [PNPM](https://pnpm.io/installation)
+
+[nvm]: https://github.com/nvm-sh/nvm
+[fnm]: https://github.com/Schniz/fnm
 
 ### Releasing
 

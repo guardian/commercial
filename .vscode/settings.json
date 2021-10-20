@@ -12,7 +12,7 @@
 		"source.organizeImports": false
 	},
 	"eslint.format.enable": true,
-	"eslint.packageManager": "yarn",
+	"eslint.packageManager": "pnpm",
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"cSpell.words": [
 		"Prebid",
