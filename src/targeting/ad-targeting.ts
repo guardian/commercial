@@ -1,6 +1,8 @@
 import { cmp, onConsentChange } from '@guardian/consent-management-platform';
+import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type { TCEventStatusCode } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import type { CountryCode } from '@guardian/libs';
+import { storageWithConsent } from './storageWithConsent';
 
 const frequency = [
 	'0',
@@ -150,6 +152,29 @@ const findBreakpoint = (width: number): 'mobile' | 'tablet' | 'desktop' => {
 	return 'mobile';
 };
 
+const getFrequencyValue = (state: ConsentState): Frequency => {
+	const rawValue = storageWithConsent.getRaw('gu.alreadyVisited', state);
+	if (!rawValue) return '0';
+
+	const visitCount: number = parseInt(rawValue, 10);
+
+	if (visitCount <= 5) {
+		return frequency[visitCount] ?? '0';
+	} else if (visitCount >= 6 && visitCount <= 9) {
+		return '6-9';
+	} else if (visitCount >= 10 && visitCount <= 15) {
+		return '10-15';
+	} else if (visitCount >= 16 && visitCount <= 19) {
+		return '16-19';
+	} else if (visitCount >= 20 && visitCount <= 29) {
+		return '20-29';
+	} else if (visitCount >= 30) {
+		return '30plus';
+	}
+
+	return '0';
+};
+
 /* -- Update Targeting on Specific Events -- */
 
 const onViewportChange = async (): Promise<void> => {
@@ -179,6 +204,8 @@ onConsentChange((state) => {
 				? 't'
 				: 'f';
 	}
+
+	visitorTargeting.fr = getFrequencyValue(state);
 
 	// TODO: update consentTargeting
 	triggerCallbacks();
