@@ -1,3 +1,5 @@
+import { cmp, onConsentChange } from '@guardian/consent-management-platform';
+import type { TCEventStatusCode } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import type { CountryCode } from '@guardian/libs';
 
 const frequency = [
@@ -93,28 +95,38 @@ type VisitorTargeting = {
 	af: 't'; // Ad Free
 	amtgrp: AdManagerGroup;
 	at: string; // Ad Test
-	cc: CountryCode; // Country Code
-	fr: Frequency; // FRequency
+	/** Country Code */
+	cc: CountryCode;
+	/** FRequency */
+	fr: Frequency;
 	permutive: string[]; // does this include the current page view?
-	pv: string; // ophan Page View id
-	ref: string; // REFerrer
-	si: True | False; // Signed In
+	/** ophan  Page View id */
+	pv: string;
+	/** REFerrer */
+	ref: string;
+	/** Signed In */
+	si: True | False;
 };
 let visitorTargeting: VisitorTargeting;
 
 // AVAILABLE: quickly + may change
 type ViewportTargeting = Partial<{
-	bp: 'mobile' | 'tablet' | 'desktop'; // BreakPoint
-	inskin: True | False; // InSkin
+	/** BreakPoint */
+	bp: 'mobile' | 'tablet' | 'desktop';
+	inskin: True | False;
+	/** Large or Small, used for InSkin page skins */
 	skinsize: 'l' | 's';
 }>;
 let viewportTargeting: ViewportTargeting;
 
 // AVAILABLE: slowly + may change
 type ConsentTargeting = {
-	cmp_interaction?: string; // predefined? 'cmpuseraction' and others
+	cmp_interaction?: TCEventStatusCode;
+	/** Consented to all 10 purposes */
 	consent_tcfv2: True | False | NotApplicable;
-	pa: True | False; // Personalised Ads consent
+	/** Personalised Ads */
+	pa: True | False;
+	/** Restrict Data Processing */
 	rdp: True | False | NotApplicable;
 };
 const consentTargeting: ConsentTargeting = {
@@ -123,48 +135,60 @@ const consentTargeting: ConsentTargeting = {
 	rdp: 'na',
 };
 
-export type PageTargeting = NotSureTargeting &
+export type AdTargeting = NotSureTargeting &
 	ContentTargeting &
 	ServerTargeting &
 	VisitorTargeting &
 	ViewportTargeting &
 	ConsentTargeting;
 
-export const onViewportChange = (): void => {
-	viewportTargeting.bp = 'desktop'; // something or other
+/* --  Methods to get specfic targeting  -- */
+
+const findBreakpoint = (width: number): 'mobile' | 'tablet' | 'desktop' => {
+	if (width >= 980) return 'desktop';
+	if (width >= 740) return 'tablet';
+	return 'mobile';
+};
+
+/* -- Update Targeting on Specific Events -- */
+
+const onViewportChange = async (): Promise<void> => {
+	const width = window.innerWidth;
+	// const height = window.innerHeight;
+
+	viewportTargeting.bp = findBreakpoint(width);
+	viewportTargeting.skinsize = width >= 1560 ? 'l' : 's';
+
+	// Don’t show inskin if if a privacy message will be shown
+	viewportTargeting.inskin = (await cmp.willShowPrivacyMessage()) ? 'f' : 't';
 
 	triggerCallbacks();
 };
+window.addEventListener('resize', () => {
+	void onViewportChange();
+});
 
-export const onConsentChange = (): void => {
-	consentTargeting.cmp_interaction = 'something here';
+// TODO: Check if visitorTargeting needs updating
+
+onConsentChange((state) => {
+	if (state.tcfv2) {
+		consentTargeting.cmp_interaction = state.tcfv2.eventStatus;
+		consentTargeting.pa =
+			Object.keys(state.tcfv2.consents).length > 0 &&
+			Object.values(state.tcfv2.consents).every(Boolean)
+				? 't'
+				: 'f';
+	}
 
 	// TODO: update consentTargeting
 	triggerCallbacks();
-};
+});
 
-// const buildPageTargeting = (partial: Partial<PageTargeting>): PageTargeting => {
-// 	return {
-// 		...notSureTargeting,
-// 		...contentTargeting,
-// 		...serverTargeting,
-// 		...visitorTargeting,
-// 		...viewportTargeting,
-// 		...consentTargeting,
-// 		...partial.notSureTargeting,
-// 		...partial.contentTargeting,
-// 		...partial.serverTargeting,
-// 		...partial.visitorTargeting,
-// 		...partial.viewportTargeting,
-// 		...partial.consentTargeting,
-// 	};
-// };
-
-type Callback = (targeting: Promise<PageTargeting>) => void;
+type Callback = (targeting: Promise<AdTargeting>) => void;
 const callbacks: Callback[] = [];
 
 const triggerCallbacks = (): void => {
-	const pageTargeting = {
+	const adTargeting = {
 		...notSureTargeting,
 		...contentTargeting,
 		...serverTargeting,
@@ -174,13 +198,11 @@ const triggerCallbacks = (): void => {
 	};
 
 	callbacks.forEach((callback) => {
-		callback(Promise.resolve(pageTargeting));
+		callback(Promise.resolve(adTargeting));
 	});
 };
 
-triggerCallbacks();
-
-export const onPageTargetingUpdate = (callback: Callback): void => {
+export const onAdTargetingUpdate = (callback: Callback): void => {
 	// do something
 
 	callbacks.push(callback);
