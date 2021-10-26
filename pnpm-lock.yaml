@@ -3,7 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@commitlint/cli': ^13
   '@commitlint/config-conventional': ^13
-  '@guardian/consent-management-platform': ^8
+  '@guardian/consent-management-platform': ^9
   '@guardian/eslint-config-typescript': ^0.7
   '@guardian/libs': ^3
   '@guardian/prettier': ^0.7
@@ -35,7 +35,7 @@ specifiers:
 devDependencies:
   '@commitlint/cli': 13.2.1
   '@commitlint/config-conventional': 13.2.0
-  '@guardian/consent-management-platform': 8.0.1
+  '@guardian/consent-management-platform': 9.0.0
   '@guardian/eslint-config-typescript': 0.7.0_5dc17954397827e5be42442a8923306d
   '@guardian/libs': 3.3.0
   '@guardian/prettier': 0.7.0_prettier@2.4.1
@@ -586,8 +586,8 @@ packages:
       - supports-color
     dev: true
 
-  /@guardian/consent-management-platform/8.0.1:
-    resolution: {integrity: sha512-T5C782HJFdGd4qTqfNqJ5ozGiZBFS/06ehc6IbRKMjkGlY9hFiEt6sfLB5f6lYfj7HsgG3WAHw+oM1Y2aLA+3Q==}
+  /@guardian/consent-management-platform/9.0.0:
+    resolution: {integrity: sha512-/ZYMwoEl0RZECpX41W5gwq3O4WrptC8Pg6zMDuveBLZHNjKXHSs61uozTE+LXBxA3DnQxz1fopGUtvzHhTjgqA==}
     dependencies:
       '@guardian/libs': 3.3.0
     dev: true
