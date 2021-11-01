@@ -94,15 +94,16 @@ let serverTargeting: ServerTargeting;
 // User / Browser / PageView. Cookies + localStorage
 // AVAILABLE: quickly
 type VisitorTargeting = {
-	af: 't'; // Ad Free
+	/** Ad ManagemenT GRouP */
 	amtgrp: AdManagerGroup;
 	at: string; // Ad Test
 	/** Country Code */
 	cc: CountryCode;
 	/** FRequency */
 	fr: Frequency;
-	permutive: string[]; // does this include the current page view?
-	/** ophan  Page View id */
+	/** Permutive user segments */
+	permutive: string[];
+	/** ophan Page View id */
 	pv: string;
 	/** REFerrer */
 	ref: string;
@@ -112,13 +113,14 @@ type VisitorTargeting = {
 let visitorTargeting: VisitorTargeting;
 
 // AVAILABLE: quickly + may change
-type ViewportTargeting = Partial<{
+type ViewportTargeting = {
 	/** BreakPoint */
 	bp: 'mobile' | 'tablet' | 'desktop';
+	/** Whether InSkin page skins can run. Australia-specific. */
 	inskin: True | False;
-	/** Large or Small, used for InSkin page skins */
+	/** Skin size: Large or Small. Used for InSkin page skins */
 	skinsize: 'l' | 's';
-}>;
+};
 let viewportTargeting: ViewportTargeting;
 
 // AVAILABLE: slowly + may change
@@ -137,14 +139,21 @@ const consentTargeting: ConsentTargeting = {
 	rdp: 'na',
 };
 
-export type AdTargeting = NotSureTargeting &
-	ContentTargeting &
-	ServerTargeting &
-	VisitorTargeting &
-	ViewportTargeting &
-	ConsentTargeting;
+type AdFreeTargeting = {
+	/** Ad Free */
+	af: 't';
+};
 
-/* --  Methods to get specfic targeting  -- */
+export type AdTargeting =
+	| (NotSureTargeting &
+			ContentTargeting &
+			ServerTargeting &
+			VisitorTargeting &
+			ViewportTargeting &
+			ConsentTargeting)
+	| AdFreeTargeting;
+
+/* --  Methods to get specific targeting  -- */
 
 const findBreakpoint = (width: number): 'mobile' | 'tablet' | 'desktop' => {
 	if (width >= 980) return 'desktop';
@@ -154,7 +163,7 @@ const findBreakpoint = (width: number): 'mobile' | 'tablet' | 'desktop' => {
 
 const getFrequencyValue = (state: ConsentState): Frequency => {
 	const rawValue = storageWithConsent.getRaw('gu.alreadyVisited', state);
-	if (!rawValue) return '0';
+	if (!rawValue) return '0'; // TODO: should we return `null` instead?
 
 	const visitCount: number = parseInt(rawValue, 10);
 
@@ -179,13 +188,15 @@ const getFrequencyValue = (state: ConsentState): Frequency => {
 
 const onViewportChange = async (): Promise<void> => {
 	const width = window.innerWidth;
-	// const height = window.innerHeight;
-
-	viewportTargeting.bp = findBreakpoint(width);
-	viewportTargeting.skinsize = width >= 1560 ? 'l' : 's';
 
 	// Don’t show inskin if if a privacy message will be shown
-	viewportTargeting.inskin = (await cmp.willShowPrivacyMessage()) ? 'f' : 't';
+	const inskin = (await cmp.willShowPrivacyMessage()) ? 'f' : 't';
+
+	viewportTargeting = {
+		bp: findBreakpoint(width),
+		skinsize: width >= 1560 ? 'l' : 's',
+		inskin,
+	};
 
 	triggerCallbacks();
 };
@@ -205,7 +216,10 @@ onConsentChange((state) => {
 				: 'f';
 	}
 
-	visitorTargeting.fr = getFrequencyValue(state);
+	// @ts-expect-error -- we’re not finished!
+	visitorTargeting = {
+		fr: getFrequencyValue(state),
+	};
 
 	// TODO: update consentTargeting
 	triggerCallbacks();
@@ -214,7 +228,13 @@ onConsentChange((state) => {
 type Callback = (targeting: Promise<AdTargeting>) => void;
 const callbacks: Callback[] = [];
 
+// TODO: handle adFree cases
+const isAdFree = Math.random() > 0.5 ? true : false;
 const triggerCallbacks = (): void => {
+	const adFree: AdFreeTargeting = {
+		af: 't',
+	};
+
 	const adTargeting = {
 		...notSureTargeting,
 		...contentTargeting,
@@ -225,7 +245,7 @@ const triggerCallbacks = (): void => {
 	};
 
 	callbacks.forEach((callback) => {
-		callback(Promise.resolve(adTargeting));
+		callback(Promise.resolve(isAdFree ? adFree : adTargeting));
 	});
 };
 
