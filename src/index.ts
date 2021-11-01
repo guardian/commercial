@@ -25,3 +25,4 @@ export type {
 	AdTargetingBuilder,
 	CustomParams,
 } from './types';
+export * as constants from './constants';
