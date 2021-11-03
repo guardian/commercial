@@ -33,9 +33,6 @@ specifiers:
   typescript: ^4.4.4
   web-vitals: ^2.1.2
 
-dependencies:
-  web-vitals: 2.1.2
-
 devDependencies:
   '@commitlint/cli': 13.2.1
   '@commitlint/config-conventional': 13.2.0
@@ -67,6 +64,7 @@ devDependencies:
   semantic-release: 18.0.0
   ts-jest: 27.0.7_2c4ca6574207836d1023f54689cc81ac
   typescript: 4.4.4
+  web-vitals: 2.1.2
 
 packages:
 
@@ -6123,7 +6121,7 @@ packages:
 
   /web-vitals/2.1.2:
     resolution: {integrity: sha512-nZnEH8dj+vJFqCRYdvYv0a59iLXsb8jJkt+xvXfwgnkyPdsSLtKNlYmtTDiHmTNGXeSXtpjTTUcNvFtrAk6VMQ==}
-    dev: false
+    dev: true
 
   /webidl-conversions/3.0.1:
     resolution: {integrity: sha1-JFNCdeKnvGvnvIZhHMFq4KVlSHE=}
