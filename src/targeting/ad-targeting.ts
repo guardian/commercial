@@ -1,6 +1,9 @@
 import { cmp, onConsentChange } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import type { TCEventStatusCode } from '@guardian/consent-management-platform/dist/types/tcfv2';
+import type {
+	TCEventStatusCode,
+	TCFv2ConsentList,
+} from '@guardian/consent-management-platform/dist/types/tcfv2';
 import type { CountryCode } from '@guardian/libs';
 import { storageWithConsent } from '../lib/storage-with-consent';
 
@@ -59,6 +62,14 @@ type NotSureTargeting = {
 	x: string; // kruX user segments (deprecated?)
 };
 let notSureTargeting: NotSureTargeting;
+let resolveNotSureTargetingReady: () => void;
+const notSureTargetingReady = new Promise<void>((resolve) => {
+	resolveNotSureTargetingReady = resolve;
+});
+const setNotSureTargeting = (newNotSureTargeting: NotSureTargeting) => {
+	notSureTargeting = newNotSureTargeting;
+	resolveNotSureTargetingReady();
+};
 
 // Always the same for a single page view. Comes from the server?
 // AVAILABLE: instantly
@@ -79,7 +90,7 @@ type ContentTargeting = {
 	urlkw: string[]; // URL KeyWords
 	vl: string; // Video Length
 };
-let contentTargeting: ContentTargeting;
+let contentTargeting: Promise<ContentTargeting>;
 
 // Experiments / Platform
 // AVAILABLE: instantly
@@ -89,7 +100,7 @@ type ServerTargeting = {
 	rp: 'dotcom-rendering' | 'dotcom-platform'; // Rendering Platform
 	su: string; // SUrging article
 };
-let serverTargeting: ServerTargeting;
+let serverTargeting: Promise<ServerTargeting>;
 
 // User / Browser / PageView. Cookies + localStorage
 // AVAILABLE: quickly
@@ -110,7 +121,7 @@ type VisitorTargeting = {
 	/** Signed In */
 	si: True | False;
 };
-let visitorTargeting: VisitorTargeting;
+let visitorTargeting: Promise<VisitorTargeting>;
 
 // AVAILABLE: quickly + may change
 type ViewportTargeting = {
@@ -121,7 +132,7 @@ type ViewportTargeting = {
 	/** Skin size: Large or Small. Used for InSkin page skins */
 	skinsize: 'l' | 's';
 };
-let viewportTargeting: ViewportTargeting;
+let viewportTargeting: Promise<ViewportTargeting>;
 
 // AVAILABLE: slowly + may change
 type ConsentTargeting = {
@@ -133,11 +144,11 @@ type ConsentTargeting = {
 	/** Restrict Data Processing */
 	rdp: True | False | NotApplicable;
 };
-const consentTargeting: ConsentTargeting = {
+let consentTargeting: Promise<ConsentTargeting> = Promise.resolve({
 	pa: 'f',
 	consent_tcfv2: 'na',
 	rdp: 'na',
-};
+});
 
 type AdFreeTargeting = {
 	/** Ad Free */
@@ -192,13 +203,13 @@ const onViewportChange = async (): Promise<void> => {
 	// Don’t show inskin if if a privacy message will be shown
 	const inskin = (await cmp.willShowPrivacyMessage()) ? 'f' : 't';
 
-	viewportTargeting = {
+	viewportTargeting = Promise.resolve({
 		bp: findBreakpoint(width),
 		skinsize: width >= 1560 ? 'l' : 's',
 		inskin,
-	};
+	});
 
-	triggerCallbacks();
+	return triggerCallbacks();
 };
 window.addEventListener('resize', () => {
 	void onViewportChange();
@@ -206,51 +217,75 @@ window.addEventListener('resize', () => {
 
 // TODO: Check if visitorTargeting needs updating
 
+const tcfv2AllPurposesConsented = (consents: TCFv2ConsentList) =>
+	Object.keys(consents).length > 0 && Object.values(consents).every(Boolean);
 onConsentChange((state) => {
 	if (state.tcfv2) {
-		consentTargeting.cmp_interaction = state.tcfv2.eventStatus;
-		consentTargeting.pa =
-			Object.keys(state.tcfv2.consents).length > 0 &&
-			Object.values(state.tcfv2.consents).every(Boolean)
+		consentTargeting = Promise.resolve({
+			cmp_interaction: state.tcfv2.eventStatus,
+			pa: tcfv2AllPurposesConsented(state.tcfv2.consents) ? 't' : 'f',
+			consent_tcfv2: tcfv2AllPurposesConsented(state.tcfv2.consents)
 				? 't'
-				: 'f';
+				: 'f',
+			rdp: 'na',
+		});
 	}
 
 	// @ts-expect-error -- we’re not finished!
-	visitorTargeting = {
+	visitorTargeting = Promise.resolve({
 		fr: getFrequencyValue(state),
-	};
+	});
 
 	// TODO: update consentTargeting
-	triggerCallbacks();
+	void triggerCallbacks();
 });
 
-type Callback = (targeting: Promise<AdTargeting>) => void;
-const callbacks: Callback[] = [];
-
-// TODO: handle adFree cases
-const isAdFree = Math.random() > 0.5 ? true : false;
-const triggerCallbacks = (): void => {
-	const adFree: AdFreeTargeting = {
-		af: 't',
-	};
-
-	const adTargeting = {
-		...notSureTargeting,
-		...contentTargeting,
-		...serverTargeting,
-		...visitorTargeting,
-		...viewportTargeting,
-		...consentTargeting,
-	};
-
-	callbacks.forEach((callback) => {
-		callback(Promise.resolve(isAdFree ? adFree : adTargeting));
+const init = () => {
+	setNotSureTargeting({
+		gdncrm: ['a', 'b', 'c'],
+		ms: 'something',
+		slot: 'top-above-nav',
+		x: 'Krux-ID',
 	});
 };
 
-export const onAdTargetingUpdate = (callback: Callback): void => {
-	// do something
+init();
 
-	callbacks.push(callback);
+type Callback = (targeting: AdTargeting) => void | Promise<void>;
+const callbacks: Callback[] = [];
+
+const getAdTargeting = async (adFree: boolean): Promise<AdTargeting> => {
+	if (adFree) {
+		const adFreeTargeting: AdFreeTargeting = {
+			af: 't',
+		};
+		return adFreeTargeting;
+	}
+
+	await Promise.all([notSureTargetingReady]);
+
+	return {
+		...notSureTargeting,
+		...(await contentTargeting),
+		...(await serverTargeting),
+		...(await visitorTargeting),
+		...(await viewportTargeting),
+		...(await consentTargeting),
+	};
 };
+
+const triggerCallbacks = async (): Promise<void> => {
+	const adTargeting = await getAdTargeting(true);
+
+	callbacks.forEach((callback) => {
+		void callback(adTargeting);
+	});
+};
+
+const onAdTargetingUpdate = (callback: Callback): void => {
+	callbacks.push(callback);
+
+	void triggerCallbacks();
+};
+
+export { onAdTargetingUpdate };
