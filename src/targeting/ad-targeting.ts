@@ -2,7 +2,7 @@ import { cmp, onConsentChange } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type { TCEventStatusCode } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import type { CountryCode } from '@guardian/libs';
-import { storageWithConsent } from './storageWithConsent';
+import { storageWithConsent } from '../lib/storage-with-consent';
 
 const frequency = [
 	'0',
