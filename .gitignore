@@ -1,5 +1,15 @@
+# system
+.DS_Store
+
+# Node Modules
 node_modules
+
+# Build
 dist
 coverage
-.DS_Store
+
+# Editor settings
 .idea
+
+# Work-in-progress folder
+wip
