@@ -6,6 +6,8 @@ import type {
 } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import type { CountryCode } from '@guardian/libs';
 import { storageWithConsent } from '../lib/storage-with-consent';
+import type { NotSureTargeting } from './not-sure';
+import { getNotSureTargeting, setNotSureTargeting } from './not-sure';
 
 const frequency = [
 	'0',
@@ -54,59 +56,6 @@ type ContentType =
 	| 'section'
 	| 'tag'
 	| 'video';
-
-type NotSureTargeting = {
-	/**
-	 * **G**uar**d**ia**n** **C**ustomer **R**elation **M**anagement - [see on Ad Manager][gam]
-	 *
-	 * Type: *Dynamic*
-	 *
-	 * Sample values:
-	 * - `"PXPE"`
-	 * - `"PXHCI2"`
-	 *
-	 * [gam]: https://example.com/
-	 */
-	gdncrm: string | string[];
-	/** **M**edia **S**ource - [see on Ad Manager][gam]
-	 *
-	 * Type: *Dynamic*
-	 *
-	 * Sample values:
-	 * - `"epictv"`
-	 * - `"crane.tv"`
-	 * - `"a-rational-fear"`
-	 *
-	 * [gam]: https://example.com
-	 */
-	ms: string;
-	/**
-	 * Ad **Slot** ID
-	 *
-	 * Type: *Predefined*
-	 *
-	 * Sample values: 'top-above-nav', 'inline-1'
-	 *
-	 * [gam]: https://example.com/
-	 */
-	slot: string; // TODO: Narrow to known IDs
-	/**
-	 * kruX user segments
-	 * https://example.com/
-	 *
-	 * @deprecated We no longer use Krux
-	 */
-	x: string;
-};
-let notSureTargeting: NotSureTargeting;
-let resolveNotSureTargetingReady: () => void;
-const notSureTargetingReady = new Promise<void>((resolve) => {
-	resolveNotSureTargetingReady = resolve;
-});
-const setNotSureTargeting = (newNotSureTargeting: NotSureTargeting) => {
-	notSureTargeting = newNotSureTargeting;
-	resolveNotSureTargetingReady();
-};
 
 // Always the same for a single page view. Comes from the server?
 // AVAILABLE: instantly
@@ -299,10 +248,8 @@ const getAdTargeting = async (adFree: boolean): Promise<AdTargeting> => {
 		return adFreeTargeting;
 	}
 
-	await Promise.all([notSureTargetingReady]);
-
 	return {
-		...notSureTargeting,
+		...(await getNotSureTargeting()),
 		...(await contentTargeting),
 		...(await serverTargeting),
 		...(await visitorTargeting),
@@ -312,7 +259,7 @@ const getAdTargeting = async (adFree: boolean): Promise<AdTargeting> => {
 };
 
 const triggerCallbacks = async (): Promise<void> => {
-	const adTargeting = await getAdTargeting(true);
+	const adTargeting: AdTargeting = await getAdTargeting(true);
 
 	callbacks.forEach((callback) => {
 		void callback(adTargeting);
