@@ -6,6 +6,8 @@ import type {
 } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import type { CountryCode } from '@guardian/libs';
 import { storageWithConsent } from '../lib/storage-with-consent';
+import type { ContentTargeting } from './content';
+import { contentTargeting } from './content';
 import type { NotSureTargeting } from './not-sure';
 import { notSureTargeting } from './not-sure';
 
@@ -44,39 +46,6 @@ type AdManagerGroup = typeof adManagerGroups[number];
 type True = 't';
 type False = 'f';
 type NotApplicable = 'na';
-
-type ContentType =
-	| 'article'
-	| 'audio'
-	| 'crossword'
-	| 'gallery'
-	| 'interactive'
-	| 'liveblog'
-	| 'network-front'
-	| 'section'
-	| 'tag'
-	| 'video';
-
-// Always the same for a single page view. Comes from the server?
-// AVAILABLE: instantly
-type ContentTargeting = {
-	bl: string[]; // BLog tags
-	br: 's' | 'p' | 'f'; // BRanding
-	co: string; // COntributor
-	ct: ContentType;
-	edition: 'uk' | 'us' | 'au' | 'int';
-	k: string[]; // Keywords
-	ob: 't'; // OBserver content
-	p: 'r2' | 'ng' | 'app' | 'amp'; // Platform (web)
-	s: string; // site Section
-	se: string; // SEries
-	sens: True | False; // SenSitive
-	tn: string; // ToNe
-	url: string;
-	urlkw: string[]; // URL KeyWords
-	vl: string; // Video Length
-};
-let contentTargeting: Promise<ContentTargeting>;
 
 // Experiments / Platform
 // AVAILABLE: instantly
@@ -255,7 +224,7 @@ const getAdTargeting = async (adFree: boolean): Promise<AdTargeting> => {
 
 	return {
 		...(await notSureTargeting.get()),
-		...(await contentTargeting),
+		...(await contentTargeting.get()),
 		...(await serverTargeting),
 		...(await visitorTargeting),
 		...(await viewportTargeting),
@@ -278,3 +247,4 @@ const onAdTargetingUpdate = (callback: Callback): void => {
 };
 
 export { onAdTargetingUpdate };
+export type { True, False, NotApplicable };
