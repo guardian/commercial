@@ -7,7 +7,7 @@ import type {
 import type { CountryCode } from '@guardian/libs';
 import { storageWithConsent } from '../lib/storage-with-consent';
 import type { NotSureTargeting } from './not-sure';
-import { getNotSureTargeting, setNotSureTargeting } from './not-sure';
+import { notSureTargeting } from './not-sure';
 
 const frequency = [
 	'0',
@@ -226,16 +226,21 @@ onConsentChange((state) => {
 	void triggerCallbacks();
 });
 
-const init = () => {
-	setNotSureTargeting({
+const init = ({ unsure }: { unsure: NotSureTargeting }) => {
+	notSureTargeting.set(unsure);
+
+	void triggerCallbacks();
+};
+
+// TODO: Use real values
+init({
+	unsure: {
 		gdncrm: ['a', 'b', 'c'],
 		ms: 'something',
 		slot: 'top-above-nav',
 		x: 'Krux-ID',
-	});
-};
-
-init();
+	},
+});
 
 type Callback = (targeting: AdTargeting) => void | Promise<void>;
 const callbacks: Callback[] = [];
@@ -249,7 +254,7 @@ const getAdTargeting = async (adFree: boolean): Promise<AdTargeting> => {
 	}
 
 	return {
-		...(await getNotSureTargeting()),
+		...(await notSureTargeting.get()),
 		...(await contentTargeting),
 		...(await serverTargeting),
 		...(await visitorTargeting),

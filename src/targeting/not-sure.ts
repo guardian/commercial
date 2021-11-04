@@ -1,3 +1,5 @@
+import { AsyncAdTargeting } from './async-ad-targeting';
+
 type NotSureTargeting = {
 	/**
 	 * **G**uar**d**ia**n** **C**ustomer **R**elation **M**anagement - [see on Ad Manager][gam]
@@ -41,19 +43,7 @@ type NotSureTargeting = {
 	 */
 	x: string;
 };
-let notSureTargeting: NotSureTargeting;
-let resolveNotSureTargetingReady: () => void;
-const notSureTargetingReady = new Promise<void>((resolve) => {
-	resolveNotSureTargetingReady = resolve;
-});
-const setNotSureTargeting = (newNotSureTargeting: NotSureTargeting): void => {
-	notSureTargeting = newNotSureTargeting;
-	resolveNotSureTargetingReady();
-};
-const getNotSureTargeting = async (): Promise<NotSureTargeting> => {
-	await notSureTargetingReady;
-	return notSureTargeting;
-};
+const notSureTargeting = new AsyncAdTargeting<NotSureTargeting>();
 
 export type { NotSureTargeting };
-export { setNotSureTargeting, getNotSureTargeting };
+export { notSureTargeting };
