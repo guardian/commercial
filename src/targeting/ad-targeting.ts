@@ -1,47 +1,14 @@
 import { cmp, onConsentChange } from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type {
 	TCEventStatusCode,
 	TCFv2ConsentList,
 } from '@guardian/consent-management-platform/dist/types/tcfv2';
-import type { CountryCode } from '@guardian/libs';
-import { storageWithConsent } from '../lib/storage-with-consent';
 import type { ContentTargeting } from './content';
-import { contentTargeting } from './content';
+import { getContentTargeting } from './content';
 import type { NotSureTargeting } from './not-sure';
-import { notSureTargeting } from './not-sure';
-
-const frequency = [
-	'0',
-	'1',
-	'2',
-	'3',
-	'4',
-	'5',
-	'6-9',
-	'10-15',
-	'16-19',
-	'20-29',
-	'30plus',
-] as const;
-
-const adManagerGroups = [
-	'1',
-	'2',
-	'3',
-	'4',
-	'5',
-	'6',
-	'7',
-	'8',
-	'9',
-	'10',
-	'11',
-	'12',
-] as const;
-
-type Frequency = typeof frequency[number];
-type AdManagerGroup = typeof adManagerGroups[number];
+import { getUnsureTargeting, initUnsureTargeting } from './not-sure';
+import type { VisitorTargeting } from './visitor';
+import { getVisitorTargeting, updateVisitorTargeting } from './visitor';
 
 type True = 't';
 type False = 'f';
@@ -56,27 +23,6 @@ type ServerTargeting = {
 	su: string; // SUrging article
 };
 let serverTargeting: Promise<ServerTargeting>;
-
-// User / Browser / PageView. Cookies + localStorage
-// AVAILABLE: quickly
-type VisitorTargeting = {
-	/** Ad ManagemenT GRouP */
-	amtgrp: AdManagerGroup;
-	at: string; // Ad Test
-	/** Country Code */
-	cc: CountryCode;
-	/** FRequency */
-	fr: Frequency;
-	/** Permutive user segments */
-	permutive: string[];
-	/** ophan Page View id */
-	pv: string;
-	/** REFerrer */
-	ref: string;
-	/** Signed In */
-	si: True | False;
-};
-let visitorTargeting: Promise<VisitorTargeting>;
 
 // AVAILABLE: quickly + may change
 type ViewportTargeting = {
@@ -127,29 +73,6 @@ const findBreakpoint = (width: number): 'mobile' | 'tablet' | 'desktop' => {
 	return 'mobile';
 };
 
-const getFrequencyValue = (state: ConsentState): Frequency => {
-	const rawValue = storageWithConsent.getRaw('gu.alreadyVisited', state);
-	if (!rawValue) return '0'; // TODO: should we return `null` instead?
-
-	const visitCount: number = parseInt(rawValue, 10);
-
-	if (visitCount <= 5) {
-		return frequency[visitCount] ?? '0';
-	} else if (visitCount >= 6 && visitCount <= 9) {
-		return '6-9';
-	} else if (visitCount >= 10 && visitCount <= 15) {
-		return '10-15';
-	} else if (visitCount >= 16 && visitCount <= 19) {
-		return '16-19';
-	} else if (visitCount >= 20 && visitCount <= 29) {
-		return '20-29';
-	} else if (visitCount >= 30) {
-		return '30plus';
-	}
-
-	return '0';
-};
-
 /* -- Update Targeting on Specific Events -- */
 
 const onViewportChange = async (): Promise<void> => {
@@ -174,6 +97,7 @@ window.addEventListener('resize', () => {
 
 const tcfv2AllPurposesConsented = (consents: TCFv2ConsentList) =>
 	Object.keys(consents).length > 0 && Object.values(consents).every(Boolean);
+
 onConsentChange((state) => {
 	if (state.tcfv2) {
 		consentTargeting = Promise.resolve({
@@ -186,17 +110,14 @@ onConsentChange((state) => {
 		});
 	}
 
-	// @ts-expect-error -- we’re not finished!
-	visitorTargeting = Promise.resolve({
-		fr: getFrequencyValue(state),
-	});
+	updateVisitorTargeting(state);
 
 	// TODO: update consentTargeting
 	void triggerCallbacks();
 });
 
 const init = ({ unsure }: { unsure: NotSureTargeting }) => {
-	notSureTargeting.set(unsure);
+	initUnsureTargeting(unsure);
 
 	void triggerCallbacks();
 };
@@ -223,17 +144,17 @@ const getAdTargeting = async (adFree: boolean): Promise<AdTargeting> => {
 	}
 
 	return {
-		...(await notSureTargeting.get()),
-		...(await contentTargeting.get()),
+		...(await getUnsureTargeting()),
+		...(await getContentTargeting()),
 		...(await serverTargeting),
-		...(await visitorTargeting),
+		...(await getVisitorTargeting()),
 		...(await viewportTargeting),
 		...(await consentTargeting),
 	};
 };
 
 const triggerCallbacks = async (): Promise<void> => {
-	const adTargeting: AdTargeting = await getAdTargeting(true);
+	const adTargeting: AdTargeting = await getAdTargeting(false);
 
 	callbacks.forEach((callback) => {
 		void callback(adTargeting);

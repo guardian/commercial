@@ -1,7 +1,7 @@
 // Always the same for a single page view. Comes from the server?
 
 import type { False, True } from './ad-targeting';
-import { AsyncAdTargeting } from './async-ad-targeting';
+import { AsyncAdTargeting } from './get-set';
 
 // AVAILABLE: instantly
 export type ContentTargeting = {
@@ -34,4 +34,13 @@ type ContentType =
 	| 'tag'
 	| 'video';
 
-export const contentTargeting = new AsyncAdTargeting<ContentTargeting>();
+const contentTargeting = new AsyncAdTargeting<ContentTargeting>();
+
+const initContentTargeting = (targeting: ContentTargeting): void => {
+	contentTargeting.set(targeting);
+};
+
+const getContentTargeting = (): Promise<ContentTargeting> =>
+	contentTargeting.get();
+
+export { initContentTargeting, getContentTargeting };

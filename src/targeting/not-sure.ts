@@ -1,4 +1,4 @@
-import { AsyncAdTargeting } from './async-ad-targeting';
+import { AsyncAdTargeting } from './get-set';
 
 type NotSureTargeting = {
 	/**
@@ -45,5 +45,12 @@ type NotSureTargeting = {
 };
 const notSureTargeting = new AsyncAdTargeting<NotSureTargeting>();
 
+const initUnsureTargeting = (unsure: NotSureTargeting) => {
+	notSureTargeting.set(unsure);
+};
+
+const getUnsureTargeting = (): Promise<NotSureTargeting> =>
+	notSureTargeting.get();
+
 export type { NotSureTargeting };
-export { notSureTargeting };
+export { initUnsureTargeting, getUnsureTargeting };
