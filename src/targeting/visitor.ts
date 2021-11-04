@@ -82,7 +82,7 @@ const getFrequencyValue = (state: ConsentState): Frequency => {
 
 const visitorTargeting = new AsyncAdTargeting<VisitorTargeting>();
 
-const updateVisitorTargeting = (state: ConsentState) => {
+const updateVisitorTargeting = (state: ConsentState): void => {
 	visitorTargeting.set({
 		fr: getFrequencyValue(state),
 		amtgrp: '3',
