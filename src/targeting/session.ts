@@ -13,14 +13,50 @@ import { AsyncAdTargeting } from './get-set';
  * read from a cookie or passed down from the server.
  */
 export type SessionTargeting = {
-	at: string; // Ad Test
-	/** Country Code */
+	/**
+	 * **A**d **T**est – [see on Ad Manager][gam]
+	 *
+	 * Used for testing purposes, based on cookie.
+	 *
+	 * Type: _Dynamic_
+	 *
+	 * Sample values:
+	 * - catcat
+	 * -
+	 *
+	 * [gam]:
+	 */
+	at: string;
+
+	/**
+	 * Country Code – [see on Ad Manager][gam]
+	 *
+	 * [gam]:
+	 */
+
 	cc: CountryCode;
-	/** ophan Page View id */
+	/**
+	 * Ophan **P**age **V**iew id – [see on Ad Manager][gam]
+	 *
+	 * [gam]:
+	 */
+
 	pv: string;
-	/** REFerrer */
+	/**
+	 * **Ref**errer – [see on Ad Manager][gam]
+	 *
+	 *
+	 * [gam]:
+	 */
 	ref: string;
-	/** Signed In */
+
+	/**
+	 * **S**igned **I**n – [see on Ad Manager][gam]
+	 *
+	 *
+	 *
+	 * [gam]:
+	 */
 	si: True | False;
 };
 
