@@ -61,6 +61,17 @@ export type SessionTargeting = {
 	pv: string;
 
 	/**
+	 * **S**igned **I**n – [see on Ad Manager][gam]
+	 *
+	 *Whether a user is signed in. Based on presence of a cookie.
+	 *
+	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=215727
+	 */
+	si: True | False;
+};
+
+type SessionTargetingInternal = {
+	/**
 	 * **Ref**errer – [see on Ad Manager][gam]
 	 *
 	 * Type: _Dynamic_
@@ -74,29 +85,54 @@ export type SessionTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=228567
 	 */
-	ref: string;
-
-	/**
-	 * **S**igned **I**n – [see on Ad Manager][gam]
-	 *
-	 *Whether a user is signed in. Based on presence of a cookie.
-	 *
-	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=215727
-	 */
-	si: True | False;
+	ref: typeof referrers[number] | null;
 };
 
-const sessionTargeting = new AsyncAdTargeting<SessionTargeting>();
+const referrers = ['facebook', 'twitter', 'reddit', 'google'] as const;
+const getReferrer = (): typeof referrers[number] | null => {
+	const { referrer } = document;
 
-const initSessionTargeting = (): void => {
-	sessionTargeting.set({
-		ab: null,
-		at: null,
-		cc: 'GB',
-		pv: '123456',
-		ref: 'reddit.com',
-		si: 'f',
-	});
+	if (referrer === '') return null;
+
+	type MatchType = {
+		id: typeof referrers[number];
+		match: string;
+	};
+
+	const referrerTypes: MatchType[] = [
+		{
+			id: 'facebook',
+			match: 'facebook.com',
+		},
+		{
+			id: 'twitter',
+			// added (/) because without slash it is picking up reddit.com too
+			match: 't.co/',
+		},
+		{
+			id: 'reddit',
+			match: 'reddit.com',
+		},
+		{
+			id: 'google',
+			match: 'www.google',
+		},
+	];
+
+	const matchedRef: MatchType | null =
+		referrerTypes.find((referrerType) =>
+			referrer.includes(referrerType.match),
+		) ?? null;
+
+	return matchedRef ? matchedRef.id : null;
+};
+
+const sessionTargeting = new AsyncAdTargeting<
+	SessionTargeting & SessionTargetingInternal
+>();
+
+const initSessionTargeting = (targeting: SessionTargeting): void => {
+	sessionTargeting.set({ ref: getReferrer(), ...targeting });
 };
 
 const getSessionTargeting = (): Promise<SessionTargeting> =>

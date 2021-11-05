@@ -77,13 +77,15 @@ onConsentChange((state) => {
 const init = ({
 	unsure,
 	content,
+	session,
 }: {
 	unsure: NotSureTargeting;
 	content: ContentTargeting;
+	session: Omit<SessionTargeting, 'ref'>;
 }) => {
 	initUnsureTargeting(unsure);
 	initContentTargeting(content);
-	initSessionTargeting();
+	initSessionTargeting(session);
 
 	void triggerCallbacks();
 };
@@ -115,6 +117,13 @@ init({
 		url: '/some/thing',
 		urlkw: ['a', 'b'],
 		vl: '60',
+	},
+	session: {
+		ab: ['ab-new-targeting'],
+		at: null,
+		cc: 'GB',
+		pv: '123457',
+		si: 'f',
 	},
 });
 
