@@ -99,7 +99,7 @@ init({
 	content: {
 		bl: ['a', 'b'],
 		br: 'f',
-		co: 'Max',
+		co: ['Max Duval'],
 		ct: 'article',
 		dcre: 'f',
 		edition: 'uk',
@@ -108,13 +108,13 @@ init({
 		p: 'ng',
 		rp: 'dotcom-platform',
 		s: 'uk-news',
-		se: 'one',
+		se: ['one'],
 		sens: 'f',
-		su: 't',
+		su: '0',
 		tn: 'something',
 		url: '/some/thing',
 		urlkw: ['a', 'b'],
-		vl: 'something',
+		vl: '60',
 	},
 });
 
