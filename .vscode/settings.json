@@ -16,6 +16,7 @@
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"cSpell.words": [
 		"amtgrp",
+		"Ophan",
 		"Permutive",
 		"Prebid",
 		"tcfv",
