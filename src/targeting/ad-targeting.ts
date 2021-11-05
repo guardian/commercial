@@ -1,14 +1,15 @@
 import { cmp, onConsentChange } from '@guardian/consent-management-platform';
-import type {
-	TCEventStatusCode,
-	TCFv2ConsentList,
-} from '@guardian/consent-management-platform/dist/types/tcfv2';
 import type { ContentTargeting } from './content';
 import { getContentTargeting } from './content';
 import type { NotSureTargeting } from './not-sure';
 import { getUnsureTargeting, initUnsureTargeting } from './not-sure';
+import type { PersonalisedTargeting } from './personalised';
+import {
+	getPersonalisedTargeting,
+	updatePersonalisedTargeting,
+} from './personalised';
 import type { SessionTargeting } from './session';
-import { getSessionTargeting, updateSessionTargeting } from './session';
+import { getSessionTargeting, initSessionTargeting } from './session';
 
 type True = 't';
 type False = 'f';
@@ -35,22 +36,6 @@ type ViewportTargeting = {
 };
 let viewportTargeting: Promise<ViewportTargeting>;
 
-// AVAILABLE: slowly + may change
-type ConsentTargeting = {
-	cmp_interaction?: TCEventStatusCode;
-	/** Consented to all 10 purposes */
-	consent_tcfv2: True | False | NotApplicable;
-	/** Personalised Ads */
-	pa: True | False;
-	/** Restrict Data Processing */
-	rdp: True | False | NotApplicable;
-};
-let consentTargeting: Promise<ConsentTargeting> = Promise.resolve({
-	pa: 'f',
-	consent_tcfv2: 'na',
-	rdp: 'na',
-});
-
 type AdFreeTargeting = {
 	/** Ad Free */
 	af: 't';
@@ -62,7 +47,7 @@ export type AdTargeting =
 			ServerTargeting &
 			SessionTargeting &
 			ViewportTargeting &
-			ConsentTargeting)
+			PersonalisedTargeting)
 	| AdFreeTargeting;
 
 /* --  Methods to get specific targeting  -- */
@@ -93,24 +78,8 @@ window.addEventListener('resize', () => {
 	void onViewportChange();
 });
 
-// TODO: Check if visitorTargeting needs updating
-
-const tcfv2AllPurposesConsented = (consents: TCFv2ConsentList) =>
-	Object.keys(consents).length > 0 && Object.values(consents).every(Boolean);
-
 onConsentChange((state) => {
-	if (state.tcfv2) {
-		consentTargeting = Promise.resolve({
-			cmp_interaction: state.tcfv2.eventStatus,
-			pa: tcfv2AllPurposesConsented(state.tcfv2.consents) ? 't' : 'f',
-			consent_tcfv2: tcfv2AllPurposesConsented(state.tcfv2.consents)
-				? 't'
-				: 'f',
-			rdp: 'na',
-		});
-	}
-
-	updateSessionTargeting(state);
+	updatePersonalisedTargeting(state);
 
 	// TODO: update consentTargeting
 	void triggerCallbacks();
@@ -118,6 +87,7 @@ onConsentChange((state) => {
 
 const init = ({ unsure }: { unsure: NotSureTargeting }) => {
 	initUnsureTargeting(unsure);
+	initSessionTargeting();
 
 	void triggerCallbacks();
 };
@@ -149,7 +119,7 @@ const getAdTargeting = async (adFree: boolean): Promise<AdTargeting> => {
 		...(await serverTargeting),
 		...(await getSessionTargeting()),
 		...(await viewportTargeting),
-		...(await consentTargeting),
+		...(await getPersonalisedTargeting()),
 	};
 };
 
