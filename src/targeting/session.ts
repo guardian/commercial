@@ -6,9 +6,22 @@ import type { False, True } from './ad-targeting';
 import { AsyncAdTargeting } from './get-set';
 import { storageWithConsent } from './storageWithConsent';
 
-// AVAILABLE: quickly
-export type VisitorTargeting = {
-	/** Ad ManagemenT GRouP */
+/**
+ * #### Targeting based on a session.
+ *
+ * Includes information such as the country of origin, referrer, page view ID.
+ *
+ * Requires consent for some values, such as:
+ * - Permutive segments
+ * - Frequency
+ * - Ad Manager group
+ */
+export type SessionTargeting = {
+	/**
+	 * **A**d **M**anagemen**t** **Gr**ou**p** – [see on Ad Manager][gam]
+	 *
+	 * [gam]:
+	 * */
 	amtgrp: AdManagerGroup;
 	at: string; // Ad Test
 	/** Country Code */
@@ -80,10 +93,10 @@ const getFrequencyValue = (state: ConsentState): Frequency => {
 	return '0';
 };
 
-const visitorTargeting = new AsyncAdTargeting<VisitorTargeting>();
+const sessionTargeting = new AsyncAdTargeting<SessionTargeting>();
 
-const updateVisitorTargeting = (state: ConsentState): void => {
-	visitorTargeting.set({
+const updateSessionTargeting = (state: ConsentState): void => {
+	sessionTargeting.set({
 		fr: getFrequencyValue(state),
 		amtgrp: '3',
 		cc: 'GB',
@@ -95,7 +108,7 @@ const updateVisitorTargeting = (state: ConsentState): void => {
 	});
 };
 
-const getVisitorTargeting = (): Promise<VisitorTargeting> =>
-	visitorTargeting.get();
+const getSessionTargeting = (): Promise<SessionTargeting> =>
+	sessionTargeting.get();
 
-export { updateVisitorTargeting, getFrequencyValue, getVisitorTargeting };
+export { updateSessionTargeting, getFrequencyValue, getSessionTargeting };

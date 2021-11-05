@@ -7,8 +7,8 @@ import type { ContentTargeting } from './content';
 import { getContentTargeting } from './content';
 import type { NotSureTargeting } from './not-sure';
 import { getUnsureTargeting, initUnsureTargeting } from './not-sure';
-import type { VisitorTargeting } from './visitor';
-import { getVisitorTargeting, updateVisitorTargeting } from './visitor';
+import type { SessionTargeting } from './session';
+import { getSessionTargeting, updateSessionTargeting } from './session';
 
 type True = 't';
 type False = 'f';
@@ -60,7 +60,7 @@ export type AdTargeting =
 	| (NotSureTargeting &
 			ContentTargeting &
 			ServerTargeting &
-			VisitorTargeting &
+			SessionTargeting &
 			ViewportTargeting &
 			ConsentTargeting)
 	| AdFreeTargeting;
@@ -110,7 +110,7 @@ onConsentChange((state) => {
 		});
 	}
 
-	updateVisitorTargeting(state);
+	updateSessionTargeting(state);
 
 	// TODO: update consentTargeting
 	void triggerCallbacks();
@@ -147,7 +147,7 @@ const getAdTargeting = async (adFree: boolean): Promise<AdTargeting> => {
 		...(await getUnsureTargeting()),
 		...(await getContentTargeting()),
 		...(await serverTargeting),
-		...(await getVisitorTargeting()),
+		...(await getSessionTargeting()),
 		...(await viewportTargeting),
 		...(await consentTargeting),
 	};
