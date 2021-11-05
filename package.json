@@ -23,11 +23,11 @@
     "compile:common": "tsc --project ./tsconfig.build.json --outDir ./dist/cjs --module CommonJS",
     "compile:esm": "tsc --project ./tsconfig.build.json --outDir ./dist/esm",
     "lint": "eslint .",
-		"preinstall": "npx only-allow pnpm",
+    "preinstall": "npx only-allow pnpm",
     "precommit:lint": "lint-staged",
     "prepush:test": "jest --verbose --runInBand --onlyChanged",
     "test": "jest",
-		"test:ci": "jest --coverage --ci",
+    "test:ci": "jest --coverage --ci",
     "tsc": "tsc --noEmit",
     "validate": "npm-run-all tsc lint test build",
     "prepare": "husky install"
@@ -78,6 +78,6 @@
   },
   "peerDependencies": {
     "@guardian/libs": "^3",
-		"@guardian/consent-management-platform": "^9"
+    "@guardian/consent-management-platform": "^9"
   }
 }
