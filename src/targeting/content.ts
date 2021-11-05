@@ -49,16 +49,16 @@ const platform = {
 } as const;
 
 const contentType = [
-	,'article'
-	,'audio'
-	,'crossword'
-	,'gallery'
-	,'interactive'
-	,'liveblog'
-	,'network-front'
-	,'section'
-	,'tag'
-	,'video'
+	'article',
+	'audio',
+	'crossword',
+	'gallery',
+	'interactive',
+	'liveblog',
+	'network-front',
+	'section',
+	'tag',
+	'video',
 ] as const;
 
 /**
