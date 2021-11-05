@@ -48,6 +48,19 @@ const platform = {
 	AcceleratedMobilePages: 'amp',
 } as const;
 
+const contentType = [
+	,'article'
+	,'audio'
+	,'crossword'
+	,'gallery'
+	,'interactive'
+	,'liveblog'
+	,'network-front'
+	,'section'
+	,'tag'
+	,'video'
+] as const;
+
 /**
  * Content Targeting comes from the server
  *
@@ -96,7 +109,7 @@ export type ContentTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=177807
 	 */
-	ct: ContentType;
+	ct: typeof contentType[number];
 
 	/**
 	 * **D**ot**c**om-**r**endering **E**ligible - [see on Ad Manager][gam]
@@ -214,18 +227,6 @@ export type ContentTargeting = {
 	 */
 	vl: typeof videoLengths[number];
 };
-
-type ContentType =
-	| 'article'
-	| 'audio'
-	| 'crossword'
-	| 'gallery'
-	| 'interactive'
-	| 'liveblog'
-	| 'network-front'
-	| 'section'
-	| 'tag'
-	| 'video';
 
 const contentTargeting = new AsyncAdTargeting<ContentTargeting>();
 
