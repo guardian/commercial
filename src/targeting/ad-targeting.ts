@@ -1,6 +1,6 @@
 import { cmp, onConsentChange } from '@guardian/consent-management-platform';
 import type { ContentTargeting } from './content';
-import { getContentTargeting } from './content';
+import { getContentTargeting, initContentTargeting } from './content';
 import type { NotSureTargeting } from './not-sure';
 import { getUnsureTargeting, initUnsureTargeting } from './not-sure';
 import type { PersonalisedTargeting } from './personalised';
@@ -14,16 +14,6 @@ import { getSessionTargeting, initSessionTargeting } from './session';
 type True = 't';
 type False = 'f';
 type NotApplicable = 'na';
-
-// Experiments / Platform
-// AVAILABLE: instantly
-type ServerTargeting = {
-	ab: string[];
-	dcre: True | False; // DotCom-Rendering Eligible
-	rp: 'dotcom-rendering' | 'dotcom-platform'; // Rendering Platform
-	su: string; // SUrging article
-};
-let serverTargeting: Promise<ServerTargeting>;
 
 // AVAILABLE: quickly + may change
 type ViewportTargeting = {
@@ -44,7 +34,6 @@ type AdFreeTargeting = {
 export type AdTargeting =
 	| (NotSureTargeting &
 			ContentTargeting &
-			ServerTargeting &
 			SessionTargeting &
 			ViewportTargeting &
 			PersonalisedTargeting)
@@ -85,8 +74,15 @@ onConsentChange((state) => {
 	void triggerCallbacks();
 });
 
-const init = ({ unsure }: { unsure: NotSureTargeting }) => {
+const init = ({
+	unsure,
+	content,
+}: {
+	unsure: NotSureTargeting;
+	content: ContentTargeting;
+}) => {
 	initUnsureTargeting(unsure);
+	initContentTargeting(content);
 	initSessionTargeting();
 
 	void triggerCallbacks();
@@ -99,6 +95,26 @@ init({
 		ms: 'something',
 		slot: 'top-above-nav',
 		x: 'Krux-ID',
+	},
+	content: {
+		bl: ['a', 'b'],
+		br: 'f',
+		co: 'Max',
+		ct: 'article',
+		dcre: 'f',
+		edition: 'uk',
+		k: ['a', 'b'],
+		ob: null,
+		p: 'ng',
+		rp: 'dotcom-platform',
+		s: 'uk-news',
+		se: 'one',
+		sens: 'f',
+		su: 't',
+		tn: 'something',
+		url: '/some/thing',
+		urlkw: ['a', 'b'],
+		vl: 'something',
 	},
 });
 
@@ -116,7 +132,6 @@ const getAdTargeting = async (adFree: boolean): Promise<AdTargeting> => {
 	return {
 		...(await getUnsureTargeting()),
 		...(await getContentTargeting()),
-		...(await serverTargeting),
 		...(await getSessionTargeting()),
 		...(await viewportTargeting),
 		...(await getPersonalisedTargeting()),
