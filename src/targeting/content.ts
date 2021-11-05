@@ -36,9 +36,8 @@ type ContentType =
 
 const contentTargeting = new AsyncAdTargeting<ContentTargeting>();
 
-const initContentTargeting = (targeting: ContentTargeting): void => {
+const initContentTargeting = (targeting: ContentTargeting): void =>
 	contentTargeting.set(targeting);
-};
 
 const getContentTargeting = (): Promise<ContentTargeting> =>
 	contentTargeting.get();

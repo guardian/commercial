@@ -170,14 +170,13 @@ const getCMPTargeting = (state: ConsentState): CMPTargeting => {
 
 const personalisedTargeting = new AsyncAdTargeting<PersonalisedTargeting>();
 
-const updatePersonalisedTargeting = (state: ConsentState) => {
+const updatePersonalisedTargeting = (state: ConsentState): void =>
 	personalisedTargeting.set({
 		amtgrp: '7',
 		fr: getFrequencyValue(state),
 		permutive: ['1', '2', '3', '9'],
 		...getCMPTargeting(state),
 	});
-};
 
 const getPersonalisedTargeting = (): Promise<PersonalisedTargeting> =>
 	personalisedTargeting.get();
