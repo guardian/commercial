@@ -4,7 +4,7 @@ type NotSureTargeting = {
 	/**
 	 * **G**uar**d**ia**n** **C**ustomer **R**elation **M**anagement – [see on Ad Manager][gam]
 	 *
-	 * Type: *Dynamic*
+	 * Type: _Dynamic_
 	 *
 	 * Sample values:
 	 * - `"PXPE"`
@@ -16,7 +16,7 @@ type NotSureTargeting = {
 	/**
 	 * **M**edia **S**ource – [see on Ad Manager][gam]
 	 *
-	 * Type: *Dynamic*
+	 * Type: _Dynamic_
 	 *
 	 * Sample values:
 	 * - `"epictv"`
@@ -29,7 +29,7 @@ type NotSureTargeting = {
 	/**
 	 * Ad **Slot** ID – [see on Ad Manager][gam]
 	 *
-	 * Type: *Predefined*
+	 * Type: _Predefined_
 	 *
 	 * Sample values: 'top-above-nav', 'inline-1'
 	 *
@@ -38,6 +38,8 @@ type NotSureTargeting = {
 	slot: string; // TODO: Narrow to known IDs
 	/**
 	 * Kru**x** user segments – [see on Ad Manager][gam]
+	 *
+	 * * Type: _Dynamic_
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=200247
 	 *
