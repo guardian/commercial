@@ -4,6 +4,8 @@ import { isString } from '@guardian/libs';
 import type { False, True } from './ad-targeting';
 import { AsyncAdTargeting } from './get-set';
 
+/* -- Types -- */
+
 /**
  * #### Targeting on browser session
  *
@@ -12,7 +14,7 @@ import { AsyncAdTargeting } from './get-set';
  * These values identify a browser session are either generated client-side,
  * read from a cookie or passed down from the server.
  */
-export type SessionTargeting = {
+type SessionTargeting = {
 	/**
 	 * **A**d **T**est – [see on Ad Manager][gam]
 	 *
@@ -88,6 +90,13 @@ type SessionTargetingInternal = {
 	ref: typeof referrers[number] | null;
 };
 
+export type AllParticipations = {
+	clientSideParticipations: Participations;
+	serverSideParticipations: Record<string, 'control' | 'variant'>;
+};
+
+/* -- Methods -- */
+
 const referrers = ['facebook', 'twitter', 'reddit', 'google'] as const;
 const getReferrer = (): typeof referrers[number] | null => {
 	const { referrer } = document;
@@ -127,15 +136,6 @@ const getReferrer = (): typeof referrers[number] | null => {
 	return matchedRef ? matchedRef.id : null;
 };
 
-const sessionTargeting = new AsyncAdTargeting<
-	SessionTargeting & SessionTargetingInternal
->();
-
-export type AllParticipations = {
-	clientSideParticipations: Participations;
-	serverSideParticipations: Record<string, 'control' | 'variant'>;
-};
-
 const experimentsTargeting = ({
 	clientSideParticipations,
 	serverSideParticipations,
@@ -161,6 +161,12 @@ const experimentsTargeting = ({
 	return [...clientSideExperiment, ...serverSideExperiments];
 };
 
+/* -- Targeting -- */
+
+const sessionTargeting = new AsyncAdTargeting<
+	SessionTargeting & SessionTargetingInternal
+>();
+
 const initSessionTargeting = (
 	participations: AllParticipations,
 	targeting: SessionTargeting,
@@ -176,3 +182,4 @@ const getSessionTargeting = (): Promise<SessionTargeting> =>
 	sessionTargeting.get();
 
 export { initSessionTargeting, getSessionTargeting };
+export type { SessionTargeting };
