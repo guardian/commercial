@@ -1,15 +1,15 @@
 lockfileVersion: 5.3
 
 specifiers:
-  '@commitlint/cli': ^13.2.1
-  '@commitlint/config-conventional': ^13.2.0
-  '@guardian/consent-management-platform': ^8.0.1
-  '@guardian/eslint-config-typescript': ^0.7.0
-  '@guardian/libs': ^3.5.0
-  '@guardian/prettier': ^0.7.0
-  '@octokit/core': ^3.5.1
-  '@semantic-release/github': ^8.0.1
-  '@types/doubleclick-gpt': ^2019111201.0.2
+  '@commitlint/cli': ^13
+  '@commitlint/config-conventional': ^14
+  '@guardian/consent-management-platform': ^8
+  '@guardian/eslint-config-typescript': ^0.7
+  '@guardian/libs': ^3
+  '@guardian/prettier': ^0.7
+  '@octokit/core': ^3
+  '@semantic-release/github': ^8
+  '@types/doubleclick-gpt': ^2019111201.0.0
   '@types/google.analytics': ^0.0.42
   '@types/jest': ^27.0.2
   '@typescript-eslint/eslint-plugin': ^4.33.0
@@ -35,7 +35,7 @@ specifiers:
 
 devDependencies:
   '@commitlint/cli': 13.2.1
-  '@commitlint/config-conventional': 13.2.0
+  '@commitlint/config-conventional': 14.1.0
   '@guardian/consent-management-platform': 8.0.1
   '@guardian/eslint-config-typescript': 0.7.0_5dc17954397827e5be42442a8923306d
   '@guardian/libs': 3.5.0_web-vitals@2.1.2
@@ -431,8 +431,8 @@ packages:
       yargs: 17.2.1
     dev: true
 
-  /@commitlint/config-conventional/13.2.0:
-    resolution: {integrity: sha512-7u7DdOiF+3qSdDlbQGfpvCH8DCQdLFvnI2+VucYmmV7E92iD6t9PBj+UjIoSQCaMAzYp27Vkall78AkcXBh6Xw==}
+  /@commitlint/config-conventional/14.1.0:
+    resolution: {integrity: sha512-JuhCqkEv8jyqmd54EpXPsQFpYc/8k7sfP1UziRdEvZSJUCLxz+8Pk4cNS0oF1BtjaWO7ITgXPlIZg47PyApGmg==}
     engines: {node: '>=v12'}
     dependencies:
       conventional-changelog-conventionalcommits: 4.6.1
