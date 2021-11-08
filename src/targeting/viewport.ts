@@ -20,11 +20,27 @@ type ViewportTargeting = {
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=180327
 	 */
 	bp: 'mobile' | 'tablet' | 'desktop' | 'wide';
-	/** Whether InSkin page skins can run. Australia-specific. */
-	inskin: True | False;
+
 	/**
-	 * **Skin size**
-	 *  Large or Small. Used for InSkin page skins */
+	 * InSkin (CMP Banner shown) – [see on Ad Manager][gam]
+	 *
+	 * Australia-specific (via Bonzai?)
+	 *
+	 * Type: _Predefined_
+	 *
+	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=11916570
+	 * */
+	inskin: True | False;
+
+	/**
+	 * **Skin size** – [see on Ad Manager][gam]
+	 *
+	 * Large or Small. Used for InSkin page skins
+	 *
+	 * Type: _Predefined_
+	 *
+	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=12312030
+	 */
 	skinsize: 'l' | 's';
 };
 

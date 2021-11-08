@@ -65,50 +65,6 @@ const init = ({
 	void triggerCallbacks();
 };
 
-// TODO: Use real values
-init({
-	unsure: {
-		gdncrm: ['a', 'b', 'c'],
-		ms: 'something',
-		slot: 'top-above-nav',
-		x: 'Krux-ID',
-	},
-	content: {
-		bl: ['a', 'b'],
-		br: 'f',
-		co: ['Max Duval'],
-		ct: 'article',
-		dcre: 'f',
-		edition: 'uk',
-		k: ['a', 'b'],
-		ob: null,
-		p: 'ng',
-		rp: 'dotcom-platform',
-		s: 'uk-news',
-		se: ['one'],
-		sens: 'f',
-		su: '0',
-		tn: 'something',
-		url: '/some/thing',
-		urlkw: ['a', 'b'],
-		vl: '60',
-	},
-	session: {
-		at: null,
-		cc: 'GB',
-		pv: '123457',
-		si: 'f',
-	},
-	participations: {
-		clientSideParticipations: {
-			'ab-new-ad-targeting': {
-				variant: 'variant',
-			},
-		},
-		serverSideParticipations: {},
-	},
-});
-
 type Callback = (targeting: AdTargeting) => void | Promise<void>;
 const callbacks: Callback[] = [];
 
