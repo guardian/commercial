@@ -1,7 +1,7 @@
 // Always the same for a single page view. Comes from the server?
 
-import type { False, True } from './ad-targeting';
 import { AsyncAdTargeting } from './get-set';
+import type { False, True } from '.';
 
 type ValuesOf<T extends Record<string, string>> = T[keyof T];
 

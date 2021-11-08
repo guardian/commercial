@@ -1,7 +1,7 @@
 /* -- Types -- */
 
-import type { True } from './ad-targeting';
 import { AsyncAdTargeting } from './get-set';
+import type { True } from '.';
 
 /**
  * #### Ad Free Targeting

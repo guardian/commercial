@@ -26,3 +26,5 @@ export type {
 	CustomParams,
 } from './types';
 export * as constants from './constants';
+
+export { initAdTargeting, onAdTargetingUpdate } from './targeting/';

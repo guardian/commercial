@@ -1,8 +1,8 @@
 import type { Participations } from '@guardian/ab-core';
 import type { CountryCode } from '@guardian/libs';
 import { isString } from '@guardian/libs';
-import type { False, True } from './ad-targeting';
 import { AsyncAdTargeting } from './get-set';
+import type { False, True } from '.';
 
 /* -- Types -- */
 

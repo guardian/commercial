@@ -1,5 +1,5 @@
-import type { False, True } from './ad-targeting';
 import { AsyncAdTargeting } from './get-set';
+import type { False, True } from '.';
 
 /* -- Types -- */
 

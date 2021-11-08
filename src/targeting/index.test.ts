@@ -3,7 +3,7 @@ import type {
 	Callback,
 	ConsentState,
 } from '@guardian/consent-management-platform/dist/types';
-import { init, onAdTargetingUpdate } from './ad-targeting';
+import { initAdTargeting, onAdTargetingUpdate } from '.';
 
 jest.mock('@guardian/consent-management-platform', () => ({
 	onConsentChange: jest.fn(),
@@ -48,12 +48,12 @@ const CCPAWithConsent = (cb: Callback) => {
 	});
 };
 
-describe('init', () => {
+describe('initAdTargeting', () => {
 	it('can initialise with dummy values', async () => {
 		mockOnConsentChange.mockImplementation(tcfv2WithConsentMock);
 		mockCmp.willShowPrivacyMessage.mockResolvedValue(false);
 
-		init({
+		initAdTargeting({
 			unsure: {
 				gdncrm: ['a', 'b', 'c'],
 				ms: 'something',
@@ -100,6 +100,7 @@ describe('init', () => {
 
 		return onAdTargetingUpdate((targeting) => {
 			console.warn('we triggered once with', targeting);
+			// TODO: Match everything
 			expect(targeting).toMatchObject({
 				at: null,
 				ab: ['ab-new-ad-targeting-variant'],

@@ -27,6 +27,32 @@ type AdTargeting =
 			PersonalisedTargeting)
 	| AdFreeTargeting;
 
+type InitAdTargeting = (targeting: {
+	unsure: NotSureTargeting;
+	content: ContentTargeting;
+	session: SessionTargeting;
+	participations: AllParticipations;
+}) => void;
+let initialised = false;
+const init: InitAdTargeting = ({
+	unsure,
+	content,
+	session,
+	participations,
+}) => {
+	if (initialised) return;
+	else initialised = true;
+
+	registerListeners();
+
+	initUnsureTargeting(unsure);
+	initContentTargeting(content);
+	initSessionTargeting(participations, session);
+
+	// TODO Allow this to be set, maybe asynchronously?
+	updateAdFreeTargeting(false);
+};
+
 const registerListeners = () => {
 	// TODO: Add throttling / debouncing
 	window.addEventListener('resize', () => {
@@ -48,34 +74,6 @@ const registerListeners = () => {
 	});
 };
 
-let initialised = false;
-const init = ({
-	unsure,
-	content,
-	session,
-	participations,
-}: {
-	unsure: NotSureTargeting;
-	content: ContentTargeting;
-	session: SessionTargeting;
-	participations: AllParticipations;
-}): void => {
-	if (initialised) return;
-	else initialised = true;
-
-	registerListeners();
-
-	initUnsureTargeting(unsure);
-	initContentTargeting(content);
-	initSessionTargeting(participations, session);
-
-	// TODO Allow this to be set, maybe asynchronously?
-	updateAdFreeTargeting(false);
-};
-
-type Callback = (targeting: AdTargeting) => void | Promise<void>;
-const callbacks: Callback[] = [];
-
 const getAdTargeting = async (): Promise<AdTargeting> => {
 	const adFreeTargeting = await getAdFreeTargeting();
 
@@ -90,6 +88,8 @@ const getAdTargeting = async (): Promise<AdTargeting> => {
 	};
 };
 
+type AdTargetingCallback = (targeting: AdTargeting) => void | Promise<void>;
+const callbacks: AdTargetingCallback[] = [];
 const triggerCallbacks = async (): Promise<void> => {
 	const adTargeting: AdTargeting = await getAdTargeting();
 
@@ -98,12 +98,48 @@ const triggerCallbacks = async (): Promise<void> => {
 	});
 };
 
-const onAdTargetingUpdate = async (callback: Callback): Promise<void> => {
+const onUpdate = async (callback: AdTargetingCallback): Promise<void> => {
 	callbacks.push(callback);
 
 	const targeting = await getAdTargeting();
 	return callback(targeting);
 };
 
-export { onAdTargetingUpdate, init };
-export type { AdTargeting, True, False, NotApplicable };
+// Ad Targeting methods are registered globally on the window
+window.guardian.commercial ||= {};
+
+/**
+ * Initialise Ad Targeting
+ *
+ * Some initial values are required for targeting to work.
+ * See type `InitAdTargeting` for details.
+ *
+ * Ad Targeting updates can be registered to via `onAdTargetingUpdate`.
+ *
+ */
+const initAdTargeting: InitAdTargeting =
+	(window.guardian.commercial.initAdTargeting ||= init);
+
+/**
+ * Register callbacks to execute when Ad Targeting changes.
+ *
+ * Safe to call before `initAdTargeting`.
+ *
+ * This is inherently asynchronous and could change during a page lifecycle
+ * if events such as the following occur:
+ * - Changes to a user’s privacy settings
+ * - Changes to the browser window size
+ * - Changes to logged-in status (?)
+ */
+const onAdTargetingUpdate = (window.guardian.commercial.onAdTargetingUpdate ||=
+	onUpdate);
+
+export { onAdTargetingUpdate, initAdTargeting };
+export type {
+	AdTargeting,
+	AdTargetingCallback,
+	InitAdTargeting,
+	True,
+	False,
+	NotApplicable,
+};

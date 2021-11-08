@@ -13,6 +13,7 @@ type NotSureTargeting = {
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=184047
 	 */
 	gdncrm: string | string[];
+
 	/**
 	 * **M**edia **S**ource – [see on Ad Manager][gam]
 	 *
@@ -26,6 +27,7 @@ type NotSureTargeting = {
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=186807
 	 */
 	ms: string;
+
 	/**
 	 * Ad **Slot** ID – [see on Ad Manager][gam]
 	 *
@@ -36,6 +38,7 @@ type NotSureTargeting = {
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=174447
 	 */
 	slot: string; // TODO: Narrow to known IDs
+
 	/**
 	 * Kru**x** user segments – [see on Ad Manager][gam]
 	 *
