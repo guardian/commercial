@@ -10,21 +10,12 @@ import {
 } from './personalised';
 import type { AllParticipations, SessionTargeting } from './session';
 import { getSessionTargeting, initSessionTargeting } from './session';
+import type { ViewportTargeting } from './viewport';
+import { getViewportTargeting, updateViewportTargeting } from './viewport';
 
 type True = 't';
 type False = 'f';
 type NotApplicable = 'na';
-
-// AVAILABLE: quickly + may change
-type ViewportTargeting = {
-	/** BreakPoint */
-	bp: 'mobile' | 'tablet' | 'desktop';
-	/** Whether InSkin page skins can run. Australia-specific. */
-	inskin: True | False;
-	/** Skin size: Large or Small. Used for InSkin page skins */
-	skinsize: 'l' | 's';
-};
-let viewportTargeting: Promise<ViewportTargeting>;
 
 type AdFreeTargeting = {
 	/** Ad Free */
@@ -39,32 +30,14 @@ export type AdTargeting =
 			PersonalisedTargeting)
 	| AdFreeTargeting;
 
-/* --  Methods to get specific targeting  -- */
-
-const findBreakpoint = (width: number): 'mobile' | 'tablet' | 'desktop' => {
-	if (width >= 980) return 'desktop';
-	if (width >= 740) return 'tablet';
-	return 'mobile';
-};
-
 /* -- Update Targeting on Specific Events -- */
 
-const onViewportChange = async (): Promise<void> => {
-	const width = window.innerWidth;
-
-	// Don’t show inskin if if a privacy message will be shown
-	const inskin = (await cmp.willShowPrivacyMessage()) ? 'f' : 't';
-
-	viewportTargeting = Promise.resolve({
-		bp: findBreakpoint(width),
-		skinsize: width >= 1560 ? 'l' : 's',
-		inskin,
-	});
-
-	return triggerCallbacks();
-};
 window.addEventListener('resize', () => {
-	void onViewportChange();
+	void cmp
+		// If we’ll show a privacy banner, we can’t have page skins
+		.willShowPrivacyMessage()
+		.then((cmpBannerWillShow) => updateViewportTargeting(cmpBannerWillShow))
+		.then(() => triggerCallbacks());
 });
 
 onConsentChange((state) => {
@@ -151,7 +124,7 @@ const getAdTargeting = async (adFree: boolean): Promise<AdTargeting> => {
 		...(await getUnsureTargeting()),
 		...(await getContentTargeting()),
 		...(await getSessionTargeting()),
-		...(await viewportTargeting),
+		...(await getViewportTargeting()),
 		...(await getPersonalisedTargeting()),
 	};
 };
