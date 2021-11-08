@@ -1,4 +1,6 @@
 import { cmp, onConsentChange } from '@guardian/consent-management-platform';
+import type { AdFreeTargeting } from './ad-free';
+import { getAdFreeTargeting, updateAdFreeTargeting } from './ad-free';
 import type { ContentTargeting } from './content';
 import { getContentTargeting, initContentTargeting } from './content';
 import type { NotSureTargeting } from './not-sure';
@@ -16,11 +18,6 @@ import { getViewportTargeting, updateViewportTargeting } from './viewport';
 type True = 't';
 type False = 'f';
 type NotApplicable = 'na';
-
-type AdFreeTargeting = {
-	/** Ad Free */
-	af: 't';
-};
 
 type AdTargeting =
 	| (NotSureTargeting &
@@ -71,18 +68,18 @@ const init = ({
 	initUnsureTargeting(unsure);
 	initContentTargeting(content);
 	initSessionTargeting(participations, session);
+
+	// TODO Allow this to be set, maybe asynchronously?
+	updateAdFreeTargeting(false);
 };
 
 type Callback = (targeting: AdTargeting) => void | Promise<void>;
 const callbacks: Callback[] = [];
 
-const getAdTargeting = async (adFree: boolean): Promise<AdTargeting> => {
-	if (adFree) {
-		const adFreeTargeting: AdFreeTargeting = {
-			af: 't',
-		};
-		return adFreeTargeting;
-	}
+const getAdTargeting = async (): Promise<AdTargeting> => {
+	const adFreeTargeting = await getAdFreeTargeting();
+
+	if (adFreeTargeting.af) return adFreeTargeting;
 
 	return {
 		...(await getUnsureTargeting()),
@@ -94,7 +91,7 @@ const getAdTargeting = async (adFree: boolean): Promise<AdTargeting> => {
 };
 
 const triggerCallbacks = async (): Promise<void> => {
-	const adTargeting: AdTargeting = await getAdTargeting(false);
+	const adTargeting: AdTargeting = await getAdTargeting();
 
 	callbacks.forEach((callback) => {
 		void callback(adTargeting);
@@ -104,7 +101,7 @@ const triggerCallbacks = async (): Promise<void> => {
 const onAdTargetingUpdate = async (callback: Callback): Promise<void> => {
 	callbacks.push(callback);
 
-	const targeting = await getAdTargeting(false);
+	const targeting = await getAdTargeting();
 	return callback(targeting);
 };
 
