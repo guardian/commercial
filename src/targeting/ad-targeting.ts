@@ -57,7 +57,7 @@ const init = ({
 	content: ContentTargeting;
 	session: SessionTargeting;
 	participations: AllParticipations;
-}) => {
+}): void => {
 	initUnsureTargeting(unsure);
 	initContentTargeting(content);
 	initSessionTargeting(participations, session);
@@ -96,8 +96,12 @@ const triggerCallbacks = async (): Promise<void> => {
 const onAdTargetingUpdate = (callback: Callback): void => {
 	callbacks.push(callback);
 
-	void triggerCallbacks();
+	void getAdTargeting(false)
+		.then((targeting) => callback(targeting))
+		.catch(() => {
+			// do nothing, callback will be trigger when Ad Targeting changes
+		});
 };
 
-export { onAdTargetingUpdate };
+export { onAdTargetingUpdate, init };
 export type { True, False, NotApplicable };
