@@ -29,7 +29,7 @@ declare global {
 			 *
 			 * https://github.com/guardian/commercial-core
 			 */
-			commercial: {
+			commercial?: {
 				onAdTargetingUpdate?: (
 					callback: AdTargetingCallback,
 				) => Promise<void>;
