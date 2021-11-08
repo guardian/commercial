@@ -42,7 +42,7 @@
   },
   "prettier": "@guardian/prettier",
   "devDependencies": {
-    "@commitlint/cli": "^13",
+    "@commitlint/cli": "^14",
     "@commitlint/config-conventional": "^14",
     "@guardian/consent-management-platform": "^8",
     "@guardian/eslint-config-typescript": "^0.7",
