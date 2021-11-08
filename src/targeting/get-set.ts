@@ -10,7 +10,7 @@ class AsyncAdTargeting<T> {
 			this.resolver = resolve;
 		});
 
-		this.get = async () => {
+		this.get = () => {
 			return this.val;
 		};
 
