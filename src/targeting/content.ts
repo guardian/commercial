@@ -230,7 +230,7 @@ export type ContentTargeting = {
 
 const contentTargeting = new AsyncAdTargeting<ContentTargeting>();
 
-const initContentTargeting = (targeting: ContentTargeting): void =>
+const initContentTargeting = (targeting: ContentTargeting): number =>
 	contentTargeting.set(targeting);
 
 const getContentTargeting = (): Promise<ContentTargeting> =>

@@ -170,13 +170,12 @@ const sessionTargeting = new AsyncAdTargeting<
 const initSessionTargeting = (
 	participations: AllParticipations,
 	targeting: SessionTargeting,
-): void => {
+): number =>
 	sessionTargeting.set({
 		ref: getReferrer(),
 		ab: experimentsTargeting(participations),
 		...targeting,
 	});
-};
 
 const getSessionTargeting = (): Promise<SessionTargeting> =>
 	sessionTargeting.get();

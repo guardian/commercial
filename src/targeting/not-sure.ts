@@ -49,7 +49,7 @@ type NotSureTargeting = {
 };
 const notSureTargeting = new AsyncAdTargeting<NotSureTargeting>();
 
-const initUnsureTargeting = (unsure: NotSureTargeting): void =>
+const initUnsureTargeting = (unsure: NotSureTargeting): number =>
 	notSureTargeting.set(unsure);
 
 const getUnsureTargeting = (): Promise<NotSureTargeting> =>

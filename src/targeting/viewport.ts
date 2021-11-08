@@ -56,13 +56,13 @@ const findBreakpoint = (width: number): 'mobile' | 'tablet' | 'desktop' => {
 
 const viewportTargeting = new AsyncAdTargeting<ViewportTargeting>();
 
-const updateViewportTargeting = (cmpBannerWillShow: boolean): void => {
+const updateViewportTargeting = (cmpBannerWillShow: boolean): number => {
 	const width = window.innerWidth;
 
 	// Don’t show inskin if if a privacy message will be shown
 	const inskin = cmpBannerWillShow ? 'f' : 't';
 
-	viewportTargeting.set({
+	return viewportTargeting.set({
 		bp: findBreakpoint(width),
 		skinsize: width >= 1560 ? 'l' : 's',
 		inskin,

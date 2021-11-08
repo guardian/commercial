@@ -22,7 +22,7 @@ type AdFreeTargeting = {
 	af: 't';
 };
 
-export type AdTargeting =
+type AdTargeting =
 	| (NotSureTargeting &
 			ContentTargeting &
 			SessionTargeting &
@@ -30,23 +30,28 @@ export type AdTargeting =
 			PersonalisedTargeting)
 	| AdFreeTargeting;
 
-/* -- Update Targeting on Specific Events -- */
+const registerListeners = () => {
+	// TODO: Add throttling / debouncing
+	window.addEventListener('resize', () => {
+		void cmp
+			// If we’ll show a privacy banner, we can’t have page skins
+			.willShowPrivacyMessage()
+			.then((cmpBannerWillShow) =>
+				updateViewportTargeting(cmpBannerWillShow),
+			)
+			.then((count) => {
+				if (count > 1) void triggerCallbacks();
+			});
+	});
 
-window.addEventListener('resize', () => {
-	void cmp
-		// If we’ll show a privacy banner, we can’t have page skins
-		.willShowPrivacyMessage()
-		.then((cmpBannerWillShow) => updateViewportTargeting(cmpBannerWillShow))
-		.then(() => triggerCallbacks());
-});
+	onConsentChange((state) => {
+		const count = updatePersonalisedTargeting(state);
 
-onConsentChange((state) => {
-	updatePersonalisedTargeting(state);
+		if (count > 1) void triggerCallbacks();
+	});
+};
 
-	// TODO: update consentTargeting
-	void triggerCallbacks();
-});
-
+let initialised = false;
 const init = ({
 	unsure,
 	content,
@@ -58,11 +63,14 @@ const init = ({
 	session: SessionTargeting;
 	participations: AllParticipations;
 }): void => {
+	if (initialised) return;
+	else initialised = true;
+
+	registerListeners();
+
 	initUnsureTargeting(unsure);
 	initContentTargeting(content);
 	initSessionTargeting(participations, session);
-
-	void triggerCallbacks();
 };
 
 type Callback = (targeting: AdTargeting) => void | Promise<void>;
@@ -93,15 +101,12 @@ const triggerCallbacks = async (): Promise<void> => {
 	});
 };
 
-const onAdTargetingUpdate = (callback: Callback): void => {
+const onAdTargetingUpdate = async (callback: Callback): Promise<void> => {
 	callbacks.push(callback);
 
-	void getAdTargeting(false)
-		.then((targeting) => callback(targeting))
-		.catch(() => {
-			// do nothing, callback will be trigger when Ad Targeting changes
-		});
+	const targeting = await getAdTargeting(false);
+	return callback(targeting);
 };
 
 export { onAdTargetingUpdate, init };
-export type { True, False, NotApplicable };
+export type { AdTargeting, True, False, NotApplicable };
