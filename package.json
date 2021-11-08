@@ -44,6 +44,7 @@
   "devDependencies": {
     "@commitlint/cli": "^13",
     "@commitlint/config-conventional": "^13",
+    "@guardian/ab-core": "^2.0.0",
     "@guardian/consent-management-platform": "^9",
     "@guardian/eslint-config-typescript": "^0.7",
     "@guardian/libs": "^3",
@@ -74,10 +75,11 @@
     "typescript": "^4"
   },
   "publishConfig": {
-    "access": "public"
+		"access": "public"
   },
   "peerDependencies": {
-    "@guardian/libs": "^3",
-    "@guardian/consent-management-platform": "^9"
+		"@guardian/ab-core": "^2.0.0",
+    "@guardian/consent-management-platform": "^9",
+    "@guardian/libs": "^3"
   }
 }

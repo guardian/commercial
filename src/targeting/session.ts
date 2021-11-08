@@ -1,6 +1,6 @@
-// User / Browser / PageView. Cookies + localStorage
-
+import type { Participations } from '@guardian/ab-core';
 import type { CountryCode } from '@guardian/libs';
+import { isString } from '@guardian/libs';
 import type { False, True } from './ad-targeting';
 import { AsyncAdTargeting } from './get-set';
 
@@ -13,17 +13,6 @@ import { AsyncAdTargeting } from './get-set';
  * read from a cookie or passed down from the server.
  */
 export type SessionTargeting = {
-	/**
-	 * **AB** Tests – [see on Ad Manager][gam]
-	 *
-	 * Type: _Dynamic_
-	 *
-	 * Values: typically start with `ab`
-	 *
-	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=186327
-	 */
-	ab: string[] | null;
-
 	/**
 	 * **A**d **T**est – [see on Ad Manager][gam]
 	 *
@@ -71,6 +60,17 @@ export type SessionTargeting = {
 };
 
 type SessionTargetingInternal = {
+	/**
+	 * **AB** Tests – [see on Ad Manager][gam]
+	 *
+	 * Type: _Dynamic_
+	 *
+	 * Values: typically start with `ab`
+	 *
+	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=186327
+	 */
+	ab: string[] | null;
+
 	/**
 	 * **Ref**errer – [see on Ad Manager][gam]
 	 *
@@ -131,8 +131,45 @@ const sessionTargeting = new AsyncAdTargeting<
 	SessionTargeting & SessionTargetingInternal
 >();
 
-const initSessionTargeting = (targeting: SessionTargeting): void => {
-	sessionTargeting.set({ ref: getReferrer(), ...targeting });
+export type AllParticipations = {
+	clientSideParticipations: Participations;
+	serverSideParticipations: Record<string, 'control' | 'variant'>;
+};
+
+const experimentsTargeting = ({
+	clientSideParticipations,
+	serverSideParticipations,
+}: AllParticipations): string[] => {
+	const testToParams = (testName: string, variant: string): string | null => {
+		if (variant === 'notintest') return null;
+
+		// DFP key-value pairs accept value strings up to 40 characters long
+		return `${testName}-${variant}`.substring(0, 40);
+	};
+
+	const clientSideExperiment = Object.entries(clientSideParticipations)
+		.map((test) => {
+			const [name, variant] = test;
+			return testToParams(name, variant.variant);
+		})
+		.filter(isString);
+
+	const serverSideExperiments = Object.entries(serverSideParticipations)
+		.map((test) => testToParams(...test))
+		.filter(isString);
+
+	return [...clientSideExperiment, ...serverSideExperiments];
+};
+
+const initSessionTargeting = (
+	participations: AllParticipations,
+	targeting: SessionTargeting,
+): void => {
+	sessionTargeting.set({
+		ref: getReferrer(),
+		ab: experimentsTargeting(participations),
+		...targeting,
+	});
 };
 
 const getSessionTargeting = (): Promise<SessionTargeting> =>

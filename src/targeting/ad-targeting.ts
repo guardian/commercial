@@ -8,7 +8,7 @@ import {
 	getPersonalisedTargeting,
 	updatePersonalisedTargeting,
 } from './personalised';
-import type { SessionTargeting } from './session';
+import type { AllParticipations, SessionTargeting } from './session';
 import { getSessionTargeting, initSessionTargeting } from './session';
 
 type True = 't';
@@ -78,14 +78,16 @@ const init = ({
 	unsure,
 	content,
 	session,
+	participations,
 }: {
 	unsure: NotSureTargeting;
 	content: ContentTargeting;
-	session: Omit<SessionTargeting, 'ref'>;
+	session: SessionTargeting;
+	participations: AllParticipations;
 }) => {
 	initUnsureTargeting(unsure);
 	initContentTargeting(content);
-	initSessionTargeting(session);
+	initSessionTargeting(participations, session);
 
 	void triggerCallbacks();
 };
@@ -119,11 +121,18 @@ init({
 		vl: '60',
 	},
 	session: {
-		ab: ['ab-new-targeting'],
 		at: null,
 		cc: 'GB',
 		pv: '123457',
 		si: 'f',
+	},
+	participations: {
+		clientSideParticipations: {
+			'ab-new-ad-targeting': {
+				variant: 'variant',
+			},
+		},
+		serverSideParticipations: {},
 	},
 });
 
