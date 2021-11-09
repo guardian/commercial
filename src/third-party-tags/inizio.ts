@@ -5,11 +5,9 @@ const handleQuerySurveyDone = (
 	survey: { measurementId: string },
 ): void => {
 	if (surveyAvailable) {
-		if (window.googletag) {
-			window.googletag.cmd.push(() => {
-				window.googletag?.pubads().setTargeting('inizio', 't');
-			});
-		}
+		window.googletag.cmd.push(() => {
+			window.googletag.pubads().setTargeting('inizio', 't');
+		});
 		console.log(`surveyAvailable: ${survey.measurementId}`);
 	}
 };
