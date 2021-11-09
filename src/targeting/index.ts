@@ -20,12 +20,12 @@ type False = 'f';
 type NotApplicable = 'na';
 
 type AdTargeting =
+	| AdFreeTargeting
 	| (NotSureTargeting &
 			ContentTargeting &
 			SessionTargeting &
 			ViewportTargeting &
-			PersonalisedTargeting)
-	| AdFreeTargeting;
+			PersonalisedTargeting);
 
 type InitAdTargeting = (targeting: {
 	unsure: NotSureTargeting;
