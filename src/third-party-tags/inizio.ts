@@ -5,9 +5,12 @@ const handleQuerySurveyDone = (
 	survey: { measurementId: string },
 ): void => {
 	if (surveyAvailable) {
-		window.googletag.cmd.push(() => {
-			window.googletag.pubads().setTargeting('inizio', 't');
-		});
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- @types/googletag declares it, but it may be missing
+		if (window.googletag) {
+			window.googletag.cmd.push(() => {
+				window.googletag.pubads().setTargeting('inizio', 't');
+			});
+		}
 		console.log(`surveyAvailable: ${survey.measurementId}`);
 	}
 };
