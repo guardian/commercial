@@ -46,7 +46,7 @@
     "@commitlint/config-conventional": "^14",
     "@guardian/consent-management-platform": "^8",
     "@guardian/eslint-config-typescript": "^0.7",
-    "@guardian/libs": "^3",
+    "@guardian/libs": "3.3.0",
     "@guardian/prettier": "^0.7",
     "@octokit/core": "^3",
     "@semantic-release/github": "^8",
@@ -78,6 +78,6 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@guardian/libs": "^3"
+    "@guardian/libs": "^3.3.0"
   }
 }
