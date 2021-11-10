@@ -1,6 +1,3 @@
-// Always the same for a single page view. Comes from the server?
-
-import { AsyncAdTargeting } from './get-set';
 import type { False, True } from '.';
 
 type ValuesOf<T extends Record<string, string>> = T[keyof T];
@@ -89,7 +86,7 @@ export type ContentTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=259767
 	 */
-	br: ValuesOf<typeof branding>;
+	br: ValuesOf<typeof branding> | null;
 
 	/**
 	 * **Co**ntributor - [see on Ad Manager][gam]
@@ -227,13 +224,3 @@ export type ContentTargeting = {
 	 */
 	vl: typeof videoLengths[number];
 };
-
-const contentTargeting = new AsyncAdTargeting<ContentTargeting>();
-
-const initContentTargeting = (targeting: ContentTargeting): number =>
-	contentTargeting.set(targeting);
-
-const getContentTargeting = (): Promise<ContentTargeting> =>
-	contentTargeting.get();
-
-export { initContentTargeting, getContentTargeting };

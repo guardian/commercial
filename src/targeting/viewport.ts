@@ -1,4 +1,3 @@
-import { AsyncAdTargeting } from './get-set';
 import type { False, True } from '.';
 
 /* -- Types -- */
@@ -11,7 +10,7 @@ import type { False, True } from '.';
  * - screen density (? not yet)
  * - w
  */
-type ViewportTargeting = {
+export type ViewportTargeting = {
 	/**
 	 * **B**reak**p**oint – [see on Ad Manager][gam]
 	 *
@@ -54,22 +53,17 @@ const findBreakpoint = (width: number): 'mobile' | 'tablet' | 'desktop' => {
 
 /* -- Targeting -- */
 
-const viewportTargeting = new AsyncAdTargeting<ViewportTargeting>();
-
-const updateViewportTargeting = (cmpBannerWillShow: boolean): number => {
+export const getViewportTargeting = (
+	cmpBannerWillShow: boolean,
+): ViewportTargeting => {
 	const width = window.innerWidth;
 
 	// Don’t show inskin if if a privacy message will be shown
 	const inskin = cmpBannerWillShow ? 'f' : 't';
 
-	return viewportTargeting.set({
+	return {
 		bp: findBreakpoint(width),
 		skinsize: width >= 1560 ? 'l' : 's',
 		inskin,
-	});
+	};
 };
-const getViewportTargeting = (): Promise<ViewportTargeting> =>
-	viewportTargeting.get();
-
-export { updateViewportTargeting, getViewportTargeting };
-export type { ViewportTargeting };

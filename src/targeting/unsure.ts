@@ -1,6 +1,4 @@
-import { AsyncAdTargeting } from './get-set';
-
-type NotSureTargeting = {
+export type UnsureTargeting = {
 	/**
 	 * **G**uar**d**ia**n** **C**ustomer **R**elation **M**anagement – [see on Ad Manager][gam]
 	 *
@@ -50,13 +48,3 @@ type NotSureTargeting = {
 	 */
 	x: string;
 };
-const notSureTargeting = new AsyncAdTargeting<NotSureTargeting>();
-
-const initUnsureTargeting = (unsure: NotSureTargeting): number =>
-	notSureTargeting.set(unsure);
-
-const getUnsureTargeting = (): Promise<NotSureTargeting> =>
-	notSureTargeting.get();
-
-export type { NotSureTargeting };
-export { initUnsureTargeting, getUnsureTargeting };

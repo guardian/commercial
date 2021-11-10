@@ -1,4 +1,3 @@
-import type { AdTargetingCallback, InitAdTargeting } from './targeting';
 import type {
 	GoogleTagParams,
 	GoogleTrackConversionObject,
@@ -23,18 +22,6 @@ declare global {
 		guardian: {
 			commercialTimer?: EventTimer;
 			config?: GuardianWindowConfig;
-
-			/**
-			 * Commercial Features
-			 *
-			 * https://github.com/guardian/commercial-core
-			 */
-			commercial?: {
-				onAdTargetingUpdate?: (
-					callback: AdTargetingCallback,
-				) => Promise<void>;
-				initAdTargeting?: InitAdTargeting;
-			};
 		};
 		ga: UniversalAnalytics.ga | null;
 		readonly navigator: Navigator;

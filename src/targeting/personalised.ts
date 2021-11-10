@@ -4,8 +4,9 @@ import type {
 	TCFv2ConsentList,
 } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import { storage } from '@guardian/libs';
-import { AsyncAdTargeting } from './get-set';
 import type { False, NotApplicable, True } from '.';
+
+/* -- Types -- */
 
 const frequency = [
 	'0',
@@ -22,6 +23,7 @@ const frequency = [
 	'5plus', // TODO: remove it (?)
 ] as const;
 
+const AMTGRP_STORAGE_KEY = 'gu.adManagerGroup';
 const adManagerGroups = [
 	'1',
 	'2',
@@ -36,6 +38,7 @@ const adManagerGroups = [
 	'11',
 	'12',
 ] as const;
+type AdManagerGroup = typeof adManagerGroups[number];
 
 export type PersonalisedTargeting = {
 	/**
@@ -48,7 +51,7 @@ export type PersonalisedTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=12318099
 	 * */
-	amtgrp: typeof adManagerGroups[number];
+	amtgrp: AdManagerGroup | null;
 
 	/**
 	 * Interaction with TCFv2 banner – [see on Ad Manager][gam]
@@ -108,6 +111,8 @@ export type PersonalisedTargeting = {
 	rdp: True | False | NotApplicable;
 };
 
+/* -- Methods -- */
+
 const getRawWithConsent = (key: string, state: ConsentState): string | null => {
 	if (!state.tcfv2?.consents['1']) return null;
 	if (state.ccpa?.doNotSell) return null;
@@ -142,6 +147,14 @@ const getFrequencyValue = (state: ConsentState): typeof frequency[number] => {
 const tcfv2AllPurposesConsented = (consents: TCFv2ConsentList) =>
 	Object.keys(consents).length > 0 && Object.values(consents).every(Boolean);
 
+const personalisedAdvertising = (state: ConsentState): boolean => {
+	if (state.tcfv2) return tcfv2AllPurposesConsented(state.tcfv2.consents);
+	if (state.ccpa) return !state.ccpa.doNotSell;
+	if (state.aus) return state.aus.personalisedAdvertising;
+
+	return false;
+};
+
 type CMPTargeting = Pick<
 	PersonalisedTargeting,
 	'cmp_interaction' | 'pa' | 'consent_tcfv2' | 'rdp'
@@ -166,17 +179,36 @@ const getCMPTargeting = (state: ConsentState): CMPTargeting => {
 	};
 };
 
-const personalisedTargeting = new AsyncAdTargeting<PersonalisedTargeting>();
+const isAdManagerGroup = (s: string | null): s is AdManagerGroup =>
+	adManagerGroups.some((g) => g === s);
 
-const updatePersonalisedTargeting = (state: ConsentState): number =>
-	personalisedTargeting.set({
-		amtgrp: '7',
-		fr: getFrequencyValue(state),
-		permutive: ['1', '2', '3', '9'],
-		...getCMPTargeting(state),
-	});
+const getAdManagerGroup = (state: ConsentState): AdManagerGroup | null => {
+	if (!personalisedAdvertising(state)) return null;
 
-const getPersonalisedTargeting = (): Promise<PersonalisedTargeting> =>
-	personalisedTargeting.get();
+	const existingGroup = storage.local.getRaw(AMTGRP_STORAGE_KEY);
 
-export { updatePersonalisedTargeting, getPersonalisedTargeting };
+	return isAdManagerGroup(existingGroup)
+		? existingGroup
+		: createAdManagerGroup();
+};
+
+const createAdManagerGroup = (): AdManagerGroup => {
+	const group =
+		adManagerGroups[Math.floor(Math.random() * adManagerGroups.length)] ??
+		'12';
+	storage.local.setRaw(AMTGRP_STORAGE_KEY, group);
+	return group;
+};
+
+/* -- Targeting -- */
+
+const getPersonalisedTargeting = (
+	state: ConsentState,
+): PersonalisedTargeting => ({
+	amtgrp: getAdManagerGroup(state),
+	fr: getFrequencyValue(state),
+	permutive: ['1', '2', '3', '9'],
+	...getCMPTargeting(state),
+});
+
+export { getPersonalisedTargeting };

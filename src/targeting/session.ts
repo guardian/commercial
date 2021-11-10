@@ -1,7 +1,6 @@
 import type { Participations } from '@guardian/ab-core';
 import type { CountryCode } from '@guardian/libs';
 import { isString } from '@guardian/libs';
-import { AsyncAdTargeting } from './get-set';
 import type { False, True } from '.';
 
 /* -- Types -- */
@@ -14,7 +13,10 @@ import type { False, True } from '.';
  * These values identify a browser session are either generated client-side,
  * read from a cookie or passed down from the server.
  */
-type SessionTargeting = {
+export type SessionTargeting = SessionTargetingExternal &
+	SessionTargetingInternal;
+
+type SessionTargetingExternal = {
 	/**
 	 * **A**d **T**est – [see on Ad Manager][gam]
 	 *
@@ -163,22 +165,11 @@ const experimentsTargeting = ({
 
 /* -- Targeting -- */
 
-const sessionTargeting = new AsyncAdTargeting<
-	SessionTargeting & SessionTargetingInternal
->();
-
-const initSessionTargeting = (
+export const getSessionTargeting = (
 	participations: AllParticipations,
-	targeting: SessionTargeting,
-): number =>
-	sessionTargeting.set({
-		ref: getReferrer(),
-		ab: experimentsTargeting(participations),
-		...targeting,
-	});
-
-const getSessionTargeting = (): Promise<SessionTargeting> =>
-	sessionTargeting.get();
-
-export { initSessionTargeting, getSessionTargeting };
-export type { SessionTargeting };
+	targeting: SessionTargetingExternal,
+): SessionTargeting => ({
+	ref: getReferrer(),
+	ab: experimentsTargeting(participations),
+	...targeting,
+});
