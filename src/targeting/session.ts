@@ -141,7 +141,7 @@ const getReferrer = (): typeof referrers[number] | null => {
 const experimentsTargeting = ({
 	clientSideParticipations,
 	serverSideParticipations,
-}: AllParticipations): string[] => {
+}: AllParticipations): string[] | null => {
 	const testToParams = (testName: string, variant: string): string | null => {
 		if (variant === 'notintest') return null;
 
@@ -159,6 +159,9 @@ const experimentsTargeting = ({
 	const serverSideExperiments = Object.entries(serverSideParticipations)
 		.map((test) => testToParams(...test))
 		.filter(isString);
+
+	if (clientSideExperiment.length + serverSideExperiments.length === 0)
+		return null;
 
 	return [...clientSideExperiment, ...serverSideExperiments];
 };

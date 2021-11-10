@@ -3,7 +3,13 @@ import type { ContentTargeting } from './content';
 import type { PersonalisedTargeting } from './personalised';
 import type { AllParticipations, SessionTargeting } from './session';
 import type { UnsureTargeting } from './unsure';
-import { getContentTargeting, getPersonalisedTargeting } from '.';
+import type { ViewportTargeting } from './viewport';
+import {
+	getContentTargeting,
+	getPersonalisedTargeting,
+	getSessionTargeting,
+	getViewportTargeting,
+} from '.';
 
 describe('Content Targeting', () => {
 	test('should output the same thing', () => {
@@ -85,24 +91,143 @@ describe('Personalised targeting', () => {
 	});
 
 	describe('CCPA', () => {
-		it.skip('consent', () => {
-			const CCPAWithConsent: ConsentState = {
+		it('Full Consent', () => {
+			const state: ConsentState = {
 				ccpa: { doNotSell: false },
 			};
+
+			const expected: Partial<PersonalisedTargeting> = {
+				pa: 't',
+				consent_tcfv2: 'na',
+				rdp: 'f',
+			};
+			const targeting = getPersonalisedTargeting(state);
+			expect(targeting).toMatchObject(expected);
+		});
+
+		it('Do Not Sell', () => {
+			const state: ConsentState = {
+				ccpa: { doNotSell: true },
+			};
+
+			const expected: Partial<PersonalisedTargeting> = {
+				pa: 'f',
+				consent_tcfv2: 'na',
+				rdp: 't',
+			};
+			const targeting = getPersonalisedTargeting(state);
+			expect(targeting).toMatchObject(expected);
 		});
 	});
 
 	describe('AUS', () => {
-		test.skip('consent', () => {
-			const ausConsented: ConsentState = {
+		test('Full Consent', () => {
+			const state: ConsentState = {
 				aus: { personalisedAdvertising: true },
 			};
+
+			const expected: Partial<PersonalisedTargeting> = {
+				pa: 't',
+				consent_tcfv2: 'na',
+				rdp: 'na',
+			};
+			const targeting = getPersonalisedTargeting(state);
+			expect(targeting).toMatchObject(expected);
+		});
+		test('Personalised Advertising OFF', () => {
+			const state: ConsentState = {
+				aus: { personalisedAdvertising: false },
+			};
+
+			const expected: Partial<PersonalisedTargeting> = {
+				pa: 'f',
+				consent_tcfv2: 'na',
+				rdp: 'na',
+			};
+			const targeting = getPersonalisedTargeting(state);
+			expect(targeting).toMatchObject(expected);
 		});
 	});
 });
 
 describe('Session targeting', () => {
-	test.todo('No CMP banner will show');
+	test('No participations', () => {
+		const expected: SessionTargeting = {
+			ab: null,
+			at: null,
+			cc: 'GB',
+			pv: '1234567',
+			ref: null,
+			si: 'f',
+		};
+
+		// TODO: mock referrer?
+
+		const targeting = getSessionTargeting(
+			{
+				serverSideParticipations: {},
+				clientSideParticipations: {},
+			},
+			{ at: null, pv: '1234567', cc: 'GB', si: 'f' },
+		);
+		expect(targeting).toMatchObject(expected);
+	});
+
+	test('With participations', () => {
+		const participations: AllParticipations = {
+			clientSideParticipations: {
+				'ab-new-ad-targeting': {
+					variant: 'variant',
+				},
+			},
+			serverSideParticipations: {
+				abStandaloneBundle: 'variant',
+			},
+		};
+
+		const expected: SessionTargeting = {
+			ab: ['ab-new-ad-targeting-variant', 'abStandaloneBundle-variant'],
+			at: null,
+			cc: 'GB',
+			pv: '1234567',
+			ref: null,
+			si: 'f',
+		};
+
+		// TODO: mock referrer?
+
+		const targeting = getSessionTargeting(participations, {
+			at: null,
+			pv: '1234567',
+			cc: 'GB',
+			si: 'f',
+		});
+		expect(targeting).toMatchObject(expected);
+	});
+});
+
+describe('Viewport targeting', () => {
+	test('No CMP banner will show', () => {
+		const expected: ViewportTargeting = {
+			bp: 'desktop',
+			inskin: 't',
+			skinsize: 's',
+		};
+		const targeting = getViewportTargeting(false);
+		expect(targeting).toMatchObject(expected);
+	});
+});
+
+describe('Viewport targeting', () => {
+	test('No CMP banner will show', () => {
+		const expected: ViewportTargeting = {
+			bp: 'desktop',
+			inskin: 't',
+			skinsize: 's',
+		};
+		const targeting = getViewportTargeting(false);
+		expect(targeting).toMatchObject(expected);
+	});
 });
 
 const unsure: UnsureTargeting = {
@@ -110,15 +235,6 @@ const unsure: UnsureTargeting = {
 	ms: 'something',
 	slot: 'top-above-nav',
 	x: 'Krux-ID',
-};
-
-const participations: AllParticipations = {
-	clientSideParticipations: {
-		'ab-new-ad-targeting': {
-			variant: 'variant',
-		},
-	},
-	serverSideParticipations: {},
 };
 
 const session: SessionTargeting = {

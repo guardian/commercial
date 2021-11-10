@@ -171,6 +171,22 @@ const getCMPTargeting = (state: ConsentState): CMPTargeting => {
 		};
 	}
 
+	if (state.ccpa) {
+		return {
+			consent_tcfv2: 'na',
+			rdp: state.ccpa.doNotSell ? 't' : 'f',
+			pa: state.ccpa.doNotSell ? 'f' : 't',
+		};
+	}
+
+	if (state.aus) {
+		return {
+			consent_tcfv2: 'na',
+			rdp: 'na',
+			pa: state.aus.personalisedAdvertising ? 't' : 'f',
+		};
+	}
+
 	return {
 		cmp_interaction: 'na',
 		consent_tcfv2: 'na',
