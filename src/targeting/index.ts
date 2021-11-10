@@ -1,4 +1,5 @@
 import type { AdFreeTargeting } from './ad-free';
+import { getAdFreeTargeting } from './ad-free';
 import type { ContentTargeting } from './content';
 import type { PersonalisedTargeting } from './personalised';
 import { getPersonalisedTargeting } from './personalised';
@@ -35,6 +36,7 @@ const getContentTargeting = (targeting: ContentTargeting): ContentTargeting =>
 	targeting;
 
 export {
+	getAdFreeTargeting,
 	getContentTargeting,
 	getPersonalisedTargeting,
 	getSessionTargeting,
