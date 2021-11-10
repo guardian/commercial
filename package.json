@@ -27,6 +27,7 @@
     "precommit:lint": "lint-staged",
     "prepush:test": "jest --verbose --runInBand --onlyChanged",
     "test": "jest",
+    "test:watch": "jest --watch",
     "test:ci": "jest --coverage --ci",
     "tsc": "tsc --noEmit",
     "validate": "npm-run-all tsc lint test build",
@@ -44,7 +45,7 @@
   "devDependencies": {
     "@commitlint/cli": "^13",
     "@commitlint/config-conventional": "^14",
-    "@guardian/ab-core": "^2",
+    "@guardian/ab-core": "^2.0.0",
     "@guardian/consent-management-platform": "^8",
     "@guardian/eslint-config-typescript": "^0.7",
     "@guardian/libs": "^3",
