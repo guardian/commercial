@@ -8,7 +8,7 @@ import type { False, True } from '../types';
 const referrers = ['facebook', 'twitter', 'reddit', 'google'] as const;
 
 /**
- * #### Targeting on browser session
+ * Session Targeting is based on the browser session
  *
  * Includes information such as the country of origin, referrer, page view ID.
  *
