@@ -13,10 +13,18 @@ import type { False, True } from '.';
  * These values identify a browser session are either generated client-side,
  * read from a cookie or passed down from the server.
  */
-export type SessionTargeting = SessionTargetingExternal &
-	SessionTargetingInternal;
+export type SessionTargeting = {
+	/**
+	 * **AB** Tests – [see on Ad Manager][gam]
+	 *
+	 * Type: _Dynamic_
+	 *
+	 * Values: typically start with `ab`
+	 *
+	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=186327
+	 */
+	ab: string[] | null;
 
-type SessionTargetingExternal = {
 	/**
 	 * **A**d **T**est – [see on Ad Manager][gam]
 	 *
@@ -54,28 +62,6 @@ type SessionTargetingExternal = {
 	pv: string;
 
 	/**
-	 * **S**igned **I**n – [see on Ad Manager][gam]
-	 *
-	 *Whether a user is signed in. Based on presence of a cookie.
-	 *
-	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=215727
-	 */
-	si: True | False;
-};
-
-type SessionTargetingInternal = {
-	/**
-	 * **AB** Tests – [see on Ad Manager][gam]
-	 *
-	 * Type: _Dynamic_
-	 *
-	 * Values: typically start with `ab`
-	 *
-	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=186327
-	 */
-	ab: string[] | null;
-
-	/**
 	 * **Ref**errer – [see on Ad Manager][gam]
 	 *
 	 * Type: _Dynamic_
@@ -90,6 +76,15 @@ type SessionTargetingInternal = {
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=228567
 	 */
 	ref: typeof referrers[number] | null;
+
+	/**
+	 * **S**igned **I**n – [see on Ad Manager][gam]
+	 *
+	 *Whether a user is signed in. Based on presence of a cookie.
+	 *
+	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=215727
+	 */
+	si: True | False;
 };
 
 export type AllParticipations = {
@@ -169,7 +164,7 @@ const experimentsTargeting = ({
 
 export const getSessionTargeting = (
 	participations: AllParticipations,
-	targeting: SessionTargetingExternal,
+	targeting: Omit<SessionTargeting, 'ab' | 'ref'>,
 ): SessionTargeting => ({
 	ref: getReferrer(),
 	ab: experimentsTargeting(participations),
