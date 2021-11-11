@@ -1,5 +1,7 @@
 import type { False, True } from '.';
 
+/* -- Types -- */
+
 type ValuesOf<T extends Record<string, string>> = T[keyof T];
 
 const branding = {
@@ -222,5 +224,24 @@ export type ContentTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=195087
 	 */
-	vl: typeof videoLengths[number];
+	vl: null | typeof videoLengths[number];
+};
+
+/* -- Methods -- */
+
+const getVideoLength = (videoLength: number): ContentTargeting['vl'] => {
+	const index = Math.min(Math.ceil(videoLength / 30), 10);
+	return videoLengths[index] ?? null;
+};
+
+/* -- Targeting -- */
+
+export const getContentTargeting = (
+	targeting: Omit<ContentTargeting, 'vl'>,
+	videoLength?: number,
+): ContentTargeting => {
+	return {
+		vl: videoLength ? getVideoLength(videoLength) : null,
+		...targeting,
+	};
 };

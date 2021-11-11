@@ -1,6 +1,7 @@
 import type { AdFreeTargeting } from './ad-free';
 import { getAdFreeTargeting } from './ad-free';
 import type { ContentTargeting } from './content';
+import { getContentTargeting } from './content';
 import type { PersonalisedTargeting } from './personalised';
 import { getPersonalisedTargeting } from './personalised';
 import type { SessionTargeting } from './session';
@@ -26,13 +27,6 @@ type AdTargeting =
  * TODO: reduce requirements for public API
  */
 const getUnsureTargeting = (targeting: UnsureTargeting): UnsureTargeting =>
-	targeting;
-
-/**
- * This adds little to using the type directly, but is left for consistency
- * TODO: reduce requirements for public API
- */
-const getContentTargeting = (targeting: ContentTargeting): ContentTargeting =>
 	targeting;
 
 export {
