@@ -18,7 +18,6 @@ declare global {
 			cmd: string;
 			val: Record<string, unknown>;
 		}>;
-		googletag?: googletag.Googletag;
 		guardian: {
 			commercialTimer?: EventTimer;
 			config?: GuardianWindowConfig;
