@@ -6,7 +6,7 @@ specifiers:
   '@guardian/ab-core': ^2
   '@guardian/consent-management-platform': ^8
   '@guardian/eslint-config-typescript': ^0.7
-  '@guardian/libs': ^3
+  '@guardian/libs': 3.3.0
   '@guardian/prettier': ^0.7
   '@octokit/core': ^3
   '@semantic-release/github': ^8
@@ -40,7 +40,7 @@ devDependencies:
   '@guardian/ab-core': 2.0.0
   '@guardian/consent-management-platform': 8.0.1
   '@guardian/eslint-config-typescript': 0.7.0_5dc17954397827e5be42442a8923306d
-  '@guardian/libs': 3.5.1_web-vitals@2.1.2
+  '@guardian/libs': 3.3.0
   '@guardian/prettier': 0.7.0_prettier@2.4.1
   '@octokit/core': 3.5.1
   '@semantic-release/github': 8.0.2_semantic-release@18.0.0
@@ -672,14 +672,6 @@ packages:
 
   /@guardian/libs/3.3.0:
     resolution: {integrity: sha512-XB9o8qtDOg+KlPh1sjEr4u+Ai3RFTRr2riZ/HJpdlh8Cu4ZpYjCSGUZXSGkxp1CwFWT9sduANnsWSqZ97iBloQ==}
-    dev: true
-
-  /@guardian/libs/3.5.1_web-vitals@2.1.2:
-    resolution: {integrity: sha512-obu0aPfkbe6kdo18e0dEq/esVjAhwZpQusU/yRjDQFBQMcG4CvPtD0HZb6sI1Grm2NWdBueHHQcJ0YX48SDCsg==}
-    peerDependencies:
-      web-vitals: ^2
-    dependencies:
-      web-vitals: 2.1.2
     dev: true
 
   /@guardian/prettier/0.7.0_prettier@2.4.1:
