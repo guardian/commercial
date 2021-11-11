@@ -4,7 +4,7 @@ import type {
 	TCFv2ConsentList,
 } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import { storage } from '@guardian/libs';
-import { clearPermutiveSegments, getPermutiveSegments } from '..';
+import { clearPermutiveSegments, getPermutiveSegments } from '../permutive';
 import type { False, NotApplicable, True } from '.';
 
 /* -- Types -- */
