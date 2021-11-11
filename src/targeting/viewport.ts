@@ -5,10 +5,8 @@ import type { False, True } from '.';
 /**
  * #### Viewport Targeting
  *
- * Inclues values related to the viewport:
- * - size
- * - screen density (? not yet)
- * - w
+ * Includes values related to the viewport:
+ * - breakpoint
  */
 export type ViewportTargeting = {
 	/**
@@ -16,9 +14,11 @@ export type ViewportTargeting = {
 	 *
 	 * Type: _Predefined_
 	 *
+	 * TODO: remove 'wide'
+	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=180327
 	 */
-	bp: 'mobile' | 'tablet' | 'desktop' | 'wide';
+	bp: 'mobile' | 'tablet' | 'desktop';
 
 	/**
 	 * InSkin (CMP Banner shown) – [see on Ad Manager][gam]
