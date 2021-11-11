@@ -1,11 +1,13 @@
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { storage } from '@guardian/libs';
+import type { AdFreeTargeting } from './ad-free';
 import type { ContentTargeting } from './content';
 import type { PersonalisedTargeting } from './personalised';
 import type { AllParticipations, SessionTargeting } from './session';
 import type { UnsureTargeting } from './unsure';
 import type { ViewportTargeting } from './viewport';
 import {
+	getAdFreeTargeting,
 	getContentTargeting,
 	getPersonalisedTargeting,
 	getSessionTargeting,
@@ -15,6 +17,20 @@ import {
 
 const FREQUENCY_KEY = 'gu.alreadyVisited';
 const AMTGRP_STORAGE_KEY = 'gu.adManagerGroup';
+
+describe('Ad-fre targeting', () => {
+	test('User is ad-free', () => {
+		const expected: AdFreeTargeting = {
+			af: 't',
+		};
+
+		expect(getAdFreeTargeting(true)).toEqual(expected);
+	});
+
+	test('User should get advertising', () => {
+		expect(getAdFreeTargeting(false)).toEqual(null);
+	});
+});
 
 describe('Content Targeting', () => {
 	test('should output the same thing', () => {
@@ -389,6 +405,56 @@ describe('Viewport targeting', () => {
 		const targeting = getViewportTargeting(false);
 		expect(targeting).toMatchObject(expected);
 	});
+
+	test('No CMP will show', () => {
+		const expected: ViewportTargeting = {
+			bp: 'desktop',
+			inskin: 'f',
+			skinsize: 's',
+		};
+		const targeting = getViewportTargeting(true);
+		expect(targeting).toMatchObject(expected);
+	});
+
+	const windowWidths: Array<
+		[number, ViewportTargeting['bp'], ViewportTargeting['skinsize']]
+	> = [
+		[320, 'mobile', 's'],
+		[640, 'mobile', 's'],
+		[739, 'mobile', 's'],
+
+		[750, 'tablet', 's'],
+		[960, 'tablet', 's'],
+
+		[1024, 'desktop', 's'],
+		[1280, 'desktop', 's'],
+		[1440, 'desktop', 's'],
+		[1559, 'desktop', 's'],
+
+		[1560, 'desktop', 'l'],
+		[1680, 'desktop', 'l'],
+		[1920, 'desktop', 'l'],
+		[2560, 'desktop', 'l'],
+	];
+
+	test.each(windowWidths)(
+		'Screen size %f => bp:%s, skinsize:%s',
+		(windowWidth, bp, skinsize) => {
+			const expected: ViewportTargeting = {
+				inskin: 't',
+				bp,
+				skinsize,
+			};
+
+			Object.defineProperty(window, 'innerWidth', {
+				value: windowWidth,
+				configurable: true,
+			});
+
+			const targeting = getViewportTargeting(false);
+			expect(targeting).toMatchObject(expected);
+		},
+	);
 });
 
 describe('Unsure targeting', () => {
