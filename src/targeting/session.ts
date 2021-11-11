@@ -116,17 +116,16 @@ const getReferrer = (): typeof referrers[number] | null => {
 			match: 'facebook.com',
 		},
 		{
+			id: 'google',
+			match: 'www.google',
+		},
+		{
 			id: 'twitter',
-			// added (/) because without slash it is picking up reddit.com too
-			match: 't.co/',
+			match: '/t.co/',
 		},
 		{
 			id: 'reddit',
 			match: 'reddit.com',
-		},
-		{
-			id: 'google',
-			match: 'www.google',
 		},
 	];
 
@@ -145,7 +144,7 @@ const experimentsTargeting = ({
 	const testToParams = (testName: string, variant: string): string | null => {
 		if (variant === 'notintest') return null;
 
-		// DFP key-value pairs accept value strings up to 40 characters long
+		// GAM key-value pairs accept value strings up to 40 characters long
 		return `${testName}-${variant}`.substring(0, 40);
 	};
 

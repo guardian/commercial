@@ -180,6 +180,9 @@ describe('Session targeting', () => {
 				'ab-new-ad-targeting': {
 					variant: 'variant',
 				},
+				'ab-some-other-test': {
+					variant: 'notintest',
+				},
 			},
 			serverSideParticipations: {
 				abStandaloneBundle: 'variant',
@@ -203,6 +206,41 @@ describe('Session targeting', () => {
 			cc: 'GB',
 			si: 'f',
 		});
+		expect(targeting).toMatchObject(expected);
+	});
+
+	const referrers: Array<[SessionTargeting['ref'], `http${string}`]> = [
+		['facebook', 'https://www.facebook.com/index.php'],
+		['google', 'https:///www.google.com/'],
+		['reddit', 'https://www.reddit.com/r/'],
+		['twitter', 'https://t.co/sH0RtUr1'],
+		[null, 'https://example.com/'],
+	];
+
+	test.each(referrers)('should get `%s` for ref: %s', (ref, referrer) => {
+		Object.defineProperty(document, 'referrer', {
+			value: referrer,
+			configurable: true,
+		});
+
+		const expected: SessionTargeting = {
+			ab: null,
+			at: null,
+			cc: 'GB',
+			pv: '1234567',
+			si: 'f',
+			ref,
+		};
+
+		const targeting = getSessionTargeting(
+			{ serverSideParticipations: {}, clientSideParticipations: {} },
+			{
+				at: null,
+				pv: '1234567',
+				cc: 'GB',
+				si: 'f',
+			},
+		);
 		expect(targeting).toMatchObject(expected);
 	});
 });
