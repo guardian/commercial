@@ -4,6 +4,7 @@ import type {
 	TCFv2ConsentList,
 } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import { storage } from '@guardian/libs';
+import { getPermutiveSegments } from '..';
 import type { False, NotApplicable, True } from '.';
 
 /* -- Types -- */
@@ -114,11 +115,17 @@ export type PersonalisedTargeting = {
 /* -- Methods -- */
 
 const getRawWithConsent = (key: string, state: ConsentState): string | null => {
-	if (!state.tcfv2?.consents['1']) return null;
-	if (state.ccpa?.doNotSell) return null;
-	if (!state.aus?.personalisedAdvertising) return null;
+	if (state.tcfv2) {
+		if (state.tcfv2.consents['1']) return storage.local.getRaw(key);
+	}
+	if (state.ccpa) {
+		if (!state.ccpa.doNotSell) return storage.local.getRaw(key);
+	}
+	if (state.aus) {
+		if (state.aus.personalisedAdvertising) return storage.local.getRaw(key);
+	}
 
-	return storage.local.getRaw(key);
+	return null;
 };
 
 const getFrequencyValue = (state: ConsentState): typeof frequency[number] => {
@@ -209,9 +216,8 @@ const getAdManagerGroup = (state: ConsentState): AdManagerGroup | null => {
 };
 
 const createAdManagerGroup = (): AdManagerGroup => {
-	const group =
-		adManagerGroups[Math.floor(Math.random() * adManagerGroups.length)] ??
-		'12';
+	const index = Math.floor(Math.random() * adManagerGroups.length);
+	const group = adManagerGroups[index] ?? '12';
 	storage.local.setRaw(AMTGRP_STORAGE_KEY, group);
 	return group;
 };
@@ -223,7 +229,7 @@ const getPersonalisedTargeting = (
 ): PersonalisedTargeting => ({
 	amtgrp: getAdManagerGroup(state),
 	fr: getFrequencyValue(state),
-	permutive: ['1', '2', '3', '9'],
+	permutive: getPermutiveSegments(),
 	...getCMPTargeting(state),
 });
 
