@@ -4,7 +4,7 @@ import type {
 	TCFv2ConsentList,
 } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import { storage } from '@guardian/libs';
-import { getPermutiveSegments } from '..';
+import { clearPermutiveSegments, getPermutiveSegments } from '..';
 import type { False, NotApplicable, True } from '.';
 
 /* -- Types -- */
@@ -222,6 +222,13 @@ const createAdManagerGroup = (): AdManagerGroup => {
 	return group;
 };
 
+const getPermutiveWithState = (state: ConsentState) => {
+	if (personalisedAdvertising(state)) return getPermutiveSegments();
+
+	clearPermutiveSegments();
+	return [];
+};
+
 /* -- Targeting -- */
 
 const getPersonalisedTargeting = (
@@ -229,7 +236,7 @@ const getPersonalisedTargeting = (
 ): PersonalisedTargeting => ({
 	amtgrp: getAdManagerGroup(state),
 	fr: getFrequencyValue(state),
-	permutive: getPermutiveSegments(),
+	permutive: getPermutiveWithState(state),
 	...getCMPTargeting(state),
 });
 
