@@ -128,7 +128,9 @@ const getRawWithConsent = (key: string, state: ConsentState): string | null => {
 	return null;
 };
 
-const getFrequencyValue = (state: ConsentState): typeof frequency[number] => {
+const getFrequencyValue = (
+	state: ConsentState,
+): PersonalisedTargeting['fr'] => {
 	const rawValue = getRawWithConsent('gu.alreadyVisited', state);
 	if (!rawValue) return '0'; // TODO: should we return `null` instead?
 
@@ -205,8 +207,13 @@ const getCMPTargeting = (state: ConsentState): CMPTargeting => {
 const isAdManagerGroup = (s: string | null): s is AdManagerGroup =>
 	adManagerGroups.some((g) => g === s);
 
-const getAdManagerGroup = (state: ConsentState): AdManagerGroup | null => {
-	if (!personalisedAdvertising(state)) return null;
+const getAdManagerGroup = (
+	state: ConsentState,
+): PersonalisedTargeting['amtgrp'] => {
+	if (!personalisedAdvertising(state)) {
+		storage.local.remove(AMTGRP_STORAGE_KEY);
+		return null;
+	}
 
 	const existingGroup = storage.local.getRaw(AMTGRP_STORAGE_KEY);
 

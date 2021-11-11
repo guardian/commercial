@@ -5,6 +5,8 @@ import type { False, True } from '.';
 
 /* -- Types -- */
 
+const referrers = ['facebook', 'twitter', 'reddit', 'google'] as const;
+
 /**
  * #### Targeting on browser session
  *
@@ -94,8 +96,7 @@ export type AllParticipations = {
 
 /* -- Methods -- */
 
-const referrers = ['facebook', 'twitter', 'reddit', 'google'] as const;
-const getReferrer = (): typeof referrers[number] | null => {
+const getReferrer = (): SessionTargeting['ref'] => {
 	const { referrer } = document;
 
 	if (referrer === '') return null;
@@ -135,7 +136,7 @@ const getReferrer = (): typeof referrers[number] | null => {
 const experimentsTargeting = ({
 	clientSideParticipations,
 	serverSideParticipations,
-}: AllParticipations): string[] | null => {
+}: AllParticipations): SessionTargeting['ab'] => {
 	const testToParams = (testName: string, variant: string): string | null => {
 		if (variant === 'notintest') return null;
 
