@@ -1,5 +1,8 @@
 /* -- Types -- */
 
+/**
+ * I think all of these are deprecated?!?
+ */
 export type UnsureTargeting = {
 	/**
 	 * **G**uar**d**ia**n** **C**ustomer **R**elation **M**anagement – [see on Ad Manager][gam]
@@ -11,6 +14,8 @@ export type UnsureTargeting = {
 	 * - `"PXHCI2"`
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=184047
+	 *
+	 * @deprecated (?)
 	 */
 	gdncrm: string | string[];
 
@@ -25,6 +30,8 @@ export type UnsureTargeting = {
 	 * - `"a-rational-fear"`
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=186807
+	 *
+	 * @deprecated - We no longer use Video.js (?)
 	 */
 	ms: string;
 
