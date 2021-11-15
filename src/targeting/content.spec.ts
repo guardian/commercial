@@ -3,7 +3,7 @@ import { getContentTargeting } from './content';
 
 describe('Content Targeting', () => {
 	test('should output the same thing', () => {
-		const content: ContentTargeting = {
+		const expected: ContentTargeting = {
 			bl: ['a', 'b'],
 			br: 'f',
 			co: ['Max Duval'],
@@ -19,12 +19,33 @@ describe('Content Targeting', () => {
 			sens: 'f',
 			su: '0',
 			tn: 'something',
-			url: '/some/thing',
-			urlkw: ['a', 'b'],
-			vl: '60',
+			url: '/2021/some-thing-or-other',
+			urlkw: ['some', 'thing', 'or', 'other'],
+			vl: null,
 		};
 
-		expect(getContentTargeting(content)).toEqual(content);
+		const targeting = getContentTargeting(
+			{
+				bl: ['a', 'b'],
+				br: 'f',
+				co: ['Max Duval'],
+				ct: 'article',
+				dcre: 'f',
+				edition: 'uk',
+				k: ['a', 'b'],
+				ob: null,
+				p: 'ng',
+				rp: 'dotcom-platform',
+				s: 'uk-news',
+				se: ['one'],
+				sens: 'f',
+				su: '0',
+				tn: 'something',
+			},
+			'/2021/some-thing-or-other',
+		);
+
+		expect(targeting).toEqual(expected);
 	});
 
 	const videoLengths: Array<[number, ContentTargeting['vl']]> = [
@@ -72,9 +93,8 @@ describe('Content Targeting', () => {
 				sens: 'f',
 				su: '0',
 				tn: 'something',
-				url: '/some/thing',
-				urlkw: ['a', 'b'],
 			},
+			'/2021/my-great-blog-post',
 			videoLength,
 		);
 

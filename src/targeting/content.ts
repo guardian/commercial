@@ -1,3 +1,4 @@
+import { isString } from '@guardian/libs';
 import type { False, True } from '../types';
 
 /* -- Types -- */
@@ -232,14 +233,26 @@ const getVideoLength = (videoLength: number): ContentTargeting['vl'] => {
 	return videoLengths[index] ?? null;
 };
 
+const getUrlKeywords = (url: ContentTargeting['url']): string[] => {
+	const lastSegment = url
+		.split('/')
+		.filter(Boolean) // This handles a trailing slash
+		.slice(-1)[0];
+
+	return isString(lastSegment) ? lastSegment.split('-') : [];
+};
+
 /* -- Targeting -- */
 
 export const getContentTargeting = (
-	targeting: Omit<ContentTargeting, 'vl'>,
+	targeting: Omit<ContentTargeting, 'vl' | 'url' | 'urlkw'>,
+	url: ContentTargeting['url'],
 	videoLength?: number,
 ): ContentTargeting => {
 	return {
-		vl: videoLength ? getVideoLength(videoLength) : null,
 		...targeting,
+		vl: videoLength ? getVideoLength(videoLength) : null,
+		url,
+		urlkw: getUrlKeywords(url),
 	};
 };
