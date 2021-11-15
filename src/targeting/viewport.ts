@@ -56,16 +56,15 @@ const findBreakpoint = (width: number): ViewportTargeting['bp'] => {
 /* -- Targeting -- */
 
 export const getViewportTargeting = (
+	viewPortWidth: number,
 	cmpBannerWillShow: boolean,
 ): ViewportTargeting => {
-	const width = window.innerWidth;
-
 	// Don’t show inskin if if a privacy message will be shown
 	const inskin = cmpBannerWillShow ? 'f' : 't';
 
 	return {
-		bp: findBreakpoint(width),
-		skinsize: width >= 1560 ? 'l' : 's',
+		bp: findBreakpoint(viewPortWidth),
+		skinsize: viewPortWidth >= 1560 ? 'l' : 's',
 		inskin,
 	};
 };

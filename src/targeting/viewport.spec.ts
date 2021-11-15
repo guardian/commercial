@@ -8,7 +8,7 @@ describe('Viewport targeting', () => {
 			inskin: 't',
 			skinsize: 's',
 		};
-		const targeting = getViewportTargeting(false);
+		const targeting = getViewportTargeting(1280, false);
 		expect(targeting).toMatchObject(expected);
 	});
 
@@ -18,7 +18,7 @@ describe('Viewport targeting', () => {
 			inskin: 'f',
 			skinsize: 's',
 		};
-		const targeting = getViewportTargeting(true);
+		const targeting = getViewportTargeting(1280, true);
 		expect(targeting).toMatchObject(expected);
 	});
 
@@ -52,12 +52,7 @@ describe('Viewport targeting', () => {
 				skinsize,
 			};
 
-			Object.defineProperty(window, 'innerWidth', {
-				value: windowWidth,
-				configurable: true,
-			});
-
-			const targeting = getViewportTargeting(false);
+			const targeting = getViewportTargeting(windowWidth, false);
 			expect(targeting).toMatchObject(expected);
 		},
 	);
