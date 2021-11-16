@@ -23,7 +23,6 @@
     "compile:common": "tsc --project ./tsconfig.build.json --outDir ./dist/cjs --module CommonJS",
     "compile:esm": "tsc --project ./tsconfig.build.json --outDir ./dist/esm",
     "lint": "eslint .",
-    "preinstall": "npx only-allow pnpm",
     "precommit:lint": "lint-staged",
     "prepush:test": "jest --verbose --runInBand --onlyChanged",
     "test": "jest",

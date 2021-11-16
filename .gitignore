@@ -1,8 +1,10 @@
 # system
 .DS_Store
 
-# Node Modules
+# Node Modules & other Package Managers
 node_modules
+yarn.lock
+package-lock.json
 
 # Build
 dist
