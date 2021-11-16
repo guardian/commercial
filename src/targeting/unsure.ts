@@ -45,17 +45,6 @@ export type UnsureTargeting = {
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=174447
 	 */
 	slot: string; // TODO: Narrow to known IDs
-
-	/**
-	 * Kru**x** user segments – [see on Ad Manager][gam]
-	 *
-	 * * Type: _Dynamic_
-	 *
-	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=200247
-	 *
-	 * @deprecated We no longer use Krux
-	 */
-	x: string;
 };
 
 /* -- Methods -- */

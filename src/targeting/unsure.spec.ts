@@ -7,7 +7,6 @@ describe('Unsure targeting', () => {
 			gdncrm: ['a', 'b', 'c'],
 			ms: 'something',
 			slot: 'top-above-nav',
-			x: 'Krux-ID',
 		};
 
 		const targeting = getUnsureTargeting(unsure);
