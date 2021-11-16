@@ -3,7 +3,7 @@ import type { False, True } from '../types';
 
 /* -- Types -- */
 
-const branding = {
+const brands = {
 	Foundation: 'f',
 	Paid: 'p',
 	Sponsored: 's',
@@ -30,23 +30,23 @@ const videoLengths = [
 	'300',
 ] as const;
 
-const surging = {
-	'Not surging': '0',
-	'50-100 page view per minute': '5',
-	'100+ page view per minute': '4',
-	'200+ page view per minute': '3',
-	'300+ page view per minute': '2',
-	'400+ page view per minute': '1',
+const surges = {
+	0: '0',
+	50: '5',
+	100: '4',
+	200: '3',
+	300: '2',
+	400: '1',
 } as const;
 
-const platform = {
+const platforms = {
 	R2: 'r2',
 	NextGen: 'ng',
 	MobileApp: 'app',
 	AcceleratedMobilePages: 'amp',
 } as const;
 
-const contentType = [
+const contentTypes = [
 	'article',
 	'audio',
 	'crossword',
@@ -87,7 +87,7 @@ export type ContentTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=259767
 	 */
-	br: typeof branding[keyof typeof branding] | null;
+	br: typeof brands[keyof typeof brands] | null;
 
 	/**
 	 * **Co**ntributor - [see on Ad Manager][gam]
@@ -107,7 +107,7 @@ export type ContentTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=177807
 	 */
-	ct: typeof contentType[number];
+	ct: typeof contentTypes[number];
 
 	/**
 	 * **D**ot**c**om-**r**endering **E**ligible - [see on Ad Manager][gam]
@@ -148,7 +148,7 @@ export type ContentTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=180207
 	 */
-	p: typeof platform[keyof typeof platform];
+	p: typeof platforms[keyof typeof platforms];
 
 	/**
 	 * Rendering Platform - [see on Ad Manager][gam]
@@ -185,14 +185,14 @@ export type ContentTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=185007
 	 */
-	su: typeof surging[keyof typeof surging];
+	su: Array<typeof surges[keyof typeof surges]>;
 
 	/**
-	 * **T**o**n**e - [see on Ad Manager][gam]
+	 * **T**o**n**es - [see on Ad Manager][gam]
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=191487
 	 */
-	tn: string;
+	tn: string[];
 
 	/**
 	 * **U**niform **R**esource **L**ocator - [see on Ad Manager][gam]
@@ -242,17 +242,53 @@ const getUrlKeywords = (url: ContentTargeting['url']): string[] => {
 	return isString(lastSegment) ? lastSegment.split('-') : [];
 };
 
+const getSurgingParam = (surging: number): ContentTargeting['su'] => {
+	if (surging < 50 || isNaN(surging)) return ['0'];
+
+	const thresholds: Array<keyof typeof surges> = [400, 300, 200, 100, 50];
+	return thresholds.filter((n) => n <= surging).map((s) => surges[s]);
+};
+
 /* -- Targeting -- */
 
 export const getContentTargeting = (
-	targeting: Omit<ContentTargeting, 'vl' | 'url' | 'urlkw'>,
-	url: ContentTargeting['url'],
-	videoLength?: number,
+	{
+		branding,
+		contentType,
+		contributors,
+		platform,
+		sensitive,
+		tones,
+		path,
+		videoLength,
+		surging,
+	}: {
+		branding?: keyof typeof brands;
+		contentType: typeof contentTypes[number];
+		contributors: string[];
+		platform: keyof typeof platforms;
+		sensitive: boolean;
+		tones: ContentTargeting['tn'];
+		path: ContentTargeting['url'];
+		videoLength?: number;
+		surging: number;
+	},
+	targeting: Omit<
+		ContentTargeting,
+		'br' | 'ct' | 'co' | 'p' | 'sens' | 'tn' | 'url' | 'urlkw' | 'vl' | 'su'
+	>,
 ): ContentTargeting => {
 	return {
 		...targeting,
+		br: branding ? brands[branding] : null,
+		co: contributors,
+		ct: contentType,
+		p: platforms[platform],
+		sens: sensitive ? 't' : 'f',
+		tn: tones,
+		su: getSurgingParam(surging),
+		url: path,
+		urlkw: getUrlKeywords(path),
 		vl: videoLength ? getVideoLength(videoLength) : null,
-		url,
-		urlkw: getUrlKeywords(url),
 	};
 };
