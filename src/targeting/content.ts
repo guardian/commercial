@@ -114,7 +114,7 @@ export type ContentTargeting = {
 	 *
 	 * Type: _Predefined_
 	 *
-	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=177807
+	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=11958028
 	 */
 	dcre: True | False;
 
