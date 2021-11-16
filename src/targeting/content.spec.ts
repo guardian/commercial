@@ -116,7 +116,7 @@ describe('Content Targeting', () => {
 		});
 	});
 
-	describe('Sensitive', () => {
+	describe('Sensitive (sens)', () => {
 		const sensitive: Array<[boolean, ContentTargeting['sens']]> = [
 			[true, 't'],
 			[false, 'f'],
@@ -139,30 +139,7 @@ describe('Content Targeting', () => {
 		});
 	});
 
-	describe('Sensitive', () => {
-		const sensitive: Array<[boolean, ContentTargeting['sens']]> = [
-			[true, 't'],
-			[false, 'f'],
-		];
-
-		test.each(sensitive)('For `%s`, returns `%s`', (sensitive, sens) => {
-			const expected: Pick<ContentTargeting, 'sens'> = {
-				sens,
-			};
-
-			const targeting = getContentTargeting(
-				{
-					...defaultValues,
-					sensitive,
-				},
-				defaultTargeting,
-			);
-
-			expect(targeting).toMatchObject(expected);
-		});
-	});
-
-	describe('Surging', () => {
+	describe('Surging (su)', () => {
 		const sensitive: Array<[number, ContentTargeting['su']]> = [
 			[0, ['0']],
 			[1, ['0']],
@@ -193,6 +170,107 @@ describe('Content Targeting', () => {
 				{
 					...defaultValues,
 					surging,
+				},
+				defaultTargeting,
+			);
+
+			expect(targeting).toMatchObject(expected);
+		});
+	});
+
+	describe('Path and its keywords (url and urlkw)', () => {
+		test('Handles standard slug like /2021/nov/1/my-great-blog-post', () => {
+			const path: ContentTargeting['url'] =
+				'/2021/nov/1/my-great-blog-post';
+			const keywords: ContentTargeting['urlkw'] = [
+				'my',
+				'great',
+				'blog',
+				'post',
+			];
+
+			const expected: Pick<ContentTargeting, 'url' | 'urlkw'> = {
+				url: path,
+				urlkw: keywords,
+			};
+
+			const targeting = getContentTargeting(
+				{
+					...defaultValues,
+					path,
+				},
+				defaultTargeting,
+			);
+
+			expect(targeting).toMatchObject(expected);
+		});
+
+		test('Handles double dashes in slug', () => {
+			const path: ContentTargeting['url'] =
+				'/world/2021/nov/1/one--ring-2---rule-them-all';
+			const keywords: ContentTargeting['urlkw'] = [
+				'one',
+				'ring',
+				'2',
+				'rule',
+				'them',
+				'all',
+			];
+
+			const expected: Pick<ContentTargeting, 'url' | 'urlkw'> = {
+				url: path,
+				urlkw: keywords,
+			};
+
+			const targeting = getContentTargeting(
+				{
+					...defaultValues,
+					path,
+				},
+				defaultTargeting,
+			);
+
+			expect(targeting).toMatchObject(expected);
+		});
+
+		test('Handles no leading slash', () => {
+			const path: ContentTargeting['url'] = '/2021/my-great-blog-post';
+			const keywords: ContentTargeting['urlkw'] = [
+				'my',
+				'great',
+				'blog',
+				'post',
+			];
+
+			const expected: Pick<ContentTargeting, 'url' | 'urlkw'> = {
+				url: path,
+				urlkw: keywords,
+			};
+
+			const targeting = getContentTargeting(
+				{
+					...defaultValues,
+					path,
+				},
+				defaultTargeting,
+			);
+
+			expect(targeting).toMatchObject(expected);
+		});
+
+		test('Handles weird URL ///', () => {
+			const path: ContentTargeting['url'] = '///';
+			const keywords: ContentTargeting['urlkw'] = [];
+
+			const expected: Pick<ContentTargeting, 'url' | 'urlkw'> = {
+				url: path,
+				urlkw: keywords,
+			};
+
+			const targeting = getContentTargeting(
+				{
+					...defaultValues,
+					path,
 				},
 				defaultTargeting,
 			);

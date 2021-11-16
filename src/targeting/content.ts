@@ -239,7 +239,7 @@ const getUrlKeywords = (url: ContentTargeting['url']): string[] => {
 		.filter(Boolean) // This handles a trailing slash
 		.slice(-1)[0];
 
-	return isString(lastSegment) ? lastSegment.split('-') : [];
+	return isString(lastSegment) ? lastSegment.split('-').filter(Boolean) : [];
 };
 
 const getSurgingParam = (surging: number): ContentTargeting['su'] => {
