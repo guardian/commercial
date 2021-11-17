@@ -21,7 +21,6 @@ const frequency = [
 	'16-19',
 	'20-29',
 	'30plus',
-	'5plus', // TODO: remove it (?)
 ] as const;
 
 const AMTGRP_STORAGE_KEY = 'gu.adManagerGroup';
