@@ -1,11 +1,11 @@
-export type TagAtrribute = {
+export type TagAttribute = {
 	name: string;
 	value: string;
 };
 
 export type ThirdPartyTag = {
 	async?: boolean;
-	attrs?: TagAtrribute[];
+	attrs?: TagAttribute[];
 	beforeLoad?: () => void;
 	insertSnippet?: () => void;
 	loaded?: boolean;

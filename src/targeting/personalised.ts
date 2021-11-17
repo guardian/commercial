@@ -44,7 +44,7 @@ type AdManagerGroup = typeof adManagerGroups[number];
  * Personalised Targeting requires user consent
  *
  * It allows or prevents personalised advertising, restrict data processing
- * and handles access to cookies and localstorage
+ * and handles access to cookies and local storage
  */
 export type PersonalisedTargeting = {
 	/**
