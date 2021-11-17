@@ -137,7 +137,7 @@ const getFrequencyValue = (
 	state: ConsentState,
 ): PersonalisedTargeting['fr'] => {
 	const rawValue = getRawWithConsent('gu.alreadyVisited', state);
-	if (!rawValue) return '0'; // TODO: should we return `null` instead?
+	if (!rawValue) return '0';
 
 	const visitCount: number = parseInt(rawValue, 10);
 
