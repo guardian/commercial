@@ -7,5 +7,8 @@
   },
   "extends": ["@guardian/eslint-config-typescript"],
   "globals": { "googletag": "readonly" },
-  "ignorePatterns": ["dist", "coverage", "src/__vendor"]
+  "ignorePatterns": ["dist", "coverage", "src/__vendor"],
+  "rules": {
+	  "no-use-before-define": ["error", { "functions": true, "classes": true }]
+  }
 }
