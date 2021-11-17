@@ -3,8 +3,6 @@ export type TagAtrribute = {
 	value: string;
 };
 
-export type GetThirdPartyTag = (arg0: { shouldRun: boolean }) => ThirdPartyTag;
-
 export type ThirdPartyTag = {
 	async?: boolean;
 	attrs?: TagAtrribute[];
@@ -17,6 +15,8 @@ export type ThirdPartyTag = {
 	url?: string;
 	useImage?: boolean;
 };
+
+export type GetThirdPartyTag = (arg0: { shouldRun: boolean }) => ThirdPartyTag;
 
 export type GuardianAnalyticsConfig = {
 	trackers: Record<string, string>;

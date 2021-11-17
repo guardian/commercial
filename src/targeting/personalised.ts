@@ -213,6 +213,13 @@ const getCMPTargeting = (state: ConsentState): CMPTargeting => {
 const isAdManagerGroup = (s: string | null): s is AdManagerGroup =>
 	adManagerGroups.some((g) => g === s);
 
+const createAdManagerGroup = (): AdManagerGroup => {
+	const index = Math.floor(Math.random() * adManagerGroups.length);
+	const group = adManagerGroups[index] ?? '12';
+	storage.local.setRaw(AMTGRP_STORAGE_KEY, group);
+	return group;
+};
+
 const getAdManagerGroup = (
 	state: ConsentState,
 ): PersonalisedTargeting['amtgrp'] => {
@@ -226,13 +233,6 @@ const getAdManagerGroup = (
 	return isAdManagerGroup(existingGroup)
 		? existingGroup
 		: createAdManagerGroup();
-};
-
-const createAdManagerGroup = (): AdManagerGroup => {
-	const index = Math.floor(Math.random() * adManagerGroups.length);
-	const group = adManagerGroups[index] ?? '12';
-	storage.local.setRaw(AMTGRP_STORAGE_KEY, group);
-	return group;
 };
 
 const getPermutiveWithState = (state: ConsentState) => {
