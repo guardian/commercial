@@ -5,7 +5,24 @@ import type { False, True } from '../types';
 
 /* -- Types -- */
 
-const referrers = ['facebook', 'twitter', 'reddit', 'google'] as const;
+const referrers = [
+	{
+		id: 'facebook',
+		match: 'facebook.com',
+	},
+	{
+		id: 'google',
+		match: 'www.google',
+	},
+	{
+		id: 'twitter',
+		match: '/t.co/',
+	},
+	{
+		id: 'reddit',
+		match: 'reddit.com',
+	},
+] as const;
 
 /**
  * Session Targeting is based on the browser session
@@ -77,7 +94,7 @@ export type SessionTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=228567
 	 */
-	ref: typeof referrers[number] | null;
+	ref: typeof referrers[number]['id'] | null;
 
 	/**
 	 * **S**igned **I**n – [see on Ad Manager][gam]
@@ -101,32 +118,8 @@ const getReferrer = (): SessionTargeting['ref'] => {
 
 	if (referrer === '') return null;
 
-	type MatchType = {
-		id: typeof referrers[number];
-		match: string;
-	};
-
-	const referrerTypes: MatchType[] = [
-		{
-			id: 'facebook',
-			match: 'facebook.com',
-		},
-		{
-			id: 'google',
-			match: 'www.google',
-		},
-		{
-			id: 'twitter',
-			match: '/t.co/',
-		},
-		{
-			id: 'reddit',
-			match: 'reddit.com',
-		},
-	];
-
-	const matchedRef: MatchType | null =
-		referrerTypes.find((referrerType) =>
+	const matchedRef: typeof referrers[number] | null =
+		referrers.find((referrerType) =>
 			referrer.includes(referrerType.match),
 		) ?? null;
 
