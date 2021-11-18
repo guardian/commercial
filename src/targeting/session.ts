@@ -113,9 +113,7 @@ export type AllParticipations = {
 
 /* -- Methods -- */
 
-const getReferrer = (): SessionTargeting['ref'] => {
-	const { referrer } = document;
-
+const getReferrer = (referrer: string): SessionTargeting['ref'] => {
 	if (referrer === '') return null;
 
 	const matchedRef: typeof referrers[number] | null =
@@ -157,10 +155,11 @@ const experimentsTargeting = ({
 /* -- Targeting -- */
 
 export const getSessionTargeting = (
+	referrer: string,
 	participations: AllParticipations,
 	targeting: Omit<SessionTargeting, 'ab' | 'ref'>,
 ): SessionTargeting => ({
-	ref: getReferrer(),
+	ref: getReferrer(referrer),
 	ab: experimentsTargeting(participations),
 	...targeting,
 });

@@ -13,6 +13,7 @@ describe('Session targeting', () => {
 		};
 
 		const targeting = getSessionTargeting(
+			'',
 			{
 				serverSideParticipations: {},
 				clientSideParticipations: {},
@@ -46,7 +47,7 @@ describe('Session targeting', () => {
 			si: 'f',
 		};
 
-		const targeting = getSessionTargeting(participations, {
+		const targeting = getSessionTargeting('', participations, {
 			at: null,
 			pv: '1234567',
 			cc: 'GB',
@@ -64,11 +65,6 @@ describe('Session targeting', () => {
 	];
 
 	test.each(referrers)('should get `%s` for ref: %s', (ref, referrer) => {
-		Object.defineProperty(document, 'referrer', {
-			value: referrer,
-			configurable: true,
-		});
-
 		const expected: SessionTargeting = {
 			ab: null,
 			at: null,
@@ -79,6 +75,7 @@ describe('Session targeting', () => {
 		};
 
 		const targeting = getSessionTargeting(
+			referrer,
 			{ serverSideParticipations: {}, clientSideParticipations: {} },
 			{
 				at: null,
