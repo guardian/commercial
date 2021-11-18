@@ -1,14 +1,6 @@
 import { log } from '@guardian/libs';
 import { EventTimer } from './EventTimer';
 
-type CommercialMetrics = {
-	browser_id?: string;
-	page_view_id: string;
-	platform: string;
-	metrics: readonly Metrics[];
-	properties: readonly Properties[];
-};
-
 type Metrics = {
 	name: string;
 	value: number;
@@ -17,6 +9,14 @@ type Metrics = {
 type Properties = {
 	name: string;
 	value: string;
+};
+
+type CommercialMetrics = {
+	browser_id?: string;
+	page_view_id: string;
+	platform: string;
+	metrics: readonly Metrics[];
+	properties: readonly Properties[];
 };
 
 export function sendCommercialMetrics(
