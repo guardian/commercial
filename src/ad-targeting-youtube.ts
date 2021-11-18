@@ -14,6 +14,8 @@ import type {
 
 type CustomParams = Record<string, MaybeArray<string | number | boolean>>;
 
+const disabledAds: AdsConfigDisabled = { disableAds: true };
+
 const buildCustomParamsFromCookies = (): CustomParams =>
 	canUseDom()
 		? {
@@ -74,8 +76,6 @@ const buildAdsConfig = (
 	// Shouldn't happen but handle if no matching framework
 	return disabledAds;
 };
-
-const disabledAds: AdsConfigDisabled = { disableAds: true };
 
 const buildAdsConfigWithConsent = (
 	isAdFreeUser: boolean,

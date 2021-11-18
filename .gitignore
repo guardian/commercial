@@ -1,5 +1,17 @@
+# system
+.DS_Store
+
+# Node Modules & other Package Managers
 node_modules
+yarn.lock
+package-lock.json
+
+# Build
 dist
 coverage
-.DS_Store
+
+# Editor settings
 .idea
+
+# Work-in-progress folder
+wip
