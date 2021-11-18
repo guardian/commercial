@@ -34,7 +34,7 @@ describe('trackEvent', () => {
 		expect(ga.mock.calls.length).toBe(0);
 	});
 
-	it('trackEvent makes one call to ga with trackername from config', () => {
+	it('trackEvent makes one call to ga with tracker name from config', () => {
 		window.guardian = {
 			config: GUARDIAN_CONFIG,
 		};
@@ -57,7 +57,7 @@ describe('trackEvent', () => {
 			],
 		]);
 	});
-	it('trackEvent makes one call to ga with default trackername when config undefined', () => {
+	it('trackEvent makes one call to ga with default tracker name when config undefined', () => {
 		window.guardian = {
 			config: undefined,
 		};

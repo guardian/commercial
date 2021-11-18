@@ -1,13 +1,11 @@
-export type TagAtrribute = {
+export type TagAttribute = {
 	name: string;
 	value: string;
 };
 
-export type GetThirdPartyTag = (arg0: { shouldRun: boolean }) => ThirdPartyTag;
-
 export type ThirdPartyTag = {
 	async?: boolean;
-	attrs?: TagAtrribute[];
+	attrs?: TagAttribute[];
 	beforeLoad?: () => void;
 	insertSnippet?: () => void;
 	loaded?: boolean;
@@ -17,6 +15,8 @@ export type ThirdPartyTag = {
 	url?: string;
 	useImage?: boolean;
 };
+
+export type GetThirdPartyTag = (arg0: { shouldRun: boolean }) => ThirdPartyTag;
 
 export type GuardianAnalyticsConfig = {
 	trackers: Record<string, string>;
@@ -72,3 +72,8 @@ export type AdsConfigEnabled =
 export type AdsConfig = AdsConfigEnabled | AdsConfigDisabled;
 
 export type AdTargetingBuilder = () => Promise<AdsConfig>;
+
+type True = 't';
+type False = 'f';
+type NotApplicable = 'na';
+export type { True, False, NotApplicable };
