@@ -15,7 +15,21 @@
 	"eslint.packageManager": "pnpm",
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"cSpell.words": [
+		"AMTGRP",
+		"Bonzai",
+		"Brandmetrics",
+		"CAPI",
+		"CCPA",
+		"Googletag",
+		"Inizio",
+		"leaderboard",
+		"mobilesticky",
+		"outstream",
+		"Permutive",
 		"Prebid",
-		"viewability"
+		"remarketing",
+		"TCFV",
+		"viewability",
+		"Youtube"
 	]
 }

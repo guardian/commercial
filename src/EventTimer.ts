@@ -54,10 +54,10 @@ export class EventTimer {
 		effectiveType?: string;
 	};
 	/**
-	 * Initalise the EventTimer class on page.
+	 * Initialise the EventTimer class on page.
 	 * Returns the singleton instance of the EventTimer class and binds
 	 * to window.guardian.commercialTimer. If it's been previously
-	 * initalised and bound it returns the original instance
+	 * initialised and bound it returns the original instance
 	 * Note: We save to window.guardian.commercialTimer because
 	 * different bundles (DCR / DCP) can use commercial core, and we want
 	 * all timer events saved to a single instance per-page
@@ -191,7 +191,7 @@ export class EventTimer {
 	 * @param {origin} [origin=page] - Either 'page' (default) or the name of the slot
 	 */
 	trigger(eventName: string, origin = 'page'): void {
-		const TRACKEDSLOTNAME = 'top-above-nav';
+		const TRACKED_SLOT_NAME = 'top-above-nav';
 		if (
 			origin === 'page' &&
 			!this.triggers.page[eventName as keyof PageEventStatus]
@@ -209,16 +209,16 @@ export class EventTimer {
 			this.triggers.first[eventName as keyof SlotEventStatus] = true;
 		}
 
-		if (origin === TRACKEDSLOTNAME) {
+		if (origin === TRACKED_SLOT_NAME) {
 			if (
-				!this.triggers[TRACKEDSLOTNAME][
+				!this.triggers[TRACKED_SLOT_NAME][
 					eventName as keyof SlotEventStatus
 				]
 			) {
-				const trackLabel = `${TRACKEDSLOTNAME}-${eventName}`;
+				const trackLabel = `${TRACKED_SLOT_NAME}-${eventName}`;
 				this.mark(trackLabel);
 				this.trackInGA(eventName, trackLabel);
-				this.triggers[TRACKEDSLOTNAME][
+				this.triggers[TRACKED_SLOT_NAME][
 					eventName as keyof SlotEventStatus
 				] = true;
 			}
