@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@commitlint/cli': ^13.2.1
   '@commitlint/config-conventional': ^14.1.0
+  '@guardian/ab-core': ^2.0.0
   '@guardian/consent-management-platform': ^8.0.1
   '@guardian/eslint-config-typescript': ^0.7.0
   '@guardian/libs': 3.3.0
@@ -36,6 +37,7 @@ specifiers:
 devDependencies:
   '@commitlint/cli': 13.2.1
   '@commitlint/config-conventional': 14.1.0
+  '@guardian/ab-core': 2.0.0
   '@guardian/consent-management-platform': 8.0.1
   '@guardian/eslint-config-typescript': 0.7.0_06efd07f324a49e051600f8db609bbf4
   '@guardian/libs': 3.3.0
@@ -628,6 +630,10 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@guardian/ab-core/2.0.0:
+    resolution: {integrity: sha512-E5p6l0l37hY0GNFaZmA5/22TlVuavzlMHR3OeweD5eDcY2gB3nGgzPK/d3M67dkbDAJkGjB4a0W84Z5N2YScvQ==}
     dev: true
 
   /@guardian/consent-management-platform/8.0.1:
