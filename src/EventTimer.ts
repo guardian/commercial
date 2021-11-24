@@ -84,11 +84,8 @@ export class EventTimer {
 			'getEntriesByName' in window.performance
 			? [
 					...this._events,
-					...EventTimer._externallyDefinedEventNames
-						.filter(
-							(eventName) =>
-								window.performance.getEntriesByName(eventName)
-									.length,
+					...window.performance.getEntriesByName(
+						...EventTimer._externallyDefinedEventNames
 						)
 						.map(
 							(eventName) =>
