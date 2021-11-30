@@ -14,7 +14,7 @@ const getSegments = (key: string): string[] => {
 
 		return segments
 			.slice(0, 250)
-			.map((s) => Number.parseInt(s, 10))
+			.map((s: string) => Number.parseInt(s, 10))
 			.filter((n) => typeof n === 'number' && !Number.isNaN(n))
 			.map(String);
 	} catch (err) {
