@@ -28,7 +28,7 @@ jobs:
         uses: guardian/actions-setup-node@main
 
       - name: Cache .pnpm-store
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -58,7 +58,7 @@ jobs:
         uses: guardian/actions-setup-node@main
 
       - name: Cache .pnpm-store
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -83,7 +83,7 @@ jobs:
         uses: guardian/actions-setup-node@main
 
       - name: Cache .pnpm-store
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -110,7 +110,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Cache .pnpm-store
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -146,7 +146,7 @@ jobs:
         uses: guardian/actions-setup-node@main
 
       - name: Cache .pnpm-store
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}

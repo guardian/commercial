@@ -6,7 +6,7 @@ jest.mock('./GoogleAnalytics', () => ({
 }));
 
 const mockGetEntriesByName = (names: string[]) =>
-	jest.fn((name) =>
+	jest.fn((name: string) =>
 		names.includes(name)
 			? [
 					{
