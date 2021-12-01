@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-pnpm npm-run-all 'precommit:*'
+yarn npm-run-all 'precommit:*'
