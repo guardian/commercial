@@ -35,10 +35,13 @@ export class EventTimer {
 	private _events: Event[];
 	private static _externallyDefinedEventNames = [
 		'cmp-tcfv2-init',
+		'cmp-tcfv2-ui-displayed',
 		'cmp-tcfv2-got-consent',
 		'cmp-ccpa-init',
+		'cmp-ccpa-ui-displayed',
 		'cmp-ccpa-got-consent',
 		'cmp-aus-init',
+		'cmp-aus-ui-displayed',
 		'cmp-aus-got-consent',
 	];
 	startTS: DOMHighResTimeStamp;
