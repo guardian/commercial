@@ -8,7 +8,7 @@ The process is performed client side before making a request to GAM.
 
 ## Process
 
-![Process](assets/header-bidding-process.png)
+![Header bidding auction process flowchart](header-bidding-process.png)
 
 ### 1. Auction Initialised
 
@@ -172,11 +172,11 @@ In [Google Ad Manager](https://admanager.google.com/) under line items, we can f
 
 Notice there is a line item for each bid price:
 
-![](assets/header-bidding-gam-line-items.png)
+![A list of line items in Google Ad Manager](header-bidding-gam-line-items.png)
 
 Opening a line item and inspecting the 'Ad targeting' section we can see how the line items are matched to the header bidding `hb_` parameters we saw earlier:
 
-![](assets/header-bidding-gam-line-item-match.png)
+![Line item details in Google Ad Manager](header-bidding-gam-line-item-match.png)
 
 ### 5. GAM Renders Advert On Client
 

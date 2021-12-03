@@ -13,7 +13,7 @@ so many impressions of it, and it's running behind. This logic is configured by 
 ## Header Bidding
 
 Header bidding works along similar lines to the typical GAM flow, but with extra steps before
-we make the request to GAM. [See more details in the header bidding document](./header-bidding.md).
+we make the request to GAM. [See more details in the header bidding document](../header-bidding/readme.md).
 
 ### Responsive adverts
 Responsive ads are implemented as 'breakout scripts'. These use DFP-side templates that wrap a blob of JSON in a script tag with
