@@ -12,7 +12,7 @@
 		"source.organizeImports": false
 	},
 	"eslint.format.enable": true,
-	"eslint.packageManager": "pnpm",
+	"eslint.packageManager": "yarn",
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"cSpell.words": [
 		"AMTGRP",

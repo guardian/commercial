@@ -27,20 +27,11 @@ jobs:
       - name: Setup node
         uses: guardian/actions-setup-node@main
 
-      - name: Cache .pnpm-store
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-
-      - name: Install pnpm
-        run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
-
       - name: Install dependencies
-        run: pnpm install
+        uses: bahmutov/npm-install@v1
 
       - name: Run unit tests
-        run: pnpm test:ci
+        run: 'yarn test --coverage --ci'
 
       - name: Report coverage
         uses: coverallsapp/github-action@master
@@ -57,20 +48,11 @@ jobs:
       - name: Setup node
         uses: guardian/actions-setup-node@main
 
-      - name: Cache .pnpm-store
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-
-      - name: Install pnpm
-        run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
-
       - name: Install dependencies
-        run: pnpm install
+        uses: bahmutov/npm-install@v1
 
       - name: Lint files
-        run: pnpm lint
+        run: yarn lint
   types:
     name: Types
     needs: [docs]
@@ -78,24 +60,14 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-
       - name: Setup node
         uses: guardian/actions-setup-node@main
 
-      - name: Cache .pnpm-store
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-
-      - name: Install pnpm
-        run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
-
       - name: Install dependencies
-        run: pnpm install
+        uses: bahmutov/npm-install@v1
 
       - name: Check types
-        run: pnpm tsc
+        run: yarn tsc
   build:
     name: Build
     needs: [docs]
@@ -109,20 +81,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Cache .pnpm-store
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-
-      - name: Install pnpm
-        run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
-
       - name: Install dependencies
-        run: pnpm install
+        uses: bahmutov/npm-install@v1
 
       - name: Build package
-        run: pnpm build
+        run: yarn build
 
       - name: Save build
         if: github.ref == 'refs/heads/main'
@@ -145,17 +108,8 @@ jobs:
       - name: Setup node
         uses: guardian/actions-setup-node@main
 
-      - name: Cache .pnpm-store
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-
-      - name: Install pnpm
-        run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
-
       - name: Install dependencies
-        run: pnpm install
+        uses: bahmutov/npm-install@v1
 
       - name: Fetch build
         uses: actions/download-artifact@v2
