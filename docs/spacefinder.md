@@ -2,6 +2,10 @@
 
 Spacefinder identifies slots in articles where ads can be inserted dynamically. Every paragraph is assessed against a set of rules, with 'winning' candidates having ads placed above them.
 
+- [How Spacefinder works](#how-spacefinder-works)
+- [Spacefinder rules](#spacefinder-rules)
+- [Style and layout of dynamic ads](#style-and-layout-of-dynamic-ads)
+
 Ideally Spacefinder hits the sweet spot between high ad ratio for us and a peerless reading experience for _Guardian_ website visitors.
 
 ---
@@ -15,7 +19,7 @@ Some ad slots on the website are fixed. Come rain or shine, they're there. These
 
 By contrast, ad slots identified by Spacefinder vary from page to page. A short article may only have space for one, while a long read ought to fit many more.
 
-Spacefinder cycles through the paragraphs inside the `article-body-commercial-selector` container, highlighted below. (The Adobe / Billie Eilish ad is an example of an ad inserted by Spacefinder.)
+Once a page has loaded, Spacefinder cycles through the paragraphs inside the `article-body-commercial-selector` container, highlighted below. (The Adobe / Billie Eilish ad is an example of an ad inserted by Spacefinder.)
 
 ![Article body section of a Guardian article](assets/spacefinder-article-body-example.png)
 
@@ -31,13 +35,17 @@ Or to simplify it further:
 
 ![Pseudo equation explaining Spacefinder logic in a nutshell](assets/spacefinder-equation.png)
 
-I have made up the value names above to try to boil the essentials down - they don’t match what’s going on in the code itself. The ad heights mentioned are pulled in from ad-sizes.js.
+I have made up the value names above to try to boil the essentials down - they don’t match what’s going on in the code itself. The ad heights mentioned are pulled in from `ad-sizes.js`.
+
+---
+
+[ [Back to top &#8593;](#spacefinder) ]
 
 ---
 
 ## Spacefinder rules
 
-Rules are set in [`article-body-adverts.js`](https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/commercial/modules/article-body-adverts.js) in the frontend repository. The desktop configuration sits inside `addDesktopInlineAds`, which has two sets of rules. The mobile configuration is inside `addMobileInlineAds`.
+Rules are currently set in [`article-body-adverts.js`](https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/commercial/modules/article-body-adverts.js) in the frontend repository. The desktop configuration sits inside `addDesktopInlineAds`, which has two sets of rules. The mobile configuration is inside `addMobileInlineAds`.
 
 ### Desktop
 
@@ -64,6 +72,14 @@ Rules are set in [`article-body-adverts.js`](https://github.com/guardian/fronten
 
 ---
 
-## Style and layout
+[ [Back to top &#8593;](#spacefinder) ]
+
+---
+
+## Style and layout of dynamic ads
 
 On desktop, the first inline ad sits inside the body of the article copy. All subsequent ‘inline’ ads on desktop sit in the white space to the right. On mobile they're all part of the content column.
+
+---
+
+[ [Back to top &#8593;](#spacefinder) ]
