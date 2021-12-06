@@ -228,7 +228,7 @@ export class EventTimer {
 		}
 	}
 
-	trackInGA(eventName: string, label = ''): void {
+	private trackInGA(eventName: string, label = ''): void {
 		const gaEvent = this.gaConfig.logEvents.find(
 			(e) => e.timingVariable === eventName,
 		);
