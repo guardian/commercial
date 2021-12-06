@@ -168,7 +168,7 @@ export class EventTimer {
 				: {};
 	}
 
-	mark(name: string): void {
+	private mark(name: string): void {
 		const longName = `gu.commercial.${name}`;
 		if (
 			typeof window.performance !== 'undefined' &&

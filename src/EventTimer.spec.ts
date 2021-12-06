@@ -98,7 +98,7 @@ describe('EventTimer', () => {
 			writable: true,
 		});
 		const eventTimer = EventTimer.get();
-		eventTimer.mark(MARK_NAME);
+		eventTimer.trigger(MARK_NAME);
 		expect(eventTimer.events).toHaveLength(3);
 		expect(eventTimer.events.map((event) => event.name).sort()).toEqual(
 			[CMP_INIT, CMP_GOT_CONSENT, MARK_NAME].sort(),
@@ -107,13 +107,13 @@ describe('EventTimer', () => {
 
 	it('mark produces correct event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.mark(MARK_NAME);
+		eventTimer.trigger(MARK_NAME);
 		expect(eventTimer.events).toHaveLength(1);
 		expect(eventTimer.events[0]?.name).toBe('mark_name');
 		expect(eventTimer.events[0]?.ts).toBe(1);
 	});
 
-	it('calling mark with performance undefined produces no events', () => {
+	it('calling trigger with performance undefined produces no events', () => {
 		Object.defineProperty(window, 'performance', {
 			configurable: true,
 			enumerable: true,
@@ -121,11 +121,11 @@ describe('EventTimer', () => {
 			writable: true,
 		});
 		const eventTimer = EventTimer.get();
-		eventTimer.mark(MARK_NAME);
+		eventTimer.trigger(MARK_NAME);
 		expect(eventTimer.events).toEqual([]);
 	});
 
-	it('when retrieved mark is undefined produce no events', () => {
+	it('when retrieved and mark is undefined produce no events', () => {
 		const performance = {
 			now: jest.fn(),
 			mark: jest.fn(),
@@ -138,7 +138,7 @@ describe('EventTimer', () => {
 			writable: true,
 		});
 		const eventTimer = EventTimer.get();
-		eventTimer.mark(MARK_NAME);
+		eventTimer.trigger(MARK_NAME);
 		expect(eventTimer.events).toEqual([]);
 	});
 
@@ -156,7 +156,7 @@ describe('EventTimer', () => {
 		);
 	});
 
-	it('triggering two slotReady events causes one mark and one track', () => {
+	it('triggering two slotReady events causes one trigger and one track', () => {
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger('slotReady', 'inline1');
 		eventTimer.trigger('slotReady', 'inline1');
