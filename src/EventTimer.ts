@@ -168,23 +168,6 @@ export class EventTimer {
 				: {};
 	}
 
-	private mark(name: string): void {
-		const longName = `gu.commercial.${name}`;
-		if (
-			typeof window.performance !== 'undefined' &&
-			'mark' in window.performance
-		) {
-			window.performance.mark(longName);
-			// Most recent mark with this name is the event we just created.
-			const mark = window.performance
-				.getEntriesByName(longName, 'mark')
-				.slice(-1)[0];
-			if (typeof mark !== 'undefined') {
-				this._events.push(new Event(name, mark));
-			}
-		}
-	}
-
 	/**
 	 * Creates a new performance mark
 	 * For slot events also ensures each TYPE of event event is marked only once for 'first'
@@ -224,6 +207,23 @@ export class EventTimer {
 				this.triggers[TRACKED_SLOT_NAME][
 					eventName as keyof SlotEventStatus
 				] = true;
+			}
+		}
+	}
+
+	private mark(name: string): void {
+		const longName = `gu.commercial.${name}`;
+		if (
+			typeof window.performance !== 'undefined' &&
+			'mark' in window.performance
+		) {
+			window.performance.mark(longName);
+			// Most recent mark with this name is the event we just created.
+			const mark = window.performance
+				.getEntriesByName(longName, 'mark')
+				.slice(-1)[0];
+			if (typeof mark !== 'undefined') {
+				this._events.push(new Event(name, mark));
 			}
 		}
 	}
