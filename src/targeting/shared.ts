@@ -174,6 +174,9 @@ const getSurgingParam = (surging: number): SharedTargeting['su'] => {
 
 /* -- Targeting -- */
 
+/**
+ * What goes in comes out
+ */
 export const getSharedTargeting = (
 	shared: Partial<SharedTargeting>,
 ): Partial<SharedTargeting> => {
