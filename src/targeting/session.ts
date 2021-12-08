@@ -146,8 +146,9 @@ const experimentsTargeting = ({
 		.map((test) => testToParams(...test))
 		.filter(isString);
 
-	if (clientSideExperiment.length + serverSideExperiments.length === 0)
+	if (clientSideExperiment.length + serverSideExperiments.length === 0) {
 		return null;
+	}
 
 	return [...clientSideExperiment, ...serverSideExperiments];
 };

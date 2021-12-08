@@ -17,8 +17,9 @@ function adElementBlocked(ad: HTMLElement): boolean {
 		ad.offsetWidth === 0 ||
 		ad.clientHeight === 0 ||
 		ad.clientWidth === 0
-	)
+	) {
 		return true;
+	}
 	const adStyles = window.getComputedStyle(ad);
 
 	if (adStyles.getPropertyValue('display') === 'none') return true;
