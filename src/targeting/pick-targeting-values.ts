@@ -14,13 +14,15 @@ type ValidTargeting<T, K> = '' extends T
 type DefinedKeys<T> = { [K in keyof T]-?: ValidTargeting<T[K], K> }[keyof T];
 type ObjectWithDefinedValues<T> = Pick<T, DefinedKeys<T>>;
 
+const isTargetingString = (string: unknown): boolean =>
+	isString(string) && string !== '';
+
+const isTargetingArray = (array: unknown): boolean =>
+	Array.isArray(array) && array.filter(isTargetingString).length > 0;
+
 const isValidTargeting = (value: unknown): value is string | string[] => {
-	if (isString(value) && value !== '') return true;
-	if (
-		Array.isArray(value) &&
-		value.filter(isString).filter(Boolean).length > 0
-	)
-		return true;
+	if (isTargetingString(value)) return true;
+	if (isTargetingArray(value)) return true;
 	return false;
 };
 
@@ -53,9 +55,11 @@ export const pickTargetingValues = <
 	const initialValue = {} as ObjectWithDefinedValues<T>;
 	return Object.entries(obj).reduce<ObjectWithDefinedValues<T>>(
 		(valid, [key, value]) => {
-			if (isValidTargeting(value))
+			if (isValidTargeting(value)) {
 				// @ts-expect-error -- isValidTargeting checks this
 				valid[key] = value;
+			}
+
 			return valid;
 		},
 		initialValue,
