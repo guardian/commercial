@@ -1,18 +1,18 @@
-import { pickDefinedValues } from './pick-defined-values';
+import { pickTargetingValues } from './pick-targeting-values';
 
 describe('Pick defined values from an object', () => {
 	test('TypeScript validates input', () => {
 		// @ts-expect-error -- we don’t want nulls
-		expect(pickDefinedValues({ null: null })).toEqual({});
+		expect(pickTargetingValues({ null: null })).toEqual({});
 
 		// @ts-expect-error -- we don’t want booleans
-		expect(pickDefinedValues({ true: true })).toEqual({});
+		expect(pickTargetingValues({ true: true })).toEqual({});
 
 		// @ts-expect-error -- we don’t want booleans
-		expect(pickDefinedValues({ false: false })).toEqual({});
+		expect(pickTargetingValues({ false: false })).toEqual({});
 
 		expect(
-			pickDefinedValues({
+			pickTargetingValues({
 				arrayOfNonStrings: [
 					// @ts-expect-error -- we don’t want undefined
 					undefined,
@@ -45,7 +45,7 @@ describe('Pick defined values from an object', () => {
 			arrayOfEmptyStrings: ['', '', ''],
 		} as const;
 
-		const targeting = pickDefinedValues(maybeTargeting);
+		const targeting = pickTargetingValues(maybeTargeting);
 
 		expect(targeting.string).toEqual(maybeTargeting.string);
 		expect(targeting.strings).toEqual(maybeTargeting.strings);
