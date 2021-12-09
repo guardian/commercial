@@ -49,7 +49,9 @@ export const pickTargetingValues = <
 		(valid, [key, value]) => {
 			if (isValidTargeting(value)) {
 				// @ts-expect-error -- isValidTargeting checks this
-				valid[key] = value;
+				valid[key] = Array.isArray(value)
+					? value.filter(isTargetingString)
+					: value;
 			}
 
 			return valid;
