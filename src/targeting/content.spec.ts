@@ -2,59 +2,84 @@ import type { ContentTargeting } from './content';
 import { getContentTargeting } from './content';
 import type { SharedTargeting } from './shared';
 
-const defaultParams: Parameters<typeof getContentTargeting> = [
-	{
-		path: '/2021/my-great-blog-post',
-		sensitive: false,
-		renderingPlatform: 'dotcom-platform',
-		section: 'uk-news',
-		eligibleForDCR: false,
-	},
-];
-
-const [defaultValues] = defaultParams;
+const defaultValues: Parameters<typeof getContentTargeting>[0] = {
+	path: '/2021/my-great-blog-post',
+	sensitive: false,
+	renderingPlatform: 'dotcom-platform',
+	section: 'uk-news',
+	eligibleForDCR: false,
+};
 
 describe('Content Targeting', () => {
-	test('should handle  the same thing', () => {
-		const expected: ContentTargeting = {
-			dcre: 'f',
-			rp: 'dotcom-platform',
-			s: 'uk-news',
-			sens: 'f',
-			urlkw: ['some', 'thing', 'or', 'other'],
-			vl: null,
-		};
+	describe('Section (s)', () => {
+		const sections: Array<ContentTargeting['s']> = [
+			'uk-news',
+			'environment',
+			'culture',
+		];
+		test.each(sections)('Returns the correct section `%s`', (section) => {
+			const expected: Pick<ContentTargeting, 's'> = {
+				s: section,
+			};
 
-		const targeting = getContentTargeting({
-			path: '/2021/some-thing-or-other',
-			sensitive: false,
-			renderingPlatform: 'dotcom-platform',
-			eligibleForDCR: false,
-			section: 'uk-news',
+			const targeting = getContentTargeting({
+				...defaultValues,
+				section,
+			});
+
+			expect(targeting).toMatchObject(expected);
 		});
-
-		expect(targeting).toEqual(expected);
 	});
 
-	test('should output the same thing', () => {
-		const expected: ContentTargeting = {
-			dcre: 'f',
-			rp: 'dotcom-platform',
-			s: 'uk-news',
-			sens: 'f',
-			urlkw: ['some', 'thing', 'or', 'other'],
-			vl: null,
-		};
+	describe('Rendering Platform (rp)', () => {
+		const platforms: Array<
+			[
+				Parameters<typeof getContentTargeting>[0]['renderingPlatform'],
+				ContentTargeting['rp'],
+			]
+		> = [
+			['dotcom-platform', 'dotcom-platform'],
+			['dotcom-rendering', 'dotcom-rendering'],
+		];
 
-		const targeting = getContentTargeting({
-			path: '/2021/some-thing-or-other',
-			sensitive: false,
-			renderingPlatform: 'dotcom-platform',
-			eligibleForDCR: false,
-			section: 'uk-news',
-		});
+		test.each(platforms)(
+			'For `%s` return the `%s`',
+			(renderingPlatform) => {
+				const expected: Pick<ContentTargeting, 'rp'> = {
+					rp: renderingPlatform,
+				};
 
-		expect(targeting).toEqual(expected);
+				const targeting = getContentTargeting({
+					...defaultValues,
+					renderingPlatform,
+				});
+
+				expect(targeting).toMatchObject(expected);
+			},
+		);
+	});
+
+	describe('Eligible for DCR (dcre)', () => {
+		const eligibilities: Array<[boolean, ContentTargeting['dcre']]> = [
+			[true, 't'],
+			[false, 'f'],
+		];
+
+		test.each(eligibilities)(
+			'For `%s`, returns `%s`',
+			(eligibleForDCR, dcre) => {
+				const expected: Pick<ContentTargeting, 'dcre'> = {
+					dcre,
+				};
+
+				const targeting = getContentTargeting({
+					...defaultValues,
+					eligibleForDCR,
+				});
+
+				expect(targeting).toMatchObject(expected);
+			},
+		);
 	});
 
 	describe('Video Length (vl)', () => {
