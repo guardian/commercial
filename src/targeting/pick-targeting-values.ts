@@ -1,18 +1,10 @@
 import { isString } from '@guardian/libs';
+import type { ConditionalExcept } from 'type-fest';
 
-type ValidTargeting<T, K> = '' extends T
-	? never
-	: [] extends T
-	? never
-	: [''] extends T
-	? never
-	: T extends boolean
-	? never
-	: T extends NonNullable<T>
-	? K
-	: never;
-type DefinedKeys<T> = { [K in keyof T]-?: ValidTargeting<T[K], K> }[keyof T];
-type ObjectWithDefinedValues<T> = Pick<T, DefinedKeys<T>>;
+type ValidTargetingObject<Base> = ConditionalExcept<
+	Base,
+	null | undefined | '' | readonly [] | readonly [''] | boolean | number
+>;
 
 const isTargetingString = (string: unknown): boolean =>
 	isString(string) && string !== '';
@@ -51,9 +43,9 @@ export const pickTargetingValues = <
 	T extends Record<string, string | Readonly<string[]> | undefined>,
 >(
 	obj: T,
-): ObjectWithDefinedValues<T> => {
-	const initialValue = {} as ObjectWithDefinedValues<T>;
-	return Object.entries(obj).reduce<ObjectWithDefinedValues<T>>(
+): ValidTargetingObject<T> => {
+	const initialValue = {} as ValidTargetingObject<T>;
+	return Object.entries(obj).reduce<ValidTargetingObject<T>>(
 		(valid, [key, value]) => {
 			if (isValidTargeting(value)) {
 				// @ts-expect-error -- isValidTargeting checks this
