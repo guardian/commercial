@@ -34,36 +34,98 @@ describe('Pick defined values from an object', () => {
 			}),
 		).toEqual({});
 	});
-	test('TypeScript validates output', () => {
+
+	test('The function handles string', () => {
 		const maybeTargeting = {
 			string: 'one',
-			strings: ['two', 'three'],
-			undefined: undefined,
-			emptyString: '',
-			emptyArray: [],
-			arrayOfEmptyString: [''],
-			arrayOfEmptyStrings: ['', '', ''],
 		} as const;
 
 		const targeting = pickTargetingValues(maybeTargeting);
 
 		expect(targeting.string).toEqual(maybeTargeting.string);
+	});
+
+	test('The function handles array of strings', () => {
+		const maybeTargeting = {
+			strings: ['two', 'three'],
+		} as const;
+
+		const targeting = pickTargetingValues(maybeTargeting);
+
 		expect(targeting.strings).toEqual(maybeTargeting.strings);
+	});
+
+	test('The function handles array of empty strings (no type safety)', () => {
+		const maybeTargeting = {
+			arrayOfEmptyStrings: ['', '', ''],
+		} as const;
+
+		const targeting = pickTargetingValues(maybeTargeting);
+
+		expect(targeting.arrayOfEmptyStrings).toBeUndefined();
+	});
+
+	test('The function handles an array of mixed strings', () => {
+		const maybeTargeting = {
+			arrayOfMixedStrings: ['', 'valid', ''],
+		} as const;
+
+		const targeting = pickTargetingValues(maybeTargeting);
+
+		expect(targeting.arrayOfMixedStrings).toEqual(['valid']);
+	});
+
+	test('TypeScript validates the output: undefined is gone', () => {
+		const maybeTargeting = {
+			undefined: undefined,
+		} as const;
+
+		const targeting = pickTargetingValues(maybeTargeting);
+
 		// @ts-expect-error -- this is what we’re checking
 		expect(targeting.undefined).toBeUndefined();
-		// @ts-expect-error -- this is what we’re checking
-		expect(targeting.null).toBeUndefined();
-		// @ts-expect-error -- this is what we’re checking
-		expect(targeting.true).toBeUndefined();
-		// @ts-expect-error -- this is what we’re checking
-		expect(targeting.false).toBeUndefined();
+	});
+
+	test('TypeScript validates the output: emptyString is gone', () => {
+		const maybeTargeting = {
+			emptyString: '',
+		} as const;
+
+		const targeting = pickTargetingValues(maybeTargeting);
+
 		// @ts-expect-error -- this is what we’re checking
 		expect(targeting.emptyString).toBeUndefined();
+	});
+
+	test('TypeScript validates the output: emptyArray is gone', () => {
+		const maybeTargeting = {
+			emptyArray: [],
+		} as const;
+
+		const targeting = pickTargetingValues(maybeTargeting);
+
 		// @ts-expect-error -- this is what we’re checking
 		expect(targeting.emptyArray).toBeUndefined();
+	});
+
+	test('TypeScript validates the output: arrayOfEmptyString is gone', () => {
+		const maybeTargeting = {
+			arrayOfEmptyString: [''],
+		} as const;
+
+		const targeting = pickTargetingValues(maybeTargeting);
+
 		// @ts-expect-error -- this is what we’re checking
 		expect(targeting.arrayOfEmptyString).toBeUndefined();
-		expect(targeting.arrayOfEmptyStrings).toBeUndefined();
+	});
+
+	test('TypeScript validates the output: arrayOfEmptyStrings is gone', () => {
+		const maybeTargeting = {
+			arrayOfEmptyStrings: ['', '', ''],
+		} as const;
+
+		const targeting = pickTargetingValues(maybeTargeting);
+
 		// @ts-expect-error -- this is what we’re checking
 		expect(targeting.arrayOfNonStrings).toBeUndefined();
 	});
