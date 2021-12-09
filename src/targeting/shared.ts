@@ -1,6 +1,6 @@
-/* -- Types -- */
+import { pickTargetingValues } from './pick-targeting-values';
 
-import { pickDefinedValues } from '../lib/pick-defined-values';
+/* -- Types -- */
 
 const brands = {
 	Foundation: 'f',
@@ -181,7 +181,7 @@ const getSurgingParam = (surging: number): SharedTargeting['su'] => {
  */
 export const getSharedTargeting = (
 	shared: Partial<SharedTargeting>,
-): Partial<SharedTargeting> => pickDefinedValues(shared);
+): Partial<SharedTargeting> => pickTargetingValues(shared);
 
 export const _ = {
 	getSurgingParam,

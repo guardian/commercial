@@ -15,6 +15,27 @@ const defaultParams: Parameters<typeof getContentTargeting> = [
 const [defaultValues] = defaultParams;
 
 describe('Content Targeting', () => {
+	test('should handle  the same thing', () => {
+		const expected: ContentTargeting = {
+			dcre: 'f',
+			rp: 'dotcom-platform',
+			s: 'uk-news',
+			sens: 'f',
+			urlkw: ['some', 'thing', 'or', 'other'],
+			vl: null,
+		};
+
+		const targeting = getContentTargeting({
+			path: '/2021/some-thing-or-other',
+			sensitive: false,
+			renderingPlatform: 'dotcom-platform',
+			eligibleForDCR: false,
+			section: 'uk-news',
+		});
+
+		expect(targeting).toEqual(expected);
+	});
+
 	test('should output the same thing', () => {
 		const expected: ContentTargeting = {
 			dcre: 'f',
