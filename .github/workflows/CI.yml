@@ -4,8 +4,8 @@ on:
     branches-ignore:
       - 'gh-pages'
   pull_request:
-    branches-ignore:
-      - 'gh-pages'
+    branches:
+      - 'main'
 jobs:
   docs:
     name: Docs
