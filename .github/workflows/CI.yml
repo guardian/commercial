@@ -1,11 +1,11 @@
 name: CI
 on:
   push:
-    branches-ignore:
-      - 'gh-pages'
-  pull_request:
     branches:
       - 'main'
+  pull_request:
+    branches-ignore:
+      - 'gh-pages'
 jobs:
   docs:
     name: Docs
