@@ -1,77 +1,85 @@
 import type { ContentTargeting } from './content';
 import { getContentTargeting } from './content';
+import type { SharedTargeting } from './shared';
 
-const defaultParams: Parameters<typeof getContentTargeting> = [
-	{
-		path: '/2021/my-great-blog-post',
-		contributors: ['Commercial Development'],
-		contentType: 'article',
-		platform: 'NextGen',
-		sensitive: false,
-		surging: 50,
-		tones: ['minutebyminute'],
-	},
-	{
-		bl: ['a', 'b'],
-		dcre: 'f',
-		edition: 'uk',
-		k: ['a', 'b'],
-		ob: null,
-		rp: 'dotcom-platform',
-		s: 'uk-news',
-		se: ['one'],
-	},
-];
-
-const [defaultValues, defaultTargeting] = defaultParams;
+const defaultValues: Parameters<typeof getContentTargeting>[0] = {
+	path: '/2021/my-great-blog-post',
+	sensitive: false,
+	renderingPlatform: 'dotcom-platform',
+	section: 'uk-news',
+	eligibleForDCR: false,
+};
 
 describe('Content Targeting', () => {
-	test('should output the same thing', () => {
-		const expected: ContentTargeting = {
-			bl: ['a', 'b'],
-			br: 'f',
-			co: ['Commercial', 'Comm-Dev'],
-			ct: 'article',
-			dcre: 'f',
-			edition: 'uk',
-			k: ['a', 'b'],
-			ob: null,
-			p: 'ng',
-			rp: 'dotcom-platform',
-			s: 'uk-news',
-			se: ['one'],
-			sens: 'f',
-			su: ['0'],
-			tn: ['news'],
-			url: '/2021/some-thing-or-other',
-			urlkw: ['some', 'thing', 'or', 'other'],
-			vl: null,
-		};
+	describe('Section (s)', () => {
+		const sections: Array<ContentTargeting['s']> = [
+			'uk-news',
+			'environment',
+			'culture',
+		];
+		test.each(sections)('Returns the correct section `%s`', (section) => {
+			const expected: Pick<ContentTargeting, 's'> = {
+				s: section,
+			};
 
-		const targeting = getContentTargeting(
-			{
-				path: '/2021/some-thing-or-other',
-				contributors: ['Commercial', 'Comm-Dev'],
-				branding: 'Foundation',
-				contentType: 'article',
-				platform: 'NextGen',
-				sensitive: false,
-				tones: ['news'],
-				surging: 0,
-			},
-			{
-				bl: ['a', 'b'],
-				dcre: 'f',
-				edition: 'uk',
-				k: ['a', 'b'],
-				ob: null,
-				rp: 'dotcom-platform',
-				s: 'uk-news',
-				se: ['one'],
+			const targeting = getContentTargeting({
+				...defaultValues,
+				section,
+			});
+
+			expect(targeting).toMatchObject(expected);
+		});
+	});
+
+	describe('Rendering Platform (rp)', () => {
+		const platforms: Array<
+			[
+				Parameters<typeof getContentTargeting>[0]['renderingPlatform'],
+				ContentTargeting['rp'],
+			]
+		> = [
+			['dotcom-platform', 'dotcom-platform'],
+			['dotcom-rendering', 'dotcom-rendering'],
+		];
+
+		test.each(platforms)(
+			'For `%s` return the `%s`',
+			(renderingPlatform) => {
+				const expected: Pick<ContentTargeting, 'rp'> = {
+					rp: renderingPlatform,
+				};
+
+				const targeting = getContentTargeting({
+					...defaultValues,
+					renderingPlatform,
+				});
+
+				expect(targeting).toMatchObject(expected);
 			},
 		);
+	});
 
-		expect(targeting).toEqual(expected);
+	describe('Eligible for DCR (dcre)', () => {
+		const eligibilities: Array<[boolean, ContentTargeting['dcre']]> = [
+			[true, 't'],
+			[false, 'f'],
+		];
+
+		test.each(eligibilities)(
+			'For `%s`, returns `%s`',
+			(eligibleForDCR, dcre) => {
+				const expected: Pick<ContentTargeting, 'dcre'> = {
+					dcre,
+				};
+
+				const targeting = getContentTargeting({
+					...defaultValues,
+					eligibleForDCR,
+				});
+
+				expect(targeting).toMatchObject(expected);
+			},
+		);
 	});
 
 	describe('Video Length (vl)', () => {
@@ -104,13 +112,10 @@ describe('Content Targeting', () => {
 				vl,
 			};
 
-			const targeting = getContentTargeting(
-				{
-					...defaultValues,
-					videoLength,
-				},
-				defaultTargeting,
-			);
+			const targeting = getContentTargeting({
+				...defaultValues,
+				videoLength,
+			});
 
 			expect(targeting).toMatchObject(expected);
 		});
@@ -127,52 +132,10 @@ describe('Content Targeting', () => {
 				sens,
 			};
 
-			const targeting = getContentTargeting(
-				{
-					...defaultValues,
-					sensitive,
-				},
-				defaultTargeting,
-			);
-
-			expect(targeting).toMatchObject(expected);
-		});
-	});
-
-	describe('Surging (su)', () => {
-		const sensitive: Array<[number, ContentTargeting['su']]> = [
-			[0, ['0']],
-			[1, ['0']],
-			[49, ['0']],
-
-			[50, ['5']],
-			[99, ['5']],
-
-			[100, ['5', '4']],
-			[199, ['5', '4']],
-
-			[200, ['5', '4', '3']],
-			[300, ['5', '4', '3', '2']],
-			[400, ['5', '4', '3', '2', '1']],
-
-			[1200, ['5', '4', '3', '2', '1']],
-
-			[NaN, ['0']],
-			[-999, ['0']],
-		];
-
-		test.each(sensitive)('For `%s`, returns `%s`', (surging, su) => {
-			const expected: Pick<ContentTargeting, 'su'> = {
-				su: su.sort(),
-			};
-
-			const targeting = getContentTargeting(
-				{
-					...defaultValues,
-					surging,
-				},
-				defaultTargeting,
-			);
+			const targeting = getContentTargeting({
+				...defaultValues,
+				sensitive,
+			});
 
 			expect(targeting).toMatchObject(expected);
 		});
@@ -180,7 +143,7 @@ describe('Content Targeting', () => {
 
 	describe('Path and its keywords (url and urlkw)', () => {
 		test('Handles standard slug like /2021/nov/1/my-great-blog-post', () => {
-			const path: ContentTargeting['url'] =
+			const path: SharedTargeting['url'] =
 				'/2021/nov/1/my-great-blog-post';
 			const keywords: ContentTargeting['urlkw'] = [
 				'my',
@@ -189,24 +152,20 @@ describe('Content Targeting', () => {
 				'post',
 			];
 
-			const expected: Pick<ContentTargeting, 'url' | 'urlkw'> = {
-				url: path,
+			const expected: Pick<ContentTargeting, 'urlkw'> = {
 				urlkw: keywords,
 			};
 
-			const targeting = getContentTargeting(
-				{
-					...defaultValues,
-					path,
-				},
-				defaultTargeting,
-			);
+			const targeting = getContentTargeting({
+				...defaultValues,
+				path,
+			});
 
 			expect(targeting).toMatchObject(expected);
 		});
 
 		test('Handles double dashes in slug', () => {
-			const path: ContentTargeting['url'] =
+			const path: SharedTargeting['url'] =
 				'/world/2021/nov/1/one--ring-2---rule-them-all';
 			const keywords: ContentTargeting['urlkw'] = [
 				'one',
@@ -217,24 +176,20 @@ describe('Content Targeting', () => {
 				'all',
 			];
 
-			const expected: Pick<ContentTargeting, 'url' | 'urlkw'> = {
-				url: path,
+			const expected: Pick<ContentTargeting, 'urlkw'> = {
 				urlkw: keywords,
 			};
 
-			const targeting = getContentTargeting(
-				{
-					...defaultValues,
-					path,
-				},
-				defaultTargeting,
-			);
+			const targeting = getContentTargeting({
+				...defaultValues,
+				path,
+			});
 
 			expect(targeting).toMatchObject(expected);
 		});
 
 		test('Handles no leading slash', () => {
-			const path: ContentTargeting['url'] = '/2021/my-great-blog-post';
+			const path: SharedTargeting['url'] = '/2021/my-great-blog-post';
 			const keywords: ContentTargeting['urlkw'] = [
 				'my',
 				'great',
@@ -242,38 +197,30 @@ describe('Content Targeting', () => {
 				'post',
 			];
 
-			const expected: Pick<ContentTargeting, 'url' | 'urlkw'> = {
-				url: path,
+			const expected: Pick<ContentTargeting, 'urlkw'> = {
 				urlkw: keywords,
 			};
 
-			const targeting = getContentTargeting(
-				{
-					...defaultValues,
-					path,
-				},
-				defaultTargeting,
-			);
+			const targeting = getContentTargeting({
+				...defaultValues,
+				path,
+			});
 
 			expect(targeting).toMatchObject(expected);
 		});
 
 		test('Handles weird URL ///', () => {
-			const path: ContentTargeting['url'] = '///';
+			const path: SharedTargeting['url'] = '///';
 			const keywords: ContentTargeting['urlkw'] = [];
 
-			const expected: Pick<ContentTargeting, 'url' | 'urlkw'> = {
-				url: path,
+			const expected: Pick<ContentTargeting, 'urlkw'> = {
 				urlkw: keywords,
 			};
 
-			const targeting = getContentTargeting(
-				{
-					...defaultValues,
-					path,
-				},
-				defaultTargeting,
-			);
+			const targeting = getContentTargeting({
+				...defaultValues,
+				path,
+			});
 
 			expect(targeting).toMatchObject(expected);
 		});
