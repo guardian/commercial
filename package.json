@@ -44,7 +44,7 @@
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
     "@guardian/ab-core": "^2.0.0",
-    "@guardian/consent-management-platform": "^8.0.1",
+    "@guardian/consent-management-platform": "^9.0.2",
     "@guardian/eslint-config-typescript": "^0.7.0",
     "@guardian/libs": "3.5.1",
     "@guardian/prettier": "^0.7.0",
