@@ -95,4 +95,31 @@ describe('Session targeting', () => {
 		});
 		expect(targeting).toMatchObject(expected);
 	});
+
+	const signedInOptions: Array<[boolean, SessionTargeting['si']]> = [
+		[true, 't'],
+		[false, 'f'],
+	];
+
+	test.each(signedInOptions)(
+		'should get `%s` for isSignedIn: %s',
+		(isSignedIn, si) => {
+			const expected: Pick<SessionTargeting, 'si'> = {
+				si,
+			};
+
+			const targeting = getSessionTargeting({
+				referrer: '',
+				participations: {
+					serverSideParticipations: {},
+					clientSideParticipations: {},
+				},
+				adTest: null,
+				pageViewId: '1234567',
+				countryCode: 'GB',
+				isSignedIn,
+			});
+			expect(targeting).toMatchObject(expected);
+		},
+	);
 });
