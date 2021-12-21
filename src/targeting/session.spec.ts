@@ -12,14 +12,17 @@ describe('Session targeting', () => {
 			si: 'f',
 		};
 
-		const targeting = getSessionTargeting(
-			'',
-			{
+		const targeting = getSessionTargeting({
+			referrer: '',
+			participations: {
 				serverSideParticipations: {},
 				clientSideParticipations: {},
 			},
-			{ at: null, pv: '1234567', cc: 'GB', si: 'f' },
-		);
+			adTest: null,
+			pageViewId: '1234567',
+			countryCode: 'GB',
+			isSignedIn: false,
+		});
 		expect(targeting).toMatchObject(expected);
 	});
 
@@ -34,12 +37,15 @@ describe('Session targeting', () => {
 				},
 			},
 			serverSideParticipations: {
-				abStandaloneBundle: 'variant',
+				abStandaloneBundleVariant: 'variant',
 			},
 		};
 
 		const expected: SessionTargeting = {
-			ab: ['ab-new-ad-targeting-variant', 'abStandaloneBundle-variant'],
+			ab: [
+				'ab-new-ad-targeting-variant',
+				'abStandaloneBundleVariant-variant',
+			],
 			at: null,
 			cc: 'GB',
 			pv: '1234567',
@@ -47,11 +53,13 @@ describe('Session targeting', () => {
 			si: 'f',
 		};
 
-		const targeting = getSessionTargeting('', participations, {
-			at: null,
-			pv: '1234567',
-			cc: 'GB',
-			si: 'f',
+		const targeting = getSessionTargeting({
+			referrer: '',
+			participations,
+			adTest: null,
+			pageViewId: '1234567',
+			countryCode: 'GB',
+			isSignedIn: false,
 		});
 		expect(targeting).toMatchObject(expected);
 	});
@@ -74,16 +82,44 @@ describe('Session targeting', () => {
 			ref,
 		};
 
-		const targeting = getSessionTargeting(
+		const targeting = getSessionTargeting({
 			referrer,
-			{ serverSideParticipations: {}, clientSideParticipations: {} },
-			{
-				at: null,
-				pv: '1234567',
-				cc: 'GB',
-				si: 'f',
+			participations: {
+				serverSideParticipations: {},
+				clientSideParticipations: {},
 			},
-		);
+			adTest: null,
+			pageViewId: '1234567',
+			countryCode: 'GB',
+			isSignedIn: false,
+		});
 		expect(targeting).toMatchObject(expected);
 	});
+
+	const signedInOptions: Array<[boolean, SessionTargeting['si']]> = [
+		[true, 't'],
+		[false, 'f'],
+	];
+
+	test.each(signedInOptions)(
+		'should get `%s` for isSignedIn: %s',
+		(isSignedIn, si) => {
+			const expected: Pick<SessionTargeting, 'si'> = {
+				si,
+			};
+
+			const targeting = getSessionTargeting({
+				referrer: '',
+				participations: {
+					serverSideParticipations: {},
+					clientSideParticipations: {},
+				},
+				adTest: null,
+				pageViewId: '1234567',
+				countryCode: 'GB',
+				isSignedIn,
+			});
+			expect(targeting).toMatchObject(expected);
+		},
+	);
 });
