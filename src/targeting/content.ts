@@ -99,6 +99,15 @@ const getUrlKeywords = (url: SharedTargeting['url']): string[] => {
 
 /* -- Targeting -- */
 
+type Content = {
+	eligibleForDCR: boolean;
+	path: SharedTargeting['url'];
+	renderingPlatform: ContentTargeting['rp'];
+	section: ContentTargeting['s'];
+	sensitive: boolean;
+	videoLength?: number;
+};
+
 export const getContentTargeting = ({
 	eligibleForDCR,
 	path,
@@ -106,14 +115,7 @@ export const getContentTargeting = ({
 	section,
 	sensitive,
 	videoLength,
-}: {
-	eligibleForDCR: boolean;
-	path: SharedTargeting['url'];
-	renderingPlatform: ContentTargeting['rp'];
-	section: ContentTargeting['s'];
-	sensitive: boolean;
-	videoLength?: number;
-}): ContentTargeting => {
+}: Content): ContentTargeting => {
 	return {
 		dcre: eligibleForDCR ? 't' : 'f',
 		rp: renderingPlatform,
