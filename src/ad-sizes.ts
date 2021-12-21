@@ -6,6 +6,8 @@ export type AdSize = Readonly<{
 	toString: () => AdSizeString;
 }>;
 
+export type AdSizeTuple = [width: number, height: number];
+
 export type SizeKeys =
 	| 'billboard'
 	| 'leaderboard'
@@ -81,6 +83,12 @@ export const adSizes: Record<SizeKeys, AdSize> = {
 	'300x600': adSizesPartial.halfPage,
 	'300x1050': adSizesPartial.portrait,
 	'160x600': adSizesPartial.skyscraper,
+};
+
+export const getTuple = (size: SizeKeys): AdSizeTuple => {
+	const { width, height } = adSizes[size];
+	const tuple: AdSizeTuple = [width, height];
+	return tuple;
 };
 
 // Export for testing
