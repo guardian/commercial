@@ -108,7 +108,10 @@ export type SessionTargeting = {
 
 export type AllParticipations = {
 	clientSideParticipations: Participations;
-	serverSideParticipations: Record<string, 'control' | 'variant'>;
+	serverSideParticipations: {
+		[key: `${string}Control`]: 'control';
+		[key: `${string}Variant`]: 'variant';
+	};
 };
 
 /* -- Methods -- */
@@ -155,12 +158,27 @@ const experimentsTargeting = ({
 
 /* -- Targeting -- */
 
-export const getSessionTargeting = (
-	referrer: string,
-	participations: AllParticipations,
-	targeting: Omit<SessionTargeting, 'ab' | 'ref'>,
-): SessionTargeting => ({
-	ref: getReferrer(referrer),
+type Session = {
+	adTest: SessionTargeting['at'];
+	countryCode: CountryCode;
+	isSignedIn: boolean;
+	pageViewId: SessionTargeting['pv'];
+	participations: AllParticipations;
+	referrer: string;
+};
+
+export const getSessionTargeting = ({
+	adTest,
+	countryCode,
+	isSignedIn,
+	pageViewId,
+	participations,
+	referrer,
+}: Session): SessionTargeting => ({
 	ab: experimentsTargeting(participations),
-	...targeting,
+	at: adTest,
+	cc: countryCode,
+	pv: pageViewId,
+	ref: getReferrer(referrer),
+	si: isSignedIn ? 't' : 'f',
 });
