@@ -6,8 +6,6 @@ export type AdSize = Readonly<{
 	toString: () => AdSizeString;
 }>;
 
-export type AdSizeTuple = [width: number, height: number];
-
 export type SizeKeys =
 	| 'billboard'
 	| 'leaderboard'
@@ -36,7 +34,7 @@ export type SizeKeys =
 	| '300x1050'
 	| '160x600';
 
-const getAdSize = (width: number, height: number): AdSize => {
+const createAdSize = (width: number, height: number): AdSize => {
 	const toString = (): AdSizeString =>
 		width === 0 && height === 0 ? 'fluid' : `${width},${height}`;
 
@@ -49,30 +47,30 @@ const getAdSize = (width: number, height: number): AdSize => {
 
 const adSizesPartial = {
 	// standard ad sizes
-	billboard: getAdSize(970, 250),
-	leaderboard: getAdSize(728, 90),
-	mpu: getAdSize(300, 250),
-	halfPage: getAdSize(300, 600),
-	portrait: getAdSize(300, 1050),
-	skyscraper: getAdSize(160, 600),
-	mobilesticky: getAdSize(320, 50),
+	billboard: createAdSize(970, 250),
+	leaderboard: createAdSize(728, 90),
+	mpu: createAdSize(300, 250),
+	halfPage: createAdSize(300, 600),
+	portrait: createAdSize(300, 1050),
+	skyscraper: createAdSize(160, 600),
+	mobilesticky: createAdSize(320, 50),
 
 	// dfp proprietary ad sizes
-	fluid: getAdSize(0, 0),
-	outOfPage: getAdSize(1, 1),
-	googleCard: getAdSize(300, 274),
+	fluid: createAdSize(0, 0),
+	outOfPage: createAdSize(1, 1),
+	googleCard: createAdSize(300, 274),
 
 	// guardian proprietary ad sizes
-	video: getAdSize(620, 1),
-	outstreamDesktop: getAdSize(620, 350),
-	outstreamGoogleDesktop: getAdSize(550, 310),
-	outstreamMobile: getAdSize(300, 197),
-	merchandisingHighAdFeature: getAdSize(88, 89),
-	merchandisingHigh: getAdSize(88, 87),
-	merchandising: getAdSize(88, 88),
-	inlineMerchandising: getAdSize(88, 85),
-	fabric: getAdSize(88, 71),
-	empty: getAdSize(2, 2),
+	video: createAdSize(620, 1),
+	outstreamDesktop: createAdSize(620, 350),
+	outstreamGoogleDesktop: createAdSize(550, 310),
+	outstreamMobile: createAdSize(300, 197),
+	merchandisingHighAdFeature: createAdSize(88, 89),
+	merchandisingHigh: createAdSize(88, 87),
+	merchandising: createAdSize(88, 88),
+	inlineMerchandising: createAdSize(88, 85),
+	fabric: createAdSize(88, 71),
+	empty: createAdSize(2, 2),
 };
 
 export const adSizes: Record<SizeKeys, AdSize> = {
@@ -85,11 +83,7 @@ export const adSizes: Record<SizeKeys, AdSize> = {
 	'160x600': adSizesPartial.skyscraper,
 };
 
-export const getTuple = (size: SizeKeys): AdSizeTuple => {
-	const { width, height } = adSizes[size];
-	const tuple: AdSizeTuple = [width, height];
-	return tuple;
-};
+export const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
 
 // Export for testing
-export const _ = { getAdSize };
+export const _ = { createAdSize };
