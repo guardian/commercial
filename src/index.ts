@@ -9,7 +9,7 @@ export { remarketing } from './third-party-tags/remarketing';
 export { EventTimer } from './EventTimer';
 export { sendCommercialMetrics } from './sendCommercialMetrics';
 export type { ThirdPartyTag } from './types';
-export { adSizes } from './ad-sizes';
+export { adSizes, getAdSize } from './ad-sizes';
 export type { SizeKeys, AdSizeString, AdSize } from './ad-sizes';
 export { isAdBlockInUse } from './detectAdBlocker';
 export {
