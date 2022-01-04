@@ -106,7 +106,7 @@ export class EventTimer {
 			: this._events;
 	}
 
-	constructor() {
+	private constructor() {
 		this._events = [];
 		this.startTS = window.performance.now();
 		this.triggers = {
