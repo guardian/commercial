@@ -55,17 +55,7 @@ describe('Pick defined values from an object', () => {
 		expect(targeting.strings).toEqual(maybeTargeting.strings);
 	});
 
-	test('The function handles array of empty strings (no type safety)', () => {
-		const maybeTargeting = {
-			arrayOfEmptyStrings: ['', '', ''],
-		} as const;
-
-		const targeting = pickTargetingValues(maybeTargeting);
-
-		expect(targeting.arrayOfEmptyStrings).toBeUndefined();
-	});
-
-	test('The function handles an array of mixed strings', () => {
+	test('The function handles an array of mixed strings (no type safety)', () => {
 		const maybeTargeting = {
 			arrayOfMixedStrings: ['', 'valid', ''],
 		} as const;
@@ -78,7 +68,7 @@ describe('Pick defined values from an object', () => {
 	test('TypeScript validates the output: undefined is gone', () => {
 		const maybeTargeting = {
 			undefined: undefined,
-		} as const;
+		};
 
 		const targeting = pickTargetingValues(maybeTargeting);
 
@@ -100,7 +90,7 @@ describe('Pick defined values from an object', () => {
 	test('TypeScript validates the output: emptyArray is gone', () => {
 		const maybeTargeting = {
 			emptyArray: [],
-		} as const;
+		};
 
 		const targeting = pickTargetingValues(maybeTargeting);
 
@@ -119,14 +109,13 @@ describe('Pick defined values from an object', () => {
 		expect(targeting.arrayOfEmptyString).toBeUndefined();
 	});
 
-	test('TypeScript validates the output: arrayOfEmptyStrings is gone', () => {
+	test('TypeScript validates the output: arrayOfEmptyStrings is gone (no type safety)', () => {
 		const maybeTargeting = {
 			arrayOfEmptyStrings: ['', '', ''],
-		} as const;
+		};
 
 		const targeting = pickTargetingValues(maybeTargeting);
 
-		// @ts-expect-error -- this is what we’re checking
-		expect(targeting.arrayOfNonStrings).toBeUndefined();
+		expect(targeting.arrayOfEmptyStrings).toBeUndefined();
 	});
 });

@@ -19,20 +19,21 @@ const mockGetEntriesByName = (names: string[]) =>
 			: [],
 	);
 
+const mockMark = jest.fn(
+	(name: string): PerformanceMark => ({
+		name,
+		duration: 1,
+		entryType: 'mark',
+		startTime: 1,
+		detail: {},
+		toJSON: () => '',
+	}),
+);
+
 const performance = {
 	now: jest.fn(),
-	mark: jest.fn(),
-	getEntriesByName: jest
-		.fn()
-		.mockReturnValueOnce([
-			{
-				duration: 1,
-				entryType: 'mark',
-				name: 'commercial event',
-				startTime: 1,
-			},
-		])
-		.mockReturnValue([]),
+	mark: mockMark,
+	getEntriesByName: jest.fn().mockReturnValue([]),
 };
 
 const MARK_NAME = 'mark_name';
@@ -84,7 +85,7 @@ describe('EventTimer', () => {
 	it('get correct cmp events with additional event mark', () => {
 		const performanceCMP = {
 			now: jest.fn(),
-			mark: jest.fn(),
+			mark: mockMark,
 			getEntriesByName: mockGetEntriesByName([
 				MARK_LONG_NAME,
 				CMP_INIT,
@@ -128,7 +129,7 @@ describe('EventTimer', () => {
 	it('when retrieved and mark is undefined produce no events', () => {
 		const performance = {
 			now: jest.fn(),
-			mark: jest.fn(),
+			mark: undefined,
 			getEntriesByName: jest.fn().mockReturnValue([]),
 		};
 		Object.defineProperty(window, 'performance', {
