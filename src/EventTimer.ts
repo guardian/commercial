@@ -88,19 +88,17 @@ export class EventTimer {
 			? [
 					...this._events,
 					...EventTimer._externallyDefinedEventNames
-						.filter(
-							(eventName) =>
-								window.performance.getEntriesByName(eventName)
-									.length,
-						)
-						.map(
-							(eventName) =>
-								new Event(
+						.map((eventName) => {
+							const entry =
+								window.performance.getEntriesByName(
 									eventName,
-									window.performance.getEntriesByName(
-										eventName,
-									)[0] as PerformanceEntry,
-								),
+								)[0];
+							return entry
+								? new Event(eventName, entry)
+								: undefined;
+						})
+						.filter(
+							(entry): entry is Event => entry instanceof Event,
 						),
 			  ]
 			: this._events;
