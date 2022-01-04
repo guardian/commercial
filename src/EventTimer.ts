@@ -217,11 +217,8 @@ export class EventTimer {
 			typeof window.performance !== 'undefined' &&
 			'mark' in window.performance
 		) {
-			window.performance.mark(longName);
+			const mark = window.performance.mark(longName);
 			// Most recent mark with this name is the event we just created.
-			const mark = window.performance
-				.getEntriesByName(longName, 'mark')
-				.slice(-1)[0];
 			if (typeof mark !== 'undefined') {
 				this._events.push(new Event(name, mark));
 			}
