@@ -215,11 +215,12 @@ export class EventTimer {
 		const longName = `gu.commercial.${name}`;
 		if (
 			typeof window.performance !== 'undefined' &&
-			'mark' in window.performance
+			'mark' in window.performance &&
+			typeof window.performance.mark === 'function'
 		) {
 			const mark = window.performance.mark(longName);
-			// Most recent mark with this name is the event we just created.
-			if (typeof mark !== 'undefined') {
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- browser support is patchy
+			if (typeof mark?.startTime === 'number') {
 				this._events.push(new Event(name, mark));
 			}
 		}
