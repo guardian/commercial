@@ -88,25 +88,23 @@ export class EventTimer {
 			? [
 					...this._events,
 					...EventTimer._externallyDefinedEventNames
-						.filter(
-							(eventName) =>
-								window.performance.getEntriesByName(eventName)
-									.length,
-						)
-						.map(
-							(eventName) =>
-								new Event(
+						.map((eventName) => {
+							const entry =
+								window.performance.getEntriesByName(
 									eventName,
-									window.performance.getEntriesByName(
-										eventName,
-									)[0] as PerformanceEntry,
-								),
+								)[0];
+							return entry
+								? new Event(eventName, entry)
+								: undefined;
+						})
+						.filter(
+							(entry): entry is Event => entry instanceof Event,
 						),
 			  ]
 			: this._events;
 	}
 
-	constructor() {
+	private constructor() {
 		this._events = [];
 		this.startTS = window.performance.now();
 		this.triggers = {
@@ -215,14 +213,12 @@ export class EventTimer {
 		const longName = `gu.commercial.${name}`;
 		if (
 			typeof window.performance !== 'undefined' &&
-			'mark' in window.performance
+			'mark' in window.performance &&
+			typeof window.performance.mark === 'function'
 		) {
-			window.performance.mark(longName);
-			// Most recent mark with this name is the event we just created.
-			const mark = window.performance
-				.getEntriesByName(longName, 'mark')
-				.slice(-1)[0];
-			if (typeof mark !== 'undefined') {
+			const mark = window.performance.mark(longName);
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- browser support is patchy
+			if (typeof mark?.startTime === 'number') {
 				this._events.push(new Event(name, mark));
 			}
 		}
