@@ -3,7 +3,14 @@ import type { ConditionalExcept } from 'type-fest';
 
 type ValidTargetingObject<Base> = ConditionalExcept<
 	Base,
-	null | undefined | '' | readonly [] | readonly [''] | boolean | number
+	| null
+	| undefined
+	| ''
+	| readonly []
+	| readonly ['']
+	| never[]
+	| boolean
+	| number
 >;
 
 const isTargetingString = (string: unknown): boolean =>
