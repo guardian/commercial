@@ -1,3 +1,5 @@
+import type { VendorName } from '@guardian/consent-management-platform/dist/types';
+
 export type TagAttribute = {
 	name: string;
 	value: string;
@@ -11,7 +13,7 @@ export type ThirdPartyTag = {
 	loaded?: boolean;
 	onLoad?: () => void;
 	shouldRun: boolean;
-	name?: string;
+	name?: VendorName;
 	url?: string;
 	useImage?: boolean;
 };
