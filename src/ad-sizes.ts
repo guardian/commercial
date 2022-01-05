@@ -7,32 +7,32 @@ export type AdSize = Readonly<{
 }>;
 
 export type SizeKeys =
+	| '160x600'
+	| '300x1050'
+	| '300x250'
+	| '300x600'
+	| '728x90'
+	| '970x250'
 	| 'billboard'
-	| 'leaderboard'
-	| 'mpu'
-	| 'halfPage'
-	| 'portrait'
-	| 'skyscraper'
-	| 'mobilesticky'
+	| 'empty'
+	| 'fabric'
 	| 'fluid'
-	| 'outOfPage'
 	| 'googleCard'
-	| 'video'
+	| 'halfPage'
+	| 'inlineMerchandising'
+	| 'leaderboard'
+	| 'merchandising'
+	| 'merchandisingHigh'
+	| 'merchandisingHighAdFeature'
+	| 'mobilesticky'
+	| 'mpu'
+	| 'outOfPage'
 	| 'outstreamDesktop'
 	| 'outstreamGoogleDesktop'
 	| 'outstreamMobile'
-	| 'merchandisingHighAdFeature'
-	| 'merchandisingHigh'
-	| 'merchandising'
-	| 'inlineMerchandising'
-	| 'fabric'
-	| 'empty'
-	| '970x250'
-	| '728x90'
-	| '300x250'
-	| '300x600'
-	| '300x1050'
-	| '160x600';
+	| 'portrait'
+	| 'skyscraper'
+	| 'video';
 
 const createAdSize = (width: number, height: number): AdSize => {
 	const toString = (): AdSizeString =>
@@ -48,29 +48,29 @@ const createAdSize = (width: number, height: number): AdSize => {
 const adSizesPartial = {
 	// standard ad sizes
 	billboard: createAdSize(970, 250),
-	leaderboard: createAdSize(728, 90),
-	mpu: createAdSize(300, 250),
 	halfPage: createAdSize(300, 600),
+	leaderboard: createAdSize(728, 90),
+	mobilesticky: createAdSize(320, 50),
+	mpu: createAdSize(300, 250),
 	portrait: createAdSize(300, 1050),
 	skyscraper: createAdSize(160, 600),
-	mobilesticky: createAdSize(320, 50),
 
 	// dfp proprietary ad sizes
 	fluid: createAdSize(0, 0),
-	outOfPage: createAdSize(1, 1),
 	googleCard: createAdSize(300, 274),
+	outOfPage: createAdSize(1, 1),
 
 	// guardian proprietary ad sizes
-	video: createAdSize(620, 1),
+	empty: createAdSize(2, 2),
+	fabric: createAdSize(88, 71),
+	inlineMerchandising: createAdSize(88, 85),
+	merchandising: createAdSize(88, 88),
+	merchandisingHigh: createAdSize(88, 87),
+	merchandisingHighAdFeature: createAdSize(88, 89),
 	outstreamDesktop: createAdSize(620, 350),
 	outstreamGoogleDesktop: createAdSize(550, 310),
 	outstreamMobile: createAdSize(300, 197),
-	merchandisingHighAdFeature: createAdSize(88, 89),
-	merchandisingHigh: createAdSize(88, 87),
-	merchandising: createAdSize(88, 88),
-	inlineMerchandising: createAdSize(88, 85),
-	fabric: createAdSize(88, 71),
-	empty: createAdSize(2, 2),
+	video: createAdSize(620, 1),
 };
 
 export const adSizes: Record<SizeKeys, AdSize> = {
