@@ -8,6 +8,11 @@ const onLoad = () => {
 	});
 };
 
+/**
+ * Google conversion tracking
+ * https://support.google.com/google-ads/answer/6095821
+ * @param  {} {shouldRun}
+ */
 export const remarketing: GetThirdPartyTag = ({ shouldRun }) => ({
 	shouldRun,
 	url: '//www.googleadservices.com/pagead/conversion_async.js',
