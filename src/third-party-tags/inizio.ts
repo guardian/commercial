@@ -25,6 +25,11 @@ const onLoad = (): void => {
 	});
 };
 
+/**
+ * Allows creatives to show survey
+ * https://trello.com/c/wHffHVF1/171-integrate-and-test-inizio
+ * @param  {} {shouldRun}
+ */
 export const inizio: GetThirdPartyTag = ({ shouldRun }) => ({
 	shouldRun,
 	url: '//cdn.brandmetrics.com/survey/script/e96d04c832084488a841a06b49b8fb2d.js',
