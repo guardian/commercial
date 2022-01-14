@@ -53,7 +53,7 @@ Rules are currently set in [`article-body-adverts.js`][] in the frontend reposit
 
 ### Desktop
 
-#### First round (`defaultRules`)
+#### First round (`defaultRules`) - skipped for paid content pages
 
 - At least 300px of space above (700px on immersive pages)
 - At least 300px of space below (700px if `isDotcomRendering` returns `false`)
