@@ -1,11 +1,15 @@
 import { EventTimer } from './EventTimer';
-import { sendCommercialMetrics } from './sendCommercialMetrics';
-
-const PROD_ENDPOINT =
-	'//performance-events.guardianapis.com/commercial-metrics';
-
-const DEV_ENDPOINT =
-	'//performance-events.code.dev-guardianapis.com/commercial-metrics';
+import {
+	Endpoints,
+	filterUndefinedEventTimerProperties,
+	getAdBlockerProperties,
+	getDevProperties,
+	getEndpoint,
+	mapEventTimerPropertiesToString,
+	roundTimeStamp,
+	sendCommercialMetrics,
+} from './sendCommercialMetrics';
+import type { Event, Metric, Property } from './sendCommercialMetrics';
 
 const PAGE_VIEW_ID = 'pv_id_1234567890';
 const BROWSER_ID = 'bwid_abcdefghijklm';
@@ -43,7 +47,7 @@ describe('sendCommercialMetrics', () => {
 		expect(mockSendMetrics()).toEqual(true);
 
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
-			[PROD_ENDPOINT, JSON.stringify(defaultMetrics)],
+			[Endpoints.PROD, JSON.stringify(defaultMetrics)],
 		]);
 	});
 
@@ -71,7 +75,7 @@ describe('sendCommercialMetrics', () => {
 
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
-					DEV_ENDPOINT,
+					Endpoints.CODE,
 					JSON.stringify({
 						...defaultMetrics,
 						properties: [
@@ -98,7 +102,7 @@ describe('sendCommercialMetrics', () => {
 
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
-					PROD_ENDPOINT,
+					Endpoints.PROD,
 					JSON.stringify({
 						...defaultMetrics,
 						properties: [
@@ -129,7 +133,7 @@ describe('sendCommercialMetrics', () => {
 
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
-					DEV_ENDPOINT,
+					Endpoints.CODE,
 					JSON.stringify({
 						...defaultMetrics,
 						properties: [
@@ -142,5 +146,86 @@ describe('sendCommercialMetrics', () => {
 				],
 			]);
 		});
+	});
+});
+
+describe('send commercial metrics helpers', () => {
+	const filteredProperties: Array<[string, string | number]> = [
+		['downlink', 1],
+		['effectiveType', '4g'],
+	];
+	const mappedProperties: Property[] = [
+		{
+			name: 'downlink',
+			value: '1',
+		},
+		{
+			name: 'effectiveType',
+			value: '4g',
+		},
+	];
+	const roundedEvent: Metric[] = [
+		{
+			name: 'cmp-tcfv2-init',
+			value: 1519211809934,
+		},
+	];
+	const adBlockerProperties: Property[] = [
+		{
+			name: 'adBlockerInUse',
+			value: 'false',
+		},
+	];
+
+	const devProperties = [
+		{
+			name: 'isDev',
+			value: 'localhost',
+		},
+	];
+
+	it('can filter out event timer properties with a value that is undefined', () => {
+		const eventProperties = {
+			type: undefined,
+			downlink: 1,
+			effectiveType: '4g',
+		};
+		const filtered = filterUndefinedEventTimerProperties(eventProperties);
+		expect(filtered).toEqual(filteredProperties);
+	});
+
+	it('can map event timer properties to the required format', () => {
+		const mapped = mapEventTimerPropertiesToString(filteredProperties);
+		expect(mapped).toEqual(mappedProperties);
+	});
+
+	it('can round up the value of timestamps', () => {
+		const event: Event[] = [
+			{
+				name: 'cmp-tcfv2-init',
+				ts: 1519211809934,
+			},
+		];
+		const rounded = roundTimeStamp(event);
+		expect(rounded).toEqual(roundedEvent);
+	});
+
+	it('can create an adBlocker property', () => {
+		const adBlockerInUse = false;
+		const property = getAdBlockerProperties(adBlockerInUse);
+		expect(property).toEqual(adBlockerProperties);
+	});
+
+	it('can create a property about the env', () => {
+		const property = getDevProperties(true);
+		expect(property).toEqual(devProperties);
+		const isNotDev = getDevProperties(false);
+		expect(isNotDev).toEqual([]);
+	});
+
+	it('can get the correct endpoint depending on the env', () => {
+		const isDev = true;
+		const endpoint = getEndpoint(isDev);
+		expect(endpoint).toBe(Endpoints.CODE);
 	});
 });
