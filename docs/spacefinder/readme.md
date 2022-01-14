@@ -49,7 +49,7 @@ The value names above are made up to try to boil the essentials down - they donâ
 
 Rules are currently set in [`article-body-adverts.js`][] in the frontend repository. The desktop configuration sits inside `addDesktopInlineAds`, which has two sets of rules. The mobile configuration is inside `addMobileInlineAds`.
 
-[`article-body-adverts.js`]: https://github.com/guardian/frontend/blob/cd3dc40766710a8931357c1fa50a5a5c7c6de961/static/src/javascripts/projects/commercial/modules/article-body-adverts.js
+[`article-body-adverts.js`]: https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/commercial/modules/article-body-adverts.js
 
 ### Desktop
 
