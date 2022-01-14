@@ -37,7 +37,7 @@ Or to simplify it further:
 
 The value names above are made up to try to boil the essentials down - they don’t match what’s going on in the code itself. The ad heights mentioned are pulled in from [`ad-sizes.js`][].
 
-[`ad-sizes.js`]: https://github.com/guardian/frontend/blob/cd3dc40766710a8931357c1fa50a5a5c7c6de961/static/src/javascripts.flow.archive/projects/commercial/modules/ad-sizes.js
+[`ad-sizes.js`]: https://github.com/guardian/commercial-core/blob/main/src/ad-sizes.ts
 
 ---
 
