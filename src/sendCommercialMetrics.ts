@@ -22,18 +22,26 @@ type EventProperties = {
 	effectiveType?: string;
 };
 
-type CommercialMetrics = {
-	browser_id?: string;
-	page_view_id: string;
+type CommercialMetricsPayload = {
+	page_view_id: string | null;
+	browser_id?: string | null;
 	platform: 'NEXT_GEN';
-	metrics: readonly Metric[];
-	properties: readonly Property[];
+	metrics: readonly Metric[] | null;
+	properties: readonly Property[] | null;
 };
 
 enum Endpoints {
 	CODE = '//performance-events.code.dev-guardianapis.com/commercial-metrics',
 	PROD = '//performance-events.guardianapis.com/commercial-metrics',
 }
+
+const commercialMetricsPayload: CommercialMetricsPayload = {
+	page_view_id: null,
+	browser_id: null,
+	platform: 'NEXT_GEN',
+	metrics: null,
+	properties: null,
+};
 
 const getEndpoint = (isDev: boolean) => {
 	return isDev ? Endpoints.CODE : Endpoints.PROD;
@@ -79,20 +87,34 @@ const roundTimeStamp = (events: Event[]): Metric[] => {
 	}));
 };
 
-function sendCommercialMetrics(
+function sendCommercialMetrics(isDev: boolean) {
+	const endpoint = getEndpoint(isDev);
+
+	log(
+		'commercial',
+		'About to send commercial metrics',
+		commercialMetricsPayload,
+	);
+	return navigator.sendBeacon(
+		endpoint,
+		JSON.stringify(commercialMetricsPayload),
+	);
+}
+
+export function initCommercialMetrics(
 	pageViewId: string,
 	browserId: string | undefined,
 	isDev: boolean,
 	adBlockerInUse?: boolean,
 ): boolean {
-	// Ask Max
+	// Ask Max - why does this need to be hidden?
 	if (document.visibilityState !== 'hidden') {
 		return false;
 	}
+	commercialMetricsPayload.page_view_id = pageViewId;
+	commercialMetricsPayload.browser_id = browserId;
 
-	const endpoint = getEndpoint(isDev);
-
-	// Assemble commercial metrics
+	// Assemble commercial properties and metrics
 	const devProperties: Property[] = getDevProperties(isDev);
 	const adBlockerProperties: Property[] =
 		getAdBlockerProperties(adBlockerInUse);
@@ -105,32 +127,24 @@ function sendCommercialMetrics(
 	const properties: readonly Property[] = mappedEventTimerProperties
 		.concat(devProperties)
 		.concat(adBlockerProperties);
+	commercialMetricsPayload.properties = properties;
 
 	const metrics: readonly Metric[] = roundTimeStamp(eventTimer.events);
+	commercialMetricsPayload.metrics = metrics;
 
-	// And finally we build the commercialMetrics object to pass on to logging and sendBeacon, drumroll
-	const commercialMetrics: CommercialMetrics = {
-		browser_id: browserId,
-		page_view_id: pageViewId,
-		platform: 'NEXT_GEN',
-		metrics,
-		properties,
-	};
+	sendCommercialMetrics(isDev);
 
-	log('commercial', 'About to send commercial metrics', commercialMetrics);
-	return navigator.sendBeacon(endpoint, JSON.stringify(commercialMetrics));
+	return true;
 }
 
-export {
+export const _ = {
 	Endpoints,
-	sendCommercialMetrics,
 	getEndpoint,
 	getDevProperties,
 	getAdBlockerProperties,
 	filterUndefinedEventTimerProperties,
 	mapEventTimerPropertiesToString,
 	roundTimeStamp,
-	type Property,
-	type Event,
-	type Metric,
 };
+
+export type { Property, Event, Metric };

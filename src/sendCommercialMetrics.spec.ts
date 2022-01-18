@@ -1,5 +1,8 @@
 import { EventTimer } from './EventTimer';
-import {
+import { _, initCommercialMetrics } from './sendCommercialMetrics';
+import type { Event, Metric, Property } from './sendCommercialMetrics';
+
+const {
 	Endpoints,
 	filterUndefinedEventTimerProperties,
 	getAdBlockerProperties,
@@ -7,23 +10,24 @@ import {
 	getEndpoint,
 	mapEventTimerPropertiesToString,
 	roundTimeStamp,
-	sendCommercialMetrics,
-} from './sendCommercialMetrics';
-import type { Event, Metric, Property } from './sendCommercialMetrics';
+} = _;
 
 const PAGE_VIEW_ID = 'pv_id_1234567890';
 const BROWSER_ID = 'bwid_abcdefghijklm';
+const IS_NOT_DEV = false;
+const IS_DEV = true;
+const ADBLOCK_NOT_IN_USE = false;
 
 const defaultMetrics = {
-	browser_id: BROWSER_ID,
 	page_view_id: PAGE_VIEW_ID,
+	browser_id: BROWSER_ID,
 	platform: 'NEXT_GEN',
 	metrics: [],
 	properties: [],
 };
 
 const mockSendMetrics = () =>
-	sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, false);
+	initCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, IS_NOT_DEV);
 
 const setVisibility = (value: 'hidden' | 'visible' = 'hidden'): void => {
 	Object.defineProperty(document, 'visibilityState', {
@@ -70,7 +74,12 @@ describe('sendCommercialMetrics', () => {
 			setVisibility();
 
 			expect(
-				sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, true, false),
+				initCommercialMetrics(
+					PAGE_VIEW_ID,
+					BROWSER_ID,
+					IS_DEV,
+					ADBLOCK_NOT_IN_USE,
+				),
 			).toEqual(true);
 
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
@@ -128,7 +137,12 @@ describe('sendCommercialMetrics', () => {
 				writable: true,
 			});
 			expect(
-				sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, true, false),
+				initCommercialMetrics(
+					PAGE_VIEW_ID,
+					BROWSER_ID,
+					IS_DEV,
+					ADBLOCK_NOT_IN_USE,
+				),
 			).toEqual(true);
 
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
@@ -199,6 +213,7 @@ describe('send commercial metrics helpers', () => {
 		expect(mapped).toEqual(mappedProperties);
 	});
 
+	// This one is seemingly not doing anything as the start and end values match
 	it('can round up the value of timestamps', () => {
 		const event: Event[] = [
 			{
