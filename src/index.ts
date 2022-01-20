@@ -7,7 +7,10 @@ export { twitter } from './third-party-tags/twitter-uwt';
 export { inizio } from './third-party-tags/inizio';
 export { remarketing } from './third-party-tags/remarketing';
 export { EventTimer } from './EventTimer';
-export { initCommercialMetrics } from './sendCommercialMetrics';
+export {
+	bypassCommercialMetricsSampling,
+	initCommercialMetrics,
+} from './sendCommercialMetrics';
 export type { ThirdPartyTag } from './types';
 export { adSizes, getAdSize } from './ad-sizes';
 export type { SizeKeys, AdSizeString, AdSize } from './ad-sizes';

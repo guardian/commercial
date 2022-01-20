@@ -1,6 +1,10 @@
 import { EventTimer } from './EventTimer';
-import { _, initCommercialMetrics } from './sendCommercialMetrics';
-import type { Event, Metric, Property } from './sendCommercialMetrics';
+import {
+	_,
+	bypassCommercialMetricsSampling,
+	initCommercialMetrics,
+} from './sendCommercialMetrics';
+import type { Metric, Property, TimedEvent } from './sendCommercialMetrics';
 
 const {
 	Endpoints,
@@ -9,6 +13,7 @@ const {
 	getDevProperties,
 	getEndpoint,
 	mapEventTimerPropertiesToString,
+	reset,
 	roundTimeStamp,
 } = _;
 
@@ -36,7 +41,7 @@ const setVisibility = (value: 'hidden' | 'visible' = 'hidden'): void => {
 	});
 };
 
-describe('sendCommercialMetrics', () => {
+describe('send commercial metrics code', () => {
 	const sendBeacon = jest.fn().mockReturnValue(true);
 	Object.defineProperty(navigator, 'sendBeacon', {
 		configurable: true,
@@ -44,6 +49,10 @@ describe('sendCommercialMetrics', () => {
 		value: sendBeacon,
 		writable: true,
 	});
+
+	const mockConsoleWarn = jest
+		.spyOn(console, 'warn')
+		.mockImplementation(() => false);
 
 	it('send commercial metrics success', () => {
 		setVisibility();
@@ -63,11 +72,31 @@ describe('sendCommercialMetrics', () => {
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([]);
 	});
 
+	describe('bypassCommercialMetricsSampling', () => {
+		it('sends a beacon if bypassed asynchronously', () => {
+			bypassCommercialMetricsSampling(IS_DEV);
+
+			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+				[Endpoints.CODE, JSON.stringify(defaultMetrics)],
+			]);
+		});
+
+		it('expect to be initialised before calling bypassCoreWebVitalsSampling', () => {
+			reset();
+			bypassCommercialMetricsSampling(IS_NOT_DEV);
+
+			expect(mockConsoleWarn).toHaveBeenCalledWith(
+				'initCommercialMetrics not yet initialised',
+			);
+		});
+	});
+
 	describe('handles various configurations', () => {
 		afterEach(() => {
 			// Reset the properties of the event timer for the purposes of this test
 			delete window.guardian.commercialTimer;
 			void EventTimer.get();
+			reset();
 		});
 
 		it('should handle endpoint in dev', () => {
@@ -181,7 +210,7 @@ describe('send commercial metrics helpers', () => {
 	const roundedEvent: Metric[] = [
 		{
 			name: 'cmp-tcfv2-init',
-			value: 1519211809934,
+			value: 1519211809935,
 		},
 	];
 	const adBlockerProperties: Property[] = [
@@ -215,10 +244,10 @@ describe('send commercial metrics helpers', () => {
 
 	// This one is seemingly not doing anything as the start and end values match
 	it('can round up the value of timestamps', () => {
-		const event: Event[] = [
+		const event: TimedEvent[] = [
 			{
 				name: 'cmp-tcfv2-init',
-				ts: 1519211809934,
+				ts: 1519211809934.234,
 			},
 		];
 		const rounded = roundTimeStamp(event);

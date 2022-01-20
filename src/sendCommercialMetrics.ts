@@ -11,7 +11,7 @@ type Property = {
 	value: string | number;
 };
 
-type Event = {
+type TimedEvent = {
 	name: string;
 	ts: number;
 };
@@ -25,7 +25,7 @@ type EventProperties = {
 type CommercialMetricsPayload = {
 	page_view_id: string | null;
 	browser_id?: string | null;
-	platform: 'NEXT_GEN';
+	platform: 'NEXT_GEN' | null;
 	metrics: readonly Metric[] | null;
 	properties: readonly Property[] | null;
 };
@@ -42,6 +42,8 @@ const commercialMetricsPayload: CommercialMetricsPayload = {
 	metrics: null,
 	properties: null,
 };
+
+let initialised = false;
 
 const getEndpoint = (isDev: boolean) => {
 	return isDev ? Endpoints.CODE : Endpoints.PROD;
@@ -65,6 +67,7 @@ const getAdBlockerProperties = (adBlockerInUse?: boolean): Property[] => {
 const filterUndefinedEventTimerProperties = (
 	eventTimerProperties: EventProperties,
 ): Array<[string, string | number]> => {
+	// Transforms object {key: value} pairs into an array of [key, value] arrays
 	return Object.entries(eventTimerProperties).filter(
 		([, value]) => typeof value !== 'undefined',
 	);
@@ -79,15 +82,14 @@ const mapEventTimerPropertiesToString = (
 	}));
 };
 
-// Ask Max - not sure what this is doing
-const roundTimeStamp = (events: Event[]): Metric[] => {
+const roundTimeStamp = (events: TimedEvent[]): Metric[] => {
 	return events.map(({ name, ts }) => ({
 		name,
 		value: Math.ceil(ts),
 	}));
 };
 
-function sendCommercialMetrics(isDev: boolean) {
+function sendMetrics(isDev: boolean) {
 	const endpoint = getEndpoint(isDev);
 
 	log(
@@ -101,16 +103,38 @@ function sendCommercialMetrics(isDev: boolean) {
 	);
 }
 
+/**
+ * A method to asynchronously send metrics after initialization.
+ * @param init.isDev - used to determine whether to use CODE or PROD endpoints.
+ */
+export function bypassCommercialMetricsSampling(isDev: boolean): void {
+	if (!initialised) {
+		console.warn('initCommercialMetrics not yet initialised');
+		return;
+	}
+
+	sendMetrics(isDev);
+}
+
+/**
+ * A method to initialise metrics.
+ * @param init.pageViewId - identifies the page view. Usually available on `guardian.config.ophan.pageViewId`. Defaults to `null`
+ * @param init.browserId - identifies the browser. Usually available via `getCookie({ name: 'bwid' })`. Defaults to `null`
+ * @param init.isDev - used to determine whether to use CODE or PROD endpoints.
+ * @param init.adBlockerInUse - indicates whether or not ann adblocker is being used.
+ */
 export function initCommercialMetrics(
 	pageViewId: string,
 	browserId: string | undefined,
 	isDev: boolean,
 	adBlockerInUse?: boolean,
 ): boolean {
-	// Ask Max - why does this need to be hidden?
 	if (document.visibilityState !== 'hidden') {
 		return false;
 	}
+
+	initialised = true;
+
 	commercialMetricsPayload.page_view_id = pageViewId;
 	commercialMetricsPayload.browser_id = browserId;
 
@@ -132,7 +156,7 @@ export function initCommercialMetrics(
 	const metrics: readonly Metric[] = roundTimeStamp(eventTimer.events);
 	commercialMetricsPayload.metrics = metrics;
 
-	sendCommercialMetrics(isDev);
+	sendMetrics(isDev);
 
 	return true;
 }
@@ -145,6 +169,18 @@ export const _ = {
 	filterUndefinedEventTimerProperties,
 	mapEventTimerPropertiesToString,
 	roundTimeStamp,
+	reset: (): void => {
+		initialised = false;
+		Object.keys(commercialMetricsPayload).map((key) => {
+			if (key === 'platform') {
+				commercialMetricsPayload.platform = 'NEXT_GEN';
+			} else {
+				commercialMetricsPayload[
+					key as keyof CommercialMetricsPayload
+				] = null;
+			}
+		});
+	},
 };
 
-export type { Property, Event, Metric };
+export type { Property, TimedEvent, Metric };
