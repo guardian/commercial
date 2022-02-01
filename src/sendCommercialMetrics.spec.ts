@@ -88,6 +88,9 @@ describe('send commercial metrics code', () => {
 	describe('bypassCommercialMetricsSampling', () => {
 		it('sends a beacon if bypassed asynchronously', () => {
 			bypassCommercialMetricsSampling();
+
+			setVisibility();
+			global.dispatchEvent(new Event('visibilitychange'));
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[Endpoints.PROD, JSON.stringify(defaultMetrics)],
 			]);

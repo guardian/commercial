@@ -114,19 +114,6 @@ function sendMetrics() {
 	);
 }
 
-/**
- * A method to asynchronously send metrics after initialization.
- * @param init.isDev - used to determine whether to use CODE or PROD endpoints.
- */
-export function bypassCommercialMetricsSampling(): void {
-	if (!initialised) {
-		console.warn('initCommercialMetrics not yet initialised');
-		return;
-	}
-
-	sendMetrics();
-}
-
 export function gatherMetricsOnPageUnload(): void {
 	// Assemble commercial properties and metrics
 	const eventTimer = EventTimer.get();
@@ -161,6 +148,26 @@ const listener = (e: Event): void => {
 	}
 };
 
+const addVisibilityListeners = (): void => {
+	// Report all available metrics when the page is unloaded or in background.
+	window.addEventListener('visibilitychange', listener);
+
+	// Safari does not reliably fire the `visibilitychange` on page unload.
+	window.addEventListener('pagehide', listener);
+};
+
+/**
+ * A method to asynchronously send metrics after initialization.
+ */
+export function bypassCommercialMetricsSampling(): void {
+	if (!initialised) {
+		console.warn('initCommercialMetrics not yet initialised');
+		return;
+	}
+
+	addVisibilityListeners();
+}
+
 /**
  * A method to initialise metrics.
  * @param init.pageViewId - identifies the page view. Usually available on `guardian.config.ophan.pageViewId`. Defaults to `null`
@@ -175,23 +182,20 @@ export function initCommercialMetrics(
 	adBlockerInUse?: boolean,
 	sampling: number = 1 / 100,
 ): boolean {
-	const userIsInSamplingGroup = Math.random() <= sampling;
-	if (!userIsInSamplingGroup || initialised) {
-		return false;
-	}
-
 	commercialMetricsPayload.page_view_id = pageViewId;
 	commercialMetricsPayload.browser_id = browserId;
 	setEndpoint(isDev);
 	setDevProperties(isDev);
 	setAdBlockerProperties(adBlockerInUse);
+
+	const userIsInSamplingGroup = Math.random() <= sampling;
+	if (!userIsInSamplingGroup || initialised) {
+		return false;
+	}
+
 	initialised = true;
 
-	// Report all available metrics when the page is unloaded or in background.
-	window.addEventListener('visibilitychange', listener);
-
-	// Safari does not reliably fire the `visibilitychange` on page unload.
-	window.addEventListener('pagehide', listener);
+	addVisibilityListeners();
 
 	return true;
 }
