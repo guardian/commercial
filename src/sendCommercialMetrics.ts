@@ -114,7 +114,7 @@ function sendMetrics() {
 	);
 }
 
-export function gatherMetricsOnPageUnload(): void {
+function gatherMetricsOnPageUnload(): void {
 	// Assemble commercial properties and metrics
 	const eventTimer = EventTimer.get();
 	const transformedEntries = transformToObjectEntries(eventTimer.properties);
