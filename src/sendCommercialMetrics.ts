@@ -75,20 +75,15 @@ const transformToObjectEntries = (
 	return Object.entries(eventTimerProperties);
 };
 
-type T = string | number;
-
-const filterUndefinedProperties = (
-	transformedProperties: Array<[string, string | number | undefined]>,
-): Array<[string, string | number]> => {
-	const filtered: Array<[string, T]> = [];
-	transformedProperties.forEach(([key, value]: [string, T | undefined]) => {
+const filterUndefinedProperties = <T>(
+	transformedProperties: Array<[string, T | undefined]>,
+): Array<[string, T]> =>
+	transformedProperties.reduce<Array<[string, T]>>((acc, [key, value]) => {
 		if (typeof value !== 'undefined') {
-			filtered.push([key, value]);
+			acc.push([key, value]);
 		}
-	});
-
-	return filtered;
-};
+		return acc;
+	}, []);
 
 const mapEventTimerPropertiesToString = (
 	properties: Array<[string, string | number]>,
