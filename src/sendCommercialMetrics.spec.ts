@@ -21,7 +21,7 @@ const IS_NOT_DEV = false;
 const IS_DEV = true;
 const ADBLOCK_NOT_IN_USE = false;
 const USER_IN_SAMPLING = 100 / 100;
-const USER_NOT_IN_SAMPLING = 0;
+const USER_NOT_IN_SAMPLING = -1;
 
 const defaultMetrics = {
 	page_view_id: PAGE_VIEW_ID,
@@ -205,12 +205,10 @@ describe('send commercial metrics code', () => {
 			const sentMetrics = initCommercialMetrics(
 				PAGE_VIEW_ID,
 				BROWSER_ID,
-				IS_DEV,
+				IS_NOT_DEV,
 				ADBLOCK_NOT_IN_USE,
 				USER_NOT_IN_SAMPLING,
 			);
-			setVisibility();
-			global.dispatchEvent(new Event('pagehide'));
 			expect(sentMetrics).toEqual(false);
 		});
 
@@ -218,13 +216,11 @@ describe('send commercial metrics code', () => {
 			const sentMetrics = initCommercialMetrics(
 				PAGE_VIEW_ID,
 				BROWSER_ID,
-				IS_DEV,
+				IS_NOT_DEV,
 				ADBLOCK_NOT_IN_USE,
 			);
 			const mathRandomSpy = jest.spyOn(Math, 'random');
 			mathRandomSpy.mockImplementation(() => 0.5);
-			setVisibility();
-			global.dispatchEvent(new Event('pagehide'));
 			expect(sentMetrics).toEqual(false);
 		});
 

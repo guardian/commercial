@@ -188,16 +188,20 @@ export function initCommercialMetrics(
 	setDevProperties(isDev);
 	setAdBlockerProperties(adBlockerInUse);
 
-	const userIsInSamplingGroup = Math.random() <= sampling;
-	if (!userIsInSamplingGroup || initialised) {
+	if (initialised) {
 		return false;
 	}
 
 	initialised = true;
 
-	addVisibilityListeners();
+	const userIsInSamplingGroup = Math.random() <= sampling;
 
-	return true;
+	if (isDev || userIsInSamplingGroup) {
+		addVisibilityListeners();
+		return true;
+	}
+
+	return false;
 }
 
 export const _ = {
