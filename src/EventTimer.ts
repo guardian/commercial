@@ -28,6 +28,8 @@ interface SlotEventStatus {
 
 interface PageEventStatus {
 	commercialStart: boolean;
+	commercialExtraModulesLoaded: boolean;
+	commercialBaseModulesLoaded: boolean;
 	commercialModulesLoaded: boolean;
 }
 
@@ -124,6 +126,8 @@ export class EventTimer {
 			},
 			page: {
 				commercialStart: false,
+				commercialExtraModulesLoaded: false,
+				commercialBaseModulesLoaded: false,
 				commercialModulesLoaded: false,
 			},
 		};
