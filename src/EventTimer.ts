@@ -28,7 +28,7 @@ interface SlotEventStatus {
 
 interface PageEventStatus {
 	commercialStart: boolean;
-	commercialEnd: boolean;
+	commercialModulesLoaded: boolean;
 }
 
 export class EventTimer {
@@ -124,7 +124,7 @@ export class EventTimer {
 			},
 			page: {
 				commercialStart: false,
-				commercialEnd: false,
+				commercialModulesLoaded: false,
 			},
 		};
 
@@ -141,7 +141,7 @@ export class EventTimer {
 					timingLabel: 'Commercial start parse time',
 				},
 				{
-					timingVariable: 'commercialEnd',
+					timingVariable: 'commercialModulesLoaded',
 					timingLabel: 'Commercial end parse time',
 				},
 			],
