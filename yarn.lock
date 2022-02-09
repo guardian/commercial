@@ -1156,9 +1156,9 @@
   integrity sha512-w0ZFj3SHznQXSq99kFCuO8tkN6w4T14znjrF2alLCSDnHOXEnpzneyNwxLvekcsDBInr8b5mXmzYh03GArqEyw==
 
 "@types/googletag@^1.1.4":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@types/googletag/-/googletag-1.2.2.tgz#ca0b767b4f47bbda7738e0baca54218316b578ff"
-  integrity sha512-xk0vT4oZD1NAipdVYTfrV00DlwzYizmPRxBNazGNh71dus2+zMpad0QLzLs+vxoIaDmuhP04UExcXqSTT68t4g==
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@types/googletag/-/googletag-1.2.3.tgz#060cdc6418a01d495a67e758df321d70e90231e2"
+  integrity sha512-0bDGlHGYtlabCyCxQ7uQCppTHn8aTOPW1uDmrUCupMPrnuy+G9yx4ol76kQMC9jI/qt4dw5Fabi/lt5+M5rsEg==
 
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
