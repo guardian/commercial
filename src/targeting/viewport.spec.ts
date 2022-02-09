@@ -26,10 +26,10 @@ describe('Viewport targeting', () => {
 		[number, ViewportTargeting['bp'], ViewportTargeting['skinsize']]
 	> = [
 		[320, 'mobile', 's'],
-		[640, 'mobile', 's'],
-		[739, 'mobile', 's'],
+		[370, 'mobile', 's'],
+		[470, 'mobile', 's'],
 
-		[750, 'tablet', 's'],
+		[670, 'tablet', 's'],
 		[960, 'tablet', 's'],
 
 		[1024, 'desktop', 's'],

@@ -49,7 +49,7 @@ export type ViewportTargeting = {
 
 const findBreakpoint = (width: number): ViewportTargeting['bp'] => {
 	if (width >= 980) return 'desktop';
-	if (width >= 740) return 'tablet';
+	if (width >= 660) return 'tablet';
 	return 'mobile';
 };
 
