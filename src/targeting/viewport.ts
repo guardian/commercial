@@ -49,16 +49,21 @@ export type ViewportTargeting = {
 
 const findBreakpoint = (width: number): ViewportTargeting['bp'] => {
 	if (width >= 980) return 'desktop';
-	if (width >= 740) return 'tablet';
+	if (width >= 660) return 'tablet';
 	return 'mobile';
 };
 
 /* -- Targeting -- */
 
-export const getViewportTargeting = (
-	viewPortWidth: number,
-	cmpBannerWillShow: boolean,
-): ViewportTargeting => {
+type Viewport = {
+	viewPortWidth: number;
+	cmpBannerWillShow: boolean;
+};
+
+export const getViewportTargeting = ({
+	viewPortWidth,
+	cmpBannerWillShow,
+}: Viewport): ViewportTargeting => {
 	// Don’t show inskin if if a privacy message will be shown
 	const inskin = cmpBannerWillShow ? 'f' : 't';
 
