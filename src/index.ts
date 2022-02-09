@@ -29,3 +29,14 @@ export type {
 	CustomParams,
 } from './types';
 export * as constants from './constants';
+export type { ContentTargeting } from './targeting/content';
+export { getContentTargeting } from './targeting/content';
+export type { PersonalisedTargeting } from './targeting/personalised';
+export { getPersonalisedTargeting } from './targeting/personalised';
+export type { SessionTargeting } from './targeting/session';
+export { getSessionTargeting } from './targeting/session';
+export type { SharedTargeting } from './targeting/shared';
+export { getSharedTargeting } from './targeting/shared';
+export type { ViewportTargeting } from './targeting/viewport';
+export { getViewportTargeting } from './targeting/viewport';
+export { pickTargetingValues } from './targeting/pick-targeting-values';
