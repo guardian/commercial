@@ -8,7 +8,10 @@ describe('Viewport targeting', () => {
 			inskin: 't',
 			skinsize: 's',
 		};
-		const targeting = getViewportTargeting(1280, false);
+		const targeting = getViewportTargeting({
+			viewPortWidth: 1280,
+			cmpBannerWillShow: false,
+		});
 		expect(targeting).toMatchObject(expected);
 	});
 
@@ -18,7 +21,10 @@ describe('Viewport targeting', () => {
 			inskin: 'f',
 			skinsize: 's',
 		};
-		const targeting = getViewportTargeting(1280, true);
+		const targeting = getViewportTargeting({
+			viewPortWidth: 1280,
+			cmpBannerWillShow: true,
+		});
 		expect(targeting).toMatchObject(expected);
 	});
 
@@ -52,7 +58,10 @@ describe('Viewport targeting', () => {
 				skinsize,
 			};
 
-			const targeting = getViewportTargeting(windowWidth, false);
+			const targeting = getViewportTargeting({
+				viewPortWidth: windowWidth,
+				cmpBannerWillShow: false,
+			});
 			expect(targeting).toMatchObject(expected);
 		},
 	);
