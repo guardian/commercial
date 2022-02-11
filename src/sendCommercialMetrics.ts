@@ -1,34 +1,63 @@
 import { log } from '@guardian/libs';
 import { EventTimer } from './EventTimer';
 
-type Metrics = {
+type Metric = {
 	name: string;
 	value: number;
 };
 
-type Properties = {
+type Property = {
 	name: string;
 	value: string;
 };
 
-type CommercialMetrics = {
-	browser_id?: string;
-	page_view_id: string;
-	platform: string;
-	metrics: readonly Metrics[];
-	properties: readonly Properties[];
+type TimedEvent = {
+	name: string;
+	ts: number;
 };
 
-export function sendCommercialMetrics(
-	pageViewId: string,
-	browserId: string | undefined,
-	isDev: boolean,
-	adBlockerInUse?: boolean,
-): boolean {
-	const devProperties: Properties[] = isDev
+type EventProperties = {
+	type?: ConnectionType;
+	downlink?: number;
+	effectiveType?: string;
+};
+
+type CommercialMetricsPayload = {
+	page_view_id?: string;
+	browser_id?: string;
+	platform?: 'NEXT_GEN';
+	metrics?: readonly Metric[];
+	properties?: readonly Property[];
+};
+
+enum Endpoints {
+	CODE = '//performance-events.code.dev-guardianapis.com/commercial-metrics',
+	PROD = '//performance-events.guardianapis.com/commercial-metrics',
+}
+
+let commercialMetricsPayload: CommercialMetricsPayload = {
+	page_view_id: undefined,
+	browser_id: undefined,
+	platform: 'NEXT_GEN',
+	metrics: [],
+	properties: [],
+};
+
+let devProperties: Property[] | [] = [];
+let adBlockerProperties: Property[] | [] = [];
+let initialised = false;
+let endpoint: Endpoints;
+
+const setEndpoint = (isDev: boolean) =>
+	(endpoint = isDev ? Endpoints.CODE : Endpoints.PROD);
+
+const setDevProperties = (isDev: boolean) =>
+	(devProperties = isDev
 		? [{ name: 'isDev', value: window.location.hostname }]
-		: [];
-	const adBlockerProperties: Properties[] =
+		: []);
+
+const setAdBlockerProperties = (adBlockerInUse?: boolean): void => {
+	adBlockerProperties =
 		adBlockerInUse !== undefined
 			? [
 					{
@@ -37,36 +66,163 @@ export function sendCommercialMetrics(
 					},
 			  ]
 			: [];
+};
 
-	const endpoint = isDev
-		? '//performance-events.code.dev-guardianapis.com/commercial-metrics'
-		: '//performance-events.guardianapis.com/commercial-metrics';
-	if (document.visibilityState !== 'hidden') return false;
+const transformToObjectEntries = (
+	eventTimerProperties: EventProperties,
+): Array<[string, string | number | undefined]> => {
+	// Transforms object {key: value} pairs into an array of [key, value] arrays
+	return Object.entries(eventTimerProperties);
+};
 
-	const eventTimer = EventTimer.get();
-	const events = eventTimer.events;
+const filterUndefinedProperties = <T>(
+	transformedProperties: Array<[string, T | undefined]>,
+): Array<[string, T]> =>
+	transformedProperties.reduce<Array<[string, T]>>((acc, [key, value]) => {
+		if (typeof value !== 'undefined') {
+			acc.push([key, value]);
+		}
+		return acc;
+	}, []);
 
-	const properties: readonly Properties[] = Object.entries(
-		eventTimer.properties,
-	)
-		.filter(([, value]) => typeof value !== 'undefined')
-		.map(([name, value]) => ({ name, value: String(value) }))
-		.concat(devProperties)
-		.concat(adBlockerProperties);
+const mapEventTimerPropertiesToString = (
+	properties: Array<[string, string | number]>,
+): Property[] => {
+	return properties.map(([name, value]) => ({
+		name: String(name),
+		value: String(value),
+	}));
+};
 
-	const metrics: readonly Metrics[] = events.map(({ name, ts }) => ({
+const roundTimeStamp = (events: TimedEvent[]): Metric[] => {
+	return events.map(({ name, ts }) => ({
 		name,
 		value: Math.ceil(ts),
 	}));
+};
 
-	const commercialMetrics: CommercialMetrics = {
-		browser_id: browserId,
-		page_view_id: pageViewId,
-		platform: 'NEXT_GEN',
-		metrics,
-		properties,
-	};
+function sendMetrics() {
+	log(
+		'commercial',
+		'About to send commercial metrics',
+		commercialMetricsPayload,
+	);
 
-	log('commercial', 'About to send commercial metrics', commercialMetrics);
-	return navigator.sendBeacon(endpoint, JSON.stringify(commercialMetrics));
+	return navigator.sendBeacon(
+		endpoint,
+		JSON.stringify(commercialMetricsPayload),
+	);
 }
+
+function gatherMetricsOnPageUnload(): void {
+	// Assemble commercial properties and metrics
+	const eventTimer = EventTimer.get();
+	const transformedEntries = transformToObjectEntries(eventTimer.properties);
+	const filteredEventTimerProperties =
+		filterUndefinedProperties(transformedEntries);
+	const mappedEventTimerProperties = mapEventTimerPropertiesToString(
+		filteredEventTimerProperties,
+	);
+
+	const properties: readonly Property[] = mappedEventTimerProperties
+		.concat(devProperties)
+		.concat(adBlockerProperties);
+	commercialMetricsPayload.properties = properties;
+
+	const metrics: readonly Metric[] = roundTimeStamp(eventTimer.events);
+	commercialMetricsPayload.metrics = metrics;
+
+	sendMetrics();
+}
+
+const listener = (e: Event): void => {
+	switch (e.type) {
+		case 'visibilitychange':
+			if (document.visibilityState === 'hidden') {
+				gatherMetricsOnPageUnload();
+			}
+			return;
+		case 'pagehide':
+			gatherMetricsOnPageUnload();
+			return;
+	}
+};
+
+const addVisibilityListeners = (): void => {
+	// Report all available metrics when the page is unloaded or in background.
+	window.addEventListener('visibilitychange', listener);
+
+	// Safari does not reliably fire the `visibilitychange` on page unload.
+	window.addEventListener('pagehide', listener);
+};
+
+/**
+ * A method to asynchronously send metrics after initialization.
+ */
+export function bypassCommercialMetricsSampling(): void {
+	if (!initialised) {
+		console.warn('initCommercialMetrics not yet initialised');
+		return;
+	}
+
+	addVisibilityListeners();
+}
+
+/**
+ * A method to initialise metrics.
+ * @param init.pageViewId - identifies the page view. Usually available on `guardian.config.ophan.pageViewId`. Defaults to `null`
+ * @param init.browserId - identifies the browser. Usually available via `getCookie({ name: 'bwid' })`. Defaults to `null`
+ * @param init.isDev - used to determine whether to use CODE or PROD endpoints.
+ * @param init.adBlockerInUse - indicates whether or not ann adblocker is being used.
+ */
+export function initCommercialMetrics(
+	pageViewId: string,
+	browserId: string | undefined,
+	isDev: boolean,
+	adBlockerInUse?: boolean,
+	sampling: number = 1 / 100,
+): boolean {
+	commercialMetricsPayload.page_view_id = pageViewId;
+	commercialMetricsPayload.browser_id = browserId;
+	setEndpoint(isDev);
+	setDevProperties(isDev);
+	setAdBlockerProperties(adBlockerInUse);
+
+	if (initialised) {
+		return false;
+	}
+
+	initialised = true;
+
+	const userIsInSamplingGroup = Math.random() <= sampling;
+
+	if (isDev || userIsInSamplingGroup) {
+		addVisibilityListeners();
+		return true;
+	}
+
+	return false;
+}
+
+export const _ = {
+	Endpoints,
+	setEndpoint,
+	filterUndefinedProperties,
+	mapEventTimerPropertiesToString,
+	roundTimeStamp,
+	transformToObjectEntries,
+	reset: (): void => {
+		initialised = false;
+		commercialMetricsPayload = {
+			page_view_id: undefined,
+			browser_id: undefined,
+			platform: 'NEXT_GEN',
+			metrics: [],
+			properties: [],
+		};
+		removeEventListener('visibilitychange', listener);
+		removeEventListener('pagehide', listener);
+	},
+};
+
+export type { Property, TimedEvent, Metric };

@@ -1,25 +1,49 @@
 import { EventTimer } from './EventTimer';
-import { sendCommercialMetrics } from './sendCommercialMetrics';
+import {
+	_,
+	bypassCommercialMetricsSampling,
+	initCommercialMetrics,
+} from './sendCommercialMetrics';
+import type { Metric, Property, TimedEvent } from './sendCommercialMetrics';
 
-const PROD_ENDPOINT =
-	'//performance-events.guardianapis.com/commercial-metrics';
-
-const DEV_ENDPOINT =
-	'//performance-events.code.dev-guardianapis.com/commercial-metrics';
+const {
+	Endpoints,
+	filterUndefinedProperties,
+	mapEventTimerPropertiesToString,
+	reset,
+	roundTimeStamp,
+	transformToObjectEntries,
+} = _;
 
 const PAGE_VIEW_ID = 'pv_id_1234567890';
 const BROWSER_ID = 'bwid_abcdefghijklm';
+const IS_NOT_DEV = false;
+const IS_DEV = true;
+const ADBLOCK_NOT_IN_USE = false;
+const USER_IN_SAMPLING = 100 / 100;
+const USER_NOT_IN_SAMPLING = -1;
 
 const defaultMetrics = {
-	browser_id: BROWSER_ID,
 	page_view_id: PAGE_VIEW_ID,
+	browser_id: BROWSER_ID,
 	platform: 'NEXT_GEN',
 	metrics: [],
-	properties: [],
+	properties: [
+		{
+			name: 'adBlockerInUse',
+			value: 'false',
+		},
+	],
 };
 
 const mockSendMetrics = () =>
-	sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, false);
+	initCommercialMetrics(
+		PAGE_VIEW_ID,
+		BROWSER_ID,
+		IS_NOT_DEV,
+		ADBLOCK_NOT_IN_USE,
+		USER_IN_SAMPLING,
+	);
 
 const setVisibility = (value: 'hidden' | 'visible' = 'hidden'): void => {
 	Object.defineProperty(document, 'visibilityState', {
@@ -28,7 +52,7 @@ const setVisibility = (value: 'hidden' | 'visible' = 'hidden'): void => {
 	});
 };
 
-describe('sendCommercialMetrics', () => {
+describe('send commercial metrics code', () => {
 	const sendBeacon = jest.fn().mockReturnValue(true);
 	Object.defineProperty(navigator, 'sendBeacon', {
 		configurable: true,
@@ -37,25 +61,54 @@ describe('sendCommercialMetrics', () => {
 		writable: true,
 	});
 
-	it('send commercial metrics success', () => {
+	const mockConsoleWarn = jest
+		.spyOn(console, 'warn')
+		.mockImplementation(() => false);
+
+	it('can send commercial metrics when the page is hidden', () => {
+		const metricsSent = mockSendMetrics();
 		setVisibility();
+		global.dispatchEvent(new Event('visibilitychange'));
 
-		expect(mockSendMetrics()).toEqual(true);
-
+		expect(metricsSent).toEqual(true);
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
-			[PROD_ENDPOINT, JSON.stringify(defaultMetrics)],
+			[Endpoints.PROD, JSON.stringify(defaultMetrics)],
 		]);
 	});
 
 	it('commercial metrics not sent when window is visible', () => {
+		const metricsSent = mockSendMetrics();
 		setVisibility('visible');
+		global.dispatchEvent(new Event('visibilitychange'));
 
-		expect(mockSendMetrics()).toEqual(false);
-
+		expect(metricsSent).toEqual(false);
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([]);
 	});
 
+	describe('bypassCommercialMetricsSampling', () => {
+		it('sends a beacon if bypassed asynchronously', () => {
+			bypassCommercialMetricsSampling();
+
+			setVisibility();
+			global.dispatchEvent(new Event('visibilitychange'));
+			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+				[Endpoints.PROD, JSON.stringify(defaultMetrics)],
+			]);
+		});
+		it('expects to be initialised before calling bypassCoreWebVitalsSampling', () => {
+			reset();
+			bypassCommercialMetricsSampling();
+			expect(mockConsoleWarn).toHaveBeenCalledWith(
+				'initCommercialMetrics not yet initialised',
+			);
+		});
+	});
+
 	describe('handles various configurations', () => {
+		beforeEach(() => {
+			reset();
+		});
+
 		afterEach(() => {
 			// Reset the properties of the event timer for the purposes of this test
 			delete window.guardian.commercialTimer;
@@ -63,15 +116,20 @@ describe('sendCommercialMetrics', () => {
 		});
 
 		it('should handle endpoint in dev', () => {
+			const mockSendMetrics = initCommercialMetrics(
+				PAGE_VIEW_ID,
+				BROWSER_ID,
+				IS_DEV,
+				ADBLOCK_NOT_IN_USE,
+				USER_IN_SAMPLING,
+			);
 			setVisibility();
+			global.dispatchEvent(new Event('visibilitychange'));
 
-			expect(
-				sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, true, false),
-			).toEqual(true);
-
+			expect(mockSendMetrics).toEqual(true);
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
-					DEV_ENDPOINT,
+					Endpoints.CODE,
 					JSON.stringify({
 						...defaultMetrics,
 						properties: [
@@ -84,26 +142,26 @@ describe('sendCommercialMetrics', () => {
 		});
 
 		it('should handle connection properties if they exist', () => {
+			const sentMetrics = mockSendMetrics();
 			const eventTimer = EventTimer.get();
-
 			// Fix the properties of the event timer for the purposes of this test
 			eventTimer.properties = {
 				downlink: 1,
 				effectiveType: '4g',
 			};
-
 			setVisibility();
+			global.dispatchEvent(new Event('visibilitychange'));
 
-			expect(mockSendMetrics()).toEqual(true);
-
+			expect(sentMetrics).toEqual(true);
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
-					PROD_ENDPOINT,
+					Endpoints.PROD,
 					JSON.stringify({
 						...defaultMetrics,
 						properties: [
 							{ name: 'downlink', value: '1' },
 							{ name: 'effectiveType', value: '4g' },
+							{ name: 'adBlockerInUse', value: 'false' },
 						],
 					}),
 				],
@@ -112,24 +170,24 @@ describe('sendCommercialMetrics', () => {
 
 		it('should merge properties adequately', () => {
 			const eventTimer = EventTimer.get();
-
 			// Fix the properties of the event timer for the purposes of this test
 			eventTimer.properties = {
 				downlink: 1,
 				effectiveType: '4g',
 			};
-
-			Object.defineProperty(document, 'visibilityState', {
-				value: 'hidden',
-				writable: true,
-			});
-			expect(
-				sendCommercialMetrics(PAGE_VIEW_ID, BROWSER_ID, true, false),
-			).toEqual(true);
-
+			const sentMetrics = initCommercialMetrics(
+				PAGE_VIEW_ID,
+				BROWSER_ID,
+				IS_DEV,
+				ADBLOCK_NOT_IN_USE,
+				USER_IN_SAMPLING,
+			);
+			setVisibility();
+			global.dispatchEvent(new Event('pagehide'));
+			expect(sentMetrics).toEqual(true);
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
-					DEV_ENDPOINT,
+					Endpoints.CODE,
 					JSON.stringify({
 						...defaultMetrics,
 						properties: [
@@ -142,5 +200,124 @@ describe('sendCommercialMetrics', () => {
 				],
 			]);
 		});
+
+		it('should return false if user is not in sampling', () => {
+			const sentMetrics = initCommercialMetrics(
+				PAGE_VIEW_ID,
+				BROWSER_ID,
+				IS_NOT_DEV,
+				ADBLOCK_NOT_IN_USE,
+				USER_NOT_IN_SAMPLING,
+			);
+			expect(sentMetrics).toEqual(false);
+		});
+
+		it('should set sampling at 0.01 if sampling is not passed in', () => {
+			const sentMetrics = initCommercialMetrics(
+				PAGE_VIEW_ID,
+				BROWSER_ID,
+				IS_NOT_DEV,
+				ADBLOCK_NOT_IN_USE,
+			);
+			const mathRandomSpy = jest.spyOn(Math, 'random');
+			mathRandomSpy.mockImplementation(() => 0.5);
+			expect(sentMetrics).toEqual(false);
+		});
+
+		it('should merge properties even if adblocking is not passed in', () => {
+			const eventTimer = EventTimer.get();
+			eventTimer.properties = {
+				downlink: 1,
+				effectiveType: '4g',
+			};
+			const sentMetrics = initCommercialMetrics(
+				PAGE_VIEW_ID,
+				BROWSER_ID,
+				IS_DEV,
+				undefined,
+				USER_IN_SAMPLING,
+			);
+			setVisibility();
+			global.dispatchEvent(new Event('pagehide'));
+			expect(sentMetrics).toEqual(true);
+			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+				[
+					Endpoints.CODE,
+					JSON.stringify({
+						...defaultMetrics,
+						properties: [
+							{ name: 'downlink', value: '1' },
+							{ name: 'effectiveType', value: '4g' },
+							{ name: 'isDev', value: 'localhost' },
+						],
+					}),
+				],
+			]);
+		});
+	});
+});
+
+describe('send commercial metrics helpers', () => {
+	const eventProperties = {
+		type: undefined,
+		downlink: 1,
+		effectiveType: '4g',
+	};
+
+	const transformedProperties: Array<[string, string | number | undefined]> =
+		[
+			['type', undefined],
+			['downlink', 1],
+			['effectiveType', '4g'],
+		];
+
+	const filteredProperties: Array<[string, string | number]> = [
+		['downlink', 1],
+		['effectiveType', '4g'],
+	];
+	const mappedProperties: Property[] = [
+		{
+			name: 'downlink',
+			value: '1',
+		},
+		{
+			name: 'effectiveType',
+			value: '4g',
+		},
+	];
+	const roundedEvent: Metric[] = [
+		{
+			name: 'cmp-tcfv2-init',
+			value: 1519211809935,
+		},
+	];
+
+	it('can transform event timer properties into object entries', () => {
+		const transformed: Array<[string, string | number | undefined]> =
+			transformToObjectEntries(eventProperties);
+		expect(transformed).toEqual(transformedProperties);
+	});
+
+	it('can filter out event timer properties with a value that is undefined', () => {
+		const filtered: Array<[string, string | number | undefined]> =
+			filterUndefinedProperties(transformedProperties);
+		expect(filtered).toEqual(filteredProperties);
+	});
+
+	it('can map event timer properties to the required format', () => {
+		const mapped = mapEventTimerPropertiesToString(filteredProperties);
+		expect(mapped).toEqual(mappedProperties);
+	});
+
+	// This one is seemingly not doing anything as the start and end values match
+	it('can round up the value of timestamps', () => {
+		const event: TimedEvent[] = [
+			{
+				name: 'cmp-tcfv2-init',
+				ts: 1519211809934.234,
+			},
+		];
+		const rounded = roundTimeStamp(event);
+		expect(rounded).toEqual(roundedEvent);
 	});
 });
