@@ -231,13 +231,13 @@ describe('EventTimer', () => {
 
 	it('trigger commercial end page event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('commercialEnd');
+		eventTimer.trigger('commercialModulesLoaded');
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['gu.commercial.commercialEnd'],
+			['gu.commercial.commercialModulesLoaded'],
 		]);
 		expect(trackEvent).toHaveBeenCalledWith(
 			'Commercial Events',
-			'commercialEnd',
+			'commercialModulesLoaded',
 			'Commercial end parse time',
 		);
 	});
