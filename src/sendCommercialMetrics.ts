@@ -45,6 +45,7 @@ let commercialMetricsPayload: CommercialMetricsPayload = {
 
 let devProperties: Property[] | [] = [];
 let adBlockerProperties: Property[] | [] = [];
+let slotProperties: Property[] | [] = [];
 let initialised = false;
 let endpoint: Endpoints;
 
@@ -66,6 +67,31 @@ const setAdBlockerProperties = (adBlockerInUse?: boolean): void => {
 					},
 			  ]
 			: [];
+};
+
+const setSlotProperties = (
+	numInlineSlots?: number,
+	totalSlots?: number,
+): void => {
+	const numInlineSlotsProperties =
+		numInlineSlots !== undefined
+			? [
+					{
+						name: 'numInlineSlots',
+						value: numInlineSlots.toString(),
+					},
+			  ]
+			: [];
+	const totalSlotsProperties =
+		totalSlots !== undefined
+			? [
+					{
+						name: 'totalSlots',
+						value: totalSlots.toString(),
+					},
+			  ]
+			: [];
+	slotProperties = numInlineSlotsProperties.concat(totalSlotsProperties);
 };
 
 const transformToObjectEntries = (
@@ -126,7 +152,8 @@ function gatherMetricsOnPageUnload(): void {
 
 	const properties: readonly Property[] = mappedEventTimerProperties
 		.concat(devProperties)
-		.concat(adBlockerProperties);
+		.concat(adBlockerProperties)
+		.concat(slotProperties);
 	commercialMetricsPayload.properties = properties;
 
 	const metrics: readonly Metric[] = roundTimeStamp(eventTimer.events);
@@ -173,6 +200,8 @@ interface InitCommercialMetricsArgs {
 	browserId: string | undefined;
 	isDev: boolean;
 	adBlockerInUse?: boolean;
+	numInlineSlots?: number;
+	totalSlots?: number;
 	sampling?: number;
 }
 
@@ -182,6 +211,8 @@ interface InitCommercialMetricsArgs {
  * @param init.browserId - identifies the browser. Usually available via `getCookie({ name: 'bwid' })`. Defaults to `null`
  * @param init.isDev - used to determine whether to use CODE or PROD endpoints.
  * @param init.adBlockerInUse - indicates whether or not an adblocker is being used.
+ * @param init.numInlineSlots - the number of inline ad slots on the page
+ * @param init.totalSlots - the total number of ad slots on the page
  * @param init.sampling - rate at which to sample commercial metrics - the default is to send for 1% of pageviews
  */
 export function initCommercialMetrics({
@@ -189,6 +220,8 @@ export function initCommercialMetrics({
 	browserId,
 	isDev,
 	adBlockerInUse,
+	numInlineSlots,
+	totalSlots,
 	sampling = 1 / 100,
 }: InitCommercialMetricsArgs): boolean {
 	commercialMetricsPayload.page_view_id = pageViewId;
@@ -196,6 +229,7 @@ export function initCommercialMetrics({
 	setEndpoint(isDev);
 	setDevProperties(isDev);
 	setAdBlockerProperties(adBlockerInUse);
+	setSlotProperties(numInlineSlots, totalSlots);
 
 	if (initialised) {
 		return false;
