@@ -168,20 +168,29 @@ export function bypassCommercialMetricsSampling(): void {
 	addVisibilityListeners();
 }
 
+interface InitCommercialMetricsArgs {
+	pageViewId: string;
+	browserId: string | undefined;
+	isDev: boolean;
+	adBlockerInUse?: boolean;
+	sampling?: number;
+}
+
 /**
  * A method to initialise metrics.
  * @param init.pageViewId - identifies the page view. Usually available on `guardian.config.ophan.pageViewId`. Defaults to `null`
  * @param init.browserId - identifies the browser. Usually available via `getCookie({ name: 'bwid' })`. Defaults to `null`
  * @param init.isDev - used to determine whether to use CODE or PROD endpoints.
- * @param init.adBlockerInUse - indicates whether or not ann adblocker is being used.
+ * @param init.adBlockerInUse - indicates whether or not an adblocker is being used.
+ * @param init.sampling - rate at which to sample commercial metrics - the default is to send for 1% of pageviews
  */
-export function initCommercialMetrics(
-	pageViewId: string,
-	browserId: string | undefined,
-	isDev: boolean,
-	adBlockerInUse?: boolean,
-	sampling: number = 1 / 100,
-): boolean {
+export function initCommercialMetrics({
+	pageViewId,
+	browserId,
+	isDev,
+	adBlockerInUse,
+	sampling = 1 / 100,
+}: InitCommercialMetricsArgs): boolean {
 	commercialMetricsPayload.page_view_id = pageViewId;
 	commercialMetricsPayload.browser_id = browserId;
 	setEndpoint(isDev);

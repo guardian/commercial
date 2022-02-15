@@ -37,13 +37,13 @@ const defaultMetrics = {
 };
 
 const mockSendMetrics = () =>
-	initCommercialMetrics(
-		PAGE_VIEW_ID,
-		BROWSER_ID,
-		IS_NOT_DEV,
-		ADBLOCK_NOT_IN_USE,
-		USER_IN_SAMPLING,
-	);
+	initCommercialMetrics({
+		pageViewId: PAGE_VIEW_ID,
+		browserId: BROWSER_ID,
+		isDev: IS_NOT_DEV,
+		adBlockerInUse: ADBLOCK_NOT_IN_USE,
+		sampling: USER_IN_SAMPLING,
+	});
 
 const setVisibility = (value: 'hidden' | 'visible' = 'hidden'): void => {
 	Object.defineProperty(document, 'visibilityState', {
@@ -116,13 +116,13 @@ describe('send commercial metrics code', () => {
 		});
 
 		it('should handle endpoint in dev', () => {
-			const mockSendMetrics = initCommercialMetrics(
-				PAGE_VIEW_ID,
-				BROWSER_ID,
-				IS_DEV,
-				ADBLOCK_NOT_IN_USE,
-				USER_IN_SAMPLING,
-			);
+			const mockSendMetrics = initCommercialMetrics({
+				pageViewId: PAGE_VIEW_ID,
+				browserId: BROWSER_ID,
+				isDev: IS_DEV,
+				adBlockerInUse: ADBLOCK_NOT_IN_USE,
+				sampling: USER_IN_SAMPLING,
+			});
 			setVisibility();
 			global.dispatchEvent(new Event('visibilitychange'));
 
@@ -175,13 +175,13 @@ describe('send commercial metrics code', () => {
 				downlink: 1,
 				effectiveType: '4g',
 			};
-			const sentMetrics = initCommercialMetrics(
-				PAGE_VIEW_ID,
-				BROWSER_ID,
-				IS_DEV,
-				ADBLOCK_NOT_IN_USE,
-				USER_IN_SAMPLING,
-			);
+			const sentMetrics = initCommercialMetrics({
+				pageViewId: PAGE_VIEW_ID,
+				browserId: BROWSER_ID,
+				isDev: IS_DEV,
+				adBlockerInUse: ADBLOCK_NOT_IN_USE,
+				sampling: USER_IN_SAMPLING,
+			});
 			setVisibility();
 			global.dispatchEvent(new Event('pagehide'));
 			expect(sentMetrics).toEqual(true);
@@ -202,23 +202,23 @@ describe('send commercial metrics code', () => {
 		});
 
 		it('should return false if user is not in sampling', () => {
-			const sentMetrics = initCommercialMetrics(
-				PAGE_VIEW_ID,
-				BROWSER_ID,
-				IS_NOT_DEV,
-				ADBLOCK_NOT_IN_USE,
-				USER_NOT_IN_SAMPLING,
-			);
+			const sentMetrics = initCommercialMetrics({
+				pageViewId: PAGE_VIEW_ID,
+				browserId: BROWSER_ID,
+				isDev: IS_NOT_DEV,
+				adBlockerInUse: ADBLOCK_NOT_IN_USE,
+				sampling: USER_NOT_IN_SAMPLING,
+			});
 			expect(sentMetrics).toEqual(false);
 		});
 
 		it('should set sampling at 0.01 if sampling is not passed in', () => {
-			const sentMetrics = initCommercialMetrics(
-				PAGE_VIEW_ID,
-				BROWSER_ID,
-				IS_NOT_DEV,
-				ADBLOCK_NOT_IN_USE,
-			);
+			const sentMetrics = initCommercialMetrics({
+				pageViewId: PAGE_VIEW_ID,
+				browserId: BROWSER_ID,
+				isDev: IS_NOT_DEV,
+				adBlockerInUse: ADBLOCK_NOT_IN_USE,
+			});
 			const mathRandomSpy = jest.spyOn(Math, 'random');
 			mathRandomSpy.mockImplementation(() => 0.5);
 			expect(sentMetrics).toEqual(false);
@@ -230,13 +230,13 @@ describe('send commercial metrics code', () => {
 				downlink: 1,
 				effectiveType: '4g',
 			};
-			const sentMetrics = initCommercialMetrics(
-				PAGE_VIEW_ID,
-				BROWSER_ID,
-				IS_DEV,
-				undefined,
-				USER_IN_SAMPLING,
-			);
+			const sentMetrics = initCommercialMetrics({
+				pageViewId: PAGE_VIEW_ID,
+				browserId: BROWSER_ID,
+				isDev: IS_DEV,
+				adBlockerInUse: undefined,
+				sampling: USER_IN_SAMPLING,
+			});
 			setVisibility();
 			global.dispatchEvent(new Event('pagehide'));
 			expect(sentMetrics).toEqual(true);
