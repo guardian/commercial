@@ -45,6 +45,7 @@ let commercialMetricsPayload: CommercialMetricsPayload = {
 
 let devProperties: Property[] | [] = [];
 let adBlockerProperties: Property[] | [] = [];
+let adSlotProperties: Property[] | [] = [];
 let initialised = false;
 let endpoint: Endpoints;
 
@@ -66,6 +67,31 @@ const setAdBlockerProperties = (adBlockerInUse?: boolean): void => {
 					},
 			  ]
 			: [];
+};
+
+const setAdSlotProperties = (
+	adSlotsInline?: number,
+	adSlotsTotal?: number,
+): void => {
+	const adSlotsInlineProperties =
+		adSlotsInline !== undefined
+			? [
+					{
+						name: 'adSlotsInline',
+						value: adSlotsInline.toString(),
+					},
+			  ]
+			: [];
+	const adSlotsTotalProperties =
+		adSlotsTotal !== undefined
+			? [
+					{
+						name: 'adSlotsTotal',
+						value: adSlotsTotal.toString(),
+					},
+			  ]
+			: [];
+	adSlotProperties = adSlotsInlineProperties.concat(adSlotsTotalProperties);
 };
 
 const transformToObjectEntries = (
@@ -126,7 +152,8 @@ function gatherMetricsOnPageUnload(): void {
 
 	const properties: readonly Property[] = mappedEventTimerProperties
 		.concat(devProperties)
-		.concat(adBlockerProperties);
+		.concat(adBlockerProperties)
+		.concat(adSlotProperties);
 	commercialMetricsPayload.properties = properties;
 
 	const metrics: readonly Metric[] = roundTimeStamp(eventTimer.events);
@@ -168,25 +195,41 @@ export function bypassCommercialMetricsSampling(): void {
 	addVisibilityListeners();
 }
 
+interface InitCommercialMetricsArgs {
+	pageViewId: string;
+	browserId: string | undefined;
+	isDev: boolean;
+	adBlockerInUse?: boolean;
+	adSlotsInline?: number;
+	adSlotsTotal?: number;
+	sampling?: number;
+}
+
 /**
  * A method to initialise metrics.
  * @param init.pageViewId - identifies the page view. Usually available on `guardian.config.ophan.pageViewId`. Defaults to `null`
  * @param init.browserId - identifies the browser. Usually available via `getCookie({ name: 'bwid' })`. Defaults to `null`
  * @param init.isDev - used to determine whether to use CODE or PROD endpoints.
- * @param init.adBlockerInUse - indicates whether or not ann adblocker is being used.
+ * @param init.adBlockerInUse - indicates whether or not an adblocker is being used.
+ * @param init.adSlotsInline - the number of inline ad slots on the page
+ * @param init.adSlotsTotal - the total number of ad slots on the page
+ * @param init.sampling - rate at which to sample commercial metrics - the default is to send for 1% of pageviews
  */
-export function initCommercialMetrics(
-	pageViewId: string,
-	browserId: string | undefined,
-	isDev: boolean,
-	adBlockerInUse?: boolean,
-	sampling: number = 1 / 100,
-): boolean {
+export function initCommercialMetrics({
+	pageViewId,
+	browserId,
+	isDev,
+	adBlockerInUse,
+	adSlotsInline,
+	adSlotsTotal,
+	sampling = 1 / 100,
+}: InitCommercialMetricsArgs): boolean {
 	commercialMetricsPayload.page_view_id = pageViewId;
 	commercialMetricsPayload.browser_id = browserId;
 	setEndpoint(isDev);
 	setDevProperties(isDev);
 	setAdBlockerProperties(adBlockerInUse);
+	setAdSlotProperties(adSlotsInline, adSlotsTotal);
 
 	if (initialised) {
 		return false;
