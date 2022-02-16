@@ -235,8 +235,8 @@ describe('send commercial metrics code', () => {
 				browserId: BROWSER_ID,
 				isDev: IS_DEV,
 				adBlockerInUse: undefined,
-				numInlineSlots: 5,
-				totalSlots: 10,
+				adSlotsInline: 5,
+				adSlotsTotal: 10,
 				sampling: USER_IN_SAMPLING,
 			});
 			setVisibility();
@@ -251,8 +251,8 @@ describe('send commercial metrics code', () => {
 							{ name: 'downlink', value: '1' },
 							{ name: 'effectiveType', value: '4g' },
 							{ name: 'isDev', value: 'localhost' },
-							{ name: 'numInlineSlots', value: '5' },
-							{ name: 'totalSlots', value: '10' },
+							{ name: 'adSlotsInline', value: '5' },
+							{ name: 'adSlotsTotal', value: '10' },
 						],
 					}),
 				],
