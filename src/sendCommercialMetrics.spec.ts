@@ -255,7 +255,7 @@ describe('send commercial metrics code', () => {
 			]);
 		});
 
-		it('should accept ad slot properties', () => {
+		it('should handle ad slot properties', () => {
 			const sentMetrics = initCommercialMetrics({
 				pageViewId: PAGE_VIEW_ID,
 				browserId: BROWSER_ID,
