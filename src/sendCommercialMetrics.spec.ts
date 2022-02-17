@@ -258,6 +258,33 @@ describe('send commercial metrics code', () => {
 				],
 			]);
 		});
+
+		it('should accept ad slot properties', () => {
+			const sentMetrics = initCommercialMetrics({
+				pageViewId: PAGE_VIEW_ID,
+				browserId: BROWSER_ID,
+				isDev: IS_DEV,
+			});
+			setVisibility();
+			const eventTimer = EventTimer.get();
+			eventTimer.setProperty('adSlotsInline', 5);
+			eventTimer.setProperty('adSlotsTotal', 10);
+			global.dispatchEvent(new Event('pagehide'));
+			expect(sentMetrics).toEqual(true);
+			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+				[
+					Endpoints.CODE,
+					JSON.stringify({
+						...defaultMetrics,
+						properties: [
+							{ name: 'adSlotsInline', value: '5' },
+							{ name: 'adSlotsTotal', value: '10' },
+							{ name: 'isDev', value: 'localhost' },
+						],
+					}),
+				],
+			]);
+		});
 	});
 });
 
