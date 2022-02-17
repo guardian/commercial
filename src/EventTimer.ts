@@ -33,6 +33,14 @@ interface PageEventStatus {
 	commercialModulesLoaded: boolean;
 }
 
+interface EventTimerProperties {
+	type?: ConnectionType;
+	downlink?: number;
+	effectiveType?: string;
+	adSlotsInline?: number;
+	adSlotsTotal?: number;
+}
+
 export class EventTimer {
 	private _events: Event[];
 	private static _externallyDefinedEventNames = [
@@ -53,11 +61,7 @@ export class EventTimer {
 		page: PageEventStatus;
 	};
 	gaConfig: GAConfig;
-	properties: {
-		type?: ConnectionType;
-		downlink?: number;
-		effectiveType?: string;
-	};
+	properties: EventTimerProperties;
 	/**
 	 * Initialise the EventTimer class on page.
 	 * Returns the singleton instance of the EventTimer class and binds
@@ -150,7 +154,6 @@ export class EventTimer {
 				},
 			],
 		};
-
 		this.properties =
 			'connection' in window.navigator
 				? {
@@ -168,6 +171,10 @@ export class EventTimer {
 								: undefined,
 				  }
 				: {};
+	}
+
+	setProperty(name: 'adSlotsInline' | 'adSlotsTotal', value: number): void {
+		this.properties[name] = value;
 	}
 
 	/**
