@@ -83,3 +83,8 @@ Rules are currently set in [`article-body-adverts.js`][] in the frontend reposit
 ## Style and layout of dynamic ads
 
 On desktop, the first inline ad sits inside the body of the article copy. All subsequent ‘inline’ ads on desktop sit in the white space to the right. On mobile they're all part of the content column.
+
+
+## Debugging
+
+> “sfdebug=1 is looking for a slot for inline1. The other is looking for the other inline slots.”
