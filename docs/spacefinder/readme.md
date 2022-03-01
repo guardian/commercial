@@ -87,4 +87,6 @@ On desktop, the first inline ad sits inside the body of the article copy. All su
 
 ## Debugging
 
-> “sfdebug=1 is looking for a slot for inline1. The other is looking for the other inline slots.”
+Adding `sfdebug=1` to the URL shows information about `inline1` ads. Adding `sfdebug=2` shows information about the other inline slots.
+
+Further reading: https://github.com/guardian/frontend/pull/24618
