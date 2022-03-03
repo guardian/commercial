@@ -83,3 +83,10 @@ Rules are currently set in [`article-body-adverts.js`][] in the frontend reposit
 ## Style and layout of dynamic ads
 
 On desktop, the first inline ad sits inside the body of the article copy. All subsequent ‘inline’ ads on desktop sit in the white space to the right. On mobile they're all part of the content column.
+
+
+## Debugging
+
+Adding `sfdebug=1` to the URL shows information about `inline1` ads. Adding `sfdebug=2` shows information about the other inline slots.
+
+Further reading: https://github.com/guardian/frontend/pull/24618
