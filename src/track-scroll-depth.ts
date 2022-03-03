@@ -1,3 +1,4 @@
+import { log } from '@guardian/libs';
 import { EventTimer } from './EventTimer';
 
 /**
@@ -18,9 +19,11 @@ const initTrackScrollDepth = () => {
 	const observer = new IntersectionObserver((entries) => {
 		entries.forEach((entry) => {
 			if (entry.isIntersecting) {
-				const currentDepthVH = entry.target.getAttribute('data-depth');
-				console.log('current depth ', currentDepthVH);
-				eventTimer.trigger('scroll-depth-vh-' + String(currentDepthVH));
+				const currentDepthVH = String(
+					entry.target.getAttribute('data-depth'),
+				);
+				log('commercial', `current scroll depth ${currentDepthVH}`);
+				eventTimer.trigger(`scroll-depth-vh-${currentDepthVH}`);
 				observer.unobserve(entry.target);
 			}
 		});
