@@ -6,7 +6,7 @@ describe('initTrackScrollDepth', () => {
 	class IntersectionObserver {
 		constructor() {
 			return Object.freeze({
-				observe: observe,
+				observe,
 				unobserve: () => {
 					return;
 				},
