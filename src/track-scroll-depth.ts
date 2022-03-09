@@ -5,6 +5,7 @@ import { EventTimer } from './EventTimer';
  * Collect commercial metrics on scroll depth
  * Insert hidden elements at intervals of 1 viewport height
  * then use an intersection observer to mark the time when the viewport intersects with these elements.
+ * Approach inspired by https://gist.github.com/bgreater/2412517f5a3f9c6fc4cafeb1ca71384f
  */
 const initTrackScrollDepth = () => {
 	const pageHeight = document.body.offsetHeight;

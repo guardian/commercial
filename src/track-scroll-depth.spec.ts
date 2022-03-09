@@ -41,8 +41,8 @@ describe('initTrackScrollDepth', () => {
 	test('Hidden elements are inserted and observed', () => {
 		// Given a 1000px page and a viewport height of 100px,
 		// 10 hidden elements are inserted
-		// NOTE we can't simulate scrolling down the page and assert that the callback
-		// to IntersectionObserver works as expected.
+		// NOTE we can't test the callback to IntersectionObserver
+		// since IntersectionObserver isn't available and has to be mocked.
 		const eventTimer = EventTimer.get();
 		window.innerHeight = 100;
 
