@@ -20,6 +20,7 @@ export {
 	getPermutiveSegments,
 	getPermutivePFPSegments,
 } from './permutive';
+export { initTrackScrollDepth } from './track-scroll-depth';
 export { buildAdsConfigWithConsent, disabledAds } from './ad-targeting-youtube';
 export type {
 	AdsConfig,

@@ -39,6 +39,8 @@ interface EventTimerProperties {
 	effectiveType?: string;
 	adSlotsInline?: number;
 	adSlotsTotal?: number;
+	// the height of the page / the viewport height
+	pageHeightVH?: number;
 }
 
 export class EventTimer {
@@ -173,7 +175,16 @@ export class EventTimer {
 				: {};
 	}
 
-	setProperty(name: 'adSlotsInline' | 'adSlotsTotal', value: number): void {
+	/**
+	 * Adds an event timer property
+	 *
+	 * @param {string} name - the property's name
+	 * @param {value} number - the property's value
+	 */
+	setProperty(
+		name: 'adSlotsInline' | 'adSlotsTotal' | 'pageHeightVH',
+		value: number,
+	): void {
 		this.properties[name] = value;
 	}
 
