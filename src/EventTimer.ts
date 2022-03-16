@@ -41,6 +41,8 @@ interface EventTimerProperties {
 	adSlotsTotal?: number;
 	// the height of the page / the viewport height
 	pageHeightVH?: number;
+	// distance in percentage of viewport height at which ads are lazy loaded
+	lazyLoadMarginPercent?: number;
 }
 
 export class EventTimer {
@@ -182,7 +184,11 @@ export class EventTimer {
 	 * @param {value} number - the property's value
 	 */
 	setProperty(
-		name: 'adSlotsInline' | 'adSlotsTotal' | 'pageHeightVH',
+		name:
+			| 'adSlotsInline'
+			| 'adSlotsTotal'
+			| 'pageHeightVH'
+			| 'lazyLoadMarginPercent',
 		value: number,
 	): void {
 		this.properties[name] = value;
