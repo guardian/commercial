@@ -3,6 +3,7 @@
 This document details requirements for moving code from Frontend to commercial-core.
 
 ## Entrance Requirements
+Modules should only be migrated from Frontend if they meet the following criteria: 
 
 - Side-effect free code whereever possible
 - Split logic where required to keep code side-effect free
