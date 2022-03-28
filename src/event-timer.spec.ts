@@ -1,4 +1,4 @@
-import { EventTimer } from './EventTimer';
+import { EventTimer } from './event-timer';
 import { trackEvent } from './GoogleAnalytics';
 
 jest.mock('./GoogleAnalytics', () => ({

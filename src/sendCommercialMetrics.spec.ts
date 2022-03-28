@@ -1,4 +1,4 @@
-import { EventTimer } from './EventTimer';
+import { EventTimer } from './event-timer';
 import {
 	_,
 	bypassCommercialMetricsSampling,

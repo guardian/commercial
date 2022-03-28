@@ -1,5 +1,5 @@
 import { log } from '@guardian/libs';
-import { EventTimer } from './EventTimer';
+import { EventTimer } from './event-timer';
 
 type Metric = {
 	name: string;

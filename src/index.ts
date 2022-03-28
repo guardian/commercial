@@ -6,7 +6,7 @@ export { fbPixel } from './third-party-tags/facebook-pixel';
 export { twitter } from './third-party-tags/twitter-uwt';
 export { inizio } from './third-party-tags/inizio';
 export { remarketing } from './third-party-tags/remarketing';
-export { EventTimer } from './EventTimer';
+export { EventTimer } from './event-timer';
 export {
 	bypassCommercialMetricsSampling,
 	initCommercialMetrics,
