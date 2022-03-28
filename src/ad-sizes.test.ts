@@ -26,7 +26,6 @@ const sizes: Array<[SizeKeys, number, number, string]> = [
 	['fluid', 0, 0, 'fluid'],
 	['googleCard', 300, 274, '300,274'],
 	['outstreamGoogleDesktop', 550, 310, '550,310'],
-	['video', 620, 1, '620,1'],
 	['300x600', 300, 600, '300,600'],
 ];
 

@@ -31,8 +31,7 @@ export type SizeKeys =
 	| 'outstreamGoogleDesktop'
 	| 'outstreamMobile'
 	| 'portrait'
-	| 'skyscraper'
-	| 'video';
+	| 'skyscraper';
 
 const createAdSize = (width: number, height: number): AdSize => {
 	const toString = (): AdSizeString =>
@@ -70,7 +69,6 @@ const adSizesPartial = {
 	outstreamDesktop: createAdSize(620, 350),
 	outstreamGoogleDesktop: createAdSize(550, 310),
 	outstreamMobile: createAdSize(300, 197),
-	video: createAdSize(620, 1),
 };
 
 export const adSizes: Record<SizeKeys, AdSize> = {
