@@ -14,7 +14,7 @@ export {
 export type { ThirdPartyTag } from './types';
 export { adSizes, getAdSize } from './ad-sizes';
 export type { SizeKeys, AdSizeString, AdSize } from './ad-sizes';
-export { isAdBlockInUse } from './detectAdBlocker';
+export { isAdBlockInUse } from './detect-ad-blocker';
 export {
 	clearPermutiveSegments,
 	getPermutiveSegments,
