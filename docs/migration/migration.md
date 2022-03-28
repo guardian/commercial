@@ -5,11 +5,11 @@ This document details requirements for moving code from Frontend to commercial-c
 ## Entrance Requirements
 Modules should only be migrated from Frontend if they meet the following criteria: 
 
-- Side-effect free code whereever possible
+- Side-effect free code wherever possible
 - Split logic where required to keep code side-effect free
 - TypeScript
 - Unit tested
-- Where we check `isDotcomRendering` double check if that logic is still required i.e. DCR is gradually taking over the rendering of more features so its worth checking if any conditional platform checks are still required.
+- Where we check `isDotcomRendering` double check if that logic is still required i.e. DCR is gradually taking over the rendering of more features so it's worth checking if any conditional platform checks are still required.
 
 ## Foundational Work
 
