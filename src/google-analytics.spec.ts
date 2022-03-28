@@ -1,4 +1,4 @@
-import { trackEvent } from './GoogleAnalytics';
+import { trackEvent } from './google-analytics';
 
 // Set parameters to be used in tests
 const PERFORMANCE_NOW = 1;
