@@ -31,6 +31,7 @@ Larger, more complex lib functions we could invert control by passing as a depen
 
 # Desirable Patterns
 
+- Aim to include [TSDocs](https://tsdoc.org/) where appropriate, especially for exported functions that will be used in consuming packages / applications.
 - exports at the end of the file i.e. no inline exports
 - no exports just for testing
 - kebab-case
