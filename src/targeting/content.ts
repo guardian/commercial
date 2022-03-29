@@ -29,7 +29,7 @@ const videoLengths = [
  * - a surge in page views per minute
  *
  */
-export type ContentTargeting = {
+type ContentTargeting = {
 	/**
 	 * **D**ot**c**om-**r**endering **E**ligible - [see on Ad Manager][gam]
 	 *
@@ -108,7 +108,7 @@ type Content = {
 	videoLength?: number;
 };
 
-export const getContentTargeting = ({
+const getContentTargeting = ({
 	eligibleForDCR,
 	path,
 	renderingPlatform,
@@ -125,3 +125,6 @@ export const getContentTargeting = ({
 		vl: videoLength ? getVideoLength(videoLength) : null,
 	};
 };
+
+export { getContentTargeting };
+export type { ContentTargeting };

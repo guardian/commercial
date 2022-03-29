@@ -46,7 +46,7 @@ type AdManagerGroup = typeof adManagerGroups[number];
  * It allows or prevents personalised advertising, restrict data processing
  * and handles access to cookies and local storage
  */
-export type PersonalisedTargeting = {
+type PersonalisedTargeting = {
 	/**
 	 * **A**d **M**anager **T**argeting **Gr**ou**p** – [see on Ad Manager][gam]
 	 *
@@ -253,3 +253,4 @@ const getPersonalisedTargeting = (
 });
 
 export { getPersonalisedTargeting };
+export type { PersonalisedTargeting };

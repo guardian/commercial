@@ -1,12 +1,12 @@
-export type AdSizeString = 'fluid' | `${number},${number}`;
+type AdSizeString = 'fluid' | `${number},${number}`;
 
-export type AdSize = Readonly<{
+type AdSize = Readonly<{
 	width: number;
 	height: number;
 	toString: () => AdSizeString;
 }>;
 
-export type SizeKeys =
+type SizeKeys =
 	| '160x600'
 	| '300x1050'
 	| '300x250'
@@ -71,7 +71,7 @@ const adSizesPartial = {
 	outstreamMobile: createAdSize(300, 197),
 };
 
-export const adSizes: Record<SizeKeys, AdSize> = {
+const adSizes: Record<SizeKeys, AdSize> = {
 	...adSizesPartial,
 	'970x250': adSizesPartial.billboard,
 	'728x90': adSizesPartial.leaderboard,
@@ -81,7 +81,10 @@ export const adSizes: Record<SizeKeys, AdSize> = {
 	'160x600': adSizesPartial.skyscraper,
 };
 
-export const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
+const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
 
 // Export for testing
 export const _ = { createAdSize };
+
+export type { AdSizeString, AdSize, SizeKeys };
+export { adSizes, getAdSize };

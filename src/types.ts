@@ -75,7 +75,8 @@ export type AdsConfig = AdsConfigEnabled | AdsConfigDisabled;
 
 export type AdTargetingBuilder = () => Promise<AdsConfig>;
 
-type True = 't';
-type False = 'f';
-type NotApplicable = 'na';
-export type { True, False, NotApplicable };
+export type True = 't';
+
+export type False = 'f';
+
+export type NotApplicable = 'na';

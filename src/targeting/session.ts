@@ -32,7 +32,7 @@ const referrers = [
  * These values identify a browser session are either generated client-side,
  * read from a cookie or passed down from the server.
  */
-export type SessionTargeting = {
+type SessionTargeting = {
 	/**
 	 * **AB** Tests – [see on Ad Manager][gam]
 	 *
@@ -106,7 +106,7 @@ export type SessionTargeting = {
 	si: True | False;
 };
 
-export type AllParticipations = {
+type AllParticipations = {
 	clientSideParticipations: Participations;
 	serverSideParticipations: {
 		[key: `${string}Control`]: 'control';
@@ -167,7 +167,7 @@ type Session = {
 	referrer: string;
 };
 
-export const getSessionTargeting = ({
+const getSessionTargeting = ({
 	adTest,
 	countryCode,
 	isSignedIn,
@@ -182,3 +182,6 @@ export const getSessionTargeting = ({
 	ref: getReferrer(referrer),
 	si: isSignedIn ? 't' : 'f',
 });
+
+export type { SessionTargeting, AllParticipations };
+export { getSessionTargeting };

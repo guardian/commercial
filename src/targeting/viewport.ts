@@ -10,7 +10,7 @@ import type { False, True } from '../types';
  * - whether a CMP banner will show
  * - size of page skin
  */
-export type ViewportTargeting = {
+type ViewportTargeting = {
 	/**
 	 * **B**reak**p**oint – [see on Ad Manager][gam]
 	 *
@@ -60,7 +60,7 @@ type Viewport = {
 	cmpBannerWillShow: boolean;
 };
 
-export const getViewportTargeting = ({
+const getViewportTargeting = ({
 	viewPortWidth,
 	cmpBannerWillShow,
 }: Viewport): ViewportTargeting => {
@@ -73,3 +73,6 @@ export const getViewportTargeting = ({
 		inskin,
 	};
 };
+
+export type { ViewportTargeting };
+export { getViewportTargeting };

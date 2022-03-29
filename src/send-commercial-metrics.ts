@@ -159,7 +159,7 @@ const addVisibilityListeners = (): void => {
 /**
  * A method to asynchronously send metrics after initialization.
  */
-export function bypassCommercialMetricsSampling(): void {
+function bypassCommercialMetricsSampling(): void {
 	if (!initialised) {
 		console.warn('initCommercialMetrics not yet initialised');
 		return;
@@ -184,7 +184,7 @@ interface InitCommercialMetricsArgs {
  * @param init.adBlockerInUse - indicates whether or not an adblocker is being used.
  * @param init.sampling - rate at which to sample commercial metrics - the default is to send for 1% of pageviews
  */
-export function initCommercialMetrics({
+function initCommercialMetrics({
 	pageViewId,
 	browserId,
 	isDev,
@@ -235,3 +235,4 @@ export const _ = {
 };
 
 export type { Property, TimedEvent, Metric };
+export { bypassCommercialMetricsSampling, initCommercialMetrics };
