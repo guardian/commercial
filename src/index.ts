@@ -6,15 +6,15 @@ export { fbPixel } from './third-party-tags/facebook-pixel';
 export { twitter } from './third-party-tags/twitter-uwt';
 export { inizio } from './third-party-tags/inizio';
 export { remarketing } from './third-party-tags/remarketing';
-export { EventTimer } from './EventTimer';
+export { EventTimer } from './event-timer';
 export {
 	bypassCommercialMetricsSampling,
 	initCommercialMetrics,
-} from './sendCommercialMetrics';
+} from './send-commercial-metrics';
 export type { ThirdPartyTag } from './types';
 export { adSizes, getAdSize } from './ad-sizes';
 export type { SizeKeys, AdSizeString, AdSize } from './ad-sizes';
-export { isAdBlockInUse } from './detectAdBlocker';
+export { isAdBlockInUse } from './detect-ad-blocker';
 export {
 	clearPermutiveSegments,
 	getPermutiveSegments,

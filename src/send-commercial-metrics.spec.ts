@@ -1,10 +1,10 @@
-import { EventTimer } from './EventTimer';
+import { EventTimer } from './event-timer';
 import {
 	_,
 	bypassCommercialMetricsSampling,
 	initCommercialMetrics,
-} from './sendCommercialMetrics';
-import type { Metric, Property, TimedEvent } from './sendCommercialMetrics';
+} from './send-commercial-metrics';
+import type { Metric, Property, TimedEvent } from './send-commercial-metrics';
 
 const {
 	Endpoints,

@@ -1,4 +1,4 @@
-import { trackEvent } from './GoogleAnalytics';
+import { trackEvent } from './google-analytics';
 
 class Event {
 	name: string;
