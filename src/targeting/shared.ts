@@ -52,7 +52,7 @@ const surges = {
  *
  *
  */
-export type SharedTargeting = {
+type SharedTargeting = {
 	/**
 	 * **Bl**og tags – [see on Ad Manager][gam]
 	 *
@@ -179,10 +179,13 @@ const getSurgingParam = (surging: number): SharedTargeting['su'] => {
 /**
  * What goes in comes out
  */
-export const getSharedTargeting = (
+const getSharedTargeting = (
 	shared: Partial<SharedTargeting>,
 ): Partial<SharedTargeting> => pickTargetingValues(shared);
 
 export const _ = {
 	getSurgingParam,
 };
+
+export type { SharedTargeting };
+export { getSharedTargeting };
