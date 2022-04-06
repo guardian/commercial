@@ -11,6 +11,7 @@
     -   For some of the fixed ad slots (top-above-nav, mostpop, comments, right, etc...):
         -   Ad slot div is present on the page
         -   An iframe is placed inside the div that comes from GAM. Can we visually compare the contents of the iframe against a fixed snapshot?
+        -   Test presence / size of slots at different breakpoints
     -   CI:
         -   Can we run the test automatically when pushing commits / raising PRs?
     -   Spacefinder
