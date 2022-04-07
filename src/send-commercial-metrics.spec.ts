@@ -1,3 +1,5 @@
+import { onConsent } from '@guardian/consent-management-platform';
+import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { EventTimer } from './event-timer';
 import {
 	_,
@@ -13,6 +15,13 @@ const {
 	roundTimeStamp,
 	transformToObjectEntries,
 } = _;
+
+jest.mock('@guardian/consent-management-platform');
+
+const mockOnConsent = (consentState: ConsentState) =>
+	(onConsent as jest.Mock).mockImplementation(() =>
+		Promise.resolve(consentState),
+	);
 
 const PAGE_VIEW_ID = 'pv_id_1234567890';
 const BROWSER_ID = 'bwid_abcdefghijklm';
@@ -35,6 +44,66 @@ const defaultMetrics = {
 	],
 };
 
+const tcfv2AllConsent: ConsentState = {
+	tcfv2: {
+		consents: {
+			1: true,
+			2: true,
+			3: true,
+			4: true,
+			5: true,
+			6: true,
+			7: true,
+			8: true,
+			9: true,
+			10: true,
+		},
+		vendorConsents: { 100: true, 200: true, 300: true },
+		eventStatus: 'tcloaded',
+		addtlConsent: '',
+		gdprApplies: true,
+		tcString: 'blablabla',
+	},
+	canTarget: true,
+	framework: 'tcfv2',
+};
+
+const tcfv2AllConsentExceptPurpose8: ConsentState = {
+	tcfv2: {
+		consents: {
+			1: true,
+			2: true,
+			3: true,
+			4: true,
+			5: true,
+			6: true,
+			7: true,
+			8: false,
+			9: true,
+			10: true,
+		},
+		vendorConsents: { 100: true, 200: true, 300: true },
+		eventStatus: 'tcloaded',
+		addtlConsent: '',
+		gdprApplies: true,
+		tcString: 'blablabla',
+	},
+	canTarget: false,
+	framework: 'tcfv2',
+};
+
+const ccpaConsent: ConsentState = {
+	ccpa: { doNotSell: false },
+	canTarget: true,
+	framework: 'ccpa',
+};
+
+const ccpaNonConsent: ConsentState = {
+	ccpa: { doNotSell: true },
+	canTarget: false,
+	framework: 'ccpa',
+};
+
 const setVisibility = (value: 'hidden' | 'visible'): void => {
 	Object.defineProperty(document, 'visibilityState', {
 		value,
@@ -44,6 +113,7 @@ const setVisibility = (value: 'hidden' | 'visible'): void => {
 
 beforeEach(() => {
 	reset();
+	jest.resetAllMocks();
 });
 
 describe('send commercial metrics code', () => {
@@ -59,8 +129,10 @@ describe('send commercial metrics code', () => {
 		.spyOn(console, 'warn')
 		.mockImplementation(() => false);
 
-	it('can send commercial metrics when the page is hidden', () => {
-		initCommercialMetrics({
+	it('can send commercial metrics when the page is hidden', async () => {
+		mockOnConsent(tcfv2AllConsent);
+
+		await initCommercialMetrics({
 			pageViewId: PAGE_VIEW_ID,
 			browserId: BROWSER_ID,
 			isDev: IS_NOT_DEV,
@@ -75,8 +147,10 @@ describe('send commercial metrics code', () => {
 		]);
 	});
 
-	it('commercial metrics not sent when window is visible', () => {
-		initCommercialMetrics({
+	it('commercial metrics not sent when window is visible', async () => {
+		mockOnConsent(tcfv2AllConsent);
+
+		await initCommercialMetrics({
 			pageViewId: PAGE_VIEW_ID,
 			browserId: BROWSER_ID,
 			isDev: IS_NOT_DEV,
@@ -89,16 +163,113 @@ describe('send commercial metrics code', () => {
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([]);
 	});
 
+	it('does not send metrics when user is not in sampling group', async () => {
+		mockOnConsent(tcfv2AllConsent);
+
+		await initCommercialMetrics({
+			pageViewId: PAGE_VIEW_ID,
+			browserId: BROWSER_ID,
+			isDev: IS_NOT_DEV,
+			adBlockerInUse: ADBLOCK_NOT_IN_USE,
+			sampling: USER_NOT_IN_SAMPLING,
+		});
+
+		setVisibility('hidden');
+		global.dispatchEvent(new Event('visibilitychange'));
+
+		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([]);
+	});
+
+	it('does not send metrics when consent does not include purpose 8', async () => {
+		mockOnConsent(tcfv2AllConsentExceptPurpose8);
+
+		await initCommercialMetrics({
+			pageViewId: PAGE_VIEW_ID,
+			browserId: BROWSER_ID,
+			isDev: IS_NOT_DEV,
+			adBlockerInUse: ADBLOCK_NOT_IN_USE,
+			sampling: USER_IN_SAMPLING,
+		});
+
+		setVisibility('hidden');
+		global.dispatchEvent(new Event('visibilitychange'));
+
+		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([]);
+	});
+
+	it('sends metrics when non-TCFv2 user (i.e. USA or Australia) consents', async () => {
+		mockOnConsent(ccpaConsent);
+
+		await initCommercialMetrics({
+			pageViewId: PAGE_VIEW_ID,
+			browserId: BROWSER_ID,
+			isDev: IS_NOT_DEV,
+			adBlockerInUse: ADBLOCK_NOT_IN_USE,
+			sampling: USER_IN_SAMPLING,
+		});
+
+		setVisibility('hidden');
+		global.dispatchEvent(new Event('visibilitychange'));
+
+		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+			[Endpoints.PROD, JSON.stringify(defaultMetrics)],
+		]);
+	});
+
+	it('sends metrics when non-TCFv2 user (i.e. USA or Australia) does not consent', async () => {
+		mockOnConsent(ccpaNonConsent);
+
+		await initCommercialMetrics({
+			pageViewId: PAGE_VIEW_ID,
+			browserId: BROWSER_ID,
+			isDev: IS_NOT_DEV,
+			adBlockerInUse: ADBLOCK_NOT_IN_USE,
+			sampling: USER_IN_SAMPLING,
+		});
+
+		setVisibility('hidden');
+		global.dispatchEvent(new Event('visibilitychange'));
+
+		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+			[Endpoints.PROD, JSON.stringify(defaultMetrics)],
+		]);
+	});
+
+	it('only initialises once (and returns false on further attempts)', async () => {
+		mockOnConsent(tcfv2AllConsent);
+
+		const firstInit = await initCommercialMetrics({
+			pageViewId: PAGE_VIEW_ID,
+			browserId: BROWSER_ID,
+			isDev: IS_NOT_DEV,
+			adBlockerInUse: ADBLOCK_NOT_IN_USE,
+			sampling: USER_IN_SAMPLING,
+		});
+
+		const secondInit = await initCommercialMetrics({
+			pageViewId: PAGE_VIEW_ID,
+			browserId: BROWSER_ID,
+			isDev: IS_NOT_DEV,
+			adBlockerInUse: ADBLOCK_NOT_IN_USE,
+			sampling: USER_IN_SAMPLING,
+		});
+
+		expect(firstInit).toEqual(true);
+		expect(secondInit).toEqual(false);
+	});
+
 	describe('bypassCommercialMetricsSampling', () => {
-		it('sends a beacon if bypassed asynchronously', () => {
-			initCommercialMetrics({
+		it('sends a beacon if bypassed asynchronously', async () => {
+			mockOnConsent(tcfv2AllConsent);
+
+			await initCommercialMetrics({
 				pageViewId: PAGE_VIEW_ID,
 				browserId: BROWSER_ID,
 				isDev: IS_NOT_DEV,
 				adBlockerInUse: ADBLOCK_NOT_IN_USE,
 				sampling: USER_NOT_IN_SAMPLING,
 			});
-			bypassCommercialMetricsSampling();
+			await bypassCommercialMetricsSampling();
 
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('visibilitychange'));
@@ -106,8 +277,28 @@ describe('send commercial metrics code', () => {
 				[Endpoints.PROD, JSON.stringify(defaultMetrics)],
 			]);
 		});
-		it('expects to be initialised before calling bypassCoreWebVitalsSampling', () => {
-			bypassCommercialMetricsSampling();
+
+		it('does not send metrics when sampling is bypassed but consent is not given', async () => {
+			mockOnConsent(tcfv2AllConsentExceptPurpose8);
+
+			await initCommercialMetrics({
+				pageViewId: PAGE_VIEW_ID,
+				browserId: BROWSER_ID,
+				isDev: IS_NOT_DEV,
+				adBlockerInUse: ADBLOCK_NOT_IN_USE,
+				sampling: USER_NOT_IN_SAMPLING,
+			});
+			await bypassCommercialMetricsSampling();
+
+			setVisibility('hidden');
+			global.dispatchEvent(new Event('visibilitychange'));
+
+			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([]);
+		});
+
+		it('expects to be initialised before calling bypassCoreWebVitalsSampling', async () => {
+			await bypassCommercialMetricsSampling();
+
 			expect(mockConsoleWarn).toHaveBeenCalledWith(
 				'initCommercialMetrics not yet initialised',
 			);
@@ -121,8 +312,10 @@ describe('send commercial metrics code', () => {
 			void EventTimer.get();
 		});
 
-		it('should handle endpoint in dev', () => {
-			initCommercialMetrics({
+		it('should handle endpoint in dev', async () => {
+			mockOnConsent(tcfv2AllConsent);
+
+			await initCommercialMetrics({
 				pageViewId: PAGE_VIEW_ID,
 				browserId: BROWSER_ID,
 				isDev: IS_DEV,
@@ -146,8 +339,10 @@ describe('send commercial metrics code', () => {
 			]);
 		});
 
-		it('should handle connection properties if they exist', () => {
-			initCommercialMetrics({
+		it('should handle connection properties if they exist', async () => {
+			mockOnConsent(tcfv2AllConsent);
+
+			await initCommercialMetrics({
 				pageViewId: PAGE_VIEW_ID,
 				browserId: BROWSER_ID,
 				isDev: IS_NOT_DEV,
@@ -178,20 +373,24 @@ describe('send commercial metrics code', () => {
 			]);
 		});
 
-		it('should merge properties adequately', () => {
-			const eventTimer = EventTimer.get();
-			// Fix the properties of the event timer for the purposes of this test
-			eventTimer.properties = {
-				downlink: 1,
-				effectiveType: '4g',
-			};
-			initCommercialMetrics({
+		it('should merge properties adequately', async () => {
+			mockOnConsent(tcfv2AllConsent);
+
+			await initCommercialMetrics({
 				pageViewId: PAGE_VIEW_ID,
 				browserId: BROWSER_ID,
 				isDev: IS_DEV,
 				adBlockerInUse: ADBLOCK_NOT_IN_USE,
 				sampling: USER_IN_SAMPLING,
 			});
+
+			// Fix the properties of the event timer for the purposes of this test
+			const eventTimer = EventTimer.get();
+			eventTimer.properties = {
+				downlink: 1,
+				effectiveType: '4g',
+			};
+
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('pagehide'));
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
@@ -210,8 +409,8 @@ describe('send commercial metrics code', () => {
 			]);
 		});
 
-		it('should return false if user is not in sampling', () => {
-			const willSendMetrics = initCommercialMetrics({
+		it('should return false if user is not in sampling', async () => {
+			const willSendMetrics = await initCommercialMetrics({
 				pageViewId: PAGE_VIEW_ID,
 				browserId: BROWSER_ID,
 				isDev: IS_NOT_DEV,
@@ -221,8 +420,8 @@ describe('send commercial metrics code', () => {
 			expect(willSendMetrics).toEqual(false);
 		});
 
-		it('should set sampling at 0.01 if sampling is not passed in', () => {
-			const willSendMetrics = initCommercialMetrics({
+		it('should set sampling at 0.01 if sampling is not passed in', async () => {
+			const willSendMetrics = await initCommercialMetrics({
 				pageViewId: PAGE_VIEW_ID,
 				browserId: BROWSER_ID,
 				isDev: IS_NOT_DEV,
@@ -234,19 +433,24 @@ describe('send commercial metrics code', () => {
 			expect(willSendMetrics).toEqual(false);
 		});
 
-		it('should merge properties even if adblocking is not passed in', () => {
-			const eventTimer = EventTimer.get();
-			eventTimer.properties = {
-				downlink: 1,
-				effectiveType: '4g',
-			};
-			initCommercialMetrics({
+		it('should merge properties even if adblocking is not passed in', async () => {
+			mockOnConsent(tcfv2AllConsent);
+
+			await initCommercialMetrics({
 				pageViewId: PAGE_VIEW_ID,
 				browserId: BROWSER_ID,
 				isDev: IS_DEV,
 				adBlockerInUse: undefined,
 				sampling: USER_IN_SAMPLING,
 			});
+
+			// Fix the properties of the event timer for the purposes of this test
+			const eventTimer = EventTimer.get();
+			eventTimer.properties = {
+				downlink: 1,
+				effectiveType: '4g',
+			};
+
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('pagehide'));
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
@@ -264,8 +468,10 @@ describe('send commercial metrics code', () => {
 			]);
 		});
 
-		it('should handle ad slot properties', () => {
-			initCommercialMetrics({
+		it('should handle ad slot properties', async () => {
+			mockOnConsent(tcfv2AllConsent);
+
+			await initCommercialMetrics({
 				pageViewId: PAGE_VIEW_ID,
 				browserId: BROWSER_ID,
 				isDev: IS_DEV,
