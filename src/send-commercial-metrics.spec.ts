@@ -42,6 +42,10 @@ const setVisibility = (value: 'hidden' | 'visible'): void => {
 	});
 };
 
+beforeEach(() => {
+	reset();
+});
+
 describe('send commercial metrics code', () => {
 	const sendBeacon = jest.fn().mockReturnValue(true);
 	Object.defineProperty(navigator, 'sendBeacon', {
@@ -87,6 +91,13 @@ describe('send commercial metrics code', () => {
 
 	describe('bypassCommercialMetricsSampling', () => {
 		it('sends a beacon if bypassed asynchronously', () => {
+			initCommercialMetrics({
+				pageViewId: PAGE_VIEW_ID,
+				browserId: BROWSER_ID,
+				isDev: IS_NOT_DEV,
+				adBlockerInUse: ADBLOCK_NOT_IN_USE,
+				sampling: USER_NOT_IN_SAMPLING,
+			});
 			bypassCommercialMetricsSampling();
 
 			setVisibility('hidden');
@@ -96,7 +107,6 @@ describe('send commercial metrics code', () => {
 			]);
 		});
 		it('expects to be initialised before calling bypassCoreWebVitalsSampling', () => {
-			reset();
 			bypassCommercialMetricsSampling();
 			expect(mockConsoleWarn).toHaveBeenCalledWith(
 				'initCommercialMetrics not yet initialised',
@@ -105,10 +115,6 @@ describe('send commercial metrics code', () => {
 	});
 
 	describe('handles various configurations', () => {
-		beforeEach(() => {
-			reset();
-		});
-
 		afterEach(() => {
 			// Reset the properties of the event timer for the purposes of this test
 			delete window.guardian.commercialTimer;
