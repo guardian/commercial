@@ -4,7 +4,6 @@ import {
 	bypassCommercialMetricsSampling,
 	initCommercialMetrics,
 } from './send-commercial-metrics';
-import type { Metric, Property, TimedEvent } from './send-commercial-metrics';
 
 const {
 	Endpoints,
@@ -288,66 +287,64 @@ describe('send commercial metrics code', () => {
 });
 
 describe('send commercial metrics helpers', () => {
-	const eventProperties = {
-		type: undefined,
-		downlink: 1,
-		effectiveType: '4g',
-	};
-
-	const transformedProperties: Array<[string, string | number | undefined]> =
-		[
+	it('can transform event timer properties into object entries', () => {
+		expect(
+			transformToObjectEntries({
+				type: undefined,
+				downlink: 1,
+				effectiveType: '4g',
+			}),
+		).toEqual([
 			['type', undefined],
 			['downlink', 1],
 			['effectiveType', '4g'],
-		];
-
-	const filteredProperties: Array<[string, string | number]> = [
-		['downlink', 1],
-		['effectiveType', '4g'],
-	];
-	const mappedProperties: Property[] = [
-		{
-			name: 'downlink',
-			value: '1',
-		},
-		{
-			name: 'effectiveType',
-			value: '4g',
-		},
-	];
-	const roundedEvent: Metric[] = [
-		{
-			name: 'cmp-tcfv2-init',
-			value: 1519211809935,
-		},
-	];
-
-	it('can transform event timer properties into object entries', () => {
-		const transformed: Array<[string, string | number | undefined]> =
-			transformToObjectEntries(eventProperties);
-		expect(transformed).toEqual(transformedProperties);
+		]);
 	});
 
 	it('can filter out event timer properties with a value that is undefined', () => {
-		const filtered: Array<[string, string | number | undefined]> =
-			filterUndefinedProperties(transformedProperties);
-		expect(filtered).toEqual(filteredProperties);
+		expect(
+			filterUndefinedProperties([
+				['type', undefined],
+				['downlink', 1],
+				['effectiveType', '4g'],
+			]),
+		).toEqual([
+			['downlink', 1],
+			['effectiveType', '4g'],
+		]);
 	});
 
 	it('can map event timer properties to the required format', () => {
-		const mapped = mapEventTimerPropertiesToString(filteredProperties);
-		expect(mapped).toEqual(mappedProperties);
+		expect(
+			mapEventTimerPropertiesToString([
+				['downlink', 1],
+				['effectiveType', '4g'],
+			]),
+		).toEqual([
+			{
+				name: 'downlink',
+				value: '1',
+			},
+			{
+				name: 'effectiveType',
+				value: '4g',
+			},
+		]);
 	});
 
-	// This one is seemingly not doing anything as the start and end values match
 	it('can round up the value of timestamps', () => {
-		const event: TimedEvent[] = [
+		expect(
+			roundTimeStamp([
+				{
+					name: 'cmp-tcfv2-init',
+					ts: 1519211809934.234,
+				},
+			]),
+		).toEqual([
 			{
 				name: 'cmp-tcfv2-init',
-				ts: 1519211809934.234,
+				value: 1519211809935,
 			},
-		];
-		const rounded = roundTimeStamp(event);
-		expect(rounded).toEqual(roundedEvent);
+		]);
 	});
 });
