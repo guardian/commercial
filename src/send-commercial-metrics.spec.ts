@@ -36,15 +36,6 @@ const defaultMetrics = {
 	],
 };
 
-const mockSendMetrics = () =>
-	initCommercialMetrics({
-		pageViewId: PAGE_VIEW_ID,
-		browserId: BROWSER_ID,
-		isDev: IS_NOT_DEV,
-		adBlockerInUse: ADBLOCK_NOT_IN_USE,
-		sampling: USER_IN_SAMPLING,
-	});
-
 const setVisibility = (value: 'hidden' | 'visible'): void => {
 	Object.defineProperty(document, 'visibilityState', {
 		value,
@@ -66,22 +57,32 @@ describe('send commercial metrics code', () => {
 		.mockImplementation(() => false);
 
 	it('can send commercial metrics when the page is hidden', () => {
-		const metricsSent = mockSendMetrics();
+		initCommercialMetrics({
+			pageViewId: PAGE_VIEW_ID,
+			browserId: BROWSER_ID,
+			isDev: IS_NOT_DEV,
+			adBlockerInUse: ADBLOCK_NOT_IN_USE,
+			sampling: USER_IN_SAMPLING,
+		});
 		setVisibility('hidden');
 		global.dispatchEvent(new Event('visibilitychange'));
 
-		expect(metricsSent).toEqual(true);
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 			[Endpoints.PROD, JSON.stringify(defaultMetrics)],
 		]);
 	});
 
 	it('commercial metrics not sent when window is visible', () => {
-		const metricsSent = mockSendMetrics();
+		initCommercialMetrics({
+			pageViewId: PAGE_VIEW_ID,
+			browserId: BROWSER_ID,
+			isDev: IS_NOT_DEV,
+			adBlockerInUse: ADBLOCK_NOT_IN_USE,
+			sampling: USER_IN_SAMPLING,
+		});
 		setVisibility('visible');
 		global.dispatchEvent(new Event('visibilitychange'));
 
-		expect(metricsSent).toEqual(false);
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([]);
 	});
 
@@ -116,7 +117,7 @@ describe('send commercial metrics code', () => {
 		});
 
 		it('should handle endpoint in dev', () => {
-			const mockSendMetrics = initCommercialMetrics({
+			initCommercialMetrics({
 				pageViewId: PAGE_VIEW_ID,
 				browserId: BROWSER_ID,
 				isDev: IS_DEV,
@@ -126,7 +127,6 @@ describe('send commercial metrics code', () => {
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('visibilitychange'));
 
-			expect(mockSendMetrics).toEqual(true);
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.CODE,
@@ -142,7 +142,13 @@ describe('send commercial metrics code', () => {
 		});
 
 		it('should handle connection properties if they exist', () => {
-			const sentMetrics = mockSendMetrics();
+			initCommercialMetrics({
+				pageViewId: PAGE_VIEW_ID,
+				browserId: BROWSER_ID,
+				isDev: IS_NOT_DEV,
+				adBlockerInUse: ADBLOCK_NOT_IN_USE,
+				sampling: USER_IN_SAMPLING,
+			});
 			const eventTimer = EventTimer.get();
 			// Fix the properties of the event timer for the purposes of this test
 			eventTimer.properties = {
@@ -152,7 +158,6 @@ describe('send commercial metrics code', () => {
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('visibilitychange'));
 
-			expect(sentMetrics).toEqual(true);
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.PROD,
@@ -175,7 +180,7 @@ describe('send commercial metrics code', () => {
 				downlink: 1,
 				effectiveType: '4g',
 			};
-			const sentMetrics = initCommercialMetrics({
+			initCommercialMetrics({
 				pageViewId: PAGE_VIEW_ID,
 				browserId: BROWSER_ID,
 				isDev: IS_DEV,
@@ -184,7 +189,6 @@ describe('send commercial metrics code', () => {
 			});
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('pagehide'));
-			expect(sentMetrics).toEqual(true);
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.CODE,
@@ -230,7 +234,7 @@ describe('send commercial metrics code', () => {
 				downlink: 1,
 				effectiveType: '4g',
 			};
-			const sentMetrics = initCommercialMetrics({
+			initCommercialMetrics({
 				pageViewId: PAGE_VIEW_ID,
 				browserId: BROWSER_ID,
 				isDev: IS_DEV,
@@ -239,7 +243,6 @@ describe('send commercial metrics code', () => {
 			});
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('pagehide'));
-			expect(sentMetrics).toEqual(true);
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.CODE,
@@ -256,7 +259,7 @@ describe('send commercial metrics code', () => {
 		});
 
 		it('should handle ad slot properties', () => {
-			const sentMetrics = initCommercialMetrics({
+			initCommercialMetrics({
 				pageViewId: PAGE_VIEW_ID,
 				browserId: BROWSER_ID,
 				isDev: IS_DEV,
@@ -266,7 +269,6 @@ describe('send commercial metrics code', () => {
 			eventTimer.setProperty('adSlotsInline', 5);
 			eventTimer.setProperty('adSlotsTotal', 10);
 			global.dispatchEvent(new Event('pagehide'));
-			expect(sentMetrics).toEqual(true);
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.CODE,
