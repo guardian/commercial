@@ -116,12 +116,11 @@ beforeEach(() => {
 	jest.resetAllMocks();
 });
 
-describe('send commercial metrics code', () => {
-	const sendBeacon = jest.fn().mockReturnValue(true);
+describe('send commercial metrics', () => {
 	Object.defineProperty(navigator, 'sendBeacon', {
 		configurable: true,
 		enumerable: true,
-		value: sendBeacon,
+		value: jest.fn(),
 		writable: true,
 	});
 
@@ -129,7 +128,7 @@ describe('send commercial metrics code', () => {
 		.spyOn(console, 'warn')
 		.mockImplementation(() => false);
 
-	it('can send commercial metrics when the page is hidden', async () => {
+	it('sends metrics when the page is hidden, user is in sampling group, and consent is given', async () => {
 		mockOnConsent(tcfv2AllConsent);
 
 		await initCommercialMetrics({
@@ -139,6 +138,7 @@ describe('send commercial metrics code', () => {
 			adBlockerInUse: ADBLOCK_NOT_IN_USE,
 			sampling: USER_IN_SAMPLING,
 		});
+
 		setVisibility('hidden');
 		global.dispatchEvent(new Event('visibilitychange'));
 
@@ -147,7 +147,7 @@ describe('send commercial metrics code', () => {
 		]);
 	});
 
-	it('commercial metrics not sent when window is visible', async () => {
+	it('does not send metrics when page is visible', async () => {
 		mockOnConsent(tcfv2AllConsent);
 
 		await initCommercialMetrics({
@@ -157,6 +157,7 @@ describe('send commercial metrics code', () => {
 			adBlockerInUse: ADBLOCK_NOT_IN_USE,
 			sampling: USER_IN_SAMPLING,
 		});
+
 		setVisibility('visible');
 		global.dispatchEvent(new Event('visibilitychange'));
 
@@ -259,7 +260,7 @@ describe('send commercial metrics code', () => {
 	});
 
 	describe('bypassCommercialMetricsSampling', () => {
-		it('sends a beacon if bypassed asynchronously', async () => {
+		it('sends metrics when user is not in sampling group but sampling is bypassed', async () => {
 			mockOnConsent(tcfv2AllConsent);
 
 			await initCommercialMetrics({
@@ -273,6 +274,7 @@ describe('send commercial metrics code', () => {
 
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('visibilitychange'));
+
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[Endpoints.PROD, JSON.stringify(defaultMetrics)],
 			]);
@@ -307,7 +309,7 @@ describe('send commercial metrics code', () => {
 
 	describe('handles various configurations', () => {
 		afterEach(() => {
-			// Reset the properties of the event timer for the purposes of this test
+			// Reset the properties of the event timer for the purposes of these tests
 			delete window.guardian.commercialTimer;
 			void EventTimer.get();
 		});
@@ -322,6 +324,7 @@ describe('send commercial metrics code', () => {
 				adBlockerInUse: ADBLOCK_NOT_IN_USE,
 				sampling: USER_IN_SAMPLING,
 			});
+
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('visibilitychange'));
 
@@ -349,12 +352,14 @@ describe('send commercial metrics code', () => {
 				adBlockerInUse: ADBLOCK_NOT_IN_USE,
 				sampling: USER_IN_SAMPLING,
 			});
-			const eventTimer = EventTimer.get();
+
 			// Fix the properties of the event timer for the purposes of this test
+			const eventTimer = EventTimer.get();
 			eventTimer.properties = {
 				downlink: 1,
 				effectiveType: '4g',
 			};
+
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('visibilitychange'));
 
@@ -393,6 +398,7 @@ describe('send commercial metrics code', () => {
 
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('pagehide'));
+
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.CODE,
@@ -417,6 +423,7 @@ describe('send commercial metrics code', () => {
 				adBlockerInUse: ADBLOCK_NOT_IN_USE,
 				sampling: USER_NOT_IN_SAMPLING,
 			});
+
 			expect(willSendMetrics).toEqual(false);
 		});
 
@@ -430,6 +437,7 @@ describe('send commercial metrics code', () => {
 
 			const mathRandomSpy = jest.spyOn(Math, 'random');
 			mathRandomSpy.mockImplementation(() => 0.5);
+
 			expect(willSendMetrics).toEqual(false);
 		});
 
@@ -453,6 +461,7 @@ describe('send commercial metrics code', () => {
 
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('pagehide'));
+
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.CODE,
@@ -476,11 +485,14 @@ describe('send commercial metrics code', () => {
 				browserId: BROWSER_ID,
 				isDev: IS_DEV,
 			});
-			setVisibility('hidden');
+
 			const eventTimer = EventTimer.get();
 			eventTimer.setProperty('adSlotsInline', 5);
 			eventTimer.setProperty('adSlotsTotal', 10);
+
+			setVisibility('hidden');
 			global.dispatchEvent(new Event('pagehide'));
+
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.CODE,
