@@ -206,26 +206,27 @@ describe('send commercial metrics code', () => {
 		});
 
 		it('should return false if user is not in sampling', () => {
-			const sentMetrics = initCommercialMetrics({
+			const willSendMetrics = initCommercialMetrics({
 				pageViewId: PAGE_VIEW_ID,
 				browserId: BROWSER_ID,
 				isDev: IS_NOT_DEV,
 				adBlockerInUse: ADBLOCK_NOT_IN_USE,
 				sampling: USER_NOT_IN_SAMPLING,
 			});
-			expect(sentMetrics).toEqual(false);
+			expect(willSendMetrics).toEqual(false);
 		});
 
 		it('should set sampling at 0.01 if sampling is not passed in', () => {
-			const sentMetrics = initCommercialMetrics({
+			const willSendMetrics = initCommercialMetrics({
 				pageViewId: PAGE_VIEW_ID,
 				browserId: BROWSER_ID,
 				isDev: IS_NOT_DEV,
 				adBlockerInUse: ADBLOCK_NOT_IN_USE,
 			});
+
 			const mathRandomSpy = jest.spyOn(Math, 'random');
 			mathRandomSpy.mockImplementation(() => 0.5);
-			expect(sentMetrics).toEqual(false);
+			expect(willSendMetrics).toEqual(false);
 		});
 
 		it('should merge properties even if adblocking is not passed in', () => {
