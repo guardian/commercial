@@ -112,7 +112,7 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Fetch build
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: dist
           path: dist
