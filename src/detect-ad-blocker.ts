@@ -1,7 +1,8 @@
 /**
 Detect whether or not the user has an ad blocking extension enabled.
 A few ad blockers are not detectable with this approach e.g. Safari / Adblock
-Code inspired by just-detect-adblock's: https://git.io/JgL4L
+Code inspired by just-detect-adblock's:
+https://github.com/wmcmurray/just-detect-adblock/blob/master/src/helpers.js
 */
 /*istanbul ignore file -- adElementBlocked can't be tested without patching each of the properties of
 HTMLElement.prototype that it accesses, defeating the purpose of the test! */
