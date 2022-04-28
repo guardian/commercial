@@ -33,6 +33,23 @@ type SizeKeys =
 	| 'portrait'
 	| 'skyscraper';
 
+interface SizeMapping {
+	mobile?: AdSize[];
+	desktop?: AdSize[];
+	phablet?: AdSize[];
+	tablet?: AdSize[];
+}
+
+interface SizeMappings {
+	right: SizeMapping;
+	comments: SizeMapping;
+	'top-above-nav': SizeMapping;
+	mostpop: SizeMapping;
+	'merchandising-high': SizeMapping;
+	merchandising: SizeMapping;
+	survey: SizeMapping;
+}
+
 const createAdSize = (width: number, height: number): AdSize => {
 	const toString = (): AdSizeString =>
 		width === 0 && height === 0 ? 'fluid' : `${width},${height}`;
@@ -81,10 +98,124 @@ const adSizes: Record<SizeKeys, AdSize> = {
 	'160x600': adSizesPartial.skyscraper,
 };
 
+const sizeMappings: SizeMappings = {
+	right: {
+		mobile: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.halfPage,
+			adSizes.fluid,
+		],
+	},
+	comments: {
+		mobile: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.halfPage,
+			adSizes.outstreamMobile,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.fluid,
+		],
+		desktop: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.fluid,
+			adSizes.halfPage,
+			adSizes.skyscraper,
+		],
+		phablet: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.outstreamMobile,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.fluid,
+		],
+	},
+	'top-above-nav': {
+		tablet: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.fabric,
+			adSizes.fluid,
+			adSizes.leaderboard,
+		],
+		desktop: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.leaderboard,
+			createAdSize(940, 230),
+			createAdSize(900, 250),
+			adSizes.billboard,
+			adSizes.fabric,
+			adSizes.fluid,
+		],
+	},
+	mostpop: {
+		mobile: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.fluid,
+		],
+		tablet: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.halfPage,
+			adSizes.leaderboard,
+			adSizes.fluid,
+		],
+		phablet: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.outstreamMobile,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.halfPage,
+			adSizes.fluid,
+		],
+		desktop: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.halfPage,
+			adSizes.fluid,
+		],
+	},
+	'merchandising-high': {
+		mobile: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.merchandisingHigh,
+			adSizes.fluid,
+		],
+	},
+	merchandising: {
+		mobile: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.merchandising,
+			adSizes.fluid,
+		],
+	},
+	survey: {
+		desktop: [adSizes.outOfPage],
+	},
+};
+
 const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
 
 // Export for testing
 export const _ = { createAdSize };
 
 export type { AdSizeString, AdSize, SizeKeys };
-export { adSizes, getAdSize };
+export { adSizes, getAdSize, sizeMappings };
