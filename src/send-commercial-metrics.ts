@@ -77,19 +77,6 @@ const transformToObjectEntries = (
 	return Object.entries(eventTimerProperties);
 };
 
-const filterUndefinedProperties = (
-	transformedProperties: Array<[string, string | number | undefined]>,
-): Array<[string, string | number]> =>
-	transformedProperties.reduce<Array<[string, string | number]>>(
-		(acc, [key, value]) => {
-			if (typeof value !== 'undefined') {
-				acc.push([key, value]);
-			}
-			return acc;
-		},
-		[],
-	);
-
 const mapEventTimerPropertiesToString = (
 	properties: Array<[string, string | number]>,
 ): Property[] => {
@@ -119,12 +106,15 @@ function sendMetrics() {
 	);
 }
 
+type ArrayMetric = [key: string, value: string | number];
+
 function gatherMetricsOnPageUnload(): void {
 	// Assemble commercial properties and metrics
 	const eventTimer = EventTimer.get();
 	const transformedEntries = transformToObjectEntries(eventTimer.properties);
-	const filteredEventTimerProperties =
-		filterUndefinedProperties(transformedEntries);
+	const filteredEventTimerProperties = transformedEntries.filter<ArrayMetric>(
+		(item): item is ArrayMetric => typeof item[1] !== 'undefined',
+	);
 	const mappedEventTimerProperties = mapEventTimerPropertiesToString(
 		filteredEventTimerProperties,
 	);
@@ -250,7 +240,6 @@ async function initCommercialMetrics({
 export const _ = {
 	Endpoints,
 	setEndpoint,
-	filterUndefinedProperties,
 	mapEventTimerPropertiesToString,
 	roundTimeStamp,
 	transformToObjectEntries,

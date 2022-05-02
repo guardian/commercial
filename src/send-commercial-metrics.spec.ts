@@ -9,7 +9,6 @@ import {
 
 const {
 	Endpoints,
-	filterUndefinedProperties,
 	mapEventTimerPropertiesToString,
 	reset,
 	roundTimeStamp,
@@ -520,19 +519,6 @@ describe('send commercial metrics helpers', () => {
 			}),
 		).toEqual([
 			['type', undefined],
-			['downlink', 1],
-			['effectiveType', '4g'],
-		]);
-	});
-
-	it('can filter out event timer properties with a value that is undefined', () => {
-		expect(
-			filterUndefinedProperties([
-				['type', undefined],
-				['downlink', 1],
-				['effectiveType', '4g'],
-			]),
-		).toEqual([
 			['downlink', 1],
 			['effectiveType', '4g'],
 		]);
