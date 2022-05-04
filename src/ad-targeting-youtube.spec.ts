@@ -23,7 +23,9 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 				ccpa: {
 					doNotSell: false, // *
 				},
-			},
+				canTarget: true,
+				framework: 'ccpa',
+			} as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
 			custParams: {
@@ -49,7 +51,9 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 				ccpa: {
 					doNotSell: true, // *
 				},
-			},
+				canTarget: false,
+				framework: 'ccpa',
+			} as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
 			custParams: {
@@ -75,7 +79,9 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 				ccpa: {
 					doNotSell: false,
 				},
-			} as unknown as ConsentState,
+				canTarget: true,
+				framework: 'ccpa',
+			} as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
 			custParams: {
@@ -101,7 +107,9 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 				ccpa: {
 					doNotSell: false,
 				},
-			},
+				canTarget: true,
+				framework: 'ccpa',
+			} as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
 			custParams: {
@@ -127,7 +135,9 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 				aus: {
 					personalisedAdvertising: true, // *
 				},
-			},
+				canTarget: true,
+				framework: 'aus',
+			} as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
 			custParams: {
@@ -153,7 +163,9 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 				aus: {
 					personalisedAdvertising: false, // *
 				},
-			},
+				canTarget: false,
+				framework: 'aus',
+			} as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
 			custParams: {
@@ -182,6 +194,8 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 					gdprApplies: true,
 					tcString: 'someTcString',
 				},
+				canTarget: true,
+				framework: 'tcfv2',
 			} as unknown as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
@@ -214,6 +228,8 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 					gdprApplies: true,
 					tcString: 'someTcString',
 				},
+				canTarget: false,
+				framework: 'tcfv2',
 			} as unknown as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
@@ -246,6 +262,8 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 					gdprApplies: false, // *
 					tcString: 'someTcString',
 				},
+				canTarget: true,
+				framework: 'tcfv2',
 			} as unknown as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
@@ -300,7 +318,10 @@ describe('YouTube Ad Targeting Object when consent errors', () => {
 			false,
 			'someAdUnit',
 			{},
-			{},
+			{
+				framework: null,
+				canTarget: false,
+			},
 		);
 		expect(adsConfig).toEqual({ disableAds: true });
 	});
@@ -308,7 +329,15 @@ describe('YouTube Ad Targeting Object when consent errors', () => {
 
 describe('YouTube Ad Targeting Object when ad free user', () => {
 	test('creates disabled ads config when ad free user', () => {
-		const adsConfig = buildAdsConfigWithConsent(true, 'someAdUnit', {}, {});
+		const adsConfig = buildAdsConfigWithConsent(
+			true,
+			'someAdUnit',
+			{},
+			{
+				framework: null,
+				canTarget: false,
+			},
+		);
 		expect(adsConfig).toEqual({ disableAds: true });
 	});
 });
