@@ -45,9 +45,11 @@ const surges = {
 } as const;
 
 /**
- * Shared Targeting is passed by `frontend` https://git.io/JDJ6W
+ * Shared Targeting is passed by `frontend`:
+ * https://github.com/guardian/frontend/blob/5b970cd7308175cfc1bcae2d4fb8c06ee13c5fa0/common/app/common/commercial/EditionAdTargeting.scala
  *
- * It is generated in `commercial-shared` https://git.io/JDJ62
+ * It is generated in `commercial-shared`:
+ * https://github.com/guardian/commercial-shared/blob/a692e8b2eba6e79eeeb666e5594f2193663f6514/src/main/scala/com/gu/commercial/display/AdTargetParam.scala
  *
  *
  *

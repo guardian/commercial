@@ -1,3 +1,5 @@
+import { onConsent } from '@guardian/consent-management-platform';
+import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { log } from '@guardian/libs';
 import { EventTimer } from './event-timer';
 
@@ -75,16 +77,6 @@ const transformToObjectEntries = (
 	return Object.entries(eventTimerProperties);
 };
 
-const filterUndefinedProperties = <T>(
-	transformedProperties: Array<[string, T | undefined]>,
-): Array<[string, T]> =>
-	transformedProperties.reduce<Array<[string, T]>>((acc, [key, value]) => {
-		if (typeof value !== 'undefined') {
-			acc.push([key, value]);
-		}
-		return acc;
-	}, []);
-
 const mapEventTimerPropertiesToString = (
 	properties: Array<[string, string | number]>,
 ): Property[] => {
@@ -114,12 +106,15 @@ function sendMetrics() {
 	);
 }
 
+type ArrayMetric = [key: string, value: string | number];
+
 function gatherMetricsOnPageUnload(): void {
 	// Assemble commercial properties and metrics
 	const eventTimer = EventTimer.get();
 	const transformedEntries = transformToObjectEntries(eventTimer.properties);
-	const filteredEventTimerProperties =
-		filterUndefinedProperties(transformedEntries);
+	const filteredEventTimerProperties = transformedEntries.filter<ArrayMetric>(
+		(item): item is ArrayMetric => typeof item[1] !== 'undefined',
+	);
 	const mappedEventTimerProperties = mapEventTimerPropertiesToString(
 		filteredEventTimerProperties,
 	);
@@ -156,16 +151,37 @@ const addVisibilityListeners = (): void => {
 	window.addEventListener('pagehide', listener);
 };
 
+const checkConsent = async (): Promise<boolean> => {
+	const consentState: ConsentState = await onConsent();
+
+	if (consentState.tcfv2) {
+		// TCFv2 mode - check for consent
+		const consents = consentState.tcfv2.consents;
+		const REQUIRED_CONSENTS = [7, 8];
+
+		return REQUIRED_CONSENTS.every((consent) => consents[consent]);
+	}
+
+	// non-TCFv2 mode - don't check for consent
+	return true;
+};
+
 /**
  * A method to asynchronously send metrics after initialization.
  */
-function bypassCommercialMetricsSampling(): void {
+async function bypassCommercialMetricsSampling(): Promise<void> {
 	if (!initialised) {
 		console.warn('initCommercialMetrics not yet initialised');
 		return;
 	}
 
-	addVisibilityListeners();
+	const consented = await checkConsent();
+
+	if (consented) {
+		addVisibilityListeners();
+	} else {
+		log('commercial', "Metrics won't be sent because consent wasn't given");
+	}
 }
 
 interface InitCommercialMetricsArgs {
@@ -184,13 +200,13 @@ interface InitCommercialMetricsArgs {
  * @param init.adBlockerInUse - indicates whether or not an adblocker is being used.
  * @param init.sampling - rate at which to sample commercial metrics - the default is to send for 1% of pageviews
  */
-function initCommercialMetrics({
+async function initCommercialMetrics({
 	pageViewId,
 	browserId,
 	isDev,
 	adBlockerInUse,
 	sampling = 1 / 100,
-}: InitCommercialMetricsArgs): boolean {
+}: InitCommercialMetricsArgs): Promise<boolean> {
 	commercialMetricsPayload.page_view_id = pageViewId;
 	commercialMetricsPayload.browser_id = browserId;
 	setEndpoint(isDev);
@@ -206,8 +222,16 @@ function initCommercialMetrics({
 	const userIsInSamplingGroup = Math.random() <= sampling;
 
 	if (isDev || userIsInSamplingGroup) {
-		addVisibilityListeners();
-		return true;
+		const consented = await checkConsent();
+		if (consented) {
+			addVisibilityListeners();
+			return true;
+		} else {
+			log(
+				'commercial',
+				"Metrics won't be sent because consent wasn't given",
+			);
+		}
 	}
 
 	return false;
@@ -216,7 +240,6 @@ function initCommercialMetrics({
 export const _ = {
 	Endpoints,
 	setEndpoint,
-	filterUndefinedProperties,
 	mapEventTimerPropertiesToString,
 	roundTimeStamp,
 	transformToObjectEntries,
