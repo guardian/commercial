@@ -21,6 +21,8 @@ describe('Personalised targeting', () => {
 					gdprApplies: true,
 					tcString: 'I<3IAB.tcf.ftw',
 				},
+				canTarget: true,
+				framework: 'tcfv2',
 			};
 
 			storage.local.setRaw(FREQUENCY_KEY, '1');
@@ -49,6 +51,8 @@ describe('Personalised targeting', () => {
 					gdprApplies: true,
 					tcString: 'I<3IAB.tcf.ftw',
 				},
+				canTarget: false,
+				framework: 'tcfv2',
 			};
 
 			const expected: Partial<PersonalisedTargeting> = {
@@ -66,6 +70,8 @@ describe('Personalised targeting', () => {
 		it('Full Consent', () => {
 			const state: ConsentState = {
 				ccpa: { doNotSell: false },
+				canTarget: true,
+				framework: 'ccpa',
 			};
 
 			storage.local.setRaw(FREQUENCY_KEY, '4');
@@ -83,6 +89,8 @@ describe('Personalised targeting', () => {
 		it('Do Not Sell', () => {
 			const state: ConsentState = {
 				ccpa: { doNotSell: true },
+				canTarget: false,
+				framework: 'ccpa',
 			};
 
 			storage.local.setRaw(FREQUENCY_KEY, '4');
@@ -102,6 +110,8 @@ describe('Personalised targeting', () => {
 		test('Full Consent', () => {
 			const state: ConsentState = {
 				aus: { personalisedAdvertising: true },
+				canTarget: true,
+				framework: 'aus',
 			};
 
 			storage.local.setRaw(FREQUENCY_KEY, '12');
@@ -119,6 +129,8 @@ describe('Personalised targeting', () => {
 		test('Personalised Advertising OFF', () => {
 			const state: ConsentState = {
 				aus: { personalisedAdvertising: false },
+				canTarget: false,
+				framework: 'aus',
 			};
 
 			storage.local.setRaw(FREQUENCY_KEY, '12');
@@ -162,6 +174,8 @@ describe('Personalised targeting', () => {
 		test.each(frequencies)('Should get `%s` for %f', (fr, val) => {
 			const state: ConsentState = {
 				ccpa: { doNotSell: false },
+				canTarget: true,
+				framework: 'ccpa',
 			};
 
 			storage.local.setRaw(FREQUENCY_KEY, String(val));
@@ -198,6 +212,8 @@ describe('Personalised targeting', () => {
 		test.each(groups)('Should get `%s` if it exists', (amtgrp, val) => {
 			const state: ConsentState = {
 				ccpa: { doNotSell: false },
+				canTarget: true,
+				framework: 'ccpa',
 			};
 
 			storage.local.remove(AMTGRP_STORAGE_KEY);
@@ -220,7 +236,10 @@ describe('Personalised targeting', () => {
 
 	describe('Unknown', () => {
 		test('Not Applicable', () => {
-			const state: ConsentState = {};
+			const state: ConsentState = {
+				canTarget: false,
+				framework: null,
+			};
 
 			const expected: PersonalisedTargeting = {
 				amtgrp: null,
