@@ -48,7 +48,7 @@
     "@guardian/consent-management-platform": "^10.5.0",
     "@guardian/eslint-config-typescript": "^1.0.0",
     "@guardian/libs": "3.6.1",
-    "@guardian/prettier": "^0.7.0",
+    "@guardian/prettier": "^1.0.0",
     "@octokit/core": "^3.5.1",
     "@semantic-release/github": "^8.0.2",
     "@types/google.analytics": "^0.0.42",
