@@ -507,10 +507,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-3.3.0.tgz#fa98c7b8216ab35b8cf3087cd9ba336958fac99a"
   integrity sha512-XB9o8qtDOg+KlPh1sjEr4u+Ai3RFTRr2riZ/HJpdlh8Cu4ZpYjCSGUZXSGkxp1CwFWT9sduANnsWSqZ97iBloQ==
 
-"@guardian/libs@3.6.1":
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-3.6.1.tgz#111d10c2aec32671a7cc7f70d8e93398edc523e2"
-  integrity sha512-n0nJLRL143Tn5RKfr5YLaprrYJCVWdMftMry10l/7d87t6i2bL/OpewTe8j4F4DGH5GjVPuSTVpZmMsgIl5hww==
+"@guardian/libs@5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-5.1.0.tgz#5f7a228d8382e07809e09aeffed6d472558ed41d"
+  integrity sha512-AKVh+CraVAR49y60IX7UYrIMlfhS/zhN1f31FqJ/nHtGv92XFzCoijknkl+pFQUtuZvD2zYCygpqLGCWPVDk/Q==
 
 "@guardian/prettier@^1.0.0":
   version "1.0.0"
@@ -1019,9 +1019,9 @@
   integrity sha512-5hiM4Un+tpl4cKw3lV4UgzJj+SmfNIDCLLw0TepzQxz9ZGV5ixnqkzIVF+3tp0ZHgcMKE+VNGHJjEeyFG2dcSw==
 
 "@semantic-release/github@^8.0.0", "@semantic-release/github@^8.0.2":
-  version "8.0.2"
-  resolved "https://registry.yarnpkg.com/@semantic-release/github/-/github-8.0.2.tgz#80114a41f6ec8ab6c0d38a436b48ff3f2223ab16"
-  integrity sha512-wIbfhOeuxlYzMTjtSAa2xgr54n7ZuPAS2gadyTWBpUt2PNAPgla7A6XxCXJnaKPgfVF0iFfSk3B+KlVKk6ByVg==
+  version "8.0.4"
+  resolved "https://registry.yarnpkg.com/@semantic-release/github/-/github-8.0.4.tgz#4ea242f6ad10a0474b0fbb09462e10c43518002a"
+  integrity sha512-But4e8oqqP3anZI5tjzZssZc2J6eoUdeeE0s7LVKKwyiAXJiQDWNNvtPOpgG2DsIz4+Exuse7cEQgjGMxwtLmg==
   dependencies:
     "@octokit/rest" "^18.0.0"
     "@semantic-release/error" "^2.2.0"
