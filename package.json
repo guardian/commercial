@@ -71,7 +71,7 @@
     "mockdate": "^3.0.5",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.5.0",
-    "semantic-release": "^18.0.1",
+    "semantic-release": "^19.0.2",
     "ts-jest": "^27.0.7",
     "type-fest": "^2.8.0",
     "typescript": "^4.5.2",
