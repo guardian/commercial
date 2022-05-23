@@ -40,7 +40,7 @@ interface SizeMapping {
 	tablet?: AdSize[];
 }
 
-interface SizeMappings {
+interface SlotSizeMappings {
 	right: SizeMapping;
 	comments: SizeMapping;
 	'top-above-nav': SizeMapping;
@@ -98,7 +98,7 @@ const adSizes: Record<SizeKeys, AdSize> = {
 	'160x600': adSizesPartial.skyscraper,
 };
 
-const sizeMappings: SizeMappings = {
+const slotSizeMappings: SlotSizeMappings = {
 	right: {
 		mobile: [
 			adSizes.outOfPage,
@@ -217,5 +217,5 @@ const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
 // Export for testing
 export const _ = { createAdSize };
 
-export type { AdSizeString, AdSize, SizeKeys };
-export { adSizes, getAdSize, sizeMappings };
+export type { AdSizeString, AdSize, SizeKeys, SizeMapping };
+export { adSizes, getAdSize, slotSizeMappings };
