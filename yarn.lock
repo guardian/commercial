@@ -480,9 +480,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/ab-core/-/ab-core-2.0.0.tgz#d8a9408d5a66ff1f8c684ed458c99517bbee15b1"
   integrity sha512-E5p6l0l37hY0GNFaZmA5/22TlVuavzlMHR3OeweD5eDcY2gB3nGgzPK/d3M67dkbDAJkGjB4a0W84Z5N2YScvQ==
 
-"@guardian/consent-management-platform@guardian/consent-management-platform#notice-gpc-navigator":
-  version "0.0.0-this-never-updates-in-source-code-refer-to-git-tags"
-  resolved "https://codeload.github.com/guardian/consent-management-platform/tar.gz/76077688e4c08f7f37e80f5628f116ac89d818fa"
+"@guardian/consent-management-platform@^10.6.0":
+  version "10.6.0"
+  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-10.6.0.tgz#18b13a1b6eebc2dcf0d708d12bcd6b93a2c407a3"
+  integrity sha512-U4JvXWV/gG5WwNsooVncYQSf5nroEinVnq2nCIrinQeMyhn6M2syxNnQVqIk/CE05Mh84OpR/ZWvGoz30b2/wA==
   dependencies:
     "@guardian/libs" "1.6.1 - 3.3.0"
 
