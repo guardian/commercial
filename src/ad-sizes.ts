@@ -72,7 +72,7 @@ type PlatformSize = 'mobile' | 'desktop' | 'phablet' | 'tablet';
 
 type SizeMapping = Partial<Record<PlatformSize, AdSize[]>>;
 
-type SlotSizeMappings = Record<SlotName, SizeMapping>;
+type SizeMappings = Record<SlotName, SizeMapping>;
 
 const createAdSize = (width: number, height: number): AdSize => {
 	const size = new AdSizeClass([width, height]);
@@ -116,7 +116,7 @@ const adSizes: Record<SizeKeys, AdSize> = {
 	'160x600': adSizesPartial.skyscraper,
 };
 
-const slotSizeMappings: SlotSizeMappings = {
+const sizeMappings: SizeMappings = {
 	right: {
 		mobile: [
 			adSizes.outOfPage,
@@ -289,5 +289,5 @@ const getAdSize = (size: SizeKeys): AdSize | 'fluid' => adSizes[size];
 // Export for testing
 export const _ = { createAdSize };
 
-export type { AdSizeString, AdSize, SizeKeys, SizeMapping, SlotSizeMappings };
-export { adSizes, getAdSize, slotSizeMappings, createAdSize };
+export type { AdSizeString, AdSize, SizeKeys, SizeMapping, SizeMappings };
+export { adSizes, getAdSize, sizeMappings, createAdSize };

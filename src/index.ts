@@ -12,13 +12,13 @@ export {
 	initCommercialMetrics,
 } from './send-commercial-metrics';
 export type { ThirdPartyTag } from './types';
-export { adSizes, getAdSize, slotSizeMappings, createAdSize } from './ad-sizes';
+export { adSizes, getAdSize, sizeMappings, createAdSize } from './ad-sizes';
 export type {
 	SizeKeys,
 	AdSizeString,
 	AdSize,
 	SizeMapping,
-	SlotSizeMappings,
+	SizeMappings,
 } from './ad-sizes';
 export { isAdBlockInUse } from './detect-ad-blocker';
 export {
