@@ -155,6 +155,31 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.fluid,
 		],
 	},
+	inline: {
+		mobile: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.outstreamMobile,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.fluid,
+		],
+		phablet: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.outstreamMobile,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.fluid,
+		],
+		desktop: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.fluid,
+		],
+	},
 	'top-above-nav': {
 		tablet: [
 			adSizes.outOfPage,
@@ -217,6 +242,17 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.fluid,
 		],
 	},
+	'merchandising-high-lucky': {
+		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.fluid],
+	},
+	'high-merch-paid': {
+		mobile: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.merchandisingHighAdFeature,
+			adSizes.fluid,
+		],
+	},
 	merchandising: {
 		mobile: [
 			adSizes.outOfPage,
@@ -227,6 +263,24 @@ const slotSizeMappings: SlotSizeMappings = {
 	},
 	survey: {
 		desktop: [adSizes.outOfPage],
+	},
+	im: {
+		mobile: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.inlineMerchandising,
+			adSizes.fluid,
+		],
+	},
+	carrot: {
+		mobile: [adSizes.fluid],
+	},
+
+	epic: {
+		mobile: [adSizes.fluid],
+	},
+	'mobile-sticky': {
+		mobile: [adSizes.mobilesticky],
 	},
 };
 
