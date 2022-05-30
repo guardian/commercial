@@ -1,10 +1,29 @@
 type AdSizeString = 'fluid' | `${number},${number}`;
 
-type AdSize = Readonly<{
-	width: number;
-	height: number;
-	toString: () => AdSizeString;
-}>;
+class AdSizeClass extends Array<number> {
+	readonly [0]: number;
+	readonly [1]: number;
+
+	constructor([width, height]: [number, number]) {
+		super();
+		this.push(width, height);
+	}
+	public toString(): AdSizeString {
+		return this.width === 0 && this.height === 0
+			? 'fluid'
+			: `${this[0]},${this[1]}`;
+	}
+
+	get width(): number {
+		return this[0];
+	}
+
+	get height(): number {
+		return this[1];
+	}
+}
+
+type AdSize = Readonly<AdSizeClass> | 'fluid';
 
 type SizeKeys =
 	| '160x600'
@@ -33,32 +52,31 @@ type SizeKeys =
 	| 'portrait'
 	| 'skyscraper';
 
-interface SizeMapping {
-	mobile?: AdSize[];
-	desktop?: AdSize[];
-	phablet?: AdSize[];
-	tablet?: AdSize[];
-}
+type SlotName =
+	| 'right'
+	| 'comments'
+	| 'inline'
+	| 'top-above-nav'
+	| 'mostpop'
+	| 'merchandising-high'
+	| 'merchandising-high-lucky'
+	| 'high-merch-paid'
+	| 'merchandising'
+	| 'survey'
+	| 'im'
+	| 'carrot'
+	| 'epic'
+	| 'mobile-sticky';
 
-interface SlotSizeMappings {
-	right: SizeMapping;
-	comments: SizeMapping;
-	'top-above-nav': SizeMapping;
-	mostpop: SizeMapping;
-	'merchandising-high': SizeMapping;
-	merchandising: SizeMapping;
-	survey: SizeMapping;
-}
+type PlatformSize = 'mobile' | 'desktop' | 'phablet' | 'tablet';
+
+type SizeMapping = Partial<Record<PlatformSize, AdSize[]>>;
+
+type SlotSizeMappings = Record<SlotName, SizeMapping>;
 
 const createAdSize = (width: number, height: number): AdSize => {
-	const toString = (): AdSizeString =>
-		width === 0 && height === 0 ? 'fluid' : `${width},${height}`;
-
-	return Object.freeze({
-		width,
-		height,
-		toString,
-	});
+	const size = new AdSizeClass([width, height]);
+	return size.toString() === 'fluid' ? 'fluid' : size;
 };
 
 const adSizesPartial = {
@@ -212,10 +230,10 @@ const slotSizeMappings: SlotSizeMappings = {
 	},
 };
 
-const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
+const getAdSize = (size: SizeKeys): AdSize | 'fluid' => adSizes[size];
 
 // Export for testing
 export const _ = { createAdSize };
 
-export type { AdSizeString, AdSize, SizeKeys, SizeMapping };
-export { adSizes, getAdSize, slotSizeMappings };
+export type { AdSizeString, AdSize, SizeKeys, SizeMapping, SlotSizeMappings };
+export { adSizes, getAdSize, slotSizeMappings, createAdSize };

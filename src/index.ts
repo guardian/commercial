@@ -12,8 +12,14 @@ export {
 	initCommercialMetrics,
 } from './send-commercial-metrics';
 export type { ThirdPartyTag } from './types';
-export { adSizes, getAdSize, slotSizeMappings } from './ad-sizes';
-export type { SizeKeys, AdSizeString, AdSize } from './ad-sizes';
+export { adSizes, getAdSize, slotSizeMappings, createAdSize } from './ad-sizes';
+export type {
+	SizeKeys,
+	AdSizeString,
+	AdSize,
+	SizeMapping,
+	SlotSizeMappings,
+} from './ad-sizes';
 export { isAdBlockInUse } from './detect-ad-blocker';
 export {
 	clearPermutiveSegments,
