@@ -20,7 +20,7 @@ declare global {
 		}>;
 		guardian: {
 			commercialTimer?: EventTimer;
-			config: GuardianWindowConfig;
+			config?: GuardianWindowConfig;
 		};
 		ga: UniversalAnalytics.ga | null;
 		readonly navigator: Navigator;
