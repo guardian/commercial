@@ -259,9 +259,8 @@ const covertSizeMappingsToStrings = (
 	sizeMappings: SizeMapping,
 ): Record<string, string> =>
 	Object.entries(sizeMappings).reduce(
-		(result: Record<string, string>, [device, sizes]) => {
-			// TODO remove assertion
-			result[device] = (sizes as AdSize[]).join('|');
+		(result: Record<string, string>, [device, sizes]: [string, AdSize[]]) => {
+			result[device] =sizes.join('|');
 			return result;
 		},
 		{},
