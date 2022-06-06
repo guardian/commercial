@@ -1,5 +1,22 @@
 type AdSizeString = 'fluid' | `${number},${number}`;
 
+/**
+ * Store ad sizes in a way that is compatible with google-tag but also accessible via
+ * more semantic `width`/`height` properties and keep things readonly.
+ *
+ * example:
+ * const size = new AdSize([300, 250]);
+ *
+ * size.width === 300; // true
+ * size[0] === 300; // true
+ *
+ * size.height === 250; // true
+ * size[1] === 250; // true
+ *
+ * size[0] = 200; // throws error
+ * size.width = 200; // throws error
+ *
+ */
 class AdSize extends Array<number> {
 	readonly [0]: number;
 	readonly [1]: number;
@@ -11,7 +28,7 @@ class AdSize extends Array<number> {
 	public toString(): AdSizeString {
 		return this.width === 0 && this.height === 0
 			? 'fluid'
-			: `${this[0]},${this[1]}`;
+			: `${this.width},${this.height}`;
 	}
 
 	get width(): number {
