@@ -73,8 +73,8 @@ type SlotName =
 	| 'inline'
 	| 'top-above-nav'
 	| 'mostpop'
-	| 'merchandising-high'
-	| 'merchandising-high-lucky'
+	| 'high-merch'
+	| 'high-merch-lucky'
 	| 'high-merch-paid'
 	| 'merchandising'
 	| 'survey'
@@ -130,7 +130,7 @@ const adSizes: Record<SizeKeys, AdSize> = {
 	'160x600': adSizesPartial.skyscraper,
 };
 
-const sizeMappings: SizeMappings = {
+const slotSizeMappings: SizeMappings = {
 	right: {
 		mobile: [
 			adSizes.outOfPage,
@@ -303,5 +303,12 @@ const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
 // Export for testing
 export const _ = { createAdSize };
 
-export type { AdSizeString, AdSize, SizeKeys, SizeMapping, SizeMappings };
-export { adSizes, getAdSize, sizeMappings, createAdSize };
+export type {
+	AdSizeString,
+	AdSize,
+	SizeKeys,
+	SizeMapping,
+	SizeMappings,
+	SlotName,
+};
+export { adSizes, getAdSize, slotSizeMappings, createAdSize };

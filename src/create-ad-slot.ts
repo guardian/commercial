@@ -1,5 +1,5 @@
-import type { AdSize, SizeMapping } from './ad-sizes';
-import { adSizes } from './ad-sizes';
+import type { AdSize, SlotName as AllSlotName, SizeMapping } from './ad-sizes';
+import { slotSizeMappings } from './ad-sizes';
 
 const adSlotIdPrefix = 'dfp-ad--';
 
@@ -10,18 +10,7 @@ type AdSlotConfig = {
 	name?: string;
 };
 
-type SlotName =
-	| 'im'
-	| 'high-merch'
-	| 'high-merch-lucky'
-	| 'high-merch-paid'
-	| 'inline'
-	| 'mostpop'
-	| 'comments'
-	| 'top-above-nav'
-	| 'carrot'
-	| 'epic'
-	| 'mobile-sticky';
+type SlotName = Exclude<AllSlotName, 'survey' | 'right' | 'merchandising'>;
 
 type AdSlotConfigs = Record<SlotName, AdSlotConfig>;
 
@@ -31,136 +20,59 @@ type CreateSlotOptions = {
 	sizes?: Record<string, AdSize[]>;
 };
 
-const commonSizeMappings: SizeMapping = {
-	mobile: [
-		adSizes.outOfPage,
-		adSizes.empty,
-		adSizes.outstreamMobile,
-		adSizes.mpu,
-		adSizes.googleCard,
-		adSizes.fluid,
-	],
-	phablet: [
-		adSizes.outOfPage,
-		adSizes.empty,
-		adSizes.outstreamMobile,
-		adSizes.mpu,
-		adSizes.googleCard,
-		adSizes.fluid,
-	],
-	desktop: [
-		adSizes.outOfPage,
-		adSizes.empty,
-		adSizes.mpu,
-		adSizes.googleCard,
-		adSizes.fluid,
-	],
-};
-
-/*
-
-    mark: 432b3a46-90c1-4573-90d3-2400b51af8d0
-
-    The ad sizes which are hardcoded here are also hardcoded in the source code of
-    dotcom-rendering.
-
-    If/when this file is modified, please make sure that updates, if any, are reported to DCR.
-
-	TODO use a map type??
-	want to assert that values are of type AdSlotConfig
- */
-
 const adSlotConfigs: AdSlotConfigs = {
 	im: {
 		label: false,
 		refresh: false,
-		sizeMappings: {
-			mobile: [
-				adSizes.outOfPage,
-				adSizes.empty,
-				adSizes.inlineMerchandising,
-				adSizes.fluid,
-			],
-		},
+		sizeMappings: slotSizeMappings.im,
 	},
 	'high-merch': {
 		label: false,
 		refresh: false,
 		name: 'merchandising-high',
-		sizeMappings: {
-			mobile: [
-				adSizes.outOfPage,
-				adSizes.empty,
-				adSizes.merchandisingHigh,
-				adSizes.fluid,
-			],
-		},
+		sizeMappings: slotSizeMappings['high-merch'],
 	},
 	'high-merch-lucky': {
 		label: false,
 		refresh: false,
 		name: 'merchandising-high-lucky',
-		sizeMappings: {
-			mobile: [adSizes.outOfPage, adSizes.empty, adSizes.fluid],
-		},
+		sizeMappings: slotSizeMappings['high-merch-lucky'],
 	},
 	'high-merch-paid': {
 		label: false,
 		refresh: false,
 		name: 'merchandising-high',
-		sizeMappings: {
-			mobile: [
-				adSizes.outOfPage,
-				adSizes.empty,
-				adSizes.merchandisingHighAdFeature,
-				adSizes.fluid,
-			],
-		},
+		sizeMappings: slotSizeMappings['high-merch-paid'],
 	},
 	inline: {
-		sizeMappings: commonSizeMappings,
+		sizeMappings: slotSizeMappings.inline,
 	},
 	mostpop: {
-		sizeMappings: commonSizeMappings,
+		sizeMappings: slotSizeMappings.mostpop,
 	},
 	comments: {
-		sizeMappings: commonSizeMappings,
+		sizeMappings: slotSizeMappings.comments,
 	},
 	'top-above-nav': {
-		sizeMappings: {
-			mobile: [
-				adSizes.outOfPage,
-				adSizes.empty,
-				adSizes.fabric,
-				adSizes.outstreamMobile,
-				adSizes.mpu,
-				adSizes.fluid,
-			],
-		},
+		sizeMappings: slotSizeMappings['top-above-nav'],
 	},
 	carrot: {
 		label: false,
 		refresh: false,
 		name: 'carrot',
-		sizeMappings: {
-			mobile: [adSizes.fluid],
-		},
+		sizeMappings: slotSizeMappings.carrot,
 	},
 	epic: {
 		label: false,
 		refresh: false,
 		name: 'epic',
-		sizeMappings: {
-			mobile: [adSizes.fluid],
-		},
+		sizeMappings: slotSizeMappings.epic,
 	},
 	'mobile-sticky': {
 		label: true,
 		refresh: true,
 		name: 'mobile-sticky',
-		sizeMappings: {
-			mobile: [adSizes.mobilesticky],
-		},
+		sizeMappings: slotSizeMappings['mobile-sticky'],
 	},
 };
 
