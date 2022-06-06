@@ -26,6 +26,7 @@ export type GuardianAnalyticsConfig = {
 
 export type GuardianWindowConfig = {
 	googleAnalytics?: GuardianAnalyticsConfig;
+	isDotcomRendering?: boolean;
 };
 
 export type GoogleTagParams = unknown;
