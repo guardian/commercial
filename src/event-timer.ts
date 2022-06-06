@@ -41,6 +41,7 @@ interface EventTimerProperties {
 	adSlotsTotal?: number;
 	// the height of the page / the viewport height
 	pageHeightVH?: number;
+	gpcSignal?: number;
 	// distance in percentage of viewport height at which ads are lazy loaded
 	lazyLoadMarginPercent?: number;
 }
@@ -188,6 +189,7 @@ export class EventTimer {
 			| 'adSlotsInline'
 			| 'adSlotsTotal'
 			| 'pageHeightVH'
+			| 'gpcSignal'
 			| 'lazyLoadMarginPercent',
 		value: number,
 	): void {
