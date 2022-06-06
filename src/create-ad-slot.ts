@@ -164,7 +164,7 @@ const adSlotConfigs: AdSlotConfigs = {
 	},
 };
 
-/*
+/**
   Returns an adSlot HTMLElement which is the main DFP slot.
 
   Insert that element as siblings at the place you want adverts to appear.
