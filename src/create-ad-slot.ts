@@ -28,7 +28,7 @@ type AdSlotConfigs = Record<SlotName, AdSlotConfig>;
 type CreateSlotOptions = {
 	classes?: string;
 	name?: string;
-	sizes?: Record<string, AdSize[] | undefined>; // allow an empty object
+	sizes?: Record<string, AdSize[]>;
 };
 
 const commonSizeMappings: SizeMapping = {
