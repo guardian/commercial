@@ -259,8 +259,11 @@ const covertSizeMappingsToStrings = (
 	sizeMappings: SizeMapping,
 ): Record<string, string> =>
 	Object.entries(sizeMappings).reduce(
-		(result: Record<string, string>, [device, sizes]: [string, AdSize[]]) => {
-			result[device] =sizes.join('|');
+		(
+			result: Record<string, string>,
+			[device, sizes]: [string, AdSize[]],
+		) => {
+			result[device] = sizes.join('|');
 			return result;
 		},
 		{},
