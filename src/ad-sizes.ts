@@ -76,9 +76,9 @@ type SlotName =
 	| 'merchandising-high'
 	| 'survey';
 
-type PlatformSize = 'mobile' | 'desktop' | 'phablet' | 'tablet';
+type Breakpoint = 'mobile' | 'desktop' | 'phablet' | 'tablet';
 
-type SizeMapping = Partial<Record<PlatformSize, AdSize[]>>;
+type SizeMapping = Partial<Record<Breakpoint, AdSize[]>>;
 
 type SlotSizeMappings = Record<SlotName, SizeMapping>;
 

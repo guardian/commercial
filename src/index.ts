@@ -18,7 +18,7 @@ export type {
 	AdSizeString,
 	AdSize,
 	SizeMapping,
-	SizeMappings,
+	SlotSizeMappings,
 	SlotName,
 } from './ad-sizes';
 export { isAdBlockInUse } from './detect-ad-blocker';
