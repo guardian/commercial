@@ -70,24 +70,17 @@ type SizeKeys =
 type SlotName =
 	| 'right'
 	| 'comments'
-	| 'inline'
 	| 'top-above-nav'
 	| 'mostpop'
-	| 'high-merch'
-	| 'high-merch-lucky'
-	| 'high-merch-paid'
 	| 'merchandising'
-	| 'survey'
-	| 'im'
-	| 'carrot'
-	| 'epic'
-	| 'mobile-sticky';
+	| 'merchandising-high'
+	| 'survey';
 
 type PlatformSize = 'mobile' | 'desktop' | 'phablet' | 'tablet';
 
 type SizeMapping = Partial<Record<PlatformSize, AdSize[]>>;
 
-type SizeMappings = Record<SlotName, SizeMapping>;
+type SlotSizeMappings = Record<SlotName, SizeMapping>;
 
 const createAdSize = (width: number, height: number): AdSize => {
 	return new AdSize([width, height]);
@@ -130,7 +123,12 @@ const adSizes: Record<SizeKeys, AdSize> = {
 	'160x600': adSizesPartial.skyscraper,
 };
 
-const slotSizeMappings: SizeMappings = {
+/**
+ * mark: 432b3a46-90c1-4573-90d3-2400b51af8d0
+ * Some of these may or may not need to be synced for with the sizes in ./create-ad-slot.ts
+ * these were originally from DCR, create-ad-slot.ts ones were in frontend.
+ **/
+const slotSizeMappings: SlotSizeMappings = {
 	right: {
 		mobile: [
 			adSizes.outOfPage,
@@ -164,31 +162,6 @@ const slotSizeMappings: SizeMappings = {
 			adSizes.outOfPage,
 			adSizes.empty,
 			adSizes.outstreamMobile,
-			adSizes.mpu,
-			adSizes.googleCard,
-			adSizes.fluid,
-		],
-	},
-	inline: {
-		mobile: [
-			adSizes.outOfPage,
-			adSizes.empty,
-			adSizes.outstreamMobile,
-			adSizes.mpu,
-			adSizes.googleCard,
-			adSizes.fluid,
-		],
-		phablet: [
-			adSizes.outOfPage,
-			adSizes.empty,
-			adSizes.outstreamMobile,
-			adSizes.mpu,
-			adSizes.googleCard,
-			adSizes.fluid,
-		],
-		desktop: [
-			adSizes.outOfPage,
-			adSizes.empty,
 			adSizes.mpu,
 			adSizes.googleCard,
 			adSizes.fluid,
@@ -256,17 +229,6 @@ const slotSizeMappings: SizeMappings = {
 			adSizes.fluid,
 		],
 	},
-	'merchandising-high-lucky': {
-		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.fluid],
-	},
-	'high-merch-paid': {
-		mobile: [
-			adSizes.outOfPage,
-			adSizes.empty,
-			adSizes.merchandisingHighAdFeature,
-			adSizes.fluid,
-		],
-	},
 	merchandising: {
 		mobile: [
 			adSizes.outOfPage,
@@ -277,24 +239,6 @@ const slotSizeMappings: SizeMappings = {
 	},
 	survey: {
 		desktop: [adSizes.outOfPage],
-	},
-	im: {
-		mobile: [
-			adSizes.outOfPage,
-			adSizes.empty,
-			adSizes.inlineMerchandising,
-			adSizes.fluid,
-		],
-	},
-	carrot: {
-		mobile: [adSizes.fluid],
-	},
-
-	epic: {
-		mobile: [adSizes.fluid],
-	},
-	'mobile-sticky': {
-		mobile: [adSizes.mobilesticky],
 	},
 };
 
@@ -308,7 +252,7 @@ export type {
 	AdSize,
 	SizeKeys,
 	SizeMapping,
-	SizeMappings,
+	SlotSizeMappings,
 	SlotName,
 };
 export { adSizes, getAdSize, slotSizeMappings, createAdSize };
