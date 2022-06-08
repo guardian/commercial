@@ -57,18 +57,11 @@ const commonSizeMappings: SizeMapping = {
 	],
 };
 
-/*
-
-    mark: 432b3a46-90c1-4573-90d3-2400b51af8d0
-
-    The ad sizes which are hardcoded here are also hardcoded in the source code of
-    dotcom-rendering.
-
-    If/when this file is modified, please make sure that updates, if any, are reported to DCR.
-
-	TODO use a map type??
-	want to assert that values are of type AdSlotConfig
- */
+/**
+ * mark: 432b3a46-90c1-4573-90d3-2400b51af8d0
+ * Some of these may or may not need to be synced for with the sizes in ./ad-sizes.ts
+ * these were originally from frontend, ad-sizes.ts ones were in DCR.
+ **/
 
 const adSlotConfigs: AdSlotConfigs = {
 	im: {

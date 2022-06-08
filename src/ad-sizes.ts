@@ -1,10 +1,44 @@
 type AdSizeString = 'fluid' | `${number},${number}`;
 
-type AdSize = Readonly<{
-	width: number;
-	height: number;
-	toString: () => AdSizeString;
-}>;
+/**
+ * Store ad sizes in a way that is compatible with google-tag but also accessible via
+ * more semantic `width`/`height` properties and keep things readonly.
+ *
+ * example:
+ * const size = new AdSize([300, 250]);
+ *
+ * size.width === 300; // true
+ * size[0] === 300; // true
+ *
+ * size.height === 250; // true
+ * size[1] === 250; // true
+ *
+ * size[0] = 200; // throws error
+ * size.width = 200; // throws error
+ *
+ */
+class AdSize extends Array<number> {
+	readonly [0]: number;
+	readonly [1]: number;
+
+	constructor([width, height]: [number, number]) {
+		super();
+		this.push(width, height);
+	}
+	public toString(): AdSizeString {
+		return this.width === 0 && this.height === 0
+			? 'fluid'
+			: `${this.width},${this.height}`;
+	}
+
+	get width(): number {
+		return this[0];
+	}
+
+	get height(): number {
+		return this[1];
+	}
+}
 
 type SizeKeys =
 	| '160x600'
@@ -33,32 +67,23 @@ type SizeKeys =
 	| 'portrait'
 	| 'skyscraper';
 
-interface SizeMapping {
-	mobile?: AdSize[];
-	desktop?: AdSize[];
-	phablet?: AdSize[];
-	tablet?: AdSize[];
-}
+type SlotName =
+	| 'right'
+	| 'comments'
+	| 'top-above-nav'
+	| 'mostpop'
+	| 'merchandising'
+	| 'merchandising-high'
+	| 'survey';
 
-interface SlotSizeMappings {
-	right: SizeMapping;
-	comments: SizeMapping;
-	'top-above-nav': SizeMapping;
-	mostpop: SizeMapping;
-	'merchandising-high': SizeMapping;
-	merchandising: SizeMapping;
-	survey: SizeMapping;
-}
+type Breakpoint = 'mobile' | 'desktop' | 'phablet' | 'tablet';
+
+type SizeMapping = Partial<Record<Breakpoint, AdSize[]>>;
+
+type SlotSizeMappings = Record<SlotName, SizeMapping>;
 
 const createAdSize = (width: number, height: number): AdSize => {
-	const toString = (): AdSizeString =>
-		width === 0 && height === 0 ? 'fluid' : `${width},${height}`;
-
-	return Object.freeze({
-		width,
-		height,
-		toString,
-	});
+	return new AdSize([width, height]);
 };
 
 const adSizesPartial = {
@@ -98,6 +123,11 @@ const adSizes: Record<SizeKeys, AdSize> = {
 	'160x600': adSizesPartial.skyscraper,
 };
 
+/**
+ * mark: 432b3a46-90c1-4573-90d3-2400b51af8d0
+ * Some of these may or may not need to be synced for with the sizes in ./create-ad-slot.ts
+ * these were originally from DCR, create-ad-slot.ts ones were in frontend.
+ **/
 const slotSizeMappings: SlotSizeMappings = {
 	right: {
 		mobile: [
@@ -217,5 +247,12 @@ const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
 // Export for testing
 export const _ = { createAdSize };
 
-export type { AdSizeString, AdSize, SizeKeys, SizeMapping };
-export { adSizes, getAdSize, slotSizeMappings };
+export type {
+	AdSizeString,
+	AdSize,
+	SizeKeys,
+	SizeMapping,
+	SlotSizeMappings,
+	SlotName,
+};
+export { adSizes, getAdSize, slotSizeMappings, createAdSize };
