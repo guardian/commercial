@@ -74,7 +74,16 @@ type SlotName =
 	| 'mostpop'
 	| 'merchandising'
 	| 'merchandising-high'
-	| 'survey';
+	| 'merchandising-high-lucky'
+	| 'survey'
+	| 'im'
+	| 'inline'
+	| 'mostpop'
+	| 'comments'
+	| 'top-above-nav'
+	| 'carrot'
+	| 'epic'
+	| 'mobile-sticky';
 
 type Breakpoint = 'mobile' | 'desktop' | 'phablet' | 'tablet';
 
@@ -129,6 +138,31 @@ const adSizes: Record<SizeKeys, AdSize> = {
  * these were originally from DCR, create-ad-slot.ts ones were in frontend.
  **/
 const slotSizeMappings: SlotSizeMappings = {
+	inline: {
+		mobile: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.outstreamMobile,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.fluid,
+		],
+		phablet: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.outstreamMobile,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.fluid,
+		],
+		desktop: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.fluid,
+		],
+	},
 	right: {
 		mobile: [
 			adSizes.outOfPage,
@@ -168,6 +202,14 @@ const slotSizeMappings: SlotSizeMappings = {
 		],
 	},
 	'top-above-nav': {
+		mobile: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.fabric,
+			adSizes.outstreamMobile,
+			adSizes.mpu,
+			adSizes.fluid,
+		],
 		tablet: [
 			adSizes.outOfPage,
 			adSizes.empty,
@@ -221,6 +263,14 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.fluid,
 		],
 	},
+	im: {
+		mobile: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.inlineMerchandising,
+			adSizes.fluid,
+		],
+	},
 	'merchandising-high': {
 		mobile: [
 			adSizes.outOfPage,
@@ -228,6 +278,9 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.merchandisingHigh,
 			adSizes.fluid,
 		],
+	},
+	'merchandising-high-lucky': {
+		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.fluid],
 	},
 	merchandising: {
 		mobile: [
@@ -239,6 +292,15 @@ const slotSizeMappings: SlotSizeMappings = {
 	},
 	survey: {
 		desktop: [adSizes.outOfPage],
+	},
+	carrot: {
+		mobile: [adSizes.fluid],
+	},
+	epic: {
+		mobile: [adSizes.fluid],
+	},
+	'mobile-sticky': {
+		mobile: [adSizes.mobilesticky],
 	},
 };
 
