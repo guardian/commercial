@@ -145,10 +145,10 @@ const listener = (e: Event): void => {
 
 const addVisibilityListeners = (): void => {
 	// Report all available metrics when the page is unloaded or in background.
-	window.addEventListener('visibilitychange', listener);
+	window.addEventListener('visibilitychange', listener, { once: true });
 
 	// Safari does not reliably fire the `visibilitychange` on page unload.
-	window.addEventListener('pagehide', listener);
+	window.addEventListener('pagehide', listener, { once: true });
 };
 
 const checkConsent = async (): Promise<boolean> => {
