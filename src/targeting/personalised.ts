@@ -1,8 +1,5 @@
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import type {
-	TCEventStatusCode,
-	TCFv2ConsentList,
-} from '@guardian/consent-management-platform/dist/types/tcfv2';
+import type { TCEventStatusCode } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import { storage } from '@guardian/libs';
 import { clearPermutiveSegments, getPermutiveSegments } from '../permutive';
 import type { False, NotApplicable, True } from '../types';
@@ -158,29 +155,17 @@ const getFrequencyValue = (
 	return '0';
 };
 
-const tcfv2AllPurposesConsented = (consents: TCFv2ConsentList) =>
-	Object.keys(consents).length > 0 && Object.values(consents).every(Boolean);
-
-const personalisedAdvertising = (state: ConsentState): boolean => {
-	if (state.tcfv2) return tcfv2AllPurposesConsented(state.tcfv2.consents);
-	if (state.ccpa) return !state.ccpa.doNotSell;
-	if (state.aus) return state.aus.personalisedAdvertising;
-
-	return false;
-};
-
 type CMPTargeting = Pick<
 	PersonalisedTargeting,
 	'cmp_interaction' | 'pa' | 'consent_tcfv2' | 'rdp'
 >;
+
 const getCMPTargeting = (state: ConsentState): CMPTargeting => {
 	if (state.tcfv2) {
 		return {
 			cmp_interaction: state.tcfv2.eventStatus,
-			pa: tcfv2AllPurposesConsented(state.tcfv2.consents) ? 't' : 'f',
-			consent_tcfv2: tcfv2AllPurposesConsented(state.tcfv2.consents)
-				? 't'
-				: 'f',
+			pa: state.canTarget ? 't' : 'f',
+			consent_tcfv2: state.canTarget ? 't' : 'f',
 			rdp: 'na',
 		};
 	}
@@ -188,8 +173,8 @@ const getCMPTargeting = (state: ConsentState): CMPTargeting => {
 	if (state.ccpa) {
 		return {
 			consent_tcfv2: 'na',
-			rdp: state.ccpa.doNotSell ? 't' : 'f',
-			pa: state.ccpa.doNotSell ? 'f' : 't',
+			rdp: !state.canTarget ? 't' : 'f',
+			pa: state.canTarget ? 't' : 'f',
 		};
 	}
 
@@ -197,7 +182,7 @@ const getCMPTargeting = (state: ConsentState): CMPTargeting => {
 		return {
 			consent_tcfv2: 'na',
 			rdp: 'na',
-			pa: state.aus.personalisedAdvertising ? 't' : 'f',
+			pa: state.canTarget ? 't' : 'f',
 		};
 	}
 
@@ -222,7 +207,7 @@ const createAdManagerGroup = (): AdManagerGroup => {
 const getAdManagerGroup = (
 	state: ConsentState,
 ): PersonalisedTargeting['amtgrp'] => {
-	if (!personalisedAdvertising(state)) {
+	if (!state.canTarget) {
 		storage.local.remove(AMTGRP_STORAGE_KEY);
 		return null;
 	}
@@ -235,7 +220,7 @@ const getAdManagerGroup = (
 };
 
 const getPermutiveWithState = (state: ConsentState) => {
-	if (personalisedAdvertising(state)) return getPermutiveSegments();
+	if (state.canTarget) return getPermutiveSegments();
 
 	clearPermutiveSegments();
 	return [];
