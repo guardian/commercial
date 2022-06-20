@@ -207,7 +207,12 @@ const createAdManagerGroup = (): AdManagerGroup => {
 const getAdManagerGroup = (
 	state: ConsentState,
 ): PersonalisedTargeting['amtgrp'] => {
-	if (!state.canTarget) {
+	if (!state.framework) {
+		storage.local.remove(AMTGRP_STORAGE_KEY);
+		return null;
+	}
+
+	if (state.tcfv2 && !state.canTarget) {
 		storage.local.remove(AMTGRP_STORAGE_KEY);
 		return null;
 	}
