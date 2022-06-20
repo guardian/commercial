@@ -232,14 +232,55 @@ describe('Personalised targeting', () => {
 
 			mockRandom.mockRestore();
 		});
+
+		test('Ad manager group IS NOT set if TCFv2 and consent not given', () => {
+			const state: ConsentState = {
+				tcfv2: {
+					consents: {},
+				},
+				canTarget: false,
+				framework: 'tcfv2',
+			} as ConsentState;
+
+			storage.local.set(AMTGRP_STORAGE_KEY, '1');
+
+			const targeting = getPersonalisedTargeting(state);
+
+			expect(targeting.amtgrp).toBeNull();
+			expect(storage.local.get(AMTGRP_STORAGE_KEY)).toBeNull();
+		});
+
+		test('Ad manager group IS set if ccpa and consent not given', () => {
+			const state: ConsentState = {
+				ccpa: { doNotSell: true },
+				canTarget: false,
+				framework: 'ccpa',
+			};
+
+			const targeting = getPersonalisedTargeting(state);
+			expect(targeting.amtgrp).not.toBeNull();
+		});
+
+		test('Ad manager group IS set if aus and consent not given', () => {
+			const state: ConsentState = {
+				aus: { personalisedAdvertising: false },
+				canTarget: false,
+				framework: 'aus',
+			};
+
+			const targeting = getPersonalisedTargeting(state);
+			expect(targeting.amtgrp).not.toBeNull();
+		});
 	});
 
 	describe('Unknown', () => {
-		test('Not Applicable', () => {
+		test('No Framework', () => {
 			const state: ConsentState = {
 				canTarget: false,
 				framework: null,
 			};
+
+			storage.local.set(AMTGRP_STORAGE_KEY, '1');
 
 			const expected: PersonalisedTargeting = {
 				amtgrp: null,
@@ -250,7 +291,9 @@ describe('Personalised targeting', () => {
 				rdp: 'na',
 			};
 			const targeting = getPersonalisedTargeting(state);
+
 			expect(targeting).toMatchObject(expected);
+			expect(storage.local.get(AMTGRP_STORAGE_KEY)).toBeNull();
 		});
 	});
 });
