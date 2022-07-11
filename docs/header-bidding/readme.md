@@ -40,8 +40,8 @@ If a line item is matched, the result is a creative containing a script that wil
 
 We have the following entry points in the commercial code:
 
-- [commercial.js](https://github.com/guardian/frontend/blob/main/static/src/javascripts/bootstraps/commercial.js)
-- [commercial.dcr.js](https://github.com/guardian/frontend/blob/main/static/src/javascripts/bootstraps/commercial.dcr.js)
+-   [commercial.dcr.ts](https://github.com/guardian/frontend/blob/1edd86365d3fdc0e85961979ffe7805c3af7d820/static/src/javascripts/bootstraps/commercial.dcr.ts)
+-   [commercial-legacy.ts](https://github.com/guardian/frontend/blob/1edd86365d3fdc0e85961979ffe7805c3af7d820/static/src/javascripts/bootstraps/commercial-legacy.ts) (deprecated)
 
 Both prepare an array of modules to invoke, amongst the first is the module `preparePrebid`:
 
@@ -54,34 +54,33 @@ commercialModules.push(
 
 The commercial bootstrap will invoke:
 
-[dfp/prepare-prebid.js init()](https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/commercial/modules/dfp/prepare-prebid.js)
+[dfp/prepare-prebid.ts init()](https://github.com/guardian/frontend/blob/1edd86365d3fdc0e85961979ffe7805c3af7d820/static/src/javascripts/projects/commercial/modules/dfp/prepare-prebid.ts#L60)
 
 This does the following:
 
-- ensure prepare prebid is called only once
-- ensures that prebid can be run according to consent and various switches
-- loads prebid.js **dynamically**
-- invokes `getPageTargeting()` to create the page targeting object if not already present
-- invokes `prebid.initialise()`
+-   ensure prepare prebid is called only once
+-   ensures that prebid can be run according to consent and various switches
+-   loads prebid.js **dynamically**
+-   invokes `prebid.initialise()`, passing the consent state framework
+
 #### prebid.js
 
-`prepare-prebid.js` will invoke:
+`prepare-prebid.ts` will invoke:
 
-[header-bidding/prebid/prebid.js/prebid.js intialise()](https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/commercial/modules/header-bidding/prebid/prebid.js)
+[header-bidding/prebid/prebid.ts intialise()](https://github.com/guardian/frontend/blob/1edd86365d3fdc0e85961979ffe7805c3af7d820/static/src/javascripts/projects/commercial/modules/header-bidding/prebid/prebid.ts#L223)
 
 This does the following:
 
-- configure prebid.js including the current bidding timeout of 1500ms
-- register a callback for the `bidWon` event to set the size of the advert
+-   configure prebid.js including the current bidding timeout of 1500ms
+-   register a callback for the `bidWon` event to set the size of the advert
 
-#### load-advert.js
+#### load-advert.ts
 
 When an ad is loaded (or refreshed) all header bidding suppliers (prebid.js and a9) are called to request bids.
 
-[dfp/load-advert.js loadAdvert()](https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/commercial/modules/dfp/load-advert.js)
+[dfp/load-advert.ts loadAdvert()](https://github.com/guardian/frontend/blob/1edd86365d3fdc0e85961979ffe7805c3af7d820/static/src/javascripts/projects/commercial/modules/dfp/load-advert.ts#L33)
 
-
-```js
+```ts
 // simplified
 export const loadAdvert = (advert) => {
     advert.whenSlotReady
@@ -98,23 +97,24 @@ export const loadAdvert = (advert) => {
         });
 };
 ```
+
 ### 2. Auction Complete
 
-In `prebid.js requestBids()` there is a bid completion callback `bidsBackHandler()`
+In `prebid.ts requestBids()` there is a bid completion callback `bidsBackHandler()`
 
 This will in turn call `window.pbjs.setTargetingForGPTAsync()` to set the advert details on Google's Page Targeting (GPT) object:
 
-[header-bidding/prebid/prebid.js/prebid.js requestBids()](https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/commercial/modules/header-bidding/prebid/prebid.js)
+[header-bidding/prebid/prebid.ts requestBids()](https://github.com/guardian/frontend/blob/1edd86365d3fdc0e85961979ffe7805c3af7d820/static/src/javascripts/projects/commercial/modules/header-bidding/prebid/prebid.ts#L429)
 
-```js
+```ts
 window.pbjs.requestBids({
     adUnits,
     bidsBackHandler() {
         // set page targeting object
-        window.pbjs.setTargetingForGPTAsync([
-            adUnits[0].code,
-        ]);
-        adUnits.map(adUnit => eventTimer.trigger('prebidEnd', stripDfpAdPrefixFrom(adUnit.code)));
+        window.pbjs.setTargetingForGPTAsync([adUnits[0].code]);
+        adUnits.forEach((adUnit) => {
+            eventTimer.trigger('prebidEnd', stripDfpAdPrefixFrom(adUnit.code)),
+        });
         resolve();
     },
 });
@@ -122,11 +122,11 @@ window.pbjs.requestBids({
 
 ### 3. GAM Request
 
-As we saw previously in `load-advert.js` when all header bidding suppliers have resolved, GAM is called to display the advert.
+As we saw previously in `load-advert.ts` when all header bidding suppliers have resolved, GAM is called to display the advert.
 
 GAM will use the properties set by `prebid.js` on the page targetting object.
 
-```js
+```ts
 // simplified
 export const loadAdvert = (advert) => {
     advert.whenSlotReady
@@ -166,6 +166,7 @@ google-lineitem-id: 5058222438
 ```
 
 Values of `-2` indicate that an ad was not matched.
+
 ### 4. GAM Line Item Matching
 
 In [Google Ad Manager](https://admanager.google.com/) under line items, we can filter 'name' by 'prebid automated' to see all prebid line items.
@@ -188,10 +189,9 @@ Here is an example header bidding creative script which includes a parameter for
 
 ```html
 <script>
-    try{
+    try {
         window.top.pbjs.renderAd(document, '%%PATTERN:hb_adid%%');
-    } catch(e) {
-    }
+    } catch (e) {}
 </script>
 ```
 
@@ -213,8 +213,8 @@ https://github.com/guardian/Prebid.js#681fbb
 
 The reasons for the custom verion is detailed here:
 
-https://github.com/guardian/Prebid.js/blob/master/modifications.md
+https://github.com/guardian/Prebid.js/blob/master/GUARDIAN_modifications.md
+
 #### Debugging prebid.js
 
 Adding `?pbjs_debug=true` to the URL will output prebid.js debug information to the developer console.
-
