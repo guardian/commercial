@@ -304,17 +304,9 @@ const slotSizeMappings: SlotSizeMappings = {
 		mobile: [adSizes.mobilesticky],
 	},
 	'crossword-banner': {
-		tablet: [
-			adSizes.outOfPage,
-			adSizes.empty,
-			adSizes.leaderboard
-		],
-		phablet: [
-			adSizes.outOfPage,
-			adSizes.empty,
-			adSizes.leaderboard
-		],
-	}
+		tablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
+		phablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
+	},
 };
 
 const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
