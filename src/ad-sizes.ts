@@ -83,7 +83,8 @@ type SlotName =
 	| 'top-above-nav'
 	| 'carrot'
 	| 'epic'
-	| 'mobile-sticky';
+	| 'mobile-sticky'
+	| 'crossword-banner';
 
 type Breakpoint = 'mobile' | 'desktop' | 'phablet' | 'tablet';
 
@@ -302,6 +303,18 @@ const slotSizeMappings: SlotSizeMappings = {
 	'mobile-sticky': {
 		mobile: [adSizes.mobilesticky],
 	},
+	'crossword-banner': {
+		tablet: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.leaderboard
+		],
+		phablet: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.leaderboard
+		],
+	}
 };
 
 const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
