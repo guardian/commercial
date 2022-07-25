@@ -1,3 +1,5 @@
+import type { Breakpoint } from './lib/breakpoint';
+
 type AdSizeString = 'fluid' | `${number},${number}`;
 
 /**
@@ -85,8 +87,6 @@ type SlotName =
 	| 'epic'
 	| 'mobile-sticky'
 	| 'crossword-banner';
-
-type Breakpoint = 'mobile' | 'desktop' | 'phablet' | 'tablet';
 
 type SizeMapping = Partial<Record<Breakpoint, AdSize[]>>;
 

@@ -1,5 +1,6 @@
 import type { AdSize, SizeMapping } from './ad-sizes';
 import { slotSizeMappings } from './ad-sizes';
+import { isBreakpoint } from './lib/breakpoint';
 
 const adSlotIdPrefix = 'dfp-ad--';
 
@@ -148,28 +149,21 @@ const createClasses = (
  */
 const concatSizeMappings = (
 	defaultSizeMappings: SizeMapping,
-	optionSizeMappings: CreateSlotOptions['sizes'],
-): SizeMapping => {
-	if (!optionSizeMappings) return defaultSizeMappings;
-	const concatenatedSizeMappings: SizeMapping = { ...defaultSizeMappings };
-	const optionDevices = Object.keys(optionSizeMappings); // ['mobile', 'desktop']
-
-	for (let i = 0; i < optionDevices.length; i++) {
-		const device = optionDevices[i] as keyof SizeMapping;
-		if (optionSizeMappings[device] && defaultSizeMappings[device]) {
-			const optionSizeMappingsForDevice = optionSizeMappings[device];
-			const defaultSizeMappingsForDevice = defaultSizeMappings[device];
-
-			if (defaultSizeMappingsForDevice && optionSizeMappingsForDevice) {
-				// TODO can we do concatenatedSizeMappings[device]?.concat ?
-				concatenatedSizeMappings[device] = (
-					concatenatedSizeMappings[device] ?? []
-				).concat(optionSizeMappingsForDevice);
+	optionSizeMappings: SizeMapping = {},
+): SizeMapping =>
+	Object.entries(optionSizeMappings).reduce<SizeMapping>(
+		(sizeMappings, [breakpoint, optionSizes]) => {
+			// Only perform concatenation if breakpoint is of the correct type
+			if (isBreakpoint(breakpoint)) {
+				// Concatenate the option sizes onto any existing sizes present for a given breakpoint
+				sizeMappings[breakpoint] = (
+					sizeMappings[breakpoint] ?? []
+				).concat(optionSizes);
 			}
-		}
-	}
-	return concatenatedSizeMappings;
-};
+			return sizeMappings;
+		},
+		{ ...defaultSizeMappings },
+	);
 
 /**
  * Convert size mappings to a string that will be added to the ad slot
@@ -206,7 +200,7 @@ const createDataAttributes = (
 		{},
 	);
 
-export const createAdSlot = (
+const createAdSlot = (
 	name: SlotName,
 	options: CreateSlotOptions = {},
 ): HTMLElement => {
@@ -234,3 +228,5 @@ export const createAdSlot = (
 		createClasses(slotName, options.classes),
 	);
 };
+
+export { createAdSlot, concatSizeMappings };
