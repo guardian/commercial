@@ -12,7 +12,13 @@ export {
 	initCommercialMetrics,
 } from './send-commercial-metrics';
 export type { ThirdPartyTag } from './types';
-export { adSizes, getAdSize, slotSizeMappings, createAdSize } from './ad-sizes';
+export {
+	adSizes,
+	getAdSize,
+	slotSizeMappings,
+	createAdSize,
+	isBreakpoint,
+} from './ad-sizes';
 export type {
 	SizeKeys,
 	AdSizeString,
@@ -30,7 +36,7 @@ export {
 export { initTrackScrollDepth } from './track-scroll-depth';
 export { initTrackGpcSignal } from './track-gpc-signal';
 export { buildAdsConfigWithConsent, disabledAds } from './ad-targeting-youtube';
-export { createAdSlot } from './create-ad-slot';
+export { createAdSlot, concatSizeMappings } from './create-ad-slot';
 export type {
 	AdsConfig,
 	AdsConfigBasic,

@@ -88,6 +88,9 @@ type SlotName =
 
 type Breakpoint = 'mobile' | 'desktop' | 'phablet' | 'tablet';
 
+const isBreakpoint = (s: string): s is Breakpoint =>
+	s === 'mobile' || s === 'phablet' || s === 'tablet' || s === 'desktop';
+
 type SizeMapping = Partial<Record<Breakpoint, AdSize[]>>;
 
 type SlotSizeMappings = Record<SlotName, SizeMapping>;
@@ -322,4 +325,4 @@ export type {
 	SlotSizeMappings,
 	SlotName,
 };
-export { adSizes, getAdSize, slotSizeMappings, createAdSize };
+export { adSizes, getAdSize, slotSizeMappings, createAdSize, isBreakpoint };
