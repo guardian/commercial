@@ -1,5 +1,6 @@
 import type { AdSize, SizeMapping } from './ad-sizes';
-import { isBreakpoint, slotSizeMappings } from './ad-sizes';
+import { slotSizeMappings } from './ad-sizes';
+import { isBreakpoint } from './lib/breakpoint';
 
 const adSlotIdPrefix = 'dfp-ad--';
 

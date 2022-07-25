@@ -12,13 +12,9 @@ export {
 	initCommercialMetrics,
 } from './send-commercial-metrics';
 export type { ThirdPartyTag } from './types';
-export {
-	adSizes,
-	getAdSize,
-	slotSizeMappings,
-	createAdSize,
-	isBreakpoint,
-} from './ad-sizes';
+export { adSizes, getAdSize, slotSizeMappings, createAdSize } from './ad-sizes';
+export { isBreakpoint } from './lib/breakpoint';
+export type { Breakpoint } from './lib/breakpoint';
 export type {
 	SizeKeys,
 	AdSizeString,
