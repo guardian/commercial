@@ -148,9 +148,9 @@ const createClasses = (
  */
 const concatSizeMappings = (
 	defaultSizeMappings: SizeMapping,
-	optionSizeMappings?: SizeMapping,
+	optionSizeMappings: SizeMapping = {},
 ): SizeMapping =>
-	Object.entries(optionSizeMappings ?? {}).reduce<SizeMapping>(
+	Object.entries(optionSizeMappings).reduce<SizeMapping>(
 		(sizeMappings, [breakpoint, optionSizes]) => {
 			// Only perform concatenation if breakpoint is of the correct type
 			if (isBreakpoint(breakpoint)) {
