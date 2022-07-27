@@ -67,7 +67,8 @@ type SizeKeys =
 	| 'outstreamGoogleDesktop'
 	| 'outstreamMobile'
 	| 'portrait'
-	| 'skyscraper';
+	| 'skyscraper'
+	| 'cascade';
 
 type SlotName =
 	| 'right'
@@ -121,6 +122,7 @@ const adSizesPartial = {
 	outstreamDesktop: createAdSize(620, 350),
 	outstreamGoogleDesktop: createAdSize(550, 310),
 	outstreamMobile: createAdSize(300, 197),
+	cascade: createAdSize(940, 230),
 };
 
 const adSizes: Record<SizeKeys, AdSize> = {
