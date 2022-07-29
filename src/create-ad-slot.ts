@@ -1,11 +1,9 @@
-import type { AdSize, SizeMapping } from './ad-sizes';
-import { slotSizeMappings } from './ad-sizes';
+import type { SizeMapping } from './ad-sizes';
 import { isBreakpoint } from './lib/breakpoint';
 
 const adSlotIdPrefix = 'dfp-ad--';
 
 type AdSlotConfig = {
-	sizeMappings: SizeMapping;
 	label?: boolean;
 	refresh?: boolean;
 	name?: string;
@@ -24,69 +22,52 @@ type SlotName =
 	| 'epic'
 	| 'mobile-sticky';
 
-type AdSlotConfigs = Record<SlotName, AdSlotConfig>;
+type AdSlotConfigs = Partial<Record<SlotName, AdSlotConfig>>;
 
 type CreateSlotOptions = {
 	classes?: string;
 	name?: string;
-	sizes?: Record<string, AdSize[]>;
 };
 
 const adSlotConfigs: AdSlotConfigs = {
 	im: {
 		label: false,
 		refresh: false,
-		sizeMappings: slotSizeMappings['im'],
 	},
 	'high-merch': {
 		label: false,
 		refresh: false,
 		name: 'merchandising-high',
-		sizeMappings: slotSizeMappings['merchandising-high'],
 	},
 	'high-merch-lucky': {
 		label: false,
 		refresh: false,
 		name: 'merchandising-high-lucky',
-		sizeMappings: slotSizeMappings['merchandising-high-lucky'],
 	},
 	'high-merch-paid': {
 		label: false,
 		refresh: false,
 		name: 'merchandising-high',
-		sizeMappings: slotSizeMappings['merchandising-high'],
 	},
-	inline: {
-		sizeMappings: slotSizeMappings['inline'],
-	},
-	mostpop: {
-		sizeMappings: slotSizeMappings['mostpop'],
-	},
-	comments: {
-		sizeMappings: slotSizeMappings['comments'],
-	},
-	'top-above-nav': {
-		sizeMappings: slotSizeMappings['top-above-nav'],
-	},
+
 	carrot: {
 		label: false,
 		refresh: false,
 		name: 'carrot',
-		sizeMappings: slotSizeMappings['merchandising-high'],
 	},
 	epic: {
 		label: false,
 		refresh: false,
 		name: 'epic',
-		sizeMappings: slotSizeMappings['epic'],
 	},
 	'mobile-sticky': {
 		label: true,
 		refresh: true,
 		name: 'mobile-sticky',
-		sizeMappings: slotSizeMappings['mobile-sticky'],
 	},
 };
+
+type DataAttributes = Record<string, string>;
 
 /**
   Returns an adSlot HTMLElement which is the main DFP slot.
@@ -98,7 +79,7 @@ const adSlotConfigs: AdSlotConfigs = {
 */
 const createAdSlotElement = (
 	name: string,
-	attrs: Record<string, string>,
+	attrs: DataAttributes,
 	classes: string[],
 ): HTMLElement => {
 	const id = `${adSlotIdPrefix}${name}`;
@@ -120,10 +101,10 @@ const createAdSlotElement = (
 	const adSlot = document.createElement('div');
 	adSlot.id = id;
 	adSlot.className = `js-ad-slot ad-slot ${classes.join(' ')}`;
-	adSlot.setAttribute('data-link-name', `ad slot ${name}`);
-	adSlot.setAttribute('data-name', name);
+	adSlot.dataset.linkName = `ad slot ${name}`;
+	adSlot.dataset.name = name;
 	adSlot.setAttribute('aria-hidden', 'true');
-	Object.entries(attrs).forEach(([k, v]) => adSlot.setAttribute(k, v));
+	Object.entries(attrs).forEach(([k, v]) => (adSlot.dataset[k] = v));
 
 	return adSlot;
 };
@@ -165,66 +146,25 @@ const concatSizeMappings = (
 		{ ...defaultSizeMappings },
 	);
 
-/**
- * Convert size mappings to a string that will be added to the ad slot
- * data attributes.
- *
- * e.g. { desktop: [[320,250], [320, 280]] } => { desktop: '320,250|320,280' }
- *
- */
-const covertSizeMappingsToStrings = (
-	sizeMappings: SizeMapping,
-): Record<string, string> =>
-	Object.entries(sizeMappings).reduce(
-		(
-			result: Record<string, string>,
-			[device, sizes]: [string, AdSize[]],
-		) => {
-			result[device] = sizes.join('|');
-			return result;
-		},
-		{},
-	);
-
-/**
- * Prefix all object keys with data-${key}
- */
-const createDataAttributes = (
-	attrs: Record<string, string>,
-): Record<`data-${string}`, string> =>
-	Object.entries(attrs).reduce(
-		(result: Record<string, string>, [key, value]) => {
-			result[`data-${key}`] = value;
-			return result;
-		},
-		{},
-	);
-
 const createAdSlot = (
 	name: SlotName,
 	options: CreateSlotOptions = {},
 ): HTMLElement => {
-	const adSlotConfig = adSlotConfigs[name];
+	const adSlotConfig = adSlotConfigs[name] ?? {};
 	const slotName = options.name ?? adSlotConfig.name ?? name;
 
-	const sizeMappings = concatSizeMappings(
-		adSlotConfig.sizeMappings,
-		options.sizes,
-	);
-
-	const attributes = covertSizeMappingsToStrings(sizeMappings);
+	const dataAttributes: DataAttributes = {};
 
 	if (adSlotConfig.label === false) {
-		attributes.label = 'false';
+		dataAttributes.label = 'false';
 	}
-
 	if (adSlotConfig.refresh === false) {
-		attributes.refresh = 'false';
+		dataAttributes.refresh = 'false';
 	}
 
 	return createAdSlotElement(
 		slotName,
-		createDataAttributes(attributes),
+		dataAttributes,
 		createClasses(slotName, options.classes),
 	);
 };
