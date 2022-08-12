@@ -44,6 +44,7 @@ describe('getAdSize', () => {
 describe('get ad size array', () => {
 	it('should return an array of the AdSize', () => {
 		expect(getAdSizeArray(adSizes.skyscraper)).toEqual([160, 600]);
+		expect(getAdSizeArray(adSizes.leaderboard).pop()).toEqual(90);
 	});
 });
 
