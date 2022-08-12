@@ -97,6 +97,10 @@ const createAdSize = (width: number, height: number): AdSize => {
 	return new AdSize([width, height]);
 };
 
+const getAdSizeArray = (adSize: AdSize): number[] => {
+	return [adSize.width, adSize.height];
+};
+
 const adSizesPartial = {
 	// standard ad sizes
 	billboard: createAdSize(970, 250),
@@ -314,7 +318,7 @@ const slotSizeMappings: SlotSizeMappings = {
 const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
 
 // Export for testing
-export const _ = { createAdSize };
+export const _ = { createAdSize, getAdSizeArray };
 
 export type {
 	AdSizeString,
@@ -324,4 +328,4 @@ export type {
 	SlotSizeMappings,
 	SlotName,
 };
-export { adSizes, getAdSize, slotSizeMappings, createAdSize };
+export { adSizes, getAdSize, slotSizeMappings, createAdSize, getAdSizeArray };
