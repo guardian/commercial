@@ -40,6 +40,10 @@ class AdSize extends Array<number> {
 	get height(): number {
 		return this[1];
 	}
+
+	get array(): number[] {
+		return [this[0], this[1]];
+	}
 }
 
 type SizeKeys =
@@ -95,10 +99,6 @@ type SlotSizeMappings = Record<SlotName, SizeMapping>;
 
 const createAdSize = (width: number, height: number): AdSize => {
 	return new AdSize([width, height]);
-};
-
-const getAdSizeArray = (adSize: AdSize): number[] => {
-	return [adSize.width, adSize.height];
 };
 
 const adSizesPartial = {
@@ -318,7 +318,7 @@ const slotSizeMappings: SlotSizeMappings = {
 const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
 
 // Export for testing
-export const _ = { createAdSize, getAdSizeArray };
+export const _ = { createAdSize };
 
 export type {
 	AdSizeString,
@@ -328,4 +328,4 @@ export type {
 	SlotSizeMappings,
 	SlotName,
 };
-export { adSizes, getAdSize, slotSizeMappings, createAdSize, getAdSizeArray };
+export { adSizes, getAdSize, slotSizeMappings, createAdSize };

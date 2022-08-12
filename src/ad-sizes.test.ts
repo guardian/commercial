@@ -1,7 +1,7 @@
 import { _, adSizes, getAdSize } from './ad-sizes';
 import type { SizeKeys } from '.';
 
-const { createAdSize, getAdSizeArray } = _;
+const { createAdSize } = _;
 
 describe('ad sizes', () => {
 	it.each([
@@ -43,14 +43,14 @@ describe('getAdSize', () => {
 
 describe('get ad size array', () => {
 	it('should return an array of the AdSize', () => {
-		expect(getAdSizeArray(adSizes.skyscraper)).toEqual([160, 600]);
-		expect(getAdSizeArray(adSizes.leaderboard).pop()).toEqual(90);
+		expect(adSizes.skyscraper.array).toEqual([160, 600]);
+		expect(adSizes.leaderboard.array.pop()).toEqual(90);
 	});
 });
 
 describe('ad size splicing', () => {
-	it('should be able to splice the array returned from getAdSizeArray', () => {
-		expect(getAdSizeArray(adSizes.skyscraper).splice(0, 1)[0]).toEqual(160);
-		expect(getAdSizeArray(adSizes.skyscraper).splice(1, 1)[0]).toEqual(600);
+	it('should be able to splice the array returned from the array method on AdSize', () => {
+		expect(adSizes.skyscraper.array.splice(0, 1)[0]).toEqual(160);
+		expect(adSizes.skyscraper.array.splice(1, 1)[0]).toEqual(600);
 	});
 });
