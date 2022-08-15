@@ -477,9 +477,9 @@
   integrity sha512-E5p6l0l37hY0GNFaZmA5/22TlVuavzlMHR3OeweD5eDcY2gB3nGgzPK/d3M67dkbDAJkGjB4a0W84Z5N2YScvQ==
 
 "@guardian/consent-management-platform@^10.6.0":
-  version "10.6.0"
-  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-10.6.0.tgz#18b13a1b6eebc2dcf0d708d12bcd6b93a2c407a3"
-  integrity sha512-U4JvXWV/gG5WwNsooVncYQSf5nroEinVnq2nCIrinQeMyhn6M2syxNnQVqIk/CE05Mh84OpR/ZWvGoz30b2/wA==
+  version "10.10.0"
+  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-10.10.0.tgz#0ffc4819be0f31b208914d20a6898ae7fe4a1e7a"
+  integrity sha512-D1v8uMzGUVAiPteSJMCxHrOws3ZR3/IJjdx1YzsRx/zb5qv74WxGBsRWBCa+TwyBzoWeJmT7fz/b5iWwCLKW9g==
   dependencies:
     "@guardian/libs" "1.6.1 - 3.3.0"
 
