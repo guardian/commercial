@@ -33,16 +33,16 @@ class AdSize extends Array<number> {
 			: `${this.width},${this.height}`;
 	}
 
+	public toArray(): number[] {
+		return [this[0], this[1]];
+	}
+
 	get width(): number {
 		return this[0];
 	}
 
 	get height(): number {
 		return this[1];
-	}
-
-	get array(): number[] {
-		return [this[0], this[1]];
 	}
 }
 
