@@ -25,7 +25,8 @@ class AdSize extends Array<number> {
 
 	constructor([width, height]: [number, number]) {
 		super();
-		this.push(width, height);
+		this[0] = width;
+		this[1] = height;
 	}
 	public toString(): AdSizeString {
 		return this.width === 0 && this.height === 0
