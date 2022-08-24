@@ -1201,9 +1201,9 @@
   integrity sha512-w0ZFj3SHznQXSq99kFCuO8tkN6w4T14znjrF2alLCSDnHOXEnpzneyNwxLvekcsDBInr8b5mXmzYh03GArqEyw==
 
 "@types/googletag@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@types/googletag/-/googletag-2.0.0.tgz#7381ad098910c5e5ab1320f61ab235b5bd989c0b"
-  integrity sha512-sZxa5EfGrPXQ0KPsbvsybwUT2On0+SI3JxVypZdaUxgMgoYW/9Lzh7KvomTHY8VtgAIB81/GrrJ9EhojiIlb6A==
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@types/googletag/-/googletag-2.2.3.tgz#e62bd9ae5ea54e6aac4731d18d4b4e9a88fcd041"
+  integrity sha512-7zi79NS9FrhM9Mbo609npXo8X2jBNw0i0hzfJcp7mxJl+nZxzKljbuDH9Tax1B0tZagfKIwcWO2Sj02nMLKlSw==
 
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
