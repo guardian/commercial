@@ -82,6 +82,6 @@
   },
   "peerDependencies": {
     "@guardian/ab-core": "^2.0.0",
-    "@guardian/libs": "^3.3.0"
+    "@guardian/libs": ">6"
   }
 }
