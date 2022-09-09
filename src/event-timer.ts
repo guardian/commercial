@@ -44,6 +44,7 @@ interface EventTimerProperties {
 	gpcSignal?: number;
 	// distance in percentage of viewport height at which ads are lazy loaded
 	lazyLoadMarginPercent?: number;
+	hasLabsContainer?: boolean;
 }
 
 export class EventTimer {
