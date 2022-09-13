@@ -183,16 +183,11 @@ export class EventTimer {
 	 * Adds an event timer property
 	 *
 	 * @param {string} name - the property's name
-	 * @param {value} number - the property's value
+	 * @param value - the property's value
 	 */
-	setProperty(
-		name:
-			| 'adSlotsInline'
-			| 'adSlotsTotal'
-			| 'pageHeightVH'
-			| 'gpcSignal'
-			| 'lazyLoadMarginPercent',
-		value: number,
+	setProperty<T extends keyof EventTimerProperties>(
+		name: T,
+		value: EventTimerProperties[T],
 	): void {
 		this.properties[name] = value;
 	}
