@@ -13,7 +13,7 @@ const initTrackLabsContainer = () => {
 	const eventTimer = EventTimer.get();
 
 	log('commercial', 'Page has labs container');
-	eventTimer.properties['hasLabsContainer'] = true;
+	eventTimer.setProperty('hasLabsContainer', true);
 
 	const observer = new IntersectionObserver((entries) => {
 		entries.map((entry) => {
