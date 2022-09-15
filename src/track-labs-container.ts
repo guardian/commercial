@@ -10,10 +10,16 @@ const initTrackLabsContainer = () => {
 	const target = document.querySelector('section.dumathoin');
 	if (target === null) return;
 
+	const labsUrl = document
+		.querySelector('h1.dumathoin__title a')
+		?.getAttribute('href');
+	if (labsUrl === null) return;
+
 	const eventTimer = EventTimer.get();
 
 	log('commercial', 'Page has labs container');
 	eventTimer.setProperty('hasLabsContainer', true);
+	eventTimer.setProperty('labsUrl', labsUrl);
 
 	const observer = new IntersectionObserver((entries) => {
 		entries.map((entry) => {
