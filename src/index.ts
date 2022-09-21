@@ -53,3 +53,4 @@ export { getSharedTargeting } from './targeting/shared';
 export type { ViewportTargeting } from './targeting/viewport';
 export { getViewportTargeting } from './targeting/viewport';
 export { pickTargetingValues } from './targeting/pick-targeting-values';
+export { init as initMessenger } from './messenger';
