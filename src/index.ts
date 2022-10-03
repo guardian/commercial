@@ -60,3 +60,4 @@ export type {
 	RespondProxy,
 } from './messenger';
 export { postMessage } from './messenger/post-message';
+export { buildPageTargeting } from './targeting/build-page-targeting';
