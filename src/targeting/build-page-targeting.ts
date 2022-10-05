@@ -73,14 +73,6 @@ const buildPageTargeting = (
 	countryCode: CountryCode,
 	clientSideParticipations: Participations,
 ): PageTargeting => {
-	if (
-		!window.guardian.config.page ||
-		!window.guardian.config.ophan ||
-		window.guardian.config.isDotcomRendering === undefined
-	) {
-		return {};
-	}
-
 	const { page, isDotcomRendering } = window.guardian.config;
 
 	const adFreeTargeting: { af?: True } = adFree ? { af: 't' } : {};

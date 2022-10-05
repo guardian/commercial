@@ -5,11 +5,21 @@ const PERFORMANCE_NOW = 1;
 const TIMING_CATEGORY = 'TIMING_CATEGORY';
 const TIMING_VAR = 'TIMING_VAR';
 const TIMING_LABEL = 'TIMING_LABEL';
-const GUARDIAN_CONFIG = {
+const GA_CONFIG = {
 	googleAnalytics: {
 		trackers: {
 			editorial: 'gaTrackerTest',
 		},
+	},
+};
+const DEFAULT_CONFIG = {
+	isDotcomRendering: true,
+	ophan: { pageViewId: 'pv_id_1234567890' },
+	page: {
+		pageId: 'world/uk',
+		isSensitive: false,
+		section: 'uk-news',
+		videoDuration: 63,
 	},
 };
 
@@ -22,7 +32,7 @@ describe('trackEvent', () => {
 
 	it('trackEvent makes no call to ga when ga undefined', () => {
 		window.guardian = {
-			config: GUARDIAN_CONFIG,
+			config: { ...DEFAULT_CONFIG, ...GA_CONFIG },
 		};
 		Object.defineProperty(window, 'ga', {
 			configurable: true,
@@ -36,7 +46,7 @@ describe('trackEvent', () => {
 
 	it('trackEvent makes one call to ga with tracker name from config', () => {
 		window.guardian = {
-			config: GUARDIAN_CONFIG,
+			config: { ...DEFAULT_CONFIG, ...GA_CONFIG },
 		};
 		Object.defineProperty(window, 'ga', {
 			configurable: true,
@@ -59,7 +69,7 @@ describe('trackEvent', () => {
 	});
 	it('trackEvent makes one call to ga with default tracker name when config undefined', () => {
 		window.guardian = {
-			config: undefined,
+			config: DEFAULT_CONFIG,
 		};
 		Object.defineProperty(window, 'ga', {
 			configurable: true,

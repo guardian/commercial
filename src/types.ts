@@ -26,13 +26,13 @@ export type GuardianAnalyticsConfig = {
 
 export type GuardianWindowConfig = {
 	googleAnalytics?: GuardianAnalyticsConfig;
-	isDotcomRendering?: boolean;
-	ophan?: {
+	isDotcomRendering: boolean;
+	ophan: {
 		// somewhat redundant with guardian.ophan
 		pageViewId: string;
 		browserId?: string;
 	};
-	page?: {
+	page: {
 		sharedAdTargeting?: Record<string, string | string[]>;
 		pageAdTargeting?: Record<string, string | string[]>;
 		isSensitive: boolean;
