@@ -61,3 +61,4 @@ export type {
 } from './messenger';
 export { postMessage } from './messenger/post-message';
 export { buildPageTargeting } from './targeting/build-page-targeting';
+export { buildPageTargetingConsentless } from './targeting/build-page-targeting-consentless';
