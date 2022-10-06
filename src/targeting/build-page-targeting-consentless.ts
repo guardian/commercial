@@ -43,7 +43,10 @@ const isConsentlessKey = (key: unknown): key is ConsentlessTargetingKeys => {
  * consentless targeting.
  *
  * @param  {ConsentState} consentState
- * @returns {ConsentlessPageTargeting}
+ * @param  {boolean} adFree
+ * @param  {CountryCode} countryCode
+ * @param  {Participations} clientSideParticipations
+ * @returns ConsentlessPageTargeting
  */
 const buildPageTargetingConsentless = (
 	consentState: ConsentState,
