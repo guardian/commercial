@@ -102,8 +102,7 @@ const createAdSize = (width: number, height: number): AdSize => {
 	return new AdSize([width, height]);
 };
 
-const adSizesPartial = {
-	// standard ad sizes
+const namedStandardAdSizes = {
 	billboard: createAdSize(970, 250),
 	halfPage: createAdSize(300, 600),
 	leaderboard: createAdSize(728, 90),
@@ -111,13 +110,24 @@ const adSizesPartial = {
 	mpu: createAdSize(300, 250),
 	portrait: createAdSize(300, 1050),
 	skyscraper: createAdSize(160, 600),
+};
 
-	// dfp proprietary ad sizes
+const standardAdSizes = {
+	'970x250': namedStandardAdSizes.billboard,
+	'300x600': namedStandardAdSizes.halfPage,
+	'728x90': namedStandardAdSizes.leaderboard,
+	'300x250': namedStandardAdSizes.mpu,
+	'300x1050': namedStandardAdSizes.portrait,
+	'160x600': namedStandardAdSizes.skyscraper,
+};
+
+const dfpProprietaryAdSizes = {
 	fluid: createAdSize(0, 0),
 	googleCard: createAdSize(300, 274),
 	outOfPage: createAdSize(1, 1),
+};
 
-	// guardian proprietary ad sizes
+const guardianProprietaryAdSizes = {
 	empty: createAdSize(2, 2),
 	fabric: createAdSize(88, 71),
 	inlineMerchandising: createAdSize(88, 85),
@@ -131,13 +141,10 @@ const adSizesPartial = {
 };
 
 const adSizes: Record<SizeKeys, AdSize> = {
-	...adSizesPartial,
-	'970x250': adSizesPartial.billboard,
-	'728x90': adSizesPartial.leaderboard,
-	'300x250': adSizesPartial.mpu,
-	'300x600': adSizesPartial.halfPage,
-	'300x1050': adSizesPartial.portrait,
-	'160x600': adSizesPartial.skyscraper,
+	...namedStandardAdSizes,
+	...standardAdSizes,
+	...dfpProprietaryAdSizes,
+	...guardianProprietaryAdSizes,
 };
 
 /**
@@ -329,4 +336,5 @@ export type {
 	SlotSizeMappings,
 	SlotName,
 };
-export { adSizes, getAdSize, slotSizeMappings, createAdSize };
+
+export { adSizes, standardAdSizes, getAdSize, slotSizeMappings, createAdSize };

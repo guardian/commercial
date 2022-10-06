@@ -12,7 +12,13 @@ export {
 	initCommercialMetrics,
 } from './send-commercial-metrics';
 export type { ThirdPartyTag } from './types';
-export { adSizes, getAdSize, slotSizeMappings, createAdSize } from './ad-sizes';
+export {
+	adSizes,
+	standardAdSizes,
+	getAdSize,
+	slotSizeMappings,
+	createAdSize,
+} from './ad-sizes';
 export { isBreakpoint } from './lib/breakpoint';
 export type { Breakpoint } from './lib/breakpoint';
 export type {
@@ -62,3 +68,4 @@ export type {
 export { postMessage } from './messenger/post-message';
 export { buildPageTargeting } from './targeting/build-page-targeting';
 export { buildPageTargetingConsentless } from './targeting/build-page-targeting-consentless';
+export type { PageTargeting } from './targeting/build-page-targeting';
