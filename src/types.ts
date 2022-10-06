@@ -26,7 +26,24 @@ export type GuardianAnalyticsConfig = {
 
 export type GuardianWindowConfig = {
 	googleAnalytics?: GuardianAnalyticsConfig;
-	isDotcomRendering?: boolean;
+	isDotcomRendering: boolean;
+	ophan: {
+		// somewhat redundant with guardian.ophan
+		pageViewId: string;
+		browserId?: string;
+	};
+	page: {
+		sharedAdTargeting?: Record<string, string | string[]>;
+		pageAdTargeting?: Record<string, string | string[]>;
+		isSensitive: boolean;
+		pageId: string;
+		section: string;
+		videoDuration: number;
+	};
+	tests?: {
+		[key: `${string}Control`]: 'control';
+		[key: `${string}Variant`]: 'variant';
+	};
 };
 
 export type GoogleTagParams = unknown;

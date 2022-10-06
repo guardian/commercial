@@ -20,6 +20,8 @@ const frequency = [
 	'30plus',
 ] as const;
 
+type Frequency = typeof frequency[number];
+
 const AMTGRP_STORAGE_KEY = 'gu.adManagerGroup';
 const adManagerGroups = [
 	'1',
@@ -82,7 +84,7 @@ type PersonalisedTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=214647
 	 */
-	fr: typeof frequency[number];
+	fr: Frequency;
 
 	/**
 	 * **P**ersonalised **A**ds Consent – [see on Ad Manager][gam]
@@ -243,4 +245,4 @@ const getPersonalisedTargeting = (
 });
 
 export { getPersonalisedTargeting };
-export type { PersonalisedTargeting };
+export type { PersonalisedTargeting, AdManagerGroup, Frequency };

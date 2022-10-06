@@ -85,7 +85,7 @@ const createAdSlotElement = (
 	const id = `${adSlotIdPrefix}${name}`;
 
 	// 3562dc07-78e9-4507-b922-78b979d4c5cb
-	if (window.guardian.config?.isDotcomRendering && name === 'top-above-nav') {
+	if (window.guardian.config.isDotcomRendering && name === 'top-above-nav') {
 		// This is to prevent a problem that appeared with DCR.
 		// We are simply making sure that if we are about to
 		// introduce dfp-ad--top-above-nav then there isn't already one.

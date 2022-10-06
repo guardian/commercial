@@ -12,7 +12,13 @@ export {
 	initCommercialMetrics,
 } from './send-commercial-metrics';
 export type { ThirdPartyTag } from './types';
-export { adSizes, getAdSize, slotSizeMappings, createAdSize } from './ad-sizes';
+export {
+	adSizes,
+	standardAdSizes,
+	getAdSize,
+	slotSizeMappings,
+	createAdSize,
+} from './ad-sizes';
 export { isBreakpoint } from './lib/breakpoint';
 export type { Breakpoint } from './lib/breakpoint';
 export type {
@@ -30,6 +36,7 @@ export {
 	getPermutivePFPSegments,
 } from './permutive';
 export { initTrackScrollDepth } from './track-scroll-depth';
+export { initTrackLabsContainer } from './track-labs-container';
 export { initTrackGpcSignal } from './track-gpc-signal';
 export { buildAdsConfigWithConsent, disabledAds } from './ad-targeting-youtube';
 export { createAdSlot, concatSizeMappings } from './create-ad-slot';
@@ -52,3 +59,13 @@ export { getSharedTargeting } from './targeting/shared';
 export type { ViewportTargeting } from './targeting/viewport';
 export { getViewportTargeting } from './targeting/viewport';
 export { pickTargetingValues } from './targeting/pick-targeting-values';
+export { init as initMessenger } from './messenger';
+export type {
+	RegisterListener,
+	RegisterPersistentListener,
+	RespondProxy,
+} from './messenger';
+export { postMessage } from './messenger/post-message';
+export { buildPageTargeting } from './targeting/build-page-targeting';
+export { buildPageTargetingConsentless } from './targeting/build-page-targeting-consentless';
+export type { PageTargeting } from './targeting/build-page-targeting';

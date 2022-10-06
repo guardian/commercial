@@ -16,6 +16,7 @@ describe('ad sizes', () => {
 			const adSize = createAdSize(expectedWidth, expectedHeight);
 			expect(adSize.width).toEqual(expectedWidth);
 			expect(adSize.height).toEqual(expectedHeight);
+			expect(adSize.length).toEqual(2);
 			expect(adSize.toString()).toEqual(expectedString);
 		},
 	);
