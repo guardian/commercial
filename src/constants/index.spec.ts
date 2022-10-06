@@ -11,7 +11,7 @@ describe('Constant values are constant', () => {
 		expect(PREBID_TIMEOUT).toBe(1500);
 	});
 
-	test('PREBID_TIMEOUT', () => {
+	test('AD_LABEL_HEIGHT', () => {
 		expect(AD_LABEL_HEIGHT).toBe(24);
 	});
 });
