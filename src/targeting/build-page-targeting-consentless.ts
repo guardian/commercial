@@ -34,9 +34,8 @@ type ConsentlessPageTargeting = Partial<
 	Pick<PageTargeting, ConsentlessTargetingKeys>
 >;
 
-const isConsentlessKey = (key: unknown): key is ConsentlessTargetingKeys => {
-	return consentlessTargetingKeys.includes(key as ConsentlessTargetingKeys);
-};
+const isConsentlessKey = (key: unknown): key is ConsentlessTargetingKeys =>
+	consentlessTargetingKeys.includes(key as ConsentlessTargetingKeys);
 
 /**
  * Call buildPageTargeting then filter out the keys that are not needed for
