@@ -184,4 +184,4 @@ const getSessionTargeting = ({
 });
 
 export type { SessionTargeting, AllParticipations };
-export { getSessionTargeting };
+export { getSessionTargeting, experimentsTargeting };

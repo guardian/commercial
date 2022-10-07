@@ -137,5 +137,5 @@ const buildPageTargeting = (
 	return pageTargeting;
 };
 
-export { buildPageTargeting };
+export { buildPageTargeting, filterEmptyValues };
 export type { PageTargeting };

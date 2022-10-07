@@ -1,8 +1,11 @@
+import type { Participations } from '@guardian/ab-core';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { getCookie } from '@guardian/libs';
 import { canUseDom } from './lib/can-use-dom';
 import { constructQuery } from './lib/construct-query';
 import { getPermutivePFPSegments } from './permutive';
+import { filterEmptyValues } from './targeting/build-page-targeting';
+import { experimentsTargeting } from './targeting/session';
 import type {
 	AdsConfig,
 	AdsConfigBasic,
@@ -118,17 +121,22 @@ const encodeVastTagKeyValues = (
 const buildImaAdTagUrl = (
 	adUnit: string,
 	customParams: CustomParams,
+	clientSideParticipations: Participations,
 ): string => {
+	console.log(clientSideParticipations);
 	const customParameters = {
+		ab: experimentsTargeting({
+			clientSideParticipations,
+			serverSideParticipations: window.guardian.config.tests ?? {},
+		}),
 		...customParams,
 		...buildCustomParamsFromCookies(),
 	};
-	// const customParameters = { at: 'fixed-puppies' };
 	console.log('raw cust params', customParameters);
 
 	const queryParams = {
-		// iu: adUnit,
-		iu: '/59666047/theguardian.com',
+		iu: adUnit,
+		// iu: '/59666047/theguardian.com',
 		description_url: '[placeholder]', // do we need this?
 		tfcd: '0',
 		npa: '0',
@@ -140,8 +148,10 @@ const buildImaAdTagUrl = (
 		impl: 's',
 		correlator: '', // do we need this?
 		vad_type: 'linear',
-		// vpos: 'preroll',
-		cust_params: encodeVastTagKeyValues(customParameters),
+		vpos: 'preroll',
+		cust_params: encodeVastTagKeyValues(
+			filterEmptyValues(customParameters),
+		),
 	};
 
 	console.log(queryParams);
