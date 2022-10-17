@@ -55,3 +55,36 @@ describe('ad size splicing', () => {
 		expect(adSizes.skyscraper.toArray().splice(1, 1)[0]).toEqual(600);
 	});
 });
+
+describe('isProxy', () => {
+	it.each([
+		[160, 600],
+		[300, 1050],
+		[300, 197],
+		[300, 250],
+		[300, 600],
+		[320, 50],
+		[550, 310],
+		[620, 350],
+		[728, 90],
+		[940, 230],
+		[970, 250],
+	])('isProxy is false for size (%d, %d)', (width, height) => {
+		const adSize = createAdSize(width, height);
+		expect(adSize.isProxy()).toBe(false);
+	});
+
+	it.each([
+		[0, 0],
+		[1, 1],
+		[2, 2],
+		[88, 71],
+		[88, 85],
+		[88, 87],
+		[88, 88],
+		[88, 89],
+	])('isProxy is true for size (%d, %d)', (width, height) => {
+		const adSize = createAdSize(width, height);
+		expect(adSize.isProxy()).toBe(true);
+	});
+});

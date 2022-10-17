@@ -39,6 +39,17 @@ class AdSize extends Array<number> {
 		return [this[0], this[1]];
 	}
 
+	// The advert size is not reflective of the actual size of the advert.
+	// For example, fluid ads and Guardian merch ads are larger than the dimensions
+	public isProxy(): boolean {
+		const isOutOfPage = this.width === 1 && this.height === 1;
+		const isEmpty = this.width === 2 && this.height === 2;
+		const isFluid = this.toString() === 'fluid';
+		const isMerch = this.width === 88;
+
+		return isOutOfPage || isEmpty || isFluid || isMerch;
+	}
+
 	get width(): number {
 		return this[0];
 	}
