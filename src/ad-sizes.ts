@@ -28,6 +28,7 @@ class AdSize extends Array<number> {
 		this[0] = width;
 		this[1] = height;
 	}
+
 	public toString(): AdSizeString {
 		return this.width === 0 && this.height === 0
 			? 'fluid'
@@ -110,6 +111,7 @@ const namedStandardAdSizes = {
 	mpu: createAdSize(300, 250),
 	portrait: createAdSize(300, 1050),
 	skyscraper: createAdSize(160, 600),
+	cascade: createAdSize(940, 230),
 };
 
 const standardAdSizes = {
@@ -119,6 +121,12 @@ const standardAdSizes = {
 	'300x250': namedStandardAdSizes.mpu,
 	'300x1050': namedStandardAdSizes.portrait,
 	'160x600': namedStandardAdSizes.skyscraper,
+};
+
+const outstreamSizes = {
+	outstreamDesktop: createAdSize(620, 350),
+	outstreamGoogleDesktop: createAdSize(550, 310),
+	outstreamMobile: createAdSize(300, 197),
 };
 
 const dfpProprietaryAdSizes = {
@@ -134,15 +142,12 @@ const guardianProprietaryAdSizes = {
 	merchandising: createAdSize(88, 88),
 	merchandisingHigh: createAdSize(88, 87),
 	merchandisingHighAdFeature: createAdSize(88, 89),
-	outstreamDesktop: createAdSize(620, 350),
-	outstreamGoogleDesktop: createAdSize(550, 310),
-	outstreamMobile: createAdSize(300, 197),
-	cascade: createAdSize(940, 230),
 };
 
 const adSizes: Record<SizeKeys, AdSize> = {
 	...namedStandardAdSizes,
 	...standardAdSizes,
+	...outstreamSizes,
 	...dfpProprietaryAdSizes,
 	...guardianProprietaryAdSizes,
 };
@@ -337,4 +342,11 @@ export type {
 	SlotName,
 };
 
-export { adSizes, standardAdSizes, getAdSize, slotSizeMappings, createAdSize };
+export {
+	adSizes,
+	standardAdSizes,
+	outstreamSizes,
+	getAdSize,
+	slotSizeMappings,
+	createAdSize,
+};

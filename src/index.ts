@@ -14,10 +14,11 @@ export {
 export type { ThirdPartyTag } from './types';
 export {
 	adSizes,
-	standardAdSizes,
-	getAdSize,
-	slotSizeMappings,
 	createAdSize,
+	getAdSize,
+	outstreamSizes,
+	slotSizeMappings,
+	standardAdSizes,
 } from './ad-sizes';
 export { isBreakpoint } from './lib/breakpoint';
 export type { Breakpoint } from './lib/breakpoint';
