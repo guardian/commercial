@@ -3,6 +3,7 @@ import { cmp } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type { CountryCode } from '@guardian/libs';
 import { getCookie, isString } from '@guardian/libs';
+import { getLocale } from '../lib/get-locale';
 import type { False, True } from '../types';
 import type { ContentTargeting } from './content';
 import { getContentTargeting } from './content';
@@ -70,7 +71,6 @@ const filterEmptyValues = (pageTargets: Record<string, unknown>) => {
 const buildPageTargeting = (
 	consentState: ConsentState,
 	adFree: boolean,
-	countryCode: CountryCode,
 	clientSideParticipations: Participations,
 ): PageTargeting => {
 	const { page, isDotcomRendering } = window.guardian.config;
@@ -92,7 +92,7 @@ const buildPageTargeting = (
 
 	const sessionTargeting: SessionTargeting = getSessionTargeting({
 		adTest: getCookie({ name: 'adtest', shouldMemoize: true }),
-		countryCode,
+		countryCode: getLocale(),
 		isSignedIn: !!getCookie({ name: 'GU_U' }),
 		pageViewId: window.guardian.config.ophan.pageViewId,
 		participations: {
