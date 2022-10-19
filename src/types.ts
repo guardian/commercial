@@ -24,6 +24,8 @@ export type GuardianAnalyticsConfig = {
 	trackers: Record<string, string>;
 };
 
+export type Edition = 'UK' | 'AU' | 'US';
+
 export type GuardianWindowConfig = {
 	googleAnalytics?: GuardianAnalyticsConfig;
 	isDotcomRendering: boolean;
@@ -34,11 +36,11 @@ export type GuardianWindowConfig = {
 	};
 	page: {
 		sharedAdTargeting?: Record<string, string | string[]>;
-		pageAdTargeting?: Record<string, string | string[]>;
 		isSensitive: boolean;
 		pageId: string;
 		section: string;
 		videoDuration: number;
+		edition: Edition;
 	};
 	tests?: {
 		[key: `${string}Control`]: 'control';

@@ -20,6 +20,7 @@ const DEFAULT_CONFIG = {
 		isSensitive: false,
 		section: 'uk-news',
 		videoDuration: 63,
+		edition: 'UK' as const,
 	},
 };
 

@@ -1,6 +1,5 @@
 import type { Participations } from '@guardian/ab-core';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import type { CountryCode } from '@guardian/libs';
 import type { PageTargeting } from './build-page-targeting';
 import { buildPageTargeting } from './build-page-targeting';
 
@@ -43,20 +42,17 @@ const isConsentlessKey = (key: unknown): key is ConsentlessTargetingKeys =>
  *
  * @param  {ConsentState} consentState
  * @param  {boolean} adFree
- * @param  {CountryCode} countryCode
  * @param  {Participations} clientSideParticipations
  * @returns ConsentlessPageTargeting
  */
 const buildPageTargetingConsentless = (
 	consentState: ConsentState,
 	adFree: boolean,
-	countryCode: CountryCode,
 	clientSideParticipations: Participations,
 ): ConsentlessPageTargeting => {
 	const consentedPageTargeting: PageTargeting = buildPageTargeting(
 		consentState,
 		adFree,
-		countryCode,
 		clientSideParticipations,
 	);
 
