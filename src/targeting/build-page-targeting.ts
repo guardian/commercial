@@ -1,8 +1,8 @@
-import type { Participations } from '@guardian/ab-core';
 import { cmp } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type { CountryCode } from '@guardian/libs';
 import { getCookie, isString } from '@guardian/libs';
+import { getParticipationsFromLocalStorage } from '../lib/ab-localstorage';
 import { getLocale } from '../lib/get-locale';
 import type { False, True } from '../types';
 import type { ContentTargeting } from './content';
@@ -71,7 +71,6 @@ const filterEmptyValues = (pageTargets: Record<string, unknown>) => {
 const buildPageTargeting = (
 	consentState: ConsentState,
 	adFree: boolean,
-	clientSideParticipations: Participations,
 ): PageTargeting => {
 	const { page, isDotcomRendering } = window.guardian.config;
 
@@ -96,7 +95,7 @@ const buildPageTargeting = (
 		isSignedIn: !!getCookie({ name: 'GU_U' }),
 		pageViewId: window.guardian.config.ophan.pageViewId,
 		participations: {
-			clientSideParticipations,
+			clientSideParticipations: getParticipationsFromLocalStorage(),
 			serverSideParticipations: window.guardian.config.tests ?? {},
 		},
 		referrer: getReferrer(),
