@@ -15,7 +15,7 @@ const encodeVastTagKeyValues = (
 			if (Array.isArray(value)) {
 				queryValue = value.join(',');
 			} else if (typeof value == 'boolean' || typeof value == 'number') {
-				queryValue = value.toString();
+				queryValue = String(value);
 			} else {
 				queryValue = value;
 			}
@@ -55,7 +55,7 @@ const buildImaAdTagUrl = (
 		queryParamsArray.push(`${k}=${v}`);
 	}
 	return (
-		'https://pubads.g.doubleclick.net/gampad/live/ads?' +
+		'https://pubads.g.doubleclick.net/gampad/ads?' +
 		queryParamsArray.join('&')
 	);
 };
