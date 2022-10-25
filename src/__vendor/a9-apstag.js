@@ -1,5 +1,7 @@
 /*eslint-disable */
-// Load Amazon A9 library as described here: https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/javascript-guide/display.html
+/**
+ * Load Amazon A9 library as {@link https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/javascript-guide/display.html described here}
+ */
 export const a9Apstag = () => {
 	!(function(a9, a, p, s, t, A, g) {
 		if (a[a9]) return;
@@ -33,4 +35,3 @@ export const a9Apstag = () => {
 		'//c.amazon-adsystem.com/aax2/apstag.js'
 	);
 }
-/* eslint-enable */
