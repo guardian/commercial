@@ -1,4 +1,3 @@
-/*eslint-disable */
 /**
  * Load Amazon A9 library as {@link https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/javascript-guide/display.html described here}
  */

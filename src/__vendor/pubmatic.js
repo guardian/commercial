@@ -1,4 +1,3 @@
-/*eslint-disable */
 /**
  * Pubmatic custom override script
  *

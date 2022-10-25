@@ -1,4 +1,3 @@
-/*eslint-disable */
 /**
  * Load the Ipsos Mori Stub
  *

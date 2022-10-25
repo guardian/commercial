@@ -1,4 +1,3 @@
-/*eslint-disable */
 /**
  *  Loads the Launchpad js tracker (used by Redplanet) into the page,
  *  and creates the global "launchpad" method
