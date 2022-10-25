@@ -3,7 +3,7 @@
  *  and creates the global "launchpad" method
  */
 export const launchpad = () => {
-	;(function (p, l, o, w, i, n, g) {
+	(function (p, l, o, w, i, n, g) {
 		if (!p[i]) {
 			p.GlobalSnowplowNamespace = p.GlobalSnowplowNamespace || [];
 			p.GlobalSnowplowNamespace.push(i);
