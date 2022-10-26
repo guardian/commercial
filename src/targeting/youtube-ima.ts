@@ -1,24 +1,18 @@
-import type { Participations } from '@guardian/ab-core';
 import type { CustomParams, MaybeArray } from '../types';
-import { filterEmptyValues } from './build-page-targeting';
+import { filterValues } from './build-page-targeting';
 
 /**
  * @param  {Record<string, MaybeArray<string|number|boolean>>
- * do this https://support.google.com/admanager/answer/1080597
+ * Follows https://support.google.com/admanager/answer/1080597
  */
 const encodeVastTagKeyValues = (
-	query: Record<string, MaybeArray<string | number | boolean>>,
+	query: Record<string, MaybeArray<string>>,
 ): string => {
 	const unencodedUrl = Object.entries(query)
 		.map(([key, value]) => {
-			let queryValue: string;
-			if (Array.isArray(value)) {
-				queryValue = value.join(',');
-			} else if (typeof value == 'boolean' || typeof value == 'number') {
-				queryValue = String(value);
-			} else {
-				queryValue = value;
-			}
+			const queryValue = Array.isArray(value)
+				? value.join(',')
+				: String(value);
 			return `${key}=${queryValue}`;
 		})
 		.join('&');
@@ -31,7 +25,7 @@ const encodeVastTagKeyValues = (
 const buildImaAdTagUrl = (
 	adUnit: string,
 	customParams: CustomParams,
-	clientSideParticipations: Participations,
+	// TODO: clientSideParticipations: Participations,
 ): string => {
 	const queryParams = {
 		iu: adUnit,
@@ -47,7 +41,7 @@ const buildImaAdTagUrl = (
 		correlator: '', // do we need this?
 		vad_type: 'linear',
 		vpos: 'preroll',
-		cust_params: encodeVastTagKeyValues(filterEmptyValues(customParams)),
+		cust_params: encodeVastTagKeyValues(filterValues(customParams)),
 	};
 
 	const queryParamsArray = [];

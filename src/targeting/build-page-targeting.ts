@@ -51,7 +51,7 @@ type PageTargeting = PartialWithNulls<
 	} & SharedTargeting
 >;
 
-const filterEmptyValues = (pageTargets: Record<string, unknown>) => {
+const filterValues = (pageTargets: Record<string, unknown>) => {
 	const filtered: Record<string, string | string[]> = {};
 	for (const key in pageTargets) {
 		const value = pageTargets[key];
@@ -131,11 +131,11 @@ const buildPageTargeting = (
 		...viewportTargeting,
 	};
 
-	// filter out empty values
-	const pageTargeting = filterEmptyValues(pageTargets);
+	// filter !(string | string[]) and empty values
+	const pageTargeting = filterValues(pageTargets);
 
 	return pageTargeting;
 };
 
-export { buildPageTargeting, filterEmptyValues };
+export { buildPageTargeting, filterValues };
 export type { PageTargeting };
