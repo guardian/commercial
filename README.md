@@ -27,12 +27,6 @@
 yarn add @guardian/commercial-core
 ```
 
-or
-
-```bash
-npm install @guardian/commercial-core
-```
-
 ### Bundling
 
 This package uses `ES2020`.
