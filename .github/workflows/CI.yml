@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'test-navigator-types'
   pull_request:
     branches-ignore:
       - 'gh-pages'
