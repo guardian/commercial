@@ -74,3 +74,4 @@ export { a9Apstag } from './__vendor/a9-apstag';
 export { ipsosMoriStub } from './__vendor/ipsos-mori';
 export { launchpad } from './__vendor/launchpad';
 export { pubmatic } from './__vendor/pubmatic';
+export { buildImaAdTagUrl } from './targeting/youtube-ima';

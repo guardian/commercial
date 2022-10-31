@@ -9,10 +9,8 @@ import type {
 	AdsConfigCCPAorAus,
 	AdsConfigDisabled,
 	AdsConfigTCFV2,
-	MaybeArray,
+	CustomParams,
 } from './types';
-
-type CustomParams = Record<string, MaybeArray<string | number | boolean>>;
 
 const disabledAds: AdsConfigDisabled = { disableAds: true };
 
