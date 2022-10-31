@@ -33,6 +33,24 @@ interface PageEventStatus {
 	commercialModulesLoaded: boolean;
 }
 
+type ConnectionType = "bluetooth" | "cellular" | "ethernet" | "mixed" | "none" | "other" | "unknown" | "wifi";
+
+interface NetworkInformation extends EventTarget {
+    readonly type?: ConnectionType;
+	readonly downlink?: number;
+	readonly effectiveType?: string;
+}
+
+interface NavigatorNetworkInformation {
+	readonly connection: NetworkInformation;
+}
+
+/**
+ * NavigatorNetworkInformation has been deprecated from lib.dom.d.ts since
+ * it is not supported by the majority of browsers
+ */
+type LocalWindow = Window & { navigator: Navigator & NavigatorNetworkInformation }
+
 interface EventTimerProperties {
 	type?: ConnectionType;
 	downlink?: number;
@@ -48,7 +66,7 @@ interface EventTimerProperties {
 	labsUrl?: string;
 }
 
-export class EventTimer {
+class EventTimer {
 	private _events: Event[];
 	private static _externallyDefinedEventNames = [
 		'cmp-tcfv2-init',
@@ -161,20 +179,21 @@ export class EventTimer {
 				},
 			],
 		};
+		const localWindow = window as unknown as LocalWindow;
 		this.properties =
 			'connection' in window.navigator
 				? {
 						type:
-							'type' in window.navigator.connection
-								? window.navigator.connection.type
+							'type' in localWindow.navigator.connection
+								? localWindow.navigator.connection.type
 								: undefined,
 						downlink:
-							'downlink' in window.navigator.connection
-								? window.navigator.connection.downlink
+							'downlink' in localWindow.navigator.connection
+								? localWindow.navigator.connection.downlink
 								: undefined,
 						effectiveType:
-							'effectiveType' in window.navigator.connection
-								? window.navigator.connection.effectiveType
+							'effectiveType' in localWindow.navigator.connection
+								? localWindow.navigator.connection.effectiveType
 								: undefined,
 				  }
 				: {};
@@ -260,4 +279,12 @@ export class EventTimer {
 			trackEvent('Commercial Events', gaEvent.timingVariable, labelToUse);
 		}
 	}
+}
+
+export type {
+	ConnectionType,
+}
+
+export {
+	EventTimer,
 }

@@ -6,11 +6,6 @@ import type {
 import type { EventTimer } from '.';
 
 declare global {
-	interface NetworkInformation extends EventTarget {
-		readonly type: ConnectionType;
-		readonly downlink?: number;
-		readonly effectiveType?: string;
-	}
 	interface Window {
 		google_trackConversion?: (arg0: GoogleTrackConversionObject) => void;
 		google_tag_params?: GoogleTagParams;
@@ -23,6 +18,5 @@ declare global {
 			config: GuardianWindowConfig;
 		};
 		ga: UniversalAnalytics.ga | null;
-		readonly navigator: Navigator;
 	}
 }
