@@ -25,8 +25,11 @@ const encodeVastTagKeyValues = (
 const buildImaAdTagUrl = (
 	adUnit: string,
 	customParams: CustomParams,
-	// TODO: clientSideParticipations: Participations,
 ): string => {
+	// TODO: Add regular build-page-targeting to
+	// get all targeting including ab participations.
+	// For now hardcode adtest (at)
+	const mergedCustomParams = { ...customParams, at: 'fixed-puppies' };
 	const queryParams = {
 		iu: adUnit,
 		description_url: '[placeholder]', // do we need this?
@@ -41,7 +44,7 @@ const buildImaAdTagUrl = (
 		correlator: '', // do we need this?
 		vad_type: 'linear',
 		vpos: 'preroll',
-		cust_params: encodeVastTagKeyValues(filterValues(customParams)),
+		cust_params: encodeVastTagKeyValues(filterValues(mergedCustomParams)),
 	};
 
 	const queryParamsArray = [];
