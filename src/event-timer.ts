@@ -33,7 +33,7 @@ interface PageEventStatus {
 	commercialModulesLoaded: boolean;
 }
 
-type ConnectionType = "bluetooth" | "cellular" | "ethernet" | "mixed" | "none" | "other" | "unknown" | "wifi";
+type ConnectionType = 'bluetooth' | 'cellular' | 'ethernet' | 'mixed' | 'none' | 'other' | 'unknown' | 'wifi';
 
 interface NetworkInformation extends EventTarget {
     readonly type?: ConnectionType;
