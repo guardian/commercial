@@ -33,24 +33,6 @@ interface PageEventStatus {
 	commercialModulesLoaded: boolean;
 }
 
-type ConnectionType = 'bluetooth' | 'cellular' | 'ethernet' | 'mixed' | 'none' | 'other' | 'unknown' | 'wifi';
-
-interface NetworkInformation extends EventTarget {
-    readonly type?: ConnectionType;
-	readonly downlink?: number;
-	readonly effectiveType?: string;
-}
-
-interface NavigatorNetworkInformation {
-	readonly connection: NetworkInformation;
-}
-
-/**
- * NavigatorNetworkInformation has been deprecated from lib.dom.d.ts since
- * it is not supported by the majority of browsers
- */
-type LocalWindow = Window & { navigator: Navigator & NavigatorNetworkInformation }
-
 interface EventTimerProperties {
 	type?: ConnectionType;
 	downlink?: number;
@@ -179,21 +161,21 @@ class EventTimer {
 				},
 			],
 		};
-		const localWindow = window as unknown as LocalWindow;
+
 		this.properties =
 			'connection' in window.navigator
 				? {
 						type:
-							'type' in localWindow.navigator.connection
-								? localWindow.navigator.connection.type
+							'type' in window.navigator.connection
+								? window.navigator.connection.type
 								: undefined,
 						downlink:
-							'downlink' in localWindow.navigator.connection
-								? localWindow.navigator.connection.downlink
+							'downlink' in window.navigator.connection
+								? window.navigator.connection.downlink
 								: undefined,
 						effectiveType:
-							'effectiveType' in localWindow.navigator.connection
-								? localWindow.navigator.connection.effectiveType
+							'effectiveType' in window.navigator.connection
+								? window.navigator.connection.effectiveType
 								: undefined,
 				  }
 				: {};
@@ -281,10 +263,4 @@ class EventTimer {
 	}
 }
 
-export type {
-	ConnectionType,
-}
-
-export {
-	EventTimer,
-}
+export { EventTimer };
