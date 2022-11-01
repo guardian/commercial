@@ -48,7 +48,7 @@ interface EventTimerProperties {
 	labsUrl?: string;
 }
 
-export class EventTimer {
+class EventTimer {
 	private _events: Event[];
 	private static _externallyDefinedEventNames = [
 		'cmp-tcfv2-init',
@@ -161,6 +161,7 @@ export class EventTimer {
 				},
 			],
 		};
+
 		this.properties =
 			'connection' in window.navigator
 				? {
@@ -261,3 +262,5 @@ export class EventTimer {
 		}
 	}
 }
+
+export { EventTimer };
