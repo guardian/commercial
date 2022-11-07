@@ -1,5 +1,6 @@
+import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type { CustomParams, MaybeArray } from '../types';
-import { filterValues } from './build-page-targeting';
+import { buildPageTargeting, filterValues } from './build-page-targeting';
 
 /**
  * @param  {Record<string, MaybeArray<string|number|boolean>>
@@ -25,11 +26,11 @@ const encodeVastTagKeyValues = (
 const buildImaAdTagUrl = (
 	adUnit: string,
 	customParams: CustomParams,
+	consentState: ConsentState,
 ): string => {
-	// TODO: Add regular build-page-targeting to
-	// get all targeting including ab participations.
-	// For now hardcode adtest (at)
-	const mergedCustomParams = { ...customParams, at: 'fixed-puppies' };
+	const pageTargeting = buildPageTargeting(consentState, false);
+	const mergedCustomParams = { ...customParams, ...pageTargeting };
+
 	const queryParams = {
 		iu: adUnit,
 		description_url: '[placeholder]', // do we need this?
