@@ -1,8 +1,5 @@
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { getCookie } from '@guardian/libs';
-import { canUseDom } from './lib/can-use-dom';
-import { constructQuery } from './lib/construct-query';
-import { getPermutivePFPSegments } from './permutive';
+import { constructQuery } from '../lib/construct-query';
 import type {
 	AdsConfig,
 	AdsConfigBasic,
@@ -10,17 +7,10 @@ import type {
 	AdsConfigDisabled,
 	AdsConfigTCFV2,
 	CustomParams,
-} from './types';
+} from '../types';
+import { buildPageTargeting } from './build-page-targeting';
 
 const disabledAds: AdsConfigDisabled = { disableAds: true };
-
-const buildCustomParamsFromCookies = (): CustomParams =>
-	canUseDom()
-		? {
-				permutive: getPermutivePFPSegments(),
-				si: getCookie({ name: 'GU_U' }) ? 't' : 'f',
-		  }
-		: {};
 
 const buildAdsConfig = (
 	cmpConsent: ConsentState,
@@ -29,7 +19,11 @@ const buildAdsConfig = (
 ): AdsConfig => {
 	const mergedCustomParams = {
 		...customParams,
-		...buildCustomParamsFromCookies(),
+		...buildPageTargeting({
+			consentState: cmpConsent,
+			adFree: false,
+			youtube: true,
+		}),
 	};
 
 	const defaultAdsConfig: AdsConfigBasic = {

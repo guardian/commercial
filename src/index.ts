@@ -38,7 +38,7 @@ export {
 export { initTrackScrollDepth } from './track-scroll-depth';
 export { initTrackLabsContainer } from './track-labs-container';
 export { initTrackGpcSignal } from './track-gpc-signal';
-export { buildAdsConfigWithConsent, disabledAds } from './ad-targeting-youtube';
+export { buildAdsConfigWithConsent, disabledAds } from './targeting/youtube';
 export { createAdSlot, concatSizeMappings } from './create-ad-slot';
 export type {
 	AdsConfig,
