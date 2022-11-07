@@ -27,7 +27,10 @@ const mergeCustomParamsWithTargeting = (
 ) => {
 	let pageTargeting = {};
 	try {
-		pageTargeting = buildPageTargeting(consentState, false);
+		pageTargeting = buildPageTargeting({
+			consentState: consentState,
+			adFree: false,
+		});
 	} catch (e) {
 		/**
 		 * Defensive error handling in case YoutubeAtom is used in an

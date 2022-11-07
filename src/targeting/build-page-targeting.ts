@@ -68,10 +68,17 @@ const filterValues = (pageTargets: Record<string, unknown>) => {
 	return filtered;
 };
 
-const buildPageTargeting = (
-	consentState: ConsentState,
-	adFree: boolean,
-): PageTargeting => {
+type BuildPageTargetingParams = {
+	consentState: ConsentState;
+	adFree: boolean;
+	youtube?: boolean;
+};
+
+const buildPageTargeting = ({
+	consentState,
+	adFree,
+	youtube = false,
+}: BuildPageTargetingParams): Record<string, string | string[]> => {
 	const { page, isDotcomRendering } = window.guardian.config;
 
 	const adFreeTargeting: { af?: True } = adFree ? { af: 't' } : {};
@@ -120,7 +127,10 @@ const buildPageTargeting = (
 		? getSharedTargeting(page.sharedAdTargeting)
 		: {};
 
-	const personalisedTargeting = getPersonalisedTargeting(consentState);
+	const personalisedTargeting = getPersonalisedTargeting({
+		state: consentState,
+		youtube,
+	});
 
 	const pageTargets: PageTargeting = {
 		...personalisedTargeting,
