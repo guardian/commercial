@@ -30,7 +30,6 @@ const buildImaAdTagUrl = (
 
 	const queryParams = {
 		iu: adUnit,
-		description_url: '[placeholder]', // do we need this?
 		tfcd: '0',
 		npa: '0',
 		sz: '480x360|480x361|400x300',
@@ -39,13 +38,12 @@ const buildImaAdTagUrl = (
 		unviewed_position_start: '1',
 		env: 'vp',
 		impl: 's',
-		correlator: '', // do we need this?
 		vad_type: 'linear',
 		vpos: 'preroll',
 		/**
 		 * cust_params string is encoded
 		 * cust_params values are also encoded so they will get double encoded
-		 * this ensures any values with separator chars (=&,) do not conflict with main string
+		 * this ensures any values with separator chars (=&,) do not conflict with the main string
 		 */
 		cust_params: encodeURIComponent(encodeCustomParams(filterValues(mergedCustomParams))),
 	};
