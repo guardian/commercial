@@ -6,21 +6,18 @@ import { buildPageTargeting, filterValues } from './build-page-targeting';
  * @param  {Record<string, MaybeArray<string|number|boolean>>
  * Follows https://support.google.com/admanager/answer/1080597
  */
-const encodeVastTagKeyValues = (
-	query: Record<string, MaybeArray<string>>,
+const encodeCustomParams = (
+	params: Record<string, MaybeArray<string>>,
 ): string => {
-	const unencodedUrl = Object.entries(query)
+	const encodedParams = Object.entries(params)
 		.map(([key, value]) => {
 			const queryValue = Array.isArray(value)
 				? value.join(',')
 				: String(value);
-			return `${key}=${queryValue}`;
+			return `${key}=${encodeURIComponent(queryValue)}`;
 		})
 		.join('&');
-	return unencodedUrl
-		.replace(/=/g, '%3D')
-		.replace(/&/g, '%26')
-		.replace(/,/g, '%2C');
+	return encodedParams;
 };
 
 const buildImaAdTagUrl = (
@@ -45,7 +42,12 @@ const buildImaAdTagUrl = (
 		correlator: '', // do we need this?
 		vad_type: 'linear',
 		vpos: 'preroll',
-		cust_params: encodeVastTagKeyValues(filterValues(mergedCustomParams)),
+		/**
+		 * cust_params string is encoded
+		 * cust_params values are also encoded so they will get double encoded
+		 * this ensures any values with separator chars (=&,) do not conflict with main string
+		 */
+		cust_params: encodeURIComponent(encodeCustomParams(filterValues(mergedCustomParams))),
 	};
 
 	const queryParamsArray = [];
