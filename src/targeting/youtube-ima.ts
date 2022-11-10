@@ -33,7 +33,7 @@ const mergeCustomParamsWithTargeting = (
 		/**
 		 * Defensive error handling in case YoutubeAtom is used in an
 		 * environment where guardian.config, cookies, localstorage etc
-		 * is not available
+		 * are not available
 		 */
 		log('commercial', 'Error building YouTube IMA custom params', e);
 	}
