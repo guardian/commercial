@@ -1,4 +1,5 @@
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import { log } from '@guardian/libs';
 import type { CustomParams, MaybeArray } from '../types';
 import { buildPageTargeting, filterValues } from './build-page-targeting';
 
@@ -20,14 +21,35 @@ const encodeCustomParams = (
 	return encodedParams;
 };
 
+const mergeCustomParamsWithTargeting = (
+	customParams: CustomParams,
+	consentState: ConsentState,
+) => {
+	let pageTargeting = {};
+	try {
+		pageTargeting = buildPageTargeting(consentState, false);
+	} catch (e) {
+		/**
+		 * Defensive error handling in case YoutubeAtom is used in an
+		 * environment where guardian.config, cookies, localstorage etc
+		 * are not available
+		 */
+		log('commercial', 'Error building YouTube IMA custom params', e);
+		return customParams;
+	}
+	const mergedCustomParams = { ...customParams, ...pageTargeting };
+	return mergedCustomParams;
+};
+
 const buildImaAdTagUrl = (
 	adUnit: string,
 	customParams: CustomParams,
 	consentState: ConsentState,
 ): string => {
-	const pageTargeting = buildPageTargeting(consentState, false);
-	const mergedCustomParams = { ...customParams, ...pageTargeting };
-
+	const mergedCustomParams = mergeCustomParamsWithTargeting(
+		customParams,
+		consentState,
+	);
 	const queryParams = {
 		iu: adUnit,
 		tfcd: '0',
@@ -45,7 +67,9 @@ const buildImaAdTagUrl = (
 		 * cust_params values are also encoded so they will get double encoded
 		 * this ensures any values with separator chars (=&,) do not conflict with the main string
 		 */
-		cust_params: encodeURIComponent(encodeCustomParams(filterValues(mergedCustomParams))),
+		cust_params: encodeURIComponent(
+			encodeCustomParams(filterValues(mergedCustomParams)),
+		),
 	};
 
 	const queryParamsArray = [];
