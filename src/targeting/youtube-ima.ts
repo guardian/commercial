@@ -25,10 +25,9 @@ const mergeCustomParamsWithTargeting = (
 	customParams: CustomParams,
 	consentState: ConsentState,
 ) => {
+	let pageTargeting = {};
 	try {
-		const pageTargeting = buildPageTargeting(consentState, false);
-		const mergedCustomParams = { ...customParams, ...pageTargeting };
-		return mergedCustomParams;
+		pageTargeting = buildPageTargeting(consentState, false);
 	} catch (e) {
 		/**
 		 * Defensive error handling in case YoutubeAtom is used in an
@@ -36,8 +35,10 @@ const mergeCustomParamsWithTargeting = (
 		 * are not available
 		 */
 		log('commercial', 'Error building YouTube IMA custom params', e);
+		return customParams;
 	}
-	return customParams;
+	const mergedCustomParams = { ...customParams, ...pageTargeting };
+	return mergedCustomParams;
 };
 
 const buildImaAdTagUrl = (
