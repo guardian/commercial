@@ -322,7 +322,7 @@ describe('Build Page Targeting', () => {
 		).toEqual(['prince-charles-letters', 'uk/uk', 'prince-charles']);
 	});
 
-	it.only('should set correct ab param', () => {
+	it('should set correct ab param', () => {
 		storage.local.set('gu.ab.participations', {
 			MtMaster: { variant: 'variantName' },
 		});
