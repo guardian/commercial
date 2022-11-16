@@ -1,7 +1,11 @@
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type { TCEventStatusCode } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import { storage } from '@guardian/libs';
-import { clearPermutiveSegments, getPermutiveSegments } from '../permutive';
+import {
+	clearPermutiveSegments,
+	getPermutivePFPSegments,
+	getPermutiveSegments,
+} from '../permutive';
 import type { False, NotApplicable, True } from '../types';
 
 /* -- Types -- */
@@ -226,8 +230,10 @@ const getAdManagerGroup = (
 		: createAdManagerGroup();
 };
 
-const getPermutiveWithState = (state: ConsentState) => {
-	if (state.canTarget) return getPermutiveSegments();
+const getPermutiveWithState = (state: ConsentState, youtube: boolean) => {
+	if (state.canTarget) {
+		return youtube ? getPermutivePFPSegments() : getPermutiveSegments();
+	}
 
 	clearPermutiveSegments();
 	return [];
@@ -235,12 +241,18 @@ const getPermutiveWithState = (state: ConsentState) => {
 
 /* -- Targeting -- */
 
-const getPersonalisedTargeting = (
-	state: ConsentState,
-): PersonalisedTargeting => ({
+type Personalised = {
+	state: ConsentState;
+	youtube: boolean;
+};
+
+const getPersonalisedTargeting = ({
+	state,
+	youtube,
+}: Personalised): PersonalisedTargeting => ({
 	amtgrp: getAdManagerGroup(state),
 	fr: getFrequencyValue(state),
-	permutive: getPermutiveWithState(state),
+	permutive: getPermutiveWithState(state, youtube),
 	...getCMPTargeting(state),
 });
 

@@ -33,7 +33,10 @@ describe('Personalised targeting', () => {
 				rdp: 'na',
 				fr: '1',
 			};
-			const targeting = getPersonalisedTargeting(tcfv2WithFullConsent);
+			const targeting = getPersonalisedTargeting({
+				state: tcfv2WithFullConsent,
+				youtube: false,
+			});
 			expect(targeting).toMatchObject(expected);
 		});
 
@@ -61,7 +64,10 @@ describe('Personalised targeting', () => {
 				rdp: 'na',
 				fr: '0',
 			};
-			const targeting = getPersonalisedTargeting(tcfv2WithoutConsent);
+			const targeting = getPersonalisedTargeting({
+				state: tcfv2WithoutConsent,
+				youtube: false,
+			});
 			expect(targeting).toMatchObject(expected);
 		});
 	});
@@ -82,7 +88,7 @@ describe('Personalised targeting', () => {
 				rdp: 'f',
 				fr: '4',
 			};
-			const targeting = getPersonalisedTargeting(state);
+			const targeting = getPersonalisedTargeting({ state, youtube: false });
 			expect(targeting).toMatchObject(expected);
 		});
 
@@ -101,7 +107,7 @@ describe('Personalised targeting', () => {
 				rdp: 't',
 				fr: '0',
 			};
-			const targeting = getPersonalisedTargeting(state);
+			const targeting = getPersonalisedTargeting({ state, youtube: false });
 			expect(targeting).toMatchObject(expected);
 		});
 	});
@@ -122,7 +128,7 @@ describe('Personalised targeting', () => {
 				rdp: 'na',
 				fr: '10-15',
 			};
-			const targeting = getPersonalisedTargeting(state);
+			const targeting = getPersonalisedTargeting({ state, youtube: false });
 			expect(targeting).toMatchObject(expected);
 		});
 
@@ -141,7 +147,7 @@ describe('Personalised targeting', () => {
 				rdp: 'na',
 				fr: '0',
 			};
-			const targeting = getPersonalisedTargeting(state);
+			const targeting = getPersonalisedTargeting({ state, youtube: false });
 			expect(targeting).toMatchObject(expected);
 		});
 	});
@@ -186,7 +192,7 @@ describe('Personalised targeting', () => {
 				rdp: 'f',
 				fr,
 			};
-			const targeting = getPersonalisedTargeting(state);
+			const targeting = getPersonalisedTargeting({ state, youtube: false });
 			expect(targeting).toMatchObject(expected);
 		});
 	});
@@ -227,7 +233,7 @@ describe('Personalised targeting', () => {
 				rdp: 'f',
 				amtgrp,
 			};
-			const targeting = getPersonalisedTargeting(state);
+			const targeting = getPersonalisedTargeting({ state, youtube: false });
 			expect(targeting).toMatchObject(expected);
 
 			mockRandom.mockRestore();
@@ -244,7 +250,7 @@ describe('Personalised targeting', () => {
 
 			storage.local.set(AMTGRP_STORAGE_KEY, '1');
 
-			const targeting = getPersonalisedTargeting(state);
+			const targeting = getPersonalisedTargeting({ state, youtube: false });
 
 			expect(targeting.amtgrp).toBeNull();
 			expect(storage.local.get(AMTGRP_STORAGE_KEY)).toBeNull();
@@ -257,7 +263,7 @@ describe('Personalised targeting', () => {
 				framework: 'ccpa',
 			};
 
-			const targeting = getPersonalisedTargeting(state);
+			const targeting = getPersonalisedTargeting({ state, youtube: false });
 			expect(targeting.amtgrp).not.toBeNull();
 		});
 
@@ -268,8 +274,40 @@ describe('Personalised targeting', () => {
 				framework: 'aus',
 			};
 
-			const targeting = getPersonalisedTargeting(state);
+			const targeting = getPersonalisedTargeting({ state, youtube: false });
 			expect(targeting.amtgrp).not.toBeNull();
+		});
+	});
+	describe('Permutive', () => {
+		const PERMUTIVE_KEY = `_papns`;
+		const PERMUTIVE_PFP_KEY = `_pdfps`;
+
+		test('Should set `permutive` to correct values if `youtube` is set to false', () => {
+			const state: ConsentState = {
+				ccpa: { doNotSell: false },
+				canTarget: true,
+				framework: 'ccpa',
+			};
+
+			storage.local.setRaw(PERMUTIVE_KEY, '[1, 2, 3]');
+			storage.local.setRaw(PERMUTIVE_PFP_KEY, '[]');
+
+			const targeting = getPersonalisedTargeting({ state, youtube: false });
+			expect(targeting.permutive).toEqual(['1', '2', '3']);
+		});
+
+		test('Should set `permutive` to correct values if `youtube` is set to true', () => {
+			const state: ConsentState = {
+				ccpa: { doNotSell: false },
+				canTarget: true,
+				framework: 'ccpa',
+			};
+
+			storage.local.setRaw(PERMUTIVE_KEY, '[]');
+			storage.local.setRaw(PERMUTIVE_PFP_KEY, '[4, 5, 6]');
+
+			const targeting = getPersonalisedTargeting({ state, youtube: true });
+			expect(targeting.permutive).toEqual(['4', '5', '6']);
 		});
 	});
 
@@ -290,7 +328,7 @@ describe('Personalised targeting', () => {
 				consent_tcfv2: 'na',
 				rdp: 'na',
 			};
-			const targeting = getPersonalisedTargeting(state);
+			const targeting = getPersonalisedTargeting({ state, youtube: false });
 
 			expect(targeting).toMatchObject(expected);
 			expect(storage.local.get(AMTGRP_STORAGE_KEY)).toBeNull();
