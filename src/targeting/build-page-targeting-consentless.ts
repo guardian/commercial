@@ -48,8 +48,9 @@ const buildPageTargetingConsentless = (
 	adFree: boolean,
 ): ConsentlessPageTargeting => {
 	const consentedPageTargeting: PageTargeting = buildPageTargeting({
-		consentState,
 		adFree,
+		consentState,
+		clientSideParticipations: {},
 	});
 
 	return Object.fromEntries(

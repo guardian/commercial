@@ -1,3 +1,4 @@
+import type { Participations } from '@guardian/ab-core';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { constructQuery } from '../lib/construct-query';
 import type {
@@ -16,12 +17,14 @@ const buildAdsConfig = (
 	cmpConsent: ConsentState,
 	adUnit: string,
 	customParams: CustomParams,
+	clientSideParticipations: Participations,
 ): AdsConfig => {
 	const mergedCustomParams = {
 		...customParams,
 		...buildPageTargeting({
-			consentState: cmpConsent,
 			adFree: false,
+			clientSideParticipations,
+			consentState: cmpConsent,
 			youtube: true,
 		}),
 	};
@@ -74,11 +77,17 @@ const buildAdsConfigWithConsent = (
 	adUnit: string,
 	customParamsToMerge: CustomParams,
 	consentState: ConsentState,
+	clientSideParticipations: Participations,
 ): AdsConfig => {
 	if (isAdFreeUser) {
 		return disabledAds;
 	}
-	return buildAdsConfig(consentState, adUnit, customParamsToMerge);
+	return buildAdsConfig(
+		consentState,
+		adUnit,
+		customParamsToMerge,
+		clientSideParticipations,
+	);
 };
 
 export { buildAdsConfigWithConsent, disabledAds };

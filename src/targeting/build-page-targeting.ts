@@ -1,3 +1,4 @@
+import type { Participations } from '@guardian/ab-core';
 import { cmp } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type { CountryCode } from '@guardian/libs';
@@ -69,14 +70,16 @@ const filterValues = (pageTargets: Record<string, unknown>) => {
 };
 
 type BuildPageTargetingParams = {
-	consentState: ConsentState;
 	adFree: boolean;
+	clientSideParticipations: Participations;
+	consentState: ConsentState;
 	youtube?: boolean;
 };
 
 const buildPageTargeting = ({
-	consentState,
 	adFree,
+	clientSideParticipations,
+	consentState,
 	youtube = false,
 }: BuildPageTargetingParams): Record<string, string | string[]> => {
 	const { page, isDotcomRendering } = window.guardian.config;
@@ -102,7 +105,7 @@ const buildPageTargeting = ({
 		isSignedIn: !!getCookie({ name: 'GU_U' }),
 		pageViewId: window.guardian.config.ophan.pageViewId,
 		participations: {
-			clientSideParticipations: getParticipationsFromLocalStorage(),
+			clientSideParticipations,
 			serverSideParticipations: window.guardian.config.tests ?? {},
 		},
 		referrer: getReferrer(),
