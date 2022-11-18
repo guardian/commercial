@@ -47,12 +47,19 @@ const mergeCustomParamsWithTargeting = (
 	return mergedCustomParams;
 };
 
-const buildImaAdTagUrl = (
-	adUnit: string,
-	customParams: CustomParams,
-	consentState: ConsentState,
-	clientSideParticipations: Participations,
-): string => {
+type BuildImaAdTagUrl = {
+	adUnit: string;
+	customParams: CustomParams;
+	consentState: ConsentState;
+	clientSideParticipations: Participations;
+};
+
+const buildImaAdTagUrl = ({
+	adUnit,
+	clientSideParticipations,
+	consentState,
+	customParams,
+}: BuildImaAdTagUrl ): string => {
 	const mergedCustomParams = mergeCustomParamsWithTargeting(
 		customParams,
 		consentState,

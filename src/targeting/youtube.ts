@@ -72,20 +72,28 @@ const buildAdsConfig = (
 	return disabledAds;
 };
 
-const buildAdsConfigWithConsent = (
-	isAdFreeUser: boolean,
-	adUnit: string,
-	customParamsToMerge: CustomParams,
-	consentState: ConsentState,
-	clientSideParticipations: Participations,
-): AdsConfig => {
+type BuildAdsConfigWithConsent = {
+	isAdFreeUser: boolean;
+	adUnit: string;
+	customParams: CustomParams;
+	consentState: ConsentState;
+	clientSideParticipations: Participations;
+};
+
+const buildAdsConfigWithConsent = ({
+	adUnit,
+	clientSideParticipations,
+	consentState,
+	customParams,
+	isAdFreeUser,
+}: BuildAdsConfigWithConsent): AdsConfig => {
 	if (isAdFreeUser) {
 		return disabledAds;
 	}
 	return buildAdsConfig(
 		consentState,
 		adUnit,
-		customParamsToMerge,
+		customParams,
 		clientSideParticipations,
 	);
 };
