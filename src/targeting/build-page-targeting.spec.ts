@@ -354,13 +354,13 @@ describe('Build Page Targeting', () => {
 			buildPageTargeting({
 				adFree: false,
 				clientSideParticipations: {
-					MtMaster: {
+					someTest: {
 						variant: 'variantName',
 					},
 				},
 				consentState: emptyConsent,
 			}).ab,
-		).toEqual(['MtMaster-variantName']);
+		).toEqual(['someTest-variantName']);
 	});
 
 	it('should set Observer flag for Observer content', () => {
