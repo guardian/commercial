@@ -22,7 +22,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			} as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
-			custParams: {
+			customParams: {
 				param1: 'param1',
 				param2: 'param2',
 			},
@@ -48,7 +48,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			} as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
-			custParams: {
+			customParams: {
 				param1: 'param1',
 				param2: 'param2',
 			},
@@ -74,7 +74,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			} as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
-			custParams: {
+			customParams: {
 				param1: 'param1',
 				param2: 'param2',
 			},
@@ -100,7 +100,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			} as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
-			custParams: {
+			customParams: {
 				param1: 'param1',
 				param2: 'param2',
 			},
@@ -126,7 +126,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			} as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
-			custParams: {
+			customParams: {
 				param1: 'param1',
 				param2: 'param2',
 			},
@@ -155,7 +155,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			} as unknown as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
-			custParams: {
+			customParams: {
 				param1: 'param1',
 				param2: 'param2',
 			},
@@ -187,7 +187,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			} as unknown as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
-			custParams: {
+			customParams: {
 				param1: 'param1',
 				param2: 'param2',
 			},
@@ -219,7 +219,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			} as unknown as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
-			custParams: {
+			customParams: {
 				param1: 'param1',
 				param2: 'param2',
 			},
@@ -243,19 +243,20 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			consentState,
 			isAdFreeUser,
 			adUnit,
-			custParams,
+			customParams,
 			expected,
 		}) => {
 			(buildPageTargeting as jest.Mock).mockReturnValue({
 				permutive: ['1', '2', '3'],
 				si: isSignedIn,
 			});
-			const adsConfig = buildAdsConfigWithConsent(
-				isAdFreeUser,
+			const adsConfig = buildAdsConfigWithConsent({
 				adUnit,
-				custParams,
+				clientSideParticipations: {},
 				consentState,
-			);
+				customParams,
+				isAdFreeUser,
+			});
 			expect(adsConfig).toEqual(expected);
 		},
 	);
@@ -263,30 +264,32 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 
 describe('YouTube Ad Targeting Object when consent errors', () => {
 	test('creates disabled ads config when consent does not have any matching framework', () => {
-		const adsConfig = buildAdsConfigWithConsent(
-			false,
-			'someAdUnit',
-			{},
-			{
+		const adsConfig = buildAdsConfigWithConsent({
+			adUnit: 'someAdUnit',
+			clientSideParticipations: {},
+			consentState: {
 				framework: null,
 				canTarget: false,
 			},
-		);
+			customParams: {},
+			isAdFreeUser: false,
+		});
 		expect(adsConfig).toEqual({ disableAds: true });
 	});
 });
 
 describe('YouTube Ad Targeting Object when ad free user', () => {
 	test('creates disabled ads config when ad free user', () => {
-		const adsConfig = buildAdsConfigWithConsent(
-			true,
-			'someAdUnit',
-			{},
-			{
+		const adsConfig = buildAdsConfigWithConsent({
+			adUnit: 'someAdUnit',
+			clientSideParticipations: {},
+			consentState: {
 				framework: null,
 				canTarget: false,
 			},
-		);
+			customParams: {},
+			isAdFreeUser: true,
+		});
 		expect(adsConfig).toEqual({ disableAds: true });
 	});
 });
