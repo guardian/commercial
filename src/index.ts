@@ -2,7 +2,6 @@
 
 export { ias } from './third-party-tags/ias';
 export { permutive } from './third-party-tags/permutive';
-export { fbPixel } from './third-party-tags/facebook-pixel';
 export { twitter } from './third-party-tags/twitter-uwt';
 export { inizio } from './third-party-tags/inizio';
 export { remarketing } from './third-party-tags/remarketing';
@@ -12,7 +11,14 @@ export {
 	initCommercialMetrics,
 } from './send-commercial-metrics';
 export type { ThirdPartyTag } from './types';
-export { adSizes, getAdSize, slotSizeMappings, createAdSize } from './ad-sizes';
+export {
+	adSizes,
+	createAdSize,
+	getAdSize,
+	outstreamSizes,
+	slotSizeMappings,
+	standardAdSizes,
+} from './ad-sizes';
 export { isBreakpoint } from './lib/breakpoint';
 export type { Breakpoint } from './lib/breakpoint';
 export type {
@@ -32,7 +38,7 @@ export {
 export { initTrackScrollDepth } from './track-scroll-depth';
 export { initTrackLabsContainer } from './track-labs-container';
 export { initTrackGpcSignal } from './track-gpc-signal';
-export { buildAdsConfigWithConsent, disabledAds } from './ad-targeting-youtube';
+export { buildAdsConfigWithConsent, disabledAds } from './targeting/youtube';
 export { createAdSlot, concatSizeMappings } from './create-ad-slot';
 export type {
 	AdsConfig,
@@ -60,3 +66,12 @@ export type {
 	RespondProxy,
 } from './messenger';
 export { postMessage } from './messenger/post-message';
+export { buildPageTargeting } from './targeting/build-page-targeting';
+export { buildPageTargetingConsentless } from './targeting/build-page-targeting-consentless';
+export type { PageTargeting } from './targeting/build-page-targeting';
+/* -- Vendor JavaScript -- */
+export { a9Apstag } from './__vendor/a9-apstag';
+export { ipsosMoriStub } from './__vendor/ipsos-mori';
+export { launchpad } from './__vendor/launchpad';
+export { pubmatic } from './__vendor/pubmatic';
+export { buildImaAdTagUrl } from './targeting/youtube-ima';

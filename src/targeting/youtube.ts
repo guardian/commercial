@@ -1,37 +1,32 @@
+import type { Participations } from '@guardian/ab-core';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { getCookie } from '@guardian/libs';
-import { canUseDom } from './lib/can-use-dom';
-import { constructQuery } from './lib/construct-query';
-import { getPermutivePFPSegments } from './permutive';
+import { constructQuery } from '../lib/construct-query';
 import type {
 	AdsConfig,
 	AdsConfigBasic,
 	AdsConfigCCPAorAus,
 	AdsConfigDisabled,
 	AdsConfigTCFV2,
-	MaybeArray,
-} from './types';
-
-type CustomParams = Record<string, MaybeArray<string | number | boolean>>;
+	CustomParams,
+} from '../types';
+import { buildPageTargeting } from './build-page-targeting';
 
 const disabledAds: AdsConfigDisabled = { disableAds: true };
-
-const buildCustomParamsFromCookies = (): CustomParams =>
-	canUseDom()
-		? {
-				permutive: getPermutivePFPSegments(),
-				si: getCookie({ name: 'GU_U' }) ? 't' : 'f',
-		  }
-		: {};
 
 const buildAdsConfig = (
 	cmpConsent: ConsentState,
 	adUnit: string,
 	customParams: CustomParams,
+	clientSideParticipations: Participations,
 ): AdsConfig => {
 	const mergedCustomParams = {
 		...customParams,
-		...buildCustomParamsFromCookies(),
+		...buildPageTargeting({
+			adFree: false,
+			clientSideParticipations,
+			consentState: cmpConsent,
+			youtube: true,
+		}),
 	};
 
 	const defaultAdsConfig: AdsConfigBasic = {
@@ -77,16 +72,30 @@ const buildAdsConfig = (
 	return disabledAds;
 };
 
-const buildAdsConfigWithConsent = (
-	isAdFreeUser: boolean,
-	adUnit: string,
-	customParamsToMerge: CustomParams,
-	consentState: ConsentState,
-): AdsConfig => {
+type BuildAdsConfigWithConsent = {
+	isAdFreeUser: boolean;
+	adUnit: string;
+	customParams: CustomParams;
+	consentState: ConsentState;
+	clientSideParticipations: Participations;
+};
+
+const buildAdsConfigWithConsent = ({
+	adUnit,
+	clientSideParticipations,
+	consentState,
+	customParams,
+	isAdFreeUser,
+}: BuildAdsConfigWithConsent): AdsConfig => {
 	if (isAdFreeUser) {
 		return disabledAds;
 	}
-	return buildAdsConfig(consentState, adUnit, customParamsToMerge);
+	return buildAdsConfig(
+		consentState,
+		adUnit,
+		customParams,
+		clientSideParticipations,
+	);
 };
 
 export { buildAdsConfigWithConsent, disabledAds };

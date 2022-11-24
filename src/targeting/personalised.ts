@@ -1,7 +1,11 @@
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type { TCEventStatusCode } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import { storage } from '@guardian/libs';
-import { clearPermutiveSegments, getPermutiveSegments } from '../permutive';
+import {
+	clearPermutiveSegments,
+	getPermutivePFPSegments,
+	getPermutiveSegments,
+} from '../permutive';
 import type { False, NotApplicable, True } from '../types';
 
 /* -- Types -- */
@@ -19,6 +23,8 @@ const frequency = [
 	'20-29',
 	'30plus',
 ] as const;
+
+type Frequency = typeof frequency[number];
 
 const AMTGRP_STORAGE_KEY = 'gu.adManagerGroup';
 const adManagerGroups = [
@@ -82,7 +88,7 @@ type PersonalisedTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=214647
 	 */
-	fr: typeof frequency[number];
+	fr: Frequency;
 
 	/**
 	 * **P**ersonalised **A**ds Consent – [see on Ad Manager][gam]
@@ -224,8 +230,10 @@ const getAdManagerGroup = (
 		: createAdManagerGroup();
 };
 
-const getPermutiveWithState = (state: ConsentState) => {
-	if (state.canTarget) return getPermutiveSegments();
+const getPermutiveWithState = (state: ConsentState, youtube: boolean) => {
+	if (state.canTarget) {
+		return youtube ? getPermutivePFPSegments() : getPermutiveSegments();
+	}
 
 	clearPermutiveSegments();
 	return [];
@@ -233,14 +241,20 @@ const getPermutiveWithState = (state: ConsentState) => {
 
 /* -- Targeting -- */
 
-const getPersonalisedTargeting = (
-	state: ConsentState,
-): PersonalisedTargeting => ({
+type Personalised = {
+	state: ConsentState;
+	youtube: boolean;
+};
+
+const getPersonalisedTargeting = ({
+	state,
+	youtube,
+}: Personalised): PersonalisedTargeting => ({
 	amtgrp: getAdManagerGroup(state),
 	fr: getFrequencyValue(state),
-	permutive: getPermutiveWithState(state),
+	permutive: getPermutiveWithState(state, youtube),
 	...getCMPTargeting(state),
 });
 
 export { getPersonalisedTargeting };
-export type { PersonalisedTargeting };
+export type { PersonalisedTargeting, AdManagerGroup, Frequency };

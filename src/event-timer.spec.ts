@@ -41,6 +41,18 @@ const MARK_LONG_NAME = `gu.commercial.${MARK_NAME}`;
 const CMP_INIT = 'cmp-tcfv2-init';
 const CMP_GOT_CONSENT = 'cmp-tcfv2-got-consent';
 
+const DEFAULT_CONFIG = {
+	isDotcomRendering: true,
+	ophan: { pageViewId: 'pv_id_1234567890' },
+	page: {
+		pageId: 'world/uk',
+		isSensitive: false,
+		section: 'uk-news',
+		videoDuration: 63,
+		edition: 'UK' as const,
+	},
+};
+
 describe('EventTimer', () => {
 	beforeEach(() => {
 		Object.defineProperty(window, 'performance', {
@@ -52,6 +64,7 @@ describe('EventTimer', () => {
 
 		window.guardian = {
 			config: {
+				...DEFAULT_CONFIG,
 				googleAnalytics: {
 					trackers: {
 						editorial: 'gaTrackerTest',
