@@ -479,11 +479,11 @@
   integrity sha512-E5p6l0l37hY0GNFaZmA5/22TlVuavzlMHR3OeweD5eDcY2gB3nGgzPK/d3M67dkbDAJkGjB4a0W84Z5N2YScvQ==
 
 "@guardian/consent-management-platform@^10.6.0":
-  version "10.11.0"
-  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-10.11.0.tgz#0a81b2ff2a9bfb1f3712c1bb9617359e542e2105"
-  integrity sha512-k5WkGD9HJp78Fcj1Vk6Pg7eSzR3aypN/elT0KfcWamK8WWfTEhLEH4+gbayzVWI8heLDmUyIJ0AtM4G78LBrMw==
+  version "10.11.1"
+  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-10.11.1.tgz#fa01a9262963ac07df9476e591d14601efbc4588"
+  integrity sha512-7dKcKZ3L/Y/hG9MB6i1invZmTVL6EepIv1ioGCW7uR9MVhWcuIGR1MJqKWMIzQgtZ2p0CXtSzKQOvbRtfX5fxQ==
   dependencies:
-    "@guardian/libs" "6.1.0"
+    "@guardian/libs" "^7.1.4"
 
 "@guardian/eslint-config-typescript@^1.0.0":
   version "1.0.11"
@@ -505,12 +505,7 @@
     eslint-plugin-eslint-comments "3.2.0"
     eslint-plugin-import "2.26.0"
 
-"@guardian/libs@6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-6.1.0.tgz#4fc63a988db93fb3554216256a24b22875122e0b"
-  integrity sha512-UpkM+EjkZLoDvTqFEpLaWjxbWsxtUd2w8qYrCa02eTMO3nwmuz/kygN3D4+nKhnl77qWSlLp5wyVJHJ7gP5mxw==
-
-"@guardian/libs@^7.1.3":
+"@guardian/libs@^7.1.3", "@guardian/libs@^7.1.4":
   version "7.1.4"
   resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-7.1.4.tgz#f5de14f52a32cb677361d49157c94eb046a2b9a8"
   integrity sha512-r2AJk+4EakNLCLXHhUEqdYSjFhuq19k7tsQO5+53YZc6x6ADEXFNRVE/7EzbODgu5pVwk5SQ/rMuWsE7+5qdVQ==
