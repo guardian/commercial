@@ -54,6 +54,7 @@
     "@types/google.analytics": "^0.0.42",
     "@types/googletag": "^2.0.0",
     "@types/jest": "^27.0.3",
+    "@types/node": "^18.11.9",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
     "commitizen": "^4.2.4",
@@ -74,14 +75,13 @@
     "semantic-release": "^19.0.2",
     "ts-jest": "^27.0.7",
     "type-fest": "^2.8.0",
-    "typescript": "^4.5.2",
-    "web-vitals": "^2.1.2"
+    "typescript": "^4.5.2"
   },
   "publishConfig": {
     "access": "public"
   },
   "peerDependencies": {
     "@guardian/ab-core": "^2.0.0",
-    "@guardian/libs": ">6"
+    "@guardian/libs": "^10.0.0"
   }
 }
