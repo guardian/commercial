@@ -22,10 +22,10 @@ const calculateElementHeight = (
 	element: BlockElementHeight,
 	elementText?: string,
 ) => {
-	let height = element.elementHeight;
+	let height = element.elementHeightExcludingText;
 
-	if (element.text && elementText) {
-		const { lineHeight, lineLength } = element.text;
+	if (element.textHeight && elementText) {
+		const { lineHeight, lineLength } = element.textHeight;
 		height += lineHeight * Math.ceil(elementText.length / lineLength);
 	}
 
@@ -99,8 +99,8 @@ const calculateElementSize = (element: CAPIElement): number => {
  * A block is a list of Elements that make up one liveblog update
  * An element can be a piece of text, an image, a twitter embed, etc.
  */
-const calculateLiveblogBlockSize = (block: Block) =>
-	block.elements.reduce((total, element) => {
+const calculateLiveblogBlockSize = (elements: CAPIElement[]) =>
+	elements.reduce((total, element) => {
 		return total + calculateElementSize(element);
 	}, 0);
 
@@ -111,7 +111,7 @@ const shouldDisplayAd = (
 	block: number,
 	totalBlocks: number,
 	numAdsInserted: number,
-	numPixelsSinceAdvert: number,
+	numPixelsWithoutAdvert: number,
 ) => {
 	const isFinalBlock = block === totalBlocks;
 	if (isFinalBlock || numAdsInserted >= MAX_ADS) {
@@ -124,7 +124,7 @@ const shouldDisplayAd = (
 		? MIN_SPACE_BEFORE_FIRST_AD
 		: MIN_SPACE_BETWEEN_ADS;
 
-	return numPixelsSinceAdvert > minSpaceToShowAd;
+	return numPixelsWithoutAdvert > minSpaceToShowAd;
 };
 
 export { calculateLiveblogBlockSize, shouldDisplayAd };

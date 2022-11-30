@@ -1,12 +1,4 @@
-type BlockElementText = {
-	lineHeight: number; // approx line height on desktop
-	lineLength: number; // approx number of character that fits on a line on desktop
-};
-
-type BlockElementHeight = {
-	elementHeight: number;
-	text?: BlockElementText;
-};
+import type { BlockElementHeight } from './types';
 
 /**
  * Approximations of the size each block element type will take up on the page in pixels.
@@ -15,71 +7,82 @@ type BlockElementHeight = {
  * will show the the right frequency of ads on desktop and too few on smaller devices.
  */
 const commentElementHeightData: BlockElementHeight = {
-	elementHeight: 64,
-	text: {
+	type: 'CommentBlockElement',
+	elementHeightExcludingText: 64,
+	textHeight: {
 		lineHeight: 23,
 		lineLength: 70,
 	},
 };
 
 const embedElementHeightData: BlockElementHeight = {
-	elementHeight: 205,
+	type: 'EmbedBlockElement',
+	elementHeightExcludingText: 205,
 };
 
 const guideAtomElementHeightData: BlockElementHeight = {
-	elementHeight: 76,
+	type: 'GuideAtomBlockElement',
+	elementHeightExcludingText: 76,
 };
 
 const imageElementHeightData: BlockElementHeight = {
-	elementHeight: 375,
-	text: {
+	type: 'ImageBlockElement',
+	elementHeightExcludingText: 375,
+	textHeight: {
 		lineHeight: 20,
 		lineLength: 90,
 	},
 };
 
 const interactiveElementHeightData: BlockElementHeight = {
-	elementHeight: 400,
+	type: 'InteractiveBlockElement',
+	elementHeightExcludingText: 400,
 };
 
 const richLinkElementHeightData: BlockElementHeight = {
-	elementHeight: 70,
-	text: {
+	type: 'RichLinkBlockElement',
+	elementHeightExcludingText: 70,
+	textHeight: {
 		lineHeight: 20,
 		lineLength: 70,
 	},
 };
 
 const subheadingElementHeightData: BlockElementHeight = {
-	elementHeight: 0,
-	text: {
+	type: 'SubheadingBlockElement',
+	elementHeightExcludingText: 0,
+	textHeight: {
 		lineHeight: 23,
 		lineLength: 60,
 	},
 };
 
 const tableElementHeightData: BlockElementHeight = {
-	elementHeight: 32,
+	type: 'TableBlockElement',
+	elementHeightExcludingText: 32,
 };
 
 const textElementHeightData: BlockElementHeight = {
-	elementHeight: 25, // margin
-	text: {
+	type: 'TextBlockElement',
+	elementHeightExcludingText: 25, // margin
+	textHeight: {
 		lineHeight: 27,
 		lineLength: 70,
 	},
 };
 
 const tweetElementHeightData: BlockElementHeight = {
-	elementHeight: 375,
-	text: {
+	type: 'TweetBlockElement',
+	elementHeightExcludingText: 375,
+	textHeight: {
 		lineHeight: 24,
 		lineLength: 50,
 	},
 };
 
 const youtubeElementHeightData: BlockElementHeight = {
-	elementHeight: 375,
+	type: 'YoutubeBlockElement',
+	elementHeightExcludingText: 375,
 };
 
 export type { BlockElementHeight };
