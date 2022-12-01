@@ -88,7 +88,10 @@ describe('Personalised targeting', () => {
 				rdp: 'f',
 				fr: '4',
 			};
-			const targeting = getPersonalisedTargeting({ state, youtube: false });
+			const targeting = getPersonalisedTargeting({
+				state,
+				youtube: false,
+			});
 			expect(targeting).toMatchObject(expected);
 		});
 
@@ -107,7 +110,10 @@ describe('Personalised targeting', () => {
 				rdp: 't',
 				fr: '0',
 			};
-			const targeting = getPersonalisedTargeting({ state, youtube: false });
+			const targeting = getPersonalisedTargeting({
+				state,
+				youtube: false,
+			});
 			expect(targeting).toMatchObject(expected);
 		});
 	});
@@ -128,7 +134,10 @@ describe('Personalised targeting', () => {
 				rdp: 'na',
 				fr: '10-15',
 			};
-			const targeting = getPersonalisedTargeting({ state, youtube: false });
+			const targeting = getPersonalisedTargeting({
+				state,
+				youtube: false,
+			});
 			expect(targeting).toMatchObject(expected);
 		});
 
@@ -147,7 +156,10 @@ describe('Personalised targeting', () => {
 				rdp: 'na',
 				fr: '0',
 			};
-			const targeting = getPersonalisedTargeting({ state, youtube: false });
+			const targeting = getPersonalisedTargeting({
+				state,
+				youtube: false,
+			});
 			expect(targeting).toMatchObject(expected);
 		});
 	});
@@ -192,7 +204,10 @@ describe('Personalised targeting', () => {
 				rdp: 'f',
 				fr,
 			};
-			const targeting = getPersonalisedTargeting({ state, youtube: false });
+			const targeting = getPersonalisedTargeting({
+				state,
+				youtube: false,
+			});
 			expect(targeting).toMatchObject(expected);
 		});
 	});
@@ -233,7 +248,10 @@ describe('Personalised targeting', () => {
 				rdp: 'f',
 				amtgrp,
 			};
-			const targeting = getPersonalisedTargeting({ state, youtube: false });
+			const targeting = getPersonalisedTargeting({
+				state,
+				youtube: false,
+			});
 			expect(targeting).toMatchObject(expected);
 
 			mockRandom.mockRestore();
@@ -250,7 +268,10 @@ describe('Personalised targeting', () => {
 
 			storage.local.set(AMTGRP_STORAGE_KEY, '1');
 
-			const targeting = getPersonalisedTargeting({ state, youtube: false });
+			const targeting = getPersonalisedTargeting({
+				state,
+				youtube: false,
+			});
 
 			expect(targeting.amtgrp).toBeNull();
 			expect(storage.local.get(AMTGRP_STORAGE_KEY)).toBeNull();
@@ -263,7 +284,10 @@ describe('Personalised targeting', () => {
 				framework: 'ccpa',
 			};
 
-			const targeting = getPersonalisedTargeting({ state, youtube: false });
+			const targeting = getPersonalisedTargeting({
+				state,
+				youtube: false,
+			});
 			expect(targeting.amtgrp).not.toBeNull();
 		});
 
@@ -274,7 +298,10 @@ describe('Personalised targeting', () => {
 				framework: 'aus',
 			};
 
-			const targeting = getPersonalisedTargeting({ state, youtube: false });
+			const targeting = getPersonalisedTargeting({
+				state,
+				youtube: false,
+			});
 			expect(targeting.amtgrp).not.toBeNull();
 		});
 	});
@@ -292,7 +319,10 @@ describe('Personalised targeting', () => {
 			storage.local.setRaw(PERMUTIVE_KEY, '[1, 2, 3]');
 			storage.local.setRaw(PERMUTIVE_PFP_KEY, '[]');
 
-			const targeting = getPersonalisedTargeting({ state, youtube: false });
+			const targeting = getPersonalisedTargeting({
+				state,
+				youtube: false,
+			});
 			expect(targeting.permutive).toEqual(['1', '2', '3']);
 		});
 
@@ -306,7 +336,10 @@ describe('Personalised targeting', () => {
 			storage.local.setRaw(PERMUTIVE_KEY, '[]');
 			storage.local.setRaw(PERMUTIVE_PFP_KEY, '[4, 5, 6]');
 
-			const targeting = getPersonalisedTargeting({ state, youtube: true });
+			const targeting = getPersonalisedTargeting({
+				state,
+				youtube: true,
+			});
 			expect(targeting.permutive).toEqual(['4', '5', '6']);
 		});
 	});
@@ -328,7 +361,10 @@ describe('Personalised targeting', () => {
 				consent_tcfv2: 'na',
 				rdp: 'na',
 			};
-			const targeting = getPersonalisedTargeting({ state, youtube: false });
+			const targeting = getPersonalisedTargeting({
+				state,
+				youtube: false,
+			});
 
 			expect(targeting).toMatchObject(expected);
 			expect(storage.local.get(AMTGRP_STORAGE_KEY)).toBeNull();
