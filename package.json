@@ -23,6 +23,8 @@
 		"compile:common": "tsc --project ./tsconfig.build.json --outDir ./dist/cjs --module CommonJS",
 		"compile:esm": "tsc --project ./tsconfig.build.json --outDir ./dist/esm",
 		"lint": "eslint .",
+		"prettier:check": "prettier . --check --cache",
+		"prettier:fix": "prettier . --write --cache",
 		"precommit:lint": "lint-staged",
 		"prepush:test": "jest --verbose --runInBand --onlyChanged",
 		"test": "jest",
@@ -38,7 +40,10 @@
 		]
 	},
 	"lint-staged": {
-		"*.js|*.ts": "eslint --fix"
+		"*.js|*.ts": [
+			"eslint --fix",
+			"yarn prettier:fix"
+		]
 	},
 	"prettier": "@guardian/prettier",
 	"devDependencies": {
