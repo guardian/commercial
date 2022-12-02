@@ -83,18 +83,18 @@ When an ad is loaded (or refreshed) all header bidding suppliers (prebid.js and 
 ```ts
 // simplified
 export const loadAdvert = (advert) => {
-    advert.whenSlotReady
-        .then(() => {
-            advert.startLoading();
-            return Promise.all([
-                prebid.requestBids(advert),
-                a9.requestBids(advert),
-            ]);
-        })
-        .then(() => {
-            // display advert
-            window.googletag.display(advert.id);
-        });
+	advert.whenSlotReady
+		.then(() => {
+			advert.startLoading();
+			return Promise.all([
+				prebid.requestBids(advert),
+				a9.requestBids(advert),
+			]);
+		})
+		.then(() => {
+			// display advert
+			window.googletag.display(advert.id);
+		});
 };
 ```
 
@@ -129,18 +129,18 @@ GAM will use the properties set by `prebid.js` on the page targetting object.
 ```ts
 // simplified
 export const loadAdvert = (advert) => {
-    advert.whenSlotReady
-        .then(() => {
-            advert.startLoading();
-            return Promise.all([
-                prebid.requestBids(advert),
-                a9.requestBids(advert),
-            ]);
-        })
-        .then(() => {
-            // display advert
-            window.googletag.display(advert.id);
-        });
+	advert.whenSlotReady
+		.then(() => {
+			advert.startLoading();
+			return Promise.all([
+				prebid.requestBids(advert),
+				a9.requestBids(advert),
+			]);
+		})
+		.then(() => {
+			// display advert
+			window.googletag.display(advert.id);
+		});
 };
 ```
 
@@ -189,9 +189,9 @@ Here is an example header bidding creative script which includes a parameter for
 
 ```html
 <script>
-    try {
-        window.top.pbjs.renderAd(document, '%%PATTERN:hb_adid%%');
-    } catch (e) {}
+	try {
+		window.top.pbjs.renderAd(document, '%%PATTERN:hb_adid%%');
+	} catch (e) {}
 </script>
 ```
 

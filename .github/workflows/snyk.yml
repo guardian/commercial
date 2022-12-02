@@ -14,4 +14,4 @@ jobs:
       ORG: guardian-commercial
       SKIP_NODE: false
     secrets:
-       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

@@ -59,7 +59,7 @@ const buildImaAdTagUrl = ({
 	clientSideParticipations,
 	consentState,
 	customParams,
-}: BuildImaAdTagUrl ): string => {
+}: BuildImaAdTagUrl): string => {
 	const mergedCustomParams = mergeCustomParamsWithTargeting(
 		customParams,
 		consentState,
