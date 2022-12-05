@@ -49,10 +49,10 @@
 	"devDependencies": {
 		"@commitlint/cli": "^17.0.3",
 		"@commitlint/config-conventional": "^17.0.0",
-		"@guardian/ab-core": "^2.0.0",
+		"@guardian/ab-core": "2.0.0",
 		"@guardian/consent-management-platform": "11.0.0",
 		"@guardian/eslint-config-typescript": "^1.0.0",
-		"@guardian/libs": "^10.0.0",
+		"@guardian/libs": "10.0.0",
 		"@guardian/prettier": "^2.1.1",
 		"@octokit/core": "^4.0.5",
 		"@semantic-release/github": "^8.0.2",
