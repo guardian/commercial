@@ -1,4 +1,5 @@
 import { trackEvent } from './google-analytics';
+import type { ConnectionType } from './types';
 
 class Event {
 	name: string;

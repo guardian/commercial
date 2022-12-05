@@ -2,6 +2,7 @@ import { onConsent } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { log } from '@guardian/libs';
 import { EventTimer } from './event-timer';
+import type { ConnectionType } from './types';
 
 type Metric = {
 	name: string;
