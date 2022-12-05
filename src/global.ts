@@ -2,26 +2,11 @@ import type {
 	GoogleTagParams,
 	GoogleTrackConversionObject,
 	GuardianWindowConfig,
+	NetworkInformation,
 } from './types';
 import type { EventTimer } from '.';
 
 declare global {
-	type ConnectionType =
-		| 'bluetooth'
-		| 'cellular'
-		| 'ethernet'
-		| 'mixed'
-		| 'none'
-		| 'other'
-		| 'unknown'
-		| 'wifi';
-
-	interface NetworkInformation extends EventTarget {
-		readonly type?: ConnectionType;
-		readonly downlink?: number;
-		readonly effectiveType?: string;
-	}
-
 	interface Navigator {
 		readonly connection: NetworkInformation;
 	}

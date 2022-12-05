@@ -1,5 +1,21 @@
 import type { VendorName } from '@guardian/consent-management-platform/dist/types';
 
+export type ConnectionType =
+	| 'bluetooth'
+	| 'cellular'
+	| 'ethernet'
+	| 'mixed'
+	| 'none'
+	| 'other'
+	| 'unknown'
+	| 'wifi';
+
+export interface NetworkInformation extends EventTarget {
+	readonly type?: ConnectionType;
+	readonly downlink?: number;
+	readonly effectiveType?: string;
+}
+
 export type TagAttribute = {
 	name: string;
 	value: string;
