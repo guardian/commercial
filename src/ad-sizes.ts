@@ -104,7 +104,8 @@ type SlotName =
 	| 'carrot'
 	| 'epic'
 	| 'mobile-sticky'
-	| 'crossword-banner';
+	| 'crossword-banner'
+	| 'exclusion';
 
 type SizeMapping = Partial<Record<Breakpoint, AdSize[]>>;
 
@@ -336,6 +337,11 @@ const slotSizeMappings: SlotSizeMappings = {
 	'crossword-banner': {
 		tablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
 		phablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
+	},
+	exclusion: {
+		mobile: [adSizes.empty],
+		phablet: [adSizes.empty],
+		desktop: [adSizes.empty],
 	},
 };
 
