@@ -67,6 +67,7 @@ type SizeKeys =
 	| '728x90'
 	| '970x250'
 	| 'billboard'
+	| 'cascade'
 	| 'empty'
 	| 'fabric'
 	| 'fluid'
@@ -84,8 +85,8 @@ type SizeKeys =
 	| 'outstreamGoogleDesktop'
 	| 'outstreamMobile'
 	| 'portrait'
-	| 'skyscraper'
-	| 'cascade';
+	| 'portraitInterstitial'
+	| 'skyscraper';
 
 type SlotName =
 	| 'right'
@@ -124,6 +125,7 @@ const namedStandardAdSizes = {
 	portrait: createAdSize(300, 1050),
 	skyscraper: createAdSize(160, 600),
 	cascade: createAdSize(940, 230),
+	portraitInterstitial: createAdSize(320, 480),
 };
 
 const standardAdSizes = {
@@ -141,12 +143,18 @@ const outstreamSizes = {
 	outstreamMobile: createAdSize(300, 197),
 };
 
-const dfpProprietaryAdSizes = {
+/**
+ * Ad sizes commonly associated with third parties
+ */
+const proprietaryAdSizes = {
 	fluid: createAdSize(0, 0),
 	googleCard: createAdSize(300, 274),
 	outOfPage: createAdSize(1, 1),
 };
 
+/**
+ * Ad sizes associated with in-house formats
+ */
 const guardianProprietaryAdSizes = {
 	empty: createAdSize(2, 2),
 	fabric: createAdSize(88, 71),
@@ -160,7 +168,7 @@ const adSizes: Record<SizeKeys, AdSize> = {
 	...namedStandardAdSizes,
 	...standardAdSizes,
 	...outstreamSizes,
-	...dfpProprietaryAdSizes,
+	...proprietaryAdSizes,
 	...guardianProprietaryAdSizes,
 };
 
@@ -178,6 +186,7 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.mpu,
 			adSizes.googleCard,
 			adSizes.fluid,
+			adSizes.portraitInterstitial,
 		],
 		phablet: [
 			adSizes.outOfPage,
