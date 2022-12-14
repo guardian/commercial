@@ -67,6 +67,7 @@ type SizeKeys =
 	| '728x90'
 	| '970x250'
 	| 'billboard'
+	| 'cascade'
 	| 'empty'
 	| 'fabric'
 	| 'fluid'
@@ -83,9 +84,9 @@ type SizeKeys =
 	| 'outstreamDesktop'
 	| 'outstreamGoogleDesktop'
 	| 'outstreamMobile'
+	| 'picnic'
 	| 'portrait'
-	| 'skyscraper'
-	| 'cascade';
+	| 'skyscraper';
 
 type SlotName =
 	| 'right'
@@ -178,6 +179,7 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.mpu,
 			adSizes.googleCard,
 			adSizes.fluid,
+			adSizes.picnic,
 		],
 		phablet: [
 			adSizes.outOfPage,
