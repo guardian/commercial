@@ -1,5 +1,4 @@
 import { _, adSizes, getAdSize } from './ad-sizes';
-import type { SizeKeys } from '.';
 
 const { createAdSize } = _;
 
@@ -22,13 +21,13 @@ describe('ad sizes', () => {
 	);
 });
 
-const sizes: Array<[SizeKeys, number, number, string]> = [
+const sizes = [
 	['mpu', 300, 250, '300,250'],
 	['fluid', 0, 0, 'fluid'],
 	['googleCard', 300, 274, '300,274'],
 	['outstreamGoogleDesktop', 550, 310, '550,310'],
 	['300x600', 300, 600, '300,600'],
-];
+] as const;
 
 describe('getAdSize', () => {
 	it.each(sizes)(
