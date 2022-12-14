@@ -142,12 +142,19 @@ const outstreamSizes = {
 	outstreamMobile: createAdSize(300, 197),
 };
 
-const dfpProprietaryAdSizes = {
+/**
+ * Ad sizes commonly associated with third parties
+ */
+const proprietaryAdSizes = {
 	fluid: createAdSize(0, 0),
 	googleCard: createAdSize(300, 274),
 	outOfPage: createAdSize(1, 1),
+	picnic: createAdSize(320, 480),
 };
 
+/**
+ * Ad sizes associated with in-house formats
+ */
 const guardianProprietaryAdSizes = {
 	empty: createAdSize(2, 2),
 	fabric: createAdSize(88, 71),
@@ -161,7 +168,7 @@ const adSizes: Record<SizeKeys, AdSize> = {
 	...namedStandardAdSizes,
 	...standardAdSizes,
 	...outstreamSizes,
-	...dfpProprietaryAdSizes,
+	...proprietaryAdSizes,
 	...guardianProprietaryAdSizes,
 };
 
