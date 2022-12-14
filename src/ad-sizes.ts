@@ -84,8 +84,8 @@ type SizeKeys =
 	| 'outstreamDesktop'
 	| 'outstreamGoogleDesktop'
 	| 'outstreamMobile'
-	| 'picnic'
 	| 'portrait'
+	| 'portraitInterstitial'
 	| 'skyscraper';
 
 type SlotName =
@@ -125,6 +125,7 @@ const namedStandardAdSizes = {
 	portrait: createAdSize(300, 1050),
 	skyscraper: createAdSize(160, 600),
 	cascade: createAdSize(940, 230),
+	portraitInterstitial: createAdSize(320, 480),
 };
 
 const standardAdSizes = {
@@ -149,7 +150,6 @@ const proprietaryAdSizes = {
 	fluid: createAdSize(0, 0),
 	googleCard: createAdSize(300, 274),
 	outOfPage: createAdSize(1, 1),
-	picnic: createAdSize(320, 480),
 };
 
 /**
@@ -186,7 +186,7 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.mpu,
 			adSizes.googleCard,
 			adSizes.fluid,
-			adSizes.picnic,
+			adSizes.portraitInterstitial,
 		],
 		phablet: [
 			adSizes.outOfPage,
