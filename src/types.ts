@@ -52,6 +52,7 @@ export type GuardianWindowConfig = {
 	};
 	page: {
 		sharedAdTargeting?: Record<string, string | string[]>;
+		isPreview: boolean;
 		isSensitive: boolean;
 		pageId: string;
 		section: string;

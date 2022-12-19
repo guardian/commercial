@@ -64,8 +64,9 @@ const getViewportTargeting = ({
 	viewPortWidth,
 	cmpBannerWillShow,
 }: Viewport): ViewportTargeting => {
-	// Don’t show inskin if if a privacy message will be shown
-	const inskin = cmpBannerWillShow ? 'f' : 't';
+	// Don’t show inskin if if a privacy message will be shown or on preview
+	const isPreview = window.guardian.config.page.isPreview;
+	const inskin = cmpBannerWillShow || isPreview ? 'f' : 't';
 
 	return {
 		bp: findBreakpoint(viewPortWidth),
