@@ -16,12 +16,25 @@ module.exports = webpackMerge.smart(config, {
 	},
 	plugins: shouldOverrideBundle
 		? [
+				new webpack.ProvidePlugin({
+					process: 'process/browser',
+				}),
 				new webpack.DefinePlugin({
 					'process.env.OVERRIDE_BUNDLE_PATH':
 						JSON.stringify(overrideBundlePath),
 				}),
 		  ]
-		: [],
+		: [
+				new webpack.ProvidePlugin({
+					process: 'process/browser',
+				}),
+		  ],
+
+	resolve: {
+		alias: {
+			process: 'process/browser',
+		},
+	},
 	devServer: {
 		port,
 		compress: true,

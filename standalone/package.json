@@ -81,6 +81,7 @@
 		"lodash-es": "^4.17.21",
 		"ophan-tracker-js": "^1.4.0",
 		"prebid.js": "guardian/prebid.js#2e3b96d",
+		"process": "^0.11.10",
 		"raven-js": "^3.27.2",
 		"raw-loader": "^4.0.2",
 		"svg-loader": "^0.0.2",
