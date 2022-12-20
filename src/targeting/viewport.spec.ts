@@ -2,7 +2,12 @@ import type { ViewportTargeting } from './viewport';
 import { getViewportTargeting } from './viewport';
 
 describe('Viewport targeting', () => {
-	test('No CMP banner will show', () => {
+	beforeEach(() => {
+		window.guardian = {
+			config: { page: {} },
+		} as unknown as typeof window.guardian;
+	});
+	test('Do show page skins when CMP banner will NOT show', () => {
 		const expected: ViewportTargeting = {
 			bp: 'desktop',
 			inskin: 't',
@@ -15,7 +20,7 @@ describe('Viewport targeting', () => {
 		expect(targeting).toMatchObject(expected);
 	});
 
-	test('No CMP will show', () => {
+	test('Do NOT show page skins when CMP banner will show', () => {
 		const expected: ViewportTargeting = {
 			bp: 'desktop',
 			inskin: 'f',
@@ -24,6 +29,34 @@ describe('Viewport targeting', () => {
 		const targeting = getViewportTargeting({
 			viewPortWidth: 1280,
 			cmpBannerWillShow: true,
+		});
+		expect(targeting).toMatchObject(expected);
+	});
+
+	test('Do NOT show page skins when is preview', () => {
+		window.guardian.config.page.isPreview = true;
+		const expected: ViewportTargeting = {
+			bp: 'desktop',
+			inskin: 'f',
+			skinsize: 's',
+		};
+		const targeting = getViewportTargeting({
+			viewPortWidth: 1280,
+			cmpBannerWillShow: false,
+		});
+		expect(targeting).toMatchObject(expected);
+	});
+
+	test('Do show page skins when is NOT preview', () => {
+		window.guardian.config.page.isPreview = false;
+		const expected: ViewportTargeting = {
+			bp: 'desktop',
+			inskin: 't',
+			skinsize: 's',
+		};
+		const targeting = getViewportTargeting({
+			viewPortWidth: 1280,
+			cmpBannerWillShow: false,
 		});
 		expect(targeting).toMatchObject(expected);
 	});

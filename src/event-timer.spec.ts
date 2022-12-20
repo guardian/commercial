@@ -46,6 +46,7 @@ const DEFAULT_CONFIG = {
 	ophan: { pageViewId: 'pv_id_1234567890' },
 	page: {
 		pageId: 'world/uk',
+		isPreview: false,
 		isSensitive: false,
 		section: 'uk-news',
 		videoDuration: 63,

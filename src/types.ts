@@ -47,16 +47,17 @@ export type GuardianWindowConfig = {
 	isDotcomRendering: boolean;
 	ophan: {
 		// somewhat redundant with guardian.ophan
-		pageViewId: string;
 		browserId?: string;
+		pageViewId: string;
 	};
 	page: {
-		sharedAdTargeting?: Record<string, string | string[]>;
+		edition: Edition;
+		isPreview: boolean;
 		isSensitive: boolean;
 		pageId: string;
 		section: string;
+		sharedAdTargeting?: Record<string, string | string[]>;
 		videoDuration: number;
-		edition: Edition;
 	};
 	tests?: {
 		[key: `${string}Control`]: 'control';
