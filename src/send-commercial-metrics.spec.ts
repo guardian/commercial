@@ -546,13 +546,13 @@ describe('send commercial metrics helpers', () => {
 		expect(
 			roundTimeStamp([
 				{
-					name: 'cmp-tcfv2-init',
+					name: 'test-metric',
 					ts: 1519211809934.234,
 				},
 			]),
 		).toEqual([
 			{
-				name: 'cmp-tcfv2-init',
+				name: 'test-metric',
 				value: 1519211809935,
 			},
 		]);
