@@ -186,7 +186,6 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.mpu,
 			adSizes.googleCard,
 			adSizes.fluid,
-			adSizes.portraitInterstitial,
 		],
 		phablet: [
 			adSizes.outOfPage,
