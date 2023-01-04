@@ -3,8 +3,8 @@ import type { ConsentState } from '@guardian/consent-management-platform/dist/ty
 import { EventTimer } from './event-timer';
 import {
 	_,
-	bypassCommercialMetricsSampling,
 	initCommercialMetrics,
+	switchOffSampling,
 } from './send-commercial-metrics';
 
 const {
@@ -258,8 +258,8 @@ describe('send commercial metrics', () => {
 		expect(secondInit).toEqual(false);
 	});
 
-	describe('bypassCommercialMetricsSampling', () => {
-		it('sends metrics when user is not in sampling group but sampling is bypassed', async () => {
+	describe('switchOffSampling', () => {
+		it('sends metrics when user is not in sampling group but sampling is switched off', async () => {
 			mockOnConsent(tcfv2AllConsent);
 
 			await initCommercialMetrics({
@@ -269,7 +269,7 @@ describe('send commercial metrics', () => {
 				adBlockerInUse: ADBLOCK_NOT_IN_USE,
 				sampling: USER_NOT_IN_SAMPLING,
 			});
-			await bypassCommercialMetricsSampling();
+			await switchOffSampling();
 
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('visibilitychange'));
@@ -279,7 +279,7 @@ describe('send commercial metrics', () => {
 			]);
 		});
 
-		it('does not send metrics when sampling is bypassed but consent is not given', async () => {
+		it('does not send metrics when sampling is switched off but consent is not given', async () => {
 			mockOnConsent(tcfv2AllConsentExceptPurpose8);
 
 			await initCommercialMetrics({
@@ -289,7 +289,7 @@ describe('send commercial metrics', () => {
 				adBlockerInUse: ADBLOCK_NOT_IN_USE,
 				sampling: USER_NOT_IN_SAMPLING,
 			});
-			await bypassCommercialMetricsSampling();
+			await switchOffSampling();
 
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('visibilitychange'));
@@ -297,8 +297,8 @@ describe('send commercial metrics', () => {
 			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([]);
 		});
 
-		it('expects to be initialised before calling bypassCoreWebVitalsSampling', async () => {
-			await bypassCommercialMetricsSampling();
+		it('expects to be initialised before calling switchOffSampling', async () => {
+			await switchOffSampling();
 
 			expect(mockConsoleWarn).toHaveBeenCalledWith(
 				'initCommercialMetrics not yet initialised',

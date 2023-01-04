@@ -7,7 +7,7 @@ export { inizio } from './third-party-tags/inizio';
 export { remarketing } from './third-party-tags/remarketing';
 export { EventTimer } from './event-timer';
 export {
-	bypassCommercialMetricsSampling,
+	switchOffSampling,
 	initCommercialMetrics,
 } from './send-commercial-metrics';
 export type { ThirdPartyTag } from './types';

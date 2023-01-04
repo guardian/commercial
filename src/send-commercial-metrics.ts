@@ -170,7 +170,7 @@ const checkConsent = async (): Promise<boolean> => {
 /**
  * A method to asynchronously send metrics after initialization.
  */
-async function bypassCommercialMetricsSampling(): Promise<void> {
+async function switchOffSampling(): Promise<void> {
 	if (!initialised) {
 		console.warn('initCommercialMetrics not yet initialised');
 		return;
@@ -259,4 +259,4 @@ export const _ = {
 };
 
 export type { Property, TimedEvent, Metric };
-export { bypassCommercialMetricsSampling, initCommercialMetrics };
+export { switchOffSampling, initCommercialMetrics };
