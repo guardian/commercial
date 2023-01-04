@@ -38,8 +38,8 @@ const performance = {
 
 const MARK_NAME = 'mark_name';
 const MARK_LONG_NAME = `gu.commercial.${MARK_NAME}`;
-const CMP_INIT = 'cmp-tcfv2-init';
-const CMP_GOT_CONSENT = 'cmp-tcfv2-got-consent';
+const CMP_INIT = 'cmp-init';
+const CMP_GOT_CONSENT = 'cmp-got-consent';
 
 const DEFAULT_CONFIG = {
 	isDotcomRendering: true,
