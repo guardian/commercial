@@ -89,24 +89,22 @@ type SizeKeys =
 	| 'skyscraper';
 
 type SlotName =
-	| 'right'
+	| 'carrot'
 	| 'comments'
-	| 'top-above-nav'
-	| 'mostpop'
-	| 'merchandising'
-	| 'merchandising-high'
-	| 'merchandising-high-lucky'
-	| 'survey'
+	| 'comments-expanded'
+	| 'crossword-banner'
+	| 'epic'
+	| 'exclusion'
 	| 'im'
 	| 'inline'
-	| 'mostpop'
-	| 'comments'
-	| 'top-above-nav'
-	| 'carrot'
-	| 'epic'
+	| 'merchandising-high-lucky'
+	| 'merchandising-high'
+	| 'merchandising'
 	| 'mobile-sticky'
-	| 'crossword-banner'
-	| 'exclusion';
+	| 'mostpop'
+	| 'right'
+	| 'survey'
+	| 'top-above-nav';
 
 type SizeMapping = Partial<Record<Breakpoint, AdSize[]>>;
 
@@ -239,6 +237,17 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.mpu,
 			adSizes.googleCard,
 			adSizes.fluid,
+		],
+	},
+	'comments-expanded': {
+		mobile: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.fluid,
+			adSizes.skyscraper,
+			adSizes.halfPage,
 		],
 	},
 	'top-above-nav': {
