@@ -1,11 +1,16 @@
-name: CI
+name: commercial-core CI
 on:
   push:
     branches:
-      - 'main'
+      - "main"
   pull_request:
     branches-ignore:
-      - 'gh-pages'
+      - "gh-pages"
+
+defaults:
+  run:
+    working-directory: ./core
+
 jobs:
   docs:
     name: Docs
@@ -14,7 +19,7 @@ jobs:
       - name: TOC Generator
         uses: technote-space/toc-generator@v4
         with:
-          TOC_TITLE: '## Table of contents'
+          TOC_TITLE: "## Table of contents"
           MAX_HEADER_LEVEL: 3
   test:
     name: Tests
@@ -31,12 +36,13 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Run unit tests
-        run: 'yarn test --coverage --ci'
+        run: "yarn test --coverage --ci"
 
       - name: Report coverage
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          base-path: ./core
   lint:
     name: Linting
     needs: [docs]
@@ -121,8 +127,11 @@ jobs:
           path: dist
 
       - name: Release
+        uses: cycjimmy/semantic-release-action@v2
+        id: semantic_release
+        with:
+          working_directory: packages/backend
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           HUSKY: 0
-        run: npx semantic-release
