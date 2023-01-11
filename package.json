@@ -29,5 +29,8 @@
 			"yarn workspace @guardian/commercial-core eslint --fix",
 			"yarn workspace @guardian/commercial-core prettier:fix"
 		]
+	},
+	"dependencies": {
+		"madge": "^5.0.1"
 	}
 }
