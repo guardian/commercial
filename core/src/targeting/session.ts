@@ -94,7 +94,7 @@ type SessionTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=228567
 	 */
-	ref: typeof referrers[number]['id'] | null;
+	ref: (typeof referrers)[number]['id'] | null;
 
 	/**
 	 * **S**igned **I**n – [see on Ad Manager][gam]
@@ -119,7 +119,7 @@ type AllParticipations = {
 const getReferrer = (referrer: string): SessionTargeting['ref'] => {
 	if (referrer === '') return null;
 
-	const matchedRef: typeof referrers[number] | null =
+	const matchedRef: (typeof referrers)[number] | null =
 		referrers.find((referrerType) =>
 			referrer.includes(referrerType.match),
 		) ?? null;

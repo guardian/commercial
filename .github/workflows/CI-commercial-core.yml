@@ -43,6 +43,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           base-path: ./core
+          path-to-lcov: ./core/coverage/lcov.info
   lint:
     name: Linting
     needs: [docs]
