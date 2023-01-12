@@ -13,6 +13,10 @@
 	},
 	"eslint.format.enable": true,
 	"eslint.packageManager": "yarn",
+	"eslint.workingDirectories": [
+		{ "directory": "core", "changeProcessCWD": true },
+		{ "directory": "standalone", "changeProcessCWD": true }
+	],
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"cSpell.words": [
 		"AMTGRP",

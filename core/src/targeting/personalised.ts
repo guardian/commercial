@@ -24,7 +24,7 @@ const frequency = [
 	'30plus',
 ] as const;
 
-type Frequency = typeof frequency[number];
+type Frequency = (typeof frequency)[number];
 
 const AMTGRP_STORAGE_KEY = 'gu.adManagerGroup';
 const adManagerGroups = [
@@ -41,7 +41,7 @@ const adManagerGroups = [
 	'11',
 	'12',
 ] as const;
-type AdManagerGroup = typeof adManagerGroups[number];
+type AdManagerGroup = (typeof adManagerGroups)[number];
 
 /**
  * Personalised Targeting requires user consent

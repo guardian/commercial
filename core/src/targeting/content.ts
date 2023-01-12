@@ -78,7 +78,7 @@ type ContentTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=195087
 	 */
-	vl: null | typeof videoLengths[number];
+	vl: null | (typeof videoLengths)[number];
 };
 
 /* -- Methods -- */

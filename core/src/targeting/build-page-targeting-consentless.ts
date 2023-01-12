@@ -26,7 +26,7 @@ const consentlessTargetingKeys = [
 	'urlkw',
 ] as const;
 
-type ConsentlessTargetingKeys = typeof consentlessTargetingKeys[number];
+type ConsentlessTargetingKeys = (typeof consentlessTargetingKeys)[number];
 
 type ConsentlessPageTargeting = Partial<
 	Pick<PageTargeting, ConsentlessTargetingKeys>

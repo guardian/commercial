@@ -71,7 +71,7 @@ type SharedTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=259767
 	 */
-	br: typeof brands[keyof typeof brands];
+	br: (typeof brands)[keyof typeof brands];
 
 	/**
 	 * **Co**ntributors and Authors - [see on Ad Manager][gam]
@@ -91,7 +91,7 @@ type SharedTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=177807
 	 */
-	ct: typeof contentTypes[number];
+	ct: (typeof contentTypes)[number];
 
 	/**
 	 * **Edition** - [see on Ad Manager][gam]
@@ -100,7 +100,7 @@ type SharedTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=174207
 	 */
-	edition: typeof editions[keyof typeof editions];
+	edition: (typeof editions)[keyof typeof editions];
 
 	/**
 	 * **K**eywords - [see on Ad Manager][gam]
@@ -123,7 +123,7 @@ type SharedTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=180207
 	 */
-	p: typeof platforms[keyof typeof platforms];
+	p: (typeof platforms)[keyof typeof platforms];
 
 	/**
 	 * **Se**ries - [see on Ad Manager][gam]
@@ -146,7 +146,7 @@ type SharedTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=185007
 	 */
-	su: Array<typeof surges[keyof typeof surges]>;
+	su: Array<(typeof surges)[keyof typeof surges]>;
 
 	/**
 	 * **T**o**n**es - [see on Ad Manager][gam]

@@ -1,7 +1,10 @@
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { buildPageTargeting } from './build-page-targeting';
+import * as BuildPageTargeting from './build-page-targeting';
 import { buildImaAdTagUrl } from './youtube-ima';
 
+const { buildPageTargeting } = BuildPageTargeting;
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-return -- this is a mock
 jest.mock('./build-page-targeting', () => ({
 	// we want the real filterValues()
 	...jest.requireActual('./build-page-targeting'),
