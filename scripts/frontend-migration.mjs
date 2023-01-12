@@ -39,9 +39,9 @@ const data = await madge(entry, config).then((res) => res.obj());
 Object.keys(data).forEach((file) => {
 	const fileInfo = parse(file);
 
-	console.log(fileInfo.dir);
-
 	mkdirSync(resolve(targetDir, fileInfo.dir), { recursive: true });
+	console.log(`Created path "${fileInfo.dir} or it already exists`);
+
 	copyFileSync(resolve(baseDir, file), resolve(targetDir, file));
-	// console.log(`Copied ${resolve(baseDir, file)} to ${resolve(targetDir, file)}`);
+	console.log(`Copied ${resolve(baseDir, file)} to ${resolve(targetDir, file)}`);
 });
