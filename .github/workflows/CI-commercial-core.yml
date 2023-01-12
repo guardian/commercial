@@ -101,8 +101,8 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3
         with:
-          name: dist
-          path: dist
+          name: core
+          path: core/dist
   release:
     name: Release
     needs: [build, test, lint, types]
@@ -124,8 +124,8 @@ jobs:
       - name: Fetch build
         uses: actions/download-artifact@v3
         with:
-          name: dist
-          path: dist
+          name: core
+          path: core/dist
 
       - name: Release
         run: yarn semantic-release
