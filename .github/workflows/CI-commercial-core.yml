@@ -128,10 +128,7 @@ jobs:
           path: dist
 
       - name: Release
-        uses: cycjimmy/semantic-release-action@v2
-        id: semantic_release
-        with:
-          working_directory: packages/backend
+        run: yarn semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
