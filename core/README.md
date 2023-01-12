@@ -37,10 +37,9 @@ If your target environment does not support that, make sure you transpile this p
 
 ### Requirements
 
-1. [Node 14](https://nodejs.org/en/download/) ([nvm][] or [fnm][] recommended)
+1. [Node 16](https://nodejs.org/en/download/) ([fnm][] recommended)
 2. [Yarn](https://classic.yarnpkg.com/en/docs/install/)
 
-[nvm]: https://github.com/nvm-sh/nvm
 [fnm]: https://github.com/Schniz/fnm
 
 ### Releasing
