@@ -1,5 +1,5 @@
 import madge from "madge";
-import { copyFileSync, mkdirSync } from "fs";
+import { copyFileSync, existsSync, mkdirSync } from "fs";
 import { resolve, parse, dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -34,14 +34,30 @@ const config = {
 	includeNpm: true,
 };
 
-const data = await madge(entry, config).then((res) => res.obj());
+const specificFiles = [
+	"types/global.d.ts",
+	"types/ias.d.ts",
+	"projects/commercial/modules/header-bidding/types.d.ts"
+];
 
-Object.keys(data).forEach((file) => {
+const graphFiles = await madge(entry, config).then((res) => res.obj());
+
+const allFiles = Object.keys(graphFiles).concat(specificFiles);
+
+allFiles.forEach((file) => {
 	const fileInfo = parse(file);
 
 	mkdirSync(resolve(targetDir, fileInfo.dir), { recursive: true });
 	console.log(`Created path "${fileInfo.dir} or it already exists`);
 
 	copyFileSync(resolve(baseDir, file), resolve(targetDir, file));
-	console.log(`Copied ${resolve(baseDir, file)} to ${resolve(targetDir, file)}`);
+	console.log(`Copied ${file} to ${resolve(targetDir, file)}`);
+
+	const test = resolve(baseDir, fileInfo.dir, `${fileInfo.name}.spec.ts`);
+
+	if(existsSync(test)) {
+		copyFileSync(test, resolve(targetDir, fileInfo.dir, `${fileInfo.name}.spec.ts`));
+		console.log(`Copied test ${test} to ${resolve(targetDir, fileInfo.dir, `${fileInfo.name}.spec.ts`)}`);
+	}
 });
+

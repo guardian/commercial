@@ -32,5 +32,8 @@
 	},
 	"dependencies": {
 		"madge": "^5.0.1"
+	},
+	"resolutions": {
+		"typescript": "^4.5.0"
 	}
 }
