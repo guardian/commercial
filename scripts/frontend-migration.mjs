@@ -6,14 +6,15 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 /**
+ * Madge misbehaves when the cwd is not the root of the project, missing files and such, so use from the frontend directory
+ *
  * Usage
  *
- * node scripts/frontend-migration.js <path-to-frontend-root>
+ * node ../commercial-core/scripts/frontend-migration.js
+ *
  */
 
-const args = process.argv.slice(2);
-
-const frontendDirectory = args[0];
+const frontendDirectory = process.cwd();
 
 const entry = resolve(
 	frontendDirectory,
@@ -25,10 +26,6 @@ const baseDir = resolve(frontendDirectory, "static/src/javascripts");
 const targetDir = resolve(__dirname, "../standalone/src");
 
 const config = {
-	webpackConfig: resolve(
-		frontendDirectory,
-		"webpack.config.commercial.prod.js"
-	),
 	tsConfig: resolve(frontendDirectory, "tsconfig.json"),
 	baseDir,
 	includeNpm: true,
@@ -57,6 +54,7 @@ const specificFiles = [
 const graphFiles = await madge(entry, config).then((res) => res.obj());
 
 const allFiles = Object.keys(graphFiles).concat(specificFiles);
+
 
 allFiles.forEach((file) => {
 	const fileInfo = parse(file);
