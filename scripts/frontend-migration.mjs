@@ -37,7 +37,21 @@ const config = {
 const specificFiles = [
 	"types/global.d.ts",
 	"types/ias.d.ts",
-	"projects/commercial/modules/header-bidding/types.d.ts"
+	"types/ophan.d.ts",
+	"types/utils.d.ts",
+	"projects/commercial/modules/header-bidding/types.d.ts",
+	"lib/cookies.js",
+	"lib/config.js",
+	"lib/config.d.ts",
+	"projects/common/modules/analytics/beacon.js",
+	"projects/common/modules/onward/geo-most-popular.js",
+	"lib/__mocks__/raven.ts",
+	"lib/__mocks__/fastdom-promise.ts",
+	"lib/__mocks__/fastdom.ts",
+	"lib/__mocks__/config.js",
+	"lib/__mocks__/fetch-json.js",
+	"projects/common/modules/experiments/__mocks__/ab-tests.ts",
+	"projects/common/modules/experiments/__fixtures__/ab-test.ts",
 ];
 
 const graphFiles = await madge(entry, config).then((res) => res.obj());
