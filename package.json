@@ -12,7 +12,8 @@
 	},
 	"scripts": {
 		"precommit:lint": "lint-staged",
-		"prepush:test": "yarn workspace @guardian/commercial-core jest --verbose --runInBand --onlyChanged"
+		"prepush:test": "yarn workspace @guardian/commercial-core jest --verbose --runInBand --onlyChanged",
+		"prepare": "husky install"
 	},
 	"workspaces": [
 		"core",
@@ -34,6 +35,6 @@
 		"madge": "^5.0.1"
 	},
 	"resolutions": {
-		"typescript": "~4.5.0"
+		"typescript": "~4.9.0"
 	}
 }
