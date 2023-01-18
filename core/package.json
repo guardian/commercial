@@ -49,7 +49,7 @@
 		"@octokit/core": "^4.0.5",
 		"@semantic-release/github": "^8.0.2",
 		"@types/google.analytics": "^0.0.42",
-		"@types/googletag": "^3.0.0",
+		"@types/googletag": "^3.0.1",
 		"@types/jest": "^27.0.3",
 		"@types/node": "^18.11.9",
 		"@typescript-eslint/eslint-plugin": "^5.5.0",

@@ -2046,10 +2046,10 @@
   resolved "https://registry.yarnpkg.com/@types/google.analytics/-/google.analytics-0.0.42.tgz#efe6ef9251a22ec8208dbb09f221a48a1863d720"
   integrity sha512-w0ZFj3SHznQXSq99kFCuO8tkN6w4T14znjrF2alLCSDnHOXEnpzneyNwxLvekcsDBInr8b5mXmzYh03GArqEyw==
 
-"@types/googletag@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/googletag/-/googletag-3.0.0.tgz#d31ea2c906c6d9a7044129e37480f0f2419a2d86"
-  integrity sha512-JyMgugh83IxXMr/u8Gkv6vE0oQgPwhzXFGOhlYCDy+t7ESiDWqb9TY2LiAGScxuPpWHntIy7BI3s1g+6oCSMNg==
+"@types/googletag@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@types/googletag/-/googletag-3.0.1.tgz#5a9c691bdb5c3e6b4d723cc2348d2963b696d731"
+  integrity sha512-IWiSlbwhLJDfyyeSbylqULkBUqRpZ9FPf4ZVd40Lvz9ftMQfVO+Rj5oqsPLOKHcPEPRoy7IeR7uQXd/Y+le7Lw==
 
 "@types/graceful-fs@^4.1.2":
   version "4.1.6"
