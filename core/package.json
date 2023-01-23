@@ -39,7 +39,7 @@
 		"type-fest": "2.12.2"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^17.0.3",
+		"@commitlint/cli": "^17.4.2",
 		"@commitlint/config-conventional": "^17.0.0",
 		"@guardian/ab-core": "2.0.0",
 		"@guardian/consent-management-platform": "11.0.0",
