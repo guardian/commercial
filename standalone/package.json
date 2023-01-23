@@ -35,7 +35,7 @@
 		"@types/google.analytics": "^0.0.42",
 		"@types/googletag": "^3.0.1",
 		"@types/jest": "^27.0.3",
-		"@typescript-eslint/eslint-plugin": "^5.5.0",
+		"@typescript-eslint/eslint-plugin": "^5.48.2",
 		"@typescript-eslint/parser": "^5.5.0",
 		"babel-loader": "^9.1.0",
 		"circular-dependency-plugin": "^5.2.2",
