@@ -31,8 +31,7 @@
 		"test:watch": "jest --watch",
 		"test:ci": "jest --coverage --ci",
 		"tsc": "tsc --noEmit",
-		"validate": "npm-run-all tsc lint test build",
-		"prepare": "husky install"
+		"validate": "npm-run-all tsc lint test build"
 	},
 	"prettier": "@guardian/prettier",
 	"dependencies": {
