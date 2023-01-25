@@ -11,21 +11,21 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      # Bundle
+      # Commercial
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          path: ./bundle
+          path: ./commercial
 
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version-file: "./bundle/.nvmrc"
+          node-version-file: "./commercial/.nvmrc"
 
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
         with:
-          working-directory: ./bundle
+          working-directory: ./commercial
 
       # DCR
       - name: Checkout DCR
@@ -51,9 +51,8 @@ jobs:
       - name: Run Cypress
         uses: cypress-io/github-action@v4
         with:
-          install: false
-          start: make -C ../dcr/dotcom-rendering start-ci, yarn serve
-          working-directory: frontend
+          working-directory: commercial/e2e
+          start: make -C ../../dcr/dotcom-rendering start-ci, yarn --cwd ../ workspace @guardian/commercial-standalone serve
           wait-on: "http://localhost:3030, http://localhost:3031/graun.standalone.commercial.js"
           wait-on-timeout: 30
           browser: chrome
@@ -66,10 +65,10 @@ jobs:
         if: always()
         with:
           name: cypress-videos
-          path: frontend/cypress/videos
+          path: commercial/e2e/cypress/videos
 
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: cypress-screenshots
-          path: frontend/cypress/screenshots
+          path: commercial/e2e/cypress/screenshots
