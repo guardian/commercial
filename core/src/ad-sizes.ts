@@ -215,7 +215,6 @@ const slotSizeMappings: SlotSizeMappings = {
 		mobile: [
 			adSizes.outOfPage,
 			adSizes.empty,
-			adSizes.halfPage,
 			adSizes.outstreamMobile,
 			adSizes.mpu,
 			adSizes.googleCard,
@@ -232,11 +231,9 @@ const slotSizeMappings: SlotSizeMappings = {
 		desktop: [
 			adSizes.outOfPage,
 			adSizes.empty,
-			adSizes.halfPage,
 			adSizes.mpu,
 			adSizes.googleCard,
 			adSizes.fluid,
-			adSizes.skyscraper,
 		],
 	},
 	'comments-expanded': {
