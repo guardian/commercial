@@ -1,7 +1,8 @@
 import madge from "madge";
 import { copyFileSync, existsSync, mkdirSync } from "fs";
-import { resolve, parse, dirname } from "path";
+import path, { resolve, parse, dirname } from "path";
 import { fileURLToPath } from "url";
+import glob from "glob";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -55,7 +56,6 @@ const graphFiles = await madge(entry, config).then((res) => res.obj());
 
 const allFiles = Object.keys(graphFiles).concat(specificFiles);
 
-
 allFiles.forEach((file) => {
 	const fileInfo = parse(file);
 
@@ -73,3 +73,14 @@ allFiles.forEach((file) => {
 	}
 });
 
+const e2eFilesToCopy = glob.sync("cypress/**/*.ts", { cwd: frontendDirectory });
+
+e2eFilesToCopy.forEach((file) => {
+	const fileInfo = parse(file);
+
+	mkdirSync(resolve(targetDir, 'e2e', fileInfo.dir), { recursive: true });
+	console.log(`Created path "${fileInfo.dir} or it already exists`);
+
+	copyFileSync(resolve(frontendDirectory, file), resolve(targetDir, 'e2e', file));
+	console.log(`Copied ${file} to ${resolve(targetDir, file)}`);
+});
