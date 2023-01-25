@@ -1,5 +1,5 @@
 import webpackPreprocessor from '@cypress/webpack-preprocessor';
-import webpackConfig from '../cypress.webpack.config';
+import webpackConfig from '../../cypress.webpack.config';
 
 /**
  * @type {Cypress.PluginConfig}

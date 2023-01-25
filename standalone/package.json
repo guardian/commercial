@@ -63,7 +63,6 @@
 		"commitizen": "^4.2.4",
 		"conventional-changelog-conventionalcommits": "^5.0.0",
 		"csstype": "^3.1.1",
-		"cypress": "^12.3.0",
 		"cz-conventional-changelog": "^3.3.0",
 		"eslint": "^8.4.1",
 		"eslint-config-prettier": "^8.3.0",
@@ -72,8 +71,8 @@
 		"eslint-plugin-jest": "^27.2.1",
 		"eslint-plugin-prettier": "^4.0.0",
 		"husky": "^8.0.1",
-		"jest": "^26.6.3",
-		"jest-environment-jsdom": "~26.6.2",
+		"jest": "^27.0.0",
+		"jest-environment-jsdom": "~27.0.0",
 		"jest-environment-jsdom-global": "~2.0.4",
 		"lint-staged": "^13.0.3",
 		"mockdate": "^3.0.5",
@@ -100,6 +99,7 @@
 		"@guardian/libs": ">6"
 	},
 	"dependencies": {
+		"@guardian/ab-core": "^2.0.1",
 		"@guardian/source-foundations": "^7.0.1",
 		"fastdom": "^1.0.11",
 		"lodash-es": "^4.17.21",

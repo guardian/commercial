@@ -7,28 +7,6 @@ module.exports = {
         "@babel/plugin-syntax-dynamic-import"
     ],
     "env": {
-        "production": {
-            "presets": [
-                ["@babel/preset-env", {
-                    "modules": false
-                }]
-            ],
-            "plugins": [
-                "@babel/plugin-transform-runtime",
-                "@babel/plugin-proposal-class-properties",
-            ],
-        },
-        "development": {
-            "presets": [
-                ["@babel/preset-env", {
-                    "modules": false
-                }]
-            ],
-            "plugins": [
-                "@babel/plugin-transform-runtime",
-                "@babel/plugin-proposal-class-properties",
-            ],
-        },
         "test": {
             "presets": [
                 ["@babel/preset-env", {

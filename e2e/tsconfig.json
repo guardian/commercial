@@ -15,5 +15,5 @@
       "types/*": ["../static/src/javascripts/types/*"]
     }
   },
-  "include": ["**/*.ts", "../static/src/javascripts/types/global.d.ts"]
+  "include": ["./**/*.ts", "../static/src/javascripts/types/global.d.ts"]
 }

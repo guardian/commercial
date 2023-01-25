@@ -1,0 +1,10 @@
+{
+  "name": "commercial-e2e",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@cypress/webpack-preprocessor": "^5.16.1",
+    "cypress": "^12.4.0"
+  }
+}
