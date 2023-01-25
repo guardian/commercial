@@ -17,9 +17,6 @@
     "noEmit": true,
     "noUnusedLocals": true,
     "paths": {
-      "admin/*": [
-        "projects/admin/*"
-      ],
       "bootstraps/*": [
         "bootstraps/*"
       ],
@@ -29,43 +26,21 @@
       "common/*": [
         "projects/common/*"
       ],
-      "facia/*": [
-        "projects/facia/*"
-      ],
-      "journalism/*": [
-        "projects/journalism/*"
-      ],
-      "lib/*": [
-        "lib/*"
-      ],
-      "lodash/*": [
-        "node_modules/lodash-node/compat/*"
-      ],
-      "membership/*": [
-        "projects/membership/*"
-      ],
-      "ophan/embed": [
-        "node_modules/ophan-tracker-js/build/ophan.embed"
-      ],
-      "ophan/ng": [
-        "node_modules/ophan-tracker-js"
-      ],
       "raven": [
         "node_modules/raven-js"
       ],
       "svgs/*": [
         "./static/svg/*"
       ],
-      "videojs": [
-        "node_modules/video.js"
-      ]
+	  "lodash/*": [
+        "node_modules/lodash-node/compat/*"
+      ],
     },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNEXT"
   },
-  "include": [
-    "src"
-  ]
+  "exclude": ["node_modules", "dist", "coverage", ".eslintrc.js"]
+
 }
