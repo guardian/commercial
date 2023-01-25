@@ -10,17 +10,18 @@ type AdSlotConfig = {
 };
 
 type SlotName =
-	| 'im'
-	| 'high-merch'
+	| 'carrot'
+	| 'comments-expanded'
+	| 'comments'
+	| 'epic'
 	| 'high-merch-lucky'
 	| 'high-merch-paid'
+	| 'high-merch'
+	| 'im'
 	| 'inline'
+	| 'mobile-sticky'
 	| 'mostpop'
-	| 'comments'
-	| 'top-above-nav'
-	| 'carrot'
-	| 'epic'
-	| 'mobile-sticky';
+	| 'top-above-nav';
 
 type AdSlotConfigs = Partial<Record<SlotName, AdSlotConfig>>;
 
@@ -49,7 +50,6 @@ const adSlotConfigs: AdSlotConfigs = {
 		refresh: false,
 		name: 'merchandising-high',
 	},
-
 	carrot: {
 		label: false,
 		refresh: false,
