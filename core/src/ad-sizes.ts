@@ -221,15 +221,6 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.googleCard,
 			adSizes.fluid,
 		],
-		desktop: [
-			adSizes.outOfPage,
-			adSizes.empty,
-			adSizes.mpu,
-			adSizes.googleCard,
-			adSizes.fluid,
-			adSizes.halfPage,
-			adSizes.skyscraper,
-		],
 		phablet: [
 			adSizes.outOfPage,
 			adSizes.empty,
@@ -237,6 +228,15 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.mpu,
 			adSizes.googleCard,
 			adSizes.fluid,
+		],
+		desktop: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.halfPage,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.fluid,
+			adSizes.skyscraper,
 		],
 	},
 	'comments-expanded': {
@@ -285,15 +285,6 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.googleCard,
 			adSizes.fluid,
 		],
-		tablet: [
-			adSizes.outOfPage,
-			adSizes.empty,
-			adSizes.mpu,
-			adSizes.googleCard,
-			adSizes.halfPage,
-			adSizes.leaderboard,
-			adSizes.fluid,
-		],
 		phablet: [
 			adSizes.outOfPage,
 			adSizes.empty,
@@ -301,6 +292,15 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.mpu,
 			adSizes.googleCard,
 			adSizes.halfPage,
+			adSizes.fluid,
+		],
+		tablet: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.halfPage,
+			adSizes.leaderboard,
 			adSizes.fluid,
 		],
 		desktop: [
@@ -352,8 +352,8 @@ const slotSizeMappings: SlotSizeMappings = {
 		mobile: [adSizes.mobilesticky],
 	},
 	'crossword-banner': {
-		tablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
 		phablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
+		tablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
 	},
 	exclusion: {
 		mobile: [adSizes.empty],
