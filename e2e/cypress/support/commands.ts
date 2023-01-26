@@ -75,7 +75,7 @@ Cypress.Commands.add('useConsentedSession', (name: string) => {
 	cy.session(name, () => {
 		storage.local.set('gu.geo.override', 'GB');
 
-		cy.intercept('**/graun.vendors~Prebid.js.commercial.js').as(
+		cy.intercept('**/gpt.js').as(
 			'consentAll',
 		);
 
