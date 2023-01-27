@@ -13,8 +13,9 @@ const stringToTuple = (size: string): [number, number] => {
 	const dimensions = size.split(',', 2).map(Number);
 
 	// Return an outOfPage tuple if the string is not `{number},{number}`
-	if (dimensions.length !== 2 || dimensions.some((n) => isNaN(n)))
-		return [0, 0]; // adSizes.outOfPage
+	if (dimensions.length !== 2 || dimensions.some((n) => isNaN(n))) {
+		return [0, 0];
+	} // adSizes.outOfPage
 
 	return [dimensions[0], dimensions[1]];
 };

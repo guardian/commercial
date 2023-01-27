@@ -234,13 +234,15 @@ const getTripleLiftInventoryCode = (
 	slotId: string,
 	sizes: HeaderBiddingSize[],
 ): string => {
-	if (containsLeaderboard(sizes))
+	if (containsLeaderboard(sizes)) {
 		return 'theguardian_topbanner_728x90_prebid';
+	}
 
-	if (containsMpu(sizes))
+	if (containsMpu(sizes)) {
 		return isArticle
 			? 'theguardian_article_300x250_prebid'
 			: 'theguardian_sectionfront_300x250_prebid';
+	}
 
 	if (containsMobileSticky(sizes)) return 'theguardian_320x50_HDX';
 

@@ -146,8 +146,9 @@ const onInteractivesLoaded = memoize(async (rules: SpacefinderRules) => {
 		},
 	);
 
-	if (notLoaded.length === 0 || !('MutationObserver' in window))
+	if (notLoaded.length === 0 || !('MutationObserver' in window)) {
 		return Promise.resolve();
+	}
 
 	const mutations = notLoaded.map(
 		(interactive) =>

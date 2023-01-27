@@ -9,6 +9,9 @@ module.exports = {
 		// disallow naming variables 'guardian', because
 		// window.guardian is our global config/settings object
 		'id-denylist': ['error', 'guardian'],
+		// TODO - remove these rule once we've migrated to commercial-core
+		'@typescript-eslint/no-unsafe-argument': 'off',
+		'@typescript-eslint/no-unsafe-return': 'off',
 	},
 	overrides: [
 		{
@@ -21,4 +24,14 @@ module.exports = {
 		},
 	],
 	ignorePatterns: ['*.js'],
+	settings: {
+		'import/resolver': {
+			alias: {
+				map: [
+					['svgs', './static/svg'],
+					['ophan/ng', '../node_modules/ophan-tracker-js'],
+				],
+			},
+		},
+	},
 };

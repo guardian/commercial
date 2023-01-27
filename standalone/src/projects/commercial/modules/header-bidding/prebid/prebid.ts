@@ -477,26 +477,29 @@ const requestBids = async (
 				new Promise<void>((resolve) => {
 					window.pbjs?.que.push(() => {
 						adUnits.forEach((adUnit) => {
-							if (isString(adUnit.code))
+							if (isString(adUnit.code)) {
 								eventTimer.trigger(
 									'prebidStart',
 									stripDfpAdPrefixFrom(adUnit.code),
 								);
+							}
 						});
 						window.pbjs?.requestBids({
 							adUnits,
 							bidsBackHandler() {
-								if (isString(adUnits[0].code))
+								if (isString(adUnits[0].code)) {
 									window.pbjs?.setTargetingForGPTAsync([
 										adUnits[0].code,
 									]);
+								}
 
 								adUnits.forEach((adUnit) => {
-									if (isString(adUnit.code))
+									if (isString(adUnit.code)) {
 										eventTimer.trigger(
 											'prebidEnd',
 											stripDfpAdPrefixFrom(adUnit.code),
 										);
+									}
 								});
 
 								resolve();

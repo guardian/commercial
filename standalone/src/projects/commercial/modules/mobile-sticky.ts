@@ -37,8 +37,9 @@ export const init = (): Promise<void> => {
 		return fastdom
 			.mutate(() => {
 				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Is body really always defined?
-				if (document.body && mobileStickyWrapper)
+				if (document.body && mobileStickyWrapper) {
 					document.body.appendChild(mobileStickyWrapper);
+				}
 			})
 			.then(() => {
 				if (mobileStickyWrapper) {

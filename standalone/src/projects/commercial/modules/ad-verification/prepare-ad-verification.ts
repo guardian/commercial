@@ -78,8 +78,9 @@ export const init = async (): Promise<void> => {
 
 		if (!window.confiant?.settings) return;
 
-		if (window.location.hash === '#confiantDevMode')
+		if (window.location.hash === '#confiantDevMode') {
 			window.confiant.settings.devMode = true;
+		}
 
 		window.confiant.settings.callback = maybeRefreshBlockedSlotOnce;
 	}

@@ -3,11 +3,11 @@
 
 module.exports = {
 	preset: 'ts-jest/presets/js-with-babel',
-	globals: {
-		'ts-jest': {
-			tsconfig: 'tsconfig.test.json',
-		},
-	},
+	// globals: {
+	// 	'ts-jest': {
+	// 		tsconfig: 'tsconfig.test.json',
+	// 	},
+	// },
 	moduleFileExtensions: ['ts', 'tsx', 'js'],
 	testMatch: ['**/*.(test|spec).+(ts|tsx|js)'],
 	roots: ['<rootDir>/src'],
@@ -31,4 +31,7 @@ module.exports = {
 		url: 'http://testurl.theguardian.com',
 	},
 	transformIgnorePatterns: ['/node_modules/(?!(@guardian|lodash-es)/)'],
+	transform: {
+		'^.+\\.(ts|tsx)$': 'ts-jest',
+	},
 };
