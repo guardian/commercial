@@ -159,7 +159,7 @@ class EventTimer {
 		};
 
 		this.properties = {
-			offlineCount: window.offlineCount,
+			offlineCount: window.guardian.offlineCount,
 		};
 
 		if (window.navigator.connection) {

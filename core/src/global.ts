@@ -21,9 +21,9 @@ declare global {
 		guardian: {
 			commercialTimer?: EventTimer;
 			config: GuardianWindowConfig;
+			offlineCount?: number;
 		};
 		ga: UniversalAnalytics.ga | null;
 		readonly navigator: Navigator;
-		offlineCount?: number;
 	}
 }
