@@ -158,15 +158,15 @@ class EventTimer {
 			],
 		};
 
-
 		this.properties = {
 			offlineCount: window.offlineCount,
 		};
 
 		if (window.navigator.connection) {
-			this.properties.type = window.navigator.connection.type
-			this.properties.downlink = window.navigator.connection.downlink
-			this.properties.effectiveType = window.navigator.connection.effectiveType
+			this.properties.type = window.navigator.connection.type;
+			this.properties.downlink = window.navigator.connection.downlink;
+			this.properties.effectiveType =
+				window.navigator.connection.effectiveType;
 		}
 	}
 
