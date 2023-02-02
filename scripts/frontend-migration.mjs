@@ -26,6 +26,8 @@ const baseDir = resolve(frontendDirectory, "static/src/javascripts");
 
 const targetDir = resolve(__dirname, "../standalone/src");
 
+const cypressDir = resolve(__dirname, "../e2e");
+
 const config = {
 	tsConfig: resolve(frontendDirectory, "tsconfig.json"),
 	baseDir,
@@ -76,11 +78,15 @@ allFiles.forEach((file) => {
 const e2eFilesToCopy = glob.sync("cypress/**/*.ts", { cwd: frontendDirectory });
 
 e2eFilesToCopy.forEach((file) => {
+
+	if (file.includes("cypress.webpack.config.ts")) return;
+	if (file.includes("plugins/index.ts")) return;
+
 	const fileInfo = parse(file);
 
-	mkdirSync(resolve(targetDir, 'e2e', fileInfo.dir), { recursive: true });
+	mkdirSync(resolve(cypressDir, fileInfo.dir), { recursive: true });
 	console.log(`Created path "${fileInfo.dir} or it already exists`);
 
-	copyFileSync(resolve(frontendDirectory, file), resolve(targetDir, 'e2e', file));
-	console.log(`Copied ${file} to ${resolve(targetDir, file)}`);
+	copyFileSync(resolve(frontendDirectory, file), resolve(cypressDir, file));
+	console.log(`Copied ${file} to ${resolve(cypressDir, file)}`);
 });
