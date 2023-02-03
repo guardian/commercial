@@ -1,6 +1,6 @@
 const webpackMerge = require('webpack-merge');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-	.BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin =
+	require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const config = require('./webpack.config.js');
 

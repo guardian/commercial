@@ -1,0 +1,74 @@
+name: E2E Tests
+on:
+  pull_request:
+
+concurrency:
+  group: "e2e-${{ github.head_ref }}"
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      # Commercial
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: ./commercial
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: "./commercial/.nvmrc"
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: ./commercial
+
+      # DCR
+      - name: Checkout DCR
+        uses: actions/checkout@v3
+        with:
+          repository: guardian/dotcom-rendering
+          path: ./dcr
+
+      - name: Setup DCR node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: "./dcr/.nvmrc"
+
+      - name: Install DCR dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: ./dcr
+
+      - name: Build DCR
+        run: make build
+        working-directory: ./dcr/dotcom-rendering
+
+      - name: Run Cypress
+        uses: cypress-io/github-action@v4
+        with:
+          working-directory: commercial/e2e
+          start: make -C ../../dcr/dotcom-rendering start-ci, yarn --cwd ../ workspace @guardian/commercial-standalone serve
+          wait-on: "http://localhost:3030, http://localhost:3031/graun.standalone.commercial.js"
+          wait-on-timeout: 30
+          browser: chrome
+          spec: cypress/e2e/**/*
+        env:
+          PORT: 3030
+          COMMERCIAL_BUNDLE_URL: http://localhost:3031/graun.standalone.commercial.js
+
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: cypress-videos
+          path: commercial/e2e/cypress/videos
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: commercial/e2e/cypress/screenshots
