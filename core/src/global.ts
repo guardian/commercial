@@ -8,7 +8,7 @@ import type { EventTimer } from '.';
 
 declare global {
 	interface Navigator {
-		readonly connection: NetworkInformation;
+		readonly connection?: NetworkInformation;
 	}
 
 	interface Window {
@@ -21,6 +21,7 @@ declare global {
 		guardian: {
 			commercialTimer?: EventTimer;
 			config: GuardianWindowConfig;
+			offlineCount?: number;
 		};
 		ga: UniversalAnalytics.ga | null;
 		readonly navigator: Navigator;

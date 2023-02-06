@@ -38,6 +38,7 @@ interface EventTimerProperties {
 	type?: ConnectionType;
 	downlink?: number;
 	effectiveType?: string;
+	offlineCount?: number;
 	adSlotsInline?: number;
 	adSlotsTotal?: number;
 	// the height of the page / the viewport height
@@ -157,23 +158,16 @@ class EventTimer {
 			],
 		};
 
-		this.properties =
-			'connection' in window.navigator
-				? {
-						type:
-							'type' in window.navigator.connection
-								? window.navigator.connection.type
-								: undefined,
-						downlink:
-							'downlink' in window.navigator.connection
-								? window.navigator.connection.downlink
-								: undefined,
-						effectiveType:
-							'effectiveType' in window.navigator.connection
-								? window.navigator.connection.effectiveType
-								: undefined,
-				  }
-				: {};
+		this.properties = {
+			offlineCount: window.guardian.offlineCount,
+		};
+
+		if (window.navigator.connection) {
+			this.properties.type = window.navigator.connection.type;
+			this.properties.downlink = window.navigator.connection.downlink;
+			this.properties.effectiveType =
+				window.navigator.connection.effectiveType;
+		}
 	}
 
 	/**

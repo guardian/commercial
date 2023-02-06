@@ -23,6 +23,7 @@ type EventProperties = {
 	type?: ConnectionType;
 	downlink?: number;
 	effectiveType?: string;
+	offlineCount?: number;
 };
 
 type CommercialMetricsPayload = {
