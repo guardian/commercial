@@ -142,6 +142,7 @@ describe('Build Page Targeting', () => {
 						url: '/football/series/footballweekly',
 					},
 					isSensitive: false,
+					webPublicationDate: 608857200,
 				} as unknown as typeof window.guardian.config.page,
 			} as unknown as typeof window.guardian.config,
 		};

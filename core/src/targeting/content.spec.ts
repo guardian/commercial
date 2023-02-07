@@ -8,6 +8,7 @@ const defaultValues: Parameters<typeof getContentTargeting>[0] = {
 	renderingPlatform: 'dotcom-platform',
 	section: 'uk-news',
 	eligibleForDCR: false,
+	webPublicationDate: 608857200,
 };
 
 describe('Content Targeting', () => {
