@@ -42,6 +42,7 @@ describe('buildPageTargetingConsentless', () => {
 			bp: 'desktop',
 			skinsize: 's',
 			inskin: 'f',
+			rc: '0',
 		});
 
 		expect(buildPageTargetingConsentless(emptyConsent, false)).toEqual({
@@ -64,6 +65,7 @@ describe('buildPageTargetingConsentless', () => {
 			si: 't',
 			bp: 'desktop',
 			skinsize: 's',
+			rc: '0',
 		});
 	});
 });
