@@ -8,6 +8,7 @@ const defaultValues: Parameters<typeof getContentTargeting>[0] = {
 	renderingPlatform: 'dotcom-platform',
 	section: 'uk-news',
 	eligibleForDCR: false,
+	webPublicationDate: 608857200,
 };
 
 describe('Content Targeting', () => {
@@ -223,6 +224,117 @@ describe('Content Targeting', () => {
 			});
 
 			expect(targeting).toMatchObject(expected);
+		});
+	});
+
+	describe('Recently published content (rc)', () => {
+		// Mock Date.now to return a fixed date
+		Date.now = jest.fn(() =>
+			new Date('January 1, 2023 00:00:00').getTime(),
+		);
+
+		test('correctly buckets content published 1 second ago', () => {
+			expect(
+				getContentTargeting({
+					...defaultValues,
+					webPublicationDate: new Date(
+						'December 31, 2022 23:59:59',
+					).getTime(),
+				}),
+			).toMatchObject({
+				rc: '0',
+			});
+		});
+
+		test('correctly buckets content published 6 hours ago', () => {
+			expect(
+				getContentTargeting({
+					...defaultValues,
+					webPublicationDate: new Date(
+						'December 31, 2022 18:00:00',
+					).getTime(),
+				}),
+			).toMatchObject({
+				rc: '1',
+			});
+		});
+
+		test('correctly buckets content published 2 days ago', () => {
+			expect(
+				getContentTargeting({
+					...defaultValues,
+					webPublicationDate: new Date(
+						'December 30, 2022 00:00:00',
+					).getTime(),
+				}),
+			).toMatchObject({
+				rc: '2',
+			});
+		});
+
+		test('correctly buckets content published 5 days ago', () => {
+			expect(
+				getContentTargeting({
+					...defaultValues,
+					webPublicationDate: new Date(
+						'December 26, 2022 00:00:00',
+					).getTime(),
+				}),
+			).toMatchObject({
+				rc: '3',
+			});
+		});
+
+		test('correctly buckets content published 2 weeks ago', () => {
+			expect(
+				getContentTargeting({
+					...defaultValues,
+					webPublicationDate: new Date(
+						'December 18, 2022 00:00:00',
+					).getTime(),
+				}),
+			).toMatchObject({
+				rc: '4',
+			});
+		});
+
+		test('correctly buckets content published 6 months ago', () => {
+			expect(
+				getContentTargeting({
+					...defaultValues,
+					webPublicationDate: new Date(
+						'July 1, 2022 00:00:00',
+					).getTime(),
+				}),
+			).toMatchObject({
+				rc: '5',
+			});
+		});
+
+		test('correctly buckets content published 12 months ago', () => {
+			expect(
+				getContentTargeting({
+					...defaultValues,
+					webPublicationDate: new Date(
+						'January 1, 2022 00:00:00',
+					).getTime(),
+				}),
+			).toMatchObject({
+				rc: '6',
+			});
+		});
+
+		test('correctly buckets content published 14 months and 1 second ago', () => {
+			expect(
+				getContentTargeting({
+					...defaultValues,
+					webPublicationDate: new Date(
+						'October 31, 2021 23:59:59',
+					).getTime(),
+				}),
+			).toMatchObject({
+				rc: '7',
+			});
 		});
 	});
 });

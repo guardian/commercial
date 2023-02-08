@@ -58,6 +58,7 @@ export type GuardianWindowConfig = {
 		section: string;
 		sharedAdTargeting?: Record<string, string | string[]>;
 		videoDuration: number;
+		webPublicationDate: number;
 	};
 	tests?: {
 		[key: `${string}Control`]: 'control';

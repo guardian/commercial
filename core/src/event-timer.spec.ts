@@ -51,6 +51,7 @@ const DEFAULT_CONFIG = {
 		section: 'uk-news',
 		videoDuration: 63,
 		edition: 'UK' as const,
+		webPublicationDate: 608857200,
 	},
 };
 

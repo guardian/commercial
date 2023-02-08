@@ -36,6 +36,7 @@ type PageTargeting = PartialWithNulls<
 		pa: TrueOrFalse; // Personalised Ads consent
 		permutive: string[]; // predefined segment values
 		pv: string; // ophan Page View id
+		rc: string; // recently published content
 		rdp: string;
 		ref: string; // REFerrer
 		rp: 'dotcom-rendering' | 'dotcom-platform'; // Rendering Platform
@@ -86,6 +87,7 @@ const buildPageTargeting = ({
 	const adFreeTargeting: { af?: True } = adFree ? { af: 't' } : {};
 
 	const contentTargeting: ContentTargeting = getContentTargeting({
+		webPublicationDate: page.webPublicationDate,
 		eligibleForDCR: isDotcomRendering,
 		path: `/${page.pageId}`,
 		renderingPlatform: isDotcomRendering

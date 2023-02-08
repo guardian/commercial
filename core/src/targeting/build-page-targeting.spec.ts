@@ -142,6 +142,7 @@ describe('Build Page Targeting', () => {
 						url: '/football/series/footballweekly',
 					},
 					isSensitive: false,
+					webPublicationDate: 608857200,
 				} as unknown as typeof window.guardian.config.page,
 			} as unknown as typeof window.guardian.config,
 		};
@@ -194,6 +195,7 @@ describe('Build Page Targeting', () => {
 		expect(pageTargeting.pa).toEqual('f');
 		expect(pageTargeting.cc).toEqual('US');
 		expect(pageTargeting.rp).toEqual('dotcom-platform');
+		expect(pageTargeting.rc).toEqual('7');
 	});
 
 	it('should set correct personalized ad (pa) param', () => {
@@ -417,6 +419,7 @@ describe('Build Page Targeting', () => {
 			inskin: 'f',
 			pa: 'f',
 			pv: '123456',
+			rc: '7',
 			rdp: 'na',
 			rp: 'dotcom-platform',
 			sens: 'f',

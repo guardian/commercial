@@ -13,6 +13,7 @@ const consentlessTargetingKeys = [
 	'dcre',
 	'edition',
 	'k',
+	'rc',
 	'rp',
 	's',
 	'se',
