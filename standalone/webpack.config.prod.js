@@ -3,6 +3,7 @@ const BundleAnalyzerPlugin =
 	require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const config = require('./webpack.config.js');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = webpackMerge.smart(config, {
 	mode: 'production',
@@ -17,9 +18,9 @@ module.exports = webpackMerge.smart(config, {
 			analyzerMode: 'static',
 			openAnalyzer: false,
 		}),
-		new UglifyJSPlugin({
-			parallel: true,
-			sourceMap: true,
-		}),
 	],
+	optimization: {
+		minimize: true,
+		minimizer: [new TerserPlugin()],
+	},
 });
