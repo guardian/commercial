@@ -123,9 +123,7 @@ describe('send commercial metrics', () => {
 		writable: true,
 	});
 
-	const mockConsoleWarn = jest
-		.spyOn(console, 'warn')
-		.mockImplementation(() => false);
+	console.warn = jest.fn().mockImplementation(() => false);
 
 	it('sends metrics when the page is hidden, user is in sampling group, and consent is given', async () => {
 		mockOnConsent(tcfv2AllConsent);
@@ -300,7 +298,7 @@ describe('send commercial metrics', () => {
 		it('expects to be initialised before calling bypassCoreWebVitalsSampling', async () => {
 			await bypassCommercialMetricsSampling();
 
-			expect(mockConsoleWarn).toHaveBeenCalledWith(
+			expect(console.warn).toHaveBeenCalledWith(
 				'initCommercialMetrics not yet initialised',
 			);
 		});
