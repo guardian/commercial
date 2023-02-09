@@ -106,7 +106,7 @@ jobs:
   release:
     name: Release
     needs: [build, test, lint, types]
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -128,7 +128,7 @@ jobs:
           path: core/dist
 
       - name: Release
-        run: yarn semantic-release
+        run: yarn semantic-release --dry-run
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

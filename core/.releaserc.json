@@ -1,6 +1,6 @@
 {
 	"extends": "semantic-release-monorepo",
-	"branches": "main",
+	"branches": "jlk/fix-dep-res-issue",
 	"plugins": [
 		"@semantic-release/commit-analyzer",
 		"@semantic-release/release-notes-generator",
