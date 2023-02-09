@@ -35,5 +35,6 @@
 		"TCFV",
 		"viewability",
 		"Youtube"
-	]
+  ],
+  "jest.rootPath": "core"
 }

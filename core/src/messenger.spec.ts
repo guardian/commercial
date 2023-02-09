@@ -12,13 +12,10 @@ const unregister = unregister_;
 const noop = (): void => {
 	// noop
 };
-const addEventListenerSpy = jest
-	.spyOn(global, 'addEventListener')
-	.mockImplementation(noop);
-const removeEventListenerSpy = jest
-	.spyOn(global, 'removeEventListener')
-	.mockImplementation(noop);
-const jsonParseSpy = jest.spyOn(JSON, 'parse');
+
+window.addEventListener = jest.fn().mockImplementationOnce(noop);
+window.removeEventListener = jest.fn().mockImplementationOnce(noop);
+
 const mockOrigin = 'someorigin.com';
 
 jest.mock('./messenger/post-message', () => ({
@@ -56,16 +53,12 @@ describe('Cross-frame messenger', () => {
 
 	it('should register an event listener when there is at least one message routine', () => {
 		register('click', noop);
-		expect(addEventListenerSpy).toHaveBeenCalled();
+		expect(window.addEventListener).toHaveBeenCalled();
 		unregister('click', noop);
-		expect(removeEventListenerSpy).toHaveBeenCalled();
+		expect(window.removeEventListener).toHaveBeenCalled();
 	});
 
 	it('should not respond when sending malformed JSON', (done) => {
-		jsonParseSpy.mockImplementation(() => {
-			throw new Error();
-		});
-
 		Promise.resolve()
 			.then(() =>
 				// @ts-expect-error -- we're stubbing the message event
@@ -87,9 +80,12 @@ describe('Cross-frame messenger', () => {
 
 		void Promise.all(
 			payloads.map((data) => {
-				jsonParseSpy.mockReturnValueOnce(data);
-				// @ts-expect-error -- we're stubbing the message event
-				return onMessage({ origin: mockOrigin, data: '', source: '' });
+				return onMessage({
+					origin: mockOrigin,
+					data: JSON.stringify(data),
+					// @ts-expect-error -- we're stubbing the message event
+					source: '',
+				});
 			}),
 		).then(() => {
 			expect(postMessage).not.toHaveBeenCalled();
@@ -103,7 +99,6 @@ describe('Cross-frame messenger', () => {
 			type: 'scroll',
 			value: 'hello',
 		};
-		jsonParseSpy.mockImplementationOnce(() => payload);
 		register('click', noop);
 		register('scroll', noop);
 		unregister('scroll', noop);
@@ -142,12 +137,15 @@ describe('Cross-frame messenger', () => {
 			type: 'click',
 			value: 'hello',
 		};
-		jsonParseSpy.mockImplementationOnce(() => payload);
 		register('click', routines.thrower);
 		void Promise.resolve()
 			.then(() =>
-				// @ts-expect-error -- we're stubbing the message event
-				onMessage({ origin: mockOrigin, data: '', source: 'source' }),
+				onMessage({
+					origin: mockOrigin,
+					data: JSON.stringify(payload),
+					// @ts-expect-error -- we're stubbing the message event
+					source: 'source',
+				}),
 			)
 			.then(() => {
 				expect(postMessage).toHaveBeenCalledWith(
@@ -176,13 +174,12 @@ describe('Cross-frame messenger', () => {
 			type: 'click',
 			value: 'hello',
 		};
-		jsonParseSpy.mockImplementationOnce(() => payload);
 		register('click', routines.respond);
 		void Promise.resolve()
 			.then(() =>
 				onMessage({
 					origin: mockOrigin,
-					data: '',
+					data: JSON.stringify(payload),
 					// @ts-expect-error -- we're stubbing the message event
 					source: 'sauce',
 				}),
@@ -210,14 +207,17 @@ describe('Cross-frame messenger', () => {
 			type: 'click',
 			value: 1,
 		};
-		jsonParseSpy.mockImplementationOnce(() => payload);
 		register('click', routines.add1);
 		register('click', routines.add2);
 
 		void Promise.resolve()
 			.then(() =>
-				// @ts-expect-error -- we're stubbing the message event
-				onMessage({ origin: mockOrigin, data: '', source: 'sorcery' }),
+				onMessage({
+					origin: mockOrigin,
+					data: JSON.stringify(payload),
+					// @ts-expect-error -- we're stubbing the message event
+					source: 'sorcery',
+				}),
 			)
 			.then(() => {
 				expect(postMessage).toHaveBeenCalledWith(
@@ -242,11 +242,15 @@ describe('Cross-frame messenger', () => {
 			type: 'set-ad-height',
 			value: { id: 'test', height: '20px' },
 		};
-		jsonParseSpy.mockImplementationOnce(() => payload);
 		register('resize', routines.rubicon);
-		// @ts-expect-error -- we're stubbing the message event
-		void onMessage({ origin: mockOrigin, data: '', source: 'saucy' })
+		void onMessage({
+			origin: mockOrigin,
+			data: JSON.stringify(payload),
+			// @ts-expect-error -- we're stubbing the message event
+			source: 'saucy',
+		})
 			.then(() => {
+				console.log(postMessage);
 				expect(postMessage).toHaveBeenCalledWith(
 					{
 						error: null,

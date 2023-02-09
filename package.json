@@ -16,7 +16,9 @@
 		"prepare": "husky install"
 	},
 	"workspaces": [
-		"core"
+		"core",
+		"standalone",
+		"e2e"
 	],
 	"private": true,
 	"commitlint": {
