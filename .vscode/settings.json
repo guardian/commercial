@@ -15,7 +15,7 @@
 	"eslint.packageManager": "yarn",
 	"eslint.workingDirectories": [
 		{ "directory": "core", "changeProcessCWD": true },
-		{ "directory": "standalone", "changeProcessCWD": true }
+		{ "directory": "bundle", "changeProcessCWD": true }
 	],
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"cSpell.words": [

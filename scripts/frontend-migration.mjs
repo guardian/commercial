@@ -24,7 +24,7 @@ const entry = resolve(
 
 const baseDir = resolve(frontendDirectory, "static/src/javascripts");
 
-const targetDir = resolve(__dirname, "../standalone/src");
+const targetDir = resolve(__dirname, "../bundle/src");
 
 const cypressDir = resolve(__dirname, "../e2e");
 

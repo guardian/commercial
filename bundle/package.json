@@ -1,7 +1,7 @@
 {
-	"name": "@guardian/commercial-standalone",
+	"name": "@guardian/commercial-bundle",
 	"version": "0.0.0-workspace",
-	"description": "Guardian advertising business logic",
+	"description": "The bundle that provides the advertising logic for the https://theguardian.com",
 	"homepage": "https://github.com/guardian/commercial-core#readme",
 	"bugs": {
 		"url": "https://github.com/guardian/commercial-core/issues"

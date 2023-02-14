@@ -10,7 +10,7 @@ on:
 
 defaults:
   run:
-    working-directory: ./standalone
+    working-directory: ./bundle
 
 jobs:
   test:
@@ -106,8 +106,8 @@ jobs:
   #     - name: Fetch build
   #       uses: actions/download-artifact@v3
   #       with:
-  #         name: standalone
-  #         path: standalone/dist
+  #         name: bundle
+  #         path: bundle/dist
 
   #     - name: Release
   #       run: yarn semantic-release

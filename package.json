@@ -17,7 +17,7 @@
 	},
 	"workspaces": [
 		"core",
-		"standalone",
+		"bundle",
 		"e2e"
 	],
 	"private": true,
