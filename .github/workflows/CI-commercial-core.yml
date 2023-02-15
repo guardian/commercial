@@ -21,6 +21,7 @@ jobs:
         with:
           TOC_TITLE: "## Table of contents"
           MAX_HEADER_LEVEL: 3
+          TARGET_PATHS: core/README.md
   test:
     name: Tests
     needs: [docs]
