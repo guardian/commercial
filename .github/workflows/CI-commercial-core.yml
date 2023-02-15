@@ -104,9 +104,29 @@ jobs:
         with:
           name: core
           path: core/dist
+  # This job is used to verify that the release will be successful before we allow merging to main
+  verify-release:
+    name: Verify Release
+    needs: [build, test, lint, types]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup node
+        uses: guardian/actions-setup-node@main
+
+        # Semantic release only uses npm, so we need to use it here, ignoring the yarn.lock file
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          install-command: npm install
   release:
     name: Release
-    needs: [build, test, lint, types]
+    needs: [build, test, lint, types, verify-release]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:

@@ -1,12 +1,11 @@
 name: bundle CI
 on:
-  workflow_dispatch:
-  # push:
-  #   branches:
-  #     - "main"
-  # pull_request:
-  #   branches-ignore:
-  #     - "gh-pages"
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches-ignore:
+      - "gh-pages"
 
 defaults:
   run:
@@ -79,39 +78,64 @@ jobs:
       - name: Build package
         run: yarn build
 
-      # - name: Save build
-      #   if: github.ref == 'refs/heads/main'
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: core
-      #     path: core/dist
-  # release:
-  #   name: Release
-  #   needs: [build, test, lint, types]
-  #   if: github.ref == 'refs/heads/main'
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0
-  #         persist-credentials: false
+      - name: Save build
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v3
+        with:
+          name: bundle
+          path: bundle/dist
 
-  #     - name: Setup node
-  #       uses: guardian/actions-setup-node@main
+  # This job is used to verify that the release will be successful before we allow merging to main
+  verify-release:
+    name: Verify Release
+    needs: [build, test, lint, types]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
-  #     - name: Install dependencies
-  #       uses: bahmutov/npm-install@v1
+      - name: Setup node
+        uses: guardian/actions-setup-node@main
 
-  #     - name: Fetch build
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #         name: bundle
-  #         path: bundle/dist
+        # Semantic release only uses npm, so we need to use it here, ignoring the yarn.lock file
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          install-command: npm install
 
-  #     - name: Release
-  #       run: yarn semantic-release
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-  #         HUSKY: 0
+  release:
+    name: Release
+    needs: [build, test, lint, types, verify-release]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup node
+        uses: guardian/actions-setup-node@main
+
+        # Semantic release only uses npm, so we need to use it here, ignoring the yarn.lock file
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          install-command: npm install
+
+      - name: Fetch build
+        uses: actions/download-artifact@v3
+        with:
+          name: bundle
+          path: bundle/dist
+
+      - name: Release
+        run: yarn semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          HUSKY: 0
