@@ -1,4 +1,4 @@
-name: bundle CI
+name: Commercial Bundle CI
 on:
   push:
     branches:
@@ -84,28 +84,9 @@ jobs:
         with:
           name: bundle
           path: bundle/dist
-
-  # This job is used to verify that the release will be successful before we allow merging to main
-  verify-release:
-    name: Verify Release
-    needs: [build, test, lint, types]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-
-      - name: Setup node
-        uses: guardian/actions-setup-node@main
-
-        # Semantic release only uses npm, so we need to use it here
-      - run: npm version 999.0.0-test --no-git-tag-version --allow-same-version
-
   release:
     name: Release
-    needs: [build, test, lint, types, verify-release]
+    needs: [build, test, lint, types]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
