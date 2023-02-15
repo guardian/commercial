@@ -100,11 +100,8 @@ jobs:
       - name: Setup node
         uses: guardian/actions-setup-node@main
 
-        # Semantic release only uses npm, so we need to use it here, ignoring the yarn.lock file
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          install-command: npm install
+        # Semantic release only uses npm, so we need to use it here
+      - run: npm version 999.0.0-test --no-git-tag-version --allow-same-version
 
   release:
     name: Release
