@@ -1,4 +1,4 @@
-name: commercial-core CI
+name: Commercial Core CI
 on:
   push:
     branches:
@@ -104,6 +104,7 @@ jobs:
         with:
           name: core
           path: core/dist
+
   release:
     name: Release
     needs: [build, test, lint, types]

@@ -8,7 +8,7 @@ import { loadScript } from '@guardian/libs';
 import { init as initMeasureAdLoad } from 'commercial/modules/messenger/measure-ad-load';
 import raven from '../../../../lib/raven';
 import { reportError } from '../../../../lib/report-error';
-import { removeSlots } from '../remove-slots';
+import { removeSlots } from '../../../commercial/modules/remove-slots';
 import { getPageTargeting } from '../../../common/modules/commercial/build-page-targeting';
 import { commercialFeatures } from '../../../common/modules/commercial/commercial-features';
 import type { IdentityUserIdentifiers } from '../../../common/modules/identity/api';

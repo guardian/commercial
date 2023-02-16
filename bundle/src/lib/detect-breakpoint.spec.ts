@@ -153,7 +153,7 @@ describe('matchesBreakpoint', () => {
 		(min, max) => {
 			// matchMedia is not supported by JSDOM, so we need to mock it
 			(window.matchMedia as jest.MockedFunction<typeof window.matchMedia>)
-				// @ts-expect-error -- stub response
+				// @ts-expect-error -- it's a mock
 				.mockImplementation((query) => {
 					expect(
 						query.includes(
