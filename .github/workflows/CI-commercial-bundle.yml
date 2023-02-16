@@ -99,12 +99,6 @@ jobs:
       - name: Setup node
         uses: guardian/actions-setup-node@main
 
-        # Semantic release only uses npm, so we need to use it here, ignoring the yarn.lock file
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          install-command: npm install
-
       - name: Fetch build
         uses: actions/download-artifact@v3
         with:
