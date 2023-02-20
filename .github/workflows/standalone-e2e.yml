@@ -1,7 +1,7 @@
 name: E2E Tests
 on:
   workflow_dispatch:
-  # pull_request:
+  pull_request:
 
 concurrency:
   group: "e2e-${{ github.head_ref }}"
@@ -53,7 +53,7 @@ jobs:
         uses: cypress-io/github-action@v4
         with:
           working-directory: commercial/e2e
-          start: make -C ../../dcr/dotcom-rendering start-ci, yarn --cwd ../ workspace @guardian/commercial-standalone serve
+          start: make -C ../../dcr/dotcom-rendering start-ci, yarn --cwd ../ workspace @guardian/commercial-bundle serve
           wait-on: "http://localhost:3030, http://localhost:3031/graun.standalone.commercial.js"
           wait-on-timeout: 30
           browser: chrome
