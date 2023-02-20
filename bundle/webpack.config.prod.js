@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const BundleAnalyzerPlugin =
 	require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -17,6 +18,10 @@ module.exports = webpackMerge.smart(config, {
 			analyzerMode: 'static',
 			openAnalyzer: false,
 		}),
+		new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('production'),
+			'process.env.OVERRIDE_BUNDLE_PATH': JSON.stringify('false'),
+        }),
 	],
 	optimization: {
 		minimize: true,

@@ -13,6 +13,7 @@ module.exports = {
 	},
 	output: {
 		path: path.join(__dirname, 'dist'),
+		clean: true,
 	},
 	resolve: {
 		modules: [
@@ -25,7 +26,6 @@ module.exports = {
 			svgs: path.join(__dirname, 'static', 'svg'),
 			'ophan/ng': 'ophan-tracker-js',
 			lodash: 'lodash-es',
-			process: 'process/browser',
 		},
 		extensions: ['.js', '.ts', '.tsx', '.jsx'],
 		symlinks: false, // Inserted to enable linking @guardian/consent-management-platform
@@ -60,9 +60,6 @@ module.exports = {
 			exclude: /node_modules/,
 			// add errors to webpack instead of warnings
 			failOnError: true,
-		}),
-		new webpack.ProvidePlugin({
-			process: 'process/browser',
 		}),
 	],
 };

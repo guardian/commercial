@@ -29,6 +29,12 @@ module.exports = webpackMerge.smart(config, {
 					process: 'process/browser',
 				}),
 		  ],
+
+	resolve: {
+		alias: {
+			process: 'process/browser',
+		},
+	},
 	devServer: {
 		port,
 		compress: true,
