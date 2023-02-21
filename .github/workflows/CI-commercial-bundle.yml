@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - "main"
+      - "beta"
   pull_request:
     branches-ignore:
       - "gh-pages"
@@ -79,15 +80,16 @@ jobs:
         run: yarn build
 
       - name: Save build
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta'
         uses: actions/upload-artifact@v3
         with:
-          name: bundle
-          path: bundle/dist
+          name: core
+          path: core/dist
+
   release:
     name: Release
     needs: [build, test, lint, types]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/beta'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -105,8 +107,8 @@ jobs:
       - name: Fetch build
         uses: actions/download-artifact@v3
         with:
-          name: bundle
-          path: bundle/dist
+          name: core
+          path: core/dist
 
       - name: Release
         run: yarn semantic-release
