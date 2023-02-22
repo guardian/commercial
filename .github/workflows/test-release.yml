@@ -9,9 +9,20 @@ on:
     types: [labeled]
 
 jobs:
+  has-permission:
+    name: Check permissions
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Check if user has admin access"
+        uses: "lannonbr/repo-permission-check-action@2.0.2"
+        with:
+          permission: "admin"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   bundle-release:
     name: Bundle Beta Release
     runs-on: ubuntu-latest
+    needs: has-permission
     if: github.event.label.name == 'Bundle Beta Release'
     defaults:
       run:
@@ -54,6 +65,7 @@ jobs:
   core-release:
     name: Core Beta Release
     runs-on: ubuntu-latest
+    needs: has-permission
     if: github.event.label.name == 'Core Beta Release'
     defaults:
       run:
