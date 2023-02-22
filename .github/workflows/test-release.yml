@@ -1,0 +1,94 @@
+name: Publish Beta Package
+
+# This workflow is triggered on a label being added to a PR, and will publish a beta version of the bundle package e.g. @guardian/commercial-bundle-v1.0.1-beta.0
+# It gets the last version from the tags, bumps the prerelease version and publishes to npm with the next tag
+# if the current version is 1.0.0, the next beta version will be 1.0.1-beta.0, then 1.0.1-beta.1, etc.
+# semanic-release is not used here as it's very opinionated and refuses to work with non-semver versions or pull requests
+on:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  bundle-release:
+    name: Bundle Beta Release
+    runs-on: ubuntu-latest
+    if: github.event.label.name == 'Bundle Beta Release'
+    defaults:
+      run:
+        working-directory: ./bundle
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup node
+        uses: guardian/actions-setup-node@main
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Build package
+        run: yarn build
+
+      - name: Grab last version
+        run: yarn version --new-version $(git tag -l | grep @guardian/commercial-bundle-\* |  sed -E 's|.*([0-9]+\.[0-9]+\.[0-9]+(-beta.[0-9]+)?)|\1|g' | tail -1) --no-git-tag-version
+
+      - name: Bump prerelease version
+        run: yarn version --prerelease --preid beta --no-git-tag-version
+
+      - name: Tag version
+        run: git tag -a @guardian/commercial-bundle-v$(node -p "require('./package.json').version") -m "Release @guardian/commercial-bundle-v$(node -p "require('./package.json').version")"
+
+      - name: Push tag
+        run: git push --follow-tags
+
+      - name: Release
+        run: npm publish --tag next
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          HUSKY: 0
+
+  core-release:
+    name: Core Beta Release
+    runs-on: ubuntu-latest
+    if: github.event.label.name == 'Core Beta Release'
+    defaults:
+      run:
+        working-directory: ./core
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup node
+        uses: guardian/actions-setup-node@main
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Build package
+        run: yarn build
+
+      - name: Grab last version
+        run: yarn version --new-version $(git tag -l | grep @guardian/commercial-core-\* |  sed -E 's|.*([0-9]+\.[0-9]+\.[0-9]+(-beta.[0-9]+)?)|\1|g' | tail -1) --no-git-tag-version
+
+      - name: Bump prerelease version
+        run: yarn version --prerelease --preid beta --no-git-tag-version
+
+      - name: Tag version
+        run: git tag -a @guardian/commercial-core-v$(node -p "require('./package.json').version") -m "Release @guardian/commercial-core-v$(node -p "require('./package.json').version")"
+
+      - name: Push tag
+        run: git push --follow-tags
+
+      - name: Release
+        run: npm publish --tag next
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          HUSKY: 0
