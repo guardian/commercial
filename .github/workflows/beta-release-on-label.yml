@@ -1,0 +1,137 @@
+name: Publish Beta Package
+
+# This workflow is triggered on a label being added to a PR, and will publish a beta version of the bundle package e.g. @guardian/commercial-bundle-v1.0.1-beta.0
+# It gets the last version from the tags, bumps the prerelease version and publishes to npm with the next tag
+# if the current version is 1.0.0, the next beta version will be 1.0.1-beta.0, then 1.0.1-beta.1, etc.
+# semanic-release is not used here as it's very opinionated and refuses to work with non-semver versions or pull requests
+on:
+  pull_request:
+  workflow_dispatch:
+    # types: [labeled, synchronize]
+
+jobs:
+  has-permission:
+    name: Check permissions
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Check if user has admin access"
+        uses: "lannonbr/repo-permission-check-action@2.0.2"
+        with:
+          permission: "admin"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  bundle-release:
+    name: "@guardian/commercial-bundle"
+    runs-on: ubuntu-latest
+    needs: has-permission
+    # if: github.event.label.name == '[beta] @guardian/commercial-bundle'
+    defaults:
+      run:
+        working-directory: ./bundle
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: guardian/actions-setup-node@main
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Build package
+        run: yarn build
+
+      - name: Grab last version
+        run: yarn version --new-version $(git tag -l | grep @guardian/commercial-bundle-\* |  sed -E 's|.*([0-9]+\.[0-9]+\.[0-9]+(-beta.[0-9]+)?)|\1|g' | tail -1) --no-git-tag-version
+
+      - name: Bump prerelease version
+        run: yarn version --prerelease --preid beta --no-git-tag-version
+
+      - name: Get Version
+        id: version
+        run: echo BETA_VERSION=@guardian/commercial-bundle-v$(node -p "require('./package.json').version") >> $GITHUB_OUTPUT
+
+      - name: Tag version
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@users.noreply.github.com
+          git tag -a ${{ steps.version.outputs.BETA_VERSION }} -m "Release ${{ steps.version.outputs.BETA_VERSION }}"
+
+      - name: Push tag
+        run: git push origin ${{ steps.version.outputs.BETA_VERSION }}
+
+      - name: Release
+        run: yarn publish --tag beta --new-version ${{ steps.version.outputs.BETA_VERSION }}
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🚀 ${{ steps.version.outputs.BETA_VERSION }} published to npm as a beta release'
+            })
+
+  core-release:
+    name: "@guardian/commercial-core"
+    runs-on: ubuntu-latest
+    needs: has-permission
+    if: github.event.label.name == '[beta] @guardian/commercial-core'
+    defaults:
+      run:
+        working-directory: ./core
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: guardian/actions-setup-node@main
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Build package
+        run: yarn build
+
+      - name: Grab last version
+        run: yarn version --new-version $(git tag -l | grep @guardian/commercial-core-\* |  sed -E 's|.*([0-9]+\.[0-9]+\.[0-9]+(-beta.[0-9]+)?)|\1|g' | tail -1) --no-git-tag-version
+
+      - name: Bump prerelease version
+        run: yarn version --prerelease --preid beta --no-git-tag-version
+
+      - name: Get Version
+        id: version
+        run: echo BETA_VERSION=@guardian/commercial-bundle-v$(node -p "require('./package.json').version") >> $GITHUB_OUTPUT
+
+      - name: Tag version
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@users.noreply.github.com
+          git tag -a ${{ steps.version.outputs.BETA_VERSION }} -m "Release ${{ steps.version.outputs.BETA_VERSION }}"
+
+      - name: Push tag
+        run: git push origin ${{ steps.version.outputs.BETA_VERSION }}
+
+      - name: Release
+        run: yarn publish --tag beta --new-version ${{ steps.version.outputs.BETA_VERSION }}
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🚀 ${{ steps.version.outputs.BETA_VERSION }} published to npm as a beta release'
+            })
