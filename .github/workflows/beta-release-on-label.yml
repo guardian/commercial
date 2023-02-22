@@ -6,7 +6,8 @@ name: Publish Beta Package
 # semanic-release is not used here as it's very opinionated and refuses to work with non-semver versions or pull requests
 on:
   pull_request:
-    types: [labeled]
+  workflow_dispatch:
+    # types: [labeled, synchronize]
 
 jobs:
   has-permission:
@@ -20,10 +21,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   bundle-release:
-    name: Bundle Beta Release
+    name: "@guardian/commercial-bundle"
     runs-on: ubuntu-latest
     needs: has-permission
-    if: github.event.label.name == 'Bundle Beta Release'
+    # if: github.event.label.name == '[beta] @guardian/commercial-bundle'
     defaults:
       run:
         working-directory: ./bundle
@@ -32,7 +33,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          persist-credentials: false
 
       - name: Setup node
         uses: guardian/actions-setup-node@main
@@ -49,24 +49,40 @@ jobs:
       - name: Bump prerelease version
         run: yarn version --prerelease --preid beta --no-git-tag-version
 
+      - name: Get Version
+        id: version
+        run: echo BETA_VERSION=@guardian/commercial-bundle-v$(node -p "require('./package.json').version") >> $GITHUB_OUTPUT
+
       - name: Tag version
-        run: git tag -a @guardian/commercial-bundle-v$(node -p "require('./package.json').version") -m "Release @guardian/commercial-bundle-v$(node -p "require('./package.json').version")"
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@users.noreply.github.com
+          git tag -a ${{ steps.version.outputs.BETA_VERSION }} -m "Release ${{ steps.version.outputs.BETA_VERSION }}"
 
       - name: Push tag
-        run: git push --follow-tags
+        run: git push origin ${{ steps.version.outputs.BETA_VERSION }}
 
       - name: Release
-        run: npm publish --tag next
+        run: yarn publish --tag beta --new-version ${{ steps.version.outputs.BETA_VERSION }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          HUSKY: 0
+
+      - uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🚀 ${{ steps.version.outputs.BETA_VERSION }} published to npm as a beta release'
+            })
 
   core-release:
-    name: Core Beta Release
+    name: "@guardian/commercial-core"
     runs-on: ubuntu-latest
     needs: has-permission
-    if: github.event.label.name == 'Core Beta Release'
+    if: github.event.label.name == '[beta] @guardian/commercial-core'
     defaults:
       run:
         working-directory: ./core
@@ -75,7 +91,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          persist-credentials: false
 
       - name: Setup node
         uses: guardian/actions-setup-node@main
@@ -92,15 +107,31 @@ jobs:
       - name: Bump prerelease version
         run: yarn version --prerelease --preid beta --no-git-tag-version
 
+      - name: Get Version
+        id: version
+        run: echo BETA_VERSION=@guardian/commercial-bundle-v$(node -p "require('./package.json').version") >> $GITHUB_OUTPUT
+
       - name: Tag version
-        run: git tag -a @guardian/commercial-core-v$(node -p "require('./package.json').version") -m "Release @guardian/commercial-core-v$(node -p "require('./package.json').version")"
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@users.noreply.github.com
+          git tag -a ${{ steps.version.outputs.BETA_VERSION }} -m "Release ${{ steps.version.outputs.BETA_VERSION }}"
 
       - name: Push tag
-        run: git push --follow-tags
+        run: git push origin ${{ steps.version.outputs.BETA_VERSION }}
 
       - name: Release
-        run: npm publish --tag next
+        run: yarn publish --tag beta --new-version ${{ steps.version.outputs.BETA_VERSION }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          HUSKY: 0
+
+      - uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🚀 ${{ steps.version.outputs.BETA_VERSION }} published to npm as a beta release'
+            })
