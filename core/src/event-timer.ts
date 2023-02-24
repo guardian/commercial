@@ -38,7 +38,6 @@ interface EventTimerProperties {
 	type?: ConnectionType;
 	downlink?: number;
 	effectiveType?: string;
-	offlineCount?: number;
 	adSlotsInline?: number;
 	adSlotsTotal?: number;
 	// the height of the page / the viewport height
@@ -158,9 +157,7 @@ class EventTimer {
 			],
 		};
 
-		this.properties = {
-			offlineCount: window.guardian.offlineCount,
-		};
+		this.properties = {};
 
 		if (window.navigator.connection) {
 			this.properties.type = window.navigator.connection.type;

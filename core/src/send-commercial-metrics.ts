@@ -23,7 +23,6 @@ type EventProperties = {
 	type?: ConnectionType;
 	downlink?: number;
 	effectiveType?: string;
-	offlineCount?: number;
 };
 
 type CommercialMetricsPayload = {
@@ -110,6 +109,25 @@ function sendMetrics() {
 
 type ArrayMetric = [key: string, value: string | number];
 
+/**
+ * Gather how many times the user has experienced the “offline” event
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/offline_event
+ *
+ * This value should accessed as late as through the page lifecycle
+ * to get an accurate value.
+ *
+ * Relevant for an @guardian/open-journalism investigation.
+ */
+const getOfflineCount = (): Metric[] =>
+	window.guardian.offlineCount
+		? [
+				{
+					name: 'offlineCount',
+					value: window.guardian.offlineCount,
+				},
+		  ]
+		: [];
+
 function gatherMetricsOnPageUnload(): void {
 	// Assemble commercial properties and metrics
 	const eventTimer = EventTimer.get();
@@ -126,7 +144,9 @@ function gatherMetricsOnPageUnload(): void {
 		.concat(adBlockerProperties);
 	commercialMetricsPayload.properties = properties;
 
-	const metrics: readonly Metric[] = roundTimeStamp(eventTimer.events);
+	const metrics: readonly Metric[] = roundTimeStamp(eventTimer.events).concat(
+		getOfflineCount(),
+	);
 	commercialMetricsPayload.metrics = metrics;
 
 	sendMetrics();
