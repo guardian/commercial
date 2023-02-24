@@ -35,7 +35,7 @@
 	},
 	"prettier": "@guardian/prettier",
 	"dependencies": {
-		"type-fest": "2.12.2"
+		"type-fest": "3.6.0"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^17.0.3",
