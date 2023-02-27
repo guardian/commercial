@@ -119,7 +119,7 @@ type ArrayMetric = [key: string, value: string | number];
  * Relevant for an @guardian/open-journalism investigation.
  */
 const getOfflineCount = (): Metric[] =>
-	typeof window.guardian.offlineCount === "number"
+	typeof window.guardian.offlineCount === 'number'
 		? [
 				{
 					name: 'offlineCount',
