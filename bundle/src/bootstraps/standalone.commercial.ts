@@ -11,6 +11,7 @@
  *
  * Changes here will be served on DCR & Frontend rendered pages.
  */
+
 import { EventTimer } from '@guardian/commercial-core';
 import {
 	getConsentFor,
