@@ -505,6 +505,89 @@ describe('send commercial metrics', () => {
 			]);
 		});
 	});
+
+	describe('record offline count', () => {
+		it('returns the value if present', async () => {
+			mockOnConsent(tcfv2AllConsent);
+
+			await initCommercialMetrics({
+				pageViewId: PAGE_VIEW_ID,
+				browserId: BROWSER_ID,
+				isDev: IS_NOT_DEV,
+				adBlockerInUse: ADBLOCK_NOT_IN_USE,
+				sampling: USER_IN_SAMPLING,
+			});
+
+			window.guardian.offlineCount = 3;
+
+			setVisibility('hidden');
+			global.dispatchEvent(new Event('pagehide'));
+
+			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+				[
+					Endpoints.PROD,
+					JSON.stringify({
+						...defaultMetrics,
+						metrics: [{ name: 'offlineCount', value: 3 }],
+					}),
+				],
+			]);
+		});
+
+		it('records a value of 0, even if falsy', async () => {
+			mockOnConsent(tcfv2AllConsent);
+
+			await initCommercialMetrics({
+				pageViewId: PAGE_VIEW_ID,
+				browserId: BROWSER_ID,
+				isDev: IS_NOT_DEV,
+				adBlockerInUse: ADBLOCK_NOT_IN_USE,
+				sampling: USER_IN_SAMPLING,
+			});
+
+			window.guardian.offlineCount = 0;
+
+			setVisibility('hidden');
+			global.dispatchEvent(new Event('pagehide'));
+
+			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+				[
+					Endpoints.PROD,
+					JSON.stringify({
+						...defaultMetrics,
+						metrics: [{ name: 'offlineCount', value: 0 }],
+					}),
+				],
+			]);
+		});
+
+		it('returns nothing if absent', async () => {
+			mockOnConsent(tcfv2AllConsent);
+
+			await initCommercialMetrics({
+				pageViewId: PAGE_VIEW_ID,
+				browserId: BROWSER_ID,
+				isDev: IS_NOT_DEV,
+				adBlockerInUse: ADBLOCK_NOT_IN_USE,
+				sampling: USER_IN_SAMPLING,
+			});
+
+			delete window.guardian.offlineCount;
+
+			setVisibility('hidden');
+			global.dispatchEvent(new Event('pagehide'));
+
+			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+				[
+					Endpoints.PROD,
+					JSON.stringify({
+						...defaultMetrics,
+						metrics: [],
+					}),
+				],
+			]);
+		});
+	});
 });
 
 describe('send commercial metrics helpers', () => {
