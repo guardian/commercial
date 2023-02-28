@@ -12,6 +12,7 @@ module.exports = {
 		// TODO - remove these rule once we've migrated to commercial-core
 		'@typescript-eslint/no-unsafe-argument': 'off',
 		'@typescript-eslint/no-unsafe-return': 'off',
+		'@typescript-eslint/unbound-method': 'off',
 	},
 	overrides: [
 		{

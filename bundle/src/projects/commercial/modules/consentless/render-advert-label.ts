@@ -3,7 +3,6 @@
 -- Nested fastdom measure-mutate promises throw the error:
 -- "Promise returned in function argument where a void return was expected"
 */
-
 import crossIcon from 'svgs/icon/cross.svg';
 import fastdom from '../../../../lib/fastdom-promise';
 import { shouldRenderLabel } from '../dfp/render-advert-label';
