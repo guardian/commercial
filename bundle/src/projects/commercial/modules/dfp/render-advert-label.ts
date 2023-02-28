@@ -4,7 +4,7 @@
 -- "Promise returned in function argument where a void return was expected"
 */
 import { getCookie } from '@guardian/libs';
-import crossIcon from 'svgs/icon/cross.svg';
+import crossIcon from '../../../../../static/svg/icon/cross.svg';
 import fastdom from '../../../../lib/fastdom-promise';
 
 const shouldRenderLabel = (adSlotNode: HTMLElement): boolean => {
