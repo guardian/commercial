@@ -43,16 +43,18 @@ Try to write PR titles in the conventional commit format, and squash and merge w
 
 ### Working locally with DCR
 
-To use the bundle localy with DCR, run `COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js PORT=3030 make dev` in the DCR directory.
+To use the bundle locally with DCR, run `COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js PORT=3030 make dev` in the DCR directory.
 
 DCR will then use the local bundle instead of the one from PROD/CODE.
 
 ### Working locally with Frontend
 
-To use the bundle localy with Frontend, run `yarn link` in the bundle directory. Then run `yarn link @guardian/commercial-bundle` in the frontend directory. Finally, start the frontend server as usual.
+To use the bundle locally with Frontend, run `yarn link` in the bundle directory. Then run `yarn link @guardian/commercial-bundle` in the frontend directory. Finally, start the frontend server as usual.
 
 Frontend will then use the local bundle instead of the one from PROD/CODE.
 
 ### Testing on CODE
 
-Currently you'll need to merge your changes to main to test on CODE so a release is published to npm that you can use on your branch in Frontend.
+To test the bundle on CODE, create a PR, add the `[beta] @guardian/commercial-bundle` label, this will release a beta version of the bundle to NPM, the exact version will be commented on your PR.
+
+On a branch on frontend you can update the version of the bundle to the beta version and deploy to CODE to test.
