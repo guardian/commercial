@@ -35,7 +35,7 @@ const shouldRenderCloseButton = (adSlotNode: HTMLElement): boolean =>
 const createAdCloseDiv = (): HTMLElement => {
 	const buttonDiv: HTMLElement = document.createElement('button');
 	buttonDiv.className = 'ad-slot__close-button';
-	buttonDiv.innerHTML = crossIcon.markup;
+	buttonDiv.innerHTML = crossIcon;
 	buttonDiv.onclick = () => {
 		const container: HTMLElement | null = buttonDiv.closest(
 			'.mobilesticky-container',
