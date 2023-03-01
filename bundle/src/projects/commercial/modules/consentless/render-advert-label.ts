@@ -10,7 +10,7 @@ import { shouldRenderLabel } from '../dfp/render-advert-label';
 export const createAdCloseDiv = (): HTMLElement => {
 	const closeDiv: HTMLElement = document.createElement('button');
 	closeDiv.className = 'ad-slot__close-button';
-	closeDiv.innerHTML = crossIcon.markup;
+	closeDiv.innerHTML = crossIcon;
 	closeDiv.onclick = () => {
 		const container: HTMLElement | null = closeDiv.closest(
 			'.mobilesticky-container',
