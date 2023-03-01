@@ -1,6 +1,5 @@
-import type { AdSize } from '@guardian/commercial-core';
 import { EventTimer } from '@guardian/commercial-core';
-import { requestBidsForAd } from '../header-bidding/request-bids';
+import { refreshBidsForAd } from '../header-bidding/request-bids';
 import { stripDfpAdPrefixFrom } from '../header-bidding/utils';
 import type { Advert } from './Advert';
 
@@ -18,7 +17,6 @@ export const loadAdvert = (advert: Advert): void => {
 		})
 		.then(() => {
 			eventTimer.trigger('slotReady', adName);
-			return requestBidsForAd(advert);
 		})
 		.then(() => {
 			eventTimer.trigger('slotInitialised', adName);
