@@ -5,6 +5,7 @@ import { isInVariantSynchronous } from 'common/modules/experiments/ab';
 import { billboardsInMerch } from 'common/modules/experiments/tests/billboards-in-merch';
 import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
 import { commercialFeatures } from '../../../common/modules/commercial/commercial-features';
+import { requestBidsForAds } from '../header-bidding/request-bids';
 import { removeDisabledSlots } from '../remove-slots';
 import type { Advert } from './Advert';
 import { createAdvert } from './create-advert';
@@ -88,6 +89,9 @@ const fillAdvertSlots = async (): Promise<void> => {
 	adverts.forEach((advert, index) => {
 		dfpEnv.advertIds[advert.id] = currentLength + index;
 	});
+
+	// Request bids for all server rendered adverts
+	await requestBidsForAds(adverts);
 
 	adverts.forEach(queueAdvert);
 	if (dfpEnv.shouldLazyLoad()) {
