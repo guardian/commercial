@@ -4,6 +4,7 @@ import { PREBID_TIMEOUT } from '@guardian/commercial-core/dist/esm/constants';
 import { onConsent } from '@guardian/consent-management-platform';
 import type { Framework } from '@guardian/consent-management-platform/dist/types';
 import { isString, log } from '@guardian/libs';
+import { flatten } from 'lodash-es';
 import type { Advert } from 'commercial/modules/dfp/Advert';
 import { getPageTargeting } from 'common/modules/commercial/build-page-targeting';
 import { dfpEnv } from '../../dfp/dfp-env';
@@ -137,6 +138,7 @@ declare global {
 			que: {
 				push: (cb: () => void) => void;
 			};
+			addAdUnits: (adUnits: PrebidAdUnit[]) => void;
 			// https://docs.prebid.org/dev-docs/publisher-api-reference/requestBids.html
 			requestBids(requestObj?: {
 				adUnitCodes?: string[];
@@ -516,4 +518,42 @@ const requestBids = async (
 	return requestQueue;
 };
 
-export const prebid = { initialise, requestBids };
+const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
+	const adUnits = await onConsent()
+		.then((consentState) => {
+			// calculate this once before mapping over
+			const pageTargeting = getPageTargeting(consentState);
+			return flatten(
+				adverts.map((advert) =>
+					getHeaderBiddingAdSlots(advert)
+						.map(
+							(slot) =>
+								new PrebidAdUnit(advert, slot, pageTargeting),
+						)
+						.filter((adUnit) => !adUnit.isEmpty()),
+				),
+			);
+		})
+		.catch((e) => {
+			// silently fail
+			log('commercial', 'Failed to execute prebid onConsent', e);
+			return [];
+		});
+	console.log(adUnits);
+
+	return new Promise((resolve) => {
+		window.pbjs?.que.push(() => {
+			window.pbjs?.requestBids({
+				adUnits,
+				bidsBackHandler() {
+					if (isString(adUnits[0].code)) {
+						window.pbjs?.setTargetingForGPTAsync([adUnits[0].code]);
+					}
+					resolve();
+				},
+			});
+		});
+	});
+};
+
+export const prebid = { initialise, requestBids, requestBidsForAds };

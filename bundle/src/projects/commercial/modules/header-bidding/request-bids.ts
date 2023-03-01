@@ -31,12 +31,16 @@ const retainTopAboveNavSlotSize = (
 	];
 };
 
-export const requestBidsForAd = async (advert: Advert): Promise<void> =>
-	Promise.all([prebid.requestBids(advert), a9.requestBids(advert)]).then(
-		() => {
-			return;
-		},
-	);
+export const requestBidsForAd = async (advert: Advert): Promise<void> => {
+	await Promise.all([prebid.requestBids(advert), a9.requestBids(advert)]);
+};
+
+export const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
+	await Promise.all([
+		prebid.requestBidsForAds(adverts),
+		a9.requestBidsForAds(adverts),
+	]);
+};
 
 export const refreshBidsForAd = async (advert: Advert): Promise<void> => {
 	const prebidPromise = prebid.requestBids(
@@ -49,7 +53,5 @@ export const refreshBidsForAd = async (advert: Advert): Promise<void> => {
 		retainTopAboveNavSlotSize(advert.size, a9Slot),
 	);
 
-	return Promise.all([prebidPromise, a9Promise]).then(() => {
-		return;
-	});
+	await Promise.all([prebidPromise, a9Promise]);
 };
