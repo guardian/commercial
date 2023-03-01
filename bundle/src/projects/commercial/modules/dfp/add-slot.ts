@@ -21,26 +21,28 @@ const addSlot = (
 	adSlot: HTMLElement,
 	forceDisplay: boolean,
 	additionalSizes?: SizeMapping,
-): void => {
-	window.googletag.cmd.push(() => {
-		if (!(adSlot.id in dfpEnv.advertIds)) {
-			const advert = createAdvert(adSlot, additionalSizes);
-			if (advert === null) return;
-
-			// dynamically add ad slot
-			displayAd(advert, forceDisplay);
-		} else {
-			const errorMessage = `Attempting to add slot with exisiting id ${adSlot.id}`;
-			reportError(
-				Error(errorMessage),
-				{
-					feature: 'commercial',
-					slotId: adSlot.id,
-				},
-				false,
-			);
-			console.error(errorMessage);
-		}
+): Promise<Advert| null> => {
+	return new Promise((resolve) => {
+		window.googletag.cmd.push(() => {
+			if (!(adSlot.id in dfpEnv.advertIds)) {
+				const advert = createAdvert(adSlot, additionalSizes);
+				resolve(advert);
+				if (advert === null) return;
+				// dynamically add ad slot
+				displayAd(advert, forceDisplay);
+			} else {
+				const errorMessage = `Attempting to add slot with exisiting id ${adSlot.id}`;
+				reportError(
+					Error(errorMessage),
+					{
+						feature: 'commercial',
+						slotId: adSlot.id,
+					},
+					false,
+				);
+				console.error(errorMessage);
+			}
+		});
 	});
 };
 
