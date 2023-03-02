@@ -1,3 +1,4 @@
+import { flatten } from 'lodash-es';
 import { noop } from 'lib/noop';
 import type { Advert } from '../../dfp/Advert';
 import { dfpEnv } from '../../dfp/dfp-env';
@@ -75,9 +76,31 @@ const requestBids = (
 	return requestQueue;
 };
 
+const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
+	const adUnits = flatten(
+		adverts.map((advert) =>
+			getHeaderBiddingAdSlots(advert).map(
+				(slot) => new A9AdUnit(advert, slot),
+			),
+		),
+	);
+
+	console.log(adUnits);
+
+	return new Promise((resolve) => {
+		window.apstag?.fetchBids({ slots: adUnits }, () => {
+			window.googletag.cmd.push(() => {
+				window.apstag?.setDisplayBids();
+				resolve();
+			});
+		});
+	});
+};
+
 export const a9 = {
 	initialise,
 	requestBids,
+	requestBidsForAds,
 };
 
 export const _ = {
