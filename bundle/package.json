@@ -38,6 +38,8 @@
 		"@babel/runtime": "^7.11.2",
 		"@commitlint/cli": "^17.0.3",
 		"@commitlint/config-conventional": "^17.0.0",
+		"@percy/cli": "^1.20.1",
+		"@percy/cypress": "^3.1.2",
 		"@semantic-release/github": "^8.0.2",
 		"@types/google.analytics": "^0.0.42",
 		"@types/googletag": "~1.1.3",
