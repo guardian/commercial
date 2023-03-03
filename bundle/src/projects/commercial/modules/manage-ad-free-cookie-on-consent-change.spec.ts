@@ -14,6 +14,10 @@ const {
 const { AdFreeCookieReasons, setAdFreeCookie, maybeUnsetAdFreeCookie } =
 	ActualManageAdFreeCookie;
 
+jest.mock('common/modules/experiments/ab', () => ({
+	isInVariantSynchronous: jest.fn(() => false),
+}));
+
 jest.mock('@guardian/consent-management-platform', () => ({
 	onConsentChange: jest.fn(),
 }));
