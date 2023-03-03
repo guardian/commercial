@@ -21,6 +21,7 @@ import { log } from '@guardian/libs';
 import { initTeadsCookieless } from 'commercial/modules/teads-cookieless';
 import { isInVariantSynchronous } from 'common/modules/experiments/ab';
 import { consentlessAds } from 'common/modules/experiments/tests/consentlessAds';
+import { elementsManager } from 'common/modules/experiments/tests/elements-manager';
 import { reportError } from '../lib/report-error';
 import { catchErrorsWithContext } from '../lib/robust';
 import { initAdblockAsk } from '../projects/commercial/adblock-ask';
@@ -218,6 +219,11 @@ const chooseAdvertisingTag = async () => {
 	const consentState = await onConsent();
 	// Only load the Opt Out tag in TCF regions when there is no consent for Googletag
 	if (consentState.tcfv2 && !getConsentFor('googletag', consentState)) {
+		// Don't load OptOut (for now) if loading Elements Manager
+		if (!isInVariantSynchronous(elementsManager, 'variant')) {
+			return;
+		}
+
 		void import(
 			/* webpackChunkName: "consentless" */
 			'./commercial.consentless'
@@ -230,6 +236,13 @@ const chooseAdvertisingTag = async () => {
 		}
 	}
 };
+
+if (isInVariantSynchronous(elementsManager, 'variant')) {
+	void import(
+		/* webpackChunkName: "elements-manager" */
+		'../projects/commercial/modules/elementsManager'
+	).then(({ initElementsManager }) => initElementsManager());
+}
 
 /* Provide consentless advertising in the variant of a zero-percent test,
    regardless of consent state. This is currently just for testing purposes.
