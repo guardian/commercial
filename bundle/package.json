@@ -97,7 +97,7 @@
 		"@guardian/eslint-config-typescript": "^3.0.0",
 		"@guardian/libs": "^10.0.0",
 		"@guardian/prettier": "^2.1.1",
-		"@guardian/source-foundations": "^7.0.1",
+		"@guardian/source-foundations": "^9.0.0",
 		"@guardian/support-dotcom-components": "^1.0.7",
 		"@octokit/core": "^4.0.5",
 		"csstype": "^3.1.1",
