@@ -546,9 +546,11 @@ const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
 			window.pbjs?.requestBids({
 				adUnits,
 				bidsBackHandler() {
-					if (isString(adUnits[0].code)) {
-						window.pbjs?.setTargetingForGPTAsync([adUnits[0].code]);
-					}
+					adUnits.forEach((adUnit) => {
+						if (isString(adUnit.code)) {
+							window.pbjs?.setTargetingForGPTAsync([adUnit.code]);
+						}
+					});
 					resolve();
 				},
 			});
