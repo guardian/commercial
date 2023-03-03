@@ -94,7 +94,7 @@
 		"@guardian/commercial-core": "^5.3.0",
 		"@guardian/consent-management-platform": "11.0.0",
 		"@guardian/core-web-vitals": "^1.0.0",
-		"@guardian/eslint-config-typescript": "^3.0.0",
+		"@guardian/eslint-config-typescript": "^4.0.0",
 		"@guardian/libs": "^10.0.0",
 		"@guardian/prettier": "^2.1.1",
 		"@guardian/source-foundations": "^9.0.0",
