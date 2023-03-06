@@ -88,7 +88,7 @@ const buildPageTargeting = ({
 
 	const contentTargeting: ContentTargeting = getContentTargeting({
 		webPublicationDate: page.webPublicationDate,
-		eligibleForDCR: isDotcomRendering,
+		eligibleForDCR: page.dcrCouldRender,
 		path: `/${page.pageId}`,
 		renderingPlatform: isDotcomRendering
 			? 'dotcom-rendering'
