@@ -860,4 +860,28 @@ describe('Build Page Targeting', () => {
 			expect(valueFromStorage).toEqual(valueGenerated);
 		});
 	});
+
+	describe('dcre dotcom-rendering-eligible', () => {
+		it('should be true if page is a dotcom-rendering-eligible page', () => {
+			window.guardian.config.page.dcrCouldRender = true;
+			expect(
+				buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: emptyConsent,
+				}).dcre,
+			).toBe('t');
+		});
+
+		it('should be false if page is not a dotcom-rendering-eligible page', () => {
+			window.guardian.config.page.dcrCouldRender = false;
+			expect(
+				buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: emptyConsent,
+				}).dcre,
+			).toBe('f');
+		});
+	});
 });
