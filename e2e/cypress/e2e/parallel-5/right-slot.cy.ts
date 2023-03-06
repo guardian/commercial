@@ -1,5 +1,5 @@
 import { breakpoints } from '@guardian/source-foundations';
-import { articles, liveblogs } from '../fixtures/pages';
+import { articles, liveblogs } from '../../fixtures/pages';
 
 describe('right slot on pages', () => {
 	beforeEach(() => {

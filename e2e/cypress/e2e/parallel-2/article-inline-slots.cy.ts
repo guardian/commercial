@@ -1,6 +1,6 @@
-import { breakpoints } from '../fixtures/breakpoints';
-import { articles, liveblogs } from '../fixtures/pages';
-import { mockIntersectionObserver } from '../lib/util';
+import { breakpoints } from '../../fixtures/breakpoints';
+import { articles, liveblogs } from '../../fixtures/pages';
+import { mockIntersectionObserver } from '../../lib/util';
 
 const pages = articles.filter((page) => 'expectedMinInlineSlotsOnPage' in page);
 

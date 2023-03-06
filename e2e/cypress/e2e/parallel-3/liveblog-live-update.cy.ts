@@ -1,6 +1,6 @@
-import { breakpoints } from '../fixtures/breakpoints';
-import { liveblogs } from '../fixtures/pages';
-import { mockIntersectionObserver } from '../lib/util';
+import { breakpoints } from '../../fixtures/breakpoints';
+import { liveblogs } from '../../fixtures/pages';
+import { mockIntersectionObserver } from '../../lib/util';
 
 const pages = [...liveblogs];
 
