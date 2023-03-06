@@ -48,6 +48,8 @@ jobs:
         uses: bahmutov/npm-install@v1
         with:
           working-directory: ./dcr
+        env:
+          NODE_ENV: production
 
       - name: Build DCR
         run: make build
