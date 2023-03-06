@@ -11,6 +11,10 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [1, 2, 3, 4, 5]
     steps:
       # Commercial
       - name: Checkout
@@ -44,6 +48,8 @@ jobs:
         uses: bahmutov/npm-install@v1
         with:
           working-directory: ./dcr
+        env:
+          NODE_ENV: production
 
       - name: Build DCR
         run: make build
@@ -57,7 +63,7 @@ jobs:
           wait-on: "http://localhost:3030, http://localhost:3031/graun.standalone.commercial.js"
           wait-on-timeout: 30
           browser: chrome
-          spec: cypress/e2e/**/*
+          spec: cypress/e2e/parallel-${{ matrix.group }}/*
         env:
           PORT: 3030
           COMMERCIAL_BUNDLE_URL: http://localhost:3031/graun.standalone.commercial.js
