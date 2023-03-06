@@ -106,6 +106,7 @@ interface Config {
 		[key: `${string}Variant`]: 'variant';
 	};
 	isDotcomRendering: boolean;
+	frontendAssetsFullURL?: string;
 	googleAnalytics?: {
 		trackers?: {
 			editorial?: string;

@@ -54,13 +54,14 @@ import { init as initTrackScrollDepth } from '../projects/commercial/modules/tra
 import { commercialFeatures } from '../projects/common/modules/commercial/commercial-features';
 import type { Modules } from './types';
 
-const { isDotcomRendering, page } = window.guardian.config;
+const { isDotcomRendering, frontendAssetsFullURL, page } =
+	window.guardian.config;
 
 const decideAssetsPath = () => {
 	if (process.env.OVERRIDE_BUNDLE_PATH) {
 		return process.env.OVERRIDE_BUNDLE_PATH;
 	} else {
-		const assetsPath = page.frontendAssetsFullURL ?? page.assetsPath;
+		const assetsPath = frontendAssetsFullURL ?? page.assetsPath;
 		return `${assetsPath}javascripts/commercial/`;
 	}
 };
