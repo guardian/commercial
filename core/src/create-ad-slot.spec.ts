@@ -23,12 +23,13 @@ const DEFAULT_CONFIG = {
 	isDotcomRendering: true,
 	ophan: { pageViewId: 'pv_id_1234567890' },
 	page: {
-		pageId: 'world/uk',
+		dcrCouldRender: true,
+		edition: 'UK' as const,
 		isPreview: false,
 		isSensitive: false,
+		pageId: 'world/uk',
 		section: 'uk-news',
 		videoDuration: 63,
-		edition: 'UK' as const,
 		webPublicationDate: 608857200,
 	},
 };

@@ -51,6 +51,7 @@ export type GuardianWindowConfig = {
 		pageViewId: string;
 	};
 	page: {
+		dcrCouldRender: boolean;
 		edition: Edition;
 		isPreview: boolean;
 		isSensitive: boolean;
