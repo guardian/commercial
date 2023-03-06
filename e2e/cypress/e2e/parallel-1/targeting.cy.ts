@@ -1,5 +1,5 @@
-import { allPages, articles } from '../fixtures/pages';
-import { bidderURLs, wins } from '../fixtures/prebid';
+import { allPages, articles } from '../../fixtures/pages';
+import { bidderURLs, wins } from '../../fixtures/prebid';
 
 const gamUrl = 'https://securepubads.g.doubleclick.net/gampad/ads?**';
 

@@ -1,4 +1,4 @@
-import { allPages } from '../fixtures/pages';
+import { allPages } from '../../fixtures/pages';
 
 describe('top-above-nav on pages', () => {
 	beforeEach(() => {

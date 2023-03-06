@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
-import { articles } from '../fixtures/pages';
-import { fakeLogOut, fakeLogin } from '../lib/util';
+import { articles } from '../../fixtures/pages';
+import { fakeLogOut, fakeLogin } from '../../lib/util';
 import { AdFreeCookieReasons } from 'lib/manage-ad-free-cookie';
 
 // Don't fail tests when uncaught exceptions occur
