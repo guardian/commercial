@@ -57,8 +57,8 @@ jobs:
               working-directory: ./dcr/dotcom-rendering
 
             - name: Start Commercial server
-              run: make commercial-dev & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
-              working-directory: ./frontend
+              run: yarn server & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
+              working-directory: ./commercial/bundle
 
             - name: Start DCR server
               run: make start-ci & npx wait-on -v -i 1000 http://localhost:3030
@@ -69,13 +69,13 @@ jobs:
 
             - name: Run Percy Visual Regression Tests
               run: yarn cypress:run:snapshot
-              working-directory: ./frontend
+              working-directory: ./e2e
               env:
                   PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
             - name: Wait for Percy Snapshots
               run: yarn percy build:wait --verbose --fail-on-changes --project ced09b1a/commercial --commit ${{ github.event.pull_request.head.sha }} --timeout 900000 --interval 5000
-              working-directory: ./frontend
+              working-directory: ./e2e
               env:
                   PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
@@ -83,10 +83,10 @@ jobs:
               if: always()
               with:
                   name: cypress-videos
-                  path: frontend/cypress/videos
+                  path: ./e2e/cypress/videos
 
             - uses: actions/upload-artifact@v2
               if: failure()
               with:
                   name: cypress-screenshots
-                  path: frontend/cypress/screenshots
+                  path: ./e2e/cypress/screenshots
