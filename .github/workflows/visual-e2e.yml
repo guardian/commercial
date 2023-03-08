@@ -19,21 +19,21 @@ jobs:
         name: Test
         runs-on: ubuntu-latest
         steps:
-            # Frontend
-            - name: Checkout frontend
+            # Commercial
+            - name: Checkout
               uses: actions/checkout@v3
               with:
-                  path: ./frontend
+                path: ./commercial
 
-            - name: Setup frontend node
+            - name: Setup node
               uses: actions/setup-node@v3
               with:
-                  node-version-file: './frontend/.nvmrc'
+                node-version-file: "./commercial/.nvmrc"
 
-            - name: Install Frontend dependencies
-              uses: bahmutov/npm-install@v1
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
               with:
-                  working-directory: ./frontend
+                working-directory: ./commercial
 
             # DCR
             - name: Checkout DCR
@@ -48,7 +48,7 @@ jobs:
                   node-version-file: './dcr/.nvmrc'
 
             - name: Install DCR dependencies
-              uses: bahmutov/npm-install@v1
+              run: yarn install --frozen-lockfile
               with:
                   working-directory: ./dcr
 
