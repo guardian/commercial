@@ -4,10 +4,10 @@
 	"main": "index.js",
 	"license": "MIT",
 	"scripts": {
-		"cypress:open": "cypress open --e2e --browser=chrome",
-		"cypress:run": "cypress run --spec 'cypress/e2e/**/*'",
-		"cypress:open:snapshot": "cypress open --e2e --browser=chrome --config specPattern='cypress/snapshot/**/*'",
-		"cypress:run:snapshot": "percy exec -- cypress run --config specPattern='cypress/snapshot/**/*'"
+		"e2e:open": "cypress open --e2e --browser=chrome",
+		"e2e:run": "cypress run --spec 'cypress/e2e/**/*'",
+		"visual:open": "cypress open --e2e --browser=chrome --config specPattern='cypress/snapshot/**/*'",
+		"visual:run": "percy exec -- cypress run --config specPattern='cypress/snapshot/**/*'"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.0.1",
