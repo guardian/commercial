@@ -28,7 +28,7 @@ jobs:
           node-version-file: "./commercial/.nvmrc"
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: yarn install --frozen-lockfile
         with:
           working-directory: ./commercial
 
@@ -45,7 +45,7 @@ jobs:
           node-version-file: "./dcr/.nvmrc"
 
       - name: Install DCR dependencies
-        uses: bahmutov/npm-install@v1
+        run: yarn install --frozen-lockfile
         with:
           working-directory: ./dcr
         env:
