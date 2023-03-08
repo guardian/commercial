@@ -29,8 +29,7 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-        with:
-          working-directory: ./commercial
+        working-directory: ./commercial
 
       # DCR
       - name: Checkout DCR
@@ -46,8 +45,7 @@ jobs:
 
       - name: Install DCR dependencies
         run: yarn install --frozen-lockfile
-        with:
-          working-directory: ./dcr
+        working-directory: ./dcr
         env:
           NODE_ENV: production
 
