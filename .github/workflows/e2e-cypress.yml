@@ -1,4 +1,4 @@
-name: E2E Tests
+name: E2E Cypress
 on:
   workflow_dispatch:
   pull_request:

@@ -1,4 +1,4 @@
-name: Commercial E2E Visual Tests
+name: E2E Visual
 on: workflow_dispatch
     # pull_request:
     #     paths:

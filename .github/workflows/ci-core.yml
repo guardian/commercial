@@ -1,4 +1,4 @@
-name: Commercial Bundle CI
+name: CI Core
 on:
   push:
     branches:
@@ -9,11 +9,23 @@ on:
 
 defaults:
   run:
-    working-directory: ./bundle
+    working-directory: ./core
 
 jobs:
+  docs:
+    name: Doc
+    runs-on: ubuntu-latest
+    steps:
+      - name: TOC Generator
+        uses: technote-space/toc-generator@v4
+        with:
+          TOC_TITLE: "## Table of contents"
+          MAX_HEADER_LEVEL: 3
+          TARGET_PATHS: core/README.md
+
   test:
     name: Test
+    needs: [docs]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -29,10 +41,18 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Run unit tests
-        run: yarn test --ci
+        run: yarn test --coverage --ci
+
+      - name: Report coverage
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          base-path: ./core
+          path-to-lcov: ./core/coverage/lcov.info
 
   lint:
     name: Lint
+    needs: [docs]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -55,6 +75,7 @@ jobs:
 
   types:
     name: Type check
+    needs: [docs]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -74,6 +95,7 @@ jobs:
 
   build:
     name: Build
+    needs: [docs]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -95,8 +117,8 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3
         with:
-          name: bundle
-          path: bundle/dist
+          name: core
+          path: core/dist
 
   release:
     name: Release
@@ -122,8 +144,8 @@ jobs:
       - name: Fetch build
         uses: actions/download-artifact@v3
         with:
-          name: bundle
-          path: bundle/dist
+          name: core
+          path: core/dist
 
       - name: Release
         run: yarn semantic-release
