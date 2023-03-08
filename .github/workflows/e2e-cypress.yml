@@ -53,18 +53,20 @@ jobs:
         run: make build
         working-directory: ./dcr/dotcom-rendering
 
-      - name: Run Cypress
-        uses: cypress-io/github-action@v4
-        with:
-          working-directory: commercial/e2e
-          start: make -C ../../dcr/dotcom-rendering start-ci, yarn --cwd ../ workspace @guardian/commercial-bundle serve
-          wait-on: "http://localhost:3030, http://localhost:3031/graun.standalone.commercial.js"
-          wait-on-timeout: 30
-          browser: chrome
-          spec: cypress/e2e/parallel-${{ matrix.group }}/*
+      - name: Start DCR server
+        run: make start-ci & npx wait-on -v -i 1000 http://localhost:3030
+        working-directory: ./dcr/dotcom-rendering
         env:
-          PORT: 3030
-          COMMERCIAL_BUNDLE_URL: http://localhost:3031/graun.standalone.commercial.js
+            PORT: 3030
+            COMMERCIAL_BUNDLE_URL: http://localhost:3031/graun.standalone.commercial.js
+
+      - name: Start Commercial server
+        run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
+        working-directory: ./commercial/bundle
+
+      - name: Run Cypress
+        run: yarn cypress run --spec cypress/e2e/parallel-${{ matrix.group }}/*
+        working-directory: ./commercial/e2e
 
       - uses: actions/upload-artifact@v2
         if: always()

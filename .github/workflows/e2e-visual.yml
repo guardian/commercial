@@ -55,7 +55,7 @@ jobs:
               working-directory: ./dcr/dotcom-rendering
 
             - name: Start Commercial server
-              run: yarn server & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
+              run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
               working-directory: ./commercial/bundle
 
             - name: Start DCR server
