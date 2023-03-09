@@ -12,20 +12,8 @@ defaults:
     working-directory: ./core
 
 jobs:
-  docs:
-    name: Doc
-    runs-on: ubuntu-latest
-    steps:
-      - name: TOC Generator
-        uses: technote-space/toc-generator@v4
-        with:
-          TOC_TITLE: "## Table of contents"
-          MAX_HEADER_LEVEL: 3
-          TARGET_PATHS: core/README.md
-
   test:
     name: Test
-    needs: [docs]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -52,7 +40,6 @@ jobs:
 
   lint:
     name: Lint
-    needs: [docs]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -75,7 +62,6 @@ jobs:
 
   types:
     name: Type check
-    needs: [docs]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -95,7 +81,6 @@ jobs:
 
   build:
     name: Build
-    needs: [docs]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
