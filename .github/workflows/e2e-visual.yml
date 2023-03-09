@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   test:
-    name: Test
+    name: E2E Visual
     runs-on: ubuntu-latest
     steps:
       # Commercial

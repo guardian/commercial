@@ -9,7 +9,7 @@ concurrency:
 
 jobs:
   test:
-    name: Test
+    name: E2E Cypress
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
