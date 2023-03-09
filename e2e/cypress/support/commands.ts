@@ -30,26 +30,20 @@ Cypress.Commands.add('findAdSlotIframeBySlotId', (adSlotId: string) => {
 	cy.get(`#${adSlotId}`).find('iframe', { timeout: 30000 });
 });
 
-const allowAllButtons = ['Yes, I’m happy', 'Accept all', 'Yes, ok']
-	.map((title) => `button[title="${title}"]`)
-	.join(',');
-const manageConsent = 'Manage my cookies';
-const rejectAll = 'Reject all';
-
 Cypress.Commands.add('rejectAllConsent', () => {
 	cy.getIframeBody('sp_message_iframe_')
-		.find(`button[title="${manageConsent}"]`)
+		.find('button.sp_choice_type_12')
 		.click();
 
 	cy.getIframeBody('iframe[title="SP Consent Message"]')
-		.find(`button[title="${rejectAll}"]`, { timeout: 30000 })
+		.find('button.sp_choice_type_REJECT_ALL', { timeout: 30000 })
 		.click();
 	cy.wait(100);
 });
 
 Cypress.Commands.add('allowAllConsent', () => {
 	cy.getIframeBody('sp_message_iframe_')
-		.find(allowAllButtons, { timeout: 30000 })
+		.find('button.sp_choice_type_11', { timeout: 30000 })
 		.click();
 	cy.wait(100);
 });
