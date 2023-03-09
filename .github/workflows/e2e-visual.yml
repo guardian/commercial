@@ -1,12 +1,12 @@
 name: E2E Visual
-on:
-  pull_request:
-    paths:
-      - core/**
-      - bundle/**
-      - e2e/cypress/!(e2e)/**
-      - e2e/cypress.config.ts
-      - .github/workflows/e2e-visual.yml
+on: workflow_dispatch
+  # pull_request:
+  #   paths:
+  #     - core/**
+  #     - bundle/**
+  #     - e2e/cypress/!(e2e)/**
+  #     - e2e/cypress.config.ts
+  #     - .github/workflows/e2e-visual.yml
 
 concurrency:
   group: "commercial-e2e-visual-${{ github.head_ref }}"
