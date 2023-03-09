@@ -52,16 +52,16 @@ jobs:
         run: make build
         working-directory: ./dcr/dotcom-rendering
 
-      - name: Start Commercial server
-        run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
-        working-directory: ./commercial/bundle
-
       - name: Start DCR server
         run: make start-ci & npx wait-on -v -i 1000 http://localhost:3030
         working-directory: ./dcr/dotcom-rendering
         env:
           PORT: 3030
           COMMERCIAL_BUNDLE_URL: http://localhost:3031/graun.standalone.commercial.js
+
+      - name: Start Commercial server
+        run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
+        working-directory: ./commercial/bundle
 
       - name: Run Percy Visual Regression Tests
         run: yarn visual:run
