@@ -1,88 +1,88 @@
 name: E2E Visual
 on:
   pull_request:
-      paths:
-        - core/**
-        - bundle/**
-        - e2e/cypress/!(e2e)/**
-        - e2e/cypress.config.ts
-        - .github/workflows/e2e-visual.yml
+    paths:
+      - core/**
+      - bundle/**
+      - e2e/cypress/!(e2e)/**
+      - e2e/cypress.config.ts
+      - .github/workflows/e2e-visual.yml
 
 concurrency:
-    group: 'commercial-e2e-visual-${{ github.head_ref }}'
-    cancel-in-progress: true
+  group: "commercial-e2e-visual-${{ github.head_ref }}"
+  cancel-in-progress: true
 
 jobs:
-    test:
-        name: Test
-        runs-on: ubuntu-latest
-        steps:
-            # Commercial
-            - name: Checkout
-              uses: actions/checkout@v3
-              with:
-                path: ./commercial
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      # Commercial
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: ./commercial
 
-            - name: Setup node
-              uses: actions/setup-node@v3
-              with:
-                node-version-file: "./commercial/.nvmrc"
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: "./commercial/.nvmrc"
 
-            - name: Install dependencies
-              run: yarn install --frozen-lockfile
-              working-directory: ./commercial
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: ./commercial
 
-            # DCR
-            - name: Checkout DCR
-              uses: actions/checkout@v3
-              with:
-                repository: guardian/dotcom-rendering
-                path: ./dcr
+      # DCR
+      - name: Checkout DCR
+        uses: actions/checkout@v3
+        with:
+          repository: guardian/dotcom-rendering
+          path: ./dcr
 
-            - name: Setup DCR node
-              uses: actions/setup-node@v3
-              with:
-                  node-version-file: './dcr/.nvmrc'
+      - name: Setup DCR node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: "./dcr/.nvmrc"
 
-            - name: Install DCR dependencies
-              run: yarn install --frozen-lockfile
-              working-directory: ./dcr
+      - name: Install DCR dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: ./dcr
 
-            - name: Build DCR
-              run: make build
-              working-directory: ./dcr/dotcom-rendering
+      - name: Build DCR
+        run: make build
+        working-directory: ./dcr/dotcom-rendering
 
-            - name: Start Commercial server
-              run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
-              working-directory: ./commercial/bundle
+      - name: Start Commercial server
+        run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
+        working-directory: ./commercial/bundle
 
-            - name: Start DCR server
-              run: make start-ci & npx wait-on -v -i 1000 http://localhost:3030
-              working-directory: ./dcr/dotcom-rendering
-              env:
-                  PORT: 3030
-                  COMMERCIAL_BUNDLE_URL: http://localhost:3031/graun.standalone.commercial.js
+      - name: Start DCR server
+        run: make start-ci & npx wait-on -v -i 1000 http://localhost:3030
+        working-directory: ./dcr/dotcom-rendering
+        env:
+          PORT: 3030
+          COMMERCIAL_BUNDLE_URL: http://localhost:3031/graun.standalone.commercial.js
 
-            - name: Run Percy Visual Regression Tests
-              run: yarn visual:run
-              working-directory: ./commercial/e2e
-              env:
-                  PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+      - name: Run Percy Visual Regression Tests
+        run: yarn visual:run
+        working-directory: ./commercial/e2e
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
-            - name: Wait for Percy Snapshots
-              run: yarn percy build:wait --verbose --fail-on-changes --project ced09b1a/commercial --commit ${{ github.event.pull_request.head.sha }} --timeout 900000 --interval 5000
-              working-directory: ./commercial/e2e
-              env:
-                  PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+      - name: Wait for Percy Snapshots
+        run: yarn percy build:wait --verbose --fail-on-changes --project ced09b1a/commercial --commit ${{ github.event.pull_request.head.sha }} --timeout 900000 --interval 5000
+        working-directory: ./commercial/e2e
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
-            - uses: actions/upload-artifact@v2
-              if: always()
-              with:
-                  name: cypress-videos
-                  path: ./commercial/e2e/cypress/videos
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: cypress-videos
+          path: ./commercial/e2e/cypress/videos
 
-            - uses: actions/upload-artifact@v2
-              if: failure()
-              with:
-                  name: cypress-screenshots
-                  path: ./commercial/e2e/cypress/screenshots
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: ./commercial/e2e/cypress/screenshots
