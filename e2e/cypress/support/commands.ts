@@ -30,20 +30,29 @@ Cypress.Commands.add('findAdSlotIframeBySlotId', (adSlotId: string) => {
 	cy.get(`#${adSlotId}`).find('iframe', { timeout: 30000 });
 });
 
+/**
+ * Sourcepoint have ensured us that the following class names
+ * will not change so they are the safest way to select the
+ * manage, reject all and accept buttons
+ */
+const MANAGE_MY_COOKIES_BUTTON = 'button.sp_choice_type_12';
+const REJECT_ALL_BUTTON = 'button.sp_choice_type_REJECT_ALL';
+const ACCEPT_BUTTON = 'button.sp_choice_type_11';
+
 Cypress.Commands.add('rejectAllConsent', () => {
 	cy.getIframeBody('sp_message_iframe_')
-		.find('button.sp_choice_type_12')
+		.find(MANAGE_MY_COOKIES_BUTTON)
 		.click();
 
 	cy.getIframeBody('iframe[title="SP Consent Message"]')
-		.find('button.sp_choice_type_REJECT_ALL', { timeout: 30000 })
+		.find(REJECT_ALL_BUTTON, { timeout: 30000 })
 		.click();
 	cy.wait(100);
 });
 
 Cypress.Commands.add('allowAllConsent', () => {
 	cy.getIframeBody('sp_message_iframe_')
-		.find('button.sp_choice_type_11', { timeout: 30000 })
+		.find(ACCEPT_BUTTON, { timeout: 30000 })
 		.click();
 	cy.wait(100);
 });
