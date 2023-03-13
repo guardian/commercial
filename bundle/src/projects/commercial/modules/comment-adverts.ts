@@ -1,4 +1,5 @@
 import { adSizes, createAdSlot } from '@guardian/commercial-core';
+import { isInEagerPrebidVariant } from 'common/modules/experiments/tests/eager-prebid';
 import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
 import fastdom from '../../../lib/fastdom-promise';
 import { mediator } from '../../../lib/mediator';
@@ -8,6 +9,7 @@ import { addSlot } from './dfp/add-slot';
 import type { Advert } from './dfp/Advert';
 import { getAdvertById } from './dfp/get-advert-by-id';
 import { refreshAdvert } from './dfp/load-advert';
+import { requestBidsForAd } from './header-bidding/request-bids';
 
 const createCommentSlot = (): HTMLElement => {
 	const adSlot = createAdSlot('comments');
@@ -35,14 +37,18 @@ const insertCommentAd = (
 			adSlotContainer.appendChild(commentSlot);
 			return commentSlot;
 		})
-		.then((adSlot) => {
-			addSlot(
+		.then(async (adSlot) => {
+			const advert = await addSlot(
 				adSlot,
 				false,
 				canBeDmpu
 					? { desktop: [adSizes.halfPage, adSizes.skyscraper] }
 					: {},
 			);
+
+			if (advert && isInEagerPrebidVariant()) {
+				await requestBidsForAd(advert);
+			}
 			void Promise.resolve(mediator.emit('page:commercial:comments'));
 		});
 };

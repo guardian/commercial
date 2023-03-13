@@ -1,5 +1,6 @@
 import type { ABTest } from '@guardian/ab-core';
 import { memoize } from 'lodash-es';
+import { isInUk } from 'common/modules/commercial/geo-utils';
 import { getSynchronousTestsToRun } from '../ab';
 import { bypassMetricsSampling } from '../utils';
 
@@ -28,6 +29,9 @@ export const eagerPrebid: ABTest = {
 
 // determine if the user is in any of the the eager prebid variants
 export const isInEagerPrebidVariant = memoize((): boolean => {
+	if(!isInUk()) {
+		return false;
+	}
 	const test = getSynchronousTestsToRun().find((test) => test.id === eagerPrebid.id);
 	return test ? test.variantToRun.id !== 'control': false;
 });

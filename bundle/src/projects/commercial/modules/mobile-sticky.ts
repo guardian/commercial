@@ -1,6 +1,8 @@
 import { createAdSlot } from '@guardian/commercial-core';
+import { isInEagerPrebidVariant } from 'common/modules/experiments/tests/eager-prebid';
 import fastdom from '../../../lib/fastdom-promise';
 import { addSlot } from './dfp/add-slot';
+import { requestBidsForAd } from './header-bidding/request-bids';
 import { shouldIncludeMobileSticky } from './header-bidding/utils';
 
 const createAdWrapperClassic = () => {
@@ -41,13 +43,18 @@ export const init = (): Promise<void> => {
 					document.body.appendChild(mobileStickyWrapper);
 				}
 			})
-			.then(() => {
+			.then(async () => {
 				if (mobileStickyWrapper) {
 					const mobileStickyAdSlot =
 						mobileStickyWrapper.querySelector<HTMLElement>(
 							'#dfp-ad--mobile-sticky',
 						);
-					if (mobileStickyAdSlot) addSlot(mobileStickyAdSlot, true);
+					if (mobileStickyAdSlot) {
+						const advert = await addSlot(mobileStickyAdSlot, true);
+							if (advert && isInEagerPrebidVariant()) {
+								await requestBidsForAd(advert);
+							}
+					}
 				}
 			});
 	}
