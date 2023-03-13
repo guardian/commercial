@@ -33,7 +33,6 @@
 		]
 	},
 	"dependencies": {
-		"madge": "^5.0.1",
 		"glob": "^8.1.0"
 	},
 	"resolutions": {
