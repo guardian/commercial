@@ -34,10 +34,13 @@ jobs:
           fetch-depth: 0
 
       - name: Setup node
-        uses: guardian/actions-setup-node@main
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: ".nvmrc"
+          cache: "yarn"
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: yarn install --frozen-lockfile
 
       - name: Build package
         run: yarn build
@@ -92,10 +95,13 @@ jobs:
           fetch-depth: 0
 
       - name: Setup node
-        uses: guardian/actions-setup-node@main
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: ".nvmrc"
+          cache: "yarn"
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: yarn install --frozen-lockfile
 
       - name: Build package
         run: yarn build

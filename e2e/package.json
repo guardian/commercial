@@ -4,15 +4,17 @@
 	"main": "index.js",
 	"license": "MIT",
 	"scripts": {
-		"cypress:open": "cypress open --e2e --browser=chrome",
-		"cypress:run": "cypress run --spec 'cypress/e2e/**/*'",
-		"cypress:open:snapshot": "cypress open --e2e --browser=chrome --config specPattern='cypress/snapshot/**/*'",
-		"cypress:run:snapshot": "percy exec -- cypress run --config specPattern='cypress/snapshot/**/*'"
+		"e2e:open": "cypress open --e2e --browser=chrome",
+		"e2e:run": "cypress run --spec 'cypress/e2e/**/*'",
+		"visual:open": "cypress open --e2e --browser=chrome --config specPattern='cypress/snapshot/**/*'",
+		"visual:run": "percy exec -- cypress run --config specPattern='cypress/snapshot/**/*'"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.0.1",
 		"@babel/preset-env": "^7.0.0",
 		"@cypress/webpack-preprocessor": "^5.16.1",
+		"@percy/cli": "^1.20.1",
+		"@percy/cypress": "^3.1.2",
 		"babel-loader": "^9",
 		"cypress": "^12.4.0",
 		"webpack": "^5"
