@@ -81,5 +81,8 @@
 		"@guardian/ab-core": "^4.0.0",
 		"@guardian/consent-management-platform": "^11.0.0",
 		"@guardian/libs": "^14.0.0"
+	},
+	"resolutions": {
+		"typescript": "~4.9.5"
 	}
 }

@@ -109,5 +109,8 @@
 		"tslib": "^2.4.1",
 		"web-vitals": "^2.1.2",
 		"wolfy87-eventemitter": "^5.2.9"
+	},
+	"resolutions": {
+		"typescript": "~4.9.5"
 	}
 }
