@@ -14,8 +14,7 @@ export const eagerPrebid: ABTest = {
 	audienceCriteria: 'All pageviews',
 	successMeasure:
 		'Ads lazy load faster, without affecting the page load time',
-	description:
-		'Test the impact of running prebid on page load',
+	description: 'Test the impact of running prebid on page load',
 	variants: [
 		{ id: 'control', test: bypassMetricsSampling },
 		{ id: 'variant-20', test: bypassMetricsSampling },
@@ -29,9 +28,11 @@ export const eagerPrebid: ABTest = {
 
 // determine if the user is in any of the the eager prebid variants
 export const isInEagerPrebidVariant = memoize((): boolean => {
-	if(!isInUk()) {
+	if (!isInUk()) {
 		return false;
 	}
-	const test = getSynchronousTestsToRun().find((test) => test.id === eagerPrebid.id);
-	return test ? test.variantToRun.id !== 'control': false;
+	const test = getSynchronousTestsToRun().find(
+		(test) => test.id === eagerPrebid.id,
+	);
+	return test ? test.variantToRun.id !== 'control' : false;
 });

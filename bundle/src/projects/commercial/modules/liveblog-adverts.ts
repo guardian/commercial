@@ -153,22 +153,29 @@ const insertAds: SpacefinderWriter = async (paras) => {
 const fill = (rules: SpacefinderRules) => {
 	const options: SpacefinderOptions = { debug: sfdebug === '1' };
 
-	return spaceFiller.fillSpace(rules, insertAds, options).then(() => {
-		if (AD_COUNTER < MAX_ADS) {
-			const el = document.querySelector(
-				`${rules.bodySelector} > .ad-slot-container`,
-			);
-			if (el && el.previousSibling instanceof HTMLElement) {
-				firstSlot = el.previousSibling;
+	return spaceFiller
+		.fillSpace(rules, insertAds, options)
+		.then(() => {
+			if (AD_COUNTER < MAX_ADS) {
+				const el = document.querySelector(
+					`${rules.bodySelector} > .ad-slot-container`,
+				);
+				if (el && el.previousSibling instanceof HTMLElement) {
+					firstSlot = el.previousSibling;
+				} else {
+					firstSlot = undefined;
+				}
+				startListening();
 			} else {
 				firstSlot = undefined;
 			}
-			startListening();
-		} else {
-			firstSlot = undefined;
-		}
-	}).then(async () => {
-		if (insertedDynamicAds.length && isInUk() && isInEagerPrebidVariant()) {
+		})
+		.then(async () => {
+			if (
+				insertedDynamicAds.length &&
+				isInUk() &&
+				isInEagerPrebidVariant()
+			) {
 				await requestBidsForAds(insertedDynamicAds);
 			}
 			insertedDynamicAds = [];
