@@ -1,5 +1,8 @@
 import { EventTimer } from '@guardian/commercial-core';
-import { refreshBidsForAd } from '../header-bidding/request-bids';
+import {
+	refreshBidsForAd,
+	requestBidsForAd,
+} from '../header-bidding/request-bids';
 import { stripDfpAdPrefixFrom } from '../header-bidding/utils';
 import type { Advert } from './Advert';
 
@@ -16,7 +19,10 @@ export const loadAdvert = (advert: Advert): void => {
 			// The display needs to be called, even in the event of an error.
 		})
 		.then(() => {
-			eventTimer.trigger('slotReady', adName);
+			if (advert.headerBiddingBidRequest) {
+				return advert.headerBiddingBidRequest;
+			}
+			return requestBidsForAd(advert);
 		})
 		.then(() => {
 			eventTimer.trigger('slotInitialised', adName);

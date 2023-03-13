@@ -21,15 +21,15 @@ const addSlot = (
 	adSlot: HTMLElement,
 	forceDisplay: boolean,
 	additionalSizes?: SizeMapping,
-): Promise<Advert| null> => {
+): Promise<Advert | null> => {
 	return new Promise((resolve) => {
 		window.googletag.cmd.push(() => {
 			if (!(adSlot.id in dfpEnv.advertIds)) {
 				const advert = createAdvert(adSlot, additionalSizes);
-				resolve(advert);
 				if (advert === null) return;
 				// dynamically add ad slot
 				displayAd(advert, forceDisplay);
+				resolve(advert);
 			} else {
 				const errorMessage = `Attempting to add slot with exisiting id ${adSlot.id}`;
 				reportError(

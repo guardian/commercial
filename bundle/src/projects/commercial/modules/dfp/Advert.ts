@@ -89,6 +89,7 @@ class Advert {
 	whenSlotReady: Promise<void>;
 	extraNodeClasses: string[] = [];
 	hasPrebidSize = false;
+	headerBiddingBidRequest: Promise<unknown> | null = null;
 	lineItemId: number | null = null;
 
 	constructor(

@@ -32,14 +32,28 @@ const retainTopAboveNavSlotSize = (
 };
 
 export const requestBidsForAd = async (advert: Advert): Promise<void> => {
-	await Promise.all([prebid.requestBids(advert), a9.requestBids(advert)]);
+	advert.headerBiddingBidRequest = Promise.all([
+		prebid.requestBids(advert),
+		a9.requestBids(advert),
+	]);
+	await advert.headerBiddingBidRequest;
 };
 
 export const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
-	await Promise.all([
-		prebid.requestBidsForAds(adverts),
-		a9.requestBidsForAds(adverts),
+	const adsToRequestBidsFor = adverts.filter(
+		(advert) => !advert.headerBiddingBidRequest,
+	);
+
+	const promise = Promise.all([
+		prebid.requestBidsForAds(adsToRequestBidsFor),
+		a9.requestBidsForAds(adsToRequestBidsFor),
 	]);
+
+	adsToRequestBidsFor.forEach((advert) => {
+		advert.headerBiddingBidRequest = promise;
+	});
+
+	await promise;
 };
 
 export const refreshBidsForAd = async (advert: Advert): Promise<void> => {
