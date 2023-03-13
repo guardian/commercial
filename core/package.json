@@ -34,9 +34,6 @@
 		"validate": "npm-run-all tsc lint test build"
 	},
 	"prettier": "@guardian/prettier",
-	"dependencies": {
-		"type-fest": "2.12.2"
-	},
 	"devDependencies": {
 		"@commitlint/cli": "^17.0.3",
 		"@commitlint/config-conventional": "^17.0.0",
@@ -72,6 +69,7 @@
 		"semantic-release-monorepo": "^7.0.5",
 		"ts-jest": "^29.0.5",
 		"tslib": "^2.4.1",
+		"type-fest": "2.12.2",
 		"typescript": "~4.9.5"
 	},
 	"publishConfig": {
