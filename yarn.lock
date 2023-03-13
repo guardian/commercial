@@ -1297,10 +1297,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/ab-core/-/ab-core-4.0.0.tgz#50c1fc076437e594b367f6e8d9469a3d9b97a78e"
   integrity sha512-l6Ot/anisLKyoLZOp8koW7Ia5JFOtmZkB0sfgdWajv5+N0w0UScUVoImEdPlFstM1anSd3FvV8D3UgYkRzAang==
 
-"@guardian/commercial-core@^5.3.0":
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/@guardian/commercial-core/-/commercial-core-5.4.0.tgz#cfee79a2eebdb1b774152003573b364c6ce7ec1d"
-  integrity sha512-J054cBZ7jk7icnRlPiJa2CE3A6pmuT+V1Pv6gKyBMxzh2NnDGZe6/h/UByQepisUJU3s8J4uZ6Z/1/vts/6pRg==
+"@guardian/commercial-core@^5.4.4":
+  version "5.4.4"
+  resolved "https://registry.yarnpkg.com/@guardian/commercial-core/-/commercial-core-5.4.4.tgz#671064c6fb495b6876c43520b6b9d622cd20b450"
+  integrity sha512-mYerRRQ5YXfUr8hINbLn1MEe6JLa0S7E/yAJIfSSVc1TC1BrsZ2LUnZ6rN3ZWy8ktgFLFAWUgJHZgF+dvYF58g==
   dependencies:
     type-fest "2.12.2"
 
