@@ -1309,10 +1309,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-11.0.0.tgz#240083bbe4e8c4c22410cfa4c867b608e7c0e92f"
   integrity sha512-j97gI5NbhVLXy1s8465lyT/w/nU3K+HewkfHIQ/NLOvzBS2mmcgB6A6sRXsKCOYRt4W8eNoTX5xgAdemFgvLAw==
 
-"@guardian/core-web-vitals@^1.0.0":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@guardian/core-web-vitals/-/core-web-vitals-1.0.1.tgz#f3bbf7e60a82d988228698f054664cadc9cd0886"
-  integrity sha512-F7vCWwXA5YbSEEMcn28+Xe6pXLCqqFA5h6E+pzvmLyL21y7v5UsAU+A59BB7k3yJLaFXyYi3sSRXxXGPxkCvog==
+"@guardian/core-web-vitals@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/core-web-vitals/-/core-web-vitals-4.0.0.tgz#e09bf40ee896ae92c0223fa57399b1b0b5f9bdb2"
+  integrity sha512-LDXnDhsNApO9v8LrXPK1AHMZYoa457tYjqjHnXNSxleHHoyeS3ehB4qohdDMpWv76F8DLUVMXBTZ/8EbQce3sA==
 
 "@guardian/eslint-config-typescript@^1.0.0":
   version "1.0.11"
