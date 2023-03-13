@@ -1,8 +1,6 @@
 import { createAdSlot } from '@guardian/commercial-core';
-import { isInEagerPrebidVariant } from 'common/modules/experiments/tests/eager-prebid';
 import fastdom from '../../../lib/fastdom-promise';
 import { addSlot } from './dfp/add-slot';
-import { requestBidsForAd } from './header-bidding/request-bids';
 import { shouldIncludeMobileSticky } from './header-bidding/utils';
 
 const createAdWrapperClassic = () => {
