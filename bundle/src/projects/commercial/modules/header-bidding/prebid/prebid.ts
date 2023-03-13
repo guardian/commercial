@@ -438,6 +438,27 @@ const initialise = (window: Window, framework: Framework = 'tcfv2'): void => {
 	});
 };
 
+const bidsBackHandler = (
+	adUnits: PrebidAdUnit[],
+	eventTimer: EventTimer,
+): Promise<void> =>
+	new Promise((resolve) => {
+		window.pbjs?.setTargetingForGPTAsync(
+			adUnits.map((u) => u.code).filter(isString),
+		);
+
+		resolve();
+
+		adUnits.forEach((adUnit) => {
+			if (isString(adUnit.code)) {
+				eventTimer.trigger(
+					'prebidEnd',
+					stripDfpAdPrefixFrom(adUnit.code),
+				);
+			}
+		});
+	});
+
 // slotFlatMap allows you to dynamically interfere with the PrebidSlot definition
 // for this given request for bids.
 const requestBids = async (
@@ -488,24 +509,10 @@ const requestBids = async (
 						});
 						window.pbjs?.requestBids({
 							adUnits,
-							bidsBackHandler() {
-								if (isString(adUnits[0].code)) {
-									window.pbjs?.setTargetingForGPTAsync([
-										adUnits[0].code,
-									]);
-								}
-
-								adUnits.forEach((adUnit) => {
-									if (isString(adUnit.code)) {
-										eventTimer.trigger(
-											'prebidEnd',
-											stripDfpAdPrefixFrom(adUnit.code),
-										);
-									}
-								});
-
-								resolve();
-							},
+							bidsBackHandler: () =>
+								void bidsBackHandler(adUnits, eventTimer).then(
+									resolve,
+								),
 						});
 					});
 				}),
@@ -519,6 +526,14 @@ const requestBids = async (
 };
 
 const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
+	if (!initialised) {
+		return requestQueue;
+	}
+
+	if (!dfpEnv.hbImpl.prebid) {
+		return requestQueue;
+	}
+
 	const adUnits = await onConsent()
 		.then((consentState) => {
 			// calculate this once before mapping over
@@ -539,23 +554,32 @@ const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
 			log('commercial', 'Failed to execute prebid onConsent', e);
 			return [];
 		});
-	console.log(adUnits);
 
-	return new Promise((resolve) => {
-		window.pbjs?.que.push(() => {
-			window.pbjs?.requestBids({
-				adUnits,
-				bidsBackHandler() {
-					adUnits.forEach((adUnit) => {
-						if (isString(adUnit.code)) {
-							window.pbjs?.setTargetingForGPTAsync([adUnit.code]);
-						}
+	const eventTimer = EventTimer.get();
+
+	requestQueue = requestQueue.then(
+		() =>
+			new Promise<void>((resolve) => {
+				adUnits.forEach((adUnit) => {
+					if (isString(adUnit.code)) {
+						eventTimer.trigger(
+							'prebidStart',
+							stripDfpAdPrefixFrom(adUnit.code),
+						);
+					}
+				});
+				window.pbjs?.que.push(() => {
+					window.pbjs?.requestBids({
+						adUnits,
+						bidsBackHandler: () =>
+							void bidsBackHandler(adUnits, eventTimer).then(
+								resolve,
+							),
 					});
-					resolve();
-				},
-			});
-		});
-	});
+				});
+			}),
+	);
+	return requestQueue;
 };
 
 export const prebid = { initialise, requestBids, requestBidsForAds };

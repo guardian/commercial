@@ -77,6 +77,14 @@ const requestBids = (
 };
 
 const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
+	if (!initialised) {
+		return requestQueue;
+	}
+
+	if (!dfpEnv.hbImpl.a9) {
+		return requestQueue;
+	}
+
 	const adUnits = flatten(
 		adverts.map((advert) =>
 			getHeaderBiddingAdSlots(advert).map(
@@ -85,16 +93,25 @@ const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
 		),
 	);
 
-	console.log(adUnits);
+	if (adUnits.length === 0) {
+		return requestQueue;
+	}
 
-	return new Promise((resolve) => {
-		window.apstag?.fetchBids({ slots: adUnits }, () => {
-			window.googletag.cmd.push(() => {
-				window.apstag?.setDisplayBids();
-				resolve();
-			});
-		});
-	});
+	requestQueue = requestQueue
+		.then(
+			() =>
+				new Promise<void>((resolve) => {
+					window.apstag?.fetchBids({ slots: adUnits }, () => {
+						window.googletag.cmd.push(() => {
+							window.apstag?.setDisplayBids();
+							resolve();
+						});
+					});
+				}),
+		)
+		.catch(noop);
+
+	return requestQueue;
 };
 
 export const a9 = {
