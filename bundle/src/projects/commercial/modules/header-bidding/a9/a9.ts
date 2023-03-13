@@ -1,3 +1,4 @@
+import { flatten } from 'lodash-es';
 import { noop } from 'lib/noop';
 import type { Advert } from '../../dfp/Advert';
 import { dfpEnv } from '../../dfp/dfp-env';
@@ -38,8 +39,8 @@ const initialise = (): void => {
 
 // slotFlatMap allows you to dynamically interfere with the PrebidSlot definition
 // for this given request for bids.
-const requestBids = (
-	advert: Advert,
+const requestBids = async (
+	adverts: Advert[],
 	slotFlatMap?: SlotFlatMap,
 ): Promise<void> => {
 	if (!initialised) {
@@ -50,8 +51,12 @@ const requestBids = (
 		return requestQueue;
 	}
 
-	const adUnits = getHeaderBiddingAdSlots(advert, slotFlatMap).map(
-		(slot) => new A9AdUnit(advert, slot),
+	const adUnits = flatten(
+		adverts.map((advert) =>
+			getHeaderBiddingAdSlots(advert, slotFlatMap).map(
+				(slot) => new A9AdUnit(advert, slot),
+			),
+		),
 	);
 
 	if (adUnits.length === 0) {

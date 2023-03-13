@@ -5,6 +5,14 @@ import { init } from './article-body-adverts';
 const ads = {
 	'dfp-ad--im': true,
 } as const;
+jest.mock('lib/report-error', () => ({
+	reportError: jest.fn(),
+}));
+
+jest.mock('../../commercial/modules/header-bidding/prebid/prebid', () => ({
+	requestBids: jest.fn(),
+}));
+
 jest.mock('./dfp/wait-for-advert', () => (id: keyof typeof ads) => {
 	return Promise.resolve(ads[id]);
 });

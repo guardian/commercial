@@ -1,10 +1,13 @@
 import type { SizeMapping } from '@guardian/commercial-core';
 import { adSizes, createAdSize } from '@guardian/commercial-core';
 import { log } from '@guardian/libs';
+import { isInUk } from 'common/modules/commercial/geo-utils';
 import { isInVariantSynchronous } from 'common/modules/experiments/ab';
 import { billboardsInMerch } from 'common/modules/experiments/tests/billboards-in-merch';
+import { isInEagerPrebidVariant } from 'common/modules/experiments/tests/eager-prebid';
 import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
 import { commercialFeatures } from '../../../common/modules/commercial/commercial-features';
+import { requestBidsForAds } from '../header-bidding/request-bids';
 import { removeDisabledSlots } from '../remove-slots';
 import type { Advert } from './Advert';
 import { createAdvert } from './create-advert';
@@ -88,6 +91,11 @@ const fillAdvertSlots = async (): Promise<void> => {
 	adverts.forEach((advert, index) => {
 		dfpEnv.advertIds[advert.id] = currentLength + index;
 	});
+
+	if (isInUk() && isInEagerPrebidVariant()) {
+		// Request bids for all server rendered adverts
+		await requestBidsForAds(adverts);
+	}
 
 	adverts.forEach(queueAdvert);
 	if (dfpEnv.shouldLazyLoad()) {

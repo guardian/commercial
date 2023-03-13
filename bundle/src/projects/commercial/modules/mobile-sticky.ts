@@ -47,7 +47,9 @@ export const init = (): Promise<void> => {
 						mobileStickyWrapper.querySelector<HTMLElement>(
 							'#dfp-ad--mobile-sticky',
 						);
-					if (mobileStickyAdSlot) addSlot(mobileStickyAdSlot, true);
+					if (mobileStickyAdSlot) {
+						void addSlot(mobileStickyAdSlot, true);
+					}
 				}
 			});
 	}

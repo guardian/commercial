@@ -1,37 +1,10 @@
-import type { AdSize } from '@guardian/commercial-core';
 import { EventTimer } from '@guardian/commercial-core';
-import { a9 } from '../header-bidding/a9/a9';
-import { prebid } from '../header-bidding/prebid/prebid';
+import {
+	refreshBidsForAd,
+	requestBidsForAd,
+} from '../header-bidding/request-bids';
 import { stripDfpAdPrefixFrom } from '../header-bidding/utils';
 import type { Advert } from './Advert';
-
-// Force the refreshed advert to be the same size as the first
-const retainTopAboveNavSlotSize = (
-	advertSize: Advert['size'],
-	hbSlot: HeaderBiddingSlot,
-): HeaderBiddingSlot[] => {
-	if (hbSlot.key !== 'top-above-nav') {
-		return [hbSlot];
-	}
-
-	// No point forcing a size, as there is already only one possible (mobile/tablet).
-	// See prebid/slot-config.js
-	if (hbSlot.sizes.length === 1) {
-		return [hbSlot];
-	}
-
-	// If advert.size is not an array, there is no point having this hbSlot
-	if (!Array.isArray(advertSize)) {
-		return [];
-	}
-
-	return [
-		{
-			...hbSlot,
-			sizes: [[advertSize[0], advertSize[1]] as AdSize],
-		},
-	];
-};
 
 const eventTimer = EventTimer.get();
 
@@ -46,11 +19,10 @@ export const loadAdvert = (advert: Advert): void => {
 			// The display needs to be called, even in the event of an error.
 		})
 		.then(() => {
-			eventTimer.trigger('slotReady', adName);
-			return Promise.all([
-				prebid.requestBids(advert),
-				a9.requestBids(advert),
-			]);
+			if (advert.headerBiddingBidRequest) {
+				return advert.headerBiddingBidRequest;
+			}
+			return requestBidsForAd(advert);
 		})
 		.then(() => {
 			eventTimer.trigger('slotInitialised', adName);
@@ -62,19 +34,7 @@ export const refreshAdvert = (advert: Advert): void => {
 	// advert.size contains the effective size being displayed prior to refreshing
 	void advert.whenSlotReady
 		.then(() => {
-			const prebidPromise = prebid.requestBids(
-				advert,
-				(prebidSlot: HeaderBiddingSlot) =>
-					retainTopAboveNavSlotSize(advert.size, prebidSlot),
-			);
-
-			const a9Promise = a9.requestBids(
-				advert,
-				(a9Slot: HeaderBiddingSlot) =>
-					retainTopAboveNavSlotSize(advert.size, a9Slot),
-			);
-
-			return Promise.all([prebidPromise, a9Promise]);
+			return refreshBidsForAd(advert);
 		})
 		.then(() => {
 			advert.slot.setTargeting('refreshed', 'true');

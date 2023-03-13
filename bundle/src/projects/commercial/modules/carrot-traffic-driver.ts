@@ -103,7 +103,7 @@ const insertSlot: SpacefinderWriter = (paras) => {
 				candidates[0].parentNode.insertBefore(slot, candidates[0]);
 			}
 		})
-		.then(() => addSlot(slot, true));
+		.then(() => void addSlot(slot, true));
 };
 
 const getRules = (): SpacefinderRules => {
