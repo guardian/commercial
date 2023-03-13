@@ -42,7 +42,7 @@
 		"@commitlint/config-conventional": "^17.0.0",
 		"@guardian/ab-core": "4.0.0",
 		"@guardian/consent-management-platform": "11.0.0",
-		"@guardian/eslint-config-typescript": "^1.0.0",
+		"@guardian/eslint-config-typescript": "^5.0.0",
 		"@guardian/libs": "14.0.0",
 		"@guardian/prettier": "^2.1.1",
 		"@octokit/core": "^4.0.5",
