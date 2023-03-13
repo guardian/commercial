@@ -101,7 +101,7 @@
 		"csstype": "^3.1.1",
 		"fastdom": "^1.0.11",
 		"lodash-es": "^4.17.21",
-		"madge": "^5.0.1",
+		"madge": "^6.0.0",
 		"ophan-tracker-js": "^1.4.0",
 		"prebid.js": "guardian/prebid.js#2e3b96d",
 		"process": "^0.11.10",
