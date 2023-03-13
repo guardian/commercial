@@ -43,7 +43,7 @@
 		"@guardian/ab-core": "4.0.0",
 		"@guardian/consent-management-platform": "11.0.0",
 		"@guardian/eslint-config-typescript": "^1.0.0",
-		"@guardian/libs": "10.0.0",
+		"@guardian/libs": "14.0.0",
 		"@guardian/prettier": "^2.1.1",
 		"@octokit/core": "^4.0.5",
 		"@semantic-release/github": "^8.0.2",
@@ -80,6 +80,6 @@
 	"peerDependencies": {
 		"@guardian/ab-core": "^4.0.0",
 		"@guardian/consent-management-platform": "^11.0.0",
-		"@guardian/libs": "^10.0.0"
+		"@guardian/libs": "^14.0.0"
 	}
 }
