@@ -43,17 +43,15 @@ export const init = (): Promise<void> => {
 					document.body.appendChild(mobileStickyWrapper);
 				}
 			})
-			.then(async () => {
+			.then(() => {
 				if (mobileStickyWrapper) {
 					const mobileStickyAdSlot =
 						mobileStickyWrapper.querySelector<HTMLElement>(
 							'#dfp-ad--mobile-sticky',
 						);
 					if (mobileStickyAdSlot) {
-						const advert = await addSlot(mobileStickyAdSlot, true);
-							if (advert && isInEagerPrebidVariant()) {
-								await requestBidsForAd(advert);
-							}
+						void addSlot(mobileStickyAdSlot, true);
+
 					}
 				}
 			});
