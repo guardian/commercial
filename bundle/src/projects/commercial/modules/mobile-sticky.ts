@@ -51,7 +51,6 @@ export const init = (): Promise<void> => {
 						);
 					if (mobileStickyAdSlot) {
 						void addSlot(mobileStickyAdSlot, true);
-
 					}
 				}
 			});
