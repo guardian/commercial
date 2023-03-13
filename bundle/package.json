@@ -94,7 +94,7 @@
 		"@guardian/core-web-vitals": "^4.0.0",
 		"@guardian/eslint-config-typescript": "^5.0.0",
 		"@guardian/libs": "^14.0.0",
-		"@guardian/prettier": "^2.1.1",
+		"@guardian/prettier": "^3.0.0",
 		"@guardian/source-foundations": "^9.0.0",
 		"@guardian/support-dotcom-components": "^1.0.7",
 		"@octokit/core": "^4.0.5",
