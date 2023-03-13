@@ -1,5 +1,7 @@
 import { adSizes, createAdSlot } from '@guardian/commercial-core';
 import { log } from '@guardian/libs';
+import { isInUk } from 'common/modules/commercial/geo-utils';
+import { isInEagerPrebidVariant } from 'common/modules/experiments/tests/eager-prebid';
 import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
 import { getUrlVars } from 'lib/url';
 import fastdom from '../../../lib/fastdom-promise';
@@ -12,6 +14,8 @@ import type {
 	SpacefinderWriter,
 } from '../../common/modules/spacefinder';
 import { addSlot } from './dfp/add-slot';
+import type { Advert } from './dfp/Advert';
+import { requestBidsForAds } from './header-bidding/request-bids';
 
 /**
  * Maximum number of inline ads to display on the page.
@@ -32,6 +36,8 @@ const AD_SPACE_MULTIPLIER = 2;
 let AD_COUNTER = 0;
 let WINDOWHEIGHT: number;
 let firstSlot: HTMLElement | undefined;
+
+let insertedDynamicAds: Advert[] = [];
 
 const sfdebug = getUrlVars().sfdebug;
 
@@ -114,8 +120,8 @@ const insertAdAtPara = (para: Node): Promise<void> => {
 				para.parentNode.insertBefore(container, para.nextSibling);
 			}
 		})
-		.then(() => {
-			addSlot(ad, false, {
+		.then(async () => {
+			const advert = await addSlot(ad, false, {
 				phablet: [
 					adSizes.outstreamDesktop,
 					adSizes.outstreamGoogleDesktop,
@@ -125,6 +131,9 @@ const insertAdAtPara = (para: Node): Promise<void> => {
 					adSizes.outstreamGoogleDesktop,
 				],
 			});
+			if (advert) {
+				insertedDynamicAds.push(advert);
+			}
 		});
 };
 
@@ -158,7 +167,12 @@ const fill = (rules: SpacefinderRules) => {
 		} else {
 			firstSlot = undefined;
 		}
-	});
+	}).then(async () => {
+		if (insertedDynamicAds.length && isInUk() && isInEagerPrebidVariant()) {
+				await requestBidsForAds(insertedDynamicAds);
+			}
+			insertedDynamicAds = [];
+		});
 };
 
 const onUpdate = () => {
