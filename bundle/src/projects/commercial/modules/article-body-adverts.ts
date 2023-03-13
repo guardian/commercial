@@ -1,5 +1,7 @@
 import type { AdSize, SizeMapping } from '@guardian/commercial-core';
 import { adSizes, createAdSlot } from '@guardian/commercial-core';
+import { isInUk } from 'common/modules/commercial/geo-utils';
+import { isInEagerPrebidVariant } from 'common/modules/experiments/tests/eager-prebid';
 import { createAdvertBorder } from 'common/modules/spacefinder-debug-tools';
 import {
 	getCurrentBreakpoint,
@@ -439,7 +441,9 @@ const doInit = async (): Promise<boolean> => {
 	await addInlineAds();
 	await initCarrot();
 
-	await requestBidsForAds(insertedDynamicAds);
+	if (isInUk() && isInEagerPrebidVariant()) {
+		await requestBidsForAds(insertedDynamicAds);
+	}
 
 	return im;
 };
