@@ -462,70 +462,9 @@ const bidsBackHandler = (
 // slotFlatMap allows you to dynamically interfere with the PrebidSlot definition
 // for this given request for bids.
 const requestBids = async (
-	advert: Advert,
+	adverts: Advert[],
 	slotFlatMap?: SlotFlatMap,
 ): Promise<void> => {
-	if (!initialised) {
-		return requestQueue;
-	}
-
-	if (!dfpEnv.hbImpl.prebid) {
-		return requestQueue;
-	}
-
-	// prepare-prebid already waits for consent so this should resolve immediately
-	const adUnits = await onConsent()
-		.then((consentState) => {
-			// calculate this once before mapping over
-			const pageTargeting = getPageTargeting(consentState);
-			return getHeaderBiddingAdSlots(advert, slotFlatMap)
-				.map((slot) => new PrebidAdUnit(advert, slot, pageTargeting))
-				.filter((adUnit) => !adUnit.isEmpty());
-		})
-		.catch((e) => {
-			// silently fail
-			log('commercial', 'Failed to execute prebid onConsent', e);
-			return [];
-		});
-
-	if (adUnits.length === 0) {
-		return requestQueue;
-	}
-
-	const eventTimer = EventTimer.get();
-
-	requestQueue = requestQueue
-		.then(
-			() =>
-				new Promise<void>((resolve) => {
-					window.pbjs?.que.push(() => {
-						adUnits.forEach((adUnit) => {
-							if (isString(adUnit.code)) {
-								eventTimer.trigger(
-									'prebidStart',
-									stripDfpAdPrefixFrom(adUnit.code),
-								);
-							}
-						});
-						window.pbjs?.requestBids({
-							adUnits,
-							bidsBackHandler: () =>
-								void bidsBackHandler(adUnits, eventTimer).then(
-									resolve,
-								),
-						});
-					});
-				}),
-		)
-		.catch((e) => {
-			// silently fail
-			log('commercial', 'Failed to execute Request queue', e);
-		});
-
-	return requestQueue;
-};
-
-const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
 	if (!initialised) {
 		return requestQueue;
 	}
@@ -540,7 +479,7 @@ const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
 			const pageTargeting = getPageTargeting(consentState);
 			return flatten(
 				adverts.map((advert) =>
-					getHeaderBiddingAdSlots(advert)
+					getHeaderBiddingAdSlots(advert, slotFlatMap)
 						.map(
 							(slot) =>
 								new PrebidAdUnit(advert, slot, pageTargeting),
@@ -582,4 +521,4 @@ const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
 	return requestQueue;
 };
 
-export const prebid = { initialise, requestBids, requestBidsForAds };
+export const prebid = { initialise, requestBids };

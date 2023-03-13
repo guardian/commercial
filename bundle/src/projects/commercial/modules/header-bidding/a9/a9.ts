@@ -39,8 +39,8 @@ const initialise = (): void => {
 
 // slotFlatMap allows you to dynamically interfere with the PrebidSlot definition
 // for this given request for bids.
-const requestBids = (
-	advert: Advert,
+const requestBids = async (
+	adverts: Advert[],
 	slotFlatMap?: SlotFlatMap,
 ): Promise<void> => {
 	if (!initialised) {
@@ -51,43 +51,9 @@ const requestBids = (
 		return requestQueue;
 	}
 
-	const adUnits = getHeaderBiddingAdSlots(advert, slotFlatMap).map(
-		(slot) => new A9AdUnit(advert, slot),
-	);
-
-	if (adUnits.length === 0) {
-		return requestQueue;
-	}
-
-	requestQueue = requestQueue
-		.then(
-			() =>
-				new Promise<void>((resolve) => {
-					window.apstag?.fetchBids({ slots: adUnits }, () => {
-						window.googletag.cmd.push(() => {
-							window.apstag?.setDisplayBids();
-							resolve();
-						});
-					});
-				}),
-		)
-		.catch(noop);
-
-	return requestQueue;
-};
-
-const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
-	if (!initialised) {
-		return requestQueue;
-	}
-
-	if (!dfpEnv.hbImpl.a9) {
-		return requestQueue;
-	}
-
 	const adUnits = flatten(
 		adverts.map((advert) =>
-			getHeaderBiddingAdSlots(advert).map(
+			getHeaderBiddingAdSlots(advert, slotFlatMap).map(
 				(slot) => new A9AdUnit(advert, slot),
 			),
 		),
@@ -117,7 +83,6 @@ const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
 export const a9 = {
 	initialise,
 	requestBids,
-	requestBidsForAds,
 };
 
 export const _ = {
