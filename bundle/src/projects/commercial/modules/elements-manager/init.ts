@@ -2,8 +2,8 @@ import { isString } from '@guardian/libs';
 import { isInVariantSynchronous } from 'common/modules/experiments/ab';
 import { elementsManager } from 'common/modules/experiments/tests/elements-manager';
 import { getUrlVars } from 'lib/url';
-import { dfpEnv } from './dfp/dfp-env';
-import { renderAdvertLabel } from './dfp/render-advert-label';
+import { dfpEnv } from '../dfp/dfp-env';
+import { renderAdvertLabel } from '../dfp/render-advert-label';
 
 type PreviewParameters = {
 	assetPath: string;
