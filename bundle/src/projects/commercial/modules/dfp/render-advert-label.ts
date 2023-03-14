@@ -76,19 +76,17 @@ const createAdTestCookieRemovalLink = (
 ): HTMLElement => {
 	const adTestCookieRemovalLink = document.createElement('div');
 	adTestCookieRemovalLink.style.cssText =
-		'position: relative;padding: 0 0.5rem;text-align: left;box-sizing: border-box;';
+		'position: relative;padding: 0;text-align: left;box-sizing: border-box;display: block:width: 0;height: 0';
 
-	if (adTestName) {
-		const url = new URL(window.location.href);
-		url.searchParams.set('adtest', 'clear');
+	const url = new URL(window.location.href);
+	url.searchParams.set('adtest', 'clear');
 
-		const clearLink = document.createElement('a');
-		clearLink.className = 'ad-slot__adtest-cookie-clear-link';
-		clearLink.href = url.href;
-		clearLink.innerHTML = 'clear';
+	const clearLink = document.createElement('a');
+	clearLink.className = 'ad-slot__adtest-cookie-clear-link';
+	clearLink.href = url.href;
+	clearLink.innerHTML = 'clear';
 
-		adTestCookieRemovalLink.appendChild(clearLink);
-	}
+	adTestCookieRemovalLink.appendChild(clearLink);
 
 	return adTestCookieRemovalLink;
 };
@@ -97,6 +95,7 @@ const renderAdvertLabel = (adSlotNode: HTMLElement): Promise<Promise<void>> => {
 	return fastdom.measure(() => {
 		if (shouldRenderLabel(adSlotNode)) {
 			const renderAdTestLabel = shouldRenderAdTestLabel();
+			const adTestClearExists = adSlotNode.parentNode?.firstChild?.firstChild?.nodeName === 'A' ? true : false
 			const adTestCookieName = getCookie({
 				name: 'adtest',
 				shouldMemoize: true,
@@ -128,10 +127,10 @@ const renderAdvertLabel = (adSlotNode: HTMLElement): Promise<Promise<void>> => {
 						adSlotNode.firstChild,
 					);
 				}
-				if (renderAdTestLabel && adTestCookieName) {
-					adSlotNode.insertBefore(
+				if (renderAdTestLabel && adTestCookieName && !adTestClearExists) {
+					adSlotNode.parentNode?.insertBefore(
 						createAdTestCookieRemovalLink(adTestCookieName),
-						adSlotNode.firstChild,
+						adSlotNode,
 					);
 				}
 			});
