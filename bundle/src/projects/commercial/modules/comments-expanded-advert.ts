@@ -1,7 +1,8 @@
 import { adSizes, createAdSlot } from '@guardian/commercial-core';
 import { AD_LABEL_HEIGHT } from '@guardian/commercial-core/dist/cjs/constants';
 import { log } from '@guardian/libs';
-import { isInEagerPrebidVariant } from 'common/modules/experiments/tests/eager-prebid';
+import { isInEagerPrebidVariant } from 'common/modules/experiments/tests/eager-prebid-check';
+
 import fastdom from '../../../lib/fastdom-promise';
 import { commercialFeatures } from '../../common/modules/commercial/commercial-features';
 import { addSlot } from './dfp/add-slot';

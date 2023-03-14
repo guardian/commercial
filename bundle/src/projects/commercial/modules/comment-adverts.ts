@@ -1,5 +1,6 @@
 import { adSizes, createAdSlot } from '@guardian/commercial-core';
-import { isInEagerPrebidVariant } from 'common/modules/experiments/tests/eager-prebid';
+import { isInEagerPrebidVariant } from 'common/modules/experiments/tests/eager-prebid-check';
+
 import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
 import fastdom from '../../../lib/fastdom-promise';
 import { mediator } from '../../../lib/mediator';
