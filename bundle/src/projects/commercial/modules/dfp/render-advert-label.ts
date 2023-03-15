@@ -95,7 +95,11 @@ const renderAdvertLabel = (adSlotNode: HTMLElement): Promise<Promise<void>> => {
 	return fastdom.measure(() => {
 		if (shouldRenderLabel(adSlotNode)) {
 			const renderAdTestLabel = shouldRenderAdTestLabel();
-			const adTestClearExists = adSlotNode.parentNode?.firstElementChild?.firstElementChild?.nodeName === 'A' ? true : false
+			const adTestClearExists =
+				adSlotNode.parentNode?.firstElementChild?.firstElementChild
+					?.nodeName === 'A'
+					? true
+					: false;
 			const adTestCookieName = getCookie({
 				name: 'adtest',
 				shouldMemoize: true,
@@ -127,7 +131,11 @@ const renderAdvertLabel = (adSlotNode: HTMLElement): Promise<Promise<void>> => {
 						adSlotNode.firstChild,
 					);
 				}
-				if (renderAdTestLabel && adTestCookieName && !adTestClearExists) {
+				if (
+					renderAdTestLabel &&
+					adTestCookieName &&
+					!adTestClearExists
+				) {
 					adSlotNode.parentNode?.insertBefore(
 						createAdTestCookieRemovalLink(adTestCookieName),
 						adSlotNode,
