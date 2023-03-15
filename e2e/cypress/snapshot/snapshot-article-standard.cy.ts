@@ -27,6 +27,9 @@ describe('Visually snapshot standard article', () => {
 		cy.get('[name=OnwardsUpper]').invoke('remove');
 		// snapshot
 		cy.percySnapshot('article-standard', {
+			discovery: {
+				allowedHostnames: ['localhost', 'tpc.googlesyndication.com'],
+			},
 			widths: [320, 740, 1300],
 		});
 	});

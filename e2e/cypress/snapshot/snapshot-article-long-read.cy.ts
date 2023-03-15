@@ -26,6 +26,9 @@ describe('Visually snapshot long read article', () => {
 		cy.get('[name=OnwardsUpper]').invoke('remove');
 		// snapshot
 		cy.percySnapshot('article-long-read', {
+			discovery: {
+				allowedHostnames: ['localhost', 'tpc.googlesyndication.com'],
+			},
 			widths: [320, 740, 1300],
 		});
 	});
