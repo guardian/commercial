@@ -1,6 +1,4 @@
 import { createAdSlot } from '@guardian/commercial-core';
-import { isInVariantSynchronous } from 'common/modules/experiments/ab';
-import { noCarrotAdsNearNewsletterSignupBlocks } from 'common/modules/experiments/tests/no-carrot-ads-near-newsletter-signup-blocks';
 import { getCurrentTweakpoint } from 'lib/detect-breakpoint';
 import { getUrlVars } from 'lib/url';
 import fastdom from '../../../lib/fastdom-promise';
@@ -57,22 +55,14 @@ const wideRules: SpacefinderRules = {
 			minAbove: 400,
 			minBelow: 400,
 		},
+		// Don't place carrot ads near newsletter sign-up blocks
+		' > figure[data-spacefinder-role="inline"]': {
+			minAbove: 400,
+			minBelow: 400,
+		},
 	},
 	fromBottom: true,
 };
-
-const avoidNewsletterSignupBlocks = !isInVariantSynchronous(
-	noCarrotAdsNearNewsletterSignupBlocks,
-	'control',
-);
-
-if (avoidNewsletterSignupBlocks && wideRules.selectors) {
-	// Don't place carrot ads near newsletter sign-up blocks
-	wideRules.selectors[' > figure[data-spacefinder-role="inline"]'] = {
-		minAbove: 400,
-		minBelow: 400,
-	};
-}
 
 // anything below leftCol (1140) : desktop, tablet, ..., mobile
 const desktopRules: SpacefinderRules = {
