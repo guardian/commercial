@@ -1,5 +1,8 @@
 name: E2E Visual
 on:
+  push:
+    branches:
+      - main
   pull_request:
     paths:
       - core/**
@@ -32,14 +35,17 @@ jobs:
         run: yarn install --frozen-lockfile
         working-directory: ./commercial
 
-      # Set HEAD commit hash
-      # Using GHA context would require different lookups for PRs and regular branches
-      # Setting an environment variable is simpler and branch agnostic
-      - name: Set HEAD commit hash
-        run: echo "LOCAL_HEAD_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+      - name: Set commit hash for main
+        if: github.ref == 'refs/heads/main'
+        run: echo "LOCAL_HEAD_SHA=${{ github.sha }}" >> $GITHUB_ENV
         working-directory: ./commercial
 
-      - name: Check HEAD commit hash
+      - name: Set commit hash for PRs
+        if: ! github.ref == 'refs/heads/main'
+        run: echo "LOCAL_HEAD_SHA=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+        working-directory: ./commercial
+
+      - name: Log commit hash
         run: echo "${{ env.LOCAL_HEAD_SHA }}"
 
       # DCR
