@@ -27,12 +27,20 @@
 		]
 	},
 	"lint-staged": {
-		"core/*.(js|ts)": [
+		"core/**/*.(js|ts)": [
 			"yarn workspace @guardian/commercial-core eslint --fix",
 			"yarn workspace @guardian/commercial-core prettier:fix"
+		],
+		"bundle/**/*.(js|ts)": [
+			"yarn workspace @guardian/commercial-bundle eslint --fix",
+			"yarn workspace @guardian/commercial-bundle prettier:fix"
 		]
 	},
 	"resolutions": {
 		"typescript": "~4.9.5"
+	},
+	"devDependencies": {
+		"husky": "^8.0.3",
+		"lint-staged": "^13.2.0"
 	}
 }
