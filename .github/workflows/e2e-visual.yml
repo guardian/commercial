@@ -17,6 +17,14 @@ jobs:
     name: E2E Visual
     runs-on: ubuntu-latest
     steps:
+      # Set HEAD commit hash
+      # Using GHA context would require different lookups for PRs and regular branches
+      - name: Set HEAD commit hash
+        run: echo "LOCAL_HEAD_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+      - name: Check HEAD commit hash
+        run: echo "${{ env.LOCAL_HEAD_SHA }}"
+
       # Commercial
       - name: Checkout
         uses: actions/checkout@v3
@@ -52,6 +60,7 @@ jobs:
         run: make build
         working-directory: ./dcr/dotcom-rendering
 
+      # Start servers
       - name: Start DCR server
         run: make start-ci & npx wait-on -v -i 1000 http://localhost:3030
         working-directory: ./dcr/dotcom-rendering
@@ -63,6 +72,7 @@ jobs:
         run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
         working-directory: ./commercial/bundle
 
+      # Percy
       - name: Run Percy Visual Regression Tests
         run: yarn visual:run
         working-directory: ./commercial/e2e
@@ -70,7 +80,7 @@ jobs:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
       - name: Wait for Percy Snapshots
-        run: yarn percy build:wait --verbose --fail-on-changes --project ced09b1a/commercial --commit ${{ github.event.pull_request.head.sha }} --timeout 900000 --interval 5000
+        run: yarn percy build:wait --verbose --fail-on-changes --project ced09b1a/commercial --commit ${{ env.LOCAL_HEAD_SHA }} --timeout 900000 --interval 5000
         working-directory: ./commercial/e2e
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
