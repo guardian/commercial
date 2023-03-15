@@ -21,20 +21,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Commercial
-      - name: Checkout
+      - name: Checkout Commercial
         uses: actions/checkout@v3
         with:
           path: ./commercial
 
-      - name: Setup node
+      - name: Setup Commercial node
         uses: actions/setup-node@v3
         with:
           node-version-file: "./commercial/.nvmrc"
 
-      - name: Install dependencies
+      - name: Install Commercial dependencies
         run: yarn install --frozen-lockfile
         working-directory: ./commercial
 
+      # Set commit hash
       - name: Set commit hash for main
         if: github.ref == 'refs/heads/main'
         run: echo "LOCAL_HEAD_SHA=${{ github.sha }}" >> $GITHUB_ENV
