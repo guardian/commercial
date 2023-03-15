@@ -72,9 +72,9 @@ const showPreview = (
 	previewParams: PreviewParameters,
 ) => {
 	const { assetPath, width, height } = previewParams;
-	slots.forEach((adSlot) => {
-		createIframe(adSlot, assetPath, { width, height });
-		void renderAdvertLabel(adSlot);
+	slots.forEach((slot) => {
+		createIframe(slot, assetPath, { width, height });
+		void renderAdvertLabel(slot);
 	});
 };
 
