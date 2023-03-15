@@ -19,6 +19,7 @@ jobs:
     steps:
       # Set HEAD commit hash
       # Using GHA context would require different lookups for PRs and regular branches
+      # Setting an environment variable is simpler and branch agnostic
       - name: Set HEAD commit hash
         run: echo "LOCAL_HEAD_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
