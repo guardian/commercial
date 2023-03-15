@@ -15,7 +15,3 @@ export type GuElement = {
 	targeting: TargetingRules;
 	assets: Asset[];
 };
-
-export type SelectionPayload = {
-	elements: GuElement[];
-};

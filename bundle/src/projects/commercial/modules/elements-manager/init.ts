@@ -7,7 +7,7 @@ import { dfpEnv } from '../dfp/dfp-env';
 import { renderAdvertLabel } from '../dfp/render-advert-label';
 import {
 	fetchSelectionPayload,
-	getPageTargeting,
+	getPageTargetingForElements,
 	initTargeting,
 } from './targeting';
 
@@ -80,13 +80,10 @@ const showPreview = (
 
 const selectAssetsForSlots = async (slots: HTMLElement[]) => {
 	const consentState = await onConsent();
-	const selectionPayload = await fetchSelectionPayload();
-	const pageTargeting = getPageTargeting(consentState);
+	const elements = await fetchSelectionPayload();
+	const pageTargeting = getPageTargetingForElements(consentState);
 
-	const { selectAssetForSlot } = initTargeting(
-		selectionPayload,
-		pageTargeting,
-	);
+	const { selectAssetForSlot } = initTargeting(elements, pageTargeting);
 
 	slots.forEach((slot) => {
 		const slotName = slot.dataset.name;

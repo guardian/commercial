@@ -7,25 +7,62 @@ import type { ConsentState } from '@guardian/consent-management-platform/dist/ty
 import { isString } from 'lodash-es';
 import { commercialFeatures } from 'common/modules/commercial/commercial-features';
 import { getSynchronousParticipations } from 'common/modules/experiments/ab';
-import type {
-	Asset,
-	GuElement,
-	SelectionPayload,
-	TargetingRule,
-	TargetingRules,
-} from './types';
+import type { Asset, GuElement, TargetingRule, TargetingRules } from './types';
 
-export const fetchSelectionPayload = (): Promise<SelectionPayload> => {
-	// TODO replace this with a fetch
-	return Promise.resolve({
-		elements: [],
-	});
+type SerializedPayload = Array<{
+	id: string;
+	targeting: Array<{
+		key: string;
+		// Here multiple values may occupy the same string, but are comma separated
+		// e.g. `sport,culture`
+		value: string;
+	}>;
+	assets: Asset[];
+}>;
+
+export const fetchSelectionPayload = async (): Promise<GuElement[]> => {
+	// Endpoints are required for development purposes
+	const payloadUrl = `http://localhost:3000/api/elements`;
+	const assetUrl = `http://localhost:3000/api/dev/asset`;
+
+	try {
+		const res = await fetch(payloadUrl);
+
+		if (!res.ok) {
+			console.error(
+				'Network error trying to fetch the selection payload',
+			);
+			return [];
+		}
+
+		const json = (await res.json()) as SerializedPayload;
+
+		// Transform the serialized payload into an array of elements
+		const elements: GuElement[] = json.map((element) => ({
+			...element,
+			assets: element.assets.map((asset) => ({
+				...asset,
+				path: `${assetUrl}/${asset.path}`,
+			})),
+			targeting: element.targeting.map(({ key, value }) => ({
+				key,
+				value: new Set(value.split(',')),
+			})),
+		}));
+
+		return elements;
+	} catch (error) {
+		console.error(error);
+		return [];
+	}
 };
 
 /**
  * Obtain consented or consentless page targeting object, based on consent state.
  */
-export const getPageTargeting = (consentState: ConsentState): PageTargeting => {
+export const getPageTargetingForElements = (
+	consentState: ConsentState,
+): PageTargeting => {
 	if (consentState.canTarget) {
 		return buildPageTargeting({
 			consentState,
@@ -88,11 +125,11 @@ const selectAtRandom = <T>(candidates: T[]) =>
 	candidates[Math.floor(Math.random() * candidates.length)] as T | undefined;
 
 export const initTargeting = (
-	{ elements }: SelectionPayload,
+	elements: GuElement[],
 	pageTargeting: PageTargeting,
 ) => {
 	const selectAssetForSlot = (slotId: string): Asset | undefined => {
-		// Combine per-slot targeting to the page targeting object
+		// Combine per-slot targeting with the page targeting object to form a full set of targeting
 		const targeting = { ...pageTargeting, slot: slotId };
 		const candidates = eligibleElements(targeting, elements);
 		const winningElement = selectAtRandom(candidates);
