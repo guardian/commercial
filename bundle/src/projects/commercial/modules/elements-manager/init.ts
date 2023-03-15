@@ -93,7 +93,8 @@ const selectAssetsForSlots = async (slots: HTMLElement[]) => {
 			);
 			return;
 		}
-		const asset = selectAssetForSlot(slotName);
+		const slotTargeting = { slot: slot.dataset.name };
+		const asset = selectAssetForSlot(slotTargeting);
 		if (asset) {
 			createIframe(slot, asset.path, {
 				width: asset.width?.toString(),

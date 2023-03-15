@@ -132,15 +132,12 @@ export const initTargeting = (
 	elements: GuElement[],
 	pageTargeting: PageTargeting,
 ) => {
-	const selectAssetForSlot = (slotId: string): Asset | undefined => {
-		const targeting = { ...pageTargeting, slot: slotId };
-
-		// Select all of the eligible candidates from their targeting
+	const selectAssetForSlot = (
+		slotTargeting: PageTargeting,
+	): Asset | undefined => {
+		const targeting = { ...pageTargeting, ...slotTargeting };
 		const candidates = eligibleElements(targeting, elements);
-
 		const winningElement = selectAtRandom(candidates);
-
-		// Choose an asset at random from the winning element
 		return winningElement
 			? selectAtRandom(winningElement.assets)
 			: undefined;
