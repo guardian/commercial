@@ -7,6 +7,14 @@ import { _, init } from './liveblog-adverts';
 
 const { getSlotName } = _;
 
+jest.mock('lib/report-error', () => ({
+	reportError: jest.fn(),
+}));
+
+jest.mock('../../commercial/modules/header-bidding/prebid/prebid', () => ({
+	requestBids: jest.fn(),
+}));
+
 jest.mock('ophan/ng', () => null);
 
 jest.mock('../../../lib/raven');

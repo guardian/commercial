@@ -1,9 +1,11 @@
 import { adSizes, createAdSlot } from '@guardian/commercial-core';
 import { AD_LABEL_HEIGHT } from '@guardian/commercial-core/dist/cjs/constants';
 import { log } from '@guardian/libs';
+import { isInEagerPrebidVariant } from 'common/modules/experiments/tests/eager-prebid-check';
 import fastdom from '../../../lib/fastdom-promise';
 import { commercialFeatures } from '../../common/modules/commercial/commercial-features';
 import { addSlot } from './dfp/add-slot';
+import { requestBidsForAd } from './header-bidding/request-bids';
 
 const tallestCommentAd = adSizes.mpu.height + AD_LABEL_HEIGHT;
 const tallestCommentsExpandedAd = adSizes.halfPage.height + AD_LABEL_HEIGHT;
@@ -30,8 +32,12 @@ const insertAd = (anchor: HTMLElement): Promise<void> => {
 		.mutate(() => {
 			anchor.appendChild(adSlotContainer);
 		})
-		.then(() => {
-			addSlot(slot, false);
+		.then(async () => {
+			const advert = await addSlot(slot, false);
+
+			if (advert && isInEagerPrebidVariant()) {
+				await requestBidsForAd(advert);
+			}
 		});
 };
 

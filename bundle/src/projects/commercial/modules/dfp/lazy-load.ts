@@ -1,4 +1,5 @@
 import { once } from 'lodash-es';
+import { getEagerPrebidVariant } from 'common/modules/experiments/tests/eager-prebid-check';
 import type { Advert } from './Advert';
 import { dfpEnv } from './dfp-env';
 import { getAdvertById } from './get-advert-by-id';
@@ -34,10 +35,30 @@ const onIntersect = (
 	);
 };
 
+// Decide the rootMargin for the IntersectionObserver
+// This is based on the variant the user is in, control and
+// variant-20 are the same
+const decideLazyLoadMargin = (): string => {
+	const variant = getEagerPrebidVariant();
+
+	switch (variant) {
+		case 'variant-17':
+			return '17.5% 0px';
+		case 'variant-15':
+			return '15% 0px';
+		case 'variant-12':
+			return '12.5% 0px';
+		case 'variant-10':
+			return '10% 0px';
+		default:
+			return '20% 0px';
+	}
+};
+
 const getObserver = once(() => {
 	return Promise.resolve(
 		new window.IntersectionObserver(onIntersect, {
-			rootMargin: '20% 0px',
+			rootMargin: decideLazyLoadMargin(),
 		}),
 	);
 });
