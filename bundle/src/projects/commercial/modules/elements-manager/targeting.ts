@@ -7,18 +7,13 @@ import type { ConsentState } from '@guardian/consent-management-platform/dist/ty
 import { isString } from 'lodash-es';
 import { commercialFeatures } from 'common/modules/commercial/commercial-features';
 import { getSynchronousParticipations } from 'common/modules/experiments/ab';
-import type { Asset, GuElement, TargetingRule, TargetingRules } from './types';
-
-type SerializedPayload = Array<{
-	id: string;
-	targeting: Array<{
-		key: string;
-		// Here multiple values may occupy the same string, but are comma separated
-		// e.g. `sport,culture`
-		value: string;
-	}>;
-	assets: Asset[];
-}>;
+import type {
+	Asset,
+	GuElement,
+	SerializedPayload,
+	TargetingRule,
+	TargetingRules,
+} from './types';
 
 export const fetchSelectionPayload = async (): Promise<GuElement[]> => {
 	// Endpoints are required for development purposes
@@ -78,7 +73,10 @@ export const getPageTargetingForElements = (
 };
 
 /**
- * Check that a single targeting role is satisfied by the page targeting object.
+ * Determines if a given targeting object matches a single condition
+ *
+ * @example
+ * satisfiesRule({ at: "fixed-puppies "}, { key: "at", value: new Set(["fixed-puppies", "fixed-cats"]) }); => true
  */
 const satisfiesRule = (
 	pageTargeting: PageTargeting,
@@ -86,18 +84,24 @@ const satisfiesRule = (
 ): boolean => {
 	const targetingValue = pageTargeting[condition.key];
 	if (!targetingValue) {
+		// If there is no value in the targeting for the corresponding key then
+		// this rule can't be satisfied
 		return false;
 	} else if (isString(targetingValue)) {
+		// If there is a single value in the targeting for this key, check that
+		// string is present in the condition's values
 		return condition.value.has(targetingValue);
 	} else {
+		// If there's multiple values in the targeting for this key, check that
+		// at least one is present in the condition's values
 		return targetingValue.some((v) => condition.value.has(v));
 	}
 };
 
 /**
- * Check that all of the conditions in the target are satisfied
- * by the page targeting object. This is in effect the AND conditions
- * as supplied in the GEM UI.
+ * Check that all of the conditions in the target are satisfied by the page targeting object.
+ *
+ * We're effectively taking the **AND** of all of the conditions
  */
 const satisfiesTargeting = (
 	pageTargeting: PageTargeting,
@@ -129,10 +133,14 @@ export const initTargeting = (
 	pageTargeting: PageTargeting,
 ) => {
 	const selectAssetForSlot = (slotId: string): Asset | undefined => {
-		// Combine per-slot targeting with the page targeting object to form a full set of targeting
 		const targeting = { ...pageTargeting, slot: slotId };
+
+		// Select all of the eligible candidates from their targeting
 		const candidates = eligibleElements(targeting, elements);
+
 		const winningElement = selectAtRandom(candidates);
+
+		// Choose an asset at random from the winning element
 		return winningElement
 			? selectAtRandom(winningElement.assets)
 			: undefined;
