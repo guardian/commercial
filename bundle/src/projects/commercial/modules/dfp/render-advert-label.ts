@@ -95,7 +95,7 @@ const renderAdvertLabel = (adSlotNode: HTMLElement): Promise<Promise<void>> => {
 	return fastdom.measure(() => {
 		if (shouldRenderLabel(adSlotNode)) {
 			const renderAdTestLabel = shouldRenderAdTestLabel();
-			const adTestClearExists = adSlotNode.parentNode?.firstChild?.firstChild?.nodeName === 'A' ? true : false
+			const adTestClearExists = adSlotNode.parentNode?.firstElementChild?.firstElementChild?.nodeName === 'A' ? true : false
 			const adTestCookieName = getCookie({
 				name: 'adtest',
 				shouldMemoize: true,
