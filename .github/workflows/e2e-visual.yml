@@ -46,9 +46,6 @@ jobs:
         run: echo "LOCAL_HEAD_SHA=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
         working-directory: ./commercial
 
-      - name: Log commit hash
-        run: echo "${{ env.LOCAL_HEAD_SHA }}"
-
       # DCR
       - name: Checkout DCR
         uses: actions/checkout@v3
