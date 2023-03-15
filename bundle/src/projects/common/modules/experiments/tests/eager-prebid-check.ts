@@ -8,9 +8,7 @@ export const getEagerPrebidVariant = memoize((): string => {
 		return 'notInTest';
 	}
 	const tests = getSynchronousTestsToRun();
-	const test = tests.find(
-		(test) => test.id === eagerPrebid.id,
-	);
+	const test = tests.find((test) => test.id === eagerPrebid.id);
 	return test ? test.variantToRun.id : 'control';
 });
 

@@ -5,7 +5,6 @@ import { isInUk } from 'common/modules/commercial/geo-utils';
 import { isInVariantSynchronous } from 'common/modules/experiments/ab';
 import { billboardsInMerch } from 'common/modules/experiments/tests/billboards-in-merch';
 import { isInEagerPrebidVariant } from 'common/modules/experiments/tests/eager-prebid-check';
-
 import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
 import { commercialFeatures } from '../../../common/modules/commercial/commercial-features';
 import { requestBidsForAds } from '../header-bidding/request-bids';
