@@ -8,9 +8,64 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      # Commercial
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: ./commercial
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: "./commercial/.nvmrc"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: ./commercial
+
+      # DCR
+      - name: Checkout DCR
+        uses: actions/checkout@v3
+        with:
+          repository: guardian/dotcom-rendering
+          path: ./dcr
+
+      - name: Setup DCR node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: "./dcr/.nvmrc"
+
+      - name: Install DCR dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: ./dcr/dotcom-rendering
+        env:
+          NODE_ENV: production
+
+      - name: Build DCR
+        run: make build
+        working-directory: ./dcr/dotcom-rendering
+
+      - name: Build Commercial
+        run: yarn build:dev
+        working-directory: ./commercial/bundle
+
+      - name: Upload builds
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          retention-days: 1
+          path: |
+            commercial/bundle/dist
+            dcr/dotcom-rendering/dist
+
   test:
     name: E2E Cypress
     runs-on: ubuntu-latest
+    needs: build
     strategy:
       fail-fast: false
       matrix:
@@ -45,13 +100,14 @@ jobs:
 
       - name: Install DCR dependencies
         run: yarn install --frozen-lockfile
-        working-directory: ./dcr
+        working-directory: ./dcr/dotcom-rendering
         env:
           NODE_ENV: production
 
-      - name: Build DCR
-        run: make build
-        working-directory: ./dcr/dotcom-rendering
+      - name: Download build
+        uses: actions/download-artifact@v2
+        with:
+          name: build
 
       - name: Start DCR server
         run: make start-ci & npx wait-on -v -i 1000 http://localhost:3030
@@ -61,7 +117,7 @@ jobs:
           COMMERCIAL_BUNDLE_URL: http://localhost:3031/graun.standalone.commercial.js
 
       - name: Start Commercial server
-        run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
+        run: npx http-server -p 3031 ./dist & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
         working-directory: ./commercial/bundle
 
       - name: Run Cypress
