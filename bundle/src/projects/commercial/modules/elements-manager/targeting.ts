@@ -7,12 +7,8 @@ import type { ConsentState } from '@guardian/consent-management-platform/dist/ty
 import { isString } from 'lodash-es';
 import { commercialFeatures } from 'common/modules/commercial/commercial-features';
 import { getSynchronousParticipations } from 'common/modules/experiments/ab';
-import type {
-	Asset,
-	GuElement,
-	SerializedPayload,
-	TargetingRule,
-} from './types';
+import type { GuElement, SerializedPayload, TargetingRule } from './types';
+import { selectAtRandom } from './util';
 
 const fetchSelectionPayload = async (): Promise<GuElement[]> => {
 	// Endpoints are required for development purposes
@@ -124,10 +120,6 @@ const eligibleElements = (
 			// The page targeting object supplied satisfies the element's targeting rules
 			satisfiesTargeting(pageTargeting, element.targeting),
 	);
-
-const selectAtRandom = <T>(candidates: T[]) =>
-	// TODO remove this type assertion when we can enable --noUncheckedIndexedAccess compiler option
-	candidates[Math.floor(Math.random() * candidates.length)] as T | undefined;
 
 const selectAsset = (elements: GuElement[], targeting: PageTargeting) => {
 	const candidates = eligibleElements(targeting, elements);
