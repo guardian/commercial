@@ -32,7 +32,7 @@ const retainTopAboveNavSlotSize = (
 };
 
 /**
- * This is used by to request bids for a single advert. This should only be called if an ad is already in the viewport and load-advert is invoked immediately, before space-finder is finished and prebid is called for all dynamic slots.
+ * This is used to request bids for a single advert. This should only be called if an ad is already in the viewport and load-advert is invoked immediately, before space-finder is finished and prebid is called for all dynamic slots.
  *
  * @param advert  The advert to request bids for
  */
