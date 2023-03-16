@@ -98,7 +98,7 @@ jobs:
           path: ./commercial/e2e/cypress/videos
 
       - uses: actions/upload-artifact@v2
-        if: failure()
+        if: always()
         with:
           name: cypress-screenshots
           path: ./commercial/e2e/cypress/screenshots

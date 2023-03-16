@@ -24,6 +24,8 @@ describe('Visually snapshot long read article', () => {
 		// workaround for onwards sections
 		// the intercept intermittently fails to stub the request
 		cy.get('[name=OnwardsUpper]').invoke('remove');
+		// cypress screenshot
+		cy.screenshot('article-long-read');
 		// snapshot
 		cy.percySnapshot('article-long-read', {
 			discovery: {
