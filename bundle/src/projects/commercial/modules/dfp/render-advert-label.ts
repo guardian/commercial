@@ -51,11 +51,11 @@ const createAdCloseDiv = (): HTMLElement => {
 	return closeDiv;
 };
 
-const shouldRenderAdTestLabel = (): boolean =>
+const shouldRenderAdTestLabel = (adSlotNode: HTMLElement): boolean =>
 	!!getCookie({
 		name: 'adtestInLabels',
 		shouldMemoize: true,
-	});
+	}) && !adSlotNode.classList.contains('ad-slot--sky');
 
 // If `adtest` cookie is set, display its value in the ad label
 const createAdTestLabel = (
@@ -94,7 +94,7 @@ const createAdTestCookieRemovalLink = (
 const renderAdvertLabel = (adSlotNode: HTMLElement): Promise<Promise<void>> => {
 	return fastdom.measure(() => {
 		if (shouldRenderLabel(adSlotNode)) {
-			const renderAdTestLabel = shouldRenderAdTestLabel();
+			const renderAdTestLabel = shouldRenderAdTestLabel(adSlotNode);
 			const adTestClearExists =
 				adSlotNode.parentNode?.firstElementChild?.firstElementChild
 					?.nodeName === 'A'
