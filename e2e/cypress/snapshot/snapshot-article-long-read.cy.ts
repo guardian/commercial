@@ -25,8 +25,9 @@ describe('Visually snapshot long read article', () => {
 		// the intercept intermittently fails to stub the request
 		cy.get('[name=OnwardsUpper]').invoke('remove');
 		// cypress screenshot
+		// helpful to compare to Percy
 		cy.screenshot('article-long-read');
-		// snapshot
+		// percy snapshot
 		cy.percySnapshot('article-long-read', {
 			discovery: {
 				allowedHostnames: ['localhost', 'tpc.googlesyndication.com'],

@@ -25,7 +25,10 @@ describe('Visually snapshot standard article', () => {
 		// the intercept intermittently fails to stub the request
 		cy.get('section:has(gu-island[name="Carousel"])').invoke('remove');
 		cy.get('[name=OnwardsUpper]').invoke('remove');
-		// snapshot
+		// cypress screenshot
+		// helpful to compare to Percy
+		cy.screenshot('article-standard');
+		// percy snapshot
 		cy.percySnapshot('article-standard', {
 			discovery: {
 				allowedHostnames: ['localhost', 'tpc.googlesyndication.com'],
