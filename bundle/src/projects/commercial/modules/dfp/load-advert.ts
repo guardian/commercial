@@ -19,6 +19,7 @@ export const loadAdvert = (advert: Advert): void => {
 			// The display needs to be called, even in the event of an error.
 		})
 		.then(() => {
+			// If the advert has already had bids requested, then we don't need to request them again.
 			if (advert.headerBiddingBidRequest) {
 				return advert.headerBiddingBidRequest;
 			}

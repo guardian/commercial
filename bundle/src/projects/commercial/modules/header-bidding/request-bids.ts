@@ -31,11 +31,21 @@ const retainTopAboveNavSlotSize = (
 	];
 };
 
+/**
+ * This is used by to request bids for a single advert. This should only be called if an ad is already in the viewport and load-advert is invoked immediately, before space-finder is finished and prebid is called for all dynamic slots.
+ *
+ * @param advert  The advert to request bids for
+ */
 export const requestBidsForAd = async (advert: Advert): Promise<void> => {
 	advert.headerBiddingBidRequest = requestBidsForAds([advert]);
 	await advert.headerBiddingBidRequest;
 };
 
+/**
+ * This is used to request bids for multiple adverts, it's possible for adverts to be passed in that have already had bids requested, this can happen if they're already in the viewport, it will only request bids for adverts that haven't already had bids requested.
+ *
+ * @param adverts  The adverts to request bids for
+ */
 export const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
 	const adsToRequestBidsFor = adverts.filter(
 		(advert) => !advert.headerBiddingBidRequest,
@@ -53,6 +63,10 @@ export const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
 	await promise;
 };
 
+/**
+ * This is used to refresh bids for a single advert. retainTopAboveNavSlotSize is used to force the refreshed advert to be the same size as the first
+ * @param advert  The advert to refresh bids for
+ **/
 export const refreshBidsForAd = async (advert: Advert): Promise<void> => {
 	const prebidPromise = prebid.requestBids(
 		[advert],
