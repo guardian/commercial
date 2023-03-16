@@ -170,10 +170,7 @@ const fill = (rules: SpacefinderRules) => {
 			}
 		})
 		.then(async () => {
-			if (
-				insertedDynamicAds.length &&
-				isInEagerPrebidVariant()
-			) {
+			if (insertedDynamicAds.length && isInEagerPrebidVariant()) {
 				await requestBidsForAds(insertedDynamicAds);
 			}
 			insertedDynamicAds = [];
