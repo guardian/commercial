@@ -1,6 +1,6 @@
 import type { AdSize, SizeMapping } from '@guardian/commercial-core';
 import { adSizes, createAdSlot } from '@guardian/commercial-core';
-import { isInEagerPrebidVariant } from 'common/modules/experiments/tests/eager-prebid-check';
+import { isInEagerPrebidVariant } from 'common/modules/experiments/eager-prebid-check';
 import { createAdvertBorder } from 'common/modules/spacefinder-debug-tools';
 import {
 	getCurrentBreakpoint,

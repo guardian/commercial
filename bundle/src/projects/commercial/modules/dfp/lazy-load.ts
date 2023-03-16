@@ -1,5 +1,5 @@
 import { once } from 'lodash-es';
-import { getEagerPrebidVariant } from 'common/modules/experiments/tests/eager-prebid-check';
+import { getEagerPrebidVariant } from 'common/modules/experiments/eager-prebid-check';
 import type { Advert } from './Advert';
 import { dfpEnv } from './dfp-env';
 import { getAdvertById } from './get-advert-by-id';
