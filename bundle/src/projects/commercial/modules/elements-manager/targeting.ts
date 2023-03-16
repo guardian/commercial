@@ -14,7 +14,7 @@ import type {
 	TargetingRule,
 } from './types';
 
-export const fetchSelectionPayload = async (): Promise<GuElement[]> => {
+const fetchSelectionPayload = async (): Promise<GuElement[]> => {
 	// Endpoints are required for development purposes
 	const payloadUrl = `http://localhost:3000/api/elements`;
 	const assetUrl = `http://localhost:3000/api/dev/asset`;
@@ -54,7 +54,7 @@ export const fetchSelectionPayload = async (): Promise<GuElement[]> => {
 /**
  * Obtain consented or consentless page targeting object, based on consent state.
  */
-export const getPageTargetingForElements = (
+const getPageTargetingForElements = (
 	consentState: ConsentState,
 ): PageTargeting => {
 	if (consentState.canTarget) {
@@ -129,10 +129,7 @@ const selectAtRandom = <T>(candidates: T[]) =>
 	// TODO remove this type assertion when we can enable --noUncheckedIndexedAccess compiler option
 	candidates[Math.floor(Math.random() * candidates.length)] as T | undefined;
 
-export const initTargeting = (
-	elements: GuElement[],
-	pageTargeting: PageTargeting,
-) => {
+const initTargeting = (elements: GuElement[], pageTargeting: PageTargeting) => {
 	const selectAssetForSlot = (
 		slotTargeting: PageTargeting,
 	): Asset | undefined => {
@@ -145,3 +142,5 @@ export const initTargeting = (
 	};
 	return { selectAssetForSlot };
 };
+
+export { initTargeting, getPageTargetingForElements, fetchSelectionPayload };
