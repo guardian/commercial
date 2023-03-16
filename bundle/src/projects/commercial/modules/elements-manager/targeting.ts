@@ -86,15 +86,17 @@ const satisfiesRule = (
 		// If there is no value in the targeting for the corresponding key then
 		// this rule can't be satisfied
 		return false;
-	} else if (isString(targetingValue)) {
+	}
+
+	if (isString(targetingValue)) {
 		// If there is a single value in the targeting for this key, check that
 		// string is present in the condition's values
 		return condition.value.has(targetingValue);
-	} else {
-		// If there's multiple values in the targeting for this key, check that
-		// at least one is present in the condition's values
-		return targetingValue.some((v) => condition.value.has(v));
 	}
+
+	// If there's multiple values in the targeting for this key, check that
+	// at least one is present in the condition's values
+	return targetingValue.some((v) => condition.value.has(v));
 };
 
 /**
