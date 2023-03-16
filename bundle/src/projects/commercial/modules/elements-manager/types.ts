@@ -1,7 +1,5 @@
 export type TargetingRule = { key: string; value: Set<string> };
 
-export type TargetingRules = TargetingRule[];
-
 export type Asset = {
 	id: string;
 	path: string;
@@ -12,7 +10,7 @@ export type Asset = {
 
 export type GuElement = {
 	id: string;
-	targeting: TargetingRules;
+	targeting: TargetingRule[];
 	assets: Asset[];
 };
 

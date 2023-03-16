@@ -12,7 +12,6 @@ import type {
 	GuElement,
 	SerializedPayload,
 	TargetingRule,
-	TargetingRules,
 } from './types';
 
 export const fetchSelectionPayload = async (): Promise<GuElement[]> => {
@@ -105,7 +104,7 @@ const satisfiesRule = (
  */
 const satisfiesTargeting = (
 	pageTargeting: PageTargeting,
-	targetingRules: TargetingRules,
+	targetingRules: TargetingRule[],
 ): boolean =>
 	targetingRules.every((rule) => satisfiesRule(pageTargeting, rule));
 
