@@ -129,18 +129,10 @@ const selectAtRandom = <T>(candidates: T[]) =>
 	// TODO remove this type assertion when we can enable --noUncheckedIndexedAccess compiler option
 	candidates[Math.floor(Math.random() * candidates.length)] as T | undefined;
 
-const initTargeting = (elements: GuElement[], pageTargeting: PageTargeting) => {
-	const selectAssetForSlot = (
-		slotTargeting: PageTargeting,
-	): Asset | undefined => {
-		const targeting = { ...pageTargeting, ...slotTargeting };
-		const candidates = eligibleElements(targeting, elements);
-		const winningElement = selectAtRandom(candidates);
-		return winningElement
-			? selectAtRandom(winningElement.assets)
-			: undefined;
-	};
-	return { selectAssetForSlot };
+const selectAsset = (elements: GuElement[], targeting: PageTargeting) => {
+	const candidates = eligibleElements(targeting, elements);
+	const winningElement = selectAtRandom(candidates);
+	return winningElement ? selectAtRandom(winningElement.assets) : undefined;
 };
 
-export { initTargeting, getPageTargetingForElements, fetchSelectionPayload };
+export { getPageTargetingForElements, fetchSelectionPayload, selectAsset };

@@ -8,7 +8,7 @@ import { renderAdvertLabel } from '../dfp/render-advert-label';
 import {
 	fetchSelectionPayload,
 	getPageTargetingForElements,
-	initTargeting,
+	selectAsset,
 } from './targeting';
 
 type PreviewParameters = {
@@ -83,8 +83,6 @@ const selectAssetsForSlots = async (slots: HTMLElement[]) => {
 	const elements = await fetchSelectionPayload();
 	const pageTargeting = getPageTargetingForElements(consentState);
 
-	const { selectAssetForSlot } = initTargeting(elements, pageTargeting);
-
 	slots.forEach((slot) => {
 		const slotName = slot.dataset.name;
 		if (!slotName) {
@@ -93,8 +91,10 @@ const selectAssetsForSlots = async (slots: HTMLElement[]) => {
 			);
 			return;
 		}
-		const slotTargeting = { slot: slot.dataset.name };
-		const asset = selectAssetForSlot(slotTargeting);
+		const asset = selectAsset(elements, {
+			...pageTargeting,
+			slot: slot.dataset.name,
+		});
 		if (asset) {
 			createIframe(slot, asset.path, {
 				width: asset.width?.toString(),
