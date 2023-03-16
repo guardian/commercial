@@ -11,12 +11,9 @@ jest.mock('lodash-es', () => ({
 	once: jest.fn().mockImplementation(<T>(f: T) => f),
 }));
 
-jest.mock(
-	'../../../common/modules/experiments/tests/eager-prebid-check',
-	() => ({
-		getEagerPrebidVariant: jest.fn().mockReturnValue('control'),
-	}),
-);
+jest.mock('../../../common/modules/experiments/eager-prebid-check', () => ({
+	getEagerPrebidVariant: jest.fn().mockReturnValue('control'),
+}));
 
 jest.mock('../../../../lib/config', () => ({
 	get: jest.fn(() => false),
