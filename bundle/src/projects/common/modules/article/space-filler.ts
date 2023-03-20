@@ -6,15 +6,6 @@ import type {
 import { findSpace, SpaceError } from 'common/modules/spacefinder';
 import raven from 'lib/raven';
 
-const fireSpacefillerCompleteEvent = (
-	options: SpacefinderOptions | undefined,
-): void => {
-	if (options?.debug) {
-		const event = new CustomEvent('spacefiller-complete');
-		document.dispatchEvent(event);
-	}
-};
-
 class SpaceFiller {
 	queue = Promise.resolve(true);
 
@@ -33,14 +24,10 @@ class SpaceFiller {
 			findSpace(rules, options)
 				.then((paragraphs: HTMLElement[]) => writer(paragraphs))
 				.then(() => {
-					fireSpacefillerCompleteEvent(options);
-				})
-				.then(() => {
 					return true;
 				})
 				.catch((ex) => {
 					if (ex instanceof SpaceError) {
-						fireSpacefillerCompleteEvent(options);
 						return false;
 					}
 					throw ex;
