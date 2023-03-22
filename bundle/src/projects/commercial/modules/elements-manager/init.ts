@@ -1,9 +1,15 @@
+import { onConsent } from '@guardian/consent-management-platform';
 import { isString } from '@guardian/libs';
 import { isInVariantSynchronous } from 'common/modules/experiments/ab';
 import { elementsManager } from 'common/modules/experiments/tests/elements-manager';
 import { getUrlVars } from 'lib/url';
-import { dfpEnv } from './dfp/dfp-env';
-import { renderAdvertLabel } from './dfp/render-advert-label';
+import { dfpEnv } from '../dfp/dfp-env';
+import { renderAdvertLabel } from '../dfp/render-advert-label';
+import {
+	fetchSelectionPayload,
+	getPageTargetingForElements,
+	selectAsset,
+} from './targeting';
 
 type PreviewParameters = {
 	assetPath: string;
@@ -61,25 +67,58 @@ const createIframe = (
 	adSlot.appendChild(iframeNode);
 };
 
-const initElementsManager = (): Promise<void> => {
+const showPreview = (
+	slots: HTMLElement[],
+	previewParams: PreviewParameters,
+) => {
+	const { assetPath, width, height } = previewParams;
+	slots.forEach((slot) => {
+		createIframe(slot, assetPath, { width, height });
+		void renderAdvertLabel(slot);
+	});
+};
+
+const selectAssetsForSlots = async (slots: HTMLElement[]) => {
+	const consentState = await onConsent();
+	const elements = await fetchSelectionPayload();
+	const pageTargeting = getPageTargetingForElements(consentState);
+
+	slots.forEach((slot) => {
+		const slotName = slot.dataset.name;
+		if (!slotName) {
+			console.error(
+				`Name attribute not found for slot with id ${slot.id}`,
+			);
+			return;
+		}
+		const asset = selectAsset(elements, {
+			...pageTargeting,
+			slot: slot.dataset.name,
+		});
+		if (asset) {
+			createIframe(slot, asset.path, {
+				width: asset.width?.toString(),
+				height: asset.height?.toString(),
+			});
+			void renderAdvertLabel(slot);
+		}
+	});
+};
+
+const initElementsManager = async (): Promise<void> => {
 	if (!isInVariantSynchronous(elementsManager, 'variant')) {
 		return Promise.resolve();
 	}
 
+	const slots = getSlots();
 	const previewParams = parsePreviewUrl();
 
-	if (!previewParams) {
+	if (previewParams) {
+		showPreview(slots, previewParams);
 		return Promise.resolve();
 	}
 
-	const { assetPath, width, height } = previewParams;
-
-	getSlots().forEach((adSlot) => {
-		createIframe(adSlot, assetPath, { width, height });
-		void renderAdvertLabel(adSlot);
-	});
-
-	return Promise.resolve();
+	await selectAssetsForSlots(slots);
 };
 
 export { initElementsManager };
