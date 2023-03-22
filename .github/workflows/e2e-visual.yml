@@ -84,16 +84,12 @@ jobs:
         working-directory: ./commercial/e2e
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
-          # Set to a random string to force Percy to allow globally approved snapshots
-          PERCY_BRANCH: XYZ_123
 
       - name: Wait for Percy Snapshots
         run: yarn percy build:wait --verbose --fail-on-changes --project ced09b1a/commercial --commit ${{ env.LOCAL_HEAD_SHA }} --timeout 900000 --interval 5000
         working-directory: ./commercial/e2e
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
-          # Set to a random string to force Percy to allow globally approved snapshots
-          PERCY_BRANCH: XYZ_123
 
       - uses: actions/upload-artifact@v2
         if: always()
