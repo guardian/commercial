@@ -69,7 +69,7 @@ jobs:
           npm config set _authToken=${{ secrets.NPM_TOKEN }}
           npm publish --tag beta
 
-      - uses: actions/github-script@v3
+      - uses: actions/github-script@v6
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -130,7 +130,7 @@ jobs:
           npm config set _authToken=${{ secrets.NPM_TOKEN }}
           npm publish --tag beta
 
-      - uses: actions/github-script@v3
+      - uses: actions/github-script@v6
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
