@@ -4,6 +4,7 @@ import { PREBID_TIMEOUT } from '@guardian/commercial-core/dist/esm/constants';
 import { onConsent } from '@guardian/consent-management-platform';
 import type { Framework } from '@guardian/consent-management-platform/dist/types';
 import { isString, log } from '@guardian/libs';
+import { flatten } from 'lodash-es';
 import type { Advert } from 'commercial/modules/dfp/Advert';
 import { getPageTargeting } from 'common/modules/commercial/build-page-targeting';
 import { dfpEnv } from '../../dfp/dfp-env';
@@ -137,6 +138,7 @@ declare global {
 			que: {
 				push: (cb: () => void) => void;
 			};
+			addAdUnits: (adUnits: PrebidAdUnit[]) => void;
 			// https://docs.prebid.org/dev-docs/publisher-api-reference/requestBids.html
 			requestBids(requestObj?: {
 				adUnitCodes?: string[];
@@ -436,10 +438,31 @@ const initialise = (window: Window, framework: Framework = 'tcfv2'): void => {
 	});
 };
 
+const bidsBackHandler = (
+	adUnits: PrebidAdUnit[],
+	eventTimer: EventTimer,
+): Promise<void> =>
+	new Promise((resolve) => {
+		window.pbjs?.setTargetingForGPTAsync(
+			adUnits.map((u) => u.code).filter(isString),
+		);
+
+		resolve();
+
+		adUnits.forEach((adUnit) => {
+			if (isString(adUnit.code)) {
+				eventTimer.trigger(
+					'prebidEnd',
+					stripDfpAdPrefixFrom(adUnit.code),
+				);
+			}
+		});
+	});
+
 // slotFlatMap allows you to dynamically interfere with the PrebidSlot definition
 // for this given request for bids.
 const requestBids = async (
-	advert: Advert,
+	adverts: Advert[],
 	slotFlatMap?: SlotFlatMap,
 ): Promise<void> => {
 	if (!initialised) {
@@ -450,14 +473,20 @@ const requestBids = async (
 		return requestQueue;
 	}
 
-	// prepare-prebid already waits for consent so this should resolve immediately
 	const adUnits = await onConsent()
 		.then((consentState) => {
 			// calculate this once before mapping over
 			const pageTargeting = getPageTargeting(consentState);
-			return getHeaderBiddingAdSlots(advert, slotFlatMap)
-				.map((slot) => new PrebidAdUnit(advert, slot, pageTargeting))
-				.filter((adUnit) => !adUnit.isEmpty());
+			return flatten(
+				adverts.map((advert) =>
+					getHeaderBiddingAdSlots(advert, slotFlatMap)
+						.map(
+							(slot) =>
+								new PrebidAdUnit(advert, slot, pageTargeting),
+						)
+						.filter((adUnit) => !adUnit.isEmpty()),
+				),
+			);
 		})
 		.catch((e) => {
 			// silently fail
@@ -465,54 +494,30 @@ const requestBids = async (
 			return [];
 		});
 
-	if (adUnits.length === 0) {
-		return requestQueue;
-	}
-
 	const eventTimer = EventTimer.get();
 
-	requestQueue = requestQueue
-		.then(
-			() =>
-				new Promise<void>((resolve) => {
-					window.pbjs?.que.push(() => {
-						adUnits.forEach((adUnit) => {
-							if (isString(adUnit.code)) {
-								eventTimer.trigger(
-									'prebidStart',
-									stripDfpAdPrefixFrom(adUnit.code),
-								);
-							}
-						});
-						window.pbjs?.requestBids({
-							adUnits,
-							bidsBackHandler() {
-								if (isString(adUnits[0].code)) {
-									window.pbjs?.setTargetingForGPTAsync([
-										adUnits[0].code,
-									]);
-								}
-
-								adUnits.forEach((adUnit) => {
-									if (isString(adUnit.code)) {
-										eventTimer.trigger(
-											'prebidEnd',
-											stripDfpAdPrefixFrom(adUnit.code),
-										);
-									}
-								});
-
-								resolve();
-							},
-						});
+	requestQueue = requestQueue.then(
+		() =>
+			new Promise<void>((resolve) => {
+				adUnits.forEach((adUnit) => {
+					if (isString(adUnit.code)) {
+						eventTimer.trigger(
+							'prebidStart',
+							stripDfpAdPrefixFrom(adUnit.code),
+						);
+					}
+				});
+				window.pbjs?.que.push(() => {
+					window.pbjs?.requestBids({
+						adUnits,
+						bidsBackHandler: () =>
+							void bidsBackHandler(adUnits, eventTimer).then(
+								resolve,
+							),
 					});
-				}),
-		)
-		.catch((e) => {
-			// silently fail
-			log('commercial', 'Failed to execute Request queue', e);
-		});
-
+				});
+			}),
+	);
 	return requestQueue;
 };
 

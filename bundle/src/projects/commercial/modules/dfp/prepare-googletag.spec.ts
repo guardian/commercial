@@ -65,6 +65,10 @@ const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
 	typeof getCurrentBreakpoint_
 >;
 
+jest.mock('../../modules/header-bidding/prebid/prebid', () => ({
+	requestBids: jest.fn(),
+}));
+
 jest.mock('../../../../lib/raven');
 jest.mock('../../../common/modules/identity/api', () => ({
 	isUserLoggedIn: () => true,

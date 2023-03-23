@@ -1,5 +1,6 @@
 import { adSizes, createAdSlot } from '@guardian/commercial-core';
 import { log } from '@guardian/libs';
+import { isInEagerPrebidVariant } from 'common/modules/experiments/eager-prebid-check';
 import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
 import { getUrlVars } from 'lib/url';
 import fastdom from '../../../lib/fastdom-promise';
@@ -12,6 +13,8 @@ import type {
 	SpacefinderWriter,
 } from '../../common/modules/spacefinder';
 import { addSlot } from './dfp/add-slot';
+import type { Advert } from './dfp/Advert';
+import { requestBidsForAds } from './header-bidding/request-bids';
 
 /**
  * Maximum number of inline ads to display on the page.
@@ -32,6 +35,8 @@ const AD_SPACE_MULTIPLIER = 2;
 let AD_COUNTER = 0;
 let WINDOWHEIGHT: number;
 let firstSlot: HTMLElement | undefined;
+
+let insertedDynamicAds: Advert[] = [];
 
 const sfdebug = getUrlVars().sfdebug;
 
@@ -114,8 +119,8 @@ const insertAdAtPara = (para: Node): Promise<void> => {
 				para.parentNode.insertBefore(container, para.nextSibling);
 			}
 		})
-		.then(() => {
-			addSlot(ad, false, {
+		.then(async () => {
+			const advert = await addSlot(ad, false, {
 				phablet: [
 					adSizes.outstreamDesktop,
 					adSizes.outstreamGoogleDesktop,
@@ -125,6 +130,9 @@ const insertAdAtPara = (para: Node): Promise<void> => {
 					adSizes.outstreamGoogleDesktop,
 				],
 			});
+			if (advert) {
+				insertedDynamicAds.push(advert);
+			}
 		});
 };
 
@@ -144,21 +152,29 @@ const insertAds: SpacefinderWriter = async (paras) => {
 const fill = (rules: SpacefinderRules) => {
 	const options: SpacefinderOptions = { debug: sfdebug === '1' };
 
-	return spaceFiller.fillSpace(rules, insertAds, options).then(() => {
-		if (AD_COUNTER < MAX_ADS) {
-			const el = document.querySelector(
-				`${rules.bodySelector} > .ad-slot-container`,
-			);
-			if (el && el.previousSibling instanceof HTMLElement) {
-				firstSlot = el.previousSibling;
+	return spaceFiller
+		.fillSpace(rules, insertAds, options)
+		.then(() => {
+			if (AD_COUNTER < MAX_ADS) {
+				const el = document.querySelector(
+					`${rules.bodySelector} > .ad-slot-container`,
+				);
+				if (el && el.previousSibling instanceof HTMLElement) {
+					firstSlot = el.previousSibling;
+				} else {
+					firstSlot = undefined;
+				}
+				startListening();
 			} else {
 				firstSlot = undefined;
 			}
-			startListening();
-		} else {
-			firstSlot = undefined;
-		}
-	});
+		})
+		.then(async () => {
+			if (insertedDynamicAds.length && isInEagerPrebidVariant()) {
+				await requestBidsForAds(insertedDynamicAds);
+			}
+			insertedDynamicAds = [];
+		});
 };
 
 const onUpdate = () => {
