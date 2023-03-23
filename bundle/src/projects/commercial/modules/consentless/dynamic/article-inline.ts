@@ -10,16 +10,13 @@ import type {
 	SpacefinderRules,
 	SpacefinderWriter,
 } from 'common/modules/spacefinder';
-import { createAdvertBorder } from 'common/modules/spacefinder-debug-tools';
 import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
-import { getUrlVars } from 'lib/url';
 import fastdom from '../../../../../lib/fastdom-promise';
 import { defineSlot } from '../define-slot';
 
 type SlotName = Parameters<typeof createAdSlot>[0];
 
 type ContainerOptions = {
-	enableDebug?: boolean;
 	className?: string;
 };
 
@@ -29,8 +26,6 @@ const adSlotClassSelectorSizes = {
 	minAbove: 500,
 	minBelow: 500,
 };
-
-const sfdebug = getUrlVars().sfdebug;
 
 /**
  * Get the classname for an ad slot container
@@ -51,10 +46,6 @@ const wrapSlotInContainer = (
 	const container = document.createElement('div');
 
 	container.className = `ad-slot-container ${options.className ?? ''}`;
-
-	if (options.enableDebug) {
-		createAdvertBorder(container);
-	}
 
 	container.appendChild(ad);
 	return container;
@@ -115,11 +106,10 @@ const addMobileInlineAds = async () => {
 				minBelow: 250,
 			},
 			' .ad-slot': adSlotClassSelectorSizes,
-			' > :not(p):not(h2):not(.ad-slot):not(#sign-in-gate):not(.sfdebug)':
-				{
-					minAbove: 35,
-					minBelow: 200,
-				},
+			' > :not(p):not(h2):not(.ad-slot):not(#sign-in-gate)': {
+				minAbove: 35,
+				minBelow: 200,
+			},
 		},
 		filter: filterNearbyCandidates(adSizes.mpu.height),
 	};
@@ -138,12 +128,10 @@ const addMobileInlineAds = async () => {
 		await Promise.all(slots);
 	};
 
-	const enableDebug = sfdebug === '1';
-
 	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
-		debug: enableDebug,
+		pass: 'inline1',
 	});
 };
 
@@ -163,8 +151,6 @@ const addDesktopInlineAds = async () => {
 		},
 		filter: filterNearbyCandidates(adSizes.halfPage.height),
 	};
-
-	const enableDebug = sfdebug === '1';
 
 	const insertAds: SpacefinderWriter = async (paras) => {
 		// Compute the height of containers in which ads will remain sticky
@@ -192,7 +178,6 @@ const addDesktopInlineAds = async () => {
 
 			const containerOptions = {
 				className: containerClasses,
-				enableDebug,
 			};
 
 			return insertAdAtPara(
@@ -210,7 +195,7 @@ const addDesktopInlineAds = async () => {
 	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
-		debug: enableDebug,
+		pass: 'inline1',
 	});
 };
 

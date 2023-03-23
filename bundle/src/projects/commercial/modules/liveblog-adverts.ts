@@ -2,7 +2,6 @@ import { adSizes, createAdSlot } from '@guardian/commercial-core';
 import { log } from '@guardian/libs';
 import { isInEagerPrebidVariant } from 'common/modules/experiments/eager-prebid-check';
 import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
-import { getUrlVars } from 'lib/url';
 import fastdom from '../../../lib/fastdom-promise';
 import { spaceFiller } from '../../common/modules/article/space-filler';
 import { commercialFeatures } from '../../common/modules/commercial/commercial-features';
@@ -37,8 +36,6 @@ let WINDOWHEIGHT: number;
 let firstSlot: HTMLElement | undefined;
 
 let insertedDynamicAds: Advert[] = [];
-
-const sfdebug = getUrlVars().sfdebug;
 
 const startListening = () => {
 	document.addEventListener('liveblog:blocks-updated', onUpdate);
@@ -150,7 +147,7 @@ const insertAds: SpacefinderWriter = async (paras) => {
 };
 
 const fill = (rules: SpacefinderRules) => {
-	const options: SpacefinderOptions = { debug: sfdebug === '1' };
+	const options: SpacefinderOptions = { pass: 'inline1' };
 
 	return spaceFiller
 		.fillSpace(rules, insertAds, options)

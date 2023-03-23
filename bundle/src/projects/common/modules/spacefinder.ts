@@ -4,7 +4,7 @@ import { log } from '@guardian/libs';
 import { memoize } from 'lodash-es';
 import { amIUsed } from 'commercial/am-i-used';
 import fastdom from '../../../lib/fastdom-promise';
-import { runDebugTool } from './spacefinder-debug-tools';
+import { init as initSpacefinderDebugger } from './spacefinder-debug-tools';
 
 type RuleSpacing = {
 	minAbove: number;
@@ -54,8 +54,10 @@ type SpacefinderWriter = (paras: HTMLElement[]) => Promise<void>;
 type SpacefinderOptions = {
 	waitForImages?: boolean;
 	waitForInteractives?: boolean;
-	debug?: boolean;
+	pass: SpacefinderPass;
 };
+
+type SpacefinderPass = 'inline1' | 'inline2' | 'im' | 'carrot';
 
 type ExcludedItem = SpacefinderItem | HTMLElement;
 
@@ -81,7 +83,7 @@ const LOADING_TIMEOUT = 5_000;
 const defaultOptions: SpacefinderOptions = {
 	waitForImages: true,
 	waitForInteractives: false,
-	debug: false,
+	pass: 'inline1',
 };
 
 const isIframe = (node: Node): node is HTMLIFrameElement =>
@@ -453,9 +455,7 @@ const findSpace = async (
 	const measurements = await getMeasurements(rules, candidates);
 	const winners = enforceRules(measurements, rules, exclusions);
 
-	if (options.debug) {
-		runDebugTool(exclusions, winners, rules);
-	}
+	initSpacefinderDebugger(exclusions, winners, rules, options.pass);
 
 	// TODO Is this really an error condition?
 	if (!winners.length) {
@@ -479,4 +479,5 @@ export type {
 	SpacefinderOptions,
 	SpacefinderItem,
 	SpacefinderExclusions,
+	SpacefinderPass,
 };
