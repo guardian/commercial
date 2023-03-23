@@ -1,19 +1,19 @@
-import { storage } from '@guardian/libs';
-import { getStage, getTestUrl } from '../lib/util';
-import { stubApiRequests } from '../lib/stubApiRequests';
-import '@percy/cypress';
+import { storage } from "@guardian/libs";
+import { getStage, getTestUrl } from "../lib/util";
+import { stubApiRequests } from "../lib/stubApiRequests";
+import "@percy/cypress";
 
-describe('Visually snapshot standard article', () => {
+describe("Visually snapshot standard article", () => {
 	it(`snapshots standard article`, () => {
 		const path = getTestUrl(
 			getStage(),
-			'/commentisfree/2023/feb/27/dont-believe-those-who-claim-science-proves-masks-dont-work',
-			{ isDcr: true },
+			"/commentisfree/2023/feb/27/dont-believe-those-who-claim-science-proves-masks-dont-work",
+			{ isDcr: true }
 		);
 		// stub all api requests
 		stubApiRequests();
 		// force geolocation to UK
-		storage.local.set('gu.geo.override', 'GB');
+		storage.local.set("gu.geo.override", "GB");
 		// load article
 		cy.visit(path);
 		cy.allowAllConsent();
@@ -23,10 +23,20 @@ describe('Visually snapshot standard article', () => {
 		cy.checkAdsRendered();
 		// workaround for onwards sections
 		// the intercept intermittently fails to stub the request
-		cy.get('section:has(gu-island[name="Carousel"])').invoke('remove');
-		cy.get('[name=OnwardsUpper]').invoke('remove');
-		// snapshot
-		cy.percySnapshot('article-standard', {
+		cy.get('section:has(gu-island[name="Carousel"])').invoke("remove");
+		cy.get("[name=OnwardsUpper]").invoke("remove");
+		// cypress screenshot
+		// helpful to compare to Percy
+		cy.screenshot("article-standard");
+		// percy snapshot
+		cy.percySnapshot("article-standard", {
+			discovery: {
+				allowedHostnames: [
+					"localhost",
+					"i.guim.co.uk",
+					"tpc.googlesyndication.com",
+				],
+			},
 			widths: [320, 740, 1300],
 		});
 	});

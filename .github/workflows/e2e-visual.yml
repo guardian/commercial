@@ -1,12 +1,15 @@
 name: E2E Visual
-on: workflow_dispatch
-  # pull_request:
-  #   paths:
-  #     - core/**
-  #     - bundle/**
-  #     - e2e/cypress/!(e2e)/**
-  #     - e2e/cypress.config.ts
-  #     - .github/workflows/e2e-visual.yml
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    paths:
+      - core/**
+      - bundle/**
+      - e2e/cypress/!(e2e)/**
+      - e2e/cypress.config.ts
+      - .github/workflows/e2e-visual.yml
 
 concurrency:
   group: "commercial-e2e-visual-${{ github.head_ref }}"
@@ -18,19 +21,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Commercial
-      - name: Checkout
+      - name: Checkout Commercial
         uses: actions/checkout@v3
         with:
           path: ./commercial
 
-      - name: Setup node
+      - name: Setup Commercial node
         uses: actions/setup-node@v3
         with:
           node-version-file: "./commercial/.nvmrc"
 
-      - name: Install dependencies
+      - name: Install Commercial dependencies
         run: yarn install --frozen-lockfile
         working-directory: ./commercial
+
+      # Set commit hash
+      - name: Set commit hash for main
+        if: github.ref == 'refs/heads/main'
+        run: echo "LOCAL_HEAD_SHA=${{ github.sha }}" >> $GITHUB_ENV
+
+      - name: Set commit hash for PRs
+        if: github.ref != 'refs/heads/main'
+        run: echo "LOCAL_HEAD_SHA=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
 
       # DCR
       - name: Checkout DCR
@@ -52,6 +64,7 @@ jobs:
         run: make build
         working-directory: ./dcr/dotcom-rendering
 
+      # Start servers
       - name: Start DCR server
         run: make start-ci & npx wait-on -v -i 1000 http://localhost:3030
         working-directory: ./dcr/dotcom-rendering
@@ -63,6 +76,7 @@ jobs:
         run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
         working-directory: ./commercial/bundle
 
+      # Percy
       - name: Run Percy Visual Regression Tests
         run: yarn visual:run
         working-directory: ./commercial/e2e
@@ -70,7 +84,7 @@ jobs:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
       - name: Wait for Percy Snapshots
-        run: yarn percy build:wait --verbose --fail-on-changes --project ced09b1a/commercial --commit ${{ github.event.pull_request.head.sha }} --timeout 900000 --interval 5000
+        run: yarn percy build:wait --verbose --fail-on-changes --project ced09b1a/commercial --commit ${{ env.LOCAL_HEAD_SHA }} --timeout 900000 --interval 5000
         working-directory: ./commercial/e2e
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
@@ -82,7 +96,7 @@ jobs:
           path: ./commercial/e2e/cypress/videos
 
       - uses: actions/upload-artifact@v2
-        if: failure()
+        if: always()
         with:
           name: cypress-screenshots
           path: ./commercial/e2e/cypress/screenshots

@@ -241,7 +241,7 @@ const chooseAdvertisingTag = async () => {
 if (isInVariantSynchronous(elementsManager, 'variant')) {
 	void import(
 		/* webpackChunkName: "elements-manager" */
-		'../projects/commercial/modules/elementsManager'
+		'../projects/commercial/modules/elements-manager/init'
 	).then(({ initElementsManager }) => initElementsManager());
 }
 
