@@ -1,0 +1,20 @@
+name: Tell frontend there's a new version
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tell frontend
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.FRONTEND_PAT }}
+          script: |
+            github.actions.createWorkflowDispatch({
+              owner: 'guardian',
+              repo: 'frontend',
+              workflow_id: 'commercial-bundle-bump.yml',
+              ref: 'jlk/auto-bump-commercial-pr',
+            });
