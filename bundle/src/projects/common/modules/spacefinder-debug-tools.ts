@@ -311,6 +311,7 @@ const addDebugPanel = (): void => {
 			border-radius: 3px;
 			user-select: none;
 			margin: 0 5px;
+			transition: all .2s ease-out;
 		}
 
 		#sfdebug-panel .controls input:checked + label {
@@ -346,6 +347,7 @@ const addDebugPanel = (): void => {
 			width: 100%;
 			background-color: ${colours.darkOrange};
 			height: 3px;
+			transition: all .2s ease-out;
 		}
 
 		#sfdebug-body .line .label {
@@ -358,6 +360,10 @@ const addDebugPanel = (): void => {
 			padding: 5px 10px 5px 10px;
 			border: 3px solid ${colours.darkOrange};
 			border-radius: 5px 5px 0px 0px;
+		}
+
+		#sfdebug-body .candidate {
+			transition: all .2s ease-out;
 		}
 
 		#sfdebug-body .candidate::before {
