@@ -94,10 +94,9 @@ const renderAdvertLabel = (adSlotNode: HTMLElement): Promise<Promise<void>> => {
 		if (shouldRenderLabel(adSlotNode)) {
 			const renderAdTestLabel = shouldRenderAdTestLabel(adSlotNode);
 			const adTestClearExists =
-				adSlotNode.parentNode?.firstElementChild?.firstElementChild
-					?.nodeName === 'A'
-					? true
-					: false;
+				adSlotNode.parentNode?.firstElementChild
+					?.firstElementChild instanceof HTMLAnchorElement;
+			console.log(adTestClearExists);
 			const adTestCookieName = getCookie({
 				name: 'adtest',
 				shouldMemoize: true,
