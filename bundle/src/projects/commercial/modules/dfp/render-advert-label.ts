@@ -45,7 +45,7 @@ const createAdCloseDiv = (): HTMLElement => {
 
 	const closeDiv: HTMLElement = document.createElement('div');
 	closeDiv.style.cssText =
-		'position: relative;padding: 0 0.5rem;text-align: left;box-sizing: border-box;';
+		'position: relative;padding: 0;text-align: left;box-sizing: border-box;display: block;width: 0;height: 0';
 	closeDiv.appendChild(buttonDiv);
 
 	return closeDiv;
