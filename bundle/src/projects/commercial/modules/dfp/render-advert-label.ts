@@ -74,7 +74,7 @@ const createAdTestLabel = (
 const createAdTestCookieRemovalLink = (): HTMLElement => {
 	const adTestCookieRemovalLink = document.createElement('div');
 	adTestCookieRemovalLink.style.cssText =
-		'position: relative;padding: 0;text-align: left;box-sizing: border-box;display: block:width: 0;height: 0';
+		'position: relative;padding: 0;text-align: left;box-sizing: border-box;display: block;width: 0;height: 0';
 
 	const url = new URL(window.location.href);
 	url.searchParams.set('adtest', 'clear');
