@@ -45,17 +45,17 @@ const createAdCloseDiv = (): HTMLElement => {
 
 	const closeDiv: HTMLElement = document.createElement('div');
 	closeDiv.style.cssText =
-		'position: relative;padding: 0 0.5rem;text-align: left;box-sizing: border-box;';
+		'position: relative;padding: 0;text-align: left;box-sizing: border-box;display: block;width: 0;height: 0';
 	closeDiv.appendChild(buttonDiv);
 
 	return closeDiv;
 };
 
-const shouldRenderAdTestLabel = (): boolean =>
+const shouldRenderAdTestLabel = (adSlotNode: HTMLElement): boolean =>
 	!!getCookie({
 		name: 'adtestInLabels',
 		shouldMemoize: true,
-	});
+	}) && !adSlotNode.classList.contains('ad-slot--sky');
 
 // If `adtest` cookie is set, display its value in the ad label
 const createAdTestLabel = (
@@ -71,24 +71,20 @@ const createAdTestLabel = (
 	return adTestLabel;
 };
 
-const createAdTestCookieRemovalLink = (
-	adTestName: string | null,
-): HTMLElement => {
+const createAdTestCookieRemovalLink = (): HTMLElement => {
 	const adTestCookieRemovalLink = document.createElement('div');
 	adTestCookieRemovalLink.style.cssText =
-		'position: relative;padding: 0 0.5rem;text-align: left;box-sizing: border-box;';
+		'position: relative;padding: 0;text-align: left;box-sizing: border-box;display: block;width: 0;height: 0';
 
-	if (adTestName) {
-		const url = new URL(window.location.href);
-		url.searchParams.set('adtest', 'clear');
+	const url = new URL(window.location.href);
+	url.searchParams.set('adtest', 'clear');
 
-		const clearLink = document.createElement('a');
-		clearLink.className = 'ad-slot__adtest-cookie-clear-link';
-		clearLink.href = url.href;
-		clearLink.innerHTML = 'clear';
+	const clearLink = document.createElement('a');
+	clearLink.className = 'ad-slot__adtest-cookie-clear-link';
+	clearLink.href = url.href;
+	clearLink.innerHTML = 'clear';
 
-		adTestCookieRemovalLink.appendChild(clearLink);
-	}
+	adTestCookieRemovalLink.appendChild(clearLink);
 
 	return adTestCookieRemovalLink;
 };
@@ -96,7 +92,10 @@ const createAdTestCookieRemovalLink = (
 const renderAdvertLabel = (adSlotNode: HTMLElement): Promise<Promise<void>> => {
 	return fastdom.measure(() => {
 		if (shouldRenderLabel(adSlotNode)) {
-			const renderAdTestLabel = shouldRenderAdTestLabel();
+			const renderAdTestLabel = shouldRenderAdTestLabel(adSlotNode);
+			const adTestClearExists =
+				adSlotNode.parentNode?.firstElementChild
+					?.firstElementChild instanceof HTMLAnchorElement;
 			const adTestCookieName = getCookie({
 				name: 'adtest',
 				shouldMemoize: true,
@@ -128,10 +127,14 @@ const renderAdvertLabel = (adSlotNode: HTMLElement): Promise<Promise<void>> => {
 						adSlotNode.firstChild,
 					);
 				}
-				if (renderAdTestLabel && adTestCookieName) {
-					adSlotNode.insertBefore(
-						createAdTestCookieRemovalLink(adTestCookieName),
-						adSlotNode.firstChild,
+				if (
+					renderAdTestLabel &&
+					adTestCookieName &&
+					!adTestClearExists
+				) {
+					adSlotNode.parentNode?.insertBefore(
+						createAdTestCookieRemovalLink(),
+						adSlotNode,
 					);
 				}
 			});
