@@ -135,6 +135,9 @@ jobs:
       # - name: Tell frontend
       #   uses: actions/github-script@v5
       #   with:
+      # This is the PAT with the following permissions:
+      # - READ metadata
+      # - READ & WRITE workflows/actions (note: this is just the ability to trigger workflows, not the ability to read or write code)
       #     github-token: ${{ secrets.FRONTEND_PAT }}
       #     script: |
       #       github.actions.createWorkflowDispatch({
