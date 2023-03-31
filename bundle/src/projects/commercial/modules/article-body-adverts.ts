@@ -1,11 +1,10 @@
 import type { AdSize, SizeMapping } from '@guardian/commercial-core';
 import { adSizes, createAdSlot } from '@guardian/commercial-core';
-import { createAdvertBorder } from 'common/modules/spacefinder-debug-tools';
+import { isInEagerPrebidVariant } from 'common/modules/experiments/eager-prebid-check';
 import {
 	getCurrentBreakpoint,
 	getCurrentTweakpoint,
 } from 'lib/detect-breakpoint';
-import { getUrlVars } from 'lib/url';
 import fastdom from '../../../lib/fastdom-promise';
 import { mediator } from '../../../lib/mediator';
 import { spaceFiller } from '../../common/modules/article/space-filler';
@@ -18,20 +17,19 @@ import type {
 } from '../../common/modules/spacefinder';
 import { initCarrot } from './carrot-traffic-driver';
 import { addSlot } from './dfp/add-slot';
+import type { Advert } from './dfp/Advert';
 import { waitForAdvert } from './dfp/wait-for-advert';
+import { requestBidsForAds } from './header-bidding/request-bids';
 import { computeStickyHeights, insertHeightStyles } from './sticky-inlines';
 
 type SlotName = Parameters<typeof createAdSlot>[0];
 
 type ContainerOptions = {
 	sticky?: boolean;
-	enableDebug?: boolean;
 	className?: string;
 };
 
 const articleBodySelector = '.article-body-commercial-selector';
-
-const sfdebug = getUrlVars().sfdebug;
 
 const isPaidContent = window.guardian.config.page.isPaidContent;
 
@@ -46,6 +44,8 @@ const adSlotContainerRules: RuleSpacing = {
 	minAbove: 500,
 	minBelow: 500,
 };
+
+let insertedDynamicAds: Advert[] = [];
 
 /**
  * Get the classname for an ad slot container
@@ -67,10 +67,6 @@ const wrapSlotInContainer = (
 	const container = document.createElement('div');
 
 	container.className = `${adSlotContainerClass} ${options.className ?? ''}`;
-
-	if (options.enableDebug) {
-		createAdvertBorder(container);
-	}
 
 	container.appendChild(ad);
 	return container;
@@ -97,9 +93,12 @@ const insertAdAtPara = (
 				para.parentNode.insertBefore(node, para);
 			}
 		})
-		.then(() => {
+		.then(async () => {
 			const shouldForceDisplay = ['im', 'carrot'].includes(name);
-			addSlot(ad, shouldForceDisplay, sizes);
+			const advert = await addSlot(ad, shouldForceDisplay, sizes);
+			if (advert) {
+				insertedDynamicAds.push(advert);
+			}
 		});
 };
 
@@ -157,8 +156,8 @@ const addDesktopInlineAds = (isInline1: boolean): Promise<boolean> => {
 	const hasLeftCol = ['leftCol', 'wide'].includes(tweakpoint);
 
 	const ignoreList = hasLeftCol
-		? ` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.sfdebug):not([data-spacefinder-role="richLink"])`
-		: ` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.sfdebug)`;
+		? ` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-role="richLink"]):not([data-spacefinder-role="thumbnail"])`
+		: ` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`;
 
 	const isImmersive = window.guardian.config.page.isImmersive;
 
@@ -222,9 +221,6 @@ const addDesktopInlineAds = (isInline1: boolean): Promise<boolean> => {
 
 	const rules = isInline1 ? firstInlineRules : subsequentInlineRules;
 
-	const enableDebug =
-		(sfdebug === '1' && isInline1) || (sfdebug === '2' && !isInline1);
-
 	const insertAds: SpacefinderWriter = async (paras) => {
 		// Make ads sticky on the non-inline1 pass
 		// i.e. inline2, inline3, etc...
@@ -264,7 +260,6 @@ const addDesktopInlineAds = (isInline1: boolean): Promise<boolean> => {
 				const containerOptions = {
 					sticky: isSticky,
 					className: containerClasses,
-					enableDebug,
 				};
 
 				return insertAdAtPara(
@@ -301,7 +296,7 @@ const addDesktopInlineAds = (isInline1: boolean): Promise<boolean> => {
 	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
-		debug: enableDebug,
+		pass: isInline1 ? 'inline1' : 'inline2',
 	});
 };
 
@@ -317,7 +312,7 @@ const addMobileInlineAds = (): Promise<boolean> => {
 				minBelow: 250,
 			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
-			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.sfdebug)`]:
+			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
 				{
 					minAbove: 35,
 					minBelow: 200,
@@ -344,12 +339,10 @@ const addMobileInlineAds = (): Promise<boolean> => {
 		await Promise.all(slots);
 	};
 
-	const enableDebug = sfdebug === '1';
-
 	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
-		debug: enableDebug,
+		pass: 'inline1',
 	});
 };
 
@@ -388,15 +381,13 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 				minBelow: 250,
 			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
-			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.sfdebug)`]:
+			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
 				{
 					minAbove: 200,
 					minBelow: 400,
 				},
 		},
 	};
-
-	const enableDebug = sfdebug === 'im';
 
 	const insertAds: SpacefinderWriter = (paras) =>
 		insertAdAtPara(
@@ -413,7 +404,7 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
-		debug: enableDebug,
+		pass: 'im',
 	});
 };
 
@@ -422,6 +413,8 @@ const doInit = async (): Promise<boolean> => {
 		return Promise.resolve(false);
 	}
 
+	insertedDynamicAds = [];
+
 	const im = window.guardian.config.page.hasInlineMerchandise
 		? attemptToAddInlineMerchAd()
 		: Promise.resolve(false);
@@ -429,6 +422,10 @@ const doInit = async (): Promise<boolean> => {
 	if (inlineMerchAdded) await waitForAdvert('dfp-ad--im');
 	await addInlineAds();
 	await initCarrot();
+
+	if (isInEagerPrebidVariant()) {
+		await requestBidsForAds(insertedDynamicAds);
+	}
 
 	return im;
 };

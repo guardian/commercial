@@ -42,7 +42,7 @@ type ContentTargeting = {
 	/**
 	 * **R**ecently Published **C**ontent - [see on Ad Manager][gam]
 	 *
-	 * [gam]: TODO: add URL here once it's been created
+	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=13845194
 	 */
 	rc: string;
 

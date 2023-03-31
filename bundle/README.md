@@ -10,7 +10,9 @@ To install the package, run `yarn add @guardian/commercial-bundle`.
 
 ### Requirements
 
--   Node 12 (fnm recommended)
+-   Node
+    -   see [.nvmrc](../.nvmrc) for the current version
+    -   the version manager [fnm](https://github.com/Schniz/fnm) is recommended with additional configuration to automatically switch on [changing directory](https://github.com/Schniz/fnm#shell-setup)
 -   Yarn
 
 ### Setup

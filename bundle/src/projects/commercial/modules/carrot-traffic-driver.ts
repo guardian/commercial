@@ -1,6 +1,5 @@
 import { createAdSlot } from '@guardian/commercial-core';
 import { getCurrentTweakpoint } from 'lib/detect-breakpoint';
-import { getUrlVars } from 'lib/url';
 import fastdom from '../../../lib/fastdom-promise';
 import { spaceFiller } from '../../common/modules/article/space-filler';
 import { commercialFeatures } from '../../common/modules/commercial/commercial-features';
@@ -9,8 +8,6 @@ import type {
 	SpacefinderWriter,
 } from '../../common/modules/spacefinder';
 import { addSlot } from './dfp/add-slot';
-
-const sfdebug = getUrlVars().sfdebug;
 
 const bodySelector = '.article-body-commercial-selector';
 
@@ -42,11 +39,10 @@ const wideRules: SpacefinderRules = {
 			minAbove: 50,
 			minBelow: 50,
 		},
-		' > *:not(p):not(h2):not(blockquote):not(#sign-in-gate):not(.sfdebug)':
-			{
-				minAbove: 50,
-				minBelow: 50,
-			},
+		' > *:not(p):not(h2):not(blockquote):not(#sign-in-gate)': {
+			minAbove: 50,
+			minBelow: 50,
+		},
 		' .ad-slot': {
 			minAbove: 100,
 			minBelow: 100,
@@ -93,7 +89,7 @@ const insertSlot: SpacefinderWriter = (paras) => {
 				candidates[0].parentNode.insertBefore(slot, candidates[0]);
 			}
 		})
-		.then(() => addSlot(slot, true));
+		.then(() => void addSlot(slot, true));
 };
 
 const getRules = (): SpacefinderRules => {
@@ -107,13 +103,11 @@ const getRules = (): SpacefinderRules => {
 };
 
 export const initCarrot = (): Promise<boolean> => {
-	const enableDebug = sfdebug === 'carrot';
-
 	if (commercialFeatures.carrotTrafficDriver) {
 		return spaceFiller.fillSpace(getRules(), insertSlot, {
 			waitForImages: true,
 			waitForInteractives: true,
-			debug: enableDebug,
+			pass: 'carrot',
 		});
 	}
 	return Promise.resolve(false);

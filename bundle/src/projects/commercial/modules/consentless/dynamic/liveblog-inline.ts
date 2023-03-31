@@ -1,5 +1,4 @@
 import { createAdSlot } from '@guardian/commercial-core';
-import { getUrlVars } from 'lib/url';
 import fastdom from '../../../../../lib/fastdom-promise';
 import { spaceFiller } from '../../../../common/modules/article/space-filler';
 import { commercialFeatures } from '../../../../common/modules/commercial/commercial-features';
@@ -30,8 +29,6 @@ const AD_SPACE_MULTIPLIER = 2;
 let AD_COUNTER = 0;
 let WINDOWHEIGHT: number;
 let firstSlot: HTMLElement | undefined;
-
-const sfdebug = getUrlVars().sfdebug;
 
 const startListening = () => {
 	document.addEventListener('liveblog:blocks-updated', onUpdate);
@@ -121,7 +118,7 @@ const insertAds: SpacefinderWriter = async (paras) => {
 };
 
 const fill = (rules: SpacefinderRules) => {
-	const options: SpacefinderOptions = { debug: sfdebug === '1' };
+	const options: SpacefinderOptions = { pass: 'inline1' };
 
 	return spaceFiller.fillSpace(rules, insertAds, options).then(() => {
 		if (AD_COUNTER < MAX_ADS) {

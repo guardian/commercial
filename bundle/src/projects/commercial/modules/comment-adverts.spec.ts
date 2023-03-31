@@ -26,6 +26,18 @@ Object.defineProperty(HTMLElement.prototype, 'dataset', {
 	value: {},
 });
 
+jest.mock('lib/report-error', () => ({
+	reportError: jest.fn(),
+}));
+
+jest.mock('../../common/modules/experiments/ab', () => ({
+	getSynchronousTestsToRun: jest.fn().mockReturnValue([]),
+}));
+
+jest.mock('../../commercial/modules/header-bidding/prebid/prebid', () => ({
+	requestBids: jest.fn(),
+}));
+
 jest.mock('../../../lib/config', () => ({ page: {}, get: () => false }));
 
 jest.mock('./dfp/add-slot', () => ({
