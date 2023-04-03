@@ -6,7 +6,7 @@ export const eagerPrebid: ABTest = {
 	author: '@commercial-dev',
 	start: '2023-03-23',
 	expiry: '2023-04-7',
-	audience: 0 / 100,
+	audience: 5 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: 'All pageviews',
 	successMeasure:
