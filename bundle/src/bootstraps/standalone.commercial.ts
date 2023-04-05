@@ -221,7 +221,7 @@ const chooseAdvertisingTag = async () => {
 	// Only load the Opt Out tag in TCF regions when there is no consent for Googletag
 	if (consentState.tcfv2 && !getConsentFor('googletag', consentState)) {
 		// Don't load OptOut (for now) if loading Elements Manager
-		if (!isInVariantSynchronous(elementsManager, 'variant')) {
+		if (isInVariantSynchronous(elementsManager, 'variant')) {
 			return;
 		}
 
