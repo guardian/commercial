@@ -138,27 +138,21 @@ export const init = (): Promise<void> => {
 
 				//DuckDuckGo blocks googletag request by default, creating a lot of noise in Sentry
 				//This flow allows us to handle errors originating from DuckDuckGo without spamming Sentry
-				const duckDuckErrorHandler = (error: Error) => {
-					log(
-						'commercial',
-						'🦆 Caught loadScript error on DuckDuckGo',
-						error,
-					);
-				};
-
-				if (navigator.userAgent.includes('DuckDuckGo')) {
-					loadScript(
-						window.guardian.config.page.libs?.googletag ??
-							'//www.googletagservices.com/tag/js/gpt.js',
-						{ async: false },
-					).catch(duckDuckErrorHandler);
-				} else {
-					void loadScript(
-						window.guardian.config.page.libs?.googletag ??
-							'//www.googletagservices.com/tag/js/gpt.js',
-						{ async: false },
-					);
-				}
+				loadScript(
+					window.guardian.config.page.libs?.googletag ??
+						'//www.googletagservices.com/tag/js/gpt.js',
+					{ async: false },
+				).catch((error: Error) => {
+					if (navigator.userAgent.includes('DuckDuckGo')) {
+						log(
+							'commercial',
+							'🦆 Caught loadScript error on DuckDuckGo',
+							error,
+						);
+					} else {
+						throw error;
+					}
+				});
 			}
 			return Promise.resolve();
 		});
