@@ -4,7 +4,7 @@ import {
 	onConsent,
 } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { loadScript } from '@guardian/libs';
+import { loadScript, log } from '@guardian/libs';
 import { init as initMeasureAdLoad } from 'commercial/modules/messenger/measure-ad-load';
 import { isInVariantSynchronous } from 'common/modules/experiments/ab';
 import { elementsManager } from 'common/modules/experiments/tests/elements-manager';
@@ -136,11 +136,23 @@ export const init = (): Promise<void> => {
 					},
 				);
 
-				void loadScript(
+				//DuckDuckGo blocks googletag request by default, creating a lot of noise in Sentry
+				//This flow allows us to handle errors originating from DuckDuckGo without spamming Sentry
+				loadScript(
 					window.guardian.config.page.libs?.googletag ??
 						'//www.googletagservices.com/tag/js/gpt.js',
 					{ async: false },
-				);
+				).catch((error: Error) => {
+					if (navigator.userAgent.includes('DuckDuckGo')) {
+						log(
+							'commercial',
+							'🦆 Caught loadScript error on DuckDuckGo',
+							error,
+						);
+					} else {
+						throw error;
+					}
+				});
 			}
 			return Promise.resolve();
 		});
