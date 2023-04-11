@@ -59,7 +59,7 @@ devOverrides {
 }
 ```
 
-Frontend will then use the local bundle instead of the one from PROD/CODE. Frontend will then pass the local bundle URL along to DCR, so you don't have to override there if you've done it in Frontend.
+Frontend will then use the local bundle instead of the one from PROD/CODE. Frontend will pass the local bundle URL along to DCR, so you don't have to override there if you've done it in Frontend.
 
 ### Linking
 
