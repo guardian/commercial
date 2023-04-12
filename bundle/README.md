@@ -51,7 +51,19 @@ DCR will then use the local bundle instead of the one from PROD/CODE.
 
 ### Working locally with Frontend
 
-To use the bundle locally with Frontend, run `yarn link` in the bundle directory. Then run `yarn link @guardian/commercial-bundle` in the frontend directory. Finally, start the frontend server as usual.
+To use the bundle locally with Frontend, you can override your default Frontend configuration ([see the Frontend docs for more detail on this](https://github.com/guardian/frontend/blob/038406bb5f876afd139b4747711c76551e8a7add/docs/03-dev-howtos/14-override-default-configuration.md)) to point to a local commercial dev server. For example, save the following in `~/.gu/frontend.conf`:
+
+```
+devOverrides {
+    commercial.overrideCommercialBundleUrl="http://localhost:3031/graun.standalone.commercial.js"
+}
+```
+
+Frontend will then use the local bundle instead of the one from PROD/CODE. Frontend will pass the local bundle URL along to DCR, so you don't have to override there if you've done it in Frontend.
+
+### Linking
+
+To use the production bundle locally with Frontend, run `yarn link` in the bundle directory. Then run `yarn link @guardian/commercial-bundle` in the frontend directory. Finally, start the frontend server as usual.
 
 Frontend will then use the local bundle instead of the one from PROD/CODE.
 
