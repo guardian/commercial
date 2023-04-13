@@ -19,6 +19,7 @@ import { queueAdvert } from './queue-advert';
 const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 	const { contentType } = window.guardian.config.page;
 	const { name } = adSlot.dataset;
+
 	if (contentType === 'Gallery' && name?.includes('inline')) {
 		return {
 			desktop: [adSizes.billboard, createAdSize(900, 250)],
@@ -29,6 +30,11 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 	) {
 		return {
 			desktop: [adSizes.billboard],
+		};
+	} else if (contentType === 'LiveBlog' && name?.includes('inline')) {
+		return {
+			phablet: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
+			desktop: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
 		};
 	} else {
 		return {};
@@ -81,6 +87,7 @@ const fillAdvertSlots = async (): Promise<void> => {
 		)
 		.map((adSlot) => {
 			const additionalSizes = decideAdditionalSizes(adSlot);
+
 			return createAdvert(adSlot, additionalSizes);
 		})
 		.filter((advert): advert is Advert => advert !== null);
