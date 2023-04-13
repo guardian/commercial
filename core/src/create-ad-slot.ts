@@ -14,6 +14,7 @@ type SlotName =
 	| 'comments-expanded'
 	| 'comments'
 	| 'epic'
+	| 'exclusion'
 	| 'high-merch-lucky'
 	| 'high-merch-paid'
 	| 'high-merch'
