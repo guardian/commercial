@@ -4,6 +4,7 @@ const BundleAnalyzerPlugin =
 	require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const config = require('./webpack.config.js');
 const TerserPlugin = require('terser-webpack-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 module.exports = webpackMerge.smart(config, {
 	mode: 'production',
@@ -21,6 +22,10 @@ module.exports = webpackMerge.smart(config, {
 		new webpack.DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify('production'),
 			'process.env.OVERRIDE_BUNDLE_PATH': JSON.stringify(false),
+		}),
+		new WebpackManifestPlugin({
+			publicPath: '',
+			fileName: 'assets.map',
 		}),
 	],
 	optimization: {
