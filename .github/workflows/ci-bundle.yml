@@ -139,7 +139,7 @@ jobs:
         with:
           projectName: dotcom:testing-commercial
           buildNumber: 0 # temp
-          configPath: riff-raff.yaml
+          configPath: ./bundle/riff-raff.yaml
           contentDirectories: |
             frontend-static/test_commercial_bundles:
               - bundle/dist
