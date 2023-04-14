@@ -104,6 +104,10 @@ jobs:
     needs: [build]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      # contents: read
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -125,6 +129,20 @@ jobs:
         with:
           name: bundle
           path: bundle/dist
+
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: eu-west-1
+          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+
+      - uses: guardian/actions-riff-raff@v2
+        with:
+          projectName: dotcom:testing-commercial
+          buildNumber: 0 # temp
+          configPath: riff-raff.yaml
+          contentDirectories: |
+            frontend-static/test_commercial_bundles:
+              - bundle/dist
 
       #- name: Release
       #  run: yarn semantic-release
