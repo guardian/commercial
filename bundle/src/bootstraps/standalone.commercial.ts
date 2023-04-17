@@ -24,30 +24,12 @@ import { consentlessAds } from 'common/modules/experiments/tests/consentlessAds'
 import { elementsManager } from 'common/modules/experiments/tests/elements-manager';
 import { reportError } from '../lib/report-error';
 import { catchErrorsWithContext } from '../lib/robust';
-import { initAdblockAsk } from '../projects/commercial/adblock-ask';
 import { adFreeSlotRemove } from '../projects/commercial/modules/ad-free-slot-remove';
-import { init as prepareAdVerification } from '../projects/commercial/modules/ad-verification/prepare-ad-verification';
-import { init as initArticleAsideAdverts } from '../projects/commercial/modules/article-aside-adverts';
-import { init as initArticleBodyAdverts } from '../projects/commercial/modules/article-body-adverts';
-import { initCommentAdverts } from '../projects/commercial/modules/comment-adverts';
-import { initCommentsExpandedAdverts } from '../projects/commercial/modules/comments-expanded-advert';
 import { init as initComscore } from '../projects/commercial/modules/comscore';
 import { adSlotIdPrefix } from '../projects/commercial/modules/dfp/dfp-env-globals';
-import { init as prepareA9 } from '../projects/commercial/modules/dfp/prepare-a9';
-import { init as prepareGoogletag } from '../projects/commercial/modules/dfp/prepare-googletag';
-import { initPermutive } from '../projects/commercial/modules/dfp/prepare-permutive';
-import { init as preparePrebid } from '../projects/commercial/modules/dfp/prepare-prebid';
-import { init as initRedplanet } from '../projects/commercial/modules/dfp/redplanet';
-import { init as initHighMerch } from '../projects/commercial/modules/high-merch';
 import { init as initIpsosMori } from '../projects/commercial/modules/ipsos-mori';
-import { init as initLiveblogAdverts } from '../projects/commercial/modules/liveblog-adverts';
 import { manageAdFreeCookieOnConsentChange } from '../projects/commercial/modules/manage-ad-free-cookie-on-consent-change';
-import { init as initMobileSticky } from '../projects/commercial/modules/mobile-sticky';
-import { paidContainers } from '../projects/commercial/modules/paid-containers';
 import { removeDisabledSlots as closeDisabledSlots } from '../projects/commercial/modules/remove-slots';
-import { init as setAdTestCookie } from '../projects/commercial/modules/set-adtest-cookie';
-import { init as setAdTestInLabelsCookie } from '../projects/commercial/modules/set-adtest-in-labels-cookie';
-import { init as initThirdPartyTags } from '../projects/commercial/modules/third-party-tags';
 import { init as initTrackGpcSignal } from '../projects/commercial/modules/track-gpc-signal';
 import { init as initTrackLabsContainer } from '../projects/commercial/modules/track-labs-container';
 import { init as initTrackScrollDepth } from '../projects/commercial/modules/track-scroll-depth';
@@ -89,31 +71,19 @@ const commercialExtraModules: Modules = [
 	['cm-trackGpcSignal', initTrackGpcSignal],
 ];
 
-if (!commercialFeatures.adFree) {
-	commercialBaseModules.push(
-		['cm-setAdTestCookie', setAdTestCookie],
-		['cm-setAdTestInLabelsCookie', setAdTestInLabelsCookie],
-		['cm-prepare-prebid', preparePrebid],
-		// Permutive init code must run before google tag enableServices()
-		// The permutive lib however is loaded async with the third party tags
-		['cm-prepare-googletag', () => initPermutive().then(prepareGoogletag)],
-		['cm-prepare-a9', prepareA9],
-	);
-	commercialExtraModules.push(
-		['cm-prepare-adverification', prepareAdVerification],
-		['cm-mobileSticky', initMobileSticky],
-		['cm-highMerch', initHighMerch],
-		['cm-articleAsideAdverts', initArticleAsideAdverts],
-		['cm-articleBodyAdverts', initArticleBodyAdverts],
-		['cm-liveblogAdverts', initLiveblogAdverts],
-		['cm-thirdPartyTags', initThirdPartyTags],
-		['cm-redplanet', initRedplanet],
-		['cm-paidContainers', paidContainers],
-		['cm-commentAdverts', initCommentAdverts],
-		['cm-commentsExpandedAdverts', initCommentsExpandedAdverts],
-		['rr-adblock-ask', initAdblockAsk],
-	);
-}
+/**
+ * TODO
+ */
+const loadGamModules = async (): Promise<void> => {
+	if (!commercialFeatures.adFree) {
+		const { baseModules, extraModules } = await import(
+			/* webpackChunkName: "gam" */
+			'./gam.commercial'
+		);
+		commercialBaseModules.push(...baseModules);
+		commercialExtraModules.push(...extraModules);
+	}
+};
 
 /**
  * Load modules specific to `dotcom-rendering`.
@@ -199,6 +169,8 @@ const bootCommercial = async (): Promise<void> => {
 
 	try {
 		await loadDcrBundle();
+
+		await loadGamModules();
 
 		const allModules: Array<Parameters<typeof loadModules>> = [
 			[commercialBaseModules, 'commercialBaseModulesLoaded'],
