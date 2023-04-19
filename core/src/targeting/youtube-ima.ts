@@ -43,7 +43,13 @@ const mergeCustomParamsWithTargeting = (
 		log('commercial', 'Error building YouTube IMA custom params', e);
 		return customParams;
 	}
-	const mergedCustomParams = { ...customParams, ...pageTargeting };
+	// TODO: 19/04/2023 This is a temporary update to assist reporting for a YouTube IMA test
+	const tempParams = { yt_embed_ima: '1' };
+	const mergedCustomParams = {
+		...tempParams,
+		...customParams,
+		...pageTargeting,
+	};
 	return mergedCustomParams;
 };
 
