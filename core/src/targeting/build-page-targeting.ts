@@ -46,6 +46,7 @@ type PageTargeting = PartialWithNulls<
 		skinsize: 'l' | 's';
 		urlkw: string[]; // URL KeyWords
 		vl: string; // Video Length
+		allkw: string[]; // Concatenated urlkw and k so they can be used in the same targeting key reducing the number of keys
 
 		// And more
 		[_: string]: string | string[];
@@ -68,6 +69,10 @@ const filterValues = (pageTargets: Record<string, unknown>) => {
 	}
 	return filtered;
 };
+
+const concatUnique = (a: string[], b: string[]): string[] => [
+	...new Set([...a, ...b]),
+];
 
 type BuildPageTargetingParams = {
 	adFree: boolean;
@@ -136,6 +141,10 @@ const buildPageTargeting = ({
 		youtube,
 	});
 
+	const otherTargeting = {
+		allkw: concatUnique(contentTargeting.urlkw, sharedAdTargeting.k ?? []),
+	};
+
 	const pageTargets: PageTargeting = {
 		...personalisedTargeting,
 		...sharedAdTargeting,
@@ -143,6 +152,7 @@ const buildPageTargeting = ({
 		...contentTargeting,
 		...sessionTargeting,
 		...viewportTargeting,
+		...otherTargeting,
 	};
 
 	// filter !(string | string[]) and empty values
