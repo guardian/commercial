@@ -70,10 +70,6 @@ const filterValues = (pageTargets: Record<string, unknown>) => {
 	return filtered;
 };
 
-const concatUnique = (a: string[], b: string[]): string[] => [
-	...new Set([...a, ...b]),
-];
-
 type BuildPageTargetingParams = {
 	adFree: boolean;
 	clientSideParticipations: Participations;
@@ -91,6 +87,10 @@ const buildPageTargeting = ({
 
 	const adFreeTargeting: { af?: True } = adFree ? { af: 't' } : {};
 
+	const sharedAdTargeting = page.sharedAdTargeting
+		? getSharedTargeting(page.sharedAdTargeting)
+		: {};
+
 	const contentTargeting: ContentTargeting = getContentTargeting({
 		webPublicationDate: page.webPublicationDate,
 		eligibleForDCR: page.dcrCouldRender,
@@ -101,6 +101,7 @@ const buildPageTargeting = ({
 		section: page.section,
 		sensitive: page.isSensitive,
 		videoLength: page.videoDuration,
+		keywords: sharedAdTargeting.k ?? [],
 	});
 
 	const getReferrer = () => document.referrer || '';
@@ -132,18 +133,10 @@ const buildPageTargeting = ({
 			!cmp.hasInitialised() || cmp.willShowPrivacyMessageSync(),
 	});
 
-	const sharedAdTargeting = page.sharedAdTargeting
-		? getSharedTargeting(page.sharedAdTargeting)
-		: {};
-
 	const personalisedTargeting = getPersonalisedTargeting({
 		state: consentState,
 		youtube,
 	});
-
-	const otherTargeting = {
-		allkw: concatUnique(contentTargeting.urlkw, sharedAdTargeting.k ?? []),
-	};
 
 	const pageTargets: PageTargeting = {
 		...personalisedTargeting,
@@ -152,7 +145,6 @@ const buildPageTargeting = ({
 		...contentTargeting,
 		...sessionTargeting,
 		...viewportTargeting,
-		...otherTargeting,
 	};
 
 	// filter !(string | string[]) and empty values
