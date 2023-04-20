@@ -46,6 +46,7 @@ type PageTargeting = PartialWithNulls<
 		skinsize: 'l' | 's';
 		urlkw: string[]; // URL KeyWords
 		vl: string; // Video Length
+		allkw: string[]; // Concatenated urlkw and k so they can be used in the same targeting key reducing the number of keys
 
 		// And more
 		[_: string]: string | string[];
@@ -86,6 +87,10 @@ const buildPageTargeting = ({
 
 	const adFreeTargeting: { af?: True } = adFree ? { af: 't' } : {};
 
+	const sharedAdTargeting = page.sharedAdTargeting
+		? getSharedTargeting(page.sharedAdTargeting)
+		: {};
+
 	const contentTargeting: ContentTargeting = getContentTargeting({
 		webPublicationDate: page.webPublicationDate,
 		eligibleForDCR: page.dcrCouldRender,
@@ -96,6 +101,7 @@ const buildPageTargeting = ({
 		section: page.section,
 		sensitive: page.isSensitive,
 		videoLength: page.videoDuration,
+		keywords: sharedAdTargeting.k ?? [],
 	});
 
 	const getReferrer = () => document.referrer || '';
@@ -126,10 +132,6 @@ const buildPageTargeting = ({
 		cmpBannerWillShow:
 			!cmp.hasInitialised() || cmp.willShowPrivacyMessageSync(),
 	});
-
-	const sharedAdTargeting = page.sharedAdTargeting
-		? getSharedTargeting(page.sharedAdTargeting)
-		: {};
 
 	const personalisedTargeting = getPersonalisedTargeting({
 		state: consentState,

@@ -86,6 +86,15 @@ type ContentTargeting = {
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=195087
 	 */
 	vl: null | (typeof videoLengths)[number];
+
+	/**
+	 * **All** **K**ey**w**ords - [see on Ad Manager][gam]
+	 * This is a list of all keywords on the page, including the section and the URL keywords
+	 * Type: _Dynamic_
+	 *
+	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=13995840
+	 */
+	allkw: string[];
 };
 
 /* -- Methods -- */
@@ -103,6 +112,10 @@ const getUrlKeywords = (url: SharedTargeting['url']): string[] => {
 
 	return isString(lastSegment) ? lastSegment.split('-').filter(Boolean) : [];
 };
+
+const concatUnique = (a: string[], b: string[]): string[] => [
+	...new Set([...a, ...b]),
+];
 
 // "0" means content < 2 hours old
 // "1" means content between 2 hours and 24 hours old.
@@ -140,6 +153,7 @@ type Content = {
 	sensitive: boolean;
 	videoLength?: number;
 	webPublicationDate: number;
+	keywords: string[];
 };
 
 const getContentTargeting = ({
@@ -150,15 +164,18 @@ const getContentTargeting = ({
 	sensitive,
 	videoLength,
 	webPublicationDate,
+	keywords,
 }: Content): ContentTargeting => {
+	const urlkw = getUrlKeywords(path);
 	return {
 		dcre: eligibleForDCR ? 't' : 'f',
 		rc: calculateRecentlyPublishedBucket(webPublicationDate),
 		rp: renderingPlatform,
 		s: section,
 		sens: sensitive ? 't' : 'f',
-		urlkw: getUrlKeywords(path),
+		urlkw,
 		vl: videoLength ? getVideoLength(videoLength) : null,
+		allkw: concatUnique(urlkw, keywords),
 	};
 };
 
