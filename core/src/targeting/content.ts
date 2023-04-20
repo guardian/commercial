@@ -87,6 +87,13 @@ type ContentTargeting = {
 	 */
 	vl: null | (typeof videoLengths)[number];
 
+	/**
+	 * **All** **K**ey**w**ords - [see on Ad Manager][gam]
+	 * This is a list of all keywords on the page, including the section and the URL keywords
+	 * Type: _Dynamic_
+	 *
+	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=13995840
+	 */
 	allkw: string[];
 };
 
