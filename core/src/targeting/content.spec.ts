@@ -9,6 +9,7 @@ const defaultValues: Parameters<typeof getContentTargeting>[0] = {
 	section: 'uk-news',
 	eligibleForDCR: false,
 	webPublicationDate: 608857200,
+	keywords: ['keyword'],
 };
 
 describe('Content Targeting', () => {

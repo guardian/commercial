@@ -196,6 +196,12 @@ describe('Build Page Targeting', () => {
 		expect(pageTargeting.cc).toEqual('US');
 		expect(pageTargeting.rp).toEqual('dotcom-platform');
 		expect(pageTargeting.rc).toEqual('7');
+		expect(pageTargeting.allkw).toEqual([
+			'footballweekly',
+			'prince-charles-letters',
+			'uk/uk',
+			'prince-charles',
+		]);
 	});
 
 	it('should set correct personalized ad (pa) param', () => {
@@ -426,6 +432,7 @@ describe('Build Page Targeting', () => {
 			si: 't',
 			skinsize: 's',
 			urlkw: ['footballweekly'],
+			allkw: ['footballweekly'],
 		});
 	});
 
