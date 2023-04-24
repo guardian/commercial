@@ -43,7 +43,10 @@ const mergeCustomParamsWithTargeting = (
 		log('commercial', 'Error building YouTube IMA custom params', e);
 		return customParams;
 	}
-	const mergedCustomParams = { ...customParams, ...pageTargeting };
+	const mergedCustomParams = {
+		...customParams,
+		...pageTargeting,
+	};
 	return mergedCustomParams;
 };
 
