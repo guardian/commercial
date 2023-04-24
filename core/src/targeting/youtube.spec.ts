@@ -30,7 +30,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 				adTagParameters: {
 					iu: 'someAdUnit',
 					cust_params: encodeURIComponent(
-						'yt_embed_ima=0&param1=param1&param2=param2&permutive=1,2,3&si=t',
+						'param1=param1&param2=param2&permutive=1,2,3&si=t&yt_embed_ima=0',
 					),
 				},
 				restrictedDataProcessor: false,
@@ -56,7 +56,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 				adTagParameters: {
 					iu: 'someAdUnit',
 					cust_params: encodeURIComponent(
-						'yt_embed_ima=0&param1=param1&param2=param2&permutive=1,2,3&si=t',
+						'param1=param1&param2=param2&permutive=1,2,3&si=t&yt_embed_ima=0',
 					),
 				},
 				restrictedDataProcessor: true,
@@ -82,7 +82,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 				adTagParameters: {
 					iu: 'someAdUnit',
 					cust_params: encodeURIComponent(
-						'yt_embed_ima=0&param1=param1&param2=param2&permutive=1,2,3&si=f',
+						'param1=param1&param2=param2&permutive=1,2,3&si=f&yt_embed_ima=0',
 					),
 				},
 				restrictedDataProcessor: false,
@@ -108,7 +108,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 				adTagParameters: {
 					iu: 'someAdUnit',
 					cust_params: encodeURIComponent(
-						'yt_embed_ima=0&param1=param1&param2=param2&permutive=1,2,3&si=t',
+						'param1=param1&param2=param2&permutive=1,2,3&si=t&yt_embed_ima=0',
 					),
 				},
 				restrictedDataProcessor: false,
@@ -134,7 +134,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 				adTagParameters: {
 					iu: 'someAdUnit',
 					cust_params: encodeURIComponent(
-						'yt_embed_ima=0&param1=param1&param2=param2&permutive=1,2,3&si=t',
+						'param1=param1&param2=param2&permutive=1,2,3&si=t&yt_embed_ima=0',
 					),
 				},
 				restrictedDataProcessor: true,
@@ -166,7 +166,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 					cmpVcd: 'someTcString',
 					cmpGvcd: 'someAddtlConsent',
 					cust_params: encodeURIComponent(
-						'yt_embed_ima=0&param1=param1&param2=param2&permutive=1,2,3&si=t',
+						'param1=param1&param2=param2&permutive=1,2,3&si=t&yt_embed_ima=0',
 					),
 				},
 				nonPersonalizedAd: false,
@@ -198,7 +198,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 					cmpVcd: 'someTcString',
 					cmpGvcd: 'someAddtlConsent',
 					cust_params: encodeURIComponent(
-						'yt_embed_ima=0&param1=param1&param2=param2&permutive=1,2,3&si=t',
+						'param1=param1&param2=param2&permutive=1,2,3&si=t&yt_embed_ima=0',
 					),
 				},
 				nonPersonalizedAd: true,
@@ -230,7 +230,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 					cmpVcd: 'someTcString',
 					cmpGvcd: 'someAddtlConsent',
 					cust_params: encodeURIComponent(
-						'yt_embed_ima=0&param1=param1&param2=param2&permutive=1,2,3&si=t',
+						'param1=param1&param2=param2&permutive=1,2,3&si=t&yt_embed_ima=0',
 					),
 				},
 				nonPersonalizedAd: false,

@@ -28,7 +28,7 @@ describe('Builds an IMA ad tag URL', () => {
 			clientSideParticipations: {},
 		});
 		expect(adTagURL).toEqual(
-			'https://pubads.g.doubleclick.net/gampad/ads?iu=someAdUnit&tfcd=0&npa=0&sz=480x360|480x361|400x300&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&vad_type=linear&vpos=preroll&cust_params=yt_embed_ima%3D1%26at%3DadTestValue',
+			'https://pubads.g.doubleclick.net/gampad/ads?iu=someAdUnit&tfcd=0&npa=0&sz=480x360|480x361|400x300&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&vad_type=linear&vpos=preroll&cust_params=at%3DadTestValue',
 		);
 	});
 	it('encodes custom parameters', () => {
@@ -52,7 +52,7 @@ describe('Builds an IMA ad tag URL', () => {
 		expect(adTagURL).toEqual(
 			// this is a real ad tag url that you can paste into Google's VAST tag checker:
 			// https://googleads.github.io/googleads-ima-html5/vsi/
-			'https://pubads.g.doubleclick.net/gampad/ads?iu=/59666047/theguardian.com&tfcd=0&npa=0&sz=480x360|480x361|400x300&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&vad_type=linear&vpos=preroll&cust_params=yt_embed_ima%3D1%26param1%3Dhello1%26param2%3Dhello2%26param3%3Dhello3%252Chello4%26param6%3D%253D%2526%252C%26at%3Dfixed-puppies%26encodeMe%3D%253D%2526%252C',
+			'https://pubads.g.doubleclick.net/gampad/ads?iu=/59666047/theguardian.com&tfcd=0&npa=0&sz=480x360|480x361|400x300&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&vad_type=linear&vpos=preroll&cust_params=param1%3Dhello1%26param2%3Dhello2%26param3%3Dhello3%252Chello4%26param6%3D%253D%2526%252C%26at%3Dfixed-puppies%26encodeMe%3D%253D%2526%252C',
 		);
 	});
 	it('uses provided custom parameters if page targeting throws an exception', () => {

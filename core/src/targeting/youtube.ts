@@ -19,10 +19,7 @@ const buildAdsConfig = (
 	customParams: CustomParams,
 	clientSideParticipations: Participations,
 ): AdsConfig => {
-	// TODO: 19/04/2023 This is a temporary update to assist reporting for a YouTube IMA test
-	const tempParams = { yt_embed_ima: '0' };
 	const mergedCustomParams = {
-		...tempParams,
 		...customParams,
 		...buildPageTargeting({
 			adFree: false,
@@ -30,6 +27,8 @@ const buildAdsConfig = (
 			consentState: cmpConsent,
 			youtube: true,
 		}),
+		// 19/04/2023 This is a temporary update to assist reporting for a YouTube IMA test
+		yt_embed_ima: '0',
 	};
 
 	const defaultAdsConfig: AdsConfigBasic = {
