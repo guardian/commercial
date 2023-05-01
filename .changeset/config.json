@@ -3,7 +3,7 @@
   "changelog": "@changesets/cli/changelog",
   "commit": false,
   "fixed": [],
-  "linked": [],
+  "linked": [["@guardian/commercial-core", "@guardian/commercial-bundle"]],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
