@@ -11,6 +11,9 @@
 		"url": "git+https://github.com/guardian/commercial-core.git"
 	},
 	"scripts": {
+		"build": "npm-run-all build:*",
+		"build:core": "yarn workspace @guardian/commercial-core build",
+		"build:bundle": "yarn workspace @guardian/commercial-bundle build",
 		"precommit:lint": "lint-staged",
 		"prepush:test": "yarn workspace @guardian/commercial-core jest --verbose --runInBand --onlyChanged",
 		"prepare": "husky install"
