@@ -155,9 +155,11 @@ const addDesktopInlineAds = (isInline1: boolean): Promise<boolean> => {
 	const tweakpoint = getCurrentTweakpoint();
 	const hasLeftCol = ['leftCol', 'wide'].includes(tweakpoint);
 
-	const ignoreList = hasLeftCol
-		? ` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-role="richLink"]):not([data-spacefinder-role="thumbnail"])`
-		: ` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`;
+	let ignoreList = ` > :not(p):not(h2):not(ul):not(.${adSlotContainerClass}):not(#sign-in-gate)`;
+	if (hasLeftCol) {
+		ignoreList +=
+			':not([data-spacefinder-role="richLink"]):not([data-spacefinder-role="thumbnail"])';
+	}
 
 	const isImmersive = window.guardian.config.page.isImmersive;
 
