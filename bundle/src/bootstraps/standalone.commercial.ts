@@ -53,6 +53,8 @@ import { init as initTrackScrollDepth } from '../projects/commercial/modules/tra
 import { commercialFeatures } from '../projects/common/modules/commercial/commercial-features';
 import type { Modules } from './types';
 
+console.log('hello');
+
 const { isDotcomRendering, frontendAssetsFullURL, switches, page } =
 	window.guardian.config;
 
