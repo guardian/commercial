@@ -9,7 +9,7 @@ on:
     types: [labeled]
 
 # Let's quickly try all of the permissions
-# permissions: read-all|write-all
+permissions: read-all|write-all
 
 jobs:
   has-permission:
