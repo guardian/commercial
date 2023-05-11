@@ -7,6 +7,8 @@ on:
     branches-ignore:
       - "gh-pages"
 
+permissions: write-all
+
 defaults:
   run:
     working-directory: ./bundle
