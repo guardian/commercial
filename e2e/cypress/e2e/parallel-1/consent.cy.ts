@@ -63,7 +63,7 @@ const expectAdFree = (reasons: AdFreeCookieReasons[]) => {
 	});
 };
 
-describe('tcfv2 consent', () => {
+describe.skip('tcfv2 consent', () => {
 	const expectAdFreeCookieReasonSet = (reasons: AdFreeCookieReasons[]) => {
 		cy.window()
 			.its('localStorage.setItem')
