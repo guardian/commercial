@@ -220,10 +220,7 @@ const chooseAdvertisingTag = async () => {
 	// Only load the Opt Out tag in TCF regions when it is switched on and there is no consent for Googletag
 	if (consentState.tcfv2 && !getConsentFor('googletag', consentState)) {
 		// Don't load OptOut (for now) if loading Elements Manager
-		if (
-			isInVariantSynchronous(elementsManager, 'variant') ||
-			!switches.optOutAdvertising
-		) {
+		if (isInVariantSynchronous(elementsManager, 'variant')) {
 			return;
 		}
 
@@ -247,4 +244,16 @@ if (isInVariantSynchronous(elementsManager, 'variant')) {
 	).then(({ initElementsManager }) => initElementsManager());
 }
 
-void chooseAdvertisingTag();
+/*
+	Provide consentless advertising when the switch is on and no consent is given.
+    If the switch is off, get the usual commercial experience
+*/
+if (switches.optOutAdvertising) {
+	void chooseAdvertisingTag();
+} else {
+	if (window.guardian.mustardCut || window.guardian.polyfilled) {
+		void bootCommercial();
+	} else {
+		window.guardian.queue.push(bootCommercial);
+	}
+}
