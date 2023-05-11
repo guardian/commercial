@@ -20,7 +20,6 @@ import {
 import { log } from '@guardian/libs';
 import { initTeadsCookieless } from 'commercial/modules/teads-cookieless';
 import { isInVariantSynchronous } from 'common/modules/experiments/ab';
-import { consentlessAds } from 'common/modules/experiments/tests/consentlessAds';
 import { elementsManager } from 'common/modules/experiments/tests/elements-manager';
 import { reportError } from '../lib/report-error';
 import { catchErrorsWithContext } from '../lib/robust';
@@ -54,7 +53,7 @@ import { init as initTrackScrollDepth } from '../projects/commercial/modules/tra
 import { commercialFeatures } from '../projects/common/modules/commercial/commercial-features';
 import type { Modules } from './types';
 
-const { isDotcomRendering, frontendAssetsFullURL, page } =
+const { isDotcomRendering, frontendAssetsFullURL, switches, page } =
 	window.guardian.config;
 
 const decideAssetsPath = () => {
@@ -218,10 +217,13 @@ const bootCommercial = async (): Promise<void> => {
  */
 const chooseAdvertisingTag = async () => {
 	const consentState = await onConsent();
-	// Only load the Opt Out tag in TCF regions when there is no consent for Googletag
+	// Only load the Opt Out tag in TCF regions when it is switched on and there is no consent for Googletag
 	if (consentState.tcfv2 && !getConsentFor('googletag', consentState)) {
 		// Don't load OptOut (for now) if loading Elements Manager
-		if (isInVariantSynchronous(elementsManager, 'variant')) {
+		if (
+			isInVariantSynchronous(elementsManager, 'variant') ||
+			!switches.optOutAdvertising
+		) {
 			return;
 		}
 
@@ -245,17 +247,4 @@ if (isInVariantSynchronous(elementsManager, 'variant')) {
 	).then(({ initElementsManager }) => initElementsManager());
 }
 
-/* Provide consentless advertising in the variant of a zero-percent test,
-   regardless of consent state. This is currently just for testing purposes.
-
-   If not in the variant, get the usual commercial experience
-*/
-if (isInVariantSynchronous(consentlessAds, 'variant')) {
-	void chooseAdvertisingTag();
-} else {
-	if (window.guardian.mustardCut || window.guardian.polyfilled) {
-		void bootCommercial();
-	} else {
-		window.guardian.queue.push(bootCommercial);
-	}
-}
+void chooseAdvertisingTag();
