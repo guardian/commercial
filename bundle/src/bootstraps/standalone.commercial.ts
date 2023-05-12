@@ -225,13 +225,8 @@ const bootCommercialWhenReady = () => {
  */
 const chooseAdvertisingTag = async () => {
 	const consentState = await onConsent();
-	// Only load the Opt Out tag in TCF regions and there is no consent for Googletag
+	// Only load the Opt Out tag in TCF regions and if there is no consent for Googletag
 	if (consentState.tcfv2 && !getConsentFor('googletag', consentState)) {
-		// Don't load OptOut (for now) if loading Elements Manager
-		if (isInVariantSynchronous(elementsManager, 'variant')) {
-			return;
-		}
-
 		void import(
 			/* webpackChunkName: "consentless" */
 			'./commercial.consentless'
