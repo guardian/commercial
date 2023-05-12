@@ -237,13 +237,6 @@ const chooseAdvertisingTag = async () => {
 	}
 };
 
-if (isInVariantSynchronous(elementsManager, 'variant')) {
-	void import(
-		/* webpackChunkName: "elements-manager" */
-		'../projects/commercial/modules/elements-manager/init'
-	).then(({ initElementsManager }) => initElementsManager());
-}
-
 /*
 	Provide consentless advertising when the switch is on and no consent is given.
     If the switch is off, get the usual commercial experience
