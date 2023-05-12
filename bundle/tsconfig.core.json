@@ -1,6 +1,5 @@
 {
 	"compilerOptions": {
-		"noUncheckedIndexedAccess": true,
 		"allowJs": true,
 		"esModuleInterop": true,
 		"isolatedModules": true,
@@ -14,6 +13,7 @@
 			"ES2020",
 			"ESNext"
 		],
+		"noUncheckedIndexedAccess": true,
 		"module": "ES6",
 		"moduleResolution": "node",
 		"noEmit": true,
