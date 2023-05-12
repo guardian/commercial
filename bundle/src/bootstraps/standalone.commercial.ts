@@ -19,8 +19,7 @@ import {
 } from '@guardian/consent-management-platform';
 import { log } from '@guardian/libs';
 import { initTeadsCookieless } from 'commercial/modules/teads-cookieless';
-import { isInVariantSynchronous } from 'common/modules/experiments/ab';
-import { elementsManager } from 'common/modules/experiments/tests/elements-manager';
+import { isDigitalSubscriber } from 'common/modules/commercial/user-features';
 import { reportError } from '../lib/report-error';
 import { catchErrorsWithContext } from '../lib/robust';
 import { initAdblockAsk } from '../projects/commercial/adblock-ask';
@@ -225,8 +224,15 @@ const bootCommercialWhenReady = () => {
  */
 const chooseAdvertisingTag = async () => {
 	const consentState = await onConsent();
-	// Only load the Opt Out tag in TCF regions and if there is no consent for Googletag
-	if (consentState.tcfv2 && !getConsentFor('googletag', consentState)) {
+	// Only load the Opt Out tag if:
+	// - in TCF region
+	// - no consent for Googletag
+	// - the user is not a subscriber
+	if (
+		consentState.tcfv2 &&
+		!getConsentFor('googletag', consentState) &&
+		!isDigitalSubscriber()
+	) {
 		void import(
 			/* webpackChunkName: "consentless" */
 			'./commercial.consentless'
