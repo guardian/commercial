@@ -237,10 +237,10 @@ const chooseAdvertisingTag = async () => {
 	}
 };
 
-/*
-	Provide consentless advertising when the switch is on and no consent is given.
-    If the switch is off, get the usual commercial experience
-*/
+/**
+ * If the consentless switch is on decide whether to boot consentless or not
+ * If the consentless switch is off boot the normal commercial
+ */
 if (switches.optOutAdvertising) {
 	void chooseAdvertisingTag();
 } else {
