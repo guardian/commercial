@@ -212,12 +212,20 @@ const bootCommercial = async (): Promise<void> => {
 	}
 };
 
+const bootCommercialWhenReady = () => {
+	if (window.guardian.mustardCut || window.guardian.polyfilled) {
+		void bootCommercial();
+	} else {
+		window.guardian.queue.push(bootCommercial);
+	}
+};
+
 /**
  * Choose whether to launch Googletag or Opt Out tag (ootag) based on consent state
  */
 const chooseAdvertisingTag = async () => {
 	const consentState = await onConsent();
-	// Only load the Opt Out tag in TCF regions when it is switched on and there is no consent for Googletag
+	// Only load the Opt Out tag in TCF regions and there is no consent for Googletag
 	if (consentState.tcfv2 && !getConsentFor('googletag', consentState)) {
 		// Don't load OptOut (for now) if loading Elements Manager
 		if (isInVariantSynchronous(elementsManager, 'variant')) {
@@ -229,24 +237,16 @@ const chooseAdvertisingTag = async () => {
 			'./commercial.consentless'
 		).then(({ bootConsentless }) => bootConsentless(consentState));
 	} else {
-		if (window.guardian.mustardCut || window.guardian.polyfilled) {
-			void bootCommercial();
-		} else {
-			window.guardian.queue.push(bootCommercial);
-		}
+		bootCommercialWhenReady();
 	}
 };
 
 /**
- * If the consentless switch is on decide whether to boot consentless or not
- * If the consentless switch is off boot the normal commercial
+ * If the consentless switch is on decide whether to boot consentless or normal consented
+ * If the consentless switch is off boot normal consented
  */
 if (switches.optOutAdvertising) {
 	void chooseAdvertisingTag();
 } else {
-	if (window.guardian.mustardCut || window.guardian.polyfilled) {
-		void bootCommercial();
-	} else {
-		window.guardian.queue.push(bootCommercial);
-	}
+	bootCommercialWhenReady();
 }
