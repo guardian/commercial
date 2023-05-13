@@ -10,7 +10,7 @@ const retainTopAboveNavSlotSize = (
 ): HeaderBiddingSlot[] => {
 	if (
 		hbSlot.key !== 'top-above-nav' &&
-		!hbSlot.key.includes('front-banner')
+		!hbSlot.key.startsWith('front-banner')
 	) {
 		return [hbSlot];
 	}
