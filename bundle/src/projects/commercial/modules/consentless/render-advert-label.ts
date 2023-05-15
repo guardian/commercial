@@ -5,7 +5,14 @@
 */
 import crossIcon from 'svgs/icon/cross.svg';
 import fastdom from '../../../../lib/fastdom-promise';
-import { shouldRenderLabel } from '../dfp/render-advert-label';
+
+const shouldRenderConsentlessLabel = (adSlotNode: HTMLElement): boolean => {
+	if (adSlotNode.getAttribute('data-label') === 'false') {
+		return false;
+	}
+
+	return true;
+};
 
 export const createAdCloseDiv = (): HTMLElement => {
 	const closeDiv: HTMLElement = document.createElement('button');
@@ -24,7 +31,7 @@ export const renderConsentlessAdvertLabel = (
 	adSlotNode: HTMLElement,
 ): Promise<Promise<void>> => {
 	return fastdom.measure(() => {
-		if (shouldRenderLabel(adSlotNode)) {
+		if (shouldRenderConsentlessLabel(adSlotNode)) {
 			//Assigning the ad label text like this allows us to conditionally add extra text to it
 			//eg. for the ad test labelling for google ads
 			const adLabelContent = `Advertisement`;
