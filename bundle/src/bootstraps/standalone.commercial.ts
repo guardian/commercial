@@ -19,8 +19,7 @@ import {
 } from '@guardian/consent-management-platform';
 import { log } from '@guardian/libs';
 import { initTeadsCookieless } from 'commercial/modules/teads-cookieless';
-import { isInVariantSynchronous } from 'common/modules/experiments/ab';
-import { elementsManager } from 'common/modules/experiments/tests/elements-manager';
+import { isDigitalSubscriber } from 'common/modules/commercial/user-features';
 import { reportError } from '../lib/report-error';
 import { catchErrorsWithContext } from '../lib/robust';
 import { initAdblockAsk } from '../projects/commercial/adblock-ask';
@@ -212,48 +211,43 @@ const bootCommercial = async (): Promise<void> => {
 	}
 };
 
-/**
- * Choose whether to launch Googletag or Opt Out tag (ootag) based on consent state
- */
-const chooseAdvertisingTag = async () => {
-	const consentState = await onConsent();
-	// Only load the Opt Out tag in TCF regions when it is switched on and there is no consent for Googletag
-	if (consentState.tcfv2 && !getConsentFor('googletag', consentState)) {
-		// Don't load OptOut (for now) if loading Elements Manager
-		if (isInVariantSynchronous(elementsManager, 'variant')) {
-			return;
-		}
-
-		void import(
-			/* webpackChunkName: "consentless" */
-			'./commercial.consentless'
-		).then(({ bootConsentless }) => bootConsentless(consentState));
-	} else {
-		if (window.guardian.mustardCut || window.guardian.polyfilled) {
-			void bootCommercial();
-		} else {
-			window.guardian.queue.push(bootCommercial);
-		}
-	}
-};
-
-if (isInVariantSynchronous(elementsManager, 'variant')) {
-	void import(
-		/* webpackChunkName: "elements-manager" */
-		'../projects/commercial/modules/elements-manager/init'
-	).then(({ initElementsManager }) => initElementsManager());
-}
-
-/*
-	Provide consentless advertising when the switch is on and no consent is given.
-    If the switch is off, get the usual commercial experience
-*/
-if (switches.optOutAdvertising) {
-	void chooseAdvertisingTag();
-} else {
+const bootCommercialWhenReady = () => {
 	if (window.guardian.mustardCut || window.guardian.polyfilled) {
 		void bootCommercial();
 	} else {
 		window.guardian.queue.push(bootCommercial);
 	}
+};
+
+/**
+ * Choose whether to launch Googletag or Opt Out tag (ootag) based on consent state
+ */
+const chooseAdvertisingTag = async () => {
+	const consentState = await onConsent();
+	// Only load the Opt Out tag if:
+	// - in TCF region
+	// - no consent for Googletag
+	// - the user is not a subscriber
+	if (
+		consentState.tcfv2 &&
+		!getConsentFor('googletag', consentState) &&
+		!isDigitalSubscriber()
+	) {
+		void import(
+			/* webpackChunkName: "consentless" */
+			'./commercial.consentless'
+		).then(({ bootConsentless }) => bootConsentless(consentState));
+	} else {
+		bootCommercialWhenReady();
+	}
+};
+
+/**
+ * If the consentless switch is on decide whether to boot consentless or normal consented
+ * If the consentless switch is off boot normal consented
+ */
+if (switches.optOutAdvertising) {
+	void chooseAdvertisingTag();
+} else {
+	bootCommercialWhenReady();
 }
