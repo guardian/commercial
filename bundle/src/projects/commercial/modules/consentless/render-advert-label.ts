@@ -7,7 +7,11 @@ import crossIcon from 'svgs/icon/cross.svg';
 import fastdom from '../../../../lib/fastdom-promise';
 
 const shouldRenderConsentlessLabel = (adSlotNode: HTMLElement): boolean => {
-	if (adSlotNode.getAttribute('data-label') === 'false') {
+	if (
+		adSlotNode.getAttribute('data-label') === 'false' &&
+		(!adSlotNode.classList.contains('ad-slot--merchandising-high') ||
+			!adSlotNode.classList.contains('ad-slot--merchandising'))
+	) {
 		return false;
 	}
 
