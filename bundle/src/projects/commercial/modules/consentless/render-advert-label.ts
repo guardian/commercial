@@ -8,9 +8,18 @@ import fastdom from '../../../../lib/fastdom-promise';
 
 const shouldRenderConsentlessLabel = (adSlotNode: HTMLElement): boolean => {
 	if (
-		adSlotNode.getAttribute('data-label') === 'false' &&
-		(!adSlotNode.classList.contains('ad-slot--merchandising-high') ||
-			!adSlotNode.classList.contains('ad-slot--merchandising'))
+		adSlotNode.classList.contains('ad-slot--merchandising') ||
+		adSlotNode.classList.contains('ad-slot--merchandising-high')
+	) {
+		return true;
+	}
+	if (
+		adSlotNode.classList.contains('ad-slot--frame') ||
+		adSlotNode.classList.contains('ad-slot--gc') ||
+		adSlotNode.classList.contains('u-h') ||
+		// set for out-of-page (1x1) and empty (2x2) ads
+		adSlotNode.classList.contains('ad-slot--collapse') ||
+		adSlotNode.getAttribute('data-label') === 'false'
 	) {
 		return false;
 	}
