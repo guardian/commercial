@@ -95,7 +95,7 @@ type SlotName =
 	| 'crossword-banner'
 	| 'epic'
 	| 'exclusion'
-	| 'front-banner'
+	| 'fronts-banner'
 	| 'im'
 	| 'inline'
 	| 'merchandising-high-lucky'
@@ -275,7 +275,7 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.fluid,
 		],
 	},
-	'front-banner': {
+	'fronts-banner': {
 		desktop: [
 			adSizes.outOfPage,
 			adSizes.empty,

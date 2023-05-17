@@ -115,7 +115,7 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 			tablet: [adSizes.leaderboard],
 			mobile: [adSizes.mpu],
 		},
-		'front-banner': {
+		'fronts-banner': {
 			desktop: [adSizes.billboard],
 		},
 		inline: {
