@@ -11,6 +11,10 @@ const adverts: Record<string, string> = {
         <div class="js-ad-slot"></div>`,
 	labelDisabled: `
         <div class="js-ad-slot" data-label="false"></div>`,
+	frame: `
+        <div class="js-ad-slot ad-slot--frame"></div>`,
+	uh: `
+        <div class="js-ad-slot u-h"></div>`,
 };
 
 const createAd = (html: string) => {
@@ -40,6 +44,22 @@ describe('Rendering advert labels', () => {
 
 	it('Will not add a label if it has an attribute data-label="false"', async () => {
 		createAd(adverts['labelDisabled']);
+		return renderConsentlessAdvertLabel(getAd()).then(() => {
+			const dataLabelShow = getAd().getAttribute('data-label-show');
+			expect(dataLabelShow).toBeFalsy();
+		});
+	});
+
+	it('Will not add a label to frame ads', async () => {
+		createAd(adverts['frame']);
+		return renderConsentlessAdvertLabel(getAd()).then(() => {
+			const dataLabelShow = getAd().getAttribute('data-label-show');
+			expect(dataLabelShow).toBeFalsy();
+		});
+	});
+
+	it('Will not add a label to an ad slot with a hidden u-h class', async () => {
+		createAd(adverts['uh']);
 		return renderConsentlessAdvertLabel(getAd()).then(() => {
 			const dataLabelShow = getAd().getAttribute('data-label-show');
 			expect(dataLabelShow).toBeFalsy();
