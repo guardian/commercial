@@ -36,6 +36,7 @@ import { init as prepareGoogletag } from '../projects/commercial/modules/dfp/pre
 import { initPermutive } from '../projects/commercial/modules/dfp/prepare-permutive';
 import { init as preparePrebid } from '../projects/commercial/modules/dfp/prepare-prebid';
 import { init as initRedplanet } from '../projects/commercial/modules/dfp/redplanet';
+import { init as initFrontsInlineAdverts } from '../projects/commercial/modules/fronts-inline-adverts';
 import { init as initHighMerch } from '../projects/commercial/modules/high-merch';
 import { init as initIpsosMori } from '../projects/commercial/modules/ipsos-mori';
 import { init as initLiveblogAdverts } from '../projects/commercial/modules/liveblog-adverts';
@@ -104,6 +105,7 @@ if (!commercialFeatures.adFree) {
 		['cm-articleAsideAdverts', initArticleAsideAdverts],
 		['cm-articleBodyAdverts', initArticleBodyAdverts],
 		['cm-liveblogAdverts', initLiveblogAdverts],
+		['cm-frontsInlineAdverts', initFrontsInlineAdverts],
 		['cm-thirdPartyTags', initThirdPartyTags],
 		['cm-redplanet', initRedplanet],
 		['cm-paidContainers', paidContainers],
