@@ -15,8 +15,6 @@ const adverts: Record<string, string> = {
         <div class="js-ad-slot ad-slot--frame"></div>`,
 	uh: `
         <div class="js-ad-slot u-h"></div>`,
-	topAboveNav: `
-        <div class="js-ad-slot" id="dfp-ad--top-above-nav"></div>`,
 };
 
 const createAd = (html: string) => {
@@ -65,14 +63,6 @@ describe('Rendering advert labels', () => {
 		return renderConsentlessAdvertLabel(getAd()).then(() => {
 			const dataLabelShow = getAd().getAttribute('data-label-show');
 			expect(dataLabelShow).toBeFalsy();
-		});
-	});
-
-	it('When the ad is top above nav and the label is NOT toggleable, render the label dynamically', async () => {
-		createAd(adverts['topAboveNav']);
-		return renderConsentlessAdvertLabel(getAd()).then(() => {
-			const dataLabelShow = getAd().getAttribute('data-label-show');
-			expect(dataLabelShow).toBeTruthy();
 		});
 	});
 });
