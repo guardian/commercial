@@ -5,8 +5,8 @@ import { addSlot } from './dfp/add-slot';
 
 const sectionsToInsertAdvertsAbove = [
 	'opinion',
-	'spotlight',
-	'coronavirus',
+	'spotlight', // FOR TESTING PURPOSES
+	'coronavirus', // FOR TESTING PURPOSES
 	'sport',
 	'around-the-world',
 	'lifestyle',
