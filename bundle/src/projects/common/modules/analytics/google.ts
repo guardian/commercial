@@ -1,5 +1,9 @@
 import { getCLS, getFID, getLCP } from 'web-vitals';
 import { mediator } from 'lib/mediator';
+import type {
+	BoostGaUserTimingFidelityMetrics,
+	GoogleTimingEvent,
+} from 'types/global';
 
 const trackerName =
 	window.guardian.config.googleAnalytics?.trackers?.editorial ??
