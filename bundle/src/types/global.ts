@@ -1,17 +1,39 @@
-type ServerSideABTest = `${string}${'Variant' | 'Control'}`;
+import type { EventTimer } from '../core/event-timer';
+import type { PageTargeting } from '../core/targeting/build-page-targeting';
+import type {
+	GoogleTagParams,
+	GoogleTrackConversionObject,
+	NetworkInformation,
+} from '../core/types';
+import type { Advert } from '../projects/commercial/modules/dfp/Advert';
+import type { IasPETSlot } from './ias';
 
-declare const twttr: {
-	widgets?: {
-		load?: (arg0: Element | null | undefined) => void;
-	};
-};
+interface DfpEnv {
+	renderStartTime: number;
+	adSlotSelector: string;
+	hbImpl: Record<string, boolean>;
+	lazyLoadEnabled: boolean;
+	lazyLoadObserve: boolean;
+	creativeIDs: string[];
+	advertIds: Record<string, number>;
+	advertsToLoad: Advert[];
+	advertsToRefresh: Advert[];
+	adverts: Advert[];
+	shouldLazyLoad: () => boolean;
+}
+
+export type ServerSideABTest = `${string}${'Variant' | 'Control'}`;
 
 declare type TagAtrribute = {
 	name: string;
 	value: string;
 };
 
-declare type ThirdPartyTag = {
+interface Navigator {
+	readonly connection?: NetworkInformation;
+}
+
+export type ThirdPartyTag = {
 	shouldRun: boolean;
 	url?: string;
 	name?: string;
@@ -24,27 +46,11 @@ declare type ThirdPartyTag = {
 	insertSnippet?: () => void;
 };
 
-declare const jsdom: {
-	reconfigure: (settings: Record<string, unknown>) => void;
-};
-
-declare module '*.svg' {
-	const content: string;
-	// eslint-disable-next-line import/no-default-export -- allow svg imports
-	export default content;
-}
-
-declare module 'ophan/ng' {
-	const ophan: Ophan;
-	// eslint-disable-next-line import/no-default-export -- that’s the ophan way
-	export default ophan;
-}
-
 // This comes from Scala:
 // https://github.com/guardian/frontend/blob/main/common/app/common/commercial/PrebidIndexSite.scala#L10
 // https://github.com/guardian/frontend/blob/main/common/app/views/support/JavaScriptPage.scala#L54
 type PrebidBreakpoint = 'D' | 'T' | 'M';
-type PrebidIndexSite = {
+export type PrebidIndexSite = {
 	bp: PrebidBreakpoint;
 	id: number;
 };
@@ -68,7 +74,7 @@ interface CommercialPageConfig {
 	};
 }
 
-interface UserConfig {
+export interface UserConfig {
 	accountCreatedDate: number;
 	displayName: string;
 	emailVerified: boolean;
@@ -92,27 +98,27 @@ type GoogleTimingEvent = {
 	timingLabel: string;
 };
 
-interface Config {
+export interface Config {
+	frontendAssetsFullURL?: string;
+	googleAnalytics?: {
+		timingEvents?: GoogleTimingEvent[];
+		trackers?: {
+			editorial?: string;
+		};
+	};
+	isDotcomRendering: boolean;
 	ophan: {
 		// somewhat redundant with guardian.ophan
-		pageViewId: string;
 		browserId?: string;
+		pageViewId: string;
 	};
 	page: PageConfig;
 	switches: Record<string, boolean | undefined>;
-	user?: UserConfig;
 	tests?: {
 		[key: `${string}Control`]: 'control';
 		[key: `${string}Variant`]: 'variant';
 	};
-	isDotcomRendering: boolean;
-	frontendAssetsFullURL?: string;
-	googleAnalytics?: {
-		trackers?: {
-			editorial?: string;
-		};
-		timingEvents?: GoogleTimingEvent[];
-	};
+	user?: UserConfig;
 }
 
 type Edition = string; // https://github.com/guardian/frontend/blob/b952f6b9/common/app/views/support/JavaScriptPage.scala#L79
@@ -121,7 +127,7 @@ interface LightboxImages {
 	images: Array<{ src: string }>;
 }
 
-interface PageConfig extends CommercialPageConfig {
+export interface PageConfig extends CommercialPageConfig {
 	ajaxUrl?: string; // https://github.com/guardian/frontend/blob/33db7bbd/common/app/views/support/JavaScriptPage.scala#L72
 	assetsPath: string;
 	author: string;
@@ -129,6 +135,7 @@ interface PageConfig extends CommercialPageConfig {
 	blogIds: string;
 	commentable: boolean;
 	contentType: string;
+	dcrCouldRender: boolean;
 	edition: Edition;
 	frontendAssetsFullURL?: string; // only in DCR
 	hasInlineMerchandise: boolean;
@@ -162,6 +169,7 @@ interface PageConfig extends CommercialPageConfig {
 	sentryPublicApiKey: string;
 	series: string;
 	seriesId: string;
+	sharedAdTargeting?: Record<string, string | string[]>;
 	shouldHideReaderRevenue?: boolean;
 	showNewRecipeDesign?: boolean;
 	showRelatedContent?: boolean;
@@ -203,7 +211,7 @@ enum BlockingType {
 	Hrap, // Domain-based detection for high risk ad platform domains
 }
 
-type ConfiantCallback = (
+export type ConfiantCallback = (
 	blockingType: BlockingType,
 	blockingId: string,
 	isBlocked: boolean,
@@ -226,7 +234,7 @@ interface Confiant extends Record<string, unknown> {
 	};
 }
 
-interface Permutive {
+export interface Permutive {
 	config?: {
 		projectId?: string;
 		apiKey?: string;
@@ -238,7 +246,7 @@ interface Permutive {
 }
 
 // https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/javascript-guide/api-reference.html#apstaginit
-interface A9AdUnitInterface {
+export interface A9AdUnitInterface {
 	slotID: string;
 	slotName?: string;
 	sizes: number[][];
@@ -255,8 +263,8 @@ type FetchBidsBidConfig = {
 };
 
 type Apstag = {
-	init: (ApstagInitConfig) => void;
-	fetchBids: (FetchBidsBidConfig, callback: () => void) => void;
+	init: (arg0: ApstagInitConfig) => void;
+	fetchBids: (arg0: FetchBidsBidConfig, callback: () => void) => void;
 	setDisplayBids: () => void;
 };
 
@@ -269,7 +277,7 @@ type ComscoreGlobals = {
 
 type AdBlockers = {
 	active: boolean | undefined;
-	onDetect: function[];
+	onDetect: Array<() => void>;
 };
 
 /**
@@ -341,7 +349,7 @@ interface OptOutResponse {
 	};
 }
 
-type OptOutFilledCallback = (
+export type OptOutFilledCallback = (
 	adSlot: OptOutAdSlot,
 	response: OptOutResponse,
 ) => void;
@@ -428,54 +436,76 @@ interface HeaderNotification {
 	ophanLabel: string;
 	logImpression: () => void;
 }
-interface Window {
-	// eslint-disable-next-line id-denylist -- this *is* the guardian object
-	guardian: {
-		ophan: Ophan;
-		config: Config;
-		queue: Array<() => Promise<void>>;
-		mustardCut?: boolean;
-		polyfilled?: boolean;
-		adBlockers: AdBlockers;
-		// /frontend/common/app/templates/inlineJS/blocking/enableStylesheets.scala.js
-		css: { onLoad: () => void; loaded: boolean };
-		articleCounts?: ArticleCounts;
-		commercial?: {
-			dfpEnv?: DfpEnv;
+
+declare global {
+	interface Window {
+		guardian: {
+			ophan: Ophan;
+			config: Config;
+			queue: Array<() => Promise<void>>;
+			mustardCut?: boolean;
+			polyfilled?: boolean;
+			adBlockers: AdBlockers;
+			// /frontend/common/app/templates/inlineJS/blocking/enableStylesheets.scala.js
+			css: { onLoad: () => void; loaded: boolean };
+			articleCounts?: ArticleCounts;
+			commercial?: {
+				dfpEnv?: DfpEnv;
+			};
+			notificationEventHistory?: HeaderNotification[][];
+			commercialTimer?: EventTimer;
+			offlineCount?: number;
 		};
-		notificationEventHistory?: HeaderNotification[][];
-	};
-	ootag: {
-		queue: Array<() => void>;
-		initializeOo: (o: OptOutInitializeOptions) => void;
-		addParameter: (key: string, value: string | string[]) => void;
-		addParameterForSlot: (
-			slotId: string,
-			key: string,
-			value: string | string[],
-		) => void;
-		defineSlot: (o: OptOutAdSlot) => void;
-		makeRequests: () => void;
-		refreshSlot: (slotId: string) => void;
-		refreshAllSlots: () => void;
-		logger: (...args: unknown[]) => void;
-	};
-	confiant?: Confiant;
-	apstag?: Apstag;
-	permutive?: Permutive;
-	_comscore?: ComscoreGlobals[];
-	__iasPET?: IasPET;
-	teads_analytics?: TeadsAnalytics;
+		ootag: {
+			queue: Array<() => void>;
+			initializeOo: (o: OptOutInitializeOptions) => void;
+			addParameter: (key: string, value: string | string[]) => void;
+			addParameterForSlot: (
+				slotId: string,
+				key: string,
+				value: string | string[],
+			) => void;
+			defineSlot: (o: OptOutAdSlot) => void;
+			makeRequests: () => void;
+			refreshSlot: (slotId: string) => void;
+			refreshAllSlots: () => void;
+			logger: (...args: unknown[]) => void;
+		};
 
-	// https://www.iab.com/wp-content/uploads/2014/08/SafeFrames_v1.1_final.pdf
-	$sf: SafeFrameAPI;
+		// Third parties
 
-	// Safeframe API host config required by Opt Out tag
-	conf: SafeFrameAPIHostConfig;
+		confiant?: Confiant;
 
-	// IMR Worldwide
-	NOLCMB: {
-		getInstance: (apid: string) => NSdkInstance;
-	};
-	nol_t: (pvar: { cid: string; content: string; server: string }) => Trac;
+		apstag?: Apstag;
+
+		permutive?: Permutive;
+
+		_comscore?: ComscoreGlobals[];
+
+		__iasPET?: IasPET;
+
+		teads_analytics?: TeadsAnalytics;
+
+		// https://www.iab.com/wp-content/uploads/2014/08/SafeFrames_v1.1_final.pdf
+		$sf: SafeFrameAPI;
+		// Safeframe API host config required by Opt Out tag
+		conf: SafeFrameAPIHostConfig;
+
+		// IMR Worldwide
+		NOLCMB: {
+			getInstance: (apid: string) => NSdkInstance;
+		};
+		nol_t: (pvar: { cid: string; content: string; server: string }) => Trac;
+
+		// Google
+		ga: UniversalAnalytics.ga | null;
+		google_trackConversion?: (arg0: GoogleTrackConversionObject) => void;
+		google_tag_params?: GoogleTagParams;
+
+		// Brand metrics
+		_brandmetrics?: Array<{
+			cmd: string;
+			val: Record<string, unknown>;
+		}>;
+	}
 }

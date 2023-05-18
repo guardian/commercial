@@ -1,3 +1,4 @@
+import type { Config, PageConfig, Permutive, UserConfig } from 'types/global';
 import { reportError } from '../../../../lib/report-error';
 
 interface PermutivePageConfig {

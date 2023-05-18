@@ -10,6 +10,7 @@ module.exports = webpackMerge.smart(config, {
 	output: {
 		filename: `[chunkhash]/graun.standalone.commercial.js`,
 		chunkFilename: `[chunkhash]/graun.[name].commercial.js`,
+		clean: false,
 	},
 	devtool: 'source-map',
 	plugins: [

@@ -12,6 +12,7 @@ import {
 } from 'common/modules/experiments/ab-local-storage';
 import { concurrentTests } from 'common/modules/experiments/ab-tests';
 import { runnableTestsToParticipations } from 'common/modules/experiments/ab-utils';
+import type { Config } from 'types/global';
 import { _ } from '../analytics/mvt-cookie';
 
 const { overwriteMvtCookie } = _;

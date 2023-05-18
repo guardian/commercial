@@ -6,6 +6,6 @@
 		"rootDir": "src"
 	},
 	"extends": "./tsconfig.core.json",
-	"include": ["src"],
+	"include": ["src/core"],
 	"exclude": ["**/*.spec.*", "**/*.test.*"]
 }

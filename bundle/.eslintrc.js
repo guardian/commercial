@@ -8,7 +8,7 @@ module.exports = {
 	rules: {
 		// disallow naming variables 'guardian', because
 		// window.guardian is our global config/settings object
-		'id-denylist': ['error', 'guardian'],
+		'id-denylist': ['error'],
 		// TODO - remove these rule once we've migrated to commercial-core
 		'@typescript-eslint/no-unsafe-argument': 'off',
 		'@typescript-eslint/no-unsafe-return': 'off',

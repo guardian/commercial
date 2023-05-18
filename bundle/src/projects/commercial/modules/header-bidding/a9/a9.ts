@@ -1,5 +1,6 @@
 import { flatten } from 'lodash-es';
 import { noop } from 'lib/noop';
+import type { A9AdUnitInterface } from 'types/global';
 import type { Advert } from '../../dfp/Advert';
 import { dfpEnv } from '../../dfp/dfp-env';
 import { getHeaderBiddingAdSlots } from '../slot-config';
