@@ -2,7 +2,7 @@
  * Load Amazon A9 library as {@link https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/javascript-guide/display.html described here}
  */
 export const a9Apstag = () => {
-	(function(a9, a, p, s, t, A, g) {
+	(function (a9, a, p, s, t, A, g) {
 		if (a[a9]) return;
 		function q(c, r) {
 			a[a9]._Q.push([c, r]);
@@ -31,6 +31,6 @@ export const a9Apstag = () => {
 		window,
 		document,
 		'script',
-		'//c.amazon-adsystem.com/aax2/apstag.js'
+		'//c.amazon-adsystem.com/aax2/apstag.js',
 	);
-}
+};

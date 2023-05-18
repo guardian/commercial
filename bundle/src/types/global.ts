@@ -29,10 +29,6 @@ declare type TagAtrribute = {
 	value: string;
 };
 
-interface Navigator {
-	readonly connection?: NetworkInformation;
-}
-
 export type ThirdPartyTag = {
 	shouldRun: boolean;
 	url?: string;
@@ -82,7 +78,7 @@ export interface UserConfig {
 	rawResponse: string;
 }
 
-type BoostGaUserTimingFidelityMetrics = {
+export type BoostGaUserTimingFidelityMetrics = {
 	standardStart: 'metric18';
 	standardEnd: 'metric19';
 	commercialStart: 'metric20';
@@ -91,7 +87,7 @@ type BoostGaUserTimingFidelityMetrics = {
 	enhancedEnd: 'metric23';
 };
 
-type GoogleTimingEvent = {
+export type GoogleTimingEvent = {
 	timingCategory: string;
 	timingVar: keyof BoostGaUserTimingFidelityMetrics;
 	timeSincePageLoad: number;
@@ -121,7 +117,7 @@ export interface Config {
 	user?: UserConfig;
 }
 
-type Edition = string; // https://github.com/guardian/frontend/blob/b952f6b9/common/app/views/support/JavaScriptPage.scala#L79
+export type Edition = 'UK' | 'AU' | 'US'; // https://github.com/guardian/frontend/blob/b952f6b9/common/app/views/support/JavaScriptPage.scala#L79
 
 interface LightboxImages {
 	images: Array<{ src: string }>;
@@ -259,7 +255,7 @@ type ApstagInitConfig = {
 };
 
 type FetchBidsBidConfig = {
-	slots: A9AdUnitInterface;
+	slots: A9AdUnitInterface[];
 };
 
 type Apstag = {
@@ -268,7 +264,7 @@ type Apstag = {
 	setDisplayBids: () => void;
 };
 
-type ComscoreGlobals = {
+export type ComscoreGlobals = {
 	c1: string;
 	c2: string;
 	cs_ucfr: string;
@@ -277,7 +273,7 @@ type ComscoreGlobals = {
 
 type AdBlockers = {
 	active: boolean | undefined;
-	onDetect: Array<() => void>;
+	onDetect: Array<(value: boolean | PromiseLike<boolean>) => void>;
 };
 
 /**
@@ -472,6 +468,8 @@ declare global {
 			logger: (...args: unknown[]) => void;
 		};
 
+		readonly navigator: Navigator;
+
 		// Third parties
 
 		confiant?: Confiant;
@@ -498,7 +496,7 @@ declare global {
 		nol_t: (pvar: { cid: string; content: string; server: string }) => Trac;
 
 		// Google
-		ga: UniversalAnalytics.ga | null;
+		ga?: UniversalAnalytics.ga | null;
 		google_trackConversion?: (arg0: GoogleTrackConversionObject) => void;
 		google_tag_params?: GoogleTagParams;
 
@@ -507,5 +505,8 @@ declare global {
 			cmd: string;
 			val: Record<string, unknown>;
 		}>;
+	}
+	interface Navigator {
+		readonly connection?: NetworkInformation;
 	}
 }

@@ -4,9 +4,10 @@
 export const twitterScript = () => {
 	!(function (e, t, n, s, u, a) {
 		e.twq ||
-			((s = e.twq = function () {
-				s.exe ? s.exe(...arguments) : s.queue.push(arguments);
-			}),
+			((s = e.twq =
+				function () {
+					s.exe ? s.exe(...arguments) : s.queue.push(arguments);
+				}),
 			(s.version = '1.1'),
 			(s.queue = []),
 			(u = t.createElement(n)),

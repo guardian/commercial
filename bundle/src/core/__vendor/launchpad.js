@@ -8,7 +8,7 @@ export const launchpad = () => {
 			p.GlobalSnowplowNamespace = p.GlobalSnowplowNamespace || [];
 			p.GlobalSnowplowNamespace.push(i);
 			p[i] = function () {
-				(p[i].q = p[i].q || []).push(arguments)
+				(p[i].q = p[i].q || []).push(arguments);
 			};
 			p[i].q = p[i].q || [];
 			n = l.createElement(o);
@@ -17,7 +17,7 @@ export const launchpad = () => {
 			n.async = 1;
 			n.src = w;
 
-			g.parentNode.insertBefore(n, g)
+			g.parentNode.insertBefore(n, g);
 		}
-	}(window, document, "script", "https://lps.qantas.com/sp.js", "launchpad"));
-}
+	})(window, document, 'script', 'https://lps.qantas.com/sp.js', 'launchpad');
+};
