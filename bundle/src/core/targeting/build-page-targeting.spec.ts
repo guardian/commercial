@@ -145,7 +145,7 @@ describe('Build Page Targeting', () => {
 					webPublicationDate: 608857200,
 				} as unknown as typeof window.guardian.config.page,
 			} as unknown as typeof window.guardian.config,
-		};
+		} as unknown as typeof window.guardian;
 
 		setCookie({ name: 'adtest', value: 'ng101' });
 

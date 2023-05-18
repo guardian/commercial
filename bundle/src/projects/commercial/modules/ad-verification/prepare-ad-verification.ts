@@ -3,6 +3,7 @@ import {
 	bypassCommercialMetricsSampling as switchOffSampling,
 } from '@guardian/commercial-core';
 import { loadScript, log } from '@guardian/libs';
+import type { ConfiantCallback } from 'types/global';
 import { getAdvertById } from '../dfp/get-advert-by-id';
 import { refreshAdvert } from '../dfp/load-advert';
 import { stripDfpAdPrefixFrom } from '../header-bidding/utils';
