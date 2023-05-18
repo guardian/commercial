@@ -5,7 +5,7 @@ export const trackEvent = (
 ): void => {
 	const { ga, guardian } = window;
 	const trackerName: string | undefined =
-		guardian.config.googleAnalytics?.trackers.editorial;
+		guardian.config.googleAnalytics?.trackers?.editorial;
 
 	if (typeof ga !== 'function') {
 		return;
