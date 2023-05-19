@@ -2,12 +2,8 @@
 // https://jestjs.io/docs/en/configuration.html
 
 module.exports = {
+	clearMocks: true,
 	preset: 'ts-jest/presets/js-with-babel',
-	// globals: {
-	// 	'ts-jest': {
-	// 		tsconfig: 'tsconfig.test.json',
-	// 	},
-	// },
 	moduleFileExtensions: ['ts', 'tsx', 'js'],
 	testMatch: ['**/*.(test|spec).+(ts|tsx|js)'],
 	roots: ['<rootDir>/src'],

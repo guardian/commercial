@@ -13,6 +13,22 @@ import {
 	isInUsa,
 	isInUsOrCa,
 } from '../../../../common/modules/commercial/geo-utils';
+import type {
+	HeaderBiddingSize,
+	PrebidAdYouLikeParams,
+	PrebidAppNexusParams,
+	PrebidBid,
+	PrebidBidder,
+	PrebidImproveParams,
+	PrebidIndexExchangeParams,
+	PrebidOpenXParams,
+	PrebidOzoneParams,
+	PrebidPubmaticParams,
+	PrebidSonobiParams,
+	PrebidTripleLiftParams,
+	PrebidTrustXParams,
+	PrebidXaxisParams,
+} from '../prebid-types';
 import {
 	containsLeaderboard,
 	containsLeaderboardOrBillboard,
