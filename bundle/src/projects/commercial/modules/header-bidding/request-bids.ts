@@ -2,6 +2,7 @@ import type { AdSize } from '@guardian/commercial-core';
 import type { Advert } from '../dfp/Advert';
 import { a9 } from './a9/a9';
 import { prebid } from './prebid/prebid';
+import type { HeaderBiddingSlot } from './prebid-types';
 
 // Force the refreshed advert to be the same size as the first
 const retainTopAboveNavSlotSize = (

@@ -178,7 +178,7 @@ export interface PageConfig extends CommercialPageConfig {
 	userAttributesApiUrl?: string;
 }
 
-interface Ophan {
+export interface Ophan {
 	setEventEmitter: unknown;
 	trackComponentAttention: unknown;
 	record: (...args: unknown[]) => void;

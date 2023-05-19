@@ -9,6 +9,13 @@ import type { Advert } from 'commercial/modules/dfp/Advert';
 import { getPageTargeting } from 'common/modules/commercial/build-page-targeting';
 import { dfpEnv } from '../../dfp/dfp-env';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
+import type {
+	BidderCode,
+	HeaderBiddingSlot,
+	PrebidBid,
+	PrebidMediaTypes,
+	SlotFlatMap,
+} from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';
 import { stripDfpAdPrefixFrom } from '../utils';
 import { bids } from './bid-config';

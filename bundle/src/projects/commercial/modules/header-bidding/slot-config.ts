@@ -1,6 +1,13 @@
 import { adSizes, createAdSize } from '@guardian/commercial-core';
 import type { AdSize } from '@guardian/commercial-core';
 import type { Advert } from 'commercial/modules/dfp/Advert';
+import type {
+	HeaderBiddingSizeKey,
+	HeaderBiddingSizeMapping,
+	HeaderBiddingSlot,
+	HeaderBiddingSlotName,
+	SlotFlatMap,
+} from './prebid-types';
 import { getBreakpointKey, shouldIncludeMobileSticky } from './utils';
 
 const getHbBreakpoint = () => {
