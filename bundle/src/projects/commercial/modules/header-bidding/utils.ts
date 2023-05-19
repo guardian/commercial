@@ -13,6 +13,7 @@ import {
 	isInUk,
 	isInUsOrCa,
 } from '../../../common/modules/commercial/geo-utils';
+import type { HeaderBiddingSize } from './prebid-types';
 
 type StringManipulation = (a: string, b: string) => string;
 type RegExpRecords = Record<string, RegExp | undefined>;

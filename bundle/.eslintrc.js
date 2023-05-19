@@ -6,8 +6,6 @@ module.exports = {
 		'plugin:import/recommended',
 	],
 	rules: {
-		// disallow naming variables 'guardian', because
-		// window.guardian is our global config/settings object
 		'id-denylist': ['error'],
 		// TODO - remove these rule once we've migrated to commercial-core
 		'@typescript-eslint/no-unsafe-argument': 'off',
@@ -24,7 +22,7 @@ module.exports = {
 			},
 		},
 	],
-	ignorePatterns: ['*.js'],
+	ignorePatterns: ['*.js', 'dist', 'src/__vendor', '.eslintrc.js'],
 	settings: {
 		'import/resolver': {
 			alias: {
@@ -35,4 +33,10 @@ module.exports = {
 			},
 		},
 	},
+	env: {
+		jest: true,
+		browser: true,
+		node: true,
+	},
+	globals: { googletag: 'readonly' },
 };

@@ -3,7 +3,7 @@
 -- Nested fastdom measure-mutate promises throw the error:
 -- "Promise returned in function argument where a void return was expected"
 */
-import crossIcon from 'svgs/icon/cross.svg';
+import crossIcon from '../../../../../static/svg/icon/cross.svg';
 import fastdom from '../../../../lib/fastdom-promise';
 
 const shouldRenderConsentlessLabel = (adSlotNode: HTMLElement): boolean => {

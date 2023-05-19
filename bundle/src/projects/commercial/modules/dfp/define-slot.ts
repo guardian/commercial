@@ -1,8 +1,8 @@
 import type { SizeMapping, SlotName } from '@guardian/commercial-core';
 import { breakpoints as sourceBreakpoints } from '@guardian/source-foundations';
 import { once } from 'lodash-es';
-import type { IasPETSlot, IasTargeting } from 'types/ias';
 import { getUrlVars } from '../../../../lib/url';
+import type { IasPETSlot, IasTargeting } from '../../../../types/ias';
 import { toGoogleTagSize } from '../../../common/modules/commercial/lib/googletag-ad-size';
 
 const breakpointViewports: Record<keyof SizeMapping, [number, number]> = {
@@ -198,11 +198,14 @@ const defineSlot = (
 			const targeting = JSON.parse(targetingJSON) as IasTargeting;
 
 			// brand safety is on a page level
-			Object.keys(targeting.brandSafety).forEach((key) =>
-				window.googletag
-					.pubads()
-					.setTargeting(key, targeting.brandSafety[key]),
-			);
+			Object.keys(targeting.brandSafety).forEach((key) => {
+				const brandSafetyValue = targeting.brandSafety[key];
+				if (brandSafetyValue) {
+					window.googletag
+						.pubads()
+						.setTargeting(key, brandSafetyValue);
+				}
+			});
 			if (targeting.fr) {
 				window.googletag.pubads().setTargeting('fra', targeting.fr);
 			}
@@ -214,11 +217,24 @@ const defineSlot = (
 
 			// viewability targeting is on a slot level
 			const ignoredKeys = ['pub'];
-			Object.keys(targeting.slots[id])
-				.filter((x) => !ignoredKeys.includes(x))
-				.forEach((key) =>
-					slot?.setTargeting(key, targeting.slots[id][key]),
-				);
+			const slotTargeting = targeting.slots[id];
+
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TODO TS can't deduce that this could be undefined
+			if (slotTargeting) {
+				Object.keys(slotTargeting)
+					.filter((x) => !ignoredKeys.includes(x))
+					.forEach((key) => {
+						const targetingSlot = targeting.slots[id];
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TODO TS can't deduce that this could be undefined
+						if (targetingSlot) {
+							const targetingValue = targetingSlot[key];
+							// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TODO TS can't deduce that this could be undefined
+							if (slot && targetingValue) {
+								slot.setTargeting(key, targetingValue);
+							}
+						}
+					});
+			}
 
 			loadedResolve();
 		};
@@ -264,9 +280,4 @@ const defineSlot = (
 	};
 };
 
-export { defineSlot, buildGoogletagSizeMapping };
-
-export const _ = {
-	buildGoogletagSizeMapping,
-	collectSizes,
-};
+export { buildGoogletagSizeMapping, collectSizes, defineSlot };
