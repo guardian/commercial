@@ -103,7 +103,8 @@ const constructQuery = (
 			const value = query[param];
 			const queryValue = Array.isArray(value)
 				? value.map((v) => encodeURIComponent(v)).join(',')
-				: encodeURIComponent(value);
+				: // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TODO TS can't deduce that this could be undefined
+				  encodeURIComponent(value ?? '');
 			return `${param}=${queryValue}`;
 		})
 		.join('&');

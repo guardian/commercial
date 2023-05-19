@@ -8,6 +8,7 @@ import {
 } from 'common/modules/commercial/geo-utils';
 import config from '../../../../../lib/config';
 import { isInVariantSynchronous as isInVariantSynchronous_ } from '../../../../common/modules/experiments/ab';
+import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
 import {
 	containsBillboard as containsBillboard_,
 	containsDmpu as containsDmpu_,
