@@ -1,9 +1,9 @@
-import type { ThirdPartyTag } from '@guardian/commercial-core';
 import {
 	getConsentFor,
 	onConsent,
 } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import type { ThirdPartyTag } from 'types/global';
 import { commercialFeatures } from '../../common/modules/commercial/commercial-features';
 import { _, init } from './third-party-tags';
 

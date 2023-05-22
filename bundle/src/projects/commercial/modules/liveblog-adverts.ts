@@ -1,5 +1,6 @@
-import { adSizes, createAdSlot } from '@guardian/commercial-core';
 import { log } from '@guardian/libs';
+import { adSizes } from 'core/ad-sizes';
+import { createAdSlot } from 'core/create-ad-slot';
 import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
 import { isInEagerPrebidVariant } from 'projects/common/modules/experiments/eager-prebid-check';
 import fastdom from '../../../lib/fastdom-promise';

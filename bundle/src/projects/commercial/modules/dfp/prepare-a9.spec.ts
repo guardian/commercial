@@ -23,7 +23,7 @@ jest.mock('../header-bidding/a9/a9');
 
 jest.mock('./Advert');
 
-jest.mock('@guardian/commercial-core', () => ({
+jest.mock('core/__vendor/a9-apstag', () => ({
 	a9Apstag: jest.fn(),
 }));
 

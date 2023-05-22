@@ -1,4 +1,4 @@
-import type { AdSize } from '@guardian/commercial-core';
+import type { AdSize } from 'core/ad-sizes';
 
 export type HeaderBiddingSize = AdSize;
 

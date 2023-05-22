@@ -1,9 +1,9 @@
-import { ipsosMoriStub } from '@guardian/commercial-core';
 import {
 	getConsentFor,
 	onConsent,
 } from '@guardian/consent-management-platform';
 import { getLocale, loadScript, log } from '@guardian/libs';
+import { ipsosMoriStub } from 'core/__vendor/ipsos-mori';
 
 const loadIpsosScript = (locale: 'au' | 'uk') => {
 	ipsosMoriStub();

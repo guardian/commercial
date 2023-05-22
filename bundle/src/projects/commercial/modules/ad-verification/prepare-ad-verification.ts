@@ -1,8 +1,6 @@
-import {
-	EventTimer,
-	bypassCommercialMetricsSampling as switchOffSampling,
-} from '@guardian/commercial-core';
 import { loadScript, log } from '@guardian/libs';
+import { EventTimer } from 'core/event-timer';
+import { bypassCommercialMetricsSampling } from 'core/send-commercial-metrics';
 import type { ConfiantCallback } from 'types/global';
 import { getAdvertById } from '../dfp/get-advert-by-id';
 import { refreshAdvert } from '../dfp/load-advert';
@@ -49,7 +47,7 @@ const maybeRefreshBlockedSlotOnce: ConfiantCallback = (
 	const eventTimer = EventTimer.get();
 	eventTimer.trigger(`${stripDfpAdPrefixFrom(advert.id)}-blockedByConfiant`);
 
-	void switchOffSampling();
+	void bypassCommercialMetricsSampling();
 
 	advert.slot.setTargeting('confiant', String(blockingType));
 

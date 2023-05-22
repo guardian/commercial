@@ -1,10 +1,10 @@
-import { initMessenger } from '@guardian/commercial-core';
 import {
 	getConsentFor,
 	onConsent,
 } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { loadScript, log } from '@guardian/libs';
+import { init as initMessenger } from 'core/messenger';
 import { init as initMeasureAdLoad } from 'projects/commercial/modules/messenger/measure-ad-load';
 import { isInVariantSynchronous } from 'projects/common/modules/experiments/ab';
 import { elementsManager } from 'projects/common/modules/experiments/tests/elements-manager';

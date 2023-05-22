@@ -1,4 +1,5 @@
-import { adSizes, createAdSlot } from '@guardian/commercial-core';
+import { adSizes } from 'core/ad-sizes';
+import { createAdSlot } from 'core/create-ad-slot';
 import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
 import { spaceFiller } from 'projects/common/modules/article/space-filler';
 import { commercialFeatures } from 'projects/common/modules/commercial/commercial-features';

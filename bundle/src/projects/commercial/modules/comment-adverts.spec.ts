@@ -1,5 +1,5 @@
-import { adSizes } from '@guardian/commercial-core';
 import { mocked } from 'jest-mock';
+import { adSizes } from 'core/ad-sizes';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect-breakpoint';
 import fastdom from '../../../lib/fastdom-promise';
 import { mediator as fakeMediator } from '../../../lib/mediator';

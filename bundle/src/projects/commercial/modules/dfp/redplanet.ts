@@ -1,9 +1,9 @@
-import { launchpad } from '@guardian/commercial-core';
 import {
 	getConsentFor,
 	onConsent,
 } from '@guardian/consent-management-platform';
 import { log } from '@guardian/libs';
+import { launchpad } from 'core/__vendor/launchpad';
 import { commercialFeatures } from '../../../common/modules/commercial/commercial-features';
 import { isInAuOrNz } from '../../../common/modules/commercial/geo-utils';
 

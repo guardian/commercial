@@ -1,10 +1,10 @@
-import type * as CommercialCore from '@guardian/commercial-core';
 import {
 	getConsentFor,
 	onConsent,
 } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { loadScript } from '@guardian/libs';
+import type * as AdSizesType from 'core/ad-sizes';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect-breakpoint';
 import _config from '../../../../lib/config';
 import { commercialFeatures } from '../../../common/modules/commercial/commercial-features';
@@ -14,10 +14,6 @@ import { fillAdvertSlots } from './fill-advert-slots';
 import { getAdvertById } from './get-advert-by-id';
 import { loadAdvert } from './load-advert';
 import { init as prepareGoogletag } from './prepare-googletag';
-
-type MockCommercialCore = {
-	slotSizeMappings: Record<string, unknown>;
-};
 
 const config = _config as {
 	get: (k: string) => string;
@@ -93,13 +89,12 @@ jest.mock('../../../common/modules/commercial/commercial-features', () => ({
 		dfpAdvertising: true,
 	},
 }));
-jest.mock('@guardian/commercial-core', (): MockCommercialCore => {
-	const commercialCore: typeof CommercialCore = jest.requireActual(
-		'@guardian/commercial-core',
-	);
-	const { createAdSize } = commercialCore;
+
+jest.mock('core/ad-sizes', () => {
+	const adSizes: typeof AdSizesType = jest.requireActual('core/ad-sizes');
+	const { createAdSize } = adSizes;
 	return {
-		...commercialCore,
+		...adSizes,
 		slotSizeMappings: {
 			'html-slot': {
 				mobile: [Array.from(createAdSize(300, 50))],
@@ -132,6 +127,7 @@ jest.mock('@guardian/commercial-core', (): MockCommercialCore => {
 		},
 	};
 });
+
 jest.mock('@guardian/libs', () => {
 	return {
 		// eslint-disable-next-line -- ESLint doesn't understand jest.requireActual
