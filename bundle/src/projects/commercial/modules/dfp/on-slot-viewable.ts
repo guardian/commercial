@@ -1,5 +1,6 @@
-import { constants, outstreamSizes } from '@guardian/commercial-core';
 import { log } from '@guardian/libs';
+import { outstreamSizes } from 'core/ad-sizes';
+import { AD_LABEL_HEIGHT } from 'core/constants/adLabelHeight';
 import fastdom from '../../../../lib/fastdom-promise';
 import { getUrlVars } from '../../../../lib/url';
 import { isAdSize } from './Advert';
@@ -37,7 +38,7 @@ const setAdSlotMinHeight = (advert: Advert): void => {
 
 	const isStandardAdSize = !size.isProxy();
 	if (isStandardAdSize) {
-		const adSlotHeight = size.height + constants.AD_LABEL_HEIGHT;
+		const adSlotHeight = size.height + AD_LABEL_HEIGHT;
 		void fastdom.mutate(() => {
 			node.style.minHeight = `${adSlotHeight}px`;
 		});

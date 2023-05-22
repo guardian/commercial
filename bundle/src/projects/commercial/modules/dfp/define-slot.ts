@@ -1,6 +1,6 @@
-import type { SizeMapping, SlotName } from '@guardian/commercial-core';
 import { breakpoints as sourceBreakpoints } from '@guardian/source-foundations';
 import { once } from 'lodash-es';
+import type { SizeMapping, SlotName } from 'core/ad-sizes';
 import { getUrlVars } from '../../../../lib/url';
 import type { IasPETSlot, IasTargeting } from '../../../../types/ias';
 import { toGoogleTagSize } from '../../../common/modules/commercial/lib/googletag-ad-size';

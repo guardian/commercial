@@ -1,7 +1,4 @@
-import type {
-	RegisterPersistentListener,
-	RespondProxy,
-} from '@guardian/commercial-core';
+import type { RegisterPersistentListener, RespondProxy } from 'core/messenger';
 import { getViewport } from '../../../../lib/detect-viewport';
 import type { Viewport } from '../../../../lib/detect-viewport';
 import fastdom from '../../../../lib/fastdom-promise';

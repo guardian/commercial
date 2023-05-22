@@ -1,3 +1,4 @@
+import type { VendorName } from '@guardian/consent-management-platform/dist/types';
 import type { EventTimer } from '../core/event-timer';
 import type { PageTargeting } from '../core/targeting/build-page-targeting';
 import type {
@@ -24,22 +25,22 @@ interface DfpEnv {
 
 export type ServerSideABTest = `${string}${'Variant' | 'Control'}`;
 
-declare type TagAtrribute = {
+export type TagAttribute = {
 	name: string;
 	value: string;
 };
 
 export type ThirdPartyTag = {
-	shouldRun: boolean;
-	url?: string;
-	name?: string;
-	onLoad?: () => void;
-	beforeLoad?: () => void;
-	useImage?: boolean;
-	attrs?: TagAtrribute[];
 	async?: boolean;
-	loaded?: boolean;
+	attrs?: TagAttribute[];
+	beforeLoad?: () => void;
 	insertSnippet?: () => void;
+	loaded?: boolean;
+	onLoad?: () => void;
+	shouldRun: boolean;
+	name?: VendorName;
+	url?: string;
+	useImage?: boolean;
 };
 
 // This comes from Scala:

@@ -1,5 +1,6 @@
-import type { AdSize, SizeMapping } from '@guardian/commercial-core';
-import { adSizes, createAdSlot } from '@guardian/commercial-core';
+import type { AdSize, SizeMapping } from 'core/ad-sizes';
+import { adSizes } from 'core/ad-sizes';
+import { createAdSlot } from 'core/create-ad-slot';
 import {
 	getCurrentBreakpoint,
 	getCurrentTweakpoint,

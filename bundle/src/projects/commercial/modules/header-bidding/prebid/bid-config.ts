@@ -1,5 +1,5 @@
-import type { PageTargeting } from '@guardian/commercial-core';
 import { log } from '@guardian/libs';
+import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import type { PrebidIndexSite } from 'types/global';
 import { pbTestNameMap } from '../../../../../lib/url';
 import {
