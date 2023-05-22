@@ -331,7 +331,7 @@ describe('send commercial metrics', () => {
 					JSON.stringify({
 						...defaultMetrics,
 						properties: [
-							{ name: 'isDev', value: 'localhost' },
+							{ name: 'isDev', value: 'testurl.theguardian.com' },
 							{ name: 'adBlockerInUse', value: 'false' },
 						],
 					}),
@@ -404,7 +404,7 @@ describe('send commercial metrics', () => {
 						properties: [
 							{ name: 'downlink', value: '1' },
 							{ name: 'effectiveType', value: '4g' },
-							{ name: 'isDev', value: 'localhost' },
+							{ name: 'isDev', value: 'testurl.theguardian.com' },
 							{ name: 'adBlockerInUse', value: 'false' },
 						],
 					}),
@@ -467,7 +467,7 @@ describe('send commercial metrics', () => {
 						properties: [
 							{ name: 'downlink', value: '1' },
 							{ name: 'effectiveType', value: '4g' },
-							{ name: 'isDev', value: 'localhost' },
+							{ name: 'isDev', value: 'testurl.theguardian.com' },
 						],
 					}),
 				],
@@ -498,7 +498,7 @@ describe('send commercial metrics', () => {
 						properties: [
 							{ name: 'adSlotsInline', value: '5' },
 							{ name: 'adSlotsTotal', value: '10' },
-							{ name: 'isDev', value: 'localhost' },
+							{ name: 'isDev', value: 'testurl.theguardian.com' },
 						],
 					}),
 				],
