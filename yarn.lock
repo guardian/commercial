@@ -1292,7 +1292,7 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@guardian/ab-core@4.0.0", "@guardian/ab-core@^4.0.0":
+"@guardian/ab-core@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@guardian/ab-core/-/ab-core-4.0.0.tgz#50c1fc076437e594b367f6e8d9469a3d9b97a78e"
   integrity sha512-l6Ot/anisLKyoLZOp8koW7Ia5JFOtmZkB0sfgdWajv5+N0w0UScUVoImEdPlFstM1anSd3FvV8D3UgYkRzAang==
@@ -1332,15 +1332,15 @@
     eslint-plugin-eslint-comments "3.2.0"
     eslint-plugin-import "2.26.0"
 
-"@guardian/libs@14.0.0", "@guardian/libs@^14.0.0":
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-14.0.0.tgz#07022b652430a1c5d6b16f8aa105ae3d73da4e7c"
-  integrity sha512-rB4h4FlD3EcoCY66f3xjO7alnXiimPOynL9znvX/xP2nAVpG4UyedJnIpupw4KPqJuB0lZMih6EeXq0a1XnI3w==
-
 "@guardian/libs@^10.0.0":
   version "10.1.1"
   resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-10.1.1.tgz#7048c365a68dda068f707d46c78979f430221963"
   integrity sha512-OdWReBHRWhdbErVmS15hihVzlkdU8DkKrjDsUIN0P8QZiF4twuzcU3qsPwto2UfibAwPkWqKkNwH1k8b6xNclA==
+
+"@guardian/libs@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-14.0.0.tgz#07022b652430a1c5d6b16f8aa105ae3d73da4e7c"
+  integrity sha512-rB4h4FlD3EcoCY66f3xjO7alnXiimPOynL9znvX/xP2nAVpG4UyedJnIpupw4KPqJuB0lZMih6EeXq0a1XnI3w==
 
 "@guardian/prettier@^3.0.0":
   version "3.0.0"
@@ -2351,11 +2351,6 @@
   resolved "https://registry.yarnpkg.com/@types/google.analytics/-/google.analytics-0.0.42.tgz#efe6ef9251a22ec8208dbb09f221a48a1863d720"
   integrity sha512-w0ZFj3SHznQXSq99kFCuO8tkN6w4T14znjrF2alLCSDnHOXEnpzneyNwxLvekcsDBInr8b5mXmzYh03GArqEyw==
 
-"@types/googletag@^3.0.1":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@types/googletag/-/googletag-3.0.2.tgz#d8e3878e0ec3cf1c66c3724e27b366c38ac345d1"
-  integrity sha512-1nWDuKdnvKc3HPkMA5yWEVI0OGMhk1q2oZGotvxhwo10gnfSJd9Ln/y4n01F5S/rO8dxbKTbE72GyuJBs/WjNQ==
-
 "@types/googletag@~1.1.3":
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/@types/googletag/-/googletag-1.1.4.tgz#7717c529347a1acd39aebd0f8de08dc9d365ff29"
@@ -2394,7 +2389,7 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@^29.0.3", "@types/jest@^29.4.0":
+"@types/jest@^29.4.0":
   version "29.4.0"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.4.0.tgz#a8444ad1704493e84dbf07bb05990b275b3b9206"
   integrity sha512-VaywcGQ9tPorCX/Jkkni7RWGFfI11whqzs8dvxF41P17Z+z872thvEvlIbznjPJ02kl1HMX3LmLOonsj2n7HeQ==
@@ -2443,10 +2438,15 @@
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.2.tgz#ee771e2ba4b3dc5b372935d549fd9617bf345b8c"
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
 
-"@types/node@*", "@types/node@^18.11.9":
+"@types/node@*":
   version "18.13.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.13.0.tgz#0400d1e6ce87e9d3032c19eb6c58205b0d3f7850"
   integrity sha512-gC3TazRzGoOnoKAhUx+Q0t8S9Tzs74z7m0ipwGpSqQrleP14hKxP4/JUeEQcD3W1/aIpnWl8pHowI7WokuZpXg==
+
+"@types/node@18.15.0":
+  version "18.15.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.15.0.tgz#286a65e3fdffd691e170541e6ecb0410b16a38be"
+  integrity sha512-z6nr0TTEOBGkzLGmbypWOGnpSpSIBorEhC4L+4HeQ2iezKCi4f77kyslRwvHeNitymGQ+oFyIWGP96l/DPSV9w==
 
 "@types/node@^14.14.31":
   version "14.18.36"
@@ -6902,7 +6902,7 @@ jest-worker@^29.4.2:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jest@^29.0.0, jest@^29.4.1:
+jest@^29.0.0:
   version "29.4.2"
   resolved "https://registry.yarnpkg.com/jest/-/jest-29.4.2.tgz#4c2127d03a71dc187f386156ef155dbf323fb7be"
   integrity sha512-+5hLd260vNIHu+7ZgMIooSpKl7Jp5pHKb51e73AJU3owd5dEo/RfVwHbA/na3C/eozrt3hJOLGf96c7EWwIAzg==
@@ -10202,11 +10202,6 @@ type-detect@4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/type-detect/-/type-detect-4.0.8.tgz#7646fb5f18871cfbb7749e69bd39a6388eb7450c"
   integrity sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==
-
-type-fest@2.12.2:
-  version "2.12.2"
-  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.12.2.tgz#80a53614e6b9b475eb9077472fb7498dc7aa51d0"
-  integrity sha512-qt6ylCGpLjZ7AaODxbpyBZSs9fCI9SkL3Z9q2oxMBQhs/uyY+VD8jHA8ULCGmWQJlBgqvO3EJeAngOHD8zQCrQ==
 
 type-fest@^0.16.0:
   version "0.16.0"
