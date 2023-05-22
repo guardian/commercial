@@ -48,7 +48,7 @@ describe('getSegments', () => {
 describe('getPermutiveSegments', () => {
 	test('calls the right key from localStorage', () => {
 		getPermutiveSegments();
-		// eslint-disable-next-line @typescript-eslint/unbound-method -- ok for jest
+
 		expect(storage.local.getRaw as jest.Mock).toHaveBeenCalledWith(
 			_.PERMUTIVE_KEY,
 		);
@@ -58,7 +58,6 @@ describe('getPermutiveSegments', () => {
 describe('getPermutivePFPSegments', () => {
 	test('calls the right key from localStorage', () => {
 		getPermutivePFPSegments();
-		// eslint-disable-next-line @typescript-eslint/unbound-method -- ok for jest
 		expect(storage.local.getRaw).toHaveBeenCalledWith(_.PERMUTIVE_PFP_KEY);
 	});
 });
@@ -66,9 +65,7 @@ describe('getPermutivePFPSegments', () => {
 describe('clearPermutiveSegments', () => {
 	test('removes the right keys from localStorage', () => {
 		clearPermutiveSegments();
-		// eslint-disable-next-line @typescript-eslint/unbound-method -- ok for jest
 		expect(storage.local.remove).toHaveBeenCalledWith(_.PERMUTIVE_KEY);
-		// eslint-disable-next-line @typescript-eslint/unbound-method -- ok for jest
 		expect(storage.local.remove).toHaveBeenCalledWith(_.PERMUTIVE_PFP_KEY);
 	});
 });
