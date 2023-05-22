@@ -37,7 +37,7 @@ type UserGroups = {
 	packageCode: string;
 };
 
-export type IdentityUser = {
+type IdentityUser = {
 	dates: { accountCreatedDate: string };
 	consents: UserConsents[];
 	userGroups: UserGroups[];
@@ -80,7 +80,7 @@ type IdentityResponse = {
 	errors?: UserNameError[];
 };
 
-export type IdentityUserIdentifiers = {
+type IdentityUserIdentifiers = {
 	id: string;
 	brazeUuid: string;
 	puzzleId: string;
@@ -101,7 +101,7 @@ const profileRoot =
 
 mediator.emit('module:identity:api:loaded');
 
-export const decodeBase64 = (str: string): string =>
+const decodeBase64 = (str: string): string =>
 	decodeURIComponent(
 		escape(
 			window.atob(
@@ -110,7 +110,9 @@ export const decodeBase64 = (str: string): string =>
 		),
 	);
 
-export const getUserFromCookie = (): IdentityUserFromCache => {
+const getUserCookie = (): string | null => getCookie({ name: cookieName });
+
+const getUserFromCookie = (): IdentityUserFromCache => {
 	if (userFromCookieCache === null) {
 		const cookieData = getUserCookie();
 		let userData: string[] | null = null;
@@ -140,7 +142,7 @@ export const getUserFromCookie = (): IdentityUserFromCache => {
 	return userFromCookieCache;
 };
 
-export const updateNewsletter = (newsletter: Newsletter): Promise<void> => {
+const updateNewsletter = (newsletter: Newsletter): Promise<void> => {
 	const url = `${idApiRoot}/users/me/newsletters`;
 	return fetch(url, {
 		method: 'PATCH',
@@ -150,7 +152,7 @@ export const updateNewsletter = (newsletter: Newsletter): Promise<void> => {
 	}).then(() => Promise.resolve());
 };
 
-export const buildNewsletterUpdatePayload = (
+const buildNewsletterUpdatePayload = (
 	action = 'none',
 	newsletterId: string,
 ): Newsletter => {
@@ -168,9 +170,9 @@ export const buildNewsletterUpdatePayload = (
 	return newsletter;
 };
 
-export const isUserLoggedIn = (): boolean => getUserFromCookie() !== null;
+const isUserLoggedIn = (): boolean => getUserFromCookie() !== null;
 
-export const getUserFromApi = mergeCalls(
+const getUserFromApi = mergeCalls(
 	(mergingCallback: (u: IdentityUser | null) => void) => {
 		if (isUserLoggedIn()) {
 			const url = `${idApiRoot}/user/me`;
@@ -216,7 +218,7 @@ const fetchUserIdentifiers = () => {
 		});
 };
 
-export const getUserIdentifiersFromApi = mergeCalls(
+const getUserIdentifiersFromApi = mergeCalls(
 	(mergingCallback: (u: IdentityUserIdentifiers | null) => void) => {
 		if (isUserLoggedIn()) {
 			void fetchUserIdentifiers().then((result) =>
@@ -228,17 +230,15 @@ export const getUserIdentifiersFromApi = mergeCalls(
 	},
 );
 
-export const reset = (): void => {
+const reset = (): void => {
 	getUserFromApi.reset();
 	getUserIdentifiersFromApi.reset();
 	userFromCookieCache = null;
 };
 
-const getUserCookie = (): string | null => getCookie({ name: cookieName });
+const getUrl = (): string => profileRoot;
 
-export const getUrl = (): string => profileRoot;
-
-export const getUserFromApiWithRefreshedCookie = (): Promise<unknown> => {
+const getUserFromApiWithRefreshedCookie = (): Promise<unknown> => {
 	const endpoint = `${idApiRoot}/user/me?refreshCookie=true`;
 	return fetch(endpoint, {
 		mode: 'cors',
@@ -246,12 +246,12 @@ export const getUserFromApiWithRefreshedCookie = (): Promise<unknown> => {
 	}).then((resp) => resp.json());
 };
 
-export const refreshOktaSession = (returnUrl: string): void => {
+const refreshOktaSession = (returnUrl: string): void => {
 	const endpoint = `${profileRoot}/signin/refresh?returnUrl=${returnUrl}`;
 	window.location.replace(endpoint);
 };
 
-export const redirectTo = (url: string): void => {
+const redirectTo = (url: string): void => {
 	window.location.assign(url);
 };
 
@@ -357,4 +357,20 @@ export const setConsent = (consents: SettableConsent): Promise<void> =>
 		return Promise.reject();
 	});
 
-export { getUserCookie as getCookie };
+export {
+	getUserCookie as getCookie,
+	IdentityUser,
+	IdentityUserIdentifiers,
+	decodeBase64,
+	getUserFromCookie,
+	updateNewsletter,
+	buildNewsletterUpdatePayload,
+	isUserLoggedIn,
+	getUserFromApi,
+	getUserIdentifiersFromApi,
+	getUrl,
+	getUserFromApiWithRefreshedCookie,
+	refreshOktaSession,
+	redirectTo,
+	reset,
+};

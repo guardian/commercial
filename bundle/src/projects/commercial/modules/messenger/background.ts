@@ -8,6 +8,19 @@ import {
 
 const isDCR = window.guardian.config.isDotcomRendering;
 
+interface BackgroundSpecs {
+	backgroundImage: string;
+	backgroundRepeat?: string;
+	backgroundPosition?: string;
+	// native templates are sometimes using the british spelling of background-color for some reason, removed in getStylesFromSpec above
+	backgroundColour?: string;
+	backgroundColor?: string;
+	backgroundSize?: string;
+	transform?: string;
+	scrollType?: 'interscroller' | 'fixed' | 'parallax';
+	ctaUrl?: string;
+}
+
 const getStylesFromSpec = (
 	specs: BackgroundSpecs,
 ): Omit<BackgroundSpecs, 'scrollType' | 'backgroundColour' | 'ctaUrl'> => {
@@ -22,19 +35,6 @@ const getStylesFromSpec = (
 	}
 	return styles;
 };
-
-interface BackgroundSpecs {
-	backgroundImage: string;
-	backgroundRepeat?: string;
-	backgroundPosition?: string;
-	// native templates are sometimes using the british spelling of background-color for some reason, removed in getStylesFromSpec above
-	backgroundColour?: string;
-	backgroundColor?: string;
-	backgroundSize?: string;
-	transform?: string;
-	scrollType?: 'interscroller' | 'fixed' | 'parallax';
-	ctaUrl?: string;
-}
 
 const isBackgroundSpecs = (specs: unknown): specs is BackgroundSpecs =>
 	isObject(specs) && 'backgroundImage' in specs;

@@ -84,7 +84,7 @@ const pushQueryString = (params: Params): void =>
 const replaceQueryString = (params: Params): void =>
 	updateQueryString(params, window.history.replaceState.bind(window.history));
 
-export type MaybeArray<T> = T | T[];
+type MaybeArray<T> = T | T[];
 /**
  * Turn an object into a query parameter string
  *
@@ -146,4 +146,5 @@ export {
 	pushQueryString,
 	replaceQueryString,
 	pbTestNameMap,
+	type MaybeArray,
 };

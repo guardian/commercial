@@ -166,6 +166,9 @@ const requestNewData = () =>
 const featuresDataIsOld = () =>
 	cookieIsExpiredOrMissing(USER_FEATURES_EXPIRY_COOKIE);
 
+const isDigitalSubscriber = (): boolean =>
+	getCookie({ name: DIGITAL_SUBSCRIBER_COOKIE }) === 'true';
+
 const userNeedsNewFeatureData = (): boolean =>
 	featuresDataIsOld() ||
 	(adFreeDataIsPresent() && adFreeDataIsOld()) ||
@@ -304,9 +307,6 @@ const isRecurringContributor = (): boolean =>
 	(isUserLoggedIn() &&
 		getCookie({ name: RECURRING_CONTRIBUTOR_COOKIE }) !== 'false') ||
 	supportSiteRecurringCookiePresent();
-
-const isDigitalSubscriber = (): boolean =>
-	getCookie({ name: DIGITAL_SUBSCRIBER_COOKIE }) === 'true';
 
 const shouldNotBeShownSupportMessaging = (): boolean =>
 	getCookie({ name: HIDE_SUPPORT_MESSAGING_COOKIE }) === 'true';
