@@ -1,7 +1,7 @@
 import { _ } from './prepare-ad-verification';
 
 jest.mock('../../../../lib/raven');
-jest.mock('ophan/ng', () => null);
+jest.mock('ophan-tracker-js', () => null);
 jest.mock('@guardian/libs', () => ({
 	storage: {
 		local: {

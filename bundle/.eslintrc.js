@@ -26,10 +26,7 @@ module.exports = {
 	settings: {
 		'import/resolver': {
 			alias: {
-				map: [
-					['svgs', './static/svg'],
-					['ophan/ng', '../node_modules/ophan-tracker-js'],
-				],
+				map: [['svgs', './static/svg']],
 			},
 		},
 	},

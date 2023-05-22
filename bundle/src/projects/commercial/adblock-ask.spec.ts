@@ -6,7 +6,7 @@ const { params, canShow } = _;
 
 jest.mock('../common/modules/commercial/contributions-utilities');
 jest.mock('../common/modules/commercial/user-features');
-jest.mock('ophan/ng', () => null);
+jest.mock('ophan-tracker-js', () => null);
 jest.mock('lib/raven');
 
 describe('adblock-ask', () => {
