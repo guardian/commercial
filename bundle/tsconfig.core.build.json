@@ -3,7 +3,8 @@
 		"declaration": true,
 		"noEmit": false,
 		"outDir": "dist",
-		"rootDir": "src"
+		"rootDir": "src",
+		"baseUrl": "src",
 	},
 	"extends": "./tsconfig.core.json",
 	"include": ["src/core", "src/types"],
