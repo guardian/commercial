@@ -101,6 +101,7 @@ class EventTimer {
 								window.performance.getEntriesByName(
 									eventName,
 								)[0];
+							// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- possibly undefined
 							return entry
 								? new Event(eventName, entry)
 								: undefined;
