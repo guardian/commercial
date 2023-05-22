@@ -1,6 +1,6 @@
 import type { SizeMapping } from '@guardian/commercial-core';
 import { adSizes } from '@guardian/commercial-core';
-import { toGoogleTagSize } from 'common/modules/commercial/lib/googletag-ad-size';
+import { toGoogleTagSize } from 'projects/common/modules/commercial/lib/googletag-ad-size';
 import {
 	buildGoogletagSizeMapping,
 	collectSizes,

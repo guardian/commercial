@@ -5,7 +5,7 @@ import {
 	isInRow as isInRow_,
 	isInUk as isInUk_,
 	isInUsOrCa as isInUsOrCa_,
-} from 'common/modules/commercial/geo-utils';
+} from 'projects/common/modules/commercial/geo-utils';
 import config from '../../../../../lib/config';
 import { isInVariantSynchronous as isInVariantSynchronous_ } from '../../../../common/modules/experiments/ab';
 import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';

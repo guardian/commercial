@@ -1,19 +1,19 @@
 import type { ABTest, Runnable } from '@guardian/ab-core';
+import type { Config } from 'types/global';
+import { _ } from '../analytics/mvt-cookie';
 import {
 	getAsyncTestsToRun,
 	getSynchronousTestsToRun,
 	isInVariantSynchronous,
 	runAndTrackAbTests,
-} from 'common/modules/experiments/ab';
-import { NOT_IN_TEST } from 'common/modules/experiments/ab-constants';
+} from './ab';
+import { NOT_IN_TEST } from './ab-constants';
 import {
 	getParticipationsFromLocalStorage,
 	setParticipationsInLocalStorage,
-} from 'common/modules/experiments/ab-local-storage';
-import { concurrentTests } from 'common/modules/experiments/ab-tests';
-import { runnableTestsToParticipations } from 'common/modules/experiments/ab-utils';
-import type { Config } from 'types/global';
-import { _ } from '../analytics/mvt-cookie';
+} from './ab-local-storage';
+import { concurrentTests } from './ab-tests';
+import { runnableTestsToParticipations } from './ab-utils';
 
 const { overwriteMvtCookie } = _;
 

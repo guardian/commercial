@@ -1,6 +1,6 @@
 import { once } from 'lodash-es';
-import { isInVariantSynchronous } from 'common/modules/experiments/ab';
-import { elementsManager } from 'common/modules/experiments/tests/elements-manager';
+import { isInVariantSynchronous } from 'projects/common/modules/experiments/ab';
+import { elementsManager } from 'projects/common/modules/experiments/tests/elements-manager';
 import fastdom from '../../../lib/fastdom-promise';
 import { dfpEnv } from './dfp/dfp-env';
 

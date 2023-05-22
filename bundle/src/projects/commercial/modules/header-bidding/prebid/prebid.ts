@@ -5,8 +5,8 @@ import { onConsent } from '@guardian/consent-management-platform';
 import type { Framework } from '@guardian/consent-management-platform/dist/types';
 import { isString, log } from '@guardian/libs';
 import { flatten } from 'lodash-es';
-import type { Advert } from 'commercial/modules/dfp/Advert';
-import { getPageTargeting } from 'common/modules/commercial/build-page-targeting';
+import type { Advert } from 'projects/commercial/modules/dfp/Advert';
+import { getPageTargeting } from 'projects/common/modules/commercial/build-page-targeting';
 import { dfpEnv } from '../../dfp/dfp-env';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import type {
