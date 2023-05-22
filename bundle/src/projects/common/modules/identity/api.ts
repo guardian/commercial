@@ -358,19 +358,19 @@ export const setConsent = (consents: SettableConsent): Promise<void> =>
 	});
 
 export {
+	type IdentityUser,
+	type IdentityUserIdentifiers,
 	getUserCookie as getCookie,
-	IdentityUser,
-	IdentityUserIdentifiers,
-	decodeBase64,
-	getUserFromCookie,
-	updateNewsletter,
 	buildNewsletterUpdatePayload,
-	isUserLoggedIn,
-	getUserFromApi,
-	getUserIdentifiersFromApi,
+	decodeBase64,
 	getUrl,
+	getUserFromApi,
 	getUserFromApiWithRefreshedCookie,
-	refreshOktaSession,
+	getUserFromCookie,
+	getUserIdentifiersFromApi,
+	isUserLoggedIn,
+	updateNewsletter,
 	redirectTo,
+	refreshOktaSession,
 	reset,
 };
