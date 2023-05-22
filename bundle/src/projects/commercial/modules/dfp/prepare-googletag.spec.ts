@@ -72,7 +72,7 @@ jest.mock('../../../common/modules/identity/api', () => ({
 	getUserIdentifiersFromApi: jest.fn(),
 	getUrl: jest.fn(),
 }));
-jest.mock('ophan/ng', () => null);
+jest.mock('ophan-tracker-js', () => null);
 jest.mock('../../../common/modules/analytics/beacon', () => void {});
 
 jest.mock('lib/detect-breakpoint', () => ({
