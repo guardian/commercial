@@ -458,6 +458,7 @@ interface Window {
 		makeRequests: () => void;
 		refreshSlot: (slotId: string) => void;
 		refreshAllSlots: () => void;
+		logger: (...args: unknown[]) => void;
 	};
 	confiant?: Confiant;
 	apstag?: Apstag;
