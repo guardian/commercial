@@ -1,4 +1,4 @@
-import { isInCanada } from 'common/modules/commercial/geo-utils';
+import { isInCanada } from 'projects/common/modules/commercial/geo-utils';
 import { commercialFeatures } from '../../../common/modules/commercial/commercial-features';
 import { a9 } from '../header-bidding/a9/a9';
 import { dfpEnv } from './dfp-env';
