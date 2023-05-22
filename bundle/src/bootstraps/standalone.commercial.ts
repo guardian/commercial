@@ -62,10 +62,9 @@ const decideAssetsPath = () => {
 		return process.env.OVERRIDE_BUNDLE_PATH;
 	} else {
 		const assetsPath = frontendAssetsFullURL ?? page.assetsPath;
-		// We need to add another field to the key
-		// This is to effectively namespace our commercial bundles from everything else
-		// But we can reliably know this every time
-		// TODO choose a proper name
+		// TEMP
+		// Adjust the path we use to fetch dynamic imports to match the
+		// bucket key we use to deploy via Riff-Raff
 		return `${assetsPath}test_commercial_bundles/`;
 	}
 };
