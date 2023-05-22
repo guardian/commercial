@@ -1,44 +1,38 @@
-/* eslint-disable import/first -- variables must be available to be used when the mock is hoisted before the imports by jest */
-const slots = {
-	'mobile-only-slot': {
-		mobile: [[300, 50]],
-	},
-	slot: {
-		mobile: [
-			[300, 50],
-			[320, 50],
-		],
-		tablet: [[728, 90]],
-		desktop: [
-			[728, 90],
-			[900, 250],
-			[970, 250],
-		],
-	},
-};
-
-import { slotSizeMappings } from '@guardian/commercial-core';
-import type * as CommercialCore from '@guardian/commercial-core';
+import type * as AdSizesType from 'core/ad-sizes';
+import { slotSizeMappings as slotSizeMappings_ } from 'core/ad-sizes';
 import { _, Advert } from './Advert';
-/* eslint-enable import/first */
-
-type MockCommercialCore = {
-	slotSizeMappings: Record<string, unknown>;
-};
 
 const { getSlotSizeMapping } = _;
 
 jest.mock('../../../../lib/raven');
-jest.mock('ophan/ng', () => null);
+jest.mock('ophan-tracker-js', () => null);
 
-jest.mock('@guardian/commercial-core', (): MockCommercialCore => {
-	const commercialCore: typeof CommercialCore = jest.requireActual(
-		'@guardian/commercial-core',
-	);
+jest.mock('core/ad-sizes', () => {
+	// console.log('!!!!!!!!!!!!', slots);
+	const adSizes: typeof AdSizesType = jest.requireActual('core/ad-sizes');
+	const slotSizeMappings = adSizes.slotSizeMappings;
+	const slots = {
+		'mobile-only-slot': {
+			mobile: [[300, 50]],
+		},
+		slot: {
+			mobile: [
+				[300, 50],
+				[320, 50],
+			],
+			tablet: [[728, 90]],
+			desktop: [
+				[728, 90],
+				[900, 250],
+				[970, 250],
+			],
+		},
+	};
 	return {
-		...commercialCore,
+		__esModule: true,
+		...adSizes,
 		slotSizeMappings: {
-			...commercialCore.slotSizeMappings,
+			...slotSizeMappings,
 			...slots,
 		},
 	};
@@ -129,23 +123,32 @@ describe('Advert', () => {
 });
 
 describe('getAdSizeMapping', () => {
-	it.each(['slot', 'mobile-only-slot'])(
-		'getAdSizeMapping(%s) should get the size mapping',
-		(slotName) => {
-			expect(getSlotSizeMapping(slotName)).toEqual(
-				slots[slotName as keyof typeof slots],
-			);
-		},
-	);
+	it('getAdSizeMapping for test slots should get the size mapping', () => {
+		expect(getSlotSizeMapping('slot')).toEqual({
+			mobile: [
+				[300, 50],
+				[320, 50],
+			],
+			tablet: [[728, 90]],
+			desktop: [
+				[728, 90],
+				[900, 250],
+				[970, 250],
+			],
+		});
+		expect(getSlotSizeMapping('mobile-only-slot')).toEqual({
+			mobile: [[300, 50]],
+		});
+	});
 
-	it.each(['inline1', 'inline10', ...Object.keys(slotSizeMappings)])(
+	it.each(['inline1', 'inline10', ...Object.keys(slotSizeMappings_)])(
 		'getAdSizeMapping(%s) should get the size mapping for real slots',
 		(value) => {
 			const slotName = /inline\d+/.test(value)
 				? 'inline'
-				: (value as CommercialCore.SlotName);
+				: (value as AdSizesType.SlotName);
 			expect(getSlotSizeMapping(value)).toEqual(
-				slotSizeMappings[slotName],
+				slotSizeMappings_[slotName],
 			);
 		},
 	);
