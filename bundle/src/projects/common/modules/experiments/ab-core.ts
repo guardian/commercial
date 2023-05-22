@@ -1,6 +1,6 @@
 import type { ABTest, Runnable, Variant } from '@guardian/ab-core';
-import { logAutomatEvent } from 'common/modules/experiments/automatLog';
 import { isExpired } from 'lib/time-utils';
+import { logAutomatEvent } from 'projects/common/modules/experiments/automatLog';
 import { getMvtNumValues, getMvtValue } from '../analytics/mvt-cookie';
 import { NOT_IN_TEST } from './ab-constants';
 import { getVariantFromLocalStorage } from './ab-local-storage';
