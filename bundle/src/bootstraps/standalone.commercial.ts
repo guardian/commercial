@@ -177,7 +177,11 @@ const recordCommercialMetrics = () => {
 };
 
 const bootCommercial = async (): Promise<void> => {
-	log('commercial', '📦 standalone.commercial.ts', __webpack_public_path__);
+	log(
+		'commercial',
+		'📦 standalone.commercial.ts LOOK I WAS DEPLOYED WITH RIFF RAFF',
+		__webpack_public_path__,
+	);
 
 	// Init Commercial event timers
 	EventTimer.init();
