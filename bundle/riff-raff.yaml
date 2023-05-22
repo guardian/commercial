@@ -10,4 +10,3 @@ deployments:
       cacheControl: public, max-age=315360000, immutable
       prefixStack: false
       publicReadAcl: false
- 
