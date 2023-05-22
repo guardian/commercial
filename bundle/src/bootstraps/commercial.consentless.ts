@@ -1,13 +1,13 @@
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { initArticleInline } from 'commercial/modules/consentless/dynamic/article-inline';
-import { initExclusionSlot } from 'commercial/modules/consentless/dynamic/exclusion-slot';
-import { initLiveblogInline } from 'commercial/modules/consentless/dynamic/liveblog-inline';
-import { initFixedSlots } from 'commercial/modules/consentless/init-fixed-slots';
-import { initConsentless } from 'commercial/modules/consentless/prepare-ootag';
 import {
 	AdFreeCookieReasons,
 	maybeUnsetAdFreeCookie,
 } from 'lib/manage-ad-free-cookie';
+import { initArticleInline } from '../projects/commercial/modules/consentless/dynamic/article-inline';
+import { initExclusionSlot } from '../projects/commercial/modules/consentless/dynamic/exclusion-slot';
+import { initLiveblogInline } from '../projects/commercial/modules/consentless/dynamic/liveblog-inline';
+import { initFixedSlots } from '../projects/commercial/modules/consentless/init-fixed-slots';
+import { initConsentless } from '../projects/commercial/modules/consentless/prepare-ootag';
 import { init as setAdTestCookie } from '../projects/commercial/modules/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from '../projects/commercial/modules/set-adtest-in-labels-cookie';
 

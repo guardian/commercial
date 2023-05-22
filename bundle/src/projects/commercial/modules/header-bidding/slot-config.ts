@@ -1,6 +1,6 @@
 import { adSizes, createAdSize } from '@guardian/commercial-core';
 import type { AdSize } from '@guardian/commercial-core';
-import type { Advert } from 'commercial/modules/dfp/Advert';
+import type { Advert } from 'projects/commercial/modules/dfp/Advert';
 import type {
 	HeaderBiddingSizeKey,
 	HeaderBiddingSizeMapping,

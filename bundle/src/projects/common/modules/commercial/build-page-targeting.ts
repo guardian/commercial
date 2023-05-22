@@ -3,7 +3,7 @@ import { buildPageTargeting } from '@guardian/commercial-core';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { getSynchronousParticipations } from 'common/modules/experiments/ab';
+import { getSynchronousParticipations } from 'projects/common/modules/experiments/ab';
 import { removeFalseyValues } from '../../../commercial/modules/header-bidding/utils';
 import { commercialFeatures } from './commercial-features';
 

@@ -5,9 +5,9 @@ import {
 } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { loadScript, log } from '@guardian/libs';
-import { init as initMeasureAdLoad } from 'commercial/modules/messenger/measure-ad-load';
-import { isInVariantSynchronous } from 'common/modules/experiments/ab';
-import { elementsManager } from 'common/modules/experiments/tests/elements-manager';
+import { init as initMeasureAdLoad } from 'projects/commercial/modules/messenger/measure-ad-load';
+import { isInVariantSynchronous } from 'projects/common/modules/experiments/ab';
+import { elementsManager } from 'projects/common/modules/experiments/tests/elements-manager';
 import raven from '../../../../lib/raven';
 import { reportError } from '../../../../lib/report-error';
 import { removeSlots } from '../../../commercial/modules/remove-slots';

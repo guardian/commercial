@@ -5,7 +5,7 @@ import {
 } from '@guardian/consent-management-platform';
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { isInCanada } from 'common/modules/commercial/geo-utils';
+import { isInCanada } from 'projects/common/modules/commercial/geo-utils';
 import { isGoogleProxy } from '../../../../lib/detect-google-proxy';
 import { commercialFeatures } from '../../../common/modules/commercial/commercial-features';
 import { a9 } from '../header-bidding/a9/a9';

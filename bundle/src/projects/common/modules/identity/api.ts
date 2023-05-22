@@ -1,5 +1,5 @@
 import { getCookie, storage } from '@guardian/libs';
-import { mergeCalls } from 'common/modules/async-call-merger';
+import { mergeCalls } from 'projects/common/modules/async-call-merger';
 import { fetchJson } from '../../../../lib/fetch-json';
 import { mediator } from '../../../../lib/mediator';
 import { getUrlVars } from '../../../../lib/url';

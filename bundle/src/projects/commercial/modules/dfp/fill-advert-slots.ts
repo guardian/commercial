@@ -1,10 +1,10 @@
 import type { SizeMapping } from '@guardian/commercial-core';
 import { adSizes, createAdSize } from '@guardian/commercial-core';
 import { log } from '@guardian/libs';
-import { isInVariantSynchronous } from 'common/modules/experiments/ab';
-import { isInEagerPrebidVariant } from 'common/modules/experiments/eager-prebid-check';
-import { billboardsInMerch } from 'common/modules/experiments/tests/billboards-in-merch';
 import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
+import { isInVariantSynchronous } from 'projects/common/modules/experiments/ab';
+import { isInEagerPrebidVariant } from 'projects/common/modules/experiments/eager-prebid-check';
+import { billboardsInMerch } from 'projects/common/modules/experiments/tests/billboards-in-merch';
 import { commercialFeatures } from '../../../common/modules/commercial/commercial-features';
 import { requestBidsForAds } from '../header-bidding/request-bids';
 import { removeDisabledSlots } from '../remove-slots';

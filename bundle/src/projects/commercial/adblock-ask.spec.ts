@@ -1,5 +1,5 @@
-import { pageShouldHideReaderRevenue } from 'common/modules/commercial/contributions-utilities';
-import { shouldHideSupportMessaging } from 'common/modules/commercial/user-features';
+import { pageShouldHideReaderRevenue } from 'projects/common/modules/commercial/contributions-utilities';
+import { shouldHideSupportMessaging } from 'projects/common/modules/commercial/user-features';
 import { _ } from './adblock-ask';
 
 const { params, canShow } = _;
