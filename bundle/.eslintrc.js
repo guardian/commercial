@@ -5,12 +5,19 @@ module.exports = {
 		'@guardian/eslint-config-typescript',
 		'plugin:import/recommended',
 	],
+	parserOptions: {
+		project: ['./tsconfig.json'],
+		tsconfigRootDir: __dirname,
+	},
 	rules: {
 		'id-denylist': ['error'],
 		// TODO - remove these rule once we've migrated to commercial-core
 		'@typescript-eslint/no-unsafe-argument': 'off',
 		'@typescript-eslint/no-unsafe-return': 'off',
 		'@typescript-eslint/unbound-method': 'off',
+		curly: ['error', 'multi-line'],
+		'no-use-before-define': ['error', { functions: true, classes: true }],
+		'import/exports-last': 'error',
 	},
 	overrides: [
 		{

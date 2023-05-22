@@ -59,10 +59,6 @@ const isSlotName = (slotName: string): slotName is SlotName => {
 	return slotName in slotSizeMappings;
 };
 
-const isAdSize = (size: Advert['size']): size is AdSize => {
-	return size !== null && size !== 'fluid';
-};
-
 const getSlotSizeMapping = (name: string): SizeMapping => {
 	let slotName: string;
 	if (name.includes('inline')) {
@@ -208,6 +204,10 @@ class Advert {
 		}
 	}
 }
+
+const isAdSize = (size: Advert['size']): size is AdSize => {
+	return size !== null && size !== 'fluid';
+};
 
 export { Advert, isAdSize };
 
