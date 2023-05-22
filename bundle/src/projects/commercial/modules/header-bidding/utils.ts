@@ -1,6 +1,6 @@
-import { createAdSize } from '@guardian/commercial-core';
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
+import { createAdSize } from 'core/ad-sizes';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,

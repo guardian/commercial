@@ -1,5 +1,5 @@
-import type { RegisterListener } from '@guardian/commercial-core';
 import { isString } from '@guardian/libs';
+import type { RegisterListener } from 'core/messenger';
 import { trackNativeAdLinkClick } from '../../../common/modules/analytics/google';
 
 const sendClick = (adSlot: { id: string }, linkName: string): void => {

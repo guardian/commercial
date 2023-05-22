@@ -1,6 +1,6 @@
-import type { SizeMapping } from '@guardian/commercial-core';
-import { adSizes, createAdSize } from '@guardian/commercial-core';
 import { log } from '@guardian/libs';
+import type { SizeMapping } from 'core/ad-sizes';
+import { adSizes, createAdSize } from 'core/ad-sizes';
 import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
 import { isInVariantSynchronous } from 'projects/common/modules/experiments/ab';
 import { isInEagerPrebidVariant } from 'projects/common/modules/experiments/eager-prebid-check';

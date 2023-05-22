@@ -1,4 +1,4 @@
-import { createAdSlot } from '@guardian/commercial-core';
+import { createAdSlot } from 'core/create-ad-slot';
 import { getCurrentTweakpoint } from 'lib/detect-breakpoint';
 import fastdom from '../../../lib/fastdom-promise';
 import { spaceFiller } from '../../common/modules/article/space-filler';

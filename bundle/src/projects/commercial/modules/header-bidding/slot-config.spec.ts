@@ -1,5 +1,5 @@
-import type { SizeMapping } from '@guardian/commercial-core';
-import { adSizes } from '@guardian/commercial-core';
+import type { SizeMapping } from 'core/ad-sizes';
+import { adSizes } from 'core/ad-sizes';
 import { Advert } from '../dfp/Advert';
 import { getHeaderBiddingAdSlots } from './slot-config';
 import { getBreakpointKey, shouldIncludeMobileSticky } from './utils';

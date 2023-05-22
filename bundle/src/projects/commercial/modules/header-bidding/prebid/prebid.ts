@@ -1,10 +1,13 @@
-import type { AdSize, PageTargeting } from '@guardian/commercial-core';
-import { createAdSize, EventTimer, pubmatic } from '@guardian/commercial-core';
-import { PREBID_TIMEOUT } from '@guardian/commercial-core/dist/esm/constants';
 import { onConsent } from '@guardian/consent-management-platform';
 import type { Framework } from '@guardian/consent-management-platform/dist/types';
 import { isString, log } from '@guardian/libs';
 import { flatten } from 'lodash-es';
+import { pubmatic } from 'core/__vendor/pubmatic';
+import type { AdSize } from 'core/ad-sizes';
+import { createAdSize } from 'core/ad-sizes';
+import { PREBID_TIMEOUT } from 'core/constants/prebid-timeout';
+import { EventTimer } from 'core/event-timer';
+import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import type { Advert } from 'projects/commercial/modules/dfp/Advert';
 import { getPageTargeting } from 'projects/common/modules/commercial/build-page-targeting';
 import { dfpEnv } from '../../dfp/dfp-env';

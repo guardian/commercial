@@ -1,5 +1,5 @@
-import { createAdSize } from '@guardian/commercial-core';
 import type { CountryCode } from '@guardian/libs';
+import { createAdSize } from 'core/ad-sizes';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
 	matchesBreakpoints as matchesBreakpoints_,

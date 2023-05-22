@@ -1,4 +1,4 @@
-import { createAdSlot } from '@guardian/commercial-core';
+import { createAdSlot } from 'core/create-ad-slot';
 import fastdom from '../../../../../lib/fastdom-promise';
 import { spaceFiller } from '../../../../common/modules/article/space-filler';
 import { commercialFeatures } from '../../../../common/modules/commercial/commercial-features';

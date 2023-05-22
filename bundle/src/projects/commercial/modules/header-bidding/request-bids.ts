@@ -1,4 +1,4 @@
-import type { AdSize } from '@guardian/commercial-core';
+import type { AdSize } from 'core/ad-sizes';
 import type { Advert } from '../dfp/Advert';
 import { a9 } from './a9/a9';
 import { prebid } from './prebid/prebid';

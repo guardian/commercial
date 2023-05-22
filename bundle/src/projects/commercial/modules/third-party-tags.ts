@@ -1,17 +1,15 @@
 /* A regionalised container for all the commercial tags. */
 
 import {
-	ias,
-	inizio,
-	permutive,
-	remarketing,
-	twitter,
-} from '@guardian/commercial-core';
-import type { ThirdPartyTag } from '@guardian/commercial-core';
-import {
 	getConsentFor,
 	onConsent,
 } from '@guardian/consent-management-platform';
+import { ias } from 'core/third-party-tags/ias';
+import { inizio } from 'core/third-party-tags/inizio';
+import { permutive } from 'core/third-party-tags/permutive';
+import { remarketing } from 'core/third-party-tags/remarketing';
+import { twitter } from 'core/third-party-tags/twitter-uwt';
+import type { ThirdPartyTag } from 'types/global';
 import fastdom from '../../../lib/fastdom-promise';
 import { commercialFeatures } from '../../common/modules/commercial/commercial-features';
 import { imrWorldwide } from './third-party-tags/imr-worldwide';

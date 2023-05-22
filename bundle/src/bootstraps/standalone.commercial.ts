@@ -12,12 +12,12 @@
  * Changes here will be served on DCR & Frontend rendered pages.
  */
 
-import { EventTimer } from '@guardian/commercial-core';
 import {
 	getConsentFor,
 	onConsent,
 } from '@guardian/consent-management-platform';
 import { log } from '@guardian/libs';
+import { EventTimer } from 'core/event-timer';
 import { reportError } from '../lib/report-error';
 import { catchErrorsWithContext } from '../lib/robust';
 import { initAdblockAsk } from '../projects/commercial/adblock-ask';
