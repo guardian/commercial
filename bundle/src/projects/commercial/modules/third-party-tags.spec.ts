@@ -95,7 +95,7 @@ afterEach(() => {
 	document.body.innerHTML = '';
 });
 
-jest.mock('ophan/ng', () => null);
+jest.mock('ophan-tracker-js', () => null);
 
 jest.mock('../../common/modules/commercial/commercial-features', () => ({
 	commercialFeatures: {

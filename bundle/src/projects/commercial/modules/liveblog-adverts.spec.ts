@@ -15,7 +15,7 @@ jest.mock('../../commercial/modules/header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));
 
-jest.mock('ophan/ng', () => null);
+jest.mock('ophan-tracker-js', () => null);
 
 jest.mock('../../../lib/raven');
 

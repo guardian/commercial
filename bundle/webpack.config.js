@@ -24,7 +24,6 @@ module.exports = {
 			common: 'projects/common',
 			commercial: 'projects/commercial',
 			svgs: path.join(__dirname, 'static', 'svg'),
-			'ophan/ng': 'ophan-tracker-js',
 			lodash: 'lodash-es',
 		},
 		extensions: ['.js', '.ts', '.tsx', '.jsx'],
