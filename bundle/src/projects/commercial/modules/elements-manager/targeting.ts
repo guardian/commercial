@@ -1,10 +1,8 @@
-import type { PageTargeting } from '@guardian/commercial-core';
-import {
-	buildPageTargeting,
-	buildPageTargetingConsentless,
-} from '@guardian/commercial-core';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { isString } from 'lodash-es';
+import { buildPageTargeting } from 'core/targeting/build-page-targeting';
+import type { PageTargeting } from 'core/targeting/build-page-targeting';
+import { buildPageTargetingConsentless } from 'core/targeting/build-page-targeting-consentless';
 import { commercialFeatures } from 'projects/common/modules/commercial/commercial-features';
 import { getSynchronousParticipations } from 'projects/common/modules/experiments/ab';
 import type { GuElement, SerializedPayload, TargetingRule } from './types';

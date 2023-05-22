@@ -1,4 +1,4 @@
-import { EventTimer } from '@guardian/commercial-core';
+import { EventTimer } from 'core/event-timer';
 import {
 	refreshBidsForAd,
 	requestBidsForAd,

@@ -1,4 +1,4 @@
-import { adSizes } from '@guardian/commercial-core';
+import { adSizes } from 'core/ad-sizes';
 
 export type PrebidPriceGranularity = {
 	buckets: Array<{
