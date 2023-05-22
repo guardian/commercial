@@ -142,6 +142,28 @@ type BidderSettings = {
 	ozone?: Partial<BidderSetting>;
 };
 
+class PrebidAdUnit {
+	code: string | null | undefined;
+	bids: PrebidBid[] | null | undefined;
+	mediaTypes: PrebidMediaTypes | null | undefined;
+
+	constructor(
+		advert: Advert,
+		slot: HeaderBiddingSlot,
+		pageTargeting: PageTargeting,
+	) {
+		this.code = advert.id;
+		this.bids = bids(advert.id, slot.sizes, pageTargeting);
+		this.mediaTypes = { banner: { sizes: slot.sizes } };
+		advert.headerBiddingSizes = slot.sizes;
+		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
+	}
+
+	isEmpty() {
+		return this.code == null;
+	}
+}
+
 declare global {
 	interface Window {
 		pbjs?: {
@@ -207,28 +229,6 @@ const timeoutBuffer = 400;
  * The amount of time reserved for the auction
  */
 const bidderTimeout = PREBID_TIMEOUT;
-
-class PrebidAdUnit {
-	code: string | null | undefined;
-	bids: PrebidBid[] | null | undefined;
-	mediaTypes: PrebidMediaTypes | null | undefined;
-
-	constructor(
-		advert: Advert,
-		slot: HeaderBiddingSlot,
-		pageTargeting: PageTargeting,
-	) {
-		this.code = advert.id;
-		this.bids = bids(advert.id, slot.sizes, pageTargeting);
-		this.mediaTypes = { banner: { sizes: slot.sizes } };
-		advert.headerBiddingSizes = slot.sizes;
-		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
-	}
-
-	isEmpty() {
-		return this.code == null;
-	}
-}
 
 let requestQueue: Promise<void> = Promise.resolve();
 let initialised = false;
