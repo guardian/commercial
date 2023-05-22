@@ -1,6 +1,6 @@
 import { buildPageTargetingConsentless } from '@guardian/commercial-core';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { loadScript } from '@guardian/libs';
+import { loadScript, log } from '@guardian/libs';
 import { commercialFeatures } from 'common/modules/commercial/commercial-features';
 
 function initConsentless(consentState: ConsentState): Promise<void> {
@@ -11,9 +11,15 @@ function initConsentless(consentState: ConsentState): Promise<void> {
 			queue: [],
 		};
 		window.ootag.queue.push(function () {
+			// Ensures Opt Out logs are namespaced under Commercial
+			window.ootag.logger = (...args: unknown[]) => {
+				log('commercial', '[Opt Out Ads]', ...args);
+			};
+
 			window.ootag.initializeOo({
 				publisher: 33,
-				noLogging: 0,
+				// We set our own custom logger above
+				noLogging: 1,
 				alwaysNoConsent: 1,
 				noRequestsOnPageLoad: 1,
 			});
