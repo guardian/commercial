@@ -1,4 +1,4 @@
-src/__vendor
+src/core/__vendor
 coverage
 dist
 README.md

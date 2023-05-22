@@ -24,6 +24,8 @@
 		"compile:core:common": "tsc --project ./tsconfig.core.build.json --outDir ./dist/cjs --module CommonJS",
 		"compile:core:esm": "tsc --project ./tsconfig.core.build.json --outDir ./dist/esm",
 		"lint": "eslint .",
+		"precommit:lint": "lint-staged",
+		"prepush:test": "jest --verbose --runInBand --onlyChanged",
 		"prettier:check": "prettier . --check --cache",
 		"prettier:fix": "prettier . --write --cache",
 		"serve": "OVERRIDE_BUNDLE=true yarn webpack-dev-server -c ./webpack.config.dev.js",
