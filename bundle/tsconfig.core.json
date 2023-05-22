@@ -1,24 +1,13 @@
 {
 	"compilerOptions": {
-		"allowJs": true,
-		"esModuleInterop": true,
-		"isolatedModules": true,
-		"lib": [
-			"DOM",
-			"ES2015",
-			"ES2016",
-			"ES2017",
-			"ES2018",
-			"ES2019",
-			"ES2020",
-			"ESNext"
-		],
+		"baseUrl": "src",
+		"declaration": true,
+		"noEmit": false,
 		"noUncheckedIndexedAccess": true,
-		"module": "ES6",
-		"moduleResolution": "node",
-		"noEmit": true,
-		"strict": true,
-		"target": "ES2020"
+		"outDir": "dist",
+		"rootDir": "src"
 	},
-	"exclude": ["node_modules", "dist", "coverage", ".eslintrc.js"]
+	"extends": "./tsconfig.json",
+	"include": ["src/core", "src/types"],
+	"exclude": ["**/*.spec.*", "**/*.test.*"]
 }
