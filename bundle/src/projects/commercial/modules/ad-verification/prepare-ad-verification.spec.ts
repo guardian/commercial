@@ -1,5 +1,10 @@
 import { _ } from './prepare-ad-verification';
 
+let scriptLoadShouldFail = false;
+const validIds = ['slot-a', 'slot-2'];
+const mockVariantSynchronous = jest.fn<boolean, unknown[]>();
+const mockLog = jest.fn<void, unknown[]>();
+
 jest.mock('../../../../lib/raven');
 jest.mock('ophan-tracker-js', () => null);
 jest.mock('@guardian/libs', () => ({
@@ -37,14 +42,7 @@ jest.mock('../dfp/load-advert', () => ({
 	refreshAdvert: jest.fn(),
 }));
 
-const validIds = ['slot-a', 'slot-2'];
-
-const mockVariantSynchronous = jest.fn<boolean, unknown[]>();
-const mockLog = jest.fn<void, unknown[]>();
-
 const { init, maybeRefreshBlockedSlotOnce } = _;
-
-let scriptLoadShouldFail = false;
 
 describe('prepare-ad-verification', () => {
 	beforeAll(() => {

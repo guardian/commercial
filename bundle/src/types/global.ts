@@ -23,14 +23,14 @@ interface DfpEnv {
 	shouldLazyLoad: () => boolean;
 }
 
-export type ServerSideABTest = `${string}${'Variant' | 'Control'}`;
+type ServerSideABTest = `${string}${'Variant' | 'Control'}`;
 
-export type TagAttribute = {
+type TagAttribute = {
 	name: string;
 	value: string;
 };
 
-export type ThirdPartyTag = {
+type ThirdPartyTag = {
 	async?: boolean;
 	attrs?: TagAttribute[];
 	beforeLoad?: () => void;
@@ -47,7 +47,7 @@ export type ThirdPartyTag = {
 // https://github.com/guardian/frontend/blob/main/common/app/common/commercial/PrebidIndexSite.scala#L10
 // https://github.com/guardian/frontend/blob/main/common/app/views/support/JavaScriptPage.scala#L54
 type PrebidBreakpoint = 'D' | 'T' | 'M';
-export type PrebidIndexSite = {
+type PrebidIndexSite = {
 	bp: PrebidBreakpoint;
 	id: number;
 };
@@ -71,7 +71,7 @@ interface CommercialPageConfig {
 	};
 }
 
-export interface UserConfig {
+interface UserConfig {
 	accountCreatedDate: number;
 	displayName: string;
 	emailVerified: boolean;
@@ -79,7 +79,7 @@ export interface UserConfig {
 	rawResponse: string;
 }
 
-export type BoostGaUserTimingFidelityMetrics = {
+type BoostGaUserTimingFidelityMetrics = {
 	standardStart: 'metric18';
 	standardEnd: 'metric19';
 	commercialStart: 'metric20';
@@ -88,43 +88,20 @@ export type BoostGaUserTimingFidelityMetrics = {
 	enhancedEnd: 'metric23';
 };
 
-export type GoogleTimingEvent = {
+type GoogleTimingEvent = {
 	timingCategory: string;
 	timingVar: keyof BoostGaUserTimingFidelityMetrics;
 	timeSincePageLoad: number;
 	timingLabel: string;
 };
 
-export interface Config {
-	frontendAssetsFullURL?: string;
-	googleAnalytics?: {
-		timingEvents?: GoogleTimingEvent[];
-		trackers?: {
-			editorial?: string;
-		};
-	};
-	isDotcomRendering: boolean;
-	ophan: {
-		// somewhat redundant with guardian.ophan
-		browserId?: string;
-		pageViewId: string;
-	};
-	page: PageConfig;
-	switches: Record<string, boolean | undefined>;
-	tests?: {
-		[key: `${string}Control`]: 'control';
-		[key: `${string}Variant`]: 'variant';
-	};
-	user?: UserConfig;
-}
-
-export type Edition = 'UK' | 'AU' | 'US'; // https://github.com/guardian/frontend/blob/b952f6b9/common/app/views/support/JavaScriptPage.scala#L79
+type Edition = 'UK' | 'AU' | 'US'; // https://github.com/guardian/frontend/blob/b952f6b9/common/app/views/support/JavaScriptPage.scala#L79
 
 interface LightboxImages {
 	images: Array<{ src: string }>;
 }
 
-export interface PageConfig extends CommercialPageConfig {
+interface PageConfig extends CommercialPageConfig {
 	ajaxUrl?: string; // https://github.com/guardian/frontend/blob/33db7bbd/common/app/views/support/JavaScriptPage.scala#L72
 	assetsPath: string;
 	author: string;
@@ -179,7 +156,30 @@ export interface PageConfig extends CommercialPageConfig {
 	userAttributesApiUrl?: string;
 }
 
-export interface Ophan {
+interface Config {
+	frontendAssetsFullURL?: string;
+	googleAnalytics?: {
+		timingEvents?: GoogleTimingEvent[];
+		trackers?: {
+			editorial?: string;
+		};
+	};
+	isDotcomRendering: boolean;
+	ophan: {
+		// somewhat redundant with guardian.ophan
+		browserId?: string;
+		pageViewId: string;
+	};
+	page: PageConfig;
+	switches: Record<string, boolean | undefined>;
+	tests?: {
+		[key: `${string}Control`]: 'control';
+		[key: `${string}Variant`]: 'variant';
+	};
+	user?: UserConfig;
+}
+
+interface Ophan {
 	setEventEmitter: unknown;
 	trackComponentAttention: unknown;
 	record: (...args: unknown[]) => void;
@@ -208,7 +208,7 @@ enum BlockingType {
 	Hrap, // Domain-based detection for high risk ad platform domains
 }
 
-export type ConfiantCallback = (
+type ConfiantCallback = (
 	blockingType: BlockingType,
 	blockingId: string,
 	isBlocked: boolean,
@@ -231,7 +231,7 @@ interface Confiant extends Record<string, unknown> {
 	};
 }
 
-export interface Permutive {
+interface Permutive {
 	config?: {
 		projectId?: string;
 		apiKey?: string;
@@ -243,7 +243,7 @@ export interface Permutive {
 }
 
 // https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/javascript-guide/api-reference.html#apstaginit
-export interface A9AdUnitInterface {
+interface A9AdUnitInterface {
 	slotID: string;
 	slotName?: string;
 	sizes: number[][];
@@ -265,7 +265,7 @@ type Apstag = {
 	setDisplayBids: () => void;
 };
 
-export type ComscoreGlobals = {
+type ComscoreGlobals = {
 	c1: string;
 	c2: string;
 	cs_ucfr: string;
@@ -346,19 +346,20 @@ interface OptOutResponse {
 	};
 }
 
-export type OptOutFilledCallback = (
-	adSlot: OptOutAdSlot,
-	response: OptOutResponse,
-) => void;
-
 interface OptOutAdSlot {
 	adSlot: string;
 	targetId: string;
 	id: string;
+	// eslint-disable-next-line no-use-before-define -- circular reference
 	filledCallback?: OptOutFilledCallback;
 	emptyCallback?: (adSlot: OptOutAdSlot) => void;
 	adShownCallback?: (adSlot: OptOutAdSlot, response: OptOutResponse) => void;
 }
+
+type OptOutFilledCallback = (
+	adSlot: OptOutAdSlot,
+	response: OptOutResponse,
+) => void;
 
 /**
  * Describes the configuration options for the Safeframe host API
@@ -435,6 +436,9 @@ interface HeaderNotification {
 }
 
 declare global {
+	interface Navigator {
+		readonly connection?: NetworkInformation;
+	}
 	interface Window {
 		guardian: {
 			ophan: Ophan;
@@ -507,7 +511,23 @@ declare global {
 			val: Record<string, unknown>;
 		}>;
 	}
-	interface Navigator {
-		readonly connection?: NetworkInformation;
-	}
 }
+
+export type {
+	ServerSideABTest,
+	TagAttribute,
+	ThirdPartyTag,
+	PrebidIndexSite,
+	UserConfig,
+	BoostGaUserTimingFidelityMetrics,
+	GoogleTimingEvent,
+	OptOutFilledCallback,
+	ConfiantCallback,
+	Config,
+	Edition,
+	PageConfig,
+	ComscoreGlobals,
+	Ophan,
+	Permutive,
+	A9AdUnitInterface,
+};

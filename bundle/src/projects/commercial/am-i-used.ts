@@ -1,18 +1,18 @@
-export type AmIUsedLoggingEvent = {
-	label: string;
-	properties?: Property[];
-};
-
 type Property = {
 	name: string;
 	value: string;
 };
 
+type RestrictedKeys = 'module_name' | 'function_name' | 'URL';
+
 type RestrictedProperty = Property & {
 	name: RestrictedKeys;
 };
 
-type RestrictedKeys = 'module_name' | 'function_name' | 'URL';
+type AmIUsedLoggingEvent = {
+	label: string;
+	properties?: Property[];
+};
 
 /**
  * This function is used to send a logging event to BigQuery, which is
@@ -22,7 +22,7 @@ type RestrictedKeys = 'module_name' | 'function_name' | 'URL';
  * @param parameters an optional object to add function-specific information (e.g. `{ conditionA: 'true', conditionB: 'false' }`)
  * @returns void.
  */
-export const amIUsed = (
+const amIUsed = (
 	moduleName: string,
 	functionName: string,
 	parameters?: Partial<
@@ -56,3 +56,5 @@ export const amIUsed = (
 
 	window.navigator.sendBeacon(endpoint, JSON.stringify(event));
 };
+
+export { amIUsed, AmIUsedLoggingEvent };
