@@ -1,5 +1,5 @@
 import type { ABTest, Runnable, Variant } from '@guardian/ab-core';
-import ophan from 'ophan/ng';
+import ophan from 'ophan-tracker-js';
 import { noop } from '../../../../lib/noop';
 import { reportError } from '../../../../lib/report-error';
 

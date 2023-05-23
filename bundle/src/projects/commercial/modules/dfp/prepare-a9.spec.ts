@@ -1,4 +1,4 @@
-import { isInCanada } from 'common/modules/commercial/geo-utils';
+import { isInCanada } from 'projects/common/modules/commercial/geo-utils';
 import { commercialFeatures } from '../../../common/modules/commercial/commercial-features';
 import { a9 } from '../header-bidding/a9/a9';
 import { dfpEnv } from './dfp-env';
@@ -23,7 +23,7 @@ jest.mock('../header-bidding/a9/a9');
 
 jest.mock('./Advert');
 
-jest.mock('@guardian/commercial-core', () => ({
+jest.mock('core/__vendor/a9-apstag', () => ({
 	a9Apstag: jest.fn(),
 }));
 

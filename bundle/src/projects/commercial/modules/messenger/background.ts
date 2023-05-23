@@ -1,5 +1,5 @@
-import type { RegisterListener } from '@guardian/commercial-core';
 import { isObject } from '@guardian/libs';
+import type { RegisterListener } from 'core/messenger';
 import fastdom from '../../../../lib/fastdom-promise';
 import {
 	renderAdvertLabel,
@@ -7,6 +7,19 @@ import {
 } from '../dfp/render-advert-label';
 
 const isDCR = window.guardian.config.isDotcomRendering;
+
+interface BackgroundSpecs {
+	backgroundImage: string;
+	backgroundRepeat?: string;
+	backgroundPosition?: string;
+	// native templates are sometimes using the british spelling of background-color for some reason, removed in getStylesFromSpec above
+	backgroundColour?: string;
+	backgroundColor?: string;
+	backgroundSize?: string;
+	transform?: string;
+	scrollType?: 'interscroller' | 'fixed' | 'parallax';
+	ctaUrl?: string;
+}
 
 const getStylesFromSpec = (
 	specs: BackgroundSpecs,
@@ -22,19 +35,6 @@ const getStylesFromSpec = (
 	}
 	return styles;
 };
-
-interface BackgroundSpecs {
-	backgroundImage: string;
-	backgroundRepeat?: string;
-	backgroundPosition?: string;
-	// native templates are sometimes using the british spelling of background-color for some reason, removed in getStylesFromSpec above
-	backgroundColour?: string;
-	backgroundColor?: string;
-	backgroundSize?: string;
-	transform?: string;
-	scrollType?: 'interscroller' | 'fixed' | 'parallax';
-	ctaUrl?: string;
-}
 
 const isBackgroundSpecs = (specs: unknown): specs is BackgroundSpecs =>
 	isObject(specs) && 'backgroundImage' in specs;

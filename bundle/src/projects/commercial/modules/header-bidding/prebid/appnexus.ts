@@ -1,6 +1,7 @@
-import type { PageTargeting } from '@guardian/commercial-core';
+import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import { buildAppNexusTargetingObject } from '../../../../common/modules/commercial/build-page-targeting';
 import { isInAuOrNz } from '../../../../common/modules/commercial/geo-utils';
+import type { HeaderBiddingSize } from '../prebid-types';
 import {
 	containsLeaderboard,
 	containsLeaderboardOrBillboard,

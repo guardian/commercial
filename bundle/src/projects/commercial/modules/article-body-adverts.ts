@@ -1,10 +1,11 @@
-import type { AdSize, SizeMapping } from '@guardian/commercial-core';
-import { adSizes, createAdSlot } from '@guardian/commercial-core';
-import { isInEagerPrebidVariant } from 'common/modules/experiments/eager-prebid-check';
+import type { AdSize, SizeMapping } from 'core/ad-sizes';
+import { adSizes } from 'core/ad-sizes';
+import { createAdSlot } from 'core/create-ad-slot';
 import {
 	getCurrentBreakpoint,
 	getCurrentTweakpoint,
 } from 'lib/detect-breakpoint';
+import { isInEagerPrebidVariant } from 'projects/common/modules/experiments/eager-prebid-check';
 import fastdom from '../../../lib/fastdom-promise';
 import { mediator } from '../../../lib/mediator';
 import { spaceFiller } from '../../common/modules/article/space-filler';

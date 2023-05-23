@@ -84,7 +84,7 @@ const pushQueryString = (params: Params): void =>
 const replaceQueryString = (params: Params): void =>
 	updateQueryString(params, window.history.replaceState.bind(window.history));
 
-export type MaybeArray<T> = T | T[];
+type MaybeArray<T> = T | T[];
 /**
  * Turn an object into a query parameter string
  *
@@ -103,7 +103,8 @@ const constructQuery = (
 			const value = query[param];
 			const queryValue = Array.isArray(value)
 				? value.map((v) => encodeURIComponent(v)).join(',')
-				: encodeURIComponent(value);
+				: // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TODO TS can't deduce that this could be undefined
+				  encodeURIComponent(value ?? '');
 			return `${param}=${queryValue}`;
 		})
 		.join('&');
@@ -145,4 +146,5 @@ export {
 	pushQueryString,
 	replaceQueryString,
 	pbTestNameMap,
+	type MaybeArray,
 };

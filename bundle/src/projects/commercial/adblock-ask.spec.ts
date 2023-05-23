@@ -1,12 +1,12 @@
-import { pageShouldHideReaderRevenue } from 'common/modules/commercial/contributions-utilities';
-import { shouldHideSupportMessaging } from 'common/modules/commercial/user-features';
+import { pageShouldHideReaderRevenue } from 'projects/common/modules/commercial/contributions-utilities';
+import { shouldHideSupportMessaging } from 'projects/common/modules/commercial/user-features';
 import { _ } from './adblock-ask';
 
 const { params, canShow } = _;
 
 jest.mock('../common/modules/commercial/contributions-utilities');
 jest.mock('../common/modules/commercial/user-features');
-jest.mock('ophan/ng', () => null);
+jest.mock('ophan-tracker-js', () => null);
 jest.mock('lib/raven');
 
 describe('adblock-ask', () => {

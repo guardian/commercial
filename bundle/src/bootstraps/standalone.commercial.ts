@@ -12,14 +12,12 @@
  * Changes here will be served on DCR & Frontend rendered pages.
  */
 
-import { EventTimer } from '@guardian/commercial-core';
 import {
 	getConsentFor,
 	onConsent,
 } from '@guardian/consent-management-platform';
 import { log } from '@guardian/libs';
-import { initTeadsCookieless } from 'commercial/modules/teads-cookieless';
-import { isDigitalSubscriber } from 'common/modules/commercial/user-features';
+import { EventTimer } from 'core/event-timer';
 import { reportError } from '../lib/report-error';
 import { catchErrorsWithContext } from '../lib/robust';
 import { initAdblockAsk } from '../projects/commercial/adblock-ask';
@@ -45,11 +43,13 @@ import { paidContainers } from '../projects/commercial/modules/paid-containers';
 import { removeDisabledSlots as closeDisabledSlots } from '../projects/commercial/modules/remove-slots';
 import { init as setAdTestCookie } from '../projects/commercial/modules/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from '../projects/commercial/modules/set-adtest-in-labels-cookie';
+import { initTeadsCookieless } from '../projects/commercial/modules/teads-cookieless';
 import { init as initThirdPartyTags } from '../projects/commercial/modules/third-party-tags';
 import { init as initTrackGpcSignal } from '../projects/commercial/modules/track-gpc-signal';
 import { init as initTrackLabsContainer } from '../projects/commercial/modules/track-labs-container';
 import { init as initTrackScrollDepth } from '../projects/commercial/modules/track-scroll-depth';
 import { commercialFeatures } from '../projects/common/modules/commercial/commercial-features';
+import { isDigitalSubscriber } from '../projects/common/modules/commercial/user-features';
 import type { Modules } from './types';
 
 const { isDotcomRendering, frontendAssetsFullURL, switches, page } =
@@ -123,7 +123,7 @@ const loadDcrBundle = async (): Promise<void> => {
 
 	const userFeatures = await import(
 		/* webpackChunkName: "dcr" */
-		'common/modules/commercial/user-features'
+		'../projects/common/modules/commercial/user-features'
 	);
 
 	commercialExtraModules.push(['c-user-features', userFeatures.refresh]);

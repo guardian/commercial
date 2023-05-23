@@ -5,14 +5,19 @@ module.exports = {
 		'@guardian/eslint-config-typescript',
 		'plugin:import/recommended',
 	],
+	parserOptions: {
+		project: ['./tsconfig.json'],
+		tsconfigRootDir: __dirname,
+	},
 	rules: {
-		// disallow naming variables 'guardian', because
-		// window.guardian is our global config/settings object
-		'id-denylist': ['error', 'guardian'],
+		'id-denylist': ['error'],
 		// TODO - remove these rule once we've migrated to commercial-core
 		'@typescript-eslint/no-unsafe-argument': 'off',
 		'@typescript-eslint/no-unsafe-return': 'off',
 		'@typescript-eslint/unbound-method': 'off',
+		curly: ['error', 'multi-line'],
+		'no-use-before-define': ['error', { functions: true, classes: true }],
+		'import/exports-last': 'error',
 	},
 	overrides: [
 		{
@@ -24,15 +29,18 @@ module.exports = {
 			},
 		},
 	],
-	ignorePatterns: ['*.js'],
+	ignorePatterns: ['*.js', 'dist', 'src/__vendor', '.eslintrc.js'],
 	settings: {
 		'import/resolver': {
 			alias: {
-				map: [
-					['svgs', './static/svg'],
-					['ophan/ng', '../node_modules/ophan-tracker-js'],
-				],
+				map: [['svgs', './static/svg']],
 			},
 		},
 	},
+	env: {
+		jest: true,
+		browser: true,
+		node: true,
+	},
+	globals: { googletag: 'readonly' },
 };

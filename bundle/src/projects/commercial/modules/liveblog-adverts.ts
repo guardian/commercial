@@ -1,7 +1,8 @@
-import { adSizes, createAdSlot } from '@guardian/commercial-core';
 import { log } from '@guardian/libs';
-import { isInEagerPrebidVariant } from 'common/modules/experiments/eager-prebid-check';
+import { adSizes } from 'core/ad-sizes';
+import { createAdSlot } from 'core/create-ad-slot';
 import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
+import { isInEagerPrebidVariant } from 'projects/common/modules/experiments/eager-prebid-check';
 import fastdom from '../../../lib/fastdom-promise';
 import { spaceFiller } from '../../common/modules/article/space-filler';
 import { commercialFeatures } from '../../common/modules/commercial/commercial-features';
@@ -36,14 +37,6 @@ let WINDOWHEIGHT: number;
 let firstSlot: HTMLElement | undefined;
 
 let insertedDynamicAds: Advert[] = [];
-
-const startListening = () => {
-	document.addEventListener('liveblog:blocks-updated', onUpdate);
-};
-
-const stopListening = () => {
-	document.removeEventListener('liveblog:blocks-updated', onUpdate);
-};
 
 const getWindowHeight = (doc = document) => {
 	if (doc.documentElement.clientHeight) {
@@ -146,6 +139,22 @@ const insertAds: SpacefinderWriter = async (paras) => {
 	await Promise.all(fastdomPromises);
 };
 
+const onUpdate = () => {
+	// eslint-disable-next-line no-use-before-define -- circular reference
+	stopListening();
+	const rules = getSpaceFillerRules(WINDOWHEIGHT, true);
+	// eslint-disable-next-line no-use-before-define -- circular reference
+	void fill(rules);
+};
+
+const startListening = () => {
+	document.addEventListener('liveblog:blocks-updated', onUpdate);
+};
+
+const stopListening = () => {
+	document.removeEventListener('liveblog:blocks-updated', onUpdate);
+};
+
 const fill = (rules: SpacefinderRules) => {
 	const options: SpacefinderOptions = { pass: 'inline1' };
 
@@ -172,12 +181,6 @@ const fill = (rules: SpacefinderRules) => {
 			}
 			insertedDynamicAds = [];
 		});
-};
-
-const onUpdate = () => {
-	stopListening();
-	const rules = getSpaceFillerRules(WINDOWHEIGHT, true);
-	void fill(rules);
 };
 
 /**

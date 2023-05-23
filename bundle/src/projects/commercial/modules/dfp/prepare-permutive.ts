@@ -1,3 +1,5 @@
+import type { Edition } from 'core/types';
+import type { Config, PageConfig, Permutive, UserConfig } from 'types/global';
 import { reportError } from '../../../../lib/report-error';
 
 interface PermutivePageConfig {
@@ -33,7 +35,7 @@ type PermutiveSchema = {
 		tone?: string[];
 	};
 	user: {
-		edition?: string;
+		edition?: Edition;
 		identity?: boolean;
 	};
 };

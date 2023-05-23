@@ -1,17 +1,15 @@
-import { adSizes, createAdSlot } from '@guardian/commercial-core';
-import {
-	computeStickyHeights,
-	insertHeightStyles,
-} from 'commercial/modules/sticky-inlines';
-import { spaceFiller } from 'common/modules/article/space-filler';
-import { commercialFeatures } from 'common/modules/commercial/commercial-features';
+import { adSizes } from 'core/ad-sizes';
+import { createAdSlot } from 'core/create-ad-slot';
+import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
+import { spaceFiller } from 'projects/common/modules/article/space-filler';
+import { commercialFeatures } from 'projects/common/modules/commercial/commercial-features';
 import type {
 	SpacefinderItem,
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'common/modules/spacefinder';
-import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
+} from 'projects/common/modules/spacefinder';
 import fastdom from '../../../../../lib/fastdom-promise';
+import { computeStickyHeights, insertHeightStyles } from '../../sticky-inlines';
 import { defineSlot } from '../define-slot';
 
 type SlotName = Parameters<typeof createAdSlot>[0];

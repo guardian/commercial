@@ -14,14 +14,24 @@
 	"files": [
 		"dist"
 	],
+	"main": "dist/cjs/core/index.js",
+	"module": "dist/esm/core/index.js",
 	"scripts": {
-		"build": "webpack -c webpack.config.prod.js",
+		"build": "npm-run-all clean --parallel compile:core:* build:prod",
 		"build:dev": "webpack -c webpack.config.dev.js",
+		"build:prod": "webpack -c webpack.config.prod.js",
+		"clean": "rm -rf dist",
+		"compile:core:common": "tsc --project ./tsconfig.core.json --outDir ./dist/cjs --module CommonJS",
+		"compile:core:esm": "tsc --project ./tsconfig.core.json --outDir ./dist/esm",
+		"lint": "eslint .",
+		"precommit:lint": "lint-staged",
+		"prepush:test": "jest --verbose --runInBand --onlyChanged",
+		"prettier:check": "prettier . --check --cache",
+		"prettier:fix": "prettier . --write --cache",
 		"serve": "OVERRIDE_BUNDLE=true yarn webpack-dev-server -c ./webpack.config.dev.js",
 		"test": "jest",
-		"lint": "eslint .",
-		"prettier:check": "prettier . --check --cache",
-		"prettier:fix": "prettier . --write --cache"
+		"tsc": "tsc --noEmit",
+		"validate": "npm-run-all tsc lint test build"
 	},
 	"prettier": "@guardian/prettier",
 	"devDependencies": {
@@ -45,6 +55,7 @@
 		"@types/googletag": "~1.1.3",
 		"@types/jest": "^29.4.0",
 		"@types/lodash-es": "^4.17.6",
+		"@types/node": "18.15.0",
 		"@types/webpack-env": "^1.18.0",
 		"@typescript-eslint/eslint-plugin": "^5.5.0",
 		"@typescript-eslint/parser": "^5.5.0",

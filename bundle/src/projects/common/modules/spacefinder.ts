@@ -2,7 +2,7 @@
 
 import { log } from '@guardian/libs';
 import { memoize } from 'lodash-es';
-import { amIUsed } from 'commercial/am-i-used';
+import { amIUsed } from 'projects/commercial/am-i-used';
 import fastdom from '../../../lib/fastdom-promise';
 import { init as initSpacefinderDebugger } from './spacefinder-debug-tools';
 
@@ -51,13 +51,13 @@ type SpacefinderRules = {
 
 type SpacefinderWriter = (paras: HTMLElement[]) => Promise<void>;
 
+type SpacefinderPass = 'inline1' | 'inline2' | 'im' | 'carrot';
+
 type SpacefinderOptions = {
 	waitForImages?: boolean;
 	waitForInteractives?: boolean;
 	pass: SpacefinderPass;
 };
-
-type SpacefinderPass = 'inline1' | 'inline2' | 'im' | 'carrot';
 
 type ExcludedItem = SpacefinderItem | HTMLElement;
 

@@ -1,21 +1,24 @@
-import {
-	concatSizeMappings,
-	createAdSize,
-	slotSizeMappings,
-} from '@guardian/commercial-core';
-import type { AdSize, SizeMapping, SlotName } from '@guardian/commercial-core';
 import { breakpoints as sourceBreakpoints } from '@guardian/source-foundations';
+import type { AdSize, SizeMapping, SlotName } from 'core/ad-sizes';
+import { createAdSize, slotSizeMappings } from 'core/ad-sizes';
+import { concatSizeMappings } from 'core/create-ad-slot';
 import fastdom from '../../../../lib/fastdom-promise';
+import type { HeaderBiddingSize } from '../header-bidding/prebid-types';
 import { breakpointNameToAttribute } from './breakpoint-name-to-attribute';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';
 
 const stringToTuple = (size: string): [number, number] => {
 	const dimensions = size.split(',', 2).map(Number);
 
-	// Return an outOfPage tuple if the string is not `{number},{number}`
-	if (dimensions.length !== 2 || dimensions.some((n) => isNaN(n))) {
+	// Return an outOfPage tuple if the string is not `[number, number]`
+	if (
+		dimensions.length !== 2 ||
+		!dimensions[0] ||
+		!dimensions[1] ||
+		dimensions.some((n) => isNaN(n))
+	) {
 		return [0, 0];
-	} // adSizes.outOfPage
+	}
 
 	return [dimensions[0], dimensions[1]];
 };
@@ -54,10 +57,6 @@ const getSlotSizeMappingsFromDataAttrs = (
 
 const isSlotName = (slotName: string): slotName is SlotName => {
 	return slotName in slotSizeMappings;
-};
-
-const isAdSize = (size: Advert['size']): size is AdSize => {
-	return size !== null && size !== 'fluid';
 };
 
 const getSlotSizeMapping = (name: string): SizeMapping => {
@@ -192,6 +191,10 @@ class Advert {
 		}
 	}
 }
+
+const isAdSize = (size: Advert['size']): size is AdSize => {
+	return size !== null && size !== 'fluid';
+};
 
 export { Advert, isAdSize };
 

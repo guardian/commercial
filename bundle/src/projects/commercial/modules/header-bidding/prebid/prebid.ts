@@ -1,14 +1,24 @@
-import type { AdSize, PageTargeting } from '@guardian/commercial-core';
-import { createAdSize, EventTimer, pubmatic } from '@guardian/commercial-core';
-import { PREBID_TIMEOUT } from '@guardian/commercial-core/dist/esm/constants';
 import { onConsent } from '@guardian/consent-management-platform';
 import type { Framework } from '@guardian/consent-management-platform/dist/types';
 import { isString, log } from '@guardian/libs';
 import { flatten } from 'lodash-es';
-import type { Advert } from 'commercial/modules/dfp/Advert';
-import { getPageTargeting } from 'common/modules/commercial/build-page-targeting';
+import { pubmatic } from 'core/__vendor/pubmatic';
+import type { AdSize } from 'core/ad-sizes';
+import { createAdSize } from 'core/ad-sizes';
+import { PREBID_TIMEOUT } from 'core/constants/prebid-timeout';
+import { EventTimer } from 'core/event-timer';
+import type { PageTargeting } from 'core/targeting/build-page-targeting';
+import type { Advert } from 'projects/commercial/modules/dfp/Advert';
+import { getPageTargeting } from 'projects/common/modules/commercial/build-page-targeting';
 import { dfpEnv } from '../../dfp/dfp-env';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
+import type {
+	BidderCode,
+	HeaderBiddingSlot,
+	PrebidBid,
+	PrebidMediaTypes,
+	SlotFlatMap,
+} from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';
 import { stripDfpAdPrefixFrom } from '../utils';
 import { bids } from './bid-config';
@@ -132,6 +142,28 @@ type BidderSettings = {
 	ozone?: Partial<BidderSetting>;
 };
 
+class PrebidAdUnit {
+	code: string | null | undefined;
+	bids: PrebidBid[] | null | undefined;
+	mediaTypes: PrebidMediaTypes | null | undefined;
+
+	constructor(
+		advert: Advert,
+		slot: HeaderBiddingSlot,
+		pageTargeting: PageTargeting,
+	) {
+		this.code = advert.id;
+		this.bids = bids(advert.id, slot.sizes, pageTargeting);
+		this.mediaTypes = { banner: { sizes: slot.sizes } };
+		advert.headerBiddingSizes = slot.sizes;
+		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
+	}
+
+	isEmpty() {
+		return this.code == null;
+	}
+}
+
 declare global {
 	interface Window {
 		pbjs?: {
@@ -197,28 +229,6 @@ const timeoutBuffer = 400;
  * The amount of time reserved for the auction
  */
 const bidderTimeout = PREBID_TIMEOUT;
-
-class PrebidAdUnit {
-	code: string | null | undefined;
-	bids: PrebidBid[] | null | undefined;
-	mediaTypes: PrebidMediaTypes | null | undefined;
-
-	constructor(
-		advert: Advert,
-		slot: HeaderBiddingSlot,
-		pageTargeting: PageTargeting,
-	) {
-		this.code = advert.id;
-		this.bids = bids(advert.id, slot.sizes, pageTargeting);
-		this.mediaTypes = { banner: { sizes: slot.sizes } };
-		advert.headerBiddingSizes = slot.sizes;
-		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
-	}
-
-	isEmpty() {
-		return this.code == null;
-	}
-}
 
 let requestQueue: Promise<void> = Promise.resolve();
 let initialised = false;

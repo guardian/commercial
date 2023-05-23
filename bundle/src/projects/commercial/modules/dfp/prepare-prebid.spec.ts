@@ -5,7 +5,7 @@ import {
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type { TCFv2ConsentState } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import { log } from '@guardian/libs';
-import { isInCanada } from 'common/modules/commercial/geo-utils';
+import { isInCanada } from 'projects/common/modules/commercial/geo-utils';
 import { commercialFeatures } from '../../../common/modules/commercial/commercial-features';
 import { prebid } from '../header-bidding/prebid/prebid';
 import { dfpEnv } from './dfp-env';

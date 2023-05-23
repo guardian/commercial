@@ -1,6 +1,6 @@
-import { initTrackLabsContainer } from '@guardian/commercial-core';
 import { onConsent } from '@guardian/consent-management-platform';
 import { log } from '@guardian/libs';
+import { initTrackLabsContainer } from 'core/track-labs-container';
 
 /**
  * Initialise labs container tracking if user has consented to relevant purposes.

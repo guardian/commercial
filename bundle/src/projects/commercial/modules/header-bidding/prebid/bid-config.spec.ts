@@ -1,13 +1,14 @@
-import { createAdSize } from '@guardian/commercial-core';
-import type { PageTargeting } from '@guardian/commercial-core';
+import { createAdSize } from 'core/ad-sizes';
+import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
 	isInUk as isInUk_,
 	isInUsOrCa as isInUsOrCa_,
-} from 'common/modules/commercial/geo-utils';
+} from 'projects/common/modules/commercial/geo-utils';
 import config from '../../../../../lib/config';
 import { isInVariantSynchronous as isInVariantSynchronous_ } from '../../../../common/modules/experiments/ab';
+import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
 import {
 	containsBillboard as containsBillboard_,
 	containsDmpu as containsDmpu_,

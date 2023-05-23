@@ -2,12 +2,8 @@
 // https://jestjs.io/docs/en/configuration.html
 
 module.exports = {
+	clearMocks: true,
 	preset: 'ts-jest/presets/js-with-babel',
-	// globals: {
-	// 	'ts-jest': {
-	// 		tsconfig: 'tsconfig.test.json',
-	// 	},
-	// },
 	moduleFileExtensions: ['ts', 'tsx', 'js'],
 	testMatch: ['**/*.(test|spec).+(ts|tsx|js)'],
 	roots: ['<rootDir>/src'],
@@ -21,8 +17,6 @@ module.exports = {
 		'^svgs/(.*)$': '<rootDir>/src/__mocks__/svgMock.js',
 		'^(.*)\\.svg$': '<rootDir>/src/__mocks__/svgMock.js',
 		'^(.*)\\.html$': '<rootDir>/src/__mocks__/templateMock.js',
-		'ophan/ng': 'ophan-tracker-js',
-		'ophan/embed': 'ophan-tracker-js/build/ophan.embed',
 		'^common/(.*)$': '<rootDir>/src/projects/common/$1',
 	},
 	setupFilesAfterEnv: ['<rootDir>/jest.setupTestFrameworkScriptFile.js'],

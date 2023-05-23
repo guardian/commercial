@@ -1,5 +1,6 @@
-import type { PageTargeting } from '@guardian/commercial-core';
 import { log } from '@guardian/libs';
+import type { PageTargeting } from 'core/targeting/build-page-targeting';
+import type { PrebidIndexSite } from 'types/global';
 import { pbTestNameMap } from '../../../../../lib/url';
 import {
 	buildAppNexusTargeting,
@@ -12,6 +13,22 @@ import {
 	isInUsa,
 	isInUsOrCa,
 } from '../../../../common/modules/commercial/geo-utils';
+import type {
+	HeaderBiddingSize,
+	PrebidAdYouLikeParams,
+	PrebidAppNexusParams,
+	PrebidBid,
+	PrebidBidder,
+	PrebidImproveParams,
+	PrebidIndexExchangeParams,
+	PrebidOpenXParams,
+	PrebidOzoneParams,
+	PrebidPubmaticParams,
+	PrebidSonobiParams,
+	PrebidTripleLiftParams,
+	PrebidTrustXParams,
+	PrebidXaxisParams,
+} from '../prebid-types';
 import {
 	containsLeaderboard,
 	containsLeaderboardOrBillboard,

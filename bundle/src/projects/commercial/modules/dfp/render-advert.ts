@@ -1,4 +1,4 @@
-import { adSizes } from '@guardian/commercial-core';
+import { adSizes } from 'core/ad-sizes';
 import { $$ } from '../../../../lib/$$';
 import fastdom from '../../../../lib/fastdom-promise';
 import { reportError } from '../../../../lib/report-error';

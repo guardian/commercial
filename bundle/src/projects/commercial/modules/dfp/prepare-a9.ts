@@ -1,11 +1,11 @@
-import { a9Apstag } from '@guardian/commercial-core';
 import {
 	getConsentFor,
 	onConsent,
 } from '@guardian/consent-management-platform';
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { isInCanada } from 'common/modules/commercial/geo-utils';
+import { a9Apstag } from 'core/__vendor/a9-apstag';
+import { isInCanada } from 'projects/common/modules/commercial/geo-utils';
 import { isGoogleProxy } from '../../../../lib/detect-google-proxy';
 import { commercialFeatures } from '../../../common/modules/commercial/commercial-features';
 import { a9 } from '../header-bidding/a9/a9';

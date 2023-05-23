@@ -1,3 +1,4 @@
+import type { Edition } from '../../../../types/global';
 import { _ } from './prepare-permutive';
 
 jest.mock('../../../../lib/raven');
@@ -12,7 +13,7 @@ const testPageConfig = {
 	webPublicationDate: 1575048268000,
 	series: 'politics series',
 	isPaidContent: false,
-	edition: 'UK',
+	edition: 'UK' as Edition,
 	toneIds: 'tone/news, tone/analysis',
 };
 
@@ -216,7 +217,7 @@ describe('Generating Permutive payload utils', () => {
 					webPublicationDate: 1588334970000,
 					tones: 'Advertisement Features', // ignored
 					toneIds: 'tone/advertisement-features,tone/minutebyminute',
-					edition: 'UK',
+					edition: 'UK' as Edition,
 				},
 				ophan: testOphanConfig,
 			};
@@ -237,7 +238,7 @@ describe('Generating Permutive payload utils', () => {
 				}),
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- the assertion is any for some reason
 				user: expect.objectContaining({
-					edition: 'UK',
+					edition: 'UK' as Edition,
 					identity: false,
 				}),
 			};
@@ -252,7 +253,7 @@ describe('Generating Permutive payload utils', () => {
 			const config2 = {
 				page: {
 					...testPageConfig,
-					edition: 'UK',
+					edition: 'UK' as Edition,
 				},
 				ophan: testOphanConfig,
 			};

@@ -44,7 +44,7 @@ describe('getLocale', () => {
 					edition: 'AU',
 				} as unknown as typeof window.guardian.config.page,
 			} as unknown as typeof window.guardian.config,
-		};
+		} as unknown as typeof window.guardian;
 
 		const locale = getLocale();
 

@@ -4,6 +4,7 @@ import {
 } from '@guardian/consent-management-platform';
 import { loadScript, log } from '@guardian/libs';
 import { once } from 'lodash-es';
+import type { ComscoreGlobals } from 'types/global';
 import { commercialFeatures } from '../../common/modules/commercial/commercial-features';
 
 const comscoreSrc = '//sb.scorecardresearch.com/cs/6035250/beacon.js';

@@ -1,5 +1,6 @@
 import { log } from '@guardian/libs';
 import fastdom from 'fastdom';
+import type { OptOutFilledCallback } from 'types/global';
 import { renderConsentlessAdvertLabel } from './render-advert-label';
 
 /**

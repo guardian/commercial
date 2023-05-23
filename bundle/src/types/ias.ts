@@ -1,4 +1,4 @@
-type IasSlotTargeting = Record<string, string[]>;
+export type IasSlotTargeting = Record<string, string[]>;
 
 export interface IasTargeting {
 	brandSafety: Record<string, string>;

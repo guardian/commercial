@@ -1,6 +1,6 @@
-import { createAdSize } from '@guardian/commercial-core';
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
+import { createAdSize } from 'core/ad-sizes';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
@@ -13,6 +13,7 @@ import {
 	isInUk,
 	isInUsOrCa,
 } from '../../../common/modules/commercial/geo-utils';
+import type { HeaderBiddingSize } from './prebid-types';
 
 type StringManipulation = (a: string, b: string) => string;
 type RegExpRecords = Record<string, RegExp | undefined>;
