@@ -123,6 +123,7 @@ type BidderSetting<T = Record<string, unknown>> = {
 	bidCpmAdjustment: (n: number) => number;
 	suppressEmptyKeys: boolean;
 	sendStandardTargeting: boolean;
+	storageAllowed: boolean;
 };
 
 type BidderSettings = {
@@ -130,6 +131,7 @@ type BidderSettings = {
 	xhb?: Partial<BidderSetting<XaxisBidResponse>>;
 	improvedigital?: Partial<BidderSetting>;
 	ozone?: Partial<BidderSetting>;
+	criteo?: Partial<BidderSetting>;
 };
 
 declare global {
@@ -302,6 +304,10 @@ const initialise = (window: Window, framework: Framework = 'tcfv2'): void => {
 	}
 
 	if (window.guardian.config.switches.prebidCriteo) {
+		window.pbjs.bidderSettings.criteo = {
+			storageAllowed: true,
+		};
+
 		pbjsConfig.criteo = {
 			fastBidVersion: 'latest',
 		};
