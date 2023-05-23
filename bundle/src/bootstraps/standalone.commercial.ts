@@ -36,6 +36,7 @@ import { init as prepareGoogletag } from '../projects/commercial/modules/dfp/pre
 import { initPermutive } from '../projects/commercial/modules/dfp/prepare-permutive';
 import { init as preparePrebid } from '../projects/commercial/modules/dfp/prepare-prebid';
 import { init as initRedplanet } from '../projects/commercial/modules/dfp/redplanet';
+import { init as initFrontsBannerAdverts } from '../projects/commercial/modules/fronts-banner-adverts';
 import { init as initHighMerch } from '../projects/commercial/modules/high-merch';
 import { init as initIpsosMori } from '../projects/commercial/modules/ipsos-mori';
 import { init as initLiveblogAdverts } from '../projects/commercial/modules/liveblog-adverts';
@@ -51,6 +52,8 @@ import { init as initTrackLabsContainer } from '../projects/commercial/modules/t
 import { init as initTrackScrollDepth } from '../projects/commercial/modules/track-scroll-depth';
 import { commercialFeatures } from '../projects/common/modules/commercial/commercial-features';
 import type { Modules } from './types';
+
+console.log('HERE I am');
 
 const { isDotcomRendering, frontendAssetsFullURL, switches, page } =
 	window.guardian.config;
@@ -104,6 +107,7 @@ if (!commercialFeatures.adFree) {
 		['cm-articleAsideAdverts', initArticleAsideAdverts],
 		['cm-articleBodyAdverts', initArticleBodyAdverts],
 		['cm-liveblogAdverts', initLiveblogAdverts],
+		['cm-frontsBannerAdverts', initFrontsBannerAdverts],
 		['cm-thirdPartyTags', initThirdPartyTags],
 		['cm-redplanet', initRedplanet],
 		['cm-paidContainers', paidContainers],
