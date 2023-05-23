@@ -179,7 +179,7 @@ const recordCommercialMetrics = () => {
 const bootCommercial = async (): Promise<void> => {
 	log(
 		'commercial',
-		'📦 standalone.commercial.ts LOOK I WAS DEPLOYED WITH RIFF RAFF V3',
+		'📦 standalone.commercial.ts LOOK I WAS DEPLOYED WITH RIFF RAFF V4 in dev time',
 		__webpack_public_path__,
 	);
 
