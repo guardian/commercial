@@ -57,4 +57,4 @@ const amIUsed = (
 	window.navigator.sendBeacon(endpoint, JSON.stringify(event));
 };
 
-export { amIUsed, AmIUsedLoggingEvent };
+export { amIUsed, type AmIUsedLoggingEvent };

@@ -5,6 +5,7 @@
 		"baseUrl": "src",
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
+		"isolatedModules": true,
 		"jsx": "react",
 		"lib": [
 			"DOM",
