@@ -10,10 +10,11 @@
     "skipLibCheck": true,
     "strict": true,
     "paths": {
-      "common/*": ["../static/src/javascripts/projects/common/*"],
-      "lib/*": ["../static/src/javascripts/lib/*"],
-      "types/*": ["../static/src/javascripts/types/*"]
+      "common/*": ["../bundle/src/projects/common/*"],
+      "lib/*": ["../bundle/src/lib/*"],
+      "projects/*": ["../bundle/src/projects/*"],
+      "types/*": ["../bundle/src/types/*"]
     }
   },
-  "include": ["./**/*.ts", "../static/src/javascripts/types/global.d.ts"]
+  "include": ["./**/*.ts", "../bundle/src/types/global.ts"]
 }

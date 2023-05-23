@@ -6,6 +6,7 @@ export default {
       alias: {
         lib: path.resolve(__dirname, '../bundle/src/lib/'),
         common: path.resolve(__dirname, '../bundle/src/projects/common/'),
+        projects: path.resolve(__dirname, '../bundle/src/projects/'),
       },
     },
     module: {
