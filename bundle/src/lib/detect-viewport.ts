@@ -13,4 +13,4 @@ const getViewport = (): Viewport => {
 	};
 };
 
-export { getViewport, Viewport };
+export { getViewport, type Viewport };
