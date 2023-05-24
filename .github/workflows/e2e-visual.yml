@@ -77,7 +77,7 @@ jobs:
 
       # Percy
       - name: Run Percy Visual Regression Tests
-        run: yarn visual:run
+        run: yarn e2e:visual:run
         working-directory: ./commercial/bundle
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
