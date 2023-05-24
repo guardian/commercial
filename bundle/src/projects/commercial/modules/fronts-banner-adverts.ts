@@ -61,7 +61,7 @@ export const init = async (): Promise<void> => {
 	}
 
 	const promises = sections.map(async (section, index) => {
-		await insertAdvertAboveSection(section, index + 1);
+		return insertAdvertAboveSection(section, index + 1);
 	});
 
 	await Promise.allSettled(promises);
