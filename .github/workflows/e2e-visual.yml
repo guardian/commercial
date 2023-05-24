@@ -5,14 +5,13 @@ on:
       - main
   pull_request:
     paths:
-      - core/**
-      - bundle/**
-      - e2e/cypress/!(e2e)/**
-      - e2e/cypress.config.ts
+      - src/**
+      - cypress/!(e2e)/**
+      - cypress.config.ts
       - .github/workflows/e2e-visual.yml
 
 concurrency:
-  group: "commercial-e2e-visual-${{ github.head_ref }}"
+  group: 'commercial-e2e-visual-${{ github.head_ref }}'
   cancel-in-progress: true
 
 jobs:
@@ -29,7 +28,7 @@ jobs:
       - name: Setup Commercial node
         uses: actions/setup-node@v3
         with:
-          node-version-file: "./commercial/.nvmrc"
+          node-version-file: './commercial/.nvmrc'
 
       - name: Install Commercial dependencies
         run: yarn install --frozen-lockfile
@@ -54,7 +53,7 @@ jobs:
       - name: Setup DCR node
         uses: actions/setup-node@v3
         with:
-          node-version-file: "./dcr/.nvmrc"
+          node-version-file: './dcr/.nvmrc'
 
       - name: Install DCR dependencies
         run: yarn install --frozen-lockfile
@@ -74,18 +73,18 @@ jobs:
 
       - name: Start Commercial server
         run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
-        working-directory: ./commercial/bundle
+        working-directory: ./commercial
 
       # Percy
       - name: Run Percy Visual Regression Tests
-        run: yarn visual:run
-        working-directory: ./commercial/e2e
+        run: yarn e2e:visual:run
+        working-directory: ./commercial
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
       - name: Wait for Percy Snapshots
         run: yarn percy build:wait --verbose --fail-on-changes --project ced09b1a/commercial --commit ${{ env.LOCAL_HEAD_SHA }} --timeout 900000 --interval 5000
-        working-directory: ./commercial/e2e
+        working-directory: ./commercial
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
@@ -93,10 +92,10 @@ jobs:
         if: always()
         with:
           name: cypress-videos
-          path: ./commercial/e2e/cypress/videos
+          path: ./commercial/cypress/videos
 
       - uses: actions/upload-artifact@v2
         if: always()
         with:
           name: cypress-screenshots
-          path: ./commercial/e2e/cypress/screenshots
+          path: ./commercial/cypress/screenshots
