@@ -61,7 +61,15 @@ const isAdSize = (size: Advert['size']): size is AdSize => {
 };
 
 const getSlotSizeMapping = (name: string): SizeMapping => {
-	const slotName = name.includes('inline') ? 'inline' : name;
+	let slotName: string;
+	if (name.includes('inline')) {
+		slotName = 'inline';
+	} else if (name.includes('fronts-banner')) {
+		slotName = 'fronts-banner';
+	} else {
+		slotName = name;
+	}
+
 	if (isSlotName(slotName)) {
 		return slotSizeMappings[slotName];
 	}
