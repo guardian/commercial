@@ -14,7 +14,7 @@
 	"eslint.format.enable": true,
 	"eslint.packageManager": "yarn",
 	"eslint.workingDirectories": [
-		{ "directory": "src", "changeProcessCWD": true },
+		{ "directory": "src", "changeProcessCWD": true }
 	],
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"cSpell.words": [
