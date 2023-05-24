@@ -5,9 +5,9 @@ on:
       - main
   pull_request:
     paths:
-      - bundle/**
-      - bundle/cypress/!(e2e)/**
-      - bundle/cypress.config.ts
+      - src/**
+      - cypress/!(e2e)/**
+      - cypress.config.ts
       - .github/workflows/e2e-visual.yml
 
 concurrency:
@@ -73,18 +73,18 @@ jobs:
 
       - name: Start Commercial server
         run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
-        working-directory: ./commercial/bundle
+        working-directory: ./commercial
 
       # Percy
       - name: Run Percy Visual Regression Tests
         run: yarn e2e:visual:run
-        working-directory: ./commercial/bundle
+        working-directory: ./commercial
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
       - name: Wait for Percy Snapshots
         run: yarn percy build:wait --verbose --fail-on-changes --project ced09b1a/commercial --commit ${{ env.LOCAL_HEAD_SHA }} --timeout 900000 --interval 5000
-        working-directory: ./commercial/bundle
+        working-directory: ./commercial
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
@@ -92,10 +92,10 @@ jobs:
         if: always()
         with:
           name: cypress-videos
-          path: ./commercial/bundle/cypress/videos
+          path: ./commercial/cypress/videos
 
       - uses: actions/upload-artifact@v2
         if: always()
         with:
           name: cypress-screenshots
-          path: ./commercial/bundle/cypress/screenshots
+          path: ./commercial/cypress/screenshots

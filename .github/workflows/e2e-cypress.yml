@@ -62,20 +62,20 @@ jobs:
 
       - name: Start Commercial server
         run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
-        working-directory: ./commercial/bundle
+        working-directory: ./commercial
 
       - name: Run Cypress
         run: yarn cypress run --spec cypress/e2e/parallel-${{ matrix.group }}/*
-        working-directory: ./commercial/bundle
+        working-directory: ./commercial
 
       - uses: actions/upload-artifact@v2
         if: always()
         with:
           name: cypress-videos
-          path: commercial/bundle/cypress/videos
+          path: commercial/cypress/videos
 
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: cypress-screenshots
-          path: commercial/bundle/cypress/screenshots
+          path: commercial/cypress/screenshots
