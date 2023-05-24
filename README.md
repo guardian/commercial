@@ -1,10 +1,10 @@
-# @guardian/commercial-bundle
+# @guardian/commercial
 
 This package contains the code for the commercial bundle that is loaded on all pages on theguardian.com.
 
 ## Installation
 
-To install the package, run `yarn add @guardian/commercial-bundle`.
+To install the package, run `yarn add @guardian/commercial`.
 
 ## Development
 
@@ -63,12 +63,12 @@ Frontend will then use the local bundle instead of the one from PROD/CODE. Front
 
 ### Linking
 
-To use the production bundle locally with Frontend, run `yarn link` in the bundle directory. Then run `yarn link @guardian/commercial-bundle` in the frontend directory. Finally, start the frontend server as usual.
+To use the production bundle locally with Frontend, run `yarn link` in the bundle directory. Then run `yarn link @guardian/commercial` in the frontend directory. Finally, start the frontend server as usual.
 
 Frontend will then use the local bundle instead of the one from PROD/CODE.
 
 ### Testing on CODE
 
-To test the bundle on CODE, create a PR, add the `[beta] @guardian/commercial-bundle` label, this will release a beta version of the bundle to NPM, the exact version will be commented on your PR.
+To test the bundle on CODE, create a PR, add the `[beta] @guardian/commercial` label, this will release a beta version of the bundle to NPM, the exact version will be commented on your PR.
 
 On a branch on frontend you can update the version of the bundle to the beta version and deploy to CODE to test.
