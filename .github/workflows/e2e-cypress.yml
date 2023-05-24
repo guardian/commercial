@@ -4,7 +4,7 @@ on:
   pull_request:
 
 concurrency:
-  group: "e2e-${{ github.head_ref }}"
+  group: 'e2e-${{ github.head_ref }}'
   cancel-in-progress: true
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version-file: "./commercial/.nvmrc"
+          node-version-file: './commercial/.nvmrc'
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -41,7 +41,7 @@ jobs:
       - name: Setup DCR node
         uses: actions/setup-node@v3
         with:
-          node-version-file: "./dcr/.nvmrc"
+          node-version-file: './dcr/.nvmrc'
 
       - name: Install DCR dependencies
         run: yarn install --frozen-lockfile
