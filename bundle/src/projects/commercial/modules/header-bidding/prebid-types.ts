@@ -10,9 +10,13 @@ export type HeaderBiddingSlotName =
 	| 'mostpop'
 	| 'right'
 	| 'top-above-nav'
+	| `fronts-banner-${number}`
 	| `inline${number}`;
 
-export type HeaderBiddingSizeKey = HeaderBiddingSlotName | 'inline';
+export type HeaderBiddingSizeKey =
+	| HeaderBiddingSlotName
+	| 'inline'
+	| 'fronts-banner';
 
 export type HeaderBiddingSlot = {
 	key: HeaderBiddingSizeKey;
