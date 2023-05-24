@@ -11,7 +11,7 @@ on:
       - .github/workflows/e2e-visual.yml
 
 concurrency:
-  group: "commercial-e2e-visual-${{ github.head_ref }}"
+  group: 'commercial-e2e-visual-${{ github.head_ref }}'
   cancel-in-progress: true
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
       - name: Setup Commercial node
         uses: actions/setup-node@v3
         with:
-          node-version-file: "./commercial/.nvmrc"
+          node-version-file: './commercial/.nvmrc'
 
       - name: Install Commercial dependencies
         run: yarn install --frozen-lockfile
@@ -53,7 +53,7 @@ jobs:
       - name: Setup DCR node
         uses: actions/setup-node@v3
         with:
-          node-version-file: "./dcr/.nvmrc"
+          node-version-file: './dcr/.nvmrc'
 
       - name: Install DCR dependencies
         run: yarn install --frozen-lockfile
