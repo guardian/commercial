@@ -16,8 +16,7 @@
 		"prepare": "husky install"
 	},
 	"workspaces": [
-		"bundle",
-		"e2e"
+		"bundle"
 	],
 	"private": true,
 	"commitlint": {
@@ -26,7 +25,7 @@
 		]
 	},
 	"lint-staged": {
-		"bundle/**/*.(js|ts)": [
+		"bundle/src/**/*.(js|ts)": [
 			"yarn workspace @guardian/commercial-bundle eslint --fix",
 			"yarn workspace @guardian/commercial-bundle prettier:fix"
 		]

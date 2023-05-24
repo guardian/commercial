@@ -27,5 +27,12 @@
 		"strict": true,
 		"target": "ESNEXT"
 	},
-	"exclude": ["node_modules", "dist", "coverage", ".eslintrc.js"]
+	"exclude": [
+		"node_modules",
+		"dist",
+		"coverage",
+		".eslintrc.js",
+		"cypress",
+		"./cypress.config.js"
+	]
 }
