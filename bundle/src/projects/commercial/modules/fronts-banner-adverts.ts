@@ -1,4 +1,4 @@
-import { createAdSlot } from '@guardian/commercial-core';
+import { createAdSlot } from 'core/create-ad-slot';
 import fastdom from '../../../lib/fastdom-promise';
 import { addSlot } from './dfp/add-slot';
 
