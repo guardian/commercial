@@ -22,7 +22,7 @@ Cypress.Commands.add('getIframeBody', (selector: string) => {
 			// wraps "body" DOM element to allow
 			// chaining more Cypress commands, like ".find(...)"
 			// https://on.cypress.io/wrap
-			.then<HTMLElement>(cy.wrap)
+			.then<Element>(cy.wrap)
 	);
 });
 

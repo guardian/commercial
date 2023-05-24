@@ -1,5 +1,6 @@
 import { defineConfig } from 'cypress'
 
+// eslint-disable-next-line import/no-default-export -- cypress api
 export default defineConfig({
   chromeWebSecurity: false,
   defaultCommandTimeout: 15000,
@@ -10,6 +11,7 @@ export default defineConfig({
   video: false,
   e2e: {
     setupNodeEvents(on, config) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-var-requires -- cypress api
       return require('./cypress/plugins/index.ts').default(on, config)
     },
   },
