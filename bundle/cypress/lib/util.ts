@@ -1,4 +1,4 @@
-import type { UserFeaturesResponse } from '../../static/src/javascripts/types/membership';
+import type { UserFeaturesResponse } from '../../src/types/membership';
 
 /**
  * Generate a full URL for a given relative path and the desired stage

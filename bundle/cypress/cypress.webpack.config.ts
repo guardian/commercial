@@ -4,9 +4,9 @@ export default {
     resolve: {
       extensions: [".ts", ".js"],
       alias: {
-        lib: path.resolve(__dirname, '../bundle/src/lib/'),
-        common: path.resolve(__dirname, '../bundle/src/projects/common/'),
-        projects: path.resolve(__dirname, '../bundle/src/projects/'),
+        lib: path.resolve(__dirname, '../src/lib/'),
+        common: path.resolve(__dirname, '../src/projects/common/'),
+        projects: path.resolve(__dirname, '../src/projects/'),
       },
     },
     module: {
