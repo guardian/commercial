@@ -66,16 +66,16 @@ jobs:
 
       - name: Run Cypress
         run: yarn cypress run --spec cypress/e2e/parallel-${{ matrix.group }}/*
-        working-directory: ./commercial/e2e
+        working-directory: ./commercial/bundle
 
       - uses: actions/upload-artifact@v2
         if: always()
         with:
           name: cypress-videos
-          path: commercial/e2e/cypress/videos
+          path: commercial/bundle/cypress/videos
 
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: cypress-screenshots
-          path: commercial/e2e/cypress/screenshots
+          path: commercial/bundle/cypress/screenshots
