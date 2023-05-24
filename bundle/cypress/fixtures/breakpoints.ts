@@ -7,7 +7,7 @@ type BreakpointKeys = Pick<
 
 type BreakpointSizes = {
 	breakpoint: keyof BreakpointKeys;
-	width: typeof breakpoints[keyof BreakpointKeys];
+	width: (typeof breakpoints)[keyof BreakpointKeys];
 	height: number;
 };
 
