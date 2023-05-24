@@ -1,14 +1,14 @@
 {
-	"name": "@guardian/commercial-bundle",
-	"version": "0.0.0-workspace",
+	"name": "@guardian/commercial",
+	"version": "0.0.0",
 	"description": "Guardian advertising business logic",
-	"homepage": "https://github.com/guardian/commercial-core#readme",
+	"homepage": "https://github.com/guardian/commercial#readme",
 	"bugs": {
-		"url": "https://github.com/guardian/commercial-core/issues"
+		"url": "https://github.com/guardian/commercial/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/guardian/commercial-core.git"
+		"url": "git+https://github.com/guardian/commercial.git"
 	},
 	"license": "Apache-2.0",
 	"files": [
