@@ -11,9 +11,13 @@ declare global {
 		| 'mostpop'
 		| 'right'
 		| 'top-above-nav'
+		| `fronts-banner-${number}`
 		| `inline${number}`;
 
-	type HeaderBiddingSizeKey = HeaderBiddingSlotName | 'inline';
+	type HeaderBiddingSizeKey =
+		| HeaderBiddingSlotName
+		| 'inline'
+		| 'fronts-banner';
 
 	type HeaderBiddingSlot = {
 		key: HeaderBiddingSizeKey;
