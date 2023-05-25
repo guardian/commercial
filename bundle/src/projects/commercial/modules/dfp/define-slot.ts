@@ -1,6 +1,8 @@
 import type { SizeMapping, SlotName } from '@guardian/commercial-core';
 import { breakpoints as sourceBreakpoints } from '@guardian/source-foundations';
 import { once } from 'lodash-es';
+import { isInVariantSynchronous } from 'common/modules/experiments/ab';
+import { limitInlineMerch } from 'common/modules/experiments/tests/limit-inline-merch';
 import type { IasPETSlot, IasTargeting } from 'types/ias';
 import { getUrlVars } from '../../../../lib/url';
 import { toGoogleTagSize } from '../../../common/modules/commercial/lib/googletag-ad-size';
@@ -241,8 +243,18 @@ const defineSlot = (
 
 	const isbn = window.guardian.config.page.isbn;
 
-	if (slotTarget === 'im' && isbn) {
-		slot.setTargeting('isbn', isbn);
+	if (slotTarget === 'im') {
+		if (isbn) {
+			slot.setTargeting('isbn', isbn);
+		}
+
+		// Add additional targeting when in a variant of the AB test
+		// This allows us to target separate lines in Ad Manager
+		if (isInVariantSynchronous(limitInlineMerch, 'variant')) {
+			slot.setTargeting('ab_im', 'variant');
+		} else if (isInVariantSynchronous(limitInlineMerch, 'control')) {
+			slot.setTargeting('ab_im', 'control');
+		}
 	}
 
 	const fabricKeyValues = new Map<SlotName, string>([
