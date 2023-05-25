@@ -28,17 +28,9 @@ describe('shouldAddInlineMerchAd', () => {
 		expect(shouldAddInlineMerchAd()).toBe(true);
 	});
 
-	it('returns true when in the variant, the page is eligible, and we randomly choose not to limit the slot', () => {
-		(isInVariantSynchronous as jest.Mock).mockReturnValue(true);
-		window.guardian.config.page.hasInlineMerchandise = true;
-		jest.spyOn(global.Math, 'random').mockReturnValue(0.51);
-		expect(shouldAddInlineMerchAd()).toBe(true);
-	});
-
 	it('returns false when in the variant, the page is eligible, but we randomly choose to limit the slot', () => {
 		(isInVariantSynchronous as jest.Mock).mockReturnValue(true);
 		window.guardian.config.page.hasInlineMerchandise = true;
-		jest.spyOn(global.Math, 'random').mockReturnValue(0.49);
 		expect(shouldAddInlineMerchAd()).toBe(false);
 	});
 });
