@@ -28,7 +28,7 @@ describe('shouldAddInlineMerchAd', () => {
 		expect(shouldAddInlineMerchAd()).toBe(true);
 	});
 
-	it('returns false when in the variant, the page is eligible, but we randomly choose to limit the slot', () => {
+	it('returns false when in the variant and the page is eligible', () => {
 		(isInVariantSynchronous as jest.Mock).mockReturnValue(true);
 		window.guardian.config.page.hasInlineMerchandise = true;
 		expect(shouldAddInlineMerchAd()).toBe(false);
