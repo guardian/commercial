@@ -6,9 +6,10 @@ import { Advert } from './Advert';
 const createAdvert = (
 	adSlot: HTMLElement,
 	additionalSizes?: SizeMapping,
+	slotTargeting?: Record<string, string>,
 ): Advert | null => {
 	try {
-		const advert = new Advert(adSlot, additionalSizes);
+		const advert = new Advert(adSlot, additionalSizes, slotTargeting);
 		return advert;
 	} catch (error) {
 		const errMsg = `Could not create advert. Ad slot: ${

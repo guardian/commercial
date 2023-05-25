@@ -21,11 +21,16 @@ const addSlot = (
 	adSlot: HTMLElement,
 	forceDisplay: boolean,
 	additionalSizes?: SizeMapping,
+	slotTargeting?: Record<string, string>,
 ): Promise<Advert | null> => {
 	return new Promise((resolve) => {
 		window.googletag.cmd.push(() => {
 			if (!(adSlot.id in dfpEnv.advertIds)) {
-				const advert = createAdvert(adSlot, additionalSizes);
+				const advert = createAdvert(
+					adSlot,
+					additionalSizes,
+					slotTargeting,
+				);
 				if (advert === null) return;
 				// dynamically add ad slot
 				displayAd(advert, forceDisplay);
