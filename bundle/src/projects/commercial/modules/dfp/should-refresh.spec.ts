@@ -8,6 +8,10 @@ const outstreamSizes = [
 	adSizes.outstreamGoogleDesktop.toString(),
 ];
 
+jest.mock('common/modules/experiments/ab', () => ({
+	isInVariantSynchronous: jest.fn(),
+}));
+
 describe('shouldRefresh', () => {
 	let googleSlot: googletag.Slot;
 

@@ -5,6 +5,10 @@ import { _, defineSlot } from './define-slot';
 
 const { buildGoogletagSizeMapping, collectSizes } = _;
 
+jest.mock('common/modules/experiments/ab', () => ({
+	isInVariantSynchronous: jest.fn(),
+}));
+
 beforeEach(() => {
 	const pubAds = {
 		setTargeting: jest.fn(),
