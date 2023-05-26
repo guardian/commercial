@@ -110,6 +110,7 @@ const allowSafeFrameToExpand = (slot: googletag.Slot) => {
 const defineSlot = (
 	adSlotNode: HTMLElement,
 	sizeMapping: SizeMapping,
+	slotTargeting: Record<string, string> = {},
 ): { slot: googletag.Slot; slotReady: Promise<void> } => {
 	const slotTarget = adSlotNode.getAttribute('data-name') as SlotName;
 	const id = adSlotNode.id;
@@ -255,6 +256,10 @@ const defineSlot = (
 	if (slotFabric) {
 		slot.setTargeting('slot-fabric', slotFabric);
 	}
+
+	Object.entries(slotTargeting).forEach(([key, value]) => {
+		slot?.setTargeting(key, value);
+	});
 
 	slot.addService(window.googletag.pubads()).setTargeting('slot', slotTarget);
 

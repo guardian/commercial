@@ -103,12 +103,17 @@ class Advert {
 	constructor(
 		adSlotNode: HTMLElement,
 		additionalSizeMapping: SizeMapping = {},
+		slotTargeting: Record<string, string> = {},
 	) {
 		this.id = adSlotNode.id;
 		this.node = adSlotNode;
 		this.sizes = this.generateSizeMapping(additionalSizeMapping);
 
-		const slotDefinition = defineSlot(adSlotNode, this.sizes);
+		const slotDefinition = defineSlot(
+			adSlotNode,
+			this.sizes,
+			slotTargeting,
+		);
 
 		this.slot = slotDefinition.slot;
 		this.whenSlotReady = slotDefinition.slotReady;

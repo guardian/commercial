@@ -27,6 +27,10 @@ const insertAdvertAboveSection = async (section: string, advertNum: number) => {
 		adContainer.className = 'ad-slot-container fronts-banner-container';
 		adContainer.appendChild(ad);
 
+		const slotTargeting = {
+			'front-section': sectionNode.id,
+		};
+
 		void fastdom
 			.mutate(() => {
 				sectionNode.parentElement?.insertBefore(
@@ -35,7 +39,7 @@ const insertAdvertAboveSection = async (section: string, advertNum: number) => {
 				);
 			})
 			.then(() => {
-				void addSlot(ad, false);
+				void addSlot(ad, false, {}, slotTargeting);
 			});
 	});
 };
