@@ -1,6 +1,6 @@
 {
-	"extends": "semantic-release-monorepo",
-	"branches": "main",
+	"extends": "semantic-release",
+	"branches": ["main"],
 	"plugins": [
 		[
 			"@semantic-release/commit-analyzer",
