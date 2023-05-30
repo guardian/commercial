@@ -8,7 +8,6 @@ jest.mock('../../../../lib/raven');
 jest.mock('ophan-tracker-js', () => null);
 
 jest.mock('core/ad-sizes', () => {
-	// console.log('!!!!!!!!!!!!', slots);
 	const adSizes: typeof AdSizesType = jest.requireActual('core/ad-sizes');
 	const slotSizeMappings = adSizes.slotSizeMappings;
 	const slots = {
