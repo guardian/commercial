@@ -19,26 +19,7 @@ const inline1Html = `
 </div>
 `;
 
-const DEFAULT_CONFIG = {
-	isDotcomRendering: true,
-	ophan: { pageViewId: 'pv_id_1234567890' },
-	page: {
-		dcrCouldRender: true,
-		edition: 'UK' as const,
-		isPreview: false,
-		isSensitive: false,
-		pageId: 'world/uk',
-		section: 'uk-news',
-		videoDuration: 63,
-		webPublicationDate: 608857200,
-	},
-};
-
 describe('Create Ad Slot', () => {
-	beforeEach(() => {
-		window.guardian.config =
-			DEFAULT_CONFIG as typeof window.guardian.config;
-	});
 	it('should exist', () => {
 		expect(createAdSlot).toBeDefined();
 	});
