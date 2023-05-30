@@ -37,7 +37,7 @@ describe('trackEvent', () => {
 	it('trackEvent makes no call to ga when ga undefined', () => {
 		window.guardian = {
 			config: { ...DEFAULT_CONFIG, ...GA_CONFIG },
-		} as unknown as typeof window.guardian;
+		} as typeof window.guardian;
 		Object.defineProperty(window, 'ga', {
 			configurable: true,
 			enumerable: true,
@@ -51,7 +51,7 @@ describe('trackEvent', () => {
 	it('trackEvent makes one call to ga with tracker name from config', () => {
 		window.guardian = {
 			config: { ...DEFAULT_CONFIG, ...GA_CONFIG },
-		} as unknown as typeof window.guardian;
+		} as typeof window.guardian;
 		Object.defineProperty(window, 'ga', {
 			configurable: true,
 			enumerable: true,
@@ -72,9 +72,8 @@ describe('trackEvent', () => {
 		]);
 	});
 	it('trackEvent makes one call to ga with default tracker name when config undefined', () => {
-		window.guardian = {
-			config: DEFAULT_CONFIG,
-		} as unknown as typeof window.guardian;
+		window.guardian.config =
+			DEFAULT_CONFIG as typeof window.guardian.config;
 		Object.defineProperty(window, 'ga', {
 			configurable: true,
 			enumerable: true,

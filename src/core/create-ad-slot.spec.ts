@@ -36,9 +36,8 @@ const DEFAULT_CONFIG = {
 
 describe('Create Ad Slot', () => {
 	beforeEach(() => {
-		window.guardian.config = {
-			config: DEFAULT_CONFIG,
-		} as unknown as typeof window.guardian.config;
+		window.guardian.config =
+			DEFAULT_CONFIG as typeof window.guardian.config;
 	});
 	it('should exist', () => {
 		expect(createAdSlot).toBeDefined();

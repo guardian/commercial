@@ -3,9 +3,7 @@ import { getViewportTargeting } from './viewport';
 
 describe('Viewport targeting', () => {
 	beforeEach(() => {
-		window.guardian = {
-			config: { page: {} },
-		} as unknown as typeof window.guardian;
+		window.guardian.config = { page: {} } as typeof window.guardian.config;
 	});
 	test('Do show page skins when CMP banner will NOT show', () => {
 		const expected: ViewportTargeting = {

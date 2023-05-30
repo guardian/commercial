@@ -74,7 +74,7 @@ describe('EventTimer', () => {
 					},
 				},
 			},
-		} as unknown as typeof window.guardian;
+		} as typeof window.guardian;
 
 		EventTimer.init();
 	});

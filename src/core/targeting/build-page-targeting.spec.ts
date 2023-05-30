@@ -144,8 +144,8 @@ describe('Build Page Targeting', () => {
 					isSensitive: false,
 					webPublicationDate: 608857200,
 				} as unknown as typeof window.guardian.config.page,
-			} as unknown as typeof window.guardian.config,
-		} as unknown as typeof window.guardian;
+			},
+		} as typeof window.guardian;
 
 		setCookie({ name: 'adtest', value: 'ng101' });
 
@@ -405,7 +405,7 @@ describe('Build Page Targeting', () => {
 		window.guardian.config.page = {
 			// pageId should always be defined
 			pageId: 'football/series/footballweekly',
-		} as unknown as typeof window.guardian.config.page;
+		} as typeof window.guardian.config.page;
 		window.guardian.config.ophan = { pageViewId: '123456' };
 
 		expect(

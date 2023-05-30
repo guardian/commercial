@@ -42,9 +42,9 @@ describe('getLocale', () => {
 			config: {
 				page: {
 					edition: 'AU',
-				} as unknown as typeof window.guardian.config.page,
-			} as unknown as typeof window.guardian.config,
-		} as unknown as typeof window.guardian;
+				},
+			},
+		} as typeof window.guardian;
 
 		const locale = getLocale();
 
