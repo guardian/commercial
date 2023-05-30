@@ -1,5 +1,6 @@
 import type { AdSize, SizeMapping } from '@guardian/commercial-core';
 import { adSizes, createAdSlot } from '@guardian/commercial-core';
+import { shouldAddInlineMerchAd } from 'common/modules/commercial/inline-merch';
 import { isInEagerPrebidVariant } from 'common/modules/experiments/eager-prebid-check';
 import {
 	getCurrentBreakpoint,
@@ -417,7 +418,7 @@ const doInit = async (): Promise<boolean> => {
 
 	insertedDynamicAds = [];
 
-	const im = window.guardian.config.page.hasInlineMerchandise
+	const im = shouldAddInlineMerchAd()
 		? attemptToAddInlineMerchAd()
 		: Promise.resolve(false);
 	const inlineMerchAdded = await im;
