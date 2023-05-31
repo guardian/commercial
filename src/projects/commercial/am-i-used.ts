@@ -41,6 +41,7 @@ const amIUsed = (
 		{ name: 'function_name', value: functionName },
 		{ name: 'URL', value: window.location.href },
 	];
+
 	const event: AmIUsedLoggingEvent = {
 		label: 'commercial.amiused',
 		properties: parameters
@@ -54,7 +55,27 @@ const amIUsed = (
 			: properties,
 	};
 
-	window.navigator.sendBeacon(endpoint, JSON.stringify(event));
+	const sampling = 5 / 100;
+	const shouldTestBeacon = Math.random() <= sampling;
+
+	if (shouldTestBeacon) {
+		const beaconEvent = {
+			...event,
+			label: 'commercial.amiused.beacontest',
+		};
+		window.navigator.sendBeacon(endpoint, JSON.stringify(beaconEvent));
+
+		const fetchEvent = { ...event, label: 'commercial.amiused.fetchtest' };
+		window.onunload = function () {
+			void fetch(endpoint, {
+				method: 'POST',
+				body: JSON.stringify(fetchEvent),
+				keepalive: true,
+			});
+		};
+	} else {
+		window.navigator.sendBeacon(endpoint, JSON.stringify(event));
+	}
 };
 
 export { amIUsed, type AmIUsedLoggingEvent };
