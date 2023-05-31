@@ -1,0 +1,4 @@
+src/core/__vendor
+coverage
+dist
+README.md

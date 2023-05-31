@@ -14,8 +14,7 @@
 	"eslint.format.enable": true,
 	"eslint.packageManager": "yarn",
 	"eslint.workingDirectories": [
-		{ "directory": "core", "changeProcessCWD": true },
-		{ "directory": "bundle", "changeProcessCWD": true }
+		{ "directory": "src", "changeProcessCWD": true }
 	],
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"cSpell.words": [
@@ -35,6 +34,6 @@
 		"TCFV",
 		"viewability",
 		"Youtube"
-  ],
-  "jest.rootPath": "core"
+	],
+	"jest.rootPath": "core"
 }
