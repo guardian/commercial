@@ -54,7 +54,7 @@ describe('amIUsed', () => {
 	test('should not attach any extra properties if the property parameter is not passed', () => {
 		window.guardian.config.switches.sentinelLogger = true;
 		window.guardian.config.page.isDev = true;
-		amIUsed('moduleName', 'functionName');
+		amIUsed('moduleName', 'functionName', undefined, 0);
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 			[
 				CODE_ENDPOINT,
@@ -73,7 +73,7 @@ describe('amIUsed', () => {
 	test('should attach extra properties if they are passed as a parameter', () => {
 		window.guardian.config.switches.sentinelLogger = true;
 		window.guardian.config.page.isDev = true;
-		amIUsed('moduleName', 'functionName', { comment: 'test' });
+		amIUsed('moduleName', 'functionName', { comment: 'test' }, 0);
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 			[
 				CODE_ENDPOINT,
@@ -93,10 +93,15 @@ describe('amIUsed', () => {
 	test('should chain optional parameters to the properties array', () => {
 		window.guardian.config.switches.sentinelLogger = true;
 		window.guardian.config.page.isDev = true;
-		amIUsed('moduleName', 'functionName', {
-			conditionA: 'true',
-			conditionB: 'false',
-		});
+		amIUsed(
+			'moduleName',
+			'functionName',
+			{
+				conditionA: 'true',
+				conditionB: 'false',
+			},
+			0,
+		);
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 			[
 				CODE_ENDPOINT,
@@ -117,7 +122,7 @@ describe('amIUsed', () => {
 	test('should correctly assign commercial.amiused as a label', () => {
 		window.guardian.config.switches.sentinelLogger = true;
 		window.guardian.config.page.isDev = true;
-		amIUsed('moduleName', 'functionName');
+		amIUsed('moduleName', 'functionName', undefined, 0);
 		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
 			[
 				CODE_ENDPOINT,
