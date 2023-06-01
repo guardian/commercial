@@ -28,7 +28,7 @@ const amIUsed = (
 	parameters?: Partial<
 		Record<string, string> & Record<RestrictedKeys, never>
 	>,
-	sampling: number = 5 / 100,
+	sampling: number = 80 / 100,
 ): void => {
 	// The function will return early if the sentinelLogger switch is disabled.
 	if (!window.guardian.config.switches.sentinelLogger) return;
@@ -59,20 +59,28 @@ const amIUsed = (
 	const shouldTestBeacon = Math.random() <= sampling;
 
 	if (shouldTestBeacon) {
+		const beaconProp: Property = {
+			name: 'send_beacon_test',
+			value: 'send_beacon',
+		};
 		const beaconEvent = {
 			...event,
 			properties: {
 				...event.properties,
-				sendMethodTest: 'sendBeacon',
+				beaconProp,
 			},
 		};
 		window.navigator.sendBeacon(endpoint, JSON.stringify(beaconEvent));
 
+		const fetchProp: Property = {
+			name: 'send_beacon_test',
+			value: 'fetch',
+		};
 		const fetchEvent = {
 			...event,
 			properties: {
 				...event.properties,
-				sendMethodTest: 'fetch',
+				fetchProp,
 			},
 		};
 		window.onunload = function () {
