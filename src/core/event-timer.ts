@@ -216,6 +216,36 @@ class EventTimer {
 			) {
 				const trackLabel = `${TRACKED_SLOT_NAME}-${eventName}`;
 				this.mark(trackLabel);
+
+				if (eventName === 'slotReady') {
+					window.performance.measure(
+						`gu.commercial.${TRACKED_SLOT_NAME}-slotReady`,
+						`googletagReady`,
+						`gu.commercial.${TRACKED_SLOT_NAME}-slotReady`,
+					);
+				}
+
+				if (eventName === 'slotInitialised') {
+					window.performance.measure(
+						`gu.commercial.${TRACKED_SLOT_NAME}-slotInitialised`,
+						`gu.commercial.${TRACKED_SLOT_NAME}-slotReady`,
+						`gu.commercial.${TRACKED_SLOT_NAME}-slotInitialised`,
+					);
+				}
+
+				if (eventName === 'adOnPage') {
+					window.performance.measure(
+						`gu.commercial.${TRACKED_SLOT_NAME}-slotFullRender`,
+						`gu.commercial.googletagReady`,
+						`gu.commercial.${trackLabel}`,
+					);
+
+					window.performance.measure(
+						`gu.commercial.${TRACKED_SLOT_NAME}-slotDisplay`,
+						`gu.commercial.${TRACKED_SLOT_NAME}-slotInitialised`,
+						`gu.commercial.${trackLabel}`,
+					);
+				}
 				this.trackInGA(eventName, trackLabel);
 				this.triggers[TRACKED_SLOT_NAME][
 					eventName as keyof SlotEventStatus

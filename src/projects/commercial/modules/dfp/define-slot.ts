@@ -115,6 +115,10 @@ const defineSlot = (
 	const slotTarget = adSlotNode.getAttribute('data-name') as SlotName;
 	const id = adSlotNode.id;
 
+	if (slotTarget === 'top-above-nav') {
+		window.performance.mark(`${slotTarget}: defineSlot`);
+	}
+
 	const googletagSizeMapping = buildGoogletagSizeMapping(sizeMapping);
 	if (!googletagSizeMapping) {
 		throw new Error(
@@ -253,6 +257,18 @@ const defineSlot = (
 			});
 
 		slotReady = Promise.race([iasTimeout(), iasDataPromise]);
+
+		void slotReady.then(() => {
+			if (slotTarget === 'top-above-nav') {
+				window.performance.mark(`${slotTarget}: ias-loaded`);
+
+				window.performance.measure(
+					`${slotTarget}: defineSlot -> ias-loaded`,
+					`${slotTarget}: defineSlot`,
+					`${slotTarget}: ias-loaded`,
+				);
+			}
+		});
 	}
 
 	const isbn = window.guardian.config.page.isbn;
