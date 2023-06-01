@@ -28,6 +28,7 @@ const amIUsed = (
 	parameters?: Partial<
 		Record<string, string> & Record<RestrictedKeys, never>
 	>,
+	sampling: number = 80 / 100,
 ): void => {
 	// The function will return early if the sentinelLogger switch is disabled.
 	if (!window.guardian.config.switches.sentinelLogger) return;
@@ -41,6 +42,7 @@ const amIUsed = (
 		{ name: 'function_name', value: functionName },
 		{ name: 'URL', value: window.location.href },
 	];
+
 	const event: AmIUsedLoggingEvent = {
 		label: 'commercial.amiused',
 		properties: parameters
@@ -54,7 +56,43 @@ const amIUsed = (
 			: properties,
 	};
 
-	window.navigator.sendBeacon(endpoint, JSON.stringify(event));
+	const shouldTestBeacon = Math.random() <= sampling;
+
+	if (shouldTestBeacon) {
+		const beaconProp: Property = {
+			name: 'send_beacon_test',
+			value: 'send_beacon',
+		};
+		const beaconEvent = {
+			...event,
+			properties: {
+				...event.properties,
+				beaconProp,
+			},
+		};
+		window.navigator.sendBeacon(endpoint, JSON.stringify(beaconEvent));
+
+		const fetchProp: Property = {
+			name: 'send_beacon_test',
+			value: 'fetch',
+		};
+		const fetchEvent = {
+			...event,
+			properties: {
+				...event.properties,
+				fetchProp,
+			},
+		};
+		window.onunload = function () {
+			void fetch(endpoint, {
+				method: 'POST',
+				body: JSON.stringify(fetchEvent),
+				keepalive: true,
+			});
+		};
+	} else {
+		window.navigator.sendBeacon(endpoint, JSON.stringify(event));
+	}
 };
 
 export { amIUsed, type AmIUsedLoggingEvent };
