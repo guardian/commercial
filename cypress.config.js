@@ -4,6 +4,7 @@ import { defineConfig } from 'cypress';
 export default defineConfig({
 	chromeWebSecurity: false,
 	defaultCommandTimeout: 15000,
+	blockHosts: ['ophan.theguardian.com'],
 	retries: {
 		runMode: 2,
 		openMode: 0,
