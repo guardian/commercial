@@ -27,14 +27,14 @@ describe('amIUsed', () => {
 
 	test('should send an event when switches.sentinelLogger is true', () => {
 		window.guardian.config.switches.sentinelLogger = true;
-		amIUsed('moduleName', 'functionName');
+		amIUsed('moduleName', 'functionName', undefined, 0);
 		expect(navigator.sendBeacon).toHaveBeenCalledTimes(1);
 	});
 
 	test('should use the correct logging CODE endpoint', () => {
 		window.guardian.config.switches.sentinelLogger = true;
 		window.guardian.config.page.isDev = true;
-		amIUsed('moduleName', 'functionName');
+		amIUsed('moduleName', 'functionName', undefined, 0);
 		expect(navigator.sendBeacon).toHaveBeenCalledWith(
 			CODE_ENDPOINT,
 			expect.any(String),
@@ -44,7 +44,7 @@ describe('amIUsed', () => {
 	test('should use the correct logging DEV endpoint', () => {
 		window.guardian.config.switches.sentinelLogger = true;
 		window.guardian.config.page.isDev = false;
-		amIUsed('moduleName', 'functionName');
+		amIUsed('moduleName', 'functionName', undefined, 0);
 		expect(navigator.sendBeacon).toHaveBeenCalledWith(
 			PROD_ENDPOINT,
 			expect.any(String),
