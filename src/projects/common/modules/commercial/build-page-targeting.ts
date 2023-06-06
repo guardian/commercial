@@ -3,6 +3,7 @@ import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import { buildPageTargeting } from 'core/targeting/build-page-targeting';
+import { amIUsed } from 'projects/commercial/am-i-used';
 import { getSynchronousParticipations } from 'projects/common/modules/experiments/ab';
 import { removeFalseyValues } from '../../../commercial/modules/header-bidding/utils';
 import { commercialFeatures } from './commercial-features';
@@ -57,6 +58,8 @@ const getPageTargeting = (consentState: ConsentState): PageTargeting => {
 	page.pageAdTargeting = pageTargeting;
 
 	log('commercial', 'pageTargeting object:', pageTargeting);
+
+	amIUsed('build-page-targeting.ts', 'getPageTargeting');
 
 	return pageTargeting;
 };
