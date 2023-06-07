@@ -28,8 +28,7 @@ const amIUsed = (
 	parameters?: Partial<
 		Record<string, string> & Record<RestrictedKeys, never>
 	>,
-	//set to 100 while testing
-	sampling: number = 100 / 100,
+	sampling: number = 1 / 100,
 ): void => {
 	// The function will return early if the sentinelLogger switch is disabled.
 	if (!window.guardian.config.switches.sentinelLogger) return;
