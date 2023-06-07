@@ -45,7 +45,7 @@ jobs:
         run: yarn build
 
       - name: Grab last version
-        run: yarn version --new-version $(git tag -l | grep @guardian/commercial-v\* |  sed -E 's|.*([0-9]+\.[0-9]+\.[0-9]+(-beta.[0-9]+)?)|\1|g' | tail -1) --no-git-tag-version
+        run: yarn version --new-version $(git tag -l | grep v\* |  sed -E 's|.*([0-9]+\.[0-9]+\.[0-9]+(-beta.[0-9]+)?)|\1|g' | tail -1) --no-git-tag-version
 
       - name: Bump prerelease version
         run: yarn version --prerelease --preid beta --no-git-tag-version
