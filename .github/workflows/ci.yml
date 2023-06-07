@@ -3,9 +3,9 @@ on:
   push:
     # branches:
     #   - 'main'
-  # pull_request:
-  #   branches-ignore:
-  #     - 'gh-pages'
+  pull_request:
+    branches-ignore:
+      - 'gh-pages'
 
 permissions: write-all
 
@@ -90,7 +90,7 @@ jobs:
         run: yarn build
 
       - name: Save build
-        # if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3
         with:
           name: dist
@@ -99,7 +99,7 @@ jobs:
   release:
     name: Release
     needs: [build, test, lint, types]
-    # if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
