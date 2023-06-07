@@ -1,6 +1,4 @@
 src/core/__vendor
 coverage
 dist
-.changeset
 README.md
-CHANGELOG.md
