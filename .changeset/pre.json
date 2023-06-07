@@ -1,0 +1,10 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "@guardian/commercial": "8.0.1"
+  },
+  "changesets": [
+    "weak-mayflies-chew"
+  ]
+}
