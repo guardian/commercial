@@ -110,7 +110,7 @@
 	},
 	"dependencies": {
 		"@guardian/ab-core": "^4.0.0",
-		"@guardian/consent-management-platform": "^13.0.2",
+		"@guardian/consent-management-platform": "^13.2.0",
 		"@guardian/core-web-vitals": "^4.0.0",
 		"@guardian/libs": "^14.0.0",
 		"@guardian/source-foundations": "^10.0.1",
