@@ -1,38 +1,10 @@
-import { trackEvent } from './google-analytics';
 import type { ConnectionType } from './types';
 
-class Event {
-	name: string;
-	ts: DOMHighResTimeStamp;
-
-	constructor(name: string, mark: PerformanceEntry) {
-		this.name = name;
-		this.ts = mark.startTime;
-	}
-}
-interface GALogEvent {
-	timingVariable: string;
-	timingLabel?: string;
-}
-
-interface GAConfig {
-	logEvents: GALogEvent[];
-}
-
-interface SlotEventStatus {
-	prebidStart: boolean;
-	prebidEnd: boolean;
-	slotInitialised: boolean;
-	slotReady: boolean;
-	adOnPage: boolean;
-}
-
-interface PageEventStatus {
-	commercialStart: boolean;
-	commercialExtraModulesLoaded: boolean;
-	commercialBaseModulesLoaded: boolean;
-	commercialModulesLoaded: boolean;
-}
+const supportsPerformanceAPI =
+	typeof window !== 'undefined' &&
+	typeof window.performance !== 'undefined' &&
+	typeof window.performance.mark === 'function' &&
+	typeof window.performance.measure === 'function';
 
 interface EventTimerProperties {
 	type?: ConnectionType;
@@ -49,20 +21,62 @@ interface EventTimerProperties {
 	labsUrl?: string;
 }
 
+const enum TrackedSlots {
+	TopAboveNav = 'top-above-nav',
+	// Inline1 = 'inline1',
+	// Inline2 = 'inline2',
+}
+
+enum GlobalCommercialEvents {
+	CommercialStart = 'commercialStart',
+	CommercialExtraModulesLoaded = 'commercialExtraModulesLoaded',
+	CommercialBaseModulesLoaded = 'commercialBaseModulesLoaded',
+	CommercialModulesLoaded = 'commercialModulesLoaded',
+	// CommercialStart = 'commercialStart',
+	// GoogletagInitStart = 'googletagInitStart',
+	// GoogletagInitEnd = 'googletagInitEnd',
+}
+
+const enum CommercialSlotEvents {
+	PrebidStart = 'prebidStart',
+	PrebidEnd = 'prebidEnd',
+	SlotInitialised = 'slotInitialised',
+	SlotReady = 'slotReady',
+	AdOnPage = 'adOnPage',
+	// AdRenderStart = 'adRenderStart',
+	// DefineAdSlotsStart = 'defineAdSlotsStart',
+	// DefineAdSlotsEnd = 'defineAdSlotsEnd',
+	// PrebidStart = 'prebidStart',
+	// PrebidAuctionStart = 'prebidAuctionStart',
+	// PrebidAuctionEnd = 'prebidAuctionEnd',
+	// PrebidEnd = 'prebidEnd',
+	// LoadAdStart = 'loadAdStart',
+	// LoadAdEnd = 'loadAdEnd',
+	// AdRenderEnd = 'adRenderEnd',
+}
+
+enum ExternalEvents {
+	CmpInit = 'cmp-init',
+	CmpUiDisplayed = 'cmp-ui-displayed',
+	CmpGotConsent = 'cmp-got-consent',
+}
+
+type EventName =
+	| `${TrackedSlots}-${CommercialSlotEvents}`
+	| `${GlobalCommercialEvents}`;
+
+type LongEventName = `gu.commercial.${EventName}`;
+
+const isGlobalEvent = (
+	eventName: GlobalCommercialEvents | CommercialSlotEvents,
+): eventName is GlobalCommercialEvents =>
+	Object.values(GlobalCommercialEvents).includes(
+		eventName as GlobalCommercialEvents,
+	);
+
 class EventTimer {
-	private _events: Event[];
-	private static _externallyDefinedEventNames = [
-		'cmp-init',
-		'cmp-ui-displayed',
-		'cmp-got-consent',
-	];
-	startTS: DOMHighResTimeStamp;
-	triggers: {
-		first: SlotEventStatus;
-		'top-above-nav': SlotEventStatus;
-		page: PageEventStatus;
-	};
-	gaConfig: GAConfig;
+	private _events: Map<LongEventName, PerformanceEntry>;
+
 	properties: EventTimerProperties;
 	/**
 	 * Initialise the EventTimer class on page.
@@ -86,77 +100,36 @@ class EventTimer {
 		return this.init();
 	}
 
-	/**
-	 * Returns all commercial timers. CMP-related timers are not tracked
-	 * by EventTimer so they need to be concatenated to EventTimer's private events array.
-	 */
-	public get events(): Event[] {
+	private get externalEvents(): Map<ExternalEvents, PerformanceEntry> {
 		return typeof window.performance !== 'undefined' &&
 			'getEntriesByName' in window.performance
-			? [
-					...this._events,
-					...EventTimer._externallyDefinedEventNames
-						.map((eventName) => {
+			? new Map(
+					Object.keys(ExternalEvents)
+						.map((eventName): [string, PerformanceEntry] => {
 							const entry =
 								window.performance.getEntriesByName(
 									eventName,
 								)[0];
-							// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- possibly undefined
-							return entry
-								? new Event(eventName, entry)
-								: undefined;
+
+							return [eventName, entry];
 						})
 						.filter(
-							(entry): entry is Event => entry instanceof Event,
+							([, entry]) => entry instanceof PerformanceEntry,
 						),
-			  ]
-			: this._events;
+			  )
+			: new Map();
+	}
+
+	/**
+	 * Returns all commercial timers. CMP-related timers are not tracked
+	 * by EventTimer so they need to be concatenated to EventTimer's private events array.
+	 */
+	public get events() {
+		return new Map([...this._events, ...this.externalEvents]);
 	}
 
 	private constructor() {
-		this._events = [];
-		this.startTS = window.performance.now();
-		this.triggers = {
-			first: {
-				slotReady: false,
-				prebidStart: false,
-				prebidEnd: false,
-				slotInitialised: false,
-				adOnPage: false,
-			},
-			'top-above-nav': {
-				slotReady: false,
-				prebidStart: false,
-				prebidEnd: false,
-				slotInitialised: false,
-				adOnPage: false,
-			},
-			page: {
-				commercialStart: false,
-				commercialExtraModulesLoaded: false,
-				commercialBaseModulesLoaded: false,
-				commercialModulesLoaded: false,
-			},
-		};
-
-		this.gaConfig = {
-			logEvents: [
-				{
-					timingVariable: 'slotReady',
-				},
-				{
-					timingVariable: 'slotInitialised',
-				},
-				{
-					timingVariable: 'commercialStart',
-					timingLabel: 'Commercial start parse time',
-				},
-				{
-					timingVariable: 'commercialModulesLoaded',
-					timingLabel: 'Commercial end parse time',
-				},
-			],
-		};
+		this._events = new Map();
 
 		this.properties = {};
 
@@ -169,7 +142,7 @@ class EventTimer {
 	}
 
 	/**
-	 * Adds an event timer property
+	 * Adds a non timer measurement
 	 *
 	 * @param {string} name - the property's name
 	 * @param value - the property's value
@@ -189,93 +162,29 @@ class EventTimer {
 	 * @param {string} eventName - The short name applied to the mark
 	 * @param {origin} [origin=page] - Either 'page' (default) or the name of the slot
 	 */
-	trigger(eventName: string, origin = 'page'): void {
-		const TRACKED_SLOT_NAME = 'top-above-nav';
-		if (
-			origin === 'page' &&
-			!this.triggers.page[eventName as keyof PageEventStatus]
-		) {
+	trigger(
+		eventName: GlobalCommercialEvents | CommercialSlotEvents,
+		origin?: TrackedSlots,
+	): void {
+		if (isGlobalEvent(eventName)) {
 			this.mark(eventName);
-			this.trackInGA(eventName);
-			this.triggers.page[eventName as keyof PageEventStatus] = true;
-			return;
-		}
-
-		if (!this.triggers.first[eventName as keyof SlotEventStatus]) {
-			const trackLabel = `first-${eventName}`;
-			this.mark(trackLabel);
-			this.trackInGA(eventName, trackLabel);
-			this.triggers.first[eventName as keyof SlotEventStatus] = true;
-		}
-
-		if (origin === TRACKED_SLOT_NAME) {
-			if (
-				!this.triggers[TRACKED_SLOT_NAME][
-					eventName as keyof SlotEventStatus
-				]
-			) {
-				const trackLabel = `${TRACKED_SLOT_NAME}-${eventName}`;
-				this.mark(trackLabel);
-
-				if (eventName === 'slotReady') {
-					window.performance.measure(
-						`gu.commercial.${TRACKED_SLOT_NAME}-slotReady`,
-						`googletagReady`,
-						`gu.commercial.${TRACKED_SLOT_NAME}-slotReady`,
-					);
-				}
-
-				if (eventName === 'slotInitialised') {
-					window.performance.measure(
-						`gu.commercial.${TRACKED_SLOT_NAME}-slotInitialised`,
-						`gu.commercial.${TRACKED_SLOT_NAME}-slotReady`,
-						`gu.commercial.${TRACKED_SLOT_NAME}-slotInitialised`,
-					);
-				}
-
-				if (eventName === 'adOnPage') {
-					window.performance.measure(
-						`gu.commercial.${TRACKED_SLOT_NAME}-slotFullRender`,
-						`gu.commercial.googletagReady`,
-						`gu.commercial.${trackLabel}`,
-					);
-
-					window.performance.measure(
-						`gu.commercial.${TRACKED_SLOT_NAME}-slotDisplay`,
-						`gu.commercial.${TRACKED_SLOT_NAME}-slotInitialised`,
-						`gu.commercial.${trackLabel}`,
-					);
-				}
-				this.trackInGA(eventName, trackLabel);
-				this.triggers[TRACKED_SLOT_NAME][
-					eventName as keyof SlotEventStatus
-				] = true;
-			}
+		} else if (origin) {
+			this.mark(`${origin}-${eventName}`);
 		}
 	}
 
-	private mark(name: string): void {
-		const longName = `gu.commercial.${name}`;
-		if (
-			typeof window.performance !== 'undefined' &&
-			'mark' in window.performance &&
-			typeof window.performance.mark === 'function'
-		) {
-			const mark = window.performance.mark(longName);
+	private mark(
+		name:
+			| GlobalCommercialEvents
+			| `${TrackedSlots}-${CommercialSlotEvents}`,
+	): void {
+		const longName: LongEventName = `gu.commercial.${name}`;
+		if (supportsPerformanceAPI) {
+			const mark = window.performance.mark(name);
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- browser support is patchy
 			if (typeof mark?.startTime === 'number') {
-				this._events.push(new Event(name, mark));
+				this._events.set(longName, mark);
 			}
-		}
-	}
-
-	private trackInGA(eventName: string, label = ''): void {
-		const gaEvent = this.gaConfig.logEvents.find(
-			(e) => e.timingVariable === eventName,
-		);
-		if (gaEvent) {
-			const labelToUse = gaEvent.timingLabel ?? label;
-			trackEvent('Commercial Events', gaEvent.timingVariable, labelToUse);
 		}
 	}
 }
