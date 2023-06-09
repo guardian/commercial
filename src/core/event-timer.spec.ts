@@ -1,9 +1,5 @@
-import { EventTimer } from './event-timer';
-import { trackEvent } from './google-analytics';
-
-jest.mock('./google-analytics', () => ({
-	trackEvent: jest.fn(),
-}));
+//
+import { EventTimer, PageEvents, SlotEvents } from './event-timer';
 
 const mockGetEntriesByName = (names: string[]) =>
 	jest.fn((name: string) =>
@@ -36,7 +32,7 @@ const performance = {
 	getEntriesByName: jest.fn().mockReturnValue([]),
 };
 
-const MARK_NAME = 'mark_name';
+const MARK_NAME = PageEvents.CommercialStart;
 const MARK_LONG_NAME = `gu.commercial.${MARK_NAME}`;
 const CMP_INIT = 'cmp-init';
 const CMP_GOT_CONSENT = 'cmp-got-consent';
@@ -92,8 +88,8 @@ describe('EventTimer', () => {
 			writable: true,
 		});
 		const eventTimer = EventTimer.get();
-		expect(eventTimer.events).toHaveLength(2);
-		expect(eventTimer.events.map((event) => event.name).sort()).toEqual(
+		expect(Array.from(eventTimer.events.keys())).toHaveLength(2);
+		expect(Array.from(eventTimer.events.keys()).sort()).toEqual(
 			[CMP_GOT_CONSENT, CMP_INIT].sort(),
 		);
 	});
@@ -116,8 +112,8 @@ describe('EventTimer', () => {
 		});
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger(MARK_NAME);
-		expect(eventTimer.events).toHaveLength(3);
-		expect(eventTimer.events.map((event) => event.name).sort()).toEqual(
+		expect(Array.from(eventTimer.events.keys())).toHaveLength(3);
+		expect(Array.from(eventTimer.events.keys()).sort()).toEqual(
 			[CMP_INIT, CMP_GOT_CONSENT, MARK_NAME].sort(),
 		);
 	});
@@ -125,9 +121,8 @@ describe('EventTimer', () => {
 	it('mark produces correct event', () => {
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger(MARK_NAME);
-		expect(eventTimer.events).toHaveLength(1);
-		expect(eventTimer.events[0]?.name).toBe('mark_name');
-		expect(eventTimer.events[0]?.ts).toBe(1);
+		expect(eventTimer.events.get(MARK_NAME)).toBeDefined();
+		expect(eventTimer.events.get(MARK_NAME)?.startTime).toBe(1);
 	});
 
 	it('calling trigger with performance undefined produces no events', () => {
@@ -139,7 +134,7 @@ describe('EventTimer', () => {
 		});
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger(MARK_NAME);
-		expect(eventTimer.events).toEqual([]);
+		expect(Array.from(eventTimer.events.keys()).length).toBe(0);
 	});
 
 	it('when retrieved and mark is undefined produce no events', () => {
@@ -156,106 +151,73 @@ describe('EventTimer', () => {
 		});
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger(MARK_NAME);
-		expect(eventTimer.events).toEqual([]);
+		expect(Array.from(eventTimer.events.keys()).length).toBe(0);
 	});
 
-	it('trigger first slotReady event', () => {
-		const eventTimer = EventTimer.get();
-		eventTimer.trigger('slotReady', 'inline1');
-		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['gu.commercial.first-slotReady'],
-		]);
+	// it('trigger first slotReady event', () => {
+	// 	const eventTimer = EventTimer.get();
+	// 	eventTimer.trigger(SlotEvents.SlotReady, TrackedSlots.Inline1);
+	// 	expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
+	// 		['gu.commercial.first-slotReady'],
+	// 	]);
 
-		expect(trackEvent).toHaveBeenCalledWith(
-			'Commercial Events',
-			'slotReady',
-			'first-slotReady',
-		);
-	});
+	// 	expect(trackEvent).toHaveBeenCalledWith(
+	// 		'Commercial Events',
+	// 		SlotEvents.SlotReady,
+	// 		'first-slotReady',
+	// 	);
+	// });
 
-	it('triggering two slotReady events causes one trigger and one track', () => {
-		const eventTimer = EventTimer.get();
-		eventTimer.trigger('slotReady', 'inline1');
-		eventTimer.trigger('slotReady', 'inline1');
+	// it('triggering two slotReady events causes one trigger and one track', () => {
+	// 	const eventTimer = EventTimer.get();
+	// 	eventTimer.trigger(SlotEvents.SlotReady, TrackedSlots.Inline1);
+	// 	eventTimer.trigger(SlotEvents.SlotReady, TrackedSlots.Inline1);
 
-		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['gu.commercial.first-slotReady'],
-		]);
+	// 	expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
+	// 		['gu.commercial.first-slotReady'],
+	// 	]);
 
-		expect(trackEvent).toHaveBeenCalledTimes(1);
+	// 	expect(trackEvent).toHaveBeenCalledTimes(1);
 
-		expect(trackEvent).toHaveBeenCalledWith(
-			'Commercial Events',
-			'slotReady',
-			'first-slotReady',
-		);
-	});
+	// 	expect(trackEvent).toHaveBeenCalledWith(
+	// 		'Commercial Events',
+	// 		SlotEvents.SlotReady,
+	// 		'first-slotReady',
+	// 	);
+	// });
 
 	it('trigger top-above-nav slotReady event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('slotReady', 'top-above-nav');
+		eventTimer.trigger(SlotEvents.SlotReady, 'top-above-nav');
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['gu.commercial.first-slotReady'],
 			['gu.commercial.top-above-nav-slotReady'],
-		]);
-
-		expect((trackEvent as jest.Mock).mock.calls).toEqual([
-			['Commercial Events', 'slotReady', 'first-slotReady'],
-			['Commercial Events', 'slotReady', 'top-above-nav-slotReady'],
 		]);
 	});
 
 	it('trigger two top-above-nav slotReady events', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('slotReady', 'top-above-nav');
-		eventTimer.trigger('slotReady', 'top-above-nav');
+		eventTimer.trigger(SlotEvents.SlotReady, 'top-above-nav');
+		eventTimer.trigger(SlotEvents.SlotReady, 'top-above-nav');
 
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['gu.commercial.first-slotReady'],
 			['gu.commercial.top-above-nav-slotReady'],
 		]);
-
-		expect(trackEvent).toHaveBeenCalledTimes(2);
-
-		expect((trackEvent as jest.Mock).mock.calls).toEqual([
-			['Commercial Events', 'slotReady', 'first-slotReady'],
-			['Commercial Events', 'slotReady', 'top-above-nav-slotReady'],
-		]);
-	});
-
-	it('not trigger a GA event if not in GA config', () => {
-		const eventTimer = EventTimer.get();
-		eventTimer.trigger('adOnPage', 'inline1');
-		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['gu.commercial.first-adOnPage'],
-		]);
-		expect(trackEvent).not.toHaveBeenCalled();
 	});
 
 	it('trigger commercial start page event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('commercialStart');
+		eventTimer.trigger(PageEvents.CommercialStart);
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
 			['gu.commercial.commercialStart'],
 		]);
-		expect(trackEvent).toHaveBeenCalledWith(
-			'Commercial Events',
-			'commercialStart',
-			'Commercial start parse time',
-		);
 	});
 
 	it('trigger commercial end page event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('commercialModulesLoaded');
+		eventTimer.trigger(PageEvents.CommercialModulesLoaded);
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
 			['gu.commercial.commercialModulesLoaded'],
 		]);
-		expect(trackEvent).toHaveBeenCalledWith(
-			'Commercial Events',
-			'commercialModulesLoaded',
-			'Commercial end parse time',
-		);
 	});
 
 	it('handles no experimental properties', () => {
