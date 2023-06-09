@@ -1,10 +1,9 @@
 import type { ConnectionType } from './types';
 
-const supportsPerformanceAPI =
+const supportsPerformanceAPI = () =>
 	typeof window !== 'undefined' &&
 	typeof window.performance !== 'undefined' &&
-	typeof window.performance.mark === 'function' &&
-	typeof window.performance.measure === 'function';
+	typeof window.performance.mark === 'function';
 
 interface EventTimerProperties {
 	type?: ConnectionType;
@@ -21,23 +20,26 @@ interface EventTimerProperties {
 	labsUrl?: string;
 }
 
-const enum TrackedSlots {
-	TopAboveNav = 'top-above-nav',
-	// Inline1 = 'inline1',
-	// Inline2 = 'inline2',
-}
+// const trackedSlots = [
+// 	'top-above-nav',
+// 	'inline1',
+// 	// 'inline2',
+// ] as const;
 
-enum GlobalCommercialEvents {
+// type TrackedSlots = typeof trackedSlots[number];
+
+enum PageEvents {
 	CommercialStart = 'commercialStart',
 	CommercialExtraModulesLoaded = 'commercialExtraModulesLoaded',
 	CommercialBaseModulesLoaded = 'commercialBaseModulesLoaded',
 	CommercialModulesLoaded = 'commercialModulesLoaded',
+	LabsContainerInView = 'labsContainerInView',
 	// CommercialStart = 'commercialStart',
 	// GoogletagInitStart = 'googletagInitStart',
 	// GoogletagInitEnd = 'googletagInitEnd',
 }
 
-const enum CommercialSlotEvents {
+const enum SlotEvents {
 	PrebidStart = 'prebidStart',
 	PrebidEnd = 'prebidEnd',
 	SlotInitialised = 'slotInitialised',
@@ -61,21 +63,19 @@ enum ExternalEvents {
 	CmpGotConsent = 'cmp-got-consent',
 }
 
-type EventName =
-	| `${TrackedSlots}-${CommercialSlotEvents}`
-	| `${GlobalCommercialEvents}`;
+type EventName = `${string}-${SlotEvents}` | `${PageEvents}`;
+
+type CommercialEvents = Map<EventName | ExternalEvents, PerformanceEntry>;
 
 type LongEventName = `gu.commercial.${EventName}`;
 
 const isGlobalEvent = (
-	eventName: GlobalCommercialEvents | CommercialSlotEvents,
-): eventName is GlobalCommercialEvents =>
-	Object.values(GlobalCommercialEvents).includes(
-		eventName as GlobalCommercialEvents,
-	);
+	eventName: PageEvents | SlotEvents,
+): eventName is PageEvents =>
+	Object.values(PageEvents).includes(eventName as PageEvents);
 
 class EventTimer {
-	private _events: Map<LongEventName, PerformanceEntry>;
+	private _events: CommercialEvents;
 
 	properties: EventTimerProperties;
 	/**
@@ -104,18 +104,21 @@ class EventTimer {
 		return typeof window.performance !== 'undefined' &&
 			'getEntriesByName' in window.performance
 			? new Map(
-					Object.keys(ExternalEvents)
-						.map((eventName): [string, PerformanceEntry] => {
-							const entry =
-								window.performance.getEntriesByName(
-									eventName,
-								)[0];
+					Object.entries(ExternalEvents)
+						.map(
+							([, eventName]): [
+								string,
+								PerformanceEntry | undefined,
+							] => {
+								const entry =
+									window.performance.getEntriesByName(
+										eventName,
+									)[0];
 
-							return [eventName, entry];
-						})
-						.filter(
-							([, entry]) => entry instanceof PerformanceEntry,
-						),
+								return [eventName, entry];
+							},
+						)
+						.filter(([, entry]) => !!entry),
 			  )
 			: new Map();
 	}
@@ -162,10 +165,7 @@ class EventTimer {
 	 * @param {string} eventName - The short name applied to the mark
 	 * @param {origin} [origin=page] - Either 'page' (default) or the name of the slot
 	 */
-	trigger(
-		eventName: GlobalCommercialEvents | CommercialSlotEvents,
-		origin?: TrackedSlots,
-	): void {
+	trigger(eventName: PageEvents | SlotEvents, origin?: string): void {
 		if (isGlobalEvent(eventName)) {
 			this.mark(eventName);
 		} else if (origin) {
@@ -173,20 +173,16 @@ class EventTimer {
 		}
 	}
 
-	private mark(
-		name:
-			| GlobalCommercialEvents
-			| `${TrackedSlots}-${CommercialSlotEvents}`,
-	): void {
+	private mark(name: PageEvents | `${string}-${SlotEvents}`): void {
 		const longName: LongEventName = `gu.commercial.${name}`;
-		if (supportsPerformanceAPI) {
-			const mark = window.performance.mark(name);
+		if (!this._events.get(name) && supportsPerformanceAPI()) {
+			const mark = window.performance.mark(longName);
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- browser support is patchy
 			if (typeof mark?.startTime === 'number') {
-				this._events.set(longName, mark);
+				this._events.set(name, mark);
 			}
 		}
 	}
 }
 
-export { EventTimer };
+export { EventTimer, PageEvents, SlotEvents, type CommercialEvents };

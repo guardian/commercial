@@ -1,5 +1,5 @@
 import { log } from '@guardian/libs';
-import { EventTimer } from './event-timer';
+import { EventTimer, PageEvents } from './event-timer';
 
 /**
  * Collect commercial metrics on:
@@ -25,7 +25,7 @@ const initTrackLabsContainer = () => {
 		entries.map((entry) => {
 			if (entry.isIntersecting) {
 				log('commercial', 'Labs container in view');
-				eventTimer.trigger('labsContainerInView');
+				eventTimer.trigger(PageEvents.LabsContainerInView);
 				observer.unobserve(entry.target);
 			}
 		});

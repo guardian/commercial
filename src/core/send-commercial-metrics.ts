@@ -1,6 +1,7 @@
 import { onConsent } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { log } from '@guardian/libs';
+import type { CommercialEvents } from './event-timer';
 import { EventTimer } from './event-timer';
 import type { ConnectionType } from './types';
 
@@ -87,10 +88,10 @@ const mapEventTimerPropertiesToString = (
 	}));
 };
 
-const roundTimeStamp = (events: TimedEvent[]): Metric[] => {
-	return events.map(({ name, ts }) => ({
+const roundTimeStamp = (events: CommercialEvents): Metric[] => {
+	return Array.from(events.entries()).map(([name, timer]) => ({
 		name,
-		value: Math.ceil(ts),
+		value: Math.ceil(timer.startTime),
 	}));
 };
 

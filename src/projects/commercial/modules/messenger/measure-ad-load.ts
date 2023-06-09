@@ -1,5 +1,5 @@
 import { isObject, isString } from '@guardian/libs';
-import { EventTimer } from 'core/event-timer';
+import { EventTimer, SlotEvents } from 'core/event-timer';
 import type { RegisterListener } from 'core/messenger';
 
 // This message is intended to be used with a GAM creative wrapper.
@@ -29,7 +29,7 @@ const eventTimer = EventTimer.get();
 
 const init = (register: RegisterListener): void => {
 	register('measure-ad-load', (specs) => {
-		eventTimer.trigger('adOnPage', getSlotId(specs));
+		eventTimer.trigger(SlotEvents.AdOnPage, getSlotId(specs));
 	});
 };
 

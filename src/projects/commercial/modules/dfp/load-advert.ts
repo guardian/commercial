@@ -1,4 +1,4 @@
-import { EventTimer } from 'core/event-timer';
+import { EventTimer, SlotEvents } from 'core/event-timer';
 import {
 	refreshBidsForAd,
 	requestBidsForAd,
@@ -19,7 +19,7 @@ export const loadAdvert = (advert: Advert): void => {
 			// The display needs to be called, even in the event of an error.
 		})
 		.then(() => {
-			eventTimer.trigger('slotReady', adName);
+			eventTimer.trigger(SlotEvents.SlotReady, adName);
 			// If the advert has already had bids requested, then we don't need to request them again.
 			if (advert.headerBiddingBidRequest) {
 				return advert.headerBiddingBidRequest;
@@ -27,7 +27,7 @@ export const loadAdvert = (advert: Advert): void => {
 			return requestBidsForAd(advert);
 		})
 		.then(() => {
-			eventTimer.trigger('slotInitialised', adName);
+			eventTimer.trigger(SlotEvents.SlotInitialised, adName);
 			window.googletag.display(advert.id);
 		});
 };

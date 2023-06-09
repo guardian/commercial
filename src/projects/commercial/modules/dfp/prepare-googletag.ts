@@ -4,7 +4,7 @@ import {
 } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { loadScript, log } from '@guardian/libs';
-import { EventTimer } from 'core/event-timer';
+import { EventTimer, PageEvents } from 'core/event-timer';
 import { init as initMessenger } from 'core/messenger';
 import { init as initMeasureAdLoad } from 'projects/commercial/modules/messenger/measure-ad-load';
 import { isInVariantSynchronous } from 'projects/common/modules/experiments/ab';
@@ -91,14 +91,7 @@ export const init = (): Promise<void> => {
 	}
 
 	const setupAdvertising = (): Promise<void> => {
-		window.performance.mark('setupAdvertising-start');
 		return onConsent().then((consentState: ConsentState) => {
-			window.performance.mark('gotConsent');
-			window.performance.measure(
-				'commercial: got consent',
-				'setupAdvertising-start',
-				'gotConsent',
-			);
 			let canRun = true;
 
 			if (consentState.canTarget) {
@@ -134,15 +127,7 @@ export const init = (): Promise<void> => {
 				// it strictly follows preceding prepare-googletag work (and the module itself ensures dependencies are
 				// fulfilled), but don't assume fillAdvertSlots is complete when queueing subsequent work using cmd.push
 				window.googletag.cmd.push(
-					() => {
-						EventTimer.get().trigger('googletagReady');
-						window.performance.mark('googletagReady');
-						window.performance.measure(
-							'commercial: googletag ready',
-							'setupAdvertising-start',
-							'googletagReady',
-						);
-					},
+					() => EventTimer.get().trigger(PageEvents.GoogleTagLoaded),
 					setDfpListeners,
 					() => {
 						setPageTargeting(consentState);
