@@ -54,7 +54,7 @@
 		"@cypress/webpack-preprocessor": "^5.17.1",
 		"@guardian/eslint-config-typescript": "^5.0.0",
 		"@guardian/prettier": "^3.0.0",
-		"@percy/cli": "^1.24.2",
+		"@percy/cli": "^1.26.0",
 		"@percy/cypress": "^3.1.2",
 		"@types/google.analytics": "^0.0.42",
 		"@types/googletag": "~1.1.3",
