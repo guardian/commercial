@@ -29,15 +29,11 @@ To run the integration tests, switch to the `e2e` workspace to run `yarn cypress
 
 ### Releasing
 
-Changes are automatically released to NPM.
+This repository uses [changesets](https://github.com/changesets/changesets) for version management
 
-The main branch on GitHub is analysed by semantic-release after every push.
+To release a new version with your changes, run `yarn changeset add` and follow the prompts. This will create a new changeset file in the `.changeset` directory. Commit this file with your PR.
 
-If a commit message follows the conventional commit format, semantic-release can determine what types of changes are included in that commit.
-
-If necessary, it will then automatically release a new, semver-compliant version of the package to NPM.
-
-You can then bump the version of the package in Frontend, to use the new version.
+When your PR is merged, changeset will analyse the changes and create a PR to release the new version.
 
 ### Pull requests
 
