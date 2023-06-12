@@ -101,26 +101,17 @@ class EventTimer {
 	}
 
 	private get externalEvents(): Map<ExternalEvents, PerformanceEntry> {
-		return typeof window.performance !== 'undefined' &&
-			'getEntriesByName' in window.performance
-			? new Map(
-					Object.entries(ExternalEvents)
-						.map(
-							([, eventName]): [
-								string,
-								PerformanceEntry | undefined,
-							] => {
-								const entry =
-									window.performance.getEntriesByName(
-										eventName,
-									)[0];
+		const externalEvents = new Map();
 
-								return [eventName, entry];
-							},
-						)
-						.filter(([, entry]) => !!entry),
-			  )
-			: new Map();
+		for (const event of Object.values(ExternalEvents)) {
+			if (window.performance.getEntriesByName(event).length) {
+				externalEvents.set(
+					event,
+					window.performance.getEntriesByName(event)[0],
+				);
+			}
+		}
+		return externalEvents;
 	}
 
 	/**
