@@ -1,7 +1,7 @@
 # @guardian/commercial
 
-## 8.0.1
+## 9.1.0
 
 ### Major Changes
 
--   Migrated from semantic-release to changesets
+-   Carry over last version from semantic-release
