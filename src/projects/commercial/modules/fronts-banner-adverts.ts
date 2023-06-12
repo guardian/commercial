@@ -25,6 +25,13 @@ const insertAdvertAboveSection = async (section: string, advertNum: number) => {
 
 		const adContainer = document.createElement('div');
 		adContainer.className = 'ad-slot-container fronts-banner-container';
+
+		// To distinguish between the variant and control in the page view table. Following the AB test advice given here:
+		// https://github.com/guardian/frontend/blob/main/docs/03-dev-howtos/01-ab-testing.md#getting-the-results
+		if (section === 'opinion') {
+			adContainer.dataset.component = 'opinion-banner-ad';
+		}
+
 		adContainer.appendChild(ad);
 
 		const slotTargeting = {

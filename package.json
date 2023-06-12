@@ -17,7 +17,7 @@
 	"main": "dist/cjs/core/index.js",
 	"module": "dist/esm/core/index.js",
 	"scripts": {
-		"build": "npm-run-all clean --parallel compile:core:* build:prod build:dev",
+		"build": "npm-run-all clean --parallel compile:core:* build:prod",
 		"build:dev": "webpack -c webpack.config.dev.js",
 		"build:prod": "webpack -c webpack.config.prod.js",
 		"clean": "rm -rf dist",
@@ -103,7 +103,7 @@
 	"dependencies": {
 		"@changesets/cli": "^2.26.1",
 		"@guardian/ab-core": "^4.0.0",
-		"@guardian/consent-management-platform": "^13.0.2",
+		"@guardian/consent-management-platform": "^13.2.0",
 		"@guardian/core-web-vitals": "^4.0.0",
 		"@guardian/libs": "^14.0.0",
 		"@guardian/source-foundations": "^10.0.1",
