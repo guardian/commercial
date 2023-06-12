@@ -1,8 +1,8 @@
 name: Publish Beta Package
 
 # This workflow is triggered on a label being added to a PR, and will publish a beta version of the bundle to npm
-# Use `yarn changeset pre beta` to enter a pre-release state then add a pre-release changeset with `yarn changeset add`
-# This action will fail if you have not entered pre-release state
+# Use `yarn changeset add` to add a new change
+# This action will release the changeset as a pre-release, and add a comment to the PR with the version number
 on:
   pull_request:
     types: [labeled]
@@ -31,9 +31,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Check for pre-release
-        run: test -f .changeset/pre.json
-
       - name: Setup node
         uses: actions/setup-node@v3
         with:
@@ -44,6 +41,12 @@ jobs:
 
       - name: Build package
         run: yarn build
+
+      - name: Setup pre-release
+        run: yarn changeset pre enter ${{ github.event.pull_request.id }}
+
+      - name: Version
+        run: yarn changeset version
 
       - name: Create Release
         uses: changesets/action@v1
