@@ -84,6 +84,10 @@ export const containsLeaderboard = (sizes: HeaderBiddingSize[]): boolean =>
 export const containsBillboard = (sizes: HeaderBiddingSize[]): boolean =>
 	contains(sizes, createAdSize(970, 250));
 
+export const containsBillboardNotLeaderboard = (
+	sizes: HeaderBiddingSize[],
+): boolean => containsBillboard(sizes) && !containsLeaderboard(sizes);
+
 export const containsMpuOrDmpu = (sizes: HeaderBiddingSize[]): boolean =>
 	containsMpu(sizes) || containsDmpu(sizes);
 

@@ -3,6 +3,7 @@ import { buildAppNexusTargetingObject } from '../../../../common/modules/commerc
 import { isInAuOrNz } from '../../../../common/modules/commercial/geo-utils';
 import type { HeaderBiddingSize } from '../prebid-types';
 import {
+	containsBillboardNotLeaderboard,
 	containsLeaderboard,
 	containsLeaderboardOrBillboard,
 	containsMpu,
@@ -36,6 +37,7 @@ const getAppNexusInvCode = (sizes: HeaderBiddingSize[]): string | undefined => {
 
 export const getAppNexusDirectPlacementId = (
 	sizes: HeaderBiddingSize[],
+	isInFrontsBannerVariant: boolean,
 ): string => {
 	if (isInAuOrNz()) {
 		return '11016434';
@@ -44,6 +46,13 @@ export const getAppNexusDirectPlacementId = (
 	const defaultPlacementId = '9251752';
 	switch (getBreakpointKey()) {
 		case 'D':
+			if (isInFrontsBannerVariant) {
+				// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
+				// This check is to distinguish from the top-above-nav which includes a leaderboard
+				if (containsBillboardNotLeaderboard(sizes)) {
+					return '30017511';
+				}
+			}
 			if (containsMpuOrDmpu(sizes)) {
 				return '9251752';
 			}
@@ -72,6 +81,7 @@ export const getAppNexusDirectPlacementId = (
 export const getAppNexusDirectBidParams = (
 	sizes: HeaderBiddingSize[],
 	pageTargeting: PageTargeting,
+	isInFrontsBannerVariant: boolean,
 ): AppNexusDirectBidParams => {
 	if (isInAuOrNz() && window.guardian.config.switches.prebidAppnexusInvcode) {
 		const invCode = getAppNexusInvCode(sizes);
@@ -87,7 +97,10 @@ export const getAppNexusDirectBidParams = (
 		}
 	}
 	return {
-		placementId: getAppNexusDirectPlacementId(sizes),
+		placementId: getAppNexusDirectPlacementId(
+			sizes,
+			isInFrontsBannerVariant,
+		),
 		keywords: buildAppNexusTargetingObject(pageTargeting),
 	};
 };

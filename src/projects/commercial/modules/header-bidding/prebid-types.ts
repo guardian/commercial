@@ -93,9 +93,13 @@ export type PrebidAdYouLikeParams = {
 	placement: string;
 };
 
-export type PrebidCriteoParams = {
-	networkId: number;
-};
+export type PrebidCriteoParams =
+	| {
+			networkId: number;
+	  }
+	| {
+			zoneId: number;
+	  };
 
 export type PrebidSmartParams = {
 	siteId: number;

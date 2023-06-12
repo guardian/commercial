@@ -14,6 +14,7 @@ import {
 	isInUsOrCa,
 } from '../../../../common/modules/commercial/geo-utils';
 import type {
+	BidderCode,
 	HeaderBiddingSize,
 	PrebidAdYouLikeParams,
 	PrebidAppNexusParams,
@@ -30,6 +31,7 @@ import type {
 	PrebidXaxisParams,
 } from '../prebid-types';
 import {
+	containsBillboardNotLeaderboard,
 	containsLeaderboard,
 	containsLeaderboardOrBillboard,
 	containsMobileSticky,
@@ -57,6 +59,9 @@ import { getAppNexusDirectBidParams } from './appnexus';
 const isArticle = window.guardian.config.page.contentType === 'Article';
 
 const isDesktopAndArticle = getBreakpointKey() === 'D' && isArticle;
+
+const { tests } = window.guardian.config;
+const isInFrontsBannerVariant = tests?.frontsBannerAdsVariant === 'variant';
 
 const getTrustXAdUnitId = (
 	slotId: string,
@@ -281,7 +286,12 @@ const appNexusBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	bidParams: (
 		slotId: string,
 		sizes: HeaderBiddingSize[],
-	): PrebidAppNexusParams => getAppNexusDirectBidParams(sizes, pageTargeting),
+	): PrebidAppNexusParams =>
+		getAppNexusDirectBidParams(
+			sizes,
+			pageTargeting,
+			isInFrontsBannerVariant,
+		),
 });
 
 const openxClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
@@ -347,13 +357,23 @@ const sonobiBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	}),
 });
 
-const getPubmaticPublisherId = (): string => {
+const getPubmaticPublisherId = (slotId: string): string => {
+	if (isInFrontsBannerVariant) {
+		// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
+		// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
+		if (slotId.startsWith('dfp-ad--fronts-banner')) {
+			return 'theguardian_970x250_only';
+		}
+	}
+
 	if (isInUsOrCa()) {
 		return '157206';
 	}
+
 	if (isInAuOrNz()) {
 		return '157203';
 	}
+
 	return '157207';
 };
 
@@ -361,7 +381,7 @@ const pubmaticBidder: PrebidBidder = {
 	name: 'pubmatic',
 	switchName: 'prebidPubmatic',
 	bidParams: (slotId: string): PrebidPubmaticParams => ({
-		publisherId: getPubmaticPublisherId(),
+		publisherId: getPubmaticPublisherId(slotId),
 		adSlot: stripDfpAdPrefixFrom(slotId),
 	}),
 };
@@ -443,12 +463,31 @@ const adYouLikeBidder: PrebidBidder = {
 	},
 };
 
-const criteoBidder: PrebidBidder = {
-	name: 'criteo',
-	switchName: 'prebidCriteo',
-	bidParams: () => ({
-		networkId: 337,
-	}),
+const criteoBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
+	const defaultParams = {
+		name: 'criteo' as BidderCode,
+		switchName: 'prebidCriteo',
+	};
+
+	if (isInFrontsBannerVariant) {
+		// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
+		// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
+		if (containsBillboardNotLeaderboard(slotSizes)) {
+			return {
+				...defaultParams,
+				bidParams: () => ({
+					zoneId: 1759354,
+				}),
+			};
+		}
+	}
+
+	return {
+		...defaultParams,
+		bidParams: () => ({
+			networkId: 337,
+		}),
+	};
 };
 
 const smartBidder: PrebidBidder = {
@@ -465,7 +504,15 @@ const smartBidder: PrebidBidder = {
 const indexExchangeBidders = (
 	slotSizes: HeaderBiddingSize[],
 ): PrebidBidder[] => {
-	const indexSiteId = getIndexSiteId();
+	let indexSiteId = getIndexSiteId();
+	if (isInFrontsBannerVariant) {
+		// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
+		// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
+		if (containsBillboardNotLeaderboard(slotSizes)) {
+			indexSiteId = '983842';
+		}
+	}
+
 	return slotSizes.map((size) => ({
 		name: 'ix',
 		switchName: 'prebidIndexExchange',
@@ -491,7 +538,7 @@ const currentBidders = (
 	pageTargeting: PageTargeting,
 ): PrebidBidder[] => {
 	const biddersToCheck: Array<[boolean, PrebidBidder]> = [
-		[shouldIncludeCriteo(), criteoBidder],
+		[shouldIncludeCriteo(), criteoBidder(slotSizes)],
 		[shouldIncludeSmart(), smartBidder],
 		[shouldIncludeSonobi(), sonobiBidder(pageTargeting)],
 		[shouldIncludeTrustX(), trustXBidder],
