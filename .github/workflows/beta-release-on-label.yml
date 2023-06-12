@@ -1,9 +1,8 @@
 name: Publish Beta Package
 
-# This workflow is triggered on a label being added to a PR, and will publish a beta version of the bundle e.g. @guardian/commercial-v1.0.1-beta.0
-# It gets the last version from the tags, bumps the prerelease version and publishes to npm with the next tag
-# if the current version is 1.0.0, the next beta version will be 1.0.1-beta.0, then 1.0.1-beta.1, etc.
-# semanic-release is not used here as it's very opinionated and refuses to work with non-semver versions or pull requests
+# This workflow is triggered on a label being added to a PR, and will publish a beta version of the bundle to npm
+# Use `yarn changeset pre beta` to enter a pre-release state then add a pre-release changeset with `yarn changeset add`
+# This action will fail if you have not entered pre-release state
 on:
   pull_request:
     types: [labeled]
@@ -32,10 +31,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Check for pre-release
+        run: test -f .changeset/pre.json
+
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: '16.14.0'
           cache: 'yarn'
 
       - name: Install dependencies
@@ -44,37 +45,21 @@ jobs:
       - name: Build package
         run: yarn build
 
-      - name: Grab last version
-        run: yarn version --new-version $(git tag -l | grep v\* |  sed -E 's|.*([0-9]+\.[0-9]+\.[0-9]+(-beta.[0-9]+)?)|\1|g' | tail -1) --no-git-tag-version
-
-      - name: Bump prerelease version
-        run: yarn version --prerelease --preid beta --no-git-tag-version
-
-      - name: Get Version
-        id: version
-        run: echo BETA_VERSION=@guardian/commercial-v$(node -p "require('./package.json').version") >> $GITHUB_OUTPUT
-
-      - name: Tag version
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@users.noreply.github.com
-          git tag -a ${{ steps.version.outputs.BETA_VERSION }} -m "Release ${{ steps.version.outputs.BETA_VERSION }}"
-
-      - name: Push tag
-        run: git push origin ${{ steps.version.outputs.BETA_VERSION }}
-
-      - name: Release
-        run: |
-          npm config set _authToken=${{ secrets.NPM_TOKEN }}
-          npm publish --tag beta
+      - name: Create Release
+        uses: changesets/action@v1
+        id: changeset
+        with:
+          publish: yarn changeset publish
 
       - uses: actions/github-script@v3
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            const publishedPackages = ${{ steps.changeset.outputs.publishedPackages }};
+            const version = publishedPackages[0].version;
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '🚀 ${{ steps.version.outputs.BETA_VERSION }} published to npm as a beta release'
+              body: `🚀 ${version} published to npm as a beta release`
             })
