@@ -173,6 +173,12 @@ const recordCommercialMetrics = () => {
 
 const bootCommercial = async (): Promise<void> => {
 	log('commercial', '📦 standalone.commercial.ts', __webpack_public_path__);
+	if (process.env.COMMIT_SHA) {
+		log(
+			'commercial',
+			`@guardian/commercial commit ${process.env.COMMIT_SHA}`,
+		);
+	}
 
 	//adding an amiused call for a very small proportion of users to test sendBeacon vs fetch
 	//this will be removed when we have enough data
