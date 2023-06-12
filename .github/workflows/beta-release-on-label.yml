@@ -42,9 +42,6 @@ jobs:
       - name: Build package
         run: yarn build
 
-      - name: Setup pre-release
-        run: yarn changeset pre enter ${{ github.event.pull_request.number }}
-
       - name: Version
         run: yarn changeset version --snapshot beta
 
