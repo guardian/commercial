@@ -47,6 +47,7 @@ export type PrebidSonobiParams = {
 export type PrebidPubmaticParams = {
 	publisherId: string;
 	adSlot: string;
+	placementId?: string;
 };
 
 export type PrebidIndexExchangeParams = {

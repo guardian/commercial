@@ -357,15 +357,7 @@ const sonobiBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	}),
 });
 
-const getPubmaticPublisherId = (slotId: string): string => {
-	if (isInFrontsBannerVariant) {
-		// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
-		// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
-		if (slotId.startsWith('dfp-ad--fronts-banner')) {
-			return 'theguardian_970x250_only';
-		}
-	}
-
+const getPubmaticPublisherId = (): string => {
 	if (isInUsOrCa()) {
 		return '157206';
 	}
@@ -377,13 +369,31 @@ const getPubmaticPublisherId = (slotId: string): string => {
 	return '157207';
 };
 
-const pubmaticBidder: PrebidBidder = {
-	name: 'pubmatic',
-	switchName: 'prebidPubmatic',
-	bidParams: (slotId: string): PrebidPubmaticParams => ({
-		publisherId: getPubmaticPublisherId(slotId),
-		adSlot: stripDfpAdPrefixFrom(slotId),
-	}),
+const pubmaticBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
+	const defaultParams = {
+		name: 'pubmatic' as BidderCode,
+		switchName: 'prebidPubmatic',
+		bidParams: (slotId: string): PrebidPubmaticParams => ({
+			publisherId: getPubmaticPublisherId(),
+			adSlot: stripDfpAdPrefixFrom(slotId),
+		}),
+	};
+
+	if (isInFrontsBannerVariant) {
+		// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
+		// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
+		if (containsBillboardNotLeaderboard(slotSizes)) {
+			return {
+				...defaultParams,
+				bidParams: (slotId: string): PrebidPubmaticParams => ({
+					...defaultParams.bidParams(slotId),
+					placementId: 'theguardian_970x250_only',
+				}),
+			};
+		}
+	}
+
+	return defaultParams;
 };
 
 const trustXBidder: PrebidBidder = {
@@ -547,7 +557,7 @@ const currentBidders = (
 		[shouldIncludeImproveDigital(), improveDigitalBidder],
 		[shouldIncludeImproveDigitalSkin(), improveDigitalSkinBidder],
 		[shouldIncludeXaxis(), xaxisBidder],
-		[true, pubmaticBidder],
+		[true, pubmaticBidder(slotSizes)],
 		[shouldIncludeAdYouLike(slotSizes), adYouLikeBidder],
 		[shouldUseOzoneAdaptor(), ozoneClientSideBidder(pageTargeting)],
 		[shouldIncludeOpenx(), openxClientSideBidder(pageTargeting)],
