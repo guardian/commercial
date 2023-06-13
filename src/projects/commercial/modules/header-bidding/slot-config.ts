@@ -62,6 +62,10 @@ const getHeaderBiddingKey = (
 		return 'inline';
 	}
 
+	if (name?.includes('fronts-banner')) {
+		return 'fronts-banner';
+	}
+
 	return undefined;
 };
 
@@ -199,6 +203,7 @@ export const getHeaderBiddingAdSlots = (
 ): HeaderBiddingSlot[] => {
 	const breakpoint = getHbBreakpoint();
 	const headerBiddingSlots = filterByAdvert(ad, breakpoint, getSlots());
+
 	return headerBiddingSlots
 		.map(filterBySizeMapping(ad.sizes[breakpoint]))
 		.map(slotFlatMap)
