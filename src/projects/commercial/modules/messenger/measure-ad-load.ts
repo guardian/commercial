@@ -30,6 +30,8 @@ const eventTimer = EventTimer.get();
 const init = (register: RegisterListener): void => {
 	register('measure-ad-load', (specs) => {
 		eventTimer.trigger(SlotEvents.AdOnPage, getSlotId(specs));
+		eventTimer.trigger(SlotEvents.LoadAdEnd, getSlotId(specs));
+		eventTimer.trigger(SlotEvents.AdRenderEnd, getSlotId(specs));
 	});
 };
 

@@ -1,3 +1,4 @@
+import { log } from '@guardian/libs';
 import type { ConnectionType } from './types';
 
 const supportsPerformanceAPI = () =>
@@ -20,13 +21,14 @@ interface EventTimerProperties {
 	labsUrl?: string;
 }
 
-// const trackedSlots = [
-// 	'top-above-nav',
-// 	'inline1',
-// 	// 'inline2',
-// ] as const;
+// Events will be logged using the performance API for all slots, but only these slots will be tracked as commercial metrics
+const trackedSlots = [
+	'top-above-nav',
+	'inline1',
+	'inline2',
+] as const;
 
-// type TrackedSlots = typeof trackedSlots[number];
+type TrackedSlots = typeof trackedSlots[number];
 
 enum PageEvents {
 	CommercialStart = 'commercialStart',
@@ -34,27 +36,22 @@ enum PageEvents {
 	CommercialBaseModulesLoaded = 'commercialBaseModulesLoaded',
 	CommercialModulesLoaded = 'commercialModulesLoaded',
 	LabsContainerInView = 'labsContainerInView',
-	// CommercialStart = 'commercialStart',
-	// GoogletagInitStart = 'googletagInitStart',
-	// GoogletagInitEnd = 'googletagInitEnd',
+	GoogletagInitStart = 'googletagInitStart',
+	GoogletagInitEnd = 'googletagInitEnd',
 }
 
 const enum SlotEvents {
-	PrebidStart = 'prebidStart',
-	PrebidEnd = 'prebidEnd',
 	SlotInitialised = 'slotInitialised',
 	SlotReady = 'slotReady',
 	AdOnPage = 'adOnPage',
-	// AdRenderStart = 'adRenderStart',
-	// DefineAdSlotsStart = 'defineAdSlotsStart',
-	// DefineAdSlotsEnd = 'defineAdSlotsEnd',
-	// PrebidStart = 'prebidStart',
-	// PrebidAuctionStart = 'prebidAuctionStart',
-	// PrebidAuctionEnd = 'prebidAuctionEnd',
-	// PrebidEnd = 'prebidEnd',
-	// LoadAdStart = 'loadAdStart',
-	// LoadAdEnd = 'loadAdEnd',
-	// AdRenderEnd = 'adRenderEnd',
+	AdRenderStart = 'adRenderStart',
+	DefineSlotStart = 'defineAdSlotStart',
+	DefineSlotEnd = 'defineAdSlotEnd',
+	PrebidStart = 'prebidStart',
+	PrebidEnd = 'prebidEnd',
+	LoadAdStart = 'loadAdStart',
+	LoadAdEnd = 'loadAdEnd',
+	AdRenderEnd = 'adRenderEnd',
 }
 
 enum ExternalEvents {
@@ -76,6 +73,8 @@ const isGlobalEvent = (
 
 class EventTimer {
 	private _events: CommercialEvents;
+
+	measures: Map<string, PerformanceMeasure>;
 
 	properties: EventTimerProperties;
 	/**
@@ -124,6 +123,7 @@ class EventTimer {
 
 	private constructor() {
 		this._events = new Map();
+		this.measures = new Map();
 
 		this.properties = {};
 
@@ -160,17 +160,33 @@ class EventTimer {
 		if (isGlobalEvent(eventName)) {
 			this.mark(eventName);
 		} else if (origin) {
-			this.mark(`${origin}-${eventName}`);
+			this.mark(`${origin}-${eventName}`, origin);
 		}
 	}
 
-	private mark(name: PageEvents | `${string}-${SlotEvents}`): void {
+	private mark(name: PageEvents | `${string}-${SlotEvents}`, origin?: string): void {
 		const longName: LongEventName = `gu.commercial.${name}`;
 		if (!this._events.get(name) && supportsPerformanceAPI()) {
 			const mark = window.performance.mark(longName);
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- browser support is patchy
-			if (typeof mark?.startTime === 'number') {
+			if (typeof mark?.startTime === 'number' && trackedSlots.includes(origin as TrackedSlots)) {
 				this._events.set(name, mark);
+			}
+
+			if(name.endsWith('End')) {
+				const startEvent = longName.replace('End', 'Start');
+				const measureName = longName.replace('End', '');
+				const startMarkExists = window.performance.getEntriesByName(startEvent).length > 0;
+				if (startMarkExists) {
+					try {
+					const measure = window.performance.measure(measureName, startEvent, longName);
+					if (trackedSlots.includes(origin as TrackedSlots)) {
+						this.measures.set(measureName, measure);
+					}
+					} catch (e) {
+						log('commercial', `error measuring ${measureName}`, e);
+					}
+				}
 			}
 		}
 	}

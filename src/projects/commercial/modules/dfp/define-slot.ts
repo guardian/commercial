@@ -1,6 +1,8 @@
 import { breakpoints as sourceBreakpoints } from '@guardian/source-foundations';
 import { once } from 'lodash-es';
+import { EventTimer } from 'core';
 import type { SizeMapping, SlotName } from 'core/ad-sizes';
+import { SlotEvents } from 'core/event-timer';
 import { getUrlVars } from '../../../../lib/url';
 import type { IasPETSlot, IasTargeting } from '../../../../types/ias';
 import { toGoogleTagSize } from '../../../common/modules/commercial/lib/googletag-ad-size';
@@ -113,11 +115,9 @@ const defineSlot = (
 	slotTargeting: Record<string, string> = {},
 ): { slot: googletag.Slot; slotReady: Promise<void> } => {
 	const slotTarget = adSlotNode.getAttribute('data-name') as SlotName;
-	const id = adSlotNode.id;
+	EventTimer.get().trigger(SlotEvents.DefineSlotStart, slotTarget);
 
-	if (slotTarget === 'top-above-nav') {
-		window.performance.mark(`${slotTarget}: defineSlot`);
-	}
+	const id = adSlotNode.id;
 
 	const googletagSizeMapping = buildGoogletagSizeMapping(sizeMapping);
 	if (!googletagSizeMapping) {
@@ -259,15 +259,7 @@ const defineSlot = (
 		slotReady = Promise.race([iasTimeout(), iasDataPromise]);
 
 		void slotReady.then(() => {
-			if (slotTarget === 'top-above-nav') {
-				window.performance.mark(`${slotTarget}: ias-loaded`);
-
-				window.performance.measure(
-					`${slotTarget}: defineSlot -> ias-loaded`,
-					`${slotTarget}: defineSlot`,
-					`${slotTarget}: ias-loaded`,
-				);
-			}
+			EventTimer.get().trigger(SlotEvents.DefineSlotEnd, slotTarget);
 		});
 	}
 

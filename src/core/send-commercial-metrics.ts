@@ -88,11 +88,18 @@ const mapEventTimerPropertiesToString = (
 	}));
 };
 
-const roundTimeStamp = (events: CommercialEvents): Metric[] => {
-	return Array.from(events.entries()).map(([name, timer]) => ({
+const roundTimeStamp = (events: CommercialEvents, measures: Map<string, PerformanceMeasure>): Metric[] => {
+	const roundedEvents = [...events.entries()].map(([name, timer]) => ({
 		name,
 		value: Math.ceil(timer.startTime),
 	}));
+
+	const roundedMeasures = [...measures.entries()].map(([name, measure]) => ({
+		name,
+		value: Math.ceil(measure.duration),
+	}));
+
+	return [...roundedEvents, ...roundedMeasures];
 };
 
 function sendMetrics() {
@@ -145,7 +152,7 @@ function gatherMetricsOnPageUnload(): void {
 		.concat(adBlockerProperties);
 	commercialMetricsPayload.properties = properties;
 
-	const metrics: readonly Metric[] = roundTimeStamp(eventTimer.events).concat(
+	const metrics: readonly Metric[] = roundTimeStamp(eventTimer.events, eventTimer.measures).concat(
 		getOfflineCount(),
 	);
 	commercialMetricsPayload.metrics = metrics;
@@ -228,7 +235,7 @@ async function initCommercialMetrics({
 	browserId,
 	isDev,
 	adBlockerInUse,
-	sampling = 1 / 100,
+	sampling = 1,
 }: InitCommercialMetricsArgs): Promise<boolean> {
 	commercialMetricsPayload.page_view_id = pageViewId;
 	commercialMetricsPayload.browser_id = browserId;
