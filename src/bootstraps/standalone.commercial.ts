@@ -233,7 +233,8 @@ const chooseAdvertisingTag = async () => {
 	if (
 		consentState.tcfv2 &&
 		!getConsentFor('googletag', consentState) &&
-		!isDigitalSubscriber()
+		!isDigitalSubscriber() &&
+		!commercialFeatures.adFree
 	) {
 		void import(
 			/* webpackChunkName: "consentless" */
