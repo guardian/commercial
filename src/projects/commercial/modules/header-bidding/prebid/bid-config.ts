@@ -8,7 +8,6 @@ import {
 } from '../../../../common/modules/commercial/build-page-targeting';
 import {
 	isInAuOrNz,
-	isInRow,
 	isInUk,
 	isInUsa,
 	isInUsOrCa,
@@ -52,9 +51,13 @@ import {
 	shouldUseOzoneAdaptor,
 	stripDfpAdPrefixFrom,
 	stripMobileSuffix,
-	stripTrailingNumbersAbove1,
 } from '../utils';
 import { getAppNexusDirectBidParams } from './appnexus';
+import {
+	getImprovePlacementId,
+	getImproveSizeParam,
+	getImproveSkinPlacementId,
+} from './improve-digital';
 
 const isArticle = window.guardian.config.page.contentType === 'Article';
 
@@ -123,105 +126,6 @@ const getIndexSiteId = (): string => {
 		(s: PrebidIndexSite) => s.bp === getBreakpointKey(),
 	);
 	return site?.id ? site.id.toString() : '';
-};
-
-const getImprovePlacementId = (sizes: HeaderBiddingSize[]): number => {
-	if (isInUk()) {
-		switch (getBreakpointKey()) {
-			case 'D': // Desktop
-				if (containsMpuOrDmpu(sizes)) {
-					return 1116396;
-				}
-				if (containsLeaderboardOrBillboard(sizes)) {
-					return 1116397;
-				}
-				return -1;
-			case 'M': // Mobile
-				if (containsMpuOrDmpu(sizes)) {
-					return 1116400;
-				}
-				return -1;
-			case 'T': // Tablet
-				if (containsMpuOrDmpu(sizes)) {
-					return 1116398;
-				}
-				if (containsLeaderboardOrBillboard(sizes)) {
-					return 1116399;
-				}
-				return -1;
-			default:
-				return -1;
-		}
-	}
-	if (isInRow()) {
-		switch (getBreakpointKey()) {
-			case 'D': // Desktop
-				if (containsMpuOrDmpu(sizes)) {
-					return 1116420;
-				}
-				if (containsLeaderboardOrBillboard(sizes)) {
-					return 1116421;
-				}
-				return -1;
-			case 'M': // Mobile
-				if (containsMpuOrDmpu(sizes)) {
-					return 1116424;
-				}
-				return -1;
-			case 'T': // Tablet
-				if (containsMpuOrDmpu(sizes)) {
-					return 1116422;
-				}
-				if (containsLeaderboardOrBillboard(sizes)) {
-					return 1116423;
-				}
-				return -1;
-			default:
-				return -1;
-		}
-	}
-	return -1;
-};
-
-const getImproveSkinPlacementId = (): number => {
-	if (isInUk()) {
-		switch (getBreakpointKey()) {
-			case 'D': // Desktop
-				return 22526482;
-			default:
-				return -1;
-		}
-	}
-	if (isInRow()) {
-		switch (getBreakpointKey()) {
-			case 'D': // Desktop
-				return 22526483;
-			default:
-				return -1;
-		}
-	}
-	return -1;
-};
-
-// Improve has to have single size as parameter if slot doesn't accept multiple sizes,
-// because it uses same placement ID for multiple slot sizes and has no other size information
-const getImproveSizeParam = (
-	slotId: string,
-): {
-	w?: number;
-	h?: number;
-} => {
-	const key = stripTrailingNumbersAbove1(stripMobileSuffix(slotId));
-	return key &&
-		(key.endsWith('mostpop') ||
-			key.endsWith('comments') ||
-			key.endsWith('inline1') ||
-			(key.endsWith('inline') && !isDesktopAndArticle))
-		? {
-				w: 300,
-				h: 250,
-		  }
-		: {};
 };
 
 const getXaxisPlacementId = (sizes: HeaderBiddingSize[]): number => {
@@ -422,8 +326,8 @@ const improveDigitalBidder: PrebidBidder = {
 		slotId: string,
 		sizes: HeaderBiddingSize[],
 	): PrebidImproveParams => ({
-		placementId: getImprovePlacementId(sizes),
-		size: getImproveSizeParam(slotId),
+		placementId: getImprovePlacementId(sizes, isInFrontsBannerVariant),
+		size: getImproveSizeParam(slotId, isDesktopAndArticle),
 	}),
 };
 
@@ -585,8 +489,6 @@ export const bids = (
 
 export const _ = {
 	getIndexSiteId,
-	getImprovePlacementId,
-	getImproveSkinPlacementId,
 	getXaxisPlacementId,
 	getTrustXAdUnitId,
 	indexExchangeBidders,

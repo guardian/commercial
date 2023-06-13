@@ -30,6 +30,10 @@ import {
 	stripMobileSuffix as stripMobileSuffix_,
 } from '../utils';
 import { _, bids } from './bid-config';
+import {
+	getImprovePlacementId,
+	getImproveSkinPlacementId,
+} from './improve-digital';
 
 const mockPageTargeting = {} as unknown as PageTargeting;
 
@@ -42,8 +46,6 @@ const getBidders = () =>
 
 const {
 	getIndexSiteId,
-	getImprovePlacementId,
-	getImproveSkinPlacementId,
 	getXaxisPlacementId,
 	getTrustXAdUnitId,
 	indexExchangeBidders,
@@ -139,11 +141,12 @@ describe('getImprovePlacementId', () => {
 			[createAdSize(728, 90)],
 			[createAdSize(1, 2)],
 		];
-		return prebidSizes.map(getImprovePlacementId);
+
+		return prebidSizes.map((size) => getImprovePlacementId(size, false));
 	};
 
 	test('should return -1 if no cases match', () => {
-		expect(getImprovePlacementId([createAdSize(1, 2)])).toBe(-1);
+		expect(getImprovePlacementId([createAdSize(1, 2)], false)).toBe(-1);
 	});
 
 	test('should return the expected values when geolocated in UK and on desktop device', () => {
@@ -667,7 +670,7 @@ describe('getXaxisPlacementId', () => {
 	};
 
 	test('should return -1 if no cases match', () => {
-		expect(getImprovePlacementId([createAdSize(1, 2)])).toBe(-1);
+		expect(getImprovePlacementId([createAdSize(1, 2)], false)).toBe(-1);
 	});
 
 	test('should return the expected values for desktop device', () => {
