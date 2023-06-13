@@ -115,8 +115,8 @@
 		"prebid.js": "guardian/prebid.js#2e3b96d",
 		"process": "^0.11.10",
 		"raven-js": "^3.27.2",
-		"tslib": "^2.4.1",
-		"web-vitals": "^2.1.2",
+		"tslib": "^2.5.3",
+		"web-vitals": "^3.3.2",
 		"wolfy87-eventemitter": "^5.2.9"
 	},
 	"resolutions": {
