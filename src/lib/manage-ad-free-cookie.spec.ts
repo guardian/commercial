@@ -16,26 +16,6 @@ describe('manage-ad-free-cookie', () => {
 			},
 		},
 		{
-			reason: AdFreeCookieReasons.ConsentOptOut,
-			localStorageValue: {
-				[AdFreeCookieReasons.ConsentOptOut]: VALID_EXPIRY,
-			},
-		},
-		{
-			reason: AdFreeCookieReasons.Subscriber,
-			localStorageValue: {
-				[AdFreeCookieReasons.Subscriber]: VALID_EXPIRY,
-				[AdFreeCookieReasons.ConsentOptOut]: EXPIRED_EXPIRY,
-			},
-		},
-		{
-			reason: AdFreeCookieReasons.ConsentOptOut,
-			localStorageValue: {
-				[AdFreeCookieReasons.ConsentOptOut]: VALID_EXPIRY,
-				[AdFreeCookieReasons.Subscriber]: EXPIRED_EXPIRY,
-			},
-		},
-		{
 			reason: AdFreeCookieReasons.Subscriber,
 			localStorageValue: undefined,
 		},
@@ -70,33 +50,15 @@ describe('manage-ad-free-cookie', () => {
 			reason: AdFreeCookieReasons.Subscriber,
 			localStorageValue: {
 				[AdFreeCookieReasons.Subscriber]: VALID_EXPIRY,
-				[AdFreeCookieReasons.ConsentOptOut]: VALID_EXPIRY,
-			},
-		},
-		{
-			reason: AdFreeCookieReasons.ConsentOptOut,
-			localStorageValue: {
-				[AdFreeCookieReasons.Subscriber]: VALID_EXPIRY,
-				[AdFreeCookieReasons.ConsentOptOut]: VALID_EXPIRY,
+				[AdFreeCookieReasons.ForceAdFree]: VALID_EXPIRY,
 			},
 		},
 		{
 			reason: AdFreeCookieReasons.Subscriber,
 			localStorageValue: {
 				[AdFreeCookieReasons.Subscriber]: EXPIRED_EXPIRY,
-				[AdFreeCookieReasons.ConsentOptOut]: VALID_EXPIRY,
+				[AdFreeCookieReasons.ForceAdFree]: VALID_EXPIRY,
 			},
-		},
-		{
-			reason: AdFreeCookieReasons.ConsentOptOut,
-			localStorageValue: {
-				[AdFreeCookieReasons.Subscriber]: VALID_EXPIRY,
-				[AdFreeCookieReasons.ConsentOptOut]: EXPIRED_EXPIRY,
-			},
-		},
-		{
-			reason: AdFreeCookieReasons.ConsentOptOut,
-			localStorageValue: undefined,
 		},
 	];
 
@@ -109,14 +71,10 @@ describe('manage-ad-free-cookie', () => {
 				daysToLive: 1,
 			});
 
-			if (localStorageValue) {
-				localStorage.setItem(
-					'gu.ad_free_cookie_reason',
-					JSON.stringify(localStorageValue),
-				);
-			} else {
-				localStorage.removeItem('gu.ad_free_cookie_reason');
-			}
+			localStorage.setItem(
+				'gu.ad_free_cookie_reason',
+				JSON.stringify(localStorageValue),
+			);
 
 			maybeUnsetAdFreeCookie(reason);
 

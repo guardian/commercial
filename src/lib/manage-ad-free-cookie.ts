@@ -88,17 +88,6 @@ const setAdFreeCookie = (reason: AdFreeCookieReasons, daysToLive = 1): void => {
 const maybeUnsetAdFreeCookie = (reason: AdFreeCookieReasons): void => {
 	const adFreeLocalStorageReason = getAdFreeCookieReason();
 
-	/**
-	 *  if consent is given but localStorage is missing, play it safe and assume the user should be ad free if they already are
-	 * */
-	if (
-		!adFreeLocalStorageReason &&
-		reason === AdFreeCookieReasons.ConsentOptOut &&
-		adFreeDataIsPresent()
-	) {
-		return;
-	}
-
 	const adFreeReason = adFreeLocalStorageReason ?? {};
 
 	delete adFreeReason[reason];
