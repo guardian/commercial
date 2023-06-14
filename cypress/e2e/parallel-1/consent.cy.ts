@@ -128,11 +128,7 @@ describe.skip('tcfv2 consent', () => {
 
 		cy.getCookie('GU_AF1').should('not.be.empty');
 
-		expectAdFreeCookieReasonSet([AdFreeCookieReasons.ConsentOptOut]);
-
 		cy.reload();
-
-		expectAdFree([AdFreeCookieReasons.ConsentOptOut]);
 
 		cy.get(`[data-name="top-above-nav"]`).should('not.exist');
 
@@ -176,18 +172,13 @@ describe.skip('tcfv2 consent', () => {
 
 		cy.rejectAllConsent();
 
-		expectAdFreeCookieReasonSet([
-			AdFreeCookieReasons.ConsentOptOut,
-			AdFreeCookieReasons.Subscriber,
-		]);
+		expectAdFreeCookieReasonSet([AdFreeCookieReasons.Subscriber]);
 
 		fakeLogOut();
 
 		cy.reload();
 
 		adsShouldNotShow();
-
-		expectAdFree([AdFreeCookieReasons.ConsentOptOut]);
 	});
 
 	it(`Test ${path} reject all, login as non-subscriber, log out should not show ads`, () => {
@@ -197,13 +188,9 @@ describe.skip('tcfv2 consent', () => {
 
 		cy.rejectAllConsent();
 
-		expectAdFreeCookieReasonSet([AdFreeCookieReasons.ConsentOptOut]);
-
 		fakeLogOut();
 
 		adsShouldNotShow();
-
-		expectAdFree([AdFreeCookieReasons.ConsentOptOut]);
 	});
 
 	it(`Test ${path} reject all, login as non-subscriber, reconsent should show ads`, () => {
@@ -219,11 +206,7 @@ describe.skip('tcfv2 consent', () => {
 			`{"value":"${new Date().toISOString()}"}`,
 		);
 
-		expectAdFreeCookieReasonSet([AdFreeCookieReasons.ConsentOptOut]);
-
 		cy.reload();
-
-		expectAdFree([AdFreeCookieReasons.ConsentOptOut]);
 
 		adsShouldNotShow();
 
@@ -274,10 +257,7 @@ describe.skip('tcfv2 consent', () => {
 
 		cy.rejectAllConsent();
 
-		expectAdFreeCookieReasonSet([
-			AdFreeCookieReasons.ConsentOptOut,
-			AdFreeCookieReasons.Subscriber,
-		]);
+		expectAdFreeCookieReasonSet([AdFreeCookieReasons.Subscriber]);
 
 		cy.setCookie(
 			'gu_user_features_expiry',
@@ -294,8 +274,6 @@ describe.skip('tcfv2 consent', () => {
 
 		cy.reload();
 
-		expectAdFree([AdFreeCookieReasons.ConsentOptOut]);
-
 		// reload twice so server is not sent ad free cookie
 		cy.reload();
 
@@ -306,8 +284,6 @@ describe.skip('tcfv2 consent', () => {
 		cy.visit(path);
 
 		cy.rejectAllConsent();
-
-		expectAdFreeCookieReasonSet([AdFreeCookieReasons.ConsentOptOut]);
 
 		const expiredTimestamp = new Date().getTime() - 1000;
 
@@ -321,8 +297,6 @@ describe.skip('tcfv2 consent', () => {
 		cy.reload();
 
 		cy.wait(100);
-
-		expectAdFree([AdFreeCookieReasons.ConsentOptOut]);
 
 		// expiries should update
 

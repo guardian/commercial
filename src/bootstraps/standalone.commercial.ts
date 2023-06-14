@@ -18,6 +18,7 @@ import {
 } from '@guardian/consent-management-platform';
 import { log } from '@guardian/libs';
 import { EventTimer } from 'core/event-timer';
+import { removeTargetedAdsOnConsentChange } from 'projects/commercial/modules/remove-targeted-ads-on-consent-change';
 import { reportError } from '../lib/report-error';
 import { catchErrorsWithContext } from '../lib/robust';
 import { initAdblockAsk } from '../projects/commercial/adblock-ask';
@@ -38,7 +39,6 @@ import { init as initFrontsBannerAdverts } from '../projects/commercial/modules/
 import { init as initHighMerch } from '../projects/commercial/modules/high-merch';
 import { init as initIpsosMori } from '../projects/commercial/modules/ipsos-mori';
 import { init as initLiveblogAdverts } from '../projects/commercial/modules/liveblog-adverts';
-import { manageAdFreeCookieOnConsentChange } from '../projects/commercial/modules/manage-ad-free-cookie-on-consent-change';
 import { init as initMobileSticky } from '../projects/commercial/modules/mobile-sticky';
 import { paidContainers } from '../projects/commercial/modules/paid-containers';
 import { removeDisabledSlots as closeDisabledSlots } from '../projects/commercial/modules/remove-slots';
@@ -78,7 +78,7 @@ const commercialBaseModules: Modules = [];
 // remaining modules not necessary to load an ad
 const commercialExtraModules: Modules = [
 	['cm-adFreeSlotRemoveFronts', adFreeSlotRemove],
-	['cm-manageAdFreeCookieOnConsentChange', manageAdFreeCookieOnConsentChange],
+	['cm-removeTargetedAdsOnConsentChange', removeTargetedAdsOnConsentChange],
 	['cm-closeDisabledSlots', closeDisabledSlots],
 	['cm-comscore', initComscore],
 	['cm-ipsosmori', initIpsosMori],
@@ -233,7 +233,8 @@ const chooseAdvertisingTag = async () => {
 	if (
 		consentState.tcfv2 &&
 		!getConsentFor('googletag', consentState) &&
-		!isDigitalSubscriber()
+		!isDigitalSubscriber() &&
+		!commercialFeatures.adFree
 	) {
 		void import(
 			/* webpackChunkName: "consentless" */

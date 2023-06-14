@@ -14,7 +14,6 @@ const AD_FREE_USER_COOKIE = 'GU_AF1';
  * 3. The url parameter noadsaf is set so ads are temporarily disabled
  */
 enum AdFreeCookieReasons {
-	ConsentOptOut = 'consent_opt_out',
 	Subscriber = 'subscriber',
 	ForceAdFree = 'force_ad_free',
 }
@@ -87,17 +86,6 @@ const setAdFreeCookie = (reason: AdFreeCookieReasons, daysToLive = 1): void => {
  */
 const maybeUnsetAdFreeCookie = (reason: AdFreeCookieReasons): void => {
 	const adFreeLocalStorageReason = getAdFreeCookieReason();
-
-	/**
-	 *  if consent is given but localStorage is missing, play it safe and assume the user should be ad free if they already are
-	 * */
-	if (
-		!adFreeLocalStorageReason &&
-		reason === AdFreeCookieReasons.ConsentOptOut &&
-		adFreeDataIsPresent()
-	) {
-		return;
-	}
 
 	const adFreeReason = adFreeLocalStorageReason ?? {};
 
