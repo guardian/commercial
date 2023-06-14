@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 9.2.0
+
+### Minor Changes
+
+- df69481: Enable Prebid for fronts-banner-ads. Configure prebid vendors so that correct size is used for these slots.
+
 ## 9.1.1
 
 ### Patch Changes
