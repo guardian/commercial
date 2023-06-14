@@ -14,7 +14,6 @@ const AD_FREE_USER_COOKIE = 'GU_AF1';
  * 3. The url parameter noadsaf is set so ads are temporarily disabled
  */
 enum AdFreeCookieReasons {
-	ConsentOptOut = 'consent_opt_out',
 	Subscriber = 'subscriber',
 	ForceAdFree = 'force_ad_free',
 }
