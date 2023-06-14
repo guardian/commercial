@@ -4,13 +4,15 @@ const BundleAnalyzerPlugin =
 	require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const config = require('./webpack.config.js');
 const TerserPlugin = require('terser-webpack-plugin');
+const path = require('path');
 
 module.exports = webpackMerge.smart(config, {
 	mode: 'production',
 	output: {
 		filename: `[chunkhash]/graun.standalone.commercial.js`,
 		chunkFilename: `[chunkhash]/graun.[name].commercial.js`,
-		clean: false,
+		path: path.join(__dirname, 'dist', 'bundle', 'prod'),
+		clean: true,
 	},
 	devtool: 'source-map',
 	plugins: [

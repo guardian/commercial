@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const config = require('./webpack.config.js');
+const path = require('path');
 
 const port = 3031;
 const overrideBundlePath = `http://localhost:${port}/`;
@@ -13,6 +14,8 @@ module.exports = webpackMerge.smart(config, {
 	output: {
 		filename: `graun.standalone.commercial.js`,
 		chunkFilename: `graun.[name].commercial.js`,
+		path: path.join(__dirname, 'dist', 'bundle', 'dev'),
+		clean: true,
 	},
 	plugins: shouldOverrideBundle
 		? [
