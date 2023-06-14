@@ -417,10 +417,10 @@ const smartBidder: PrebidBidder = {
 // There's an IX bidder for every size that the slot can take
 const indexExchangeBidders = (
 	slotSizes: HeaderBiddingSize[],
-	isInVariant: boolean,
+	isInFrontsBannerVariant: boolean,
 ): PrebidBidder[] => {
 	let indexSiteId = getIndexSiteId();
-	if (isInVariant) {
+	if (isInFrontsBannerVariant) {
 		// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
 		// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
 		if (containsBillboardNotLeaderboard(slotSizes)) {
