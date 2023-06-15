@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 9.3.0
+
+### Minor Changes
+
+- b467f80: Increase inline merch AB test audience size to 20%
+
 ## 9.2.0
 
 ### Minor Changes
