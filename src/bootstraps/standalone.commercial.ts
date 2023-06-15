@@ -182,8 +182,8 @@ const bootCommercial = async (): Promise<void> => {
 	const shouldTestBeacon = Math.random() <= 1 / 10000;
 	if (shouldTestBeacon) {
 		amIUsed(
-			'spacefinder.ts',
-			'isIframeLoaded',
+			'standalone.commercial.ts',
+			'bootCommercial',
 			{ userAgent: navigator.userAgent },
 			1,
 		);
