@@ -186,14 +186,6 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.googleCard,
 			adSizes.fluid,
 		],
-		phablet: [
-			adSizes.outOfPage,
-			adSizes.empty,
-			adSizes.outstreamMobile,
-			adSizes.mpu,
-			adSizes.googleCard,
-			adSizes.fluid,
-		],
 		desktop: [
 			adSizes.outOfPage,
 			adSizes.empty,
@@ -214,14 +206,6 @@ const slotSizeMappings: SlotSizeMappings = {
 	},
 	comments: {
 		mobile: [
-			adSizes.outOfPage,
-			adSizes.empty,
-			adSizes.outstreamMobile,
-			adSizes.mpu,
-			adSizes.googleCard,
-			adSizes.fluid,
-		],
-		phablet: [
 			adSizes.outOfPage,
 			adSizes.empty,
 			adSizes.outstreamMobile,
@@ -360,12 +344,9 @@ const slotSizeMappings: SlotSizeMappings = {
 	},
 	'crossword-banner': {
 		phablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
-		tablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
 	},
 	exclusion: {
 		mobile: [adSizes.empty],
-		phablet: [adSizes.empty],
-		desktop: [adSizes.empty],
 	},
 };
 
