@@ -131,7 +131,7 @@ const waitForSetHeightMessage = (
 				string | number
 			>;
 
-			if (message.type === 'set-height' && message.value > 0) {
+			if (message.type === 'set-height' && Number(message.value) > 0) {
 				callback();
 			}
 		} catch (ex) {

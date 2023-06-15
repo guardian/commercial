@@ -124,6 +124,7 @@ const trackPerformance = (
 		timingLabel,
 	};
 
+	// @ts-expect-error -- extra safety if undefined
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- extra safety if undefined
 	if (window.ga ?? false) {
 		sendPerformanceEvent(event);
