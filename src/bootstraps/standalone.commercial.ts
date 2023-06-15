@@ -181,7 +181,12 @@ const bootCommercial = async (): Promise<void> => {
 	//this will be removed when we have enough data
 	const shouldTestBeacon = Math.random() <= 1 / 10000;
 	if (shouldTestBeacon) {
-		amIUsed('spacefinder.ts', 'isIframeLoaded', undefined, 1);
+		amIUsed(
+			'spacefinder.ts',
+			'isIframeLoaded',
+			{ userAgent: navigator.userAgent },
+			1,
+		);
 	}
 
 	// Init Commercial event timers
