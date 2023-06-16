@@ -56,6 +56,9 @@ const amIUsed = (
 			: properties,
 	};
 
+	//The code below is for testing the reliability of the sendBeacon method compared to fetch
+	//There is a possibility that sendBeacon may not be as reliable as we think: https://volument.com/blog/sendbeacon-is-broken
+
 	const shouldTestBeacon = Math.random() <= sampling;
 
 	if (shouldTestBeacon) {
