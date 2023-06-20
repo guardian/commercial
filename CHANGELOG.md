@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 10.0.0
+
+### Major Changes
+
+- 92cb83b: Move built bundle files to `prod` and `dev` subdirectories in the dist folder and have both in npm, so they can both be used, this is a breaking change as the path to the files/entrypoints will change.
+
 ## 9.3.0
 
 ### Minor Changes
