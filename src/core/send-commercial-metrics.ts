@@ -1,36 +1,80 @@
 import { onConsent } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { log } from '@guardian/libs';
+import type { EventTimerProperties } from './event-timer';
 import { EventTimer } from './event-timer';
-import type { ConnectionType } from './types';
 
-type Metric = {
+/**
+ * For numerical data of type `number`.
+ *
+ * Anything that can be measured discretely or continuously:
+ * - size of element
+ * - number of elements
+ * - duration of event
+ * - occurrences of event
+ *
+ * @see [Quantitative Data](https://en.wikibooks.org/wiki/Statistics/Different_Types_of_Data/Quantitative_and_Qualitative_Data#Quantitative_data)
+ *
+ * @example
+ * const data: Quantitative[] = [
+ * 	{ name: "time on page", value: 10_320 },
+ * 	{ name: "height of banner", value: 360 },
+ * 	{ name: "cumulative layout shift", value: 0.0625 },
+ * ]
+ */
+type Quantitative = {
 	name: string;
 	value: number;
 };
 
-type Property = {
+/**
+ * For categorical data of type `string`.
+ *
+ * Anything that can be identified with distinct labels:
+ * - edition
+ * - host name
+ * - name of element
+ * - type of connection
+ *
+ * @see [Qualitative Data](https://en.wikibooks.org/wiki/Statistics/Different_Types_of_Data/Quantitative_and_Qualitative_Data#Qualitative_data)
+ *
+ * @example
+ * const data: Qualitative[] = [
+ * 	{ name: "edition", value: "UK" },
+ * 	{ name: "content ID", value: "/2023/feb/23/…" },
+ * 	{ name: "connection type", value: "4g" },
+ * ]
+ */
+type Qualitative = {
 	name: string;
 	value: string;
 };
+
+/**
+ * Individual measurement. Latin singular form of “data”.
+ * Can be either:
+ * - qualitative (`string`)
+ * - quantitative (`number`)
+ *
+ * @see Data
+ * @see [Quantitative and Qualitative Data](https://en.wikibooks.org/wiki/Statistics/Different_Types_of_Data/Quantitative_and_Qualitative_Data)
+ */
+type Datum = Quantitative | Qualitative;
+type Data = Datum[];
 
 type TimedEvent = {
 	name: string;
 	ts: number;
 };
 
-type EventProperties = {
-	type?: ConnectionType;
-	downlink?: number;
-	effectiveType?: string;
-};
-
 type CommercialMetricsPayload = {
 	page_view_id?: string;
 	browser_id?: string;
 	platform?: 'NEXT_GEN';
-	metrics?: readonly Metric[];
-	properties?: readonly Property[];
+	/** Data of type `number`. Also known as ordinal and numerical. */
+	metrics?: readonly Quantitative[];
+	/** Data of type `string`. Also known as categorical and nominal. */
+	properties?: readonly Qualitative[];
 };
 
 enum Endpoints {
@@ -46,21 +90,21 @@ let commercialMetricsPayload: CommercialMetricsPayload = {
 	properties: [],
 };
 
-let devProperties: Property[] | [] = [];
-let adBlockerProperties: Property[] | [] = [];
+let devData: Qualitative[] = [];
+let adBlockerData: Qualitative[] = [];
 let initialised = false;
 let endpoint: Endpoints;
 
 const setEndpoint = (isDev: boolean) =>
 	(endpoint = isDev ? Endpoints.CODE : Endpoints.PROD);
 
-const setDevProperties = (isDev: boolean) =>
-	(devProperties = isDev
+const setDevData = (isDev: boolean) =>
+	(devData = isDev
 		? [{ name: 'isDev', value: window.location.hostname }]
 		: []);
 
-const setAdBlockerProperties = (adBlockerInUse?: boolean): void => {
-	adBlockerProperties =
+const setAdBlockerData = (adBlockerInUse?: boolean): void => {
+	adBlockerData =
 		adBlockerInUse !== undefined
 			? [
 					{
@@ -71,23 +115,31 @@ const setAdBlockerProperties = (adBlockerInUse?: boolean): void => {
 			: [];
 };
 
-const transformToObjectEntries = (
-	eventTimerProperties: EventProperties,
-): Array<[string, string | number | undefined]> => {
-	// Transforms object {key: value} pairs into an array of [key, value] arrays
-	return Object.entries(eventTimerProperties);
+const isQualitative = (datum: Datum): datum is Qualitative =>
+	typeof datum.value === 'string';
+
+const isQuantitative = (datum: Datum): datum is Quantitative =>
+	typeof datum.value === 'number';
+
+const transformPropertiesObjectToData = (
+	eventTimerProperties: Pick<
+		EventTimerProperties,
+		'type' | 'downlink' | 'effectiveType'
+	>,
+): [Qualitative[], Quantitative[]] => {
+	const data: Data = Object.entries(eventTimerProperties)
+		.filter(
+			(datum: [string, unknown]): datum is [string, string | number] =>
+				typeof datum[1] === 'string' || typeof datum[1] === 'number',
+		)
+		.map(([name, value]) =>
+			typeof value === 'string' ? { name, value } : { name, value },
+		);
+
+	return [data.filter(isQualitative), data.filter(isQuantitative)];
 };
 
-const mapEventTimerPropertiesToString = (
-	properties: Array<[string, string | number]>,
-): Property[] => {
-	return properties.map(([name, value]) => ({
-		name: String(name),
-		value: String(value),
-	}));
-};
-
-const roundTimeStamp = (events: TimedEvent[]): Metric[] => {
+const roundTimeStamp = (events: TimedEvent[]): Quantitative[] => {
 	return events.map(({ name, ts }) => ({
 		name,
 		value: Math.ceil(ts),
@@ -107,8 +159,6 @@ function sendMetrics() {
 	);
 }
 
-type ArrayMetric = [key: string, value: string | number];
-
 /**
  * Gather how many times the user has experienced the “offline” event
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/offline_event
@@ -118,7 +168,7 @@ type ArrayMetric = [key: string, value: string | number];
  *
  * Relevant for an @guardian/open-journalism investigation.
  */
-const getOfflineCount = (): Metric[] =>
+const getOfflineCount = (): Quantitative[] =>
 	typeof window.guardian.offlineCount === 'number'
 		? [
 				{
@@ -131,23 +181,29 @@ const getOfflineCount = (): Metric[] =>
 function gatherMetricsOnPageUnload(): void {
 	// Assemble commercial properties and metrics
 	const eventTimer = EventTimer.get();
-	const transformedEntries = transformToObjectEntries(eventTimer.properties);
-	const filteredEventTimerProperties = transformedEntries.filter<ArrayMetric>(
-		(item): item is ArrayMetric => typeof item[1] !== 'undefined',
-	);
-	const mappedEventTimerProperties = mapEventTimerPropertiesToString(
-		filteredEventTimerProperties,
+	const [qualitativeProperties, quantitativeProperties] =
+		transformPropertiesObjectToData(eventTimer.properties);
+
+	/**
+	 * Temporary measure to keep previous behaviour around
+	 *
+	 * @todo remove in next major version
+	 * @deprecated
+	 */
+	const quantitativeAsQualitative = quantitativeProperties.map(
+		({ name, value }) => ({ name, value: String(value) }),
 	);
 
-	const properties: readonly Property[] = mappedEventTimerProperties
-		.concat(devProperties)
-		.concat(adBlockerProperties);
-	commercialMetricsPayload.properties = properties;
+	const qualitativeData: readonly Qualitative[] = qualitativeProperties
+		.concat(quantitativeAsQualitative)
+		.concat(devData)
+		.concat(adBlockerData);
+	commercialMetricsPayload.properties = qualitativeData;
 
-	const metrics: readonly Metric[] = roundTimeStamp(eventTimer.events).concat(
-		getOfflineCount(),
-	);
-	commercialMetricsPayload.metrics = metrics;
+	const quantitativeData: readonly Quantitative[] = quantitativeProperties
+		.concat(roundTimeStamp(eventTimer.events))
+		.concat(getOfflineCount());
+	commercialMetricsPayload.metrics = quantitativeData;
 
 	sendMetrics();
 }
@@ -232,8 +288,8 @@ async function initCommercialMetrics({
 	commercialMetricsPayload.page_view_id = pageViewId;
 	commercialMetricsPayload.browser_id = browserId;
 	setEndpoint(isDev);
-	setDevProperties(isDev);
-	setAdBlockerProperties(adBlockerInUse);
+	setDevData(isDev);
+	setAdBlockerData(adBlockerInUse);
 
 	if (initialised) {
 		return false;
@@ -262,9 +318,8 @@ async function initCommercialMetrics({
 export const _ = {
 	Endpoints,
 	setEndpoint,
-	mapEventTimerPropertiesToString,
 	roundTimeStamp,
-	transformToObjectEntries,
+	transformPropertiesObjectToData,
 	reset: (): void => {
 		initialised = false;
 		commercialMetricsPayload = {
@@ -279,5 +334,5 @@ export const _ = {
 	},
 };
 
-export type { Property, TimedEvent, Metric };
+export type { Qualitative, TimedEvent, Quantitative };
 export { bypassCommercialMetricsSampling, initCommercialMetrics };

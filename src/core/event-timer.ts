@@ -251,3 +251,4 @@ class EventTimer {
 }
 
 export { EventTimer };
+export type { EventTimerProperties };

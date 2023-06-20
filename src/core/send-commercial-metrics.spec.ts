@@ -7,13 +7,7 @@ import {
 	initCommercialMetrics,
 } from './send-commercial-metrics';
 
-const {
-	Endpoints,
-	mapEventTimerPropertiesToString,
-	reset,
-	roundTimeStamp,
-	transformToObjectEntries,
-} = _;
+const { Endpoints, reset, roundTimeStamp, transformPropertiesObjectToData } = _;
 
 jest.mock('@guardian/consent-management-platform');
 
@@ -365,9 +359,10 @@ describe('send commercial metrics', () => {
 					Endpoints.PROD,
 					JSON.stringify({
 						...defaultMetrics,
+						metrics: [{ name: 'downlink', value: 1 }],
 						properties: [
-							{ name: 'downlink', value: '1' },
 							{ name: 'effectiveType', value: '4g' },
+							{ name: 'downlink', value: '1' },
 							{ name: 'adBlockerInUse', value: 'false' },
 						],
 					}),
@@ -401,9 +396,10 @@ describe('send commercial metrics', () => {
 					Endpoints.CODE,
 					JSON.stringify({
 						...defaultMetrics,
+						metrics: [{ name: 'downlink', value: 1 }],
 						properties: [
-							{ name: 'downlink', value: '1' },
 							{ name: 'effectiveType', value: '4g' },
+							{ name: 'downlink', value: '1' },
 							{ name: 'isDev', value: 'testurl.theguardian.com' },
 							{ name: 'adBlockerInUse', value: 'false' },
 						],
@@ -464,9 +460,10 @@ describe('send commercial metrics', () => {
 					Endpoints.CODE,
 					JSON.stringify({
 						...defaultMetrics,
+						metrics: [{ name: 'downlink', value: 1 }],
 						properties: [
-							{ name: 'downlink', value: '1' },
 							{ name: 'effectiveType', value: '4g' },
+							{ name: 'downlink', value: '1' },
 							{ name: 'isDev', value: 'testurl.theguardian.com' },
 						],
 					}),
@@ -495,6 +492,10 @@ describe('send commercial metrics', () => {
 					Endpoints.CODE,
 					JSON.stringify({
 						...defaultMetrics,
+						metrics: [
+							{ name: 'adSlotsInline', value: 5 },
+							{ name: 'adSlotsTotal', value: 10 },
+						],
 						properties: [
 							{ name: 'adSlotsInline', value: '5' },
 							{ name: 'adSlotsTotal', value: '10' },
@@ -593,33 +594,14 @@ describe('send commercial metrics', () => {
 describe('send commercial metrics helpers', () => {
 	it('can transform event timer properties into object entries', () => {
 		expect(
-			transformToObjectEntries({
+			transformPropertiesObjectToData({
 				type: undefined,
 				downlink: 1,
 				effectiveType: '4g',
 			}),
 		).toEqual([
-			['type', undefined],
-			['downlink', 1],
-			['effectiveType', '4g'],
-		]);
-	});
-
-	it('can map event timer properties to the required format', () => {
-		expect(
-			mapEventTimerPropertiesToString([
-				['downlink', 1],
-				['effectiveType', '4g'],
-			]),
-		).toEqual([
-			{
-				name: 'downlink',
-				value: '1',
-			},
-			{
-				name: 'effectiveType',
-				value: '4g',
-			},
+			[{ name: 'effectiveType', value: '4g' }],
+			[{ name: 'downlink', value: 1 }],
 		]);
 	});
 
