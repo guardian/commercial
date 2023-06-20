@@ -18,6 +18,7 @@ import {
 } from '@guardian/consent-management-platform';
 import { log } from '@guardian/libs';
 import { EventTimer } from 'core/event-timer';
+import { amIUsed } from 'projects/commercial/am-i-used';
 import { reportError } from '../lib/report-error';
 import { catchErrorsWithContext } from '../lib/robust';
 import { initAdblockAsk } from '../projects/commercial/adblock-ask';
@@ -175,6 +176,18 @@ const recordCommercialMetrics = () => {
 
 const bootCommercial = async (): Promise<void> => {
 	log('commercial', '📦 standalone.commercial.ts', __webpack_public_path__);
+
+	//adding an amiused call for a very small proportion of users to test sendBeacon vs fetch
+	//this will be removed when we have enough data
+	const shouldTestBeacon = Math.random() <= 1 / 10000;
+	if (shouldTestBeacon) {
+		amIUsed(
+			'standalone.commercial.ts',
+			'bootCommercial',
+			{ userAgent: navigator.userAgent },
+			1,
+		);
+	}
 
 	// Init Commercial event timers
 	EventTimer.init();
