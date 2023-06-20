@@ -17,7 +17,7 @@
 	"main": "dist/cjs/core/index.js",
 	"module": "dist/esm/core/index.js",
 	"scripts": {
-		"build": "npm-run-all clean --parallel compile:core:* build:prod",
+		"build": "npm-run-all clean --parallel compile:core:* build:prod build:dev",
 		"build:dev": "webpack -c webpack.config.dev.js",
 		"build:prod": "webpack -c webpack.config.prod.js",
 		"clean": "rm -rf dist",
