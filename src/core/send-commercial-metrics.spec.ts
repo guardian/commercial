@@ -12,7 +12,7 @@ const {
 	mapEventTimerPropertiesToString,
 	reset,
 	roundTimeStamp,
-	transformToObjectEntries,
+	transformObjectToData,
 } = _;
 
 jest.mock('@guardian/consent-management-platform');
@@ -582,7 +582,6 @@ describe('send commercial metrics', () => {
 					Endpoints.PROD,
 					JSON.stringify({
 						...defaultMetrics,
-						metrics: [],
 					}),
 				],
 			]);
@@ -593,34 +592,27 @@ describe('send commercial metrics', () => {
 describe('send commercial metrics helpers', () => {
 	it('can transform event timer properties into object entries', () => {
 		expect(
-			transformToObjectEntries({
+			transformObjectToData({
 				type: undefined,
 				downlink: 1,
 				effectiveType: '4g',
 			}),
-		).toEqual([
-			['type', undefined],
-			['downlink', 1],
-			['effectiveType', '4g'],
-		]);
+		).toEqual({
+			metrics: [{ name: 'downlink', value: 1 }],
+			properties: [{ name: 'effectiveType', value: '4g' }],
+		});
 	});
 
 	it('can map event timer properties to the required format', () => {
 		expect(
-			mapEventTimerPropertiesToString([
-				['downlink', 1],
-				['effectiveType', '4g'],
-			]),
-		).toEqual([
-			{
-				name: 'downlink',
-				value: '1',
-			},
-			{
-				name: 'effectiveType',
-				value: '4g',
-			},
-		]);
+			mapEventTimerPropertiesToString({
+				downlink: 1,
+				effectiveType: '4g',
+			}),
+		).toEqual({
+			downlink: '1',
+			effectiveType: '4g',
+		});
 	});
 
 	it('can round up the value of timestamps', () => {

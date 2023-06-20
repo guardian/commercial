@@ -1,35 +1,79 @@
 import { onConsent } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { log } from '@guardian/libs';
+import { isNonNullable, log } from '@guardian/libs';
+import type { EventTimerProperties } from './event-timer';
 import { EventTimer } from './event-timer';
-import type { ConnectionType } from './types';
 
+/**
+ * For numerical data of type `number`.
+ *
+ * Anything that can be measured discretely or continuously:
+ * - size of element
+ * - number of elements
+ * - duration of event
+ * - occurrences of event
+ *
+ * @see [Quantitative Data](https://en.wikibooks.org/wiki/Statistics/Different_Types_of_Data/Quantitative_and_Qualitative_Data#Quantitative_data)
+ *
+ * @example
+ * const data: Metric[] = [
+ * 	{ name: "time on page", value: 10_320 },
+ * 	{ name: "height of banner", value: 360 },
+ * 	{ name: "cumulative layout shift", value: 0.0625 },
+ * ]
+ */
 type Metric = {
 	name: string;
 	value: number;
 };
 
+/**
+ * For categorical data of type `string`.
+ *
+ * Anything that can be identified with distinct labels:
+ * - edition
+ * - host name
+ * - name of element
+ * - type of connection
+ *
+ * @see [Qualitative Data](https://en.wikibooks.org/wiki/Statistics/Different_Types_of_Data/Quantitative_and_Qualitative_Data#Qualitative_data)
+ *
+ * @example
+ * const data: Property[] = [
+ * 	{ name: "edition", value: "UK" },
+ * 	{ name: "content ID", value: "/2023/feb/23/…" },
+ * 	{ name: "connection type", value: "4g" },
+ * ]
+ */
 type Property = {
 	name: string;
 	value: string;
 };
+
+/**
+ * Individual measurement. Latin singular form of “data”.
+ * Can be either:
+ * - qualitative (`string`)
+ * - quantitative (`number`)
+ *
+ * @see Data
+ * @see [Quantitative and Qualitative Data](https://en.wikibooks.org/wiki/Statistics/Different_Types_of_Data/Quantitative_and_Qualitative_Data)
+ */
+type Datum = Metric | Property;
+type Data = Datum[];
 
 type TimedEvent = {
 	name: string;
 	ts: number;
 };
 
-type EventProperties = {
-	type?: ConnectionType;
-	downlink?: number;
-	effectiveType?: string;
-};
-
 type CommercialMetricsPayload = {
 	page_view_id?: string;
 	browser_id?: string;
 	platform?: 'NEXT_GEN';
+	/** Data of type `number`. Also known as numerical or ordinal. */
 	metrics?: readonly Metric[];
+	/** Data of type `string`. Also known as categorical and nominal. */
 	properties?: readonly Property[];
 };
 
@@ -46,8 +90,8 @@ let commercialMetricsPayload: CommercialMetricsPayload = {
 	properties: [],
 };
 
-let devProperties: Property[] | [] = [];
-let adBlockerProperties: Property[] | [] = [];
+let devProperties: Property[] = [];
+let adBlockerProperties: Property[] = [];
 let initialised = false;
 let endpoint: Endpoints;
 
@@ -71,20 +115,43 @@ const setAdBlockerProperties = (adBlockerInUse?: boolean): void => {
 			: [];
 };
 
-const transformToObjectEntries = (
-	eventTimerProperties: EventProperties,
-): Array<[string, string | number | undefined]> => {
-	// Transforms object {key: value} pairs into an array of [key, value] arrays
-	return Object.entries(eventTimerProperties);
-};
-
+/** @deprecated consider removing this transformation once the data analysis is set up */
 const mapEventTimerPropertiesToString = (
-	properties: Array<[string, string | number]>,
-): Property[] => {
-	return properties.map(([name, value]) => ({
-		name: String(name),
-		value: String(value),
-	}));
+	properties: EventTimerProperties,
+): Record<string, string> =>
+	Object.fromEntries(
+		Object.entries(properties).map(([name, value]) => [
+			name,
+			String(value),
+		]),
+	);
+
+const isProperty = (datum: Datum): datum is Property =>
+	typeof datum.value === 'string';
+
+const isMetric = (datum: Datum): datum is Metric =>
+	typeof datum.value === 'number';
+
+const transformObjectToData = (
+	eventTimerProperties: Record<string, string | number | undefined>,
+): { properties: Property[]; metrics: Metric[] } => {
+	const data: Data = Object.entries(eventTimerProperties)
+		.map(([name, value]) => {
+			switch (typeof value) {
+				case 'string':
+					return { name, value };
+				case 'number':
+					return { name, value };
+				default:
+					return undefined;
+			}
+		})
+		.filter(isNonNullable);
+
+	return {
+		properties: data.filter(isProperty),
+		metrics: data.filter(isMetric),
+	};
 };
 
 const roundTimeStamp = (events: TimedEvent[]): Metric[] => {
@@ -106,8 +173,6 @@ function sendMetrics() {
 		JSON.stringify(commercialMetricsPayload),
 	);
 }
-
-type ArrayMetric = [key: string, value: string | number];
 
 /**
  * Gather how many times the user has experienced the “offline” event
@@ -131,22 +196,19 @@ const getOfflineCount = (): Metric[] =>
 function gatherMetricsOnPageUnload(): void {
 	// Assemble commercial properties and metrics
 	const eventTimer = EventTimer.get();
-	const transformedEntries = transformToObjectEntries(eventTimer.properties);
-	const filteredEventTimerProperties = transformedEntries.filter<ArrayMetric>(
-		(item): item is ArrayMetric => typeof item[1] !== 'undefined',
-	);
-	const mappedEventTimerProperties = mapEventTimerPropertiesToString(
-		filteredEventTimerProperties,
+
+	const data = transformObjectToData(
+		mapEventTimerPropertiesToString(eventTimer.properties),
 	);
 
-	const properties: readonly Property[] = mappedEventTimerProperties
+	const properties: readonly Property[] = data.properties
 		.concat(devProperties)
 		.concat(adBlockerProperties);
 	commercialMetricsPayload.properties = properties;
 
-	const metrics: readonly Metric[] = roundTimeStamp(eventTimer.events).concat(
-		getOfflineCount(),
-	);
+	const metrics: readonly Metric[] = data.metrics
+		.concat(roundTimeStamp(eventTimer.events))
+		.concat(getOfflineCount());
 	commercialMetricsPayload.metrics = metrics;
 
 	sendMetrics();
@@ -262,9 +324,9 @@ async function initCommercialMetrics({
 export const _ = {
 	Endpoints,
 	setEndpoint,
-	mapEventTimerPropertiesToString,
 	roundTimeStamp,
-	transformToObjectEntries,
+	transformObjectToData,
+	mapEventTimerPropertiesToString,
 	reset: (): void => {
 		initialised = false;
 		commercialMetricsPayload = {
