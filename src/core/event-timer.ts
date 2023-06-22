@@ -22,27 +22,18 @@ interface EventTimerProperties {
 }
 
 // Events will be logged using the performance API for all slots, but only these slots will be tracked as commercial metrics
-const trackedSlots = [
-	'top-above-nav',
-	'inline1',
-	'inline2',
-] as const;
+const trackedSlots = ['top-above-nav', 'inline1', 'inline2'] as const;
 
-type TrackedSlots = typeof trackedSlots[number];
+type TrackedSlots = (typeof trackedSlots)[number];
 
 enum PageEvents {
 	CommercialStart = 'commercialStart',
-	CommercialExtraModulesLoaded = 'commercialExtraModulesLoaded',
-	CommercialBaseModulesLoaded = 'commercialBaseModulesLoaded',
-	CommercialModulesLoaded = 'commercialModulesLoaded',
-	LabsContainerInView = 'labsContainerInView',
 	GoogletagInitStart = 'googletagInitStart',
 	GoogletagInitEnd = 'googletagInitEnd',
+	LabsContainerInView = 'labsContainerInView',
 }
 
-const enum SlotEvents {
-	SlotInitialised = 'slotInitialised',
-	SlotReady = 'slotReady',
+enum SlotEvents {
 	AdOnPage = 'adOnPage',
 	AdRenderStart = 'adRenderStart',
 	DefineSlotStart = 'defineAdSlotStart',
@@ -60,21 +51,23 @@ enum ExternalEvents {
 	CmpGotConsent = 'cmp-got-consent',
 }
 
-type EventName = `${string}-${SlotEvents}` | `${PageEvents}`;
+type CommercialEvents = Map<string, PerformanceEntry>;
 
-type CommercialEvents = Map<EventName | ExternalEvents, PerformanceEntry>;
+const isSlotMark = (eventName: string): eventName is SlotEvents =>
+	Object.values(SlotEvents).includes(eventName as SlotEvents);
 
-type LongEventName = `gu.commercial.${EventName}`;
+const shouldSaveMark = (eventName: string) =>
+	(isSlotMark(eventName) && eventName.split(':')[1] === 'adOnPage') ||
+	eventName === PageEvents.CommercialStart;
 
-const isGlobalEvent = (
-	eventName: PageEvents | SlotEvents,
-): eventName is PageEvents =>
-	Object.values(PageEvents).includes(eventName as PageEvents);
+const shouldSaveMeasure = (measureName: string) =>
+	trackedSlots.includes(measureName.split(':')[0] as TrackedSlots) ||
+	measureName === 'googletagInitDuration';
 
 class EventTimer {
 	private _events: CommercialEvents;
 
-	measures: Map<string, PerformanceMeasure>;
+	private _measures: Map<string, PerformanceMeasure>;
 
 	properties: EventTimerProperties;
 	/**
@@ -99,7 +92,7 @@ class EventTimer {
 		return this.init();
 	}
 
-	private get externalEvents(): Map<ExternalEvents, PerformanceEntry> {
+	get externalEvents(): Map<ExternalEvents, PerformanceEntry> {
 		const externalEvents = new Map();
 
 		for (const event of Object.values(ExternalEvents)) {
@@ -118,12 +111,24 @@ class EventTimer {
 	 * by EventTimer so they need to be concatenated to EventTimer's private events array.
 	 */
 	public get events() {
-		return new Map([...this._events, ...this.externalEvents]);
+		return [...this._events, ...this.externalEvents].map(
+			([name, timer]) => ({
+				name,
+				ts: timer.startTime,
+			}),
+		);
+	}
+
+	public get measures() {
+		return [...this._measures].map(([name, measure]) => ({
+			name,
+			duration: measure.duration,
+		}));
 	}
 
 	private constructor() {
 		this._events = new Map();
-		this.measures = new Map();
+		this._measures = new Map();
 
 		this.properties = {};
 
@@ -156,37 +161,53 @@ class EventTimer {
 	 * @param {string} eventName - The short name applied to the mark
 	 * @param {origin} [origin=page] - Either 'page' (default) or the name of the slot
 	 */
-	trigger(eventName: PageEvents | SlotEvents, origin?: string): void {
-		if (isGlobalEvent(eventName)) {
+	trigger(eventName: string, origin?: string): void {
+		if (isSlotMark(eventName) && origin) {
+			this.mark(`${origin}:${eventName}`);
+		} else {
 			this.mark(eventName);
-		} else if (origin) {
-			this.mark(`${origin}-${eventName}`, origin);
 		}
 	}
 
-	private mark(name: PageEvents | `${string}-${SlotEvents}`, origin?: string): void {
-		const longName: LongEventName = `gu.commercial.${name}`;
-		if (!this._events.get(name) && supportsPerformanceAPI()) {
-			const mark = window.performance.mark(longName);
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- browser support is patchy
-			if (typeof mark?.startTime === 'number' && trackedSlots.includes(origin as TrackedSlots)) {
-				this._events.set(name, mark);
-			}
+	private mark(name: string): void {
+		if (this._events.get(name) || !supportsPerformanceAPI()) {
+			return;
+		}
 
-			if(name.endsWith('End')) {
-				const startEvent = longName.replace('End', 'Start');
-				const measureName = longName.replace('End', '');
-				const startMarkExists = window.performance.getEntriesByName(startEvent).length > 0;
-				if (startMarkExists) {
-					try {
-					const measure = window.performance.measure(measureName, startEvent, longName);
-					if (trackedSlots.includes(origin as TrackedSlots)) {
-						this.measures.set(measureName, measure);
-					}
-					} catch (e) {
-						log('commercial', `error measuring ${measureName}`, e);
-					}
+		const mark = window.performance.mark(name);
+
+		if (
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- browser support is patchy
+			typeof mark?.startTime === 'number' &&
+			// we only want to save the marks related to certain slots or the page
+			shouldSaveMark(name)
+		) {
+			this._events.set(name, mark);
+		}
+
+		if (name.endsWith('End')) {
+			this.measure(name);
+		}
+	}
+
+	private measure(endEvent: string): void {
+		const startEvent = endEvent.replace('End', 'Start');
+		const measureName = endEvent.replace('End', 'Duration');
+		const startMarkExists =
+			window.performance.getEntriesByName(startEvent).length > 0;
+		if (startMarkExists) {
+			try {
+				const measure = window.performance.measure(
+					measureName,
+					startEvent,
+					endEvent,
+				);
+
+				if (shouldSaveMeasure(measureName)) {
+					this._measures.set(measureName, measure);
 				}
+			} catch (e) {
+				log('commercial', `error measuring ${measureName}`, e);
 			}
 		}
 	}

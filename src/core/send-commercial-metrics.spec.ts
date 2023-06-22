@@ -625,16 +625,28 @@ describe('send commercial metrics helpers', () => {
 
 	it('can round up the value of timestamps', () => {
 		expect(
-			roundTimeStamp([
-				{
-					name: 'test-metric',
-					ts: 1519211809934.234,
-				},
-			]),
+			roundTimeStamp(
+				[
+					{
+						name: 'test-metric',
+						ts: 1519211809934.234,
+					},
+				],
+				[
+					{
+						name: 'test-measure',
+						duration: 1519211809934.234,
+					},
+				],
+			),
 		).toEqual([
 			{
 				name: 'test-metric',
 				value: 1519211809935,
+			},
+			{
+				name: 'test-measure',
+				duration: 1519211809935,
 			},
 		]);
 	});

@@ -27,7 +27,6 @@ export const loadAdvert = (advert: Advert): void => {
 			return requestBidsForAd(advert);
 		})
 		.then(() => {
-			eventTimer.trigger(SlotEvents.SlotInitialised, adName);
 			eventTimer.trigger(SlotEvents.LoadAdStart, adName);
 			window.googletag.display(advert.id);
 		});

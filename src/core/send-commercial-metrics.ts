@@ -1,7 +1,6 @@
 import { onConsent } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { log } from '@guardian/libs';
-import type { CommercialEvents } from './event-timer';
 import { EventTimer } from './event-timer';
 import type { ConnectionType } from './types';
 
@@ -18,6 +17,11 @@ type Property = {
 type TimedEvent = {
 	name: string;
 	ts: number;
+};
+
+type DurationEvent = {
+	name: string;
+	duration: number;
 };
 
 type EventProperties = {
@@ -88,15 +92,18 @@ const mapEventTimerPropertiesToString = (
 	}));
 };
 
-const roundTimeStamp = (events: CommercialEvents, measures: Map<string, PerformanceMeasure>): Metric[] => {
-	const roundedEvents = [...events.entries()].map(([name, timer]) => ({
+const roundTimeStamp = (
+	events: TimedEvent[],
+	measures: DurationEvent[],
+): Metric[] => {
+	const roundedEvents = events.map(({ name, ts }) => ({
 		name,
-		value: Math.ceil(timer.startTime),
+		value: Math.ceil(ts),
 	}));
 
-	const roundedMeasures = [...measures.entries()].map(([name, measure]) => ({
+	const roundedMeasures = measures.map(({ name, duration }) => ({
 		name,
-		value: Math.ceil(measure.duration),
+		value: Math.ceil(duration),
 	}));
 
 	return [...roundedEvents, ...roundedMeasures];
@@ -152,9 +159,10 @@ function gatherMetricsOnPageUnload(): void {
 		.concat(adBlockerProperties);
 	commercialMetricsPayload.properties = properties;
 
-	const metrics: readonly Metric[] = roundTimeStamp(eventTimer.events, eventTimer.measures).concat(
-		getOfflineCount(),
-	);
+	const metrics: readonly Metric[] = roundTimeStamp(
+		eventTimer.events,
+		eventTimer.measures,
+	).concat(getOfflineCount());
 	commercialMetricsPayload.metrics = metrics;
 
 	sendMetrics();
