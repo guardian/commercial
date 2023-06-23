@@ -1,5 +1,5 @@
 //
-import { EventTimer, PageEvents, SlotEvents } from './event-timer';
+import { EventTimer } from './event-timer';
 
 const mockGetEntriesByName = (names: string[]) =>
 	jest.fn((name: string) =>
@@ -32,7 +32,7 @@ const performance = {
 	getEntriesByName: jest.fn().mockReturnValue([]),
 };
 
-const MARK_NAME = PageEvents.CommercialStart;
+const MARK_NAME = 'commercialStart';
 const MARK_LONG_NAME = `${MARK_NAME}`;
 const CMP_INIT = 'cmp-init';
 const CMP_GOT_CONSENT = 'cmp-got-consent';
@@ -88,8 +88,8 @@ describe('EventTimer', () => {
 			writable: true,
 		});
 		const eventTimer = EventTimer.get();
-		expect(Array.from(eventTimer.events.keys())).toHaveLength(2);
-		expect(Array.from(eventTimer.events.keys()).sort()).toEqual(
+		expect(eventTimer.events).toHaveLength(2);
+		expect(eventTimer.events.sort()).toEqual(
 			[CMP_GOT_CONSENT, CMP_INIT].sort(),
 		);
 	});
@@ -112,8 +112,8 @@ describe('EventTimer', () => {
 		});
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger(MARK_NAME);
-		expect(Array.from(eventTimer.events.keys())).toHaveLength(3);
-		expect(Array.from(eventTimer.events.keys()).sort()).toEqual(
+		expect(eventTimer.events).toHaveLength(3);
+		expect(eventTimer.events.sort()).toEqual(
 			[CMP_INIT, CMP_GOT_CONSENT, MARK_NAME].sort(),
 		);
 	});
@@ -134,7 +134,7 @@ describe('EventTimer', () => {
 		});
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger(MARK_NAME);
-		expect(Array.from(eventTimer.events.keys()).length).toBe(0);
+		expect(eventTimer.events.length).toBe(0);
 	});
 
 	it('when retrieved and mark is undefined produce no events', () => {
@@ -151,62 +151,30 @@ describe('EventTimer', () => {
 		});
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger(MARK_NAME);
-		expect(Array.from(eventTimer.events.keys()).length).toBe(0);
+		expect(eventTimer.events.length).toBe(0);
 	});
 
-	// it('trigger first slotReady event', () => {
-	// 	const eventTimer = EventTimer.get();
-	// 	eventTimer.trigger(SlotEvents.SlotReady, TrackedSlots.Inline1);
-	// 	expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-	// 		['first-slotReady'],
-	// 	]);
-
-	// 	expect(trackEvent).toHaveBeenCalledWith(
-	// 		'Commercial Events',
-	// 		SlotEvents.SlotReady,
-	// 		'first-slotReady',
-	// 	);
-	// });
-
-	// it('triggering two slotReady events causes one trigger and one track', () => {
-	// 	const eventTimer = EventTimer.get();
-	// 	eventTimer.trigger(SlotEvents.SlotReady, TrackedSlots.Inline1);
-	// 	eventTimer.trigger(SlotEvents.SlotReady, TrackedSlots.Inline1);
-
-	// 	expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-	// 		['first-slotReady'],
-	// 	]);
-
-	// 	expect(trackEvent).toHaveBeenCalledTimes(1);
-
-	// 	expect(trackEvent).toHaveBeenCalledWith(
-	// 		'Commercial Events',
-	// 		SlotEvents.SlotReady,
-	// 		'first-slotReady',
-	// 	);
-	// });
-
-	it('trigger top-above-nav slotReady event', () => {
+	it('trigger top-above-nav loadAdStart event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger(SlotEvents.LoadAdStart, 'top-above-nav');
+		eventTimer.trigger('loadAdStart', 'top-above-nav');
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
 			['top-above-nav-slotReady'],
 		]);
 	});
 
-	it('trigger two top-above-nav slotReady events', () => {
+	it('trigger two top-above-nav loadAdStart events', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger(SlotEvents.LoadAdStart, 'top-above-nav');
-		eventTimer.trigger(SlotEvents.LoadAdStart, 'top-above-nav');
+		eventTimer.trigger('loadAdStart', 'top-above-nav');
+		eventTimer.trigger('loadAdStart', 'top-above-nav');
 
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['top-above-nav-slotReady'],
+			['top-above-nav-loadAdStart'],
 		]);
 	});
 
 	it('trigger commercial start page event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger(PageEvents.CommercialStart);
+		eventTimer.trigger('commercialStart');
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
 			['commercialStart'],
 		]);
@@ -214,7 +182,7 @@ describe('EventTimer', () => {
 
 	it('trigger commercial end page event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger(PageEvents.CommercialStart);
+		eventTimer.trigger('commercialStart');
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
 			['commercialModulesLoaded'],
 		]);

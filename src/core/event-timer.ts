@@ -26,24 +26,18 @@ const trackedSlots = ['top-above-nav', 'inline1', 'inline2'] as const;
 
 type TrackedSlots = (typeof trackedSlots)[number];
 
-enum PageEvents {
-	CommercialStart = 'commercialStart',
-	GoogletagInitStart = 'googletagInitStart',
-	GoogletagInitEnd = 'googletagInitEnd',
-	LabsContainerInView = 'labsContainerInView',
-}
+// marks that we want to save as commercial metrics
+const slotMarks = ['adOnPage'] as const;
 
-enum SlotEvents {
-	AdOnPage = 'adOnPage',
-	AdRenderStart = 'adRenderStart',
-	DefineSlotStart = 'defineAdSlotStart',
-	DefineSlotEnd = 'defineAdSlotEnd',
-	PrebidStart = 'prebidStart',
-	PrebidEnd = 'prebidEnd',
-	LoadAdStart = 'loadAdStart',
-	LoadAdEnd = 'loadAdEnd',
-	AdRenderEnd = 'adRenderEnd',
-}
+// measures that we want to save as commercial metrics
+const slotMeasures = ['adRender', 'defineSlot', 'prebid', 'loadAd'] as const;
+
+// all marks, including the measure start and end marks
+const allSlotMarks = [
+	...slotMarks,
+	...slotMeasures.map((measure) => `${measure}Start`),
+	...slotMeasures.map((measure) => `${measure}End`),
+] as const;
 
 enum ExternalEvents {
 	CmpInit = 'cmp-init',
@@ -51,21 +45,19 @@ enum ExternalEvents {
 	CmpGotConsent = 'cmp-got-consent',
 }
 
-type CommercialEvents = Map<string, PerformanceEntry>;
-
-const isSlotMark = (eventName: string): eventName is SlotEvents =>
-	Object.values(SlotEvents).includes(eventName as SlotEvents);
+const isSlotMark = (eventName: string) => allSlotMarks.includes(eventName);
 
 const shouldSaveMark = (eventName: string) =>
-	(isSlotMark(eventName) && eventName.split(':')[1] === 'adOnPage') ||
-	eventName === PageEvents.CommercialStart;
+	eventName === 'adOnPage' ||
+	(!isSlotMark(eventName.split(':')[1]) &&
+		!eventName.includes('googletagInit'));
 
+// measures that we want to save as commercial metrics, ones related to slots and googletagInitDuration
 const shouldSaveMeasure = (measureName: string) =>
-	trackedSlots.includes(measureName.split(':')[0] as TrackedSlots) ||
-	measureName === 'googletagInitDuration';
+	trackedSlots.includes(measureName.split(':')[0] as TrackedSlots);
 
 class EventTimer {
-	private _events: CommercialEvents;
+	private _events: Map<string, PerformanceEntry>;
 
 	private _measures: Map<string, PerformanceMeasure>;
 
@@ -92,6 +84,10 @@ class EventTimer {
 		return this.init();
 	}
 
+	/**
+	 * External events are events that are not triggered by the commercial but we are interested in
+	 * tracking their performance. For example, CMP-related events.
+	 **/
 	get externalEvents(): Map<ExternalEvents, PerformanceEntry> {
 		const externalEvents = new Map();
 
@@ -107,8 +103,7 @@ class EventTimer {
 	}
 
 	/**
-	 * Returns all commercial timers. CMP-related timers are not tracked
-	 * by EventTimer so they need to be concatenated to EventTimer's private events array.
+	 * Returns all performance marks and measures that should be saved as commercial metrics.
 	 */
 	public get events() {
 		return [...this._events, ...this.externalEvents].map(
@@ -119,6 +114,9 @@ class EventTimer {
 		);
 	}
 
+	/**
+	 * Returns all performance measures that should be saved as commercial metrics.
+	 */
 	public get measures() {
 		return [...this._measures].map(([name, measure]) => ({
 			name,
@@ -155,21 +153,17 @@ class EventTimer {
 
 	/**
 	 * Creates a new performance mark
-	 * For slot events also ensures each TYPE of event event is marked only once for 'first'
-	 * (the first time that event is triggered for ANY slot) and once for topAboveNav
+	 * For slot events also ensures each TYPE of event event is only logged once per slot
 	 *
-	 * @param {string} eventName - The short name applied to the mark
-	 * @param {origin} [origin=page] - Either 'page' (default) or the name of the slot
+	 * @param eventName The short name applied to the mark
+	 * @param origin - Either 'page' (default) or the name of the slot
 	 */
-	trigger(eventName: string, origin?: string): void {
-		if (isSlotMark(eventName) && origin) {
-			this.mark(`${origin}:${eventName}`);
-		} else {
-			this.mark(eventName);
+	trigger(eventName: string, origin = 'page'): void {
+		let name = eventName;
+		if (isSlotMark(eventName) && origin !== 'page') {
+			name = `${origin}:${name}`;
 		}
-	}
 
-	private mark(name: string): void {
 		if (this._events.get(name) || !supportsPerformanceAPI()) {
 			return;
 		}
@@ -179,7 +173,7 @@ class EventTimer {
 		if (
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- browser support is patchy
 			typeof mark?.startTime === 'number' &&
-			// we only want to save the marks related to certain slots or the page
+			// we only want to save the marks that are related to certain slots or the page
 			shouldSaveMark(name)
 		) {
 			this._events.set(name, mark);
@@ -203,6 +197,7 @@ class EventTimer {
 					endEvent,
 				);
 
+				// we only want to save the measures that are related to certain slots or the page
 				if (shouldSaveMeasure(measureName)) {
 					this._measures.set(measureName, measure);
 				}
@@ -213,4 +208,4 @@ class EventTimer {
 	}
 }
 
-export { EventTimer, PageEvents, SlotEvents, type CommercialEvents };
+export { EventTimer };

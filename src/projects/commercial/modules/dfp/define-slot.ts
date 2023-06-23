@@ -2,7 +2,6 @@ import { breakpoints as sourceBreakpoints } from '@guardian/source-foundations';
 import { once } from 'lodash-es';
 import { EventTimer } from 'core';
 import type { SizeMapping, SlotName } from 'core/ad-sizes';
-import { SlotEvents } from 'core/event-timer';
 import { getUrlVars } from '../../../../lib/url';
 import type { IasPETSlot, IasTargeting } from '../../../../types/ias';
 import { toGoogleTagSize } from '../../../common/modules/commercial/lib/googletag-ad-size';
@@ -115,7 +114,7 @@ const defineSlot = (
 	slotTargeting: Record<string, string> = {},
 ): { slot: googletag.Slot; slotReady: Promise<void> } => {
 	const slotTarget = adSlotNode.getAttribute('data-name') as SlotName;
-	EventTimer.get().trigger(SlotEvents.DefineSlotStart, slotTarget);
+	EventTimer.get().trigger('defineSlotStart', slotTarget);
 
 	const id = adSlotNode.id;
 
@@ -259,7 +258,7 @@ const defineSlot = (
 		slotReady = Promise.race([iasTimeout(), iasDataPromise]);
 
 		void slotReady.then(() => {
-			EventTimer.get().trigger(SlotEvents.DefineSlotEnd, slotTarget);
+			EventTimer.get().trigger('defineSlotEnd', slotTarget);
 		});
 	}
 

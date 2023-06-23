@@ -6,7 +6,7 @@ import { pubmatic } from 'core/__vendor/pubmatic';
 import type { AdSize } from 'core/ad-sizes';
 import { createAdSize } from 'core/ad-sizes';
 import { PREBID_TIMEOUT } from 'core/constants/prebid-timeout';
-import { EventTimer, SlotEvents } from 'core/event-timer';
+import { EventTimer } from 'core/event-timer';
 import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import type { Advert } from 'projects/commercial/modules/dfp/Advert';
 import { getPageTargeting } from 'projects/common/modules/commercial/build-page-targeting';
@@ -468,7 +468,7 @@ const bidsBackHandler = (
 		adUnits.forEach((adUnit) => {
 			if (isString(adUnit.code)) {
 				eventTimer.trigger(
-					SlotEvents.PrebidEnd,
+					'prebidEnd',
 					stripDfpAdPrefixFrom(adUnit.code),
 				);
 			}
@@ -518,7 +518,7 @@ const requestBids = async (
 				adUnits.forEach((adUnit) => {
 					if (isString(adUnit.code)) {
 						eventTimer.trigger(
-							SlotEvents.PrebidStart,
+							'prebidStart',
 							stripDfpAdPrefixFrom(adUnit.code),
 						);
 					}

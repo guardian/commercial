@@ -1,4 +1,4 @@
-import { EventTimer, SlotEvents } from 'core/event-timer';
+import { EventTimer } from 'core/event-timer';
 import {
 	refreshBidsForAd,
 	requestBidsForAd,
@@ -10,7 +10,7 @@ const eventTimer = EventTimer.get();
 
 export const loadAdvert = (advert: Advert): void => {
 	const adName = stripDfpAdPrefixFrom(advert.id);
-	eventTimer.trigger(SlotEvents.AdRenderStart, adName);
+	eventTimer.trigger('adRenderStart', adName);
 	// TODO can slotReady come after header bidding?
 	// If so, the callbacks pushed onto the ias queue in define-slot.js
 	// could be run in parallel with the calls to requestBids below, reducing the
@@ -27,7 +27,7 @@ export const loadAdvert = (advert: Advert): void => {
 			return requestBidsForAd(advert);
 		})
 		.then(() => {
-			eventTimer.trigger(SlotEvents.LoadAdStart, adName);
+			eventTimer.trigger('loadAdStart', adName);
 			window.googletag.display(advert.id);
 		});
 };
