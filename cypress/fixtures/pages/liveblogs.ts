@@ -1,4 +1,4 @@
-import { getStage, getTestUrl } from 'lib/util';
+import { getStage, getTestUrl } from '../../lib/util';
 import type { Page } from './Page';
 
 const stage = getStage();
