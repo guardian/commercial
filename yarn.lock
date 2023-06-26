@@ -6944,7 +6944,7 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-prebid.js@guardian/prebid.js#2e3b96d:
+prebid.js@guardian/prebid.js:
   version "7.26.0"
   resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/2e3b96dc57dfe14ed8c418674ee7a0a150ece7cb"
   dependencies:
