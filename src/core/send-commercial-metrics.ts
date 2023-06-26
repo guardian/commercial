@@ -243,7 +243,7 @@ async function initCommercialMetrics({
 	browserId,
 	isDev,
 	adBlockerInUse,
-	sampling = 1,
+	sampling = 1 / 100,
 }: InitCommercialMetricsArgs): Promise<boolean> {
 	commercialMetricsPayload.page_view_id = pageViewId;
 	commercialMetricsPayload.browser_id = browserId;
