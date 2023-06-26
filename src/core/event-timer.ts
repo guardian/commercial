@@ -47,10 +47,18 @@ enum ExternalEvents {
 
 const isSlotMark = (eventName: string) => allSlotMarks.includes(eventName);
 
-const shouldSaveMark = (eventName: string) =>
-	eventName === 'adOnPage' ||
-	(!isSlotMark(eventName.split(':')[1]) &&
-		!eventName.includes('googletagInit'));
+const shouldSaveMark = (eventName: string): boolean => {
+	let [origin, eventType] = eventName.split(':');
+	if (!eventType) {
+		eventType = origin;
+		origin = 'page';
+	}
+
+	return (
+		eventType === 'adOnPage' ||
+		(!isSlotMark(eventType) && eventType !== 'googletagInit')
+	);
+};
 
 // measures that we want to save as commercial metrics, ones related to slots and googletagInitDuration
 const shouldSaveMeasure = (measureName: string) =>
@@ -90,6 +98,10 @@ class EventTimer {
 	 **/
 	get externalEvents(): Map<ExternalEvents, PerformanceEntry> {
 		const externalEvents = new Map();
+
+		if (!supportsPerformanceAPI()) {
+			return externalEvents;
+		}
 
 		for (const event of Object.values(ExternalEvents)) {
 			if (window.performance.getEntriesByName(event).length) {

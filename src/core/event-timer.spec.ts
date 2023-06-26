@@ -1,4 +1,3 @@
-//
 import { EventTimer } from './event-timer';
 
 const mockGetEntriesByName = (names: string[]) =>
@@ -15,25 +14,43 @@ const mockGetEntriesByName = (names: string[]) =>
 			: [],
 	);
 
-const mockMark = jest.fn(
-	(name: string): PerformanceMark => ({
+const mockEntries: Array<PerformanceMark | PerformanceMeasure> = [];
+
+const mockMark = jest.fn((name: string): PerformanceMark => {
+	const mark = {
 		name,
 		duration: 1,
 		entryType: 'mark',
 		startTime: 1,
 		detail: {},
 		toJSON: () => '',
-	}),
-);
+	};
+	mockEntries.push(mark);
+	return mark;
+});
+const mockMeasure = jest.fn((name: string): PerformanceMeasure => {
+	const measure = {
+		name,
+		duration: 1,
+		entryType: 'measure',
+		startTime: 1,
+		detail: {},
+		toJSON: () => '',
+	};
+	mockEntries.push(measure);
+	return measure;
+});
 
 const performance = {
 	now: jest.fn(),
 	mark: mockMark,
-	getEntriesByName: jest.fn().mockReturnValue([]),
+	measure: mockMeasure,
+	getEntriesByName: jest.fn((name: string) => [
+		mockEntries.filter((e) => e.name === name),
+	]),
 };
 
 const MARK_NAME = 'commercialStart';
-const MARK_LONG_NAME = `${MARK_NAME}`;
 const CMP_INIT = 'cmp-init';
 const CMP_GOT_CONSENT = 'cmp-got-consent';
 
@@ -89,7 +106,7 @@ describe('EventTimer', () => {
 		});
 		const eventTimer = EventTimer.get();
 		expect(eventTimer.events).toHaveLength(2);
-		expect(eventTimer.events.sort()).toEqual(
+		expect(eventTimer.events.map(({ name }) => name).sort()).toEqual(
 			[CMP_GOT_CONSENT, CMP_INIT].sort(),
 		);
 	});
@@ -99,7 +116,7 @@ describe('EventTimer', () => {
 			now: jest.fn(),
 			mark: mockMark,
 			getEntriesByName: mockGetEntriesByName([
-				MARK_LONG_NAME,
+				MARK_NAME,
 				CMP_INIT,
 				CMP_GOT_CONSENT,
 			]),
@@ -113,9 +130,11 @@ describe('EventTimer', () => {
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger(MARK_NAME);
 		expect(eventTimer.events).toHaveLength(3);
-		expect(eventTimer.events.sort()).toEqual(
-			[CMP_INIT, CMP_GOT_CONSENT, MARK_NAME].sort(),
-		);
+		expect(eventTimer.events.map(({ name }) => name)).toEqual([
+			MARK_NAME,
+			CMP_INIT,
+			CMP_GOT_CONSENT,
+		]);
 	});
 
 	it('mark produces correct event', () => {
@@ -158,33 +177,63 @@ describe('EventTimer', () => {
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger('loadAdStart', 'top-above-nav');
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['top-above-nav-slotReady'],
+			['top-above-nav:loadAdStart'],
 		]);
 	});
 
-	it('trigger two top-above-nav loadAdStart events', () => {
+	it('trigger two top-above-nav adOnPage events', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('loadAdStart', 'top-above-nav');
-		eventTimer.trigger('loadAdStart', 'top-above-nav');
+		eventTimer.trigger('adOnPage', 'top-above-nav');
+		eventTimer.trigger('adOnPage', 'top-above-nav');
 
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['top-above-nav-loadAdStart'],
+			['top-above-nav:adOnPage'],
 		]);
 	});
 
 	it('trigger commercial start page event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('commercialStart');
+		eventTimer.trigger(MARK_NAME);
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['commercialStart'],
+			[MARK_NAME],
 		]);
 	});
 
 	it('trigger commercial end page event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('commercialStart');
+		eventTimer.trigger('adOnPage', 'top-above-nav');
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['commercialModulesLoaded'],
+			['top-above-nav:adOnPage'],
+		]);
+	});
+
+	it('trigger measure for 2 marks', () => {
+		const eventTimer = EventTimer.get();
+		eventTimer.trigger('adRenderStart', 'top-above-nav');
+		eventTimer.trigger('adRenderEnd', 'top-above-nav');
+
+		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
+			['top-above-nav:adRenderStart'],
+			['top-above-nav:adRenderEnd'],
+		]);
+
+		expect((window.performance.measure as jest.Mock).mock.calls).toEqual([
+			[
+				'top-above-nav:adRenderDuration',
+				'top-above-nav:adRenderStart',
+				'top-above-nav:adRenderEnd',
+			],
+		]);
+	});
+
+	it("trigger measure marks don't appear in EventTimer.events", () => {
+		const eventTimer = EventTimer.get();
+		eventTimer.trigger('adRenderStart');
+		eventTimer.trigger('adRenderEnd');
+
+		expect(eventTimer.events.map(({ name }) => name)).not.toContain([
+			'adRenderStart',
+			'adRenderEnd',
 		]);
 	});
 
