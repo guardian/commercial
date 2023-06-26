@@ -1,8 +1,8 @@
 import { breakpoints as sourceBreakpoints } from '@guardian/source-foundations';
 import { once } from 'lodash-es';
 import type { SizeMapping, SlotName } from 'core/ad-sizes';
-import { toGoogleTagSize } from 'lib/googletag-ad-size';
-import { getUrlVars } from 'lib/url';
+import { toGoogleTagSize } from 'lib/utils/googletag-ad-size';
+import { getUrlVars } from 'lib/utils/url';
 import type { IasPETSlot, IasTargeting } from 'types/ias';
 
 const breakpointViewports: Record<keyof SizeMapping, [number, number]> = {

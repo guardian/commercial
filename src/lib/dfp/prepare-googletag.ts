@@ -13,7 +13,7 @@ import type { IdentityUserIdentifiers } from 'lib/identity/api';
 import { getUserIdentifiersFromApi } from 'lib/identity/api';
 import { init as initMeasureAdLoad } from 'lib/messenger/measure-ad-load';
 import raven from 'lib/raven';
-import { reportError } from 'lib/report-error';
+import { reportError } from 'lib/utils/report-error';
 import { init as background } from '../messenger/background';
 import { init as sendClick } from '../messenger/click';
 import { init as disableRefresh } from '../messenger/disable-refresh';

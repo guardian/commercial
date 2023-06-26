@@ -7,7 +7,7 @@ import { loadScript } from '@guardian/libs';
 import type * as AdSizesType from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
 import _config from 'lib/config';
-import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect-breakpoint';
+import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
 import type { Advert } from './Advert';
 import { dfpEnv } from './dfp-env';
 import { fillAdvertSlots } from './fill-advert-slots';
@@ -75,7 +75,7 @@ jest.mock('lib/identity/api', () => ({
 jest.mock('ophan-tracker-js', () => null);
 jest.mock('lib/analytics/beacon', () => void {});
 
-jest.mock('lib/detect-breakpoint', () => ({
+jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 	hasCrossedBreakpoint: jest.fn(),
 }));

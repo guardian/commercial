@@ -2,7 +2,7 @@ import { onConsent } from '@guardian/consent-management-platform';
 import { isString } from '@guardian/libs';
 import { isInVariantSynchronous } from 'lib/experiments/ab';
 import { elementsManager } from 'lib/experiments/tests/elements-manager';
-import { getUrlVars } from 'lib/url';
+import { getUrlVars } from 'lib/utils/url';
 import { dfpEnv } from '../dfp/dfp-env';
 import { renderAdvertLabel } from '../dfp/render-advert-label';
 import {

@@ -1,6 +1,6 @@
 import { getCookie } from '@guardian/libs';
 import { addCookie, removeCookie } from 'lib/cookies';
-import { fetchJson } from 'lib/fetch-json';
+import { fetchJson } from 'lib/utils/fetch-json';
 import type { UserFeaturesResponse } from 'types/membership';
 import { isUserLoggedIn as isUserLoggedIn_ } from './identity/api';
 import {
@@ -23,7 +23,7 @@ jest.mock('lib/raven');
 jest.mock('lib/identity/api', () => ({
 	isUserLoggedIn: jest.fn(),
 }));
-jest.mock('lib/fetch-json', () => ({
+jest.mock('lib/utils/fetch-json', () => ({
 	fetchJson: jest.fn(() => Promise.resolve()),
 }));
 

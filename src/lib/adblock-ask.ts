@@ -1,7 +1,7 @@
 import { pageShouldHideReaderRevenue } from 'lib/contributions-utilities';
 import fastdom from 'lib/fastdom-promise';
-import { supportSubscribeDigitalURL } from 'lib/support-utilities';
 import { shouldHideSupportMessaging } from 'lib/user-features';
+import { supportSubscribeDigitalURL } from 'lib/utils/support-utilities';
 
 const params = new URLSearchParams();
 params.set(

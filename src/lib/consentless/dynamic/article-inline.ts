@@ -1,15 +1,18 @@
 import { adSizes } from 'core/ad-sizes';
 import { createAdSlot } from 'core/create-ad-slot';
-import { spaceFiller } from 'lib/article/space-filler';
 import { commercialFeatures } from 'lib/commercial-features';
-import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
+import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import fastdom from 'lib/fastdom-promise';
+import { spaceFiller } from 'lib/spacefinder/space-filler';
 import type {
 	SpacefinderItem,
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'lib/spacefinder';
-import { computeStickyHeights, insertHeightStyles } from 'lib/sticky-inlines';
+} from 'lib/spacefinder/spacefinder';
+import {
+	computeStickyHeights,
+	insertHeightStyles,
+} from 'lib/spacefinder/sticky-inlines';
 import { defineSlot } from '../define-slot';
 
 type SlotName = Parameters<typeof createAdSlot>[0];

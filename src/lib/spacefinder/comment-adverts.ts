@@ -1,16 +1,16 @@
 import { adSizes } from 'core/ad-sizes';
 import { createAdSlot } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
-import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
+import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
+import { addSlot } from 'lib/dfp/add-slot';
+import type { Advert } from 'lib/dfp/Advert';
+import { getAdvertById } from 'lib/dfp/get-advert-by-id';
+import { refreshAdvert } from 'lib/dfp/load-advert';
 import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
+import fastdom from 'lib/fastdom-promise';
+import { requestBidsForAd } from 'lib/header-bidding/request-bids';
 import { isUserLoggedIn } from 'lib/identity/api';
-import { addSlot } from './dfp/add-slot';
-import type { Advert } from './dfp/Advert';
-import { getAdvertById } from './dfp/get-advert-by-id';
-import { refreshAdvert } from './dfp/load-advert';
-import fastdom from './fastdom-promise';
-import { requestBidsForAd } from './header-bidding/request-bids';
-import { mediator } from './mediator';
+import { mediator } from 'lib/utils/mediator';
 
 const createCommentSlot = (): HTMLElement => {
 	const adSlot = createAdSlot('comments');

@@ -4,8 +4,8 @@ import {
 	buildAppNexusTargeting,
 	buildAppNexusTargetingObject,
 } from 'lib/build-page-targeting';
-import { isInAuOrNz, isInUk, isInUsa, isInUsOrCa } from 'lib/geo-utils';
-import { pbTestNameMap } from 'lib/url';
+import { isInAuOrNz, isInUk, isInUsa, isInUsOrCa } from 'lib/utils/geo-utils';
+import { pbTestNameMap } from 'lib/utils/url';
 import type { PrebidIndexSite } from 'types/global';
 import type {
 	BidderCode,

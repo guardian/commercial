@@ -1,4 +1,4 @@
-import { getUrlVars as _getUrlVars } from 'lib/url';
+import { getUrlVars as _getUrlVars } from 'lib/utils/url';
 import type { Advert } from './Advert';
 
 const getUrlVars = _getUrlVars as (arg?: string) => Record<string, string>;

@@ -1,10 +1,13 @@
 import { createAdSlot } from 'core/create-ad-slot';
-import { spaceFiller } from 'lib/article/space-filler';
 import { commercialFeatures } from 'lib/commercial-features';
-import { getCurrentTweakpoint } from 'lib/detect-breakpoint';
-import type { SpacefinderRules, SpacefinderWriter } from 'lib/spacefinder';
-import { addSlot } from './dfp/add-slot';
-import fastdom from './fastdom-promise';
+import { getCurrentTweakpoint } from 'lib/detect/detect-breakpoint';
+import { spaceFiller } from 'lib/spacefinder/space-filler';
+import type {
+	SpacefinderRules,
+	SpacefinderWriter,
+} from 'lib/spacefinder/spacefinder';
+import { addSlot } from '../dfp/add-slot';
+import fastdom from '../fastdom-promise';
 
 const bodySelector = '.article-body-commercial-selector';
 

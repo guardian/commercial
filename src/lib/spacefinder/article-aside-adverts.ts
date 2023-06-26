@@ -1,6 +1,6 @@
-import { $$ } from './$$';
-import fastdom from './fastdom-promise';
-import { mediator } from './mediator';
+import fastdom from 'lib/fastdom-promise';
+import { $$ } from 'lib/utils/$$';
+import { mediator } from 'lib/utils/mediator';
 
 const minArticleHeight = 1300;
 

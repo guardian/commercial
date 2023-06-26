@@ -1,4 +1,4 @@
-import { noop } from 'lib/noop';
+import { noop } from 'lib/utils/noop';
 import type { Callback } from './async-call-merger';
 import { mergeCalls } from './async-call-merger';
 

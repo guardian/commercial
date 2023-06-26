@@ -1,10 +1,13 @@
-import { spaceFiller } from 'lib/article/space-filler';
-import type { SpacefinderRules, SpacefinderWriter } from 'lib/spacefinder';
+import { spaceFiller } from 'lib/spacefinder/space-filler';
+import type {
+	SpacefinderRules,
+	SpacefinderWriter,
+} from 'lib/spacefinder/spacefinder';
 import { _, init } from './liveblog-adverts';
 
 const { getSlotName } = _;
 
-jest.mock('lib/report-error', () => ({
+jest.mock('lib/utils/report-error', () => ({
 	reportError: jest.fn(),
 }));
 
@@ -16,9 +19,9 @@ jest.mock('ophan-tracker-js', () => null);
 
 jest.mock('lib/raven');
 
-jest.mock('lib/mediator');
+jest.mock('lib/utils/mediator');
 
-jest.mock('lib/article/space-filler', () => ({
+jest.mock('lib/spacefinder/space-filler', () => ({
 	spaceFiller: {
 		fillSpace: jest.fn(() => Promise.resolve(true)),
 	},
@@ -30,7 +33,7 @@ jest.mock('lib/commercial-features', () => ({
 	},
 }));
 
-jest.mock('./dfp/add-slot');
+jest.mock('lib/dfp/add-slot');
 
 const spaceFillerStub = spaceFiller.fillSpace as jest.MockedFunction<
 	typeof spaceFiller.fillSpace

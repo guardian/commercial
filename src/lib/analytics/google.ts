@@ -1,5 +1,5 @@
 import { getCLS, getFID, getLCP } from 'web-vitals';
-import { mediator } from 'lib/mediator';
+import { mediator } from 'lib/utils/mediator';
 import type {
 	BoostGaUserTimingFidelityMetrics,
 	GoogleTimingEvent,

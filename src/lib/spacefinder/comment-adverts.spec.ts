@@ -1,15 +1,15 @@
 import { mocked } from 'jest-mock';
 import { adSizes } from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
-import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect-breakpoint';
+import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
 import { isUserLoggedIn as isUserLoggedIn_ } from 'lib/identity/api';
+import { addSlot } from '../dfp/add-slot';
+import type { Advert } from '../dfp/Advert';
+import { getAdvertById as getAdvertById_ } from '../dfp/get-advert-by-id';
+import { refreshAdvert as refreshAdvert_ } from '../dfp/load-advert';
+import fastdom from '../fastdom-promise';
+import { mediator as fakeMediator } from '../utils/mediator';
 import { _, initCommentAdverts } from './comment-adverts';
-import { addSlot } from './dfp/add-slot';
-import type { Advert } from './dfp/Advert';
-import { getAdvertById as getAdvertById_ } from './dfp/get-advert-by-id';
-import { refreshAdvert as refreshAdvert_ } from './dfp/load-advert';
-import fastdom from './fastdom-promise';
-import { mediator as fakeMediator } from './mediator';
 
 // Mock advert type by overwriting slot property with only one function for defining size mapping
 // This avoids having to set the rest of the slot properties that are unnecessary for the tests
@@ -26,7 +26,7 @@ Object.defineProperty(HTMLElement.prototype, 'dataset', {
 	value: {},
 });
 
-jest.mock('lib/report-error', () => ({
+jest.mock('lib/utils/report-error', () => ({
 	reportError: jest.fn(),
 }));
 
@@ -40,19 +40,19 @@ jest.mock('lib/header-bidding/prebid/prebid', () => ({
 
 jest.mock('lib/config', () => ({ page: {}, get: () => false }));
 
-jest.mock('./dfp/add-slot', () => ({
+jest.mock('lib/dfp/add-slot', () => ({
 	addSlot: jest.fn(),
 }));
 
-jest.mock('./dfp/load-advert', () => ({
+jest.mock('lib/dfp/load-advert', () => ({
 	refreshAdvert: jest.fn(),
 }));
 
-jest.mock('./dfp/get-advert-by-id', () => ({
+jest.mock('lib/dfp/get-advert-by-id', () => ({
 	getAdvertById: jest.fn(),
 }));
 
-jest.mock('lib/detect-breakpoint', () => ({
+jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 }));
 

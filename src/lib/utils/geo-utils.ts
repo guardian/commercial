@@ -1,5 +1,5 @@
 import type { CountryCode } from '@guardian/libs';
-import { getCountryCode } from 'lib/geolocation';
+import { getCountryCode } from 'lib/utils/geolocation';
 
 // cache the users location so we only have to look it up once
 let geo: CountryCode | undefined;

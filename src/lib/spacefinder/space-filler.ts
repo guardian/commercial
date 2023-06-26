@@ -3,8 +3,8 @@ import type {
 	SpacefinderOptions,
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'lib/spacefinder';
-import { findSpace, SpaceError } from 'lib/spacefinder';
+} from 'lib/spacefinder/spacefinder';
+import { findSpace, SpaceError } from 'lib/spacefinder/spacefinder';
 
 class SpaceFiller {
 	queue = Promise.resolve(true);

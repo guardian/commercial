@@ -1,5 +1,5 @@
 import { log } from '@guardian/libs';
-import { getUrlVars } from 'lib/url';
+import { getUrlVars } from 'lib/utils/url';
 import type {
 	SpacefinderExclusions,
 	SpacefinderItem,

@@ -1,4 +1,4 @@
-import { constructQuery } from 'lib/url';
+import { constructQuery } from 'lib/utils/url';
 
 export const createAuthenticationComponentEvent = (componentId, pageViewId) => {
 	const params = {

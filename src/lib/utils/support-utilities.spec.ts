@@ -1,5 +1,5 @@
 import { removeCookie, setCookie } from '@guardian/libs';
-import { _ } from 'lib/geolocation';
+import { _ } from 'lib/utils/geolocation';
 import { addCountryGroupToSupportLink } from './support-utilities';
 
 jest.mock('lib/raven');

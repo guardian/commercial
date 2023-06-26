@@ -1,5 +1,5 @@
 import type { SizeMapping } from 'core/ad-sizes';
-import { reportError } from 'lib/report-error';
+import { reportError } from 'lib/utils/report-error';
 import type { Advert } from './Advert';
 import { createAdvert } from './create-advert';
 import { dfpEnv } from './dfp-env';

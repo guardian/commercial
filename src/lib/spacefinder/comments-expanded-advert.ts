@@ -4,9 +4,9 @@ import { AD_LABEL_HEIGHT } from 'core/constants/adLabelHeight';
 import { createAdSlot } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
-import { addSlot } from './dfp/add-slot';
-import fastdom from './fastdom-promise';
-import { requestBidsForAd } from './header-bidding/request-bids';
+import { addSlot } from '../dfp/add-slot';
+import fastdom from '../fastdom-promise';
+import { requestBidsForAd } from '../header-bidding/request-bids';
 
 const tallestCommentAd = adSizes.mpu.height + AD_LABEL_HEIGHT;
 const tallestCommentsExpandedAd = adSizes.halfPage.height + AD_LABEL_HEIGHT;

@@ -1,5 +1,5 @@
 import { removeCookie, setCookie } from '@guardian/libs';
-import { getUrlVars } from './url';
+import { getUrlVars } from './utils/url';
 
 /**
  * Not to be confused with set-adtest-cookie.ts!

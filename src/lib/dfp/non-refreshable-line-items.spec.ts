@@ -1,10 +1,10 @@
-import { reportError } from 'lib/report-error';
+import { reportError } from 'lib/utils/report-error';
 import {
 	fetchNonRefreshableLineItemIds,
 	memoizedFetchNonRefreshableLineItemIds,
 } from './non-refreshable-line-items';
 
-jest.mock('lib/report-error', () => ({
+jest.mock('lib/utils/report-error', () => ({
 	reportError: jest.fn(),
 }));
 

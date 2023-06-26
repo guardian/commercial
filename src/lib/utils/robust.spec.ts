@@ -1,10 +1,10 @@
-import { convertError, reportError } from 'lib/report-error';
+import { convertError, reportError } from 'lib/utils/report-error';
 import { _, catchErrorsWithContext } from './robust';
 import type { Modules } from './robust';
 
 const { catchAndLogError } = _;
 
-jest.mock('lib/report-error', () => ({
+jest.mock('lib/utils/report-error', () => ({
 	convertError: jest.fn((e: Error) => e),
 	reportError: jest.fn(),
 }));

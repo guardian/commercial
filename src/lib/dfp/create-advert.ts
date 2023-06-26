@@ -1,6 +1,6 @@
 import { log } from '@guardian/libs';
 import type { SizeMapping } from 'core/ad-sizes';
-import { reportError } from 'lib/report-error';
+import { reportError } from 'lib/utils/report-error';
 import { Advert } from './Advert';
 
 const createAdvert = (

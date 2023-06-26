@@ -1,4 +1,4 @@
-import { isInAuOrNz } from 'lib/geo-utils';
+import { isInAuOrNz } from 'lib/utils/geo-utils';
 
 // nol_t is a global function defined by the IMR worldwide library
 

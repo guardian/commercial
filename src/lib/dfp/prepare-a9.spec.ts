@@ -1,12 +1,12 @@
 import { commercialFeatures } from 'lib/commercial-features';
-import { isInCanada } from 'lib/geo-utils';
+import { isInCanada } from 'lib/utils/geo-utils';
 import { a9 } from '../header-bidding/a9/a9';
 import { dfpEnv } from './dfp-env';
 import { _ } from './prepare-a9';
 
 const { setupA9 } = _;
 
-jest.mock('lib/geo-utils', () => ({
+jest.mock('lib/utils/geo-utils', () => ({
 	isInCanada: jest.fn(() => false),
 }));
 

@@ -1,20 +1,20 @@
 import { log } from '@guardian/libs';
 import { adSizes } from 'core/ad-sizes';
 import { createAdSlot } from 'core/create-ad-slot';
-import { spaceFiller } from 'lib/article/space-filler';
 import { commercialFeatures } from 'lib/commercial-features';
-import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
+import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
+import { addSlot } from 'lib/dfp/add-slot';
+import type { Advert } from 'lib/dfp/Advert';
 import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
+import fastdom from 'lib/fastdom-promise';
+import { requestBidsForAds } from 'lib/header-bidding/request-bids';
+import { spaceFiller } from 'lib/spacefinder/space-filler';
 import type {
 	SpacefinderItem,
 	SpacefinderOptions,
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'lib/spacefinder';
-import { addSlot } from './dfp/add-slot';
-import type { Advert } from './dfp/Advert';
-import fastdom from './fastdom-promise';
-import { requestBidsForAds } from './header-bidding/request-bids';
+} from 'lib/spacefinder/spacefinder';
 
 /**
  * Maximum number of inline ads to display on the page.

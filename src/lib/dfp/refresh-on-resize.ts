@@ -1,6 +1,6 @@
 import { breakpoints } from '@guardian/source-foundations';
-import { hasCrossedBreakpoint } from 'lib/detect-breakpoint';
-import { mediator } from 'lib/mediator';
+import { hasCrossedBreakpoint } from 'lib/detect/detect-breakpoint';
+import { mediator } from 'lib/utils/mediator';
 import type { Advert } from './Advert';
 import { breakpointNameToAttribute } from './breakpoint-name-to-attribute';
 import { dfpEnv } from './dfp-env';

@@ -1,4 +1,4 @@
-import { noop } from 'lib/noop';
+import { noop } from 'lib/utils/noop';
 import { _ as testExports } from './scroll';
 
 const addScrollListener = testExports.addScrollListener;

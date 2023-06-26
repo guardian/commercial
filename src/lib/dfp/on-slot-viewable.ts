@@ -2,7 +2,7 @@ import { log } from '@guardian/libs';
 import { outstreamSizes } from 'core/ad-sizes';
 import { AD_LABEL_HEIGHT } from 'core/constants/adLabelHeight';
 import fastdom from 'lib/fastdom-promise';
-import { getUrlVars } from 'lib/url';
+import { getUrlVars } from 'lib/utils/url';
 import { isAdSize } from './Advert';
 import type { Advert } from './Advert';
 import { getAdvertById } from './get-advert-by-id';

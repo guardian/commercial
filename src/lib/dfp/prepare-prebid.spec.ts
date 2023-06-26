@@ -6,14 +6,14 @@ import type { ConsentState } from '@guardian/consent-management-platform/dist/ty
 import type { TCFv2ConsentState } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import { log } from '@guardian/libs';
 import { commercialFeatures } from 'lib/commercial-features';
-import { isInCanada } from 'lib/geo-utils';
+import { isInCanada } from 'lib/utils/geo-utils';
 import { prebid } from '../header-bidding/prebid/prebid';
 import { dfpEnv } from './dfp-env';
 import { _ } from './prepare-prebid';
 
 const { setupPrebid } = _;
 
-jest.mock('lib/geo-utils', () => ({
+jest.mock('lib/utils/geo-utils', () => ({
 	isInCanada: jest.fn(() => false),
 }));
 

@@ -1,7 +1,6 @@
 import { getCookie, isObject, removeCookie, setCookie } from '@guardian/libs';
 import type { HeaderPayload } from '@guardian/support-dotcom-components/dist/dotcom/src/types';
 import { cookieIsExpiredOrMissing, timeInDaysFromNow } from 'lib/cookie';
-import { fetchJson } from 'lib/fetch-json';
 import {
 	AdFreeCookieReasons,
 	adFreeDataIsOld,
@@ -10,8 +9,9 @@ import {
 	maybeUnsetAdFreeCookie,
 	setAdFreeCookie,
 } from 'lib/manage-ad-free-cookie';
-import { noop } from 'lib/noop';
-import { dateDiffDays } from 'lib/time-utils';
+import { fetchJson } from 'lib/utils/fetch-json';
+import { noop } from 'lib/utils/noop';
+import { dateDiffDays } from 'lib/utils/time-utils';
 import { getLocalDate } from 'types/dates';
 import type { LocalDate } from 'types/dates';
 import type { UserFeaturesResponse } from 'types/membership';

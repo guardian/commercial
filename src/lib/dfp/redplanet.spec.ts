@@ -5,7 +5,7 @@ import {
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { log } from '@guardian/libs';
 import { commercialFeatures } from 'lib/commercial-features';
-import { isInAuOrNz as isInAuOrNz_ } from 'lib/geo-utils';
+import { isInAuOrNz as isInAuOrNz_ } from 'lib/utils/geo-utils';
 import { init, resetModule } from './redplanet';
 
 const isInAuOrNz = isInAuOrNz_ as jest.MockedFunction<typeof isInAuOrNz_>;
@@ -36,7 +36,7 @@ jest.mock('lib/commercial-features', () => ({
 
 jest.mock('./Advert');
 
-jest.mock('lib/geo-utils');
+jest.mock('lib/utils/geo-utils');
 
 jest.mock('lib/experiments/ab');
 

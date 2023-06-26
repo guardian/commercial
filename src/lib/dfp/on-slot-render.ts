@@ -1,7 +1,7 @@
 import { isString } from '@guardian/libs';
 import type { AdSize } from 'core/ad-sizes';
 import { createAdSize } from 'core/ad-sizes';
-import { reportError } from 'lib/report-error';
+import { reportError } from 'lib/utils/report-error';
 import { dfpEnv } from './dfp-env';
 import { emptyAdvert } from './empty-advert';
 import { getAdvertById } from './get-advert-by-id';

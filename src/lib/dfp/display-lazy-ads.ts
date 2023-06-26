@@ -1,4 +1,4 @@
-import { partition } from 'lib/partition';
+import { partition } from 'lib/utils/partition';
 import { dfpEnv } from './dfp-env';
 import { enableLazyLoad } from './lazy-load';
 import { loadAdvert } from './load-advert';

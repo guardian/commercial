@@ -2,8 +2,8 @@
 
 import { log } from '@guardian/libs';
 import { memoize } from 'lodash-es';
-import { amIUsed } from 'lib/am-i-used';
 import fastdom from 'lib/fastdom-promise';
+import { amIUsed } from 'lib/utils/am-i-used';
 import { init as initSpacefinderDebugger } from './spacefinder-debug-tools';
 
 type RuleSpacing = {

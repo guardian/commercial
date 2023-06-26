@@ -1,5 +1,5 @@
 import { memoize } from 'lodash-es';
-import { hasPushStateSupport } from './detect-pushstate';
+import { hasPushStateSupport } from 'lib//detect/detect-pushstate';
 
 const supportsPushState = hasPushStateSupport();
 

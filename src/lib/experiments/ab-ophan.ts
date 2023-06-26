@@ -1,7 +1,7 @@
 import type { ABTest, Runnable, Variant } from '@guardian/ab-core';
 import ophan from 'ophan-tracker-js';
-import { noop } from 'lib/noop';
-import { reportError } from 'lib/report-error';
+import { noop } from 'lib/utils/noop';
+import { reportError } from 'lib/utils/report-error';
 
 type BooleanFunction<Args extends unknown[]> = (...args: Args) => boolean;
 const not =

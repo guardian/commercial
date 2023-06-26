@@ -1,5 +1,5 @@
 import fastdom from 'fastdom';
-import { $$ } from './$$';
+import { $$ } from './utils/$$';
 
 const onKeyPress = (handler: EventListener) => (event: KeyboardEvent) => {
 	if (event.code === 'Enter' || event.code === 'Space') {

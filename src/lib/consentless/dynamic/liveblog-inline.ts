@@ -1,13 +1,13 @@
 import { createAdSlot } from 'core/create-ad-slot';
-import { spaceFiller } from 'lib/article/space-filler';
 import { commercialFeatures } from 'lib/commercial-features';
 import fastdom from 'lib/fastdom-promise';
+import { spaceFiller } from 'lib/spacefinder/space-filler';
 import type {
 	SpacefinderItem,
 	SpacefinderOptions,
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'lib/spacefinder';
+} from 'lib/spacefinder/spacefinder';
 import { defineSlot } from '../define-slot';
 
 /**

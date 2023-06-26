@@ -5,7 +5,7 @@ import {
 import { log } from '@guardian/libs';
 import { launchpad } from 'core/__vendor/launchpad';
 import { commercialFeatures } from 'lib/commercial-features';
-import { isInAuOrNz } from 'lib/geo-utils';
+import { isInAuOrNz } from 'lib/utils/geo-utils';
 
 declare global {
 	interface Window {

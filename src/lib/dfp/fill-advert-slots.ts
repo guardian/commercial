@@ -2,7 +2,7 @@ import { log } from '@guardian/libs';
 import type { SizeMapping } from 'core/ad-sizes';
 import { adSizes, createAdSize } from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
-import { getCurrentBreakpoint } from 'lib/detect-breakpoint';
+import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import { isInVariantSynchronous } from 'lib/experiments/ab';
 import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
 import { billboardsInMerch } from 'lib/experiments/tests/billboards-in-merch';

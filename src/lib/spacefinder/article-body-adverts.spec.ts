@@ -1,11 +1,11 @@
-import { spaceFiller } from 'lib/article/space-filler';
 import { commercialFeatures } from 'lib/commercial-features';
+import { spaceFiller } from 'lib/spacefinder/space-filler';
 import { init } from './article-body-adverts';
 
 const ads = {
 	'dfp-ad--im': true,
 } as const;
-jest.mock('lib/report-error', () => ({
+jest.mock('lib/utils/report-error', () => ({
 	reportError: jest.fn(),
 }));
 
@@ -13,16 +13,16 @@ jest.mock('lib/header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));
 
-jest.mock('./dfp/wait-for-advert', () => (id: keyof typeof ads) => {
+jest.mock('lib/dfp/wait-for-advert', () => (id: keyof typeof ads) => {
 	return Promise.resolve(ads[id]);
 });
-jest.mock('./dfp/add-slot', () => ({
+jest.mock('lib/dfp/add-slot', () => ({
 	addSlot: jest.fn(),
 }));
 jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));
-jest.mock('lib/article/space-filler', () => ({
+jest.mock('lib/spacefinder/space-filler', () => ({
 	spaceFiller: {
 		fillSpace: jest.fn(),
 	},

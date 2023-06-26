@@ -3,10 +3,10 @@ import { createAdSize } from 'core/ad-sizes';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
 	matchesBreakpoints as matchesBreakpoints_,
-} from 'lib/detect-breakpoint';
+} from 'lib/detect/detect-breakpoint';
 import { isInVariantSynchronous as isInVariantSynchronous_ } from 'lib/experiments/ab';
-import { _ } from 'lib/geo-utils';
-import { getCountryCode as getCountryCode_ } from 'lib/geolocation';
+import { _ } from 'lib/utils/geo-utils';
+import { getCountryCode as getCountryCode_ } from 'lib/utils/geolocation';
 import {
 	getBreakpointKey,
 	getLargestSize,
@@ -39,7 +39,7 @@ const isInVariantSynchronous = isInVariantSynchronous_ as jest.MockedFunction<
 
 jest.mock('lodash-es/once', () => (fn: (...args: unknown[]) => unknown) => fn);
 
-jest.mock('lib/geolocation', () => ({
+jest.mock('lib/utils/geolocation', () => ({
 	getCountryCode: jest.fn(() => 'GB'),
 }));
 
@@ -47,7 +47,7 @@ jest.mock('lib/experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn(),
 }));
 
-jest.mock('lib/detect-breakpoint', () => ({
+jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentTweakpoint: jest.fn(() => 'mobile'),
 	matchesBreakpoints: jest.fn(),
 }));

@@ -1,7 +1,7 @@
 import { adSizes } from 'core/ad-sizes';
-import { $$ } from 'lib/$$';
 import fastdom from 'lib/fastdom-promise';
-import { reportError } from 'lib/report-error';
+import { $$ } from 'lib/utils/$$';
+import { reportError } from 'lib/utils/report-error';
 import type { Advert } from './Advert';
 import { getAdIframe } from './get-ad-iframe';
 import { renderAdvertLabel } from './render-advert-label';

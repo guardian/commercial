@@ -4,15 +4,15 @@ import { createAdSize } from 'core/ad-sizes';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
-} from 'lib/detect-breakpoint';
+} from 'lib/detect/detect-breakpoint';
 import {
 	isInAuOrNz,
 	isInCanada,
 	isInRow,
 	isInUk,
 	isInUsOrCa,
-} from 'lib/geo-utils';
-import { pbTestNameMap } from 'lib/url';
+} from 'lib/utils/geo-utils';
+import { pbTestNameMap } from 'lib/utils/url';
 import type { HeaderBiddingSize } from './prebid-types';
 
 type StringManipulation = (a: string, b: string) => string;

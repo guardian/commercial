@@ -1,5 +1,5 @@
 import type { ABTest } from '@guardian/ab-core';
-import { noop } from 'lib/noop';
+import { noop } from 'lib/utils/noop';
 
 export const integrateIma: ABTest = {
 	id: 'IntegrateIma',

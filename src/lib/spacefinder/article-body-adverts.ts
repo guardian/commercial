@@ -1,27 +1,27 @@
 import type { AdSize, SizeMapping } from 'core/ad-sizes';
 import { adSizes } from 'core/ad-sizes';
 import { createAdSlot } from 'core/create-ad-slot';
-import { spaceFiller } from 'lib/article/space-filler';
 import { commercialFeatures } from 'lib/commercial-features';
 import {
 	getCurrentBreakpoint,
 	getCurrentTweakpoint,
-} from 'lib/detect-breakpoint';
+} from 'lib/detect/detect-breakpoint';
 import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
 import { shouldAddInlineMerchAd } from 'lib/inline-merch';
+import { spaceFiller } from 'lib/spacefinder/space-filler';
 import type {
 	RuleSpacing,
 	SpacefinderItem,
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'lib/spacefinder';
+} from 'lib/spacefinder/spacefinder';
+import { addSlot } from '../dfp/add-slot';
+import type { Advert } from '../dfp/Advert';
+import { waitForAdvert } from '../dfp/wait-for-advert';
+import fastdom from '../fastdom-promise';
+import { requestBidsForAds } from '../header-bidding/request-bids';
+import { mediator } from '../utils/mediator';
 import { initCarrot } from './carrot-traffic-driver';
-import { addSlot } from './dfp/add-slot';
-import type { Advert } from './dfp/Advert';
-import { waitForAdvert } from './dfp/wait-for-advert';
-import fastdom from './fastdom-promise';
-import { requestBidsForAds } from './header-bidding/request-bids';
-import { mediator } from './mediator';
 import { computeStickyHeights, insertHeightStyles } from './sticky-inlines';
 
 type SlotName = Parameters<typeof createAdSlot>[0];

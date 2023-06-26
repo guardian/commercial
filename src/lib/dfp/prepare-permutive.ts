@@ -1,5 +1,5 @@
 import type { Edition } from 'core/types';
-import { reportError } from 'lib/report-error';
+import { reportError } from 'lib/utils/report-error';
 import type { Config, PageConfig, Permutive, UserConfig } from 'types/global';
 
 interface PermutivePageConfig {

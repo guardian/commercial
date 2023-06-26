@@ -1,4 +1,4 @@
-import { isInRow, isInUk } from 'lib/geo-utils';
+import { isInRow, isInUk } from 'lib/utils/geo-utils';
 import type { HeaderBiddingSize } from '../prebid-types';
 import {
 	containsBillboardNotLeaderboard,

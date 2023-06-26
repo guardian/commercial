@@ -1,5 +1,5 @@
 import config from 'lib/config';
-import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect-breakpoint';
+import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
 import { commercialFeatures } from './commercial-features';
 import type { CommercialFeaturesConstructor } from './commercial-features';
 import { isUserLoggedIn as isUserLoggedIn_ } from './identity/api';
@@ -40,7 +40,7 @@ jest.mock('./user-features', () => ({
 	isAdFreeUser: jest.fn(),
 }));
 
-jest.mock('lib/detect-breakpoint', () => ({
+jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 }));
 

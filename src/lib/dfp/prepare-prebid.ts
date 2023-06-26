@@ -6,8 +6,8 @@ import type { Framework } from '@guardian/consent-management-platform/dist/types
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { commercialFeatures } from 'lib/commercial-features';
-import { isGoogleProxy } from 'lib/detect-google-proxy';
-import { isInCanada } from 'lib/geo-utils';
+import { isGoogleProxy } from 'lib/detect/detect-google-proxy';
+import { isInCanada } from 'lib/utils/geo-utils';
 import { prebid } from '../header-bidding/prebid/prebid';
 import { shouldIncludeOnlyA9 } from '../header-bidding/utils';
 import { dfpEnv } from './dfp-env';

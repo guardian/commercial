@@ -3,8 +3,8 @@ import { commercialFeatures } from 'lib/commercial-features';
 import {
 	hasCrossedBreakpoint,
 	matchesBreakpoints,
-} from 'lib/detect-breakpoint';
-import { mediator } from 'lib/mediator';
+} from 'lib/detect/detect-breakpoint';
+import { mediator } from 'lib/utils/mediator';
 
 const pageSkin = (): void => {
 	const bodyEl = document.body;
