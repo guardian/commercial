@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 10.1.0
+
+### Minor Changes
+
+- 42c9d6c: bump cmp to node 18 version
+- 38920fc: Update beta release workflow command
+
 ## 10.0.0
 
 ### Major Changes
