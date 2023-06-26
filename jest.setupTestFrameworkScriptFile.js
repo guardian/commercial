@@ -1,7 +1,7 @@
 // Polyfill test environment (done by polyfill.io in production)
 require('core-js');
 
-jest.mock('./src/projects/commercial/am-i-used', () => ({
+jest.mock('./src/lib/am-i-used', () => ({
 	amIUsed: jest.fn(),
 }));
 
