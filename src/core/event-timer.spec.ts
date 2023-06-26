@@ -1,4 +1,4 @@
-import { EventTimer } from './event-timer';
+import { _, EventTimer } from './event-timer';
 
 const mockGetEntriesByName = (names: string[]) =>
 	jest.fn((name: string) =>
@@ -219,7 +219,7 @@ describe('EventTimer', () => {
 
 		expect((window.performance.measure as jest.Mock).mock.calls).toEqual([
 			[
-				'top-above-nav:adRenderDuration',
+				'top-above-nav:adRender',
 				'top-above-nav:adRenderStart',
 				'top-above-nav:adRenderEnd',
 			],
@@ -235,6 +235,99 @@ describe('EventTimer', () => {
 			'adRenderStart',
 			'adRenderEnd',
 		]);
+	});
+
+	describe('only desired marks appear in events property', () => {
+		const passTestCases: Array<[string, string | undefined]> = [
+			['commercialStart', undefined],
+		];
+
+		for (const origin of _.trackedSlots) {
+			for (const mark of _.slotMarks) {
+				passTestCases.push([mark, origin]);
+			}
+		}
+
+		const failTestCases = [
+			['non-existent-mark', 'non-existent-origin'],
+			['commercialStart', 'non-existent-origin'],
+			['non-existent-mark', 'top-above-nav'],
+			['adRenderStart', 'top-above-nav'],
+			['adOnPage', 'inline3'],
+		];
+
+		it.each(passTestCases)(
+			'triggering %s on %s will appear in events',
+			(mark, origin) => {
+				const eventTimer = EventTimer.get();
+
+				eventTimer.trigger(mark, origin);
+				expect(eventTimer.events.map(({ name }) => name)).toContain(
+					origin ? `${origin}:${mark}` : mark,
+				);
+			},
+		);
+
+		it.each(failTestCases)(
+			'triggering %s on %s will not appear in events',
+			(mark, origin) => {
+				const eventTimer = EventTimer.get();
+
+				eventTimer.trigger(mark, origin);
+				expect(eventTimer.events.map(({ name }) => name)).not.toContain(
+					`${origin}:${mark}`,
+				);
+			},
+		);
+	});
+
+	describe('only desired measures appear in measures property', () => {
+		const passTestCases = [];
+
+		for (const origin of _.trackedSlots) {
+			for (const measure of _.slotMeasures) {
+				passTestCases.push([measure, origin]);
+			}
+		}
+
+		const failTestCases = [
+			['non-existent-measure', 'non-existent-slot'],
+			['non-existent-measure', 'top-above-nav'],
+			['adOnPage', 'non-existent-slot'],
+			['adOnPage', 'inline3'],
+			['defineSlot', 'right'],
+			['adOnPage', 'page'],
+		];
+
+		it.each(passTestCases)(
+			'triggering %s on %s will appear in events',
+			(mark, origin) => {
+				const eventTimer = EventTimer.get();
+
+				const testCase = `${origin}:${mark}`;
+
+				eventTimer.trigger(`${testCase}Start`);
+				eventTimer.trigger(`${testCase}End`);
+				expect(eventTimer.measures.map(({ name }) => name)).toContain(
+					testCase,
+				);
+			},
+		);
+
+		it.each(failTestCases)(
+			'triggering %s on %s will not appear in events',
+			(mark, origin) => {
+				const eventTimer = EventTimer.get();
+
+				const testCase = `${origin}:${mark}`;
+
+				eventTimer.trigger(`${testCase}Start`);
+				eventTimer.trigger(`${testCase}End`);
+				expect(
+					eventTimer.measures.map(({ name }) => name),
+				).not.toContain(testCase);
+			},
+		);
 	});
 
 	it('handles no experimental properties', () => {

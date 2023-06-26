@@ -29,8 +29,12 @@ type TrackedSlots = (typeof trackedSlots)[number];
 // marks that we want to save as commercial metrics
 const slotMarks = ['adOnPage'] as const;
 
+type SlotMark = (typeof slotMarks)[number];
+
 // measures that we want to save as commercial metrics
 const slotMeasures = ['adRender', 'defineSlot', 'prebid', 'loadAd'] as const;
+
+type SlotMeasure = (typeof slotMeasures)[number];
 
 // all marks, including the measure start and end marks
 const allSlotMarks = [
@@ -55,14 +59,25 @@ const shouldSaveMark = (eventName: string): boolean => {
 	}
 
 	return (
-		eventType === 'adOnPage' ||
-		(!isSlotMark(eventType) && eventType !== 'googletagInit')
+		(trackedSlots.includes(origin as TrackedSlots) &&
+			slotMarks.includes(eventType as SlotMark)) ||
+		(origin === 'page' && !isSlotMark(eventType))
 	);
 };
 
 // measures that we want to save as commercial metrics, ones related to slots and googletagInitDuration
-const shouldSaveMeasure = (measureName: string) =>
-	trackedSlots.includes(measureName.split(':')[0] as TrackedSlots);
+const shouldSaveMeasure = (measureName: string) => {
+	let [origin, measureType] = measureName.split(':');
+	if (!measureType) {
+		measureType = origin;
+		origin = 'page';
+	}
+
+	return (
+		trackedSlots.includes(origin as TrackedSlots) &&
+		slotMeasures.includes(measureType as SlotMeasure)
+	);
+};
 
 class EventTimer {
 	private _events: Map<string, PerformanceEntry>;
@@ -198,7 +213,7 @@ class EventTimer {
 
 	private measure(endEvent: string): void {
 		const startEvent = endEvent.replace('End', 'Start');
-		const measureName = endEvent.replace('End', 'Duration');
+		const measureName = endEvent.replace('End', '');
 		const startMarkExists =
 			window.performance.getEntriesByName(startEvent).length > 0;
 		if (startMarkExists) {
@@ -220,4 +235,10 @@ class EventTimer {
 	}
 }
 
-export { EventTimer };
+const _ = {
+	slotMarks,
+	slotMeasures,
+	trackedSlots,
+};
+
+export { EventTimer, _ };
