@@ -48,6 +48,9 @@ describe('shouldRefresh', () => {
 
 		// @ts-expect-error -- we’re making it a partial
 		window.googletag = partialGoogletag;
+
+		// @ts-expect-error -- it's a partial for a mock
+		window.guardian.config.page = {};
 	});
 
 	it('should return false for fluid ads', () => {
