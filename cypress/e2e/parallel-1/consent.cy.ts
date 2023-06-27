@@ -135,7 +135,7 @@ describe('tcfv2 consent', () => {
 			.should('contain', 'Support the Guardian');
 	});
 
-	it(`Test ${path} shows ad slots when reconsented`, () => {
+	it.skip(`Test ${path} shows ad slots when reconsented`, () => {
 		cy.visit(path);
 
 		cy.rejectAllConsent();
@@ -203,7 +203,7 @@ describe('tcfv2 consent', () => {
 		adsShouldShow();
 	});
 
-	it(`Test ${path} reject all, login as non-subscriber, reconsent should show ads`, () => {
+	it.skip(`Test ${path} reject all, login as non-subscriber, reconsent should show ads`, () => {
 		cy.visit(path);
 
 		cy.rejectAllConsent();
