@@ -34,7 +34,6 @@ import { init as initHighMerch } from 'lib/high-merch';
 import { init as initIpsosMori } from 'lib/ipsos-mori';
 import { manageAdFreeCookieOnConsentChange } from 'lib/manage-ad-free-cookie-on-consent-change';
 import { init as initMobileSticky } from 'lib/mobile-sticky';
-import { paidContainers } from 'lib/paid-containers';
 import { removeDisabledSlots as closeDisabledSlots } from 'lib/remove-slots';
 import { init as setAdTestCookie } from 'lib/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from 'lib/set-adtest-in-labels-cookie';
@@ -110,7 +109,6 @@ if (!commercialFeatures.adFree) {
 		['cm-frontsBannerAdverts', initFrontsBannerAdverts],
 		['cm-thirdPartyTags', initThirdPartyTags],
 		['cm-redplanet', initRedplanet],
-		['cm-paidContainers', paidContainers],
 		['cm-commentAdverts', initCommentAdverts],
 		['cm-commentsExpandedAdverts', initCommentsExpandedAdverts],
 		['rr-adblock-ask', initAdblockAsk],
