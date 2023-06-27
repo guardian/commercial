@@ -160,6 +160,8 @@ describe('tcfv2 consent', () => {
 	});
 
 	it(`Test ${path} reject all, login as subscriber, log out should show ads`, () => {
+		let { path } = articles[4];
+
 		fakeLogin(true);
 
 		cy.visit(path);
@@ -190,6 +192,8 @@ describe('tcfv2 consent', () => {
 	});
 
 	it(`Test ${path} reject all, login as non-subscriber should show ads, log out should show ads`, () => {
+		let { path } = articles[4];
+
 		fakeLogin(false);
 
 		cy.visit(path);
@@ -259,6 +263,8 @@ describe('tcfv2 consent', () => {
 	});
 
 	it(`Test ${path} reject all, login as subscriber, subscription expires, should show ads`, () => {
+		let { path } = articles[4];
+
 		fakeLogin(true);
 
 		cy.visit(path);
