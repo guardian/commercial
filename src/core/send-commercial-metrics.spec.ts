@@ -646,7 +646,7 @@ describe('send commercial metrics helpers', () => {
 			},
 			{
 				name: 'test-measure',
-				duration: 1519211809935,
+				value: 1519211809935,
 			},
 		]);
 	});

@@ -52,7 +52,10 @@ enum ExternalEvents {
 const isSlotMark = (eventName: string) => allSlotMarks.includes(eventName);
 
 const shouldSaveMark = (eventName: string): boolean => {
-	let [origin, eventType] = eventName.split(':');
+	let [origin, eventType] = eventName.split(':') as [
+		string,
+		string | undefined,
+	];
 	if (!eventType) {
 		eventType = origin;
 		origin = 'page';
