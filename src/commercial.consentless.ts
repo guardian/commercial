@@ -11,13 +11,6 @@ const bootConsentless = async (
 	consentState: ConsentState,
 	isDotcomRendering: boolean,
 ): Promise<void> => {
-	/*  In the consented ad stack, we set the ad free cookie for users who
-		don't consent to targeted ads in order to hide empty ads slots.
-		We remove the cookie here so that we can show Opt Out ads.
-		TODO: Stop setting ad free cookie for users who opt out when
-		consentless ads are rolled out to all users.
- 	*/
-
 	const consentlessModuleList = [
 		setAdTestCookie(),
 		setAdTestInLabelsCookie(),
