@@ -1,4 +1,5 @@
 import type { VendorName } from '@guardian/consent-management-platform/dist/types';
+import type { Advert } from 'lib/dfp/Advert';
 import type { EventTimer } from '../core/event-timer';
 import type { PageTargeting } from '../core/targeting/build-page-targeting';
 import type {
@@ -6,7 +7,6 @@ import type {
 	GoogleTrackConversionObject,
 	NetworkInformation,
 } from '../core/types';
-import type { Advert } from '../projects/commercial/modules/dfp/Advert';
 import type { IasPETSlot } from './ias';
 
 interface DfpEnv {

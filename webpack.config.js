@@ -7,7 +7,6 @@ module.exports = {
 		'commercial-standalone': path.join(
 			__dirname,
 			'src',
-			'bootstraps',
 			'standalone.commercial.ts',
 		),
 	},
@@ -21,8 +20,6 @@ module.exports = {
 			'node_modules', // default location, but we're overiding above, so it needs to be explicit
 		],
 		alias: {
-			common: 'projects/common',
-			commercial: 'projects/commercial',
 			svgs: path.join(__dirname, 'static', 'svg'),
 			lodash: 'lodash-es',
 		},
