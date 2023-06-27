@@ -32,7 +32,7 @@ const bootConsentless = async (
 		consentlessModuleList.push(userFeatures.refresh());
 	}
 
-	await Promise.all([consentlessModuleList]);
+	await Promise.all(consentlessModuleList);
 
 	// Since we're in single-request mode
 	// Call this once all ad slots are present on the page
