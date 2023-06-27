@@ -94,12 +94,13 @@ describe('shouldRefresh', () => {
 		expect(result).toBe(false);
 	});
 
-	it('if eventLineItemId is in nonRefreshableLineItemIds should not refresh', () => {
+	it('if the line item id is in nonRefreshableLineItemIds should not refresh', () => {
 		const slot = document.createElement('div');
 		slot.setAttribute('data-name', 'inline');
 		const advert = new Advert(slot);
 		advert.size = adSizes.halfPage;
-		const result = shouldRefresh(advert, [123], 123);
+		advert.lineItemId = 123;
+		const result = shouldRefresh(advert, [123]);
 		expect(result).toBe(false);
 	});
 });
