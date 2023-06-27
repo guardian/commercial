@@ -6,7 +6,6 @@ import { dfpEnv } from './dfp-env';
 import { emptyAdvert } from './empty-advert';
 import { getAdvertById } from './get-advert-by-id';
 import { renderAdvert } from './render-advert';
-import { shouldRefresh } from './should-refresh';
 
 const reportEmptyResponse = (
 	adSlotId: string,
@@ -68,24 +67,10 @@ export const onSlotRender = (
 			dfpEnv.creativeIDs.push(String(event.creativeId));
 		}
 
-		// Check if the non-refreshable line items are attached to the page config and fetching is switched off
-		// If they are then use these values to determine slot refresh at this point
-		// Otherwise wait until slot is viewable to fetch line item ids from endpoint
-		if (
-			!window.guardian.config.switches.fetchNonRefreshableLineItems &&
-			window.guardian.config.page.nonRefreshableLineItemIds
-		) {
-			// Set refresh field based on the outcome of the slot render.
-			advert.shouldRefresh = shouldRefresh(
-				advert,
-				window.guardian.config.page.nonRefreshableLineItemIds,
-				event.lineItemId ?? undefined,
-			);
-		} else {
-			// Otherwise associate the line item id with the advert
-			// so it can be used at the point the slot becomes viewable
-			advert.lineItemId = event.lineItemId;
-		}
+		// Associate the line item id with the advert
+		// We'll need it later when the slot becomes viewable
+		// in order to determine whether we can refresh the slot
+		advert.lineItemId = event.lineItemId;
 
 		void renderAdvert(advert, event).then((isRendered) => {
 			advert.finishedRendering(isRendered);
