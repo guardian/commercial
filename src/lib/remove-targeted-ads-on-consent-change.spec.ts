@@ -10,7 +10,7 @@ import { _ } from './remove-targeted-ads-on-consent-change';
 const { _removeTargetedAdsOnConsentChange: removeTargetedAdsOnConsentChange } =
 	_;
 
-jest.mock('common/modules/experiments/ab', () => ({
+jest.mock('./experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn(() => false),
 }));
 
