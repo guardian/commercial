@@ -253,7 +253,9 @@ const chooseAdvertisingTag = async () => {
 		void import(
 			/* webpackChunkName: "consentless" */
 			'./commercial.consentless'
-		).then(({ bootConsentless }) => bootConsentless(consentState));
+		).then(({ bootConsentless }) =>
+			bootConsentless(consentState, isDotcomRendering),
+		);
 	} else {
 		bootCommercialWhenReady();
 	}
