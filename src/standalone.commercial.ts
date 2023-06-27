@@ -32,9 +32,9 @@ import { init as initRedplanet } from 'lib/dfp/redplanet';
 import { init as initFrontsBannerAdverts } from 'lib/fronts-banner-adverts';
 import { init as initHighMerch } from 'lib/high-merch';
 import { init as initIpsosMori } from 'lib/ipsos-mori';
-import { manageAdFreeCookieOnConsentChange } from 'lib/manage-ad-free-cookie-on-consent-change';
 import { init as initMobileSticky } from 'lib/mobile-sticky';
 import { removeDisabledSlots as closeDisabledSlots } from 'lib/remove-slots';
+import { removeTargetedAdsOnConsentChange } from 'lib/remove-targeted-ads-on-consent-change';
 import { init as setAdTestCookie } from 'lib/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from 'lib/set-adtest-in-labels-cookie';
 import { init as initArticleAsideAdverts } from 'lib/spacefinder/article-aside-adverts';
@@ -78,7 +78,7 @@ const commercialBaseModules: Modules = [];
 // remaining modules not necessary to load an ad
 const commercialExtraModules: Modules = [
 	['cm-adFreeSlotRemoveFronts', adFreeSlotRemove],
-	['cm-manageAdFreeCookieOnConsentChange', manageAdFreeCookieOnConsentChange],
+	['cm-removeTargetedAdsOnConsentChange', removeTargetedAdsOnConsentChange],
 	['cm-closeDisabledSlots', closeDisabledSlots],
 	['cm-comscore', initComscore],
 	['cm-ipsosmori', initIpsosMori],
