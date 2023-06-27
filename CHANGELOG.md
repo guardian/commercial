@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 10.1.1
+
+### Patch Changes
+
+- acf17e6: Use guardian prebid fork head
+
 ## 10.1.0
 
 ### Minor Changes
