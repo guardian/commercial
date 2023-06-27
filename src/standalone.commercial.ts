@@ -45,7 +45,6 @@ import { initTeadsCookieless } from 'lib/teads-cookieless';
 import { init as initThirdPartyTags } from 'lib/third-party-tags';
 import { init as initTrackGpcSignal } from 'lib/track-gpc-signal';
 import { init as initTrackScrollDepth } from 'lib/track-scroll-depth';
-import { isDigitalSubscriber } from 'lib/user-features';
 import { amIUsed } from 'lib/utils/am-i-used';
 import { reportError } from 'lib/utils/report-error';
 import { catchErrorsWithContext } from 'lib/utils/robust';
@@ -249,7 +248,7 @@ const chooseAdvertisingTag = async () => {
 	if (
 		consentState.tcfv2 &&
 		!getConsentFor('googletag', consentState) &&
-		!isDigitalSubscriber()
+		!commercialFeatures.adFree
 	) {
 		void import(
 			/* webpackChunkName: "consentless" */
