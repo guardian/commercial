@@ -24,17 +24,32 @@ interface EventTimerProperties {
 // Events will be logged using the performance API for all slots, but only these slots will be tracked as commercial metrics
 const trackedSlots = ['top-above-nav', 'inline1', 'inline2'] as const;
 
-type TrackedSlots = (typeof trackedSlots)[number];
+type TrackedSlot = (typeof trackedSlots)[number];
 
 // marks that we want to save as commercial metrics
-const slotMarks = ['adOnPage'] as const;
+const slotMarks = ['adSlotReady', 'adRenderStart', 'adOnPage'] as const;
 
 type SlotMark = (typeof slotMarks)[number];
 
 // measures that we want to save as commercial metrics
-const slotMeasures = ['adRender', 'defineSlot', 'prebid', 'loadAd'] as const;
+const slotMeasures = [
+	'adRender',
+	'defineSlot',
+	'prepareSlot',
+	'prebid',
+	'loadAd',
+] as const;
 
 type SlotMeasure = (typeof slotMeasures)[number];
+
+const pageMarks = ['commercialStart', 'commercialModulesLoaded'] as const;
+
+type PageMark = (typeof pageMarks)[number];
+
+// measures that we want to save as commercial metrics
+const pageMeasures = ['commercialBoot', 'googletagInit'] as const;
+
+type PageMeasure = (typeof pageMeasures)[number];
 
 // all marks, including the measure start and end marks
 const allSlotMarks = [
@@ -49,8 +64,6 @@ enum ExternalEvents {
 	CmpGotConsent = 'cmp-got-consent',
 }
 
-const isSlotMark = (eventName: string) => allSlotMarks.includes(eventName);
-
 const shouldSaveMark = (eventName: string): boolean => {
 	let [origin, eventType] = eventName.split(':') as [
 		string,
@@ -62,9 +75,9 @@ const shouldSaveMark = (eventName: string): boolean => {
 	}
 
 	return (
-		(trackedSlots.includes(origin as TrackedSlots) &&
+		(trackedSlots.includes(origin as TrackedSlot) &&
 			slotMarks.includes(eventType as SlotMark)) ||
-		(origin === 'page' && !isSlotMark(eventType))
+		(origin === 'page' && pageMarks.includes(eventType as PageMark))
 	);
 };
 
@@ -77,8 +90,9 @@ const shouldSaveMeasure = (measureName: string) => {
 	}
 
 	return (
-		trackedSlots.includes(origin as TrackedSlots) &&
-		slotMeasures.includes(measureType as SlotMeasure)
+		(trackedSlots.includes(origin as TrackedSlot) &&
+			slotMeasures.includes(measureType as SlotMeasure)) ||
+		(origin === 'page' && pageMeasures.includes(measureType as PageMeasure))
 	);
 };
 
@@ -185,12 +199,14 @@ class EventTimer {
 	 * Creates a new performance mark
 	 * For slot events also ensures each TYPE of event event is only logged once per slot
 	 *
+	 * TODO more strict typing for eventName and origin
+	 *
 	 * @param eventName The short name applied to the mark
 	 * @param origin - Either 'page' (default) or the name of the slot
 	 */
 	trigger(eventName: string, origin = 'page'): void {
 		let name = eventName;
-		if (isSlotMark(eventName) && origin !== 'page') {
+		if (allSlotMarks.includes(eventName) && origin !== 'page') {
 			name = `${origin}:${name}`;
 		}
 

@@ -161,6 +161,7 @@ const loadModules = (modules: Modules, eventName: string) => {
 
 const recordCommercialMetrics = () => {
 	const eventTimer = EventTimer.get();
+	eventTimer.trigger('commercialBootEnd');
 	eventTimer.trigger('commercialModulesLoaded');
 	// record the number of ad slots on the page
 	const adSlotsTotal = document.querySelectorAll(
@@ -199,6 +200,7 @@ const bootCommercial = async (): Promise<void> => {
 				'ga-user-timing-commercial-start',
 				function runTrackPerformance() {
 					EventTimer.get().trigger('commercialStart');
+					EventTimer.get().trigger('commercialBootStart');
 				},
 			],
 		],

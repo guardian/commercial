@@ -228,12 +228,12 @@ describe('EventTimer', () => {
 
 	it("trigger measure marks don't appear in EventTimer.events", () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('adRenderStart');
-		eventTimer.trigger('adRenderEnd');
+		eventTimer.trigger('prepareSlotStart');
+		eventTimer.trigger('prepareSlotEnd');
 
 		expect(eventTimer.events.map(({ name }) => name)).not.toContain([
-			'adRenderStart',
-			'adRenderEnd',
+			'prepareSlotStart',
+			'prepareSlotEnd',
 		]);
 	});
 
@@ -252,7 +252,7 @@ describe('EventTimer', () => {
 			['non-existent-mark', 'non-existent-origin'],
 			['commercialStart', 'non-existent-origin'],
 			['non-existent-mark', 'top-above-nav'],
-			['adRenderStart', 'top-above-nav'],
+			['prepareSlotStart', 'top-above-nav'],
 			['adOnPage', 'inline3'],
 		];
 
