@@ -63,7 +63,7 @@ const expectAdFree = (reasons: AdFreeCookieReasons[]) => {
 	});
 };
 
-describe.skip('tcfv2 consent', () => {
+describe('tcfv2 consent', () => {
 	const expectAdFreeCookieReasonSet = (reasons: AdFreeCookieReasons[]) => {
 		cy.window()
 			.its('localStorage.setItem')
@@ -119,16 +119,10 @@ describe.skip('tcfv2 consent', () => {
 	});
 
 	const { path } = articles[0];
-	it(`Test ${path} hides slots when consent is denied`, () => {
+	it(`Test ${path} hides targeted slots when consent is denied`, () => {
 		cy.visit(path);
 
 		cy.rejectAllConsent();
-
-		cy.get(`[data-name="top-above-nav"]`).should('not.exist');
-
-		cy.getCookie('GU_AF1').should('not.be.empty');
-
-		cy.reload();
 
 		cy.get(`[data-name="top-above-nav"]`).should('not.exist');
 
@@ -179,6 +173,20 @@ describe.skip('tcfv2 consent', () => {
 		cy.reload();
 
 		adsShouldShow();
+	});
+
+	it(`Test ${path} reject all, login as subscriber, should not show ads`, () => {
+		fakeLogin(true);
+
+		cy.visit(path);
+
+		cy.rejectAllConsent();
+
+		expectAdFreeCookieReasonSet([AdFreeCookieReasons.Subscriber]);
+
+		cy.reload();
+
+		adsShouldNotShow();
 	});
 
 	it(`Test ${path} reject all, login as non-subscriber should show ads, log out should show ads`, () => {
