@@ -32,10 +32,10 @@ import { init as initRedplanet } from 'lib/dfp/redplanet';
 import { init as initFrontsBannerAdverts } from 'lib/fronts-banner-adverts';
 import { init as initHighMerch } from 'lib/high-merch';
 import { init as initIpsosMori } from 'lib/ipsos-mori';
-import { manageAdFreeCookieOnConsentChange } from 'lib/manage-ad-free-cookie-on-consent-change';
 import { init as initMobileSticky } from 'lib/mobile-sticky';
 import { paidContainers } from 'lib/paid-containers';
 import { removeDisabledSlots as closeDisabledSlots } from 'lib/remove-slots';
+import { removeTargetedAdsOnConsentChange } from 'lib/remove-targeted-ads-on-consent-change';
 import { init as setAdTestCookie } from 'lib/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from 'lib/set-adtest-in-labels-cookie';
 import { init as initArticleAsideAdverts } from 'lib/spacefinder/article-aside-adverts';
@@ -48,7 +48,6 @@ import { init as initThirdPartyTags } from 'lib/third-party-tags';
 import { init as initTrackGpcSignal } from 'lib/track-gpc-signal';
 import { init as initTrackLabsContainer } from 'lib/track-labs-container';
 import { init as initTrackScrollDepth } from 'lib/track-scroll-depth';
-import { isDigitalSubscriber } from 'lib/user-features';
 import { amIUsed } from 'lib/utils/am-i-used';
 import { reportError } from 'lib/utils/report-error';
 import { catchErrorsWithContext } from 'lib/utils/robust';
@@ -80,7 +79,7 @@ const commercialBaseModules: Modules = [];
 // remaining modules not necessary to load an ad
 const commercialExtraModules: Modules = [
 	['cm-adFreeSlotRemoveFronts', adFreeSlotRemove],
-	['cm-manageAdFreeCookieOnConsentChange', manageAdFreeCookieOnConsentChange],
+	['cm-removeTargetedAdsOnConsentChange', removeTargetedAdsOnConsentChange],
 	['cm-closeDisabledSlots', closeDisabledSlots],
 	['cm-comscore', initComscore],
 	['cm-ipsosmori', initIpsosMori],
@@ -247,12 +246,14 @@ const chooseAdvertisingTag = async () => {
 	if (
 		consentState.tcfv2 &&
 		!getConsentFor('googletag', consentState) &&
-		!isDigitalSubscriber()
+		!commercialFeatures.adFree
 	) {
 		void import(
 			/* webpackChunkName: "consentless" */
 			'./commercial.consentless'
-		).then(({ bootConsentless }) => bootConsentless(consentState));
+		).then(({ bootConsentless }) =>
+			bootConsentless(consentState, isDotcomRendering),
+		);
 	} else {
 		bootCommercialWhenReady();
 	}
