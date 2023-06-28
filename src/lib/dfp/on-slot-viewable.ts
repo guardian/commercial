@@ -62,32 +62,24 @@ const setSlotAdRefresh = (
 
 	void setAdSlotMinHeight(advert);
 
-	// Asynchronously retrieve the non-refreshable line item ids
-	// Only do this if they haven't been attached to the page config
-	const { switches, page } = window.guardian.config;
-	if (
-		switches.fetchNonRefreshableLineItems &&
-		!page.nonRefreshableLineItemIds
-	) {
-		// Call the memoized function so we only retrieve the value from the API once
-		void memoizedFetchNonRefreshableLineItemIds()
-			.then((nonRefreshableLineItemIds) => {
-				// Determine whether ad should refresh
-				// This value will then be checked when the timer has elapsed and
-				// we want to know whether to refresh
-				advert.shouldRefresh = shouldRefresh(
-					advert,
-					nonRefreshableLineItemIds,
-				);
-			})
-			.catch((error) => {
-				log(
-					'commercial',
-					'⚠️ Error fetching non-refreshable line items',
-					error,
-				);
-			});
-	}
+	// Call the memoized function so we only retrieve the value from the API once
+	void memoizedFetchNonRefreshableLineItemIds()
+		.then((nonRefreshableLineItemIds) => {
+			// Determine whether ad should refresh
+			// This value will then be checked when the timer has elapsed and
+			// we want to know whether to refresh
+			advert.shouldRefresh = shouldRefresh(
+				advert,
+				nonRefreshableLineItemIds,
+			);
+		})
+		.catch((error) => {
+			log(
+				'commercial',
+				'⚠️ Error fetching non-refreshable line items',
+				error,
+			);
+		});
 
 	const viewabilityThresholdMs = ADVERT_REFRESH_RATE;
 
