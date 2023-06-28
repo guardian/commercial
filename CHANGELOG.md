@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 10.2.0
+
+### Minor Changes
+
+- a421b30: Remove the non refreshable line item ids fallback
+
 ## 10.1.1
 
 ### Patch Changes
