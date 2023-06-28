@@ -9,7 +9,6 @@ import { getPageTargeting } from 'lib/build-page-targeting';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInVariantSynchronous } from 'lib/experiments/ab';
 import { elementsManager } from 'lib/experiments/tests/elements-manager';
-import type { IdentityUserIdentifiers } from 'lib/identity/api';
 import { getUserIdentifiersFromApi } from 'lib/identity/api';
 import { init as initMeasureAdLoad } from 'lib/messenger/measure-ad-load';
 import raven from 'lib/raven';
@@ -73,15 +72,13 @@ const setPageTargeting = (consentState: ConsentState) =>
  * Also known as PPID
  */
 const setPublisherProvidedId = (): void =>
-	getUserIdentifiersFromApi(
-		(userIdentifiers: IdentityUserIdentifiers | null) => {
-			if (userIdentifiers?.googleTagId) {
-				window.googletag
-					.pubads()
-					.setPublisherProvidedId(userIdentifiers.googleTagId);
-			}
-		},
-	);
+	getUserIdentifiersFromApi((userIdentifiers) => {
+		if (userIdentifiers?.googleTagId) {
+			window.googletag
+				.pubads()
+				.setPublisherProvidedId(userIdentifiers.googleTagId);
+		}
+	});
 
 export const init = (): Promise<void> => {
 	// Don't create Google ads (for now) if loading Elements Manager

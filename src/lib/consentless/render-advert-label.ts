@@ -4,7 +4,6 @@
 -- "Promise returned in function argument where a void return was expected"
 */
 import fastdom from 'lib/fastdom-promise';
-import crossIcon from '../../../static/svg/icon/cross.svg';
 
 const shouldRenderConsentlessLabel = (adSlotNode: HTMLElement): boolean => {
 	if (
@@ -25,19 +24,6 @@ const shouldRenderConsentlessLabel = (adSlotNode: HTMLElement): boolean => {
 	}
 
 	return true;
-};
-
-export const createAdCloseDiv = (): HTMLElement => {
-	const closeDiv: HTMLElement = document.createElement('button');
-	closeDiv.className = 'ad-slot__close-button';
-	closeDiv.innerHTML = crossIcon;
-	closeDiv.onclick = () => {
-		const container: HTMLElement | null = closeDiv.closest(
-			'.mobilesticky-container',
-		);
-		if (container) container.remove();
-	};
-	return closeDiv;
 };
 
 export const renderConsentlessAdvertLabel = (

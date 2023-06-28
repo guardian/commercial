@@ -1,4 +1,4 @@
-import type { ABTest, Runnable, Variant } from '@guardian/ab-core';
+import type { ABTest, Variant } from '@guardian/ab-core';
 
 export const genVariant = (id: string, canRun?: boolean): Variant => ({
 	id,
@@ -32,19 +32,3 @@ export const genAbTest = (
 	successMeasure: 'n/a',
 	variants: variants ?? [genVariant('control'), genVariant('variant')],
 });
-
-export const genRunnableAbTestWhereControlIsRunnable = (
-	id: string,
-	canRun?: boolean,
-): Runnable<ABTest> => {
-	const abTest = genAbTest(id, canRun);
-	return { ...abTest, variantToRun: abTest.variants[0] };
-};
-
-export const genRunnableAbTestWhereVariantIsRunnable = (
-	id: string,
-	canRun?: boolean,
-): Runnable<ABTest> => {
-	const abTest = genAbTest(id, canRun);
-	return { ...abTest, variantToRun: abTest.variants[1] };
-};

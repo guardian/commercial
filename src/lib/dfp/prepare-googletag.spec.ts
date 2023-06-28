@@ -149,9 +149,6 @@ jest.mock('./refresh-on-resize', () => ({
 jest.mock('lib/analytics/beacon', () => ({
 	fire: jest.fn(),
 }));
-jest.mock('lib/onward/geo-most-popular', () => ({
-	geoMostPopular: { render: jest.fn() },
-}));
 jest.mock('./load-advert', () => ({
 	loadAdvert: jest.fn(),
 }));

@@ -9,7 +9,7 @@ type AutomatLog = Record<string, unknown> & {
 	url: string;
 };
 
-export const automatLog: AutomatLog = {
+const automatLog: AutomatLog = {
 	url: window.location.href,
 };
 

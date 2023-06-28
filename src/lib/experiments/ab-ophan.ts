@@ -76,15 +76,14 @@ const registerCompleteEvent =
 		}
 	};
 
-export const registerCompleteEvents = (
-	tests: ReadonlyArray<Runnable<ABTest>>,
-): void => tests.forEach(registerCompleteEvent(true));
+const registerCompleteEvents = (tests: ReadonlyArray<Runnable<ABTest>>): void =>
+	tests.forEach(registerCompleteEvent(true));
 
-export const registerImpressionEvents = (
+const registerImpressionEvents = (
 	tests: ReadonlyArray<Runnable<ABTest>>,
 ): void => tests.filter(defersImpression).forEach(registerCompleteEvent(false));
 
-export const buildOphanPayload = (
+const buildOphanPayload = (
 	tests: ReadonlyArray<Runnable<ABTest>>,
 ): OphanABPayload => {
 	try {
@@ -116,4 +115,5 @@ export const buildOphanPayload = (
 };
 export const trackABTests = (tests: ReadonlyArray<Runnable<ABTest>>): void =>
 	submit(buildOphanPayload(tests));
-export { buildOphanSubmitter };
+
+export { registerCompleteEvents, registerImpressionEvents };

@@ -1,65 +1,8 @@
-import { getCookie, storage } from '@guardian/libs';
+import { getCookie } from '@guardian/libs';
 import { mergeCalls } from 'lib/utils/async-call-merger';
-import { fetchJson } from 'lib/utils/fetch-json';
 import { mediator } from 'lib/utils/mediator';
-import { getUrlVars } from 'lib/utils/url';
-import { createAuthenticationComponentEventParams } from './auth-component-event-params';
 
 // Types info coming from https://github.com/guardian/discussion-rendering/blob/fc14c26db73bfec8a04ff7a503ed9f90f1a1a8ad/src/types.ts
-
-type SettableConsent = {
-	id: string;
-	consented: boolean;
-};
-
-type Newsletter = {
-	id: string;
-	subscribed?: boolean;
-};
-
-type UserNameError = {
-	message: string;
-	description: string;
-	context: string;
-};
-
-type UserConsents = {
-	id: string;
-	actor: string;
-	version: number;
-	consented: boolean;
-	timestamp: string;
-	privacyPolicyVersion: number;
-};
-
-type UserGroups = {
-	path: string;
-	packageCode: string;
-};
-
-type IdentityUser = {
-	dates: { accountCreatedDate: string };
-	consents: UserConsents[];
-	userGroups: UserGroups[];
-	publicFields: {
-		username: string;
-		displayName: string;
-	};
-	statusFields: {
-		userEmailValidated: boolean;
-	};
-	privateFields: {
-		brazeUuid: string;
-		googleTagId: string;
-		puzzleUuid: string;
-		legacyPackages: string;
-		legacyProducts: string;
-	};
-	primaryEmailAddress: string;
-	id: number;
-	hasPassword: boolean;
-	adData: Record<string, unknown>;
-};
 
 type IdentityUserFromCache = {
 	dates: { accountCreatedDate: string };
@@ -74,12 +17,6 @@ type IdentityUserFromCache = {
 	rawResponse: string;
 } | null;
 
-type IdentityResponse = {
-	status: 'ok' | 'error';
-	user: IdentityUser;
-	errors?: UserNameError[];
-};
-
 type IdentityUserIdentifiers = {
 	id: string;
 	brazeUuid: string;
@@ -90,14 +27,9 @@ type IdentityUserIdentifiers = {
 let userFromCookieCache: IdentityUserFromCache = null;
 
 const cookieName = 'GU_U';
-const signOutCookieName = 'GU_SO';
-const fbCheckKey = 'gu.id.nextFbCheck';
 
 const idApiRoot =
 	window.guardian.config.page.idApiUrl ?? '/ID_API_ROOT_URL_NOT_FOUND';
-
-const profileRoot =
-	window.guardian.config.page.idUrl ?? '/PROFILE_ROOT_ID_URL_NOT_FOUND';
 
 mediator.emit('module:identity:api:loaded');
 
@@ -142,58 +74,7 @@ const getUserFromCookie = (): IdentityUserFromCache => {
 	return userFromCookieCache;
 };
 
-const updateNewsletter = (newsletter: Newsletter): Promise<void> => {
-	const url = `${idApiRoot}/users/me/newsletters`;
-	return fetch(url, {
-		method: 'PATCH',
-		credentials: 'include',
-		mode: 'cors',
-		body: JSON.stringify(newsletter),
-	}).then(() => Promise.resolve());
-};
-
-const buildNewsletterUpdatePayload = (
-	action = 'none',
-	newsletterId: string,
-): Newsletter => {
-	const newsletter: Newsletter = { id: newsletterId };
-	switch (action) {
-		case 'add':
-			newsletter.subscribed = true;
-			break;
-		case 'remove':
-			newsletter.subscribed = false;
-			break;
-		default:
-			throw new Error(`Undefined newsletter action type (${action})`);
-	}
-	return newsletter;
-};
-
 const isUserLoggedIn = (): boolean => getUserFromCookie() !== null;
-
-const getUserFromApi = mergeCalls(
-	(mergingCallback: (u: IdentityUser | null) => void) => {
-		if (isUserLoggedIn()) {
-			const url = `${idApiRoot}/user/me`;
-			void (
-				fetchJson(url, {
-					mode: 'cors',
-					credentials: 'include',
-				}) as Promise<IdentityResponse>
-			) // assert unknown -> IdentityResponse
-				.then((data: IdentityResponse) => {
-					if (data.status === 'ok') {
-						mergingCallback(data.user);
-					} else {
-						mergingCallback(null);
-					}
-				});
-		} else {
-			mergingCallback(null);
-		}
-	},
-);
 
 const fetchUserIdentifiers = () => {
 	const url = `${idApiRoot}/user/me/identifiers`;
@@ -230,147 +111,4 @@ const getUserIdentifiersFromApi = mergeCalls(
 	},
 );
 
-const reset = (): void => {
-	getUserFromApi.reset();
-	getUserIdentifiersFromApi.reset();
-	userFromCookieCache = null;
-};
-
-const getUrl = (): string => profileRoot;
-
-const getUserFromApiWithRefreshedCookie = (): Promise<unknown> => {
-	const endpoint = `${idApiRoot}/user/me?refreshCookie=true`;
-	return fetch(endpoint, {
-		mode: 'cors',
-		credentials: 'include',
-	}).then((resp) => resp.json());
-};
-
-const refreshOktaSession = (returnUrl: string): void => {
-	const endpoint = `${profileRoot}/signin/refresh?returnUrl=${returnUrl}`;
-	window.location.replace(endpoint);
-};
-
-const redirectTo = (url: string): void => {
-	window.location.assign(url);
-};
-
-// This needs to get out of here
-type AuthenticationComponentId =
-	| 'email_sign_in_banner'
-	| 'subscription_sign_in_banner'
-	| 'signin_from_formstack';
-
-export const getUserOrSignIn = (
-	componentId: AuthenticationComponentId,
-	paramUrl: string | null,
-): IdentityUserFromCache | void => {
-	let returnUrl = paramUrl;
-
-	if (isUserLoggedIn()) {
-		return getUserFromCookie();
-	}
-
-	// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- not sure what it would do
-	returnUrl = encodeURIComponent(returnUrl || document.location.href);
-	const url = [
-		getUrl() || '',
-		'/signin?returnUrl=',
-		returnUrl,
-		'&',
-		createAuthenticationComponentEventParams(componentId),
-	].join('');
-
-	redirectTo(url);
-};
-
-export const hasUserSignedOutInTheLast24Hours = (): boolean => {
-	const cookieData = getCookie({
-		name: signOutCookieName,
-	});
-
-	if (cookieData) {
-		return (
-			Math.round(new Date().getTime() / 1000) <
-			parseInt(cookieData, 10) + 86400
-		);
-	}
-	return false;
-};
-
-export const shouldAutoSigninInUser = (): boolean => {
-	const signedInUser = !!getUserCookie();
-	const checkFacebook = !!storage.local.get(fbCheckKey);
-	return (
-		!signedInUser && !checkFacebook && !hasUserSignedOutInTheLast24Hours()
-	);
-};
-
-export const sendValidationEmail = (): unknown => {
-	const defaultReturnEndpoint = '/email-prefs';
-	const endpoint = `${idApiRoot}/user/send-validation-email`;
-
-	const returnUrlVar = getUrlVars().returnUrl;
-	const returnUrl =
-		typeof returnUrlVar === 'string'
-			? decodeURIComponent(returnUrlVar)
-			: profileRoot + defaultReturnEndpoint;
-
-	const params = new URLSearchParams();
-	params.append('returnUrl', returnUrl);
-
-	const request = fetch(`${endpoint}?${params.toString()}`, {
-		mode: 'cors',
-		credentials: 'include',
-		method: 'POST',
-	});
-
-	return request;
-};
-
-export const updateUsername = (username: string): unknown => {
-	const endpoint = `${idApiRoot}/user/me`;
-	const data = {
-		publicFields: {
-			username,
-			displayName: username,
-		},
-	};
-	const request = fetch(endpoint, {
-		mode: 'cors',
-		method: 'POST',
-		body: JSON.stringify(data),
-		credentials: 'include',
-	});
-
-	return request;
-};
-
-export const setConsent = (consents: SettableConsent): Promise<void> =>
-	fetch(`${idApiRoot}/users/me/consents`, {
-		method: 'PATCH',
-		credentials: 'include',
-		mode: 'cors',
-		body: JSON.stringify(consents),
-	}).then((resp) => {
-		if (resp.ok) return Promise.resolve();
-		return Promise.reject();
-	});
-
-export {
-	type IdentityUser,
-	type IdentityUserIdentifiers,
-	getUserCookie as getCookie,
-	buildNewsletterUpdatePayload,
-	decodeBase64,
-	getUrl,
-	getUserFromApi,
-	getUserFromApiWithRefreshedCookie,
-	getUserFromCookie,
-	getUserIdentifiersFromApi,
-	isUserLoggedIn,
-	updateNewsletter,
-	redirectTo,
-	refreshOktaSession,
-	reset,
-};
+export { getUserIdentifiersFromApi, isUserLoggedIn };
