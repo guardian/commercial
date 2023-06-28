@@ -176,7 +176,7 @@ const bootCommercial = async (): Promise<void> => {
 	if (process.env.COMMIT_SHA) {
 		log(
 			'commercial',
-			`@guardian/commercial commit ${process.env.COMMIT_SHA}`,
+			`@guardian/commercial commit https://github.com/guardian/commercial/blob/${process.env.COMMIT_SHA}`,
 		);
 	}
 
