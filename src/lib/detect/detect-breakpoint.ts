@@ -160,10 +160,6 @@ const hasCrossedBreakpoint = (
 
 initMediaQueryListeners();
 
-const _ = {
-	updateBreakpoint,
-};
-
 export {
 	getBreakpoint,
 	getTweakpoint,
@@ -171,5 +167,4 @@ export {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
 	hasCrossedBreakpoint,
-	_,
 };

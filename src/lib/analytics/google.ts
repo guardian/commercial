@@ -1,56 +1,10 @@
 import { getCLS, getFID, getLCP } from 'web-vitals';
-import { mediator } from 'lib/utils/mediator';
-import type {
-	BoostGaUserTimingFidelityMetrics,
-	GoogleTimingEvent,
-} from 'types/global';
 
 const trackerName =
 	window.guardian.config.googleAnalytics?.trackers?.editorial ??
 	'no-ga-tracker-found';
 
 const send = `${trackerName}.send`;
-
-const getTextContent = (el: HTMLElement): string =>
-	(el.textContent ?? '').trim();
-
-const trackNonClickInteraction = (actionName: string): void => {
-	window.ga(send, 'event', 'Interaction', actionName, {
-		nonInteraction: true, // to avoid affecting bounce rate
-	});
-};
-
-const trackSamePageLinkClick = (target: HTMLElement, tag: string): void => {
-	window.ga(send, 'event', 'click', 'in page', tag, {
-		nonInteraction: true, // to avoid affecting bounce rate
-		dimension13: getTextContent(target),
-	});
-};
-
-const trackExternalLinkClick = (target: HTMLElement, tag: string): void => {
-	const data: {
-		dimension13: string;
-		dimension48?: string;
-	} = {
-		dimension13: getTextContent(target),
-	};
-
-	const targetURL = target.getAttribute('href');
-
-	if (targetURL) {
-		data.dimension48 = targetURL;
-	}
-
-	window.ga(send, 'event', 'click', 'external', tag, data);
-};
-
-const trackSponsorLogoLinkClick = (target: HTMLElement): void => {
-	const sponsorName = target.dataset.sponsor;
-
-	window.ga(send, 'event', 'click', 'sponsor logo', sponsorName, {
-		nonInteraction: true,
-	});
-};
 
 const trackNativeAdLinkClick = (slotName: string, tag: string): void => {
 	window.ga(send, 'event', 'click', 'native ad', tag, {
@@ -59,87 +13,12 @@ const trackNativeAdLinkClick = (slotName: string, tag: string): void => {
 	});
 };
 
-const sendPerformanceEvent = (event: GoogleTimingEvent): void => {
-	const boostGaUserTimingFidelityMetrics: BoostGaUserTimingFidelityMetrics = {
-		standardStart: 'metric18',
-		standardEnd: 'metric19',
-		commercialStart: 'metric20',
-		commercialEnd: 'metric21',
-		enhancedStart: 'metric22',
-		enhancedEnd: 'metric23',
-	};
-
-	window.ga(
-		send,
-		'timing',
-		event.timingCategory,
-		event.timingVar,
-		event.timeSincePageLoad,
-		event.timingLabel,
-	);
-
-	/*
-       send performance events as normal events too,
-       so we can avoid the 0.1% sampling that affects timing events
-    */
-	if (window.guardian.config.switches.boostGaUserTimingFidelity) {
-		// these are our own metrics that map to our timing events
-		const metric = boostGaUserTimingFidelityMetrics[event.timingVar];
-
-		const fields: Record<string, unknown> = {
-			nonInteraction: true,
-			dimension44: metric, // dimension44 is dotcomPerformance
-		};
-
-		fields[metric] = event.timeSincePageLoad;
-
-		window.ga(
-			send,
-			'event',
-			event.timingCategory,
-			event.timingVar,
-			event.timingLabel,
-			event.timeSincePageLoad,
-			fields,
-		);
-	}
-};
-
 /*
    Track important user timing metrics so that we can be notified and measure
    over time in GA
    https://developers.google.com/analytics/devguides/collection/analyticsjs/user-timings
    Tracks into Behaviour > Site Speed > User Timings in GA
 */
-const trackPerformance = (
-	timingCategory: string,
-	timingVar: keyof BoostGaUserTimingFidelityMetrics,
-	timingLabel: string,
-): void => {
-	const timeSincePageLoad = Math.round(window.performance.now());
-	const event: GoogleTimingEvent = {
-		timingCategory,
-		timingVar,
-		timeSincePageLoad,
-		timingLabel,
-	};
-
-	// @ts-expect-error -- extra safety if undefined
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- extra safety if undefined
-	if (window.ga ?? false) {
-		sendPerformanceEvent(event);
-	} else {
-		const timingEvents =
-			window.guardian.config.googleAnalytics?.timingEvents ?? [];
-		const sendDeferredEventQueue = (): void => {
-			timingEvents.map(sendPerformanceEvent);
-			mediator.off('modules:ga:ready', sendDeferredEventQueue);
-		};
-
-		mediator.on('modules:ga:ready', sendDeferredEventQueue);
-		timingEvents.push(event);
-	}
-};
 
 type CoreVitalsArgs = {
 	name: string;
@@ -195,11 +74,4 @@ if (randomPerc <= coreVitalsSampleRate) {
 	getFID(sendCoreVital); // https://github.com/GoogleChrome/web-vitals#getfid
 }
 
-export {
-	trackNonClickInteraction,
-	trackSamePageLinkClick,
-	trackExternalLinkClick,
-	trackSponsorLogoLinkClick,
-	trackNativeAdLinkClick,
-	trackPerformance,
-};
+export { trackNativeAdLinkClick };

@@ -163,9 +163,4 @@ const renderStickyScrollForMoreLabel = (
 		adSlotNode.appendChild(scrollForMoreLabel);
 	});
 
-export {
-	renderAdvertLabel,
-	renderStickyScrollForMoreLabel,
-	shouldRenderLabel,
-	createAdCloseDiv,
-};
+export { renderAdvertLabel, renderStickyScrollForMoreLabel, shouldRenderLabel };

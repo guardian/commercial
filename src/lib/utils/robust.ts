@@ -49,6 +49,6 @@ const catchErrorsWithContext = (
 	modules.forEach(([name, fn]) => catchAndLogError(name, fn, tags));
 };
 
-export { catchErrorsWithContext, logError };
+export { catchErrorsWithContext };
 export type { Modules };
 export const _ = { catchAndLogError };
