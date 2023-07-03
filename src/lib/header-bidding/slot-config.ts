@@ -184,11 +184,7 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 			],
 		},
 		'mobile-sticky': {
-			mobile:
-				shouldIncludeMobileSticky() &&
-				window.guardian.config.switches.mobileStickyPrebid
-					? [adSizes.mobilesticky]
-					: [],
+			mobile: shouldIncludeMobileSticky() ? [adSizes.mobilesticky] : [],
 		},
 		'crossword-banner': {
 			desktop: isCrossword ? [adSizes.leaderboard] : [],

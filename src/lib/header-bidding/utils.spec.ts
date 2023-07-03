@@ -346,9 +346,9 @@ describe('Utils', () => {
 	const regions: CountryCode[] = ['US', 'CA', 'AU', 'NZ'];
 
 	regions.forEach((region) => {
-		test(`should include mobile sticky if geolocation is ${region}, switch is ON and content is Article on mobiles`, () => {
+		test(`should include mobile sticky if geolocation is ${region} and content is Article on mobiles`, () => {
 			window.guardian.config.page.contentType = 'Article';
-			window.guardian.config.switches.mobileStickyLeaderboard = true;
+
 			getCountryCode.mockReturnValue(region);
 			matchesBreakpoints.mockReturnValue(true);
 			expect(shouldIncludeMobileSticky()).toBe(true);
@@ -357,16 +357,7 @@ describe('Utils', () => {
 
 	test('shouldIncludeMobileSticky should be false if all conditions true except content type ', () => {
 		window.guardian.config.page.contentType = 'Network Front';
-		window.guardian.config.switches.mobileStickyLeaderboard = true;
 		matchesBreakpoints.mockReturnValue(true);
-		getCountryCode.mockReturnValue('US');
-		expect(shouldIncludeMobileSticky()).toBe(false);
-	});
-
-	test('shouldIncludeMobileSticky should be false if all conditions true except switch', () => {
-		window.guardian.config.page.contentType = 'Article';
-		matchesBreakpoints.mockReturnValue(true);
-		window.guardian.config.switches.mobileStickyLeaderboard = false;
 		getCountryCode.mockReturnValue('US');
 		expect(shouldIncludeMobileSticky()).toBe(false);
 	});
@@ -374,7 +365,6 @@ describe('Utils', () => {
 	test('shouldIncludeMobileSticky should be false if all conditions true except isHosted condition', () => {
 		window.guardian.config.page.contentType = 'Article';
 		matchesBreakpoints.mockReturnValue(true);
-		window.guardian.config.switches.mobileStickyLeaderboard = true;
 		window.guardian.config.page.isHosted = true;
 		getCountryCode.mockReturnValue('US');
 		expect(shouldIncludeMobileSticky()).toBe(false);
@@ -382,7 +372,6 @@ describe('Utils', () => {
 
 	test('shouldIncludeMobileSticky should be false if all conditions true except continent', () => {
 		window.guardian.config.page.contentType = 'Article';
-		window.guardian.config.switches.mobileStickyLeaderboard = true;
 		matchesBreakpoints.mockReturnValue(true);
 		getCountryCode.mockReturnValue('GB');
 		expect(shouldIncludeMobileSticky()).toBe(false);
@@ -390,7 +379,6 @@ describe('Utils', () => {
 
 	test('shouldIncludeMobileSticky should be false if all conditions true except mobile', () => {
 		window.guardian.config.page.contentType = 'Article';
-		window.guardian.config.switches.mobileStickyLeaderboard = true;
 		matchesBreakpoints.mockReturnValue(false);
 		getCountryCode.mockReturnValue('US');
 		expect(shouldIncludeMobileSticky()).toBe(false);
@@ -398,7 +386,6 @@ describe('Utils', () => {
 
 	test('shouldIncludeMobileSticky should be true if test param exists irrespective of other conditions', () => {
 		window.guardian.config.page.contentType = 'Network Front';
-		window.guardian.config.switches.mobileStickyLeaderboard = false;
 		matchesBreakpoints.mockReturnValue(false);
 		getCountryCode.mockReturnValue('US');
 		window.location.hash = '#mobile-sticky';
