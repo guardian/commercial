@@ -188,11 +188,10 @@ export const shouldIncludeSmart = (): boolean => isInUk() || isInRow();
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>
 		window.location.hash.includes('#mobile-sticky') ||
-		(!!window.guardian.config.switches.mobileStickyLeaderboard &&
-			matchesBreakpoints({
-				min: 'mobile',
-				max: 'mobileLandscape',
-			}) &&
+		(matchesBreakpoints({
+			min: 'mobile',
+			max: 'mobileLandscape',
+		}) &&
 			(isInUsOrCa() || isInAuOrNz()) &&
 			window.guardian.config.page.contentType === 'Article' &&
 			!window.guardian.config.page.isHosted),
