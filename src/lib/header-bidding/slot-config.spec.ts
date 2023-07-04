@@ -115,7 +115,6 @@ describe('getPrebidAdSlots', () => {
 
 	test('should return the correct mobile-sticky slot at breakpoint M', () => {
 		(getBreakpointKey as jest.Mock).mockReturnValue('M');
-		window.guardian.config.switches.mobileStickyPrebid = true;
 		(shouldIncludeMobileSticky as jest.Mock).mockReturnValue(true);
 		expect(
 			getHeaderBiddingAdSlots(
