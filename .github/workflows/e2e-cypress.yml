@@ -18,6 +18,12 @@ jobs:
     services:
       DCR:
         # We always run our commercial code against the latest main of DCR
+        # This does make our tests sensitive to changes in DCR
+        # (e.g. imagine someone removes the top-above-nav slot from DCR)
+        # This is something we accept in order to easily test our own code
+        #
+        # Note we use the containerised version of DCR, published from:
+        # https://github.com/guardian/dotcom-rendering/blob/6a6df272/.github/workflows/container.yml
         image: ghcr.io/guardian/dotcom-rendering:main
         ports:
           - 3030:3030
