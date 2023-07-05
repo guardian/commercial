@@ -191,7 +191,10 @@ const reset = () => {
 	dfpEnv.adverts = [];
 	dfpEnv.advertsToRefresh = [];
 	dfpEnv.advertsToLoad = [];
-	dfpEnv.hbImpl = { prebid: false, a9: false };
+	window.guardian.config.switches = {
+		prebidHeaderBidding: false,
+		a9HeaderBidding: false,
+	};
 };
 
 const tcfv2WithConsent: ConsentState = {

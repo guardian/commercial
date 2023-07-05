@@ -1,7 +1,6 @@
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInCanada } from 'lib/utils/geo-utils';
 import { a9 } from '../header-bidding/a9/a9';
-import { dfpEnv } from './dfp-env';
 import { _ } from './prepare-a9';
 
 const { setupA9 } = _;
@@ -51,6 +50,7 @@ describe('init', () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
 		fakeUserAgent();
+		window.guardian.config.switches = {};
 	});
 
 	afterAll(() => {
@@ -58,7 +58,10 @@ describe('init', () => {
 	});
 
 	it('should initialise A9 when A9 switch is ON and advertising is on and ad-free is off', async () => {
-		dfpEnv.hbImpl = { a9: true, prebid: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: false,
+			a9HeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 
@@ -68,7 +71,10 @@ describe('init', () => {
 	});
 
 	it('should NOT initialise A9 when in Canada', async () => {
-		dfpEnv.hbImpl = { a9: true, prebid: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: false,
+			a9HeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		(isInCanada as jest.Mock).mockReturnValueOnce(true);
@@ -79,7 +85,10 @@ describe('init', () => {
 	});
 
 	it('should initialise A9 when both prebid and a9 switches are ON and advertising is on and ad-free is off', async () => {
-		dfpEnv.hbImpl = { a9: true, prebid: true };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+			a9HeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		await setupA9();
@@ -93,13 +102,19 @@ describe('init', () => {
 	});
 
 	it('should not initialise A9 when no external demand', async () => {
-		dfpEnv.hbImpl = { a9: false, prebid: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: false,
+			a9HeaderBidding: false,
+		};
 		await setupA9();
 		expect(a9.initialise).not.toBeCalled();
 	});
 
 	it('should not initialise a9 when advertising is switched off', async () => {
-		dfpEnv.hbImpl = { a9: true, prebid: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: false,
+			a9HeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = false;
 		commercialFeatures.adFree = false;
 		await setupA9();
@@ -107,7 +122,10 @@ describe('init', () => {
 	});
 
 	it('should not initialise a9 when ad-free is on', async () => {
-		dfpEnv.hbImpl = { a9: true, prebid: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: false,
+			a9HeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = true;
 		await setupA9();
@@ -115,7 +133,10 @@ describe('init', () => {
 	});
 
 	it('should not initialise a9 when the page has a pageskin', async () => {
-		dfpEnv.hbImpl = { a9: true, prebid: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: false,
+			a9HeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		window.guardian.config.page.hasPageSkin = true;
@@ -124,7 +145,10 @@ describe('init', () => {
 	});
 
 	it('should initialise a9 when the page has no pageskin', async () => {
-		dfpEnv.hbImpl = { a9: true, prebid: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: false,
+			a9HeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		window.guardian.config.page.hasPageSkin = false;
@@ -133,7 +157,10 @@ describe('init', () => {
 	});
 
 	it('should not initialise a9 on the secure contact pages', async () => {
-		dfpEnv.hbImpl = { a9: true, prebid: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: false,
+			a9HeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		commercialFeatures.isSecureContact = true;
