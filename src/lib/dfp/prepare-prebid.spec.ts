@@ -139,7 +139,6 @@ describe('init', () => {
 		expect.hasAssertions();
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
-			a9HeaderBidding: false,
 		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
@@ -154,7 +153,6 @@ describe('init', () => {
 		expect.hasAssertions();
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
-			a9HeaderBidding: false,
 		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
@@ -173,7 +171,6 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		window.guardian.config.switches = {
 			prebidHeaderBidding: false,
-			a9HeaderBidding: false,
 		};
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
@@ -187,7 +184,6 @@ describe('init', () => {
 
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
-			a9HeaderBidding: false,
 		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
@@ -204,7 +200,6 @@ describe('init', () => {
 
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
-			a9HeaderBidding: false,
 		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
@@ -221,7 +216,6 @@ describe('init', () => {
 
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
-			a9HeaderBidding: false,
 		};
 		commercialFeatures.dfpAdvertising = false;
 		commercialFeatures.adFree = false;
@@ -237,7 +231,6 @@ describe('init', () => {
 
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
-			a9HeaderBidding: false,
 		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = true;
@@ -253,7 +246,6 @@ describe('init', () => {
 
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
-			a9HeaderBidding: false,
 		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
@@ -268,7 +260,6 @@ describe('init', () => {
 	it('should initialise Prebid when the page has no pageskin', async () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
-			a9HeaderBidding: false,
 		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
@@ -285,7 +276,6 @@ describe('init', () => {
 
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
-			a9HeaderBidding: false,
 		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
@@ -300,7 +290,6 @@ describe('init', () => {
 
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
-			a9HeaderBidding: false,
 		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
@@ -322,7 +311,6 @@ describe('init', () => {
 
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
-			a9HeaderBidding: false,
 		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
@@ -337,7 +325,6 @@ describe('init', () => {
 
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
-			a9HeaderBidding: false,
 		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
@@ -359,7 +346,6 @@ describe('init', () => {
 
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
-			a9HeaderBidding: false,
 		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
@@ -374,7 +360,6 @@ describe('init', () => {
 
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
-			a9HeaderBidding: false,
 		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
@@ -396,7 +381,6 @@ describe('init', () => {
 
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
-			a9HeaderBidding: false,
 		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;

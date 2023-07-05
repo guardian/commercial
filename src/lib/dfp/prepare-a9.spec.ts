@@ -59,7 +59,6 @@ describe('init', () => {
 
 	it('should initialise A9 when A9 switch is ON and advertising is on and ad-free is off', async () => {
 		window.guardian.config.switches = {
-			prebidHeaderBidding: false,
 			a9HeaderBidding: true,
 		};
 		commercialFeatures.dfpAdvertising = true;
@@ -72,7 +71,6 @@ describe('init', () => {
 
 	it('should NOT initialise A9 when in Canada', async () => {
 		window.guardian.config.switches = {
-			prebidHeaderBidding: false,
 			a9HeaderBidding: true,
 		};
 		commercialFeatures.dfpAdvertising = true;
@@ -86,7 +84,6 @@ describe('init', () => {
 
 	it('should initialise A9 when both prebid and a9 switches are ON and advertising is on and ad-free is off', async () => {
 		window.guardian.config.switches = {
-			prebidHeaderBidding: true,
 			a9HeaderBidding: true,
 		};
 		commercialFeatures.dfpAdvertising = true;
@@ -103,7 +100,6 @@ describe('init', () => {
 
 	it('should not initialise A9 when no external demand', async () => {
 		window.guardian.config.switches = {
-			prebidHeaderBidding: false,
 			a9HeaderBidding: false,
 		};
 		await setupA9();
@@ -112,7 +108,6 @@ describe('init', () => {
 
 	it('should not initialise a9 when advertising is switched off', async () => {
 		window.guardian.config.switches = {
-			prebidHeaderBidding: false,
 			a9HeaderBidding: true,
 		};
 		commercialFeatures.dfpAdvertising = false;
@@ -123,7 +118,6 @@ describe('init', () => {
 
 	it('should not initialise a9 when ad-free is on', async () => {
 		window.guardian.config.switches = {
-			prebidHeaderBidding: false,
 			a9HeaderBidding: true,
 		};
 		commercialFeatures.dfpAdvertising = true;
@@ -134,7 +128,6 @@ describe('init', () => {
 
 	it('should not initialise a9 when the page has a pageskin', async () => {
 		window.guardian.config.switches = {
-			prebidHeaderBidding: false,
 			a9HeaderBidding: true,
 		};
 		commercialFeatures.dfpAdvertising = true;
@@ -146,7 +139,6 @@ describe('init', () => {
 
 	it('should initialise a9 when the page has no pageskin', async () => {
 		window.guardian.config.switches = {
-			prebidHeaderBidding: false,
 			a9HeaderBidding: true,
 		};
 		commercialFeatures.dfpAdvertising = true;
@@ -158,7 +150,6 @@ describe('init', () => {
 
 	it('should not initialise a9 on the secure contact pages', async () => {
 		window.guardian.config.switches = {
-			prebidHeaderBidding: false,
 			a9HeaderBidding: true,
 		};
 		commercialFeatures.dfpAdvertising = true;
