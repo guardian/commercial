@@ -65,7 +65,7 @@ enum ExternalEvents {
 }
 
 const shouldSaveMark = (eventName: string): boolean => {
-	let [origin, eventType] = eventName.split(':') as [
+	let [origin, eventType] = eventName.split('_') as [
 		string,
 		string | undefined,
 	];
@@ -83,7 +83,7 @@ const shouldSaveMark = (eventName: string): boolean => {
 
 // measures that we want to save as commercial metrics, ones related to slots and googletagInitDuration
 const shouldSaveMeasure = (measureName: string) => {
-	let [origin, measureType] = measureName.split(':');
+	let [origin, measureType] = measureName.split('_');
 	if (!measureType) {
 		measureType = origin;
 		origin = 'page';
@@ -207,7 +207,7 @@ class EventTimer {
 	trigger(eventName: string, origin = 'page'): void {
 		let name = eventName;
 		if (allSlotMarks.includes(eventName) && origin !== 'page') {
-			name = `${origin}:${name}`;
+			name = `${origin}_${name}`;
 		}
 
 		if (this._events.get(name) || !supportsPerformanceAPI()) {
