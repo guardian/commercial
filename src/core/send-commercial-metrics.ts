@@ -19,6 +19,11 @@ type TimedEvent = {
 	ts: number;
 };
 
+type DurationEvent = {
+	name: string;
+	duration: number;
+};
+
 type EventProperties = {
 	type?: ConnectionType;
 	downlink?: number;
@@ -87,11 +92,21 @@ const mapEventTimerPropertiesToString = (
 	}));
 };
 
-const roundTimeStamp = (events: TimedEvent[]): Metric[] => {
-	return events.map(({ name, ts }) => ({
+const roundTimeStamp = (
+	events: TimedEvent[],
+	measures: DurationEvent[],
+): Metric[] => {
+	const roundedEvents = events.map(({ name, ts }) => ({
 		name,
 		value: Math.ceil(ts),
 	}));
+
+	const roundedMeasures = measures.map(({ name, duration }) => ({
+		name,
+		value: Math.ceil(duration),
+	}));
+
+	return [...roundedEvents, ...roundedMeasures];
 };
 
 function sendMetrics() {
@@ -144,9 +159,10 @@ function gatherMetricsOnPageUnload(): void {
 		.concat(adBlockerProperties);
 	commercialMetricsPayload.properties = properties;
 
-	const metrics: readonly Metric[] = roundTimeStamp(eventTimer.events).concat(
-		getOfflineCount(),
-	);
+	const metrics: readonly Metric[] = roundTimeStamp(
+		eventTimer.events,
+		eventTimer.measures,
+	).concat(getOfflineCount());
 	commercialMetricsPayload.metrics = metrics;
 
 	sendMetrics();

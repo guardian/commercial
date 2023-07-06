@@ -10,6 +10,7 @@ const eventTimer = EventTimer.get();
 
 export const loadAdvert = (advert: Advert): void => {
 	const adName = stripDfpAdPrefixFrom(advert.id);
+	eventTimer.trigger('adRenderStart', adName);
 	// TODO can slotReady come after header bidding?
 	// If so, the callbacks pushed onto the ias queue in define-slot.js
 	// could be run in parallel with the calls to requestBids below, reducing the
@@ -19,7 +20,7 @@ export const loadAdvert = (advert: Advert): void => {
 			// The display needs to be called, even in the event of an error.
 		})
 		.then(() => {
-			eventTimer.trigger('slotReady', adName);
+			eventTimer.trigger('prepareSlotStart', adName);
 			// If the advert has already had bids requested, then we don't need to request them again.
 			if (advert.headerBiddingBidRequest) {
 				return advert.headerBiddingBidRequest;
@@ -27,7 +28,8 @@ export const loadAdvert = (advert: Advert): void => {
 			return requestBidsForAd(advert);
 		})
 		.then(() => {
-			eventTimer.trigger('slotInitialised', adName);
+			eventTimer.trigger('prepareSlotEnd', adName);
+			eventTimer.trigger('fetchAdStart', adName);
 			window.googletag.display(advert.id);
 		});
 };

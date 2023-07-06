@@ -30,6 +30,8 @@ const eventTimer = EventTimer.get();
 const init = (register: RegisterListener): void => {
 	register('measure-ad-load', (specs) => {
 		eventTimer.trigger('adOnPage', getSlotId(specs));
+		eventTimer.trigger('fetchAdEnd', getSlotId(specs));
+		eventTimer.trigger('adRenderEnd', getSlotId(specs));
 	});
 };
 
