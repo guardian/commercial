@@ -29,7 +29,7 @@ export const loadAdvert = (advert: Advert): void => {
 		})
 		.then(() => {
 			eventTimer.trigger('prepareSlotEnd', adName);
-			eventTimer.trigger('loadAdStart', adName);
+			eventTimer.trigger('fetchAdStart', adName);
 			window.googletag.display(advert.id);
 		});
 };

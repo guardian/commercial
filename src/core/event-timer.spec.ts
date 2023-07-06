@@ -173,11 +173,11 @@ describe('EventTimer', () => {
 		expect(eventTimer.events.length).toBe(0);
 	});
 
-	it('trigger top-above-nav loadAdStart event', () => {
+	it('trigger top-above-nav fetchAdStart event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('loadAdStart', 'top-above-nav');
+		eventTimer.trigger('fetchAdStart', 'top-above-nav');
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['top-above-nav:loadAdStart'],
+			['top-above-nav:fetchAdStart'],
 		]);
 	});
 

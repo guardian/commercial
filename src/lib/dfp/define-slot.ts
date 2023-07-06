@@ -260,7 +260,7 @@ const defineSlot = (
 
 		void slotReady.then(() => {
 			EventTimer.get().trigger('defineSlotEnd', slotTarget);
-			EventTimer.get().trigger('adSlotReady', slotTarget);
+			EventTimer.get().trigger('slotReady', slotTarget);
 		});
 	}
 
