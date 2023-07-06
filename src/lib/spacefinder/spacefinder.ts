@@ -465,11 +465,6 @@ const findSpace = async (
 	return winners.map((candidate) => candidate.element);
 };
 
-export const _ = {
-	testCandidate, // exposed for unit testing
-	testCandidates, // exposed for unit testing
-};
-
 export { findSpace, SpaceError };
 
 export type {

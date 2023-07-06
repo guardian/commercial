@@ -21,8 +21,6 @@ import type { Advert } from './Advert';
 const shouldRefresh = (
 	advert: Advert,
 	nonRefreshableLineItemIds: number[] = [],
-	// This parameter can be removed when we only check refreshing at the slot-viewable point
-	eventLineItemId?: number,
 ): boolean => {
 	const sizeString = advert.size?.toString();
 
@@ -38,9 +36,9 @@ const shouldRefresh = (
 
 	// If the advert has a line item id included in the array of non refreshable
 	// line item ids then it should not refresh
-	const lineItemId = advert.lineItemId ?? eventLineItemId;
 	const isNonRefreshableLineItem =
-		lineItemId && nonRefreshableLineItemIds.includes(lineItemId);
+		advert.lineItemId &&
+		nonRefreshableLineItemIds.includes(advert.lineItemId);
 	if (isNonRefreshableLineItem) return false;
 
 	// If we have a pageskin then don't refresh

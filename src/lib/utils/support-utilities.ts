@@ -20,16 +20,9 @@ const addCountryGroupToSupportLink = (rawUrl: string): string => {
 	);
 };
 
-const supportContributeURL = (): string =>
-	addCountryGroupToSupportLink('https://support.theguardian.com/contribute');
 const supportSubscribeURL = (): string =>
 	addCountryGroupToSupportLink('https://support.theguardian.com/subscribe');
 const supportSubscribeDigitalURL = (): string =>
 	`${supportSubscribeURL()}/digital`;
 
-export {
-	supportContributeURL,
-	supportSubscribeURL,
-	supportSubscribeDigitalURL,
-	addCountryGroupToSupportLink,
-};
+export { supportSubscribeDigitalURL, addCountryGroupToSupportLink };

@@ -34,7 +34,6 @@ import { init as initHighMerch } from 'lib/high-merch';
 import { init as initIpsosMori } from 'lib/ipsos-mori';
 import { manageAdFreeCookieOnConsentChange } from 'lib/manage-ad-free-cookie-on-consent-change';
 import { init as initMobileSticky } from 'lib/mobile-sticky';
-import { paidContainers } from 'lib/paid-containers';
 import { removeDisabledSlots as closeDisabledSlots } from 'lib/remove-slots';
 import { init as setAdTestCookie } from 'lib/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from 'lib/set-adtest-in-labels-cookie';
@@ -46,7 +45,6 @@ import { init as initLiveblogAdverts } from 'lib/spacefinder/liveblog-adverts';
 import { initTeadsCookieless } from 'lib/teads-cookieless';
 import { init as initThirdPartyTags } from 'lib/third-party-tags';
 import { init as initTrackGpcSignal } from 'lib/track-gpc-signal';
-import { init as initTrackLabsContainer } from 'lib/track-labs-container';
 import { init as initTrackScrollDepth } from 'lib/track-scroll-depth';
 import { isDigitalSubscriber } from 'lib/user-features';
 import { amIUsed } from 'lib/utils/am-i-used';
@@ -86,7 +84,6 @@ const commercialExtraModules: Modules = [
 	['cm-ipsosmori', initIpsosMori],
 	['cm-teadsCookieless', initTeadsCookieless],
 	['cm-trackScrollDepth', initTrackScrollDepth],
-	['cm-trackLabsContainer', initTrackLabsContainer],
 	['cm-trackGpcSignal', initTrackGpcSignal],
 ];
 
@@ -110,7 +107,6 @@ if (!commercialFeatures.adFree) {
 		['cm-frontsBannerAdverts', initFrontsBannerAdverts],
 		['cm-thirdPartyTags', initThirdPartyTags],
 		['cm-redplanet', initRedplanet],
-		['cm-paidContainers', paidContainers],
 		['cm-commentAdverts', initCommentAdverts],
 		['cm-commentsExpandedAdverts', initCommentsExpandedAdverts],
 		['rr-adblock-ask', initAdblockAsk],
@@ -178,6 +174,12 @@ const recordCommercialMetrics = () => {
 
 const bootCommercial = async (): Promise<void> => {
 	log('commercial', '📦 standalone.commercial.ts', __webpack_public_path__);
+	if (process.env.COMMIT_SHA) {
+		log(
+			'commercial',
+			`@guardian/commercial commit https://github.com/guardian/commercial/blob/${process.env.COMMIT_SHA}`,
+		);
+	}
 
 	//adding an amiused call for a very small proportion of users to test sendBeacon vs fetch
 	//this will be removed when we have enough data

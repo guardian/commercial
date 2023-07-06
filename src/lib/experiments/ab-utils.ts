@@ -7,7 +7,7 @@ import type {
 import { fromPairs, toPairs } from 'lodash-es';
 import { NOT_IN_TEST, notInTestVariant } from './ab-constants';
 
-export const testSwitchExists = (testId: string): boolean =>
+const testSwitchExists = (testId: string): boolean =>
 	Object.prototype.hasOwnProperty.call(
 		window.guardian.config.switches,
 		`ab${testId}`,

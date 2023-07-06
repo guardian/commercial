@@ -1,5 +1,8 @@
 name: E2E Cypress
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
   pull_request:
 
@@ -15,6 +18,21 @@ jobs:
       fail-fast: false
       matrix:
         group: [1, 2, 3, 4, 5]
+    services:
+      DCR:
+        # We always run our commercial code against the latest main of DCR
+        # This does make our tests sensitive to changes in DCR
+        # (e.g. imagine someone removes the top-above-nav slot from DCR)
+        # This is something we accept in order to easily test our own code
+        #
+        # Note we use the containerised version of DCR, published from:
+        # https://github.com/guardian/dotcom-rendering/blob/6a6df272/.github/workflows/container.yml
+        image: ghcr.io/guardian/dotcom-rendering:main
+        ports:
+          - 3030:3030
+        env:
+          PORT: 3030
+          COMMERCIAL_BUNDLE_URL: http://localhost:3031/graun.standalone.commercial.js
     steps:
       # Commercial
       - name: Checkout
@@ -30,35 +48,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
         working-directory: ./commercial
-
-      # DCR
-      - name: Checkout DCR
-        uses: actions/checkout@v3
-        with:
-          repository: guardian/dotcom-rendering
-          path: ./dcr
-
-      - name: Setup DCR node
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: './dcr/.nvmrc'
-
-      - name: Install DCR dependencies
-        run: yarn install --frozen-lockfile
-        working-directory: ./dcr
-        env:
-          NODE_ENV: production
-
-      - name: Build DCR
-        run: make build
-        working-directory: ./dcr/dotcom-rendering
-
-      - name: Start DCR server
-        run: make start-ci & npx wait-on -v -i 1000 http://localhost:3030
-        working-directory: ./dcr/dotcom-rendering
-        env:
-          PORT: 3030
-          COMMERCIAL_BUNDLE_URL: http://localhost:3031/graun.standalone.commercial.js
 
       - name: Start Commercial server
         run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js

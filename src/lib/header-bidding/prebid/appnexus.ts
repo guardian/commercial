@@ -35,7 +35,7 @@ const getAppNexusInvCode = (sizes: HeaderBiddingSize[]): string | undefined => {
 	}
 };
 
-export const getAppNexusDirectPlacementId = (
+const getAppNexusDirectPlacementId = (
 	sizes: HeaderBiddingSize[],
 	isInFrontsBannerVariant: boolean,
 ): string => {
@@ -103,9 +103,4 @@ export const getAppNexusDirectBidParams = (
 		),
 		keywords: buildAppNexusTargetingObject(pageTargeting),
 	};
-};
-
-export const _ = {
-	getAppNexusInvCode,
-	getAppNexusDirectPlacementId,
 };

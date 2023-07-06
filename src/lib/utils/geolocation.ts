@@ -1,6 +1,5 @@
-import { getCookie, getLocale, isString, storage } from '@guardian/libs';
+import { getCookie, isString, storage } from '@guardian/libs';
 import type { CountryCode } from '@guardian/libs';
-import { reportError } from './report-error';
 
 const editionToGeolocationMap: Record<string, CountryCode> = {
 	UK: 'GB',
@@ -39,39 +38,6 @@ const getCountryCode = (): CountryCode => {
 		}) as CountryCode | null) ??
 		editionToGeolocation(pageEdition)
 	);
-};
-
-/*
-    This method is to be used for dev purposes for example testing different RR banners
-    across different countries. We keep the overridden country for 1 day into localStorage
-*/
-const overrideGeolocation = (geolocation: CountryCode | null): void => {
-	const currentDate = new Date();
-	storage.local.set(
-		countryOverrideName,
-		geolocation,
-		currentDate.setDate(currentDate.getDate() + 1),
-	);
-	locale = geolocation;
-};
-
-const init = (): void => {
-	getLocale()
-		.then((countryCode) => {
-			locale = countryCode;
-		})
-		.catch(() => {
-			console.log(`Error getting location from libs/getLocale`);
-			reportError(
-				new Error(`Error getting location from libs/getLocale`),
-				{},
-				false,
-			);
-			locale = getCookie({
-				name: countryCookieName,
-				shouldMemoize: true,
-			}) as CountryCode | null;
-		});
 };
 
 /*
@@ -408,101 +374,7 @@ const countryCodeToSupportInternationalisationId = (
 	countryGroups[countryCodeToCountryGroupId(countryCode)]
 		.supportInternationalisationId;
 
-const extendedCurrencySymbol: Record<CountryGroupId, string> = {
-	GBPCountries: '£',
-	UnitedStates: '$',
-	AUDCountries: '$',
-	Canada: 'CA$',
-	EURCountries: '€',
-	NZDCountries: 'NZ$',
-	International: '$',
-};
-
-const defaultCurrencySymbol = '£';
-
-const getLocalCurrencySymbolSync = (): string =>
-	extendedCurrencySymbol[countryCodeToCountryGroupId(getCountryCode())] ||
-	defaultCurrencySymbol;
-
-const getLocalCurrencySymbol = (geolocation: CountryCode): string =>
-	extendedCurrencySymbol[countryCodeToCountryGroupId(geolocation)] ||
-	defaultCurrencySymbol;
-
-// A limited set of country names for the test to add country name in the epic copy
-const countryNames: Record<string, string> = {
-	GB: 'the UK',
-	US: 'the US',
-	AU: 'Australia',
-	CA: 'Canada',
-	DE: 'Germany',
-	NZ: 'New Zealand',
-	FR: 'France',
-	NL: 'the Netherlands',
-	IE: 'Ireland',
-	SE: 'Sweden',
-	CH: 'Switzerland',
-	NO: 'Norway',
-	BE: 'Belgium',
-	IT: 'Italy',
-	IN: 'India',
-	ES: 'Spain',
-	DK: 'Denmark',
-	SG: 'Singapore',
-	AT: 'Austria',
-	FI: 'Finland',
-	HK: 'Hong Kong',
-	LU: 'Luxembourg',
-	PT: 'Portugal',
-	AE: 'the UAE',
-	MX: 'Mexico',
-	BR: 'Brazil',
-	ZA: 'South Africa',
-	TW: 'Taiwan',
-	IL: 'Israel',
-	JP: 'Japan',
-	CZ: 'the Czech Republic',
-	GR: 'Greece',
-	IS: 'Iceland',
-	TH: 'Thailand',
-	MY: 'Malaysia',
-	RO: 'Romania',
-	PL: 'Poland',
-	HU: 'Hungary',
-	TR: 'Turkey',
-	KR: 'Korea',
-	SI: 'Slovenia',
-	CL: 'Chile',
-	CO: 'Colombia',
-	QA: 'Qatar',
-	HR: 'Croatia',
-	SK: 'Slovakia',
-	ID: 'Indonesia',
-	VN: 'Vietnam',
-	CN: 'China',
-	MT: 'Malta',
-	AR: 'Argentina',
-	KE: 'Kenya',
-	PR: 'Puerto Rico',
-	RU: 'Russia',
-	EE: 'Estonia',
-	CR: 'Costa Rica',
-	PA: 'Panama',
-};
-
-const getCountryName = (geolocation: string): string | undefined =>
-	geolocation ? countryNames[geolocation] : undefined;
-
-export {
-	getCountryCode,
-	countryCodeToCountryGroupId,
-	countryCodeToSupportInternationalisationId,
-	getLocalCurrencySymbolSync,
-	getLocalCurrencySymbol,
-	init,
-	overrideGeolocation,
-	extendedCurrencySymbol,
-	getCountryName,
-};
+export { getCountryCode, countryCodeToSupportInternationalisationId };
 
 export const _ = {
 	countryCookieName,
