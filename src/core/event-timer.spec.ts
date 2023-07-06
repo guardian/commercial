@@ -177,7 +177,7 @@ describe('EventTimer', () => {
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger('fetchAdStart', 'top-above-nav');
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['top-above-nav:fetchAdStart'],
+			['top-above-nav_fetchAdStart'],
 		]);
 	});
 
@@ -187,7 +187,7 @@ describe('EventTimer', () => {
 		eventTimer.trigger('adOnPage', 'top-above-nav');
 
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['top-above-nav:adOnPage'],
+			['top-above-nav_adOnPage'],
 		]);
 	});
 
@@ -203,7 +203,7 @@ describe('EventTimer', () => {
 		const eventTimer = EventTimer.get();
 		eventTimer.trigger('adOnPage', 'top-above-nav');
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['top-above-nav:adOnPage'],
+			['top-above-nav_adOnPage'],
 		]);
 	});
 
@@ -213,15 +213,15 @@ describe('EventTimer', () => {
 		eventTimer.trigger('adRenderEnd', 'top-above-nav');
 
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['top-above-nav:adRenderStart'],
-			['top-above-nav:adRenderEnd'],
+			['top-above-nav_adRenderStart'],
+			['top-above-nav_adRenderEnd'],
 		]);
 
 		expect((window.performance.measure as jest.Mock).mock.calls).toEqual([
 			[
-				'top-above-nav:adRender',
-				'top-above-nav:adRenderStart',
-				'top-above-nav:adRenderEnd',
+				'top-above-nav_adRender',
+				'top-above-nav_adRenderStart',
+				'top-above-nav_adRenderEnd',
 			],
 		]);
 	});
@@ -263,7 +263,7 @@ describe('EventTimer', () => {
 
 				eventTimer.trigger(mark, origin);
 				expect(eventTimer.events.map(({ name }) => name)).toContain(
-					origin ? `${origin}:${mark}` : mark,
+					origin ? `${origin}_${mark}` : mark,
 				);
 			},
 		);
@@ -275,7 +275,7 @@ describe('EventTimer', () => {
 
 				eventTimer.trigger(mark, origin);
 				expect(eventTimer.events.map(({ name }) => name)).not.toContain(
-					`${origin}:${mark}`,
+					`${origin}_${mark}`,
 				);
 			},
 		);
@@ -304,7 +304,7 @@ describe('EventTimer', () => {
 			(mark, origin) => {
 				const eventTimer = EventTimer.get();
 
-				const testCase = `${origin}:${mark}`;
+				const testCase = `${origin}_${mark}`;
 
 				eventTimer.trigger(`${testCase}Start`);
 				eventTimer.trigger(`${testCase}End`);
@@ -319,7 +319,7 @@ describe('EventTimer', () => {
 			(mark, origin) => {
 				const eventTimer = EventTimer.get();
 
-				const testCase = `${origin}:${mark}`;
+				const testCase = `${origin}_${mark}`;
 
 				eventTimer.trigger(`${testCase}Start`);
 				eventTimer.trigger(`${testCase}End`);
