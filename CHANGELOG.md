@@ -1,5 +1,17 @@
 # @guardian/commercial
 
+## 10.3.0
+
+### Minor Changes
+
+- a3a35ac: Drop support for paid container more less button text
+- a3297bb: Remove track-labs-containers
+- 733d538: Log the commit SHA of the current build to the browser console
+
+### Patch Changes
+
+- 7c9ebc1: remove usage of mobileStickyLeaderboard and mobileStickyPrebid switches
+
 ## 10.2.0
 
 ### Minor Changes
