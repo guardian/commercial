@@ -84,7 +84,7 @@ describe('Commercial features', () => {
 				showRelatedContent: true,
 			},
 			switches: {
-				commercial: true,
+				shouldLoadGoogletag: true,
 				enableDiscussionSwitch: true,
 			},
 		};

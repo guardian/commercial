@@ -140,7 +140,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
@@ -154,7 +154,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		fakeUserAgent('Google Web Preview');
 		mockOnConsent(tcfv2WithConsent);
@@ -167,7 +167,7 @@ describe('init', () => {
 	it('should not initialise Prebid when no header bidding switches are on', async () => {
 		expect.hasAssertions();
 
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		window.guardian.config.switches = {
 			prebidHeaderBidding: false,
@@ -185,7 +185,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
@@ -201,7 +201,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
@@ -217,7 +217,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = false;
+		commercialFeatures.shouldLoadGoogletag = false;
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
@@ -232,7 +232,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = true;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
@@ -247,7 +247,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		window.guardian.config.page.hasPageSkin = true;
 		mockOnConsent(tcfv2WithConsent);
@@ -261,7 +261,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		window.guardian.config.page.hasPageSkin = false;
 		mockOnConsent(tcfv2WithConsent);
@@ -277,7 +277,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
@@ -291,7 +291,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithoutConsent);
 		mockGetConsentFor(false);
@@ -312,7 +312,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(ccpaWithConsent);
 		mockGetConsentFor(true);
@@ -326,7 +326,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(ccpaWithoutConsent);
 		mockGetConsentFor(false);
@@ -347,7 +347,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(ausWithConsent);
 		mockGetConsentFor(true);
@@ -361,7 +361,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(ausWithoutConsent);
 		mockGetConsentFor(false);
@@ -382,7 +382,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(invalidWithoutConsent);
 		mockGetConsentFor(true);

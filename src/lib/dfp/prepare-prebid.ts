@@ -14,7 +14,7 @@ import { shouldIncludeOnlyA9 } from '../header-bidding/utils';
 const shouldLoadPrebid = () =>
 	!isGoogleProxy() &&
 	window.guardian.config.switches.prebidHeaderBidding &&
-	commercialFeatures.dfpAdvertising &&
+	commercialFeatures.shouldLoadGoogletag &&
 	!commercialFeatures.adFree &&
 	!window.guardian.config.page.hasPageSkin &&
 	!shouldIncludeOnlyA9 &&
