@@ -6,7 +6,6 @@ const getUrlVars = _getUrlVars as (arg?: string) => Record<string, string>;
 interface DfpEnv {
 	renderStartTime: number;
 	adSlotSelector: string;
-	hbImpl: Record<string, boolean>;
 	lazyLoadEnabled: boolean;
 	lazyLoadObserve: boolean;
 	creativeIDs: string[];
@@ -17,8 +16,6 @@ interface DfpEnv {
 	shouldLazyLoad: () => boolean;
 }
 
-const { switches } = window.guardian.config;
-
 const dfpEnv: DfpEnv = {
 	/* renderStartTime: integer. Point in time when DFP kicks in */
 	renderStartTime: -1,
@@ -26,12 +23,6 @@ const dfpEnv: DfpEnv = {
 	/* adSlotSelector: string. A CSS selector to query ad slots in the DOM */
 	adSlotSelector: '.js-ad-slot',
 
-	/* hbImpl: Returns an object {'prebid': boolean, 'a9': boolean} to indicate which header bidding implementations are switched on */
-	hbImpl: {
-		// TODO: fix the Switch type upstream
-		prebid: switches.prebidHeaderBidding ?? false,
-		a9: switches.a9HeaderBidding ?? false,
-	},
 	/* lazyLoadEnabled: boolean. Set to true when adverts are lazy-loaded */
 	lazyLoadEnabled: false,
 
@@ -69,3 +60,4 @@ window.guardian.commercial = window.guardian.commercial ?? {};
 window.guardian.commercial.dfpEnv = dfpEnv;
 
 export { dfpEnv };
+export type { DfpEnv };

@@ -10,11 +10,10 @@ import { isGoogleProxy } from 'lib/detect/detect-google-proxy';
 import { isInCanada } from 'lib/utils/geo-utils';
 import { prebid } from '../header-bidding/prebid/prebid';
 import { shouldIncludeOnlyA9 } from '../header-bidding/utils';
-import { dfpEnv } from './dfp-env';
 
 const shouldLoadPrebid = () =>
 	!isGoogleProxy() &&
-	dfpEnv.hbImpl.prebid &&
+	window.guardian.config.switches.prebidHeaderBidding &&
 	commercialFeatures.dfpAdvertising &&
 	!commercialFeatures.adFree &&
 	!window.guardian.config.page.hasPageSkin &&

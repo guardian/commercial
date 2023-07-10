@@ -8,7 +8,6 @@ import { log } from '@guardian/libs';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInCanada } from 'lib/utils/geo-utils';
 import { prebid } from '../header-bidding/prebid/prebid';
-import { dfpEnv } from './dfp-env';
 import { _ } from './prepare-prebid';
 
 const { setupPrebid } = _;
@@ -133,12 +132,14 @@ describe('init', () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
 		fakeUserAgent();
+		window.guardian.config.switches = {};
 	});
 
 	it('should initialise Prebid when Prebid switch is ON and advertising is on and ad-free is off', async () => {
 		expect.hasAssertions();
-
-		dfpEnv.hbImpl = { prebid: true, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
@@ -150,8 +151,9 @@ describe('init', () => {
 
 	it('should not initialise Prebid when useragent is Google Web Preview', async () => {
 		expect.hasAssertions();
-
-		dfpEnv.hbImpl = { prebid: true, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		fakeUserAgent('Google Web Preview');
@@ -167,7 +169,9 @@ describe('init', () => {
 
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
-		dfpEnv.hbImpl = { prebid: false, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: false,
+		};
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 
@@ -178,7 +182,9 @@ describe('init', () => {
 	it('should initialise Prebid when NOT in Canada', async () => {
 		expect.hasAssertions();
 
-		dfpEnv.hbImpl = { prebid: true, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
@@ -192,7 +198,9 @@ describe('init', () => {
 	it('should NOT initialise Prebid when in Canada', async () => {
 		expect.hasAssertions();
 
-		dfpEnv.hbImpl = { prebid: true, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
@@ -206,7 +214,9 @@ describe('init', () => {
 	it('should not initialise Prebid when advertising is switched off', async () => {
 		expect.hasAssertions();
 
-		dfpEnv.hbImpl = { prebid: true, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = false;
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
@@ -219,7 +229,9 @@ describe('init', () => {
 	it('should not initialise Prebid when ad-free is on', async () => {
 		expect.hasAssertions();
 
-		dfpEnv.hbImpl = { prebid: true, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = true;
 		mockOnConsent(tcfv2WithConsent);
@@ -232,7 +244,9 @@ describe('init', () => {
 	it('should not initialise Prebid when the page has a pageskin', async () => {
 		expect.hasAssertions();
 
-		dfpEnv.hbImpl = { prebid: true, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		window.guardian.config.page.hasPageSkin = true;
@@ -244,7 +258,9 @@ describe('init', () => {
 	});
 
 	it('should initialise Prebid when the page has no pageskin', async () => {
-		dfpEnv.hbImpl = { prebid: true, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		window.guardian.config.page.hasPageSkin = false;
@@ -258,7 +274,9 @@ describe('init', () => {
 	it('should initialise Prebid if TCFv2 consent with correct Sourcepoint Id is true ', async () => {
 		expect.hasAssertions();
 
-		dfpEnv.hbImpl = { prebid: true, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
@@ -270,7 +288,9 @@ describe('init', () => {
 	it('should not initialise Prebid if TCFv2 consent with correct Sourcepoint Id is false', async () => {
 		expect.assertions(2);
 
-		dfpEnv.hbImpl = { prebid: true, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithoutConsent);
@@ -289,7 +309,9 @@ describe('init', () => {
 	it('should initialise Prebid in CCPA if doNotSell is false', async () => {
 		expect.hasAssertions();
 
-		dfpEnv.hbImpl = { prebid: true, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(ccpaWithConsent);
@@ -301,7 +323,9 @@ describe('init', () => {
 	it('should not initialise Prebid in CCPA if doNotSell is true', async () => {
 		expect.assertions(2);
 
-		dfpEnv.hbImpl = { prebid: true, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(ccpaWithoutConsent);
@@ -320,7 +344,9 @@ describe('init', () => {
 	it('should initialise Prebid in AUS if Advertising is not rejected', async () => {
 		expect.hasAssertions();
 
-		dfpEnv.hbImpl = { prebid: true, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(ausWithConsent);
@@ -332,7 +358,9 @@ describe('init', () => {
 	it('should not initialise Prebid in AUS if Advertising is rejected', async () => {
 		expect.assertions(2);
 
-		dfpEnv.hbImpl = { prebid: true, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(ausWithoutConsent);
@@ -351,7 +379,9 @@ describe('init', () => {
 	it('should not initialise Prebid if the framework is invalid', async () => {
 		expect.assertions(2);
 
-		dfpEnv.hbImpl = { prebid: true, a9: false };
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
 		commercialFeatures.dfpAdvertising = true;
 		commercialFeatures.adFree = false;
 		mockOnConsent(invalidWithoutConsent);

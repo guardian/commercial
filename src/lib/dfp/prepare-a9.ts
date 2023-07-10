@@ -10,13 +10,12 @@ import { isGoogleProxy } from 'lib/detect/detect-google-proxy';
 import { isInCanada } from 'lib/utils/geo-utils';
 import { a9 } from '../header-bidding/a9/a9';
 import { shouldIncludeOnlyA9 } from '../header-bidding/utils';
-import { dfpEnv } from './dfp-env';
 
 const shouldLoadA9 = () =>
 	// There are two articles that InfoSec would like to avoid loading scripts on
 	!commercialFeatures.isSecureContact &&
 	!isGoogleProxy() &&
-	dfpEnv.hbImpl.a9 &&
+	window.guardian.config.switches.a9HeaderBidding &&
 	commercialFeatures.dfpAdvertising &&
 	!commercialFeatures.adFree &&
 	!window.guardian.config.page.hasPageSkin &&

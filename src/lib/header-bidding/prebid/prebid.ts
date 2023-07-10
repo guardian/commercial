@@ -10,7 +10,6 @@ import { EventTimer } from 'core/event-timer';
 import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import { getPageTargeting } from 'lib/build-page-targeting';
 import type { Advert } from 'lib/dfp/Advert';
-import { dfpEnv } from 'lib/dfp/dfp-env';
 import { getAdvertById } from 'lib/dfp/get-advert-by-id';
 import type {
 	BidderCode,
@@ -485,7 +484,7 @@ const requestBids = async (
 		return requestQueue;
 	}
 
-	if (!dfpEnv.hbImpl.prebid) {
+	if (!window.guardian.config.switches.prebidHeaderBidding) {
 		return requestQueue;
 	}
 
