@@ -32,7 +32,6 @@ const resetPrebid = () => {
 describe('initialise', () => {
 	beforeEach(() => {
 		resetPrebid();
-		window.guardian.config.switches.commercial = true;
 		window.guardian.config.switches.consentManagement = true;
 		window.guardian.config.switches.prebidUserSync = true;
 		window.guardian.config.switches.prebidAppNexus = true;
