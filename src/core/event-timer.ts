@@ -137,7 +137,7 @@ class EventTimer {
 
 		return externalEvents.reduce((map, event) => {
 			const entries = window.performance.getEntriesByName(event);
-			if (entries.length) {
+			if (entries.length && entries[0]) {
 				map.set(event, entries[0]);
 			}
 			return map;
