@@ -232,6 +232,7 @@ interface InitCommercialMetricsArgs {
 
 /**
  * A method to initialise metrics.
+ * Note: this is initialised in the frontend/DCR bundles, not the commercial bundle.
  * @param init.pageViewId - identifies the page view. Usually available on `guardian.config.ophan.pageViewId`. Defaults to `null`
  * @param init.browserId - identifies the browser. Usually available via `getCookie({ name: 'bwid' })`. Defaults to `null`
  * @param init.isDev - used to determine whether to use CODE or PROD endpoints.
