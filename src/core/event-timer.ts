@@ -129,21 +129,17 @@ class EventTimer {
 	 * tracking their performance. For example, CMP-related events.
 	 **/
 	get externalEvents(): Map<ExternalEvents, PerformanceEntry> {
-		const externalEvents = new Map();
-
 		if (!supportsPerformanceAPI()) {
-			return externalEvents;
+			return new Map();
 		}
 
-		for (const event of Object.values(ExternalEvents)) {
-			if (window.performance.getEntriesByName(event).length) {
-				externalEvents.set(
-					event,
-					window.performance.getEntriesByName(event)[0],
-				);
+		return Object.values(ExternalEvents).reduce((map, event) => {
+			const entries = window.performance.getEntriesByName(event);
+			if (entries.length) {
+				map.set(event, entries[0]);
 			}
-		}
-		return externalEvents;
+			return map;
+		}, new Map<ExternalEvents, PerformanceEntry>());
 	}
 
 	/**
