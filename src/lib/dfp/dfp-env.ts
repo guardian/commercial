@@ -1,3 +1,4 @@
+import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import { getUrlVars as _getUrlVars } from 'lib/utils/url';
 import type { Advert } from './Advert';
 
@@ -46,11 +47,19 @@ const dfpEnv: DfpEnv = {
 
 	/* shouldLazyLoad: () -> boolean. Determines whether ads should be lazy loaded */
 	shouldLazyLoad(): boolean {
-		// We do not want lazy loading on pageskins because it messes up the roadblock
-		// Also, if the special dll parameter is passed with a value of 1, we don't lazy load
-		return (
-			!window.guardian.config.page.hasPageSkin && getUrlVars().dll !== '1'
-		);
+		if (getUrlVars().dll === '1') {
+			return false;
+		}
+
+		if (['mobile', 'tablet'].includes(getCurrentBreakpoint())) {
+			return true;
+		}
+
+		if (window.guardian.config.page.hasPageSkin) {
+			return false;
+		}
+
+		return true;
 	},
 };
 
