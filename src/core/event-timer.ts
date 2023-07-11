@@ -58,11 +58,13 @@ const allSlotMarks = [
 	...slotMeasures.map((measure) => `${measure}End`),
 ] as const;
 
-enum ExternalEvents {
-	CmpInit = 'cmp-init',
-	CmpUiDisplayed = 'cmp-ui-displayed',
-	CmpGotConsent = 'cmp-got-consent',
-}
+const externalEvents = [
+	'cmp-init',
+	'cmp-ui-displayed',
+	'cmp-got-consent',
+] as const;
+
+type ExternalEvent = (typeof externalEvents)[number];
 
 const shouldSaveMark = (eventName: string): boolean => {
 	let [origin, eventType] = eventName.split('_') as [
@@ -128,18 +130,18 @@ class EventTimer {
 	 * External events are events that are not triggered by the commercial but we are interested in
 	 * tracking their performance. For example, CMP-related events.
 	 **/
-	get externalEvents(): Map<ExternalEvents, PerformanceEntry> {
+	get externalEvents(): Map<ExternalEvent, PerformanceEntry> {
 		if (!supportsPerformanceAPI()) {
 			return new Map();
 		}
 
-		return Object.values(ExternalEvents).reduce((map, event) => {
+		return externalEvents.reduce((map, event) => {
 			const entries = window.performance.getEntriesByName(event);
 			if (entries.length) {
 				map.set(event, entries[0]);
 			}
 			return map;
-		}, new Map<ExternalEvents, PerformanceEntry>());
+		}, new Map<ExternalEvent, PerformanceEntry>());
 	}
 
 	/**
