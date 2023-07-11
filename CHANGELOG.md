@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 10.4.0
+
+### Minor Changes
+
+- e128f63: In dfp-env shouldLazyLoad should always returns true if on mobile/tablet breakpoints
+
+### Patch Changes
+
+- e556b32: Remove `hbImpl`.
+
 ## 10.3.0
 
 ### Minor Changes
