@@ -61,7 +61,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 
 		await setupA9();
@@ -73,7 +73,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		(isInCanada as jest.Mock).mockReturnValueOnce(true);
 
@@ -86,7 +86,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		await setupA9();
 		expect(a9.initialise).toBeCalled();
@@ -110,7 +110,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = false;
+		commercialFeatures.shouldLoadGoogletag = false;
 		commercialFeatures.adFree = false;
 		await setupA9();
 		expect(a9.initialise).not.toBeCalled();
@@ -120,7 +120,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = true;
 		await setupA9();
 		expect(a9.initialise).not.toBeCalled();
@@ -130,7 +130,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		window.guardian.config.page.hasPageSkin = true;
 		await setupA9();
@@ -141,7 +141,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		window.guardian.config.page.hasPageSkin = false;
 		await setupA9();
@@ -152,7 +152,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		commercialFeatures.isSecureContact = true;
 		await setupA9();

@@ -155,7 +155,7 @@ export const init = (): Promise<void> => {
 		});
 	};
 
-	if (commercialFeatures.dfpAdvertising) {
+	if (commercialFeatures.shouldLoadGoogletag) {
 		return (
 			setupAdvertising()
 				// on error, remove all slots

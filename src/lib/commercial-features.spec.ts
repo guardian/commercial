@@ -1,4 +1,3 @@
-import config from 'lib/config';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
 import { commercialFeatures } from './commercial-features';
 import type { CommercialFeaturesConstructor } from './commercial-features';
@@ -72,21 +71,23 @@ describe('Commercial features', () => {
 		clearUserAgent();
 
 		// Set up a happy path by default
-		config.set('page', {
-			contentType: 'Article',
-			isMinuteArticle: false,
-			section: 'politics',
-			pageId: 'politics-article',
-			shouldHideAdverts: false,
-			shouldHideReaderRevenue: false,
-			isFront: false,
-			showRelatedContent: true,
-		});
-
-		config.set('switches', {
-			commercial: true,
-			enableDiscussionSwitch: true,
-		});
+		window.guardian.config = {
+			// @ts-expect-error -- It's a partial for a mock
+			page: {
+				contentType: 'Article',
+				isMinuteArticle: false,
+				section: 'politics',
+				pageId: 'politics-article',
+				shouldHideAdverts: false,
+				shouldHideReaderRevenue: false,
+				isFront: false,
+				showRelatedContent: true,
+			},
+			switches: {
+				shouldLoadGoogletag: true,
+				enableDiscussionSwitch: true,
+			},
+		};
 
 		window.location.hash = '';
 
@@ -105,7 +106,7 @@ describe('Commercial features', () => {
 	describe('DFP advertising', () => {
 		it('Runs by default', () => {
 			const features = new CommercialFeatures();
-			expect(features.dfpAdvertising).toBe(true);
+			expect(features.shouldLoadGoogletag).toBe(true);
 		});
 
 		it('Is disabled on sensitive pages', () => {
@@ -113,28 +114,28 @@ describe('Commercial features', () => {
 			// Showing adverts on these pages would be crass - callous, even.
 			window.guardian.config.page.shouldHideAdverts = true;
 			const features = new CommercialFeatures();
-			expect(features.dfpAdvertising).toBe(false);
+			expect(features.shouldLoadGoogletag).toBe(false);
 		});
 
 		it('Is disabled on the children`s book site', () => {
 			// ASA guidelines prohibit us from showing adverts on anything that might be deemed childrens' content
 			window.guardian.config.page.section = 'childrens-books-site';
 			const features = new CommercialFeatures();
-			expect(features.dfpAdvertising).toBe(false);
+			expect(features.shouldLoadGoogletag).toBe(false);
 		});
 
 		it('Is skipped for speedcurve tests', () => {
 			// We don't want external dependencies getting in the way of perf tests
 			window.location.hash = '#noads';
 			const features = new CommercialFeatures();
-			expect(features.dfpAdvertising).toBe(false);
+			expect(features.shouldLoadGoogletag).toBe(false);
 		});
 
 		it('Is disabled for speedcurve tests in ad-free mode', () => {
 			window.location.hash = '#noadsaf';
 			const features = new CommercialFeatures();
 			expect(features.adFree).toBe(true);
-			expect(features.dfpAdvertising).toBe(false);
+			expect(features.shouldLoadGoogletag).toBe(false);
 		});
 
 		describe('In browser', () => {
@@ -164,7 +165,7 @@ describe('Commercial features', () => {
 			it.each(unsupportedBrowsers)('%s is disabled', (_, userAgent) => {
 				mockUserAgent(userAgent);
 				const features = new CommercialFeatures();
-				expect(features.dfpAdvertising).toBe(false);
+				expect(features.shouldLoadGoogletag).toBe(false);
 			});
 
 			const someSupportedBrowsers = [
@@ -189,7 +190,7 @@ describe('Commercial features', () => {
 			it.each(someSupportedBrowsers)('%s is enabled', (_, userAgent) => {
 				mockUserAgent(userAgent);
 				const features = new CommercialFeatures();
-				expect(features.dfpAdvertising).toBe(true);
+				expect(features.shouldLoadGoogletag).toBe(true);
 			});
 		});
 	});
@@ -292,20 +293,15 @@ describe('Commercial features', () => {
 		});
 
 		it('Does not run on the secure contact interactive', () => {
-			config.set(
-				'page.pageId',
-				'help/ng-interactive/2017/mar/17/contact-the-guardian-securely',
-			);
-
+			window.guardian.config.page.pageId =
+				'help/ng-interactive/2017/mar/17/contact-the-guardian-securely';
 			const features = new CommercialFeatures();
 			expect(features.thirdPartyTags).toBe(false);
 		});
 
 		it('Does not run on secure contact help page', () => {
-			config.set(
-				'page.pageId',
-				'help/2016/sep/19/how-to-contact-the-guardian-securely',
-			);
+			window.guardian.config.page.pageId =
+				'help/2016/sep/19/how-to-contact-the-guardian-securely';
 
 			const features = new CommercialFeatures();
 			expect(features.thirdPartyTags).toBe(false);
@@ -336,10 +332,8 @@ describe('Commercial features', () => {
 		});
 
 		it('Does not run on secure contact pages', () => {
-			config.set(
-				'page.pageId',
-				'help/ng-interactive/2017/mar/17/contact-the-guardian-securely',
-			);
+			window.guardian.config.page.contentType =
+				'help/ng-interactive/2017/mar/17/contact-the-guardian-securely';
 
 			const features = new CommercialFeatures();
 			expect(features.thirdPartyTags).toBe(false);
@@ -472,20 +466,16 @@ describe('Commercial features', () => {
 		});
 
 		it('Does not run on the secure contact interactive', () => {
-			config.set(
-				'page.pageId',
-				'help/ng-interactive/2017/mar/17/contact-the-guardian-securely',
-			);
+			window.guardian.config.page.pageId =
+				'help/ng-interactive/2017/mar/17/contact-the-guardian-securely';
 
 			const features = new CommercialFeatures();
 			expect(features.comscore).toBe(false);
 		});
 
 		it('Does not run on secure contact help page', () => {
-			config.set(
-				'page.pageId',
-				'help/2016/sep/19/how-to-contact-the-guardian-securely',
-			);
+			window.guardian.config.page.pageId =
+				'help/2016/sep/19/how-to-contact-the-guardian-securely';
 
 			const features = new CommercialFeatures();
 			expect(features.comscore).toBe(false);

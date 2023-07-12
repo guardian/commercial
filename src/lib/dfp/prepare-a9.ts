@@ -16,7 +16,7 @@ const shouldLoadA9 = () =>
 	!commercialFeatures.isSecureContact &&
 	!isGoogleProxy() &&
 	window.guardian.config.switches.a9HeaderBidding &&
-	commercialFeatures.dfpAdvertising &&
+	commercialFeatures.shouldLoadGoogletag &&
 	!commercialFeatures.adFree &&
 	!window.guardian.config.page.hasPageSkin &&
 	!isInCanada();

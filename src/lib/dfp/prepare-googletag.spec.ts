@@ -84,12 +84,6 @@ jest.mock('./display-lazy-ads', () => ({
 	displayLazyAds: jest.fn(),
 }));
 
-jest.mock('lib/commercial-features', () => ({
-	commercialFeatures: {
-		dfpAdvertising: true,
-	},
-}));
-
 jest.mock('core/ad-sizes', () => {
 	const adSizes: typeof AdSizesType = jest.requireActual('core/ad-sizes');
 	const { createAdSize } = adSizes;
@@ -278,8 +272,6 @@ describe('DFP', () => {
 	} = {} as const;
 
 	beforeEach(() => {
-		window.guardian.config.switches.commercial = true;
-
 		config.set('page', {
 			adUnit: '/123456/theguardian.com/front',
 			contentType: 'Article',
@@ -367,7 +359,7 @@ describe('DFP', () => {
 			}
 		).__switch_zero = false;
 
-		commercialFeatures.dfpAdvertising = true;
+		commercialFeatures.shouldLoadGoogletag = true;
 	});
 
 	afterEach(() => {
@@ -385,7 +377,7 @@ describe('DFP', () => {
 	});
 
 	it('hides all ad slots when all DFP advertising is disabled', async () => {
-		commercialFeatures.dfpAdvertising = false;
+		commercialFeatures.shouldLoadGoogletag = false;
 		await prepareGoogletag();
 		const remainingAdSlots = document.querySelectorAll('.js-ad-slot');
 		expect(remainingAdSlots.length).toBe(0);
