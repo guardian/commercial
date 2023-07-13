@@ -160,7 +160,7 @@ function gatherMetricsOnPageUnload(): void {
 	commercialMetricsPayload.properties = properties;
 
 	const metrics: readonly Metric[] = roundTimeStamp(
-		eventTimer.events,
+		eventTimer.marks,
 		eventTimer.measures,
 	).concat(getOfflineCount());
 	commercialMetricsPayload.metrics = metrics;

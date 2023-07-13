@@ -105,8 +105,8 @@ describe('EventTimer', () => {
 			writable: true,
 		});
 		const eventTimer = EventTimer.get();
-		expect(eventTimer.events).toHaveLength(2);
-		expect(eventTimer.events.map(({ name }) => name).sort()).toEqual(
+		expect(eventTimer.marks).toHaveLength(2);
+		expect(eventTimer.marks.map(({ name }) => name).sort()).toEqual(
 			[CMP_GOT_CONSENT, CMP_INIT].sort(),
 		);
 	});
@@ -128,9 +128,9 @@ describe('EventTimer', () => {
 			writable: true,
 		});
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger(MARK_NAME);
-		expect(eventTimer.events).toHaveLength(3);
-		expect(eventTimer.events.map(({ name }) => name)).toEqual([
+		eventTimer.mark(MARK_NAME);
+		expect(eventTimer.marks).toHaveLength(3);
+		expect(eventTimer.marks.map(({ name }) => name)).toEqual([
 			MARK_NAME,
 			CMP_INIT,
 			CMP_GOT_CONSENT,
@@ -139,9 +139,9 @@ describe('EventTimer', () => {
 
 	it('mark produces correct event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger(MARK_NAME);
-		expect(eventTimer.events[0]?.ts).toBeDefined();
-		expect(eventTimer.events[0]?.ts).toBe(1);
+		eventTimer.mark(MARK_NAME);
+		expect(eventTimer.marks[0]?.ts).toBeDefined();
+		expect(eventTimer.marks[0]?.ts).toBe(1);
 	});
 
 	it('calling trigger with performance undefined produces no events', () => {
@@ -152,8 +152,8 @@ describe('EventTimer', () => {
 			writable: true,
 		});
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger(MARK_NAME);
-		expect(eventTimer.events.length).toBe(0);
+		eventTimer.mark(MARK_NAME);
+		expect(eventTimer.marks.length).toBe(0);
 	});
 
 	it('when retrieved and mark is undefined produce no events', () => {
@@ -169,13 +169,13 @@ describe('EventTimer', () => {
 			writable: true,
 		});
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger(MARK_NAME);
-		expect(eventTimer.events.length).toBe(0);
+		eventTimer.mark(MARK_NAME);
+		expect(eventTimer.marks.length).toBe(0);
 	});
 
 	it('trigger top-above-nav fetchAdStart event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('fetchAdStart', 'top-above-nav');
+		eventTimer.mark('fetchAdStart', 'top-above-nav');
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
 			['top-above-nav_fetchAdStart'],
 		]);
@@ -183,8 +183,8 @@ describe('EventTimer', () => {
 
 	it('trigger two top-above-nav adOnPage events', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('adOnPage', 'top-above-nav');
-		eventTimer.trigger('adOnPage', 'top-above-nav');
+		eventTimer.mark('adOnPage', 'top-above-nav');
+		eventTimer.mark('adOnPage', 'top-above-nav');
 
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
 			['top-above-nav_adOnPage'],
@@ -193,7 +193,7 @@ describe('EventTimer', () => {
 
 	it('trigger commercial start page event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger(MARK_NAME);
+		eventTimer.mark(MARK_NAME);
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
 			[MARK_NAME],
 		]);
@@ -201,7 +201,7 @@ describe('EventTimer', () => {
 
 	it('trigger commercial end page event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('adOnPage', 'top-above-nav');
+		eventTimer.mark('adOnPage', 'top-above-nav');
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
 			['top-above-nav_adOnPage'],
 		]);
@@ -209,8 +209,8 @@ describe('EventTimer', () => {
 
 	it('trigger measure for 2 marks', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('adRenderStart', 'top-above-nav');
-		eventTimer.trigger('adRenderEnd', 'top-above-nav');
+		eventTimer.mark('adRenderStart', 'top-above-nav');
+		eventTimer.mark('adRenderEnd', 'top-above-nav');
 
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
 			['top-above-nav_adRenderStart'],
@@ -226,12 +226,12 @@ describe('EventTimer', () => {
 		]);
 	});
 
-	it("trigger measure marks don't appear in EventTimer.events", () => {
+	it("trigger measure marks don't appear in EventTimer.marks", () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('prepareSlotStart');
-		eventTimer.trigger('prepareSlotEnd');
+		eventTimer.mark('prepareSlotStart');
+		eventTimer.mark('prepareSlotEnd');
 
-		expect(eventTimer.events.map(({ name }) => name)).not.toContain([
+		expect(eventTimer.marks.map(({ name }) => name)).not.toContain([
 			'prepareSlotStart',
 			'prepareSlotEnd',
 		]);
@@ -261,8 +261,8 @@ describe('EventTimer', () => {
 			(mark, origin) => {
 				const eventTimer = EventTimer.get();
 
-				eventTimer.trigger(mark, origin);
-				expect(eventTimer.events.map(({ name }) => name)).toContain(
+				eventTimer.mark(mark, origin);
+				expect(eventTimer.marks.map(({ name }) => name)).toContain(
 					origin ? `${origin}_${mark}` : mark,
 				);
 			},
@@ -273,8 +273,8 @@ describe('EventTimer', () => {
 			(mark, origin) => {
 				const eventTimer = EventTimer.get();
 
-				eventTimer.trigger(mark, origin);
-				expect(eventTimer.events.map(({ name }) => name)).not.toContain(
+				eventTimer.mark(mark, origin);
+				expect(eventTimer.marks.map(({ name }) => name)).not.toContain(
 					`${origin}_${mark}`,
 				);
 			},
@@ -306,8 +306,8 @@ describe('EventTimer', () => {
 
 				const testCase = `${origin}_${mark}`;
 
-				eventTimer.trigger(`${testCase}Start`);
-				eventTimer.trigger(`${testCase}End`);
+				eventTimer.mark(`${testCase}Start`);
+				eventTimer.mark(`${testCase}End`);
 				expect(eventTimer.measures.map(({ name }) => name)).toContain(
 					testCase,
 				);
@@ -321,8 +321,8 @@ describe('EventTimer', () => {
 
 				const testCase = `${origin}_${mark}`;
 
-				eventTimer.trigger(`${testCase}Start`);
-				eventTimer.trigger(`${testCase}End`);
+				eventTimer.mark(`${testCase}Start`);
+				eventTimer.mark(`${testCase}End`);
 				expect(
 					eventTimer.measures.map(({ name }) => name),
 				).not.toContain(testCase);

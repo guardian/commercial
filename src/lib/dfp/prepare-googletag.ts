@@ -89,7 +89,7 @@ export const init = (): Promise<void> => {
 
 	const setupAdvertising = (): Promise<void> => {
 		return onConsent().then((consentState: ConsentState) => {
-			EventTimer.get().trigger('googletagInitStart');
+			EventTimer.get().mark('googletagInitStart');
 			let canRun = true;
 
 			if (consentState.canTarget) {
@@ -125,7 +125,7 @@ export const init = (): Promise<void> => {
 				// it strictly follows preceding prepare-googletag work (and the module itself ensures dependencies are
 				// fulfilled), but don't assume fillAdvertSlots is complete when queueing subsequent work using cmd.push
 				window.googletag.cmd.push(
-					() => EventTimer.get().trigger('googletagInitEnd'),
+					() => EventTimer.get().mark('googletagInitEnd'),
 					setDfpListeners,
 					() => {
 						setPageTargeting(consentState);

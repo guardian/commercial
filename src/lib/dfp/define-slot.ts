@@ -114,7 +114,7 @@ const defineSlot = (
 	slotTargeting: Record<string, string> = {},
 ): { slot: googletag.Slot; slotReady: Promise<void> } => {
 	const slotTarget = adSlotNode.getAttribute('data-name') as SlotName;
-	EventTimer.get().trigger('defineSlotStart', slotTarget);
+	EventTimer.get().mark('defineSlotStart', slotTarget);
 
 	const id = adSlotNode.id;
 
@@ -259,8 +259,8 @@ const defineSlot = (
 		slotReady = Promise.race([iasTimeout(), iasDataPromise]);
 
 		void slotReady.then(() => {
-			EventTimer.get().trigger('defineSlotEnd', slotTarget);
-			EventTimer.get().trigger('slotReady', slotTarget);
+			EventTimer.get().mark('defineSlotEnd', slotTarget);
+			EventTimer.get().mark('slotReady', slotTarget);
 		});
 	}
 
