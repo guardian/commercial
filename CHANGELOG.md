@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 10.5.0
+
+### Minor Changes
+
+- 940b294: Use the new `shouldLoadGoogletag` switch.
+
 ## 10.4.0
 
 ### Minor Changes
