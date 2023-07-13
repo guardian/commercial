@@ -19,51 +19,51 @@ const initialise = () => {
 	if (!window.launchpad) return;
 
 	// Initialise Launchpad Tracker
-	window.launchpad('newTracker', 'launchpad', 'lpx.qantas.com', {
-		discoverRootDomain: true,
-		appId: 'the-guardian',
-	});
+	// window.launchpad('newTracker', 'launchpad', 'lpx.qantas.com', {
+	// 	discoverRootDomain: true,
+	// 	appId: 'the-guardian',
+	// });
 
 	// Track Page Views
-	window.launchpad('trackUnstructEvent', {
-		schema: 'iglu:com.qantas.launchpad/hierarchy/jsonschema/1-0-0',
-		data: {
-			u1: 'theguardian.com',
-			u2: window.guardian.config.page.section,
-			u3: window.guardian.config.page.sectionName,
-			u4: window.guardian.config.page.contentType,
-			uid: window.guardian.config.ophan.browserId ?? '',
-		},
-	});
+	// window.launchpad('trackUnstructEvent', {
+	// 	schema: 'iglu:com.qantas.launchpad/hierarchy/jsonschema/1-0-0',
+	// 	data: {
+	// 		u1: 'theguardian.com',
+	// 		u2: window.guardian.config.page.section,
+	// 		u3: window.guardian.config.page.sectionName,
+	// 		u4: window.guardian.config.page.contentType,
+	// 		uid: window.guardian.config.ophan.browserId ?? '',
+	// 	},
+	// });
 };
 
-const setupRedplanet = () =>
-	onConsent()
-		.then((state) => {
-			if (!state.aus) {
-				return Promise.reject(
-					'Redplanet should only run in Australia on AUS mode',
-				);
-			}
+// const setupRedplanet = () =>
+// 	onConsent()
+// 		.then((state) => {
+// 			if (!state.aus) {
+// 				return Promise.reject(
+// 					'Redplanet should only run in Australia on AUS mode',
+// 				);
+// 			}
 
-			if (!getConsentFor('redplanet', state)) {
-				return Promise.reject('No consent for redplanet');
-			}
-		})
-		.then(() => {
-			if (initialised) {
-				return Promise.reject('replanet already initialised');
-			}
+// 			if (!getConsentFor('redplanet', state)) {
+// 				return Promise.reject('No consent for redplanet');
+// 			}
+// 		})
+// 		.then(() => {
+// 			if (initialised) {
+// 				return Promise.reject('replanet already initialised');
+// 			}
 
-			initialised = true;
-			launchpad();
-		})
-		.then(() => {
-			initialise();
-		})
-		.catch((reason) => {
-			log('commercial', '⚠️ Failed to execute redplanet', reason);
-		});
+// 			initialised = true;
+// 			launchpad();
+// 		})
+// 		.then(() => {
+// 			initialise();
+// 		})
+// 		.catch((reason) => {
+// 			log('commercial', '⚠️ Failed to execute redplanet', reason);
+// 		});
 
 /**
  * Initialise Redplanet, pre and post campaign analysis
@@ -71,7 +71,7 @@ const setupRedplanet = () =>
  */
 export const init = (): Promise<void> => {
 	if (commercialFeatures.launchpad && isInAuOrNz()) {
-		return setupRedplanet();
+		// return setupRedplanet();
 	}
 	return Promise.resolve();
 };
