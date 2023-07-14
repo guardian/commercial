@@ -23,6 +23,7 @@ type SlotName =
 	| 'inline'
 	| 'mobile-sticky'
 	| 'mostpop'
+	| 'liveblog-right'
 	| 'top-above-nav';
 
 type AdSlotConfigs = Partial<Record<SlotName, AdSlotConfig>>;

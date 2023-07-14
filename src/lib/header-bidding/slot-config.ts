@@ -66,6 +66,10 @@ const getHeaderBiddingKey = (
 		return 'fronts-banner';
 	}
 
+	if (name?.includes('liveblog-right')) {
+		return 'liveblog-right';
+	}
+
 	return undefined;
 };
 
@@ -111,6 +115,17 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 
 	return {
 		right: {
+			desktop: hasShowcaseMainElement
+				? [adSizes.mpu]
+				: [adSizes.halfPage, adSizes.mpu],
+			tablet: hasShowcaseMainElement
+				? [adSizes.mpu]
+				: [adSizes.halfPage, adSizes.mpu],
+			mobile: hasShowcaseMainElement
+				? [adSizes.mpu]
+				: [adSizes.halfPage, adSizes.mpu],
+		},
+		'liveblog-right': {
 			desktop: hasShowcaseMainElement
 				? [adSizes.mpu]
 				: [adSizes.halfPage, adSizes.mpu],

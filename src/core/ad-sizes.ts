@@ -104,6 +104,7 @@ type SlotName =
 	| 'mobile-sticky'
 	| 'mostpop'
 	| 'right'
+	| 'liveblog-right'
 	| 'survey'
 	| 'top-above-nav';
 
@@ -196,6 +197,16 @@ const slotSizeMappings: SlotSizeMappings = {
 	},
 	right: {
 		mobile: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.mpu,
+			adSizes.googleCard,
+			adSizes.halfPage,
+			adSizes.fluid,
+		],
+	},
+	'liveblog-right': {
+		desktop: [
 			adSizes.outOfPage,
 			adSizes.empty,
 			adSizes.mpu,

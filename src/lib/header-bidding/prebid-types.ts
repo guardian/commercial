@@ -11,12 +11,14 @@ export type HeaderBiddingSlotName =
 	| 'right'
 	| 'top-above-nav'
 	| `fronts-banner-${number}`
-	| `inline${number}`;
+	| `inline${number}`
+	| `liveblog-right-${number}`;
 
 export type HeaderBiddingSizeKey =
 	| HeaderBiddingSlotName
 	| 'inline'
-	| 'fronts-banner';
+	| 'fronts-banner'
+	| 'liveblog-right';
 
 export type HeaderBiddingSlot = {
 	key: HeaderBiddingSizeKey;
