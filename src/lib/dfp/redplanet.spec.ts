@@ -66,7 +66,7 @@ describe('init', () => {
 		jest.clearAllMocks();
 	});
 
-	xit('should initialise redplanet when all conditions are true with right params', async () => {
+	it('should initialise redplanet when all conditions are true with right params', async () => {
 		commercialFeatures.launchpad = true;
 		isInAuOrNz.mockReturnValue(true);
 		window.guardian.config.ophan.browserId = '123';
@@ -106,7 +106,7 @@ describe('init', () => {
 		).toEqual([expectedNewTrackerCall, expectedTrackUnstructEventCall]);
 	});
 
-	xit('should initialise redplanet when TCFv2 consent has been given', async () => {
+	it('should initialise redplanet when TCFv2 consent has been given', async () => {
 		commercialFeatures.launchpad = true;
 		isInAuOrNz.mockReturnValue(true);
 		mockOnConsent(AusWithConsent);
@@ -115,7 +115,7 @@ describe('init', () => {
 		expect(window.launchpad).toBeCalled();
 	});
 
-	xit('should not initialise redplanet when TCFv2 consent has not been given', async () => {
+	it('should not initialise redplanet when TCFv2 consent has not been given', async () => {
 		commercialFeatures.launchpad = true;
 		isInAuOrNz.mockReturnValue(true);
 		mockOnConsent(AusWithoutConsent);
@@ -129,7 +129,7 @@ describe('init', () => {
 		expect(window.launchpad).not.toBeCalled();
 	});
 
-	xit('should throw an error when on CCPA mode', async () => {
+	it('should throw an error when on CCPA mode', async () => {
 		commercialFeatures.launchpad = true;
 		isInAuOrNz.mockReturnValue(true);
 		mockOnConsent(CcpaWithConsent);
@@ -145,7 +145,7 @@ describe('init', () => {
 		expect(window.launchpad).not.toBeCalled();
 	});
 
-	xit('should not initialise redplanet when launchpad conditions are false', async () => {
+	it('should not initialise redplanet when launchpad conditions are false', async () => {
 		commercialFeatures.launchpad = false;
 		isInAuOrNz.mockReturnValue(true);
 		mockOnConsent(AusWithConsent);
@@ -154,7 +154,7 @@ describe('init', () => {
 		expect(window.launchpad).not.toBeCalled();
 	});
 
-	xit('should not initialise redplanet when user not in AUS regions', async () => {
+	it('should not initialise redplanet when user not in AUS regions', async () => {
 		commercialFeatures.launchpad = true;
 		isInAuOrNz.mockReturnValue(false);
 		mockOnConsent(AusWithConsent);
