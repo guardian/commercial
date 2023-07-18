@@ -98,13 +98,13 @@ type SlotName =
 	| 'fronts-banner'
 	| 'im'
 	| 'inline'
+	| 'liveblog-right'
 	| 'merchandising-high-lucky'
 	| 'merchandising-high'
 	| 'merchandising'
 	| 'mobile-sticky'
 	| 'mostpop'
 	| 'right'
-	| 'liveblog-right'
 	| 'survey'
 	| 'top-above-nav';
 

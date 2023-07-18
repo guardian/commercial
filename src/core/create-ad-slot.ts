@@ -21,9 +21,9 @@ type SlotName =
 	| 'high-merch'
 	| 'im'
 	| 'inline'
+	| 'liveblog-right'
 	| 'mobile-sticky'
 	| 'mostpop'
-	| 'liveblog-right'
 	| 'top-above-nav';
 
 type AdSlotConfigs = Partial<Record<SlotName, AdSlotConfig>>;
