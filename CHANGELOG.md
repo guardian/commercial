@@ -1,5 +1,33 @@
 # @guardian/commercial
 
+## 10.5.0
+
+### Minor Changes
+
+- 940b294: Use the new `shouldLoadGoogletag` switch.
+
+## 10.4.0
+
+### Minor Changes
+
+- e128f63: In dfp-env shouldLazyLoad should always returns true if on mobile/tablet breakpoints
+
+### Patch Changes
+
+- e556b32: Remove `hbImpl`.
+
+## 10.3.0
+
+### Minor Changes
+
+- a3a35ac: Drop support for paid container more less button text
+- a3297bb: Remove track-labs-containers
+- 733d538: Log the commit SHA of the current build to the browser console
+
+### Patch Changes
+
+- 7c9ebc1: remove usage of mobileStickyLeaderboard and mobileStickyPrebid switches
+
 ## 10.2.0
 
 ### Minor Changes

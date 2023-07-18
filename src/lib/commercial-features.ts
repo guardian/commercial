@@ -37,7 +37,7 @@ const isInternetExplorer = () => {
 
 // Having a constructor means we can easily re-instantiate the object in a test
 class CommercialFeatures {
-	dfpAdvertising: boolean;
+	shouldLoadGoogletag: boolean;
 	isSecureContact: boolean;
 	articleBodyAdverts: boolean;
 	carrotTrafficDriver: boolean;
@@ -85,27 +85,29 @@ class CommercialFeatures {
 
 		this.youtubeAdvertising = !this.adFree && !sensitiveContent;
 
-		const dfpAdvertisingTrueConditions = {
-			'switches.commercial': !!switches.commercial,
+		const shouldLoadGoogletagTrueConditions = {
+			'switches.shouldLoadGoogletag': !!switches.shouldLoadGoogletag,
 			externalAdvertising,
 		};
 
-		const dfpAdvertisingFalseConditions = {
+		const shouldLoadGoogletagFalseConditions = {
 			sensitiveContent,
 			isIdentityPage,
 			adFree: this.adFree,
 			isUnsupportedBrowser,
 		};
 
-		this.dfpAdvertising =
+		this.shouldLoadGoogletag =
 			forceAds ||
-			(Object.values(dfpAdvertisingTrueConditions).every(Boolean) &&
-				!Object.values(dfpAdvertisingFalseConditions).some(Boolean));
+			(Object.values(shouldLoadGoogletagTrueConditions).every(Boolean) &&
+				!Object.values(shouldLoadGoogletagFalseConditions).some(
+					Boolean,
+				));
 
-		if (!this.dfpAdvertising) {
+		if (!this.shouldLoadGoogletag) {
 			adsDisabledLogger(
-				dfpAdvertisingTrueConditions,
-				dfpAdvertisingFalseConditions,
+				shouldLoadGoogletagTrueConditions,
+				shouldLoadGoogletagFalseConditions,
 			);
 		}
 
@@ -121,7 +123,7 @@ class CommercialFeatures {
 		};
 
 		this.articleBodyAdverts =
-			this.dfpAdvertising &&
+			this.shouldLoadGoogletag &&
 			!this.adFree &&
 			Object.values(articleBodyAdvertsTrueConditions).every(Boolean) &&
 			!Object.values(articleBodyAdvertsFalseConditions).some(Boolean);
@@ -141,7 +143,7 @@ class CommercialFeatures {
 			!window.guardian.config.page.isPaidContent;
 
 		this.highMerch =
-			this.dfpAdvertising &&
+			this.shouldLoadGoogletag &&
 			!this.adFree &&
 			!isMinuteArticle &&
 			!isHosted &&
@@ -164,7 +166,7 @@ class CommercialFeatures {
 			!!window.guardian.config.switches.redplanetForAus;
 
 		this.commentAdverts =
-			this.dfpAdvertising &&
+			this.shouldLoadGoogletag &&
 			!this.adFree &&
 			!isMinuteArticle &&
 			!!window.guardian.config.switches.enableDiscussionSwitch &&
@@ -172,7 +174,7 @@ class CommercialFeatures {
 			(!isLiveBlog || isWidePage);
 
 		this.liveblogAdverts =
-			!!isLiveBlog && this.dfpAdvertising && !this.adFree;
+			!!isLiveBlog && this.shouldLoadGoogletag && !this.adFree;
 
 		this.comscore =
 			!!window.guardian.config.switches.comscore &&

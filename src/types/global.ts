@@ -1,5 +1,4 @@
 import type { VendorName } from '@guardian/consent-management-platform/dist/types';
-import type { Advert } from 'lib/dfp/Advert';
 import type { EventTimer } from '../core/event-timer';
 import type { PageTargeting } from '../core/targeting/build-page-targeting';
 import type {
@@ -7,21 +6,8 @@ import type {
 	GoogleTrackConversionObject,
 	NetworkInformation,
 } from '../core/types';
+import type { DfpEnv } from '../lib/dfp/dfp-env';
 import type { IasPETSlot } from './ias';
-
-interface DfpEnv {
-	renderStartTime: number;
-	adSlotSelector: string;
-	hbImpl: Record<string, boolean>;
-	lazyLoadEnabled: boolean;
-	lazyLoadObserve: boolean;
-	creativeIDs: string[];
-	advertIds: Record<string, number>;
-	advertsToLoad: Advert[];
-	advertsToRefresh: Advert[];
-	adverts: Advert[];
-	shouldLazyLoad: () => boolean;
-}
 
 type ServerSideABTest = `${string}${'Variant' | 'Control'}`;
 

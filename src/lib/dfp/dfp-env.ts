@@ -1,3 +1,4 @@
+import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import { getUrlVars as _getUrlVars } from 'lib/utils/url';
 import type { Advert } from './Advert';
 
@@ -6,7 +7,6 @@ const getUrlVars = _getUrlVars as (arg?: string) => Record<string, string>;
 interface DfpEnv {
 	renderStartTime: number;
 	adSlotSelector: string;
-	hbImpl: Record<string, boolean>;
 	lazyLoadEnabled: boolean;
 	lazyLoadObserve: boolean;
 	creativeIDs: string[];
@@ -17,8 +17,6 @@ interface DfpEnv {
 	shouldLazyLoad: () => boolean;
 }
 
-const { switches } = window.guardian.config;
-
 const dfpEnv: DfpEnv = {
 	/* renderStartTime: integer. Point in time when DFP kicks in */
 	renderStartTime: -1,
@@ -26,12 +24,6 @@ const dfpEnv: DfpEnv = {
 	/* adSlotSelector: string. A CSS selector to query ad slots in the DOM */
 	adSlotSelector: '.js-ad-slot',
 
-	/* hbImpl: Returns an object {'prebid': boolean, 'a9': boolean} to indicate which header bidding implementations are switched on */
-	hbImpl: {
-		// TODO: fix the Switch type upstream
-		prebid: switches.prebidHeaderBidding ?? false,
-		a9: switches.a9HeaderBidding ?? false,
-	},
 	/* lazyLoadEnabled: boolean. Set to true when adverts are lazy-loaded */
 	lazyLoadEnabled: false,
 
@@ -55,11 +47,19 @@ const dfpEnv: DfpEnv = {
 
 	/* shouldLazyLoad: () -> boolean. Determines whether ads should be lazy loaded */
 	shouldLazyLoad(): boolean {
-		// We do not want lazy loading on pageskins because it messes up the roadblock
-		// Also, if the special dll parameter is passed with a value of 1, we don't lazy load
-		return (
-			!window.guardian.config.page.hasPageSkin && getUrlVars().dll !== '1'
-		);
+		if (getUrlVars().dll === '1') {
+			return false;
+		}
+
+		if (['mobile', 'tablet'].includes(getCurrentBreakpoint())) {
+			return true;
+		}
+
+		if (window.guardian.config.page.hasPageSkin) {
+			return false;
+		}
+
+		return true;
 	},
 };
 
@@ -69,3 +69,4 @@ window.guardian.commercial = window.guardian.commercial ?? {};
 window.guardian.commercial.dfpEnv = dfpEnv;
 
 export { dfpEnv };
+export type { DfpEnv };
