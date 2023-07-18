@@ -57,7 +57,7 @@ const fillAdvertSlots = async (numAdsToInsert: number, fromIndex: number) => {
 
 // When a liveblog-right ad slot is inserted into the page, create an ad in this new slot
 export const initLiveblogRightAdverts = (): Promise<void> => {
-	if (!isInVariantSynchronous(liveblogRightColumnAds, 'variant')) {
+	if (isInVariantSynchronous(liveblogRightColumnAds, 'multiple-adverts')) {
 		return Promise.resolve();
 	}
 
