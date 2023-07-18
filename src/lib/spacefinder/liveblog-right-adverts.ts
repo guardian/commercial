@@ -1,10 +1,9 @@
+import { isNonNullable } from '@guardian/libs';
+import { addSlot } from 'lib/dfp/add-slot';
 import type { Advert } from 'lib/dfp/Advert';
-import { createAdvert } from 'lib/dfp/create-advert';
-import { dfpEnv } from 'lib/dfp/dfp-env';
-import { displayAds } from 'lib/dfp/display-ads';
-import { displayLazyAds } from 'lib/dfp/display-lazy-ads';
-import { queueAdvert } from 'lib/dfp/queue-advert';
+import { isInVariantSynchronous } from 'lib/experiments/ab';
 import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
+import { liveblogRightColumnAds } from 'lib/experiments/tests/liveblog-right-column-ads';
 import { requestBidsForAds } from '../header-bidding/request-bids';
 
 type AdsInsertedCustomEventDetail = {
@@ -15,6 +14,8 @@ type AdsInsertedCustomEventDetail = {
 type AdsInsertedCustomEvent = {
 	detail: AdsInsertedCustomEventDetail;
 };
+
+const insertedAdverts: Advert[] = [];
 
 const isCustomEvent = (event: Event): event is CustomEvent => {
 	return 'detail' in event;
@@ -29,39 +30,37 @@ const fillAdvertSlots = async (numAdsToInsert: number, fromIndex: number) => {
 		(i) => i + fromIndex,
 	);
 
-	const adverts = [
+	const adSlots = [
 		...document.querySelectorAll<HTMLElement>('.ad-slot--liveblog-right'),
 	]
 		.filter(({ id }) =>
 			// exclude ad slots that have already been filled
 			newAdvertIndexes.includes(Number(id[id.length - 1])),
 		)
-		.map((adSlot) => createAdvert(adSlot))
-		.filter((advert): advert is Advert => advert !== null);
+		.filter((advert) => isNonNullable(advert));
 
-	if (!adverts.length) return;
+	if (!adSlots.length) return;
 
-	const currentLength = dfpEnv.adverts.length;
-	dfpEnv.adverts = dfpEnv.adverts.concat(adverts);
-	adverts.forEach((advert, index) => {
-		dfpEnv.advertIds[advert.id] = currentLength + index;
+	adSlots.map(async (advert) => {
+		await addSlot(advert, false).then((advert) => {
+			if (advert) {
+				insertedAdverts.push(advert);
+			}
+		});
 	});
 
 	if (isInEagerPrebidVariant()) {
 		// Request bids for all server rendered adverts
-		await requestBidsForAds(adverts);
-	}
-
-	adverts.forEach(queueAdvert);
-	if (dfpEnv.shouldLazyLoad()) {
-		displayLazyAds();
-	} else {
-		displayAds();
+		await requestBidsForAds(insertedAdverts);
 	}
 };
 
 // When a liveblog-right ad slot is inserted into the page, create an ad in this new slot
 export const initLiveblogRightAdverts = (): Promise<void> => {
+	if (!isInVariantSynchronous(liveblogRightColumnAds, 'variant')) {
+		return Promise.resolve();
+	}
+
 	document.addEventListener('liveblog-right-ads-inserted', (event: Event) => {
 		if (!isCustomEvent(event)) throw new Error('not a custom event');
 
