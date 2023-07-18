@@ -151,13 +151,14 @@ const loadModules = (modules: Modules, eventName: string) => {
 	});
 
 	return Promise.allSettled(modulePromises).then(() => {
-		EventTimer.get().trigger(eventName);
+		EventTimer.get().mark(eventName);
 	});
 };
 
 const recordCommercialMetrics = () => {
 	const eventTimer = EventTimer.get();
-	eventTimer.trigger('commercialModulesLoaded');
+	eventTimer.mark('commercialBootEnd');
+	eventTimer.mark('commercialModulesLoaded');
 	// record the number of ad slots on the page
 	const adSlotsTotal = document.querySelectorAll(
 		`[id^="${adSlotIdPrefix}"]`,
@@ -200,7 +201,8 @@ const bootCommercial = async (): Promise<void> => {
 			[
 				'ga-user-timing-commercial-start',
 				function runTrackPerformance() {
-					EventTimer.get().trigger('commercialStart');
+					EventTimer.get().mark('commercialStart');
+					EventTimer.get().mark('commercialBootStart');
 				},
 			],
 		],

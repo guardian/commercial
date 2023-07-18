@@ -1,38 +1,10 @@
-import { trackEvent } from './google-analytics';
+import { log } from '@guardian/libs';
 import type { ConnectionType } from './types';
 
-class Event {
-	name: string;
-	ts: DOMHighResTimeStamp;
-
-	constructor(name: string, mark: PerformanceEntry) {
-		this.name = name;
-		this.ts = mark.startTime;
-	}
-}
-interface GALogEvent {
-	timingVariable: string;
-	timingLabel?: string;
-}
-
-interface GAConfig {
-	logEvents: GALogEvent[];
-}
-
-interface SlotEventStatus {
-	prebidStart: boolean;
-	prebidEnd: boolean;
-	slotInitialised: boolean;
-	slotReady: boolean;
-	adOnPage: boolean;
-}
-
-interface PageEventStatus {
-	commercialStart: boolean;
-	commercialExtraModulesLoaded: boolean;
-	commercialBaseModulesLoaded: boolean;
-	commercialModulesLoaded: boolean;
-}
+const supportsPerformanceAPI = () =>
+	typeof window !== 'undefined' &&
+	typeof window.performance !== 'undefined' &&
+	typeof window.performance.mark === 'function';
 
 interface EventTimerProperties {
 	type?: ConnectionType;
@@ -49,20 +21,76 @@ interface EventTimerProperties {
 	labsUrl?: string;
 }
 
+// Events will be logged using the performance API for all slots, but only these slots will be tracked as commercial metrics and sent to the data lake
+const trackedSlots = ['top-above-nav', 'inline1', 'inline2'] as const;
+
+type TrackedSlot = (typeof trackedSlots)[number];
+
+// marks that we want to save as commercial metrics
+const slotMarks = ['slotReady', 'adRenderStart', 'adOnPage'] as const;
+
+type SlotMark = (typeof slotMarks)[number];
+
+// measures that we want to save as commercial metrics
+const slotMeasures = [
+	'adRender',
+	'defineSlot',
+	'prepareSlot',
+	'prebid',
+	'fetchAd',
+] as const;
+
+type SlotMeasure = (typeof slotMeasures)[number];
+
+const pageMarks = ['commercialStart', 'commercialModulesLoaded'] as const;
+
+type PageMark = (typeof pageMarks)[number];
+
+// measures that we want to save as commercial metrics
+const pageMeasures = ['commercialBoot', 'googletagInit'] as const;
+
+type PageMeasure = (typeof pageMeasures)[number];
+
+// all marks, including the measure start and end marks
+const allSlotMarks = [
+	...slotMarks,
+	...slotMeasures.map((measure) => `${measure}Start`),
+	...slotMeasures.map((measure) => `${measure}End`),
+] as const;
+
+const externalMarks = [
+	'cmp-init',
+	'cmp-ui-displayed',
+	'cmp-got-consent',
+] as const;
+
+type ExternalMark = (typeof externalMarks)[number];
+
+const shouldSave = (name: string): boolean => {
+	let [origin, type] = name.split('_') as [string, string | undefined];
+	if (!type) {
+		type = origin;
+		origin = 'page';
+	}
+
+	const shouldSaveMark =
+		(trackedSlots.includes(origin as TrackedSlot) &&
+			slotMarks.includes(type as SlotMark)) ||
+		(origin === 'page' && pageMarks.includes(type as PageMark));
+
+	const shouldSaveMeasure =
+		(trackedSlots.includes(origin as TrackedSlot) &&
+			slotMeasures.includes(type as SlotMeasure)) ||
+		(origin === 'page' && pageMeasures.includes(type as PageMeasure));
+
+	return shouldSaveMark || shouldSaveMeasure;
+};
+
 class EventTimer {
-	private _events: Event[];
-	private static _externallyDefinedEventNames = [
-		'cmp-init',
-		'cmp-ui-displayed',
-		'cmp-got-consent',
-	];
-	startTS: DOMHighResTimeStamp;
-	triggers: {
-		first: SlotEventStatus;
-		'top-above-nav': SlotEventStatus;
-		page: PageEventStatus;
-	};
-	gaConfig: GAConfig;
+	private _marks: Map<string, PerformanceEntry>;
+
+	private _measures: Map<string, PerformanceMeasure>;
+
 	properties: EventTimerProperties;
 	/**
 	 * Initialise the EventTimer class on page.
@@ -87,76 +115,48 @@ class EventTimer {
 	}
 
 	/**
-	 * Returns all commercial timers. CMP-related timers are not tracked
-	 * by EventTimer so they need to be concatenated to EventTimer's private events array.
+	 * These are marks that are not triggered by commercial but we are interested in
+	 * tracking their performance. For example, CMP-related events.
+	 **/
+	private get _externalMarks(): Map<ExternalMark, PerformanceEntry> {
+		if (!supportsPerformanceAPI()) {
+			return new Map();
+		}
+
+		return externalMarks.reduce((map, mark) => {
+			const entries = window.performance.getEntriesByName(mark);
+			if (entries.length && entries[0]) {
+				map.set(mark, entries[0]);
+			}
+			return map;
+		}, new Map<ExternalMark, PerformanceEntry>());
+	}
+
+	/**
+	 * Returns all performance marks that should be saved as commercial metrics.
 	 */
-	public get events(): Event[] {
-		return typeof window.performance !== 'undefined' &&
-			'getEntriesByName' in window.performance
-			? [
-					...this._events,
-					...EventTimer._externallyDefinedEventNames
-						.map((eventName) => {
-							const entry =
-								window.performance.getEntriesByName(
-									eventName,
-								)[0];
-							// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- possibly undefined
-							return entry
-								? new Event(eventName, entry)
-								: undefined;
-						})
-						.filter(
-							(entry): entry is Event => entry instanceof Event,
-						),
-			  ]
-			: this._events;
+	public get marks() {
+		return [...this._marks, ...this._externalMarks].map(
+			([name, timer]) => ({
+				name,
+				ts: timer.startTime,
+			}),
+		);
+	}
+
+	/**
+	 * Returns all performance measures that should be saved as commercial metrics.
+	 */
+	public get measures() {
+		return [...this._measures].map(([name, measure]) => ({
+			name,
+			duration: measure.duration,
+		}));
 	}
 
 	private constructor() {
-		this._events = [];
-		this.startTS = window.performance.now();
-		this.triggers = {
-			first: {
-				slotReady: false,
-				prebidStart: false,
-				prebidEnd: false,
-				slotInitialised: false,
-				adOnPage: false,
-			},
-			'top-above-nav': {
-				slotReady: false,
-				prebidStart: false,
-				prebidEnd: false,
-				slotInitialised: false,
-				adOnPage: false,
-			},
-			page: {
-				commercialStart: false,
-				commercialExtraModulesLoaded: false,
-				commercialBaseModulesLoaded: false,
-				commercialModulesLoaded: false,
-			},
-		};
-
-		this.gaConfig = {
-			logEvents: [
-				{
-					timingVariable: 'slotReady',
-				},
-				{
-					timingVariable: 'slotInitialised',
-				},
-				{
-					timingVariable: 'commercialStart',
-					timingLabel: 'Commercial start parse time',
-				},
-				{
-					timingVariable: 'commercialModulesLoaded',
-					timingLabel: 'Commercial end parse time',
-				},
-			],
-		};
+		this._marks = new Map();
+		this._measures = new Map();
 
 		this.properties = {};
 
@@ -169,7 +169,7 @@ class EventTimer {
 	}
 
 	/**
-	 * Adds an event timer property
+	 * Adds a non timer measurement
 	 *
 	 * @param {string} name - the property's name
 	 * @param value - the property's value
@@ -182,72 +182,80 @@ class EventTimer {
 	}
 
 	/**
-	 * Creates a new performance mark
-	 * For slot events also ensures each TYPE of event event is marked only once for 'first'
-	 * (the first time that event is triggered for ANY slot) and once for topAboveNav
+	 * Creates a new performance mark, and if the mark ends with 'End' it will
+	 * create a performance measure between the start and end marks.
 	 *
-	 * @param {string} eventName - The short name applied to the mark
-	 * @param {origin} [origin=page] - Either 'page' (default) or the name of the slot
+	 * Marks can  be triggered multiple times, but we only save the first
+	 * instance of a mark, as things like ad refreshes can trigger the same mark.
+	 *
+	 * More info on the performance API:
+	 * https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark
+	 * https://developer.mozilla.org/en-US/docs/Web/API/Performance/measure
+	 *
+	 * @todo more strict typing for eventName and origin
+	 * @param eventName The short name applied to the mark
+	 * @param origin - Either 'page' (default) or the name of the slot
 	 */
-	trigger(eventName: string, origin = 'page'): void {
-		const TRACKED_SLOT_NAME = 'top-above-nav';
-		if (
-			origin === 'page' &&
-			!this.triggers.page[eventName as keyof PageEventStatus]
-		) {
-			this.mark(eventName);
-			this.trackInGA(eventName);
-			this.triggers.page[eventName as keyof PageEventStatus] = true;
+	mark(eventName: string, origin = 'page'): void {
+		let name = eventName;
+		if (allSlotMarks.includes(eventName) && origin !== 'page') {
+			name = `${origin}_${name}`;
+		}
+
+		if (this._marks.get(name) || !supportsPerformanceAPI()) {
 			return;
 		}
 
-		if (!this.triggers.first[eventName as keyof SlotEventStatus]) {
-			const trackLabel = `first-${eventName}`;
-			this.mark(trackLabel);
-			this.trackInGA(eventName, trackLabel);
-			this.triggers.first[eventName as keyof SlotEventStatus] = true;
-		}
+		const mark = window.performance.mark(name);
 
-		if (origin === TRACKED_SLOT_NAME) {
-			if (
-				!this.triggers[TRACKED_SLOT_NAME][
-					eventName as keyof SlotEventStatus
-				]
-			) {
-				const trackLabel = `${TRACKED_SLOT_NAME}-${eventName}`;
-				this.mark(trackLabel);
-				this.trackInGA(eventName, trackLabel);
-				this.triggers[TRACKED_SLOT_NAME][
-					eventName as keyof SlotEventStatus
-				] = true;
-			}
-		}
-	}
-
-	private mark(name: string): void {
-		const longName = `gu.commercial.${name}`;
 		if (
-			typeof window.performance !== 'undefined' &&
-			'mark' in window.performance &&
-			typeof window.performance.mark === 'function'
-		) {
-			const mark = window.performance.mark(longName);
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- browser support is patchy
-			if (typeof mark?.startTime === 'number') {
-				this._events.push(new Event(name, mark));
-			}
+			typeof mark?.startTime === 'number' &&
+			// we only want to save the marks that are related to certain slots or the page
+			shouldSave(name)
+		) {
+			this._marks.set(name, mark);
+		}
+
+		if (name.endsWith('End')) {
+			this.measure(name);
 		}
 	}
 
-	private trackInGA(eventName: string, label = ''): void {
-		const gaEvent = this.gaConfig.logEvents.find(
-			(e) => e.timingVariable === eventName,
-		);
-		if (gaEvent) {
-			const labelToUse = gaEvent.timingLabel ?? label;
-			trackEvent('Commercial Events', gaEvent.timingVariable, labelToUse);
+	/**
+	 * Creates a performance measure given the name of the end marks.
+	 * The start mark is inferred from the end mark.
+	 *
+	 * @param endMark - The name of the mark that ends the measure
+	 **/
+	private measure(endMark: string): void {
+		const startMark = endMark.replace('End', 'Start');
+		const measureName = endMark.replace('End', '');
+		const startMarkExists =
+			window.performance.getEntriesByName(startMark).length > 0;
+		if (startMarkExists) {
+			try {
+				const measure = window.performance.measure(
+					measureName,
+					startMark,
+					endMark,
+				);
+
+				// we only want to save the measures that are related to certain slots or the page
+				if (shouldSave(measureName)) {
+					this._measures.set(measureName, measure);
+				}
+			} catch (e) {
+				log('commercial', `error measuring ${measureName}`, e);
+			}
 		}
 	}
 }
 
-export { EventTimer };
+const _ = {
+	slotMarks,
+	slotMeasures,
+	trackedSlots,
+};
+
+export { EventTimer, _ };

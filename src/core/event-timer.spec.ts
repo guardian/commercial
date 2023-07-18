@@ -1,9 +1,4 @@
-import { EventTimer } from './event-timer';
-import { trackEvent } from './google-analytics';
-
-jest.mock('./google-analytics', () => ({
-	trackEvent: jest.fn(),
-}));
+import { _, EventTimer } from './event-timer';
 
 const mockGetEntriesByName = (names: string[]) =>
 	jest.fn((name: string) =>
@@ -19,25 +14,43 @@ const mockGetEntriesByName = (names: string[]) =>
 			: [],
 	);
 
-const mockMark = jest.fn(
-	(name: string): PerformanceMark => ({
+const mockEntries: Array<PerformanceMark | PerformanceMeasure> = [];
+
+const mockMark = jest.fn((name: string): PerformanceMark => {
+	const mark = {
 		name,
 		duration: 1,
 		entryType: 'mark',
 		startTime: 1,
 		detail: {},
 		toJSON: () => '',
-	}),
-);
+	};
+	mockEntries.push(mark);
+	return mark;
+});
+const mockMeasure = jest.fn((name: string): PerformanceMeasure => {
+	const measure = {
+		name,
+		duration: 1,
+		entryType: 'measure',
+		startTime: 1,
+		detail: {},
+		toJSON: () => '',
+	};
+	mockEntries.push(measure);
+	return measure;
+});
 
 const performance = {
 	now: jest.fn(),
 	mark: mockMark,
-	getEntriesByName: jest.fn().mockReturnValue([]),
+	measure: mockMeasure,
+	getEntriesByName: jest.fn((name: string) => [
+		mockEntries.filter((e) => e.name === name),
+	]),
 };
 
-const MARK_NAME = 'mark_name';
-const MARK_LONG_NAME = `gu.commercial.${MARK_NAME}`;
+const MARK_NAME = 'commercialStart';
 const CMP_INIT = 'cmp-init';
 const CMP_GOT_CONSENT = 'cmp-got-consent';
 
@@ -92,8 +105,8 @@ describe('EventTimer', () => {
 			writable: true,
 		});
 		const eventTimer = EventTimer.get();
-		expect(eventTimer.events).toHaveLength(2);
-		expect(eventTimer.events.map((event) => event.name).sort()).toEqual(
+		expect(eventTimer.marks).toHaveLength(2);
+		expect(eventTimer.marks.map(({ name }) => name).sort()).toEqual(
 			[CMP_GOT_CONSENT, CMP_INIT].sort(),
 		);
 	});
@@ -103,7 +116,7 @@ describe('EventTimer', () => {
 			now: jest.fn(),
 			mark: mockMark,
 			getEntriesByName: mockGetEntriesByName([
-				MARK_LONG_NAME,
+				MARK_NAME,
 				CMP_INIT,
 				CMP_GOT_CONSENT,
 			]),
@@ -115,19 +128,20 @@ describe('EventTimer', () => {
 			writable: true,
 		});
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger(MARK_NAME);
-		expect(eventTimer.events).toHaveLength(3);
-		expect(eventTimer.events.map((event) => event.name).sort()).toEqual(
-			[CMP_INIT, CMP_GOT_CONSENT, MARK_NAME].sort(),
-		);
+		eventTimer.mark(MARK_NAME);
+		expect(eventTimer.marks).toHaveLength(3);
+		expect(eventTimer.marks.map(({ name }) => name)).toEqual([
+			MARK_NAME,
+			CMP_INIT,
+			CMP_GOT_CONSENT,
+		]);
 	});
 
 	it('mark produces correct event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger(MARK_NAME);
-		expect(eventTimer.events).toHaveLength(1);
-		expect(eventTimer.events[0]?.name).toBe('mark_name');
-		expect(eventTimer.events[0]?.ts).toBe(1);
+		eventTimer.mark(MARK_NAME);
+		expect(eventTimer.marks[0]?.ts).toBeDefined();
+		expect(eventTimer.marks[0]?.ts).toBe(1);
 	});
 
 	it('calling trigger with performance undefined produces no events', () => {
@@ -138,8 +152,8 @@ describe('EventTimer', () => {
 			writable: true,
 		});
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger(MARK_NAME);
-		expect(eventTimer.events).toEqual([]);
+		eventTimer.mark(MARK_NAME);
+		expect(eventTimer.marks.length).toBe(0);
 	});
 
 	it('when retrieved and mark is undefined produce no events', () => {
@@ -155,106 +169,164 @@ describe('EventTimer', () => {
 			writable: true,
 		});
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger(MARK_NAME);
-		expect(eventTimer.events).toEqual([]);
+		eventTimer.mark(MARK_NAME);
+		expect(eventTimer.marks.length).toBe(0);
 	});
 
-	it('trigger first slotReady event', () => {
+	it('trigger top-above-nav fetchAdStart event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('slotReady', 'inline1');
+		eventTimer.mark('fetchAdStart', 'top-above-nav');
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['gu.commercial.first-slotReady'],
-		]);
-
-		expect(trackEvent).toHaveBeenCalledWith(
-			'Commercial Events',
-			'slotReady',
-			'first-slotReady',
-		);
-	});
-
-	it('triggering two slotReady events causes one trigger and one track', () => {
-		const eventTimer = EventTimer.get();
-		eventTimer.trigger('slotReady', 'inline1');
-		eventTimer.trigger('slotReady', 'inline1');
-
-		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['gu.commercial.first-slotReady'],
-		]);
-
-		expect(trackEvent).toHaveBeenCalledTimes(1);
-
-		expect(trackEvent).toHaveBeenCalledWith(
-			'Commercial Events',
-			'slotReady',
-			'first-slotReady',
-		);
-	});
-
-	it('trigger top-above-nav slotReady event', () => {
-		const eventTimer = EventTimer.get();
-		eventTimer.trigger('slotReady', 'top-above-nav');
-		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['gu.commercial.first-slotReady'],
-			['gu.commercial.top-above-nav-slotReady'],
-		]);
-
-		expect((trackEvent as jest.Mock).mock.calls).toEqual([
-			['Commercial Events', 'slotReady', 'first-slotReady'],
-			['Commercial Events', 'slotReady', 'top-above-nav-slotReady'],
+			['top-above-nav_fetchAdStart'],
 		]);
 	});
 
-	it('trigger two top-above-nav slotReady events', () => {
+	it('trigger two top-above-nav adOnPage events', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('slotReady', 'top-above-nav');
-		eventTimer.trigger('slotReady', 'top-above-nav');
+		eventTimer.mark('adOnPage', 'top-above-nav');
+		eventTimer.mark('adOnPage', 'top-above-nav');
 
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['gu.commercial.first-slotReady'],
-			['gu.commercial.top-above-nav-slotReady'],
+			['top-above-nav_adOnPage'],
 		]);
-
-		expect(trackEvent).toHaveBeenCalledTimes(2);
-
-		expect((trackEvent as jest.Mock).mock.calls).toEqual([
-			['Commercial Events', 'slotReady', 'first-slotReady'],
-			['Commercial Events', 'slotReady', 'top-above-nav-slotReady'],
-		]);
-	});
-
-	it('not trigger a GA event if not in GA config', () => {
-		const eventTimer = EventTimer.get();
-		eventTimer.trigger('adOnPage', 'inline1');
-		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['gu.commercial.first-adOnPage'],
-		]);
-		expect(trackEvent).not.toHaveBeenCalled();
 	});
 
 	it('trigger commercial start page event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('commercialStart');
+		eventTimer.mark(MARK_NAME);
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['gu.commercial.commercialStart'],
+			[MARK_NAME],
 		]);
-		expect(trackEvent).toHaveBeenCalledWith(
-			'Commercial Events',
-			'commercialStart',
-			'Commercial start parse time',
-		);
 	});
 
 	it('trigger commercial end page event', () => {
 		const eventTimer = EventTimer.get();
-		eventTimer.trigger('commercialModulesLoaded');
+		eventTimer.mark('adOnPage', 'top-above-nav');
 		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
-			['gu.commercial.commercialModulesLoaded'],
+			['top-above-nav_adOnPage'],
 		]);
-		expect(trackEvent).toHaveBeenCalledWith(
-			'Commercial Events',
-			'commercialModulesLoaded',
-			'Commercial end parse time',
+	});
+
+	it('trigger measure for 2 marks', () => {
+		const eventTimer = EventTimer.get();
+		eventTimer.mark('adRenderStart', 'top-above-nav');
+		eventTimer.mark('adRenderEnd', 'top-above-nav');
+
+		expect((window.performance.mark as jest.Mock).mock.calls).toEqual([
+			['top-above-nav_adRenderStart'],
+			['top-above-nav_adRenderEnd'],
+		]);
+
+		expect((window.performance.measure as jest.Mock).mock.calls).toEqual([
+			[
+				'top-above-nav_adRender',
+				'top-above-nav_adRenderStart',
+				'top-above-nav_adRenderEnd',
+			],
+		]);
+	});
+
+	it("trigger measure marks don't appear in EventTimer.marks", () => {
+		const eventTimer = EventTimer.get();
+		eventTimer.mark('prepareSlotStart');
+		eventTimer.mark('prepareSlotEnd');
+
+		expect(eventTimer.marks.map(({ name }) => name)).not.toContain([
+			'prepareSlotStart',
+			'prepareSlotEnd',
+		]);
+	});
+
+	describe('only desired marks appear in events property', () => {
+		const passTestCases: Array<[string, string | undefined]> = [
+			['commercialStart', undefined],
+		];
+
+		for (const origin of _.trackedSlots) {
+			for (const mark of _.slotMarks) {
+				passTestCases.push([mark, origin]);
+			}
+		}
+
+		const failTestCases = [
+			['non-existent-mark', 'non-existent-origin'],
+			['commercialStart', 'non-existent-origin'],
+			['non-existent-mark', 'top-above-nav'],
+			['prepareSlotStart', 'top-above-nav'],
+			['adOnPage', 'inline3'],
+		];
+
+		it.each(passTestCases)(
+			'triggering %s on %s will appear in events',
+			(mark, origin) => {
+				const eventTimer = EventTimer.get();
+
+				eventTimer.mark(mark, origin);
+				expect(eventTimer.marks.map(({ name }) => name)).toContain(
+					origin ? `${origin}_${mark}` : mark,
+				);
+			},
+		);
+
+		it.each(failTestCases)(
+			'triggering %s on %s will not appear in events',
+			(mark, origin) => {
+				const eventTimer = EventTimer.get();
+
+				eventTimer.mark(mark, origin);
+				expect(eventTimer.marks.map(({ name }) => name)).not.toContain(
+					`${origin}_${mark}`,
+				);
+			},
+		);
+	});
+
+	describe('only desired measures appear in measures property', () => {
+		const passTestCases = [];
+
+		for (const origin of _.trackedSlots) {
+			for (const measure of _.slotMeasures) {
+				passTestCases.push([measure, origin]);
+			}
+		}
+
+		const failTestCases = [
+			['non-existent-measure', 'non-existent-slot'],
+			['non-existent-measure', 'top-above-nav'],
+			['adOnPage', 'non-existent-slot'],
+			['adOnPage', 'inline3'],
+			['defineSlot', 'right'],
+			['adOnPage', 'page'],
+		];
+
+		it.each(passTestCases)(
+			'triggering %s on %s will appear in events',
+			(mark, origin) => {
+				const eventTimer = EventTimer.get();
+
+				const testCase = `${origin}_${mark}`;
+
+				eventTimer.mark(`${testCase}Start`);
+				eventTimer.mark(`${testCase}End`);
+				expect(eventTimer.measures.map(({ name }) => name)).toContain(
+					testCase,
+				);
+			},
+		);
+
+		it.each(failTestCases)(
+			'triggering %s on %s will not appear in events',
+			(mark, origin) => {
+				const eventTimer = EventTimer.get();
+
+				const testCase = `${origin}_${mark}`;
+
+				eventTimer.mark(`${testCase}Start`);
+				eventTimer.mark(`${testCase}End`);
+				expect(
+					eventTimer.measures.map(({ name }) => name),
+				).not.toContain(testCase);
+			},
 		);
 	});
 

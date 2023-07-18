@@ -1,5 +1,6 @@
 import { breakpoints as sourceBreakpoints } from '@guardian/source-foundations';
 import { once } from 'lodash-es';
+import { EventTimer } from 'core';
 import type { SizeMapping, SlotName } from 'core/ad-sizes';
 import { toGoogleTagSize } from 'lib/utils/googletag-ad-size';
 import { getUrlVars } from 'lib/utils/url';
@@ -113,6 +114,8 @@ const defineSlot = (
 	slotTargeting: Record<string, string> = {},
 ): { slot: googletag.Slot; slotReady: Promise<void> } => {
 	const slotTarget = adSlotNode.getAttribute('data-name') as SlotName;
+	EventTimer.get().mark('defineSlotStart', slotTarget);
+
 	const id = adSlotNode.id;
 
 	const googletagSizeMapping = buildGoogletagSizeMapping(sizeMapping);
@@ -254,6 +257,11 @@ const defineSlot = (
 			});
 
 		slotReady = Promise.race([iasTimeout(), iasDataPromise]);
+
+		void slotReady.then(() => {
+			EventTimer.get().mark('defineSlotEnd', slotTarget);
+			EventTimer.get().mark('slotReady', slotTarget);
+		});
 	}
 
 	const isbn = window.guardian.config.page.isbn;
