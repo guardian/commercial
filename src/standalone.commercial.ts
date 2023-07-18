@@ -29,7 +29,6 @@ import { init as prepareGoogletag } from 'lib/dfp/prepare-googletag';
 import { initPermutive } from 'lib/dfp/prepare-permutive';
 import { init as preparePrebid } from 'lib/dfp/prepare-prebid';
 import { init as initRedplanet } from 'lib/dfp/redplanet';
-import { init as initFrontsBannerAdverts } from 'lib/fronts-banner-adverts';
 import { init as initHighMerch } from 'lib/high-merch';
 import { init as initIpsosMori } from 'lib/ipsos-mori';
 import { manageAdFreeCookieOnConsentChange } from 'lib/manage-ad-free-cookie-on-consent-change';
@@ -104,7 +103,6 @@ if (!commercialFeatures.adFree) {
 		['cm-articleAsideAdverts', initArticleAsideAdverts],
 		['cm-articleBodyAdverts', initArticleBodyAdverts],
 		['cm-liveblogAdverts', initLiveblogAdverts],
-		['cm-frontsBannerAdverts', initFrontsBannerAdverts],
 		['cm-thirdPartyTags', initThirdPartyTags],
 		['cm-redplanet', initRedplanet],
 		['cm-commentAdverts', initCommentAdverts],
