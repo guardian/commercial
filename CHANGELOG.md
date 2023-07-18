@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 10.6.0
+
+### Minor Changes
+
+- 66b65f0: Remove fronts banner test. Remove code to create banner ads on frontend
+- a51ae56: Refactor EventTimer incorporating new measurements (see PR)
+
 ## 10.5.0
 
 ### Minor Changes
