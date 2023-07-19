@@ -33,20 +33,19 @@ const shouldRenderCloseButton = (adSlotNode: HTMLElement): boolean =>
 	adSlotNode.classList.contains('ad-slot--mobile-sticky');
 
 const createAdCloseDiv = (): HTMLElement => {
-	const buttonDiv: HTMLElement = document.createElement('button');
-	buttonDiv.className = 'ad-slot__close-button';
-	buttonDiv.innerHTML = crossIcon;
-	buttonDiv.onclick = () => {
-		const container: HTMLElement | null = buttonDiv.closest(
+	const buttonEl: HTMLElement = document.createElement('button');
+	buttonEl.className = 'ad-slot__close-button';
+	buttonEl.innerHTML = crossIcon;
+	buttonEl.onclick = () => {
+		const container: HTMLElement | null = buttonEl.closest(
 			'.mobilesticky-container',
 		);
 		if (container) container.remove();
 	};
 
 	const closeDiv: HTMLElement = document.createElement('div');
-	closeDiv.style.cssText =
-		'position: relative;padding: 0;text-align: left;box-sizing: border-box;display: block;width: 0;height: 0';
-	closeDiv.appendChild(buttonDiv);
+	closeDiv.style.cssText = 'position: relative;padding: 0;height: 0';
+	closeDiv.appendChild(buttonEl);
 
 	return closeDiv;
 };
