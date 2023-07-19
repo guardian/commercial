@@ -4,7 +4,7 @@ import { AD_LABEL_HEIGHT } from 'core/constants/ad-label-height';
 import { createAdSlot } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
-import { addSlot } from '../dfp/add-slot';
+import { fillDynamicAdSlot } from '../dfp/fill-dynamic-advert-slot';
 import fastdom from '../fastdom-promise';
 import { requestBidsForAd } from '../header-bidding/request-bids';
 
@@ -32,7 +32,7 @@ const insertAd = (anchor: HTMLElement): Promise<void> => {
 			anchor.appendChild(adSlotContainer);
 		})
 		.then(async () => {
-			const advert = await addSlot(slot, false);
+			const advert = await fillDynamicAdSlot(slot, false);
 
 			if (advert && isInEagerPrebidVariant()) {
 				await requestBidsForAd(advert);

@@ -15,8 +15,8 @@ import type {
 	SpacefinderRules,
 	SpacefinderWriter,
 } from 'lib/spacefinder/spacefinder';
-import { addSlot } from '../dfp/add-slot';
 import type { Advert } from '../dfp/Advert';
+import { fillDynamicAdSlot } from '../dfp/fill-dynamic-advert-slot';
 import { waitForAdvert } from '../dfp/wait-for-advert';
 import fastdom from '../fastdom-promise';
 import { requestBidsForAds } from '../header-bidding/request-bids';
@@ -97,7 +97,11 @@ const insertAdAtPara = (
 		})
 		.then(async () => {
 			const shouldForceDisplay = ['im', 'carrot'].includes(name);
-			const advert = await addSlot(ad, shouldForceDisplay, sizes);
+			const advert = await fillDynamicAdSlot(
+				ad,
+				shouldForceDisplay,
+				sizes,
+			);
 			if (advert) {
 				insertedDynamicAds.push(advert);
 			}

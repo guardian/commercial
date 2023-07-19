@@ -1,5 +1,5 @@
 import { createAdSlot } from 'core/create-ad-slot';
-import { addSlot } from './dfp/add-slot';
+import { fillDynamicAdSlot } from './dfp/fill-dynamic-advert-slot';
 import fastdom from './fastdom-promise';
 import { shouldIncludeMobileSticky } from './header-bidding/utils';
 
@@ -48,7 +48,7 @@ export const init = (): Promise<void> => {
 							'#dfp-ad--mobile-sticky',
 						);
 					if (mobileStickyAdSlot) {
-						void addSlot(mobileStickyAdSlot, true);
+						void fillDynamicAdSlot(mobileStickyAdSlot, true);
 					}
 				}
 			});

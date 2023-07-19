@@ -6,7 +6,7 @@ import type {
 	SpacefinderRules,
 	SpacefinderWriter,
 } from 'lib/spacefinder/spacefinder';
-import { addSlot } from '../dfp/add-slot';
+import { fillDynamicAdSlot } from '../dfp/fill-dynamic-advert-slot';
 import fastdom from '../fastdom-promise';
 
 const bodySelector = '.article-body-commercial-selector';
@@ -89,7 +89,7 @@ const insertSlot: SpacefinderWriter = (paras) => {
 				candidates[0].parentNode.insertBefore(slot, candidates[0]);
 			}
 		})
-		.then(() => void addSlot(slot, true));
+		.then(() => void fillDynamicAdSlot(slot, true));
 };
 
 const getRules = (): SpacefinderRules => {

@@ -1,6 +1,6 @@
 import { isNonNullable } from '@guardian/libs';
-import { addSlot } from 'lib/dfp/add-slot';
 import type { Advert } from 'lib/dfp/Advert';
+import { fillDynamicAdSlot } from 'lib/dfp/fill-dynamic-advert-slot';
 import { isInVariantSynchronous } from 'lib/experiments/ab';
 import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
 import { liveblogRightColumnAds } from 'lib/experiments/tests/liveblog-right-column-ads';
@@ -42,7 +42,7 @@ const fillAdvertSlots = async (numAdsToInsert: number, fromIndex: number) => {
 	if (!adSlots.length) return;
 
 	adSlots.map(async (advert) => {
-		await addSlot(advert, false).then((advert) => {
+		await fillDynamicAdSlot(advert, false).then((advert) => {
 			if (advert) {
 				insertedAdverts.push(advert);
 			}
