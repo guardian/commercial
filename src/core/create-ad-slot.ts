@@ -78,7 +78,7 @@ type DataAttributes = Record<string, string>;
   Insert that element as siblings at the place you want adverts to appear.
 
   Note that for the DFP slot to be filled by GTP, you'll have to
-  use addSlot from add-slot.js
+  use addSlot from fill-dynamic-advert-slot.ts
 */
 const createAdSlotElement = (
 	name: string,

@@ -37,6 +37,7 @@ const fillDynamicAdSlot = (
 					},
 					false,
 				);
+
 				return;
 			}
 

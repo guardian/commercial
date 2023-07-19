@@ -40,8 +40,8 @@ jest.mock('lib/header-bidding/prebid/prebid', () => ({
 
 jest.mock('lib/config', () => ({ page: {}, get: () => false }));
 
-jest.mock('lib/dfp/add-slot', () => ({
-	addSlot: jest.fn(),
+jest.mock('lib/dfp/fill-dynamic-advert-slot', () => ({
+	fillDynamicAdSlot: jest.fn(),
 }));
 
 jest.mock('lib/dfp/load-advert', () => ({

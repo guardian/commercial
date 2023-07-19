@@ -33,7 +33,7 @@ jest.mock('lib/commercial-features', () => ({
 	},
 }));
 
-jest.mock('lib/dfp/add-slot');
+jest.mock('lib/dfp/fill-dynamic-advert-slot');
 
 const spaceFillerStub = spaceFiller.fillSpace as jest.MockedFunction<
 	typeof spaceFiller.fillSpace
