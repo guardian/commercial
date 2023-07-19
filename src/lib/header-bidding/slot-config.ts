@@ -126,15 +126,7 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 				: [adSizes.halfPage, adSizes.mpu],
 		},
 		'liveblog-right': {
-			desktop: hasShowcaseMainElement
-				? [adSizes.mpu]
-				: [adSizes.halfPage, adSizes.mpu],
-			tablet: hasShowcaseMainElement
-				? [adSizes.mpu]
-				: [adSizes.halfPage, adSizes.mpu],
-			mobile: hasShowcaseMainElement
-				? [adSizes.mpu]
-				: [adSizes.halfPage, adSizes.mpu],
+			desktop: [adSizes.halfPage, adSizes.mpu],
 		},
 		'top-above-nav': {
 			desktop: [adSizes.billboard, adSizes.leaderboard],
