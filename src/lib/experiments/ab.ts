@@ -39,13 +39,14 @@ export const isInVariantSynchronous = (
 	variantId: string,
 ): boolean =>
 	getSynchronousTestsToRun().some(
-		(t) => t.id === test.id && t.variantToRun.id === variantId,
+		({ id, variantToRun }) =>
+			id === test.id && variantToRun.id === variantId,
 	);
 
 // This excludes epic & banner tests
 // checks if the user in in a given test with any variant
 export const isInABTestSynchronous = (test: ABTest): boolean =>
-	getSynchronousTestsToRun().some((t) => t.id === test.id);
+	getSynchronousTestsToRun().some(({ id }) => id === test.id);
 
 export const runAndTrackAbTests = (): Promise<void> => {
 	const testsToRun = getSynchronousTestsToRun();

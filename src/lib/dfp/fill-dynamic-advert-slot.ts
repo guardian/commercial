@@ -1,3 +1,4 @@
+import { log } from '@guardian/libs';
 import type { SizeMapping } from 'core/ad-sizes';
 import { reportError } from 'lib/utils/report-error';
 import type { Advert } from './Advert';
@@ -8,7 +9,6 @@ import { loadAdvert } from './load-advert';
 import { queueAdvert } from './queue-advert';
 
 const displayAd = (advert: Advert, forceDisplay: boolean) => {
-	dfpEnv.advertIds[advert.id] = dfpEnv.adverts.push(advert) - 1;
 	if (dfpEnv.shouldLazyLoad() && !forceDisplay) {
 		queueAdvert(advert);
 		enableLazyLoad(advert);
@@ -17,7 +17,7 @@ const displayAd = (advert: Advert, forceDisplay: boolean) => {
 	}
 };
 
-const addSlot = (
+const fillDynamicAdSlot = (
 	adSlot: HTMLElement,
 	forceDisplay: boolean,
 	additionalSizes?: SizeMapping,
@@ -25,18 +25,10 @@ const addSlot = (
 ): Promise<Advert | null> => {
 	return new Promise((resolve) => {
 		window.googletag.cmd.push(() => {
-			if (!(adSlot.id in dfpEnv.advertIds)) {
-				const advert = createAdvert(
-					adSlot,
-					additionalSizes,
-					slotTargeting,
-				);
-				if (advert === null) return;
-				// dynamically add ad slot
-				displayAd(advert, forceDisplay);
-				resolve(advert);
-			} else {
+			// Don't recreate an advert if one has already been created for this slot
+			if (adSlot.id in dfpEnv.advertIds) {
 				const errorMessage = `Attempting to add slot with exisiting id ${adSlot.id}`;
+				log('commercial', errorMessage);
 				reportError(
 					Error(errorMessage),
 					{
@@ -45,10 +37,19 @@ const addSlot = (
 					},
 					false,
 				);
-				console.error(errorMessage);
+
+				return;
 			}
+
+			const advert = createAdvert(adSlot, additionalSizes, slotTargeting);
+			if (advert === null) return;
+
+			dfpEnv.advertIds[advert.id] = dfpEnv.adverts.push(advert) - 1;
+			displayAd(advert, forceDisplay);
+
+			resolve(advert);
 		});
 	});
 };
 
-export { addSlot };
+export { fillDynamicAdSlot };

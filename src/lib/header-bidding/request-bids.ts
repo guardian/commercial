@@ -4,11 +4,11 @@ import { a9 } from './a9/a9';
 import { prebid } from './prebid/prebid';
 import type { HeaderBiddingSlot } from './prebid-types';
 
-// Force the refreshed advert to be the same size as the first
-const retainTopAboveNavSlotSize = (
+const retainAdSizeOnRefresh = (
 	advertSize: Advert['size'],
 	hbSlot: HeaderBiddingSlot,
 ): HeaderBiddingSlot[] => {
+	// Only top-above-nav and fronts-banner ads are applicable for their ad size not changing
 	if (
 		hbSlot.key !== 'top-above-nav' &&
 		!hbSlot.key.startsWith('fronts-banner')
@@ -27,6 +27,7 @@ const retainTopAboveNavSlotSize = (
 		return [];
 	}
 
+	// Force the refreshed advert to be the same size as the first
 	return [
 		{
 			...hbSlot,
@@ -36,9 +37,9 @@ const retainTopAboveNavSlotSize = (
 };
 
 /**
- * This is used to request bids for multiple adverts, it's possible for adverts to be passed in that have already had bids requested, this can happen if they're already in the viewport, it will only request bids for adverts that haven't already had bids requested.
- *
- * @param adverts  The adverts to request bids for
+ * This is used to request bids for multiple adverts, it's possible for adverts to be
+ * passed in that have already had bids requested, this can happen if they're already in
+ * the viewport, it will only request bids for adverts that haven't already had bids requested.
  */
 export const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
 	const adsToRequestBidsFor = adverts.filter(
@@ -58,9 +59,9 @@ export const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
 };
 
 /**
- * This is used to request bids for a single advert. This should only be called if an ad is already in the viewport and load-advert is invoked immediately, before space-finder is finished and prebid is called for all dynamic slots.
- *
- * @param advert  The advert to request bids for
+ * This is used to request bids for a single advert. This should only be called if
+ * an ad is already in the viewport and load-advert is invoked immediately, before
+ * space-finder is finished and prebid is called for all dynamic slots.
  */
 export const requestBidsForAd = async (advert: Advert): Promise<void> => {
 	advert.headerBiddingBidRequest = requestBidsForAds([advert]);
@@ -68,18 +69,18 @@ export const requestBidsForAd = async (advert: Advert): Promise<void> => {
 };
 
 /**
- * This is used to refresh bids for a single advert. retainTopAboveNavSlotSize is used to force the refreshed advert to be the same size as the first
- * @param advert  The advert to refresh bids for
- **/
+ * This is used to refresh bids for a single advert. retainTopAboveNavSlotSize is
+ * used to force the refreshed advert to be the same size as the first
+ */
 export const refreshBidsForAd = async (advert: Advert): Promise<void> => {
 	const prebidPromise = prebid.requestBids(
 		[advert],
 		(prebidSlot: HeaderBiddingSlot) =>
-			retainTopAboveNavSlotSize(advert.size, prebidSlot),
+			retainAdSizeOnRefresh(advert.size, prebidSlot),
 	);
 
 	const a9Promise = a9.requestBids([advert], (a9Slot: HeaderBiddingSlot) =>
-		retainTopAboveNavSlotSize(advert.size, a9Slot),
+		retainAdSizeOnRefresh(advert.size, a9Slot),
 	);
 
 	await Promise.all([prebidPromise, a9Promise]);

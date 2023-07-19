@@ -3,8 +3,8 @@ import { adSizes } from 'core/ad-sizes';
 import { createAdSlot } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
-import { addSlot } from 'lib/dfp/add-slot';
 import type { Advert } from 'lib/dfp/Advert';
+import { fillDynamicAdSlot } from 'lib/dfp/fill-dynamic-advert-slot';
 import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
 import fastdom from 'lib/fastdom-promise';
 import { requestBidsForAds } from 'lib/header-bidding/request-bids';
@@ -110,7 +110,7 @@ const insertAdAtPara = (para: Node): Promise<void> => {
 			}
 		})
 		.then(async () => {
-			const advert = await addSlot(ad, false, {
+			const advert = await fillDynamicAdSlot(ad, false, {
 				phablet: [
 					adSizes.outstreamDesktop,
 					adSizes.outstreamGoogleDesktop,

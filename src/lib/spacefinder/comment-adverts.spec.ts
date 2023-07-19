@@ -3,8 +3,8 @@ import { adSizes } from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
 import { isUserLoggedIn as isUserLoggedIn_ } from 'lib/identity/api';
-import { addSlot } from '../dfp/add-slot';
 import type { Advert } from '../dfp/Advert';
+import { fillDynamicAdSlot } from '../dfp/fill-dynamic-advert-slot';
 import { getAdvertById as getAdvertById_ } from '../dfp/get-advert-by-id';
 import { refreshAdvert as refreshAdvert_ } from '../dfp/load-advert';
 import fastdom from '../fastdom-promise';
@@ -40,8 +40,8 @@ jest.mock('lib/header-bidding/prebid/prebid', () => ({
 
 jest.mock('lib/config', () => ({ page: {}, get: () => false }));
 
-jest.mock('lib/dfp/add-slot', () => ({
-	addSlot: jest.fn(),
+jest.mock('lib/dfp/fill-dynamic-advert-slot', () => ({
+	fillDynamicAdSlot: jest.fn(),
 }));
 
 jest.mock('lib/dfp/load-advert', () => ({
@@ -272,7 +272,7 @@ describe('initCommentAdverts', () => {
 			fakeMediator.emit('modules:comments:renderComments:rendered');
 			fakeMediator.once('page:commercial:comments', () => {
 				const adSlot = getElement('.js-ad-slot');
-				expect(addSlot).toHaveBeenCalledWith(adSlot, false, {
+				expect(fillDynamicAdSlot).toHaveBeenCalledWith(adSlot, false, {
 					desktop: [adSizes.halfPage, adSizes.skyscraper],
 				});
 				done();
@@ -287,7 +287,7 @@ describe('initCommentAdverts', () => {
 			fakeMediator.emit('modules:comments:renderComments:rendered');
 			fakeMediator.once('page:commercial:comments', () => {
 				const adSlot = getElement('.js-ad-slot');
-				expect(addSlot).toHaveBeenCalledWith(adSlot, false, {
+				expect(fillDynamicAdSlot).toHaveBeenCalledWith(adSlot, false, {
 					desktop: [adSizes.halfPage, adSizes.skyscraper],
 				});
 				done();
@@ -302,7 +302,11 @@ describe('initCommentAdverts', () => {
 			fakeMediator.emit('modules:comments:renderComments:rendered');
 			fakeMediator.once('page:commercial:comments', () => {
 				const adSlot = getElement('.js-ad-slot');
-				expect(addSlot).toHaveBeenCalledWith(adSlot, false, {});
+				expect(fillDynamicAdSlot).toHaveBeenCalledWith(
+					adSlot,
+					false,
+					{},
+				);
 				done();
 			});
 		});
