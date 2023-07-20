@@ -16,8 +16,6 @@ type SlotName =
 	| 'epic'
 	| 'exclusion'
 	| 'fronts-banner'
-	| 'high-merch-lucky'
-	| 'high-merch-paid'
 	| 'high-merch'
 	| 'im'
 	| 'inline'
@@ -46,11 +44,6 @@ const adSlotConfigs: AdSlotConfigs = {
 		label: false,
 		refresh: false,
 		name: 'merchandising-high-lucky',
-	},
-	'high-merch-paid': {
-		label: false,
-		refresh: false,
-		name: 'merchandising-high',
 	},
 	carrot: {
 		label: false,
