@@ -34,7 +34,6 @@ const adSlotConfigs: AdSlotConfigs = {
 		refresh: false,
 	},
 	'high-merch': {
-		label: false,
 		refresh: false,
 		name: 'merchandising-high',
 	},
