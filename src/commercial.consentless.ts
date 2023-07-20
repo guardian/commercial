@@ -21,7 +21,7 @@ const bootConsentless = async (
 		initLiveblogInline(),
 	];
 
-	//this is added so that we can use force ad free in consentless mode
+	//this is added so that we can load the subscriber cookie for DCR pages and correctly hide ads
 
 	if (isDotcomRendering) {
 		const userFeatures = await import(
