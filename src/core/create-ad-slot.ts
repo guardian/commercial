@@ -13,7 +13,6 @@ type SlotName =
 	| 'carrot'
 	| 'comments-expanded'
 	| 'comments'
-	| 'epic'
 	| 'exclusion'
 	| 'fronts-banner'
 	| 'high-merch'
@@ -44,11 +43,6 @@ const adSlotConfigs: AdSlotConfigs = {
 		label: false,
 		refresh: false,
 		name: 'carrot',
-	},
-	epic: {
-		label: false,
-		refresh: false,
-		name: 'epic',
 	},
 	'mobile-sticky': {
 		label: true,
