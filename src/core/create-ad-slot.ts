@@ -40,11 +40,6 @@ const adSlotConfigs: AdSlotConfigs = {
 		refresh: false,
 		name: 'merchandising-high',
 	},
-	'high-merch-lucky': {
-		label: false,
-		refresh: false,
-		name: 'merchandising-high-lucky',
-	},
 	carrot: {
 		label: false,
 		refresh: false,
