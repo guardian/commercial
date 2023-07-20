@@ -19,7 +19,6 @@ type SlotName =
 	| 'im'
 	| 'inline'
 	| 'mobile-sticky'
-	| 'mostpop'
 	| 'top-above-nav';
 
 type AdSlotConfigs = Partial<Record<SlotName, AdSlotConfig>>;
