@@ -15,7 +15,7 @@ type SlotName =
 	| 'comments'
 	| 'exclusion'
 	| 'fronts-banner'
-	| 'high-merch'
+	| 'merchandising-high'
 	| 'im'
 	| 'inline'
 	| 'mobile-sticky'
@@ -33,9 +33,8 @@ const adSlotConfigs: AdSlotConfigs = {
 		label: false,
 		refresh: false,
 	},
-	'high-merch': {
+	'merchandising-high': {
 		refresh: false,
-		name: 'merchandising-high',
 	},
 	carrot: {
 		label: false,

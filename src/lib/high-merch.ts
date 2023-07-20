@@ -15,7 +15,7 @@ export const init = (): Promise<void> => {
 		const container = document.createElement('div');
 
 		container.className = 'fc-container fc-container--commercial';
-		const slot = createAdSlot('high-merch');
+		const slot = createAdSlot('merchandising-high');
 
 		container.appendChild(slot);
 
