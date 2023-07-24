@@ -46,7 +46,7 @@ const setupRedplanet = () =>
 				);
 			}
 
-			if (getConsentFor('redplanet', state)) {
+			if (!getConsentFor('redplanet', state)) {
 				return Promise.reject('No consent for redplanet');
 			}
 		})
