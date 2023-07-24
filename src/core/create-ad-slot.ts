@@ -15,7 +15,7 @@ type SlotName =
 	| 'comments'
 	| 'exclusion'
 	| 'fronts-banner'
-	| 'high-merch'
+	| 'merchandising-high'
 	| 'im'
 	| 'inline'
 	| 'liveblog-right'
@@ -34,10 +34,8 @@ const adSlotConfigs: AdSlotConfigs = {
 		label: false,
 		refresh: false,
 	},
-	'high-merch': {
-		label: false,
+	'merchandising-high': {
 		refresh: false,
-		name: 'merchandising-high',
 	},
 	carrot: {
 		label: false,
@@ -130,6 +128,24 @@ const concatSizeMappings = (
 		{ ...defaultSizeMappings },
 	);
 
+type ContainerOptions = {
+	className?: string;
+};
+
+const adSlotContainerClass = 'ad-slot-container';
+
+const wrapSlotInContainer = (
+	adSlot: HTMLElement,
+	options: ContainerOptions = {},
+) => {
+	const container = document.createElement('div');
+
+	container.className = `${adSlotContainerClass} ${options.className ?? ''}`;
+
+	container.appendChild(adSlot);
+	return container;
+};
+
 const createAdSlot = (
 	name: SlotName,
 	options: CreateSlotOptions = {},
@@ -153,4 +169,10 @@ const createAdSlot = (
 	);
 };
 
-export { createAdSlot, concatSizeMappings };
+export {
+	adSlotContainerClass,
+	concatSizeMappings,
+	createAdSlot,
+	wrapSlotInContainer,
+};
+export type { ContainerOptions };
