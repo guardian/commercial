@@ -46,7 +46,7 @@ const setupRedplanet = () =>
 				);
 			}
 
-			if (!state.aus.personalisedAdvertising) {
+			if (getConsentFor('redplanet', state)) {
 				return Promise.reject('No consent for redplanet');
 			}
 		})
