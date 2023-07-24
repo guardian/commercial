@@ -1,5 +1,6 @@
 import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import { buildAppNexusTargetingObject } from 'lib/build-page-targeting';
+import { includeBillboardsInMerchHigh } from 'lib/dfp/merchandising-high-test';
 import { isInAuOrNz } from 'lib/utils/geo-utils';
 import type { HeaderBiddingSize } from '../prebid-types';
 import {
@@ -46,7 +47,7 @@ const getAppNexusDirectPlacementId = (
 	const defaultPlacementId = '9251752';
 	switch (getBreakpointKey()) {
 		case 'D':
-			if (isInFrontsBannerVariant) {
+			if (isInFrontsBannerVariant || includeBillboardsInMerchHigh()) {
 				// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
 				// This check is to distinguish from the top-above-nav which includes a leaderboard
 				if (containsBillboardNotLeaderboard(sizes)) {

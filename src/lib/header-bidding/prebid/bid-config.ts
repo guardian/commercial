@@ -4,6 +4,7 @@ import {
 	buildAppNexusTargeting,
 	buildAppNexusTargetingObject,
 } from 'lib/build-page-targeting';
+import { includeBillboardsInMerchHigh } from 'lib/dfp/merchandising-high-test';
 import { isInAuOrNz, isInUk, isInUsa, isInUsOrCa } from 'lib/utils/geo-utils';
 import { pbTestNameMap } from 'lib/utils/url';
 import type { PrebidIndexSite } from 'types/global';
@@ -278,7 +279,7 @@ const pubmaticBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 		}),
 	};
 
-	if (isInFrontsBannerVariant) {
+	if (isInFrontsBannerVariant || includeBillboardsInMerchHigh()) {
 		// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
 		// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
 		if (containsBillboardNotLeaderboard(slotSizes)) {
@@ -378,7 +379,7 @@ const criteoBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 		switchName: 'prebidCriteo',
 	};
 
-	if (isInFrontsBannerVariant) {
+	if (isInFrontsBannerVariant || includeBillboardsInMerchHigh()) {
 		// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
 		// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
 		if (containsBillboardNotLeaderboard(slotSizes)) {
@@ -415,7 +416,7 @@ const indexExchangeBidders = (
 	isInFrontsBannerVariant: boolean,
 ): PrebidBidder[] => {
 	let indexSiteId = getIndexSiteId();
-	if (isInFrontsBannerVariant) {
+	if (isInFrontsBannerVariant || includeBillboardsInMerchHigh()) {
 		// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
 		// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
 		if (containsBillboardNotLeaderboard(slotSizes)) {
