@@ -16,8 +16,8 @@ jest.mock('lib/header-bidding/prebid/prebid', () => ({
 jest.mock('lib/dfp/wait-for-advert', () => (id: keyof typeof ads) => {
 	return Promise.resolve(ads[id]);
 });
-jest.mock('lib/dfp/add-slot', () => ({
-	addSlot: jest.fn(),
+jest.mock('lib/dfp/fill-dynamic-advert-slot', () => ({
+	fillDynamicAdSlot: jest.fn(),
 }));
 jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},

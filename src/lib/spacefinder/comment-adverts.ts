@@ -2,8 +2,8 @@ import { adSizes } from 'core/ad-sizes';
 import { createAdSlot } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
-import { addSlot } from 'lib/dfp/add-slot';
 import type { Advert } from 'lib/dfp/Advert';
+import { fillDynamicAdSlot } from 'lib/dfp/fill-dynamic-advert-slot';
 import { getAdvertById } from 'lib/dfp/get-advert-by-id';
 import { refreshAdvert } from 'lib/dfp/load-advert';
 import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
@@ -39,7 +39,7 @@ const insertCommentAd = (
 			return commentSlot;
 		})
 		.then(async (adSlot) => {
-			const advert = await addSlot(
+			const advert = await fillDynamicAdSlot(
 				adSlot,
 				false,
 				canBeDmpu
