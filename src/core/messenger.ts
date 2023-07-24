@@ -333,13 +333,13 @@ const respond: RespondCallback = (
  */
 const onMessage = async (event: MessageEvent): Promise<void> => {
 	const message = eventToStandardMessage(event);
+	console.log('event: ', event);
 
 	if (!message) {
 		return;
 	}
 
 	const listener = LISTENERS[message.type];
-	console.log('event: ', event);
 
 	if (Array.isArray(listener) && listener.length) {
 		// Because any listener can have side-effects (by unregistering itself),

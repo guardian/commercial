@@ -21,6 +21,7 @@ import { init as initGetPageTargeting } from '../messenger/get-page-targeting';
 import { init as initGetPageUrl } from '../messenger/get-page-url';
 import { init as getStyles } from '../messenger/get-stylesheet';
 import { init as passback } from '../messenger/passback';
+import { init as refresh } from '../messenger/refresh';
 import { init as resize } from '../messenger/resize';
 import { init as scroll } from '../messenger/scroll';
 import { init as type } from '../messenger/type';
@@ -39,6 +40,7 @@ initMessenger(
 		initGetPageTargeting,
 		initGetPageUrl,
 		initMeasureAdLoad,
+		refresh,
 		resize,
 		sendClick,
 		background,
