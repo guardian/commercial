@@ -72,6 +72,7 @@ describe('tcfv2 consent', () => {
 			.should('contain', 'Support the Guardian');
 	});
 
+	//skipped because the privacy settings button often doesn't load - will be fixed in a future PR
 	it.skip(`Test ${path} shows ad slots when reconsented`, () => {
 		cy.visit(path);
 
@@ -92,6 +93,7 @@ describe('tcfv2 consent', () => {
 		adsShouldShow();
 	});
 
+	//skipped because of the opt-out $sf.host.Config error
 	it.skip(`Test ${path} reject all, login as subscriber, log out should show ads`, () => {
 		let { path } = articles[4];
 
@@ -122,6 +124,7 @@ describe('tcfv2 consent', () => {
 		adsShouldNotShow();
 	});
 
+	//skipped because of the opt-out $sf.host.Config error
 	it.skip(`Test ${path} reject all, login as non-subscriber should show ads, log out should show ads`, () => {
 		let { path } = articles[4];
 
@@ -138,6 +141,7 @@ describe('tcfv2 consent', () => {
 		adsShouldShow();
 	});
 
+	//skipped because of the opt-out $sf.host.Config error
 	it.skip(`Test ${path} reject all, login as non-subscriber, reconsent should show ads`, () => {
 		cy.visit(path);
 
@@ -186,6 +190,7 @@ describe('tcfv2 consent', () => {
 		adsShouldShow();
 	});
 
+	//skipped because of the opt-out $sf.host.Config error
 	it.skip(`Test ${path} reject all, login as subscriber, subscription expires, should show ads`, () => {
 		let { path } = articles[4];
 
