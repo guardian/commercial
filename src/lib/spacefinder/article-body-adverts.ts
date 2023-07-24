@@ -1,6 +1,11 @@
 import type { AdSize, SizeMapping } from 'core/ad-sizes';
 import { adSizes } from 'core/ad-sizes';
-import { createAdSlot } from 'core/create-ad-slot';
+import type { ContainerOptions } from 'core/create-ad-slot';
+import {
+	adSlotContainerClass,
+	createAdSlot,
+	wrapSlotInContainer,
+} from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
 import {
 	getCurrentBreakpoint,
@@ -26,11 +31,6 @@ import { computeStickyHeights, insertHeightStyles } from './sticky-inlines';
 
 type SlotName = Parameters<typeof createAdSlot>[0];
 
-type ContainerOptions = {
-	sticky?: boolean;
-	className?: string;
-};
-
 const articleBodySelector = '.article-body-commercial-selector';
 
 const isPaidContent = window.guardian.config.page.isPaidContent;
@@ -39,8 +39,6 @@ const hasImages = !!window.guardian.config.page.lightboxImages?.images.length;
 
 const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
-
-const adSlotContainerClass = 'ad-slot-container';
 
 const adSlotContainerRules: RuleSpacing = {
 	minAbove: 500,
@@ -61,18 +59,6 @@ let insertedDynamicAds: Advert[] = [];
  */
 const getStickyContainerClassname = (i: number) =>
 	`${adSlotContainerClass}-${i + 2}`;
-
-const wrapSlotInContainer = (
-	ad: HTMLElement,
-	options: ContainerOptions = {},
-) => {
-	const container = document.createElement('div');
-
-	container.className = `${adSlotContainerClass} ${options.className ?? ''}`;
-
-	container.appendChild(ad);
-	return container;
-};
 
 const insertAdAtPara = (
 	para: Node,

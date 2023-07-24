@@ -1,4 +1,4 @@
-import { createAdSlot } from 'core/create-ad-slot';
+import { createAdSlot, wrapSlotInContainer } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
 import fastdom from './fastdom-promise';
 
@@ -12,13 +12,10 @@ export const init = (): Promise<void> => {
 			? '#comments + *'
 			: '.content-footer > :first-child';
 		const anchor = document.querySelector(anchorSelector);
-		const container = document.createElement('div');
-
-		container.className = 'fc-container fc-container--commercial';
 		const slot = createAdSlot('merchandising-high');
-
-		container.appendChild(slot);
-
+		const container = wrapSlotInContainer(slot, {
+			className: 'fc-container fc-container--commercial',
+		});
 		return fastdom.mutate(() => {
 			if (anchor?.parentNode) {
 				anchor.parentNode.insertBefore(container, anchor);
