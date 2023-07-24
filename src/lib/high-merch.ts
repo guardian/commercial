@@ -15,11 +15,7 @@ export const init = (): Promise<void> => {
 		const container = document.createElement('div');
 
 		container.className = 'fc-container fc-container--commercial';
-		const slot = createAdSlot(
-			window.guardian.config.page.isPaidContent
-				? 'high-merch-paid'
-				: 'high-merch',
-		);
+		const slot = createAdSlot('high-merch');
 
 		container.appendChild(slot);
 

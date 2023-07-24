@@ -29,7 +29,6 @@ import { init as prepareGoogletag } from 'lib/dfp/prepare-googletag';
 import { initPermutive } from 'lib/dfp/prepare-permutive';
 import { init as preparePrebid } from 'lib/dfp/prepare-prebid';
 import { init as initRedplanet } from 'lib/dfp/redplanet';
-import { init as initFrontsBannerAdverts } from 'lib/fronts-banner-adverts';
 import { init as initHighMerch } from 'lib/high-merch';
 import { init as initIpsosMori } from 'lib/ipsos-mori';
 import { manageAdFreeCookieOnConsentChange } from 'lib/manage-ad-free-cookie-on-consent-change';
@@ -104,7 +103,6 @@ if (!commercialFeatures.adFree) {
 		['cm-articleAsideAdverts', initArticleAsideAdverts],
 		['cm-articleBodyAdverts', initArticleBodyAdverts],
 		['cm-liveblogAdverts', initLiveblogAdverts],
-		['cm-frontsBannerAdverts', initFrontsBannerAdverts],
 		['cm-thirdPartyTags', initThirdPartyTags],
 		['cm-redplanet', initRedplanet],
 		['cm-commentAdverts', initCommentAdverts],
@@ -151,13 +149,14 @@ const loadModules = (modules: Modules, eventName: string) => {
 	});
 
 	return Promise.allSettled(modulePromises).then(() => {
-		EventTimer.get().trigger(eventName);
+		EventTimer.get().mark(eventName);
 	});
 };
 
 const recordCommercialMetrics = () => {
 	const eventTimer = EventTimer.get();
-	eventTimer.trigger('commercialModulesLoaded');
+	eventTimer.mark('commercialBootEnd');
+	eventTimer.mark('commercialModulesLoaded');
 	// record the number of ad slots on the page
 	const adSlotsTotal = document.querySelectorAll(
 		`[id^="${adSlotIdPrefix}"]`,
@@ -200,7 +199,8 @@ const bootCommercial = async (): Promise<void> => {
 			[
 				'ga-user-timing-commercial-start',
 				function runTrackPerformance() {
-					EventTimer.get().trigger('commercialStart');
+					EventTimer.get().mark('commercialStart');
+					EventTimer.get().mark('commercialBootStart');
 				},
 			],
 		],
@@ -254,7 +254,9 @@ const chooseAdvertisingTag = async () => {
 		void import(
 			/* webpackChunkName: "consentless" */
 			'./commercial.consentless'
-		).then(({ bootConsentless }) => bootConsentless(consentState));
+		).then(({ bootConsentless }) =>
+			bootConsentless(consentState, isDotcomRendering),
+		);
 	} else {
 		bootCommercialWhenReady();
 	}

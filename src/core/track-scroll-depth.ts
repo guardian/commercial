@@ -24,7 +24,7 @@ const initTrackScrollDepth = () => {
 						entry.target.getAttribute('data-depth'),
 					);
 					log('commercial', `current scroll depth ${currentDepthVH}`);
-					eventTimer.trigger(`scroll-depth-vh-${currentDepthVH}`);
+					eventTimer.mark(`scroll-depth-vh-${currentDepthVH}`);
 					observer.unobserve(entry.target);
 				}
 			});

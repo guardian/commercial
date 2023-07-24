@@ -466,10 +466,7 @@ const bidsBackHandler = (
 
 		adUnits.forEach((adUnit) => {
 			if (isString(adUnit.code)) {
-				eventTimer.trigger(
-					'prebidEnd',
-					stripDfpAdPrefixFrom(adUnit.code),
-				);
+				eventTimer.mark('prebidEnd', stripDfpAdPrefixFrom(adUnit.code));
 			}
 		});
 	});
@@ -516,7 +513,7 @@ const requestBids = async (
 			new Promise<void>((resolve) => {
 				adUnits.forEach((adUnit) => {
 					if (isString(adUnit.code)) {
-						eventTimer.trigger(
+						eventTimer.mark(
 							'prebidStart',
 							stripDfpAdPrefixFrom(adUnit.code),
 						);
