@@ -16,6 +16,8 @@ export const init = (): Promise<void> => {
 		const container = wrapSlotInContainer(slot, {
 			className: 'fc-container fc-container--commercial',
 		});
+		container.style.display = 'flex';
+		container.style.justifyContent = 'center';
 		return fastdom.mutate(() => {
 			if (anchor?.parentNode) {
 				anchor.parentNode.insertBefore(container, anchor);
