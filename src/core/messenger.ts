@@ -16,7 +16,8 @@ type MessageType =
 	| 'set-ad-height'
 	| 'scroll'
 	| 'type'
-	| 'viewport';
+	| 'viewport'
+	| 'refresh';
 
 /**
  * A message that is sent from an iframe following a standard format
@@ -338,6 +339,7 @@ const onMessage = async (event: MessageEvent): Promise<void> => {
 	}
 
 	const listener = LISTENERS[message.type];
+	console.log('event: ', event);
 
 	if (Array.isArray(listener) && listener.length) {
 		// Because any listener can have side-effects (by unregistering itself),
@@ -362,6 +364,8 @@ const onMessage = async (event: MessageEvent): Promise<void> => {
 							ret,
 							getIframe(message, event.source),
 						);
+						console.log('thisRet: ', thisRet);
+						console.log('ret: ', ret);
 						return thisRet === undefined ? ret : thisRet;
 					}),
 				Promise.resolve(),
@@ -405,6 +409,7 @@ const onMessage = async (event: MessageEvent): Promise<void> => {
 	}
 };
 
+//here calls onMessage to process the message being mimicked by Preview.svele in Templates˘˘˘
 const on = (window: WindowProxy) => {
 	window.addEventListener('message', (event) => void onMessage(event));
 };
