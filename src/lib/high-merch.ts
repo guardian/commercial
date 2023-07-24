@@ -3,8 +3,9 @@ import { commercialFeatures } from 'lib/commercial-features';
 import fastdom from './fastdom-promise';
 
 /**
- * Initialise high merch ad slot
- * @returns Promise
+ * Initialise merchandising-high ad slot on Frontend rendered content
+ *
+ * On DCR, these ad slots are server side rendered
  */
 export const init = (): Promise<void> => {
 	if (commercialFeatures.highMerch) {
