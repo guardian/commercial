@@ -1,5 +1,16 @@
 # @guardian/commercial
 
+## 10.7.0
+
+### Minor Changes
+
+- a20730b: Fixes the mobile sticky close button
+- 454b924: Load user features for reject all readers on DCR
+
+### Patch Changes
+
+- cb6492e: Remove unused `createAdSlot` config
+
 ## 10.6.0
 
 ### Minor Changes
