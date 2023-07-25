@@ -167,6 +167,8 @@ describe('tcfv2 consent', () => {
 	});
 
 	it(`Test ${path} accept all, login as subscriber, subscription expires, should show ads`, () => {
+		let { path } = articles[0];
+
 		fakeLogin(true);
 
 		cy.visit(path);
@@ -177,13 +179,15 @@ describe('tcfv2 consent', () => {
 
 		cy.setCookie(
 			'gu_user_features_expiry',
-			String(new Date().getTime() - 1000),
+			String(new Date().getTime() - 10000),
 		);
 
 		// to intercept response
 		fakeLogin(false);
 
-		cy.reload();
+		({ path } = articles[1]);
+
+		cy.visit(path);
 
 		cy.reload();
 
