@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 10.8.0
+
+### Minor Changes
+
+- a56968d: Restore zero percent AB test for displaying billboard (970x250) adverts in merchandising-high ad slots
+- 9011ba5: add liveblog-right ad slot. Remove superfluous definitions from slotSizeMappings. Creates a script that will fill the new liveblog-right ad slots with ads
+
 ## 10.7.0
 
 ### Minor Changes
