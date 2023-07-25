@@ -120,8 +120,9 @@ const onSlotViewableFunction = (): ((
 		return setSlotAdRefresh;
 	}
 
-	// Nothing to do. Return an empty callback
-	return () => void 0;
+	return () => {
+		/* */
+	};
 };
 
 export { onSlotViewableFunction };

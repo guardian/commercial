@@ -30,7 +30,6 @@ import { fillAdvertSlots } from './fill-advert-slots';
 import { onSlotLoad } from './on-slot-load';
 import { onSlotRender } from './on-slot-render';
 import { onSlotViewableFunction } from './on-slot-viewable';
-import { refreshOnResize } from './refresh-on-resize';
 
 initMessenger(
 	[
@@ -130,7 +129,6 @@ export const init = (): Promise<void> => {
 					() => {
 						setPageTargeting(consentState);
 					},
-					refreshOnResize,
 					() => {
 						void fillAdvertSlots();
 					},
