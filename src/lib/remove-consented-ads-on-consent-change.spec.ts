@@ -3,12 +3,8 @@ import type {
 	Callback,
 	ConsentState,
 } from '@guardian/consent-management-platform/dist/types';
+import { removeConsentedAdsOnConsentChange } from './remove-consented-ads-on-consent-change';
 import { removeSlots } from './remove-slots';
-import { _ } from './remove-targeted-ads-on-consent-change';
-
-// we need to bypass the `once()` wrapper for testing
-const { _removeTargetedAdsOnConsentChange: removeTargetedAdsOnConsentChange } =
-	_;
 
 jest.mock('./experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn(() => false),
@@ -27,7 +23,7 @@ const mockOnConsentChange = (consentState: ConsentState) =>
 		cb(consentState),
 	);
 
-describe('manageAdFreeCookieOnConsentChange()', () => {
+describe('removeConsetedAdsOnConsentChange()', () => {
 	it('tcfv2 canTarget: false', () => {
 		const consentState: ConsentState = {
 			canTarget: false,
@@ -36,7 +32,7 @@ describe('manageAdFreeCookieOnConsentChange()', () => {
 
 		mockOnConsentChange(consentState);
 
-		removeTargetedAdsOnConsentChange();
+		void removeConsentedAdsOnConsentChange();
 
 		expect(removeSlots).toBeCalled();
 	});
