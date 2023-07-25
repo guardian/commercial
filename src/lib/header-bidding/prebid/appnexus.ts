@@ -48,7 +48,7 @@ const getAppNexusDirectPlacementId = (
 	switch (getBreakpointKey()) {
 		case 'D':
 			if (isInFrontsBannerVariant || includeBillboardsInMerchHigh()) {
-				// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
+				// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
 				// This check is to distinguish from the top-above-nav which includes a leaderboard
 				if (containsBillboardNotLeaderboard(sizes)) {
 					return '30017511';
