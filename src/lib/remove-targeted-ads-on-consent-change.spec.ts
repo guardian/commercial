@@ -6,7 +6,7 @@ import type {
 import { removeSlots } from './remove-slots';
 import { _ } from './remove-targeted-ads-on-consent-change';
 
-// we need too bypass the `once()` wrapper for testing
+// we need to bypass the `once()` wrapper for testing
 const { _removeTargetedAdsOnConsentChange: removeTargetedAdsOnConsentChange } =
 	_;
 
