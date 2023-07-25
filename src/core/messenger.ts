@@ -333,7 +333,6 @@ const respond: RespondCallback = (
  */
 const onMessage = async (event: MessageEvent): Promise<void> => {
 	const message = eventToStandardMessage(event);
-	console.log('event: ', event);
 
 	if (!message) {
 		return;
@@ -364,8 +363,6 @@ const onMessage = async (event: MessageEvent): Promise<void> => {
 							ret,
 							getIframe(message, event.source),
 						);
-						console.log('thisRet: ', thisRet);
-						console.log('ret: ', ret);
 						return thisRet === undefined ? ret : thisRet;
 					}),
 				Promise.resolve(),
