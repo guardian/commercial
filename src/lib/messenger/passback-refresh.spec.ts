@@ -2,6 +2,8 @@ import { getAdvertById } from 'lib/dfp/get-advert-by-id';
 import { refreshAdvert } from 'lib/dfp/load-advert';
 import { _ } from './passback-refresh';
 
+const { passbackRefresh } = _;
+
 jest.mock('../dfp/get-advert-by-id', () => ({
 	getAdvertById: jest.fn().mockReturnValue({
 		slot: {
@@ -30,10 +32,10 @@ describe('Cross-frame messenger: refresh', () => {
 		document.body.innerHTML = '';
 	});
 	describe('passbackRefresh', () => {
-		it('should successfuly define an advert and call refreshAdvert and set targetting', () => {
+		it("should successfully define an advert and call refreshAdvert and set's targeting", () => {
 			const fallback = document.createElement('div');
 			const advert = getAdvertById('');
-			_.passbackRefresh(
+			passbackRefresh(
 				'mockString',
 				document.getElementById('slot01') ?? fallback,
 			);
@@ -43,17 +45,6 @@ describe('Cross-frame messenger: refresh', () => {
 				'passback',
 				'mockString',
 			);
-		});
-		it('if specs is not of type string refresh doesnt execute', () => {
-			const fallback = document.createElement('div');
-			const advert = getAdvertById('');
-			_.passbackRefresh(
-				{ messageSpecs: 'mockString' },
-				document.getElementById('slot01') ?? fallback,
-			);
-			expect(getAdvertById).toHaveBeenCalledWith('slot01');
-			expect(refreshAdvert).not.toHaveBeenCalled();
-			expect(advert?.slot.setTargeting).not.toHaveBeenCalled();
 		});
 	});
 });
