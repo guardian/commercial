@@ -19,9 +19,9 @@ jest.mock('../dfp/load-advert', () => ({
 describe('Cross-frame messenger: refresh', () => {
 	beforeEach(() => {
 		document.body.innerHTML = `
-              <div id="slot01" class="js-ad-slot" style="width: 7px; height: 14px;" >
+              <div id="slot01" class="js-ad-slot">
                 <div id="container01">
-                    <iframe id="iframe01" class="iframe" data-unit="ch"></iframe>
+                    <iframe id="iframe01" class="iframe"></iframe>
                 </div>
               </div>`;
 
