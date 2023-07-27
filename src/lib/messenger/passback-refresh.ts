@@ -1,14 +1,11 @@
+import { isString } from '@guardian/libs';
 import type { RegisterListener } from 'core/messenger';
 import { getAdvertById } from '../dfp/get-advert-by-id';
 import { refreshAdvert } from '../dfp/load-advert';
 
-const isString = (specs: unknown): specs is string => {
-	return typeof specs === 'string' ? true : false;
-};
-
-const passbackRefresh = (specs: unknown | string, adSlot: HTMLElement) => {
+const passbackRefresh = (specs: string, adSlot: HTMLElement) => {
 	const advert = getAdvertById(adSlot.id);
-	if (isString(specs) && advert) {
+	if (advert) {
 		advert.slot.setTargeting('passback', specs);
 		refreshAdvert(advert);
 	}
@@ -16,7 +13,7 @@ const passbackRefresh = (specs: unknown | string, adSlot: HTMLElement) => {
 
 const init = (register: RegisterListener): void => {
 	register('passback-refresh', (specs, ret, iframe) => {
-		if (iframe && specs) {
+		if (iframe && isString(specs)) {
 			const adSlot =
 				iframe.closest<HTMLElement>('.js-ad-slot') ?? undefined;
 			if (!adSlot) {
