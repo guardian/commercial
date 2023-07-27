@@ -3,15 +3,14 @@ import type { SizeMapping } from 'core/ad-sizes';
 import { adSizes, createAdSize } from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
-import { isInVariantSynchronous } from 'lib/experiments/ab';
 import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
-import { billboardsInMerchHigh } from 'lib/experiments/tests/billboards-in-merch-high';
 import { requestBidsForAds } from '../header-bidding/request-bids';
 import { removeDisabledSlots } from '../remove-slots';
 import { createAdvert } from './create-advert';
 import { dfpEnv } from './dfp-env';
 import { displayAds } from './display-ads';
 import { displayLazyAds } from './display-lazy-ads';
+import { includeBillboardsInMerchHigh } from './merchandising-high-test';
 import { setupPrebidOnce } from './prepare-prebid';
 import { queueAdvert } from './queue-advert';
 
@@ -25,7 +24,7 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 		};
 	} else if (
 		name === 'merchandising-high' &&
-		isInVariantSynchronous(billboardsInMerchHigh, 'variant')
+		includeBillboardsInMerchHigh()
 	) {
 		return {
 			desktop: [adSizes.billboard],

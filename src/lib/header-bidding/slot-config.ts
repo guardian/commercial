@@ -1,6 +1,7 @@
 import type { AdSize } from 'core/ad-sizes';
 import { adSizes, createAdSize } from 'core/ad-sizes';
 import type { Advert } from 'lib/dfp/Advert';
+import { includeBillboardsInMerchHigh } from 'lib/dfp/merchandising-high-test';
 import type {
 	HeaderBiddingSizeKey,
 	HeaderBiddingSizeMapping,
@@ -196,6 +197,9 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 		'crossword-banner': {
 			desktop: isCrossword ? [adSizes.leaderboard] : [],
 			tablet: isCrossword ? [adSizes.leaderboard] : [],
+		},
+		'merchandising-high': {
+			desktop: includeBillboardsInMerchHigh() ? [adSizes.billboard] : [],
 		},
 	};
 };
