@@ -12,7 +12,6 @@ interface DfpEnv {
 	creativeIDs: string[];
 	advertIds: Record<string, number>;
 	advertsToLoad: Advert[];
-	advertsToRefresh: Advert[];
 	adverts: Advert[];
 	shouldLazyLoad: () => boolean;
 }
@@ -38,9 +37,6 @@ const dfpEnv: DfpEnv = {
 
 	/* advertsToLoad: array<Advert>. Lists adverts waiting to be loaded */
 	advertsToLoad: [],
-
-	/* advertsToRefresh: array<Advert>. Lists adverts refreshed when a breakpoint has been crossed */
-	advertsToRefresh: [],
 
 	/* adverts: array<Advert>. Keeps track of adverts and their state */
 	adverts: [],
