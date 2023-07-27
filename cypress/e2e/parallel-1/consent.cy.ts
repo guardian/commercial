@@ -65,15 +65,14 @@ describe('tcfv2 consent', () => {
 
 		// Check the header still shows support message
 		cy.get('[name="SupportTheG"]')
-			.should('have.attr', 'data-gu-ready', 'true', {
+			.should('have.attr', 'data-island-status', 'rendered', {
 				timeout: 30000,
 			})
 			.find('h2')
 			.should('contain', 'Support the Guardian');
 	});
 
-	//skipped because the privacy settings button often doesn't load - will be fixed in a future PR
-	it.skip(`Test ${path} shows ad slots when reconsented`, () => {
+	it(`Test ${path} shows ad slots when reconsented`, () => {
 		cy.visit(path);
 
 		cy.rejectAllConsent();
