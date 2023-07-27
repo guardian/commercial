@@ -1,6 +1,6 @@
 import { getAdvertById } from 'lib/dfp/get-advert-by-id';
 import { refreshAdvert } from 'lib/dfp/load-advert';
-import { _ } from './refresh';
+import { _ } from './passback-refresh';
 
 jest.mock('../dfp/get-advert-by-id', () => ({
 	getAdvertById: jest.fn().mockReturnValue({
