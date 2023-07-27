@@ -17,7 +17,7 @@ type MessageType =
 	| 'scroll'
 	| 'type'
 	| 'viewport'
-	| 'refresh';
+	| 'passback-refresh';
 
 /**
  * A message that is sent from an iframe following a standard format
@@ -406,7 +406,6 @@ const onMessage = async (event: MessageEvent): Promise<void> => {
 	}
 };
 
-//here calls onMessage to process the message being mimicked by Preview.svele in Templates˘˘˘
 const on = (window: WindowProxy) => {
 	window.addEventListener('message', (event) => void onMessage(event));
 };

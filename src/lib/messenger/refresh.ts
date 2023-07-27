@@ -2,26 +2,20 @@ import type { RegisterListener } from 'core/messenger';
 import { getAdvertById } from '../dfp/get-advert-by-id';
 import { refreshAdvert } from '../dfp/load-advert';
 
-const checkPublicGood = (specs: unknown): boolean => {
-	return typeof specs === 'string' && specs === 'public-good' ? true : false;
+const isString = (specs: unknown): specs is string => {
+	return typeof specs === 'string' ? true : false;
 };
 
-const refresh = (
-	specs: unknown | string,
-	iframe: HTMLIFrameElement,
-	adSlot: HTMLElement,
-) => {
-	if (checkPublicGood(specs)) {
-		const advert = getAdvertById(adSlot.id);
-		if (advert) {
-			advert.slot.setTargeting('passback', 'public-good');
-			refreshAdvert(advert);
-		}
+const passbackRefresh = (specs: unknown | string, adSlot: HTMLElement) => {
+	const advert = getAdvertById(adSlot.id);
+	if (isString(specs) && advert) {
+		advert.slot.setTargeting('passback', specs);
+		refreshAdvert(advert);
 	}
 };
 
 const init = (register: RegisterListener): void => {
-	register('refresh', (specs, ret, iframe) => {
+	register('passback-refresh', (specs, ret, iframe) => {
 		if (iframe && specs) {
 			const adSlot =
 				iframe.closest<HTMLElement>('.js-ad-slot') ?? undefined;
@@ -29,11 +23,11 @@ const init = (register: RegisterListener): void => {
 				return;
 			}
 
-			return refresh(specs, iframe, adSlot);
+			return passbackRefresh(specs, adSlot);
 		}
 	});
 };
 
-export const _ = { refresh };
+export const _ = { passbackRefresh };
 
 export { init };
