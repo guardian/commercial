@@ -1369,15 +1369,15 @@
     eslint-plugin-eslint-comments "3.2.0"
     eslint-plugin-import "2.27.5"
 
+"@guardian/libs@15.6.3":
+  version "15.6.3"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-15.6.3.tgz#3c748640bfe706ef8ecbd44c101567bf2b769f4a"
+  integrity sha512-WRHnZGXMn7TD2p/gXWdK+u2ZnS+CAvQ1pdBEjT3x61Ab1YhxOYEIkF5gT+l2kACuJZ7a8pWwuO6CA89JcfZfrw==
+
 "@guardian/libs@^10.0.0":
   version "10.1.1"
   resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-10.1.1.tgz#7048c365a68dda068f707d46c78979f430221963"
   integrity sha512-OdWReBHRWhdbErVmS15hihVzlkdU8DkKrjDsUIN0P8QZiF4twuzcU3qsPwto2UfibAwPkWqKkNwH1k8b6xNclA==
-
-"@guardian/libs@^15.0.0":
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-15.0.0.tgz#c3fbb1d7fdafaefe156232b7088f43e2ff4cd18b"
-  integrity sha512-UnNxcJHYDfpElrxc7sbfwSJ82erH3mjdKsALAgevggsbhOSAkE9yoCn+XMBPN7iQ14bEHZPYyOMt0y1hNCItyg==
 
 "@guardian/prettier@^4.0.0":
   version "4.0.0"

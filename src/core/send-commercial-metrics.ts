@@ -1,6 +1,7 @@
 import { onConsent } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { log } from '@guardian/libs';
+import type { TeamName } from '@guardian/libs';
+import { getMeasures, isNonNullable, log } from '@guardian/libs';
 import { EventTimer } from './event-timer';
 import type { ConnectionType } from './types';
 
@@ -143,6 +144,17 @@ const getOfflineCount = (): Metric[] =>
 		  ]
 		: [];
 
+/**
+ * Measures added with @guardian/libs’s `startPerformanceMeasure`
+ *
+ * Allows for more granular monitoring of web page performance.
+ */
+const getPerformanceMeasures = (...teams: TeamName[]): Metric[] =>
+	getMeasures(teams).map(({ detail: { team, name, action }, duration }) => ({
+		name: [team, name, action].filter(isNonNullable).join('_'),
+		value: duration,
+	}));
+
 function gatherMetricsOnPageUnload(): void {
 	// Assemble commercial properties and metrics
 	const eventTimer = EventTimer.get();
@@ -162,7 +174,9 @@ function gatherMetricsOnPageUnload(): void {
 	const metrics: readonly Metric[] = roundTimeStamp(
 		eventTimer.marks,
 		eventTimer.measures,
-	).concat(getOfflineCount());
+	)
+		.concat(getOfflineCount())
+		.concat(getPerformanceMeasures('dotcom'));
 	commercialMetricsPayload.metrics = metrics;
 
 	sendMetrics();
