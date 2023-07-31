@@ -73,12 +73,15 @@ const createLiveblogRightAdverts = () => {
 	});
 };
 
-const restrictRightAdContainerHeight = () => {
-	void fastdom.measure(() => {
+const restrictRightAdContainerHeight = (): void => {
+	fastdom.measure(() => {
 		const rightAdContainer =
 			document.querySelector<HTMLElement>('#top-right-ad-slot');
+
 		if (rightAdContainer !== null) {
-			rightAdContainer.style.maxHeight = '1059px';
+			fastdom.mutate(() => {
+				rightAdContainer.style.maxHeight = '1059px';
+			});
 		}
 	});
 };
