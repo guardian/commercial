@@ -24,6 +24,7 @@ import { initAdblockAsk } from 'lib/adblock-ask';
 import { commercialFeatures } from 'lib/commercial-features';
 import { init as initComscore } from 'lib/comscore';
 import { adSlotIdPrefix } from 'lib/dfp/dfp-env-globals';
+import { init as initExternalAdverts } from 'lib/dfp/fill-external-slots';
 import { init as prepareA9 } from 'lib/dfp/prepare-a9';
 import { init as prepareGoogletag } from 'lib/dfp/prepare-googletag';
 import { initPermutive } from 'lib/dfp/prepare-permutive';
@@ -103,12 +104,13 @@ if (!commercialFeatures.adFree) {
 		['cm-articleAsideAdverts', initArticleAsideAdverts],
 		['cm-articleBodyAdverts', initArticleBodyAdverts],
 		['cm-liveblogAdverts', initLiveblogAdverts],
-		['cm-thirdPartyTags', initThirdPartyTags],
-		['cm-redplanet', initRedplanet],
 		['cm-commentAdverts', initCommentAdverts],
 		['cm-commentsExpandedAdverts', initCommentsExpandedAdverts],
 		['cm-liveblogRightAdverts', initLiveblogRightAdverts],
+		['cm-externalAdverts', initExternalAdverts],
 		['rr-adblock-ask', initAdblockAsk],
+		['cm-thirdPartyTags', initThirdPartyTags],
+		['cm-redplanet', initRedplanet],
 	);
 }
 
