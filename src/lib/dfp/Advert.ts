@@ -67,6 +67,8 @@ const getSlotSizeMapping = (name: string): SizeMapping => {
 		slotName = 'fronts-banner';
 	} else if (name.includes('liveblog-right')) {
 		slotName = 'liveblog-right';
+	} else if (name.includes('external-')) {
+		slotName = 'external';
 	} else {
 		slotName = name;
 	}

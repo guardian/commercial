@@ -107,7 +107,8 @@ type SlotName =
 	| 'right'
 	| 'survey'
 	| 'top-above-nav'
-	| 'article-end';
+	| 'article-end'
+	| 'external';
 
 type SizeMapping = Partial<Record<Breakpoint, AdSize[]>>;
 
@@ -362,6 +363,9 @@ const slotSizeMappings: SlotSizeMappings = {
 	},
 	exclusion: {
 		mobile: [adSizes.empty],
+	},
+	external: {
+		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.fluid],
 	},
 };
 
