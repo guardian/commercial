@@ -32,7 +32,7 @@ describe('Cross-frame messenger: refresh', () => {
 		document.body.innerHTML = '';
 	});
 	describe('passbackRefresh', () => {
-		it("should successfully define an advert and call refreshAdvert and set's targeting", () => {
+		it('should successfully define an advert, call refreshAdvert and sets targeting', () => {
 			const fallback = document.createElement('div');
 			const advert = getAdvertById('');
 			passbackRefresh(

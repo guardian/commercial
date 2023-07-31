@@ -12,7 +12,7 @@ const passbackRefresh = (specs: string, adSlot: HTMLElement) => {
 };
 
 const init = (register: RegisterListener): void => {
-	register('passback-refresh', (specs, ret, iframe) => {
+	register('passback-refresh', (specs, _, iframe) => {
 		if (iframe && isString(specs)) {
 			const adSlot =
 				iframe.closest<HTMLElement>('.js-ad-slot') ?? undefined;
