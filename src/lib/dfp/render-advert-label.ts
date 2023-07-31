@@ -10,7 +10,8 @@ import crossIcon from '../../../static/svg/icon/cross.svg';
 const shouldRenderLabel = (adSlotNode: HTMLElement): boolean => {
 	if (
 		adSlotNode.classList.contains('ad-slot--fluid') &&
-		!adSlotNode.classList.contains('ad-slot--interscroller')
+		!adSlotNode.classList.contains('ad-slot--interscroller') &&
+		!adSlotNode.classList.contains('ad-slot--article-end')
 	) {
 		return false;
 	}
