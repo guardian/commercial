@@ -1,18 +1,16 @@
-import { log } from '@guardian/libs';
+import { isNonNullable, log } from '@guardian/libs';
 import type { SizeMapping } from 'core/ad-sizes';
 import { adSizes, createAdSize } from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
-import { isInVariantSynchronous } from 'lib/experiments/ab';
 import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
-import { billboardsInMerch } from 'lib/experiments/tests/billboards-in-merch';
 import { requestBidsForAds } from '../header-bidding/request-bids';
 import { removeDisabledSlots } from '../remove-slots';
-import type { Advert } from './Advert';
 import { createAdvert } from './create-advert';
 import { dfpEnv } from './dfp-env';
 import { displayAds } from './display-ads';
 import { displayLazyAds } from './display-lazy-ads';
+import { includeBillboardsInMerchHigh } from './merchandising-high-test';
 import { setupPrebidOnce } from './prepare-prebid';
 import { queueAdvert } from './queue-advert';
 
@@ -25,8 +23,8 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 			desktop: [adSizes.billboard, createAdSize(900, 250)],
 		};
 	} else if (
-		isInVariantSynchronous(billboardsInMerch, 'variant') &&
-		name?.includes('merchandising')
+		name === 'merchandising-high' &&
+		includeBillboardsInMerchHigh()
 	) {
 		return {
 			desktop: [adSizes.billboard],
@@ -87,10 +85,9 @@ const fillAdvertSlots = async (): Promise<void> => {
 		)
 		.map((adSlot) => {
 			const additionalSizes = decideAdditionalSizes(adSlot);
-
 			return createAdvert(adSlot, additionalSizes);
 		})
-		.filter((advert): advert is Advert => advert !== null);
+		.filter(isNonNullable);
 
 	const currentLength = dfpEnv.adverts.length;
 	dfpEnv.adverts = dfpEnv.adverts.concat(adverts);

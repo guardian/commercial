@@ -1,6 +1,7 @@
 import type { AdSize } from 'core/ad-sizes';
 import { adSizes, createAdSize } from 'core/ad-sizes';
 import type { Advert } from 'lib/dfp/Advert';
+import { includeBillboardsInMerchHigh } from 'lib/dfp/merchandising-high-test';
 import type {
 	HeaderBiddingSizeKey,
 	HeaderBiddingSizeMapping,
@@ -66,6 +67,10 @@ const getHeaderBiddingKey = (
 		return 'fronts-banner';
 	}
 
+	if (name?.includes('liveblog-right')) {
+		return 'liveblog-right';
+	}
+
 	return undefined;
 };
 
@@ -120,6 +125,9 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 			mobile: hasShowcaseMainElement
 				? [adSizes.mpu]
 				: [adSizes.halfPage, adSizes.mpu],
+		},
+		'liveblog-right': {
+			desktop: [adSizes.halfPage, adSizes.mpu],
 		},
 		'top-above-nav': {
 			desktop: [adSizes.billboard, adSizes.leaderboard],
@@ -189,6 +197,9 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 		'crossword-banner': {
 			desktop: isCrossword ? [adSizes.leaderboard] : [],
 			tablet: isCrossword ? [adSizes.leaderboard] : [],
+		},
+		'merchandising-high': {
+			desktop: includeBillboardsInMerchHigh() ? [adSizes.billboard] : [],
 		},
 	};
 };

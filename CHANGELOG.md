@@ -1,5 +1,41 @@
 # @guardian/commercial
 
+## 10.9.0
+
+### Minor Changes
+
+- 6d9bb51: Enable Prebid for merchandising-high slots that are setup to show billboard sized ads.
+- a3a1bb9: Remove the currently defunct logic that controls queuing
+  up adverts for refreshing when the breakpoint of the page
+  changes.
+
+  Since the Commercial bundle no longer supports Mediator,
+  and DCR also doesn't, this is currently dead code.
+
+  Removing it will result in some simplification.
+
+  In the process, we can also fix a bug where the
+  data-refresh="false" attribute on slots was being
+  ignored.
+
+## 10.8.0
+
+### Minor Changes
+
+- a56968d: Restore zero percent AB test for displaying billboard (970x250) adverts in merchandising-high ad slots
+- 9011ba5: add liveblog-right ad slot. Remove superfluous definitions from slotSizeMappings. Creates a script that will fill the new liveblog-right ad slots with ads
+
+## 10.7.0
+
+### Minor Changes
+
+- a20730b: Fixes the mobile sticky close button
+- 454b924: Load user features for reject all readers on DCR
+
+### Patch Changes
+
+- cb6492e: Remove unused `createAdSlot` config
+
 ## 10.6.0
 
 ### Minor Changes

@@ -137,9 +137,6 @@ jest.mock(
 		<T>(fn: (...args: unknown[]) => T) =>
 			fn,
 );
-jest.mock('./refresh-on-resize', () => ({
-	refreshOnResize: jest.fn(),
-}));
 jest.mock('lib/analytics/beacon', () => ({
 	fire: jest.fn(),
 }));
@@ -183,7 +180,6 @@ const makeFakeEvent = (
 const reset = () => {
 	dfpEnv.advertIds = {};
 	dfpEnv.adverts = [];
-	dfpEnv.advertsToRefresh = [];
 	dfpEnv.advertsToLoad = [];
 	window.guardian.config.switches = {
 		prebidHeaderBidding: false,

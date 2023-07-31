@@ -41,12 +41,12 @@ import { init as initArticleBodyAdverts } from 'lib/spacefinder/article-body-adv
 import { initCommentAdverts } from 'lib/spacefinder/comment-adverts';
 import { initCommentsExpandedAdverts } from 'lib/spacefinder/comments-expanded-advert';
 import { init as initLiveblogAdverts } from 'lib/spacefinder/liveblog-adverts';
+import { initLiveblogRightAdverts } from 'lib/spacefinder/liveblog-right-adverts';
 import { initTeadsCookieless } from 'lib/teads-cookieless';
 import { init as initThirdPartyTags } from 'lib/third-party-tags';
 import { init as initTrackGpcSignal } from 'lib/track-gpc-signal';
 import { init as initTrackScrollDepth } from 'lib/track-scroll-depth';
 import { isDigitalSubscriber } from 'lib/user-features';
-import { amIUsed } from 'lib/utils/am-i-used';
 import { reportError } from 'lib/utils/report-error';
 import { catchErrorsWithContext } from 'lib/utils/robust';
 
@@ -107,6 +107,7 @@ if (!commercialFeatures.adFree) {
 		['cm-redplanet', initRedplanet],
 		['cm-commentAdverts', initCommentAdverts],
 		['cm-commentsExpandedAdverts', initCommentsExpandedAdverts],
+		['cm-liveblogRightAdverts', initLiveblogRightAdverts],
 		['rr-adblock-ask', initAdblockAsk],
 	);
 }
@@ -179,18 +180,6 @@ const bootCommercial = async (): Promise<void> => {
 		);
 	}
 
-	//adding an amiused call for a very small proportion of users to test sendBeacon vs fetch
-	//this will be removed when we have enough data
-	const shouldTestBeacon = Math.random() <= 1 / 10000;
-	if (shouldTestBeacon) {
-		amIUsed(
-			'standalone.commercial.ts',
-			'bootCommercial',
-			{ userAgent: navigator.userAgent },
-			1,
-		);
-	}
-
 	// Init Commercial event timers
 	EventTimer.init();
 
@@ -254,7 +243,9 @@ const chooseAdvertisingTag = async () => {
 		void import(
 			/* webpackChunkName: "consentless" */
 			'./commercial.consentless'
-		).then(({ bootConsentless }) => bootConsentless(consentState));
+		).then(({ bootConsentless }) =>
+			bootConsentless(consentState, isDotcomRendering),
+		);
 	} else {
 		bootCommercialWhenReady();
 	}

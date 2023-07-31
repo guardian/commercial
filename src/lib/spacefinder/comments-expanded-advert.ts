@@ -1,10 +1,10 @@
 import { log } from '@guardian/libs';
 import { adSizes } from 'core/ad-sizes';
-import { AD_LABEL_HEIGHT } from 'core/constants/adLabelHeight';
+import { AD_LABEL_HEIGHT } from 'core/constants/ad-label-height';
 import { createAdSlot } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
-import { addSlot } from '../dfp/add-slot';
+import { fillDynamicAdSlot } from '../dfp/fill-dynamic-advert-slot';
 import fastdom from '../fastdom-promise';
 import { requestBidsForAd } from '../header-bidding/request-bids';
 
@@ -21,12 +21,10 @@ const insertAd = (anchor: HTMLElement): Promise<void> => {
 	adSlotContainer.className = 'ad-slot-container';
 	adSlotContainer.style.position = 'sticky';
 	adSlotContainer.style.top = '0';
-
 	adSlotContainer.appendChild(slot);
 
 	const stickyContainer = document.createElement('div');
 	stickyContainer.style.flexGrow = '1';
-
 	stickyContainer.appendChild(adSlotContainer);
 
 	return fastdom
@@ -34,7 +32,7 @@ const insertAd = (anchor: HTMLElement): Promise<void> => {
 			anchor.appendChild(adSlotContainer);
 		})
 		.then(async () => {
-			const advert = await addSlot(slot, false);
+			const advert = await fillDynamicAdSlot(slot, false);
 
 			if (advert && isInEagerPrebidVariant()) {
 				await requestBidsForAd(advert);

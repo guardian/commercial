@@ -28,7 +28,6 @@ const amIUsed = (
 	parameters?: Partial<
 		Record<string, string> & Record<RestrictedKeys, never>
 	>,
-	sampling = 0,
 ): void => {
 	// The function will return early if the sentinelLogger switch is disabled.
 	if (!window.guardian.config.switches.sentinelLogger) return;
@@ -56,32 +55,7 @@ const amIUsed = (
 			: properties,
 	};
 
-	//The code below is for testing the reliability of the sendBeacon method compared to fetch
-	//There is a possibility that sendBeacon may not be as reliable as we think: https://volument.com/blog/sendbeacon-is-broken
-
-	const shouldTestBeacon = Math.random() <= sampling;
-
-	if (shouldTestBeacon) {
-		const beaconEvent: AmIUsedLoggingEvent = {
-			...event,
-			label: 'commercial.amiused.test_send_beacon',
-		};
-
-		const fetchEvent: AmIUsedLoggingEvent = {
-			...event,
-			label: 'commercial.amiused.test_fetch',
-		};
-
-		window.navigator.sendBeacon(endpoint, JSON.stringify(beaconEvent));
-
-		void fetch(endpoint, {
-			method: 'POST',
-			body: JSON.stringify(fetchEvent),
-			keepalive: true,
-		});
-	} else {
-		window.navigator.sendBeacon(endpoint, JSON.stringify(event));
-	}
+	window.navigator.sendBeacon(endpoint, JSON.stringify(event));
 };
 
 export { amIUsed, type AmIUsedLoggingEvent };

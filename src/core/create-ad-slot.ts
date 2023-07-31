@@ -15,9 +15,10 @@ type SlotName =
 	| 'comments'
 	| 'exclusion'
 	| 'fronts-banner'
-	| 'high-merch'
+	| 'merchandising-high'
 	| 'im'
 	| 'inline'
+	| 'liveblog-right'
 	| 'mobile-sticky'
 	| 'top-above-nav';
 
@@ -33,10 +34,8 @@ const adSlotConfigs: AdSlotConfigs = {
 		label: false,
 		refresh: false,
 	},
-	'high-merch': {
-		label: false,
+	'merchandising-high': {
 		refresh: false,
-		name: 'merchandising-high',
 	},
 	carrot: {
 		label: false,
@@ -58,7 +57,7 @@ type DataAttributes = Record<string, string>;
   Insert that element as siblings at the place you want adverts to appear.
 
   Note that for the DFP slot to be filled by GTP, you'll have to
-  use addSlot from add-slot.js
+  use addSlot from fill-dynamic-advert-slot.ts
 */
 const createAdSlotElement = (
 	name: string,
@@ -129,6 +128,24 @@ const concatSizeMappings = (
 		{ ...defaultSizeMappings },
 	);
 
+type ContainerOptions = {
+	className?: string;
+};
+
+const adSlotContainerClass = 'ad-slot-container';
+
+const wrapSlotInContainer = (
+	adSlot: HTMLElement,
+	options: ContainerOptions = {},
+) => {
+	const container = document.createElement('div');
+
+	container.className = `${adSlotContainerClass} ${options.className ?? ''}`;
+
+	container.appendChild(adSlot);
+	return container;
+};
+
 const createAdSlot = (
 	name: SlotName,
 	options: CreateSlotOptions = {},
@@ -152,4 +169,10 @@ const createAdSlot = (
 	);
 };
 
-export { createAdSlot, concatSizeMappings };
+export {
+	adSlotContainerClass,
+	concatSizeMappings,
+	createAdSlot,
+	wrapSlotInContainer,
+};
+export type { ContainerOptions };

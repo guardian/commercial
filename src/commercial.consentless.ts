@@ -11,7 +11,10 @@ import { initConsentless } from './lib/consentless/prepare-ootag';
 import { init as setAdTestCookie } from './lib/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from './lib/set-adtest-in-labels-cookie';
 
-const bootConsentless = async (consentState: ConsentState): Promise<void> => {
+const bootConsentless = async (
+	consentState: ConsentState,
+	isDotcomRendering: boolean,
+): Promise<void> => {
 	/*  In the consented ad stack, we set the ad free cookie for users who
 		don't consent to targeted ads in order to hide empty ads slots.
 		We remove the cookie here so that we can show Opt Out ads.
@@ -20,7 +23,7 @@ const bootConsentless = async (consentState: ConsentState): Promise<void> => {
  	*/
 	maybeUnsetAdFreeCookie(AdFreeCookieReasons.ConsentOptOut);
 
-	await Promise.all([
+	const consentlessModuleList = [
 		setAdTestCookie(),
 		setAdTestInLabelsCookie(),
 		initConsentless(consentState),
@@ -28,7 +31,18 @@ const bootConsentless = async (consentState: ConsentState): Promise<void> => {
 		initFixedSlots(),
 		initArticleInline(),
 		initLiveblogInline(),
-	]);
+	];
+
+	if (isDotcomRendering) {
+		const userFeatures = await import(
+			/* webpackChunkName: "dcr" */
+			'lib/user-features'
+		);
+
+		consentlessModuleList.push(userFeatures.refresh());
+	}
+
+	await Promise.all(consentlessModuleList);
 
 	// Since we're in single-request mode
 	// Call this once all ad slots are present on the page

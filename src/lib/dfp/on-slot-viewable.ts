@@ -1,6 +1,6 @@
 import { log } from '@guardian/libs';
 import { outstreamSizes } from 'core/ad-sizes';
-import { AD_LABEL_HEIGHT } from 'core/constants/adLabelHeight';
+import { AD_LABEL_HEIGHT } from 'core/constants/ad-label-height';
 import fastdom from 'lib/fastdom-promise';
 import { getUrlVars } from 'lib/utils/url';
 import { isAdSize } from './Advert';
@@ -120,8 +120,9 @@ const onSlotViewableFunction = (): ((
 		return setSlotAdRefresh;
 	}
 
-	// Nothing to do. Return an empty callback
-	return () => void 0;
+	return () => {
+		/* */
+	};
 };
 
 export { onSlotViewableFunction };

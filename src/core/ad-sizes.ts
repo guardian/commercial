@@ -98,6 +98,7 @@ type SlotName =
 	| 'fronts-banner'
 	| 'im'
 	| 'inline'
+	| 'liveblog-right'
 	| 'merchandising-high-lucky'
 	| 'merchandising-high'
 	| 'merchandising'
@@ -186,14 +187,6 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.googleCard,
 			adSizes.fluid,
 		],
-		phablet: [
-			adSizes.outOfPage,
-			adSizes.empty,
-			adSizes.outstreamMobile,
-			adSizes.mpu,
-			adSizes.googleCard,
-			adSizes.fluid,
-		],
 		desktop: [
 			adSizes.outOfPage,
 			adSizes.empty,
@@ -212,16 +205,18 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.fluid,
 		],
 	},
-	comments: {
-		mobile: [
+	'liveblog-right': {
+		desktop: [
 			adSizes.outOfPage,
 			adSizes.empty,
-			adSizes.outstreamMobile,
 			adSizes.mpu,
 			adSizes.googleCard,
+			adSizes.halfPage,
 			adSizes.fluid,
 		],
-		phablet: [
+	},
+	comments: {
+		mobile: [
 			adSizes.outOfPage,
 			adSizes.empty,
 			adSizes.outstreamMobile,
@@ -360,12 +355,9 @@ const slotSizeMappings: SlotSizeMappings = {
 	},
 	'crossword-banner': {
 		phablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
-		tablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
 	},
 	exclusion: {
 		mobile: [adSizes.empty],
-		phablet: [adSizes.empty],
-		desktop: [adSizes.empty],
 	},
 };
 

@@ -1,3 +1,4 @@
+import { includeBillboardsInMerchHigh } from 'lib/dfp/merchandising-high-test';
 import { isInRow, isInUk } from 'lib/utils/geo-utils';
 import type { HeaderBiddingSize } from '../prebid-types';
 import {
@@ -16,8 +17,8 @@ const getImprovePlacementId = (
 	if (isInUk()) {
 		switch (getBreakpointKey()) {
 			case 'D': // Desktop
-				if (isInFrontsBannerVariant) {
-					// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
+				if (isInFrontsBannerVariant || includeBillboardsInMerchHigh()) {
+					// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
 					// This check is to distinguish from the top-above-nav which includes a leaderboard
 					if (containsBillboardNotLeaderboard(sizes)) {
 						return 22987847;

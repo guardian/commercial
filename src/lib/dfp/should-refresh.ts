@@ -24,6 +24,11 @@ const shouldRefresh = (
 ): boolean => {
 	const sizeString = advert.size?.toString();
 
+	// Do not refresh ads in slots labelled data-refresh="false"
+	if (advert.node.dataset.refresh === 'false') {
+		return false;
+	}
+
 	// Fluid adverts should not refresh
 	const isFluid = sizeString === 'fluid';
 	if (isFluid) return false;

@@ -10,13 +10,16 @@ export type HeaderBiddingSlotName =
 	| 'mostpop'
 	| 'right'
 	| 'top-above-nav'
+	| 'merchandising-high'
 	| `fronts-banner-${number}`
-	| `inline${number}`;
+	| `inline${number}`
+	| `liveblog-right-${number}`;
 
 export type HeaderBiddingSizeKey =
 	| HeaderBiddingSlotName
 	| 'inline'
-	| 'fronts-banner';
+	| 'fronts-banner'
+	| 'liveblog-right';
 
 export type HeaderBiddingSlot = {
 	key: HeaderBiddingSizeKey;

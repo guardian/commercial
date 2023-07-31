@@ -2,7 +2,6 @@
 	"recommendations": [
 		"orta.vscode-jest",
 		"editorconfig.editorconfig",
-		"dbaeumer.vscode-eslint",
-		"knisterpeter.vscode-commitizen"
+		"dbaeumer.vscode-eslint"
 	]
 }
