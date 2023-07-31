@@ -365,7 +365,7 @@ const slotSizeMappings: SlotSizeMappings = {
 		mobile: [adSizes.empty],
 	},
 	external: {
-		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.fluid],
+		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.fluid, adSizes.mpu],
 	},
 };
 
