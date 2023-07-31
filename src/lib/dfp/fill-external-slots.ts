@@ -16,7 +16,7 @@
 
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 
-const EXTERNAL_SLOT_PREFIX = 'dfp-ad--external-';
+const EXTERNAL_SLOT_PREFIX = 'dfp-ad--external';
 
 type ExternalSlotCustomEventDetail = {
 	slotId: string;
