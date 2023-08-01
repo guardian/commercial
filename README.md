@@ -25,7 +25,7 @@ To develop locally, run `yarn serve` to start a local server. This will watch fo
 
 To run the unit tests, run `yarn test`.
 
-To run the integration tests, switch to the `e2e` workspace to run `yarn cypress:open` or `yarn cypress:run` to run cypress integration tests.
+To run the Cypress integration tests, run `yarn e2e:open` or `yarn e2e:run`.
 
 ### Releasing
 
