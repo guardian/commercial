@@ -2,11 +2,9 @@ import { getCookie, isObject, removeCookie, setCookie } from '@guardian/libs';
 import type { HeaderPayload } from '@guardian/support-dotcom-components/dist/dotcom/src/types';
 import { cookieIsExpiredOrMissing, timeInDaysFromNow } from 'lib/cookie';
 import {
-	AdFreeCookieReasons,
 	adFreeDataIsOld,
 	adFreeDataIsPresent,
 	getAdFreeCookie,
-	maybeUnsetAdFreeCookie,
 	setAdFreeCookie,
 } from 'lib/manage-ad-free-cookie';
 import { fetchJson } from 'lib/utils/fetch-json';
@@ -23,6 +21,7 @@ const PAYING_MEMBER_COOKIE = 'gu_paying_member';
 const ACTION_REQUIRED_FOR_COOKIE = 'gu_action_required_for';
 const DIGITAL_SUBSCRIBER_COOKIE = 'gu_digital_subscriber';
 const HIDE_SUPPORT_MESSAGING_COOKIE = 'gu_hide_support_messaging';
+const AD_FREE_USER_COOKIE = 'GU_AF1';
 
 // These cookies come from the user attributes API
 const RECURRING_CONTRIBUTOR_COOKIE = 'gu_recurring_contributor';
@@ -125,15 +124,15 @@ const persistResponse = (JsonResponse: UserFeaturesResponse) => {
 	}
 
 	if (JsonResponse.contentAccess.digitalPack) {
-		setAdFreeCookie(AdFreeCookieReasons.Subscriber, 2);
+		setAdFreeCookie(2);
 	} else if (adFreeDataIsPresent() && !forcedAdFreeMode) {
-		maybeUnsetAdFreeCookie(AdFreeCookieReasons.Subscriber);
+		removeCookie({ name: AD_FREE_USER_COOKIE });
 	}
 };
 
 const deleteOldData = (): void => {
 	// We expect adfree cookies to be cleaned up by the logout process, but what if the user's login simply times out?
-	maybeUnsetAdFreeCookie(AdFreeCookieReasons.Subscriber);
+	removeCookie({ name: AD_FREE_USER_COOKIE });
 	removeCookie({ name: USER_FEATURES_EXPIRY_COOKIE });
 	removeCookie({ name: PAYING_MEMBER_COOKIE });
 	removeCookie({ name: RECURRING_CONTRIBUTOR_COOKIE });
@@ -412,5 +411,4 @@ export {
 	ARTICLES_VIEWED_OPT_OUT_COOKIE,
 	CONTRIBUTIONS_REMINDER_SIGNED_UP,
 	canShowContributionsReminderFeature,
-	AdFreeCookieReasons,
 };

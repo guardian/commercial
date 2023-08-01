@@ -38,7 +38,9 @@ export const getTestUrl = (
 		const builder = new URL(url);
 		builder.searchParams.append('adtest', adtest);
 		// force an invalid epic so it is not shown
-		builder.searchParams.append('force-epic', '9999:CONTROL');
+		if (adtest === 'fixed-puppies-ci') {
+			builder.searchParams.append('force-epic', '9999:CONTROL');
+		}
 		url = builder.toString();
 	}
 	return url;
