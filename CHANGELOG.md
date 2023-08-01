@@ -1,5 +1,17 @@
 # @guardian/commercial
 
+## 10.10.0
+
+### Minor Changes
+
+- bfac4bf: Start liveblog right ads test
+
+## 10.9.1
+
+### Patch Changes
+
+- df70bde: Fix bug in creating liveblog-right adverts
+
 ## 10.9.0
 
 ### Minor Changes
