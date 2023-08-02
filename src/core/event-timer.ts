@@ -242,7 +242,7 @@ class EventTimer {
 				);
 
 				// we only want to save the measures that are related to certain slots or the page
-				if (shouldSave(measureName)) {
+				if (measure && shouldSave(measureName)) {
 					this._measures.set(measureName, measure);
 				}
 			} catch (e) {
