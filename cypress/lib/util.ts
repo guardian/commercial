@@ -78,10 +78,14 @@ export const fakeLogin = (subscriber = true) => {
 	cy.setCookie(
 		'GU_U',
 		'WyIzMjc5Nzk0IiwiIiwiSmFrZTkiLCIiLDE2NjA4MzM3NTEyMjcsMCwxMjEyNjgzMTQ3MDAwLHRydWVd.MC0CFQCIbpFtd0J5IqK946U1vagzLgCBkwIUUN3UOkNfNN8jwNE3scKfrcvoRSg',
+		{ timeout: 30000 },
 	);
+
+	cy.wait(5000);
 
 	cy.intercept(
 		'https://members-data-api.theguardian.com/user-attributes/me',
+		{ times: 1 },
 		response,
 	).as('userData');
 };
