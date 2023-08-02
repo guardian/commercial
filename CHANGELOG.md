@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 10.11.0
+
+### Minor Changes
+
+- a5b5db3: Add refresh message to messenger
+- a5b5db3: Add ab test for public good
+
 ## 10.10.0
 
 ### Minor Changes
