@@ -106,7 +106,8 @@ type SlotName =
 	| 'mostpop'
 	| 'right'
 	| 'survey'
-	| 'top-above-nav';
+	| 'top-above-nav'
+	| 'article-end';
 
 type SizeMapping = Partial<Record<Breakpoint, AdSize[]>>;
 
@@ -355,6 +356,9 @@ const slotSizeMappings: SlotSizeMappings = {
 	},
 	'crossword-banner': {
 		phablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
+	},
+	'article-end': {
+		mobile: [adSizes.fluid],
 	},
 	exclusion: {
 		mobile: [adSizes.empty],

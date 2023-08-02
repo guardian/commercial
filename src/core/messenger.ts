@@ -16,7 +16,8 @@ type MessageType =
 	| 'set-ad-height'
 	| 'scroll'
 	| 'type'
-	| 'viewport';
+	| 'viewport'
+	| 'passback-refresh';
 
 /**
  * A message that is sent from an iframe following a standard format
