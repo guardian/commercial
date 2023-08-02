@@ -184,11 +184,15 @@ describe('tcfv2 consent', () => {
 		// to intercept response
 		fakeLogin(false);
 
-		cy.wait(4000);
+		cy.reload();
+
+		cy.wait('@userData', { timeout: 30000 });
+
+		cy.wait(5000);
 
 		cy.reload();
 
-		cy.reload();
+		cy.wait(5000);
 
 		adsShouldShow();
 	});
