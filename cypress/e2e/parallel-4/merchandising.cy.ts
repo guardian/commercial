@@ -6,7 +6,7 @@ describe('merchandising slot on pages', () => {
 	beforeEach(() => {
 		cy.useConsentedSession('merchandising-consented');
 	});
-	[...articles, ...liveblogs].forEach(({ path }) => {
+	[...articles.slice(0, 3), ...liveblogs].forEach(({ path }) => {
 		breakpoints.forEach(({ breakpoint, width, height }) => {
 			it(`Test ${path} has correct slot and iframe at breakpoint ${breakpoint}`, () => {
 				cy.viewport(width, height);

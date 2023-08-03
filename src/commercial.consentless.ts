@@ -1,8 +1,4 @@
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import {
-	AdFreeCookieReasons,
-	maybeUnsetAdFreeCookie,
-} from 'lib/manage-ad-free-cookie';
 import { initArticleInline } from './lib/consentless/dynamic/article-inline';
 import { initExclusionSlot } from './lib/consentless/dynamic/exclusion-slot';
 import { initLiveblogInline } from './lib/consentless/dynamic/liveblog-inline';
@@ -15,14 +11,6 @@ const bootConsentless = async (
 	consentState: ConsentState,
 	isDotcomRendering: boolean,
 ): Promise<void> => {
-	/*  In the consented ad stack, we set the ad free cookie for users who
-		don't consent to targeted ads in order to hide empty ads slots.
-		We remove the cookie here so that we can show Opt Out ads.
-		TODO: Stop setting ad free cookie for users who opt out when
-		consentless ads are rolled out to all users.
- 	*/
-	maybeUnsetAdFreeCookie(AdFreeCookieReasons.ConsentOptOut);
-
 	const consentlessModuleList = [
 		setAdTestCookie(),
 		setAdTestInLabelsCookie(),
@@ -32,6 +20,8 @@ const bootConsentless = async (
 		initArticleInline(),
 		initLiveblogInline(),
 	];
+
+	//this is added so that we can load the subscriber cookie for DCR pages and correctly hide ads
 
 	if (isDotcomRendering) {
 		const userFeatures = await import(

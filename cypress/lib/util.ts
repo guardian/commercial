@@ -38,7 +38,9 @@ export const getTestUrl = (
 		const builder = new URL(url);
 		builder.searchParams.append('adtest', adtest);
 		// force an invalid epic so it is not shown
-		builder.searchParams.append('force-epic', '9999:CONTROL');
+		if (adtest === 'fixed-puppies-ci') {
+			builder.searchParams.append('force-epic', '9999:CONTROL');
+		}
 		url = builder.toString();
 	}
 	return url;
@@ -76,10 +78,14 @@ export const fakeLogin = (subscriber = true) => {
 	cy.setCookie(
 		'GU_U',
 		'WyIzMjc5Nzk0IiwiIiwiSmFrZTkiLCIiLDE2NjA4MzM3NTEyMjcsMCwxMjEyNjgzMTQ3MDAwLHRydWVd.MC0CFQCIbpFtd0J5IqK946U1vagzLgCBkwIUUN3UOkNfNN8jwNE3scKfrcvoRSg',
+		{ timeout: 30000 },
 	);
+
+	cy.wait(5000);
 
 	cy.intercept(
 		'https://members-data-api.theguardian.com/user-attributes/me',
+		{ times: 1 },
 		response,
 	).as('userData');
 };
