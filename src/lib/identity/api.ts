@@ -1,6 +1,12 @@
+import type {
+	AccessToken,
+	AccessTokenClaims,
+	IDToken,
+} from '@guardian/identity-auth';
 import { getCookie } from '@guardian/libs';
 import { mergeCalls } from 'lib/utils/async-call-merger';
 import { mediator } from 'lib/utils/mediator';
+import type { CustomIdTokenClaims } from './okta';
 
 // Types info coming from https://github.com/guardian/discussion-rendering/blob/fc14c26db73bfec8a04ff7a503ed9f90f1a1a8ad/src/types.ts
 
@@ -24,7 +30,28 @@ type IdentityUserIdentifiers = {
 	googleTagId: string;
 };
 
+type SignedOutWithCookies = { kind: 'SignedOutWithCookies' };
+type SignedInWithCookies = { kind: 'SignedInWithCookies' };
+type SignedOutWithOkta = { kind: 'SignedOutWithOkta' };
+type SignedInWithOkta = {
+	kind: 'SignedInWithOkta';
+	accessToken: AccessToken<AccessTokenClaims>;
+	idToken: IDToken<CustomIdTokenClaims>;
+};
+
+type AuthStatus =
+	| SignedOutWithCookies
+	| SignedInWithCookies
+	| SignedOutWithOkta
+	| SignedInWithOkta;
+
 let userFromCookieCache: IdentityUserFromCache = null;
+
+// We want to be in the experiment if in the development environment
+// or if we have opted in to the Okta server side experiment
+const isInOktaExperiment =
+	window.guardian.config.page.stage === 'DEV' ||
+	window.guardian.config.tests?.oktaVariant === 'variant';
 
 const cookieName = 'GU_U';
 
@@ -74,8 +101,6 @@ const getUserFromCookie = (): IdentityUserFromCache => {
 	return userFromCookieCache;
 };
 
-const isUserLoggedIn = (): boolean => getUserFromCookie() !== null;
-
 const fetchUserIdentifiers = () => {
 	const url = `${idApiRoot}/user/me/identifiers`;
 	return fetch(url, {
@@ -95,6 +120,74 @@ const fetchUserIdentifiers = () => {
 		});
 };
 
+const isUserLoggedIn = (): boolean => getUserFromCookie() !== null;
+
+const getAuthStatus = async (): Promise<AuthStatus> => {
+	if (isInOktaExperiment) {
+		const { isSignedInWithOktaAuthState } = await import('./okta');
+		const authState = await isSignedInWithOktaAuthState();
+		if (authState.isAuthenticated) {
+			return {
+				kind: 'SignedInWithOkta',
+				accessToken: authState.accessToken,
+				idToken: authState.idToken,
+			};
+		} else {
+			return {
+				kind: 'SignedOutWithOkta',
+			};
+		}
+	} else {
+		if (isUserLoggedIn()) {
+			return {
+				kind: 'SignedInWithCookies',
+			};
+		} else {
+			return {
+				kind: 'SignedOutWithCookies',
+			};
+		}
+	}
+};
+
+const isUserLoggedInOktaRefactor = (): Promise<boolean> =>
+	getAuthStatus().then((authStatus) =>
+		authStatus.kind === 'SignedInWithCookies' ||
+		authStatus.kind === 'SignedInWithOkta'
+			? true
+			: false,
+	);
+
+/**
+ * Decide request options based on an {@link AuthStatus}. Requests to authenticated APIs require different options depending on whether
+ * you are in the Okta experiment or not.
+ * @param authStatus
+ * @returns where `authStatus` is:
+ *
+ * `SignedInWithCookies`:
+ * - set the `credentials` option to `"include"`
+ *
+ * `SignedInWithOkta`:
+ * - set the `Authorization` header with a Bearer Access Token
+ * - set the `X-GU-IS-OAUTH` header to `true`
+ */
+const getOptionsHeadersWithOkta = (
+	authStatus: SignedInWithCookies | SignedInWithOkta,
+): RequestInit => {
+	if (authStatus.kind === 'SignedInWithCookies') {
+		return {
+			credentials: 'include',
+		};
+	}
+
+	return {
+		headers: {
+			Authorization: `Bearer ${authStatus.accessToken.accessToken}`,
+			'X-GU-IS-OAUTH': 'true',
+		},
+	};
+};
+
 const getUserIdentifiersFromApi = mergeCalls(
 	(mergingCallback: (u: IdentityUserIdentifiers | null) => void) => {
 		if (isUserLoggedIn()) {
@@ -107,4 +200,10 @@ const getUserIdentifiersFromApi = mergeCalls(
 	},
 );
 
-export { getUserIdentifiersFromApi, isUserLoggedIn };
+export {
+	getUserIdentifiersFromApi,
+	isUserLoggedIn,
+	getAuthStatus,
+	getOptionsHeadersWithOkta,
+	isUserLoggedInOktaRefactor,
+};
