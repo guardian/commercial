@@ -94,7 +94,7 @@ describe('Commercial features', () => {
 		userPrefs.removeSwitch('adverts');
 
 		getCurrentBreakpoint.mockReturnValue('desktop');
-		isPayingMember.mockReturnValue(false);
+		isPayingMember.mockResolvedValue(false);
 		isRecentOneOffContributor.mockReturnValue(false);
 		shouldHideSupportMessagingOkta.mockResolvedValue(false);
 		isAdFreeUser.mockReturnValue(false);
