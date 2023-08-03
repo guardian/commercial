@@ -1,5 +1,5 @@
 import { pageShouldHideReaderRevenue } from 'lib/contributions-utilities';
-import { shouldHideSupportMessaging } from 'lib/user-features';
+import { shouldHideSupportMessagingOkta } from 'lib/user-features';
 import { _ } from './adblock-ask';
 
 const { params, canShow } = _;
@@ -19,9 +19,9 @@ describe('adblock-ask', () => {
 	it('should show if possible', () => {
 		window.guardian.config.page.hasShowcaseMainElement = false;
 		(pageShouldHideReaderRevenue as jest.Mock).mockReturnValue(false);
-		(shouldHideSupportMessaging as jest.Mock).mockReturnValue(false);
+		(shouldHideSupportMessagingOkta as jest.Mock).mockResolvedValue(false);
 
-		expect(canShow()).toBe(true);
+		return expect(canShow()).resolves.toBe(true);
 	});
 
 	it.each([
@@ -31,8 +31,8 @@ describe('adblock-ask', () => {
 	])('should not show if is %s is true', (_, a, b, c) => {
 		window.guardian.config.page.hasShowcaseMainElement = a;
 		(pageShouldHideReaderRevenue as jest.Mock).mockReturnValue(b);
-		(shouldHideSupportMessaging as jest.Mock).mockReturnValue(c);
+		(shouldHideSupportMessagingOkta as jest.Mock).mockResolvedValue(c);
 
-		expect(canShow()).toBe(false);
+		return expect(canShow()).resolves.toBe(false);
 	});
 });

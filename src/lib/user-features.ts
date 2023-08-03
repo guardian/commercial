@@ -13,7 +13,7 @@ import { dateDiffDays } from 'lib/utils/time-utils';
 import { getLocalDate } from 'types/dates';
 import type { LocalDate } from 'types/dates';
 import type { UserFeaturesResponse } from 'types/membership';
-import { isUserLoggedIn } from './identity/api';
+import { isUserLoggedIn, isUserLoggedInOktaRefactor } from './identity/api';
 
 // Persistence keys
 const USER_FEATURES_EXPIRY_COOKIE = 'gu_user_features_expiry';
@@ -307,6 +307,11 @@ const isRecurringContributor = (): boolean =>
 		getCookie({ name: RECURRING_CONTRIBUTOR_COOKIE }) !== 'false') ||
 	supportSiteRecurringCookiePresent();
 
+const isRecurringContributorOkta = async (): Promise<boolean> =>
+	((await isUserLoggedInOktaRefactor()) &&
+		getCookie({ name: RECURRING_CONTRIBUTOR_COOKIE }) !== 'false') ||
+	supportSiteRecurringCookiePresent();
+
 const shouldNotBeShownSupportMessaging = (): boolean =>
 	getCookie({ name: HIDE_SUPPORT_MESSAGING_COOKIE }) === 'true';
 
@@ -322,6 +327,11 @@ const shouldHideSupportMessaging = (): boolean =>
 	shouldNotBeShownSupportMessaging() ||
 	isRecentOneOffContributor() || // because members-data-api is unaware of one-off contributions so relies on cookie
 	isRecurringContributor(); // guest checkout means that members-data-api isn't aware of all recurring contributions so relies on cookie
+
+const shouldHideSupportMessagingOkta = async (): Promise<boolean> =>
+	shouldNotBeShownSupportMessaging() ||
+	isRecentOneOffContributor() || // because members-data-api is unaware of one-off contributions so relies on cookie
+	(await isRecurringContributorOkta()); // guest checkout means that members-data-api isn't aware of all recurring contributions so relies on cookie
 
 const readerRevenueRelevantCookies = [
 	PAYING_MEMBER_COOKIE,
@@ -411,4 +421,5 @@ export {
 	ARTICLES_VIEWED_OPT_OUT_COOKIE,
 	CONTRIBUTIONS_REMINDER_SIGNED_UP,
 	canShowContributionsReminderFeature,
+	shouldHideSupportMessagingOkta,
 };
