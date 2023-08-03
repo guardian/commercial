@@ -16,7 +16,6 @@ import type { UserFeaturesResponse } from 'types/membership';
 import {
 	getAuthStatus,
 	getOptionsHeadersWithOkta,
-	isUserLoggedIn,
 	isUserLoggedInOktaRefactor,
 } from './identity/api';
 
@@ -317,12 +316,6 @@ const isPostAskPauseOneOffContributor = (askPauseDays = 90): boolean => {
 	return daysSinceLastContribution > askPauseDays;
 };
 
-const isRecurringContributor = (): boolean =>
-	// If the user is logged in, but has no cookie yet, play it safe and assume they're a contributor
-	(isUserLoggedIn() &&
-		getCookie({ name: RECURRING_CONTRIBUTOR_COOKIE }) !== 'false') ||
-	supportSiteRecurringCookiePresent();
-
 const isRecurringContributorOkta = async (): Promise<boolean> =>
 	((await isUserLoggedInOktaRefactor()) &&
 		getCookie({ name: RECURRING_CONTRIBUTOR_COOKIE }) !== 'false') ||
@@ -338,11 +331,6 @@ const shouldNotBeShownSupportMessaging = (): boolean =>
     Please also update readerRevenueRelevantCookies below, if changing the cookies
     which this function is dependent on.
 */
-
-const shouldHideSupportMessaging = (): boolean =>
-	shouldNotBeShownSupportMessaging() ||
-	isRecentOneOffContributor() || // because members-data-api is unaware of one-off contributions so relies on cookie
-	isRecurringContributor(); // guest checkout means that members-data-api isn't aware of all recurring contributions so relies on cookie
 
 const shouldHideSupportMessagingOkta = async (): Promise<boolean> =>
 	shouldNotBeShownSupportMessaging() ||
@@ -419,10 +407,8 @@ export {
 	isAdFreeUser,
 	isPayingMember,
 	isRecentOneOffContributor,
-	isRecurringContributor,
 	isRecurringContributorOkta,
 	isDigitalSubscriber,
-	shouldHideSupportMessaging,
 	refresh,
 	deleteOldData,
 	getLastOneOffContributionTimestamp,
