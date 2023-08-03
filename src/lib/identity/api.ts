@@ -207,3 +207,4 @@ export {
 	getOptionsHeadersWithOkta,
 	isUserLoggedInOktaRefactor,
 };
+export type { AuthStatus };
