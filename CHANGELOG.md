@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 10.12.0
+
+### Minor Changes
+
+- 42a5ee9: No longer set the ad free cookie on reject all
+
 ## 10.11.0
 
 ### Minor Changes
