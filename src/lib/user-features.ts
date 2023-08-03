@@ -419,6 +419,7 @@ export {
 	isPayingMember,
 	isRecentOneOffContributor,
 	isRecurringContributor,
+	isRecurringContributorOkta,
 	isDigitalSubscriber,
 	shouldHideSupportMessaging,
 	refresh,
