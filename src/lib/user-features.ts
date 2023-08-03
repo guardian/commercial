@@ -13,7 +13,12 @@ import { dateDiffDays } from 'lib/utils/time-utils';
 import { getLocalDate } from 'types/dates';
 import type { LocalDate } from 'types/dates';
 import type { UserFeaturesResponse } from 'types/membership';
-import { isUserLoggedIn, isUserLoggedInOktaRefactor } from './identity/api';
+import {
+	getAuthStatus,
+	getOptionsHeadersWithOkta,
+	isUserLoggedIn,
+	isUserLoggedInOktaRefactor,
+} from './identity/api';
 
 // Persistence keys
 const USER_FEATURES_EXPIRY_COOKIE = 'gu_user_features_expiry';
@@ -142,25 +147,35 @@ const deleteOldData = (): void => {
 	removeCookie({ name: ONE_OFF_CONTRIBUTION_DATE_COOKIE });
 };
 
-const requestNewData = () =>
-	fetchJson(
-		`${
-			window.guardian.config.page.userAttributesApiUrl ??
-			'/USER_ATTRIBUTE_API_NOT_FOUND'
-		}/me`,
-		{
-			mode: 'cors',
-			credentials: 'include',
-		},
-	)
-		.then((response) => {
-			if (!validateResponse(response)) {
-				throw new Error('invalid response');
-			}
-			return response;
-		})
-		.then(persistResponse)
-		.catch(noop);
+const requestNewData = () => {
+	return getAuthStatus()
+		.then((authStatus) =>
+			authStatus.kind === 'SignedInWithCookies' ||
+			authStatus.kind === 'SignedInWithOkta'
+				? authStatus
+				: Promise.reject('The user is not signed in'),
+		)
+		.then((signedInAuthStatus) => {
+			return fetchJson(
+				`${
+					window.guardian.config.page.userAttributesApiUrl ??
+					'/USER_ATTRIBUTE_API_NOT_FOUND'
+				}/me`,
+				{
+					mode: 'cors',
+					...getOptionsHeadersWithOkta(signedInAuthStatus),
+				},
+			)
+				.then((response) => {
+					if (!validateResponse(response)) {
+						throw new Error('invalid response');
+					}
+					return response;
+				})
+				.then(persistResponse)
+				.catch(noop);
+		});
+};
 
 const featuresDataIsOld = () =>
 	cookieIsExpiredOrMissing(USER_FEATURES_EXPIRY_COOKIE);
