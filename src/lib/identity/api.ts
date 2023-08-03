@@ -190,13 +190,15 @@ const getOptionsHeadersWithOkta = (
 
 const getUserIdentifiersFromApi = mergeCalls(
 	(mergingCallback: (u: IdentityUserIdentifiers | null) => void) => {
-		if (isUserLoggedIn()) {
-			void fetchUserIdentifiers().then((result) =>
-				mergingCallback(result),
-			);
-		} else {
-			mergingCallback(null);
-		}
+		async () => {
+			if (await isUserLoggedInOktaRefactor()) {
+				void fetchUserIdentifiers().then((result) =>
+					mergingCallback(result),
+				);
+			} else {
+				mergingCallback(null);
+			}
+		};
 	},
 );
 
