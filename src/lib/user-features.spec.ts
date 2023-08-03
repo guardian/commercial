@@ -2,7 +2,12 @@ import { getCookie } from '@guardian/libs';
 import { addCookie, removeCookie } from 'lib/cookies';
 import { fetchJson } from 'lib/utils/fetch-json';
 import type { UserFeaturesResponse } from 'types/membership';
-import { isUserLoggedIn as isUserLoggedIn_ } from './identity/api';
+import type { AuthStatus } from './identity/api';
+import {
+	getAuthStatus as getAuthStatus_,
+	isUserLoggedIn as isUserLoggedIn_,
+	isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_,
+} from './identity/api';
 import {
 	accountDataUpdateWarning,
 	getDaysSinceLastOneOffContribution,
@@ -14,7 +19,7 @@ import {
 	isPayingMember,
 	isPostAskPauseOneOffContributor,
 	isRecentOneOffContributor,
-	isRecurringContributor,
+	isRecurringContributorOkta,
 	refresh,
 	shouldNotBeShownSupportMessaging,
 } from './user-features';
@@ -22,6 +27,9 @@ import {
 jest.mock('lib/raven');
 jest.mock('lib/identity/api', () => ({
 	isUserLoggedIn: jest.fn(),
+	isUserLoggedInOktaRefactor: jest.fn(),
+	getAuthStatus: jest.fn(),
+	getOptionsHeadersWithOkta: jest.fn(),
 }));
 jest.mock('lib/utils/fetch-json', () => ({
 	fetchJson: jest.fn(() => Promise.resolve()),
@@ -30,6 +38,15 @@ jest.mock('lib/utils/fetch-json', () => ({
 const fetchJsonSpy = fetchJson as jest.MockedFunction<typeof fetchJson>;
 const isUserLoggedIn = isUserLoggedIn_ as jest.MockedFunction<
 	typeof isUserLoggedIn_
+>;
+
+const isUserLoggedInOktaRefactor =
+	isUserLoggedInOktaRefactor_ as jest.MockedFunction<
+		typeof isUserLoggedInOktaRefactor_
+	>;
+
+const getAuthStatus = getAuthStatus_ as jest.MockedFunction<
+	typeof getAuthStatus_
 >;
 
 const PERSISTENCE_KEYS = {
@@ -102,6 +119,10 @@ describe('Refreshing the features data', () => {
 		beforeEach(() => {
 			jest.resetAllMocks();
 			isUserLoggedIn.mockReturnValue(true);
+			isUserLoggedInOktaRefactor.mockResolvedValue(true);
+			getAuthStatus.mockResolvedValue({
+				kind: 'SignedInWithOkta',
+			} as AuthStatus);
 			fetchJsonSpy.mockReturnValue(Promise.resolve());
 		});
 
@@ -243,6 +264,7 @@ describe('The isPayingMember getter', () => {
 	it('Is false when the user is logged out', () => {
 		jest.resetAllMocks();
 		isUserLoggedIn.mockReturnValue(false);
+		isUserLoggedInOktaRefactor.mockReturnValue(Promise.resolve(false));
 		expect(isPayingMember()).toBe(false);
 	});
 
@@ -271,32 +293,33 @@ describe('The isPayingMember getter', () => {
 });
 
 describe('The isRecurringContributor getter', () => {
-	it('Is false when the user is logged out', () => {
+	it('Is false when the user is logged out', async () => {
 		jest.resetAllMocks();
 		isUserLoggedIn.mockReturnValue(false);
-		expect(isRecurringContributor()).toBe(false);
+		expect(await isRecurringContributorOkta()).toBe(false);
 	});
 
 	describe('When the user is logged in', () => {
 		beforeEach(() => {
 			jest.resetAllMocks();
+			isUserLoggedInOktaRefactor.mockResolvedValue(true);
 			isUserLoggedIn.mockReturnValue(true);
 		});
 
-		it('Is true when the user has a `true` recurring contributor cookie', () => {
+		it('Is true when the user has a `true` recurring contributor cookie', async () => {
 			addCookie(PERSISTENCE_KEYS.RECURRING_CONTRIBUTOR_COOKIE, 'true');
-			expect(isRecurringContributor()).toBe(true);
+			expect(await isRecurringContributorOkta()).toBe(true);
 		});
 
-		it('Is false when the user has a `false` recurring contributor cookie', () => {
+		it('Is false when the user has a `false` recurring contributor cookie', async () => {
 			addCookie(PERSISTENCE_KEYS.RECURRING_CONTRIBUTOR_COOKIE, 'false');
-			expect(isRecurringContributor()).toBe(false);
+			expect(await isRecurringContributorOkta()).toBe(false);
 		});
 
-		it('Is true when the user has no recurring contributor cookie', () => {
+		it('Is true when the user has no recurring contributor cookie', async () => {
 			// If we don't know, we err on the side of caution, rather than annoy paying users
 			removeCookie(PERSISTENCE_KEYS.RECURRING_CONTRIBUTOR_COOKIE);
-			expect(isRecurringContributor()).toBe(true);
+			expect(await isRecurringContributorOkta()).toBe(true);
 		});
 	});
 });
@@ -380,6 +403,9 @@ describe('Storing new feature data', () => {
 		fetchJsonSpy.mockReturnValue(Promise.resolve(mockResponse));
 		deleteAllFeaturesData();
 		isUserLoggedIn.mockReturnValue(true);
+		getAuthStatus.mockReturnValue(
+			Promise.resolve({ kind: 'SignedInWithOkta' } as AuthStatus),
+		);
 	});
 
 	it('Puts the paying-member state and ad-free state in appropriate cookie', () => {
