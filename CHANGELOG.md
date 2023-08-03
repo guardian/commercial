@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 10.13.0
+
+### Minor Changes
+
+- ce34b8b: External ads
+
 ## 10.12.0
 
 ### Minor Changes
