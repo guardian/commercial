@@ -41,9 +41,10 @@ const setAdSlotMinHeight = (advert: Advert): void => {
 		void fastdom
 			.measure(() => node.getAttribute('data-label') === 'true')
 			.then((hasLabel) => {
+				const labelHeight = hasLabel ? AD_LABEL_HEIGHT : 0;
 				if (hasLabel) {
 					void fastdom.mutate(() => {
-						const adSlotHeight = size.height + AD_LABEL_HEIGHT;
+						const adSlotHeight = size.height + labelHeight;
 						node.style.minHeight = `${adSlotHeight}px`;
 					});
 				}
