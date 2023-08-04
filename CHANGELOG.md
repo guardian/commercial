@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 10.14.0
+
+### Minor Changes
+
+- de7ea95: Fix setting of min-height when there is no lable
+- b9f44a5: Remove redundant check for setting min-height when there is an ad label
+
 ## 10.13.0
 
 ### Minor Changes
