@@ -42,12 +42,10 @@ const setAdSlotMinHeight = (advert: Advert): void => {
 			.measure(() => node.getAttribute('data-label') === 'true')
 			.then((hasLabel) => {
 				const labelHeight = hasLabel ? AD_LABEL_HEIGHT : 0;
-				if (hasLabel) {
-					void fastdom.mutate(() => {
-						const adSlotHeight = size.height + labelHeight;
-						node.style.minHeight = `${adSlotHeight}px`;
-					});
-				}
+				void fastdom.mutate(() => {
+					const adSlotHeight = size.height + labelHeight;
+					node.style.minHeight = `${adSlotHeight}px`;
+				});
 			});
 	} else {
 		// For the situation when we load a non-standard size ad, e.g. fluid ad, after
