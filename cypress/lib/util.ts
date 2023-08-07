@@ -1,5 +1,10 @@
 import type { UserFeaturesResponse } from '../../src/types/membership';
 
+const hostnames = {
+	code: 'code.dev-theguardian.com',
+	prod: 'www.theguardian.com',
+	dev: 'localhost:3030',
+};
 /**
  * Generate a full URL for a given relative path and the desired stage
  *
@@ -11,39 +16,23 @@ import type { UserFeaturesResponse } from '../../src/types/membership';
 export const getTestUrl = (
 	stage: 'code' | 'prod' | 'dev',
 	path: string,
-	{ isDcr } = { isDcr: false },
+	type: 'article' | 'front' = 'article',
 	adtest = 'fixed-puppies-ci',
 ) => {
-	let url = '';
-	switch (stage) {
-		case 'code': {
-			url = `https://code.dev-theguardian.com${path}`;
-		}
-		case 'prod': {
-			url = `https://theguardian.com${path}`;
-		}
-		// Use dev if no stage properly specified
-		case 'dev':
-		default: {
-			// The local bundle can be served from DCR by using COMMERCIAL_BUNDLE_URL when starting DCR to test changes locally without needing to launch frontend
-			if (isDcr) {
-				url = `http://localhost:3030/Article/https://theguardian.com${path}`;
-			} else {
-				url = `http://localhost:9000${path}`;
-			}
-		}
-	}
+	let url = new URL('https://www.theguardian.com');
+
+	url.hostname = hostnames[stage] ?? hostnames.dev;
+	url.protocol = stage === 'prod' || stage === 'code' ? 'https' : 'http';
+	url.pathname = stage === 'dev' ? `/${type}/${path}` : path;
 
 	if (adtest) {
-		const builder = new URL(url);
-		builder.searchParams.append('adtest', adtest);
+		url.searchParams.append('adtest', adtest);
 		// force an invalid epic so it is not shown
-		if (adtest === 'fixed-puppies-ci') {
-			builder.searchParams.append('force-epic', '9999:CONTROL');
+		if (adtest === 'fixed-puppies-ci' || adtest === 'puppies-pageskin') {
+			url.searchParams.append('force-epic', '9999:CONTROL');
 		}
-		url = builder.toString();
 	}
-	return url;
+	return url.toString();
 };
 
 /**
