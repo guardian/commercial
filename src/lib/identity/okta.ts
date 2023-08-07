@@ -10,7 +10,6 @@ import type { Stage } from '../../types/global';
 // the `id_token.profile.theguardian` scope is used to get custom claims
 type CustomIdTokenClaims = CustomClaims & {
 	email: string;
-	//TODO confirm what this google tag parameter name should be
 	google_tag_id: string;
 };
 
