@@ -103,7 +103,7 @@
 	"dependencies": {
 		"@changesets/cli": "^2.26.1",
 		"@guardian/ab-core": "^5.0.0",
-		"@guardian/consent-management-platform": "^13.5.0",
+		"@guardian/consent-management-platform": "^13.6.1",
 		"@guardian/core-web-vitals": "^5.0.0",
 		"@guardian/libs": "^15.0.0",
 		"@guardian/source-foundations": "^12.0.0",
