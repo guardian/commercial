@@ -24,10 +24,13 @@ describe('pageskin on uk front', () => {
 			cy.intercept(gamUrl, (req) => {
 				req.continue((res) => {
 					expect(res.headers).to.have.property('google-lineitem-id');
-					expect(
-						(res.headers['google-lineitem-id'] as string).split(',')
-							.length,
-					).to.be.greaterThan(1);
+
+					// In Single Request Mode, the google-lineitem-id header will contain multiple line item ids
+					const lineItemIds = (
+						res.headers['google-lineitem-id'] as string
+					).split(',');
+
+					expect(lineItemIds).to.be.greaterThan(1);
 				});
 			}).as('gamCall');
 
@@ -52,10 +55,11 @@ describe('pageskin on uk front', () => {
 			cy.intercept(gamUrl, (req) => {
 				req.continue((res) => {
 					expect(res.headers).to.have.property('google-lineitem-id');
-					expect(
-						(res.headers['google-lineitem-id'] as string).split(',')
-							.length,
-					).to.equal(1);
+					// In Non Single Request Mode, the google-lineitem-id header will contain a single line item id
+					const lineItemIds = (
+						res.headers['google-lineitem-id'] as string
+					).split(',');
+					expect(lineItemIds).to.have.lengthOf(1);
 				});
 			}).as('gamCall');
 
