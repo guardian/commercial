@@ -1,9 +1,25 @@
 import type { UserFeaturesResponse } from '../../src/types/membership';
 
 const hostnames = {
-	code: 'code.dev-theguardian.com',
-	prod: 'www.theguardian.com',
-	dev: 'localhost:3030',
+	code: 'https://code.dev-theguardian.com',
+	prod: 'https://www.theguardian.com',
+	dev: 'http://localhost:3030',
+};
+
+const getPath = (
+	stage: 'code' | 'prod' | 'dev',
+	type: 'article' | 'liveblog' | 'front' = 'article',
+	path: string,
+) => {
+	if (stage === 'dev') {
+		if (type === 'liveblog' || type === 'article') {
+			return `Article/https://www.theguardian.com${path}`;
+		} else {
+			return `Front/https://www.theguardian.com${path}`;
+		}
+	}
+
+	return path;
 };
 /**
  * Generate a full URL for a given relative path and the desired stage
@@ -21,9 +37,9 @@ export const getTestUrl = (
 ) => {
 	let url = new URL('https://www.theguardian.com');
 
-	url.hostname = hostnames[stage] ?? hostnames.dev;
-	url.protocol = stage === 'prod' || stage === 'code' ? 'https' : 'http';
-	url.pathname = stage === 'dev' ? `/${type}/${path}` : path;
+	url.href = hostnames[stage];
+
+	url.pathname = getPath(stage, type, path);
 
 	if (type === 'liveblog') {
 		url.searchParams.append('live', '1');
