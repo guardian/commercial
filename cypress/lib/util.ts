@@ -16,7 +16,7 @@ const hostnames = {
 export const getTestUrl = (
 	stage: 'code' | 'prod' | 'dev',
 	path: string,
-	type: 'article' | 'front' = 'article',
+	type: 'article' | 'liveblog' | 'front' = 'article',
 	adtest = 'fixed-puppies-ci',
 ) => {
 	let url = new URL('https://www.theguardian.com');
@@ -24,6 +24,10 @@ export const getTestUrl = (
 	url.hostname = hostnames[stage] ?? hostnames.dev;
 	url.protocol = stage === 'prod' || stage === 'code' ? 'https' : 'http';
 	url.pathname = stage === 'dev' ? `/${type}/${path}` : path;
+
+	if (type === 'liveblog') {
+		url.searchParams.append('live', '1');
+	}
 
 	if (adtest) {
 		url.searchParams.append('adtest', adtest);
