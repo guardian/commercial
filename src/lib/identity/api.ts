@@ -4,7 +4,6 @@ import type {
 	IDToken,
 } from '@guardian/identity-auth';
 import { getCookie } from '@guardian/libs';
-import { mergeCalls } from 'lib/utils/async-call-merger';
 import { mediator } from 'lib/utils/mediator';
 import type { CustomIdTokenClaims } from './okta';
 
@@ -22,13 +21,6 @@ type IdentityUserFromCache = {
 	id: number;
 	rawResponse: string;
 } | null;
-
-type IdentityUserIdentifiers = {
-	id: string;
-	brazeUuid: string;
-	puzzleId: string;
-	googleTagId: string;
-};
 
 type SignedOutWithCookies = { kind: 'SignedOutWithCookies' };
 type SignedInWithCookies = { kind: 'SignedInWithCookies' };
@@ -101,28 +93,29 @@ const getUserFromCookie = (): IdentityUserFromCache => {
 	return userFromCookieCache;
 };
 
-const fetchUserIdentifiers = () => {
-	const url = `${idApiRoot}/user/me/identifiers`;
-	return fetch(url, {
+/**
+ * Fetch the logged in user's Google Tga ID from IDAPI
+ * @returns one of:
+ * - string - the user's Google Tag ID
+ * - null - if the request failed
+ */
+const fetchGoogleTagIdFromApi = (): Promise<string | null> =>
+	fetch(`${idApiRoot}/user/me/identifiers`, {
 		mode: 'cors',
 		credentials: 'include',
 	})
 		.then((resp) => {
 			if (resp.status === 200) {
-				return resp.json();
+				return resp.json() as Promise<{ googleTagId: string }>;
 			} else {
-				console.log(
-					'failed to get Identity user identifiers',
-					resp.status,
-				);
-				return null;
+				throw resp.status;
 			}
 		})
+		.then((json) => json.googleTagId)
 		.catch((e) => {
 			console.log('failed to get Identity user identifiers', e);
 			return null;
 		});
-};
 
 const isUserLoggedIn = (): boolean => getUserFromCookie() !== null;
 
@@ -192,25 +185,34 @@ const getOptionsHeadersWithOkta = (
 	};
 };
 
-const getUserIdentifiersFromApi = mergeCalls(
-	(mergingCallback: (u: IdentityUserIdentifiers | null) => void) => {
-		async () => {
-			if (await isUserLoggedInOktaRefactor()) {
-				void fetchUserIdentifiers().then((result) =>
-					mergingCallback(result),
-				);
-			} else {
-				mergingCallback(null);
-			}
-		};
-	},
-);
+/**
+ * Get the user's Google Tag ID
+ *
+ * If enrolled in the Okta experiment, return the value from the ID token
+ * `google_tag_id` claim
+ * Otherwise, fetch the Google Tag ID from IDAPI
+ * @returns one of:
+ * - string, if the user is enrolled in the Okta experiment or the fetch to
+ *   IDAPI was successful
+ * - null, if the user is signed out or the fetch to IDAPI failed
+ */
+const getGoogleTagId = (): Promise<string | null> =>
+	getAuthStatus().then((authStatus) => {
+		switch (authStatus.kind) {
+			case 'SignedInWithCookies':
+				return fetchGoogleTagIdFromApi();
+			case 'SignedInWithOkta':
+				return authStatus.idToken.claims.google_tag_id;
+			default:
+				return null;
+		}
+	});
 
 export {
-	getUserIdentifiersFromApi,
 	isUserLoggedIn,
 	getAuthStatus,
 	getOptionsHeadersWithOkta,
 	isUserLoggedInOktaRefactor,
+	getGoogleTagId,
 };
 export type { AuthStatus };
