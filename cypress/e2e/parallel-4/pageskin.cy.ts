@@ -12,7 +12,7 @@ const small = breakpoints.filter(
 	({ breakpoint }) => breakpoint === 'mobile' || breakpoint === 'tablet',
 );
 
-describe('merchandising slot on pages', () => {
+describe('pageskin on uk front', () => {
 	beforeEach(() => {
 		cy.useConsentedSession('pageskin-consented');
 	});
