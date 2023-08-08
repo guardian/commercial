@@ -30,7 +30,7 @@ describe('pageskin on uk front', () => {
 						res.headers['google-lineitem-id'] as string
 					).split(',');
 
-					expect(lineItemIds).to.be.greaterThan(1);
+					expect(lineItemIds.length).to.be.greaterThan(1);
 				});
 			}).as('gamCall');
 
@@ -55,11 +55,12 @@ describe('pageskin on uk front', () => {
 			cy.intercept(gamUrl, (req) => {
 				req.continue((res) => {
 					expect(res.headers).to.have.property('google-lineitem-id');
+
 					// In Non Single Request Mode, the google-lineitem-id header will contain a single line item id
 					const lineItemIds = (
 						res.headers['google-lineitem-id'] as string
 					).split(',');
-					expect(lineItemIds).to.have.lengthOf(1);
+					expect(lineItemIds.length).to.equal(1);
 				});
 			}).as('gamCall');
 
