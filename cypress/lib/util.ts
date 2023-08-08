@@ -1,5 +1,32 @@
 import type { UserFeaturesResponse } from '../../src/types/membership';
 
+type Stage = 'code' | 'prod' | 'dev';
+
+const hostnames = {
+	code: 'https://code.dev-theguardian.com',
+	prod: 'https://www.theguardian.com',
+	dev: 'http://localhost:3030',
+};
+
+const getPath = (
+	stage: Stage,
+	type: 'article' | 'liveblog' | 'front' = 'article',
+	path: string,
+) => {
+	if (stage === 'dev') {
+		if (type === 'liveblog' || type === 'article') {
+			return `Article/https://www.theguardian.com${path}`;
+		} else {
+			return `Front/https://www.theguardian.com${path}`;
+		}
+	}
+
+	return path;
+};
+
+const normalizeStage = (stage: string): Stage =>
+	['code', 'prod', 'dev'].includes(stage) ? (stage as Stage) : 'dev';
+
 /**
  * Generate a full URL for a given relative path and the desired stage
  *
@@ -9,50 +36,38 @@ import type { UserFeaturesResponse } from '../../src/types/membership';
  * @returns {string} The full path
  */
 export const getTestUrl = (
-	stage: 'code' | 'prod' | 'dev',
+	stage: Stage,
 	path: string,
-	{ isDcr } = { isDcr: false },
+	type: 'article' | 'liveblog' | 'front' = 'article',
 	adtest = 'fixed-puppies-ci',
 ) => {
-	let url = '';
-	switch (stage) {
-		case 'code': {
-			url = `https://code.dev-theguardian.com${path}`;
-		}
-		case 'prod': {
-			url = `https://theguardian.com${path}`;
-		}
-		// Use dev if no stage properly specified
-		case 'dev':
-		default: {
-			// The local bundle can be served from DCR by using COMMERCIAL_BUNDLE_URL when starting DCR to test changes locally without needing to launch frontend
-			if (isDcr) {
-				url = `http://localhost:3030/Article/https://theguardian.com${path}`;
-			} else {
-				url = `http://localhost:9000${path}`;
-			}
-		}
+	let url = new URL('https://www.theguardian.com');
+
+	url.href = hostnames[stage] ?? hostnames.dev;
+
+	url.pathname = getPath(stage, type, path);
+
+	if (type === 'liveblog') {
+		url.searchParams.append('live', '1');
 	}
 
 	if (adtest) {
-		const builder = new URL(url);
-		builder.searchParams.append('adtest', adtest);
+		url.searchParams.append('adtest', adtest);
 		// force an invalid epic so it is not shown
-		if (adtest === 'fixed-puppies-ci') {
-			builder.searchParams.append('force-epic', '9999:CONTROL');
+		if (adtest === 'fixed-puppies-ci' || adtest === 'puppies-pageskin') {
+			url.searchParams.append('force-epic', '9999:CONTROL');
 		}
-		url = builder.toString();
 	}
-	return url;
+	return url.toString();
 };
 
 /**
  * Pass different stage in via environment variable
  * e.g. `yarn cypress run --env stage=code`
  */
-export const getStage = () => {
+export const getStage = (): Stage => {
 	const stage = Cypress.env('stage');
-	return stage?.toLowerCase();
+	return normalizeStage(stage?.toLowerCase());
 };
 
 export const fakeLogin = (subscriber = true) => {
