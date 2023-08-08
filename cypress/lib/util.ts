@@ -1,5 +1,7 @@
 import type { UserFeaturesResponse } from '../../src/types/membership';
 
+type Stage = 'code' | 'prod' | 'dev';
+
 const hostnames = {
 	code: 'https://code.dev-theguardian.com',
 	prod: 'https://www.theguardian.com',
@@ -7,7 +9,7 @@ const hostnames = {
 };
 
 const getPath = (
-	stage: 'code' | 'prod' | 'dev',
+	stage: Stage,
 	type: 'article' | 'liveblog' | 'front' = 'article',
 	path: string,
 ) => {
@@ -21,6 +23,10 @@ const getPath = (
 
 	return path;
 };
+
+const normalizeStage = (stage: string): Stage =>
+	['code', 'prod', 'dev'].includes(stage) ? (stage as Stage) : 'dev';
+
 /**
  * Generate a full URL for a given relative path and the desired stage
  *
@@ -30,14 +36,14 @@ const getPath = (
  * @returns {string} The full path
  */
 export const getTestUrl = (
-	stage: 'code' | 'prod' | 'dev',
+	stage: Stage,
 	path: string,
 	type: 'article' | 'liveblog' | 'front' = 'article',
 	adtest = 'fixed-puppies-ci',
 ) => {
 	let url = new URL('https://www.theguardian.com');
 
-	url.href = hostnames[stage];
+	url.href = hostnames[stage] ?? hostnames.dev;
 
 	url.pathname = getPath(stage, type, path);
 
@@ -59,9 +65,9 @@ export const getTestUrl = (
  * Pass different stage in via environment variable
  * e.g. `yarn cypress run --env stage=code`
  */
-export const getStage = () => {
+export const getStage = (): Stage => {
 	const stage = Cypress.env('stage');
-	return stage?.toLowerCase();
+	return normalizeStage(stage?.toLowerCase());
 };
 
 export const fakeLogin = (subscriber = true) => {
