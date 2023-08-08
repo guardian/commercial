@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 10.15.0
+
+### Minor Changes
+
+- 987ebaf: Start recording DCR performance measures
+
+### Patch Changes
+
+- 1f7d50c: Updated version of consent-management-platform
+
 ## 10.14.0
 
 ### Minor Changes
