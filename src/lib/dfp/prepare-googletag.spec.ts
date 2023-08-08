@@ -67,7 +67,7 @@ jest.mock('lib/header-bidding/prebid/prebid', () => ({
 
 jest.mock('lib/raven');
 jest.mock('lib/identity/api', () => ({
-	isUserLoggedIn: () => true,
+	isUserLoggedInOktaRefactor: () => true,
 	getUserFromCookie: jest.fn(),
 	getUserIdentifiersFromApi: jest.fn(),
 	getUrl: jest.fn(),

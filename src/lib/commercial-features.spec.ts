@@ -1,12 +1,12 @@
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
 import { commercialFeatures } from './commercial-features';
 import type { CommercialFeaturesConstructor } from './commercial-features';
-import { isUserLoggedIn as isUserLoggedIn_ } from './identity/api';
+import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from './identity/api';
 import {
 	isAdFreeUser as isAdFreeUser_,
 	isPayingMember as isPayingMember_,
 	isRecentOneOffContributor as isRecentOneOffContributor_,
-	shouldHideSupportMessaging as shouldHideSupportMessaging_,
+	shouldHideSupportMessagingOkta as shouldHideSupportMessagingOkta_,
 } from './user-features';
 import userPrefs from './user-prefs';
 
@@ -17,17 +17,18 @@ const isRecentOneOffContributor =
 	isRecentOneOffContributor_ as jest.MockedFunction<
 		typeof isRecentOneOffContributor_
 	>;
-const shouldHideSupportMessaging =
-	shouldHideSupportMessaging_ as jest.MockedFunction<
-		typeof shouldHideSupportMessaging_
+const shouldHideSupportMessagingOkta =
+	shouldHideSupportMessagingOkta_ as jest.MockedFunction<
+		typeof shouldHideSupportMessagingOkta_
 	>;
 const isAdFreeUser = isAdFreeUser_ as jest.MockedFunction<typeof isAdFreeUser_>;
 const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
 	typeof getCurrentBreakpoint_
 >;
-const isUserLoggedIn = isUserLoggedIn_ as jest.MockedFunction<
-	typeof isUserLoggedIn_
->;
+const isUserLoggedInOktaRefactor =
+	isUserLoggedInOktaRefactor_ as jest.MockedFunction<
+		typeof isUserLoggedInOktaRefactor_
+	>;
 
 const CommercialFeatures =
 	commercialFeatures.constructor as CommercialFeaturesConstructor;
@@ -35,7 +36,7 @@ const CommercialFeatures =
 jest.mock('./user-features', () => ({
 	isPayingMember: jest.fn(),
 	isRecentOneOffContributor: jest.fn(),
-	shouldHideSupportMessaging: jest.fn(),
+	shouldHideSupportMessagingOkta: jest.fn(),
 	isAdFreeUser: jest.fn(),
 }));
 
@@ -44,7 +45,7 @@ jest.mock('lib/detect/detect-breakpoint', () => ({
 }));
 
 jest.mock('./identity/api', () => ({
-	isUserLoggedIn: jest.fn(),
+	isUserLoggedInOktaRefactor: jest.fn(),
 }));
 
 const originalUserAgent = navigator.userAgent;
@@ -94,11 +95,11 @@ describe('Commercial features', () => {
 		userPrefs.removeSwitch('adverts');
 
 		getCurrentBreakpoint.mockReturnValue('desktop');
-		isPayingMember.mockReturnValue(false);
+		isPayingMember.mockResolvedValue(false);
 		isRecentOneOffContributor.mockReturnValue(false);
-		shouldHideSupportMessaging.mockReturnValue(false);
+		shouldHideSupportMessagingOkta.mockResolvedValue(false);
 		isAdFreeUser.mockReturnValue(false);
-		isUserLoggedIn.mockReturnValue(true);
+		isUserLoggedInOktaRefactor.mockResolvedValue(true);
 
 		expect.hasAssertions();
 	});
@@ -343,7 +344,7 @@ describe('Commercial features', () => {
 	describe('Comment adverts', () => {
 		beforeEach(() => {
 			window.guardian.config.page.commentable = true;
-			isUserLoggedIn.mockReturnValue(true);
+			isUserLoggedInOktaRefactor.mockResolvedValue(true);
 		});
 
 		it('Displays when page has comments', () => {
@@ -352,7 +353,7 @@ describe('Commercial features', () => {
 		});
 
 		it('Will also display when the user is not logged in', () => {
-			isUserLoggedIn.mockReturnValue(false);
+			isUserLoggedInOktaRefactor.mockResolvedValue(false);
 			const features = new CommercialFeatures();
 			expect(features.commentAdverts).toBe(true);
 		});
@@ -406,7 +407,7 @@ describe('Commercial features', () => {
 		});
 
 		it('Does not appear when user signed out', () => {
-			isUserLoggedIn.mockReturnValue(false);
+			isUserLoggedInOktaRefactor.mockResolvedValue(false);
 			const features = new CommercialFeatures();
 			expect(features.commentAdverts).toBe(false);
 		});
