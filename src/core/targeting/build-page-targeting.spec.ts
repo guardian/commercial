@@ -2,6 +2,8 @@ import { cmp as cmp_ } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type { TCFv2ConsentState } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import { setCookie, storage } from '@guardian/libs';
+import { getAuthStatus as getAuthStatus_ } from 'lib/identity/api';
+import type { AuthStatus } from 'lib/identity/api';
 import { getLocale as getLocale_ } from '../lib/get-locale';
 import type { Edition } from '../types';
 import { buildPageTargeting } from './build-page-targeting';
@@ -28,6 +30,15 @@ jest.mock('@guardian/consent-management-platform', () => ({
 		willShowPrivacyMessageSync: jest.fn(),
 	},
 }));
+
+jest.mock('projects/common/modules/identity/api', () => ({
+	getAuthStatus: jest.fn(),
+	getOptionsHeadersWithOkta: jest.fn(),
+}));
+
+const getAuthStatus = getAuthStatus_ as jest.MockedFunction<
+	typeof getAuthStatus_
+>;
 
 const mockViewport = (width: number, height: number): void => {
 	Object.defineProperties(window, {
@@ -157,6 +168,10 @@ describe('Build Page Targeting', () => {
 
 		getLocale.mockReturnValue('US');
 
+		getAuthStatus.mockReturnValue(
+			Promise.resolve({ kind: 'SignedInWithOkta' } as AuthStatus),
+		);
+
 		jest.spyOn(global.Math, 'random').mockReturnValue(0.5);
 
 		expect.hasAssertions();
@@ -172,8 +187,8 @@ describe('Build Page Targeting', () => {
 		expect(buildPageTargeting).toBeDefined();
 	});
 
-	it('should build correct page targeting', () => {
-		const pageTargeting = buildPageTargeting({
+	it('should build correct page targeting', async () => {
+		const pageTargeting = await buildPageTargeting({
 			adFree: false,
 			clientSideParticipations: {},
 			consentState: emptyConsent,
@@ -204,204 +219,250 @@ describe('Build Page Targeting', () => {
 		]);
 	});
 
-	it('should set correct personalized ad (pa) param', () => {
+	it('should set correct personalized ad (pa) param', async () => {
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: tcfv2WithConsentMock,
-			}).pa,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: tcfv2WithConsentMock,
+				})
+			).pa,
 		).toBe('t');
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: tcfv2WithoutConsentMock,
-			}).pa,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: tcfv2WithoutConsentMock,
+				})
+			).pa,
 		).toBe('f');
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: tcfv2NullConsentMock,
-			}).pa,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: tcfv2NullConsentMock,
+				})
+			).pa,
 		).toBe('f');
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: tcfv2MixedConsentMock,
-			}).pa,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: tcfv2MixedConsentMock,
+				})
+			).pa,
 		).toBe('f');
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: ccpaWithConsentMock,
-			}).pa,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: ccpaWithConsentMock,
+				})
+			).pa,
 		).toBe('t');
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: ccpaWithoutConsentMock,
-			}).pa,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: ccpaWithoutConsentMock,
+				})
+			).pa,
 		).toBe('f');
 	});
 
-	it('Should correctly set the RDP flag (rdp) param', () => {
+	it('Should correctly set the RDP flag (rdp) param', async () => {
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: tcfv2WithoutConsentMock,
-			}).rdp,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: tcfv2WithoutConsentMock,
+				})
+			).rdp,
 		).toBe('na');
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: tcfv2NullConsentMock,
-			}).rdp,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: tcfv2NullConsentMock,
+				})
+			).rdp,
 		).toBe('na');
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: ccpaWithConsentMock,
-			}).rdp,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: ccpaWithConsentMock,
+				})
+			).rdp,
 		).toBe('f');
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: ccpaWithoutConsentMock,
-			}).rdp,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: ccpaWithoutConsentMock,
+				})
+			).rdp,
 		).toBe('t');
 	});
 
-	it('Should correctly set the TCFv2 (consent_tcfv2, cmp_interaction) params', () => {
+	it('Should correctly set the TCFv2 (consent_tcfv2, cmp_interaction) params', async () => {
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: tcfv2WithConsentMock,
-			}).consent_tcfv2,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: tcfv2WithConsentMock,
+				})
+			).consent_tcfv2,
 		).toBe('t');
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: tcfv2WithConsentMock,
-			}).cmp_interaction,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: tcfv2WithConsentMock,
+				})
+			).cmp_interaction,
 		).toBe('useractioncomplete');
 
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: tcfv2WithoutConsentMock,
-			}).consent_tcfv2,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: tcfv2WithoutConsentMock,
+				})
+			).consent_tcfv2,
 		).toBe('f');
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: tcfv2WithoutConsentMock,
-			}).cmp_interaction,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: tcfv2WithoutConsentMock,
+				})
+			).cmp_interaction,
 		).toBe('cmpuishown');
 
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: tcfv2MixedConsentMock,
-			}).consent_tcfv2,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: tcfv2MixedConsentMock,
+				})
+			).consent_tcfv2,
 		).toBe('f');
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: tcfv2MixedConsentMock,
-			}).cmp_interaction,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: tcfv2MixedConsentMock,
+				})
+			).cmp_interaction,
 		).toBe('useractioncomplete');
 	});
 
-	it('should set correct edition param', () => {
+	it('should set correct edition param', async () => {
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: emptyConsent,
-			}).edition,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: emptyConsent,
+				})
+			).edition,
 		).toBe('us');
 	});
 
-	it('should set correct se param', () => {
+	it('should set correct se param', async () => {
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: emptyConsent,
-			}).se,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: emptyConsent,
+				})
+			).se,
 		).toEqual(['filmweekly']);
 	});
 
-	it('should set correct k param', () => {
+	it('should set correct k param', async () => {
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: emptyConsent,
-			}).k,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: emptyConsent,
+				})
+			).k,
 		).toEqual(['prince-charles-letters', 'uk/uk', 'prince-charles']);
 	});
 
-	it('should set correct ab param', () => {
+	it('should set correct ab param', async () => {
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {
-					someTest: {
-						variant: 'variantName',
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {
+						someTest: {
+							variant: 'variantName',
+						},
 					},
-				},
-				consentState: emptyConsent,
-			}).ab,
+					consentState: emptyConsent,
+				})
+			).ab,
 		).toEqual(['someTest-variantName']);
 	});
 
-	it('should set Observer flag for Observer content', () => {
+	it('should set Observer flag for Observer content', async () => {
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: emptyConsent,
-			}).ob,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: emptyConsent,
+				})
+			).ob,
 		).toEqual('t');
 	});
 
-	it('should set correct branding param for paid content', () => {
+	it('should set correct branding param for paid content', async () => {
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: emptyConsent,
-			}).br,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: emptyConsent,
+				})
+			).br,
 		).toEqual('p');
 	});
 
-	it('should not contain an ad-free targeting value', () => {
+	it('should not contain an ad-free targeting value', async () => {
 		expect(
-			buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: emptyConsent,
-			}).af,
+			(
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: emptyConsent,
+				})
+			).af,
 		).toBeUndefined();
 	});
 
-	it('should remove empty values', () => {
+	it('should remove empty values', async () => {
 		window.guardian.config.page = {
 			// pageId should always be defined
 			pageId: 'football/series/footballweekly',
@@ -409,7 +470,7 @@ describe('Build Page Targeting', () => {
 		window.guardian.config.ophan = { pageViewId: '123456' };
 
 		expect(
-			buildPageTargeting({
+			await buildPageTargeting({
 				adFree: false,
 				clientSideParticipations: {},
 				consentState: emptyConsent,
@@ -437,288 +498,336 @@ describe('Build Page Targeting', () => {
 	});
 
 	describe('Breakpoint targeting', () => {
-		it('should set correct breakpoint targeting for a mobile device', () => {
+		it('should set correct breakpoint targeting for a mobile device', async () => {
 			mockViewport(320, 0);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).bp,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).bp,
 			).toEqual('mobile');
 		});
 
-		it('should set correct breakpoint targeting for a medium mobile device', () => {
+		it('should set correct breakpoint targeting for a medium mobile device', async () => {
 			mockViewport(375, 0);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).bp,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).bp,
 			).toEqual('mobile');
 		});
 
-		it('should set correct breakpoint targeting for a mobile device in landscape mode', () => {
+		it('should set correct breakpoint targeting for a mobile device in landscape mode', async () => {
 			mockViewport(480, 0);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).bp,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).bp,
 			).toEqual('mobile');
 		});
 
-		it('should set correct breakpoint targeting for a phablet device', () => {
+		it('should set correct breakpoint targeting for a phablet device', async () => {
 			mockViewport(660, 0);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).bp,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).bp,
 			).toEqual('tablet');
 		});
 
-		it('should set correct breakpoint targeting for a tablet device', () => {
+		it('should set correct breakpoint targeting for a tablet device', async () => {
 			mockViewport(740, 0);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).bp,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).bp,
 			).toEqual('tablet');
 		});
 
-		it('should set correct breakpoint targeting for a desktop device', () => {
+		it('should set correct breakpoint targeting for a desktop device', async () => {
 			mockViewport(980, 0);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).bp,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).bp,
 			).toEqual('desktop');
 		});
 
-		it('should set correct breakpoint targeting for a leftCol device', () => {
+		it('should set correct breakpoint targeting for a leftCol device', async () => {
 			mockViewport(1140, 0);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).bp,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).bp,
 			).toEqual('desktop');
 		});
 
-		it('should set correct breakpoint targeting for a wide device', () => {
+		it('should set correct breakpoint targeting for a wide device', async () => {
 			mockViewport(1300, 0);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).bp,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).bp,
 			).toEqual('desktop');
 		});
 	});
 
 	describe('Build Page Targeting (ad-free)', () => {
-		it('should set the ad-free param to t when enabled', () => {
+		it('should set the ad-free param to t when enabled', async () => {
 			expect(
-				buildPageTargeting({
-					adFree: true,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).af,
+				(
+					await buildPageTargeting({
+						adFree: true,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).af,
 			).toBe('t');
 		});
 	});
 
 	describe('Permutive', () => {
-		it('should set the permutive param to the value from localstorage', () => {
+		it('should set the permutive param to the value from localstorage', async () => {
 			const PERMUTIVE_KEY = `_papns`;
 			storage.local.setRaw(PERMUTIVE_KEY, '[1, 2, 3]');
 
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: ccpaWithConsentMock,
-				}).permutive,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: ccpaWithConsentMock,
+					})
+				).permutive,
 			).toEqual(['1', '2', '3']);
 		});
 	});
 
 	describe('Already visited frequency', () => {
-		it('can pass a value of five or less', () => {
+		it('can pass a value of five or less', async () => {
 			storage.local.setRaw('gu.alreadyVisited', String(5));
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: ccpaWithConsentMock,
-				}).fr,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: ccpaWithConsentMock,
+					})
+				).fr,
 			).toEqual('5');
 		});
 
-		it('between five and thirty, includes it in a bucket in the form "x-y"', () => {
+		it('between five and thirty, includes it in a bucket in the form "x-y"', async () => {
 			storage.local.setRaw('gu.alreadyVisited', String(18));
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: ccpaWithConsentMock,
-				}).fr,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: ccpaWithConsentMock,
+					})
+				).fr,
 			).toEqual('16-19');
 		});
 
-		it('over thirty, includes it in the bucket "30plus"', () => {
+		it('over thirty, includes it in the bucket "30plus"', async () => {
 			storage.local.setRaw('gu.alreadyVisited', String(300));
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: ccpaWithConsentMock,
-				}).fr,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: ccpaWithConsentMock,
+					})
+				).fr,
 			).toEqual('30plus');
 		});
 
-		it('passes a value of 0 if the value is not stored', () => {
+		it('passes a value of 0 if the value is not stored', async () => {
 			storage.local.remove('gu.alreadyVisited');
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: ccpaWithConsentMock,
-				}).fr,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: ccpaWithConsentMock,
+					})
+				).fr,
 			).toEqual('0');
 		});
 
-		it('passes a value of 0 if the number is invalid', () => {
+		it('passes a value of 0 if the number is invalid', async () => {
 			storage.local.setRaw('gu.alreadyVisited', 'not-a-number');
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: ccpaWithConsentMock,
-				}).fr,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: ccpaWithConsentMock,
+					})
+				).fr,
 			).toEqual('0');
 		});
 
-		it('passes a value of 0 if consent is not given', () => {
+		it('passes a value of 0 if consent is not given', async () => {
 			storage.local.setRaw('gu.alreadyVisited', String(5));
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: ccpaWithoutConsentMock,
-				}).fr,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: ccpaWithoutConsentMock,
+					})
+				).fr,
 			).toEqual('0');
 		});
 
-		it('passes a value of 0 if empty consent', () => {
+		it('passes a value of 0 if empty consent', async () => {
 			storage.local.setRaw('gu.alreadyVisited', String(5));
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).fr,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).fr,
 			).toEqual('0');
 		});
 	});
 
 	describe('Referrer', () => {
-		it('should set ref to Facebook', () => {
+		it('should set ref to Facebook', async () => {
 			jest.spyOn(document, 'referrer', 'get').mockReturnValue(
 				'https://www.facebook.com/feel-the-force',
 			);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).ref,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).ref,
 			).toEqual('facebook');
 		});
 
-		it('should set ref to Twitter', () => {
+		it('should set ref to Twitter', async () => {
 			jest.spyOn(document, 'referrer', 'get').mockReturnValue(
 				'https://t.co/you-must-unlearn-what-you-have-learned',
 			);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).ref,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).ref,
 			).toEqual('twitter');
 		});
 
-		it('should set ref to reddit', () => {
+		it('should set ref to reddit', async () => {
 			jest.spyOn(document, 'referrer', 'get').mockReturnValue(
 				'https://www.reddit.com/its-not-my-fault',
 			);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).ref,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).ref,
 			).toEqual('reddit');
 		});
 
-		it('should set ref to google', () => {
+		it('should set ref to google', async () => {
 			jest.spyOn(document, 'referrer', 'get').mockReturnValue(
 				'https://www.google.com/i-find-your-lack-of-faith-distrubing',
 			);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).ref,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).ref,
 			).toEqual('google');
 		});
 
-		it('should set ref empty string if referrer does not match', () => {
+		it('should set ref empty string if referrer does not match', async () => {
 			jest.spyOn(document, 'referrer', 'get').mockReturnValue(
 				'https://theguardian.com',
 			);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).ref,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).ref,
 			).toEqual(undefined);
 		});
 	});
 
 	describe('URL Keywords', () => {
-		it('should return correct keywords from pageId', () => {
+		it('should return correct keywords from pageId', async () => {
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).urlkw,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).urlkw,
 			).toEqual(['footballweekly']);
 		});
 
-		it('should extract multiple url keywords correctly', () => {
+		it('should extract multiple url keywords correctly', async () => {
 			window.guardian.config.page.pageId =
 				'stage/2016/jul/26/harry-potter-cursed-child-review-palace-theatre-london';
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).urlkw,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).urlkw,
 			).toEqual([
 				'harry',
 				'potter',
@@ -731,15 +840,17 @@ describe('Build Page Targeting', () => {
 			]);
 		});
 
-		it('should get correct keywords when trailing slash is present', () => {
+		it('should get correct keywords when trailing slash is present', async () => {
 			window.guardian.config.page.pageId =
 				'stage/2016/jul/26/harry-potter-cursed-child-review-palace-theatre-london/';
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).urlkw,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).urlkw,
 			).toEqual([
 				'harry',
 				'potter',
@@ -754,29 +865,33 @@ describe('Build Page Targeting', () => {
 	});
 
 	describe('inskin targeting', () => {
-		it('should not allow inskin if cmp has not initialised', () => {
+		it('should not allow inskin if cmp has not initialised', async () => {
 			cmp.hasInitialised.mockReturnValue(false);
 			cmp.willShowPrivacyMessageSync.mockReturnValue(false);
 			mockViewport(1920, 1080);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).inskin,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).inskin,
 			).toBe('f');
 		});
 
-		it('should not allow inskin if cmp will show a banner', () => {
+		it('should not allow inskin if cmp will show a banner', async () => {
 			cmp.hasInitialised.mockReturnValue(true);
 			cmp.willShowPrivacyMessageSync.mockReturnValue(true);
 			mockViewport(1920, 1080);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).inskin,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).inskin,
 			).toBe('f');
 		});
 	});
@@ -790,41 +905,50 @@ describe('Build Page Targeting', () => {
 			['l', 1561],
 			['l', 1920],
 			['l', 2560],
-		])("should return '%s' if viewport width is %s", (expected, width) => {
-			cmp.hasInitialised.mockReturnValue(true);
-			cmp.willShowPrivacyMessageSync.mockReturnValue(false);
-			mockViewport(width, 800);
-			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).skinsize,
-			).toBe(expected);
-		});
+		])(
+			"should return '%s' if viewport width is %s",
+			async (expected, width) => {
+				cmp.hasInitialised.mockReturnValue(true);
+				cmp.willShowPrivacyMessageSync.mockReturnValue(false);
+				mockViewport(width, 800);
+				expect(
+					(
+						await buildPageTargeting({
+							adFree: false,
+							clientSideParticipations: {},
+							consentState: emptyConsent,
+						})
+					).skinsize,
+				).toBe(expected);
+			},
+		);
 
-		it("should return 's' if vp does not have a width", () => {
+		it("should return 's' if vp does not have a width", async () => {
 			mockViewport(0, 0);
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).skinsize,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).skinsize,
 			).toBe('s');
 		});
 	});
 
 	describe('ad manager group value', () => {
 		const STORAGE_KEY = 'gu.adManagerGroup';
-		it('if present in localstorage, use value from storage', () => {
+		it('if present in localstorage, use value from storage', async () => {
 			storage.local.setRaw(STORAGE_KEY, '10');
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: tcfv2WithConsentMock,
-				}).amtgrp,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: tcfv2WithConsentMock,
+					})
+				).amtgrp,
 			).toEqual('10');
 			storage.local.remove(STORAGE_KEY);
 		});
@@ -840,26 +964,30 @@ describe('Build Page Targeting', () => {
 			[tcfv2WithoutConsentMock, undefined],
 			[tcfv2MixedConsentMock, undefined],
 			[tcfv2MixedConsentMock, undefined],
-		])('Framework %p => amtgrp is %s', (consentState, value) => {
+		])('Framework %p => amtgrp is %s', async (consentState, value) => {
 			storage.local.setRaw(STORAGE_KEY, '9');
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: consentState,
-				}).amtgrp,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: consentState,
+					})
+				).amtgrp,
 			).toEqual(value);
 			storage.local.remove(STORAGE_KEY);
 		});
 
-		it('if not present in localstorage, generate a random group 1-12, store in localstorage', () => {
+		it('if not present in localstorage, generate a random group 1-12, store in localstorage', async () => {
 			// restore Math.random for this test so we can assert the group value range is 1-12
 			jest.spyOn(global.Math, 'random').mockRestore();
-			const valueGenerated = buildPageTargeting({
-				adFree: false,
-				clientSideParticipations: {},
-				consentState: tcfv2WithConsentMock,
-			}).amtgrp;
+			const valueGenerated = (
+				await buildPageTargeting({
+					adFree: false,
+					clientSideParticipations: {},
+					consentState: tcfv2WithConsentMock,
+				})
+			).amtgrp;
 			expect(valueGenerated).toBeDefined();
 			expect(Number(valueGenerated)).toBeGreaterThanOrEqual(1);
 			expect(Number(valueGenerated)).toBeLessThanOrEqual(12);
@@ -869,25 +997,29 @@ describe('Build Page Targeting', () => {
 	});
 
 	describe('dcre dotcom-rendering-eligible', () => {
-		it('should be true if page is a dotcom-rendering-eligible page', () => {
+		it('should be true if page is a dotcom-rendering-eligible page', async () => {
 			window.guardian.config.page.dcrCouldRender = true;
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).dcre,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).dcre,
 			).toBe('t');
 		});
 
-		it('should be false if page is not a dotcom-rendering-eligible page', () => {
+		it('should be false if page is not a dotcom-rendering-eligible page', async () => {
 			window.guardian.config.page.dcrCouldRender = false;
 			expect(
-				buildPageTargeting({
-					adFree: false,
-					clientSideParticipations: {},
-					consentState: emptyConsent,
-				}).dcre,
+				(
+					await buildPageTargeting({
+						adFree: false,
+						clientSideParticipations: {},
+						consentState: emptyConsent,
+					})
+				).dcre,
 			).toBe('f');
 		});
 	});

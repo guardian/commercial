@@ -10,8 +10,8 @@ const emptyConsent: ConsentState = {
 };
 
 describe('buildPageTargetingConsentless', () => {
-	it('should filter out the keys that are not needed for consentless targeting', () => {
-		(buildPageTargeting as jest.Mock).mockReturnValue({
+	it('should filter out the keys that are not needed for consentless targeting', async () => {
+		(buildPageTargeting as jest.Mock).mockResolvedValue({
 			fr: '0',
 			cmp_interaction: 'na',
 			consent_tcfv2: 'na',
@@ -45,7 +45,9 @@ describe('buildPageTargetingConsentless', () => {
 			rc: '0',
 		});
 
-		expect(buildPageTargetingConsentless(emptyConsent, false)).toEqual({
+		expect(
+			await buildPageTargetingConsentless(emptyConsent, false),
+		).toEqual({
 			bl: ['blog'],
 			br: 'p',
 			ct: 'video',

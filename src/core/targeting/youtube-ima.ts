@@ -22,14 +22,14 @@ const encodeCustomParams = (
 	return encodedParams;
 };
 
-const mergeCustomParamsWithTargeting = (
+const mergeCustomParamsWithTargeting = async (
 	customParams: CustomParams,
 	consentState: ConsentState,
 	clientSideParticipations: Participations,
 ) => {
 	let pageTargeting = {};
 	try {
-		pageTargeting = buildPageTargeting({
+		pageTargeting = await buildPageTargeting({
 			adFree: false,
 			clientSideParticipations,
 			consentState: consentState,
@@ -57,13 +57,13 @@ type BuildImaAdTagUrl = {
 	clientSideParticipations: Participations;
 };
 
-const buildImaAdTagUrl = ({
+const buildImaAdTagUrl = async ({
 	adUnit,
 	clientSideParticipations,
 	consentState,
 	customParams,
-}: BuildImaAdTagUrl): string => {
-	const mergedCustomParams = mergeCustomParamsWithTargeting(
+}: BuildImaAdTagUrl): Promise<string> => {
+	const mergedCustomParams = await mergeCustomParamsWithTargeting(
 		customParams,
 		consentState,
 		clientSideParticipations,
