@@ -97,7 +97,7 @@ const runSecondStage = (
  * Initialize ad slot for comment section
  * @returns Promise
  */
-export const initCommentAdverts = (): Promise<boolean> => {
+export const initCommentAdverts = async (): Promise<boolean> => {
 	// TODO is this relevant? add amIUsed
 	const adSlotContainer = document.querySelector('.js-discussion__ad-slot');
 	const isMobile = getCurrentBreakpoint() === 'mobile';
@@ -105,8 +105,9 @@ export const initCommentAdverts = (): Promise<boolean> => {
 		return Promise.resolve(false);
 	}
 
-	mediator.once('modules:comments:renderComments:rendered', async () => {
-		const isLoggedIn = await isUserLoggedInOktaRefactor();
+	const isLoggedIn = await isUserLoggedInOktaRefactor();
+
+	mediator.once('modules:comments:renderComments:rendered', () => {
 		const commentMainColumn = document.querySelector<HTMLElement>(
 			'.js-comments .content__main-column',
 		);
