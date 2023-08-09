@@ -1,0 +1,12 @@
+regions: [eu-west-1]
+stacks: [frontend]
+allowedStages:
+  - CODE
+deployments:
+  frontend-static/test_commercial_bundles:
+    type: aws-s3
+    parameters:
+      bucketSsmKey: /account/services/dotcom-static.bucket
+      cacheControl: public, max-age=315360000, immutable
+      prefixStack: false
+      publicReadAcl: false

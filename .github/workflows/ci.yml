@@ -90,17 +90,18 @@ jobs:
         run: yarn build
 
       - name: Save build
-        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3
         with:
           name: dist
           path: dist
 
-  release:
-    name: Release
+  deploy:
+    name: Deploy
     needs: [build, test, lint, types]
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -108,26 +109,22 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'yarn'
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
       - name: Fetch build
         uses: actions/download-artifact@v3
         with:
           name: dist
           path: dist
 
-      - name: Create Release
-        uses: changesets/action@v1
+      - uses: aws-actions/configure-aws-credentials@v2
         with:
-          publish: yarn changeset publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          HUSKY: 0
+          aws-region: eu-west-1
+          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+
+      - uses: guardian/actions-riff-raff@v2
+        with:
+          # Temporary project name that'll never actually get used
+          projectName: dotcom:testing-commercial
+          configPath: ./riff-raff.yaml
+          contentDirectories: |
+            frontend-static/test_commercial_bundles:
+              - dist/bundle/prod

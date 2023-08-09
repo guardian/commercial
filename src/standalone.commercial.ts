@@ -60,7 +60,10 @@ const decideAssetsPath = () => {
 		return process.env.OVERRIDE_BUNDLE_PATH;
 	} else {
 		const assetsPath = frontendAssetsFullURL ?? page.assetsPath;
-		return `${assetsPath}javascripts/commercial/`;
+		// TEMP
+		// Adjust the path we use to fetch dynamic imports to match the
+		// bucket key we use to deploy via Riff-Raff
+		return `${assetsPath}test_commercial_bundles/`;
 	}
 };
 

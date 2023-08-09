@@ -4,6 +4,7 @@ const BundleAnalyzerPlugin =
 	require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const config = require('./webpack.config.js');
 const TerserPlugin = require('terser-webpack-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const path = require('path');
 const { execSync } = require('child_process');
 
@@ -35,6 +36,10 @@ module.exports = webpackMerge.smart(config, {
 			'process.env.NODE_ENV': JSON.stringify('production'),
 			'process.env.OVERRIDE_BUNDLE_PATH': JSON.stringify(false),
 			...gitCommitSHA(),
+		}),
+		new WebpackManifestPlugin({
+			publicPath: '',
+			fileName: 'assets.map',
 		}),
 	],
 	optimization: {
