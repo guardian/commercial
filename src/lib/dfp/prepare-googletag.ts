@@ -75,7 +75,7 @@ const setPageTargeting = (consentState: ConsentState) =>
  */
 const setPublisherProvidedId = async (): Promise<void> => {
 	const googleTagId = await getGoogleTagId();
-	if (!(googleTagId === null)) {
+	if (googleTagId !== null) {
 		window.googletag.pubads().setPublisherProvidedId(googleTagId);
 	}
 };
