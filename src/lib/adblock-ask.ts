@@ -1,6 +1,6 @@
 import { pageShouldHideReaderRevenue } from 'lib/contributions-utilities';
 import fastdom from 'lib/fastdom-promise';
-import { shouldHideSupportMessagingOkta } from 'lib/user-features';
+import { shouldHideSupportMessaging } from 'lib/user-features';
 import { supportSubscribeDigitalURL } from 'lib/utils/support-utilities';
 
 const params = new URLSearchParams();
@@ -26,7 +26,7 @@ const askHtml = `
 `;
 
 const canShow = async (): Promise<boolean> =>
-	!(await shouldHideSupportMessagingOkta()) &&
+	!(await shouldHideSupportMessaging()) &&
 	!pageShouldHideReaderRevenue() &&
 	!window.guardian.config.page.hasShowcaseMainElement;
 
