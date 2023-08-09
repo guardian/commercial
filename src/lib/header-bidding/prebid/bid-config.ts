@@ -26,6 +26,7 @@ import type {
 	PrebidXaxisParams,
 } from '../prebid-types';
 import {
+	containsBillboard,
 	containsBillboardNotLeaderboard,
 	containsLeaderboard,
 	containsLeaderboardOrBillboard,
@@ -223,17 +224,35 @@ const openxClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	},
 });
 
-const getOzonePlacementId = () => (isInUsa() ? '1420436308' : '0420420500');
+const getOzonePlacementId = (sizes: HeaderBiddingSize[]) => {
+	if (isInUsa()) {
+		if (getBreakpointKey() === 'D') {
+			if (containsBillboard(sizes)) {
+				return '3500010912';
+			}
+
+			if (containsMpu(sizes)) {
+				return '3500010911';
+			}
+		}
+		return '1420436308';
+	} else {
+		return '0420420500';
+	}
+};
 
 const ozoneClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	pageTargeting: PageTargeting,
 ) => ({
 	name: 'ozone',
 	switchName: 'prebidOzone',
-	bidParams: (): PrebidOzoneParams => ({
+	bidParams: (
+		_slotId: string,
+		sizes: HeaderBiddingSize[],
+	): PrebidOzoneParams => ({
 		publisherId: 'OZONEGMG0001',
 		siteId: '4204204209',
-		placementId: getOzonePlacementId(),
+		placementId: getOzonePlacementId(sizes),
 		customData: [
 			{
 				settings: {},
