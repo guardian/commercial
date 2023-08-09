@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 10.16.0
+
+### Minor Changes
+
+- 7434b3b: Add placement Ids for TripleLift to work through Ozone
+
 ## 10.15.0
 
 ### Minor Changes
