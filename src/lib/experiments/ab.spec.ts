@@ -21,7 +21,7 @@ const { overwriteMvtCookie } = _;
 // because of some implicit dependency evil that I haven't been able to figure out.
 jest.mock('lib/user-features', () => ({
 	getLastOneOffContributionDate: () => null,
-	isRecurringContributorOkta: () => false,
+	isRecurringContributor: () => false,
 	shouldNotBeShownSupportMessaging: () => false,
 }));
 
