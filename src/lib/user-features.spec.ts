@@ -18,7 +18,7 @@ import {
 	isPayingMember,
 	isPostAskPauseOneOffContributor,
 	isRecentOneOffContributor,
-	isRecurringContributorOkta,
+	isRecurringContributor,
 	refresh,
 	shouldNotBeShownSupportMessaging,
 } from './user-features';
@@ -289,7 +289,7 @@ describe('The isRecurringContributor getter', () => {
 	it('Is false when the user is logged out', async () => {
 		jest.resetAllMocks();
 		isUserLoggedInOktaRefactor.mockResolvedValue(false);
-		expect(await isRecurringContributorOkta()).toBe(false);
+		expect(await isRecurringContributor()).toBe(false);
 	});
 
 	describe('When the user is logged in', () => {
@@ -300,18 +300,18 @@ describe('The isRecurringContributor getter', () => {
 
 		it('Is true when the user has a `true` recurring contributor cookie', async () => {
 			addCookie(PERSISTENCE_KEYS.RECURRING_CONTRIBUTOR_COOKIE, 'true');
-			expect(await isRecurringContributorOkta()).toBe(true);
+			expect(await isRecurringContributor()).toBe(true);
 		});
 
 		it('Is false when the user has a `false` recurring contributor cookie', async () => {
 			addCookie(PERSISTENCE_KEYS.RECURRING_CONTRIBUTOR_COOKIE, 'false');
-			expect(await isRecurringContributorOkta()).toBe(false);
+			expect(await isRecurringContributor()).toBe(false);
 		});
 
 		it('Is true when the user has no recurring contributor cookie', async () => {
 			// If we don't know, we err on the side of caution, rather than annoy paying users
 			removeCookie(PERSISTENCE_KEYS.RECURRING_CONTRIBUTOR_COOKIE);
-			expect(await isRecurringContributorOkta()).toBe(true);
+			expect(await isRecurringContributor()).toBe(true);
 		});
 	});
 });
