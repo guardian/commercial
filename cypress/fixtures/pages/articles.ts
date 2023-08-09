@@ -21,7 +21,8 @@ const articles: Page[] = [
 			stage,
 			'/environment/2020/oct/13/maverick-rewilders-endangered-species-extinction-conservation-uk-wildlife',
 		),
-		expectedMinInlineSlotsOnPage: 10,
+		expectedMinInlineSlotsOnDesktop: 11,
+		expectedMinInlineSlotsOnMobile: 16,
 	},
 	{
 		path: getTestUrl(
