@@ -332,7 +332,7 @@ const shouldNotBeShownSupportMessaging = (): boolean =>
     which this function is dependent on.
 */
 
-const shouldHideSupportMessagingOkta = async (): Promise<boolean> =>
+const shouldHideSupportMessaging = async (): Promise<boolean> =>
 	shouldNotBeShownSupportMessaging() ||
 	isRecentOneOffContributor() || // because members-data-api is unaware of one-off contributions so relies on cookie
 	(await isRecurringContributorOkta()); // guest checkout means that members-data-api isn't aware of all recurring contributions so relies on cookie
@@ -424,5 +424,5 @@ export {
 	ARTICLES_VIEWED_OPT_OUT_COOKIE,
 	CONTRIBUTIONS_REMINDER_SIGNED_UP,
 	canShowContributionsReminderFeature,
-	shouldHideSupportMessagingOkta,
+	shouldHideSupportMessaging,
 };
