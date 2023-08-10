@@ -1,4 +1,9 @@
 import type { VendorName } from '@guardian/consent-management-platform/dist/types';
+import type {
+	AccessTokenClaims,
+	CustomClaims,
+	IdentityAuth,
+} from '@guardian/identity-auth';
 import type { EventTimer } from '../core/event-timer';
 import type { PageTargeting } from '../core/targeting/build-page-targeting';
 import type {
@@ -260,6 +265,11 @@ type ComscoreGlobals = {
 	comscorekw?: string;
 };
 
+type CustomIdTokenClaims = CustomClaims & {
+	email: string;
+	google_tag_id: string;
+};
+
 type AdBlockers = {
 	active: boolean | undefined;
 	onDetect: Array<(value: boolean | PromiseLike<boolean>) => void>;
@@ -444,6 +454,7 @@ declare global {
 			notificationEventHistory?: HeaderNotification[][];
 			commercialTimer?: EventTimer;
 			offlineCount?: number;
+			identityAuth?: IdentityAuth<AccessTokenClaims, CustomIdTokenClaims>;
 		};
 		ootag: {
 			queue: Array<() => void>;
@@ -519,4 +530,5 @@ export type {
 	Stage,
 	TagAttribute,
 	ThirdPartyTag,
+	CustomIdTokenClaims,
 };
