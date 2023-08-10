@@ -219,10 +219,9 @@ export const initPermutive = (): Promise<void> => {
 		{},
 	);
 	/* eslint-enable */
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- this is a stub
-	(window.googletag = window.googletag || {}),
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- this is a stub
-		(window.googletag.cmd = window.googletag.cmd || []),
+	(window.googletag = window.googletag || {}), // eslint-disable-line @typescript-eslint/no-unnecessary-condition -- this is a stub
+		// @ts-expect-error -- this is a stub
+		(window.googletag.cmd = window.googletag.cmd || []), // eslint-disable-line @typescript-eslint/no-unnecessary-condition -- this is a stub
 		window.googletag.cmd.push(() => {
 			if (
 				window.googletag.pubads().getTargeting('permutive').length === 0

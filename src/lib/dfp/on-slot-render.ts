@@ -59,7 +59,7 @@ export const onSlotRender = (
 		 * if advert.hasPrebidSize is false we use size
 		 * from the GAM event when adjusting the slot size.
 		 * */
-		if (!advert.hasPrebidSize) {
+		if (!advert.hasPrebidSize && event.size) {
 			advert.size = sizeEventToAdSize(event.size);
 		}
 
