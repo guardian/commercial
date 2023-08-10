@@ -236,9 +236,8 @@ const getOzonePlacementId = (sizes: HeaderBiddingSize[]) => {
 			}
 		}
 		return '1420436308';
-	} else {
-		return '0420420500';
 	}
+	return '0420420500';
 };
 
 const ozoneClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (

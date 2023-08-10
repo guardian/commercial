@@ -43,9 +43,8 @@ export const init = (): Promise<void | boolean> =>
 		.then((consentState) => {
 			if (getConsentFor('a9', consentState)) {
 				return setupA9Once();
-			} else {
-				throw Error('No consent for a9');
 			}
+			throw Error('No consent for a9');
 		})
 		.catch((e) => {
 			log('commercial', '⚠️ Failed to execute a9', e);

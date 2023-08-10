@@ -58,10 +58,9 @@ const { isDotcomRendering, frontendAssetsFullURL, switches, page } =
 const decideAssetsPath = () => {
 	if (process.env.OVERRIDE_BUNDLE_PATH) {
 		return process.env.OVERRIDE_BUNDLE_PATH;
-	} else {
-		const assetsPath = frontendAssetsFullURL ?? page.assetsPath;
-		return `${assetsPath}javascripts/commercial/`;
 	}
+	const assetsPath = frontendAssetsFullURL ?? page.assetsPath;
+	return `${assetsPath}javascripts/commercial/`;
 };
 
 __webpack_public_path__ = decideAssetsPath();
