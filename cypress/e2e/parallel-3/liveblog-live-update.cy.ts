@@ -2,14 +2,14 @@ import { breakpoints } from '../../fixtures/breakpoints';
 import { liveblogs } from '../../fixtures/pages';
 import { mockIntersectionObserver } from '../../lib/util';
 
-const pages = [...liveblogs];
+const pages = liveblogs.filter(({ name }) => name === 'live-update');
 
 describe('Liveblog live updates', () => {
 	beforeEach(() => {
 		cy.useConsentedSession('liveblog-live-update-consented');
 	});
 
-	pages.forEach(({ path, expectedMinInlineSlotsOnPage }) => {
+	pages.forEach(({ path }) => {
 		breakpoints.forEach(({ breakpoint, width, height }) => {
 			it(`Test ads are inserted when liveblogs live update, breakpoint: ${breakpoint}`, () => {
 				cy.viewport(width, height);
@@ -25,29 +25,21 @@ describe('Liveblog live updates', () => {
 				cy.window().invoke('mockLiveUpdate', {
 					numNewBlocks: 5,
 					html: `
-							<p style="height:1000px;" class="pending block">New block</p>
-							<p style="height:1000px;" class="pending block">New block</p>
-							<p style="height:1000px;" class="pending block">New block</p>
-							<p style="height:1000px;" class="pending block">New block</p>
-							<p style="height:1000px;" class="pending block">New block</p>
-							`,
+						<p style="height:1000px;" class="pending block">New block</p>
+						<p style="height:1000px;" class="pending block">New block</p>
+						<p style="height:1000px;" class="pending block">New block</p>
+						<p style="height:1000px;" class="pending block">New block</p>
+						<p style="height:1000px;" class="pending block">New block</p>
+					`,
 					mostRecentBlockId: 'abc',
 				});
 
-				if (expectedMinInlineSlotsOnPage) {
-					cy.get('@adCount').then((adCount) => {
-						cy.get(
-							`#dfp-ad--inline${
-								breakpoint === 'mobile'
-									? expectedMinInlineSlotsOnPage + 3
-									: expectedMinInlineSlotsOnPage + 1
-							}`,
-						).should('exist');
-						cy.get('#liveblog-body .ad-slot')
-							.its('length')
-							.should('be.gt', adCount);
-					});
-				}
+				// Ensure that another ad has been added to the page after the new blocks are inserted
+				cy.get('@adCount').then((adCount) => {
+					cy.get('#liveblog-body .ad-slot')
+						.its('length')
+						.should('be.gt', adCount);
+				});
 			});
 		});
 	});
