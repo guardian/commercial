@@ -34,9 +34,8 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 			phablet: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
 			desktop: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
 		};
-	} else {
-		return {};
 	}
+	return {};
 };
 
 /**

@@ -279,12 +279,8 @@ async function initCommercialMetrics({
 		if (consented) {
 			addVisibilityListeners();
 			return true;
-		} else {
-			log(
-				'commercial',
-				"Metrics won't be sent because consent wasn't given",
-			);
 		}
+		log('commercial', "Metrics won't be sent because consent wasn't given");
 	}
 
 	return false;

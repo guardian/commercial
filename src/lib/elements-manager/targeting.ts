@@ -57,12 +57,11 @@ const getPageTargetingForElements = (
 			adFree: commercialFeatures.adFree,
 			clientSideParticipations: getSynchronousParticipations(),
 		});
-	} else {
-		return buildPageTargetingConsentless(
-			consentState,
-			commercialFeatures.adFree,
-		);
 	}
+	return buildPageTargetingConsentless(
+		consentState,
+		commercialFeatures.adFree,
+	);
 };
 
 /**

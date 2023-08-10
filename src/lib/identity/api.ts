@@ -85,13 +85,9 @@ const fetchUserIdentifiers = () => {
 		.then((resp) => {
 			if (resp.status === 200) {
 				return resp.json();
-			} else {
-				console.log(
-					'failed to get Identity user identifiers',
-					resp.status,
-				);
-				return null;
 			}
+			console.log('failed to get Identity user identifiers', resp.status);
+			return null;
 		})
 		.catch((e) => {
 			console.log('failed to get Identity user identifiers', e);
