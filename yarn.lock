@@ -1369,15 +1369,10 @@
     eslint-plugin-eslint-comments "3.2.0"
     eslint-plugin-import "2.27.5"
 
-"@guardian/libs@15.6.3":
+"@guardian/libs@15.6.3", "@guardian/libs@^15.6.3":
   version "15.6.3"
   resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-15.6.3.tgz#3c748640bfe706ef8ecbd44c101567bf2b769f4a"
   integrity sha512-WRHnZGXMn7TD2p/gXWdK+u2ZnS+CAvQ1pdBEjT3x61Ab1YhxOYEIkF5gT+l2kACuJZ7a8pWwuO6CA89JcfZfrw==
-
-"@guardian/libs@^10.0.0":
-  version "10.1.1"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-10.1.1.tgz#7048c365a68dda068f707d46c78979f430221963"
-  integrity sha512-OdWReBHRWhdbErVmS15hihVzlkdU8DkKrjDsUIN0P8QZiF4twuzcU3qsPwto2UfibAwPkWqKkNwH1k8b6xNclA==
 
 "@guardian/prettier@^4.0.0":
   version "4.0.0"
@@ -6155,11 +6150,17 @@ listr2@^5.0.7:
     through "^2.3.8"
     wrap-ansi "^7.0.0"
 
-live-connect-js@2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/live-connect-js/-/live-connect-js-2.4.0.tgz#c98b1c1fa94f81e0b67202a456de2bd915e41e6c"
-  integrity sha512-MSBLKfnXoxH+pqwji/Mf8yZu3VZMq4tnNfwMw7NTWN5a+TBM6f0RWgwui1YMA3nHmMhX/nzxxsso0SkyKcF0fA==
+live-connect-common@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/live-connect-common/-/live-connect-common-1.0.0.tgz#9cb558cd665c0418271770854538243420cd1354"
+  integrity sha512-LBZsvykcGeVRYI1eqqXrrNZsoBdL2a8cpyrYPIiGAF/CpixbyRbvqGslaFw511lH294QB16J3fYYg21aYuaM2Q==
+
+live-connect-js@^5.0.0:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/live-connect-js/-/live-connect-js-5.0.1.tgz#152372cf757e8af8eb4829f32979669b26cd9052"
+  integrity sha512-X/fFbKGG8MahpqIuxndApAc9udj1g5NIxL95zKPzvqoipPYoeqvh7SCDly1hPvbqsfFj/DIbOfdWbttXzCSryw==
   dependencies:
+    live-connect-common "^1.0.0"
     tiny-hashes "1.0.1"
 
 load-json-file@^4.0.0:
@@ -6944,15 +6945,15 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-prebid.js@guardian/prebid.js:
-  version "7.26.0"
-  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/2e3b96dc57dfe14ed8c418674ee7a0a150ece7cb"
+prebid.js@guardian/prebid.js#upgrade-v7.54.4:
+  version "7.54.4"
+  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/e730b022df4ae7e7392569b953322bd95bbfc12f"
   dependencies:
     "@babel/core" "^7.16.7"
     "@babel/plugin-transform-runtime" "^7.18.9"
     "@babel/preset-env" "^7.16.8"
     "@babel/runtime" "^7.18.9"
-    "@guardian/libs" "^10.0.0"
+    "@guardian/libs" "^15.6.3"
     core-js "^3.13.0"
     core-js-pure "^3.13.0"
     criteo-direct-rsa-validate "^1.1.0"
@@ -6962,7 +6963,7 @@ prebid.js@guardian/prebid.js:
     express "^4.15.4"
     fun-hooks "^0.9.9"
     just-clone "^1.0.2"
-    live-connect-js "2.4.0"
+    live-connect-js "^5.0.0"
   optionalDependencies:
     fsevents "^2.3.2"
 
