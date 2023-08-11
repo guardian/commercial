@@ -106,6 +106,12 @@ const outOfPageCallback = (advert: Advert) => {
 			if (adContainer) {
 				adContainer.style.display = 'none';
 			}
+		} else {
+			const adContainer =
+				advert.node.closest<HTMLElement>('.ad-slot-container');
+			if (adContainer) {
+				adContainer.style.display = 'none';
+			}
 		}
 		// if in a slice, add the 'no mpu' class
 		if (parent.classList.contains('fc-slice__item--mpu-candidate')) {
