@@ -15,6 +15,15 @@ const liveblogs: Page[] = [
 	{
 		path: getTestUrl(
 			stage,
+			'/football/live/2023/aug/08/carabao-cup-first-round-wrexham-v-wigan-gillingham-v-southampton-live',
+			'liveblog',
+		),
+		name: 'ad-limit',
+		expectedMinInlineSlotsOnDesktop: 5,
+	},
+	{
+		path: getTestUrl(
+			stage,
 			'/business/live/2023/aug/07/halifax-house-prices-gradual-drop-annual-fall-in-july-interest-rates-mortgages-business-live',
 			'liveblog',
 		),
