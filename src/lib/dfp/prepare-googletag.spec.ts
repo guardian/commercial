@@ -69,7 +69,7 @@ jest.mock('lib/raven');
 jest.mock('lib/identity/api', () => ({
 	isUserLoggedInOktaRefactor: () => true,
 	getUserFromCookie: jest.fn(),
-	getUserIdentifiersFromApi: jest.fn(),
+	getGoogleTagId: jest.fn().mockResolvedValue('test-id-string'),
 	getUrl: jest.fn(),
 }));
 jest.mock('ophan-tracker-js', () => null);
@@ -305,6 +305,7 @@ describe('DFP', () => {
 			refresh: jest.fn(),
 			setRequestNonPersonalizedAds: jest.fn(),
 			setPrivacySettings: jest.fn(),
+			setPublisherProvidedId: jest.fn(),
 		};
 
 		let sizesArray: googletag.SizeMappingArray = [];
@@ -537,6 +538,9 @@ describe('DFP', () => {
 
 		expect(pubAds.enableSingleRequest).toHaveBeenCalled();
 		expect(pubAds.collapseEmptyDivs).toHaveBeenCalled();
+		expect(pubAds.setPublisherProvidedId).toHaveBeenCalledWith(
+			'test-id-string',
+		);
 		expect(window.googletag.enableServices).toHaveBeenCalled();
 		expect(loadAdvert).toHaveBeenCalled();
 	});

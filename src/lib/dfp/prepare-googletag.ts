@@ -73,11 +73,12 @@ const setPageTargeting = (consentState: ConsentState) =>
 /**
  * Also known as PPID
  */
-const setPublisherProvidedId = async (): Promise<void> => {
-	const googleTagId = await getGoogleTagId();
-	if (googleTagId !== null) {
-		window.googletag.pubads().setPublisherProvidedId(googleTagId);
-	}
+const setPublisherProvidedId = (): void => {
+	void getGoogleTagId().then((googleTagId) => {
+		if (googleTagId !== null) {
+			window.googletag.pubads().setPublisherProvidedId(googleTagId);
+		}
+	});
 };
 
 export const init = (): Promise<void> => {
@@ -92,7 +93,7 @@ export const init = (): Promise<void> => {
 			let canRun = true;
 
 			if (consentState.canTarget) {
-				window.googletag.cmd.push(() => setPublisherProvidedId);
+				window.googletag.cmd.push(setPublisherProvidedId);
 			}
 
 			if (consentState.ccpa) {
