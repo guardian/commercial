@@ -46,19 +46,20 @@ const buildAdsConfig = (
 		} satisfies AdsConfigCCPAorAus;
 	}
 
-	if (cmpConsent.tcfv2) {
+	if (cmpConsent.framework === 'tcfv2') {
 		const tcfData = cmpConsent.tcfv2;
-		const canTarget = Object.values(tcfData.consents).every(Boolean);
-		const mergedAdTagParameters = {
-			...defaultAdsConfig.adTagParameters,
-			cmpGdpr: tcfData.gdprApplies ? 1 : 0,
-			cmpGvcd: tcfData.addtlConsent,
-			cmpVcd: tcfData.tcString,
-		};
-		return {
-			adTagParameters: mergedAdTagParameters,
-			nonPersonalizedAd: !canTarget,
-		} satisfies AdsConfigTCFV2;
+		if (tcfData) {
+			const mergedAdTagParameters = {
+				...defaultAdsConfig.adTagParameters,
+				cmpGdpr: tcfData.gdprApplies ? 1 : 0,
+				cmpGvcd: tcfData.addtlConsent,
+				cmpVcd: tcfData.tcString,
+			};
+			return {
+				adTagParameters: mergedAdTagParameters,
+				nonPersonalizedAd: !cmpConsent.canTarget,
+			} satisfies AdsConfigTCFV2;
+		}
 	}
 
 	// Shouldn't happen but handle if no matching framework
