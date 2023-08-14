@@ -111,6 +111,10 @@ export type PrebidSmartParams = {
 	formatId: number;
 };
 
+export type PrebidKargoParams = {
+	placementId: string;
+};
+
 export type BidderCode =
 	| 'adyoulike'
 	| 'and'
@@ -125,7 +129,8 @@ export type BidderCode =
 	| 'sonobi'
 	| 'triplelift'
 	| 'trustx'
-	| 'xhb';
+	| 'xhb'
+	| 'kargo';
 
 export type PrebidParams =
 	| PrebidAdYouLikeParams
@@ -140,7 +145,8 @@ export type PrebidParams =
 	| PrebidSonobiParams
 	| PrebidTripleLiftParams
 	| PrebidTrustXParams
-	| PrebidXaxisParams;
+	| PrebidXaxisParams
+	| PrebidKargoParams;
 
 export type PrebidBidder = {
 	name: BidderCode;

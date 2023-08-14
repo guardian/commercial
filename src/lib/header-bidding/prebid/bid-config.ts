@@ -17,6 +17,7 @@ import type {
 	PrebidBidder,
 	PrebidImproveParams,
 	PrebidIndexExchangeParams,
+	PrebidKargoParams,
 	PrebidOpenXParams,
 	PrebidOzoneParams,
 	PrebidPubmaticParams,
@@ -28,6 +29,7 @@ import type {
 import {
 	containsBillboard,
 	containsBillboardNotLeaderboard,
+	containsDmpu,
 	containsLeaderboard,
 	containsLeaderboardOrBillboard,
 	containsMobileSticky,
@@ -39,6 +41,7 @@ import {
 	shouldIncludeCriteo,
 	shouldIncludeImproveDigital,
 	shouldIncludeImproveDigitalSkin,
+	shouldIncludeKargo,
 	shouldIncludeOpenx,
 	shouldIncludeSmart,
 	shouldIncludeSonobi,
@@ -287,6 +290,28 @@ const getPubmaticPublisherId = (): string => {
 	return '157207';
 };
 
+const getKargoPlacementId = (sizes: HeaderBiddingSize[]): string => {
+	if (getBreakpointKey() === 'D') {
+		// top-above-nav on desktop, fronts-banners in the future
+		if (containsLeaderboardOrBillboard(sizes)) {
+			return '_yflg9S7c2x';
+		}
+		// right hand slots on desktop, aka right, inline2+ or mostpop
+		if (containsMpu(sizes) && containsDmpu(sizes)) {
+			return '_zOpeEAyfiz';
+		}
+		// other MPUs on desktop (inline1)
+		return '_qDBbBXYtzA';
+	}
+	// mobile-sticky on mobile
+	if (containsMobileSticky(sizes)) {
+		return '_odszPLn2hK';
+	}
+
+	// MPUs on mobile aka top-above-nav, inline on mobile and tablet
+	return '_y9LINEsbfh';
+};
+
 const pubmaticBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 	const defaultParams = {
 		name: 'pubmatic' as BidderCode,
@@ -428,6 +453,17 @@ const smartBidder: PrebidBidder = {
 	}),
 };
 
+const kargoBidder: PrebidBidder = {
+	name: 'kargo',
+	switchName: 'prebidKargo',
+	bidParams: (
+		_slotId: string,
+		sizes: HeaderBiddingSize[],
+	): PrebidKargoParams => ({
+		placementId: getKargoPlacementId(sizes),
+	}),
+};
+
 // There's an IX bidder for every size that the slot can take
 const indexExchangeBidders = (
 	slotSizes: HeaderBiddingSize[],
@@ -457,7 +493,7 @@ const biddersBeingTested = (allBidders: PrebidBidder[]): PrebidBidder[] =>
 
 const biddersSwitchedOn = (allBidders: PrebidBidder[]): PrebidBidder[] => {
 	const isSwitchedOn = (bidder: PrebidBidder): boolean =>
-		window.guardian.config.switches[bidder.switchName] ?? false;
+		window.guardian.config.switches[bidder.switchName] ?? true;
 
 	return allBidders.filter((bidder) => isSwitchedOn(bidder));
 };
@@ -480,6 +516,7 @@ const currentBidders = (
 		[shouldIncludeAdYouLike(slotSizes), adYouLikeBidder],
 		[shouldUseOzoneAdaptor(), ozoneClientSideBidder(pageTargeting)],
 		[shouldIncludeOpenx(), openxClientSideBidder(pageTargeting)],
+		[shouldIncludeKargo(), kargoBidder],
 	];
 
 	const otherBidders = biddersToCheck

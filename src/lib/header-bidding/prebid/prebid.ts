@@ -141,6 +141,7 @@ type BidderSettings = {
 	improvedigital?: Partial<BidderSetting>;
 	ozone?: Partial<BidderSetting>;
 	criteo?: Partial<BidderSetting>;
+	kargo?: Partial<BidderSetting>;
 };
 
 class PrebidAdUnit {
@@ -424,6 +425,12 @@ const initialise = (window: Window, framework: Framework = 'tcfv2'): void => {
 
 		pbjsConfig.improvedigital = {
 			usePrebidSizes: true,
+		};
+	}
+
+	if (window.guardian.config.switches.prebidKargo) {
+		window.pbjs.bidderSettings.kargo = {
+			storageAllowed: true,
 		};
 	}
 
