@@ -493,7 +493,7 @@ const biddersBeingTested = (allBidders: PrebidBidder[]): PrebidBidder[] =>
 
 const biddersSwitchedOn = (allBidders: PrebidBidder[]): PrebidBidder[] => {
 	const isSwitchedOn = (bidder: PrebidBidder): boolean =>
-		window.guardian.config.switches[bidder.switchName] ?? true;
+		window.guardian.config.switches[bidder.switchName] ?? false;
 
 	return allBidders.filter((bidder) => isSwitchedOn(bidder));
 };
