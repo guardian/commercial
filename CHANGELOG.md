@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 10.17.0
+
+### Minor Changes
+
+- 1bc7333: Turn off liveblog right column ads ab test
+
+### Patch Changes
+
+- 5c288b1: Fix cypress tests following text line height reduction
+
 ## 10.16.0
 
 ### Minor Changes
