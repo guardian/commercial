@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 10.17.1
+
+### Patch Changes
+
+- c529f94: A working getMeasure implementation
+
 ## 10.17.0
 
 ### Minor Changes
