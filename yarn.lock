@@ -1369,10 +1369,10 @@
     eslint-plugin-eslint-comments "3.2.0"
     eslint-plugin-import "2.27.5"
 
-"@guardian/libs@15.6.3":
-  version "15.6.3"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-15.6.3.tgz#3c748640bfe706ef8ecbd44c101567bf2b769f4a"
-  integrity sha512-WRHnZGXMn7TD2p/gXWdK+u2ZnS+CAvQ1pdBEjT3x61Ab1YhxOYEIkF5gT+l2kACuJZ7a8pWwuO6CA89JcfZfrw==
+"@guardian/libs@15.6.4":
+  version "15.6.4"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-15.6.4.tgz#13787065e5c58b884944c5c71d6e324c7f2e566a"
+  integrity sha512-oN+xN7FBuVKLCbbjvAMdWjgWqOtvR38acnqwAKsjUDkFsBzRWU/pueDSEGTCTTVSFcRdCKOsWnop+Vwh59P47g==
 
 "@guardian/libs@^10.0.0":
   version "10.1.1"
@@ -2087,10 +2087,10 @@
   resolved "https://registry.yarnpkg.com/@types/google.analytics/-/google.analytics-0.0.42.tgz#efe6ef9251a22ec8208dbb09f221a48a1863d720"
   integrity sha512-w0ZFj3SHznQXSq99kFCuO8tkN6w4T14znjrF2alLCSDnHOXEnpzneyNwxLvekcsDBInr8b5mXmzYh03GArqEyw==
 
-"@types/googletag@~1.1.3":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@types/googletag/-/googletag-1.1.4.tgz#7717c529347a1acd39aebd0f8de08dc9d365ff29"
-  integrity sha512-2hUHxgj2xr9JXvAiLL6bZAbc41ZPSLQXIjqhJ3Yuvt2oZEtpXvwdJQDQOJYL3mNwynrsTS4E+m1tZW5mbGSyag==
+"@types/googletag@~3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@types/googletag/-/googletag-3.0.3.tgz#c49d541a522bf26bcd2a8f7a0a524d3204e0d56e"
+  integrity sha512-5WNCmZOFtNsvAmS25vxKj/oSKgSVnmcdRau3g2bo37t8m7GqQUWHpsLOJDhmQX68WMbOvnTSGZIHS1CbBn8pHA==
 
 "@types/graceful-fs@^4.1.3":
   version "4.1.6"

@@ -110,12 +110,14 @@ export const init = (): Promise<void> => {
 				canRun = getConsentFor('googletag', consentState);
 			} else if (consentState.aus) {
 				// AUS mode
-				// canRun stays true, set NPA flag
-				const npaFlag = !getConsentFor('googletag', consentState);
+				const nonPersonalizedAds = !getConsentFor(
+					'googletag',
+					consentState,
+				);
 				window.googletag.cmd.push(() => {
-					window.googletag
-						.pubads()
-						.setRequestNonPersonalizedAds(npaFlag ? 1 : 0);
+					window.googletag.pubads().setPrivacySettings({
+						nonPersonalizedAds,
+					});
 				});
 			}
 

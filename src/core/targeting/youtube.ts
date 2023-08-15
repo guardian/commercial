@@ -39,35 +39,27 @@ const buildAdsConfig = (
 		},
 	};
 
-	if (cmpConsent.ccpa) {
-		const canTarget = !cmpConsent.ccpa.doNotSell;
+	if (cmpConsent.framework === 'ccpa' || cmpConsent.framework === 'aus') {
 		return {
 			...defaultAdsConfig,
-			restrictedDataProcessor: !canTarget,
-		} as AdsConfigCCPAorAus;
+			restrictedDataProcessor: !cmpConsent.canTarget,
+		} satisfies AdsConfigCCPAorAus;
 	}
 
-	if (cmpConsent.aus) {
-		const canTarget = cmpConsent.aus.personalisedAdvertising;
-		return {
-			...defaultAdsConfig,
-			restrictedDataProcessor: !canTarget,
-		} as AdsConfigCCPAorAus;
-	}
-
-	if (cmpConsent.tcfv2) {
+	if (cmpConsent.framework === 'tcfv2') {
 		const tcfData = cmpConsent.tcfv2;
-		const canTarget = Object.values(tcfData.consents).every(Boolean);
-		const mergedAdTagParameters = {
-			...defaultAdsConfig.adTagParameters,
-			cmpGdpr: tcfData.gdprApplies ? 1 : 0,
-			cmpGvcd: tcfData.addtlConsent,
-			cmpVcd: tcfData.tcString,
-		};
-		return {
-			adTagParameters: mergedAdTagParameters,
-			nonPersonalizedAd: !canTarget,
-		} as AdsConfigTCFV2;
+		if (tcfData) {
+			const mergedAdTagParameters = {
+				...defaultAdsConfig.adTagParameters,
+				cmpGdpr: tcfData.gdprApplies ? 1 : 0,
+				cmpGvcd: tcfData.addtlConsent,
+				cmpVcd: tcfData.tcString,
+			};
+			return {
+				adTagParameters: mergedAdTagParameters,
+				nonPersonalizedAd: !cmpConsent.canTarget,
+			} satisfies AdsConfigTCFV2;
+		}
 	}
 
 	// Shouldn't happen but handle if no matching framework

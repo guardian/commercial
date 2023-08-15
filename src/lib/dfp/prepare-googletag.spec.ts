@@ -292,9 +292,10 @@ describe('DFP', () => {
 		document.head.appendChild($style);
 
 		pubAds = {
-			listeners: listeners,
 			// @ts-expect-error - it is a mock
+			listeners: listeners,
 			addEventListener: jest.fn((eventType, listener) => {
+				// @ts-expect-error - it is a mock
 				listeners[eventType] = listener;
 				return pubAds;
 			}),
@@ -607,13 +608,17 @@ describe('DFP', () => {
 			mockOnConsent(ausNotRejected);
 			mockGetConsentFor(true);
 			await prepareGoogletag();
-			expect(pubAds.setRequestNonPersonalizedAds).toHaveBeenCalledWith(0);
+			expect(pubAds.setPrivacySettings).toHaveBeenCalledWith({
+				nonPersonalizedAds: false,
+			});
 		});
 		it('when AUS consent is NOT given', async () => {
 			mockOnConsent(ausRejected);
 			mockGetConsentFor(false);
 			await prepareGoogletag();
-			expect(pubAds.setRequestNonPersonalizedAds).toHaveBeenCalledWith(1);
+			expect(pubAds.setPrivacySettings).toHaveBeenCalledWith({
+				nonPersonalizedAds: true,
+			});
 		});
 	});
 	describe('restrictDataProcessing flag in CCPA', () => {
