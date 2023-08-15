@@ -5,11 +5,14 @@ import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
 } from 'lib/detect/detect-breakpoint';
+import { isInVariantSynchronous } from 'lib/experiments/ab';
+import { prebidKargo } from 'lib/experiments/tests/prebid-kargo';
 import {
 	isInAuOrNz,
 	isInCanada,
 	isInRow,
 	isInUk,
+	isInUsa,
 	isInUsOrCa,
 } from 'lib/utils/geo-utils';
 import { pbTestNameMap } from 'lib/utils/url';
@@ -184,6 +187,9 @@ export const shouldIncludeCriteo = (): boolean => !isInAuOrNz();
  * Determine whether to include Smart as a prebid bidder
  */
 export const shouldIncludeSmart = (): boolean => isInUk() || isInRow();
+
+export const shouldIncludeKargo = (): boolean =>
+	isInUsa() && isInVariantSynchronous(prebidKargo, 'variant');
 
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>

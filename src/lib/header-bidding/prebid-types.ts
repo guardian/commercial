@@ -111,6 +111,10 @@ export type PrebidSmartParams = {
 	formatId: number;
 };
 
+export type PrebidKargoParams = {
+	placementId: string;
+};
+
 export type BidderCode =
 	| 'adyoulike'
 	| 'and'
@@ -118,6 +122,7 @@ export type BidderCode =
 	| 'criteo'
 	| 'improvedigital'
 	| 'ix'
+	| 'kargo'
 	| 'oxd'
 	| 'ozone'
 	| 'pubmatic'
@@ -133,6 +138,7 @@ export type PrebidParams =
 	| PrebidCriteoParams
 	| PrebidImproveParams
 	| PrebidIndexExchangeParams
+	| PrebidKargoParams
 	| PrebidOpenXParams
 	| PrebidOzoneParams
 	| PrebidPubmaticParams
