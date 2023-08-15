@@ -122,6 +122,7 @@ export type BidderCode =
 	| 'criteo'
 	| 'improvedigital'
 	| 'ix'
+	| 'kargo'
 	| 'oxd'
 	| 'ozone'
 	| 'pubmatic'
@@ -129,8 +130,7 @@ export type BidderCode =
 	| 'sonobi'
 	| 'triplelift'
 	| 'trustx'
-	| 'xhb'
-	| 'kargo';
+	| 'xhb';
 
 export type PrebidParams =
 	| PrebidAdYouLikeParams
@@ -138,6 +138,7 @@ export type PrebidParams =
 	| PrebidCriteoParams
 	| PrebidImproveParams
 	| PrebidIndexExchangeParams
+	| PrebidKargoParams
 	| PrebidOpenXParams
 	| PrebidOzoneParams
 	| PrebidPubmaticParams
@@ -145,8 +146,7 @@ export type PrebidParams =
 	| PrebidSonobiParams
 	| PrebidTripleLiftParams
 	| PrebidTrustXParams
-	| PrebidXaxisParams
-	| PrebidKargoParams;
+	| PrebidXaxisParams;
 
 export type PrebidBidder = {
 	name: BidderCode;
