@@ -110,7 +110,6 @@ export const init = (): Promise<void> => {
 				canRun = getConsentFor('googletag', consentState);
 			} else if (consentState.aus) {
 				// AUS mode
-				// canRun stays true, set NPA flag
 				const nonPersonalizedAds = !getConsentFor(
 					'googletag',
 					consentState,
