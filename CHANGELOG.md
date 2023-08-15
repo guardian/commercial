@@ -1,5 +1,16 @@
 # @guardian/commercial
 
+## 10.18.0
+
+### Minor Changes
+
+- dfde438: Add kargo as a prebid bidder in the US
+
+### Patch Changes
+
+- 93acb28: YouTube targeting uses Consentstate.canTarget
+- 837b45a: Update @types/googletag to v3.0.3
+
 ## 10.17.1
 
 ### Patch Changes
