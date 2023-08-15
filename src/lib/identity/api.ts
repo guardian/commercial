@@ -5,7 +5,7 @@ import type {
 } from '@guardian/identity-auth';
 import { getCookie } from '@guardian/libs';
 import { mediator } from 'lib/utils/mediator';
-import type { CustomIdTokenClaims } from './okta';
+import type { CustomIdTokenClaims } from '../../types/global';
 
 // Types info coming from https://github.com/guardian/discussion-rendering/blob/fc14c26db73bfec8a04ff7a503ed9f90f1a1a8ad/src/types.ts
 
