@@ -1369,10 +1369,10 @@
     eslint-plugin-eslint-comments "3.2.0"
     eslint-plugin-import "2.27.5"
 
-"@guardian/identity-auth-frontend@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@guardian/identity-auth-frontend/-/identity-auth-frontend-0.1.0.tgz#09f20a88dc0e6f8c94e69918317492101002c3db"
-  integrity sha512-AvApzRbhKIFIMsZZ/bRHyxtHCmDAxLaF6GEE4CovXb+ZeZwIFHsVFZvOv2MvmyawoVxCNUspccL5U0Rx+5rsjw==
+"@guardian/identity-auth-frontend@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/identity-auth-frontend/-/identity-auth-frontend-1.0.0.tgz#22720eeeaf1382a65161abe67839903982c1d65c"
+  integrity sha512-lmuz8kIG5PeRjyjq1S9CMlfczOLxUdT+3UD8jYk3VZkGgLjN+3IX0e3GK7mMo/SnIojxLOD8x3tiVRCPjfiUdQ==
 
 "@guardian/identity-auth@^1.0.0":
   version "1.0.0"
