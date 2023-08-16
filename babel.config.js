@@ -23,21 +23,7 @@ module.exports = {
 			],
 		},
 		internal: {
-			presets: [
-				[
-					'@babel/preset-env',
-					{
-						targets: {
-							browsers: [
-								'last 2 Chrome versions',
-								'last 1 Safari version',
-								'last 2 Firefox versions',
-								'last 2 Edge versions',
-							],
-						},
-					},
-				],
-			],
+			presets: [['@babel/preset-env']],
 		},
 	},
 	ignore: ['eslintrc.js'],

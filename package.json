@@ -52,6 +52,7 @@
 		"@babel/register": "^7.11.5",
 		"@babel/runtime": "^7.11.2",
 		"@cypress/webpack-preprocessor": "^5.17.1",
+		"@guardian/browserslist-config": "^5.1.0",
 		"@guardian/eslint-config-typescript": "^6.0.0",
 		"@guardian/prettier": "^4.0.0",
 		"@percy/cli": "^1.26.0",
@@ -131,5 +132,8 @@
 	},
 	"publishConfig": {
 		"access": "public"
-	}
+	},
+	"browserslist": [
+		"extends @guardian/browserslist-config"
+	]
 }
