@@ -161,18 +161,33 @@ const getTripleLiftInventoryCode = (
 	sizes: HeaderBiddingSize[],
 ): string => {
 	if (containsLeaderboard(sizes)) {
-		return 'theguardian_topbanner_728x90_prebid';
+		if (isInUsOrCa()) {
+			return 'theguardian_topbanner_728x90_prebid';
+		} else if (isInAuOrNz()) {
+			return 'theguardian_topbanner_728x90_prebid_AU';
+		}
 	}
 
 	if (containsMpu(sizes)) {
-		return isArticle
-			? 'theguardian_article_300x250_prebid'
-			: 'theguardian_sectionfront_300x250_prebid';
+		if (isInUsOrCa()) {
+			return isArticle
+				? 'theguardian_article_300x250_prebid'
+				: 'theguardian_sectionfront_300x250_prebid';
+		} else if (isInAuOrNz()) {
+			return isArticle
+				? 'theguardian_article_300x250_prebid_AU'
+				: 'theguardian_sectionfront_300x250_prebid_AU';
+		}
 	}
 
-	if (containsMobileSticky(sizes)) return 'theguardian_320x50_HDX';
+	if (containsMobileSticky(sizes)) {
+		if (isInUsOrCa()) {
+			return 'theguardian_320x50_HDX';
+		} else if (isInAuOrNz()) {
+			return 'theguardian_320x50_HDX_AU';
+		}
+	}
 
-	console.log(`PREBID: Failed to get TripleLift ad unit for slot ${slotId}.`);
 	return '';
 };
 
@@ -507,7 +522,7 @@ const currentBidders = (
 		[shouldIncludeSmart(), smartBidder],
 		[shouldIncludeSonobi(), sonobiBidder(pageTargeting)],
 		[shouldIncludeTrustX(), trustXBidder],
-		[shouldIncludeTripleLift(), tripleLiftBidder],
+		[shouldIncludeTripleLift(), tripleLiftBidder], // so will provide an object shouldIncludeTripleLift() return T (isInUsOrCa())
 		[shouldIncludeAppNexus(), appNexusBidder(pageTargeting)],
 		[shouldIncludeImproveDigital(), improveDigitalBidder],
 		[shouldIncludeImproveDigitalSkin(), improveDigitalSkinBidder],
