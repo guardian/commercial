@@ -43,35 +43,6 @@ describe('initialise', () => {
 	test('should generate correct Prebid config when all switches on', () => {
 		prebid.initialise(window, 'tcfv2');
 		expect(window.pbjs?.getConfig()).toEqual({
-			_auctionOptions: {},
-			_bidderSequence: 'random',
-			_bidderTimeout: 1500,
-			_customPriceBucket: {
-				buckets: [
-					{
-						max: 10,
-						increment: 0.01,
-					},
-					{
-						max: 15,
-						increment: 0.1,
-					},
-					{
-						max: 100,
-						increment: 1,
-					},
-				],
-			},
-			_debug: false,
-			_deviceAccess: true,
-			_disableAjaxTimeout: false,
-			_maxNestedIframes: 10,
-			_mediaTypePriceGranularity: {},
-			_priceGranularity: 'custom',
-			_publisherDomain: null,
-			_sendAllBids: true,
-			_timeoutBuffer: 400,
-			_useBidCache: false,
 			auctionOptions: {},
 			bidderSequence: 'random',
 			bidderTimeout: 1500,
@@ -105,7 +76,7 @@ describe('initialise', () => {
 			maxNestedIframes: 10,
 			mediaTypePriceGranularity: {},
 			priceGranularity: 'custom',
-			publisherDomain: null,
+			publisherDomain: undefined,
 			s2sConfig: {
 				adapter: 'prebidServer',
 				adapterOptions: {},
