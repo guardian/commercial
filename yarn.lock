@@ -7377,13 +7377,13 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
 
 prebid.js@guardian/prebid.js#upgrade-v7.54.4:
   version "7.54.4"
-  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/12631497ae009286a0892a4df75b0aca58eff6b4"
+  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/34a36a116b123ecfbbc56dd11c81e1e9748b7254"
   dependencies:
     "@babel/core" "^7.16.7"
     "@babel/plugin-transform-runtime" "^7.18.9"
     "@babel/preset-env" "^7.16.8"
     "@babel/runtime" "^7.18.9"
-    "@guardian/libs" "^15.6.3"
+    "@guardian/libs" "^15.6.4"
     core-js "^3.13.0"
     core-js-pure "^3.13.0"
     criteo-direct-rsa-validate "^1.1.0"
