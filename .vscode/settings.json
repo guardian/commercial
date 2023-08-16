@@ -9,8 +9,13 @@
 		"source.fixAll": true,
 		"source.organizeImports": false
 	},
+	"workbench.colorCustomizations": {
+		"titleBar.activeBackground": "#601414",
+		"titleBar.activeForeground": "#cccccc",
+		"titleBar.inactiveBackground": "#3a0a0a",
+		"titleBar.inactiveForeground": "#999999"
+	},
 	"eslint.format.enable": true,
-	"eslint.packageManager": "yarn",
 	"eslint.workingDirectories": [
 		{ "directory": "src", "changeProcessCWD": true }
 	],
