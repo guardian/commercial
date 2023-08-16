@@ -10,9 +10,9 @@
 		"source.organizeImports": false
 	},
 	"workbench.colorCustomizations": {
-		"titleBar.activeBackground": "#601414",
+		"titleBar.activeBackground": "#0b3e11",
 		"titleBar.activeForeground": "#cccccc",
-		"titleBar.inactiveBackground": "#3a0a0a",
+		"titleBar.inactiveBackground": "#041d07",
 		"titleBar.inactiveForeground": "#999999"
 	},
 	"eslint.format.enable": true,
