@@ -1,4 +1,9 @@
 import type { VendorName } from '@guardian/consent-management-platform/dist/types';
+import type {
+	AccessTokenClaims,
+	CustomClaims,
+	IdentityAuth,
+} from '@guardian/identity-auth';
 import type { EventTimer } from '../core/event-timer';
 import type { PageTargeting } from '../core/targeting/build-page-targeting';
 import type {
@@ -87,6 +92,8 @@ interface LightboxImages {
 	images: Array<{ src: string }>;
 }
 
+type Stage = 'DEV' | 'CODE' | 'PROD';
+
 interface PageConfig extends CommercialPageConfig {
 	ajaxUrl?: string; // https://github.com/guardian/frontend/blob/33db7bbd/common/app/views/support/JavaScriptPage.scala#L72
 	assetsPath: string;
@@ -156,6 +163,7 @@ interface Config {
 		pageViewId: string;
 	};
 	page: PageConfig;
+	stage: Stage;
 	switches: Record<string, boolean | undefined>;
 	tests?: {
 		[key: `${string}Control`]: 'control';
@@ -255,6 +263,11 @@ type ComscoreGlobals = {
 	c2: string;
 	cs_ucfr: string;
 	comscorekw?: string;
+};
+
+type CustomIdTokenClaims = CustomClaims & {
+	email: string;
+	google_tag_id: string;
 };
 
 type AdBlockers = {
@@ -441,6 +454,7 @@ declare global {
 			notificationEventHistory?: HeaderNotification[][];
 			commercialTimer?: EventTimer;
 			offlineCount?: number;
+			identityAuth?: IdentityAuth<AccessTokenClaims, CustomIdTokenClaims>;
 		};
 		ootag: {
 			queue: Array<() => void>;
@@ -513,6 +527,8 @@ export type {
 	PrebidIndexSite,
 	UserConfig,
 	ServerSideABTest,
+	Stage,
 	TagAttribute,
 	ThirdPartyTag,
+	CustomIdTokenClaims,
 };

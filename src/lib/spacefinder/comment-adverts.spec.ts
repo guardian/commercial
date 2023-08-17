@@ -2,7 +2,7 @@ import { mocked } from 'jest-mock';
 import { adSizes } from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
-import { isUserLoggedIn as isUserLoggedIn_ } from 'lib/identity/api';
+import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from 'lib/identity/api';
 import type { Advert } from '../dfp/Advert';
 import { fillDynamicAdSlot } from '../dfp/fill-dynamic-advert-slot';
 import { getAdvertById as getAdvertById_ } from '../dfp/get-advert-by-id';
@@ -63,12 +63,12 @@ jest.mock('lib/commercial-features', () => ({
 }));
 
 jest.mock('lib/identity/api', () => ({
-	isUserLoggedIn: jest.fn(),
+	isUserLoggedInOktaRefactor: jest.fn(),
 }));
 
 const { createCommentSlot, runSecondStage, maybeUpgradeSlot } = _;
 const commercialFeaturesMock = commercialFeatures;
-const isUserLoggedIn = isUserLoggedIn_;
+const isUserLoggedInOktaRefactor = isUserLoggedInOktaRefactor_;
 const getAdvertById = getAdvertById_;
 const getCurrentBreakpoint = getCurrentBreakpoint_;
 const refreshAdvert = refreshAdvert_;
@@ -101,7 +101,7 @@ const getElement = (selector: string): HTMLElement =>
 
 describe('createCommentSlot', () => {
 	beforeEach(() => {
-		mocked(isUserLoggedIn).mockReturnValue(false);
+		mocked(isUserLoggedInOktaRefactor).mockResolvedValue(false);
 		commercialFeaturesMock.commentAdverts = true;
 		document.body.innerHTML = `<div class="js-comments">
             <div class="content__main-column">
@@ -224,7 +224,7 @@ describe('runSecondStage', () => {
 
 describe('initCommentAdverts', () => {
 	beforeEach(() => {
-		mocked(isUserLoggedIn).mockReturnValue(false);
+		mocked(isUserLoggedInOktaRefactor).mockResolvedValue(false);
 		commercialFeaturesMock.commentAdverts = true;
 		document.body.innerHTML = `<div class="js-comments">
             <div class="content__main-column">
@@ -282,7 +282,7 @@ describe('initCommentAdverts', () => {
 
 	it('should insert a DMPU slot if there is space, and the user is logged in', (done) => {
 		mockHeight(600); // at 600px we can insert a DMPU if the user is logged in
-		mocked(isUserLoggedIn).mockReturnValue(true);
+		mocked(isUserLoggedInOktaRefactor).mockResolvedValue(true);
 		void initCommentAdverts().then(() => {
 			fakeMediator.emit('modules:comments:renderComments:rendered');
 			fakeMediator.once('page:commercial:comments', () => {
@@ -297,7 +297,7 @@ describe('initCommentAdverts', () => {
 
 	it('should insert an MPU if the user is logged in, and the DMPU will not fit', (done) => {
 		mockHeight(300); // at 300px we can insert an MPU if the user is logged in
-		mocked(isUserLoggedIn).mockReturnValue(true);
+		mocked(isUserLoggedInOktaRefactor).mockResolvedValue(true);
 		void initCommentAdverts().then(() => {
 			fakeMediator.emit('modules:comments:renderComments:rendered');
 			fakeMediator.once('page:commercial:comments', () => {
