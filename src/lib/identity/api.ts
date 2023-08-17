@@ -75,7 +75,7 @@ const getUserFromCookie = (): IdentityUserFromCache => {
 		if (userData && cookieData) {
 			const displayName = decodeURIComponent(userData[2]);
 			userFromCookieCache = {
-				id: parseInt(userData[0], 10), // not sure where this is stored now - not in the cookie any more
+				id: parseInt(userData[0], 10),
 				publicFields: {
 					displayName,
 				},
@@ -92,7 +92,7 @@ const getUserFromCookie = (): IdentityUserFromCache => {
 };
 
 /**
- * Fetch the logged in user's Google Tga ID from IDAPI
+ * Fetch the logged in user's Google Tag ID from IDAPI
  * @returns one of:
  * - string - the user's Google Tag ID
  * - null - if the request failed
