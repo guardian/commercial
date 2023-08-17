@@ -41,7 +41,7 @@ let userFromCookieCache: IdentityUserFromCache = null;
 // We want to be in the experiment if in the development environment
 // or if we have opted in to the Okta server side experiment
 const isInOktaExperiment =
-	window.guardian.config.page.stage === 'DEV' ||
+	window.guardian.config.stage === 'DEV' ||
 	window.guardian.config.tests?.oktaVariant === 'variant';
 
 const cookieName = 'GU_U';
