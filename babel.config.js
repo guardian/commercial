@@ -1,5 +1,5 @@
 module.exports = {
-	presets: ['@babel/preset-react'],
+	presets: ['@babel/preset-react', '@babel/preset-env'],
 	plugins: [
 		'@babel/plugin-proposal-object-rest-spread',
 		'@babel/plugin-syntax-dynamic-import',
@@ -20,23 +20,6 @@ module.exports = {
 				'@babel/plugin-transform-runtime',
 				'@babel/plugin-proposal-class-properties',
 				'dynamic-import-node',
-			],
-		},
-		internal: {
-			presets: [
-				[
-					'@babel/preset-env',
-					{
-						targets: {
-							browsers: [
-								'last 2 Chrome versions',
-								'last 1 Safari version',
-								'last 2 Firefox versions',
-								'last 2 Edge versions',
-							],
-						},
-					},
-				],
 			],
 		},
 	},
