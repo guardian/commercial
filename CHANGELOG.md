@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.0.0
+
+### Major Changes
+
+- b769d83: Move guardian deps to peer deps
+
 ## 10.18.0
 
 ### Minor Changes
