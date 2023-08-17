@@ -141,7 +141,6 @@ interface PageConfig extends CommercialPageConfig {
 	showRelatedContent?: boolean;
 	source: string;
 	sponsorshipType: string;
-	stage: Stage;
 	toneIds: string;
 	tones: string;
 	videoDuration: number;
@@ -164,6 +163,7 @@ interface Config {
 		pageViewId: string;
 	};
 	page: PageConfig;
+	stage: Stage;
 	switches: Record<string, boolean | undefined>;
 	tests?: {
 		[key: `${string}Control`]: 'control';
