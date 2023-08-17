@@ -1,5 +1,5 @@
 module.exports = {
-	presets: ['@babel/preset-react'],
+	presets: ['@babel/preset-react', '@babel/preset-env'],
 	plugins: [
 		'@babel/plugin-proposal-object-rest-spread',
 		'@babel/plugin-syntax-dynamic-import',
@@ -21,9 +21,6 @@ module.exports = {
 				'@babel/plugin-proposal-class-properties',
 				'dynamic-import-node',
 			],
-		},
-		internal: {
-			presets: [['@babel/preset-env']],
 		},
 	},
 	ignore: ['eslintrc.js'],
