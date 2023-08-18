@@ -5,6 +5,20 @@ module.exports = {
 		'@babel/plugin-syntax-dynamic-import',
 	],
 	env: {
+		production: {
+			presets: [
+				[
+					'@babel/preset-env',
+					{
+						modules: false,
+					},
+				],
+			],
+			plugins: [
+				'@babel/plugin-transform-runtime',
+				'@babel/plugin-proposal-class-properties',
+			],
+		},
 		test: {
 			presets: [
 				[
