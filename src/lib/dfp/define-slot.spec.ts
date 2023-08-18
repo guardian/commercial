@@ -7,6 +7,10 @@ import {
 	defineSlot,
 } from './define-slot';
 
+jest.mock('lib/dfp/init-slot-ias', () => ({
+	initSlotIas: jest.fn(() => Promise.resolve()),
+}));
+
 beforeEach(() => {
 	const pubAds = {
 		setTargeting: jest.fn(),

@@ -8,6 +8,10 @@ const outstreamSizes = [
 	adSizes.outstreamGoogleDesktop.toString(),
 ];
 
+jest.mock('lib/dfp/init-slot-ias', () => ({
+	initSlotIas: jest.fn(() => Promise.resolve()),
+}));
+
 describe('shouldRefresh', () => {
 	let googleSlot: googletag.Slot;
 

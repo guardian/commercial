@@ -4,6 +4,10 @@ import { _, Advert } from './Advert';
 
 const { getSlotSizeMapping } = _;
 
+jest.mock('lib/dfp/init-slot-ias', () => ({
+	initSlotIas: jest.fn(() => Promise.resolve()),
+}));
+
 jest.mock('lib/raven');
 jest.mock('ophan-tracker-js', () => null);
 
