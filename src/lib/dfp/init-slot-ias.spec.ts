@@ -27,7 +27,7 @@ const googletagSize = (width: number, height: number): googletag.Size => {
 };
 
 describe('initSlotIas', () => {
-	it('should call iasPET.queue.push with the correct arguments', async () => {
+	it('should call iasPET.queue.push with the correct arguments and call the callback with expected parameters', async () => {
 		const slot = {
 			getSlotElementId: () => 'slot-id',
 			getSizes: () => [googletagSize(300, 250), 'fluid'],
@@ -93,5 +93,25 @@ describe('initSlotIas', () => {
 			'slot-targeting',
 			'slot-targeting',
 		);
+	});
+
+	it('should timeout if 1000ms passes without resolving', async () => {
+		// @ts-expect-error -- no way to override types
+		window.setTimeout = jest.fn((callback: () => void) => {
+			callback();
+		});
+
+		const slot = {
+			getSlotElementId: () => 'slot-id',
+			getSizes: () => [googletagSize(300, 250), 'fluid'],
+			setTargeting: jest.fn(),
+		} as unknown as googletag.Slot;
+
+		const id = 'slot-id';
+
+		await initSlotIas(id, slot);
+
+		// just to make sure the promise is resolved even if the dataHandler is not called
+		expect(1).toBe(1);
 	});
 });
