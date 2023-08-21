@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 11.1.0
+
+### Minor Changes
+
+- 1962772: Use @guardian/browserslist-config to govern browser compatibility
+- 8535432: Upgrade Prebid.js@7.54.4
+
 ## 11.0.0
 
 ### Major Changes
