@@ -26,6 +26,10 @@ jest.mock('lib/cookies', () => ({
 	getCookie: jest.fn(),
 }));
 
+jest.mock('lib/dfp/init-slot-ias', () => ({
+	initSlotIas: jest.fn(() => Promise.resolve()),
+}));
+
 const slotPrototype = {
 	fake: 'slot',
 	defineSizeMapping: () => slotPrototype,
@@ -57,10 +61,6 @@ const buildAdvert = (name: string, sizes?: SizeMapping, id?: string) => {
 };
 
 describe('getPrebidAdSlots', () => {
-	afterEach(() => {
-		jest.resetAllMocks();
-	});
-
 	test('should return the correct top-above-nav slot at breakpoint D', () => {
 		(getBreakpointKey as jest.Mock).mockReturnValue('D');
 		expect(getHeaderBiddingAdSlots(buildAdvert('top-above-nav'))).toEqual([
