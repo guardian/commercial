@@ -55,6 +55,7 @@
 		"@guardian/ab-core": "5.0.0",
 		"@guardian/consent-management-platform": "13.6.1",
 		"@guardian/core-web-vitals": "5.1.0",
+		"@guardian/browserslist-config": "^5.1.0",
 		"@guardian/eslint-config-typescript": "^6.0.0",
 		"@guardian/libs": "15.6.4",
 		"@guardian/prettier": "4.0.0",
@@ -139,5 +140,8 @@
 		"@guardian/libs": "^15.6.4",
 		"@guardian/source-foundations": "^13.0.0",
 		"@guardian/support-dotcom-components": "^1.0.7"
-	}
+	},
+	"browserslist": [
+		"extends @guardian/browserslist-config"
+	]
 }

@@ -119,7 +119,13 @@ const initMediaQueryListeners = () => {
 			const listener = (mql: MediaQueryListEvent | MediaQueryList) =>
 				mql.matches && updateBreakpoint(bp);
 
-			mql.addEventListener('change', listener);
+			//addListener is a deprecated method but Safari 13 and earlier versions do not support the new
+			//method, so we need it here as a fallback to load ads on those versions of Safari
+			if (typeof mql.addEventListener !== 'undefined') {
+				mql.addEventListener('change', listener);
+			} else if (typeof mql.addListener !== 'undefined') {
+				mql.addListener(listener);
+			}
 
 			listener(mql);
 		}
