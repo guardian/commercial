@@ -139,6 +139,7 @@ class CommercialFeatures {
 		this.carrotTrafficDriver =
 			!this.adFree &&
 			this.articleBodyAdverts &&
+			!!window.guardian.config.switches.carrotTrafficDriver &&
 			!window.guardian.config.page.isPaidContent;
 
 		this.highMerch =

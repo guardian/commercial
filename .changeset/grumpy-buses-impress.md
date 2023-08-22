@@ -2,4 +2,4 @@
 '@guardian/commercial': minor
 ---
 
-Remove carrot and IAS switch checks
+Remove IAS switch checks
