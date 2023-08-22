@@ -1,9 +1,5 @@
 import type { VendorName } from '@guardian/consent-management-platform/dist/types';
-import type {
-	AccessTokenClaims,
-	CustomClaims,
-	IdentityAuth,
-} from '@guardian/identity-auth';
+import type { CustomClaims } from '@guardian/identity-auth';
 import type { EventTimer } from '../core/event-timer';
 import type { PageTargeting } from '../core/targeting/build-page-targeting';
 import type {
@@ -454,7 +450,6 @@ declare global {
 			notificationEventHistory?: HeaderNotification[][];
 			commercialTimer?: EventTimer;
 			offlineCount?: number;
-			identityAuth?: IdentityAuth<AccessTokenClaims, CustomIdTokenClaims>;
 		};
 		ootag: {
 			queue: Array<() => void>;
