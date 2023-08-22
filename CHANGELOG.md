@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.1.1
+
+### Patch Changes
+
+- 9035e3d: Remove carrot switch check
+
 ## 11.1.0
 
 ### Minor Changes
