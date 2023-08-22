@@ -27,21 +27,25 @@ const timeout = async <T>(
 	});
 };
 
+/**
+ * For each ad slot defined, we request information from IAS, based
+ * on slot name, ad unit and sizes. We then add this targeting to the
+ * slot prior to requesting it from DFP.
+ *
+ * We create a timer, such that if the timeout resolves before the request
+ * to IAS returns, then the slot is defined without the additional IAS data.
+ * To see debugging output from IAS add the URL param `&iasdebug=true` to the page URL
+ *
+ * this should all have been instantiated by lib/third-party-tags/ias.js
+ *
+ * @param id - the slot id
+ * @param slot - the googletag slot object
+ * @returns a promise that resolves when the IAS data is returned or the timeout resolves
+ **/
+
 const initSlotIas = (id: string, slot: googletag.Slot) =>
 	timeout(
 		new Promise<void>((resolve) => {
-			/*
-        For each ad slot defined, we request information from IAS, based
-        on slot name, ad unit and sizes. We then add this targeting to the
-        slot prior to requesting it from DFP.
-
-        We create a timer, such that if the timeout resolves before the request
-		to IAS returns, then the slot is defined without the additional IAS data.
-
-        To see debugging output from IAS add the URL param `&iasdebug=true` to the page URL
-
-		this should all have been instantiated by lib/third-party-tags/ias.js
-	*/
 			window.__iasPET = window.__iasPET ?? {};
 			const iasPET = window.__iasPET;
 
