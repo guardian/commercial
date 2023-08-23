@@ -88,9 +88,7 @@ const loadOther = (): Promise<void> => {
 		permutive({
 			shouldRun: window.guardian.config.switches.permutive ?? false,
 		}),
-		ias({
-			shouldRun: window.guardian.config.switches.iasAdTargeting ?? false,
-		}),
+		ias,
 		inizio({ shouldRun: window.guardian.config.switches.inizio ?? false }),
 		twitter({
 			shouldRun: window.guardian.config.switches.twitterUwt ?? false,

@@ -5,8 +5,8 @@ import type { GetThirdPartyTag } from '../types';
  * https://integralads.com/uk/
  * @param  {} {shouldRun}
  */
-export const ias: GetThirdPartyTag = ({ shouldRun }) => ({
-	shouldRun,
+export const ias: ReturnType<GetThirdPartyTag> = {
+	shouldRun: true,
 	url: '//cdn.adsafeprotected.com/iasPET.1.js',
 	name: 'ias',
-});
+};
