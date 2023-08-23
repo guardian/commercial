@@ -74,6 +74,7 @@ type BuildPageTargetingParams = {
 	adFree: boolean;
 	clientSideParticipations: Participations;
 	consentState: ConsentState;
+	isSignedIn?: boolean;
 	youtube?: boolean;
 };
 
@@ -81,6 +82,7 @@ const buildPageTargeting = ({
 	adFree,
 	clientSideParticipations,
 	consentState,
+	isSignedIn = false,
 	youtube = false,
 }: BuildPageTargetingParams): Record<string, string | string[]> => {
 	const { page, isDotcomRendering } = window.guardian.config;
@@ -109,7 +111,7 @@ const buildPageTargeting = ({
 	const sessionTargeting: SessionTargeting = getSessionTargeting({
 		adTest: getCookie({ name: 'adtest', shouldMemoize: true }),
 		countryCode: getLocale(),
-		isSignedIn: !!getCookie({ name: 'GU_U' }),
+		isSignedIn: isSignedIn,
 		pageViewId: window.guardian.config.ophan.pageViewId,
 		participations: {
 			clientSideParticipations,
