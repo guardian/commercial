@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 11.2.0
+
+### Minor Changes
+
+- 72305df: Remove IAS switch checks
+
+### Patch Changes
+
+- 568afc8: Start public good 10% test
+
 ## 11.1.1
 
 ### Patch Changes
