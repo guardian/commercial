@@ -69,17 +69,18 @@ const getUserFromCookie = (): IdentityUserFromCache => {
 
 		if (cookieData) {
 			userData = JSON.parse(
-				decodeBase64(cookieData.split('.')[0]),
+				decodeBase64(String(cookieData.split('.')[0])),
 			) as string[];
 		}
+
 		if (userData && cookieData) {
-			const displayName = decodeURIComponent(userData[2]);
+			const displayName = decodeURIComponent(String(userData[2]));
 			userFromCookieCache = {
-				id: parseInt(userData[0], 10),
+				id: parseInt(String(userData[0]), 10),
 				publicFields: {
 					displayName,
 				},
-				dates: { accountCreatedDate: userData[6] },
+				dates: { accountCreatedDate: String(userData[6]) },
 				statusFields: {
 					userEmailValidated: Boolean(userData[7]),
 				},
