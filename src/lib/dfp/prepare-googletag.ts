@@ -64,10 +64,12 @@ const setDfpListeners = (): void => {
 	pubads.addEventListener('impressionViewable', onSlotViewableFunction());
 };
 
-const setPageTargeting = (consentState: ConsentState) =>
-	Object.entries(getPageTargeting(consentState)).forEach(([key, value]) => {
-		if (!value) return;
-		window.googletag.pubads().setTargeting(key, value);
+const setPageTargeting = (consentState: ConsentState): void =>
+	void getPageTargeting(consentState).then((targeting) => {
+		Object.entries(targeting).forEach(([key, value]) => {
+			if (!value) return;
+			window.googletag.pubads().setTargeting(key, value);
+		});
 	});
 
 /**

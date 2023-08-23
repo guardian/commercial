@@ -44,11 +44,11 @@ const isConsentlessKey = (key: unknown): key is ConsentlessTargetingKeys =>
  * @param  {boolean} adFree
  * @returns ConsentlessPageTargeting
  */
-const buildPageTargetingConsentless = (
+const buildPageTargetingConsentless = async (
 	consentState: ConsentState,
 	adFree: boolean,
-): ConsentlessPageTargeting => {
-	const consentedPageTargeting: PageTargeting = buildPageTargeting({
+): Promise<ConsentlessPageTargeting> => {
+	const consentedPageTargeting: PageTargeting = await buildPageTargeting({
 		adFree,
 		consentState,
 		clientSideParticipations: {},

@@ -3,6 +3,7 @@ import { cmp } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type { CountryCode } from '@guardian/libs';
 import { getCookie, isString } from '@guardian/libs';
+import { isUserLoggedInOktaRefactor } from '../../lib/identity/api';
 import { getLocale } from '../lib/get-locale';
 import type { False, True } from '../types';
 import type { ContentTargeting } from './content';
@@ -77,12 +78,12 @@ type BuildPageTargetingParams = {
 	youtube?: boolean;
 };
 
-const buildPageTargeting = ({
+const buildPageTargeting = async ({
 	adFree,
 	clientSideParticipations,
 	consentState,
 	youtube = false,
-}: BuildPageTargetingParams): Record<string, string | string[]> => {
+}: BuildPageTargetingParams): Promise<Record<string, string | string[]>> => {
 	const { page, isDotcomRendering } = window.guardian.config;
 
 	const adFreeTargeting: { af?: True } = adFree ? { af: 't' } : {};
@@ -109,7 +110,7 @@ const buildPageTargeting = ({
 	const sessionTargeting: SessionTargeting = getSessionTargeting({
 		adTest: getCookie({ name: 'adtest', shouldMemoize: true }),
 		countryCode: getLocale(),
-		isSignedIn: !!getCookie({ name: 'GU_U' }),
+		isSignedIn: await isUserLoggedInOktaRefactor(),
 		pageViewId: window.guardian.config.ophan.pageViewId,
 		participations: {
 			clientSideParticipations,

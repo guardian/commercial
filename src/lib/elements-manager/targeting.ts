@@ -48,17 +48,17 @@ const fetchSelectionPayload = async (): Promise<GuElement[]> => {
 /**
  * Obtain consented or consentless page targeting object, based on consent state.
  */
-const getPageTargetingForElements = (
+const getPageTargetingForElements = async (
 	consentState: ConsentState,
-): PageTargeting => {
+): Promise<PageTargeting> => {
 	if (consentState.canTarget) {
-		return buildPageTargeting({
+		return await buildPageTargeting({
 			consentState,
 			adFree: commercialFeatures.adFree,
 			clientSideParticipations: getSynchronousParticipations(),
 		});
 	}
-	return buildPageTargetingConsentless(
+	return await buildPageTargetingConsentless(
 		consentState,
 		commercialFeatures.adFree,
 	);

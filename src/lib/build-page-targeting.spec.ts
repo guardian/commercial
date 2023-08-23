@@ -34,8 +34,8 @@ const emptyConsent: ConsentState = {
 
 describe('Build Page Targeting', () => {
 	describe('appNexusPageTargeting', () => {
-		it('should set appNexusPageTargeting as flatten string', () => {
-			buildPageTargeting.mockReturnValue({
+		it('should set appNexusPageTargeting as flatten string', async () => {
+			buildPageTargeting.mockResolvedValue({
 				fr: '0',
 				cmp_interaction: 'na',
 				consent_tcfv2: 'na',
@@ -69,7 +69,7 @@ describe('Build Page Targeting', () => {
 			});
 
 			mockViewport(1024, 0);
-			getPageTargeting(emptyConsent);
+			await getPageTargeting(emptyConsent);
 			expect(window.guardian.config.page.appNexusPageTargeting).toEqual(
 				'sens=f,pt1=/football/series/footballweekly,pt2=us,pt3=video,pt4=ng,pt5=prince-charles-letters,pt5=uk/uk,pt5=prince-charles,pt6=5,pt7=desktop,pt9=presetOphanPageViewId|gabrielle-chan|news',
 			);

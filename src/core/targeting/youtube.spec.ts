@@ -238,7 +238,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 		},
 	])(
 		'$msg',
-		({
+		async ({
 			isSignedIn,
 			consentState,
 			isAdFreeUser,
@@ -246,11 +246,11 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			customParams,
 			expected,
 		}) => {
-			(buildPageTargeting as jest.Mock).mockReturnValue({
+			(buildPageTargeting as jest.Mock).mockResolvedValue({
 				permutive: ['1', '2', '3'],
 				si: isSignedIn,
 			});
-			const adsConfig = buildAdsConfigWithConsent({
+			const adsConfig = await buildAdsConfigWithConsent({
 				adUnit,
 				clientSideParticipations: {},
 				consentState,
@@ -263,8 +263,8 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 });
 
 describe('YouTube Ad Targeting Object when consent errors', () => {
-	test('creates disabled ads config when consent does not have any matching framework', () => {
-		const adsConfig = buildAdsConfigWithConsent({
+	test('creates disabled ads config when consent does not have any matching framework', async () => {
+		const adsConfig = await buildAdsConfigWithConsent({
 			adUnit: 'someAdUnit',
 			clientSideParticipations: {},
 			consentState: {
@@ -279,8 +279,8 @@ describe('YouTube Ad Targeting Object when consent errors', () => {
 });
 
 describe('YouTube Ad Targeting Object when ad free user', () => {
-	test('creates disabled ads config when ad free user', () => {
-		const adsConfig = buildAdsConfigWithConsent({
+	test('creates disabled ads config when ad free user', async () => {
+		const adsConfig = await buildAdsConfigWithConsent({
 			adUnit: 'someAdUnit',
 			clientSideParticipations: {},
 			consentState: {
