@@ -18,6 +18,7 @@ const buildAdsConfig = (
 	adUnit: string,
 	customParams: CustomParams,
 	clientSideParticipations: Participations,
+	isSignedIn = false,
 ): AdsConfig => {
 	const mergedCustomParams = {
 		...customParams,
@@ -25,6 +26,7 @@ const buildAdsConfig = (
 			adFree: false,
 			clientSideParticipations,
 			consentState: cmpConsent,
+			isSignedIn: isSignedIn,
 			youtube: true,
 		}),
 		// 19/04/2023 This is a temporary update to assist reporting for a YouTube IMA test
@@ -72,6 +74,7 @@ type BuildAdsConfigWithConsent = {
 	customParams: CustomParams;
 	consentState: ConsentState;
 	clientSideParticipations: Participations;
+	isSignedIn: boolean;
 };
 
 const buildAdsConfigWithConsent = ({
@@ -80,6 +83,7 @@ const buildAdsConfigWithConsent = ({
 	consentState,
 	customParams,
 	isAdFreeUser,
+	isSignedIn,
 }: BuildAdsConfigWithConsent): AdsConfig => {
 	if (isAdFreeUser) {
 		return disabledAds;
@@ -89,6 +93,7 @@ const buildAdsConfigWithConsent = ({
 		adUnit,
 		customParams,
 		clientSideParticipations,
+		isSignedIn,
 	);
 };
 

@@ -256,6 +256,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 				consentState,
 				customParams,
 				isAdFreeUser,
+				isSignedIn: true,
 			});
 			expect(adsConfig).toEqual(expected);
 		},
@@ -273,6 +274,7 @@ describe('YouTube Ad Targeting Object when consent errors', () => {
 			},
 			customParams: {},
 			isAdFreeUser: false,
+			isSignedIn: true,
 		});
 		expect(adsConfig).toEqual({ disableAds: true });
 	});
@@ -289,6 +291,7 @@ describe('YouTube Ad Targeting Object when ad free user', () => {
 			},
 			customParams: {},
 			isAdFreeUser: true,
+			isSignedIn: true,
 		});
 		expect(adsConfig).toEqual({ disableAds: true });
 	});
