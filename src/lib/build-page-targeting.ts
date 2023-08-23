@@ -41,15 +41,17 @@ const buildAppNexusTargeting = once((pageTargeting: PageTargeting): string =>
 	formatAppNexusTargeting(buildAppNexusTargetingObject(pageTargeting)),
 );
 
-const getPageTargeting = async (
+const getPageTargeting = (
 	consentState: ConsentState,
-): Promise<PageTargeting> => {
+	isSignedIn: boolean,
+): PageTargeting => {
 	const { page } = window.guardian.config;
 
-	const pageTargeting = await buildPageTargeting({
+	const pageTargeting = buildPageTargeting({
 		adFree: commercialFeatures.adFree,
 		clientSideParticipations: getSynchronousParticipations(),
 		consentState,
+		isSignedIn: isSignedIn,
 	});
 
 	// third-parties wish to access our page targeting, before the googletag script is loaded.

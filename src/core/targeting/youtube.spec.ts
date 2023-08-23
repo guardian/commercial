@@ -238,7 +238,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 		},
 	])(
 		'$msg',
-		async ({
+		({
 			isSignedIn,
 			consentState,
 			isAdFreeUser,
@@ -246,16 +246,17 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			customParams,
 			expected,
 		}) => {
-			(buildPageTargeting as jest.Mock).mockResolvedValue({
+			(buildPageTargeting as jest.Mock).mockReturnValue({
 				permutive: ['1', '2', '3'],
 				si: isSignedIn,
 			});
-			const adsConfig = await buildAdsConfigWithConsent({
+			const adsConfig = buildAdsConfigWithConsent({
 				adUnit,
 				clientSideParticipations: {},
 				consentState,
 				customParams,
 				isAdFreeUser,
+				isSignedIn: true,
 			});
 			expect(adsConfig).toEqual(expected);
 		},
@@ -263,8 +264,8 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 });
 
 describe('YouTube Ad Targeting Object when consent errors', () => {
-	test('creates disabled ads config when consent does not have any matching framework', async () => {
-		const adsConfig = await buildAdsConfigWithConsent({
+	test('creates disabled ads config when consent does not have any matching framework', () => {
+		const adsConfig = buildAdsConfigWithConsent({
 			adUnit: 'someAdUnit',
 			clientSideParticipations: {},
 			consentState: {
@@ -273,14 +274,15 @@ describe('YouTube Ad Targeting Object when consent errors', () => {
 			},
 			customParams: {},
 			isAdFreeUser: false,
+			isSignedIn: true,
 		});
 		expect(adsConfig).toEqual({ disableAds: true });
 	});
 });
 
 describe('YouTube Ad Targeting Object when ad free user', () => {
-	test('creates disabled ads config when ad free user', async () => {
-		const adsConfig = await buildAdsConfigWithConsent({
+	test('creates disabled ads config when ad free user', () => {
+		const adsConfig = buildAdsConfigWithConsent({
 			adUnit: 'someAdUnit',
 			clientSideParticipations: {},
 			consentState: {
@@ -289,6 +291,7 @@ describe('YouTube Ad Targeting Object when ad free user', () => {
 			},
 			customParams: {},
 			isAdFreeUser: true,
+			isSignedIn: true,
 		});
 		expect(adsConfig).toEqual({ disableAds: true });
 	});

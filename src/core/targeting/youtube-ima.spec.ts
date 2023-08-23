@@ -16,26 +16,27 @@ const emptyConsent: ConsentState = {
 };
 
 describe('Builds an IMA ad tag URL', () => {
-	it('default values and empty custom parameters', async () => {
-		(buildPageTargeting as jest.Mock).mockResolvedValue({
+	it('default values and empty custom parameters', () => {
+		(buildPageTargeting as jest.Mock).mockReturnValue({
 			at: 'adTestValue',
 		});
-		const adTagURL = await buildImaAdTagUrl({
+		const adTagURL = buildImaAdTagUrl({
 			adUnit: 'someAdUnit',
 			customParams: {},
 			consentState: emptyConsent,
 			clientSideParticipations: {},
+			isSignedIn: true,
 		});
 		expect(adTagURL).toEqual(
 			'https://pubads.g.doubleclick.net/gampad/ads?iu=someAdUnit&tfcd=0&npa=0&sz=480x360|480x361|400x300&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&vad_type=linear&vpos=preroll&cust_params=at%3DadTestValue',
 		);
 	});
-	it('encodes custom parameters', async () => {
+	it('encodes custom parameters', () => {
 		(buildPageTargeting as jest.Mock).mockReturnValue({
 			at: 'fixed-puppies',
 			encodeMe: '=&,',
 		});
-		const adTagURL = await buildImaAdTagUrl({
+		const adTagURL = buildImaAdTagUrl({
 			adUnit: '/59666047/theguardian.com',
 			customParams: {
 				param1: 'hello1',
@@ -47,6 +48,7 @@ describe('Builds an IMA ad tag URL', () => {
 			},
 			consentState: emptyConsent,
 			clientSideParticipations: {},
+			isSignedIn: true,
 		});
 		expect(adTagURL).toEqual(
 			// this is a real ad tag url that you can paste into Google's VAST tag checker:
@@ -54,17 +56,18 @@ describe('Builds an IMA ad tag URL', () => {
 			'https://pubads.g.doubleclick.net/gampad/ads?iu=/59666047/theguardian.com&tfcd=0&npa=0&sz=480x360|480x361|400x300&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&vad_type=linear&vpos=preroll&cust_params=param1%3Dhello1%26param2%3Dhello2%26param3%3Dhello3%252Chello4%26param6%3D%253D%2526%252C%26at%3Dfixed-puppies%26encodeMe%3D%253D%2526%252C',
 		);
 	});
-	it('uses provided custom parameters if page targeting throws an exception', async () => {
+	it('uses provided custom parameters if page targeting throws an exception', () => {
 		(buildPageTargeting as jest.Mock).mockImplementation(() => {
 			throw new Error('Error from page targeting!');
 		});
-		const adTagURL = await buildImaAdTagUrl({
+		const adTagURL = buildImaAdTagUrl({
 			adUnit: '/59666047/theguardian.com',
 			customParams: {
 				param1: 'hello1',
 			},
 			consentState: emptyConsent,
 			clientSideParticipations: {},
+			isSignedIn: true,
 		});
 		expect(adTagURL).toEqual(
 			'https://pubads.g.doubleclick.net/gampad/ads?iu=/59666047/theguardian.com&tfcd=0&npa=0&sz=480x360|480x361|400x300&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&vad_type=linear&vpos=preroll&cust_params=param1%3Dhello1',

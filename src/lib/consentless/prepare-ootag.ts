@@ -2,6 +2,7 @@ import type { ConsentState } from '@guardian/consent-management-platform/dist/ty
 import { loadScript, log } from '@guardian/libs';
 import { buildPageTargetingConsentless } from 'core/targeting/build-page-targeting-consentless';
 import { commercialFeatures } from 'lib/commercial-features';
+import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
 
 function initConsentless(consentState: ConsentState): Promise<void> {
 	return new Promise((resolve) => {
@@ -26,10 +27,13 @@ function initConsentless(consentState: ConsentState): Promise<void> {
 						noRequestsOnPageLoad: 1,
 					});
 
+					const isSignedIn = await isUserLoggedInOktaRefactor();
+
 					Object.entries(
-						await buildPageTargetingConsentless(
+						buildPageTargetingConsentless(
 							consentState,
 							commercialFeatures.adFree,
+							isSignedIn,
 						),
 					).forEach(([key, value]) => {
 						if (!value) {

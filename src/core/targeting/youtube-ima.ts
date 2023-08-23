@@ -22,17 +22,19 @@ const encodeCustomParams = (
 	return encodedParams;
 };
 
-const mergeCustomParamsWithTargeting = async (
+const mergeCustomParamsWithTargeting = (
 	customParams: CustomParams,
 	consentState: ConsentState,
 	clientSideParticipations: Participations,
+	isSignedIn: boolean,
 ) => {
 	let pageTargeting = {};
 	try {
-		pageTargeting = await buildPageTargeting({
+		pageTargeting = buildPageTargeting({
 			adFree: false,
 			clientSideParticipations,
 			consentState: consentState,
+			isSignedIn: isSignedIn,
 		});
 	} catch (e) {
 		/**
@@ -55,18 +57,21 @@ type BuildImaAdTagUrl = {
 	customParams: CustomParams;
 	consentState: ConsentState;
 	clientSideParticipations: Participations;
+	isSignedIn: boolean;
 };
 
-const buildImaAdTagUrl = async ({
+const buildImaAdTagUrl = ({
 	adUnit,
 	clientSideParticipations,
 	consentState,
 	customParams,
-}: BuildImaAdTagUrl): Promise<string> => {
-	const mergedCustomParams = await mergeCustomParamsWithTargeting(
+	isSignedIn,
+}: BuildImaAdTagUrl): string => {
+	const mergedCustomParams = mergeCustomParamsWithTargeting(
 		customParams,
 		consentState,
 		clientSideParticipations,
+		isSignedIn,
 	);
 	const queryParams = {
 		iu: adUnit,

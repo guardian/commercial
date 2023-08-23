@@ -11,6 +11,7 @@ import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import { getPageTargeting } from 'lib/build-page-targeting';
 import type { Advert } from 'lib/dfp/Advert';
 import { getAdvertById } from 'lib/dfp/get-advert-by-id';
+import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
 import type {
 	BidderCode,
 	HeaderBiddingSlot,
@@ -495,7 +496,8 @@ const requestBids = async (
 	const adUnits = await onConsent()
 		.then(async (consentState) => {
 			// calculate this once before mapping over
-			const pageTargeting = await getPageTargeting(consentState);
+			const isSignedIn = await isUserLoggedInOktaRefactor();
+			const pageTargeting = getPageTargeting(consentState, isSignedIn);
 			return flatten(
 				adverts.map((advert) =>
 					getHeaderBiddingAdSlots(advert, slotFlatMap)

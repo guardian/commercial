@@ -10,7 +10,7 @@ import { getPageTargeting } from 'lib/build-page-targeting';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInVariantSynchronous } from 'lib/experiments/ab';
 import { elementsManager } from 'lib/experiments/tests/elements-manager';
-import { getGoogleTagId } from 'lib/identity/api';
+import { getGoogleTagId, isUserLoggedInOktaRefactor } from 'lib/identity/api';
 import { init as initMeasureAdLoad } from 'lib/messenger/measure-ad-load';
 import raven from 'lib/raven';
 import { reportError } from 'lib/utils/report-error';
@@ -64,13 +64,13 @@ const setDfpListeners = (): void => {
 	pubads.addEventListener('impressionViewable', onSlotViewableFunction());
 };
 
-const setPageTargeting = (consentState: ConsentState): void =>
-	void getPageTargeting(consentState).then((targeting) => {
-		Object.entries(targeting).forEach(([key, value]) => {
+const setPageTargeting = (consentState: ConsentState, isSignedIn: boolean) =>
+	Object.entries(getPageTargeting(consentState, isSignedIn)).forEach(
+		([key, value]) => {
 			if (!value) return;
 			window.googletag.pubads().setTargeting(key, value);
-		});
-	});
+		},
+	);
 
 /**
  * Also known as PPID
@@ -90,7 +90,7 @@ export const init = (): Promise<void> => {
 	}
 
 	const setupAdvertising = (): Promise<void> => {
-		return onConsent().then((consentState: ConsentState) => {
+		return onConsent().then(async (consentState: ConsentState) => {
 			EventTimer.get().mark('googletagInitStart');
 			let canRun = true;
 
@@ -128,11 +128,13 @@ export const init = (): Promise<void> => {
 				// Note: fillAdvertSlots isn't synchronous like most buffered cmds, it's a promise. It's put in here to ensure
 				// it strictly follows preceding prepare-googletag work (and the module itself ensures dependencies are
 				// fulfilled), but don't assume fillAdvertSlots is complete when queueing subsequent work using cmd.push
+				const isSignedIn = await isUserLoggedInOktaRefactor();
+
 				window.googletag.cmd.push(
 					() => EventTimer.get().mark('googletagInitEnd'),
 					setDfpListeners,
 					() => {
-						setPageTargeting(consentState);
+						setPageTargeting(consentState, isSignedIn);
 					},
 					() => {
 						void fillAdvertSlots();

@@ -5,6 +5,7 @@ import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import { buildPageTargetingConsentless } from 'core/targeting/build-page-targeting-consentless';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getSynchronousParticipations } from 'lib/experiments/ab';
+import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
 import type { GuElement, SerializedPayload, TargetingRule } from './types';
 import { selectAtRandom } from './util';
 
@@ -51,16 +52,19 @@ const fetchSelectionPayload = async (): Promise<GuElement[]> => {
 const getPageTargetingForElements = async (
 	consentState: ConsentState,
 ): Promise<PageTargeting> => {
+	const isSignedIn = await isUserLoggedInOktaRefactor();
 	if (consentState.canTarget) {
-		return await buildPageTargeting({
+		return buildPageTargeting({
 			consentState,
 			adFree: commercialFeatures.adFree,
 			clientSideParticipations: getSynchronousParticipations(),
+			isSignedIn,
 		});
 	}
-	return await buildPageTargetingConsentless(
+	return buildPageTargetingConsentless(
 		consentState,
 		commercialFeatures.adFree,
+		isSignedIn,
 	);
 };
 

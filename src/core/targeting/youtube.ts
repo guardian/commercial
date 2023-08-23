@@ -13,20 +13,22 @@ import { buildPageTargeting } from './build-page-targeting';
 
 const disabledAds: AdsConfigDisabled = { disableAds: true };
 
-const buildAdsConfig = async (
+const buildAdsConfig = (
 	cmpConsent: ConsentState,
 	adUnit: string,
 	customParams: CustomParams,
 	clientSideParticipations: Participations,
-): Promise<AdsConfig> => {
+	isSignedIn = false,
+): AdsConfig => {
 	const mergedCustomParams = {
 		...customParams,
-		...(await buildPageTargeting({
+		...buildPageTargeting({
 			adFree: false,
 			clientSideParticipations,
 			consentState: cmpConsent,
+			isSignedIn: isSignedIn,
 			youtube: true,
-		})),
+		}),
 		// 19/04/2023 This is a temporary update to assist reporting for a YouTube IMA test
 		yt_embed_ima: '0',
 	};
@@ -72,23 +74,26 @@ type BuildAdsConfigWithConsent = {
 	customParams: CustomParams;
 	consentState: ConsentState;
 	clientSideParticipations: Participations;
+	isSignedIn: boolean;
 };
 
-const buildAdsConfigWithConsent = async ({
+const buildAdsConfigWithConsent = ({
 	adUnit,
 	clientSideParticipations,
 	consentState,
 	customParams,
 	isAdFreeUser,
-}: BuildAdsConfigWithConsent): Promise<AdsConfig> => {
+	isSignedIn,
+}: BuildAdsConfigWithConsent): AdsConfig => {
 	if (isAdFreeUser) {
 		return disabledAds;
 	}
-	return await buildAdsConfig(
+	return buildAdsConfig(
 		consentState,
 		adUnit,
 		customParams,
 		clientSideParticipations,
+		isSignedIn,
 	);
 };
 
