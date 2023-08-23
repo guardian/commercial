@@ -1,7 +1,10 @@
 import { breakpoints, isBreakpoint } from './lib/breakpoint';
 import type { Breakpoint } from './lib/breakpoint';
+import type { Indices } from './types';
 
 type AdSizeString = 'fluid' | `${number},${number}`;
+
+type BreakpointIndices = Indices<typeof breakpoints>;
 
 /**
  * Store ad sizes in a way that is compatible with google-tag but also accessible via
@@ -397,12 +400,12 @@ const findAppliedSizesForBreakpoint = (
 		return [];
 	}
 
-	let breakpointIndex: 0 | 1 | 2 | 3 = breakpoints.findIndex(
+	let breakpointIndex: BreakpointIndices = breakpoints.findIndex(
 		(b) => b === breakpoint,
-	) as 0 | 1 | 2 | 3;
+	) as BreakpointIndices;
 
 	while (breakpointIndex >= 0) {
-		const breakpointToTry = breakpoints[breakpointIndex];
+		const breakpointToTry: Breakpoint = breakpoints[breakpointIndex];
 		const sizeMapping = sizeMappings[breakpointToTry];
 		if (sizeMapping?.length) {
 			return sizeMapping;
