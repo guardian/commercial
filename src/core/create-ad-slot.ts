@@ -1,3 +1,4 @@
+import { findAppliedSizesForBreakpoint } from './ad-sizes';
 import type { SizeMapping } from './ad-sizes';
 import { isBreakpoint } from './lib/breakpoint';
 
@@ -108,7 +109,6 @@ const createClasses = (
  *
  * 1. Check that the options size mappings use known device names
  * 2. If so concat the size mappings
- *
  */
 const concatSizeMappings = (
 	defaultSizeMappings: SizeMapping,
@@ -118,11 +118,15 @@ const concatSizeMappings = (
 		(sizeMappings, [breakpoint, optionSizes]) => {
 			// Only perform concatenation if breakpoint is of the correct type
 			if (isBreakpoint(breakpoint)) {
+				const sizes = findAppliedSizesForBreakpoint(
+					sizeMappings,
+					breakpoint,
+				);
+
 				// Concatenate the option sizes onto any existing sizes present for a given breakpoint
-				sizeMappings[breakpoint] = (
-					sizeMappings[breakpoint] ?? []
-				).concat(optionSizes);
+				sizeMappings[breakpoint] = sizes.concat(optionSizes);
 			}
+
 			return sizeMappings;
 		},
 		{ ...defaultSizeMappings },
@@ -139,10 +143,9 @@ const wrapSlotInContainer = (
 	options: ContainerOptions = {},
 ) => {
 	const container = document.createElement('div');
-
 	container.className = `${adSlotContainerClass} ${options.className ?? ''}`;
-
 	container.appendChild(adSlot);
+
 	return container;
 };
 
