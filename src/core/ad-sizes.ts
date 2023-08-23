@@ -397,7 +397,9 @@ const findAppliedSizesForBreakpoint = (
 		return [];
 	}
 
-	let breakpointIndex = breakpoints.findIndex((b) => b === breakpoint);
+	let breakpointIndex: 0 | 1 | 2 | 3 = breakpoints.findIndex(
+		(b) => b === breakpoint,
+	) as 0 | 1 | 2 | 3;
 
 	while (breakpointIndex >= 0) {
 		const breakpointToTry = breakpoints[breakpointIndex];
