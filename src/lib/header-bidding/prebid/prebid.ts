@@ -493,9 +493,9 @@ const requestBids = async (
 	}
 
 	const adUnits = await onConsent()
-		.then((consentState) => {
+		.then(async (consentState) => {
 			// calculate this once before mapping over
-			const pageTargeting = getPageTargeting(consentState);
+			const pageTargeting = await getPageTargeting(consentState);
 			return flatten(
 				adverts.map((advert) =>
 					getHeaderBiddingAdSlots(advert, slotFlatMap)

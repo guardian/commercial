@@ -41,10 +41,12 @@ const buildAppNexusTargeting = once((pageTargeting: PageTargeting): string =>
 	formatAppNexusTargeting(buildAppNexusTargetingObject(pageTargeting)),
 );
 
-const getPageTargeting = (consentState: ConsentState): PageTargeting => {
+const getPageTargeting = async (
+	consentState: ConsentState,
+): Promise<PageTargeting> => {
 	const { page } = window.guardian.config;
 
-	const pageTargeting = buildPageTargeting({
+	const pageTargeting = await buildPageTargeting({
 		adFree: commercialFeatures.adFree,
 		clientSideParticipations: getSynchronousParticipations(),
 		consentState,
