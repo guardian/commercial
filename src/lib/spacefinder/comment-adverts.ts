@@ -9,7 +9,7 @@ import { refreshAdvert } from 'lib/dfp/load-advert';
 import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
 import fastdom from 'lib/fastdom-promise';
 import { requestBidsForAd } from 'lib/header-bidding/request-bids';
-import { isUserLoggedIn } from 'lib/identity/api';
+import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
 import { mediator } from 'lib/utils/mediator';
 
 const createCommentSlot = (): HTMLElement => {
@@ -97,7 +97,7 @@ const runSecondStage = (
  * Initialize ad slot for comment section
  * @returns Promise
  */
-export const initCommentAdverts = (): Promise<boolean> => {
+export const initCommentAdverts = async (): Promise<boolean> => {
 	// TODO is this relevant? add amIUsed
 	const adSlotContainer = document.querySelector('.js-discussion__ad-slot');
 	const isMobile = getCurrentBreakpoint() === 'mobile';
@@ -105,8 +105,9 @@ export const initCommentAdverts = (): Promise<boolean> => {
 		return Promise.resolve(false);
 	}
 
+	const isLoggedIn = await isUserLoggedInOktaRefactor();
+
 	mediator.once('modules:comments:renderComments:rendered', () => {
-		const isLoggedIn = isUserLoggedIn();
 		const commentMainColumn = document.querySelector<HTMLElement>(
 			'.js-comments .content__main-column',
 		);
