@@ -640,7 +640,7 @@ describe('triplelift adapter', () => {
 		});
 	});
 
-	test('should return correct triplelift adapter params, with requests from US or Canada', () => {
+	test('should return correct triplelift adapter params for MPU, with requests from US or Canada', () => {
 		containsLeaderboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(true);
 		containsDmpu.mockReturnValueOnce(false);
