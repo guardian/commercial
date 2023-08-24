@@ -4,7 +4,7 @@ import { buildPageTargetingConsentless } from 'core/targeting/build-page-targeti
 import { commercialFeatures } from 'lib/commercial-features';
 import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
 
-async function initConsentless(consentState: ConsentState): Promise<void> {
+function initConsentless(consentState: ConsentState): Promise<void> {
 	return new Promise((resolve) => {
 		// Stub the command queue
 		// @ts-expect-error -- it’s a stub, not the whole OO tag object
