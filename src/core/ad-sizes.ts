@@ -1,6 +1,10 @@
+import { breakpoints, isBreakpoint } from './lib/breakpoint';
 import type { Breakpoint } from './lib/breakpoint';
+import type { Indices } from './types';
 
 type AdSizeString = 'fluid' | `${number},${number}`;
+
+type BreakpointIndices = Indices<typeof breakpoints>;
 
 /**
  * Store ad sizes in a way that is compatible with google-tag but also accessible via
@@ -178,6 +182,16 @@ const adSizes: Record<SizeKeys, AdSize> = {
  * mark: 432b3a46-90c1-4573-90d3-2400b51af8d0
  * Some of these may or may not need to be synced for with the sizes in ./create-ad-slot.ts
  * these were originally from DCR, create-ad-slot.ts ones were in frontend.
+ *
+ * Note:
+ * If a breakpoint is not defined in a size mapping for a slot, that breakpoint will use the sizes
+ * of the next breakpoint down that has a size mapping. For example, if only "mobile" and "phablet" sizes
+ * are defined for a slot, all breakpoints larger than "phablet" will use the mapping for "phablet".
+ *
+ * In another example, if a slot has only "tablet" as a size mapping defined,
+ * then "desktop" will use the size mapping for "tablet". "mobile" and "phablet"
+ * will have no size mapping. This type of example may be used in cases where
+ * we only want the slot to appear on the "tablet" size or greater.
  **/
 const slotSizeMappings: SlotSizeMappings = {
 	inline: {
@@ -371,6 +385,52 @@ const slotSizeMappings: SlotSizeMappings = {
 
 const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
 
+/**
+ * Finds the ad sizes that will be used for a breakpoint given a size mapping
+ *
+ * If ad sizes are defined in the size mapping for the specified breakpoint, we use that.
+ * If no sizes are defined for the breakpoint, use the next smallest breakpoint with defined ad sizes.
+ * If no smaller breakpoints have defined ad sizes, return an empty array
+ *
+ * Example:
+ * For the following slotSizeMappings:
+ *     inline: {
+ *         phablet: [adSizes.mpu],
+ *         desktop: [adSizes.billboard]
+ *     }
+ * the applied sizes for each breakpoint for the "inline" slot will be:
+ *     mobile: []
+ *     phablet: [adSizes.mpu]
+ *     tablet: [adSizes.mpu]
+ *     desktop: [adSizes.billboard]
+ *
+ * See ad-sizes.test.ts for more examples
+ */
+const findAppliedSizesForBreakpoint = (
+	sizeMappings: SizeMapping,
+	breakpoint: Breakpoint,
+): AdSize[] => {
+	if (!isBreakpoint(breakpoint)) {
+		return [];
+	}
+
+	let breakpointIndex: BreakpointIndices = breakpoints.findIndex(
+		(b) => b === breakpoint,
+	) as BreakpointIndices;
+
+	while (breakpointIndex >= 0) {
+		const breakpointToTry: Breakpoint = breakpoints[breakpointIndex];
+		const sizeMapping = sizeMappings[breakpointToTry];
+		if (sizeMapping?.length) {
+			return sizeMapping;
+		}
+		breakpointIndex--;
+	}
+
+	// There are no size mappings defined for any size smaller than the breakpoint
+	return [];
+};
+
 // Export for testing
 export const _ = { createAdSize };
 
@@ -390,4 +450,5 @@ export {
 	getAdSize,
 	slotSizeMappings,
 	createAdSize,
+	findAppliedSizesForBreakpoint,
 };

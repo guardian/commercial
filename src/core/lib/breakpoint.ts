@@ -1,7 +1,12 @@
-type Breakpoint = 'mobile' | 'desktop' | 'phablet' | 'tablet';
+/**
+ * Breakpoints ordered from smallest to largest
+ */
+const breakpoints = ['mobile', 'phablet', 'tablet', 'desktop'] as const;
+
+type Breakpoint = (typeof breakpoints)[number];
 
 const isBreakpoint = (s: string): s is Breakpoint =>
-	s === 'mobile' || s === 'phablet' || s === 'tablet' || s === 'desktop';
+	breakpoints.includes(s as Breakpoint);
 
 export type { Breakpoint };
-export { isBreakpoint };
+export { breakpoints, isBreakpoint };
