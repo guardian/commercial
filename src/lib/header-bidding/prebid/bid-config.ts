@@ -522,7 +522,7 @@ const currentBidders = (
 		[shouldIncludeSmart(), smartBidder],
 		[shouldIncludeSonobi(), sonobiBidder(pageTargeting)],
 		[shouldIncludeTrustX(), trustXBidder],
-		[shouldIncludeTripleLift(), tripleLiftBidder], // so will provide an object shouldIncludeTripleLift() return T (isInUsOrCa())
+		[shouldIncludeTripleLift(), tripleLiftBidder],
 		[shouldIncludeAppNexus(), appNexusBidder(pageTargeting)],
 		[shouldIncludeImproveDigital(), improveDigitalBidder],
 		[shouldIncludeImproveDigitalSkin(), improveDigitalSkinBidder],
