@@ -1,3 +1,4 @@
+import { log } from '@guardian/libs';
 import { findAppliedSizesForBreakpoint } from './ad-sizes';
 import type { SizeMapping } from './ad-sizes';
 import { isBreakpoint } from './lib/breakpoint';
@@ -74,9 +75,11 @@ const createAdSlotElement = (
 		// introduce dfp-ad--top-above-nav then there isn't already one.
 		const node = document.getElementById(id);
 		if (node?.parentNode) {
-			const pnode = node.parentNode;
-			console.log(`warning: cleaning up dom node id: dfp-ad--${name}`);
-			pnode.removeChild(node);
+			log(
+				'commercial',
+				`warning: cleaning up dom node id: dfp-ad--${name}`,
+			);
+			node.parentNode.removeChild(node);
 		}
 	}
 

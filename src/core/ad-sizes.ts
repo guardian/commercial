@@ -391,6 +391,20 @@ const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
  * If ad sizes are defined in the size mapping for the specified breakpoint, we use that.
  * If no sizes are defined for the breakpoint, use the next smallest breakpoint with defined ad sizes.
  * If no smaller breakpoints have defined ad sizes, return an empty array
+ *
+ * Example:
+ * For the following slotSizeMappings:
+ *     inline: {
+ *         phablet: [adSizes.mpu],
+ *         desktop: [adSizes.billboard]
+ *     }
+ * the applied sizes for each breakpoint for the "inline" slot will be:
+ *     mobile: []
+ *     phablet: [adSizes.mpu]
+ *     tablet: [adSizes.mpu]
+ *     desktop: [adSizes.billboard]
+ *
+ * See ad-sizes.test.ts for more examples
  */
 const findAppliedSizesForBreakpoint = (
 	sizeMappings: SizeMapping,
