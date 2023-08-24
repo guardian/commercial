@@ -111,7 +111,7 @@ const buildPageTargeting = ({
 	const sessionTargeting: SessionTargeting = getSessionTargeting({
 		adTest: getCookie({ name: 'adtest', shouldMemoize: true }),
 		countryCode: getLocale(),
-		isSignedIn: isSignedIn,
+		isSignedIn,
 		pageViewId: window.guardian.config.ophan.pageViewId,
 		participations: {
 			clientSideParticipations,

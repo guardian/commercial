@@ -51,7 +51,7 @@ const getPageTargeting = (
 		adFree: commercialFeatures.adFree,
 		clientSideParticipations: getSynchronousParticipations(),
 		consentState,
-		isSignedIn: isSignedIn,
+		isSignedIn,
 	});
 
 	// third-parties wish to access our page targeting, before the googletag script is loaded.
