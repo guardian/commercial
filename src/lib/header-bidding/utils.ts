@@ -152,7 +152,8 @@ export const shouldIncludeOpenx = (): boolean => !isInUsOrCa();
 
 export const shouldIncludeTrustX = (): boolean => isInUsOrCa();
 
-export const shouldIncludeTripleLift = (): boolean => isInUsOrCa();
+export const shouldIncludeTripleLift = (): boolean =>
+	isInUsOrCa() || isInAuOrNz();
 
 export const shouldIncludeAdYouLike = (
 	slotSizes: HeaderBiddingSize[],
