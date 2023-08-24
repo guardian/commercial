@@ -42,16 +42,19 @@ const isConsentlessKey = (key: unknown): key is ConsentlessTargetingKeys =>
  *
  * @param  {ConsentState} consentState
  * @param  {boolean} adFree
+ * @param  {boolean} isSignedIn
  * @returns ConsentlessPageTargeting
  */
 const buildPageTargetingConsentless = (
 	consentState: ConsentState,
 	adFree: boolean,
+	isSignedIn: boolean,
 ): ConsentlessPageTargeting => {
 	const consentedPageTargeting: PageTargeting = buildPageTargeting({
 		adFree,
 		consentState,
 		clientSideParticipations: {},
+		isSignedIn,
 	});
 
 	return Object.fromEntries(

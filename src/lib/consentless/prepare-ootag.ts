@@ -2,6 +2,7 @@ import type { ConsentState } from '@guardian/consent-management-platform/dist/ty
 import { loadScript, log } from '@guardian/libs';
 import { buildPageTargetingConsentless } from 'core/targeting/build-page-targeting-consentless';
 import { commercialFeatures } from 'lib/commercial-features';
+import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
 
 function initConsentless(consentState: ConsentState): Promise<void> {
 	return new Promise((resolve) => {
@@ -10,6 +11,7 @@ function initConsentless(consentState: ConsentState): Promise<void> {
 		window.ootag = {
 			queue: [],
 		};
+
 		window.ootag.queue.push(function () {
 			// Ensures Opt Out logs are namespaced under Commercial
 			window.ootag.logger = (...args: unknown[]) => {
@@ -24,18 +26,21 @@ function initConsentless(consentState: ConsentState): Promise<void> {
 				noRequestsOnPageLoad: 1,
 			});
 
-			Object.entries(
-				buildPageTargetingConsentless(
-					consentState,
-					commercialFeatures.adFree,
-				),
-			).forEach(([key, value]) => {
-				if (!value) {
-					return;
-				}
-				window.ootag.addParameter(key, value);
+			void isUserLoggedInOktaRefactor().then((isSignedIn) => {
+				Object.entries(
+					buildPageTargetingConsentless(
+						consentState,
+						commercialFeatures.adFree,
+						isSignedIn,
+					),
+				).forEach(([key, value]) => {
+					if (!value) {
+						return;
+					}
+					window.ootag.addParameter(key, value);
+				});
+				resolve();
 			});
-			resolve();
 		});
 
 		void loadScript(

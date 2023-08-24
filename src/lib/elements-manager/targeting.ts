@@ -56,11 +56,13 @@ const getPageTargetingForElements = (
 			consentState,
 			adFree: commercialFeatures.adFree,
 			clientSideParticipations: getSynchronousParticipations(),
+			isSignedIn: false,
 		});
 	}
 	return buildPageTargetingConsentless(
 		consentState,
 		commercialFeatures.adFree,
+		false,
 	);
 };
 

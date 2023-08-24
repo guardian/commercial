@@ -44,8 +44,9 @@ describe('buildPageTargetingConsentless', () => {
 			inskin: 'f',
 			rc: '0',
 		});
-
-		expect(buildPageTargetingConsentless(emptyConsent, false)).toEqual({
+		expect(
+			buildPageTargetingConsentless(emptyConsent, false, true),
+		).toEqual({
 			bl: ['blog'],
 			br: 'p',
 			ct: 'video',
