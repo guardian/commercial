@@ -81,7 +81,7 @@ const showPreview = (
 const selectAssetsForSlots = async (slots: HTMLElement[]) => {
 	const consentState = await onConsent();
 	const elements = await fetchSelectionPayload();
-	const pageTargeting = await getPageTargetingForElements(consentState);
+	const pageTargeting = getPageTargetingForElements(consentState);
 
 	slots.forEach((slot) => {
 		const slotName = slot.dataset.name;
