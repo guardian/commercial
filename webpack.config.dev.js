@@ -8,7 +8,6 @@ const overrideBundlePath = `http://localhost:${port}/`;
 const shouldOverrideBundle = !!process.env.OVERRIDE_BUNDLE;
 
 module.exports = webpackMerge.smart(config, {
-	/** @type {import('webpack-dev-server').Configuration} */
 	devtool: 'inline-source-map',
 	mode: 'development',
 	output: {
@@ -38,6 +37,7 @@ module.exports = webpackMerge.smart(config, {
 			process: 'process/browser',
 		},
 	},
+	/** @type {import('webpack-dev-server').Configuration} */
 	devServer: {
 		port,
 		compress: true,
