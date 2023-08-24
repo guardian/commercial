@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 11.3.0
+
+### Minor Changes
+
+- f8639ba: Migrate the commercial repository to use the identity-auth package
+- 0fec66a: Migrate getPageTargeting to Okta
+
 ## 11.2.0
 
 ### Minor Changes
