@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 11.4.0
+
+### Minor Changes
+
+- 916fc42: Adds tripleLift to the add list for US and Aus
+
+### Patch Changes
+
+- 8a4f86e: Fix bug when adding additional sizes to empty size mapping
+
 ## 11.3.0
 
 ### Minor Changes
