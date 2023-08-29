@@ -292,6 +292,7 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.empty,
 			adSizes.billboard,
 			adSizes.fabric,
+			adSizes.merchandisingHigh,
 			adSizes.fluid,
 		],
 	},
