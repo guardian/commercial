@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.5.0
+
+### Minor Changes
+
+- c6eb3d1: Add the merch-high ad size to fronts-banner slots
+
 ## 11.4.0
 
 ### Minor Changes
