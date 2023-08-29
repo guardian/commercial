@@ -657,7 +657,7 @@ describe('DFP', () => {
 			await prepareGoogletag();
 			expect(loadScript).toHaveBeenCalledTimes(1);
 			expect(loadScript).toHaveBeenCalledWith(
-				'//www.googletagservices.com/tag/js/gpt.js',
+				'//securepubads.g.doubleclick.net/tag/js/gpt.js',
 				{ async: false },
 			);
 		});
