@@ -2,6 +2,9 @@ const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const config = require('./webpack.config.js');
 const path = require('path');
+const {
+	setupFixturesServer,
+} = require('./scripts/fixtures/fixtures-server.js');
 
 const port = 3031;
 const overrideBundlePath = `http://localhost:${port}/`;
@@ -31,7 +34,6 @@ module.exports = webpackMerge.smart(config, {
 					process: 'process/browser',
 				}),
 		  ],
-
 	resolve: {
 		alias: {
 			process: 'process/browser',
@@ -43,5 +45,6 @@ module.exports = webpackMerge.smart(config, {
 		compress: true,
 		hot: false,
 		liveReload: true,
+		onAfterSetupMiddleware: setupFixturesServer,
 	},
 });
