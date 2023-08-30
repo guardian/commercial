@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.6.0
+
+### Minor Changes
+
+- 62d99bc: Stop sending all Sentry reports for Okta test participants
+
 ## 11.5.0
 
 ### Minor Changes
