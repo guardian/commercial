@@ -145,7 +145,7 @@ export const init = (): Promise<void> => {
 				//This flow allows us to handle errors originating from DuckDuckGo without spamming Sentry
 				loadScript(
 					window.guardian.config.page.libs?.googletag ??
-						'//www.googletagservices.com/tag/js/gpt.js',
+						'//securepubads.g.doubleclick.net/tag/js/gpt.js',
 					{ async: false },
 				).catch((error: Error) => {
 					if (navigator.userAgent.includes('DuckDuckGo')) {
