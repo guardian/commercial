@@ -28,3 +28,8 @@ wip
 downloads
 screenshots
 videos
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
