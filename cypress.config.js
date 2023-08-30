@@ -9,7 +9,9 @@ export default defineConfig({
 		runMode: 2,
 		openMode: 0,
 	},
-	video: false,
+	// Record videos in CI
+	// This environment var is always set to "true" in CI (i.e. Github Actions)
+	video: !!process.env.CI,
 	e2e: {
 		setupNodeEvents(on, config) {
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-var-requires -- cypress api
