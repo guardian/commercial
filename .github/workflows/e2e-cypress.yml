@@ -57,6 +57,9 @@ jobs:
         run: yarn cypress run --spec cypress/e2e/parallel-${{ matrix.group }}/*
         working-directory: ./commercial
 
+      # Only capture videos and screenshots on failure
+      # In order to minimize unused artifacts
+
       - uses: actions/upload-artifact@v2
         if: failure()
         with:

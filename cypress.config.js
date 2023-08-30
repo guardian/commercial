@@ -10,7 +10,7 @@ export default defineConfig({
 		openMode: 0,
 	},
 	// Record videos in CI
-	// In the GHA we'll only record failures, to minimize storage
+	// This environment var is always set to "true" in CI (i.e. Github Actions)
 	video: !!process.env.CI,
 	e2e: {
 		setupNodeEvents(on, config) {
