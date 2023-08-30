@@ -64,10 +64,6 @@ const sentryOptions: RavenOptions = {
 	shouldSendCallback(data: { tags: { ignored?: unknown } }) {
 		const isIgnored = !!data.tags.ignored;
 
-		const isInOktaExperiment =
-			!!window.guardian.config.switches.okta &&
-			window.guardian.config.tests?.oktaVariant === 'variant';
-
 		// Sample at a very small rate.
 		const isInSample = Math.random() < 0.008;
 
@@ -77,7 +73,7 @@ const sentryOptions: RavenOptions = {
 
 		return (
 			!!enableSentryReporting &&
-			(isInSample || isInOktaExperiment) &&
+			isInSample &&
 			!isIgnored &&
 			!adblockBeingUsed
 		);
