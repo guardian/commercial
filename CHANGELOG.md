@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 11.7.0
+
+### Minor Changes
+
+- f090cf4: Update GPT URL to be in line with Google recommendations
+
+### Patch Changes
+
+- ede694a: Remove fabric size from fronts-banner ad slot
+
 ## 11.6.0
 
 ### Minor Changes
