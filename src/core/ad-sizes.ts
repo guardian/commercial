@@ -291,7 +291,6 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.outOfPage,
 			adSizes.empty,
 			adSizes.billboard,
-			adSizes.fabric,
 			adSizes.merchandisingHigh,
 			adSizes.fluid,
 		],
