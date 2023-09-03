@@ -1,6 +1,12 @@
 import { BrowserContext, Cookie, Page } from '@playwright/test';
 import type { UserFeaturesResponse } from '../../src/types/membership';
 
+// TODO playwright
+// - check env vars are picked up
+// - global setup for ophan blocking
+// - helper functions for cmp accept and reject
+// - split up utils into separate files
+
 type Stage = 'code' | 'prod' | 'dev';
 
 const hostnames = {
@@ -67,6 +73,7 @@ export const getTestUrl = (
  * e.g. `STAGE=code yarn playwright test`
  */
 export const getStage = (): Stage => {
+	// TODO check playwright picks up the STAGE env var
 	const stage = process.env.STAGE;
 	return normalizeStage(stage?.toLowerCase() ?? 'dev');
 };
