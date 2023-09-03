@@ -114,7 +114,7 @@ export const fakeLogin = async (
 		'https://members-data-api.theguardian.com/user-attributes/me**',
 		async (route) => {
 			route.fulfill({
-				body: JSON.stringify({ bodyOverride }),
+				body: JSON.stringify(bodyOverride),
 			});
 		},
 	);
