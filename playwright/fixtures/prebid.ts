@@ -1,14 +1,14 @@
-export const bidderURLs = [
-	'https://ib.adnxs.com/ut/v3/prebid',
-	'https://htlb.casalemedia.com/cygnus**',
-	'https://hbopenbid.pubmatic.com/translator?source=prebid-client',
-	'https://prg.smartadserver.com/prebid/v1',
-	'https://rtb.openx.net/sync/prebid**',
-	'https://elb.the-ozone-project.com/openrtb2/auction',
-	'https://bidder.criteo.com/cdb**',
-	'https://pixel.adsafeprotected.com/services/pub**',
-	'https://ad.360yield.com/pb',
-];
+export const bidderURLs = {
+	adnxx: 'https://ib.adnxs.com/ut/v3/prebid',
+	casalemedia: 'https://htlb.casalemedia.com/cygnus**',
+	pubmatic: 'https://hbopenbid.pubmatic.com/translator?source=prebid-client',
+	smartadserver: 'https://prg.smartadserver.com/prebid/v1',
+	openx: 'https://rtb.openx.net/sync/prebid**',
+	ozone: 'https://elb.the-ozone-project.com/openrtb2/auction',
+	criteo: 'https://bidder.criteo.com/cdb**',
+	adsafeprotected: 'https://pixel.adsafeprotected.com/services/pub**',
+	yield: 'https://ad.360yield.com/pb',
+};
 
 export const wins = {
 	criteo: {

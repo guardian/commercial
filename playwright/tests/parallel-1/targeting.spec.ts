@@ -1,4 +1,4 @@
-import { Page, test } from '@playwright/test';
+import { expect, Page, Request, test } from '@playwright/test';
 import { allPages, articles } from '../../fixtures/pages';
 import { acceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
@@ -76,36 +76,32 @@ test.describe('GAM targeting', () => {
 	});
 });
 
-// TODO this test has been migrated from cypress where it was skipped
-// But it is flakey here as well as the hb_bidder is sometimes null
-// I think there are multiple criteo and we need to select the right one
 test.describe('Prebid targeting', () => {
 	test.beforeEach(async ({ page }) => {
-		bidderURLs.forEach((url) => {
-			page.route(url, async (route) => {
-				const request = route.request();
-				if (request.url().includes(wins.criteo.url)) {
-					console.log(
-						'replying with criteo response!!!!!',
-						' for ',
-						request.url(),
-					);
-					route.fulfill({
-						body: JSON.stringify(wins.criteo.response),
-					});
-				} else {
-					route.fulfill({
-						status: 204,
-					});
-				}
-			});
+		page.route(bidderURLs.criteo, async (route) => {
+			const request = route.request();
+			if (request.url().includes(wins.criteo.url)) {
+				console.log(
+					'replying with criteo response for: ',
+					request.url(),
+				);
+				route.fulfill({
+					body: JSON.stringify(wins.criteo.response),
+				});
+			}
 		});
 	});
 
 	test(`criteo targeting`, async ({ page }) => {
-		const gamRequestPromise = page.waitForRequest((request) => {
+		const gamCriteoRequestPromise = page.waitForRequest((request) => {
 			const isURL = request.url().match(gamUrl);
 			if (!isURL) return false;
+			const isCriteoBid = request.url().includes('hb_bidder%3Dcriteo');
+			if (!isCriteoBid) return false;
+			console.log('matched url', request.url());
+			return true;
+		});
+		const assertGamCriteoRequest = (request: Request) => {
 			const url = new URL(request.url());
 			const prevScp = url.searchParams.get('prev_scp');
 			if (!prevScp) return false;
@@ -113,25 +109,23 @@ test.describe('Prebid targeting', () => {
 			const prevScpParams = new URLSearchParams(prevScpDecoded);
 			if (!prevScpParams) return false;
 			console.log('prevScpParams', prevScpParams);
-			const hbBidder = prevScpParams.get('hb_bidder');
-			console.log('hbBidder', hbBidder);
-			if (hbBidder === 'criteo') {
-				return Object.entries(wins.criteo.targeting).every(
-					([key, value]) => {
-						console.log(
-							'checking',
+			const allMatched = Object.entries(wins.criteo.targeting).every(
+				([key, value]) => {
+					console.log(
+						`checking ${key}: ${value} == ${prevScpParams.get(
 							key,
-							prevScpParams.get(key),
-							value,
-						);
-						if (prevScpParams.get(key) !== value) return false;
-					},
-				);
-			}
-			return true;
-		});
+						)}`,
+					);
+					if (prevScpParams.get(key) !== value) return false;
+					return true;
+				},
+			);
+			console.log('allMatched', allMatched);
+			expect(allMatched).toBeTruthy();
+		};
 		await loadPage(page, articles[0].path);
 		await acceptAll(page);
-		await gamRequestPromise;
+		const gamCriteoRequest = await gamCriteoRequestPromise;
+		assertGamCriteoRequest(gamCriteoRequest);
 	});
 });
