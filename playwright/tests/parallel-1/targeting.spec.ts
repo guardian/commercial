@@ -2,7 +2,7 @@ import type { Request } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 import { allPages, articles } from '../../fixtures/pages';
 import { bidderURLs, wins } from '../../fixtures/prebid';
-import { acceptAll } from '../../lib/cmp';
+import { cmpAcceptAll } from '../../lib/cmp';
 import {
 	assertRequestParameter,
 	gamUrl,
@@ -18,7 +18,7 @@ test.describe('GAM targeting', () => {
 			'top-above-nav',
 		);
 		await loadPage(page, articles[0].path);
-		await acceptAll(page);
+		await cmpAcceptAll(page);
 		await gamRequestPromise;
 	});
 
@@ -28,7 +28,7 @@ test.describe('GAM targeting', () => {
 			'top-above-nav',
 		);
 		await loadPage(page, articles[0].path);
-		await acceptAll(page);
+		await cmpAcceptAll(page);
 		const request = await gamRequestPromise;
 		const matched = assertRequestParameter(
 			request,
@@ -52,7 +52,7 @@ test.describe('GAM targeting', () => {
 			throw new Error('No sensitive articles found to run test.');
 		}
 		await loadPage(page, sensitivePage.path);
-		await acceptAll(page);
+		await cmpAcceptAll(page);
 		const request = await gamRequestPromise;
 		const matched = assertRequestParameter(
 			request,
@@ -105,7 +105,7 @@ test.describe('Prebid targeting', () => {
 			return true;
 		});
 		await loadPage(page, articles[0].path);
-		await acceptAll(page);
+		await cmpAcceptAll(page);
 		const gamCriteoRequest = await gamCriteoRequestPromise;
 		assertGamCriteoRequest(gamCriteoRequest);
 	});
