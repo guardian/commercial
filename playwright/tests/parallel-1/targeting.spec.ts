@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { allPages, articles } from '../../fixtures/pages';
 import { bidderURLs, wins } from '../../fixtures/prebid';
+import { acceptAll } from '../../lib/cmp';
 
 const gamUrl = 'https://securepubads.g.doubleclick.net/gampad/ads?**';
 
@@ -21,16 +22,13 @@ test.describe('GAM targeting', () => {
 				: route.continue();
 		});
 
-		const responsePromise = page.waitForResponse(gamUrl);
+		const gamResponsePromise = page.waitForResponse(gamUrl);
+
 		await page.goto(articles[0].path);
 
-		const acceptAllButton = page
-			.frameLocator('[id*="sp_message_iframe"]')
-			.locator('button.sp_choice_type_11');
-		await acceptAllButton.click();
-		await new Promise((r) => setTimeout(r, 2000));
+		await acceptAll(page);
 
-		await responsePromise;
+		await gamResponsePromise;
 	});
 
 	// 	it(`checks the gdpr_consent param`, () => {
