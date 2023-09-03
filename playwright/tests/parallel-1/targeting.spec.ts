@@ -1,63 +1,55 @@
 import { test } from '@playwright/test';
-import { articles } from '../../fixtures/pages';
+import { allPages, articles } from '../../fixtures/pages';
 import { acceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
 
-const gamUrl = 'https://securepubads.g.doubleclick.net/gampad/ads?**';
-
-// const intercept = (page: Page, urlPattern: string) => {
-// 	// return the promise and don't await so it can be awaited on by the test where necessary
-// 	return page.route(urlPattern, async route => {
-// 		route.fulfill({
-// 			body: JSON.stringify({ bodyOverride })
-// 		});
-// 	});
-// }
+const gamUrl = /https:\/\/securepubads.g.doubleclick.net\/gampad\/ads/;
 
 test.describe('GAM targeting', () => {
 	test('checks that a request is made', async ({ page }) => {
-		const gamResponsePromise = page.waitForResponse(gamUrl, {});
+		const gamRequestPromise = page.waitForRequest(gamUrl);
 		await loadPage(page, articles[0].path);
 		await acceptAll(page);
-		await gamResponsePromise;
+		await gamRequestPromise;
 	});
 
-	// 	it(`checks the gdpr_consent param`, () => {
-	// 		const { path } = articles[0];
-	// 		cy.visit(path);
+	test('checks the gdpr_consent param', async ({ page }) => {
+		const gamRequestPromise = page.waitForRequest((request) => {
+			const isURL = request.url().match(gamUrl);
+			if (!isURL) return false;
+			const url = new URL(request.url());
+			const gdprConsent = url.searchParams.get('gdpr_consent');
+			if (gdprConsent === null) return false;
+			return gdprConsent.length > 0;
+		});
+		await loadPage(page, articles[0].path);
+		await acceptAll(page);
+		await gamRequestPromise;
+	});
 
-	// 		cy.intercept({ url: gamUrl }, function (req) {
-	// 			const url = new URL(req.url);
+	test(`checks sensitive content is marked as sensitive`, async ({
+		page,
+	}) => {
+		const gamRequestPromise = page.waitForRequest((request) => {
+			const isURL = request.url().match(gamUrl);
+			if (!isURL) return false;
+			const url = new URL(request.url());
+			const custParams = url.searchParams.get('cust_params') ?? '';
+			if (custParams === null) return false;
+			const decodedCustParams = decodeURIComponent(custParams);
+			const sens = new URLSearchParams(decodedCustParams).get('sens');
+			return sens === 't';
+		});
+		const sensitivePage = allPages.find(
+			(page) => page?.name === 'sensitive-content',
+		);
+		if (!sensitivePage)
+			throw new Error('No sensitive articles found to run test.');
 
-	// 			expect(url.searchParams.get('gdpr_consent')).to.not.be.undefined;
-	// 		}).as('gamRequest');
-
-	// 		cy.wait('@gamRequest', { timeout: 30000 });
-	// 	});
-
-	// 	it(`checks sensitive content is marked as sensitive`, () => {
-	// 		const sensitivePage = allPages.find(
-	// 			(page) => page?.name === 'sensitive-content',
-	// 		);
-	// 		if (!sensitivePage)
-	// 			throw new Error('No sensitive articles found to run test.');
-
-	// 		cy.visit(sensitivePage.path);
-
-	// 		cy.intercept({ url: gamUrl }, function (req) {
-	// 			const url = new URL(req.url);
-
-	// 			const custParams = decodeURIComponent(
-	// 				url.searchParams.get('cust_params') || '',
-	// 			);
-	// 			const decodedCustParams = new URLSearchParams(custParams);
-
-	// 			expect(decodedCustParams.get('sens')).to.equal('t');
-	// 		}).as('gamRequest');
-
-	// 		cy.wait('@gamRequest', { timeout: 30000 });
-	// 	});
-	// });
+		await loadPage(page, sensitivePage.path);
+		await acceptAll(page);
+		await gamRequestPromise;
+	});
 
 	// describe('Prebid targeting', () => {
 	// 	const interceptGamRequest = () =>
