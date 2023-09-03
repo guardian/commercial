@@ -1,7 +1,7 @@
-import { test, expect, type Page } from '@playwright/test';
-import { allPages, articles } from '../../fixtures/pages';
-import { bidderURLs, wins } from '../../fixtures/prebid';
+import { test } from '@playwright/test';
+import { articles } from '../../fixtures/pages';
 import { acceptAll } from '../../lib/cmp';
+import { loadPage } from '../../lib/load-page';
 
 const gamUrl = 'https://securepubads.g.doubleclick.net/gampad/ads?**';
 
@@ -16,18 +16,9 @@ const gamUrl = 'https://securepubads.g.doubleclick.net/gampad/ads?**';
 
 test.describe('GAM targeting', () => {
 	test('checks that a request is made', async ({ page }) => {
-		await page.route('**/*', (route) => {
-			return route.request().url().includes('ophan.theguardian.com')
-				? route.abort()
-				: route.continue();
-		});
-
-		const gamResponsePromise = page.waitForResponse(gamUrl);
-
-		await page.goto(articles[0].path);
-
+		const gamResponsePromise = page.waitForResponse(gamUrl, {});
+		await loadPage(page, articles[0].path);
 		await acceptAll(page);
-
 		await gamResponsePromise;
 	});
 
