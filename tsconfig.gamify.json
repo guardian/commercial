@@ -1,0 +1,7 @@
+// TODO explain what this is for
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"noUncheckedIndexedAccess": true
+	}
+}

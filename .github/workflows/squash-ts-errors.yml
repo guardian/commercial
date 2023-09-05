@@ -1,0 +1,45 @@
+name: Report TS Unchecked indexed access errors
+on:
+  push:
+    #branches:
+    #  - 'main'
+  pull_request:
+    branches-ignore:
+      - 'gh-pages'
+
+permissions: write-all
+
+jobs:
+  test:
+    name: Report TS Errors
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          # TODO Replace with main
+          ref: clj/test-num-errors
+
+      - name: Get number of errors on main
+        run: |
+          echo "NUM_ERRORS=$(cat .num-errors)" >> $GITHUB_OUTPUT
+        id: num_errors
+
+      - name: Output num-errors
+        run: |
+          echo "${{ steps.num_errors.outputs.NUM_ERRORS }}"
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name:
+        run: yarn tsc --project ./tsconfig.gamify.json
