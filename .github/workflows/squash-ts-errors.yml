@@ -22,12 +22,12 @@ jobs:
 
       - name: Get number of errors on main
         run: |
-          echo "NUM_ERRORS=$(cat .num-errors)" >> $GITHUB_OUTPUT
+          echo "NUM_ERRORS_MAIN=$(cat .num-errors)" >> $GITHUB_OUTPUT
         id: num_errors
 
       - name: Output num-errors
         run: |
-          echo "${{ steps.num_errors.outputs.NUM_ERRORS }}"
+          echo "${{ steps.num_errors.outputs.NUM_ERRORS_MAIN }}"
 
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -42,4 +42,6 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name:
-        run: yarn tsc --project ./tsconfig.gamify.json
+        run: node ./scripts/no-unchecked.js
+        env:
+          NUM_ERRORS_MAIN: ${{ steps.num_errors.outputs.NUM_ERRORS_MAIN }}
