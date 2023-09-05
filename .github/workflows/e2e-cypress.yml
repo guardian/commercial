@@ -34,17 +34,17 @@ jobs:
         run: yarn install --frozen-lockfile
         working-directory: ./commercial
 
-        # We always run our commercial code against the latest main of DCR
-        # This does make our tests sensitive to changes in DCR
-        # (e.g. imagine someone removes the top-above-nav slot from DCR)
-        # This is something we accept in order to easily test our own code
-        #
-        # Note we use the containerised version of DCR, published from:
-        # https://github.com/guardian/dotcom-rendering/blob/6a6df272/.github/workflows/container.yml
-        #
-        # The argument `--network host` is crucial here, as it means the container shares the networking stack of the host
-        # This makes the commercial dev server available from inside the container
-        # Note that GHA provides a service container feature, but it does not support this argument
+      # We always run our commercial code against the latest main of DCR
+      # This does make our tests sensitive to changes in DCR
+      # (e.g. imagine someone removes the top-above-nav slot from DCR)
+      # This is something we accept in order to easily test our own code
+      #
+      # Note we use the containerised version of DCR, published from:
+      # https://github.com/guardian/dotcom-rendering/blob/6a6df272/.github/workflows/container.yml
+      #
+      # The argument `--network host` is crucial here, as it means the container shares the networking stack of the host
+      # This makes the commercial dev server available from inside the container
+      # Note that GHA provides a service container feature, but it does not support this argument
       - name: Start DCR in a container
         run: |
           /usr/bin/docker run -d \
