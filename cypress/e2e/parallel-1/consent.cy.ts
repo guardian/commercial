@@ -54,6 +54,7 @@ const visitArticleNoOkta = () =>
 					 * See https://github.com/guardian/dotcom-rendering/issues/8758
 					 */
 					okta: false,
+					idCookieRefresh: false,
 				},
 			},
 		}),

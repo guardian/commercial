@@ -3,7 +3,7 @@ import type { Page } from './Page';
 
 const stage = getStage();
 
-const articles: Page[] = [
+export const articles: Page[] = [
 	{
 		path: getTestUrl(
 			stage,
@@ -41,7 +41,7 @@ const articles: Page[] = [
 	},
 ];
 
-const Standard = {
+export const Standard = {
 	slotMachineFlags: '',
 	main: '<figure class="element element-image" data-media-id="ca1ab65e57b67491418deb6430ed72d2c5ce6fdd"> <img src="https://media.guim.co.uk/ca1ab65e57b67491418deb6430ed72d2c5ce6fdd/0_329_5390_3236/1000.jpg" alt="Jeremy Corbyn at a Stop the War coalition protest in August 2021." width="1000" height="600" class="gu-image" /> <figcaption> <span class="element-image__caption">Jeremy Corbyn at a Stop the War coalition protest in August 2021.</span> <span class="element-image__credit">Photograph: Neil Hall/EPA</span> </figcaption> </figure>',
 	subMetaSectionLinks: [
@@ -1272,7 +1272,7 @@ const Standard = {
 					],
 				},
 			],
-			elementId: '42ee9d07-9d76-4b4d-84ae-36a93def3b20',
+			elementId: '17987206-4ddc-4369-88b8-2422cc924331',
 		},
 	],
 	canonicalUrl:
@@ -1284,17 +1284,17 @@ const Standard = {
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>Keir Starmer has launched an outspoken attack on the <a href="https://www.theguardian.com/politics/stop-the-war-coalition" data-component="auto-linked-tag">Stop the War coalition</a>, in which Jeremy Corbyn is a leading figure, effectively accusing the campaign group of siding with Russia against Nato.</p>',
-					elementId: '9581dfa2-d344-4804-aaa5-bde283aec4d2',
+					elementId: 'dd16a8c3-1ae7-4c71-9d49-4d049c2d5f13',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>In an opinion <a href="https://www.theguardian.com/commentisfree/2022/feb/10/labour-nato-british-left-ukraine-keir-starmer">article for the Guardian</a>, written on the way to Brussels where he reaffirmed Labour’s staunch support for Nato, Starmer says Stop the War are “not benign voices for peace”.</p>',
-					elementId: '72e39470-8b13-4e38-8cb8-ff2ad117b6e9',
+					elementId: '3b9b69e1-4044-4a65-bd19-73d9560e0c45',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>“At best they are naive, at worst they actively give succour to authoritarian leaders who directly threaten democracies. There is nothing progressive in showing solidarity with the aggressor when our allies need our solidarity and – crucially – our practical assistance now more than ever.”</p>',
-					elementId: '55859f1a-4f85-479f-9ecf-7d683141828e',
+					elementId: '95190ff9-c597-4ecb-b7b8-418d2dcbbb77',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.RichLinkBlockElement',
@@ -1302,97 +1302,97 @@ const Standard = {
 					text: 'Under my leadership, Labour’s commitment to Nato is unshakable | Keir Starmer',
 					prefix: 'Related: ',
 					role: 'thumbnail',
-					elementId: 'd1146e67-5c74-4221-b1cd-89d6e9787a8a',
+					elementId: '39f7cf16-e9e6-49f9-a814-8ac3142126e2',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>He said Putin’s regime would see Stop the War protesters in the UK as “virtue signallers” who were “providing a smokescreen so it can go on beating up and jailing those brave individuals that dare to stand up to its despotism on the streets of Russia”.</p>',
-					elementId: '09f157a7-cd2f-4c95-a898-ed364fa31173',
+					elementId: 'c164519e-8ae5-4205-9d1c-1271651243a7',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>He accused the group of a “kneejerk reflex: ‘Britain, Canada, the United States, France – wrong; their enemies – right’.”</p>',
-					elementId: 'f1c49310-f28a-4b84-804a-dbcff456b085',
+					elementId: '8233eb46-fa7f-402e-9676-2ab3c2ed9bae',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>Corbyn is the deputy president of the Stop the War coalition, alongside Andrew Murray, who was chief of staff to the former Unite union leader Len McCluskey. Murray is a former communist who joined <a href="https://www.theguardian.com/politics/labour" data-component="auto-linked-tag">Labour</a> when Corbyn became leader.</p>',
-					elementId: 'a5042ed4-6d37-4102-ae1c-1f5a78c4c36d',
+					elementId: 'a1657e06-86e3-4d98-8e2f-20c192005e69',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>The group’s president is the musician Brian Eno. Stop the War was founded in the run-up to the invasion of Afghanistan in 2001, and regularly holds rallies on issues including Israel and Palestine. Its critics claim it is not just anti-war, but anti-west.</p>',
-					elementId: 'd1b04416-8bce-49a3-a200-1cde3a3341f8',
+					elementId: '51002aed-3891-4294-9457-890c760a3c15',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>Stop the War is holding an online rally on Thursday evening, with the title No War in Ukraine: Stop Nato Expansion. Speakers include Corbyn and the Labour MP Diane Abbott.</p>',
-					elementId: '7066af6a-2a8a-495f-adbd-82aff9eb9fb8',
+					elementId: 'e5a43840-bd47-4cfa-95a8-eb33ac6dc59d',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>Starmer said: “Nobody wants war. At first glance some on the left may be sympathetic to those siren voices who condemn Nato. But to condemn Nato is to condemn the guarantee of democracy and security it brings and which our allies in eastern and central <a href="https://www.theguardian.com/world/europe-news" data-component="auto-linked-tag">Europe</a> are relying on as the sabre-rattling from Moscow grows ever louder.”</p>',
-					elementId: 'eac2bb99-011a-4c61-a2b6-514550fd19ac',
+					elementId: 'caf559ed-99fe-434a-aefc-72c8384a5ab1',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>Murray rejected the Labour leader’s criticisms, saying: “Keir Starmer ignores Nato’s actual role over the past 25 years. It is those who supported intervention in Iraq and Afghanistan and Libya who have shown solidarity with the aggressor.”</p>',
-					elementId: 'c38ad5d4-72e5-4aa3-8303-ebce3038ddef',
+					elementId: '6e88462e-8a4c-4ef9-b813-7615cd824f18',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>“Stop the War called those conflicts right when most Labour MPs did not,” he added. “Keir Starmer would do better to back the French and German governments in seeking a diplomatic solution.”</p>',
-					elementId: '621bda6b-de8b-4441-ac24-b0805c465732',
+					elementId: '5ca963e1-3b61-4033-98c8-a8319dea05d3',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>Starmer has repeatedly distanced himself from Corbyn, who is currently sitting as an independent MP after having the whip removed over <a href="https://www.theguardian.com/politics/2020/oct/29/jeremy-corbyn-rejects-findings-of-report-on-antisemitism-in-labour">his response to a critical Equality and Human Rights Commission report</a> on Labour’s handling of antisemitism complaints.</p>',
-					elementId: '00ba3c9d-1cb1-49e5-bff8-eb919a0385bd',
+					elementId: 'ea46e2ca-83de-4f74-b1f0-c914aac11fc6',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>Unless he is allowed back into the fold, Corbyn will not be able to stand as a Labour candidate at the next general election. Friends have suggested he could stand as an independent.</p>',
-					elementId: '5b0f798b-df4b-440d-8968-c9609e08beed',
+					elementId: '0a0d8375-7579-4385-9e86-85dc23b653d0',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>Starmer, as he travelled to <a href="https://www.theguardian.com/world/nato" data-component="auto-linked-tag">Nato</a> on the same day as the prime minister – a rare show of unity amid political turmoil at Westminster over the lockdown parties scandal – sought to place himself in a line of senior Labour figures, including the postwar foreign secretary Ernest Bevin, who took a tough line with Soviet Russia.</p>',
-					elementId: '2d7d613c-03b3-4267-908b-e844bfe811a5',
+					elementId: '8c63a9e0-4f08-4408-8a8a-b9879f810302',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>“Attlee, Healey and Bevin saw communism for what it was and were prepared to stand up to its aggression,” he said. “Today’s Labour party has the same clear-eyed view of the current regime in the Kremlin.</p>',
-					elementId: '6b30d9fc-cbf2-4170-b450-790c96dfbeec',
+					elementId: '38832c19-02d3-4e4d-bb30-10af4de0b412',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>“We know, as they did, that bullies only respect strength. Russian tanks sit, engines revving, on the verge of annexing Ukraine but protest placards waved here by the usual suspects condemn Nato not Moscow.”</p>',
-					elementId: '0ca25774-5747-471e-8ebd-4bb7cc99bc29',
+					elementId: '98797acb-62d9-40d5-9ac2-891ac499f0c6',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>Corbyn shocked many Labour backbenchers in the aftermath of the Salisbury poisonings in 2018 when he declined to attribute responsibility for the attacks to Moscow without “incontrovertible evidence”.</p>',
-					elementId: '43d1be51-5c72-4a11-8d0e-d3d7a9de69f8',
+					elementId: '75dc5a44-52e4-4d91-82f7-035b3fd701c2',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>Asked in a BBC interview in Brussels how he had served in Corbyn’s shadow cabinet despite their difference of view over Nato, Starmer said: “Jeremy Corbyn had a very different view. He was wrong about that. And I spoke out at the time and said he was wrong about that.”</p>',
-					elementId: '95e0c9c3-ad4e-43de-9fbe-a8b28d6dad1d',
+					elementId: 'ef44d783-e590-4951-ac90-5448a04776db',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>On Salisbury, he said: “He was wrong in relation to the Salisbury poisoning incident, where he didn’t respond appropriately. I said so at the time, but it’s very important to me, this is my first chance as leader of the Labour party to come here to Nato headquarters to have the meeting with the secretary general and to deliver a very important message for our party and for our country, which is that the Labour party support for Nato is unshakable.”</p>',
-					elementId: '4a291729-bd4c-4d43-8da7-147eaed3e260',
+					elementId: '2bc84e90-6e72-4ad9-836b-07266dc42fe7',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>Some Labour strategists believe Corbyn’s apparent ambivalence over Russia’s role in the poisonings was a key reason for the public scepticism about his leadership that contributed to Labour’s disastrous performance at the 2019 general election.</p>',
-					elementId: '59b6f4f9-2114-458b-a39c-e38d775675c0',
+					elementId: '5500e491-0575-49ed-be9d-b384e85e8097',
 				},
 				{
 					_type: 'model.dotcomrendering.pageElements.TextBlockElement',
 					html: '<p>However, Corbyn’s supporters blame highly critical media reporting of the then Labour leader, as well as the debilitating parliamentary battle over Brexit that divided the party.</p>',
-					elementId: '2dbec612-ede0-4cdb-9508-a91254650d0e',
+					elementId: 'a8cafa8e-b6d1-4d74-afa4-e5aeb457ebec',
 				},
 			],
 			attributes: { pinned: false, keyEvent: false, summary: false },
@@ -1763,7 +1763,10 @@ const Standard = {
 		dfpHost: 'pubads.g.doubleclick.net',
 		googletagUrl: '//securepubads.g.doubleclick.net/tag/js/gpt.js',
 		mmaUrl: 'https://manage.theguardian.com',
-		abTests: { deeplyReadVariant: 'variant', oktaVariant: 'variant' },
+		abTests: {
+			deeplyReadControl: 'control',
+			frontsBannerAdsDcrControl: 'control',
+		},
 		shortUrl: 'https://www.theguardian.com/p/kjnz8',
 		isContent: true,
 		contentId:
@@ -1797,5 +1800,3 @@ const Standard = {
 		isNumberedList: false,
 	},
 };
-
-export { articles, Standard };
