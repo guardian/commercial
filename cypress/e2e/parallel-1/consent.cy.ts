@@ -82,7 +82,7 @@ describe('tcfv2 consent', () => {
 	const { path } = articles[0];
 
 	it(`Test ${path} hides targeted slots when consent is denied`, () => {
-		cy.visit(path);
+		visitArticleNoOkta();
 
 		cy.rejectAllConsent();
 
@@ -140,11 +140,9 @@ describe('tcfv2 consent', () => {
 	it(`Test ${path} reject all, login as subscriber, should not show ads`, () => {
 		fakeLogin(true);
 
-		cy.visit(path);
-
+		visitArticleNoOkta();
 		cy.rejectAllConsent();
-
-		cy.reload();
+		visitArticleNoOkta();
 
 		adsShouldNotShow();
 	});
