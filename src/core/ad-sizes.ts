@@ -318,7 +318,6 @@ const slotSizeMappings: SlotSizeMappings = {
 			adSizes.mpu,
 			adSizes.googleCard,
 			adSizes.halfPage,
-			adSizes.leaderboard,
 			adSizes.fluid,
 		],
 		desktop: [
