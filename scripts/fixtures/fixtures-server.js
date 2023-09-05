@@ -31,12 +31,28 @@ const fetchDcrDataModel = async (path) => {
 };
 
 /**
+ * Add an additional endpoint that proxies Frontend,
+ * merging into the resulting JSON any overrides provided
+ * as a fixture.
+ *
+ * These fixtures are stored in fixtures.json in an object keyed
+ * by the fixture ID, and are merged into the JSON returned for the
+ * rest of the path. For example, to override the data for the /uk
+ * path with fixture id 'foo' you could call:
+ *
+ * 	`http://localhost:PORT/renderFixture/foo/uk.json`
+ *
+ * These can then be used by an E2E test in order to fix certain
+ * behavior about the system-under-test e.g. override a switch state
+ * to always be true.
+ *
  * @param {import('webpack-dev-server')} devServer
  */
 const setupFixturesServer = (devServer) => {
 	if (!devServer) {
 		throw new Error('webpack-dev-server is not defined');
 	}
+
 	devServer.app.get('/renderFixture/:fixtureId/*.json', async (req, res) => {
 		const path = req.params[0];
 		const fixtureId = req.params.fixtureId;
