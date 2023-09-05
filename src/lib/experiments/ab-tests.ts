@@ -4,7 +4,6 @@ import { consentlessAds } from './tests/consentlessAds';
 import { eagerPrebid } from './tests/eager-prebid';
 import { elementsManager } from './tests/elements-manager';
 import { integrateIma } from './tests/integrate-ima';
-import { limitInlineMerch } from './tests/limit-inline-merch';
 import { liveblogRightColumnAds } from './tests/liveblog-right-column-ads';
 import { prebidKargo } from './tests/prebid-kargo';
 import { publicGoodTest } from './tests/public-good';
@@ -23,7 +22,6 @@ export const concurrentTests: readonly ABTest[] = [
 	billboardsInMerchHigh,
 	elementsManager,
 	eagerPrebid,
-	limitInlineMerch,
 	liveblogRightColumnAds,
 	publicGoodTest,
 	prebidKargo,
