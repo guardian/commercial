@@ -144,7 +144,11 @@ const onInteractivesLoaded = memoize(async (rules: SpacefinderRules) => {
 	const notLoaded = query('.element-interactive', rules.body).filter(
 		(interactive) => {
 			const iframes = Array.from(interactive.children).filter(isIframe);
-			return !(iframes.length && isIframeLoaded(iframes[0]));
+			return !(
+				iframes.length &&
+				iframes[0] &&
+				isIframeLoaded(iframes[0])
+			);
 		},
 	);
 
@@ -159,7 +163,7 @@ const onInteractivesLoaded = memoize(async (rules: SpacefinderRules) => {
 				new MutationObserver((records, instance) => {
 					if (
 						!records.length ||
-						!records[0].addedNodes.length ||
+						!records[0]?.addedNodes.length ||
 						!isIframe(records[0].addedNodes[0])
 					) {
 						return;
@@ -183,13 +187,13 @@ const onInteractivesLoaded = memoize(async (rules: SpacefinderRules) => {
 
 const partitionCandidates = <T>(
 	list: T[],
-	filterElement: (element: T, lastFilteredElement: T) => boolean,
+	filterElement: (element: T) => boolean,
 ): [T[], T[]] => {
 	const filtered: T[] = [];
 	const exclusions: T[] = [];
 
 	list.forEach((element) => {
-		if (filterElement(element, filtered[filtered.length - 1])) {
+		if (filterElement(element)) {
 			filtered.push(element);
 		} else {
 			exclusions.push(element);
@@ -289,9 +293,7 @@ const enforceRules = (
 					testCandidates(
 						rule,
 						candidate,
-						measurements.opponents
-							? measurements.opponents[selector]
-							: [],
+						measurements.opponents?.[selector] ?? [],
 					),
 			);
 			spacefinderExclusions[selector] = exclusions;

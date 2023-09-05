@@ -42,6 +42,6 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name:
-        run: node ./scripts/no-unchecked.js
+        run: node ./scripts/no-unchecked.js --check
         env:
           NUM_ERRORS_MAIN: ${{ steps.num_errors.outputs.NUM_ERRORS_MAIN }}
