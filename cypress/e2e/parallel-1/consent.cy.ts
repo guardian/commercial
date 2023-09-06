@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 import { articles } from '../../fixtures/pages';
 import { fakeLogOut, fakeLogin } from '../../lib/util';
+import { Standard } from '../../fixtures/pages/articles';
 
 // Don't fail tests when uncaught exceptions occur
 // This is because scripts loaded on the page and unrelated to these tests can cause this
@@ -38,6 +39,30 @@ const reconsent = () => {
 	cy.wait(100);
 };
 
+const visitArticleNoOkta = () =>
+	cy.visit('http://localhost:3030/Article', {
+		method: 'POST',
+		body: JSON.stringify({
+			...Standard,
+			config: {
+				...Standard.config,
+				switches: {
+					...Standard.config.switches,
+					/**
+					 * We want to continue using cookies for signed in features
+					 * until we figure out how to use Okta in Cypress.
+					 * See https://github.com/guardian/dotcom-rendering/issues/8758
+					 */
+					okta: false,
+					idCookieRefresh: false,
+				},
+			},
+		}),
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
 describe('tcfv2 consent', () => {
 	beforeEach(() => {
 		cy.clearCookies();
@@ -57,7 +82,7 @@ describe('tcfv2 consent', () => {
 	const { path } = articles[0];
 
 	it(`Test ${path} hides targeted slots when consent is denied`, () => {
-		cy.visit(path);
+		visitArticleNoOkta();
 
 		cy.rejectAllConsent();
 
@@ -115,11 +140,9 @@ describe('tcfv2 consent', () => {
 	it(`Test ${path} reject all, login as subscriber, should not show ads`, () => {
 		fakeLogin(true);
 
-		cy.visit(path);
-
+		visitArticleNoOkta();
 		cy.rejectAllConsent();
-
-		cy.reload();
+		visitArticleNoOkta();
 
 		adsShouldNotShow();
 	});
@@ -226,13 +249,10 @@ describe('tcfv2 consent', () => {
 	it(`Test ${path} allow all, logged in, don't show ads`, () => {
 		fakeLogin(true);
 
-		cy.visit(path);
-
+		visitArticleNoOkta();
 		cy.allowAllConsent();
-
 		cy.wait('@userData');
-
-		cy.reload();
+		visitArticleNoOkta();
 
 		cy.get('#dfp-ad--top-above-nav').should('not.exist');
 	});
