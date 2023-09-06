@@ -12,7 +12,6 @@ import {
 	getCurrentTweakpoint,
 } from 'lib/detect/detect-breakpoint';
 import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
-import { shouldAddInlineMerchAd } from 'lib/inline-merch';
 import { spaceFiller } from 'lib/spacefinder/space-filler';
 import type {
 	RuleSpacing,
@@ -409,7 +408,7 @@ const doInit = async (): Promise<boolean> => {
 
 	insertedDynamicAds = [];
 
-	const im = shouldAddInlineMerchAd()
+	const im = window.guardian.config.page.hasInlineMerchandise
 		? attemptToAddInlineMerchAd()
 		: Promise.resolve(false);
 	const inlineMerchAdded = await im;
