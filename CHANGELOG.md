@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.8.1
+
+### Patch Changes
+
+- b1b38db: Okta is now a feature switch
+
 ## 11.8.0
 
 ### Minor Changes
