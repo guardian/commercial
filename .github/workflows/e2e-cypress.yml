@@ -18,21 +18,6 @@ jobs:
       fail-fast: false
       matrix:
         group: [1, 2, 3, 4, 5]
-    services:
-      DCR:
-        # We always run our commercial code against the latest main of DCR
-        # This does make our tests sensitive to changes in DCR
-        # (e.g. imagine someone removes the top-above-nav slot from DCR)
-        # This is something we accept in order to easily test our own code
-        #
-        # Note we use the containerised version of DCR, published from:
-        # https://github.com/guardian/dotcom-rendering/blob/6a6df272/.github/workflows/container.yml
-        image: ghcr.io/guardian/dotcom-rendering:main
-        ports:
-          - 3030:3030
-        env:
-          PORT: 3030
-          COMMERCIAL_BUNDLE_URL: http://localhost:3031/graun.standalone.commercial.js
     steps:
       # Commercial
       - name: Checkout
@@ -48,6 +33,26 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
         working-directory: ./commercial
+
+      # We always run our commercial code against the latest main of DCR
+      # This does make our tests sensitive to changes in DCR
+      # (e.g. imagine someone removes the top-above-nav slot from DCR)
+      # This is something we accept in order to easily test our own code
+      #
+      # Note we use the containerised version of DCR, published from:
+      # https://github.com/guardian/dotcom-rendering/blob/6a6df272/.github/workflows/container.yml
+      #
+      # The argument `--network host` is crucial here, as it means the container shares the networking stack of the host
+      # This makes the commercial dev server available from inside the container
+      # Note that GHA provides a service container feature, but it does not support this argument
+      - name: Start DCR in a container
+        run: |
+          /usr/bin/docker run -d \
+            --network host \
+            -p 3030:3030 \
+            -e "PORT=3030" \
+            -e "COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js" \
+            ghcr.io/guardian/dotcom-rendering:main
 
       - name: Start Commercial server
         run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js

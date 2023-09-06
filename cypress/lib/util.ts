@@ -6,21 +6,23 @@ const hostnames = {
 	code: 'https://code.dev-theguardian.com',
 	prod: 'https://www.theguardian.com',
 	dev: 'http://localhost:3030',
-};
+} as const;
 
 const getPath = (
 	stage: Stage,
 	type: 'article' | 'liveblog' | 'front' = 'article',
 	path: string,
+	fixtureId?: string,
 ) => {
 	if (stage === 'dev') {
-		if (type === 'liveblog' || type === 'article') {
-			return `Article/https://www.theguardian.com${path}`;
+		const dcrContentType =
+			type === 'liveblog' || type === 'article' ? 'Article' : 'Front';
+		if (fixtureId) {
+			return `${dcrContentType}/http://localhost:3031/renderFixture/${fixtureId}/${path}`;
 		} else {
-			return `Front/https://www.theguardian.com${path}`;
+			return `${dcrContentType}/https://www.theguardian.com${path}`;
 		}
 	}
-
 	return path;
 };
 
@@ -29,23 +31,18 @@ const normalizeStage = (stage: string): Stage =>
 
 /**
  * Generate a full URL for a given relative path and the desired stage
- *
- * @param {'dev' | 'code' | 'prod'} stage
- * @param {string} path
- * @param {{ isDcr?: boolean }} options
- * @returns {string} The full path
  */
 export const getTestUrl = (
 	stage: Stage,
 	path: string,
 	type: 'article' | 'liveblog' | 'front' = 'article',
 	adtest = 'fixed-puppies-ci',
-) => {
-	let url = new URL('https://www.theguardian.com');
-
-	url.href = hostnames[stage] ?? hostnames.dev;
-
-	url.pathname = getPath(stage, type, path);
+	fixtureId?: string,
+): string => {
+	const url = new URL(
+		getPath(stage, type, path, fixtureId),
+		hostnames[stage],
+	);
 
 	if (type === 'liveblog') {
 		url.searchParams.append('live', '1');
