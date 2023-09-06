@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.8.0
+
+### Minor Changes
+
+- bcf427c: Remove the "limit inline merch" AB test
+
 ## 11.7.0
 
 ### Minor Changes
