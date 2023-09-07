@@ -46,6 +46,10 @@ jobs:
         run: yarn install --frozen-lockfile
         working-directory: ./commercial
 
+      - name: Install Playwright Browsers
+        run: yarn playwright install --with-deps
+        working-directory: ./commercial
+
       - name: Start Commercial server
         run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
         working-directory: ./commercial
