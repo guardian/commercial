@@ -12,19 +12,49 @@ concurrency:
 
 jobs:
   test:
-    timeout-minutes: 60
+    name: E2E Playwright
+    timeout-minutes: 20
     runs-on: ubuntu-latest
+    services:
+      DCR:
+        # We always run our commercial code against the latest main of DCR
+        # This does make our tests sensitive to changes in DCR
+        # (e.g. imagine someone removes the top-above-nav slot from DCR)
+        # This is something we accept in order to easily test our own code
+        #
+        # Note we use the containerised version of DCR, published from:
+        # https://github.com/guardian/dotcom-rendering/blob/6a6df272/.github/workflows/container.yml
+        image: ghcr.io/guardian/dotcom-rendering:main
+        ports:
+          - 3030:3030
+        env:
+          PORT: 3030
+          COMMERCIAL_BUNDLE_URL: http://localhost:3031/graun.standalone.commercial.js
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      # Commercial
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
-          node-version: 18
+          path: ./commercial
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: './commercial/.nvmrc'
+
       - name: Install dependencies
-        run: yarn
-      - name: Install Playwright Browsers
-        run: yarn playwright install --with-deps
-      - name: Run Playwright tests
+        run: yarn install --frozen-lockfile
+        working-directory: ./commercial
+
+      - name: Start Commercial server
+        run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
+        working-directory: ./commercial
+
+      - name: Run Playwright
+        # run: yarn cypress run --spec cypress/e2e/parallel-${{ matrix.group }}/*
         run: yarn playwright test
+        working-directory: ./commercial
+
       - uses: actions/upload-artifact@v3
         if: always()
         with:
