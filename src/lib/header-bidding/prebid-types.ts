@@ -67,6 +67,7 @@ export type PrebidTripleLiftParams = {
 };
 
 export type PrebidImproveParams = {
+	publisherId?: number;
 	placementId: number;
 	size: {
 		w?: number;
