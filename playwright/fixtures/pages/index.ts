@@ -1,7 +1,7 @@
-import { fronts, frontWithPageSkin } from './fronts';
 import { articles } from './articles';
-import { liveblogs } from './liveblogs';
+import { fronts, frontWithPageSkin } from './fronts';
+import { blogs } from './liveblogs';
 
-const allPages = [...articles, ...liveblogs];
+const allPages = [...articles, ...blogs];
 
-export { articles, liveblogs, fronts, frontWithPageSkin, allPages };
+export { articles, blogs, fronts, frontWithPageSkin, allPages };

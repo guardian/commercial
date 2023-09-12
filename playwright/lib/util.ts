@@ -129,7 +129,7 @@ const clearCookie = async (context: BrowserContext, cookieName: string) => {
 	await context.addCookies(filteredCookies);
 };
 
-export const fakeLogOut = async (page: Page, context: BrowserContext) => {
+const fakeLogOut = async (page: Page, context: BrowserContext) => {
 	await clearCookie(context, 'GU_U');
 	await page.reload();
 };
@@ -142,7 +142,7 @@ export const fakeLogOut = async (page: Page, context: BrowserContext) => {
  * @param win window object
  * @param selector optional selector to target specific elements, if empty, will indiscriminately mock all observers
  */
-export const mockIntersectionObserver = (win: Window, selector?: string) => {
+const mockIntersectionObserver = (win: Window, selector?: string) => {
 	// ts-expect-error
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- testing
 	const Original = win.IntersectionObserver;
@@ -188,4 +188,16 @@ export const mockIntersectionObserver = (win: Window, selector?: string) => {
 	};
 };
 
-export { getTestUrl, getStage, fakeLogin };
+const waitForSlotIframe = async (page: Page, slotId: string) => {
+	const iframe = page.locator(`#${slotId} iframe`);
+	await iframe.waitFor({ state: 'visible', timeout: 60000 });
+};
+
+export {
+	fakeLogOut,
+	fakeLogin,
+	getStage,
+	getTestUrl,
+	mockIntersectionObserver,
+	waitForSlotIframe,
+};

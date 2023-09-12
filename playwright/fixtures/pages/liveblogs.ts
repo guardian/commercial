@@ -3,7 +3,7 @@ import type { Page } from './Page';
 
 const stage = getStage();
 
-const liveblogs: Page[] = [
+const blogs: Page[] = [
 	{
 		path: getTestUrl(
 			stage,
@@ -32,4 +32,4 @@ const liveblogs: Page[] = [
 	},
 ];
 
-export { liveblogs };
+export { blogs };
