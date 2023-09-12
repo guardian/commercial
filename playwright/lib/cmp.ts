@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 const SP_IFRAME_LOCATOR = '[id*="sp_message_iframe"]';
 const SP_ACCEPT_ALL_LOCATOR = 'button.sp_choice_type_11';

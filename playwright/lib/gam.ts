@@ -22,7 +22,6 @@ const waitForGAMRequestForSlot = (page: Page, slotExpected: string) => {
 		if (searchParams === null) return false;
 		const slot = searchParams.get('slot');
 		if (slot !== slotExpected) return false;
-		console.log('found request for slot:', slotExpected);
 		return true;
 	});
 };
@@ -31,8 +30,8 @@ const assertRequestParameter = (
 	request: Request,
 	name: string,
 	matcher: (value: string) => boolean,
-	isEncoded: boolean = false,
-	encodedParam: string = '',
+	isEncoded = false,
+	encodedParam = '',
 ): boolean => {
 	const url = new URL(request.url());
 	let params: URLSearchParams | null = url.searchParams;

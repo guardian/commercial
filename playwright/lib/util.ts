@@ -1,4 +1,4 @@
-import { BrowserContext, Cookie, Page } from '@playwright/test';
+import type { BrowserContext, Cookie, Page } from '@playwright/test';
 import type { UserFeaturesResponse } from '../../src/types/membership';
 
 // TODO playwright
@@ -13,7 +13,7 @@ const hostnames = {
 	code: 'https://code.dev-theguardian.com',
 	prod: 'https://www.theguardian.com',
 	dev: 'http://localhost:3030',
-};
+} as const;
 
 const getPath = (
 	stage: Stage,
@@ -23,9 +23,8 @@ const getPath = (
 	if (stage === 'dev') {
 		if (type === 'liveblog' || type === 'article') {
 			return `Article/https://www.theguardian.com${path}`;
-		} else {
-			return `Front/https://www.theguardian.com${path}`;
 		}
+		return `Front/https://www.theguardian.com${path}`;
 	}
 
 	return path;
@@ -42,14 +41,15 @@ const normalizeStage = (stage: string): Stage =>
  * @param {{ isDcr?: boolean }} options
  * @returns {string} The full path
  */
-export const getTestUrl = (
+const getTestUrl = (
 	stage: Stage,
 	path: string,
 	type: 'article' | 'liveblog' | 'front' = 'article',
 	adtest = 'fixed-puppies-ci',
 ) => {
-	let url = new URL('https://www.theguardian.com');
+	const url = new URL('https://www.theguardian.com');
 
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- defensive runtime
 	url.href = hostnames[stage] ?? hostnames.dev;
 
 	url.pathname = getPath(stage, type, path);
@@ -72,13 +72,13 @@ export const getTestUrl = (
  * Pass different stage in via environment variable
  * e.g. `STAGE=code yarn playwright test`
  */
-export const getStage = (): Stage => {
+const getStage = (): Stage => {
 	// TODO check playwright picks up the STAGE env var
 	const stage = process.env.STAGE;
 	return normalizeStage(stage?.toLowerCase() ?? 'dev');
 };
 
-export const fakeLogin = async (
+const fakeLogin = async (
 	page: Page,
 	context: BrowserContext,
 	subscriber = true,
@@ -112,8 +112,8 @@ export const fakeLogin = async (
 	// return the promise and don't await so it can be awaited on by the test where necessary
 	return page.route(
 		'https://members-data-api.theguardian.com/user-attributes/me**',
-		async (route) => {
-			route.fulfill({
+		(route) => {
+			void route.fulfill({
 				body: JSON.stringify(bodyOverride),
 			});
 		},
@@ -125,8 +125,8 @@ const clearCookie = async (context: BrowserContext, cookieName: string) => {
 	const filteredCookies = cookies.filter(
 		(cookie: Cookie) => cookie.name !== cookieName,
 	);
-	context.clearCookies();
-	context.addCookies(filteredCookies);
+	await context.clearCookies();
+	await context.addCookies(filteredCookies);
 };
 
 export const fakeLogOut = async (page: Page, context: BrowserContext) => {
@@ -143,6 +143,8 @@ export const fakeLogOut = async (page: Page, context: BrowserContext) => {
  * @param selector optional selector to target specific elements, if empty, will indiscriminately mock all observers
  */
 export const mockIntersectionObserver = (win: Window, selector?: string) => {
+	// ts-expect-error
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- testing
 	const Original = win.IntersectionObserver;
 	// ts-expect-error
 	win.IntersectionObserver = function (
@@ -151,10 +153,10 @@ export const mockIntersectionObserver = (win: Window, selector?: string) => {
 	) {
 		const instance: IntersectionObserver = {
 			thresholds: Array.isArray(options?.threshold)
-				? options?.threshold || [0]
-				: [options?.threshold || 0],
-			root: options?.root || null,
-			rootMargin: options?.rootMargin || '0px',
+				? options?.threshold ?? [0]
+				: [options?.threshold ?? 0],
+			root: options?.root ?? null,
+			rootMargin: options?.rootMargin ?? '0px',
 			takeRecords: () => [],
 			observe: (element: HTMLElement) => {
 				if (!selector || element.matches(selector)) {
@@ -174,6 +176,7 @@ export const mockIntersectionObserver = (win: Window, selector?: string) => {
 					];
 					cb(entry, instance);
 				} else {
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-call -- tests
 					const observer = new Original(cb, options);
 					observer.observe(element);
 				}
@@ -184,3 +187,5 @@ export const mockIntersectionObserver = (win: Window, selector?: string) => {
 		return instance;
 	};
 };
+
+export { getTestUrl, getStage, fakeLogin };
