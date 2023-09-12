@@ -380,6 +380,7 @@ const improveDigitalBidder: PrebidBidder = {
 		slotId: string,
 		sizes: HeaderBiddingSize[],
 	): PrebidImproveParams => ({
+		publisherId: 995,
 		placementId: getImprovePlacementId(sizes, isInFrontsBannerVariant),
 		size: getImproveSizeParam(slotId, isDesktopAndArticle),
 	}),
