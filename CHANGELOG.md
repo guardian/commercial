@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.9.0
+
+### Minor Changes
+
+- 1cef4fb: Add publisherId for the improve digital bidder
+
 ## 11.8.1
 
 ### Patch Changes
