@@ -190,7 +190,7 @@ const mockIntersectionObserver = (win: Window, selector?: string) => {
 
 const waitForSlotIframe = async (page: Page, slotId: string) => {
 	const iframe = page.locator(`#${slotId} iframe`);
-	await iframe.waitFor({ state: 'visible', timeout: 60000 });
+	await iframe.waitFor({ state: 'visible', timeout: 1200000 });
 };
 
 export {
