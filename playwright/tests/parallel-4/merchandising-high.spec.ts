@@ -1,12 +1,12 @@
 import { test } from '@playwright/test';
 import { breakpoints } from '../../fixtures/breakpoints';
-import { allPages } from '../../fixtures/pages';
+import { articles, blogs } from '../../fixtures/pages';
 import { cmpAcceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
 import { waitForSlotIframe } from '../../lib/util';
 
-test.describe('top-above-nav slot', () => {
-	[...allPages].forEach(({ path }, index) => {
+test.describe('merchandising high slot', () => {
+	[...articles.slice(0, 3), ...blogs].forEach(({ path }, index) => {
 		breakpoints.forEach(({ breakpoint, width, height }) => {
 			test(`Test page ${index} has slot and iframe at breakpoint ${breakpoint}`, async ({
 				page,
@@ -22,13 +22,15 @@ test.describe('top-above-nav slot', () => {
 
 				// Check that the ad slot is on the page
 				// TODO check if this needs an assert
-				await page.locator('#dfp-ad--mostpop').isVisible();
+				await page.locator('#dfp-ad--merchandising-high').isVisible();
 
 				// creative isn't loaded unless slot is in view
-				await page.locator('#dfp-ad--mostpop').scrollIntoViewIfNeeded();
+				await page
+					.locator('#dfp-ad--merchandising-high')
+					.scrollIntoViewIfNeeded();
 
 				// Check that an iframe is placed inside the ad slot
-				await waitForSlotIframe(page, 'dfp-ad--mostpop');
+				await waitForSlotIframe(page, 'dfp-ad--merchandising-high');
 			});
 		});
 	});
