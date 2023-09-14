@@ -34,7 +34,6 @@
 		"coverage",
 		".eslintrc.js",
 		"cypress",
-		"./cypress.config.js",
-		"playwright"
+		"./cypress.config.js"
 	]
 }

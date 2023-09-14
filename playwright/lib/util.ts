@@ -142,62 +142,51 @@ const fakeLogOut = async (page: Page, context: BrowserContext) => {
  * @param win window object
  * @param selector optional selector to target specific elements, if empty, will indiscriminately mock all observers
  */
-const mockIntersectionObserver = (win: Window, selector?: string) => {
-	// ts-expect-error
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- testing
-	const Original = win.IntersectionObserver;
-	// ts-expect-error
-	win.IntersectionObserver = function (
-		cb: IntersectionObserverCallback,
-		options: IntersectionObserverInit | undefined,
-	) {
-		const instance: IntersectionObserver = {
-			thresholds: Array.isArray(options?.threshold)
-				? options?.threshold ?? [0]
-				: [options?.threshold ?? 0],
-			root: options?.root ?? null,
-			rootMargin: options?.rootMargin ?? '0px',
-			takeRecords: () => [],
-			observe: (element: HTMLElement) => {
-				if (!selector || element.matches(selector)) {
-					const entry = [
-						{
-							isIntersecting: true,
-							boundingClientRect: element.getBoundingClientRect(),
-							intersectionRatio: 1,
-							intersectionRect: element.getBoundingClientRect(),
-							rootBounds:
-								instance.root instanceof HTMLElement
-									? instance.root.getBoundingClientRect()
-									: null,
-							target: element,
-							time: Date.now(),
-						},
-					];
-					cb(entry, instance);
-				} else {
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-call -- tests
-					const observer = new Original(cb, options);
-					observer.observe(element);
-				}
-			},
-			unobserve: () => {},
-			disconnect: () => {},
-		};
-		return instance;
-	};
-};
+// const mockIntersectionObserver = (win: Window, selector?: string) => {
+// 	const Original = win.IntersectionObserver;
+// 	win.IntersectionObserver = function (
+// 		cb: IntersectionObserverCallback,
+// 		options: IntersectionObserverInit | undefined,
+// 	) {
+// 		const instance: IntersectionObserver = {
+// 			thresholds: Array.isArray(options?.threshold)
+// 				? options?.threshold ?? [0]
+// 				: [options?.threshold ?? 0],
+// 			root: options?.root ?? null,
+// 			rootMargin: options?.rootMargin ?? '0px',
+// 			takeRecords: () => [],
+// 			observe: (element: HTMLElement) => {
+// 				if (!selector || element.matches(selector)) {
+// 					const entry = [
+// 						{
+// 							isIntersecting: true,
+// 							boundingClientRect: element.getBoundingClientRect(),
+// 							intersectionRatio: 1,
+// 							intersectionRect: element.getBoundingClientRect(),
+// 							rootBounds:
+// 								instance.root instanceof HTMLElement
+// 									? instance.root.getBoundingClientRect()
+// 									: null,
+// 							target: element,
+// 							time: Date.now(),
+// 						},
+// 					];
+// 					cb(entry, instance);
+// 				} else {
+// 					const observer = new Original(cb, options);
+// 					observer.observe(element);
+// 				}
+// 			},
+// 			unobserve: () => {},
+// 			disconnect: () => {},
+// 		};
+// 		return instance;
+// 	} as unknown as IntersectionObserver;
+// };
 
 const waitForSlotIframe = async (page: Page, slotId: string) => {
 	const iframe = page.locator(`#${slotId} iframe`);
 	await iframe.waitFor({ state: 'visible', timeout: 1200000 });
 };
 
-export {
-	fakeLogOut,
-	fakeLogin,
-	getStage,
-	getTestUrl,
-	mockIntersectionObserver,
-	waitForSlotIframe,
-};
+export { fakeLogOut, fakeLogin, getStage, getTestUrl, waitForSlotIframe };
