@@ -170,13 +170,13 @@ const guardianProprietaryAdSizes = {
 	merchandisingHighAdFeature: createAdSize(88, 89),
 };
 
-const adSizes: Record<SizeKeys, AdSize> = {
+const adSizes = {
 	...namedStandardAdSizes,
 	...standardAdSizes,
 	...outstreamSizes,
 	...proprietaryAdSizes,
 	...guardianProprietaryAdSizes,
-};
+} satisfies Record<SizeKeys, AdSize>;
 
 /**
  * mark: 432b3a46-90c1-4573-90d3-2400b51af8d0
@@ -193,7 +193,7 @@ const adSizes: Record<SizeKeys, AdSize> = {
  * will have no size mapping. This type of example may be used in cases where
  * we only want the slot to appear on the "tablet" size or greater.
  **/
-const slotSizeMappings: SlotSizeMappings = {
+const slotSizeMappings = {
 	inline: {
 		mobile: [
 			adSizes.outOfPage,
@@ -380,7 +380,7 @@ const slotSizeMappings: SlotSizeMappings = {
 	external: {
 		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.fluid, adSizes.mpu],
 	},
-};
+} satisfies SlotSizeMappings;
 
 const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
 
