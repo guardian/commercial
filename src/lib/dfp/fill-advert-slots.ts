@@ -3,8 +3,6 @@ import type { SizeMapping } from 'core/ad-sizes';
 import { adSizes, createAdSize } from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
-import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
-import { requestBidsForAds } from '../header-bidding/request-bids';
 import { removeDisabledSlots } from '../remove-slots';
 import { createAdvert } from './create-advert';
 import { dfpEnv } from './dfp-env';
@@ -97,11 +95,6 @@ const fillAdvertSlots = async (): Promise<void> => {
 	adverts.forEach((advert, index) => {
 		dfpEnv.advertIds[advert.id] = currentLength + index;
 	});
-
-	if (isInEagerPrebidVariant()) {
-		// Request bids for all server rendered adverts
-		await requestBidsForAds(adverts);
-	}
 
 	adverts.forEach(queueAdvert);
 	if (dfpEnv.shouldLazyLoad()) {

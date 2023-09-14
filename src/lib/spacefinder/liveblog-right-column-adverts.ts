@@ -1,11 +1,8 @@
 import { isNonNullable } from '@guardian/libs';
 import fastdom from 'fastdom';
-import type { Advert } from 'lib/dfp/Advert';
 import { fillDynamicAdSlot } from 'lib/dfp/fill-dynamic-advert-slot';
 import { isInVariantSynchronous } from 'lib/experiments/ab';
-import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
 import { liveblogRightColumnAds } from 'lib/experiments/tests/liveblog-right-column-ads';
-import { requestBidsForAds } from '../header-bidding/request-bids';
 
 type AdsInsertedCustomEventDetail = {
 	numAdsToInsert: number;
@@ -16,15 +13,13 @@ type AdsInsertedCustomEvent = {
 	detail: AdsInsertedCustomEventDetail;
 };
 
-const insertedAdverts: Advert[] = [];
-
 const isCustomEvent = (event: Event): event is CustomEvent => {
 	return 'detail' in event;
 };
 
 // TODO: There's lots of overlap with fill-advert-slots.ts in this function. If multiple right
 // ad slots on liveblogs is what we go forward with, then refactor this to use common functions
-const fillAdvertSlots = async (newAdvertIndexes?: number[]) => {
+const fillAdvertSlots = (newAdvertIndexes?: number[]) => {
 	const adSlots = [
 		...document.querySelectorAll<HTMLElement>('.ad-slot--liveblog-right'),
 	]
@@ -41,17 +36,8 @@ const fillAdvertSlots = async (newAdvertIndexes?: number[]) => {
 	if (!adSlots.length) return;
 
 	adSlots.map(async (advert) => {
-		await fillDynamicAdSlot(advert, false).then((advert) => {
-			if (advert) {
-				insertedAdverts.push(advert);
-			}
-		});
+		await fillDynamicAdSlot(advert, false);
 	});
-
-	if (isInEagerPrebidVariant()) {
-		// Request bids for all server rendered adverts
-		await requestBidsForAds(insertedAdverts);
-	}
 };
 
 const createLiveblogRightAdverts = () => {
