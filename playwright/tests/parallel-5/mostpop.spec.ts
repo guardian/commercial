@@ -5,7 +5,7 @@ import { cmpAcceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
 import { waitForSlotIframe } from '../../lib/util';
 
-test.describe('top-above-nav slot', () => {
+test.describe('mostpop slot', () => {
 	[...allPages].forEach(({ path }, index) => {
 		breakpoints.forEach(({ breakpoint, width, height }) => {
 			test(`Test page ${index} has slot and iframe at breakpoint ${breakpoint}`, async ({
