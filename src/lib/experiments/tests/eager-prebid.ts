@@ -2,10 +2,10 @@ import type { ABTest } from '@guardian/ab-core';
 import { bypassMetricsSampling } from '../utils';
 
 export const eagerPrebid: ABTest = {
-	id: 'EagerPrebid',
+	id: 'EagerPrebid2',
 	author: '@commercial-dev',
-	start: '2023-03-23',
-	expiry: '2023-05-01',
+	start: '2023-09-12',
+	expiry: '2023-10-31',
 	audience: 0 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: 'All pageviews',
