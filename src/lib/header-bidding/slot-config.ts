@@ -30,7 +30,7 @@ const getHbBreakpoint = () => {
  * (this does not include inline1)
  */
 const filterBySizeMapping =
-	(slotSizes: AdSize[] = []) =>
+	(slotSizes: Readonly<AdSize[]> = []) =>
 	({ key, sizes }: HeaderBiddingSlot): HeaderBiddingSlot => {
 		// For now, only apply filtering to inline header bidding slots
 		// In the future we may want to expand this to all slots
