@@ -114,7 +114,7 @@ type SlotName =
 	| 'article-end'
 	| 'external';
 
-type SizeMapping = Partial<Record<Breakpoint, AdSize[]>>;
+type SizeMapping = Partial<Record<Breakpoint, Readonly<AdSize[]>>>;
 
 type SlotSizeMappings = Record<SlotName, SizeMapping>;
 
@@ -176,7 +176,7 @@ const adSizes = {
 	...outstreamSizes,
 	...proprietaryAdSizes,
 	...guardianProprietaryAdSizes,
-} satisfies Record<SizeKeys, AdSize>;
+} as const satisfies Record<SizeKeys, AdSize>;
 
 /**
  * mark: 432b3a46-90c1-4573-90d3-2400b51af8d0
@@ -380,7 +380,7 @@ const slotSizeMappings = {
 	external: {
 		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.fluid, adSizes.mpu],
 	},
-} satisfies SlotSizeMappings;
+} as const satisfies SlotSizeMappings;
 
 const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
 
@@ -408,7 +408,7 @@ const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
 const findAppliedSizesForBreakpoint = (
 	sizeMappings: SizeMapping,
 	breakpoint: Breakpoint,
-): AdSize[] => {
+): Readonly<AdSize[]> => {
 	if (!isBreakpoint(breakpoint)) {
 		return [];
 	}
