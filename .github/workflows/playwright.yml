@@ -15,6 +15,10 @@ jobs:
     name: E2E Playwright
     timeout-minutes: 30
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [1, 2, 3, 4, 5]
     services:
       DCR:
         # We always run our commercial code against the latest main of DCR
@@ -55,8 +59,7 @@ jobs:
         working-directory: ./commercial
 
       - name: Run Playwright
-        # run: yarn cypress run --spec cypress/e2e/parallel-${{ matrix.group }}/*
-        run: yarn playwright test
+        run: yarn playwright test parallel-${{ matrix.group }}
         working-directory: ./commercial
 
       - uses: actions/upload-artifact@v3
