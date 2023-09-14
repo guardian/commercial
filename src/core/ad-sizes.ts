@@ -50,8 +50,9 @@ class AdSize extends Array<number> {
 		const isEmpty = this.width === 2 && this.height === 2;
 		const isFluid = this.toString() === 'fluid';
 		const isMerch = this.width === 88;
+		const isSponsorLogo = this.width === 3 && this.height === 3;
 
-		return isOutOfPage || isEmpty || isFluid || isMerch;
+		return isOutOfPage || isEmpty || isFluid || isMerch || isSponsorLogo;
 	}
 
 	get width(): number {
@@ -90,15 +91,18 @@ type SizeKeys =
 	| 'outstreamMobile'
 	| 'portrait'
 	| 'portraitInterstitial'
-	| 'skyscraper';
+	| 'skyscraper'
+	| 'sponsorLogo';
 
 type SlotName =
+	| 'article-end'
 	| 'carrot'
-	| 'comments'
 	| 'comments-expanded'
+	| 'comments'
 	| 'crossword-banner'
 	| 'epic'
 	| 'exclusion'
+	| 'external'
 	| 'fronts-banner'
 	| 'im'
 	| 'inline'
@@ -109,10 +113,9 @@ type SlotName =
 	| 'mobile-sticky'
 	| 'mostpop'
 	| 'right'
+	| 'sponsor-logo'
 	| 'survey'
-	| 'top-above-nav'
-	| 'article-end'
-	| 'external';
+	| 'top-above-nav';
 
 type SizeMapping = Partial<Record<Breakpoint, Readonly<AdSize[]>>>;
 
@@ -168,6 +171,12 @@ const guardianProprietaryAdSizes = {
 	merchandising: createAdSize(88, 88),
 	merchandisingHigh: createAdSize(88, 87),
 	merchandisingHighAdFeature: createAdSize(88, 89),
+	/**
+	 * This is a proxy size (not the true size of the rendered creative)
+	 * that can be used to ensure that no other high priority line items
+	 * fill a certain slot.
+	 */
+	sponsorLogo: createAdSize(3, 3),
 };
 
 const adSizes = {
@@ -377,8 +386,19 @@ const slotSizeMappings = {
 	exclusion: {
 		mobile: [adSizes.empty],
 	},
+	/**
+	 * @deprecated Use `slotSizeMappings['sponsor-logo']` instead
+	 */
 	external: {
 		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.fluid, adSizes.mpu],
+	},
+	'sponsor-logo': {
+		mobile: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.fluid,
+			adSizes.sponsorLogo,
+		],
 	},
 } as const satisfies SlotSizeMappings;
 
