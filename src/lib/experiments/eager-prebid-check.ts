@@ -11,9 +11,3 @@ export const getEagerPrebidVariant = memoize((): string => {
 	const test = tests.find((test) => test.id === eagerPrebid.id);
 	return test ? test.variantToRun.id : 'control';
 });
-
-// determine if the user is in any of the the eager prebid variants
-export const isInEagerPrebidVariant = memoize((): boolean => {
-	const variant = getEagerPrebidVariant();
-	return variant !== 'control';
-});
