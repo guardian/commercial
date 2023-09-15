@@ -7,6 +7,18 @@ import { dfpEnv } from './dfp-env';
 import { getAdvertById } from './get-advert-by-id';
 import { loadAdvert, refreshAdvert } from './load-advert';
 
+const eagerPrebidVariant = getEagerPrebidVariant() as
+	| 'control'
+	| 'variant-1'
+	| 'variant-2'
+	| null;
+
+const lazyLoadMarginOptions = {
+	control: '20% 0px',
+	'variant-1': '20% 0px', // same as control
+	'variant-2': '10% 0px',
+};
+
 const displayAd = (advertId: string) => {
 	const advert = getAdvertById(advertId);
 	if (advert) {
@@ -70,31 +82,28 @@ const onIntersectPrebid = (
 };
 
 const getDisplayAdObserver = once(() => {
-	const eagerPrebidVariant = getEagerPrebidVariant() as
-		| 'control'
-		| 'variant-1'
-		| 'variant-2';
-
-	const lazyLoadMarginOptions = {
-		control: '20% 0px',
-		'variant-1': '20% 0px', // same as control
-		'variant-2': '10% 0px',
-	};
 	return new window.IntersectionObserver(onIntersectDisplayAd, {
-		rootMargin: lazyLoadMarginOptions[eagerPrebidVariant],
+		rootMargin: eagerPrebidVariant
+			? lazyLoadMarginOptions[eagerPrebidVariant]
+			: '20% 0px',
 	});
 });
 
 const getPrebidObserver = once(() => {
 	return new window.IntersectionObserver(onIntersectPrebid, {
-		rootMargin: '40% 0px',
+		rootMargin: '100% 0px',
 	});
 });
 
 export const enableLazyLoad = (advert: Advert): void => {
 	if (dfpEnv.lazyLoadObserve) {
 		getDisplayAdObserver().observe(advert.node);
-		getPrebidObserver().observe(advert.node);
+		if (
+			getEagerPrebidVariant() !== null &&
+			getEagerPrebidVariant() !== 'control'
+		) {
+			getPrebidObserver().observe(advert.node);
+		}
 	} else {
 		displayAd(advert.id);
 	}

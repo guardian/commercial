@@ -12,7 +12,11 @@ jest.mock('lodash-es', () => ({
 }));
 
 jest.mock('lib/experiments/eager-prebid-check', () => ({
-	getEagerPrebidVariant: jest.fn().mockReturnValue('control'),
+	getEagerPrebidVariant: jest.fn().mockReturnValue(null),
+}));
+
+jest.mock('lib/header-bidding/request-bids', () => ({
+	requestBidsForAd: jest.fn(),
 }));
 
 jest.mock('lib/config', () => ({
