@@ -68,10 +68,3 @@ jobs:
           name: playwright-report-${{ matrix.group }}
           path: ./commercial/playwright-report
           retention-days: 5
-
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: playwright-results-${{ matrix.group }}
-          path: ./commercial/test-results
-          retention-days: 5
