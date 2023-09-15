@@ -91,7 +91,7 @@ const getDisplayAdObserver = once(() => {
 
 const getPrebidObserver = once(() => {
 	return new window.IntersectionObserver(onIntersectPrebid, {
-		rootMargin: '100% 0px',
+		rootMargin: '50% 0px',
 	});
 });
 
