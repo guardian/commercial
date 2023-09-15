@@ -134,7 +134,7 @@ describe('getPrebidAdSlots', () => {
 
 		const hbSlots = getHeaderBiddingAdSlots(buildAdvert('inline1'));
 		expect(hbSlots).toHaveLength(1);
-		expect(hbSlots[0].sizes).toEqual([
+		expect(hbSlots[0]?.sizes).toEqual([
 			[300, 250],
 			[620, 350],
 		]);
@@ -146,7 +146,7 @@ describe('getPrebidAdSlots', () => {
 
 		const hbSlots = getHeaderBiddingAdSlots(buildAdvert('inline1'));
 		expect(hbSlots).toHaveLength(1);
-		expect(hbSlots[0].sizes).toEqual([
+		expect(hbSlots[0]?.sizes).toEqual([
 			[300, 197],
 			[300, 250],
 			[320, 480],
@@ -159,7 +159,7 @@ describe('getPrebidAdSlots', () => {
 
 		const hbSlots = getHeaderBiddingAdSlots(buildAdvert('inline2'));
 		expect(hbSlots).toHaveLength(1);
-		expect(hbSlots[0].sizes).toEqual([
+		expect(hbSlots[0]?.sizes).toEqual([
 			[160, 600],
 			[300, 600],
 			[300, 250],
@@ -172,7 +172,7 @@ describe('getPrebidAdSlots', () => {
 
 		const hbSlots = getHeaderBiddingAdSlots(buildAdvert('inline2'));
 		expect(hbSlots).toHaveLength(1);
-		expect(hbSlots[0].sizes).toEqual([
+		expect(hbSlots[0]?.sizes).toEqual([
 			[300, 250],
 			[320, 480],
 		]);
@@ -194,7 +194,7 @@ describe('getPrebidAdSlots', () => {
 
 		const hbSlots = getHeaderBiddingAdSlots(buildAdvert('inline4'));
 		expect(hbSlots).toHaveLength(1);
-		expect(hbSlots[0].sizes).toEqual([[300, 250]]);
+		expect(hbSlots[0]?.sizes).toEqual([[300, 250]]);
 	});
 
 	test('should return the correct inline slot at breakpoint D with additional size mappings', () => {
@@ -207,7 +207,7 @@ describe('getPrebidAdSlots', () => {
 			}),
 		);
 		expect(hbSlots).toHaveLength(1);
-		expect(hbSlots[0].sizes).toEqual([
+		expect(hbSlots[0]?.sizes).toEqual([
 			[160, 600],
 			[300, 600],
 			[300, 250],
