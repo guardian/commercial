@@ -1,4 +1,4 @@
-import type { Page, Request } from '@playwright/test';
+import type { Page, Request, Response } from '@playwright/test';
 
 const gamUrl = /https:\/\/securepubads.g.doubleclick.net\/gampad\/ads/;
 
@@ -14,16 +14,27 @@ const getEncodedParamsFromRequest = (
 	return searchParams;
 };
 
+const assertOnSlotFromRequest = (request: Request, expectedSlot: string) => {
+	const isURL = request.url().match(gamUrl);
+	if (!isURL) return false;
+	const searchParams = getEncodedParamsFromRequest(request, 'prev_scp');
+	if (searchParams === null) return false;
+	const slot = searchParams.get('slot');
+	if (slot !== expectedSlot) return false;
+	return true;
+};
+
 const waitForGAMRequestForSlot = (page: Page, slotExpected: string) => {
-	return page.waitForRequest((request) => {
-		const isURL = request.url().match(gamUrl);
-		if (!isURL) return false;
-		const searchParams = getEncodedParamsFromRequest(request, 'prev_scp');
-		if (searchParams === null) return false;
-		const slot = searchParams.get('slot');
-		if (slot !== slotExpected) return false;
-		return true;
-	});
+	return page.waitForRequest((request) =>
+		assertOnSlotFromRequest(request, slotExpected),
+	);
+};
+
+const waitForGAMResponseForSlot = (page: Page, slotExpected: string) => {
+	console.log('!!!', slotExpected);
+	return page.waitForResponse((response) =>
+		assertOnSlotFromRequest(response.request(), slotExpected),
+	);
 };
 
 const assertRequestParameter = (
@@ -44,9 +55,22 @@ const assertRequestParameter = (
 	return matcher(paramValue);
 };
 
+const assertHeader = async (
+	reqres: Request | Response,
+	name: string,
+	matcher: (value: string) => boolean,
+): Promise<boolean> => {
+	const headerValue = await reqres.headerValue(name);
+	if (headerValue === null) return false;
+	console.log('!!!', headerValue);
+	return matcher(headerValue);
+};
+
 export {
 	assertRequestParameter,
+	assertHeader,
 	gamUrl,
 	getEncodedParamsFromRequest,
 	waitForGAMRequestForSlot,
+	waitForGAMResponseForSlot,
 };

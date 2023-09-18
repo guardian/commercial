@@ -16,7 +16,7 @@ test.describe('top-above-nav slot', () => {
 			);
 
 			if (!isImmersive) {
-				// Check that the right ad slot is on the page
+				// Check the ad slot is on the page
 				await page.locator('#dfp-ad--top-above-nav').isVisible();
 
 				// creative isn't loaded unless slot is in view

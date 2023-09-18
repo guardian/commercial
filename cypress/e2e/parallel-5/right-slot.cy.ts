@@ -12,7 +12,7 @@ describe('right slot on pages', () => {
 
 			cy.visit(path);
 
-			// Check that the right ad slot is on the page
+			// Check the ad slot is on the page
 			cy.get('#dfp-ad--right').should('exist');
 
 			// creative isn't loaded unless slot is in view

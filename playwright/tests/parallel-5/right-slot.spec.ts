@@ -18,7 +18,7 @@ test.describe('right slot', () => {
 
 			await cmpAcceptAll(page);
 
-			// Check that the right ad slot is on the page
+			// Check the ad slot is on the page
 			await page.locator('#dfp-ad--right').isVisible();
 
 			// creative isn't loaded unless slot is in view
