@@ -304,7 +304,13 @@ const initialise = (window: Window, framework: Framework = 'tcfv2'): void => {
 				{
 					name: 'permutive',
 					params: {
-						acBidders: ['appnexus', 'ozone', 'pubmatic', 'trustx'],
+						acBidders: [
+							'appnexus',
+							'ix',
+							'ozone',
+							'pubmatic',
+							'trustx',
+						],
 						overwrites: {
 							pubmatic,
 						},

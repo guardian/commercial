@@ -188,6 +188,7 @@ describe('initialise', () => {
 		expect(rtcData?.name).toEqual('permutive');
 		expect(rtcData?.params.acBidders).toEqual([
 			'appnexus',
+			'ix',
 			'ozone',
 			'pubmatic',
 			'trustx',
