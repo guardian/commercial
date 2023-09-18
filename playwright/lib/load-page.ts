@@ -5,12 +5,12 @@ const loadPage = async (page: Page, path: string, region = 'GB') => {
 	// await page.route(/ophan.theguardian.com/, (route) => {
 	// 	route.abort();
 	// });
-	await page.addInitScript(() => {
+	await page.addInitScript((region) => {
 		window.localStorage.setItem(
 			'gu.geo.override',
 			JSON.stringify({ value: region }),
 		);
-	});
+	}, region);
 	await page.goto(path, { waitUntil: 'domcontentloaded' });
 };
 
