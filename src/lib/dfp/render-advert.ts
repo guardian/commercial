@@ -131,7 +131,7 @@ const addContentClass = (adSlotNode: HTMLElement) => {
 
 	if (adSlotContent.length) {
 		void fastdom.mutate(() => {
-			adSlotContent[0].classList.add('ad-slot__content');
+			adSlotContent[0]?.classList.add('ad-slot__content');
 		});
 	}
 };

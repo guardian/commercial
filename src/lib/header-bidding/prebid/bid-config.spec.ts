@@ -380,11 +380,11 @@ describe('indexExchangeBidders', () => {
 			createAdSize(300, 600),
 		];
 		const bidders: PrebidBidder[] = indexExchangeBidders(slotSizes, false);
-		expect(bidders[0].bidParams('type', [createAdSize(1, 2)])).toEqual({
+		expect(bidders[0]?.bidParams('type', [createAdSize(1, 2)])).toEqual({
 			siteId: '123456',
 			size: [300, 250],
 		});
-		expect(bidders[1].bidParams('type', [createAdSize(1, 2)])).toEqual({
+		expect(bidders[1]?.bidParams('type', [createAdSize(1, 2)])).toEqual({
 			siteId: '123456',
 			size: [300, 600],
 		});
@@ -618,7 +618,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
-		)[1].params;
+		)[1]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_topbanner_728x90_prebid',
 		});
@@ -634,7 +634,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
-		)[1].params;
+		)[1]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_topbanner_728x90_prebid_AU',
 		});
@@ -651,7 +651,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--inline1',
 			[createAdSize(300, 250)],
 			mockPageTargeting,
-		)[1].params;
+		)[1]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_sectionfront_300x250_prebid',
 		});
@@ -668,7 +668,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--inline1',
 			[createAdSize(300, 250)],
 			mockPageTargeting,
-		)[1].params;
+		)[1]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_sectionfront_300x250_prebid_AU',
 		});
@@ -685,7 +685,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(320, 50)],
 			mockPageTargeting,
-		)[1].params;
+		)[1]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_320x50_HDX',
 		});
@@ -702,7 +702,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(320, 50)],
 			mockPageTargeting,
-		)[1].params;
+		)[1]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_320x50_HDX_AU',
 		});
