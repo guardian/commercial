@@ -7464,9 +7464,9 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-prebid.js@guardian/prebid.js#ei/upgrade-prebid:
+prebid.js@guardian/prebid.js#356f371:
   version "7.54.5"
-  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/33139299e50aac564ed65eeb31608006ec001375"
+  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/356f3714fda0459b6740e90ff265055fe6d4f813"
   dependencies:
     "@babel/core" "^7.16.7"
     "@babel/plugin-transform-runtime" "^7.18.9"
