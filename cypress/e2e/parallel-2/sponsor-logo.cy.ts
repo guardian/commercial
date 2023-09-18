@@ -6,7 +6,7 @@ describe('sponsorshipLogo', () => {
 	});
 
 	it('sponsor logo ad is correctly filled in thrasher fixture', () => {
-		// Construct a path that uses a fixture where a thrasher containers a sponsor logo
+		// Construct a path that uses a fixture where a thrasher contains a sponsor logo
 		const path = getTestUrl(
 			getStage(),
 			'uk',
