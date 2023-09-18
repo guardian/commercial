@@ -2,4 +2,4 @@
 '@guardian/commercial': patch
 ---
 
-Testing Prebid update
+Update Prebid version
