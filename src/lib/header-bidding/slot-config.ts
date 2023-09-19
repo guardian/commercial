@@ -67,10 +67,6 @@ const getHeaderBiddingKey = (
 		return 'fronts-banner';
 	}
 
-	if (name?.includes('liveblog-right')) {
-		return 'liveblog-right';
-	}
-
 	return undefined;
 };
 
@@ -125,9 +121,6 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 			mobile: hasShowcaseMainElement
 				? [adSizes.mpu]
 				: [adSizes.halfPage, adSizes.mpu],
-		},
-		'liveblog-right': {
-			desktop: [adSizes.halfPage, adSizes.mpu],
 		},
 		'top-above-nav': {
 			desktop: [adSizes.billboard, adSizes.leaderboard],

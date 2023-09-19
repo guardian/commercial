@@ -106,7 +106,6 @@ type SlotName =
 	| 'fronts-banner'
 	| 'im'
 	| 'inline'
-	| 'liveblog-right'
 	| 'merchandising-high-lucky'
 	| 'merchandising-high'
 	| 'merchandising'
@@ -222,16 +221,6 @@ const slotSizeMappings = {
 	},
 	right: {
 		mobile: [
-			adSizes.outOfPage,
-			adSizes.empty,
-			adSizes.mpu,
-			adSizes.googleCard,
-			adSizes.halfPage,
-			adSizes.fluid,
-		],
-	},
-	'liveblog-right': {
-		desktop: [
 			adSizes.outOfPage,
 			adSizes.empty,
 			adSizes.mpu,
