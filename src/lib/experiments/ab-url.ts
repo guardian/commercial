@@ -7,12 +7,15 @@ export const getForcedParticipationsFromUrl = (): Participations => {
 
 		return tokens.reduce((obj, token) => {
 			const [testId, variantId] = token.split('=');
-			return {
-				...obj,
-				[testId]: {
-					variant: variantId,
-				},
-			};
+			if (testId && variantId) {
+				return {
+					...obj,
+					[testId]: {
+						variant: variantId,
+					},
+				};
+			}
+			return obj;
 		}, {});
 	}
 
