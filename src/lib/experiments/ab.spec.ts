@@ -79,14 +79,11 @@ describe('A/B', () => {
 			};
 
 			const shouldRun = [
-				// @ts-expect-error -- this is mocked in __mocks__/ab-tests.ts
 				jest.spyOn(concurrentTests[0].variants[0], 'test'),
-				// @ts-expect-error -- this is mocked in __mocks__/ab-tests.ts
 				jest.spyOn(concurrentTests[1].variants[0], 'test'),
 			];
 
 			const shouldNotRun = [
-				// @ts-expect-error -- this is mocked in __mocks__/ab-tests.ts
 				jest.spyOn(concurrentTests[2].variants[0], 'test'),
 			];
 
@@ -117,7 +114,10 @@ describe('A/B', () => {
 		test('tests with notintest participations should not run, but this should be persisted to localStorage', () => {
 			expect.assertions(3);
 
-			// @ts-expect-error -- this is mocked in __mocks__/ab-tests.ts
+			if (!concurrentTests[0].variants[0]) {
+				throw new Error('Test has no variants');
+			}
+
 			const spy = jest.spyOn(concurrentTests[0].variants[0], 'test');
 			expect(spy).not.toHaveBeenCalled();
 			setParticipationsInLocalStorage({
@@ -182,8 +182,7 @@ describe('A/B', () => {
 			expect.assertions(2);
 
 			window.location.hash = '#ab-DummyTest=variant';
-			// @ts-expect-error -- this is mocked in __mocks__/ab-tests.ts
-			expect(getSynchronousTestsToRun()[0].variantToRun.id).toEqual(
+			expect(getSynchronousTestsToRun()[0]?.variantToRun.id).toEqual(
 				'variant',
 			);
 
