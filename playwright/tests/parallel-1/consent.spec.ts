@@ -1,0 +1,222 @@
+import type { Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import { standardArticle } from '../../fixtures/json/article-standard';
+import { cmpAcceptAll, cmpRejectAll } from '../../lib/cmp';
+import { loadPage } from '../../lib/load-page';
+import { fakeLogin, getHost, waitForSlot } from '../../lib/util';
+
+const adsShouldShow = async (page: Page) => {
+	await waitForSlot(page, 'top-above-nav');
+};
+
+const adsShouldNotShow = async (page: Page) => {
+	expect(
+		await page.locator('#dfp-ad--top-above-nav').isVisible(),
+	).toBeFalsy();
+};
+
+const visitArticleNoOkta = async (page: Page) => {
+	const url = `${getHost()}/Article`;
+	await page.route(url, async (route) => {
+		const postData = {
+			...standardArticle,
+			config: {
+				...standardArticle.config,
+				switches: {
+					...standardArticle.config.switches,
+					/**
+					 * We want to continue using cookies for signed in features
+					 * until we figure out how to use Okta in Cypress.
+					 * See https://github.com/guardian/dotcom-rendering/issues/8758
+					 */
+					okta: false,
+					idCookieRefresh: false,
+				},
+			},
+		};
+		await route.continue({
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			postData,
+		});
+	});
+	await loadPage(page, url);
+};
+
+test.describe('tcfv2 consent', () => {
+	test(`Test hide targeted slots when consent is denied`, async ({
+		page,
+	}) => {
+		await visitArticleNoOkta(page);
+		await cmpRejectAll(page);
+		await adsShouldNotShow(page);
+	});
+
+	test.only(`Test reject all, login NOT as subscriber, should not show ads`, async ({
+		page,
+		context,
+	}) => {
+		await fakeLogin(page, context, false);
+		await visitArticleNoOkta(page);
+
+		await cmpRejectAll(page);
+
+		await visitArticleNoOkta(page);
+		await adsShouldNotShow(page);
+	});
+
+	test(`Test accept all, login as subscriber, don't show ads`, async ({
+		page,
+		context,
+	}) => {
+		const loginPromise = fakeLogin(page, context, true);
+		await visitArticleNoOkta(page);
+		await loginPromise;
+
+		await cmpAcceptAll(page);
+
+		await visitArticleNoOkta(page);
+		await adsShouldNotShow(page);
+	});
+
+	// //skipped because of the opt-out $sf.host.Config error
+	// it.skip(`Test ${path} shows ad slots when reconsented`, () => {
+	// 	cy.visit(path);
+
+	// 	cy.rejectAllConsent();
+
+	// 	// prevent support banner so we can click privacy settings button
+	// 	localStorage.setItem(
+	// 		'gu.prefs.engagementBannerLastClosedAt',
+	// 		`{"value":"${new Date().toISOString()}"}`,
+	// 	);
+
+	// 	cy.reload();
+
+	// 	reconsent();
+
+	// 	cy.reload();
+
+	// 	adsShouldShow();
+	// });
+
+	// //skipped because of the opt-out $sf.host.Config error
+	// it.skip(`Test ${path} reject all, login as subscriber, log out should show ads`, () => {
+	// 	const { path } = articles[4];
+
+	// 	fakeLogin(true);
+
+	// 	cy.visit(path);
+
+	// 	cy.rejectAllConsent();
+
+	// 	cy.reload();
+
+	// 	fakeLogOut();
+
+	// 	cy.reload();
+
+	// 	adsShouldShow();
+	// });
+
+	// //skipped because of the opt-out $sf.host.Config error
+	// it.skip(`Test ${path} reject all, login as non-subscriber should show ads, log out should show ads`, () => {
+	// 	const { path } = articles[4];
+
+	// 	fakeLogin(false);
+
+	// 	cy.visit(path);
+
+	// 	cy.rejectAllConsent();
+
+	// 	adsShouldShow();
+
+	// 	fakeLogOut();
+
+	// 	adsShouldShow();
+	// });
+
+	// //skipped because of the opt-out $sf.host.Config error
+	// it.skip(`Test ${path} reject all, login as non-subscriber, reconsent should show ads`, () => {
+	// 	cy.visit(path);
+
+	// 	cy.rejectAllConsent();
+
+	// 	fakeLogin(false);
+
+	// 	// prevent support banner so we can click privacy settings button
+	// 	localStorage.setItem(
+	// 		'gu.prefs.engagementBannerLastClosedAt',
+	// 		`{"value":"${new Date().toISOString()}"}`,
+	// 	);
+
+	// 	cy.reload();
+
+	// 	adsShouldShow();
+
+	// 	reconsent();
+
+	// 	cy.reload();
+
+	// 	adsShouldShow();
+	// });
+
+	// //skipping because this test is very flaky and works about 50% of the time
+	// it.skip(`Test ${path} accept all, login as subscriber, subscription expires, should show ads`, () => {
+	// 	fakeLogin(true);
+
+	// 	cy.visit(path);
+
+	// 	cy.allowAllConsent();
+
+	// 	cy.reload();
+
+	// 	cy.setCookie(
+	// 		'gu_user_features_expiry',
+	// 		String(new Date().getTime() - 10000),
+	// 	);
+
+	// 	// to intercept response
+	// 	fakeLogin(false);
+
+	// 	cy.reload();
+
+	// 	cy.wait('@userData', { timeout: 30000 });
+
+	// 	cy.wait(5000);
+
+	// 	cy.reload();
+
+	// 	cy.wait(5000);
+
+	// 	adsShouldShow();
+	// });
+
+	// //skipped because of the opt-out $sf.host.Config error
+	// it.skip(`Test ${path} reject all, login as subscriber, subscription expires, should show ads`, () => {
+	// 	const { path } = articles[4];
+
+	// 	fakeLogin(true);
+
+	// 	cy.visit(path);
+
+	// 	cy.rejectAllConsent();
+
+	// 	cy.setCookie(
+	// 		'gu_user_features_expiry',
+	// 		String(new Date().getTime() - 1000),
+	// 	);
+
+	// 	// to intercept response
+	// 	fakeLogin(false);
+
+	// 	cy.reload();
+
+	// 	// reload twice so server is not sent ad free cookie
+	// 	cy.reload();
+
+	// 	adsShouldShow();
+	// });
+});
