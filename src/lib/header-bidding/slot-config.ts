@@ -93,7 +93,7 @@ const filterByAdvert = (
 		return [];
 	}
 
-	const sizes = sizeMapping[key][breakpoint];
+	const sizes = sizeMapping[key]?.[breakpoint];
 
 	if (!sizes || sizes.length < 1) {
 		return [];
