@@ -31,7 +31,6 @@ const waitForGAMRequestForSlot = (page: Page, slotExpected: string) => {
 };
 
 const waitForGAMResponseForSlot = (page: Page, slotExpected: string) => {
-	console.log('!!!', slotExpected);
 	return page.waitForResponse((response) =>
 		assertOnSlotFromRequest(response.request(), slotExpected),
 	);
@@ -62,7 +61,6 @@ const assertHeader = async (
 ): Promise<boolean> => {
 	const headerValue = await reqres.headerValue(name);
 	if (headerValue === null) return false;
-	console.log('!!!', headerValue);
 	return matcher(headerValue);
 };
 
