@@ -186,7 +186,7 @@ const fakeLogOut = async (page: Page, context: BrowserContext) => {
 
 const waitForSlotIframe = async (page: Page, slotId: string) => {
 	const iframe = page.locator(`#${slotId} iframe`);
-	await iframe.waitFor({ state: 'visible', timeout: 1200000 });
+	await iframe.waitFor({ state: 'visible', timeout: 120000 });
 };
 
 export { fakeLogOut, fakeLogin, getStage, getTestUrl, waitForSlotIframe };
