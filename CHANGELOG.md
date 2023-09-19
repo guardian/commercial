@@ -1,5 +1,17 @@
 # @guardian/commercial
 
+## 11.10.0
+
+### Minor Changes
+
+- 1a2a967: Add new 3x3 ad size
+
+### Patch Changes
+
+- d4400ee: Use satsifies operator when defining ad sizes and slot mappings config
+- 6de6d1d: Add ix to acBidders in realTimeData
+- 6d4305e: Update Prebid version
+
 ## 11.9.0
 
 ### Minor Changes
