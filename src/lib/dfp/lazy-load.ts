@@ -46,9 +46,11 @@ const onIntersectDisplayAd = (
 	entries
 		.filter((entry) => !('isIntersecting' in entry) || entry.isIntersecting)
 		.forEach((entry) => {
-			log('commercial', 'load observer triggered', {
-				advertId: entry.target.id,
-			});
+			log(
+				'commercial',
+				'display observer triggered for: ',
+				entry.target.id,
+			);
 			observer.unobserve(entry.target);
 			displayAd(entry.target.id);
 			advertIds.push(entry.target.id);
@@ -67,9 +69,11 @@ const onIntersectPrebid = (
 	entries
 		.filter((entry) => !('isIntersecting' in entry) || entry.isIntersecting)
 		.forEach((entry) => {
-			log('commercial', 'prebid observer triggered', {
-				advertId: entry.target.id,
-			});
+			log(
+				'commercial',
+				'prebid observer triggered for: ',
+				entry.target.id,
+			);
 
 			observer.unobserve(entry.target);
 			requestBids(entry.target.id);
