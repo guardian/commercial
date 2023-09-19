@@ -3,7 +3,7 @@ import { test } from '@playwright/test';
 import { allPages } from '../../fixtures/pages';
 import { cmpAcceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
-import { waitForSlotIframe } from '../../lib/util';
+import { waitForSlot } from '../../lib/util';
 
 test.describe('right slot', () => {
 	[...allPages].forEach(({ path }, index) => {
@@ -15,17 +15,9 @@ test.describe('right slot', () => {
 			});
 
 			await loadPage(page, path);
-
 			await cmpAcceptAll(page);
 
-			// Check the ad slot is on the page
-			await page.locator('#dfp-ad--right').isVisible();
-
-			// creative isn't loaded unless slot is in view
-			await page.locator('#dfp-ad--right').scrollIntoViewIfNeeded();
-
-			// Check that an iframe is placed inside the ad slot
-			await waitForSlotIframe(page, 'dfp-ad--right');
+			await waitForSlot(page, 'right');
 		});
 	});
 });

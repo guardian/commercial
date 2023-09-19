@@ -5,6 +5,7 @@ import { frontWithPageSkin } from '../../fixtures/pages';
 import { cmpAcceptAll } from '../../lib/cmp';
 import { assertHeader, waitForGAMResponseForSlot } from '../../lib/gam';
 import { loadPage } from '../../lib/load-page';
+import { waitForSlot } from '../../lib/util';
 
 const large = breakpoints.filter(
 	({ breakpoint }) => breakpoint === 'desktop' || breakpoint === 'wide',
@@ -32,7 +33,6 @@ test.describe('pageskin on uk front', () => {
 			);
 			await loadPage(page, frontWithPageSkin.path);
 			await cmpAcceptAll(page);
-
 			const response = await gamResponsePromise;
 			const matched = await assertHeader(
 				response,
@@ -60,12 +60,17 @@ test.describe('pageskin on uk front', () => {
 				height,
 			});
 
-			const gamResponsePromise = waitForGAMResponseForSlot(
-				page,
-				'top-above-nav',
-			);
+			const slot = 'top-above-nav';
+			const slotWithPostfix =
+				breakpoint === 'mobile' ? `${slot}--mobile` : slot;
+
+			// the request to GAM uses the slot name of 'top-above-nav' for mobile and tablet
+			const gamResponsePromise = waitForGAMResponseForSlot(page, slot);
 			await loadPage(page, frontWithPageSkin.path);
 			await cmpAcceptAll(page);
+
+			// need to wait for top-above-nav on mobile as it is out of view
+			await waitForSlot(page, slotWithPostfix);
 
 			const response = await gamResponsePromise;
 			const matched = await assertHeader(

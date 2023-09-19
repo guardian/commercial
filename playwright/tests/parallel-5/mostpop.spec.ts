@@ -3,7 +3,7 @@ import { breakpoints } from '../../fixtures/breakpoints';
 import { allPages } from '../../fixtures/pages';
 import { cmpAcceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
-import { waitForSlotIframe } from '../../lib/util';
+import { waitForSlot } from '../../lib/util';
 
 test.describe('mostpop slot', () => {
 	[...allPages].forEach(({ path }, index) => {
@@ -17,18 +17,9 @@ test.describe('mostpop slot', () => {
 				});
 
 				await loadPage(page, path);
-
 				await cmpAcceptAll(page);
 
-				// Check that the ad slot is on the page
-				// TODO check if this needs an assert
-				await page.locator('#dfp-ad--mostpop').isVisible();
-
-				// creative isn't loaded unless slot is in view
-				await page.locator('#dfp-ad--mostpop').scrollIntoViewIfNeeded();
-
-				// Check that an iframe is placed inside the ad slot
-				await waitForSlotIframe(page, 'dfp-ad--mostpop');
+				await waitForSlot(page, 'mostpop');
 			});
 		});
 	});

@@ -184,9 +184,16 @@ const fakeLogOut = async (page: Page, context: BrowserContext) => {
 // 	} as unknown as IntersectionObserver;
 // };
 
-const waitForSlotIframe = async (page: Page, slotId: string) => {
-	const iframe = page.locator(`#${slotId} iframe`);
+const waitForSlot = async (page: Page, slot: string) => {
+	const slotId = `#dfp-ad--${slot}`;
+	// Check that the ad slot is on the page
+	await page.locator(slotId).isVisible();
+	// creative isn't loaded unless slot is in view
+	await page.locator(slotId).scrollIntoViewIfNeeded();
+	// iframe locator
+	const iframe = page.locator(`${slotId} iframe`);
+	// wait for the iframe
 	await iframe.waitFor({ state: 'visible', timeout: 120000 });
 };
 
-export { fakeLogOut, fakeLogin, getStage, getTestUrl, waitForSlotIframe };
+export { fakeLogOut, fakeLogin, getStage, getTestUrl, waitForSlot };
