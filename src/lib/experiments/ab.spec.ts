@@ -1,6 +1,7 @@
 import type { ABTest, Runnable } from '@guardian/ab-core';
 import type { Config } from 'types/global';
 import { _ } from '../analytics/mvt-cookie';
+import type { concurrentTests as concurrentTestsMock } from './__mocks__/ab-tests';
 import {
 	getAsyncTestsToRun,
 	getSynchronousTestsToRun,
@@ -12,10 +13,12 @@ import {
 	getParticipationsFromLocalStorage,
 	setParticipationsInLocalStorage,
 } from './ab-local-storage';
-import { concurrentTests } from './ab-tests';
+import { concurrentTests as _concurrentTests } from './ab-tests';
 import { runnableTestsToParticipations } from './ab-utils';
 
 const { overwriteMvtCookie } = _;
+
+const concurrentTests = _concurrentTests as typeof concurrentTestsMock;
 
 // This is required as loading these seems to cause an error locally (and in CI)
 // because of some implicit dependency evil that I haven't been able to figure out.
@@ -111,6 +114,10 @@ describe('A/B', () => {
 		test('tests with notintest participations should not run, but this should be persisted to localStorage', () => {
 			expect.assertions(3);
 
+			if (!concurrentTests[0].variants[0]) {
+				throw new Error('Test has no variants');
+			}
+
 			const spy = jest.spyOn(concurrentTests[0].variants[0], 'test');
 			expect(spy).not.toHaveBeenCalled();
 			setParticipationsInLocalStorage({
@@ -175,7 +182,7 @@ describe('A/B', () => {
 			expect.assertions(2);
 
 			window.location.hash = '#ab-DummyTest=variant';
-			expect(getSynchronousTestsToRun()[0].variantToRun.id).toEqual(
+			expect(getSynchronousTestsToRun()[0]?.variantToRun.id).toEqual(
 				'variant',
 			);
 

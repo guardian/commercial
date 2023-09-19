@@ -44,7 +44,7 @@ const testCanBeRun = (test: ABTest): boolean => {
 //
 // The test population is just a subset of MVT ids. A test population must
 // begin from a specific value. Overlapping test ranges are permitted.
-const computeVariantFromMvtCookie = (test: ABTest): Variant | null => {
+const computeVariantFromMvtCookie = (test: ABTest): Variant | void => {
 	const smallestTestId = getMvtNumValues() * test.audienceOffset;
 	const largestTestId = smallestTestId + getMvtNumValues() * test.audience;
 	const mvtCookieId = getMvtValue();
@@ -58,7 +58,7 @@ const computeVariantFromMvtCookie = (test: ABTest): Variant | null => {
 		return test.variants[mvtCookieId % test.variants.length];
 	}
 
-	return null;
+	return;
 };
 
 // This is the heart of the A/B testing framework.
@@ -71,7 +71,7 @@ const runnableTest = (test: ABTest): Runnable<ABTest> | null => {
 	const fromUrl = getVariantFromUrl(test);
 	const fromLocalStorage = getVariantFromLocalStorage(test);
 	const fromCookie = computeVariantFromMvtCookie(test);
-	const variantToRun = fromUrl ?? fromLocalStorage ?? fromCookie ?? null;
+	const variantToRun = fromUrl ?? fromLocalStorage ?? fromCookie;
 	const ignoreCanRun = fromUrl && getIgnoreCanRunFromUrl(); // check fromUrl to only ignore can run for forced tests
 
 	if (variantToRun && ignoreCanRun) {
