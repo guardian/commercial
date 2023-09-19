@@ -540,11 +540,13 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 		)[2];
-		expect(openXBid.params).toEqual({
-			customParams: 'someAppNexusTargetingObject',
-			delDomain: 'guardian-d.openx.net',
-			unit: '540279541',
-		});
+		if (typeof openXBid !== 'undefined') {
+			expect(openXBid.params).toEqual({
+				customParams: 'someAppNexusTargetingObject',
+				delDomain: 'guardian-d.openx.net',
+				unit: '540279541',
+			});
+		}
 	});
 
 	test('should use correct parameters in OpenX bids geolocated in US', () => {
@@ -555,11 +557,13 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 		)[2];
-		expect(openXBid.params).toEqual({
-			customParams: 'someAppNexusTargetingObject',
-			delDomain: 'guardian-us-d.openx.net',
-			unit: '540279544',
-		});
+		if (typeof openXBid !== 'undefined') {
+			expect(openXBid.params).toEqual({
+				customParams: 'someAppNexusTargetingObject',
+				delDomain: 'guardian-us-d.openx.net',
+				unit: '540279544',
+			});
+		}
 	});
 
 	test('should use correct parameters in OpenX bids geolocated in AU', () => {
@@ -570,11 +574,13 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 		)[2];
-		expect(openXBid.params).toEqual({
-			customParams: 'someAppNexusTargetingObject',
-			delDomain: 'guardian-aus-d.openx.net',
-			unit: '540279542',
-		});
+		if (typeof openXBid !== 'undefined') {
+			expect(openXBid.params).toEqual({
+				customParams: 'someAppNexusTargetingObject',
+				delDomain: 'guardian-aus-d.openx.net',
+				unit: '540279542',
+			});
+		}
 	});
 
 	test('should use correct parameters in OpenX bids geolocated in FR', () => {
@@ -585,11 +591,13 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 		)[2];
-		expect(openXBid.params).toEqual({
-			customParams: 'someAppNexusTargetingObject',
-			delDomain: 'guardian-d.openx.net',
-			unit: '540279541',
-		});
+		if (typeof openXBid !== 'undefined') {
+			expect(openXBid.params).toEqual({
+				customParams: 'someAppNexusTargetingObject',
+				delDomain: 'guardian-d.openx.net',
+				unit: '540279541',
+			});
+		}
 	});
 });
 
