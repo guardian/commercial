@@ -34,6 +34,21 @@ const normalizeStage = (stage: string): Stage =>
 	['code', 'prod', 'dev'].includes(stage) ? (stage as Stage) : 'dev';
 
 /**
+ * Pass different stage in via environment variable
+ * e.g. `STAGE=code yarn playwright test`
+ */
+const getStage = (): Stage => {
+	// TODO check playwright picks up the STAGE env var
+	const stage = process.env.STAGE;
+	return normalizeStage(stage?.toLowerCase() ?? 'dev');
+};
+
+const getHost = (stage?: Stage | undefined) => {
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- defensive runtime
+	return hostnames[stage ?? getStage()] ?? hostnames.dev;
+};
+
+/**
  * Generate a full URL for a given relative path and the desired stage
  *
  * @param {'dev' | 'code' | 'prod'} stage
@@ -49,8 +64,7 @@ const getTestUrl = (
 ) => {
 	const url = new URL('https://www.theguardian.com');
 
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- defensive runtime
-	url.href = hostnames[stage] ?? hostnames.dev;
+	url.href = getHost(stage);
 
 	url.pathname = getPath(stage, type, path);
 
@@ -66,16 +80,6 @@ const getTestUrl = (
 		}
 	}
 	return url.toString();
-};
-
-/**
- * Pass different stage in via environment variable
- * e.g. `STAGE=code yarn playwright test`
- */
-const getStage = (): Stage => {
-	// TODO check playwright picks up the STAGE env var
-	const stage = process.env.STAGE;
-	return normalizeStage(stage?.toLowerCase() ?? 'dev');
 };
 
 const fakeLogin = async (
@@ -106,14 +110,15 @@ const fakeLogin = async (
 		{
 			name: 'GU_U',
 			value: 'WyIzMjc5Nzk0IiwiIiwiSmFrZTkiLCIiLDE2NjA4MzM3NTEyMjcsMCwxMjEyNjgzMTQ3MDAwLHRydWVd.MC0CFQCIbpFtd0J5IqK946U1vagzLgCBkwIUUN3UOkNfNN8jwNE3scKfrcvoRSg',
+			domain: 'localhost',
+			path: '/',
 		},
 	]);
 
-	// return the promise and don't await so it can be awaited on by the test where necessary
-	return page.route(
+	await page.route(
 		'https://members-data-api.theguardian.com/user-attributes/me**',
 		(route) => {
-			void route.fulfill({
+			return route.fulfill({
 				body: JSON.stringify(bodyOverride),
 			});
 		},
@@ -196,4 +201,4 @@ const waitForSlot = async (page: Page, slot: string) => {
 	await iframe.waitFor({ state: 'visible', timeout: 120000 });
 };
 
-export { fakeLogOut, fakeLogin, getStage, getTestUrl, waitForSlot };
+export { fakeLogOut, fakeLogin, getStage, getTestUrl, waitForSlot, getHost };
