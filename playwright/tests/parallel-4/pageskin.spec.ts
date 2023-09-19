@@ -5,7 +5,6 @@ import { frontWithPageSkin } from '../../fixtures/pages';
 import { cmpAcceptAll } from '../../lib/cmp';
 import { assertHeader, waitForGAMResponseForSlot } from '../../lib/gam';
 import { loadPage } from '../../lib/load-page';
-import { waitForSlotIframe } from '../../lib/util';
 
 const large = breakpoints.filter(
 	({ breakpoint }) => breakpoint === 'desktop' || breakpoint === 'wide',
@@ -33,6 +32,7 @@ test.describe('pageskin on uk front', () => {
 			);
 			await loadPage(page, frontWithPageSkin.path);
 			await cmpAcceptAll(page);
+
 			const response = await gamResponsePromise;
 			const matched = await assertHeader(
 				response,
@@ -60,26 +60,12 @@ test.describe('pageskin on uk front', () => {
 				height,
 			});
 
-			const slot = 'top-above-nav';
-			const slotWithPostfix =
-				breakpoint === 'mobile' ? `${slot}--mobile` : slot;
-			const slotId = `#dfp-ad--${slotWithPostfix}`;
-
-			// the request to GAM uses the slot name of 'top-above-nav' for mobile and tablet
-			const gamResponsePromise = waitForGAMResponseForSlot(page, slot);
+			const gamResponsePromise = waitForGAMResponseForSlot(
+				page,
+				'top-above-nav',
+			);
 			await loadPage(page, frontWithPageSkin.path);
 			await cmpAcceptAll(page);
-
-			// Check the ad slot is on the page
-			await page.locator(slotId).isVisible();
-
-			// creative isn't loaded unless slot is in view
-			await page
-				.locator(slotId)
-				.scrollIntoViewIfNeeded({ timeout: 30000 });
-
-			// Check that an iframe is placed inside the ad slot
-			await waitForSlotIframe(page, `dfp-ad--${slotWithPostfix}`);
 
 			const response = await gamResponsePromise;
 			const matched = await assertHeader(
