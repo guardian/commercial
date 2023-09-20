@@ -1,19 +1,10 @@
 import { getCookie, setCookie } from '@guardian/libs';
-import { cookieIsExpiredOrMissing } from 'lib/cookie';
 
 // cookie to trigger server-side ad-freeness
 const AD_FREE_USER_COOKIE = 'GU_AF1';
 
 const getAdFreeCookie = (): string | null =>
 	getCookie({ name: AD_FREE_USER_COOKIE });
-
-const adFreeDataIsOld = (): boolean => {
-	const { switches } = window.guardian.config;
-	return (
-		Boolean(switches.adFreeStrictExpiryEnforcement) &&
-		cookieIsExpiredOrMissing(AD_FREE_USER_COOKIE)
-	);
-};
 
 const adFreeDataIsPresent = (): boolean => {
 	const cookieVal = getAdFreeCookie();
@@ -36,9 +27,4 @@ const setAdFreeCookie = (daysToLive = 1): void => {
 	});
 };
 
-export {
-	setAdFreeCookie,
-	getAdFreeCookie,
-	adFreeDataIsOld,
-	adFreeDataIsPresent,
-};
+export { setAdFreeCookie, getAdFreeCookie, adFreeDataIsPresent };
