@@ -1497,7 +1497,6 @@ export const Standard = {
 			adaptiveSite: true,
 			prebidPermutiveAudience: true,
 			compareVariantDecision: false,
-			adFreeStrictExpiryEnforcement: false,
 			enableSentryReporting: true,
 			lazyLoadContainers: true,
 			ampArticleSwitch: true,
