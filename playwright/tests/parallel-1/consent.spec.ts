@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { expect, test } from '@playwright/test';
+import { test } from '@playwright/test';
 import { standardArticle } from '../../fixtures/json/article-standard';
 import { cmpAcceptAll, cmpRejectAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
@@ -10,9 +10,11 @@ const adsShouldShow = async (page: Page) => {
 };
 
 const adsShouldNotShow = async (page: Page) => {
-	expect(
-		await page.locator('#dfp-ad--top-above-nav').isVisible(),
-	).toBeFalsy();
+	// wait for consentless to remove slot
+	// TODO check this is correct behaviour
+	const slot = page.locator('#dfp-ad--top-above-nav');
+	// wait for locator to be removed from the dom i.e. detached
+	await slot.waitFor({ state: 'detached', timeout: 120000 });
 };
 
 const visitArticleNoOkta = async (page: Page) => {
@@ -46,15 +48,13 @@ const visitArticleNoOkta = async (page: Page) => {
 };
 
 test.describe('tcfv2 consent', () => {
-	test(`Test hide targeted slots when consent is denied`, async ({
-		page,
-	}) => {
+	test(`Reject all, do NOT show ads`, async ({ page }) => {
 		await visitArticleNoOkta(page);
 		await cmpRejectAll(page);
 		await adsShouldNotShow(page);
 	});
 
-	test.only(`Test reject all, login NOT as subscriber, should not show ads`, async ({
+	test(`Reject all, login NOT as subscriber, do NOT show ads`, async ({
 		page,
 		context,
 	}) => {
@@ -67,17 +67,17 @@ test.describe('tcfv2 consent', () => {
 		await adsShouldNotShow(page);
 	});
 
-	test(`Test accept all, login as subscriber, don't show ads`, async ({
+	test(`Accept all, login as subscriber, do NOT show ads`, async ({
 		page,
 		context,
 	}) => {
-		const loginPromise = fakeLogin(page, context, true);
+		await fakeLogin(page, context, true);
 		await visitArticleNoOkta(page);
-		await loginPromise;
 
 		await cmpAcceptAll(page);
 
 		await visitArticleNoOkta(page);
+		// check containers are not rendered i.e. no SSR slots
 		await adsShouldNotShow(page);
 	});
 
