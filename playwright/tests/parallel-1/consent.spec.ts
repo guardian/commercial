@@ -1,9 +1,12 @@
 import type { Page } from '@playwright/test';
 import { test } from '@playwright/test';
 import { standardArticle } from '../../fixtures/json/article-standard';
-import { cmpAcceptAll, cmpRejectAll } from '../../lib/cmp';
+import { articles } from '../../fixtures/pages';
+import { cmpAcceptAll, cmpReconsent, cmpRejectAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
 import { fakeLogin, getHost, waitForSlot } from '../../lib/util';
+
+const { path } = articles[0];
 
 const adsShouldShow = async (page: Page) => {
 	await waitForSlot(page, 'top-above-nav');
@@ -48,13 +51,13 @@ const visitArticleNoOkta = async (page: Page) => {
 };
 
 test.describe('tcfv2 consent', () => {
-	test(`Reject all, do NOT show ads`, async ({ page }) => {
+	test(`Reject all, ads should NOT show`, async ({ page }) => {
 		await visitArticleNoOkta(page);
 		await cmpRejectAll(page);
 		await adsShouldNotShow(page);
 	});
 
-	test(`Reject all, login NOT as subscriber, do NOT show ads`, async ({
+	test(`Reject all, login NOT as subscriber, ads should NOT show`, async ({
 		page,
 		context,
 	}) => {
@@ -67,7 +70,7 @@ test.describe('tcfv2 consent', () => {
 		await adsShouldNotShow(page);
 	});
 
-	test(`Accept all, login as subscriber, do NOT show ads`, async ({
+	test(`Accept all, login as subscriber, ads should NOT show`, async ({
 		page,
 		context,
 	}) => {
@@ -77,30 +80,23 @@ test.describe('tcfv2 consent', () => {
 		await cmpAcceptAll(page);
 
 		await visitArticleNoOkta(page);
-		// check containers are not rendered i.e. no SSR slots
+		// TODO check containers are not rendered i.e. no SSR slots
 		await adsShouldNotShow(page);
 	});
 
-	// //skipped because of the opt-out $sf.host.Config error
-	// it.skip(`Test ${path} shows ad slots when reconsented`, () => {
-	// 	cy.visit(path);
+	test(`Reject all, reconsent, ads should NOT show`, async ({ page }) => {
+		await loadPage(page, path);
 
-	// 	cy.rejectAllConsent();
+		await cmpRejectAll(page);
 
-	// 	// prevent support banner so we can click privacy settings button
-	// 	localStorage.setItem(
-	// 		'gu.prefs.engagementBannerLastClosedAt',
-	// 		`{"value":"${new Date().toISOString()}"}`,
-	// 	);
+		await loadPage(page, path);
 
-	// 	cy.reload();
+		await cmpReconsent(page);
 
-	// 	reconsent();
+		await loadPage(page, path);
 
-	// 	cy.reload();
-
-	// 	adsShouldShow();
-	// });
+		await adsShouldShow(page);
+	});
 
 	// //skipped because of the opt-out $sf.host.Config error
 	// it.skip(`Test ${path} reject all, login as subscriber, log out should show ads`, () => {
