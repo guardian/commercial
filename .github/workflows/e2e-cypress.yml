@@ -1,4 +1,4 @@
-name: E2E Cypress
+name: E2E
 on:
   push:
     branches:
@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   test:
-    name: E2E Cypress
+    name: Cypress
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
