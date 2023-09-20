@@ -1543,7 +1543,6 @@ export const Standard = {
 			brazeTaylorReport: false,
 			abConsentlessAds: true,
 			externalVideoEmbeds: true,
-			simpleReach: true,
 			abIntegrateIma: true,
 			callouts: true,
 			sentinelLogger: true,
