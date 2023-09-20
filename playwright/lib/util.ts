@@ -134,10 +134,8 @@ const clearCookie = async (context: BrowserContext, cookieName: string) => {
 	await context.addCookies(filteredCookies);
 };
 
-const fakeLogOut = async (page: Page, context: BrowserContext) => {
+const fakeLogOut = async (page: Page, context: BrowserContext) =>
 	await clearCookie(context, 'GU_U');
-	await page.reload();
-};
 
 /**
  * This function will mock the intersection observer API, and will call the callback immediately to trigger lazy-loading behaviour

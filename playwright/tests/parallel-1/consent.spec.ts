@@ -1,23 +1,29 @@
 import type { Page } from '@playwright/test';
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { standardArticle } from '../../fixtures/json/article-standard';
 import { articles } from '../../fixtures/pages';
 import { cmpAcceptAll, cmpReconsent, cmpRejectAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
-import { fakeLogin, getHost, waitForSlot } from '../../lib/util';
+import { fakeLogin, fakeLogOut, getHost, waitForSlot } from '../../lib/util';
 
 const { path } = articles[0];
 
-const adsShouldShow = async (page: Page) => {
+const adSlotsAreFulfilled = async (page: Page) => {
 	await waitForSlot(page, 'top-above-nav');
 };
 
-const adsShouldNotShow = async (page: Page) => {
-	// wait for consentless to remove slot
-	// TODO check this is correct behaviour
-	const slot = page.locator('#dfp-ad--top-above-nav');
-	// wait for locator to be removed from the dom i.e. detached
-	await slot.waitFor({ state: 'detached', timeout: 120000 });
+const adsSlotsArePresent = async (page: Page) => {
+	// Warning!
+	// isVisible() is an immediate check and does not wait.
+	// While slots will be present when opt-out loads we will remove
+	// a slot if it is not fulfilled. So using this visibility check
+	// relies on the slot being present before removal occurs.
+	await page.locator('#dfp-ad--top-above-nav').isVisible();
+};
+
+const adsSlotsAreNotPresent = async (page: Page) => {
+	// This is intended for when SSR does not render slots i.e for subscribers
+	await expect(page.locator('#dfp-ad--top-above-nav')).not.toBeVisible();
 };
 
 const visitArticleNoOkta = async (page: Page) => {
@@ -50,41 +56,55 @@ const visitArticleNoOkta = async (page: Page) => {
 	await loadPage(page, url);
 };
 
+const waitForOptOut = (page: Page) =>
+	page.waitForRequest(/cdn.optoutadvertising.com/);
+
 test.describe('tcfv2 consent', () => {
-	test(`Reject all, ads should NOT show`, async ({ page }) => {
-		await visitArticleNoOkta(page);
+	test(`Reject all, load opt out, ads slots are present`, async ({
+		page,
+	}) => {
+		await loadPage(page, path);
+
+		const optOutPromise = waitForOptOut(page);
 		await cmpRejectAll(page);
-		await adsShouldNotShow(page);
+		await optOutPromise;
+
+		await adsSlotsArePresent(page);
 	});
 
-	test(`Reject all, login NOT as subscriber, ads should NOT show`, async ({
+	test(`Reject all, login as non-subscriber, load opt out, ads slots are present`, async ({
 		page,
 		context,
 	}) => {
 		await fakeLogin(page, context, false);
+
 		await visitArticleNoOkta(page);
 
+		const optOutPromise = waitForOptOut(page);
 		await cmpRejectAll(page);
+		await optOutPromise;
 
 		await visitArticleNoOkta(page);
-		await adsShouldNotShow(page);
+
+		await adsSlotsArePresent(page);
 	});
 
-	test(`Accept all, login as subscriber, ads should NOT show`, async ({
+	test(`Accept all, login as subscriber, ads slots are not present`, async ({
 		page,
 		context,
 	}) => {
 		await fakeLogin(page, context, true);
+
 		await visitArticleNoOkta(page);
 
 		await cmpAcceptAll(page);
 
 		await visitArticleNoOkta(page);
-		// TODO check containers are not rendered i.e. no SSR slots
-		await adsShouldNotShow(page);
+
+		await adsSlotsAreNotPresent(page);
 	});
 
-	test(`Reject all, reconsent, ads should NOT show`, async ({ page }) => {
+	test(`Reject all, reconsent, ad slots are fulfilled`, async ({ page }) => {
 		await loadPage(page, path);
 
 		await cmpRejectAll(page);
@@ -95,44 +115,50 @@ test.describe('tcfv2 consent', () => {
 
 		await loadPage(page, path);
 
-		await adsShouldShow(page);
+		await adSlotsAreFulfilled(page);
 	});
 
-	// //skipped because of the opt-out $sf.host.Config error
-	// it.skip(`Test ${path} reject all, login as subscriber, log out should show ads`, () => {
-	// 	const { path } = articles[4];
+	test(`Reject all, login as subscriber, ad slots are not present, log out, load opt out, ad slots are present`, async ({
+		page,
+		context,
+	}) => {
+		await fakeLogin(page, context, true);
 
-	// 	fakeLogin(true);
+		await visitArticleNoOkta(page);
 
-	// 	cy.visit(path);
+		await cmpRejectAll(page);
 
-	// 	cy.rejectAllConsent();
+		await visitArticleNoOkta(page);
 
-	// 	cy.reload();
+		await adsSlotsAreNotPresent(page);
 
-	// 	fakeLogOut();
+		await fakeLogOut(page, context);
 
-	// 	cy.reload();
+		await visitArticleNoOkta(page);
 
-	// 	adsShouldShow();
-	// });
+		await adsSlotsArePresent(page);
+	});
 
-	// //skipped because of the opt-out $sf.host.Config error
-	// it.skip(`Test ${path} reject all, login as non-subscriber should show ads, log out should show ads`, () => {
-	// 	const { path } = articles[4];
+	test(`Reject all, login as non-subscriber, ad slots are present, log out, ad slots are present`, async ({
+		page,
+		context,
+	}) => {
+		await fakeLogin(page, context, false);
 
-	// 	fakeLogin(false);
+		await visitArticleNoOkta(page);
 
-	// 	cy.visit(path);
+		await cmpRejectAll(page);
 
-	// 	cy.rejectAllConsent();
+		await visitArticleNoOkta(page);
 
-	// 	adsShouldShow();
+		await adsSlotsArePresent(page);
 
-	// 	fakeLogOut();
+		await fakeLogOut(page, context);
 
-	// 	adsShouldShow();
-	// });
+		await visitArticleNoOkta(page);
+
+		await adsSlotsArePresent(page);
+	});
 
 	// //skipped because of the opt-out $sf.host.Config error
 	// it.skip(`Test ${path} reject all, login as non-subscriber, reconsent should show ads`, () => {
