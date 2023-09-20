@@ -19,17 +19,22 @@ type RightColItem = {
 /**
  * The minimum buffer between two adverts (aka winning paragraphs) in the right column
  */
-const paragraphBufferPx = 600;
+const PARAGRAPH_BUFFER_PX = 600;
 
 /**
  * The minimum buffer between a right column advert and an immersive element
  */
-const immersiveBufferPx = 100;
+const IMMERSIVE_BUFFER_PX = 100;
 
 /**
  * The minimum buffer between a right column advert and the bottom of the article body
  */
-const articleBottomBufferPx = 100;
+const ARTICLE_BOTTOM_BUFFER_PX = 100;
+
+/**
+ * The height of the labs header on paid content pages
+ */
+const LABS_HEADER_HEIGHT = 55;
 
 /**
  * Add a stylesheet to the document that adds height properties for a given set of class names
@@ -41,9 +46,17 @@ const articleBottomBufferPx = 100;
 const insertHeightStyles = (
 	heightMapping: Array<[string, number]>,
 ): Promise<void> => {
+	/**
+	 * Paid content has a banner at the top of the page. We don't want this
+	 * banner to overlap the advert. Adds extra padding for visual benefit
+	 */
+	const top = window.guardian.config.page.isPaidContent
+		? `${LABS_HEADER_HEIGHT + 6}px`
+		: 0;
+
 	const heightClasses = heightMapping.reduce(
 		(css, [name, height]) =>
-			`${css} .${name} { min-height: ${height}px; } .${name} > * { position: sticky; top: 0; }`,
+			`${css} .${name} { min-height: ${height}px; } .${name} > * { position: sticky; top: ${top}; }`,
 		'',
 	);
 
@@ -123,15 +136,15 @@ const computeStickyHeights = async (
 					return (
 						articleBodyElementHeightBottom -
 						current.top -
-						articleBottomBufferPx
+						ARTICLE_BOTTOM_BUFFER_PX
 					);
 				}
 
 				// Choose height of buffer depending on the kind of element we're measuring to
 				const buffer =
 					next.kind === 'winningPara'
-						? paragraphBufferPx
-						: immersiveBufferPx;
+						? PARAGRAPH_BUFFER_PX
+						: IMMERSIVE_BUFFER_PX;
 
 				// Compute the distance from the top of the current element to the top of the next element, minus the buffer
 				return Math.floor(next.top - current.top - buffer);
