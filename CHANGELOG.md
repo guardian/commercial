@@ -1,5 +1,16 @@
 # @guardian/commercial
 
+## 11.11.0
+
+### Minor Changes
+
+- f36824a: Removes liveblog-right slot
+
+### Patch Changes
+
+- b2fbdc0: fix noUncheckedIndexAccess errors in `ab*.ts` files
+- 87d76ef: Prevent inline2+ and banner overlapping on paid content pages
+
 ## 11.10.0
 
 ### Minor Changes
