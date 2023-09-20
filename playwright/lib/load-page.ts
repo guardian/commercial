@@ -6,9 +6,15 @@ const loadPage = async (page: Page, path: string, region = 'GB') => {
 	// 	route.abort();
 	// });
 	await page.addInitScript((region) => {
+		// force geo region
 		window.localStorage.setItem(
 			'gu.geo.override',
 			JSON.stringify({ value: region }),
+		);
+		// prevent support banner
+		window.localStorage.setItem(
+			'gu.prefs.engagementBannerLastClosedAt',
+			`{"value":"${new Date().toISOString()}"}`,
 		);
 	}, region);
 	await page.goto(path, { waitUntil: 'domcontentloaded' });
