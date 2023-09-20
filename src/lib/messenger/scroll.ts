@@ -38,13 +38,15 @@ const domRectToRect = (rect: DOMRect) => ({
 });
 
 const sendCoordinates = (iframeId: string, domRect: DOMRect) => {
-	iframes[iframeId].respond(null, domRectToRect(domRect));
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- fixes noUncheckedIndexedAccess error
+	iframes[iframeId]?.respond(null, domRectToRect(domRect));
 };
 
-const getDimensions = (id: string): [string, DOMRect] => [
-	id,
-	iframes[id].node.getBoundingClientRect(),
-];
+const getDimensions = (id: string): [string, DOMRect] => {
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion, @typescript-eslint/no-unnecessary-condition -- Fixes noUncheckedIndexedAccess error
+	const node = <HTMLIFrameElement>iframes[id]?.node;
+	return [id, node.getBoundingClientRect()];
+};
 
 const isIframeInViewport = function (
 	this: Viewport,
