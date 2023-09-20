@@ -82,10 +82,6 @@ const fillAdvertSlots = async (): Promise<void> => {
 		.filter(
 			(adSlot) => !(isDCRMobile && adSlot.id === 'dfp-ad--top-above-nav'),
 		)
-		// We cannot guarantee that liveblog-right slots will be on the page when this code runs.
-		// liveblog-right slots are inserted by liveblog-right-column-adverts.ts, where they will be
-		// inserted when a custom event is received.
-		.filter((adSlot) => !adSlot.id.includes('liveblog-right'))
 		.map((adSlot) => {
 			const additionalSizes = decideAdditionalSizes(adSlot);
 			return createAdvert(adSlot, additionalSizes);

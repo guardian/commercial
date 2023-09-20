@@ -8,7 +8,7 @@ const retainAdSizeOnRefresh = (
 	advertSize: Advert['size'],
 	hbSlot: HeaderBiddingSlot,
 ): HeaderBiddingSlot[] => {
-	// Only top-above-nav and fronts-banner ads are applicable for their ad size not changing
+	// Only top-above-nav and fronts-banner ads are currently applicable for their ad size not changing
 	if (
 		hbSlot.key !== 'top-above-nav' &&
 		!hbSlot.key.startsWith('fronts-banner')

@@ -42,7 +42,6 @@ import { init as initArticleBodyAdverts } from 'lib/spacefinder/article-body-adv
 import { initCommentAdverts } from 'lib/spacefinder/comment-adverts';
 import { initCommentsExpandedAdverts } from 'lib/spacefinder/comments-expanded-advert';
 import { init as initLiveblogAdverts } from 'lib/spacefinder/liveblog-adverts';
-import { initLiveblogRightColumnAdverts } from 'lib/spacefinder/liveblog-right-column-adverts';
 import { initTeadsCookieless } from 'lib/teads-cookieless';
 import { init as initThirdPartyTags } from 'lib/third-party-tags';
 import { init as initTrackGpcSignal } from 'lib/track-gpc-signal';
@@ -104,7 +103,6 @@ if (!commercialFeatures.adFree) {
 		['cm-liveblogAdverts', initLiveblogAdverts],
 		['cm-commentAdverts', initCommentAdverts],
 		['cm-commentsExpandedAdverts', initCommentsExpandedAdverts],
-		['cm-liveblogRightAdverts', initLiveblogRightColumnAdverts],
 		['cm-externalAdverts', initExternalAdverts],
 		['rr-adblock-ask', initAdblockAsk],
 		['cm-thirdPartyTags', initThirdPartyTags],
