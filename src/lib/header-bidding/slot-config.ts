@@ -93,7 +93,8 @@ const filterByAdvert = (
 		return [];
 	}
 
-	const sizes = sizeMapping[key][breakpoint];
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Fixes noUncheckedIndexedAccess error
+	const sizes = sizeMapping[key]?.[breakpoint];
 
 	if (!sizes || sizes.length < 1) {
 		return [];

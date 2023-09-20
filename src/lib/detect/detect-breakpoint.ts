@@ -174,3 +174,5 @@ export {
 	matchesBreakpoints,
 	hasCrossedBreakpoint,
 };
+
+export type { SourceBreakpoint };

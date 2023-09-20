@@ -4,6 +4,7 @@ import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
 	matchesBreakpoints as matchesBreakpoints_,
 } from 'lib/detect/detect-breakpoint';
+import type { SourceBreakpoint } from 'lib/detect/detect-breakpoint';
 import { isInVariantSynchronous as isInVariantSynchronous_ } from 'lib/experiments/ab';
 import { _ } from 'lib/utils/geo-utils';
 import { getCountryCode as getCountryCode_ } from 'lib/utils/geolocation';
@@ -78,11 +79,11 @@ describe('Utils', () => {
 	});
 
 	test('stripPrefix correctly strips valid cases', () => {
-		const validStrips: string[][] = [
+		const validStrips = [
 			['dfp-ad--slot', 'slot'],
 			['slot', 'slot'],
 			['dfp-ad--', ''],
-		];
+		] as const;
 
 		validStrips.forEach(([stringToStrip, result]) => {
 			expect(stripDfpAdPrefixFrom(stringToStrip)).toEqual(result);
@@ -108,7 +109,7 @@ describe('Utils', () => {
 	});
 
 	test('getCurrentTweakpointKey should find the correct key', () => {
-		const breakpoints = [
+		const breakpoints: readonly SourceBreakpoint[] = [
 			'mobile',
 			'phablet',
 			'tablet',
@@ -116,8 +117,8 @@ describe('Utils', () => {
 			'wide',
 		] as const;
 		const results = [];
-		for (let i = 0; i < breakpoints.length; i += 1) {
-			getCurrentTweakpoint.mockReturnValueOnce(breakpoints[i]);
+		for (const breakpoint of breakpoints) {
+			getCurrentTweakpoint.mockReturnValueOnce(breakpoint);
 			results.push(getBreakpointKey());
 		}
 		expect(results).toEqual(['M', 'T', 'T', 'D', 'D']);
@@ -169,24 +170,24 @@ describe('Utils', () => {
 			'SH',
 			'IE',
 		];
-		for (let i = 0; i < testGeos.length; i += 1) {
-			getCountryCode.mockReturnValueOnce(testGeos[i]);
+		for (const testGeo of testGeos) {
+			getCountryCode.mockReturnValueOnce(testGeo);
 			expect(shouldIncludeOpenx()).toBe(true);
 		}
 	});
 
 	test('shouldIncludeOpenx should return false if within US region', () => {
 		const testGeos: CountryCode[] = ['CA', 'US'];
-		for (let i = 0; i < testGeos.length; i += 1) {
-			getCountryCode.mockReturnValue(testGeos[i]);
+		for (const testGeo of testGeos) {
+			getCountryCode.mockReturnValue(testGeo);
 			expect(shouldIncludeOpenx()).toBe(false);
 		}
 	});
 
 	test('shouldIncludeOpenx should return true if within AU region', () => {
 		const testGeos: CountryCode[] = ['NZ', 'AU'];
-		for (let i = 0; i < testGeos.length; i += 1) {
-			getCountryCode.mockReturnValue(testGeos[i]);
+		for (const testGeo of testGeos) {
+			getCountryCode.mockReturnValue(testGeo);
 			expect(shouldIncludeOpenx()).toBe(true);
 		}
 	});
@@ -206,8 +207,8 @@ describe('Utils', () => {
 			'SH',
 			'AU',
 		];
-		for (let i = 0; i < testGeos.length; i += 1) {
-			getCountryCode.mockReturnValueOnce(testGeos[i]);
+		for (const testGeo of testGeos) {
+			getCountryCode.mockReturnValueOnce(testGeo);
 			expect(shouldIncludeTrustX()).toBe(false);
 		}
 	});
@@ -255,16 +256,16 @@ describe('Utils', () => {
 			'CA',
 			'NZ',
 		];
-		for (let i = 0; i < testGeos.length; i += 1) {
-			getCountryCode.mockReturnValue(testGeos[i]);
+		for (const testGeo of testGeos) {
+			getCountryCode.mockReturnValue(testGeo);
 			expect(shouldIncludeXaxis()).toBe(false);
 		}
 	});
 
 	test('shouldIncludeSonobi should return true if geolocation is US', () => {
 		const testGeos: CountryCode[] = ['US', 'CA'];
-		for (let i = 0; i < testGeos.length; i += 1) {
-			getCountryCode.mockReturnValueOnce(testGeos[i]);
+		for (const testGeo of testGeos) {
+			getCountryCode.mockReturnValueOnce(testGeo);
 			expect(shouldIncludeSonobi()).toBe(true);
 		}
 	});
@@ -279,8 +280,8 @@ describe('Utils', () => {
 			'SH',
 			'AU',
 		];
-		for (let i = 0; i < testGeos.length; i += 1) {
-			getCountryCode.mockReturnValueOnce(testGeos[i]);
+		for (const testGeo of testGeos) {
+			getCountryCode.mockReturnValueOnce(testGeo);
 			expect(shouldIncludeSonobi()).toBe(false);
 		}
 	});
