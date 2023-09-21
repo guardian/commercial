@@ -19,6 +19,8 @@ module.exports = {
 		'no-use-before-define': ['error', { functions: true, classes: true }],
 		'import/exports-last': 'error',
 		'no-else-return': 'error',
+		// TODO - remove this once we've unable no unchecked indexed access on main
+		'@typescript-eslint/no-unnecessary-condition': 'warn',
 	},
 	overrides: [
 		{
