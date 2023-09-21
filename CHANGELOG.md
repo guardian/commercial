@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 11.11.1
+
+### Patch Changes
+
+- 77fef49: Fix noUncheckedIndexedAccess errors in spacefinder.ts
+- 82d96b7: removing ad free expiry switch and logic:
+
 ## 11.11.0
 
 ### Minor Changes
