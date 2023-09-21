@@ -122,6 +122,7 @@ const fakeLogin = async (
 				body: JSON.stringify(bodyOverride),
 			});
 		},
+		{ times: 1 },
 	);
 };
 

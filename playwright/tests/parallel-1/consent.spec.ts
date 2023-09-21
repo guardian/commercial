@@ -8,23 +8,27 @@ import { fakeLogin, fakeLogOut, getHost, waitForSlot } from '../../lib/util';
 
 const { path } = articles[0];
 
-const adSlotsAreFulfilled = async (page: Page) => {
+const adSlotsAreFulfilled = async (page: Page) =>
 	await waitForSlot(page, 'top-above-nav');
-};
 
-const adsSlotsArePresent = async (page: Page) => {
-	// Warning!
-	// isVisible() is an immediate check and does not wait.
-	// While slots will be present when opt-out loads we will remove
-	// a slot if it is not fulfilled. So using this visibility check
-	// relies on the slot being present before removal occurs.
+/**
+ * Warning!
+ * isVisible() is an immediate check and does not wait.
+ * While slots will be present when opt-out loads we remove
+ * a slot if it is not fulfilled. So using this visibility check
+ * relies on the slot being present before removal occurs.
+ */
+const adSlotsArePresent = async (page: Page) =>
 	await page.locator('#dfp-ad--top-above-nav').isVisible();
-};
 
-const adsSlotsAreNotPresent = async (page: Page) => {
-	// This is intended for when SSR does not render slots i.e for subscribers
-	await expect(page.locator('#dfp-ad--top-above-nav')).not.toBeVisible();
-};
+/**
+ * This function is intended to check when SSR does not render slots
+ * i.e for subscribers
+ */
+const adSlotsAreNotPresent = async (page: Page) =>
+	expect(
+		await page.locator('#dfp-ad--top-above-nav').isVisible(),
+	).toBeFalsy();
 
 const visitArticleNoOkta = async (page: Page) => {
 	const url = `${getHost()}/Article`;
@@ -69,7 +73,7 @@ test.describe('tcfv2 consent', () => {
 		await cmpRejectAll(page);
 		await optOutPromise;
 
-		await adsSlotsArePresent(page);
+		await adSlotsArePresent(page);
 	});
 
 	test(`Reject all, login as non-subscriber, load opt out, ads slots are present`, async ({
@@ -86,7 +90,7 @@ test.describe('tcfv2 consent', () => {
 
 		await visitArticleNoOkta(page);
 
-		await adsSlotsArePresent(page);
+		await adSlotsArePresent(page);
 	});
 
 	test(`Accept all, login as subscriber, ads slots are not present`, async ({
@@ -101,10 +105,10 @@ test.describe('tcfv2 consent', () => {
 
 		await visitArticleNoOkta(page);
 
-		await adsSlotsAreNotPresent(page);
+		await adSlotsAreNotPresent(page);
 	});
 
-	test(`Reject all, reconsent, ad slots are fulfilled`, async ({ page }) => {
+	test(`Reject all, accept all, ad slots are fulfilled`, async ({ page }) => {
 		await loadPage(page, path);
 
 		await cmpRejectAll(page);
@@ -130,13 +134,13 @@ test.describe('tcfv2 consent', () => {
 
 		await visitArticleNoOkta(page);
 
-		await adsSlotsAreNotPresent(page);
+		await adSlotsAreNotPresent(page);
 
 		await fakeLogOut(page, context);
 
 		await visitArticleNoOkta(page);
 
-		await adsSlotsArePresent(page);
+		await adSlotsArePresent(page);
 	});
 
 	test(`Reject all, login as non-subscriber, ad slots are present, log out, ad slots are present`, async ({
@@ -151,94 +155,116 @@ test.describe('tcfv2 consent', () => {
 
 		await visitArticleNoOkta(page);
 
-		await adsSlotsArePresent(page);
+		await adSlotsArePresent(page);
 
 		await fakeLogOut(page, context);
 
 		await visitArticleNoOkta(page);
 
-		await adsSlotsArePresent(page);
+		await adSlotsArePresent(page);
 	});
 
-	// //skipped because of the opt-out $sf.host.Config error
-	// it.skip(`Test ${path} reject all, login as non-subscriber, reconsent should show ads`, () => {
-	// 	cy.visit(path);
+	test(`Reject all, login as non-subscriber, ad slots are present, accept all, ad slots are fulfilled`, async ({
+		page,
+		context,
+	}) => {
+		await fakeLogin(page, context, false);
 
-	// 	cy.rejectAllConsent();
+		await visitArticleNoOkta(page);
 
-	// 	fakeLogin(false);
+		await cmpRejectAll(page);
 
-	// 	// prevent support banner so we can click privacy settings button
-	// 	localStorage.setItem(
-	// 		'gu.prefs.engagementBannerLastClosedAt',
-	// 		`{"value":"${new Date().toISOString()}"}`,
-	// 	);
+		await visitArticleNoOkta(page);
 
-	// 	cy.reload();
+		await adSlotsArePresent(page);
 
-	// 	adsShouldShow();
+		await cmpReconsent(page);
 
-	// 	reconsent();
+		await visitArticleNoOkta(page);
 
-	// 	cy.reload();
+		await adSlotsAreFulfilled(page);
+	});
 
-	// 	adsShouldShow();
-	// });
+	test(`Accept all, login as subscriber, ad slots are not present, subscription expires, ads slots are fulfilled`, async ({
+		page,
+		context,
+	}) => {
+		await fakeLogin(page, context, true);
 
-	// //skipping because this test is very flaky and works about 50% of the time
-	// it.skip(`Test ${path} accept all, login as subscriber, subscription expires, should show ads`, () => {
-	// 	fakeLogin(true);
+		await visitArticleNoOkta(page);
 
-	// 	cy.visit(path);
+		await cmpAcceptAll(page);
 
-	// 	cy.allowAllConsent();
+		await visitArticleNoOkta(page);
 
-	// 	cy.reload();
+		await adSlotsAreNotPresent(page);
 
-	// 	cy.setCookie(
-	// 		'gu_user_features_expiry',
-	// 		String(new Date().getTime() - 10000),
-	// 	);
+		// expire subscription
+		await context.addCookies([
+			{
+				name: 'gu_user_features_expiry',
+				value: String(new Date().getTime() - 10000),
+				domain: 'localhost',
+				path: '/',
+			},
+		]);
 
-	// 	// to intercept response
-	// 	fakeLogin(false);
+		await visitArticleNoOkta(page);
 
-	// 	cy.reload();
+		await visitArticleNoOkta(page);
 
-	// 	cy.wait('@userData', { timeout: 30000 });
+		await adSlotsAreFulfilled(page);
+	});
 
-	// 	cy.wait(5000);
+	test(`Reject all, login as subscriber, ad slots are not present, subscription expires, ads slots are present`, async ({
+		page,
+		context,
+	}) => {
+		await fakeLogin(page, context, true);
 
-	// 	cy.reload();
+		await visitArticleNoOkta(page);
 
-	// 	cy.wait(5000);
+		await cmpRejectAll(page);
 
-	// 	adsShouldShow();
-	// });
+		await visitArticleNoOkta(page);
 
-	// //skipped because of the opt-out $sf.host.Config error
-	// it.skip(`Test ${path} reject all, login as subscriber, subscription expires, should show ads`, () => {
-	// 	const { path } = articles[4];
+		await adSlotsAreNotPresent(page);
 
-	// 	fakeLogin(true);
+		// expire subscription
+		// await context.addCookies([
+		// 	{
+		// 		name: 'gu_user_features_expiry',
+		// 		value: String(new Date().getTime() - 10000),
+		// 		domain: 'localhost',
+		// 		path: '/',
+		// 	},
+		// ]);
 
-	// 	cy.visit(path);
+		await visitArticleNoOkta(page);
 
-	// 	cy.rejectAllConsent();
+		await adSlotsArePresent(page);
+	});
 
-	// 	cy.setCookie(
-	// 		'gu_user_features_expiry',
-	// 		String(new Date().getTime() - 1000),
-	// 	);
+	test(`Reject all, login as subscriber, ad slots are not present on every page load`, async ({
+		page,
+		context,
+	}) => {
+		await fakeLogin(page, context, true);
 
-	// 	// to intercept response
-	// 	fakeLogin(false);
+		await visitArticleNoOkta(page);
 
-	// 	cy.reload();
+		await cmpRejectAll(page);
 
-	// 	// reload twice so server is not sent ad free cookie
-	// 	cy.reload();
+		await visitArticleNoOkta(page);
 
-	// 	adsShouldShow();
-	// });
+		await adSlotsAreNotPresent(page);
+
+		await visitArticleNoOkta(page);
+
+		await adSlotsAreNotPresent(page);
+
+		await visitArticleNoOkta(page);
+
+		await adSlotsAreNotPresent(page);
+	});
 });
