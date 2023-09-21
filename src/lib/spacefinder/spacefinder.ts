@@ -144,7 +144,7 @@ const onInteractivesLoaded = memoize(async (rules: SpacefinderRules) => {
 	const notLoaded = query('.element-interactive', rules.body).filter(
 		(interactive) => {
 			const iframes = Array.from(interactive.children).filter(isIframe);
-			return !(iframes.length && isIframeLoaded(iframes[0]));
+			return !(iframes[0] && isIframeLoaded(iframes[0]));
 		},
 	);
 
@@ -158,9 +158,9 @@ const onInteractivesLoaded = memoize(async (rules: SpacefinderRules) => {
 				// Listen for when iframes are added as children to interactives
 				new MutationObserver((records, instance) => {
 					if (
-						!records.length ||
-						!records[0].addedNodes.length ||
-						!isIframe(records[0].addedNodes[0])
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- enable noUncheckedIndexedAccess in tsconfig
+						!records[0]?.addedNodes[0] ||
+						!isIframe(records[0]?.addedNodes[0])
 					) {
 						return;
 					}
@@ -183,8 +183,8 @@ const onInteractivesLoaded = memoize(async (rules: SpacefinderRules) => {
 
 const partitionCandidates = <T>(
 	list: T[],
-	filterElement: (element: T, lastFilteredElement: T) => boolean,
-) => {
+	filterElement: (element: T, lastFilteredElement: T | undefined) => boolean,
+): [T[], T[]] => {
 	const filtered: T[] = [];
 	const exclusions: T[] = [];
 
@@ -289,9 +289,7 @@ const enforceRules = (
 					testCandidates(
 						rule,
 						candidate,
-						measurements.opponents
-							? measurements.opponents[selector]
-							: [],
+						measurements.opponents?.[selector] ?? [],
 					),
 			);
 			spacefinderExclusions[selector] = exclusions;
