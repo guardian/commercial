@@ -2,7 +2,6 @@ import { getCookie, isObject, removeCookie, setCookie } from '@guardian/libs';
 import type { HeaderPayload } from '@guardian/support-dotcom-components/dist/dotcom/src/types';
 import { cookieIsExpiredOrMissing, timeInDaysFromNow } from 'lib/cookie';
 import {
-	adFreeDataIsOld,
 	adFreeDataIsPresent,
 	getAdFreeCookie,
 	setAdFreeCookie,
@@ -183,9 +182,7 @@ const isDigitalSubscriber = (): boolean =>
 	getCookie({ name: DIGITAL_SUBSCRIBER_COOKIE }) === 'true';
 
 const userNeedsNewFeatureData = (): boolean =>
-	featuresDataIsOld() ||
-	(adFreeDataIsPresent() && adFreeDataIsOld()) ||
-	(isDigitalSubscriber() && !adFreeDataIsPresent());
+	featuresDataIsOld() || (isDigitalSubscriber() && !adFreeDataIsPresent());
 
 const userHasDataAfterSignout = async (): Promise<boolean> =>
 	!(await isUserLoggedInOktaRefactor()) && userHasData();
@@ -356,7 +353,7 @@ const fakeOneOffContributor = (): void => {
 };
 
 const isAdFreeUser = (): boolean =>
-	isDigitalSubscriber() || (adFreeDataIsPresent() && !adFreeDataIsOld());
+	isDigitalSubscriber() || adFreeDataIsPresent();
 
 // Extend the expiry of the contributions cookie by 1 year beyond the date of the contribution
 const extendContribsCookieExpiry = (): void => {
