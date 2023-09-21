@@ -27,7 +27,7 @@ import { init as scroll } from '../messenger/scroll';
 import { init as type } from '../messenger/type';
 import { init as viewport } from '../messenger/viewport';
 import { removeSlots } from '../remove-slots';
-import { fillAdvertSlots } from './fill-advert-slots';
+import { fillStaticAdvertSlots } from './fill-static-advert-slots';
 import { onSlotLoad } from './on-slot-load';
 import { onSlotRender } from './on-slot-render';
 import { onSlotViewableFunction } from './on-slot-viewable';
@@ -137,7 +137,7 @@ export const init = (): Promise<void> => {
 						setPageTargeting(consentState, isSignedIn);
 					},
 					() => {
-						void fillAdvertSlots();
+						void fillStaticAdvertSlots();
 					},
 				);
 

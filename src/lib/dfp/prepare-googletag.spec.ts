@@ -10,7 +10,7 @@ import _config from 'lib/config';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
 import type { Advert } from './Advert';
 import { dfpEnv } from './dfp-env';
-import { fillAdvertSlots } from './fill-advert-slots';
+import { fillStaticAdvertSlots } from './fill-static-advert-slots';
 import { getAdvertById } from './get-advert-by-id';
 import { loadAdvert } from './load-advert';
 import { init as prepareGoogletag } from './prepare-googletag';
@@ -391,7 +391,7 @@ describe('DFP', () => {
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 
-		await fillAdvertSlots();
+		await fillStaticAdvertSlots();
 		await prepareGoogletag();
 
 		expect(Object.keys(getAdverts(true)).length).toBe(4);
@@ -405,7 +405,7 @@ describe('DFP', () => {
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 
-		await fillAdvertSlots();
+		await fillStaticAdvertSlots();
 		await prepareGoogletag();
 
 		const slots = getAdverts(true);
@@ -432,7 +432,7 @@ describe('DFP', () => {
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 
-		await fillAdvertSlots();
+		await fillStaticAdvertSlots();
 		await prepareGoogletag();
 
 		[
@@ -537,7 +537,7 @@ describe('DFP', () => {
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 
-		await fillAdvertSlots();
+		await fillStaticAdvertSlots();
 		await prepareGoogletag();
 
 		expect(pubAds.enableSingleRequest).toHaveBeenCalled();
@@ -557,7 +557,7 @@ describe('DFP', () => {
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 
-		await fillAdvertSlots();
+		await fillStaticAdvertSlots();
 		await prepareGoogletag();
 
 		expect(window.googletag.defineOutOfPageSlot).toHaveBeenCalled();
@@ -576,7 +576,7 @@ describe('DFP', () => {
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 
-		await fillAdvertSlots();
+		await fillStaticAdvertSlots();
 		await prepareGoogletag();
 
 		listeners.slotRenderEnded?.(fakeEventOne);

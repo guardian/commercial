@@ -26,10 +26,11 @@ const isCustomEvent = (event: Event): event is CustomEvent => {
 /**
  * Listen for events to fill an additional slot
  *
- * This is for slots that are not fixed (aka SSR) or dynamic (aka injected by spacefinder).
- * They are placed on the page by a non-standard route, for example in a thrasher or some
- * other async process that adds the slot at an unknown time but still expects the
- * commercial runtime to fulfill the slot.
+ * This is for slots that are not fixed (aka SSR) or dynamic (aka injected from
+ * this bundle, e.g. via spacefinder). They are placed on the page by a
+ * non-standard route, for example in a thrasher or some other async process
+ * that adds the slot at an unknown time but still expects the commercial
+ * runtime to fulfill the slot.
  *
  * The extra logic in addition to dynamic slots covers when:
  * - the commercial runtime loads before the slot so we wait for a custom event
@@ -75,7 +76,7 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 };
 
 /**
- * Pre-rendered ad slots that were rendered on the page by the server are collected here.
+ * Static ad slots that were rendered on the page by the server are collected here.
  *
  * For dynamic ad slots that are created at js-runtime, see:
  *  - article-aside-adverts
@@ -83,7 +84,7 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
  *  - liveblog-adverts
  *  - high-merch
  */
-const fillAdvertSlots = async (): Promise<void> => {
+const fillStaticAdvertSlots = async (): Promise<void> => {
 	// This module has the following strict dependencies. These dependencies must be
 	// fulfilled before fillAdvertSlots can execute reliably. The bootstrap
 	// initiates these dependencies, to speed up the init process. Bootstrap also captures the module performance.
@@ -106,8 +107,6 @@ const fillAdvertSlots = async (): Promise<void> => {
 		window.guardian.config.isDotcomRendering &&
 		getCurrentBreakpoint() === 'mobile';
 
-	// Since JS runs to completion, we won't process any events to fill slots
-	// until after we've gathered up the initial ad slots in the DOM
 	createSlotFillListener();
 
 	// Get all ad slots
@@ -147,4 +146,4 @@ const fillAdvertSlots = async (): Promise<void> => {
 	}
 };
 
-export { fillAdvertSlots };
+export { fillStaticAdvertSlots };
