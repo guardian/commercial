@@ -330,7 +330,7 @@ describe('Generating Permutive payload utils', () => {
 			);
 			const err = (logger.mock.calls[0] as Error[])[0];
 			expect(err).toBeInstanceOf(Error);
-			expect(err.message).toBe('Global Permutive setup error');
+			expect(err?.message).toBe('Global Permutive setup error');
 		});
 		it('calls the permutive addon method with the correct payload', () => {
 			const mockPermutive = { addon: jest.fn(), identify: jest.fn() };
