@@ -19,14 +19,16 @@ const getPath = (
 	stage: Stage,
 	type: 'article' | 'liveblog' | 'front' = 'article',
 	path: string,
+	fixtureId?: string,
 ) => {
 	if (stage === 'dev') {
-		if (type === 'liveblog' || type === 'article') {
-			return `Article/https://www.theguardian.com${path}`;
+		const dcrContentType =
+			type === 'liveblog' || type === 'article' ? 'Article' : 'Front';
+		if (fixtureId) {
+			return `${dcrContentType}/http://localhost:3031/renderFixture/${fixtureId}/${path}`;
 		}
-		return `Front/https://www.theguardian.com${path}`;
+		return `${dcrContentType}/https://www.theguardian.com${path}`;
 	}
-
 	return path;
 };
 
@@ -61,12 +63,13 @@ const getTestUrl = (
 	path: string,
 	type: 'article' | 'liveblog' | 'front' = 'article',
 	adtest = 'fixed-puppies-ci',
+	fixtureId?: string,
 ) => {
 	const url = new URL('https://www.theguardian.com');
 
 	url.href = getHost(stage);
 
-	url.pathname = getPath(stage, type, path);
+	url.pathname = getPath(stage, type, path, fixtureId);
 
 	if (type === 'liveblog') {
 		url.searchParams.append('live', '1');

@@ -250,6 +250,15 @@ const advertThatFiresEventInThrasher = {
 	},
 };
 
+const overwriteOktaSwitchFalse = {
+	config: {
+		switches: {
+			okta: false,
+			idCookieRefresh: false,
+		},
+	},
+};
+
 /**
  * The fixtures represent a set of objects that is deeply merged into the JSON
  * data that is used by DCR. It can be used to override properties for the
@@ -263,6 +272,7 @@ const fixtures = {
 	overwriteShouldLoadGoogletagFalse,
 	sponsorshipLogoInThrasher,
 	advertThatFiresEventInThrasher,
+	overwriteOktaSwitchFalse,
 };
 
 module.exports = {
