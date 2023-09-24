@@ -1,13 +1,20 @@
 import type { BrowserContext, Cookie, Page } from '@playwright/test';
 import type { UserFeaturesResponse } from '../../src/types/membership';
 
-// TODO playwright
-// - check env vars are picked up
-// - global setup for ophan blocking
-// - helper functions for cmp accept and reject
-// - split up utils into separate files
-
 type Stage = 'code' | 'prod' | 'dev';
+
+const normalizeStage = (stage: string): Stage =>
+	['code', 'prod', 'dev'].includes(stage) ? (stage as Stage) : 'dev';
+
+/**
+ * Set the stage via environment variable STAGE
+ * e.g. `STAGE=code yarn playwright test`
+ */
+const getStage = (): Stage => {
+	// TODO check playwright picks up the STAGE env var
+	const stage = process.env.STAGE;
+	return normalizeStage(stage?.toLowerCase() ?? 'dev');
+};
 
 const hostnames = {
 	code: 'https://code.dev-theguardian.com',
@@ -15,6 +22,20 @@ const hostnames = {
 	dev: 'http://localhost:3030',
 } as const;
 
+const getHost = (stage?: Stage | undefined) => {
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- defensive runtime
+	return hostnames[stage ?? getStage()] ?? hostnames.dev;
+};
+
+/**
+ * Generate the path for the request to DCR
+ *
+ * @param {'dev' | 'code' | 'prod'}  stage
+ * @param type
+ * @param path
+ * @param fixtureId
+ * @returns
+ */
 const getPath = (
 	stage: Stage,
 	type: 'article' | 'liveblog' | 'front' = 'article',
@@ -32,31 +53,15 @@ const getPath = (
 	return path;
 };
 
-const normalizeStage = (stage: string): Stage =>
-	['code', 'prod', 'dev'].includes(stage) ? (stage as Stage) : 'dev';
-
 /**
- * Pass different stage in via environment variable
- * e.g. `STAGE=code yarn playwright test`
- */
-const getStage = (): Stage => {
-	// TODO check playwright picks up the STAGE env var
-	const stage = process.env.STAGE;
-	return normalizeStage(stage?.toLowerCase() ?? 'dev');
-};
-
-const getHost = (stage?: Stage | undefined) => {
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- defensive runtime
-	return hostnames[stage ?? getStage()] ?? hostnames.dev;
-};
-
-/**
- * Generate a full URL for a given relative path and the desired stage
+ * Generate a full URL i.e domain and path
  *
  * @param {'dev' | 'code' | 'prod'} stage
  * @param {string} path
- * @param {{ isDcr?: boolean }} options
- * @returns {string} The full path
+ * @param {'article' | 'liveblog' | 'front' } type
+ * @adtest string
+ * @fixtureId string
+ * @returns {string} The full URL
  */
 const getTestUrl = (
 	stage: Stage,
