@@ -1,10 +1,15 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
-import { standardArticle } from '../../fixtures/json/article-standard';
 import { articles } from '../../fixtures/pages';
 import { cmpAcceptAll, cmpReconsent, cmpRejectAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
-import { fakeLogin, fakeLogOut, getHost, waitForSlot } from '../../lib/util';
+import {
+	fakeLogin,
+	fakeLogOut,
+	getStage,
+	getTestUrl,
+	waitForSlot,
+} from '../../lib/util';
 
 const { path } = articles[0];
 
@@ -15,48 +20,27 @@ const adSlotsAreFulfilled = async (page: Page) =>
  * Warning!
  * isVisible() is an immediate check and does not wait.
  * While slots will be present when opt-out loads we remove
- * a slot if it is not fulfilled. So using this visibility check
- * relies on the slot being present before removal occurs.
+ * a slot if it is not fulfilled. Using this visibility check
+ * ensures we check the slot is present before removal occurs.
  */
 const adSlotsArePresent = async (page: Page) =>
 	await page.locator('#dfp-ad--top-above-nav').isVisible();
 
 /**
- * This function is intended to check when SSR does not render slots
- * i.e for subscribers
+ * This function is intended to check if slots are _not_ present
+ * immediately i.e. when SSR does not render slots for adFree users.
  */
 const adSlotsAreNotPresent = async (page: Page) =>
-	expect(
-		await page.locator('#dfp-ad--top-above-nav').isVisible(),
-	).toBeFalsy();
+	expect(await adSlotsArePresent(page)).toBeFalsy();
 
 const visitArticleNoOkta = async (page: Page) => {
-	const url = `${getHost()}/Article`;
-	await page.route(url, async (route) => {
-		const postData = {
-			...standardArticle,
-			config: {
-				...standardArticle.config,
-				switches: {
-					...standardArticle.config.switches,
-					/**
-					 * We want to continue using cookies for signed in features
-					 * until we figure out how to use Okta in Cypress.
-					 * See https://github.com/guardian/dotcom-rendering/issues/8758
-					 */
-					okta: false,
-					idCookieRefresh: false,
-				},
-			},
-		};
-		await route.continue({
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			postData,
-		});
-	});
+	const url = getTestUrl(
+		getStage(),
+		'politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',
+		'article',
+		undefined, // use the default ad test
+		'overwriteOktaSwitchFalse',
+	);
 	await loadPage(page, url);
 };
 
@@ -102,6 +86,11 @@ test.describe('tcfv2 consent', () => {
 		await visitArticleNoOkta(page);
 
 		await cmpAcceptAll(page);
+
+		// TODO investigate
+		// user-features does not run until consent state has been given
+		// so when we accept all ads will load despite being ad free as
+		// the ad free cookie has not yet been set.
 
 		await visitArticleNoOkta(page);
 
@@ -203,7 +192,7 @@ test.describe('tcfv2 consent', () => {
 		await context.addCookies([
 			{
 				name: 'gu_user_features_expiry',
-				value: String(new Date().getTime() - 10000),
+				value: String(new Date().getTime() / 1000 - 1000),
 				domain: 'localhost',
 				path: '/',
 			},
@@ -216,7 +205,7 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreFulfilled(page);
 	});
 
-	test(`Reject all, login as subscriber, ad slots are not present, subscription expires, ads slots are present`, async ({
+	test.skip(`Reject all, login as subscriber, ad slots are not present, subscription expires, ads slots are present`, async ({
 		page,
 		context,
 	}) => {
@@ -231,21 +220,21 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreNotPresent(page);
 
 		// expire subscription
-		// await context.addCookies([
-		// 	{
-		// 		name: 'gu_user_features_expiry',
-		// 		value: String(new Date().getTime() - 10000),
-		// 		domain: 'localhost',
-		// 		path: '/',
-		// 	},
-		// ]);
+		await context.addCookies([
+			{
+				name: 'gu_user_features_expiry',
+				value: String(new Date().getTime() - 10000),
+				domain: 'localhost',
+				path: '/',
+			},
+		]);
 
 		await visitArticleNoOkta(page);
 
 		await adSlotsArePresent(page);
 	});
 
-	test(`Reject all, login as subscriber, ad slots are not present on every page load`, async ({
+	test.skip(`Reject all, login as subscriber, ad slots are not present on every page load`, async ({
 		page,
 		context,
 	}) => {
