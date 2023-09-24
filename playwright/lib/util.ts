@@ -85,7 +85,7 @@ const getTestUrl = (
 	return url.toString();
 };
 
-const fakeLogin = async (
+const setupFakeLogin = async (
 	page: Page,
 	context: BrowserContext,
 	subscriber = true,
@@ -141,56 +141,6 @@ const clearCookie = async (context: BrowserContext, cookieName: string) => {
 const fakeLogOut = async (page: Page, context: BrowserContext) =>
 	await clearCookie(context, 'GU_U');
 
-/**
- * This function will mock the intersection observer API, and will call the callback immediately to trigger lazy-loading behaviour
- *
- * Optionally, you can pass in a selector to mock the intersection observer for specific elements, useful for ads because loading them all at once can be quite slow
- *
- * @param win window object
- * @param selector optional selector to target specific elements, if empty, will indiscriminately mock all observers
- */
-// const mockIntersectionObserver = (win: Window, selector?: string) => {
-// 	const Original = win.IntersectionObserver;
-// 	win.IntersectionObserver = function (
-// 		cb: IntersectionObserverCallback,
-// 		options: IntersectionObserverInit | undefined,
-// 	) {
-// 		const instance: IntersectionObserver = {
-// 			thresholds: Array.isArray(options?.threshold)
-// 				? options?.threshold ?? [0]
-// 				: [options?.threshold ?? 0],
-// 			root: options?.root ?? null,
-// 			rootMargin: options?.rootMargin ?? '0px',
-// 			takeRecords: () => [],
-// 			observe: (element: HTMLElement) => {
-// 				if (!selector || element.matches(selector)) {
-// 					const entry = [
-// 						{
-// 							isIntersecting: true,
-// 							boundingClientRect: element.getBoundingClientRect(),
-// 							intersectionRatio: 1,
-// 							intersectionRect: element.getBoundingClientRect(),
-// 							rootBounds:
-// 								instance.root instanceof HTMLElement
-// 									? instance.root.getBoundingClientRect()
-// 									: null,
-// 							target: element,
-// 							time: Date.now(),
-// 						},
-// 					];
-// 					cb(entry, instance);
-// 				} else {
-// 					const observer = new Original(cb, options);
-// 					observer.observe(element);
-// 				}
-// 			},
-// 			unobserve: () => {},
-// 			disconnect: () => {},
-// 		};
-// 		return instance;
-// 	} as unknown as IntersectionObserver;
-// };
-
 const waitForSlot = async (page: Page, slot: string) => {
 	const slotId = `#dfp-ad--${slot}`;
 	// Check that the ad slot is on the page
@@ -203,4 +153,4 @@ const waitForSlot = async (page: Page, slot: string) => {
 	await iframe.waitFor({ state: 'visible', timeout: 120000 });
 };
 
-export { fakeLogOut, fakeLogin, getStage, getTestUrl, waitForSlot, getHost };
+export { fakeLogOut, setupFakeLogin, getStage, getTestUrl, waitForSlot };
