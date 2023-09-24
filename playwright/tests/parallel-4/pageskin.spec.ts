@@ -34,6 +34,8 @@ test.describe('pageskin on uk front', () => {
 			await loadPage(page, frontWithPageSkin.path);
 			await cmpAcceptAll(page);
 			const response = await gamResponsePromise;
+
+			// check single request mode
 			const matched = await assertHeader(
 				response,
 				'google-lineitem-id',
@@ -41,6 +43,7 @@ test.describe('pageskin on uk front', () => {
 			);
 			expect(matched).toBeTruthy();
 
+			// check page skin classes on body
 			await expect(page.locator('body')).toHaveClass(/has-page-skin/);
 			await expect(page.locator('body')).toHaveCSS(
 				'background-image',
@@ -73,6 +76,8 @@ test.describe('pageskin on uk front', () => {
 			await waitForSlot(page, slotWithPostfix);
 
 			const response = await gamResponsePromise;
+
+			// check single request mode
 			const matched = await assertHeader(
 				response,
 				'google-lineitem-id',
@@ -80,6 +85,7 @@ test.describe('pageskin on uk front', () => {
 			);
 			expect(matched).toBeTruthy();
 
+			// check page skin classes on body
 			await expect(page.locator('body')).toHaveClass('has-page-skin');
 			await expect(page.locator('body')).not.toHaveCSS(
 				'background-image',
