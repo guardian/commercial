@@ -65,23 +65,17 @@ const getTestUrl = (
 	adtest = 'fixed-puppies-ci',
 	fixtureId?: string,
 ) => {
-	const url = new URL('https://www.theguardian.com');
-
-	url.href = getHost(stage);
-
-	url.pathname = getPath(stage, type, path, fixtureId);
+	const url = new URL(getPath(stage, type, path, fixtureId), getHost(stage));
 
 	if (type === 'liveblog') {
 		url.searchParams.append('live', '1');
 	}
 
-	if (adtest) {
-		url.searchParams.append('adtest', adtest);
-		// force an invalid epic so it is not shown
-		if (adtest === 'fixed-puppies-ci' || adtest === 'puppies-pageskin') {
-			url.searchParams.append('force-epic', '9999:CONTROL');
-		}
-	}
+	url.searchParams.append('adtest', adtest);
+
+	// force an invalid epic so it is not shown
+	url.searchParams.append('force-epic', '9999:CONTROL');
+
 	return url.toString();
 };
 
