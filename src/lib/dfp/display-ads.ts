@@ -22,7 +22,9 @@ const displayAds = (): void => {
 	window.googletag.pubads().collapseEmptyDivs();
 	window.googletag.enableServices();
 
-	const firstAdvertToLoad: Advert | undefined = dfpEnv.advertsToLoad[0];
+	const firstAdvertToLoad: Advert | undefined = dfpEnv.advertsToLoad.length
+		? dfpEnv.advertsToLoad[0]
+		: undefined;
 
 	if (firstAdvertToLoad) {
 		loadAdvert(firstAdvertToLoad);
