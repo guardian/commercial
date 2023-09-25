@@ -27,9 +27,9 @@ describe('sponsorshipLogo', () => {
 	});
 
 	it('sponsor logo ad is filled after firing a custom event from a thrasher fixture', () => {
-		// Construct a path that uses a fixture where a thrasher contains a sponsor logo
-		// This sponsor logo has an artificially delay before inserting the slot into the DOM
-		// and firing a custom event to fill the slot
+		// Construct a path for a page containing a thrasher
+		// This thrasher inserts a sponsor logo slot after an artificial delay
+		// Then fires a custom event to fill the slot
 		const path = getTestUrl(
 			getStage(),
 			'uk',
