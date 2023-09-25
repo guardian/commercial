@@ -1,4 +1,5 @@
 import { pageSkin } from '../creatives/page-skin';
+import type { Advert } from './Advert';
 import { dfpEnv } from './dfp-env';
 import { loadAdvert } from './load-advert';
 
@@ -21,8 +22,12 @@ const displayAds = (): void => {
 	window.googletag.pubads().collapseEmptyDivs();
 	window.googletag.enableServices();
 
-	loadAdvert(dfpEnv.advertsToLoad[0]);
-	dfpEnv.advertsToLoad.length = 0;
+	const firstAdvertToLoad: Advert | undefined = dfpEnv.advertsToLoad[0];
+
+	if (firstAdvertToLoad) {
+		loadAdvert(firstAdvertToLoad);
+		dfpEnv.advertsToLoad.length = 0;
+	}
 	pageSkin();
 };
 
