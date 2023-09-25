@@ -1,6 +1,6 @@
 import { articles } from './articles';
+import { blogs } from './blogs';
 import { fronts, frontWithPageSkin } from './fronts';
-import { blogs } from './liveblogs';
 
 const allPages = [...articles, ...blogs];
 

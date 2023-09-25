@@ -38,6 +38,8 @@ test.describe('Slots and iframes load on liveblog pages', () => {
 					await loadPage(page, path);
 					await cmpAcceptAll(page);
 
+					// wait for the first inline slot
+					// wait for state:hidden as the slot will be out of the viewport
 					await page
 						.locator('.ad-slot--liveblog-inline')
 						.first()
@@ -50,8 +52,6 @@ test.describe('Slots and iframes load on liveblog pages', () => {
 					expect(foundSlots).toBeGreaterThanOrEqual(
 						expectedMinSlotsOnPage,
 					);
-
-					// TODO check each iframe exists for the slots?
 				});
 			});
 		},
