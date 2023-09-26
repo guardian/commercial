@@ -5,11 +5,12 @@ import '@percy/cypress';
 
 describe('Visually snapshot standard article', () => {
 	it(`snapshots standard article`, () => {
-		const path = getTestUrl(
-			getStage(),
-			'/commentisfree/2023/feb/27/dont-believe-those-who-claim-science-proves-masks-dont-work',
-			{ isDcr: true },
-		);
+		const path = getTestUrl({
+			stage: getStage(),
+			path: '/commentisfree/2023/feb/27/dont-believe-those-who-claim-science-proves-masks-dont-work',
+			// @ts-expect-error This type is out of date
+			type: { isDcr: true },
+		});
 		// stub all api requests
 		stubApiRequests();
 		// force geolocation to UK

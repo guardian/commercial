@@ -7,13 +7,13 @@ describe('shouldLoadGoogletagSwitch', () => {
 
 	it('ad slot should be filled when switch is true', () => {
 		// Construct a path that uses a fixture where the `shouldLoadGoogletag` switch is set to true
-		const path = getTestUrl(
-			getStage(),
-			'uk',
-			'front',
-			undefined, // use the default ad test
-			'overwriteShouldLoadGoogletagTrue',
-		);
+		const path = getTestUrl({
+			stage: getStage(),
+			path: 'uk',
+			type: 'front',
+			adtest: undefined,
+			fixtureId: 'overwriteShouldLoadGoogletagTrue',
+		});
 		cy.visit(path);
 
 		// Check that the top-above-nav ad slot is on the page
@@ -28,13 +28,13 @@ describe('shouldLoadGoogletagSwitch', () => {
 
 	it('ad slot should be filled when switch is false', () => {
 		// Construct a path that uses a fixture where the `shouldLoadGoogletag` switch is set to false
-		const path = getTestUrl(
-			getStage(),
-			'uk',
-			'front',
-			undefined, // use the default ad test
-			'overwriteShouldLoadGoogletagFalse',
-		);
+		const path = getTestUrl({
+			stage: getStage(),
+			path: 'uk',
+			type: 'front',
+			adtest: undefined,
+			fixtureId: 'overwriteShouldLoadGoogletagFalse',
+		});
 		cy.visit(path);
 
 		// eslint-disable-next-line cypress/no-unnecessary-waiting -- Wait for top-above-nav to be removed by commercial code

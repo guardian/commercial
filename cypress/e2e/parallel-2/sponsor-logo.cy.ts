@@ -7,13 +7,12 @@ describe('sponsorshipLogo', () => {
 
 	it('sponsor logo ad is correctly filled in thrasher fixture', () => {
 		// Construct a path that uses a fixture where a thrasher contains a sponsor logo
-		const path = getTestUrl(
-			getStage(),
-			'uk',
-			'front',
-			undefined, // use the default ad test
-			'sponsorshipLogoInThrasher',
-		);
+		const path = getTestUrl({
+			stage: getStage(),
+			path: 'uk',
+			type: 'front',
+			fixtureId: 'sponsorshipLogoInThrasher',
+		});
 		cy.visit(path);
 
 		// Check that the top-above-nav ad slot is on the page

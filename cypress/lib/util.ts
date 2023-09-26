@@ -8,12 +8,17 @@ const hostnames = {
 	dev: 'http://localhost:3030',
 } as const;
 
-const getPath = (
-	stage: Stage,
-	type: 'article' | 'liveblog' | 'front' = 'article',
-	path: string,
-	fixtureId?: string,
-) => {
+const getPath = ({
+	stage,
+	type = 'article',
+	path,
+	fixtureId,
+}: {
+	stage: Stage;
+	type: 'article' | 'liveblog' | 'front';
+	path: string;
+	fixtureId?: string;
+}) => {
 	if (stage === 'dev') {
 		const dcrContentType =
 			type === 'liveblog' || type === 'article' ? 'Article' : 'Front';
@@ -32,15 +37,21 @@ const normalizeStage = (stage: string): Stage =>
 /**
  * Generate a full URL for a given relative path and the desired stage
  */
-export const getTestUrl = (
-	stage: Stage,
-	path: string,
-	type: 'article' | 'liveblog' | 'front' = 'article',
+export const getTestUrl = ({
+	stage,
+	path,
+	type = 'article',
 	adtest = 'fixed-puppies-ci',
-	fixtureId?: string,
-): string => {
+	fixtureId,
+}: {
+	stage: Stage;
+	path: string;
+	type?: 'article' | 'liveblog' | 'front';
+	adtest?: string;
+	fixtureId?: string;
+}): string => {
 	const url = new URL(
-		getPath(stage, type, path, fixtureId),
+		getPath({ stage, type, path, fixtureId }),
 		hostnames[stage],
 	);
 

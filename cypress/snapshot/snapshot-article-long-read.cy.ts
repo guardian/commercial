@@ -5,11 +5,12 @@ import '@percy/cypress';
 
 describe('Visually snapshot long read article', () => {
 	it(`snapshots long read article`, () => {
-		const path = getTestUrl(
-			getStage(),
-			'/business/2022/apr/14/a-day-in-the-life-of-almost-every-vending-machine-in-the-world',
-			{ isDcr: true },
-		);
+		const path = getTestUrl({
+			stage: getStage(),
+			path: '/business/2022/apr/14/a-day-in-the-life-of-almost-every-vending-machine-in-the-world',
+			// @ts-expect-error This type is out of date
+			type: { isDcr: true },
+		});
 		// stub all api requests
 		stubApiRequests();
 		// force geolocation to UK
