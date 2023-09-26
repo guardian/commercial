@@ -330,7 +330,7 @@ describe('Generating Permutive payload utils', () => {
 			);
 			const err = (logger.mock.calls[0] as Error[])[0];
 			expect(err).toBeInstanceOf(Error);
-			expect(err.message).toBe('Global Permutive setup error');
+			expect(err?.message).toBe('Global Permutive setup error');
 		});
 		it('calls the permutive addon method with the correct payload', () => {
 			const mockPermutive = { addon: jest.fn(), identify: jest.fn() };
@@ -376,8 +376,8 @@ describe('Generating Permutive payload utils', () => {
 			_.runPermutive(config, mockPermutive, logger);
 			const [identifyCallOrder] =
 				mockPermutive.identify.mock.invocationCallOrder;
-			const [addonCallOrder] =
-				mockPermutive.addon.mock.invocationCallOrder;
+			const [addonCallOrder] = mockPermutive.addon.mock
+				.invocationCallOrder as [number];
 			expect(identifyCallOrder).toBeLessThan(addonCallOrder);
 		});
 		it('does not call the identify method if no browser ID is present', () => {
