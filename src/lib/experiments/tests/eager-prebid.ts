@@ -4,9 +4,9 @@ import { bypassMetricsSampling } from '../utils';
 export const eagerPrebid: ABTest = {
 	id: 'EagerPrebid2',
 	author: '@commercial-dev',
-	start: '2023-09-12',
+	start: '2023-09-26',
 	expiry: '2023-10-31',
-	audience: 0 / 100,
+	audience: 1 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: 'All pageviews',
 	successMeasure:
