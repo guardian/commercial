@@ -53,6 +53,30 @@ const setupFixturesServer = (devServer) => {
 		throw new Error('webpack-dev-server is not defined');
 	}
 
+	devServer.app.get('/renderFixture/*.json', async (req, res) => {
+		const path = req.params[0];
+		const fixtureQuery = req.query['fixture'];
+		const fixture = JSON.parse(
+			Buffer.from(fixtureQuery, 'base64').toString(),
+		);
+
+		console.log({ fixture });
+
+		// Fetch the JSON for the given path from PROD Frontend
+		const dataModel = await fetchDcrDataModel(path);
+
+		if (!dataModel) {
+			console.error('Something went wrong retrieving DCR data from PROD');
+			return res.status(503).send();
+		}
+
+		// Merge the fixture into the data model
+		// Note that this will be a deep merge
+		merge(dataModel, fixture);
+
+		return res.json(dataModel);
+	});
+
 	devServer.app.get('/renderFixture/:fixtureId/*.json', async (req, res) => {
 		const path = req.params[0];
 		const fixtureId = req.params.fixtureId;

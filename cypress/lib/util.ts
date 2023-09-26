@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer';
 import type { UserFeaturesResponse } from '../../src/types/membership';
 
 type Stage = 'code' | 'prod' | 'dev';
@@ -13,17 +14,23 @@ const getPath = ({
 	type = 'article',
 	path,
 	fixtureId,
+	fixture,
 }: {
 	stage: Stage;
 	type: 'article' | 'liveblog' | 'front';
 	path: string;
 	fixtureId?: string;
+	fixture?: Record<string, unknown>;
 }) => {
 	if (stage === 'dev') {
 		const dcrContentType =
 			type === 'liveblog' || type === 'article' ? 'Article' : 'Front';
 		if (fixtureId) {
 			return `${dcrContentType}/http://localhost:3031/renderFixture/${fixtureId}/${path}`;
+		} else if (fixture) {
+			const fixtureJson = JSON.stringify(fixture);
+			const base64Fixture = Buffer.from(fixtureJson).toString('base64');
+			return `${dcrContentType}/http://localhost:3031/renderFixture/${path}?fixture=${base64Fixture}`;
 		} else {
 			return `${dcrContentType}/https://www.theguardian.com${path}`;
 		}
@@ -43,15 +50,17 @@ export const getTestUrl = ({
 	type = 'article',
 	adtest = 'fixed-puppies-ci',
 	fixtureId,
+	fixture,
 }: {
 	stage: Stage;
 	path: string;
 	type?: 'article' | 'liveblog' | 'front';
 	adtest?: string;
 	fixtureId?: string;
+	fixture?: Record<string, unknown>;
 }): string => {
 	const url = new URL(
-		getPath({ stage, type, path, fixtureId }),
+		getPath({ stage, type, path, fixtureId, fixture }),
 		hostnames[stage],
 	);
 

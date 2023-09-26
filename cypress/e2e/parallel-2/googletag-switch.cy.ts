@@ -6,13 +6,18 @@ describe('shouldLoadGoogletagSwitch', () => {
 	});
 
 	it('ad slot should be filled when switch is true', () => {
-		// Construct a path that uses a fixture where the `shouldLoadGoogletag` switch is set to true
+		const fixture = {
+			config: {
+				switches: {
+					shouldLoadGoogletag: true,
+				},
+			},
+		};
 		const path = getTestUrl({
 			stage: getStage(),
 			path: 'uk',
 			type: 'front',
-			adtest: undefined,
-			fixtureId: 'overwriteShouldLoadGoogletagTrue',
+			fixture,
 		});
 		cy.visit(path);
 
@@ -27,13 +32,18 @@ describe('shouldLoadGoogletagSwitch', () => {
 	});
 
 	it('ad slot should be filled when switch is false', () => {
-		// Construct a path that uses a fixture where the `shouldLoadGoogletag` switch is set to false
+		const fixture = {
+			config: {
+				switches: {
+					shouldLoadGoogletag: false,
+				},
+			},
+		};
 		const path = getTestUrl({
 			stage: getStage(),
 			path: 'uk',
 			type: 'front',
-			adtest: undefined,
-			fixtureId: 'overwriteShouldLoadGoogletagFalse',
+			fixture,
 		});
 		cy.visit(path);
 
