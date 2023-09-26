@@ -126,11 +126,7 @@ export const init = (): Promise<void> => {
 			// Prebid will already be loaded, and window.googletag is stubbed in `commercial.js`.
 			// Just load googletag. Prebid will already be loaded, and googletag is already added to the window by Prebid.
 			if (canRun) {
-				// Note: fillAdvertSlots isn't synchronous like most buffered cmds, it's a promise. It's put in here to ensure
-				// it strictly follows preceding prepare-googletag work (and the module itself ensures dependencies are
-				// fulfilled), but don't assume fillAdvertSlots is complete when queueing subsequent work using cmd.push
 				const isSignedIn = await isUserLoggedInOktaRefactor();
-
 				window.googletag.cmd.push(
 					() => EventTimer.get().mark('googletagInitEnd'),
 					setDfpListeners,
@@ -139,6 +135,9 @@ export const init = (): Promise<void> => {
 					},
 					() => {
 						createSlotFillListener();
+						// Note: this function isn't synchronous like most buffered cmds, it's a promise. It's put in here to ensure
+						// it strictly follows preceding prepare-googletag work (and the module itself ensures dependencies are
+						// fulfilled), but don't assume this function is complete when queueing subsequent work using cmd.push
 						void fillStaticAdvertSlots();
 					},
 				);

@@ -49,7 +49,7 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
  */
 const fillStaticAdvertSlots = async (): Promise<void> => {
 	// This module has the following strict dependencies. These dependencies must be
-	// fulfilled before fillAdvertSlots can execute reliably. The bootstrap
+	// fulfilled before this function can execute reliably. The bootstrap
 	// initiates these dependencies, to speed up the init process. Bootstrap also captures the module performance.
 	const dependencies: Array<Promise<void>> = [removeDisabledSlots()];
 
