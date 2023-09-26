@@ -13,6 +13,7 @@ type MessageType =
 	| 'measure-ad-load'
 	| 'passback'
 	| 'resize'
+	| 'fullwidth'
 	| 'set-ad-height'
 	| 'scroll'
 	| 'type'
