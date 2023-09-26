@@ -60,8 +60,6 @@ const setupFixturesServer = (devServer) => {
 			Buffer.from(fixtureQuery, 'base64').toString(),
 		);
 
-		console.log({ fixture });
-
 		// Fetch the JSON for the given path from PROD Frontend
 		const dataModel = await fetchDcrDataModel(path);
 
