@@ -67,7 +67,7 @@ export const init = (): Promise<void | boolean> => {
 			return [
 				mainCol.get(0).offsetHeight,
 				immersiveElementOffset - mainColOffset,
-			];
+			] as const;
 		})
 		.then(([mainColHeight, immersiveOffset]) => {
 			// we do all the adjustments server-side if the page has a ShowcaseMainElement!
@@ -83,7 +83,7 @@ export const init = (): Promise<void | boolean> => {
 			) {
 				return fastdom.mutate(() => {
 					removeStickyClasses(adSlotsWithinRightCol);
-					adSlotsWithinRightCol[0].setAttribute(
+					adSlotsWithinRightCol[0]?.setAttribute(
 						'data-mobile',
 						getAllowedSizesForImmersive(immersiveOffset),
 					);
@@ -95,7 +95,7 @@ export const init = (): Promise<void | boolean> => {
 			if (mainColHeight < minArticleHeight) {
 				return fastdom.mutate(() => {
 					removeStickyClasses(adSlotsWithinRightCol);
-					adSlotsWithinRightCol[0].setAttribute(
+					adSlotsWithinRightCol[0]?.setAttribute(
 						'data-mobile',
 						'1,1|2,2|300,250|300,274|fluid',
 					);

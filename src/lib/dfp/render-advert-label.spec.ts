@@ -6,7 +6,7 @@ jest.mock('lib/commercial-features', () => ({
 
 const adSelector = '.js-ad-slot';
 
-const adverts: Record<string, string> = {
+const adverts = {
 	withLabel: `
         <div class="js-ad-slot"></div>`,
 	labelDisabled: `
@@ -27,7 +27,7 @@ const adverts: Record<string, string> = {
         <div class="js-ad-slot" data-label="true"></div>`,
 	dataLabelFalse: `
         <div class="js-ad-slot" data-label="false"></div>`,
-};
+} satisfies Record<string, string>;
 
 const createAd = (html: string) => {
 	document.body.innerHTML = html;

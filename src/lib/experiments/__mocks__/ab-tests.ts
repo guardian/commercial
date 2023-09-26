@@ -8,7 +8,7 @@ export const concurrentTests = [
 		genVariant('control', false),
 		genVariant('variant', true),
 	]),
-];
+] as const;
 export const epicTests = [genAbTest('EpicTest'), genAbTest('EpicTest2')];
 export const engagementBannerTests = [
 	genAbTest('BannerTest'),

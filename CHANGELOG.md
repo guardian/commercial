@@ -1,5 +1,35 @@
 # @guardian/commercial
 
+## 11.11.1
+
+### Patch Changes
+
+- 77fef49: Fix noUncheckedIndexedAccess errors in spacefinder.ts
+- 82d96b7: removing ad free expiry switch and logic:
+
+## 11.11.0
+
+### Minor Changes
+
+- f36824a: Removes liveblog-right slot
+
+### Patch Changes
+
+- b2fbdc0: fix noUncheckedIndexAccess errors in `ab*.ts` files
+- 87d76ef: Prevent inline2+ and banner overlapping on paid content pages
+
+## 11.10.0
+
+### Minor Changes
+
+- 1a2a967: Add new 3x3 ad size
+
+### Patch Changes
+
+- d4400ee: Use satsifies operator when defining ad sizes and slot mappings config
+- 6de6d1d: Add ix to acBidders in realTimeData
+- 6d4305e: Update Prebid version
+
 ## 11.9.0
 
 ### Minor Changes

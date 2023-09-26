@@ -20,7 +20,6 @@ type SlotName =
 	| 'merchandising-high'
 	| 'im'
 	| 'inline'
-	| 'liveblog-right'
 	| 'mobile-sticky'
 	| 'top-above-nav';
 

@@ -30,7 +30,7 @@ const getHbBreakpoint = () => {
  * (this does not include inline1)
  */
 const filterBySizeMapping =
-	(slotSizes: AdSize[] = []) =>
+	(slotSizes: Readonly<AdSize[]> = []) =>
 	({ key, sizes }: HeaderBiddingSlot): HeaderBiddingSlot => {
 		// For now, only apply filtering to inline header bidding slots
 		// In the future we may want to expand this to all slots
@@ -67,10 +67,6 @@ const getHeaderBiddingKey = (
 		return 'fronts-banner';
 	}
 
-	if (name?.includes('liveblog-right')) {
-		return 'liveblog-right';
-	}
-
 	return undefined;
 };
 
@@ -93,7 +89,8 @@ const filterByAdvert = (
 		return [];
 	}
 
-	const sizes = sizeMapping[key][breakpoint];
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Fixes noUncheckedIndexedAccess error
+	const sizes = sizeMapping[key]?.[breakpoint];
 
 	if (!sizes || sizes.length < 1) {
 		return [];
@@ -125,9 +122,6 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 			mobile: hasShowcaseMainElement
 				? [adSizes.mpu]
 				: [adSizes.halfPage, adSizes.mpu],
-		},
-		'liveblog-right': {
-			desktop: [adSizes.halfPage, adSizes.mpu],
 		},
 		'top-above-nav': {
 			desktop: [adSizes.billboard, adSizes.leaderboard],

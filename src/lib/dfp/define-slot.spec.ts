@@ -1,5 +1,5 @@
 import type { SizeMapping } from 'core/ad-sizes';
-import { adSizes } from 'core/ad-sizes';
+import { adSizes, createAdSize } from 'core/ad-sizes';
 import { toGoogleTagSize } from 'lib/utils/googletag-ad-size';
 import {
 	buildGoogletagSizeMapping,
@@ -151,25 +151,25 @@ describe('Define Slot', () => {
 
 		const topAboveNavSizes = {
 			tablet: [
-				[1, 1],
-				[2, 2],
-				[728, 90],
-				[88, 71],
-				[0, 0],
+				createAdSize(1, 1),
+				createAdSize(2, 2),
+				createAdSize(728, 90),
+				createAdSize(88, 71),
+				createAdSize(0, 0),
 			],
 			desktop: [
-				[1, 1],
-				[2, 2],
-				[728, 90],
-				[940, 230],
-				[900, 250],
-				[970, 250],
-				[88, 71],
-				[0, 0],
+				createAdSize(1, 1),
+				createAdSize(2, 2),
+				createAdSize(728, 90),
+				createAdSize(940, 230),
+				createAdSize(900, 250),
+				createAdSize(970, 250),
+				createAdSize(88, 71),
+				createAdSize(0, 0),
 			],
 		};
 
-		defineSlot(slotDiv, topAboveNavSizes as SizeMapping);
+		defineSlot(slotDiv, topAboveNavSizes);
 
 		expect(window.googletag.defineSlot).toHaveBeenCalledWith(
 			undefined,

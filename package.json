@@ -1,6 +1,6 @@
 {
 	"name": "@guardian/commercial",
-	"version": "11.9.0",
+	"version": "11.11.1",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial#readme",
 	"bugs": {
@@ -115,7 +115,7 @@
 		"fastdom": "^1.0.11",
 		"lodash-es": "^4.17.21",
 		"ophan-tracker-js": "^1.4.0",
-		"prebid.js": "guardian/prebid.js#b8263f2",
+		"prebid.js": "guardian/prebid.js#356f371",
 		"process": "^0.11.10",
 		"raven-js": "^3.27.2",
 		"tslib": "^2.5.3",

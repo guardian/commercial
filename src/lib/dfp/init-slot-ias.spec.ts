@@ -42,7 +42,7 @@ describe('initSlotIas', () => {
 
 		expect(queue).toHaveLength(1);
 
-		const { adSlots, dataHandler } = queue[0];
+		const { adSlots, dataHandler } = queue[0]!;
 
 		expect(adSlots).toEqual([
 			{
