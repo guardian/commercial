@@ -870,7 +870,7 @@
       "boundElementIds": [],
       "fontSize": 20,
       "fontFamily": 1,
-      "text": "window.googletag?.cmd.push(\n    setDfpListeners,\n    setPageTargeting,\n    refreshOnResize,\n    () => {\n        void fillAdvertSlots();\n    },\n);",
+      "text": "window.googletag?.cmd.push(\n    setDfpListeners,\n    setPageTargeting,\n    refreshOnResize,\n    () => {\n        void fillStaticAdvertSlots();\n    },\n);",
       "baseline": 193,
       "textAlign": "left",
       "verticalAlign": "top"
