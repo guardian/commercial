@@ -17,51 +17,41 @@ describe('Cross-frame messenger: fullwidth', () => {
               </div>
 			</div>`;
 
-		const fakeAdSlotContainer = document.querySelector(
-			'.ad-slot-container',
-		) as HTMLElement;
+		const fakeAdSlot = document.querySelector('.js-ad-slot') as HTMLElement;
 
-		expect(fakeAdSlotContainer).not.toBeUndefined();
+		expect(fakeAdSlot).not.toBeUndefined();
 
 		const fakeSpecs = {
 			fullwidth: true,
 		};
 
-		fullwidth(fakeSpecs, fakeAdSlotContainer);
+		fullwidth(fakeSpecs, fakeAdSlot);
 
-		expect(
-			fakeAdSlotContainer.classList.contains(
-				'ad-slot-container--fullwidth',
-			),
-		).toBe(true);
+		expect(fakeAdSlot.classList.contains('ad-slot--full-width')).toBe(true);
 	});
 
 	it('should remove the fullwidth class from the slot container', () => {
 		document.body.innerHTML = `
-			<div class="ad-slot-container ad-slot-container--fullwidth">
-			  <div id="slot01" class="js-ad-slot" style="width: 7px; height: 14px;" >
+			<div class="ad-slot-container">
+			  <div id="slot01" class="js-ad-slot ad-slot--fullwidth" style="width: 7px; height: 14px;" >
 				<div id="container01">
 					<iframe id="iframe01" class="iframe" data-unit="ch"></iframe>
 				</div>
 			  </div>
 			</div>`;
 
-		const fakeAdSlotContainer = document.querySelector(
-			'.ad-slot-container',
-		) as HTMLElement;
+		const fakeAdSlot = document.querySelector('.js-ad-slot') as HTMLElement;
 
-		expect(fakeAdSlotContainer).not.toBeUndefined();
+		expect(fakeAdSlot).not.toBeUndefined();
 
 		const fakeSpecs = {
 			fullwidth: false,
 		};
 
-		fullwidth(fakeSpecs, fakeAdSlotContainer);
+		fullwidth(fakeSpecs, fakeAdSlot);
 
-		expect(
-			fakeAdSlotContainer.classList.contains(
-				'ad-slot-container--fullwidth',
-			),
-		).toBe(false);
+		expect(fakeAdSlot.classList.contains('ad-slot--full-width')).toBe(
+			false,
+		);
 	});
 });
