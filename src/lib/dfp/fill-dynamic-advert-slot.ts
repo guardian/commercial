@@ -26,7 +26,7 @@ const fillDynamicAdSlot = (
 	return new Promise((resolve) => {
 		window.googletag.cmd.push(() => {
 			// Don't recreate an advert if one has already been created for this slot
-			if (adSlot.id in dfpEnv.advertIds) {
+			if (dfpEnv.adverts.has(adSlot.id)) {
 				const errorMessage = `Attempting to add slot with exisiting id ${adSlot.id}`;
 				log('commercial', errorMessage);
 				reportError(
@@ -44,7 +44,7 @@ const fillDynamicAdSlot = (
 			const advert = createAdvert(adSlot, additionalSizes, slotTargeting);
 			if (advert === null) return;
 
-			dfpEnv.advertIds[advert.id] = dfpEnv.adverts.push(advert) - 1;
+			dfpEnv.adverts.set(advert.id, advert);
 			displayAd(advert, forceDisplay);
 
 			resolve(advert);
