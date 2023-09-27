@@ -11,8 +11,8 @@ const desktopBreakpoint = breakpoints.filter(
 	({ breakpoint }) => breakpoint === 'desktop',
 )[0];
 
-// TODO the max on playwright is 7 not 8 - double check
-const maxAdSlots = 7;
+// TODO E2E seen flip flop to 7 - double check this is stable
+const maxAdSlots = 8;
 
 const addNewBlocks = async (page: Page) => {
 	// scroll to the top so we get a toast to click on
@@ -43,7 +43,9 @@ const countInlineSlots = (page: Page) =>
 
 test.describe('Ad slot limits', () => {
 	pages.forEach(({ path, expectedMinInlineSlotsOnDesktop }) => {
-		test(`doesn't insert more than 7 ads on desktop`, async ({ page }) => {
+		test(`doesn't insert more than ${maxAdSlots} ads on desktop`, async ({
+			page,
+		}) => {
 			await page.setViewportSize({
 				width: desktopBreakpoint.width,
 				height: desktopBreakpoint.height,
@@ -52,16 +54,23 @@ test.describe('Ad slot limits', () => {
 			await loadPage(page, path);
 			await cmpAcceptAll(page);
 
-			let inlineSlotCount = await countInlineSlots(page);
-			expect(inlineSlotCount).toEqual(expectedMinInlineSlotsOnDesktop);
+			const initialSlotCount = await countInlineSlots(page);
+			expect(initialSlotCount).toEqual(expectedMinInlineSlotsOnDesktop);
 
+			// extra ad slots added after blocks inserted
 			await addNewBlocks(page);
-			inlineSlotCount = await countInlineSlots(page);
-			expect(inlineSlotCount).toEqual(maxAdSlots);
+			const afterFirstInsertSlotCount = await countInlineSlots(page);
+			expect(afterFirstInsertSlotCount).toBeGreaterThan(initialSlotCount);
 
+			// no extra ad slots added after blocks inserted
 			await addNewBlocks(page);
-			inlineSlotCount = await countInlineSlots(page);
-			expect(inlineSlotCount).toEqual(maxAdSlots);
+			const afterSecondInsertSlotCount = await countInlineSlots(page);
+			expect(afterSecondInsertSlotCount).toEqual(maxAdSlots);
+
+			// no extra ad slots added after blocks inserted
+			await addNewBlocks(page);
+			const afterThirdInsertSlotCount = await countInlineSlots(page);
+			expect(afterThirdInsertSlotCount).toEqual(maxAdSlots);
 		});
 	});
 });
