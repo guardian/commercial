@@ -9,7 +9,6 @@ interface DfpEnv {
 	adSlotSelector: string;
 	lazyLoadEnabled: boolean;
 	lazyLoadObserve: boolean;
-	creativeIDs: string[];
 	advertsToLoad: Advert[];
 	adverts: Map<Advert['id'], Advert>;
 	shouldLazyLoad: () => boolean;
@@ -27,9 +26,6 @@ const dfpEnv: DfpEnv = {
 
 	/* lazyLoadObserve: boolean. Use IntersectionObserver in supporting browsers */
 	lazyLoadObserve: 'IntersectionObserver' in window,
-
-	/* creativeIDs - List of loaded creative IDs */
-	creativeIDs: [],
 
 	/* advertsToLoad - Lists adverts waiting to be loaded */
 	advertsToLoad: [],

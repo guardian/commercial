@@ -2,7 +2,6 @@ import { isString } from '@guardian/libs';
 import type { AdSize } from 'core/ad-sizes';
 import { createAdSize } from 'core/ad-sizes';
 import { reportError } from 'lib/utils/report-error';
-import { dfpEnv } from './dfp-env';
 import { emptyAdvert } from './empty-advert';
 import { getAdvertById } from './get-advert-by-id';
 import { renderAdvert } from './render-advert';
@@ -61,10 +60,6 @@ export const onSlotRender = (
 		 * */
 		if (!advert.hasPrebidSize && event.size) {
 			advert.size = sizeEventToAdSize(event.size);
-		}
-
-		if (event.creativeId) {
-			dfpEnv.creativeIDs.push(String(event.creativeId));
 		}
 
 		// Associate the line item id with the advert
