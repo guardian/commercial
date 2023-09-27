@@ -3,15 +3,13 @@ import { adSizes } from 'core/ad-sizes';
 import { AD_LABEL_HEIGHT } from 'core/constants/ad-label-height';
 import { createAdSlot } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
-import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
 import { fillDynamicAdSlot } from '../dfp/fill-dynamic-advert-slot';
 import fastdom from '../fastdom-promise';
-import { requestBidsForAd } from '../header-bidding/request-bids';
 
 const tallestCommentAd = adSizes.mpu.height + AD_LABEL_HEIGHT;
 const tallestCommentsExpandedAd = adSizes.halfPage.height + AD_LABEL_HEIGHT;
 
-const insertAd = (anchor: HTMLElement): Promise<void> => {
+const insertAd = (anchor: HTMLElement) => {
 	log('commercial', 'Inserting comments-expanded advert');
 	const slot = createAdSlot('comments-expanded', {
 		classes: 'comments-expanded',
@@ -31,13 +29,7 @@ const insertAd = (anchor: HTMLElement): Promise<void> => {
 		.mutate(() => {
 			anchor.appendChild(adSlotContainer);
 		})
-		.then(async () => {
-			const advert = await fillDynamicAdSlot(slot, false);
-
-			if (advert && isInEagerPrebidVariant()) {
-				await requestBidsForAd(advert);
-			}
-		});
+		.then(() => fillDynamicAdSlot(slot, false));
 };
 
 const getRightColumn = async (): Promise<HTMLElement> => {

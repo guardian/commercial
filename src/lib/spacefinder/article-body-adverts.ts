@@ -11,7 +11,6 @@ import {
 	getCurrentBreakpoint,
 	getCurrentTweakpoint,
 } from 'lib/detect/detect-breakpoint';
-import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
 import { spaceFiller } from 'lib/spacefinder/space-filler';
 import type {
 	RuleSpacing,
@@ -19,11 +18,9 @@ import type {
 	SpacefinderRules,
 	SpacefinderWriter,
 } from 'lib/spacefinder/spacefinder';
-import type { Advert } from '../dfp/Advert';
 import { fillDynamicAdSlot } from '../dfp/fill-dynamic-advert-slot';
 import { waitForAdvert } from '../dfp/wait-for-advert';
 import fastdom from '../fastdom-promise';
-import { requestBidsForAds } from '../header-bidding/request-bids';
 import { mediator } from '../utils/mediator';
 import { initCarrot } from './carrot-traffic-driver';
 import { computeStickyHeights, insertHeightStyles } from './sticky-inlines';
@@ -43,8 +40,6 @@ const adSlotContainerRules: RuleSpacing = {
 	minAbove: 500,
 	minBelow: 500,
 };
-
-let insertedDynamicAds: Advert[] = [];
 
 /**
  * Get the classname for an ad slot container
@@ -82,14 +77,7 @@ const insertAdAtPara = (
 		})
 		.then(async () => {
 			const shouldForceDisplay = ['im', 'carrot'].includes(name);
-			const advert = await fillDynamicAdSlot(
-				ad,
-				shouldForceDisplay,
-				sizes,
-			);
-			if (advert) {
-				insertedDynamicAds.push(advert);
-			}
+			await fillDynamicAdSlot(ad, shouldForceDisplay, sizes);
 		});
 };
 
@@ -406,8 +394,6 @@ const doInit = async (): Promise<boolean> => {
 		return Promise.resolve(false);
 	}
 
-	insertedDynamicAds = [];
-
 	const im = window.guardian.config.page.hasInlineMerchandise
 		? attemptToAddInlineMerchAd()
 		: Promise.resolve(false);
@@ -415,10 +401,6 @@ const doInit = async (): Promise<boolean> => {
 	if (inlineMerchAdded) await waitForAdvert('dfp-ad--im');
 	await addInlineAds();
 	await initCarrot();
-
-	if (isInEagerPrebidVariant()) {
-		await requestBidsForAds(insertedDynamicAds);
-	}
 
 	return im;
 };

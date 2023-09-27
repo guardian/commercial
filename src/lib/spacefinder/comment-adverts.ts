@@ -6,9 +6,7 @@ import type { Advert } from 'lib/dfp/Advert';
 import { fillDynamicAdSlot } from 'lib/dfp/fill-dynamic-advert-slot';
 import { getAdvertById } from 'lib/dfp/get-advert-by-id';
 import { refreshAdvert } from 'lib/dfp/load-advert';
-import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
 import fastdom from 'lib/fastdom-promise';
-import { requestBidsForAd } from 'lib/header-bidding/request-bids';
 import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
 import { mediator } from 'lib/utils/mediator';
 
@@ -39,7 +37,7 @@ const insertCommentAd = (
 			return commentSlot;
 		})
 		.then(async (adSlot) => {
-			const advert = await fillDynamicAdSlot(
+			await fillDynamicAdSlot(
 				adSlot,
 				false,
 				canBeDmpu
@@ -47,9 +45,6 @@ const insertCommentAd = (
 					: {},
 			);
 
-			if (advert && isInEagerPrebidVariant()) {
-				await requestBidsForAd(advert);
-			}
 			void Promise.resolve(mediator.emit('page:commercial:comments'));
 		});
 };

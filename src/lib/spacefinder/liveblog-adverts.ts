@@ -3,11 +3,8 @@ import { adSizes } from 'core/ad-sizes';
 import { createAdSlot } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
-import type { Advert } from 'lib/dfp/Advert';
 import { fillDynamicAdSlot } from 'lib/dfp/fill-dynamic-advert-slot';
-import { isInEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
 import fastdom from 'lib/fastdom-promise';
-import { requestBidsForAds } from 'lib/header-bidding/request-bids';
 import { spaceFiller } from 'lib/spacefinder/space-filler';
 import type {
 	SpacefinderItem,
@@ -35,8 +32,6 @@ const AD_SPACE_MULTIPLIER = 2;
 let AD_COUNTER = 0;
 let WINDOWHEIGHT: number;
 let firstSlot: HTMLElement | undefined;
-
-let insertedDynamicAds: Advert[] = [];
 
 const getWindowHeight = (doc = document) => {
 	if (doc.documentElement.clientHeight) {
@@ -90,7 +85,7 @@ const getSlotName = (isMobile: boolean, slotCounter: number): string => {
 	return `inline${slotCounter + 1}`;
 };
 
-const insertAdAtPara = (para: Node): Promise<void> => {
+const insertAdAtPara = (para: Node) => {
 	const isMobile = getCurrentBreakpoint() === 'mobile';
 	const container: HTMLElement = document.createElement('div');
 	container.className = `ad-slot-container`;
@@ -109,8 +104,8 @@ const insertAdAtPara = (para: Node): Promise<void> => {
 				para.parentNode.insertBefore(container, para.nextSibling);
 			}
 		})
-		.then(async () => {
-			const advert = await fillDynamicAdSlot(ad, false, {
+		.then(async () =>
+			fillDynamicAdSlot(ad, false, {
 				phablet: [
 					adSizes.outstreamDesktop,
 					adSizes.outstreamGoogleDesktop,
@@ -119,18 +114,15 @@ const insertAdAtPara = (para: Node): Promise<void> => {
 					adSizes.outstreamDesktop,
 					adSizes.outstreamGoogleDesktop,
 				],
-			});
-			if (advert) {
-				insertedDynamicAds.push(advert);
-			}
-		});
+			}),
+		);
 };
 
 const insertAds: SpacefinderWriter = async (paras) => {
 	const fastdomPromises = [];
 	for (let i = 0; i < paras.length && AD_COUNTER < MAX_ADS; i += 1) {
 		const para = paras[i];
-		if (para?.parentNode) {
+		if (para.parentNode) {
 			const result = insertAdAtPara(para);
 			fastdomPromises.push(result);
 			AD_COUNTER += 1;
@@ -158,29 +150,21 @@ const stopListening = () => {
 const fill = (rules: SpacefinderRules) => {
 	const options: SpacefinderOptions = { pass: 'inline1' };
 
-	return spaceFiller
-		.fillSpace(rules, insertAds, options)
-		.then(() => {
-			if (AD_COUNTER < MAX_ADS) {
-				const el = document.querySelector(
-					`${rules.bodySelector} > .ad-slot-container`,
-				);
-				if (el && el.previousSibling instanceof HTMLElement) {
-					firstSlot = el.previousSibling;
-				} else {
-					firstSlot = undefined;
-				}
-				startListening();
+	return spaceFiller.fillSpace(rules, insertAds, options).then(() => {
+		if (AD_COUNTER < MAX_ADS) {
+			const el = document.querySelector(
+				`${rules.bodySelector} > .ad-slot-container`,
+			);
+			if (el && el.previousSibling instanceof HTMLElement) {
+				firstSlot = el.previousSibling;
 			} else {
 				firstSlot = undefined;
 			}
-		})
-		.then(async () => {
-			if (insertedDynamicAds.length && isInEagerPrebidVariant()) {
-				await requestBidsForAds(insertedDynamicAds);
-			}
-			insertedDynamicAds = [];
-		});
+			startListening();
+		} else {
+			firstSlot = undefined;
+		}
+	});
 };
 
 /**
