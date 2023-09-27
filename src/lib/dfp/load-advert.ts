@@ -1,4 +1,3 @@
-import fastdom from 'fastdom';
 import { EventTimer } from 'core/event-timer';
 import {
 	refreshBidsForAd,
