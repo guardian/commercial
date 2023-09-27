@@ -27,7 +27,7 @@ self.addEventListener('message', function onMessage(evt) {
 */
 
 const findAdvert = (adSlot: HTMLElement) => {
-	for (const [, advert] of dfpEnv.adverts) {
+	for (const advert of dfpEnv.adverts.values()) {
 		if (advert.node.isSameNode(adSlot)) {
 			return advert;
 		}
