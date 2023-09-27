@@ -27,7 +27,8 @@ import { init as scroll } from '../messenger/scroll';
 import { init as type } from '../messenger/type';
 import { init as viewport } from '../messenger/viewport';
 import { removeSlots } from '../remove-slots';
-import { fillAdvertSlots } from './fill-advert-slots';
+import { createSlotFillListener } from './fill-slot-listener';
+import { fillStaticAdvertSlots } from './fill-static-advert-slots';
 import { onSlotLoad } from './on-slot-load';
 import { onSlotRender } from './on-slot-render';
 import { onSlotViewableFunction } from './on-slot-viewable';
@@ -125,11 +126,7 @@ export const init = (): Promise<void> => {
 			// Prebid will already be loaded, and window.googletag is stubbed in `commercial.js`.
 			// Just load googletag. Prebid will already be loaded, and googletag is already added to the window by Prebid.
 			if (canRun) {
-				// Note: fillAdvertSlots isn't synchronous like most buffered cmds, it's a promise. It's put in here to ensure
-				// it strictly follows preceding prepare-googletag work (and the module itself ensures dependencies are
-				// fulfilled), but don't assume fillAdvertSlots is complete when queueing subsequent work using cmd.push
 				const isSignedIn = await isUserLoggedInOktaRefactor();
-
 				window.googletag.cmd.push(
 					() => EventTimer.get().mark('googletagInitEnd'),
 					setDfpListeners,
@@ -137,7 +134,11 @@ export const init = (): Promise<void> => {
 						setPageTargeting(consentState, isSignedIn);
 					},
 					() => {
-						void fillAdvertSlots();
+						createSlotFillListener();
+						// Note: this function isn't synchronous like most buffered cmds, it's a promise. It's put in here to ensure
+						// it strictly follows preceding prepare-googletag work (and the module itself ensures dependencies are
+						// fulfilled), but don't assume this function is complete when queueing subsequent work using cmd.push
+						void fillStaticAdvertSlots();
 					},
 				);
 

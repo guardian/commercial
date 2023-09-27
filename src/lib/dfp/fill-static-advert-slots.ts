@@ -37,7 +37,7 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 };
 
 /**
- * Pre-rendered ad slots that were rendered on the page by the server are collected here.
+ * Static ad slots that were rendered on the page by the server are collected here.
  *
  * For dynamic ad slots that are created at js-runtime, see:
  *  - article-aside-adverts
@@ -45,9 +45,9 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
  *  - liveblog-adverts
  *  - high-merch
  */
-const fillAdvertSlots = async (): Promise<void> => {
+const fillStaticAdvertSlots = async (): Promise<void> => {
 	// This module has the following strict dependencies. These dependencies must be
-	// fulfilled before fillAdvertSlots can execute reliably. The bootstrap
+	// fulfilled before this function can execute reliably. The bootstrap
 	// initiates these dependencies, to speed up the init process. Bootstrap also captures the module performance.
 	const dependencies: Array<Promise<void>> = [removeDisabledSlots()];
 
@@ -100,4 +100,4 @@ const fillAdvertSlots = async (): Promise<void> => {
 	}
 };
 
-export { fillAdvertSlots };
+export { fillStaticAdvertSlots };
