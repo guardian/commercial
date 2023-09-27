@@ -72,7 +72,7 @@ const fillStaticAdvertSlots = async (): Promise<void> => {
 	const adverts = [
 		...document.querySelectorAll<HTMLElement>(dfpEnv.adSlotSelector),
 	]
-		.filter((adSlot) => !(adSlot.id in dfpEnv.advertIds))
+		.filter((adSlot) => !dfpEnv.adverts.has(adSlot.id))
 		// TODO: find cleaner workaround
 		// we need to not init top-above-nav on mobile view in DCR
 		// as the DOM element needs to be removed and replaced to be inline
@@ -86,11 +86,9 @@ const fillStaticAdvertSlots = async (): Promise<void> => {
 		})
 		.filter(isNonNullable);
 
-	const currentLength = dfpEnv.adverts.length;
-	dfpEnv.adverts = dfpEnv.adverts.concat(adverts);
-	adverts.forEach((advert, index) => {
-		dfpEnv.advertIds[advert.id] = currentLength + index;
-	});
+	for (const advert of adverts) {
+		dfpEnv.adverts.set(advert.id, advert);
+	}
 
 	adverts.forEach(queueAdvert);
 	if (dfpEnv.shouldLazyLoad()) {

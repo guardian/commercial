@@ -3,15 +3,8 @@ import type { Advert } from './Advert';
 import { dfpEnv } from './dfp-env';
 
 const removeFromDfpEnv = (advert: Advert) => {
-	const removeAdvert = (adverts: Advert[]) =>
-		adverts.filter((_) => _ !== advert);
-
-	dfpEnv.adverts = removeAdvert(dfpEnv.adverts);
-	dfpEnv.advertsToLoad = removeAdvert(dfpEnv.advertsToLoad);
-	dfpEnv.advertIds = {};
-	dfpEnv.adverts.forEach((ad, i) => {
-		dfpEnv.advertIds[ad.id] = i;
-	});
+	dfpEnv.adverts.delete(advert.id);
+	dfpEnv.advertsToLoad = dfpEnv.advertsToLoad.filter((_) => _ !== advert);
 };
 
 const removeAd = (advert: Advert) => {

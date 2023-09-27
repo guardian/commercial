@@ -8,10 +8,8 @@ import type * as AdSizesType from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
 import _config from 'lib/config';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
-import type { Advert } from './Advert';
 import { dfpEnv } from './dfp-env';
 import { fillStaticAdvertSlots } from './fill-static-advert-slots';
-import { getAdvertById } from './get-advert-by-id';
 import { loadAdvert } from './load-advert';
 import { init as prepareGoogletag } from './prepare-googletag';
 
@@ -42,18 +40,15 @@ const config = _config as {
 	) => void;
 };
 
-const getAdverts = (withEmpty: boolean) =>
-	Object.keys(dfpEnv.advertIds).reduce(
-		(advertsById: Record<string, Advert | null>, id) => {
-			const advert = getAdvertById(id);
-			// Do not return empty slots unless explicitly requested
-			if (withEmpty || (advert && !advert.isEmpty)) {
-				advertsById[id] = advert;
-			}
-			return advertsById;
-		},
-		{},
-	);
+const getAdverts = (withEmpty: boolean) => {
+	return [...dfpEnv.adverts.values()].map((advert) => {
+		// Do not return empty slots unless explicitly requested
+		if (withEmpty || !advert.isEmpty) {
+			return advert;
+		}
+		return null;
+	});
+};
 
 const getCreativeIDs = () => dfpEnv.creativeIDs;
 
@@ -182,8 +177,7 @@ const makeFakeEvent = (
 });
 
 const reset = () => {
-	dfpEnv.advertIds = {};
-	dfpEnv.adverts = [];
+	dfpEnv.adverts = new Map();
 	dfpEnv.advertsToLoad = [];
 	window.guardian.config.switches = {
 		prebidHeaderBidding: false,
