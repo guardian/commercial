@@ -198,8 +198,8 @@ const init = (register: RegisterListener): void => {
 							const slotId = event.slot.getSlotElementId();
 							if (slotId === passbackElementId) {
 								const size = event.size;
-								if (Array.isArray(size)) {
-									const adHeight = Number(size[1]);
+								if (Array.isArray(size) && size[1]) {
+									const adHeight = size[1];
 									log(
 										'commercial',
 										`Passback: ad height is ${adHeight}`,
