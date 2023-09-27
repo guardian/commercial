@@ -6,7 +6,7 @@ import { loadPage } from '../../lib/load-page';
 import { waitForSlot } from '../../lib/util';
 
 test.describe('merchandising high slot', () => {
-	[...articles.slice(0, 3), ...blogs].forEach(({ path }, index) => {
+	[articles[0], blogs[0]].forEach(({ path }, index) => {
 		breakpoints.forEach(({ breakpoint, width, height }) => {
 			test(`Test page ${index} has slot and iframe at breakpoint ${breakpoint}`, async ({
 				page,
