@@ -9,7 +9,7 @@ import {
 const isDCR = window.guardian.config.isDotcomRendering;
 
 interface BackgroundSpecs {
-	backgroundImage: string;
+	backgroundImage?: string;
 	backgroundRepeat?: string;
 	backgroundPosition?: string;
 	// native templates are sometimes using the british spelling of background-color for some reason, removed in getStylesFromSpec above
@@ -19,14 +19,19 @@ interface BackgroundSpecs {
 	transform?: string;
 	scrollType?: 'interscroller' | 'fixed' | 'parallax';
 	ctaUrl?: string;
+	videoSource?: string;
 }
 
 const getStylesFromSpec = (
 	specs: BackgroundSpecs,
-): Omit<BackgroundSpecs, 'scrollType' | 'backgroundColour' | 'ctaUrl'> => {
+): Omit<
+	BackgroundSpecs,
+	'scrollType' | 'backgroundColour' | 'ctaUrl' | 'videoSource'
+> => {
 	const styles = { ...specs };
 	delete styles.scrollType;
 	delete styles.ctaUrl;
+	delete styles.videoSource;
 
 	// native templates are sometimes using the british spelling of background-color for some reason
 	if (styles.backgroundColour) {
@@ -207,6 +212,15 @@ const setupBackground = async (
 			if (specs.ctaUrl) {
 				const anchor = setCtaURL(specs.ctaUrl, backgroundParent);
 				adSlot.insertBefore(anchor, adSlot.firstChild);
+			}
+
+			if (specs.videoSource) {
+				const video = document.createElement('video');
+				video.autoplay = true;
+				video.muted = true;
+				video.playsInline = true;
+				video.src = String(specs.videoSource);
+				background.appendChild(video);
 			}
 		} else {
 			adSlot.insertBefore(backgroundParent, adSlot.firstChild);
