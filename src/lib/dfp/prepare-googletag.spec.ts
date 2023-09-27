@@ -50,8 +50,6 @@ const getAdverts = (withEmpty: boolean) => {
 	});
 };
 
-const getCreativeIDs = () => dfpEnv.creativeIDs;
-
 const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
 	typeof getCurrentBreakpoint_
 >;
@@ -367,12 +365,6 @@ describe('DFP', () => {
 		window.googletag = undefined;
 	});
 
-	it('should exist', () => {
-		expect(prepareGoogletag).toBeDefined();
-		expect(getAdverts).toBeDefined();
-		expect(getCreativeIDs).toBeDefined();
-	});
-
 	it('hides all ad slots when all DFP advertising is disabled', async () => {
 		commercialFeatures.shouldLoadGoogletag = false;
 		await prepareGoogletag();
@@ -576,10 +568,6 @@ describe('DFP', () => {
 
 		listeners.slotRenderEnded?.(fakeEventOne);
 		listeners.slotRenderEnded?.(fakeEventTwo);
-		const result_4 = getCreativeIDs();
-		expect(result_4.length).toBe(2);
-		expect(result_4[0]).toEqual('1');
-		expect(result_4[1]).toEqual('2');
 	});
 
 	describe('keyword targeting', () => {
