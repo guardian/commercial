@@ -9,12 +9,12 @@ interface FullwidthSpecs {
 const isFullwidthSpecs = (specs: unknown): specs is FullwidthSpecs =>
 	!!specs && isObject(specs) && 'fullwidth' in specs;
 
-const fullwidth = (specs: FullwidthSpecs, slotContainer: HTMLElement) =>
+const fullwidth = (specs: FullwidthSpecs, slot: HTMLElement) =>
 	fastdom.mutate(() => {
 		if (specs.fullwidth) {
-			slotContainer.classList.add('ad-slot-container--fullwidth');
+			slot.classList.add('ad-slot--full-width');
 		} else {
-			slotContainer.classList.remove('ad-slot-container--fullwidth');
+			slot.classList.remove('ad-slot--full-width');
 		}
 	});
 
@@ -30,18 +30,11 @@ const init = (register: RegisterListener): void => {
 			const name = adSlot?.dataset.name;
 
 			// only allow for banner ads
-			if (!name?.startsWith('fronts-banner')) {
+			if (!name?.startsWith('fronts-banner') || !adSlot) {
 				return;
 			}
 
-			const slotContainer =
-				iframe.closest<HTMLElement>('.ad-slot-container') ?? undefined;
-
-			if (!slotContainer) {
-				return;
-			}
-
-			return fullwidth(specs, slotContainer);
+			return fullwidth(specs, adSlot);
 		}
 	});
 };
