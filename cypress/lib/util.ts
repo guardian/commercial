@@ -26,7 +26,7 @@ const getPath = ({
 		const dcrContentType =
 			type === 'liveblog' || type === 'article' ? 'Article' : 'Front';
 		if (fixtureId) {
-			return `${dcrContentType}/http://localhost:3031/renderFixture/${fixtureId}/${path}`;
+			return `${dcrContentType}/http://localhost:3031/renderStoredFixture/${fixtureId}/${path}`;
 		} else if (fixture) {
 			const fixtureJson = JSON.stringify(fixture);
 			const base64Fixture = Buffer.from(fixtureJson).toString('base64');

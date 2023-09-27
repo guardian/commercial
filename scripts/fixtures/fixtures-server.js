@@ -75,30 +75,35 @@ const setupFixturesServer = (devServer) => {
 		return res.json(dataModel);
 	});
 
-	devServer.app.get('/renderFixture/:fixtureId/*.json', async (req, res) => {
-		const path = req.params[0];
-		const fixtureId = req.params.fixtureId;
-		const fixture = fixtures[fixtureId];
+	devServer.app.get(
+		'/renderStoredFixture/:fixtureId/*.json',
+		async (req, res) => {
+			const path = req.params[0];
+			const fixtureId = req.params.fixtureId;
+			const fixture = fixtures[fixtureId];
 
-		if (!fixture) {
-			console.error(`Fixture with id ${fixtureId} not found`);
-			return res.status(404).send();
-		}
+			if (!fixture) {
+				console.error(`Fixture with id ${fixtureId} not found`);
+				return res.status(404).send();
+			}
 
-		// Fetch the JSON for the given path from PROD Frontend
-		const dataModel = await fetchDcrDataModel(path);
+			// Fetch the JSON for the given path from PROD Frontend
+			const dataModel = await fetchDcrDataModel(path);
 
-		if (!dataModel) {
-			console.error('Something went wrong retrieving DCR data from PROD');
-			return res.status(503).send();
-		}
+			if (!dataModel) {
+				console.error(
+					'Something went wrong retrieving DCR data from PROD',
+				);
+				return res.status(503).send();
+			}
 
-		// Merge the fixture into the data model
-		// Note that this will be a deep merge
-		merge(dataModel, fixture);
+			// Merge the fixture into the data model
+			// Note that this will be a deep merge
+			merge(dataModel, fixture);
 
-		return res.json(dataModel);
-	});
+			return res.json(dataModel);
+		},
+	);
 };
 
 module.exports = {

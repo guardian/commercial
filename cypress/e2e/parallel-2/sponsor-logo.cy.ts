@@ -137,13 +137,12 @@ describe('sponsorshipLogo', () => {
 		// Construct a path for a page containing a thrasher
 		// This thrasher inserts a sponsor logo slot after an artificial delay
 		// Then fires a custom event to fill the slot
-		const path = getTestUrl(
-			getStage(),
-			'uk',
-			'front',
-			undefined, // use the default ad test
-			'advertThatFiresEventInThrasher',
-		);
+		const path = getTestUrl({
+			stage: getStage(),
+			path: 'uk',
+			type: 'front',
+			fixtureId: 'advertThatFiresEventInThrasher',
+		});
 		cy.visit(path);
 
 		// Check that the top-above-nav ad slot is on the page
