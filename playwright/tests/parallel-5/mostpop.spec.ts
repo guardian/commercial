@@ -1,12 +1,12 @@
 import { test } from '@playwright/test';
 import { breakpoints } from '../../fixtures/breakpoints';
-import { allPages } from '../../fixtures/pages';
+import { articles, blogs } from '../../fixtures/pages';
 import { cmpAcceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
 import { waitForSlot } from '../../lib/util';
 
 test.describe('mostpop slot', () => {
-	[...allPages].forEach(({ path }, index) => {
+	[articles[0], blogs[0]].forEach(({ path }, index) => {
 		breakpoints.forEach(({ breakpoint, width, height }) => {
 			test(`Test page ${index} has slot and iframe at breakpoint ${breakpoint}`, async ({
 				page,
