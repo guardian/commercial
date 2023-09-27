@@ -20,7 +20,7 @@ const breakpointsToTest: Array<keyof BreakpointKeys> = [
 
 const heights = {
 	mobile: 600,
-	tablet: 1100,
+	tablet: 1024,
 	desktop: 1100,
 	wide: 1100,
 } as const;

@@ -142,10 +142,12 @@ const fakeLogOut = async (page: Page, context: BrowserContext) =>
 
 const waitForSlot = async (page: Page, slot: string) => {
 	const slotId = `#dfp-ad--${slot}`;
-	// Check that the ad slot is on the page
-	await page.locator(slotId).isVisible();
-	// creative isn't loaded unless slot is in view
-	await page.locator(slotId).scrollIntoViewIfNeeded();
+	// create a locator for the slot
+	const slotLocator = page.locator(slotId);
+	// check that the ad slot is present on the page
+	await slotLocator.isVisible();
+	// scroll to it
+	await slotLocator.scrollIntoViewIfNeeded();
 	// iframe locator
 	const iframe = page.locator(`${slotId} iframe`);
 	// wait for the iframe

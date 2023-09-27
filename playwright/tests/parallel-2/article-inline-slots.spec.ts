@@ -4,6 +4,11 @@ import { articles } from '../../fixtures/pages';
 import { cmpAcceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
 
+/**
+ * TODO e2e flakey test
+ * - sometimes the no slots of inserted does not match expectedMinInlineSlots :(
+ */
+
 const pages = articles.filter(
 	(page) =>
 		'expectedMinInlineSlotsOnDesktop' in page &&
@@ -18,7 +23,6 @@ test.describe('Slots and iframes load on article pages', () => {
 			expectedMinInlineSlotsOnMobile,
 		}) => {
 			breakpoints.forEach(({ breakpoint, width, height }, index) => {
-				// little hack to set the min expected slots to a large number if either props are undefined
 				const expectedMinSlotsOnPage =
 					(breakpoint === 'mobile'
 						? expectedMinInlineSlotsOnMobile
@@ -35,6 +39,8 @@ test.describe('Slots and iframes load on article pages', () => {
 					await loadPage(page, path);
 					await cmpAcceptAll(page);
 
+					// wait for the first inline slot to be added to the dom
+					// they will not be 'visible' initially
 					await page
 						.locator('.ad-slot--inline')
 						.first()
@@ -47,8 +53,6 @@ test.describe('Slots and iframes load on article pages', () => {
 					expect(foundSlots).toBeGreaterThanOrEqual(
 						expectedMinSlotsOnPage,
 					);
-
-					// TODO check each iframe exists for the slots?
 				});
 			});
 		},

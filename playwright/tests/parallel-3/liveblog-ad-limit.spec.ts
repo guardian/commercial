@@ -11,7 +11,12 @@ const desktopBreakpoint = breakpoints.filter(
 	({ breakpoint }) => breakpoint === 'desktop',
 )[0];
 
-// TODO E2E seen flip flop to 7 - double check this is stable
+/**
+ * TODO e2e flakey test
+ * - sometimes window.mockLiveUpdate is not available because the article does not switch to 'live'
+ * - sometimes the maxAdSlots is 7 and not 8
+ */
+
 const maxAdSlots = 8;
 
 const addNewBlocks = async (page: Page) => {

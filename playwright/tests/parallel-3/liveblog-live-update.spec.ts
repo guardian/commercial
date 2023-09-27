@@ -4,6 +4,11 @@ import { blogs } from '../../fixtures/pages';
 import { cmpAcceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
 
+/**
+ * TODO e2e flakey test
+ * - sometimes window.mockLiveUpdate is not available because the article does not switch to 'live'
+ */
+
 const pages = blogs.filter(({ name }) => name === 'live-update');
 
 test.describe('Liveblog live updates', () => {

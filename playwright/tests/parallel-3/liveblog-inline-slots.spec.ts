@@ -21,7 +21,6 @@ test.describe('Slots and iframes load on liveblog pages', () => {
 			index,
 		) => {
 			breakpoints.forEach(({ breakpoint, width, height }) => {
-				// little hack to set the min expected slots to a large number if either props are undefined
 				const expectedMinSlotsOnPage =
 					(breakpoint === 'mobile'
 						? expectedMinInlineSlotsOnMobile

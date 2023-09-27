@@ -52,6 +52,10 @@ test.describe('pageskin on uk front', () => {
 		});
 	});
 
+	/**
+	 * TODO e2e flakey test
+	 * The test for tablet always passes locallly but always fails on CI
+	 */
 	small.forEach(({ breakpoint, width, height }) => {
 		test(`Test pageskin front on ${breakpoint} should NOT display the pageskin and NOT use single request mode`, async ({
 			page,
