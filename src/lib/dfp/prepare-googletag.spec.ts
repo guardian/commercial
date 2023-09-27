@@ -8,10 +8,8 @@ import type * as AdSizesType from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
 import _config from 'lib/config';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
-import type { Advert } from './Advert';
 import { dfpEnv } from './dfp-env';
 import { fillStaticAdvertSlots } from './fill-static-advert-slots';
-import { getAdvertById } from './get-advert-by-id';
 import { loadAdvert } from './load-advert';
 import { init as prepareGoogletag } from './prepare-googletag';
 
@@ -42,20 +40,15 @@ const config = _config as {
 	) => void;
 };
 
-const getAdverts = (withEmpty: boolean) =>
-	Object.keys(dfpEnv.advertIds).reduce(
-		(advertsById: Record<string, Advert | null>, id) => {
-			const advert = getAdvertById(id);
-			// Do not return empty slots unless explicitly requested
-			if (withEmpty || (advert && !advert.isEmpty)) {
-				advertsById[id] = advert;
-			}
-			return advertsById;
-		},
-		{},
-	);
-
-const getCreativeIDs = () => dfpEnv.creativeIDs;
+const getAdverts = (withEmpty: boolean) => {
+	return [...dfpEnv.adverts.values()].map((advert) => {
+		// Do not return empty slots unless explicitly requested
+		if (withEmpty || !advert.isEmpty) {
+			return advert;
+		}
+		return null;
+	});
+};
 
 const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
 	typeof getCurrentBreakpoint_
@@ -182,8 +175,7 @@ const makeFakeEvent = (
 });
 
 const reset = () => {
-	dfpEnv.advertIds = {};
-	dfpEnv.adverts = [];
+	dfpEnv.adverts = new Map();
 	dfpEnv.advertsToLoad = [];
 	window.guardian.config.switches = {
 		prebidHeaderBidding: false,
@@ -370,12 +362,6 @@ describe('DFP', () => {
 		$style.remove();
 		// @ts-expect-error -- we’re removing it
 		window.googletag = undefined;
-	});
-
-	it('should exist', () => {
-		expect(prepareGoogletag).toBeDefined();
-		expect(getAdverts).toBeDefined();
-		expect(getCreativeIDs).toBeDefined();
 	});
 
 	it('hides all ad slots when all DFP advertising is disabled', async () => {
@@ -581,10 +567,6 @@ describe('DFP', () => {
 
 		listeners.slotRenderEnded?.(fakeEventOne);
 		listeners.slotRenderEnded?.(fakeEventTwo);
-		const result_4 = getCreativeIDs();
-		expect(result_4.length).toBe(2);
-		expect(result_4[0]).toEqual('1');
-		expect(result_4[1]).toEqual('2');
 	});
 
 	describe('pageskin loading', () => {
