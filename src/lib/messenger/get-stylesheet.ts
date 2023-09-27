@@ -14,7 +14,6 @@ const getStyles = (
 ): string[] => {
 	const result: string[] = [];
 	for (let i = 0; i < styleSheets.length; i += 1) {
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Fixes noUncheckedIndexedAccess error
 		const ownerNode = styleSheets[i]?.ownerNode;
 
 		if (

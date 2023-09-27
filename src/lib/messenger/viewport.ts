@@ -23,7 +23,6 @@ const reset = (window_?: Window): void => {
 };
 
 const sendViewportDimensions = (iframeId: string, viewport: Viewport) => {
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Fixes noUncheckedIndexedAccess error
 	iframes[iframeId]?.respond(null, viewport);
 };
 
