@@ -21,9 +21,7 @@ describe('Cross-frame messenger: full-width', () => {
 
 		expect(fakeAdSlot).not.toBeUndefined();
 
-		const fakeSpecs = {
-			fullwidth: true,
-		};
+		const fakeSpecs = true;
 
 		fullWidth(fakeSpecs, fakeAdSlot);
 
@@ -44,9 +42,7 @@ describe('Cross-frame messenger: full-width', () => {
 
 		expect(fakeAdSlot).not.toBeUndefined();
 
-		const fakeSpecs = {
-			fullwidth: false,
-		};
+		const fakeSpecs = false;
 
 		fullWidth(fakeSpecs, fakeAdSlot);
 
