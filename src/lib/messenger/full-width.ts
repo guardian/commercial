@@ -1,4 +1,4 @@
-import { isObject } from '@guardian/libs';
+import { isBoolean, isObject } from '@guardian/libs';
 import fastdom from 'fastdom';
 import type { RegisterListener } from 'core/messenger';
 
@@ -6,10 +6,13 @@ interface FullwidthSpecs {
 	fullwidth: boolean;
 }
 
-const isFullwidthSpecs = (specs: unknown): specs is FullwidthSpecs =>
-	!!specs && isObject(specs) && 'fullwidth' in specs;
+const isFullWidthSpecs = (specs: unknown): specs is FullwidthSpecs =>
+	!!specs &&
+	isObject(specs) &&
+	'fullwidth' in specs &&
+	isBoolean(specs.fullwidth);
 
-const fullwidth = (specs: FullwidthSpecs, slot: HTMLElement) =>
+const fullWidth = (specs: FullwidthSpecs, slot: HTMLElement) =>
 	fastdom.mutate(() => {
 		if (specs.fullwidth) {
 			slot.classList.add('ad-slot--full-width');
@@ -19,9 +22,9 @@ const fullwidth = (specs: FullwidthSpecs, slot: HTMLElement) =>
 	});
 
 const init = (register: RegisterListener): void => {
-	register('fullwidth', (specs, ret, iframe) => {
+	register('full-width', (specs, ret, iframe) => {
 		if (iframe && specs) {
-			if (!isFullwidthSpecs(specs)) {
+			if (!isFullWidthSpecs(specs)) {
 				return;
 			}
 			const adSlot =
@@ -34,11 +37,11 @@ const init = (register: RegisterListener): void => {
 				return;
 			}
 
-			return fullwidth(specs, adSlot);
+			return fullWidth(specs, adSlot);
 		}
 	});
 };
 
-export const _ = { fullwidth };
+export const _ = { fullWidth };
 
 export { init };

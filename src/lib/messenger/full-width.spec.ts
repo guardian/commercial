@@ -1,13 +1,13 @@
-import { _ } from './fullwidth';
+import { _ } from './full-width';
 
-const { fullwidth } = _;
+const { fullWidth } = _;
 
-describe('Cross-frame messenger: fullwidth', () => {
+describe('Cross-frame messenger: full-width', () => {
 	afterEach(() => {
 		document.body.innerHTML = '';
 	});
 
-	it('should add the fullwidth class to the slot container', () => {
+	it('should add the full-width class to the slot container', () => {
 		document.body.innerHTML = `
 			<div class="ad-slot-container">
               <div id="slot01" class="js-ad-slot" style="width: 7px; height: 14px;" >
@@ -25,15 +25,15 @@ describe('Cross-frame messenger: fullwidth', () => {
 			fullwidth: true,
 		};
 
-		fullwidth(fakeSpecs, fakeAdSlot);
+		fullWidth(fakeSpecs, fakeAdSlot);
 
 		expect(fakeAdSlot.classList.contains('ad-slot--full-width')).toBe(true);
 	});
 
-	it('should remove the fullwidth class from the slot container', () => {
+	it('should remove the full-width class from the slot container', () => {
 		document.body.innerHTML = `
 			<div class="ad-slot-container">
-			  <div id="slot01" class="js-ad-slot ad-slot--fullwidth" style="width: 7px; height: 14px;" >
+			  <div id="slot01" class="js-ad-slot ad-slot--full-width" style="width: 7px; height: 14px;" >
 				<div id="container01">
 					<iframe id="iframe01" class="iframe" data-unit="ch"></iframe>
 				</div>
@@ -48,7 +48,7 @@ describe('Cross-frame messenger: fullwidth', () => {
 			fullwidth: false,
 		};
 
-		fullwidth(fakeSpecs, fakeAdSlot);
+		fullWidth(fakeSpecs, fakeAdSlot);
 
 		expect(fakeAdSlot.classList.contains('ad-slot--full-width')).toBe(
 			false,
