@@ -3,18 +3,18 @@ import fastdom from 'fastdom';
 import type { RegisterListener } from 'core/messenger';
 
 interface FullwidthSpecs {
-	fullwidth: boolean;
+	fullWidth: boolean;
 }
 
 const isFullWidthSpecs = (specs: unknown): specs is FullwidthSpecs =>
 	!!specs &&
 	isObject(specs) &&
-	'fullwidth' in specs &&
-	isBoolean(specs.fullwidth);
+	'fullWidth' in specs &&
+	isBoolean(specs.fullWidth);
 
 const fullWidth = (specs: FullwidthSpecs, slot: HTMLElement) =>
 	fastdom.mutate(() => {
-		if (specs.fullwidth) {
+		if (specs.fullWidth) {
 			slot.classList.add('ad-slot--full-width');
 		} else {
 			slot.classList.remove('ad-slot--full-width');
