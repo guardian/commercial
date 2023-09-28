@@ -1,5 +1,25 @@
 # @guardian/commercial
 
+## 11.12.0
+
+### Minor Changes
+
+- 20ffce1: Add `fullwidth` messenger message
+
+### Patch Changes
+
+- 120b23b: Fix instances of no unchecked indexed access errors in:
+
+  - src/lib/consentless/dynamic/liveblog-inline.ts
+  - src/lib/dfp/init-slot-ias.spec.ts
+  - src/lib/dfp/prepare-permutive.spec.ts
+  - src/lib/spacefinder/article-aside-adverts.ts
+  - src/lib/spacefinder/liveblog-adverts.ts
+  - src/lib/third-party-tags.ts
+  - src/lib/utils/geolocation.ts
+
+- e8de2d4: Unify the two different methods of filling advert slots
+
 ## 11.11.1
 
 ### Patch Changes
