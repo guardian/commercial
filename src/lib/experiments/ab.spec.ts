@@ -1,4 +1,4 @@
-import type { ABTest, Runnable } from '@guardian/ab-core';
+import type { ABTest, Runnable, Variant } from '@guardian/ab-core';
 import type { Config } from 'types/global';
 import { _ } from '../analytics/mvt-cookie';
 import type { concurrentTests as concurrentTestsMock } from './__mocks__/ab-tests';
@@ -79,12 +79,12 @@ describe('A/B', () => {
 			};
 
 			const shouldRun = [
-				jest.spyOn(concurrentTests[0].variants[0], 'test'),
-				jest.spyOn(concurrentTests[1].variants[0], 'test'),
+				jest.spyOn(concurrentTests[0].variants[0] as Variant, 'test'),
+				jest.spyOn(concurrentTests[1].variants[0] as Variant, 'test'),
 			];
 
 			const shouldNotRun = [
-				jest.spyOn(concurrentTests[2].variants[0], 'test'),
+				jest.spyOn(concurrentTests[2].variants[0] as Variant, 'test'),
 			];
 
 			expect.assertions(shouldRun.length + shouldNotRun.length);

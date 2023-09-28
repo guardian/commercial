@@ -21,8 +21,10 @@ class $$ {
 	 */
 	get(): HTMLElement[];
 	get(index: number): HTMLElement;
-	get(index?: number): HTMLElement | HTMLElement[] {
-		if (typeof index === 'number') return this.#elements[index];
+	get(index?: number): HTMLElement | HTMLElement[] | undefined {
+		if (typeof index === 'number' && this.#elements[index]) {
+			return this.#elements[index];
+		}
 		return this.#elements;
 	}
 
