@@ -1,20 +1,10 @@
-import { isBoolean, isObject } from '@guardian/libs';
+import { isBoolean } from '@guardian/libs';
 import fastdom from 'fastdom';
 import type { RegisterListener } from 'core/messenger';
 
-interface FullwidthSpecs {
-	fullWidth: boolean;
-}
-
-const isFullWidthSpecs = (specs: unknown): specs is FullwidthSpecs =>
-	!!specs &&
-	isObject(specs) &&
-	'fullWidth' in specs &&
-	isBoolean(specs.fullWidth);
-
-const fullWidth = (specs: FullwidthSpecs, slot: HTMLElement) =>
+const fullWidth = (fullWidth: boolean, slot: HTMLElement) =>
 	fastdom.mutate(() => {
-		if (specs.fullWidth) {
+		if (fullWidth) {
 			slot.classList.add('ad-slot--full-width');
 		} else {
 			slot.classList.remove('ad-slot--full-width');
@@ -24,7 +14,7 @@ const fullWidth = (specs: FullwidthSpecs, slot: HTMLElement) =>
 const init = (register: RegisterListener): void => {
 	register('full-width', (specs, ret, iframe) => {
 		if (iframe && specs) {
-			if (!isFullWidthSpecs(specs)) {
+			if (!isBoolean(specs)) {
 				return;
 			}
 			const adSlot =
