@@ -22,7 +22,7 @@ class $$ {
 	get(): HTMLElement[];
 	get(index: number): HTMLElement;
 	get(index?: number): HTMLElement | HTMLElement[] | undefined {
-		if (typeof index === 'number' && this.#elements[index]) {
+		if (typeof index === 'number') {
 			return this.#elements[index];
 		}
 		return this.#elements;
