@@ -17,6 +17,7 @@ import { reportError } from 'lib/utils/report-error';
 import { init as background } from '../messenger/background';
 import { init as sendClick } from '../messenger/click';
 import { init as disableRefresh } from '../messenger/disable-refresh';
+import { init as fullwidth } from '../messenger/full-width';
 import { init as initGetPageTargeting } from '../messenger/get-page-targeting';
 import { init as initGetPageUrl } from '../messenger/get-page-url';
 import { init as getStyles } from '../messenger/get-stylesheet';
@@ -42,6 +43,7 @@ initMessenger(
 		initMeasureAdLoad,
 		passbackRefresh,
 		resize,
+		fullwidth,
 		sendClick,
 		background,
 		disableRefresh,
