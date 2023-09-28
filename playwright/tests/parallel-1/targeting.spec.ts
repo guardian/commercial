@@ -82,11 +82,6 @@ test.describe('Prebid targeting', () => {
 		if (!prevScpParams) return false;
 		const allMatched = Object.entries(wins.criteo.targeting).every(
 			([key, value]) => {
-				// console.log(
-				// 	`checking ${key}: ${value} == ${
-				// 		prevScpParams.get(key) ?? ''
-				// 	}`,
-				// );
 				if (prevScpParams.get(key) !== value) return false;
 				return true;
 			},

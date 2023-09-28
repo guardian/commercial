@@ -6,7 +6,7 @@ import { loadPage } from '../../lib/load-page';
 
 /**
  * TODO e2e flakey test
- * - sometimes the no slots of inserted does not match expectedMinInlineSlots :(
+ * - sometimes the number slots of inserted does not match expectedMinInlineSlots :(
  */
 
 const pages = articles.filter(

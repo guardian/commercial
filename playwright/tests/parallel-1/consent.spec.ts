@@ -193,6 +193,7 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreNotPresent(page);
 	});
 
+	// TODO e2e
 	test.skip(`Accept all, login as subscriber, ad slots are not present, subscription expires, ads slots are fulfilled`, async ({
 		page,
 		context,
@@ -224,6 +225,7 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreFulfilled(page);
 	});
 
+	// TODO e2e
 	test.skip(`Reject all, login as subscriber, ad slots are not present, subscription expires, ads slots are present`, async ({
 		page,
 		context,
