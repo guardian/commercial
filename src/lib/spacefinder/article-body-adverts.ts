@@ -383,20 +383,20 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 	};
 
 	const insertAds: SpacefinderWriter = (paras) => {
-		if (typeof paras[0] !== 'undefined') {
-			return insertAdAtPara(
-				paras[0],
-				'im',
-				'im',
-				'',
-				{},
-				{
-					className: 'ad-slot-container--im',
-				},
+		if (typeof paras[0] === 'undefined') {
+			throw new Error(
+				'Trying to insert inline merch before a node that does not exist',
 			);
 		}
-		throw new Error(
-			'Trying to insert inline merch before a node that does not exist',
+		return insertAdAtPara(
+			paras[0],
+			'im',
+			'im',
+			'',
+			{},
+			{
+				className: 'ad-slot-container--im',
+			},
 		);
 	};
 
