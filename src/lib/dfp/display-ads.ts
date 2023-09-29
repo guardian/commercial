@@ -28,7 +28,7 @@ const displayAds = (): void => {
 
 	if (firstAdvertToLoad) {
 		loadAdvert(firstAdvertToLoad);
-		dfpEnv.advertsToLoad.length = 0;
+		dfpEnv.advertsToLoad = [];
 	}
 	pageSkin();
 };
