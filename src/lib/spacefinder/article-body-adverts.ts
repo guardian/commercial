@@ -382,17 +382,23 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 		},
 	};
 
-	const insertAds: SpacefinderWriter = (paras) =>
-		insertAdAtPara(
-			paras[0] as Node,
-			'im',
-			'im',
-			'',
-			{},
-			{
-				className: 'ad-slot-container--im',
-			},
+	const insertAds: SpacefinderWriter = (paras) => {
+		if (typeof paras[0] !== 'undefined') {
+			return insertAdAtPara(
+				paras[0],
+				'im',
+				'im',
+				'',
+				{},
+				{
+					className: 'ad-slot-container--im',
+				},
+			);
+		}
+		throw new Error(
+			'Trying to insert inline merch before a node that does not exist',
 		);
+	};
 
 	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,
