@@ -384,7 +384,7 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 
 	const insertAds: SpacefinderWriter = (paras) =>
 		insertAdAtPara(
-			paras[0],
+			paras[0] as Node,
 			'im',
 			'im',
 			'',
