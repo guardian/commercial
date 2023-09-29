@@ -219,7 +219,11 @@ const setupBackground = async (
 				video.autoplay = true;
 				video.muted = true;
 				video.playsInline = true;
-				video.src = String(specs.videoSource);
+				video.src = specs.videoSource;
+				video.style.inset = '0';
+				video.style.transition = 'background 100ms ease';
+				video.style.position = 'relative';
+				video.style.width = '100%';
 				background.appendChild(video);
 			}
 		} else {
