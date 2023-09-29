@@ -20,6 +20,7 @@ const isStringTuple = (_) => typeof _[1] === 'string';
 const fetchDcrDataModel = async (path, _headers) => {
 	const url = getProdDataUrl(path);
 	try {
+		// Forward cookies and x-gu headers
 		const headers = Object.fromEntries(
 			Object.entries(_headers)
 				.filter(
