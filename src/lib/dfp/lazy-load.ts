@@ -79,10 +79,6 @@ const onIntersectPrebid = (
 			requestBids(entry.target.id);
 			advertIds.push(entry.target.id);
 		});
-
-	dfpEnv.advertsToLoad = dfpEnv.advertsToLoad.filter(
-		(advert) => !advertIds.includes(advert.id),
-	);
 };
 
 const getDisplayAdObserver = once(() => {
