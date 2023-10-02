@@ -118,15 +118,20 @@ const isUserLoggedIn = (): boolean => getUserFromCookie() !== null;
 
 const getAuthStatus = async (): Promise<AuthStatus> => {
 	if (useOkta) {
-		const { isSignedInWithOktaAuthState } = await import('./okta');
-		const authState = await isSignedInWithOktaAuthState();
-		if (authState.isAuthenticated) {
-			return {
-				kind: 'SignedInWithOkta',
-				accessToken: authState.accessToken,
-				idToken: authState.idToken,
-			};
+		try {
+			const { isSignedInWithOktaAuthState } = await import('./okta');
+			const authState = await isSignedInWithOktaAuthState();
+			if (authState.isAuthenticated) {
+				return {
+					kind: 'SignedInWithOkta',
+					accessToken: authState.accessToken,
+					idToken: authState.idToken,
+				};
+			}
+		} catch (e) {
+			console.error(e);
 		}
+
 		return {
 			kind: 'SignedOutWithOkta',
 		};

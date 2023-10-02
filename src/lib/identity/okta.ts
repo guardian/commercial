@@ -5,7 +5,7 @@ import type {
 import { getIdentityAuth } from '@guardian/identity-auth-frontend';
 import type { CustomIdTokenClaims } from '../../types/global';
 
-export async function isSignedInWithOktaAuthState(): Promise<
+export function isSignedInWithOktaAuthState(): Promise<
 	IdentityAuthState<AccessTokenClaims, CustomIdTokenClaims>
 > {
 	return getIdentityAuth().isSignedInWithAuthState();
