@@ -60,31 +60,30 @@ const guMetadata: Record<string, string> = {
 const onLoad = (): void => {
 	const sectionFromMeta = window.guardian.config.page.section.toLowerCase();
 	const subBrandApId =
-		guMetadata[sectionFromMeta] || guMetadata['brand-only'];
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- fixes noUncheckedIndexedAccess error
+		(guMetadata[sectionFromMeta] || guMetadata['brand-only']) as string;
 
 	const sectionRef =
 		sectionFromMeta in guMetadata
 			? sectionFromMeta
 			: 'The Guardian - brand only';
 
-	if (typeof subBrandApId === 'string') {
-		const nolggGlobalParams = {
-			sfcode: 'dcr',
-			apid: subBrandApId,
-			apn: 'theguardian',
-		};
+	const nolggGlobalParams = {
+		sfcode: 'dcr',
+		apid: subBrandApId,
+		apn: 'theguardian',
+	};
 
-		const nSdkInstance = window.NOLCMB.getInstance(nolggGlobalParams.apid);
-		nSdkInstance.ggInitialize(nolggGlobalParams);
+	const nSdkInstance = window.NOLCMB.getInstance(nolggGlobalParams.apid);
+	nSdkInstance.ggInitialize(nolggGlobalParams);
 
-		const dcrStaticMetadata = {
-			type: 'static',
-			assetid: window.guardian.config.page.pageId,
-			section: sectionRef,
-		};
+	const dcrStaticMetadata = {
+		type: 'static',
+		assetid: window.guardian.config.page.pageId,
+		section: sectionRef,
+	};
 
-		nSdkInstance.ggPM('staticstart', dcrStaticMetadata);
-	}
+	nSdkInstance.ggPM('staticstart', dcrStaticMetadata);
 };
 
 export const imrWorldwide = {
