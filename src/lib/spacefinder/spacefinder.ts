@@ -158,7 +158,6 @@ const onInteractivesLoaded = memoize(async (rules: SpacefinderRules) => {
 				// Listen for when iframes are added as children to interactives
 				new MutationObserver((records, instance) => {
 					if (
-						// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- enable noUncheckedIndexedAccess in tsconfig
 						!records[0]?.addedNodes[0] ||
 						!isIframe(records[0]?.addedNodes[0])
 					) {
