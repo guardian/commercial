@@ -23,7 +23,7 @@ const reset = (window_?: Window): void => {
 };
 
 const sendViewportDimensions = (iframeId: string, viewport: Viewport) => {
-	iframes[iframeId].respond(null, viewport);
+	iframes[iframeId]?.respond(null, viewport);
 };
 
 /**

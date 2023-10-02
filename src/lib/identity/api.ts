@@ -61,26 +61,30 @@ const getUserCookie = (): string | null => getCookie({ name: cookieName });
 const getUserFromCookie = (): IdentityUserFromCache => {
 	if (userFromCookieCache === null) {
 		const cookieData = getUserCookie();
-		let userData: string[] | null = null;
 
 		if (cookieData) {
-			userData = JSON.parse(
-				decodeBase64(cookieData.split('.')[0]),
+			const userData = JSON.parse(
+				decodeBase64(cookieData.split('.')[0] ?? ''),
 			) as string[];
-		}
-		if (userData && cookieData) {
-			const displayName = decodeURIComponent(userData[2]);
-			userFromCookieCache = {
-				id: parseInt(userData[0], 10),
-				publicFields: {
-					displayName,
-				},
-				dates: { accountCreatedDate: userData[6] },
-				statusFields: {
-					userEmailValidated: Boolean(userData[7]),
-				},
-				rawResponse: cookieData,
-			};
+
+			const id = parseInt(userData[0] ?? '', 10);
+			const displayName = decodeURIComponent(userData[2] ?? '');
+			const accountCreatedDate = userData[6];
+			const userEmailValidated = Boolean(userData[7]);
+
+			if (id && accountCreatedDate) {
+				userFromCookieCache = {
+					id,
+					publicFields: {
+						displayName,
+					},
+					dates: { accountCreatedDate },
+					statusFields: {
+						userEmailValidated,
+					},
+					rawResponse: cookieData,
+				};
+			}
 		}
 	}
 
@@ -114,15 +118,20 @@ const isUserLoggedIn = (): boolean => getUserFromCookie() !== null;
 
 const getAuthStatus = async (): Promise<AuthStatus> => {
 	if (useOkta) {
-		const { isSignedInWithOktaAuthState } = await import('./okta');
-		const authState = await isSignedInWithOktaAuthState();
-		if (authState.isAuthenticated) {
-			return {
-				kind: 'SignedInWithOkta',
-				accessToken: authState.accessToken,
-				idToken: authState.idToken,
-			};
+		try {
+			const { isSignedInWithOktaAuthState } = await import('./okta');
+			const authState = await isSignedInWithOktaAuthState();
+			if (authState.isAuthenticated) {
+				return {
+					kind: 'SignedInWithOkta',
+					accessToken: authState.accessToken,
+					idToken: authState.idToken,
+				};
+			}
+		} catch (e) {
+			console.error(e);
 		}
+
 		return {
 			kind: 'SignedOutWithOkta',
 		};

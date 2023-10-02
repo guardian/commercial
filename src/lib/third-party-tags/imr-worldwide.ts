@@ -60,7 +60,8 @@ const guMetadata: Record<string, string> = {
 const onLoad = (): void => {
 	const sectionFromMeta = window.guardian.config.page.section.toLowerCase();
 	const subBrandApId =
-		guMetadata[sectionFromMeta] || guMetadata['brand-only'];
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- fixes noUncheckedIndexedAccess error
+		(guMetadata[sectionFromMeta] || guMetadata['brand-only']) as string;
 
 	const sectionRef =
 		sectionFromMeta in guMetadata

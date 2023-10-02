@@ -370,8 +370,13 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 		},
 	};
 
-	const insertAds: SpacefinderWriter = (paras) =>
-		insertAdAtPara(
+	const insertAds: SpacefinderWriter = (paras) => {
+		if (typeof paras[0] === 'undefined') {
+			throw new Error(
+				'Trying to insert inline merch before a node that does not exist',
+			);
+		}
+		return insertAdAtPara(
 			paras[0],
 			'im',
 			'im',
@@ -381,6 +386,7 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 				className: 'ad-slot-container--im',
 			},
 		);
+	};
 
 	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,

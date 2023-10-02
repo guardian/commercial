@@ -37,7 +37,7 @@ const reportEmptyResponse = (
 
 const sizeEventToAdSize = (size: string | number[]): AdSize | 'fluid' => {
 	if (isString(size)) return 'fluid';
-	return createAdSize(size[0], size[1]);
+	return createAdSize(Number(size[0]), Number(size[1]));
 };
 
 export const onSlotRender = (

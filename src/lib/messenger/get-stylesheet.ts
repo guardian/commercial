@@ -14,7 +14,7 @@ const getStyles = (
 ): string[] => {
 	const result: string[] = [];
 	for (let i = 0; i < styleSheets.length; i += 1) {
-		const ownerNode = styleSheets[i].ownerNode;
+		const ownerNode = styleSheets[i]?.ownerNode;
 
 		if (
 			ownerNode instanceof HTMLStyleElement &&

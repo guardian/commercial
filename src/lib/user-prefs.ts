@@ -68,29 +68,31 @@ const setPrefs = (loc: Location): void => {
 	let i: number;
 	let j: number;
 	for (i = 0, j = qs.length; i < j; i += 1) {
-		const m = /^gu\.prefs\.(.*)=(.*)$/.exec(qs[i]);
-		if (m) {
-			const key = m[1];
-			const val = m[2];
-			let v: string | boolean | number;
-			switch (key) {
-				case 'switchOn':
-					switchOn(val);
-					break;
-				case 'switchOff':
-					switchOff(val);
-					break;
-				default:
-					if (isNumeric(val)) {
-						// +val casts any number (int, float) from a string
-						v = +val;
-					} else if (isBoolean(val)) {
-						// String(val) === "true" converts a string to bool
-						v = String(val).toLowerCase() === 'true';
+		const param = qs[i];
+		if (param) {
+			const m = /^gu\.prefs\.(.*)=(.*)$/.exec(param);
+			if (m) {
+				const key = m[1];
+				const val = m[2];
+				if (key) {
+					if (val !== undefined) {
+						if (key === 'switchOn') {
+							switchOn(val);
+						} else if (key === 'switchOff') {
+							switchOff(val);
+						} else if (isNumeric(val)) {
+							// +val casts any number (int, float) from a string
+							set(key, +val);
+						} else if (isBoolean(val)) {
+							// String(val) === "true" converts a string to bool
+							set(key, String(val).toLowerCase() === 'true');
+						} else {
+							set(key, val);
+						}
 					} else {
-						v = val;
+						remove(key);
 					}
-					set(key, v);
+				}
 			}
 		}
 	}
