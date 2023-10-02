@@ -221,8 +221,8 @@ const setupBackground = async (
 				video.playsInline = true;
 				video.src = specs.videoSource;
 				video.style.inset = '0';
-				video.style.transition = 'background 100ms ease';
-				video.style.position = 'relative';
+				video.style.position = 'fixed';
+				video.style.height = '100%';
 				video.style.width = '100%';
 				background.appendChild(video);
 			}
