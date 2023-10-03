@@ -4,3 +4,4 @@ dist
 .changeset
 README.md
 CHANGELOG.md
+.vscode/settings.json
