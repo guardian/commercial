@@ -13,7 +13,7 @@ jobs:
     steps:
       # Commercial
       - name: Checkout Commercial
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./commercial
 
@@ -37,7 +37,7 @@ jobs:
 
       # DCR
       - name: Checkout DCR
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: guardian/dotcom-rendering
           path: ./dcr

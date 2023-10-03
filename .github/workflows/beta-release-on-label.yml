@@ -27,7 +27,7 @@ jobs:
     if: github.event.label.name == '[beta] @guardian/commercial'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
