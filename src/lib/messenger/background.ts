@@ -223,7 +223,6 @@ const setupBackground = async (
 				video.style.inset = '0';
 				video.style.position = 'fixed';
 				video.style.height = '100%';
-				video.style.width = '100%';
 				background.appendChild(video);
 			}
 		} else {
