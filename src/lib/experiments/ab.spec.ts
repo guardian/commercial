@@ -79,14 +79,11 @@ describe('A/B', () => {
 			};
 
 			const shouldRun = [
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- remove when noUncheckedIndexedAccess is turned on
 				jest.spyOn(concurrentTests[0].variants[0] as Variant, 'test'),
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- remove when noUncheckedIndexedAccess is turned on
 				jest.spyOn(concurrentTests[1].variants[0] as Variant, 'test'),
 			];
 
 			const shouldNotRun = [
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- remove when noUncheckedIndexedAccess is turned on
 				jest.spyOn(concurrentTests[2].variants[0] as Variant, 'test'),
 			];
 

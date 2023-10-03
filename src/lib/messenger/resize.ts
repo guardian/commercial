@@ -31,8 +31,15 @@ const normalise = (length: string | number): string => {
 	if (!matches) {
 		return '';
 	}
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- update tsconfig: "noUncheckedIndexedAccess": true
-	return matches[1] + (matches[2] === undefined ? defaultUnit : matches[2]);
+
+	const number = matches[1];
+	const unit = matches[2] === undefined ? defaultUnit : matches[2];
+
+	if (!number) {
+		return '';
+	}
+
+	return number + unit;
 };
 
 const resize = (
