@@ -47,7 +47,7 @@ const contains = (
  * @param o object with falsey values
  * @returns {Record<string, string | string[]>} object with only non-empty strings, or arrays of non-empty strings.
  */
-export const removeFalseyValues = <O extends Record<string, unknown>>(
+export const removeFalsyValues = <O extends Record<string, unknown>>(
 	o: O,
 ): Record<string, string | string[]> =>
 	Object.entries(o).reduce<Record<string, string | string[]>>(
