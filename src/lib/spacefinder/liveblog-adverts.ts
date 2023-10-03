@@ -122,7 +122,6 @@ const insertAds: SpacefinderWriter = async (paras) => {
 	const fastdomPromises = [];
 	for (let i = 0; i < paras.length && AD_COUNTER < MAX_ADS; i += 1) {
 		const para = paras[i];
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- false positive
 		if (para?.parentNode) {
 			const result = insertAdAtPara(para);
 			fastdomPromises.push(result);

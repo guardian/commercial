@@ -54,7 +54,6 @@ const addScripts = (tags: ThirdPartyTag[]) => {
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- false positive
 	if (hasScriptsToInsert) {
 		return fastdom.mutate(() => {
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- false positive
 			if (ref?.parentNode) {
 				ref.parentNode.insertBefore(frag, ref);
 			}
