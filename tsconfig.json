@@ -25,7 +25,8 @@
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"strict": true,
-		"target": "ESNEXT"
+		"target": "ESNEXT",
+		"noUncheckedIndexedAccess": true
 	},
 	"exclude": [
 		"node_modules",
