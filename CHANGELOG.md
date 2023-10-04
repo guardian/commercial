@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.14.0
+
+### Minor Changes
+
+- 1f8baf9: Add a video version of the interscroller template to messenger
+
 ## 11.13.0
 
 ### Minor Changes
