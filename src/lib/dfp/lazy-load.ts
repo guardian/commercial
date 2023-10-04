@@ -1,9 +1,23 @@
+import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { getEagerPrebidVariant } from 'lib/experiments/eager-prebid-check';
+import { requestBidsForAd } from 'lib/header-bidding/request-bids';
 import type { Advert } from './Advert';
 import { dfpEnv } from './dfp-env';
 import { getAdvertById } from './get-advert-by-id';
 import { loadAdvert, refreshAdvert } from './load-advert';
+
+const eagerPrebidVariant = getEagerPrebidVariant() as
+	| 'control'
+	| 'variant-1'
+	| 'variant-2'
+	| null;
+
+const lazyLoadMarginOptions = {
+	control: '20% 0px',
+	'variant-1': '20% 0px', // same as control
+	'variant-2': '10% 0px',
+};
 
 const displayAd = (advertId: string) => {
 	const advert = getAdvertById(advertId);
@@ -16,7 +30,14 @@ const displayAd = (advertId: string) => {
 	}
 };
 
-const onIntersect = (
+const requestBids = (advertId: string) => {
+	const advert = getAdvertById(advertId);
+	if (advert) {
+		void requestBidsForAd(advert);
+	}
+};
+
+const onIntersectDisplayAd = (
 	entries: IntersectionObserverEntry[],
 	observer: IntersectionObserver,
 ) => {
@@ -25,6 +46,11 @@ const onIntersect = (
 	entries
 		.filter((entry) => !('isIntersecting' in entry) || entry.isIntersecting)
 		.forEach((entry) => {
+			log(
+				'commercial',
+				'display observer triggered for: ',
+				entry.target.id,
+			);
 			observer.unobserve(entry.target);
 			displayAd(entry.target.id);
 			advertIds.push(entry.target.id);
@@ -35,37 +61,49 @@ const onIntersect = (
 	);
 };
 
-// Decide the rootMargin for the IntersectionObserver
-// This is based on the variant the user is in, control and
-// variant-20 are the same
-const decideLazyLoadMargin = (): string => {
-	const variant = getEagerPrebidVariant();
+const onIntersectPrebid = (
+	entries: IntersectionObserverEntry[],
+	observer: IntersectionObserver,
+) => {
+	const advertIds: string[] = [];
+	entries
+		.filter((entry) => !('isIntersecting' in entry) || entry.isIntersecting)
+		.forEach((entry) => {
+			log(
+				'commercial',
+				'prebid observer triggered for: ',
+				entry.target.id,
+			);
 
-	switch (variant) {
-		case 'variant-17':
-			return '17.5% 0px';
-		case 'variant-15':
-			return '15% 0px';
-		case 'variant-12':
-			return '12.5% 0px';
-		case 'variant-10':
-			return '10% 0px';
-		default:
-			return '20% 0px';
-	}
+			observer.unobserve(entry.target);
+			requestBids(entry.target.id);
+			advertIds.push(entry.target.id);
+		});
 };
 
-const getObserver = once(() => {
-	return Promise.resolve(
-		new window.IntersectionObserver(onIntersect, {
-			rootMargin: decideLazyLoadMargin(),
-		}),
-	);
+const getDisplayAdObserver = once(() => {
+	return new window.IntersectionObserver(onIntersectDisplayAd, {
+		rootMargin: eagerPrebidVariant
+			? lazyLoadMarginOptions[eagerPrebidVariant]
+			: '20% 0px',
+	});
+});
+
+const getPrebidObserver = once(() => {
+	return new window.IntersectionObserver(onIntersectPrebid, {
+		rootMargin: '50% 0px',
+	});
 });
 
 export const enableLazyLoad = (advert: Advert): void => {
 	if (dfpEnv.lazyLoadObserve) {
-		void getObserver().then((observer) => observer.observe(advert.node));
+		getDisplayAdObserver().observe(advert.node);
+		if (
+			getEagerPrebidVariant() !== null &&
+			getEagerPrebidVariant() !== 'control'
+		) {
+			getPrebidObserver().observe(advert.node);
+		}
 	} else {
 		displayAd(advert.id);
 	}
