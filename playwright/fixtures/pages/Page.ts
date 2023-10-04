@@ -1,4 +1,4 @@
-export type Page = {
+export type GuPage = {
 	path: string;
 	name?: string;
 	expectedMinInlineSlotsOnMobile?: number;

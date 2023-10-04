@@ -31,4 +31,4 @@ const breakpointSizes: BreakpointSizes[] = breakpointsToTest.map((b) => ({
 	height: heights[b],
 }));
 
-export { breakpointSizes as breakpoints };
+export { breakpointSizes as breakpoints, type BreakpointSizes };

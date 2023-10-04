@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 import { articles } from '../../fixtures/pages';
+import type { GuPage } from '../../fixtures/pages/Page';
 import { cmpAcceptAll, cmpReconsent, cmpRejectAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
 import {
@@ -11,7 +12,7 @@ import {
 	waitForSlot,
 } from '../../lib/util';
 
-const { path } = articles[0];
+const { path } = articles[0] as unknown as GuPage;
 
 const adSlotsAreFulfilled = async (page: Page) =>
 	await waitForSlot(page, 'top-above-nav');

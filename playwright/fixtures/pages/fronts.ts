@@ -1,7 +1,7 @@
 import { getStage, getTestUrl } from '../../lib/util';
-import type { Page } from './Page';
+import type { GuPage } from './Page';
 
-type Front = Page & {
+type Front = GuPage & {
 	section: string;
 };
 

@@ -1,6 +1,7 @@
 import type { Request } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 import { allPages, articles } from '../../fixtures/pages';
+import type { GuPage } from '../../fixtures/pages/Page';
 import { bidderURLs, wins } from '../../fixtures/prebid';
 import { cmpAcceptAll } from '../../lib/cmp';
 import {
@@ -11,13 +12,15 @@ import {
 } from '../../lib/gam';
 import { loadPage } from '../../lib/load-page';
 
+const article = articles[0] as unknown as GuPage;
+
 test.describe('GAM targeting', () => {
 	test('checks that a request is made', async ({ page }) => {
 		const gamRequestPromise = waitForGAMRequestForSlot(
 			page,
 			'top-above-nav',
 		);
-		await loadPage(page, articles[0].path);
+		await loadPage(page, article.path);
 		await cmpAcceptAll(page);
 		await gamRequestPromise;
 	});
@@ -27,7 +30,7 @@ test.describe('GAM targeting', () => {
 			page,
 			'top-above-nav',
 		);
-		await loadPage(page, articles[0].path);
+		await loadPage(page, article.path);
 		await cmpAcceptAll(page);
 		const request = await gamRequestPromise;
 		const matched = assertRequestParameter(
@@ -97,7 +100,7 @@ test.describe('Prebid targeting', () => {
 			if (!isCriteoBid) return false;
 			return true;
 		});
-		await loadPage(page, articles[0].path);
+		await loadPage(page, article.path);
 		await cmpAcceptAll(page);
 		const gamCriteoRequest = await gamCriteoRequestPromise;
 		assertGamCriteoRequest(gamCriteoRequest);

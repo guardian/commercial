@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
+import type { BreakpointSizes } from '../../fixtures/breakpoints';
 import { breakpoints } from '../../fixtures/breakpoints';
 import { blogs } from '../../fixtures/pages';
 import { cmpAcceptAll } from '../../lib/cmp';
@@ -9,7 +10,7 @@ const pages = blogs.filter(({ name }) => name === 'ad-limit');
 
 const desktopBreakpoint = breakpoints.filter(
 	({ breakpoint }) => breakpoint === 'desktop',
-)[0];
+)[0] as unknown as BreakpointSizes;
 
 /**
  * TODO e2e flakey test

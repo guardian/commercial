@@ -1,9 +1,9 @@
 import { getStage, getTestUrl } from '../../lib/util';
-import type { Page } from './Page';
+import type { GuPage } from './Page';
 
 const stage = getStage();
 
-const articles: Page[] = [
+const articles: GuPage[] = [
 	{
 		path: getTestUrl(
 			stage,
