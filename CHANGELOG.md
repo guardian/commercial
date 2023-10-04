@@ -1,5 +1,18 @@
 # @guardian/commercial
 
+## 11.13.0
+
+### Minor Changes
+
+- 72e698e: Prepare eager prebid 2 ab test
+
+### Patch Changes
+
+- 7c6b426: noUncheckedIndexedAccess errors in several files
+- 03ba957: Dependabot package updates
+- 6cecf16: Catch Okta errors
+- f4d5c66: enable noUncheckedIndexAccess
+
 ## 11.12.0
 
 ### Minor Changes
