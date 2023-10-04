@@ -9,7 +9,7 @@ import {
 const isDCR = window.guardian.config.isDotcomRendering;
 
 interface BackgroundSpecs {
-	backgroundImage?: string;
+	backgroundImage: string;
 	backgroundRepeat?: string;
 	backgroundPosition?: string;
 	// native templates are sometimes using the british spelling of background-color for some reason, removed in getStylesFromSpec above
