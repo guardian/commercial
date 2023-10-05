@@ -128,6 +128,7 @@ const setupFakeLogin = async (
 	);
 };
 
+// Playwright does not currently have a useful method for removing a cookie, so this workaround is needed.
 const clearCookie = async (context: BrowserContext, cookieName: string) => {
 	const cookies = await context.cookies();
 	const filteredCookies = cookies.filter(
@@ -137,7 +138,7 @@ const clearCookie = async (context: BrowserContext, cookieName: string) => {
 	await context.addCookies(filteredCookies);
 };
 
-const fakeLogOut = async (page: Page, context: BrowserContext) =>
+const fakeLogOut = async (context: BrowserContext) =>
 	await clearCookie(context, 'GU_U');
 
 const waitForSlot = async (page: Page, slot: string) => {
