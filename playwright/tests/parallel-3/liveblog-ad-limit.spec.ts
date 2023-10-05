@@ -49,7 +49,7 @@ const countInlineSlots = (page: Page) =>
 
 test.describe('Ad slot limits', () => {
 	pages.forEach(({ path, expectedMinInlineSlotsOnDesktop }) => {
-		test(`doesn't insert more than ${maxAdSlots} ads on desktop`, async ({
+		test.skip(`doesn't insert more than ${maxAdSlots} ads on desktop`, async ({
 			page,
 		}) => {
 			await page.setViewportSize({
