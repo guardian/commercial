@@ -4,16 +4,7 @@ import { articles } from '../../fixtures/pages';
 import { cmpAcceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
 
-/**
- * TODO e2e flakey test
- * - sometimes the number slots of inserted does not match expectedMinInlineSlots :(
- */
-
-const pages = articles.filter(
-	(page) =>
-		'expectedMinInlineSlotsOnDesktop' in page &&
-		'expectedMinInlineSlotsOnMobile' in page,
-);
+const pages = articles.filter(({ name }) => name === 'inlineSlots');
 
 test.describe('Slots and iframes load on article pages', () => {
 	pages.forEach(
@@ -39,12 +30,15 @@ test.describe('Slots and iframes load on article pages', () => {
 					await loadPage(page, path);
 					await cmpAcceptAll(page);
 
-					// wait for the first inline slot to be added to the dom
-					// they will not be 'visible' initially
+					// wait for Spacefinder to place the first inline slot into the DOM
 					await page
-						.locator('.ad-slot--inline')
-						.first()
-						.waitFor({ state: 'hidden', timeout: 30000 });
+						.locator('.ad-slot--inline1')
+						.waitFor({ state: 'attached' });
+
+					// wait for Spacefinder to run a second time, to place the inline2+ slots
+					await page
+						.locator('.ad-slot--inline2')
+						.waitFor({ state: 'attached' });
 
 					const foundSlots = await page
 						.locator('.ad-slot--inline')

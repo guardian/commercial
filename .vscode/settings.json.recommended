@@ -1,5 +1,5 @@
 // Recommended VS Code settings for this project.
-// Copy these to .vscode/settings.json to apply them to your editor – but don't commit it!
+// Copy these to .vscode/settings.json to apply them to your editor
 // https://github.com/guardian/recommendations/blob/main/VSCode.md#do-not-commit-vscode
 {
 	"[javascript]": {
