@@ -11,14 +11,27 @@ const { merge } = require('lodash');
 const getProdDataUrl = (path) =>
 	`https://theguardian.com/${path}.json?dcr=true`;
 
+const isStringTuple = (_) => typeof _[1] === 'string';
+
 /**
  * @param {string} path
  * @returns {Promise<Record<string, unknown>>}
  */
-const fetchDcrDataModel = async (path) => {
+const fetchDcrDataModel = async (path, _headers) => {
 	const url = getProdDataUrl(path);
 	try {
-		const res = await fetch(url);
+		// Forward cookies and x-gu headers
+		const headers = Object.fromEntries(
+			Object.entries(_headers)
+				.filter(
+					([key]) =>
+						key.toLowerCase() === 'cookie' ||
+						key.toLowerCase().startsWith('x-gu-'),
+				)
+				.filter(isStringTuple),
+		);
+
+		const res = await fetch(url, { headers });
 		if (!res.ok) {
 			return undefined;
 		}
@@ -64,7 +77,7 @@ const setupFixturesServer = (devServer) => {
 		}
 
 		// Fetch the JSON for the given path from PROD Frontend
-		const dataModel = await fetchDcrDataModel(path);
+		const dataModel = await fetchDcrDataModel(path, req.headers);
 
 		if (!dataModel) {
 			console.error('Something went wrong retrieving DCR data from PROD');

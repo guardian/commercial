@@ -7,12 +7,13 @@ on:
   pull_request:
 
 concurrency:
-  group: 'e2e-${{ github.head_ref }}'
+  group: 'playwright-${{ github.head_ref }}'
   cancel-in-progress: true
 
 jobs:
   test:
-    name: Cypress
+    name: Playwright
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -21,7 +22,7 @@ jobs:
     steps:
       # Commercial
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           path: ./commercial
 
@@ -54,22 +55,21 @@ jobs:
             -e "COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js" \
             ghcr.io/guardian/dotcom-rendering:main
 
+      - name: Install Playwright Browsers
+        run: yarn playwright install --with-deps
+        working-directory: ./commercial
+
       - name: Start Commercial server
         run: yarn serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
         working-directory: ./commercial
 
-      - name: Run Cypress
-        run: yarn cypress run --spec cypress/e2e/parallel-${{ matrix.group }}/*
+      - name: Run Playwright
+        run: yarn playwright test parallel-${{ matrix.group }}
         working-directory: ./commercial
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: cypress-videos
-          path: commercial/cypress/videos
-
-      - uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: commercial/cypress/screenshots
+          name: playwright-report-${{ matrix.group }}
+          path: ./commercial/playwright-report
+          retention-days: 5

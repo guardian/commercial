@@ -131,3 +131,5 @@ export type Indices<T extends readonly unknown[]> = Exclude<
 	Partial<T>['length'],
 	T['length']
 >;
+
+export const isDefined = <T>(x: T | undefined): x is T => x !== undefined;

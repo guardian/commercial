@@ -65,6 +65,7 @@
 		"@guardian/support-dotcom-components": "1.0.7",
 		"@percy/cli": "^1.26.0",
 		"@percy/cypress": "^3.1.2",
+		"@playwright/test": "^1.37.1",
 		"@types/google.analytics": "^0.0.42",
 		"@types/googletag": "~3.0.3",
 		"@types/jest": "^29.4.0",
