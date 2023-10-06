@@ -23,8 +23,6 @@
 		"clean": "rm -rf dist",
 		"compile:core:common": "tsc --project ./tsconfig.core.json --outDir ./dist/cjs --module CommonJS",
 		"compile:core:esm": "tsc --project ./tsconfig.core.json --outDir ./dist/esm",
-		"playwright:ui": "npx playwright test --ui",
-		"playwright": "npx playwright test",
 		"e2e:open": "cypress open --e2e --browser=chrome",
 		"e2e:run": "cypress run --spec 'cypress/e2e/**/*'",
 		"e2e:visual:open": "cypress open --e2e --browser=chrome --config specPattern='cypress/snapshot/**/*'",
