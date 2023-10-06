@@ -115,7 +115,7 @@
 		"@octokit/core": "^4.0.5",
 		"fastdom": "^1.0.11",
 		"lodash-es": "^4.17.21",
-		"ophan-tracker-js": "^1.4.0",
+		"ophan-tracker-js": "^2.0.1",
 		"prebid.js": "guardian/prebid.js#356f371",
 		"process": "^0.11.10",
 		"raven-js": "^3.27.2",
