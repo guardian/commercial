@@ -100,23 +100,20 @@ const initSlotIas = (id: string, slot: googletag.Slot) =>
 				const ignoredKeys = ['pub'];
 				const slotTargeting = targeting.slots[id];
 
-				/* eslint-disable @typescript-eslint/no-unnecessary-condition -- TODO temporary until no unchecked index access can be turned on */
 				if (slotTargeting) {
 					Object.keys(slotTargeting)
 						.filter((x) => !ignoredKeys.includes(x))
 						.forEach((key) => {
 							const targetingSlot = targeting.slots[id];
-
 							if (targetingSlot) {
 								const targetingValue = targetingSlot[key];
 
-								if (slot && targetingValue) {
+								if (targetingValue) {
 									slot.setTargeting(key, targetingValue);
 								}
 							}
 						});
 				}
-				/* eslint-enable @typescript-eslint/no-unnecessary-condition */
 
 				resolve();
 			};
