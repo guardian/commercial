@@ -273,7 +273,11 @@ const ozoneClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 		customData: [
 			{
 				settings: {},
-				targeting: buildAppNexusTargetingObject(pageTargeting),
+				targeting: {
+					// Assigns a random integer between 0 and 99
+					testgroup: String(Math.floor(100 * Math.random())),
+					...buildAppNexusTargetingObject(pageTargeting),
+				},
 			},
 		],
 		ozoneData: {}, // TODO: confirm if we need to send any

@@ -5,7 +5,7 @@ import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import { buildPageTargeting } from 'core/targeting/build-page-targeting';
 import { getSynchronousParticipations } from 'lib/experiments/ab';
 import { commercialFeatures } from './commercial-features';
-import { removeFalseyValues } from './header-bidding/utils';
+import { removeFalsyValues } from './header-bidding/utils';
 
 const formatAppNexusTargeting = (obj: Record<string, string | string[]>) => {
 	const asKeyValues = Object.entries(obj).map((entry) => {
@@ -21,7 +21,7 @@ const formatAppNexusTargeting = (obj: Record<string, string | string[]>) => {
 
 const buildAppNexusTargetingObject = once(
 	(pageTargeting: PageTargeting): Record<string, string | string[]> =>
-		removeFalseyValues({
+		removeFalsyValues({
 			sens: pageTargeting.sens,
 			pt1: pageTargeting.url,
 			pt2: pageTargeting.edition,

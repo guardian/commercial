@@ -11,7 +11,7 @@ import { getCountryCode as getCountryCode_ } from 'lib/utils/geolocation';
 import {
 	getBreakpointKey,
 	getLargestSize,
-	removeFalseyValues,
+	removeFalsyValues,
 	shouldIncludeAdYouLike,
 	shouldIncludeAppNexus,
 	shouldIncludeImproveDigital,
@@ -313,8 +313,8 @@ describe('Utils', () => {
 		expect(shouldIncludeAdYouLike([createAdSize(728, 90)])).toBe(false);
 	});
 
-	test('removeFalseyValues correctly remove non-truthy values', () => {
-		const result = removeFalseyValues({
+	test('removeFalsyValues correctly remove non-truthy values', () => {
+		const result = removeFalsyValues({
 			testString: 'non empty string',
 			testEmptyString: '',
 			testNull: null,
@@ -329,8 +329,8 @@ describe('Utils', () => {
 		});
 	});
 
-	test('removeFalseyValues correctly keeps arrays of strings', () => {
-		const result = removeFalseyValues({
+	test('removeFalsyValues correctly keeps arrays of strings', () => {
+		const result = removeFalsyValues({
 			testString: 'non empty string',
 			testArraysWithEmptyStrings: ['a', '', 'b', '', 'c'],
 			testEmptyArray: [],
