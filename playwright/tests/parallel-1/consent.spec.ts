@@ -49,7 +49,17 @@ const waitForOptOut = (page: Page) =>
 	page.waitForRequest(/cdn.optoutadvertising.com/);
 
 test.describe('tcfv2 consent', () => {
-	test(`Reject all, load opt out, ads slots are present`, async ({
+	test(`Accept all, ad slots are fulfilled`, async ({ page }) => {
+		await loadPage(page, path);
+
+		await cmpAcceptAll(page);
+
+		await loadPage(page, path);
+
+		await adSlotsAreFulfilled(page);
+	});
+
+	test(`Reject all, load Opt Out, ads slots are present`, async ({
 		page,
 	}) => {
 		await loadPage(page, path);
@@ -61,7 +71,24 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsArePresent(page);
 	});
 
-	test(`Reject all, login as non-subscriber, load opt out, ads slots are present`, async ({
+	test(`Reject all, login as subscriber, load Opt Out, ads slots are not present`, async ({
+		page,
+		context,
+	}) => {
+		await setupFakeLogin(page, context, true);
+
+		await visitArticleNoOkta(page);
+
+		const optOutPromise = waitForOptOut(page);
+		await cmpRejectAll(page);
+		await optOutPromise;
+
+		await visitArticleNoOkta(page);
+
+		await adSlotsAreNotPresent(page);
+	});
+
+	test(`Reject all, login as non-subscriber, load Opt Out, ads slots are present`, async ({
 		page,
 		context,
 	}) => {
@@ -76,26 +103,6 @@ test.describe('tcfv2 consent', () => {
 		await visitArticleNoOkta(page);
 
 		await adSlotsArePresent(page);
-	});
-
-	test(`Accept all, login as subscriber, ads slots are not present`, async ({
-		page,
-		context,
-	}) => {
-		await setupFakeLogin(page, context, true);
-
-		await visitArticleNoOkta(page);
-
-		await cmpAcceptAll(page);
-
-		// TODO investigate
-		// user-features does not run until consent state has been given.
-		// So when we accept all ads will load despite being ad free as
-		// the ad free cookie has not yet been set.
-
-		await visitArticleNoOkta(page);
-
-		await adSlotsAreNotPresent(page);
 	});
 
 	test(`Reject all, accept all, ad slots are fulfilled`, async ({ page }) => {
@@ -112,7 +119,27 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreFulfilled(page);
 	});
 
-	test(`Reject all, login as subscriber, ad slots are not present, log out, load opt out, ad slots are present`, async ({
+	test(`Accept all, login as subscriber, ads slots are not present`, async ({
+		page,
+		context,
+	}) => {
+		await setupFakeLogin(page, context, true);
+
+		await visitArticleNoOkta(page);
+
+		await cmpAcceptAll(page);
+
+		// TODO investigate
+		// user-features does not run until consent state has been given.
+		// So when we accept all, ads will load despite being ad free as
+		// the ad free cookie has not yet been set.
+
+		await visitArticleNoOkta(page);
+
+		await adSlotsAreNotPresent(page);
+	});
+
+	test(`Reject all, login as subscriber, ad slots are not present, log out, load Opt Out, ad slots are present`, async ({
 		page,
 		context,
 	}) => {
@@ -126,11 +153,30 @@ test.describe('tcfv2 consent', () => {
 
 		await adSlotsAreNotPresent(page);
 
-		await fakeLogOut(page, context);
+		await fakeLogOut(context);
 
 		await visitArticleNoOkta(page);
 
 		await adSlotsArePresent(page);
+	});
+
+	test(`Reject all, login as subscriber, ad slots are not present on multiple page loads`, async ({
+		page,
+		context,
+	}) => {
+		await setupFakeLogin(page, context, true);
+
+		await visitArticleNoOkta(page);
+
+		await cmpRejectAll(page);
+
+		await visitArticleNoOkta(page);
+
+		await adSlotsAreNotPresent(page);
+
+		await visitArticleNoOkta(page);
+
+		await adSlotsAreNotPresent(page);
 	});
 
 	test(`Reject all, login as non-subscriber, ad slots are present, log out, ad slots are present`, async ({
@@ -147,7 +193,7 @@ test.describe('tcfv2 consent', () => {
 
 		await adSlotsArePresent(page);
 
-		await fakeLogOut(page, context);
+		await fakeLogOut(context);
 
 		await visitArticleNoOkta(page);
 
@@ -173,86 +219,5 @@ test.describe('tcfv2 consent', () => {
 		await visitArticleNoOkta(page);
 
 		await adSlotsAreFulfilled(page);
-	});
-
-	test(`Reject all, login as subscriber, ad slots are not present on multiple page loads`, async ({
-		page,
-		context,
-	}) => {
-		await setupFakeLogin(page, context, true);
-
-		await visitArticleNoOkta(page);
-
-		await cmpRejectAll(page);
-
-		await visitArticleNoOkta(page);
-
-		await adSlotsAreNotPresent(page);
-
-		await visitArticleNoOkta(page);
-
-		await adSlotsAreNotPresent(page);
-	});
-
-	// TODO e2e
-	test.skip(`Accept all, login as subscriber, ad slots are not present, subscription expires, ads slots are fulfilled`, async ({
-		page,
-		context,
-	}) => {
-		await setupFakeLogin(page, context, true);
-
-		await visitArticleNoOkta(page);
-
-		await cmpAcceptAll(page);
-
-		await visitArticleNoOkta(page);
-
-		await adSlotsAreNotPresent(page);
-
-		// expire subscription
-		await context.addCookies([
-			{
-				name: 'gu_user_features_expiry',
-				value: String(new Date().getTime() / 1000 - 10000),
-				domain: 'localhost',
-				path: '/',
-			},
-		]);
-
-		await visitArticleNoOkta(page);
-
-		await visitArticleNoOkta(page);
-
-		await adSlotsAreFulfilled(page);
-	});
-
-	// TODO e2e
-	test.skip(`Reject all, login as subscriber, ad slots are not present, subscription expires, ads slots are present`, async ({
-		page,
-		context,
-	}) => {
-		await setupFakeLogin(page, context, true);
-
-		await visitArticleNoOkta(page);
-
-		await cmpRejectAll(page);
-
-		await visitArticleNoOkta(page);
-
-		await adSlotsAreNotPresent(page);
-
-		// expire subscription
-		await context.addCookies([
-			{
-				name: 'gu_user_features_expiry',
-				value: String(new Date().getTime() / 1000 - 10000),
-				domain: 'localhost',
-				path: '/',
-			},
-		]);
-
-		await visitArticleNoOkta(page);
-
-		await adSlotsArePresent(page);
 	});
 });
