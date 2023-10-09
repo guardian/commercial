@@ -24,11 +24,6 @@ coverage
 # Work-in-progress folder
 wip
 
-# Cypress
-downloads
-screenshots
-videos
-
 # Playwright
 /test-results/
 /playwright-report/
