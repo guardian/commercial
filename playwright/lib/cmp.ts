@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { waitForIsland } from './util';
 
 const SP_LAYER1_IFRAME = '[id*="sp_message_iframe"]';
 const SP_LAYER1_ACCEPT_ALL_BUTTON = 'button.sp_choice_type_11';
@@ -29,6 +30,7 @@ const cmpRejectAll = async (page: Page) => {
 };
 
 const cmpReconsent = async (page: Page) => {
+	await waitForIsland(page, 'PrivacySettingsLink');
 	const privacySettingsSelector = '[data-link-name="privacy-settings"]';
 	await page.locator(privacySettingsSelector).scrollIntoViewIfNeeded();
 	await page.locator(privacySettingsSelector).click();

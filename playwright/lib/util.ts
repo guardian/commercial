@@ -155,4 +155,25 @@ const waitForSlot = async (page: Page, slot: string) => {
 	await iframe.waitFor({ state: 'visible', timeout: 120000 });
 };
 
-export { fakeLogOut, setupFakeLogin, getStage, getTestUrl, waitForSlot };
+const waitForIsland = async (page: Page, island: string) => {
+	const islandSelector = `gu-island[name="${island}"]`;
+	// create a locator for the island
+	const islandLocator = page.locator(islandSelector);
+	// check that the island is present on the page
+	await islandLocator.isVisible();
+	// scroll to it
+	await islandLocator.scrollIntoViewIfNeeded();
+	// wait for it to be hydrated
+	const hyrdatedIslandSelector = `gu-island[name="${island}"][data-island-status="hydrated"]`;
+	const hyrdatedIslandLocator = page.locator(hyrdatedIslandSelector);
+	await hyrdatedIslandLocator.waitFor({ state: 'visible', timeout: 120000 });
+};
+
+export {
+	fakeLogOut,
+	setupFakeLogin,
+	getStage,
+	getTestUrl,
+	waitForSlot,
+	waitForIsland,
+};
