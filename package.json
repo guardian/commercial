@@ -60,7 +60,6 @@
 		"@guardian/prettier": "4.0.0",
 		"@guardian/source-foundations": "13.0.0",
 		"@guardian/support-dotcom-components": "1.0.7",
-		"@percy/cli": "^1.26.0",
 		"@playwright/test": "^1.37.1",
 		"@types/google.analytics": "^0.0.42",
 		"@types/googletag": "~3.0.3",
