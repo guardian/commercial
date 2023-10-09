@@ -42,7 +42,10 @@ describe('initSlotIas', () => {
 
 		expect(queue).toHaveLength(1);
 
-		const { adSlots, dataHandler } = queue[0]!;
+		const { adSlots, dataHandler } = queue[0] as unknown as {
+			adSlots: [];
+			dataHandler: (json: string) => void;
+		};
 
 		expect(adSlots).toEqual([
 			{
