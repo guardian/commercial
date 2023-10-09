@@ -25,7 +25,7 @@ To develop locally, run `yarn serve` to start a local server. This will watch fo
 
 To run the unit tests, run `yarn test`.
 
-To run the Cypress integration tests, run `yarn e2e:open` or `yarn e2e:run`.
+To run the Playwright e2e tests, run `yarn e2e` or `yarn e2e:ui`.
 
 ### Releasing
 
