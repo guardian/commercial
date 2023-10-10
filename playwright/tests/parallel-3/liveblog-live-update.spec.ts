@@ -12,8 +12,7 @@ import { loadPage } from '../../lib/load-page';
 
 const pages = blogs.filter(({ name }) => name === 'live-update');
 
-test.describe.configure({ mode: 'serial' });
-test.describe('Liveblog live updates', () => {
+test.describe.serial('Liveblog live updates', () => {
 	pages.forEach(({ path }) => {
 		breakpoints.forEach(({ breakpoint, width, height }) => {
 			test(`Test ads are inserted when liveblogs update, breakpoint: ${breakpoint}`, async ({
