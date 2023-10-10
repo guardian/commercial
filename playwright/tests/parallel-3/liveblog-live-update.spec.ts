@@ -12,10 +12,11 @@ import { loadPage } from '../../lib/load-page';
 
 const pages = blogs.filter(({ name }) => name === 'live-update');
 
+test.describe.configure({ mode: 'serial' });
 test.describe('Liveblog live updates', () => {
 	pages.forEach(({ path }) => {
 		breakpoints.forEach(({ breakpoint, width, height }) => {
-			test.skip(`Test ads are inserted when liveblogs update, breakpoint: ${breakpoint}`, async ({
+			test(`Test ads are inserted when liveblogs update, breakpoint: ${breakpoint}`, async ({
 				page,
 			}) => {
 				await page.setViewportSize({
@@ -81,8 +82,11 @@ test.describe('Liveblog live updates', () => {
 					.locator('#liveblog-body .ad-slot--liveblog-inline')
 					.count();
 
+				console.log(`end slot count is ${endSlotCount}`);
+
 				expect(endSlotCount).toBeGreaterThan(startSlotCount);
 			});
 		});
+		//});
 	});
 });
