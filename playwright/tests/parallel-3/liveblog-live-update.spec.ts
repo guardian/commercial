@@ -87,6 +87,5 @@ test.describe('Liveblog live updates', () => {
 				expect(endSlotCount).toBeGreaterThan(startSlotCount);
 			});
 		});
-		//});
 	});
 });
