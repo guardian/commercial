@@ -1,5 +1,16 @@
 # @guardian/commercial
 
+## 11.15.0
+
+### Minor Changes
+
+- c56d3b7: Adds testgroup key to ozone targeting object
+- 2c817cb: bump ophan-tracker-js
+
+### Patch Changes
+
+- d38e580: Bumped version of consent-management-platform to 13.7.0
+
 ## 11.14.0
 
 ### Minor Changes
