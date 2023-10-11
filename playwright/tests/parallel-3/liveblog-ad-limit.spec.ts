@@ -23,14 +23,14 @@ const addAndAwaitNewBlocks = async (page: Page, blockContent: string) => {
 		window.mockLiveUpdate({
 			numNewBlocks: 7,
 			html: `
-			<p style="height:1000px;" class="pending block">${blockContent}</p>
-			<p style="height:1000px;" class="pending block">New block</p>
-			<p style="height:1000px;" class="pending block">New block</p>
-			<p style="height:1000px;" class="pending block">New block</p>
-			<p style="height:1000px;" class="pending block">New block</p>
-			<p style="height:1000px;" class="pending block">New block</p>
-			<p style="height:1000px;" class="pending block">New block</p>
-		`,
+				<p style="height:1000px;" class="pending block">${blockContent}</p>
+				<p style="height:1000px;" class="pending block">New block</p>
+				<p style="height:1000px;" class="pending block">New block</p>
+				<p style="height:1000px;" class="pending block">New block</p>
+				<p style="height:1000px;" class="pending block">New block</p>
+				<p style="height:1000px;" class="pending block">New block</p>
+				<p style="height:1000px;" class="pending block">New block</p>
+			`,
 			mostRecentBlockId: 'abc',
 		});
 	}, blockContent);
