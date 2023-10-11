@@ -14,9 +14,6 @@ const desktopBreakpoint = breakpoints.filter(
 
 const maxAdSlots = 8;
 
-const countInlineSlots = (page: Page) =>
-	page.locator('#liveblog-body .ad-slot--liveblog-inline').count();
-
 const addAndAwaitNewBlocks = async (page: Page, blockContent: string) => {
 	// scroll to the top so we get a toast to click on
 	await page.evaluate(() => window.scrollTo(0, 0));
@@ -45,6 +42,9 @@ const addAndAwaitNewBlocks = async (page: Page, blockContent: string) => {
 	const newBlock = page.getByText(blockContent).first();
 	await expect(newBlock).toBeVisible();
 };
+
+const countInlineSlots = (page: Page) =>
+	page.locator('#liveblog-body .ad-slot--liveblog-inline').count();
 
 test.describe.serial('Ad slot limits', () => {
 	pages.forEach(({ path, expectedMinInlineSlotsOnDesktop }) => {
