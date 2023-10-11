@@ -18,20 +18,19 @@ const addAndAwaitNewBlocks = async (page: Page, blockContent: string) => {
 	// scroll to the top so we get a toast to click on
 	await page.evaluate(() => window.scrollTo(0, 0));
 	await page.evaluate((blockContent) => {
-		const htmlBlocks = `
-			<p style="height:1000px;" class="pending block">${blockContent}</p>
-			<p style="height:1000px;" class="pending block">${blockContent}</p>
-			<p style="height:1000px;" class="pending block">${blockContent}</p>
-			<p style="height:1000px;" class="pending block">${blockContent}</p>
-			<p style="height:1000px;" class="pending block">${blockContent}</p>
-			<p style="height:1000px;" class="pending block">${blockContent}</p>
-			<p style="height:1000px;" class="pending block">${blockContent}</p>
-		`;
 		// @ts-expect-error -- browser land
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-call -- browser land
 		window.mockLiveUpdate({
 			numNewBlocks: 7,
-			html: htmlBlocks,
+			html: `
+			<p style="height:1000px;" class="pending block">${blockContent}</p>
+			<p style="height:1000px;" class="pending block">New block</p>
+			<p style="height:1000px;" class="pending block">New block</p>
+			<p style="height:1000px;" class="pending block">New block</p>
+			<p style="height:1000px;" class="pending block">New block</p>
+			<p style="height:1000px;" class="pending block">New block</p>
+			<p style="height:1000px;" class="pending block">New block</p>
+		`,
 			mostRecentBlockId: 'abc',
 		});
 	}, blockContent);
