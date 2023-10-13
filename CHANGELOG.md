@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.16.0
+
+### Minor Changes
+
+- 09607f0: Set eager prebid test to 0%
+
 ## 11.15.0
 
 ### Minor Changes
