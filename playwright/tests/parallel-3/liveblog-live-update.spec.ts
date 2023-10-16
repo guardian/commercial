@@ -4,6 +4,11 @@ import { blogs } from '../../fixtures/pages';
 import { cmpAcceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
 
+/**
+ * TODO serial e2e tests
+ * - It would be good to see if these tests could be run in parallel in the future
+ */
+
 const pages = blogs.filter(({ name }) => name === 'live-update');
 
 test.describe.serial('Liveblog live updates', () => {
