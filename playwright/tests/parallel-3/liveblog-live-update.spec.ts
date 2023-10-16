@@ -4,12 +4,6 @@ import { blogs } from '../../fixtures/pages';
 import { cmpAcceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
 
-/**
- * TODO e2e flakey test
- * - sometimes window.mockLiveUpdate is not available because the article does not switch to 'live'
- * - sometimes no extra ads are inserted when new blocks are inserted. Is this a bug in the code?
- */
-
 const pages = blogs.filter(({ name }) => name === 'live-update');
 
 test.describe.serial('Liveblog live updates', () => {
