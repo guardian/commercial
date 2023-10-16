@@ -5,17 +5,16 @@ import { cmpAcceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
 
 /**
- * TODO e2e flakey test
- * - sometimes window.mockLiveUpdate is not available because the article does not switch to 'live'
- * - sometimes no extra ads are inserted when new blocks are inserted. Is this a bug in the code?
+ * TODO serial e2e tests
+ * - It would be good to see if these tests could be run in parallel in the future
  */
 
 const pages = blogs.filter(({ name }) => name === 'live-update');
 
-test.describe('Liveblog live updates', () => {
+test.describe.serial('Liveblog live updates', () => {
 	pages.forEach(({ path }) => {
 		breakpoints.forEach(({ breakpoint, width, height }) => {
-			test.skip(`Test ads are inserted when liveblogs update, breakpoint: ${breakpoint}`, async ({
+			test(`Test ads are inserted when liveblogs update, breakpoint: ${breakpoint}`, async ({
 				page,
 			}) => {
 				await page.setViewportSize({
@@ -80,6 +79,8 @@ test.describe('Liveblog live updates', () => {
 				const endSlotCount = await page
 					.locator('#liveblog-body .ad-slot--liveblog-inline')
 					.count();
+
+				console.log(`end slot count is ${endSlotCount}`);
 
 				expect(endSlotCount).toBeGreaterThan(startSlotCount);
 			});
