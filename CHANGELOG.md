@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.16.2
+
+### Patch Changes
+
+- 4cc0a75: Bump Prebid to use updated version of babel/core
+
 ## 11.16.1
 
 ### Patch Changes
