@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.16.1
+
+### Patch Changes
+
+- 5056e54: Bump prebid.js to fix @babel/traverse vulnerability
+
 ## 11.16.0
 
 ### Minor Changes
