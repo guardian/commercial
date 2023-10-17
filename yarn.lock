@@ -6779,9 +6779,9 @@ playwright-core@1.37.1:
   resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.37.1.tgz#cb517d52e2e8cb4fa71957639f1cd105d1683126"
   integrity sha512-17EuQxlSIYCmEMwzMqusJ2ztDgJePjrbttaefgdsiqeLWidjYz9BxXaTaZWxH1J95SHGk6tjE+dwgWILJoUZfA==
 
-prebid.js@guardian/prebid.js#356f371:
+prebid.js@guardian/prebid.js#c66612d:
   version "7.54.5"
-  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/356f3714fda0459b6740e90ff265055fe6d4f813"
+  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/c66612d7a87dfa02c5c623dbcf6cca7186a659bb"
   dependencies:
     "@babel/core" "^7.16.7"
     "@babel/plugin-transform-runtime" "^7.18.9"
