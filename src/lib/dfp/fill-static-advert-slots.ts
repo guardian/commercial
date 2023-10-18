@@ -80,6 +80,8 @@ const fillStaticAdvertSlots = async (): Promise<void> => {
 		.filter(
 			(adSlot) => !(isDCRMobile && adSlot.id === 'dfp-ad--top-above-nav'),
 		)
+		// Slots can explicitly set themselves to be dynamic, in which case they will be filled at some other point, for example via custom event.
+		.filter((adSlot) => adSlot.dataset['dynamic-slot'] !== 'true')
 		.map((adSlot) => {
 			const additionalSizes = decideAdditionalSizes(adSlot);
 			return createAdvert(adSlot, additionalSizes);
