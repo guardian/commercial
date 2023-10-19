@@ -5,12 +5,19 @@ import { getStage, getTestUrl, waitForSlot } from '../../lib/util';
 
 test.describe('shouldLoadGoogletagSwitch', () => {
 	test('ad slot should be filled when switch is true', async ({ page }) => {
+		const fixture = {
+			config: {
+				switches: {
+					shouldLoadGoogletag: true,
+				},
+			},
+		};
 		const path = getTestUrl({
 			stage: getStage(),
 			path: 'uk',
 			type: 'front',
 			adtest: undefined,
-			fixtureId: 'overwriteShouldLoadGoogletagTrue',
+			fixture,
 		});
 		await loadPage(page, path);
 		await cmpAcceptAll(page);
@@ -18,12 +25,19 @@ test.describe('shouldLoadGoogletagSwitch', () => {
 	});
 
 	test('ad slot should be filled when switch is false', async ({ page }) => {
+		const fixture = {
+			config: {
+				switches: {
+					shouldLoadGoogletag: false,
+				},
+			},
+		};
 		const path = getTestUrl({
 			stage: getStage(),
 			path: 'uk',
 			type: 'front',
 			adtest: undefined,
-			fixtureId: 'overwriteShouldLoadGoogletagFalse',
+			fixture,
 		});
 		await loadPage(page, path);
 		await cmpAcceptAll(page);

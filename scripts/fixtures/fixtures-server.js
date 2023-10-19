@@ -53,7 +53,7 @@ const fetchDcrDataModel = async (path, _headers) => {
  * rest of the path. For example, to override the data for the /uk
  * path with fixture id 'foo' you could call:
  *
- * 	`http://localhost:PORT/renderFixture/foo/uk.json`
+ * 	`http://localhost:PORT/renderFixtureWithId/foo/uk.json`
  *
  * These can then be used by an E2E test in order to fix certain
  * behavior about the system-under-test e.g. override a switch state
@@ -66,30 +66,67 @@ const setupFixturesServer = (devServer) => {
 		throw new Error('webpack-dev-server is not defined');
 	}
 
-	devServer.app.get('/renderFixture/:fixtureId/*.json', async (req, res) => {
-		const path = req.params[0];
-		const fixtureId = req.params.fixtureId;
-		const fixture = fixtures[fixtureId];
+	devServer.app.get(
+		'/renderFixture/*.json',
+		/**
+		 * TODO
+		 */
+		async (req, res) => {
+			const path = req.params[0];
+			const fixtureQuery = req.query['fixture'];
+			const fixture = JSON.parse(
+				Buffer.from(fixtureQuery, 'base64').toString(),
+			);
 
-		if (!fixture) {
-			console.error(`Fixture with id ${fixtureId} not found`);
-			return res.status(404).send();
-		}
+			// Fetch the JSON for the given path from PROD Frontend
+			const dataModel = await fetchDcrDataModel(path, req.headers);
 
-		// Fetch the JSON for the given path from PROD Frontend
-		const dataModel = await fetchDcrDataModel(path, req.headers);
+			if (!dataModel) {
+				console.error(
+					'Something went wrong retrieving DCR data from PROD',
+				);
+				return res.status(503).send();
+			}
+			// Merge the fixture into the data model
+			// Note that this will be a deep merge
+			merge(dataModel, fixture);
 
-		if (!dataModel) {
-			console.error('Something went wrong retrieving DCR data from PROD');
-			return res.status(503).send();
-		}
+			return res.json(dataModel);
+		},
+	);
 
-		// Merge the fixture into the data model
-		// Note that this will be a deep merge
-		merge(dataModel, fixture);
+	devServer.app.get(
+		'/renderFixtureWithId/:fixtureId/*.json',
+		/**
+		 * TODO
+		 */
+		async (req, res) => {
+			const path = req.params[0];
+			const fixtureId = req.params.fixtureId;
+			const fixture = fixtures[fixtureId];
 
-		return res.json(dataModel);
-	});
+			if (!fixture) {
+				console.error(`Fixture with id ${fixtureId} not found`);
+				return res.status(404).send();
+			}
+
+			// Fetch the JSON for the given path from PROD Frontend
+			const dataModel = await fetchDcrDataModel(path, req.headers);
+
+			if (!dataModel) {
+				console.error(
+					'Something went wrong retrieving DCR data from PROD',
+				);
+				return res.status(503).send();
+			}
+
+			// Merge the fixture into the data model
+			// Note that this will be a deep merge
+			merge(dataModel, fixture);
+
+			return res.json(dataModel);
+		},
+	);
 };
 
 module.exports = {

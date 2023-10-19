@@ -35,12 +35,20 @@ const adSlotsAreNotPresent = async (page: Page) =>
 	expect(await adSlotsArePresent(page)).toBeFalsy();
 
 const visitArticleNoOkta = async (page: Page) => {
+	const fixture = {
+		config: {
+			switches: {
+				okta: false,
+				idCookieRefresh: false,
+			},
+		},
+	};
 	const url = getTestUrl({
 		stage: getStage(),
 		path: 'politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',
 		type: 'article',
 		adtest: undefined,
-		fixtureId: 'overwriteOktaSwitchFalse',
+		fixture,
 	});
 	await loadPage(page, url);
 };
