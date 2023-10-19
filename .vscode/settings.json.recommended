@@ -10,7 +10,7 @@
 	},
 	"editor.codeActionsOnSave": {
 		"source.fixAll": true,
-		"source.organizeImports": false
+		"source.organizeImports": true
 	},
 	"workbench.colorCustomizations": {
 		"titleBar.activeBackground": "#0b3e11",
