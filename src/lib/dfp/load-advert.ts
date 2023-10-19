@@ -1,3 +1,4 @@
+import fastdom from 'fastdom';
 import { EventTimer } from 'core/event-timer';
 import {
 	refreshBidsForAd,
@@ -37,6 +38,15 @@ export const loadAdvert = (advert: Advert): void => {
 export const refreshAdvert = (advert: Advert): void => {
 	// advert.size contains the effective size being displayed prior to refreshing
 	void advert.whenSlotReady
+		.then(() =>
+			fastdom.mutate(() => {
+				if (advert.id.includes('fronts-banner')) {
+					advert.node
+						.closest<HTMLElement>('.ad-slot-container')
+						?.classList.remove('ad-slot--full-width');
+				}
+			}),
+		)
 		.then(() => {
 			return refreshBidsForAd(advert);
 		})
