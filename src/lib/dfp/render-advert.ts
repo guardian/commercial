@@ -98,7 +98,8 @@ const outOfPageCallback = (advert: Advert) => {
 	const parent = advert.node.parentNode as HTMLElement;
 	return fastdom.mutate(() => {
 		advert.node.classList.add('ad-slot--collapse');
-		// Special case for top-above-nav which has a container with its own height
+
+		// top-above-nav and fronts-banner have an extra container
 		if (advert.id.includes('top-above-nav')) {
 			const adContainer = advert.node.closest<HTMLElement>(
 				'.top-banner-ad-container',
@@ -107,6 +108,15 @@ const outOfPageCallback = (advert: Advert) => {
 				adContainer.style.display = 'none';
 			}
 		}
+		if (advert.id.includes('fronts-banner')) {
+			const adContainer = advert.node.closest<HTMLElement>(
+				'.top-fronts-banner-ad-container',
+			);
+			if (adContainer) {
+				adContainer.style.display = 'none';
+			}
+		}
+
 		// if in a slice, add the 'no mpu' class
 		if (parent.classList.contains('fc-slice__item--mpu-candidate')) {
 			parent.classList.add('fc-slice__item--no-mpu');
