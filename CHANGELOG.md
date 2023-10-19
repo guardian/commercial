@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.17.0
+
+### Minor Changes
+
+- 0fd6b82: Add a guard the custom event listener so it won't try to fill already filled slots
+
 ## 11.16.3
 
 ### Patch Changes
