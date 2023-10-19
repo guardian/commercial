@@ -1,3 +1,4 @@
+import { dfpEnv } from './dfp-env';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 
 type ExternalSlotCustomEvent = CustomEvent<{
@@ -28,6 +29,11 @@ export const createSlotFillListener = () => {
 	document.addEventListener('gu.commercial.slot.fill', (event: Event) => {
 		if (isCustomEvent(event)) {
 			const { slotId } = (<ExternalSlotCustomEvent>event).detail;
+
+			if (slotId in dfpEnv.advertIds) {
+				return;
+			}
+
 			const slot = document.getElementById(slotId);
 			if (slot) {
 				void fillDynamicAdSlot(slot, false);
