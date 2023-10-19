@@ -35,13 +35,13 @@ const adSlotsAreNotPresent = async (page: Page) =>
 	expect(await adSlotsArePresent(page)).toBeFalsy();
 
 const visitArticleNoOkta = async (page: Page) => {
-	const url = getTestUrl(
-		getStage(),
-		'politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',
-		'article',
-		undefined, // use the default ad test
-		'overwriteOktaSwitchFalse',
-	);
+	const url = getTestUrl({
+		stage: getStage(),
+		path: 'politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',
+		type: 'article',
+		adtest: undefined,
+		fixtureId: 'overwriteOktaSwitchFalse',
+	});
 	await loadPage(page, url);
 };
 

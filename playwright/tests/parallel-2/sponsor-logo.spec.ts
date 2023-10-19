@@ -8,13 +8,13 @@ test.describe('sponsorshipLogo', () => {
 		page,
 	}) => {
 		// Construct a path that uses a fixture where a thrasher contains a sponsor logo
-		const path = getTestUrl(
-			getStage(),
-			'uk',
-			'front',
-			undefined,
-			'sponsorshipLogoInThrasher',
-		);
+		const path = getTestUrl({
+			stage: getStage(),
+			path: 'uk',
+			type: 'front',
+			adtest: undefined,
+			fixtureId: 'sponsorshipLogoInThrasher',
+		});
 
 		await loadPage(page, path);
 

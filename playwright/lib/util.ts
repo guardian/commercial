@@ -63,13 +63,19 @@ const getPath = (
  * @fixtureId string
  * @returns {string} The full URL
  */
-const getTestUrl = (
-	stage: Stage,
-	path: string,
-	type: 'article' | 'liveblog' | 'front' = 'article',
+const getTestUrl = ({
+	stage,
+	path,
+	type = 'article',
 	adtest = 'fixed-puppies-ci',
-	fixtureId?: string,
-) => {
+	fixtureId,
+}: {
+	stage: Stage;
+	path: string;
+	type?: 'article' | 'liveblog' | 'front';
+	adtest?: string;
+	fixtureId?: string;
+}) => {
 	const url = new URL(getPath(stage, type, path, fixtureId), getHost(stage));
 
 	if (type === 'liveblog') {
