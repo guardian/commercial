@@ -4,6 +4,7 @@ import { adSizes, createAdSize } from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import { removeDisabledSlots } from '../remove-slots';
+import type { Advert } from './Advert';
 import { createAdvert } from './create-advert';
 import { dfpEnv } from './dfp-env';
 import { displayAds } from './display-ads';
@@ -37,6 +38,37 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 };
 
 /**
+ * Filter the elements to online include those we want to fill at this time.
+ *
+ * @param elements
+ */
+const findStaticAdverts = (elements: HTMLElement[]): Advert[] => {
+	const isDCRMobile =
+		window.guardian.config.isDotcomRendering &&
+		getCurrentBreakpoint() === 'mobile';
+
+	return (
+		elements
+			.filter((adSlot) => !(adSlot.id in dfpEnv.advertIds))
+			// TODO: find cleaner workaround
+			// we need to not init top-above-nav on mobile view in DCR
+			// as the DOM element needs to be removed and replaced to be inline
+			// refer to: 3562dc07-78e9-4507-b922-78b979d4c5cb
+			.filter(
+				(adSlot) =>
+					!(isDCRMobile && adSlot.id === 'dfp-ad--top-above-nav'),
+			)
+			// Slots can explicitly set themselves to be dynamic, in which case they will be filled at some other point, for example via custom event.
+			.filter((adSlot) => adSlot.dataset['dynamic-slot'] !== 'true')
+			.map((adSlot) => {
+				const additionalSizes = decideAdditionalSizes(adSlot);
+				return createAdvert(adSlot, additionalSizes);
+			})
+			.filter(isNonNullable)
+	);
+};
+
+/**
  * Static ad slots that were rendered on the page by the server are collected here.
  *
  * For dynamic ad slots that are created at js-runtime, see:
@@ -64,29 +96,10 @@ const fillStaticAdvertSlots = async (): Promise<void> => {
 		return Promise.resolve();
 	}
 
-	const isDCRMobile =
-		window.guardian.config.isDotcomRendering &&
-		getCurrentBreakpoint() === 'mobile';
-
 	// Get all ad slots
-	const adverts = [
+	const adverts = findStaticAdverts([
 		...document.querySelectorAll<HTMLElement>(dfpEnv.adSlotSelector),
-	]
-		.filter((adSlot) => !(adSlot.id in dfpEnv.advertIds))
-		// TODO: find cleaner workaround
-		// we need to not init top-above-nav on mobile view in DCR
-		// as the DOM element needs to be removed and replaced to be inline
-		// refer to: 3562dc07-78e9-4507-b922-78b979d4c5cb
-		.filter(
-			(adSlot) => !(isDCRMobile && adSlot.id === 'dfp-ad--top-above-nav'),
-		)
-		// Slots can explicitly set themselves to be dynamic, in which case they will be filled at some other point, for example via custom event.
-		.filter((adSlot) => adSlot.dataset['dynamic-slot'] !== 'true')
-		.map((adSlot) => {
-			const additionalSizes = decideAdditionalSizes(adSlot);
-			return createAdvert(adSlot, additionalSizes);
-		})
-		.filter(isNonNullable);
+	]);
 
 	const currentLength = dfpEnv.adverts.length;
 	dfpEnv.adverts = dfpEnv.adverts.concat(adverts);
@@ -100,6 +113,10 @@ const fillStaticAdvertSlots = async (): Promise<void> => {
 	} else {
 		displayAds();
 	}
+};
+
+export const _ = {
+	findStaticAdverts,
 };
 
 export { fillStaticAdvertSlots };
