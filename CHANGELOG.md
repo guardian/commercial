@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.17.1
+
+### Patch Changes
+
+- 2c33c02: Add full-width class to fronts-banner container on post message
+
 ## 11.17.0
 
 ### Minor Changes
