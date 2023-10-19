@@ -44,20 +44,11 @@ const fetchDcrDataModel = async (path, _headers) => {
 };
 
 /**
- * Add an additional endpoint that proxies Frontend,
- * merging into the resulting JSON any overrides provided
- * as a fixture.
+ * Add additional endpoints that proxy Frontend, merging into the resulting JSON
+ * any overrides provided as a fixture.
  *
- * These fixtures are stored in fixtures.json in an object keyed
- * by the fixture ID, and are merged into the JSON returned for the
- * rest of the path. For example, to override the data for the /uk
- * path with fixture id 'foo' you could call:
- *
- * 	`http://localhost:PORT/renderFixtureWithId/foo/uk.json`
- *
- * These can then be used by an E2E test in order to fix certain
- * behavior about the system-under-test e.g. override a switch state
- * to always be true.
+ * These can then be used by an E2E test in order to fix certain behavior about
+ * the system-under-test e.g. override a switch state to always be true.
  *
  * @param {import('webpack-dev-server')} devServer
  */
@@ -69,9 +60,12 @@ const setupFixturesServer = (devServer) => {
 	devServer.app.get(
 		'/renderFixture/*.json',
 		/**
-		 * TODO
+		 * Pass a base-64 encoded JSON fixture as a query parameter. This is
+		 * merged into the DCR data retrieved from frontend for the given path
+		 *
+		 *  `http://localhost:PORT/renderFixture/uk.json?fixture=...`
 		 */
-		async (req, res) => {
+		async function (req, res) {
 			const path = req.params[0];
 			const fixtureQuery = req.query['fixture'];
 			const fixture = JSON.parse(
@@ -98,9 +92,17 @@ const setupFixturesServer = (devServer) => {
 	devServer.app.get(
 		'/renderFixtureWithId/:fixtureId/*.json',
 		/**
-		 * TODO
+		 * Take a fixture stored with the fixtures server and apply it by
+		 * passing in its ID
+		 *
+		 * These fixtures are stored in fixtures.js in an object keyed by the
+		 * fixture ID, and are merged into the JSON returned for the rest of the
+		 * path. For example, to override the data for the /uk path with fixture
+		 * id 'foo' you could call:
+		 *
+		 *  `http://localhost:PORT/renderFixtureWithId/fixtureFoo/uk.json`
 		 */
-		async (req, res) => {
+		async function (req, res) {
 			const path = req.params[0];
 			const fixtureId = req.params.fixtureId;
 			const fixture = fixtures[fixtureId];
