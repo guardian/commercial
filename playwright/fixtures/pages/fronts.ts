@@ -9,21 +9,41 @@ const stage = getStage();
 
 const fronts: Front[] = [
 	{
-		path: getTestUrl(stage, '/uk', 'front', 'puppies-pageskin'),
+		path: getTestUrl({
+			stage,
+			path: '/uk',
+			type: 'front',
+			adtest: 'puppies-pageskin',
+		}),
 		section: 'uk',
 	},
 	{
-		path: getTestUrl(stage, '/commentisfree', 'front', 'puppies-pageskin'),
+		path: getTestUrl({
+			stage,
+			path: '/commentisfree',
+			type: 'front',
+			adtest: 'puppies-pageskin',
+		}),
 		section: 'commentisfree',
 	},
 	{
-		path: getTestUrl(stage, '/sport', 'front', 'puppies-pageskin'),
+		path: getTestUrl({
+			stage,
+			path: '/sport',
+			type: 'front',
+			adtest: 'puppies-pageskin',
+		}),
 		section: 'sport',
 	},
 ];
 
 const frontWithPageSkin: Front = {
-	path: getTestUrl(stage, '/uk', 'front', 'puppies-pageskin'),
+	path: getTestUrl({
+		stage,
+		path: '/uk',
+		type: 'front',
+		adtest: 'puppies-pageskin',
+	}),
 	section: 'uk',
 };
 

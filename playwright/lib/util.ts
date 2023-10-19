@@ -29,24 +29,24 @@ const getHost = (stage?: Stage | undefined) => {
 
 /**
  * Generate the path for the request to DCR
- *
- * @param {'dev' | 'code' | 'prod'}  stage
- * @param type
- * @param path
- * @param fixtureId
- * @returns
  */
 const getPath = (
 	stage: Stage,
 	type: 'article' | 'liveblog' | 'front' = 'article',
 	path: string,
-	fixtureId?: string,
+	fixtureId: string | undefined,
+	fixture: Record<string, unknown> | undefined,
 ) => {
 	if (stage === 'dev') {
 		const dcrContentType =
 			type === 'liveblog' || type === 'article' ? 'Article' : 'Front';
 		if (fixtureId) {
-			return `${dcrContentType}/http://localhost:3031/renderFixture/${fixtureId}/${path}`;
+			return `${dcrContentType}/http://localhost:3031/renderFixtureWithId/${fixtureId}/${path}`;
+		}
+		if (fixture) {
+			const fixtureJson = JSON.stringify(fixture);
+			const base64Fixture = Buffer.from(fixtureJson).toString('base64');
+			return `${dcrContentType}/http://localhost:3031/renderFixture/${path}?fixture=${base64Fixture}`;
 		}
 		return `${dcrContentType}/https://www.theguardian.com${path}`;
 	}
@@ -63,14 +63,25 @@ const getPath = (
  * @fixtureId string
  * @returns {string} The full URL
  */
-const getTestUrl = (
-	stage: Stage,
-	path: string,
-	type: 'article' | 'liveblog' | 'front' = 'article',
+const getTestUrl = ({
+	stage,
+	path,
+	type = 'article',
 	adtest = 'fixed-puppies-ci',
-	fixtureId?: string,
-) => {
-	const url = new URL(getPath(stage, type, path, fixtureId), getHost(stage));
+	fixtureId,
+	fixture,
+}: {
+	stage: Stage;
+	path: string;
+	type?: 'article' | 'liveblog' | 'front';
+	adtest?: string;
+	fixtureId?: string;
+	fixture?: Record<string, unknown>;
+}) => {
+	const url = new URL(
+		getPath(stage, type, path, fixtureId, fixture),
+		getHost(stage),
+	);
 
 	if (type === 'liveblog') {
 		url.searchParams.append('live', '1');
