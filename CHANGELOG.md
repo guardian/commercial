@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.16.3
+
+### Patch Changes
+
+- 73bd2d7: Hide fronts-banner ads when collapsing slots
+
 ## 11.16.2
 
 ### Patch Changes
