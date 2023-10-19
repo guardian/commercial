@@ -2,4 +2,4 @@
 '@guardian/commercial': minor
 ---
 
-Allow slots to mark themselves as dynamic via data attribute
+Add a guard the custom event listener so it won't try to fill already filled slots
