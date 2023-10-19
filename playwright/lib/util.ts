@@ -29,12 +29,6 @@ const getHost = (stage?: Stage | undefined) => {
 
 /**
  * Generate the path for the request to DCR
- *
- * @param {'dev' | 'code' | 'prod'}  stage
- * @param type
- * @param path
- * @param fixtureId
- * @returns
  */
 const getPath = (
 	stage: Stage,
