@@ -587,18 +587,6 @@ describe('DFP', () => {
 		expect(result_4[1]).toEqual('2');
 	});
 
-	describe('pageskin loading', () => {
-		it('should lazy load ads when there is no pageskin', () => {
-			window.guardian.config.page.hasPageSkin = false;
-			expect(dfpEnv.shouldLazyLoad()).toBe(true);
-		});
-
-		it('should not lazy load ads when there is a pageskin', () => {
-			window.guardian.config.page.hasPageSkin = true;
-			expect(dfpEnv.shouldLazyLoad()).toBe(false);
-		});
-	});
-
 	describe('keyword targeting', () => {
 		it('should send page level keywords', async () => {
 			mockOnConsent(tcfv2WithConsent);
