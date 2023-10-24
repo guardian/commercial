@@ -220,9 +220,10 @@ const setupBackground = async (
 				video.muted = true;
 				video.playsInline = true;
 				video.src = specs.videoSource;
-				video.style.inset = '0';
+				video.style.inset = '50% 0 0 50%';
 				video.style.position = 'fixed';
 				video.style.height = '100%';
+				video.style.transform = 'translate(-50%, -50%)';
 				background.appendChild(video);
 			}
 		} else {
