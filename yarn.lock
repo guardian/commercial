@@ -1742,10 +1742,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/browserslist-config/-/browserslist-config-5.1.0.tgz#61cd822388dc196cea1b39c693366ed550edcd10"
   integrity sha512-QsyaZ7OZ6jBl8lByiLWtnobcS0IvIPVzDeGz9XY+CvPy5v5Kb0RJo+fFLEZbCqRLrfK+5f2sjrwPqrwtJBe2Sw==
 
-"@guardian/consent-management-platform@^13.7.0":
-  version "13.7.0"
-  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-13.7.0.tgz#c5f6511b822a3f16c3a78337653204f072396416"
-  integrity sha512-GQPhLOch8FIKko9muw8Fsm28+f+KubLGNbNfUxX4slg9+0jM4J57Kajr75RTqdtzWmKkp0cdYI9QDIVsbhgcuQ==
+"@guardian/consent-management-platform@^13.7.1":
+  version "13.7.1"
+  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-13.7.1.tgz#ba38f32de023775e615e79cfa97a3425f144eb89"
+  integrity sha512-BtUNkuCqd++A0Wkk9CA4kI95yVZJk1YMjPdppEnmq3cG/ros4ElXN4cNG7pWifeTR5cUtJflAiRRO4L5ewASpQ==
 
 "@guardian/core-web-vitals@5.1.0":
   version "5.1.0"
