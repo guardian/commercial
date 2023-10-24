@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 11.17.2
+
+### Patch Changes
+
+- 75e0cac: fix for babel/traverse vulnerability in consent-management-platform
+- 4bec345: Centre video element in the video interscroller template
+
 ## 11.17.1
 
 ### Patch Changes
