@@ -36,6 +36,7 @@ const slotPrototype = {
 	addService: () => slotPrototype,
 	setTargeting: () => slotPrototype,
 	setSafeFrameConfig: () => slotPrototype,
+	getTargeting: () => slotPrototype,
 };
 
 // Mock window.googletag
