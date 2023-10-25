@@ -100,7 +100,7 @@ class Advert {
 	hasPrebidSize = false;
 	headerBiddingBidRequest: Promise<unknown> | null = null;
 	lineItemId: number | null = null;
-	testgroup: string;
+	testgroup: string | undefined;
 
 	constructor(
 		adSlotNode: HTMLElement,
