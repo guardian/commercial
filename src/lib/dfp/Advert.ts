@@ -119,7 +119,7 @@ class Advert {
 
 		this.slot = slotDefinition.slot;
 		this.whenSlotReady = slotDefinition.slotReady;
-		this.testgroup = slotDefinition.slot.getTargeting('testgroup');
+		this.testgroup = slotDefinition.slot.getTargeting('testgroup')[0];
 	}
 
 	/**

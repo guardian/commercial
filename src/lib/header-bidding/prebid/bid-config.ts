@@ -267,24 +267,27 @@ const ozoneClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	bidParams: (
 		_slotId: string,
 		sizes: HeaderBiddingSize[],
-	): PrebidOzoneParams => ({
-		publisherId: 'OZONEGMG0001',
-		siteId: '4204204209',
-		placementId: getOzonePlacementId(sizes),
-		customData: [
-			{
-				settings: {},
-				targeting: {
-					// Assigns a random integer between 0 and 99
-					testgroup: dfpEnv.adverts.find(
-						(ad) => ad.id === _slotId && ad.testgroup,
-					).testgroup[0],
-					...buildAppNexusTargetingObject(pageTargeting),
+	): PrebidOzoneParams => {
+		const advert = dfpEnv.adverts.find((ad) => ad.id === _slotId);
+		const testgroup = advert ? { testgroup: advert.testgroup } : {};
+
+		return {
+			publisherId: 'OZONEGMG0001',
+			siteId: '4204204209',
+			placementId: getOzonePlacementId(sizes),
+			customData: [
+				{
+					settings: {},
+					targeting: {
+						// Assigns a random integer between 0 and 99
+						...testgroup,
+						...buildAppNexusTargetingObject(pageTargeting),
+					},
 				},
-			},
-		],
-		ozoneData: {}, // TODO: confirm if we need to send any
-	}),
+			],
+			ozoneData: {}, // TODO: confirm if we need to send any
+		};
+	},
 });
 
 const sonobiBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
