@@ -4,6 +4,7 @@ import {
 	buildAppNexusTargeting,
 	buildAppNexusTargetingObject,
 } from 'lib/build-page-targeting';
+import { dfpEnv } from 'lib/dfp/dfp-env';
 import { includeBillboardsInMerchHigh } from 'lib/dfp/merchandising-high-test';
 import { isInAuOrNz, isInUk, isInUsa, isInUsOrCa } from 'lib/utils/geo-utils';
 import { pbTestNameMap } from 'lib/utils/url';
@@ -275,7 +276,9 @@ const ozoneClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 				settings: {},
 				targeting: {
 					// Assigns a random integer between 0 and 99
-					testgroup: String(Math.floor(100 * Math.random())),
+					testgroup: dfpEnv.adverts.find(
+						(ad) => ad.id === _slotId && ad.testgroup,
+					).testgroup[0],
 					...buildAppNexusTargetingObject(pageTargeting),
 				},
 			},

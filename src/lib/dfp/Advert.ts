@@ -100,6 +100,7 @@ class Advert {
 	hasPrebidSize = false;
 	headerBiddingBidRequest: Promise<unknown> | null = null;
 	lineItemId: number | null = null;
+	testgroup: string;
 
 	constructor(
 		adSlotNode: HTMLElement,
@@ -118,6 +119,7 @@ class Advert {
 
 		this.slot = slotDefinition.slot;
 		this.whenSlotReady = slotDefinition.slotReady;
+		this.testgroup = slotDefinition.slot.getTargeting('testgroup');
 	}
 
 	/**
