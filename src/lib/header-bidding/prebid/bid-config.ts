@@ -268,7 +268,7 @@ const ozoneClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 		_slotId: string,
 		sizes: HeaderBiddingSize[],
 	): PrebidOzoneParams => {
-		const advert = dfpEnv.adverts.find((ad) => ad.id === _slotId);
+		const advert = dfpEnv.adverts.get(_slotId);
 		const testgroup = advert?.testgroup
 			? { testgroup: advert.testgroup }
 			: {};
