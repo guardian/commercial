@@ -100,7 +100,7 @@ class Advert {
 	hasPrebidSize = false;
 	headerBiddingBidRequest: Promise<unknown> | null = null;
 	lineItemId: number | null = null;
-	testgroup: string | undefined;
+	testgroup: string | undefined; //Ozone testgroup property
 
 	constructor(
 		adSlotNode: HTMLElement,
