@@ -38,7 +38,7 @@ beforeEach(() => {
 		defineSlot: jest.fn(() => window.googletag),
 		defineSizeMapping: jest.fn(() => window.googletag),
 		addService: jest.fn(() => window.googletag),
-		setTargeting: jest.fn(),
+		setTargeting: jest.fn(() => window.googletag),
 		/* @ts-expect-error -- no way to override types */
 		pubads() {
 			return pubAds;

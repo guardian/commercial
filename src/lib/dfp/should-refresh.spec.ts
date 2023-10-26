@@ -36,6 +36,7 @@ describe('shouldRefresh', () => {
 			setSafeFrameConfig: jest.fn(() => googleSlot),
 			setTargeting: jest.fn(() => googleSlot),
 			addService: jest.fn(() => googleSlot),
+			getTargeting: jest.fn(() => []),
 		};
 
 		const partialGoogletag: Partial<typeof googletag> = {

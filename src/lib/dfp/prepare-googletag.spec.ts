@@ -331,6 +331,7 @@ describe('DFP', () => {
 			setSafeFrameConfig: jest.fn(() => googleSlot),
 			setTargeting: jest.fn(() => googleSlot),
 			addService: jest.fn(() => googleSlot),
+			getTargeting: jest.fn(() => []),
 		} as unknown as googletag.Slot;
 
 		googleTag = {

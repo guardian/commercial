@@ -174,7 +174,9 @@ const defineSlot = (
 		slot?.setTargeting(key, value);
 	});
 
-	slot.addService(window.googletag.pubads()).setTargeting('slot', slotTarget);
+	slot.addService(window.googletag.pubads())
+		.setTargeting('slot', slotTarget)
+		.setTargeting('testgroup', String(Math.floor(100 * Math.random())));
 
 	return {
 		slot,
