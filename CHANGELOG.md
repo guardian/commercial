@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.19.0
+
+### Minor Changes
+
+- 11027d5: Update Prebid
+
 ## 11.18.0
 
 ### Minor Changes
