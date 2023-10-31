@@ -30,7 +30,7 @@ export const createSlotFillListener = () => {
 		if (isCustomEvent(event)) {
 			const { slotId } = (<ExternalSlotCustomEvent>event).detail;
 
-			if (slotId in dfpEnv.advertIds) {
+			if (dfpEnv.adverts.has(slotId)) {
 				return;
 			}
 
