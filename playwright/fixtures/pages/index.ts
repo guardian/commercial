@@ -1,7 +1,7 @@
 import { articles } from './articles';
 import { blogs } from './blogs';
-import { fronts, frontWithPageSkin } from './fronts';
+import { fronts, frontWithPageSkin, tagFronts } from './fronts';
 
 const allPages = [...articles, ...blogs];
 
-export { articles, blogs, fronts, frontWithPageSkin, allPages };
+export { allPages, articles, blogs, fronts, frontWithPageSkin, tagFronts };
