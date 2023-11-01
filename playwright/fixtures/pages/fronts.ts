@@ -5,7 +5,7 @@ type Front = GuPage & {
 	section: string;
 };
 
-type TaggedFront = GuPage;
+type TagFront = GuPage;
 
 const stage = getStage();
 
@@ -39,12 +39,12 @@ const fronts: Front[] = [
 	},
 ];
 
-const taggedFronts: TaggedFront[] = [
+const tagFronts: TagFront[] = [
 	{
 		path: getTestUrl({
 			stage,
-			path: '/world/americas', // tagged front
-			type: 'taggedFront',
+			path: '/world/americas',
+			type: 'tagFront',
 			adtest: 'fixed-puppies',
 		}),
 	},
@@ -60,4 +60,4 @@ const frontWithPageSkin: Front = {
 	section: 'uk',
 };
 
-export { frontWithPageSkin, fronts, taggedFronts };
+export { frontWithPageSkin, fronts, tagFronts };
