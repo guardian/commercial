@@ -3,6 +3,8 @@ import type { UserFeaturesResponse } from '../../src/types/membership';
 
 type Stage = 'code' | 'prod' | 'dev';
 
+type ContentType = 'article' | 'liveblog' | 'front' | 'taggedFront';
+
 const normalizeStage = (stage: string): Stage =>
 	['code', 'prod', 'dev'].includes(stage) ? (stage as Stage) : 'dev';
 
@@ -27,27 +29,44 @@ const getHost = (stage?: Stage | undefined) => {
 	return hostnames[stage ?? getStage()] ?? hostnames.dev;
 };
 
+const getDcrContentType = (
+	type: ContentType,
+): 'Article' | 'Front' | 'TagFront' => {
+	switch (type) {
+		case 'front':
+			return 'Front';
+
+		case 'taggedFront':
+			return 'TagFront';
+
+		default:
+			return 'Article';
+	}
+};
+
 /**
  * Generate the path for the request to DCR
  */
 const getPath = (
 	stage: Stage,
-	type: 'article' | 'liveblog' | 'front' = 'article',
+	type: ContentType = 'article',
 	path: string,
 	fixtureId: string | undefined,
 	fixture: Record<string, unknown> | undefined,
 ) => {
 	if (stage === 'dev') {
-		const dcrContentType =
-			type === 'liveblog' || type === 'article' ? 'Article' : 'Front';
+		const dcrContentType = getDcrContentType(type);
+
 		if (fixtureId) {
 			return `${dcrContentType}/http://localhost:3031/renderFixtureWithId/${fixtureId}/${path}`;
 		}
+
 		if (fixture) {
 			const fixtureJson = JSON.stringify(fixture);
 			const base64Fixture = Buffer.from(fixtureJson).toString('base64');
 			return `${dcrContentType}/http://localhost:3031/renderFixture/${path}?fixture=${base64Fixture}`;
 		}
+
 		return `${dcrContentType}/https://www.theguardian.com${path}`;
 	}
 	return path;
@@ -55,13 +74,6 @@ const getPath = (
 
 /**
  * Generate a full URL i.e domain and path
- *
- * @param {'dev' | 'code' | 'prod'} stage
- * @param {string} path
- * @param {'article' | 'liveblog' | 'front' } type
- * @adtest string
- * @fixtureId string
- * @returns {string} The full URL
  */
 const getTestUrl = ({
 	stage,
@@ -73,7 +85,7 @@ const getTestUrl = ({
 }: {
 	stage: Stage;
 	path: string;
-	type?: 'article' | 'liveblog' | 'front';
+	type?: ContentType;
 	adtest?: string;
 	fixtureId?: string;
 	fixture?: Record<string, unknown>;
@@ -182,9 +194,9 @@ const waitForIsland = async (page: Page, island: string) => {
 
 export {
 	fakeLogOut,
-	setupFakeLogin,
 	getStage,
 	getTestUrl,
-	waitForSlot,
+	setupFakeLogin,
 	waitForIsland,
+	waitForSlot,
 };
