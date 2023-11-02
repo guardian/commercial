@@ -24,7 +24,6 @@ jest.mock('lib/identity/api', () => ({
 jest.mock('lib/raven');
 jest.mock('lib/identity/api', () => ({
 	isUserLoggedInOktaRefactor: jest.fn(),
-	getAuthStatus: jest.fn(),
 	getOptionsHeadersWithOkta: jest.fn(),
 }));
 jest.mock('lib/utils/fetch-json', () => ({
