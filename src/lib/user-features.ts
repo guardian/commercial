@@ -105,26 +105,13 @@ const isAdFreeUser = (): boolean =>
 	isDigitalSubscriber() || adFreeDataIsPresent();
 
 export {
-	// 	accountDataUpdateWarning,
 	isAdFreeUser,
 	isPayingMember,
 	isRecentOneOffContributor,
 	isRecurringContributor,
 	isDigitalSubscriber,
-	// 	refresh,
-	// 	deleteOldData,
 	getLastOneOffContributionTimestamp,
-	// 	getLastOneOffContributionDate,
-	// 	getLastRecurringContributionDate,
 	getDaysSinceLastOneOffContribution,
-	// 	getPurchaseInfo,
-	// 	isPostAskPauseOneOffContributor,
-	// 	readerRevenueRelevantCookies,
-	// 	fakeOneOffContributor,
 	shouldNotBeShownSupportMessaging,
-	// 	extendContribsCookieExpiry,
-	// 	ARTICLES_VIEWED_OPT_OUT_COOKIE,
-	// 	CONTRIBUTIONS_REMINDER_SIGNED_UP,
-	// 	canShowContributionsReminderFeature,
 	shouldHideSupportMessaging,
 };

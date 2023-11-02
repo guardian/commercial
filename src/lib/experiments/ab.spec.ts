@@ -20,14 +20,6 @@ const { overwriteMvtCookie } = _;
 
 const concurrentTests = _concurrentTests as typeof concurrentTestsMock;
 
-// This is required as loading these seems to cause an error locally (and in CI)
-// because of some implicit dependency evil that I haven't been able to figure out.
-// jest.mock('lib/user-features', () => ({
-// 	getLastOneOffContributionDate: () => null,
-// 	isRecurringContributor: () => false,
-// 	shouldNotBeShownSupportMessaging: () => false,
-// }));
-
 function emptyFunction() {
 	// do nothing
 }
