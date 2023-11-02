@@ -50,8 +50,7 @@ import { catchErrorsWithContext } from 'lib/utils/robust';
 
 type Modules = Array<[`${string}-${string}`, () => Promise<unknown>]>;
 
-const { isDotcomRendering, frontendAssetsFullURL, switches, page } =
-	window.guardian.config;
+const { frontendAssetsFullURL, switches, page } = window.guardian.config;
 
 const decideAssetsPath = () => {
 	if (process.env.OVERRIDE_BUNDLE_PATH) {
@@ -113,17 +112,6 @@ if (!commercialFeatures.adFree) {
  * Not sure if this is needed. Currently no separate chunk is created
  * Introduced by @tomrf1
  */
-const loadDcrBundle = async (): Promise<void> => {
-	if (!isDotcomRendering) return;
-
-	const userFeatures = await import(
-		/* webpackChunkName: "dcr" */
-		'lib/user-features'
-	);
-
-	commercialExtraModules.push(['c-user-features', userFeatures.refresh]);
-	return;
-};
 
 const loadModules = (modules: Modules, eventName: string) => {
 	const modulePromises: Array<Promise<unknown>> = [];
@@ -199,8 +187,6 @@ const bootCommercial = async (): Promise<void> => {
 	};
 
 	try {
-		await loadDcrBundle();
-
 		const allModules: Array<Parameters<typeof loadModules>> = [
 			[commercialBaseModules, 'commercialBaseModulesLoaded'],
 			[commercialExtraModules, 'commercialExtraModulesLoaded'],
@@ -239,9 +225,7 @@ const chooseAdvertisingTag = async () => {
 		void import(
 			/* webpackChunkName: "consentless" */
 			'./commercial.consentless'
-		).then(({ bootConsentless }) =>
-			bootConsentless(consentState, isDotcomRendering),
-		);
+		).then(({ bootConsentless }) => bootConsentless(consentState));
 	} else {
 		bootCommercialWhenReady();
 	}
