@@ -1,48 +1,34 @@
-import { getCookie } from '@guardian/libs';
 import { addCookie, removeCookie } from 'lib/cookies';
-import { fetchJson } from 'lib/utils/fetch-json';
-import type { UserFeaturesResponse } from 'types/membership';
-import type { AuthStatus } from './identity/api';
+import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from './identity/api';
 import {
-	getAuthStatus as getAuthStatus_,
-	isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_,
-} from './identity/api';
-import {
-	accountDataUpdateWarning,
 	getDaysSinceLastOneOffContribution,
 	getLastOneOffContributionTimestamp,
-	getLastRecurringContributionDate,
-	getPurchaseInfo,
 	isAdFreeUser,
 	isDigitalSubscriber,
 	isPayingMember,
-	isPostAskPauseOneOffContributor,
 	isRecentOneOffContributor,
 	isRecurringContributor,
-	refresh,
 	shouldNotBeShownSupportMessaging,
 } from './user-features';
-
-jest.mock('lib/raven');
-jest.mock('lib/identity/api', () => ({
-	isUserLoggedInOktaRefactor: jest.fn(),
-	getAuthStatus: jest.fn(),
-	getOptionsHeadersWithOkta: jest.fn(),
-}));
-jest.mock('lib/utils/fetch-json', () => ({
-	fetchJson: jest.fn(() => Promise.resolve()),
-}));
-
-const fetchJsonSpy = fetchJson as jest.MockedFunction<typeof fetchJson>;
 
 const isUserLoggedInOktaRefactor =
 	isUserLoggedInOktaRefactor_ as jest.MockedFunction<
 		typeof isUserLoggedInOktaRefactor_
 	>;
 
-const getAuthStatus = getAuthStatus_ as jest.MockedFunction<
-	typeof getAuthStatus_
->;
+jest.mock('lib/identity/api', () => ({
+	isUserLoggedInOktaRefactor: jest.fn(),
+	getAuthStatus: jest.fn(),
+	getOptionsHeadersWithOkta: jest.fn(),
+}));
+jest.mock('lib/raven');
+jest.mock('lib/identity/api', () => ({
+	isUserLoggedInOktaRefactor: jest.fn(),
+	getOptionsHeadersWithOkta: jest.fn(),
+}));
+jest.mock('lib/utils/fetch-json', () => ({
+	fetchJson: jest.fn(() => Promise.resolve()),
+}));
 
 const PERSISTENCE_KEYS = {
 	USER_FEATURES_EXPIRY_COOKIE: 'gu_user_features_expiry',
@@ -60,166 +46,8 @@ const PERSISTENCE_KEYS = {
 		'gu.contributions.recurring.contrib-timestamp.Annual',
 };
 
-const setAllFeaturesData = (opts: { isExpired: boolean }) => {
-	const currentTime = new Date().getTime();
-	const msInOneDay = 24 * 60 * 60 * 1000;
-	const expiryDate = opts.isExpired
-		? new Date(currentTime - msInOneDay)
-		: new Date(currentTime + msInOneDay);
-	const adFreeExpiryDate = opts.isExpired
-		? new Date(currentTime - msInOneDay * 2)
-		: new Date(currentTime + msInOneDay * 2);
-	addCookie(PERSISTENCE_KEYS.PAYING_MEMBER_COOKIE, 'true');
-	addCookie(PERSISTENCE_KEYS.RECURRING_CONTRIBUTOR_COOKIE, 'true');
-	addCookie(PERSISTENCE_KEYS.DIGITAL_SUBSCRIBER_COOKIE, 'true');
-	addCookie(PERSISTENCE_KEYS.HIDE_SUPPORT_MESSAGING_COOKIE, 'true');
-	addCookie(
-		PERSISTENCE_KEYS.AD_FREE_USER_COOKIE,
-		adFreeExpiryDate.getTime().toString(),
-	);
-	addCookie(
-		PERSISTENCE_KEYS.USER_FEATURES_EXPIRY_COOKIE,
-		expiryDate.getTime().toString(),
-	);
-	addCookie(PERSISTENCE_KEYS.ACTION_REQUIRED_FOR_COOKIE, 'test');
-};
-
-const deleteAllFeaturesData = () => {
-	removeCookie(PERSISTENCE_KEYS.PAYING_MEMBER_COOKIE);
-	removeCookie(PERSISTENCE_KEYS.RECURRING_CONTRIBUTOR_COOKIE);
-	removeCookie(PERSISTENCE_KEYS.DIGITAL_SUBSCRIBER_COOKIE);
-	removeCookie(PERSISTENCE_KEYS.USER_FEATURES_EXPIRY_COOKIE);
-	removeCookie(PERSISTENCE_KEYS.AD_FREE_USER_COOKIE);
-	removeCookie(PERSISTENCE_KEYS.ACTION_REQUIRED_FOR_COOKIE);
-	removeCookie(PERSISTENCE_KEYS.HIDE_SUPPORT_MESSAGING_COOKIE);
-};
-
 beforeAll(() => {
 	window.guardian.config.page.userAttributesApiUrl = '';
-});
-
-describe('Refreshing the features data', () => {
-	describe('If user signed in', () => {
-		beforeEach(() => {
-			jest.resetAllMocks();
-			isUserLoggedInOktaRefactor.mockResolvedValue(true);
-			getAuthStatus.mockResolvedValue({
-				kind: 'SignedInWithOkta',
-			} as AuthStatus);
-			fetchJsonSpy.mockReturnValue(Promise.resolve());
-		});
-
-		it('Performs an update if the user has missing data', async () => {
-			deleteAllFeaturesData();
-			await refresh();
-			expect(fetchJsonSpy).toHaveBeenCalledTimes(1);
-		});
-
-		it('Performs an update if the user has expired data', async () => {
-			setAllFeaturesData({ isExpired: true });
-			await refresh();
-			expect(fetchJsonSpy).toHaveBeenCalledTimes(1);
-		});
-
-		it('Does not delete the data just because it has expired', async () => {
-			setAllFeaturesData({ isExpired: true });
-			await refresh();
-			expect(
-				getCookie({ name: PERSISTENCE_KEYS.PAYING_MEMBER_COOKIE }),
-			).toBe('true');
-			expect(
-				getCookie({
-					name: PERSISTENCE_KEYS.RECURRING_CONTRIBUTOR_COOKIE,
-				}),
-			).toBe('true');
-			expect(
-				getCookie({
-					name: PERSISTENCE_KEYS.USER_FEATURES_EXPIRY_COOKIE,
-				}),
-			).toEqual(expect.stringMatching(/\d{13}/));
-			expect(
-				getCookie({ name: PERSISTENCE_KEYS.AD_FREE_USER_COOKIE }),
-			).toEqual(expect.stringMatching(/\d{13}/));
-		});
-
-		it('Does not perform update if user has fresh feature data', async () => {
-			setAllFeaturesData({ isExpired: false });
-			await refresh();
-			expect(fetchJsonSpy).not.toHaveBeenCalled();
-		});
-
-		it('Performs an update if membership-frontend wipes just the paying-member cookie', async () => {
-			// Set everything except paying-member cookie
-			setAllFeaturesData({ isExpired: true });
-			removeCookie(PERSISTENCE_KEYS.PAYING_MEMBER_COOKIE);
-
-			await refresh();
-			expect(fetchJsonSpy).toHaveBeenCalledTimes(1);
-		});
-	});
-
-	describe('If user signed out', () => {
-		beforeEach(() => {
-			jest.resetAllMocks();
-			isUserLoggedInOktaRefactor.mockResolvedValue(false);
-			fetchJsonSpy.mockReturnValue(Promise.resolve());
-		});
-
-		it('Does not perform update, even if feature data missing', async () => {
-			deleteAllFeaturesData();
-			await refresh();
-			expect(fetchJsonSpy).not.toHaveBeenCalled();
-		});
-
-		it('Deletes leftover feature data', async () => {
-			setAllFeaturesData({ isExpired: false });
-			await refresh();
-			expect(
-				getCookie({ name: PERSISTENCE_KEYS.AD_FREE_USER_COOKIE }),
-			).toBeNull();
-			expect(
-				getCookie({ name: PERSISTENCE_KEYS.PAYING_MEMBER_COOKIE }),
-			).toBeNull();
-			expect(
-				getCookie({
-					name: PERSISTENCE_KEYS.RECURRING_CONTRIBUTOR_COOKIE,
-				}),
-			).toBeNull();
-			expect(
-				getCookie({ name: PERSISTENCE_KEYS.DIGITAL_SUBSCRIBER_COOKIE }),
-			).toBeNull();
-			expect(
-				getCookie({
-					name: PERSISTENCE_KEYS.USER_FEATURES_EXPIRY_COOKIE,
-				}),
-			).toBeNull();
-		});
-	});
-});
-
-describe('The account data update warning getter', () => {
-	it('Is not set when the user is logged out', () => {
-		jest.resetAllMocks();
-		isUserLoggedInOktaRefactor.mockResolvedValue(false);
-		expect(accountDataUpdateWarning()).toBe(null);
-	});
-
-	describe('When the user is logged in', () => {
-		beforeEach(() => {
-			jest.resetAllMocks();
-			isUserLoggedInOktaRefactor.mockResolvedValue(true);
-		});
-
-		it('Is the same when the user has an account data update link cookie', () => {
-			addCookie(PERSISTENCE_KEYS.ACTION_REQUIRED_FOR_COOKIE, 'the-same');
-			expect(accountDataUpdateWarning()).toBe('the-same');
-		});
-
-		it('Is null when the user does not have an account data update link cookie', () => {
-			removeCookie(PERSISTENCE_KEYS.ACTION_REQUIRED_FOR_COOKIE);
-			expect(accountDataUpdateWarning()).toBe(null);
-		});
-	});
 });
 
 describe('The isAdFreeUser getter', () => {
@@ -352,121 +180,6 @@ describe('The shouldNotBeShownSupportMessaging getter', () => {
 	});
 });
 
-describe('Storing new feature data', () => {
-	beforeEach(() => {
-		const mockResponse: UserFeaturesResponse = {
-			userId: 'abc',
-			showSupportMessaging: false,
-			contentAccess: {
-				member: false,
-				paidMember: false,
-				recurringContributor: false,
-				digitalPack: false,
-				paperSubscriber: false,
-				guardianWeeklySubscriber: false,
-			},
-		};
-
-		jest.resetAllMocks();
-		fetchJsonSpy.mockReturnValue(Promise.resolve(mockResponse));
-		deleteAllFeaturesData();
-		isUserLoggedInOktaRefactor.mockResolvedValue(true);
-		getAuthStatus.mockResolvedValue({
-			kind: 'SignedInWithOkta',
-		} as AuthStatus);
-	});
-
-	it('Puts the paying-member state and ad-free state in appropriate cookie', () => {
-		fetchJsonSpy.mockReturnValueOnce(
-			Promise.resolve({
-				contentAccess: {
-					paidMember: false,
-					recurringContributor: false,
-					digitalPack: false,
-				},
-				adFree: false,
-			}),
-		);
-		return refresh().then(() => {
-			expect(
-				getCookie({ name: PERSISTENCE_KEYS.PAYING_MEMBER_COOKIE }),
-			).toBe('false');
-			expect(
-				getCookie({
-					name: PERSISTENCE_KEYS.RECURRING_CONTRIBUTOR_COOKIE,
-				}),
-			).toBe('false');
-			expect(
-				getCookie({ name: PERSISTENCE_KEYS.DIGITAL_SUBSCRIBER_COOKIE }),
-			).toBe('false');
-			expect(
-				getCookie({ name: PERSISTENCE_KEYS.AD_FREE_USER_COOKIE }),
-			).toBeNull();
-		});
-	});
-
-	it('Puts the paying-member state and ad-free state in appropriate cookie', () => {
-		fetchJsonSpy.mockReturnValueOnce(
-			Promise.resolve({
-				contentAccess: {
-					paidMember: true,
-					recurringContributor: true,
-					digitalPack: true,
-				},
-				adFree: true,
-			}),
-		);
-		return refresh().then(() => {
-			expect(
-				getCookie({ name: PERSISTENCE_KEYS.PAYING_MEMBER_COOKIE }),
-			).toBe('true');
-			expect(
-				getCookie({
-					name: PERSISTENCE_KEYS.RECURRING_CONTRIBUTOR_COOKIE,
-				}),
-			).toBe('true');
-			expect(
-				getCookie({ name: PERSISTENCE_KEYS.DIGITAL_SUBSCRIBER_COOKIE }),
-			).toBe('true');
-			expect(
-				getCookie({ name: PERSISTENCE_KEYS.AD_FREE_USER_COOKIE }),
-			).toBeTruthy();
-			expect(
-				Number.isNaN(
-					parseInt(
-						// @ts-expect-error -- we’re testing it
-						getCookie({
-							name: PERSISTENCE_KEYS.AD_FREE_USER_COOKIE,
-						}),
-						10,
-					),
-				),
-			).toBe(false);
-		});
-	});
-
-	it('Puts an expiry date in an accompanying cookie', () =>
-		refresh().then(() => {
-			const expiryDate = getCookie({
-				name: PERSISTENCE_KEYS.USER_FEATURES_EXPIRY_COOKIE,
-			});
-			expect(expiryDate).toBeTruthy();
-			// @ts-expect-error -- we’re testing it
-			expect(Number.isNaN(parseInt(expiryDate, 10))).toBe(false);
-		}));
-
-	it('The expiry date is in the future', () =>
-		refresh().then(() => {
-			const expiryDateString = getCookie({
-				name: PERSISTENCE_KEYS.USER_FEATURES_EXPIRY_COOKIE,
-			});
-			// @ts-expect-error -- we’re testing it
-			const expiryDateEpoch = parseInt(expiryDateString, 10);
-			const currentTimeEpoch = new Date().getTime();
-			expect(currentTimeEpoch < expiryDateEpoch).toBe(true);
-		}));
-});
-
 const setSupportFrontendOneOffContributionCookie = (value: string) =>
 	addCookie(PERSISTENCE_KEYS.SUPPORT_ONE_OFF_CONTRIBUTION_COOKIE, value);
 
@@ -511,60 +224,6 @@ describe('getting the last one-off contribution date of a user', () => {
 		expect(getLastOneOffContributionTimestamp()).toBe(
 			contributionDateTimeEpoch,
 		);
-	});
-});
-
-const setMonthlyContributionCookie = (value: string) =>
-	addCookie(PERSISTENCE_KEYS.SUPPORT_MONTHLY_CONTRIBUTION_COOKIE, value);
-
-const setAnnualContributionCookie = (value: string) =>
-	addCookie(PERSISTENCE_KEYS.SUPPORT_ANNUAL_CONTRIBUTION_COOKIE, value);
-
-const removeMonthlyContributionCookie = () =>
-	removeCookie(PERSISTENCE_KEYS.SUPPORT_MONTHLY_CONTRIBUTION_COOKIE);
-
-const removeAnnualContributionCookie = () =>
-	removeCookie(PERSISTENCE_KEYS.SUPPORT_ANNUAL_CONTRIBUTION_COOKIE);
-
-describe('getting the last recurring contribution date of a user', () => {
-	beforeEach(() => {
-		removeMonthlyContributionCookie();
-		removeAnnualContributionCookie();
-	});
-
-	const monthlyContributionTimestamp = 1556124724;
-	const annualContributionTimestamp = 1556125286;
-
-	it("returns null if the user isn't a recurring contributor", () => {
-		expect(getLastRecurringContributionDate()).toBe(null);
-	});
-
-	it('return the correct date if the user is a monthly recurring contributor', () => {
-		setMonthlyContributionCookie(monthlyContributionTimestamp.toString());
-		expect(getLastRecurringContributionDate()).toBe(
-			monthlyContributionTimestamp,
-		);
-	});
-
-	it('return the correct date if the user is a annual recurring contributor', () => {
-		setAnnualContributionCookie(annualContributionTimestamp.toString());
-		expect(getLastRecurringContributionDate()).toBe(
-			annualContributionTimestamp,
-		);
-	});
-
-	it('return the correct date if the user is both annual and monthly recurring contributor', () => {
-		setAnnualContributionCookie(annualContributionTimestamp.toString());
-		setMonthlyContributionCookie(monthlyContributionTimestamp.toString());
-		expect(getLastRecurringContributionDate()).toBe(
-			annualContributionTimestamp,
-		);
-	});
-
-	it('returns null if the cookie has been set with an invalid value', () => {
-		setAnnualContributionCookie('not a date string one');
-		setMonthlyContributionCookie('not a date string two');
-		expect(getLastRecurringContributionDate()).toBe(null);
 	});
 });
 
@@ -619,58 +278,5 @@ describe('isRecentOneOffContributor', () => {
 		global.Date.now = jest.fn(() => Date.parse('2019-08-01T13:00:30'));
 		setSupportFrontendOneOffContributionCookie(contributionDateTimeEpoch);
 		expect(isRecentOneOffContributor()).toBe(false);
-	});
-});
-
-describe('isPostAskPauseOneOffContributor', () => {
-	beforeEach(() => {
-		removeSupportFrontendOneOffContributionCookie();
-		removeAttributesOneOffContributionCookie();
-	});
-
-	const contributionDateTimeEpoch = String(
-		Date.parse('2018-08-01T12:00:30Z'),
-	);
-
-	it('returns false if there is no one-off contribution cookie', () => {
-		expect(isPostAskPauseOneOffContributor()).toBe(false);
-	});
-
-	it('returns false if there are 5 days between the last contribution date and now', () => {
-		global.Date.now = jest.fn(() => Date.parse('2018-08-07T10:50:34'));
-		setSupportFrontendOneOffContributionCookie(contributionDateTimeEpoch);
-		expect(isPostAskPauseOneOffContributor()).toBe(false);
-	});
-
-	it('returns true if the one-off contribution was more than 3 months ago', () => {
-		global.Date.now = jest.fn(() => Date.parse('2019-02-01T13:00:30'));
-		setSupportFrontendOneOffContributionCookie(contributionDateTimeEpoch);
-		expect(isPostAskPauseOneOffContributor()).toBe(true);
-	});
-});
-
-describe('getPurchaseInfo', () => {
-	afterEach(() => {
-		removeCookie('GU_CO_COMPLETE');
-	});
-
-	it('returns decoded cookie data', () => {
-		addCookie(
-			'GU_CO_COMPLETE',
-			'%7B%22userType%22%3A%22guest%22%2C%22product%22%3A%22DigitalPack%22%7D',
-		);
-		expect(getPurchaseInfo()).toEqual({
-			userType: 'guest',
-			product: 'DigitalPack',
-		});
-	});
-
-	it('returns undefined if cookie unset', () => {
-		expect(getPurchaseInfo()).toBeUndefined();
-	});
-
-	it('returns undefined if cookie data invalid', () => {
-		addCookie('GU_CO_COMPLETE', 'utter-nonsense');
-		expect(getPurchaseInfo()).toBeUndefined();
 	});
 });
