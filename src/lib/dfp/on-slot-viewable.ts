@@ -3,14 +3,14 @@ import { outstreamSizes } from 'core/ad-sizes';
 import { AD_LABEL_HEIGHT } from 'core/constants/ad-label-height';
 import fastdom from 'lib/fastdom-promise';
 import { getUrlVars } from 'lib/utils/url';
-import { isAdSize } from './Advert';
 import type { Advert } from './Advert';
+import { isAdSize } from './Advert';
 import { getAdvertById } from './get-advert-by-id';
 import { enableLazyLoad } from './lazy-load';
 import { memoizedFetchNonRefreshableLineItemIds } from './non-refreshable-line-items';
 import { shouldRefresh } from './should-refresh';
 
-const ADVERT_REFRESH_RATE = 30_000; // 30 seconds
+const ADVERT_REFRESH_RATE = 30_000; // 30 seconds. The minimum time allowed by Google.
 
 /**
  * Prevent CLS when an advert is refreshed, by setting the
