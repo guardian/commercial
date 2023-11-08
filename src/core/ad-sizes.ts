@@ -342,12 +342,30 @@ const slotSizeMappings = {
 			adSizes.merchandisingHigh,
 			adSizes.fluid,
 		],
+		// The mobile mapping is given an additional size when filling the slot.
+		// We do not want this extra size applied to tablet, so we provide a
+		// mapping for tablet here.
+		tablet: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.merchandisingHigh,
+			adSizes.fluid,
+		],
 	},
 	'merchandising-high-lucky': {
 		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.fluid],
 	},
 	merchandising: {
 		mobile: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.merchandising,
+			adSizes.fluid,
+		],
+		// The mobile mapping is given an additional size when filling the slot.
+		// We do not want this extra size applied to tablet, so we provide a
+		// mapping for tablet here.
+		tablet: [
 			adSizes.outOfPage,
 			adSizes.empty,
 			adSizes.merchandising,

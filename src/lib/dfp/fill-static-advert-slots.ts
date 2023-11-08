@@ -21,10 +21,11 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 			desktop: [adSizes.billboard, createAdSize(900, 250)],
 		};
 	} else if (
-		name === 'merchandising-high' &&
+		(name === 'merchandising-high' || name === 'merchandising') &&
 		includeBillboardsInMerchHigh()
 	) {
 		return {
+			mobile: [adSizes.mpu],
 			desktop: [adSizes.billboard],
 		};
 	} else if (contentType === 'LiveBlog' && name?.includes('inline')) {
