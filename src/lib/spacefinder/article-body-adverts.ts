@@ -166,7 +166,6 @@ const addDesktopInline1 = (): Promise<boolean> => {
 				minBelow: 0,
 			},
 		},
-		filter: filterNearbyCandidates(adSizes.mpu.height),
 	};
 
 	// these are added here and not in size mappings because the inline[i] name
@@ -218,6 +217,7 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 		minAbove += 100;
 	}
 
+	const largestSizeForSlot = adSizes.halfPage.height;
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
 		slotSelector: ' > p',
@@ -230,7 +230,7 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 				minBelow: 600,
 			},
 		},
-		filter: filterNearbyCandidates(adSizes.halfPage.height),
+		filter: filterNearbyCandidates(largestSizeForSlot),
 	};
 
 	const insertAds: SpacefinderWriter = async (paras) => {
@@ -258,20 +258,22 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 				className: containerClasses,
 			};
 
+			// these are added here and not in size mappings because the inline[i] name
+			// is also used on fronts, where we don't want outstream or tall ads
+			const additionalSizes = {
+				desktop: await decideAdditionalSizes(
+					para,
+					[adSizes.halfPage, adSizes.skyscraper],
+					isLastInline,
+				),
+			};
+
 			return insertAdAtPara(
 				para,
 				`inline${i + 2}`,
 				'inline',
 				'inline',
-				// these are added here and not in size mappings because the inline[i] name
-				// is also used on fronts, where we don't want outstream or tall ads
-				{
-					desktop: await decideAdditionalSizes(
-						para,
-						[adSizes.halfPage, adSizes.skyscraper],
-						isLastInline,
-					),
-				},
+				additionalSizes,
 				containerOptions,
 			);
 		});
