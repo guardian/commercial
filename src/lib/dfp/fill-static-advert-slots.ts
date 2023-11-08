@@ -4,11 +4,11 @@ import { adSizes, createAdSize } from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import { removeDisabledSlots } from '../remove-slots';
+import { includeAdsInMerch } from './ads-in-merchandising-test';
 import { createAdvert } from './create-advert';
 import { dfpEnv } from './dfp-env';
 import { displayAds } from './display-ads';
 import { displayLazyAds } from './display-lazy-ads';
-import { includeBillboardsInMerchHigh } from './merchandising-high-test';
 import { setupPrebidOnce } from './prepare-prebid';
 import { queueAdvert } from './queue-advert';
 
@@ -22,7 +22,7 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 		};
 	} else if (
 		(name === 'merchandising-high' || name === 'merchandising') &&
-		includeBillboardsInMerchHigh()
+		includeAdsInMerch()
 	) {
 		return {
 			mobile: [adSizes.mpu],

@@ -1,7 +1,7 @@
 import type { ABTest } from '@guardian/ab-core';
 
-export const billboardsInMerchHigh: ABTest = {
-	id: 'BillboardsInMerchHigh',
+export const adsInMerch: ABTest = {
+	id: 'AdsInMerch',
 	author: '@commercial-dev',
 	start: '2022-12-07',
 	expiry: '2023-11-30',
