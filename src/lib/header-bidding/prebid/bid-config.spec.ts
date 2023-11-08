@@ -11,7 +11,6 @@ import {
 import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
 import {
 	containsBillboard as containsBillboard_,
-	containsBillboardNotLeaderboard as containsBillboardNotLeaderboard_,
 	containsDmpu as containsDmpu_,
 	containsLeaderboard as containsLeaderboard_,
 	containsLeaderboardOrBillboard as containsLeaderboardOrBillboard_,
@@ -66,8 +65,6 @@ const containsDmpu = containsDmpu_ as jest.Mock;
 const containsLeaderboard = containsLeaderboard_ as jest.Mock;
 const containsLeaderboardOrBillboard =
 	containsLeaderboardOrBillboard_ as jest.Mock;
-const containsBillboardNotLeaderboard =
-	containsBillboardNotLeaderboard_ as jest.Mock;
 const containsMobileSticky = containsMobileSticky_ as jest.Mock;
 const containsMpu = containsMpu_ as jest.Mock;
 const containsMpuOrDmpu = containsMpuOrDmpu_ as jest.Mock;
@@ -145,26 +142,11 @@ describe('getImprovePlacementId', () => {
 			[createAdSize(1, 2)],
 		];
 
-		return prebidSizes.map((size) => getImprovePlacementId(size, false));
+		return prebidSizes.map((size) => getImprovePlacementId(size));
 	};
 
 	test('should return -1 if no cases match', () => {
-		expect(getImprovePlacementId([createAdSize(1, 2)], false)).toBe(-1);
-	});
-
-	test('should give the expected values when in the fronts banner test in uk on desktop', () => {
-		isInUk.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('D');
-		containsMpuOrDmpu.mockReturnValue(false);
-		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
-		containsBillboardNotLeaderboard.mockReturnValue(true);
-
-		expect(getImprovePlacementId([createAdSize(970, 250)], true)).toEqual(
-			22987847,
-		);
-		expect(getImprovePlacementId([createAdSize(970, 250)], false)).toEqual(
-			1116397,
-		);
+		expect(getImprovePlacementId([createAdSize(1, 2)])).toBe(-1);
 	});
 
 	test('should return the expected values when geolocated in UK and on desktop device', () => {
@@ -359,7 +341,7 @@ describe('indexExchangeBidders', () => {
 			createAdSize(300, 250),
 			createAdSize(300, 600),
 		];
-		const bidders: PrebidBidder[] = indexExchangeBidders(slotSizes, false);
+		const bidders: PrebidBidder[] = indexExchangeBidders(slotSizes);
 		expect(bidders).toEqual([
 			expect.objectContaining<Partial<PrebidBidder>>({
 				name: 'ix',
@@ -379,7 +361,7 @@ describe('indexExchangeBidders', () => {
 			createAdSize(300, 250),
 			createAdSize(300, 600),
 		];
-		const bidders: PrebidBidder[] = indexExchangeBidders(slotSizes, false);
+		const bidders: PrebidBidder[] = indexExchangeBidders(slotSizes);
 		expect(bidders[0]?.bidParams('type', [createAdSize(1, 2)])).toEqual({
 			siteId: '123456',
 			size: [300, 250],
@@ -748,7 +730,7 @@ describe('getXaxisPlacementId', () => {
 	};
 
 	test('should return -1 if no cases match', () => {
-		expect(getImprovePlacementId([createAdSize(1, 2)], false)).toBe(-1);
+		expect(getImprovePlacementId([createAdSize(1, 2)])).toBe(-1);
 	});
 
 	test('should return the expected values for desktop device', () => {
