@@ -1,7 +1,12 @@
 import { breakpoints as sourceBreakpoints } from '@guardian/source-foundations';
 import type { AdSize, SizeMapping, SlotName } from 'core/ad-sizes';
-import { createAdSize, slotSizeMappings } from 'core/ad-sizes';
+import {
+	createAdSize,
+	findAppliedSizesForBreakpoint,
+	slotSizeMappings,
+} from 'core/ad-sizes';
 import { concatSizeMappings } from 'core/create-ad-slot';
+import type { Breakpoint } from 'core/lib/breakpoint';
 import fastdom from 'lib/fastdom-promise';
 import type { HeaderBiddingSize } from '../header-bidding/prebid-types';
 import { breakpointNameToAttribute } from './breakpoint-name-to-attribute';
@@ -76,6 +81,27 @@ const getSlotSizeMapping = (name: string): SizeMapping => {
 	}
 
 	return {};
+};
+
+/**
+ * Finds the smallest possible known ad size that can fill a slot
+ * Useful for minimising CLS.
+ */
+const findSmallestAdHeightForSlot = (
+	slot: SlotName,
+	breakpoint: Breakpoint,
+): number | null => {
+	const sizes = getSlotSizeMapping(slot);
+	if (!Object.keys(sizes).length) return null;
+
+	const sizesForBreakpoint = findAppliedSizesForBreakpoint(sizes, breakpoint);
+	const heights = sizesForBreakpoint
+		.filter((size) => !size.isProxy())
+		.map(({ height }) => height);
+
+	if (!heights.length) return null;
+
+	return Math.min(...heights);
 };
 
 const isSizeMappingEmpty = (sizeMapping: SizeMapping): boolean => {
@@ -213,7 +239,7 @@ const isAdSize = (size: Advert['size']): size is AdSize => {
 	return size !== null && size !== 'fluid';
 };
 
-export { Advert, isAdSize };
+export { Advert, findSmallestAdHeightForSlot, isAdSize };
 
 export const _ = {
 	getSlotSizeMapping,
