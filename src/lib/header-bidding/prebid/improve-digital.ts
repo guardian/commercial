@@ -1,4 +1,3 @@
-import { includeBillboardsInMerchHigh } from 'lib/dfp/merchandising-high-test';
 import { isInRow, isInUk } from 'lib/utils/geo-utils';
 import type { HeaderBiddingSize } from '../prebid-types';
 import {
@@ -10,19 +9,14 @@ import {
 	stripTrailingNumbersAbove1,
 } from '../utils';
 
-const getImprovePlacementId = (
-	sizes: HeaderBiddingSize[],
-	isInFrontsBannerVariant: boolean,
-): number => {
+const getImprovePlacementId = (sizes: HeaderBiddingSize[]): number => {
 	if (isInUk()) {
 		switch (getBreakpointKey()) {
 			case 'D': // Desktop
-				if (isInFrontsBannerVariant || includeBillboardsInMerchHigh()) {
-					// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
-					// This check is to distinguish from the top-above-nav which includes a leaderboard
-					if (containsBillboardNotLeaderboard(sizes)) {
-						return 22987847;
-					}
+				// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
+				// This check is to distinguish from the top-above-nav which includes a leaderboard
+				if (containsBillboardNotLeaderboard(sizes)) {
+					return 22987847;
 				}
 				if (containsMpuOrDmpu(sizes)) {
 					return 1116396;
@@ -122,6 +116,6 @@ const getImproveSizeParam = (
 
 export {
 	getImprovePlacementId,
-	getImproveSkinPlacementId,
 	getImproveSizeParam,
+	getImproveSkinPlacementId,
 };

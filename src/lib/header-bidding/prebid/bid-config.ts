@@ -5,7 +5,6 @@ import {
 	buildAppNexusTargetingObject,
 } from 'lib/build-page-targeting';
 import { dfpEnv } from 'lib/dfp/dfp-env';
-import { includeBillboardsInMerchHigh } from 'lib/dfp/merchandising-high-test';
 import { isInAuOrNz, isInUk, isInUsa, isInUsOrCa } from 'lib/utils/geo-utils';
 import { pbTestNameMap } from 'lib/utils/url';
 import type { PrebidIndexSite } from 'types/global';
@@ -61,11 +60,7 @@ import {
 } from './improve-digital';
 
 const isArticle = window.guardian.config.page.contentType === 'Article';
-
 const isDesktopAndArticle = getBreakpointKey() === 'D' && isArticle;
-
-const { tests } = window.guardian.config;
-const isInFrontsBannerVariant = tests?.frontsBannerAdsVariant === 'variant';
 
 const getTrustXAdUnitId = (
 	slotId: string,
@@ -206,12 +201,7 @@ const appNexusBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	bidParams: (
 		slotId: string,
 		sizes: HeaderBiddingSize[],
-	): PrebidAppNexusParams =>
-		getAppNexusDirectBidParams(
-			sizes,
-			pageTargeting,
-			isInFrontsBannerVariant,
-		),
+	): PrebidAppNexusParams => getAppNexusDirectBidParams(sizes, pageTargeting),
 });
 
 const openxClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
@@ -349,18 +339,16 @@ const pubmaticBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 		}),
 	};
 
-	if (isInFrontsBannerVariant || includeBillboardsInMerchHigh()) {
-		// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
-		// This check is to distinguish from the top-above-nav which, includes a leaderboard
-		if (containsBillboardNotLeaderboard(slotSizes)) {
-			return {
-				...defaultParams,
-				bidParams: (slotId: string): PrebidPubmaticParams => ({
-					...defaultParams.bidParams(slotId),
-					placementId: 'theguardian_970x250_only',
-				}),
-			};
-		}
+	// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
+	// This check is to distinguish from the top-above-nav which, includes a leaderboard
+	if (containsBillboardNotLeaderboard(slotSizes)) {
+		return {
+			...defaultParams,
+			bidParams: (slotId: string): PrebidPubmaticParams => ({
+				...defaultParams.bidParams(slotId),
+				placementId: 'theguardian_970x250_only',
+			}),
+		};
 	}
 
 	return defaultParams;
@@ -393,7 +381,7 @@ const improveDigitalBidder: PrebidBidder = {
 		sizes: HeaderBiddingSize[],
 	): PrebidImproveParams => ({
 		publisherId: 995,
-		placementId: getImprovePlacementId(sizes, isInFrontsBannerVariant),
+		placementId: getImprovePlacementId(sizes),
 		size: getImproveSizeParam(slotId, isDesktopAndArticle),
 	}),
 };
@@ -450,17 +438,15 @@ const criteoBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 		switchName: 'prebidCriteo',
 	};
 
-	if (isInFrontsBannerVariant || includeBillboardsInMerchHigh()) {
-		// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
-		// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
-		if (containsBillboardNotLeaderboard(slotSizes)) {
-			return {
-				...defaultParams,
-				bidParams: () => ({
-					zoneId: 1759354,
-				}),
-			};
-		}
+	// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
+	// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
+	if (containsBillboardNotLeaderboard(slotSizes)) {
+		return {
+			...defaultParams,
+			bidParams: () => ({
+				zoneId: 1759354,
+			}),
+		};
 	}
 
 	return {
@@ -495,15 +481,12 @@ const kargoBidder: PrebidBidder = {
 // There's an IX bidder for every size that the slot can take
 const indexExchangeBidders = (
 	slotSizes: HeaderBiddingSize[],
-	isInFrontsBannerVariant: boolean,
 ): PrebidBidder[] => {
 	let indexSiteId = getIndexSiteId();
-	if (isInFrontsBannerVariant || includeBillboardsInMerchHigh()) {
-		// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
-		// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
-		if (containsBillboardNotLeaderboard(slotSizes)) {
-			indexSiteId = '983842';
-		}
+	// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
+	// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
+	if (containsBillboardNotLeaderboard(slotSizes)) {
+		indexSiteId = '983842';
 	}
 
 	return slotSizes.map((size) => ({
@@ -551,10 +534,7 @@ const currentBidders = (
 		.filter(([shouldInclude]) => inPbTestOr(shouldInclude))
 		.map(([, bidder]) => bidder);
 
-	const allBidders = indexExchangeBidders(
-		slotSizes,
-		isInFrontsBannerVariant,
-	).concat(otherBidders);
+	const allBidders = indexExchangeBidders(slotSizes).concat(otherBidders);
 	return isPbTestOn()
 		? biddersBeingTested(allBidders)
 		: biddersSwitchedOn(allBidders);
