@@ -62,12 +62,12 @@ jest.mock('lib/raven');
 
 jest.mock('../utils');
 const containsBillboard = containsBillboard_ as jest.Mock;
+const containsBillboardNotLeaderboard =
+	containsBillboardNotLeaderboard_ as jest.Mock;
 const containsDmpu = containsDmpu_ as jest.Mock;
 const containsLeaderboard = containsLeaderboard_ as jest.Mock;
 const containsLeaderboardOrBillboard =
 	containsLeaderboardOrBillboard_ as jest.Mock;
-const containsBillboardNotLeaderboard =
-	containsBillboardNotLeaderboard_ as jest.Mock;
 const containsMobileSticky = containsMobileSticky_ as jest.Mock;
 const containsMpu = containsMpu_ as jest.Mock;
 const containsMpuOrDmpu = containsMpuOrDmpu_ as jest.Mock;
@@ -129,7 +129,6 @@ const resetConfig = () => {
 describe('getImprovePlacementId', () => {
 	beforeEach(() => {
 		resetConfig();
-		getBreakpointKey.mockReturnValue('D');
 	});
 
 	afterEach(() => {
@@ -145,26 +144,41 @@ describe('getImprovePlacementId', () => {
 			[createAdSize(1, 2)],
 		];
 
-		return prebidSizes.map((size) => getImprovePlacementId(size, false));
+		return prebidSizes.map((size) => getImprovePlacementId(size));
 	};
 
 	test('should return -1 if no cases match', () => {
-		expect(getImprovePlacementId([createAdSize(1, 2)], false)).toBe(-1);
+		expect(getImprovePlacementId([createAdSize(1, 2)])).toBe(-1);
 	});
 
-	test('should give the expected values when in the fronts banner test in uk on desktop', () => {
+	test('should give the expected values when there is a billboard but NOT a leaderboard', () => {
 		isInUk.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
-		containsMpuOrDmpu.mockReturnValue(false);
+		containsBillboardNotLeaderboard.mockReturnValueOnce(true);
+		containsMpuOrDmpu.mockReturnValueOnce(false);
 		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
-		containsBillboardNotLeaderboard.mockReturnValue(true);
 
-		expect(getImprovePlacementId([createAdSize(970, 250)], true)).toEqual(
-			22987847,
-		);
-		expect(getImprovePlacementId([createAdSize(970, 250)], false)).toEqual(
-			1116397,
-		);
+		expect(getImprovePlacementId([])).toEqual(22987847);
+	});
+
+	test('should give the expected values when there is a leaderboard but NOT a billboard', () => {
+		isInUk.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('D');
+		containsBillboardNotLeaderboard.mockReturnValueOnce(false);
+		containsMpuOrDmpu.mockReturnValueOnce(false);
+		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
+
+		expect(getImprovePlacementId([])).toEqual(1116397);
+	});
+
+	test('should give the expected values when there is a billboard AND a leaderboard', () => {
+		isInUk.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('D');
+		containsBillboardNotLeaderboard.mockReturnValueOnce(false);
+		containsMpuOrDmpu.mockReturnValueOnce(false);
+		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
+
+		expect(getImprovePlacementId([])).toEqual(1116397);
 	});
 
 	test('should return the expected values when geolocated in UK and on desktop device', () => {
@@ -359,7 +373,7 @@ describe('indexExchangeBidders', () => {
 			createAdSize(300, 250),
 			createAdSize(300, 600),
 		];
-		const bidders: PrebidBidder[] = indexExchangeBidders(slotSizes, false);
+		const bidders: PrebidBidder[] = indexExchangeBidders(slotSizes);
 		expect(bidders).toEqual([
 			expect.objectContaining<Partial<PrebidBidder>>({
 				name: 'ix',
@@ -379,7 +393,7 @@ describe('indexExchangeBidders', () => {
 			createAdSize(300, 250),
 			createAdSize(300, 600),
 		];
-		const bidders: PrebidBidder[] = indexExchangeBidders(slotSizes, false);
+		const bidders: PrebidBidder[] = indexExchangeBidders(slotSizes);
 		expect(bidders[0]?.bidParams('type', [createAdSize(1, 2)])).toEqual({
 			siteId: '123456',
 			size: [300, 250],
@@ -748,7 +762,7 @@ describe('getXaxisPlacementId', () => {
 	};
 
 	test('should return -1 if no cases match', () => {
-		expect(getImprovePlacementId([createAdSize(1, 2)], false)).toBe(-1);
+		expect(getImprovePlacementId([createAdSize(1, 2)])).toBe(-1);
 	});
 
 	test('should return the expected values for desktop device', () => {

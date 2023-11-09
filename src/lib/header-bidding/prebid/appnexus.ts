@@ -1,6 +1,5 @@
 import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import { buildAppNexusTargetingObject } from 'lib/build-page-targeting';
-import { includeBillboardsInMerchHigh } from 'lib/dfp/merchandising-high-test';
 import { isInAuOrNz } from 'lib/utils/geo-utils';
 import type { HeaderBiddingSize } from '../prebid-types';
 import {
@@ -36,10 +35,7 @@ const getAppNexusInvCode = (sizes: HeaderBiddingSize[]): string | undefined => {
 	}
 };
 
-const getAppNexusDirectPlacementId = (
-	sizes: HeaderBiddingSize[],
-	isInFrontsBannerVariant: boolean,
-): string => {
+const getAppNexusDirectPlacementId = (sizes: HeaderBiddingSize[]): string => {
 	if (isInAuOrNz()) {
 		return '11016434';
 	}
@@ -47,12 +43,10 @@ const getAppNexusDirectPlacementId = (
 	const defaultPlacementId = '9251752';
 	switch (getBreakpointKey()) {
 		case 'D':
-			if (isInFrontsBannerVariant || includeBillboardsInMerchHigh()) {
-				// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
-				// This check is to distinguish from the top-above-nav which includes a leaderboard
-				if (containsBillboardNotLeaderboard(sizes)) {
-					return '30017511';
-				}
+			// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
+			// This check is to distinguish from the top-above-nav which includes a leaderboard
+			if (containsBillboardNotLeaderboard(sizes)) {
+				return '30017511';
 			}
 			if (containsMpuOrDmpu(sizes)) {
 				return '9251752';
@@ -82,7 +76,6 @@ const getAppNexusDirectPlacementId = (
 export const getAppNexusDirectBidParams = (
 	sizes: HeaderBiddingSize[],
 	pageTargeting: PageTargeting,
-	isInFrontsBannerVariant: boolean,
 ): AppNexusDirectBidParams => {
 	if (isInAuOrNz() && window.guardian.config.switches.prebidAppnexusInvcode) {
 		const invCode = getAppNexusInvCode(sizes);
@@ -98,10 +91,7 @@ export const getAppNexusDirectBidParams = (
 		}
 	}
 	return {
-		placementId: getAppNexusDirectPlacementId(
-			sizes,
-			isInFrontsBannerVariant,
-		),
+		placementId: getAppNexusDirectPlacementId(sizes),
 		keywords: buildAppNexusTargetingObject(pageTargeting),
 	};
 };
