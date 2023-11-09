@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 11.19.1
+
+### Patch Changes
+
+- a07fa56: Use correct placement IDs for AppNexus and Improve for fronts-banner ads in UK desktop
+- d0cf664: Use the full hash for the link to `guardian/prebid.js` in deps
+
 ## 11.19.0
 
 ### Minor Changes
