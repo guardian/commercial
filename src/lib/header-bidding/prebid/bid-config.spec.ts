@@ -11,6 +11,7 @@ import {
 import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
 import {
 	containsBillboard as containsBillboard_,
+	containsBillboardNotLeaderboard as containsBillboardNotLeaderboard_,
 	containsDmpu as containsDmpu_,
 	containsLeaderboard as containsLeaderboard_,
 	containsLeaderboardOrBillboard as containsLeaderboardOrBillboard_,
@@ -61,6 +62,8 @@ jest.mock('lib/raven');
 
 jest.mock('../utils');
 const containsBillboard = containsBillboard_ as jest.Mock;
+const containsBillboardNotLeaderboard =
+	containsBillboardNotLeaderboard_ as jest.Mock;
 const containsDmpu = containsDmpu_ as jest.Mock;
 const containsLeaderboard = containsLeaderboard_ as jest.Mock;
 const containsLeaderboardOrBillboard =
@@ -126,7 +129,6 @@ const resetConfig = () => {
 describe('getImprovePlacementId', () => {
 	beforeEach(() => {
 		resetConfig();
-		getBreakpointKey.mockReturnValue('D');
 	});
 
 	afterEach(() => {
@@ -147,6 +149,36 @@ describe('getImprovePlacementId', () => {
 
 	test('should return -1 if no cases match', () => {
 		expect(getImprovePlacementId([createAdSize(1, 2)])).toBe(-1);
+	});
+
+	test('should give the expected values when there is a billboard but NOT a leaderboard', () => {
+		isInUk.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('D');
+		containsBillboardNotLeaderboard.mockReturnValueOnce(true);
+		containsMpuOrDmpu.mockReturnValueOnce(false);
+		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
+
+		expect(getImprovePlacementId([])).toEqual(22987847);
+	});
+
+	test('should give the expected values when there is a leaderboard but NOT a billboard', () => {
+		isInUk.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('D');
+		containsBillboardNotLeaderboard.mockReturnValueOnce(false);
+		containsMpuOrDmpu.mockReturnValueOnce(false);
+		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
+
+		expect(getImprovePlacementId([])).toEqual(1116397);
+	});
+
+	test('should give the expected values when there is a billboard AND a leaderboard', () => {
+		isInUk.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('D');
+		containsBillboardNotLeaderboard.mockReturnValueOnce(false);
+		containsMpuOrDmpu.mockReturnValueOnce(false);
+		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
+
+		expect(getImprovePlacementId([])).toEqual(1116397);
 	});
 
 	test('should return the expected values when geolocated in UK and on desktop device', () => {
