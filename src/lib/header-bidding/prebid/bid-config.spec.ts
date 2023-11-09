@@ -634,7 +634,7 @@ describe('triplelift adapter', () => {
 		containsLeaderboard.mockReturnValueOnce(true);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(false);
+		containsMobileSticky.mockReturnValue(false);
 		isInUsOrCa.mockReturnValue(true);
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
@@ -650,7 +650,7 @@ describe('triplelift adapter', () => {
 		containsLeaderboard.mockReturnValueOnce(true);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(false);
+		containsMobileSticky.mockReturnValue(false);
 		isInAuOrNz.mockReturnValue(true);
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
@@ -666,7 +666,7 @@ describe('triplelift adapter', () => {
 		containsLeaderboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(true);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(false);
+		containsMobileSticky.mockReturnValue(false);
 		isInUsOrCa.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -683,7 +683,7 @@ describe('triplelift adapter', () => {
 		containsLeaderboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(true);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(false);
+		containsMobileSticky.mockReturnValue(false);
 		isInAuOrNz.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -700,7 +700,7 @@ describe('triplelift adapter', () => {
 		containsLeaderboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(true);
+		containsMobileSticky.mockReturnValue(true);
 		isInUsOrCa.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -717,7 +717,7 @@ describe('triplelift adapter', () => {
 		containsLeaderboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(true);
+		containsMobileSticky.mockReturnValue(true);
 		isInAuOrNz.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
