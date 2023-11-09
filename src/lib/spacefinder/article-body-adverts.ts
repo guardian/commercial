@@ -130,7 +130,7 @@ const decideAdditionalSizes = async (
 	);
 };
 
-const addDesktopInlineAds = (isInline1: boolean): Promise<boolean> => {
+const addDesktopInline1 = (): Promise<boolean> => {
 	const tweakpoint = getCurrentTweakpoint();
 	const hasLeftCol = ['leftCol', 'wide'].includes(tweakpoint);
 
@@ -142,7 +142,7 @@ const addDesktopInlineAds = (isInline1: boolean): Promise<boolean> => {
 
 	const isImmersive = window.guardian.config.page.isImmersive;
 
-	const firstInlineRules: SpacefinderRules = {
+	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
 		slotSelector: ' > p',
 		minAbove: isImmersive ? 700 : 300,
@@ -166,9 +166,41 @@ const addDesktopInlineAds = (isInline1: boolean): Promise<boolean> => {
 				minBelow: 0,
 			},
 		},
-		filter: filterNearbyCandidates(adSizes.mpu.height),
 	};
 
+	// these are added here and not in size mappings because the inline[i] name
+	// is also used on fronts, where we don't want outstream or tall ads
+	const additionalSizes = {
+		phablet: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
+		desktop: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
+	};
+
+	const insertAd: SpacefinderWriter = async (paras) => {
+		const slots = paras.slice(0, 1).map(async (para) => {
+			return insertAdAtPara(
+				para,
+				'inline1',
+				'inline',
+				'inline',
+				additionalSizes,
+			);
+		});
+
+		await Promise.all(slots);
+	};
+
+	return spaceFiller.fillSpace(rules, insertAd, {
+		waitForImages: true,
+		waitForInteractives: true,
+		pass: 'inline1',
+	});
+};
+
+/**
+ * Inserts all inline ads on desktop except for inline1.
+ *
+ */
+const addDesktopInline2PlusAds = (): Promise<boolean> => {
 	let minAbove = 1000;
 
 	/**
@@ -185,7 +217,8 @@ const addDesktopInlineAds = (isInline1: boolean): Promise<boolean> => {
 		minAbove += 100;
 	}
 
-	const subsequentInlineRules: SpacefinderRules = {
+	const largestSizeForSlot = adSizes.halfPage.height;
+	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
 		slotSelector: ' > p',
 		minAbove,
@@ -197,79 +230,53 @@ const addDesktopInlineAds = (isInline1: boolean): Promise<boolean> => {
 				minBelow: 600,
 			},
 		},
-		filter: filterNearbyCandidates(adSizes.halfPage.height),
+		filter: filterNearbyCandidates(largestSizeForSlot),
 	};
 
-	const rules = isInline1 ? firstInlineRules : subsequentInlineRules;
-
 	const insertAds: SpacefinderWriter = async (paras) => {
-		// Make ads sticky on the non-inline1 pass
-		// i.e. inline2, inline3, etc...
-		const isSticky = !isInline1;
+		const stickyContainerHeights = await computeStickyHeights(
+			paras,
+			articleBodySelector,
+		);
 
-		if (isSticky) {
-			const stickyContainerHeights = await computeStickyHeights(
-				paras,
-				articleBodySelector,
-			);
+		void insertHeightStyles(
+			stickyContainerHeights.map((height, index) => [
+				getStickyContainerClassname(index),
+				height,
+			]),
+		);
 
-			void insertHeightStyles(
-				stickyContainerHeights.map((height, index) => [
-					getStickyContainerClassname(index),
-					height,
-				]),
-			);
-		}
+		const slots = paras.slice(0, paras.length).map(async (para, i) => {
+			const isLastInline = i === paras.length - 1;
 
-		const slots = paras
-			.slice(0, isInline1 ? 1 : paras.length)
-			.map(async (para, i) => {
-				const inlineId = i + (isInline1 ? 1 : 2);
-				const isLastInline = i === paras.length - 1;
+			const containerClasses =
+				getStickyContainerClassname(i) +
+				' offset-right ad-slot--offset-right ad-slot-container--offset-right';
 
-				let containerClasses = '';
+			const containerOptions = {
+				sticky: true,
+				className: containerClasses,
+			};
 
-				if (isSticky) {
-					containerClasses += getStickyContainerClassname(i);
-				}
-
-				if (!isInline1) {
-					containerClasses +=
-						' offset-right ad-slot--offset-right ad-slot-container--offset-right';
-				}
-
-				const containerOptions = {
-					sticky: isSticky,
-					className: containerClasses,
-				};
-
-				return insertAdAtPara(
+			// these are added here and not in size mappings because the inline[i] name
+			// is also used on fronts, where we don't want outstream or tall ads
+			const additionalSizes = {
+				desktop: await decideAdditionalSizes(
 					para,
-					`inline${inlineId}`,
-					'inline',
-					'inline',
-					// these are added here and not in size mappings because the inline[i] name is also used on fronts, where we don't want outstream or tall ads
-					isInline1
-						? {
-								phablet: [
-									adSizes.outstreamDesktop,
-									adSizes.outstreamGoogleDesktop,
-								],
-								desktop: [
-									adSizes.outstreamDesktop,
-									adSizes.outstreamGoogleDesktop,
-								],
-						  }
-						: {
-								desktop: await decideAdditionalSizes(
-									para,
-									[adSizes.halfPage, adSizes.skyscraper],
-									isLastInline,
-								),
-						  },
-					containerOptions,
-				);
-			});
+					[adSizes.halfPage, adSizes.skyscraper],
+					isLastInline,
+				),
+			};
+
+			return insertAdAtPara(
+				para,
+				`inline${i + 2}`,
+				'inline',
+				'inline',
+				additionalSizes,
+				containerOptions,
+			);
+		});
 
 		await Promise.all(slots);
 	};
@@ -277,7 +284,7 @@ const addDesktopInlineAds = (isInline1: boolean): Promise<boolean> => {
 	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
-		pass: isInline1 ? 'inline1' : 'inline2',
+		pass: 'inline2',
 	});
 };
 
@@ -329,14 +336,17 @@ const addMobileInlineAds = (): Promise<boolean> => {
 
 const addInlineAds = (): Promise<boolean> => {
 	const isMobile = getCurrentBreakpoint() === 'mobile';
-
 	if (isMobile) {
 		return addMobileInlineAds();
 	}
+
 	if (isPaidContent) {
-		return addDesktopInlineAds(false);
+		return addDesktopInline2PlusAds();
 	}
-	return addDesktopInlineAds(true).then(() => addDesktopInlineAds(false));
+
+	// Add the rest of the inline ad slots after a position for inline1 has been found.
+	// We don't wan't inline1 and inline2 targeting the same paragraph.
+	return addDesktopInline1().then(() => addDesktopInline2PlusAds());
 };
 
 const attemptToAddInlineMerchAd = (): Promise<boolean> => {
