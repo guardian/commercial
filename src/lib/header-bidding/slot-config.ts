@@ -191,7 +191,12 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 			desktop: isCrossword ? [adSizes.leaderboard] : [],
 			tablet: isCrossword ? [adSizes.leaderboard] : [],
 		},
+		merchandising: {
+			mobile: includeAdsInMerch() ? [adSizes.mpu] : [],
+			desktop: includeAdsInMerch() ? [adSizes.billboard] : [],
+		},
 		'merchandising-high': {
+			mobile: includeAdsInMerch() ? [adSizes.mpu] : [],
 			desktop: includeAdsInMerch() ? [adSizes.billboard] : [],
 		},
 	};
