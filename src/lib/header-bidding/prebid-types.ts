@@ -10,6 +10,7 @@ export type HeaderBiddingSlotName =
 	| 'mostpop'
 	| 'right'
 	| 'top-above-nav'
+	| 'merchandising'
 	| 'merchandising-high'
 	| `fronts-banner-${number}`
 	| `inline${number}`;

@@ -1,7 +1,7 @@
 import type { AdSize } from 'core/ad-sizes';
 import { adSizes, createAdSize } from 'core/ad-sizes';
+import { includeAdsInMerch } from 'lib/dfp/ads-in-merchandising-test';
 import type { Advert } from 'lib/dfp/Advert';
-import { includeBillboardsInMerchHigh } from 'lib/dfp/merchandising-high-test';
 import type {
 	HeaderBiddingSizeKey,
 	HeaderBiddingSizeMapping,
@@ -191,8 +191,13 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 			desktop: isCrossword ? [adSizes.leaderboard] : [],
 			tablet: isCrossword ? [adSizes.leaderboard] : [],
 		},
+		merchandising: {
+			mobile: includeAdsInMerch() ? [adSizes.mpu] : [],
+			desktop: includeAdsInMerch() ? [adSizes.billboard] : [],
+		},
 		'merchandising-high': {
-			desktop: includeBillboardsInMerchHigh() ? [adSizes.billboard] : [],
+			mobile: includeAdsInMerch() ? [adSizes.mpu] : [],
+			desktop: includeAdsInMerch() ? [adSizes.billboard] : [],
 		},
 	};
 };

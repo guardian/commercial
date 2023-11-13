@@ -1,5 +1,5 @@
 import type { ABTest } from '@guardian/ab-core';
-import { billboardsInMerchHigh } from './tests/billboards-in-merch-high';
+import { adsInMerch } from './tests/ads-in-merch';
 import { consentlessAds } from './tests/consentlessAds';
 import { eagerPrebid } from './tests/eager-prebid';
 import { elementsManager } from './tests/elements-manager';
@@ -18,7 +18,7 @@ export const concurrentTests: readonly ABTest[] = [
 	signInGateCopyTestJan2023,
 	consentlessAds,
 	integrateIma,
-	billboardsInMerchHigh,
+	adsInMerch,
 	elementsManager,
 	eagerPrebid,
 	publicGoodTest,

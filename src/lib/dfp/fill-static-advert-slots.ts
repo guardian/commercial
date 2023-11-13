@@ -4,11 +4,11 @@ import { adSizes, createAdSize } from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import { removeDisabledSlots } from '../remove-slots';
+import { includeAdsInMerch } from './ads-in-merchandising-test';
 import { createAdvert } from './create-advert';
 import { dfpEnv } from './dfp-env';
 import { displayAds } from './display-ads';
 import { displayLazyAds } from './display-lazy-ads';
-import { includeBillboardsInMerchHigh } from './merchandising-high-test';
 import { setupPrebidOnce } from './prepare-prebid';
 import { queueAdvert } from './queue-advert';
 
@@ -21,10 +21,11 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 			desktop: [adSizes.billboard, createAdSize(900, 250)],
 		};
 	} else if (
-		name === 'merchandising-high' &&
-		includeBillboardsInMerchHigh()
+		(name === 'merchandising-high' || name === 'merchandising') &&
+		includeAdsInMerch()
 	) {
 		return {
+			mobile: [adSizes.mpu],
 			desktop: [adSizes.billboard],
 		};
 	} else if (contentType === 'LiveBlog' && name?.includes('inline')) {
