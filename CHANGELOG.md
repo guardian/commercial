@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.20.0
+
+### Minor Changes
+
+- d7e0c71: Show MPUs and Billboard ads in merchandising and merchandising-high slots
+
 ## 11.19.1
 
 ### Patch Changes
