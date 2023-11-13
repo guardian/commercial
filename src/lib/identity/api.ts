@@ -209,7 +209,6 @@ const getGoogleTagId = (): Promise<string | null> =>
 
 export {
 	isUserLoggedIn,
-	getAuthStatus,
 	getOptionsHeadersWithOkta,
 	isUserLoggedInOktaRefactor,
 	getGoogleTagId,

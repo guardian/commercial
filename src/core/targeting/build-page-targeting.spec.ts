@@ -2,8 +2,6 @@ import { cmp as cmp_ } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type { TCFv2ConsentState } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import { setCookie, storage } from '@guardian/libs';
-import { getAuthStatus as getAuthStatus_ } from 'lib/identity/api';
-import type { AuthStatus } from 'lib/identity/api';
 import { getLocale as getLocale_ } from '../lib/get-locale';
 import type { Edition } from '../types';
 import { buildPageTargeting } from './build-page-targeting';
@@ -33,13 +31,8 @@ jest.mock('@guardian/consent-management-platform', () => ({
 
 jest.mock('../../lib/identity/api', () => ({
 	isUserLoggedInOktaRefactor: () => true,
-	getAuthStatus: jest.fn(),
 	getOptionsHeadersWithOkta: jest.fn(),
 }));
-
-const getAuthStatus = getAuthStatus_ as jest.MockedFunction<
-	typeof getAuthStatus_
->;
 
 const mockViewport = (width: number, height: number): void => {
 	Object.defineProperties(window, {
@@ -168,10 +161,6 @@ describe('Build Page Targeting', () => {
 		storage.local.setRaw('gu.alreadyVisited', String(0));
 
 		getLocale.mockReturnValue('US');
-
-		getAuthStatus.mockReturnValue(
-			Promise.resolve({ kind: 'SignedInWithOkta' } as AuthStatus),
-		);
 
 		jest.spyOn(global.Math, 'random').mockReturnValue(0.5);
 
