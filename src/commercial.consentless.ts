@@ -23,7 +23,10 @@ const bootConsentless = async (
 
 	//this is added so that we can load the subscriber cookie for DCR pages and correctly hide ads
 
-	if (isDotcomRendering) {
+	if (
+		isDotcomRendering &&
+		window.guardian.config.switches.userFeaturesDcr !== true
+	) {
 		const userFeatures = await import(
 			/* webpackChunkName: "dcr" */
 			'lib/user-features'

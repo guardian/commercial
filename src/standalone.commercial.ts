@@ -116,6 +116,10 @@ if (!commercialFeatures.adFree) {
 const loadDcrBundle = async (): Promise<void> => {
 	if (!isDotcomRendering) return;
 
+	if (window.guardian.config.switches.userFeaturesDcr === true) {
+		return;
+	}
+
 	const userFeatures = await import(
 		/* webpackChunkName: "dcr" */
 		'lib/user-features'
