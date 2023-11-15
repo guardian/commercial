@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 11.21.0
+
+### Minor Changes
+
+- 4fe3874: Add a new Index site id for the mobile-sticky size
+- cec24f3: ding feature switch logic
+
 ## 11.20.0
 
 ### Minor Changes
