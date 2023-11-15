@@ -117,11 +117,35 @@ const getTrustXAdUnitId = (
 	}
 };
 
-const getIndexSiteId = (): string => {
+/**
+ * We store a mapping of sections to Index site ids server-side, where each is
+ * split out by breakpoint. These are transferred to the client via the window,
+ * and read here
+ *
+ * This appears to be an old method of assigning site ids, with the newer method
+ * being to assign them according to ad size (@see getIndexSiteId)
+ */
+const getIndexSiteIdFromConfig = (): string => {
 	const site = window.guardian.config.page.pbIndexSites.find(
 		(s: PrebidIndexSite) => s.bp === getBreakpointKey(),
 	);
 	return site?.id ? site.id.toString() : '';
+};
+
+const getIndexSiteId = (slotSizes: HeaderBiddingSize[]) => {
+	// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
+	// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
+	if (containsBillboardNotLeaderboard(slotSizes)) {
+		return '983842';
+	}
+
+	// Return a specific site id for the mobile sticky slot
+	if (containsMobileSticky(slotSizes)) {
+		return '1047869';
+	}
+
+	// Fall back to reading the site id from the window
+	return getIndexSiteIdFromConfig();
 };
 
 const getXaxisPlacementId = (sizes: HeaderBiddingSize[]): number => {
@@ -482,18 +506,12 @@ const kargoBidder: PrebidBidder = {
 const indexExchangeBidders = (
 	slotSizes: HeaderBiddingSize[],
 ): PrebidBidder[] => {
-	let indexSiteId = getIndexSiteId();
-	// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
-	// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
-	if (containsBillboardNotLeaderboard(slotSizes)) {
-		indexSiteId = '983842';
-	}
-
+	const siteId = getIndexSiteId(slotSizes);
 	return slotSizes.map((size) => ({
 		name: 'ix',
 		switchName: 'prebidIndexExchange',
 		bidParams: (): PrebidIndexExchangeParams => ({
-			siteId: indexSiteId,
+			siteId,
 			size,
 		}),
 	}));
@@ -551,7 +569,7 @@ export const bids = (
 	}));
 
 export const _ = {
-	getIndexSiteId,
+	getIndexSiteIdFromConfig,
 	getXaxisPlacementId,
 	getTrustXAdUnitId,
 	indexExchangeBidders,

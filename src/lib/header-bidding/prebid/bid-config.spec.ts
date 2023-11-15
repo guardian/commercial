@@ -46,7 +46,7 @@ const getBidders = () =>
 	).map((bid) => bid.bidder);
 
 const {
-	getIndexSiteId,
+	getIndexSiteIdFromConfig,
 	getXaxisPlacementId,
 	getTrustXAdUnitId,
 	indexExchangeBidders,
@@ -414,8 +414,8 @@ describe('getIndexSiteId', () => {
 	test('should return an empty string if pbIndexSites is empty', () => {
 		window.guardian.config.page.pbIndexSites = [];
 		getBreakpointKey.mockReturnValue('D');
-		expect(getIndexSiteId()).toBe('');
-		expect(getIndexSiteId().length).toBe(0);
+		expect(getIndexSiteIdFromConfig()).toBe('');
+		expect(getIndexSiteIdFromConfig().length).toBe(0);
 	});
 
 	test('should find the correct ID for the breakpoint', () => {
@@ -428,7 +428,7 @@ describe('getIndexSiteId', () => {
 		const results = [];
 		for (let i = 0; i < breakpoints.length; i += 1) {
 			getBreakpointKey.mockReturnValue(breakpoints[i]);
-			results.push(getIndexSiteId());
+			results.push(getIndexSiteIdFromConfig());
 		}
 		expect(results).toEqual([
 			'234567',
@@ -634,7 +634,7 @@ describe('triplelift adapter', () => {
 		containsLeaderboard.mockReturnValueOnce(true);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(false);
+		containsMobileSticky.mockReturnValue(false);
 		isInUsOrCa.mockReturnValue(true);
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
@@ -650,7 +650,7 @@ describe('triplelift adapter', () => {
 		containsLeaderboard.mockReturnValueOnce(true);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(false);
+		containsMobileSticky.mockReturnValue(false);
 		isInAuOrNz.mockReturnValue(true);
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
@@ -666,7 +666,7 @@ describe('triplelift adapter', () => {
 		containsLeaderboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(true);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(false);
+		containsMobileSticky.mockReturnValue(false);
 		isInUsOrCa.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -683,7 +683,7 @@ describe('triplelift adapter', () => {
 		containsLeaderboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(true);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(false);
+		containsMobileSticky.mockReturnValue(false);
 		isInAuOrNz.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -700,7 +700,7 @@ describe('triplelift adapter', () => {
 		containsLeaderboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(true);
+		containsMobileSticky.mockReturnValue(true);
 		isInUsOrCa.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -717,7 +717,7 @@ describe('triplelift adapter', () => {
 		containsLeaderboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(true);
+		containsMobileSticky.mockReturnValue(true);
 		isInAuOrNz.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
