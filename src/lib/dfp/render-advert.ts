@@ -155,17 +155,14 @@ const addContainerClass = (adSlotNode: HTMLElement, isRendered: boolean) => {
 	];
 	return fastdom
 		.measure(() => {
-			if (
+			return (
 				isRendered &&
 				!adSlotNode.classList.contains('ad-slot--fluid') &&
 				adSlotNode.parentElement?.classList.contains(
 					'ad-slot-container',
 				) &&
 				centreAdSlots.includes(adSlotNode.id)
-			) {
-				return true;
-			}
-			return false;
+			);
 		})
 		.then((shouldCentre) => {
 			if (shouldCentre) {
