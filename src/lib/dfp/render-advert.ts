@@ -185,25 +185,25 @@ const renderAdvert = (
 					  })
 					: Promise.resolve();
 
-			const centredAdSlots = [
+			const centreAdSlots = [
 				'dfp-ad--top-above-nav',
 				'dfp-ad--merchandising-high',
 				'dfp-ad--merchandising',
 			];
 
-			/* Center certain slots in their containers, this is class is added dynamically to avoid rendering quirks with the ad label, and variable width ads.
+			/* Centre certain slots in their containers, this is class is added dynamically to avoid rendering quirks with the ad label, and variable width ads.
 			 */
-			const addContainerCenterClass = () => {
+			const addContainerCentreClass = () => {
 				if (
 					isRendered &&
 					advert.node.parentElement?.classList.contains(
 						'ad-slot-container',
 					) &&
-					centredAdSlots.includes(advert.node.id)
+					centreAdSlots.includes(advert.node.id)
 				) {
 					return fastdom.mutate(() => {
 						advert.node.parentElement?.classList.add(
-							'ad-slot-container--centred-slot',
+							'ad-slot-container--centre-slot',
 						);
 					});
 				}
@@ -213,7 +213,7 @@ const renderAdvert = (
 			return callSizeCallback()
 				.then(() => renderAdvertLabel(advert.node))
 				.then(addRenderedClass)
-				.then(addContainerCenterClass)
+				.then(addContainerCentreClass)
 				.then(() => isRendered);
 		})
 		.catch((err) => {

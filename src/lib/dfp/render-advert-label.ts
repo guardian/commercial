@@ -109,7 +109,7 @@ const renderAdvertLabel = (adSlotNode: HTMLElement): Promise<Promise<void>> => {
 			return fastdom.mutate(() => {
 				adSlotNode.setAttribute('data-label-show', 'true');
 				adSlotNode.setAttribute('ad-label-text', adLabelContent);
-				// Remove this once new `ad-slot-container--centred-slot` class is in place
+				// Remove this once new `ad-slot-container--centre-slot` class is in place
 				if (
 					adSlotNode.parentElement?.classList.contains(
 						'ad-slot-container',

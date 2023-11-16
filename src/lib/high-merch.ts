@@ -17,7 +17,7 @@ export const init = (): Promise<void> => {
 		const container = wrapSlotInContainer(slot, {
 			className: 'fc-container fc-container--commercial',
 		});
-		// Remove this once new `ad-slot-container--center-slot` class is in place
+		// Remove this once new `ad-slot-container--centre-slot` class is in place
 		container.style.display = 'flex';
 		container.style.justifyContent = 'center';
 		// \Remove this
