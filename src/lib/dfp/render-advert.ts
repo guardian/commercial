@@ -146,7 +146,7 @@ const addContentClass = (adSlotNode: HTMLElement) => {
 	}
 };
 
-/* Centre certain slots in their containers, this class is added dynamically to avoid rendering quirks with the ad label, and variable width ads. */
+/* Centre certain slots in their containers, this class is added dynamically to avoid rendering quirks with the ad label and variable width ads. */
 const addContainerClass = (adSlotNode: HTMLElement, isRendered: boolean) => {
 	const centreAdSlots = [
 		'dfp-ad--top-above-nav',
@@ -154,16 +154,15 @@ const addContainerClass = (adSlotNode: HTMLElement, isRendered: boolean) => {
 		'dfp-ad--merchandising',
 	];
 	return fastdom
-		.measure(() => {
-			return (
+		.measure(
+			() =>
 				isRendered &&
 				!adSlotNode.classList.contains('ad-slot--fluid') &&
 				adSlotNode.parentElement?.classList.contains(
 					'ad-slot-container',
 				) &&
-				centreAdSlots.includes(adSlotNode.id)
-			);
-		})
+				centreAdSlots.includes(adSlotNode.id),
+		)
 		.then((shouldCentre) => {
 			if (shouldCentre) {
 				return fastdom.mutate(() => {
