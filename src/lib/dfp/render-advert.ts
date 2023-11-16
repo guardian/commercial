@@ -146,7 +146,7 @@ const addContentClass = (adSlotNode: HTMLElement) => {
 	}
 };
 
-/* Centre certain slots in their containers, this is class is added dynamically to avoid rendering quirks with the ad label, and variable width ads. */
+/* Centre certain slots in their containers, this class is added dynamically to avoid rendering quirks with the ad label, and variable width ads. */
 const addContainerClass = (adSlotNode: HTMLElement, isRendered: boolean) => {
 	const centreAdSlots = [
 		'dfp-ad--top-above-nav',
