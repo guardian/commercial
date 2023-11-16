@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.22.0
+
+### Minor Changes
+
+- 68b9acb: Unify ad centring
+
 ## 11.21.0
 
 ### Minor Changes
