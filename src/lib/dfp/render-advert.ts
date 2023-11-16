@@ -146,6 +146,34 @@ const addContentClass = (adSlotNode: HTMLElement) => {
 	}
 };
 
+/* Centre certain slots in their containers, this class is added dynamically to avoid rendering quirks with the ad label and variable width ads. */
+const addContainerClass = (adSlotNode: HTMLElement, isRendered: boolean) => {
+	const centreAdSlots = [
+		'dfp-ad--top-above-nav',
+		'dfp-ad--merchandising-high',
+		'dfp-ad--merchandising',
+	];
+	return fastdom
+		.measure(
+			() =>
+				isRendered &&
+				!adSlotNode.classList.contains('ad-slot--fluid') &&
+				adSlotNode.parentElement?.classList.contains(
+					'ad-slot-container',
+				) &&
+				centreAdSlots.includes(adSlotNode.id),
+		)
+		.then((shouldCentre) => {
+			if (shouldCentre) {
+				return fastdom.mutate(() => {
+					adSlotNode.parentElement?.classList.add(
+						'ad-slot-container--centre-slot',
+					);
+				});
+			}
+		});
+};
+
 /**
  * @param advert - as defined in lib/dfp/Advert
  * @param slotRenderEndedEvent - GPT slotRenderEndedEvent
@@ -188,6 +216,7 @@ const renderAdvert = (
 			return callSizeCallback()
 				.then(() => renderAdvertLabel(advert.node))
 				.then(addRenderedClass)
+				.then(() => addContainerClass(advert.node, isRendered))
 				.then(() => isRendered);
 		})
 		.catch((err) => {
