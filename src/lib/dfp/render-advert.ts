@@ -185,9 +185,35 @@ const renderAdvert = (
 					  })
 					: Promise.resolve();
 
+			const centredAdSlots = [
+				'dfp-ad--top-above-nav',
+				'dfp-ad--merchandising-high',
+				'dfp-ad--merchandising',
+			];
+
+			/* Center certain slots in their containers, this is class is added dynamically to avoid rendering quirks with the ad label, and variable width ads.
+			 */
+			const addContainerCenterClass = () => {
+				if (
+					isRendered &&
+					advert.node.parentElement?.classList.contains(
+						'ad-slot-container',
+					) &&
+					centredAdSlots.includes(advert.node.id)
+				) {
+					return fastdom.mutate(() => {
+						advert.node.parentElement?.classList.add(
+							'ad-slot-container--centred-slot',
+						);
+					});
+				}
+				return Promise.resolve();
+			};
+
 			return callSizeCallback()
 				.then(() => renderAdvertLabel(advert.node))
 				.then(addRenderedClass)
+				.then(addContainerCenterClass)
 				.then(() => isRendered);
 		})
 		.catch((err) => {
