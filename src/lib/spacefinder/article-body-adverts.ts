@@ -54,14 +54,21 @@ const adSlotContainerRules: RuleSpacing = {
 const getStickyContainerClassname = (i: number) =>
 	`${adSlotContainerClass}-${i + 2}`;
 
-const insertAdAtPara = (
-	para: Node,
-	name: string,
-	type: SlotName,
-	classes?: string,
-	sizes?: SizeMapping,
-	containerOptions: ContainerOptions = {},
-): Promise<void> => {
+const insertAdAtPara = ({
+	para,
+	name,
+	type,
+	classes,
+	sizes,
+	containerOptions = {},
+}: {
+	para: Node;
+	name: string;
+	type: SlotName;
+	classes?: string;
+	sizes?: SizeMapping;
+	containerOptions?: ContainerOptions;
+}): Promise<void> => {
 	const ad = createAdSlot(type, {
 		name,
 		classes,
@@ -177,13 +184,13 @@ const addDesktopInline1 = (): Promise<boolean> => {
 
 	const insertAd: SpacefinderWriter = async (paras) => {
 		const slots = paras.slice(0, 1).map(async (para) => {
-			return insertAdAtPara(
+			return insertAdAtPara({
 				para,
-				'inline1',
-				'inline',
-				'inline',
-				additionalSizes,
-			);
+				name: 'inline1',
+				type: 'inline',
+				classes: 'inline',
+				sizes: additionalSizes,
+			});
 		});
 
 		await Promise.all(slots);
@@ -268,14 +275,14 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 				),
 			};
 
-			return insertAdAtPara(
+			return insertAdAtPara({
 				para,
-				`inline${i + 2}`,
-				'inline',
-				'inline',
-				additionalSizes,
+				name: `inline${i + 2}`,
+				type: 'inline',
+				classes: 'inline',
+				sizes: additionalSizes,
 				containerOptions,
-			);
+			});
 		});
 
 		await Promise.all(slots);
@@ -311,18 +318,19 @@ const addMobileInlineAds = (): Promise<boolean> => {
 
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const slots = paras.map((para, i) =>
-			insertAdAtPara(
+			insertAdAtPara({
 				para,
-				i === 0 ? 'top-above-nav' : `inline${i}`,
-				i === 0 ? 'top-above-nav' : 'inline',
-				'inline',
+				name: i === 0 ? 'top-above-nav' : `inline${i}`,
+				type: i === 0 ? 'top-above-nav' : 'inline',
+				classes: 'inline',
 				// Add the mobile portrait interstitial size to inline1 and inline2
-				i == 1 || i == 2
-					? {
-							mobile: [adSizes.portraitInterstitial],
-					  }
-					: undefined,
-			),
+				sizes:
+					i == 1 || i == 2
+						? {
+								mobile: [adSizes.portraitInterstitial],
+						  }
+						: undefined,
+			}),
 		);
 		await Promise.all(slots);
 	};
@@ -386,16 +394,16 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 				'Trying to insert inline merch before a node that does not exist',
 			);
 		}
-		return insertAdAtPara(
-			paras[0],
-			'im',
-			'im',
-			'',
-			{},
-			{
+		return insertAdAtPara({
+			para: paras[0],
+			name: 'im',
+			type: 'im',
+			classes: '',
+			sizes: {},
+			containerOptions: {
 				className: 'ad-slot-container--im',
 			},
-		);
+		});
 	};
 
 	return spaceFiller.fillSpace(rules, insertAds, {

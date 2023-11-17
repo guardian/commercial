@@ -52,14 +52,21 @@ const wrapSlotInContainer = (
 	return container;
 };
 
-const insertAdAtPara = (
-	para: Node,
-	name: string,
-	type: SlotName,
+const insertAdAtPara = ({
+	para,
+	name,
+	type,
 	classes = '',
-	containerOptions: ContainerOptions = {},
-	inlineId: number,
-): Promise<void> => {
+	containerOptions = {},
+	inlineId,
+}: {
+	para: Node;
+	name: string;
+	type: SlotName;
+	classes: string;
+	containerOptions: ContainerOptions;
+	inlineId: number;
+}): Promise<void> => {
 	const adSlot = createAdSlot(type, {
 		name,
 		classes,
@@ -117,14 +124,14 @@ const addMobileInlineAds = async () => {
 
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const slots = paras.map((para, i) =>
-			insertAdAtPara(
+			insertAdAtPara({
 				para,
-				`inline${i + 1}`,
-				'inline',
-				'inline',
-				{},
-				i + 1,
-			),
+				name: `inline${i + 1}`,
+				type: 'inline',
+				classes: 'inline',
+				containerOptions: {},
+				inlineId: i + 1,
+			}),
 		);
 		await Promise.all(slots);
 	};
@@ -181,14 +188,14 @@ const addDesktopInlineAds = async () => {
 				className: containerClasses,
 			};
 
-			return insertAdAtPara(
+			return insertAdAtPara({
 				para,
-				`inline${inlineId}`,
-				'inline',
-				'inline',
+				name: `inline${inlineId}`,
+				type: 'inline',
+				classes: 'inline',
 				containerOptions,
 				inlineId,
-			);
+			});
 		});
 		await Promise.all(slots);
 	};
