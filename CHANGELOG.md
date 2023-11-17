@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.23.0
+
+### Minor Changes
+
+- a5aa368: Remove ads-in-merch AB test
+
 ## 11.22.0
 
 ### Minor Changes
