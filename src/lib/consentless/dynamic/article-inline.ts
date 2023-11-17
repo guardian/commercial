@@ -52,7 +52,7 @@ const wrapSlotInContainer = (
 	return container;
 };
 
-const insertAdAtPara = ({
+const insertAdAtPara = async ({
 	para,
 	name,
 	type,
@@ -74,19 +74,13 @@ const insertAdAtPara = ({
 
 	const node = wrapSlotInContainer(adSlot, containerOptions);
 
-	return fastdom
-		.mutate(() => {
-			if (para.parentNode) {
-				para.parentNode.insertBefore(node, para);
-			}
-		})
-		.then(() => {
-			defineSlot(
-				adSlot,
-				name,
-				inlineId === 1 ? 'inline' : 'inline-right',
-			);
-		});
+	await fastdom.mutate(() => {
+		if (para.parentNode) {
+			para.parentNode.insertBefore(node, para);
+		}
+	});
+
+	defineSlot(adSlot, name, inlineId === 1 ? 'inline' : 'inline-right');
 };
 
 // this facilitates a second filtering, now taking into account the candidates' position/size relative to the other candidates

@@ -54,7 +54,7 @@ const adSlotContainerRules: RuleSpacing = {
 const getStickyContainerClassname = (i: number) =>
 	`${adSlotContainerClass}-${i + 2}`;
 
-const insertAdAtPara = ({
+const insertAdAtPara = async ({
 	para,
 	name,
 	type,
@@ -76,16 +76,14 @@ const insertAdAtPara = ({
 
 	const node = wrapSlotInContainer(ad, containerOptions);
 
-	return fastdom
-		.mutate(() => {
-			if (para.parentNode) {
-				para.parentNode.insertBefore(node, para);
-			}
-		})
-		.then(async () => {
-			const shouldForceDisplay = ['im', 'carrot'].includes(name);
-			await fillDynamicAdSlot(ad, shouldForceDisplay, sizes);
-		});
+	await fastdom.mutate(() => {
+		if (para.parentNode) {
+			para.parentNode.insertBefore(node, para);
+		}
+	});
+
+	const shouldForceDisplay = ['im', 'carrot'].includes(name);
+	await fillDynamicAdSlot(ad, shouldForceDisplay, sizes);
 };
 
 // this facilitates a second filtering, now taking into account the candidates' position/size relative to the other candidates
