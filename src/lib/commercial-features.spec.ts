@@ -1,7 +1,7 @@
-import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
+import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'detect/detect-breakpoint';
+import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from '../identity/api';
 import { commercialFeatures } from './commercial-features';
 import type { CommercialFeaturesConstructor } from './commercial-features';
-import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from './identity/api';
 import {
 	isAdFreeUser as isAdFreeUser_,
 	isPayingMember as isPayingMember_,

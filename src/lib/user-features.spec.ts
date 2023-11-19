@@ -1,12 +1,12 @@
 import { getCookie } from '@guardian/libs';
 import { addCookie, removeCookie } from 'lib/cookies';
-import { fetchJson } from 'lib/utils/fetch-json';
 import type { UserFeaturesResponse } from 'types/membership';
-import type { AuthStatus } from './identity/api';
+import { fetchJson } from 'utils/fetch-json';
+import type { AuthStatus } from '../identity/api';
 import {
 	getAuthStatus as getAuthStatus_,
 	isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_,
-} from './identity/api';
+} from '../identity/api';
 import {
 	accountDataUpdateWarning,
 	getDaysSinceLastOneOffContribution,

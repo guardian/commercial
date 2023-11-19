@@ -1,9 +1,9 @@
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { initArticleInline } from './lib/consentless/dynamic/article-inline';
-import { initExclusionSlot } from './lib/consentless/dynamic/exclusion-slot';
-import { initLiveblogInline } from './lib/consentless/dynamic/liveblog-inline';
-import { initFixedSlots } from './lib/consentless/init-fixed-slots';
-import { initConsentless } from './lib/consentless/prepare-ootag';
+import { initArticleInline } from './consentless/dynamic/article-inline';
+import { initExclusionSlot } from './consentless/dynamic/exclusion-slot';
+import { initLiveblogInline } from './consentless/dynamic/liveblog-inline';
+import { initFixedSlots } from './consentless/init-fixed-slots';
+import { initConsentless } from './consentless/prepare-ootag';
 import { init as setAdTestCookie } from './lib/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from './lib/set-adtest-in-labels-cookie';
 
