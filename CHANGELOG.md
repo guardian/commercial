@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.23.1
+
+### Patch Changes
+
+- ce6d299: Change order of ad rendering classes
+
 ## 11.23.0
 
 ### Minor Changes
