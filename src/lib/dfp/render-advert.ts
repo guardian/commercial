@@ -215,8 +215,8 @@ const renderAdvert = (
 
 			return callSizeCallback()
 				.then(() => renderAdvertLabel(advert.node))
-				.then(addRenderedClass)
 				.then(() => addContainerClass(advert.node, isRendered))
+				.then(addRenderedClass)
 				.then(() => isRendered);
 		})
 		.catch((err) => {
