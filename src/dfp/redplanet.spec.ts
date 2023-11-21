@@ -28,8 +28,6 @@ const CcpaWithConsent = {
 	framework: 'ccpa',
 } as ConsentState;
 
-jest.mock('lib/raven');
-
 jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));

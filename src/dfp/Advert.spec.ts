@@ -8,7 +8,6 @@ jest.mock('dfp/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock('lib/raven');
 jest.mock('ophan-tracker-js', () => null);
 
 jest.mock('core/ad-sizes', () => {

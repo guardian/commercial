@@ -21,8 +21,6 @@ jest.mock('experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn().mockReturnValue(false),
 }));
 
-jest.mock('lib/raven');
-
 jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));

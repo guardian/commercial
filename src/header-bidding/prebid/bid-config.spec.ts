@@ -58,8 +58,6 @@ jest.mock('lib/build-page-targeting', () => ({
 	getPageTargeting: () => 'bla',
 }));
 
-jest.mock('lib/raven');
-
 jest.mock('../utils');
 const containsBillboard = containsBillboard_ as jest.Mock;
 const containsBillboardNotLeaderboard =

@@ -5,7 +5,6 @@ const validIds = ['slot-a', 'slot-2'];
 const mockVariantSynchronous = jest.fn<boolean, unknown[]>();
 const mockLog = jest.fn<void, unknown[]>();
 
-jest.mock('lib/raven');
 jest.mock('ophan-tracker-js', () => null);
 jest.mock('@guardian/libs', () => ({
 	storage: {

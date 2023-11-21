@@ -3,8 +3,6 @@ import { prebid } from './prebid';
 
 const getAdvertById = getAdvertById_ as jest.Mock;
 
-jest.mock('lib/raven');
-
 jest.mock('dfp/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
 );

@@ -10,8 +10,6 @@ const baseEvent = {
 	},
 };
 
-jest.mock('lib/raven');
-
 jest.mock('./empty-advert');
 
 jest.mock('./render-advert', () => ({

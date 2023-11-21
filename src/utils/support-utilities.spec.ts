@@ -2,7 +2,6 @@ import { removeCookie, setCookie } from '@guardian/libs';
 import { _ } from 'utils/geolocation';
 import { addCountryGroupToSupportLink } from './support-utilities';
 
-jest.mock('lib/raven');
 const { countryCookieName } = _;
 
 describe('addCountryGroupToSupportLink', () => {

@@ -1,8 +1,6 @@
 import type { Edition } from 'types/global';
 import { _ } from './prepare-permutive';
 
-// jest.mock('lib/raven');
-
 const testPageConfig = {
 	pageId: 'world/2019/nov/29',
 	headline: 'Headline',

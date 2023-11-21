@@ -23,7 +23,6 @@ import {
 	shouldNotBeShownSupportMessaging,
 } from './user-features';
 
-jest.mock('lib/raven');
 jest.mock('identity/api', () => ({
 	isUserLoggedInOktaRefactor: jest.fn(),
 	getAuthStatus: jest.fn(),

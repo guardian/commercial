@@ -44,7 +44,6 @@ const CcpaWithConsentMock = (callback: Callback) =>
 		framework: 'ccpa',
 	});
 
-jest.mock('lib/raven');
 jest.mock('dfp/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
 );

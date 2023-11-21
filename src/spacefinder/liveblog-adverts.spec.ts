@@ -17,8 +17,6 @@ jest.mock('header-bidding/prebid/prebid', () => ({
 
 jest.mock('ophan-tracker-js', () => null);
 
-jest.mock('lib/raven');
-
 jest.mock('utils/mediator');
 
 jest.mock('spacefinder/space-filler', () => ({

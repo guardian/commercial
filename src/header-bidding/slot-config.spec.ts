@@ -5,8 +5,6 @@ import { getHeaderBiddingAdSlots } from './slot-config';
 import { getBreakpointKey, shouldIncludeMobileSticky } from './utils';
 import type * as Utils from './utils';
 
-jest.mock('lib/raven');
-
 jest.mock('./utils', () => {
 	const original: typeof Utils = jest.requireActual('./utils');
 	return {
