@@ -84,13 +84,13 @@ const stripMobileSuffix = stripMobileSuffix_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
 const isInVariantSynchronous = isInVariantSynchronous_ as jest.Mock;
 
-jest.mock('lib/utils/geo-utils');
+jest.mock('utils/geo-utils');
 const isInAuOrNz = isInAuOrNz_ as jest.Mock;
 const isInRow = isInRow_ as jest.Mock;
 const isInUk = isInUk_ as jest.Mock;
 const isInUsOrCa = isInUsOrCa_ as jest.Mock;
 
-jest.mock('lib/experiments/ab', () => ({
+jest.mock('experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn(),
 }));
 

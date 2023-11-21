@@ -2,7 +2,7 @@ import { selectAsset } from './targeting';
 import type { Asset, GuElement } from './types';
 import { selectAtRandom } from './util';
 
-jest.mock('lib/experiments/ab', () => ({
+jest.mock('experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn(),
 }));
 

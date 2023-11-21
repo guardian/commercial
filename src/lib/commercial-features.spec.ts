@@ -40,11 +40,11 @@ jest.mock('./user-features', () => ({
 	isAdFreeUser: jest.fn(),
 }));
 
-jest.mock('lib/detect/detect-breakpoint', () => ({
+jest.mock('detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 }));
 
-jest.mock('./identity/api', () => ({
+jest.mock('identity/api', () => ({
 	isUserLoggedInOktaRefactor: jest.fn(),
 }));
 

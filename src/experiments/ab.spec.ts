@@ -32,8 +32,8 @@ function emptyFunction() {
 	// do nothing
 }
 
-jest.mock('lib/experiments/ab-tests'); // __mocks__/ab-tests
-jest.mock('lib/experiments/ab-ophan', () => ({
+jest.mock('experiments/ab-tests'); // __mocks__/ab-tests
+jest.mock('experiments/ab-ophan', () => ({
 	registerImpressionEvents: emptyFunction,
 	registerCompleteEvents: emptyFunction,
 	trackABTests: emptyFunction,

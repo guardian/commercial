@@ -4,7 +4,7 @@ import type { Modules } from './robust';
 
 const { catchAndLogError } = _;
 
-jest.mock('lib/utils/report-error', () => ({
+jest.mock('utils/report-error', () => ({
 	convertError: jest.fn((e: Error) => e),
 	reportError: jest.fn(),
 }));

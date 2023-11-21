@@ -4,7 +4,7 @@ import { _, Advert } from './Advert';
 
 const { getSlotSizeMapping } = _;
 
-jest.mock('lib/dfp/init-slot-ias', () => ({
+jest.mock('dfp/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 

@@ -54,29 +54,28 @@ const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
 	typeof getCurrentBreakpoint_
 >;
 
-jest.mock('lib/dfp/init-slot-ias', () => ({
+jest.mock('dfp/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock('lib/header-bidding/prebid/prebid', () => ({
+jest.mock('header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));
 
-jest.mock('lib/raven');
-jest.mock('lib/identity/api', () => ({
+jest.mock('identity/api', () => ({
 	isUserLoggedInOktaRefactor: () => true,
 	getUserFromCookie: jest.fn(),
 	getGoogleTagId: jest.fn().mockResolvedValue('test-id-string'),
 	getUrl: jest.fn(),
 }));
 jest.mock('ophan-tracker-js', () => null);
-jest.mock('lib/analytics/beacon', () => void {});
+jest.mock('analytics/beacon', () => void {});
 
-jest.mock('lib/detect/detect-breakpoint', () => ({
+jest.mock('detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 	hasCrossedBreakpoint: jest.fn(),
 }));
-jest.mock('lib/analytics/google', () => () => void {});
+jest.mock('analytics/google', () => () => void {});
 jest.mock('./display-lazy-ads', () => ({
 	displayLazyAds: jest.fn(),
 }));
@@ -134,7 +133,7 @@ jest.mock(
 		<T>(fn: (...args: unknown[]) => T) =>
 			fn,
 );
-jest.mock('lib/analytics/beacon', () => ({
+jest.mock('analytics/beacon', () => ({
 	fire: jest.fn(),
 }));
 jest.mock('./load-advert', () => ({

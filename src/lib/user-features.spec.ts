@@ -24,12 +24,12 @@ import {
 } from './user-features';
 
 jest.mock('lib/raven');
-jest.mock('lib/identity/api', () => ({
+jest.mock('identity/api', () => ({
 	isUserLoggedInOktaRefactor: jest.fn(),
 	getAuthStatus: jest.fn(),
 	getOptionsHeadersWithOkta: jest.fn(),
 }));
-jest.mock('lib/utils/fetch-json', () => ({
+jest.mock('utils/fetch-json', () => ({
 	fetchJson: jest.fn(() => Promise.resolve()),
 }));
 

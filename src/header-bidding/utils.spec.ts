@@ -40,20 +40,20 @@ const isInVariantSynchronous = isInVariantSynchronous_ as jest.MockedFunction<
 
 jest.mock('lodash-es/once', () => (fn: (...args: unknown[]) => unknown) => fn);
 
-jest.mock('lib/utils/geolocation', () => ({
+jest.mock('utils/geolocation', () => ({
 	getCountryCode: jest.fn(() => 'GB'),
 }));
 
-jest.mock('lib/experiments/ab', () => ({
+jest.mock('experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn(),
 }));
 
-jest.mock('lib/detect/detect-breakpoint', () => ({
+jest.mock('detect/detect-breakpoint', () => ({
 	getCurrentTweakpoint: jest.fn(() => 'mobile'),
 	matchesBreakpoints: jest.fn(),
 }));
 
-jest.mock('lib/experiments/ab-tests');
+jest.mock('experiments/ab-tests');
 
 const resetConfig = () => {
 	window.guardian.config.switches.prebidAppnexus = true;

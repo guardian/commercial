@@ -26,7 +26,7 @@ jest.mock('@guardian/libs', () => ({
 	},
 	log: jest.fn((...args) => mockLog(...args)),
 }));
-jest.mock('lib/experiments/ab', () => ({
+jest.mock('experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn(() => mockVariantSynchronous()),
 }));
 jest.mock('../dfp/get-advert-by-id', () => ({

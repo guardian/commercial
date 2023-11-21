@@ -5,30 +5,30 @@ import { init } from './article-body-adverts';
 const ads = {
 	'dfp-ad--im': true,
 } as const;
-jest.mock('lib/utils/report-error', () => ({
+jest.mock('utils/report-error', () => ({
 	reportError: jest.fn(),
 }));
 
-jest.mock('lib/header-bidding/prebid/prebid', () => ({
+jest.mock('header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));
 
-jest.mock('lib/dfp/wait-for-advert', () => (id: keyof typeof ads) => {
+jest.mock('dfp/wait-for-advert', () => (id: keyof typeof ads) => {
 	return Promise.resolve(ads[id]);
 });
-jest.mock('lib/dfp/fill-dynamic-advert-slot', () => ({
+jest.mock('dfp/fill-dynamic-advert-slot', () => ({
 	fillDynamicAdSlot: jest.fn(),
 }));
 jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));
-jest.mock('lib/spacefinder/space-filler', () => ({
+jest.mock('spacefinder/space-filler', () => ({
 	spaceFiller: {
 		fillSpace: jest.fn(),
 	},
 }));
 jest.mock('lib/config', () => ({ page: {}, get: () => false }));
-jest.mock('lib/experiments/ab', () => ({
+jest.mock('experiments/ab', () => ({
 	isInVariantSynchronous: () => false,
 }));
 

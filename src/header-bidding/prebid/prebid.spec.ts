@@ -5,7 +5,7 @@ const getAdvertById = getAdvertById_ as jest.Mock;
 
 jest.mock('lib/raven');
 
-jest.mock('lib/dfp/Advert', () =>
+jest.mock('dfp/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
 );
 
@@ -13,11 +13,11 @@ jest.mock('./bid-config', () => ({
 	bids: jest.fn(),
 }));
 
-jest.mock('lib/dfp/get-advert-by-id', () => ({
+jest.mock('dfp/get-advert-by-id', () => ({
 	getAdvertById: jest.fn(),
 }));
 
-jest.mock('lib/experiments/ab', () => ({
+jest.mock('experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn(),
 }));
 

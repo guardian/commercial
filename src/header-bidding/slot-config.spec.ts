@@ -16,7 +16,7 @@ jest.mock('./utils', () => {
 	};
 });
 
-jest.mock('lib/experiments/ab', () => ({
+jest.mock('experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn(
 		(testId, variantId) => variantId === 'variant',
 	),
@@ -26,7 +26,7 @@ jest.mock('lib/cookies', () => ({
 	getCookie: jest.fn(),
 }));
 
-jest.mock('lib/dfp/init-slot-ias', () => ({
+jest.mock('dfp/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 

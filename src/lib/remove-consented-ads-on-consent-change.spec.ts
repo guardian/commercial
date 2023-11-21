@@ -6,7 +6,7 @@ import type {
 import { removeConsentedAdsOnConsentChange } from './remove-consented-ads-on-consent-change';
 import { removeSlots } from './remove-slots';
 
-jest.mock('./experiments/ab', () => ({
+jest.mock('experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn(() => false),
 }));
 

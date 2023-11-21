@@ -7,11 +7,11 @@ import { _, init } from './liveblog-adverts';
 
 const { getSlotName } = _;
 
-jest.mock('lib/utils/report-error', () => ({
+jest.mock('utils/report-error', () => ({
 	reportError: jest.fn(),
 }));
 
-jest.mock('lib/header-bidding/prebid/prebid', () => ({
+jest.mock('header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));
 
@@ -19,9 +19,9 @@ jest.mock('ophan-tracker-js', () => null);
 
 jest.mock('lib/raven');
 
-jest.mock('lib/utils/mediator');
+jest.mock('utils/mediator');
 
-jest.mock('lib/spacefinder/space-filler', () => ({
+jest.mock('spacefinder/space-filler', () => ({
 	spaceFiller: {
 		fillSpace: jest.fn(() => Promise.resolve(true)),
 	},
@@ -33,7 +33,7 @@ jest.mock('lib/commercial-features', () => ({
 	},
 }));
 
-jest.mock('lib/dfp/fill-dynamic-advert-slot');
+jest.mock('dfp/fill-dynamic-advert-slot');
 
 const spaceFillerStub = spaceFiller.fillSpace as jest.MockedFunction<
 	typeof spaceFiller.fillSpace

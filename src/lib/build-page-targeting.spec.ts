@@ -7,10 +7,10 @@ const buildPageTargeting = buildPageTargeting_ as jest.MockedFunction<
 	typeof buildPageTargeting_
 >;
 
-jest.mock('lib/utils/geolocation', () => ({
+jest.mock('utils/geolocation', () => ({
 	getCountryCode: jest.fn(),
 }));
-jest.mock('./experiments/ab', () => ({
+jest.mock('experiments/ab', () => ({
 	getSynchronousParticipations: jest.fn(),
 }));
 jest.mock('core/targeting/build-page-targeting', () => ({

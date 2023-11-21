@@ -20,7 +20,7 @@ const cmp = {
 		>,
 };
 
-jest.mock('../lib/get-locale', () => ({
+jest.mock('core/lib/get-locale', () => ({
 	getLocale: jest.fn(),
 }));
 
@@ -31,7 +31,7 @@ jest.mock('@guardian/consent-management-platform', () => ({
 	},
 }));
 
-jest.mock('../../lib/identity/api', () => ({
+jest.mock('identity/api', () => ({
 	isUserLoggedInOktaRefactor: () => true,
 	getAuthStatus: jest.fn(),
 	getOptionsHeadersWithOkta: jest.fn(),

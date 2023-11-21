@@ -36,9 +36,9 @@ jest.mock('lib/commercial-features', () => ({
 
 jest.mock('./Advert');
 
-jest.mock('lib/utils/geo-utils');
+jest.mock('utils/geo-utils');
 
-jest.mock('lib/experiments/ab');
+jest.mock('experiments/ab');
 
 jest.mock('lib/cookies');
 

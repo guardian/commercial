@@ -5,11 +5,11 @@ import { _ } from './prepare-a9';
 
 const { setupA9 } = _;
 
-jest.mock('lib/utils/geo-utils', () => ({
+jest.mock('utils/geo-utils', () => ({
 	isInCanada: jest.fn(() => false),
 }));
 
-jest.mock('lib/experiments/ab', () => ({
+jest.mock('experiments/ab', () => ({
 	isInABTestSynchronous: jest.fn().mockReturnValue(false),
 	isInVariantSynchronous: jest.fn().mockReturnValue(false),
 }));

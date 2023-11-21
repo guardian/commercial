@@ -26,33 +26,33 @@ Object.defineProperty(HTMLElement.prototype, 'dataset', {
 	value: {},
 });
 
-jest.mock('lib/utils/report-error', () => ({
+jest.mock('utils/report-error', () => ({
 	reportError: jest.fn(),
 }));
 
-jest.mock('lib/experiments/ab', () => ({
+jest.mock('experiments/ab', () => ({
 	getSynchronousTestsToRun: jest.fn().mockReturnValue([]),
 }));
 
-jest.mock('lib/header-bidding/prebid/prebid', () => ({
+jest.mock('header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));
 
 jest.mock('lib/config', () => ({ page: {}, get: () => false }));
 
-jest.mock('lib/dfp/fill-dynamic-advert-slot', () => ({
+jest.mock('dfp/fill-dynamic-advert-slot', () => ({
 	fillDynamicAdSlot: jest.fn(),
 }));
 
-jest.mock('lib/dfp/load-advert', () => ({
+jest.mock('dfp/load-advert', () => ({
 	refreshAdvert: jest.fn(),
 }));
 
-jest.mock('lib/dfp/get-advert-by-id', () => ({
+jest.mock('dfp/get-advert-by-id', () => ({
 	getAdvertById: jest.fn(),
 }));
 
-jest.mock('lib/detect/detect-breakpoint', () => ({
+jest.mock('detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 }));
 
@@ -62,7 +62,7 @@ jest.mock('lib/commercial-features', () => ({
 	},
 }));
 
-jest.mock('lib/identity/api', () => ({
+jest.mock('identity/api', () => ({
 	isUserLoggedInOktaRefactor: jest.fn(),
 }));
 

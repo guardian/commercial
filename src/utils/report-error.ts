@@ -1,4 +1,4 @@
-import raven from '../lib/raven';
+import raven from 'lib/raven';
 
 type FrontendError = (Error & { reported?: boolean }) | string;
 
