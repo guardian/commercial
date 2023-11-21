@@ -1,16 +1,16 @@
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { buildPageTargeting as buildPageTargeting_ } from 'core/targeting/build-page-targeting';
+import { isUserLoggedInOktaRefactor } from '../identity/api';
 import { getPageTargeting } from './build-page-targeting';
-import { isUserLoggedInOktaRefactor } from './identity/api';
 
 const buildPageTargeting = buildPageTargeting_ as jest.MockedFunction<
 	typeof buildPageTargeting_
 >;
 
-jest.mock('lib/utils/geolocation', () => ({
+jest.mock('utils/geolocation', () => ({
 	getCountryCode: jest.fn(),
 }));
-jest.mock('./experiments/ab', () => ({
+jest.mock('experiments/ab', () => ({
 	getSynchronousParticipations: jest.fn(),
 }));
 jest.mock('core/targeting/build-page-targeting', () => ({

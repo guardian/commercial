@@ -1,5 +1,5 @@
 import { log } from '@guardian/libs';
-import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
+import { getCurrentBreakpoint } from 'detect/detect-breakpoint';
 import { isAdFreeUser } from './user-features';
 import userPrefs from './user-prefs';
 

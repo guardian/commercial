@@ -1,8 +1,8 @@
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { isInVariantSynchronous } from 'lib/experiments/ab';
-import { elementsManager } from 'lib/experiments/tests/elements-manager';
-import { dfpEnv } from './dfp/dfp-env';
+import { isInVariantSynchronous } from 'experiments/ab';
+import { elementsManager } from 'experiments/tests/elements-manager';
+import { dfpEnv } from '../dfp/dfp-env';
 import fastdom from './fastdom-promise';
 
 // Remove ad slots

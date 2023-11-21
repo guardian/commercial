@@ -7,7 +7,6 @@ const { params, canShow } = _;
 jest.mock('lib/contributions-utilities');
 jest.mock('lib/user-features');
 jest.mock('ophan-tracker-js', () => null);
-jest.mock('lib/raven');
 
 describe('adblock-ask', () => {
 	it('has the correct URL params', () => {

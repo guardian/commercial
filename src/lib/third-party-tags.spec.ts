@@ -9,8 +9,6 @@ import { _, init } from './third-party-tags';
 
 const { insertScripts, loadOther } = _;
 
-jest.mock('lib/raven');
-
 jest.mock('@guardian/consent-management-platform');
 
 const tcfv2AllConsent = {
@@ -103,7 +101,7 @@ jest.mock('lib/commercial-features', () => ({
 	},
 }));
 
-jest.mock('./third-party-tags/imr-worldwide', () => ({
+jest.mock('third-party-tags/imr-worldwide', () => ({
 	imrWorldwide: {
 		shouldRun: true,
 		url: '//fakeThirdPartyTag.js',

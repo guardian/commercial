@@ -6,17 +6,17 @@ import {
 	getAdFreeCookie,
 	setAdFreeCookie,
 } from 'lib/manage-ad-free-cookie';
-import { fetchJson } from 'lib/utils/fetch-json';
-import { noop } from 'lib/utils/noop';
-import { dateDiffDays } from 'lib/utils/time-utils';
 import { getLocalDate } from 'types/dates';
 import type { LocalDate } from 'types/dates';
 import type { UserFeaturesResponse } from 'types/membership';
+import { fetchJson } from 'utils/fetch-json';
+import { noop } from 'utils/noop';
+import { dateDiffDays } from 'utils/time-utils';
 import {
 	getAuthStatus,
 	getOptionsHeadersWithOkta,
 	isUserLoggedInOktaRefactor,
-} from './identity/api';
+} from '../identity/api';
 
 // Persistence keys
 const USER_FEATURES_EXPIRY_COOKIE = 'gu_user_features_expiry';

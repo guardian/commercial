@@ -1,12 +1,12 @@
 import { getCookie } from '@guardian/libs';
 import { addCookie, removeCookie } from 'lib/cookies';
-import { fetchJson } from 'lib/utils/fetch-json';
 import type { UserFeaturesResponse } from 'types/membership';
-import type { AuthStatus } from './identity/api';
+import { fetchJson } from 'utils/fetch-json';
+import type { AuthStatus } from '../identity/api';
 import {
 	getAuthStatus as getAuthStatus_,
 	isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_,
-} from './identity/api';
+} from '../identity/api';
 import {
 	accountDataUpdateWarning,
 	getDaysSinceLastOneOffContribution,
@@ -23,13 +23,12 @@ import {
 	shouldNotBeShownSupportMessaging,
 } from './user-features';
 
-jest.mock('lib/raven');
-jest.mock('lib/identity/api', () => ({
+jest.mock('identity/api', () => ({
 	isUserLoggedInOktaRefactor: jest.fn(),
 	getAuthStatus: jest.fn(),
 	getOptionsHeadersWithOkta: jest.fn(),
 }));
-jest.mock('lib/utils/fetch-json', () => ({
+jest.mock('utils/fetch-json', () => ({
 	fetchJson: jest.fn(() => Promise.resolve()),
 }));
 
