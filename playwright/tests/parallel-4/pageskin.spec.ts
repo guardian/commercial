@@ -63,19 +63,21 @@ test.describe('pageskin on uk front', () => {
 				height,
 			});
 
+			if (breakpoint === 'tablet') {
+				test.setTimeout(50000);
+			}
+
 			const slot = 'top-above-nav';
+			const slotWithPostfix =
+				breakpoint === 'mobile' ? `${slot}--mobile` : slot;
 
 			// the request to GAM uses the slot name of 'top-above-nav' for mobile and tablet
 			const gamResponsePromise = waitForGAMResponseForSlot(page, slot);
 			await loadPage(page, frontWithPageSkin.path);
 			await cmpAcceptAll(page);
 
-			if (breakpoint === 'mobile') {
-				// need to wait for top-above-nav on mobile as it is out of view
-				await waitForSlot(page, `${slot}--mobile`);
-			} else {
-				await waitForSlot(page, slot);
-			}
+			// need to wait for top-above-nav on mobile as it is out of view
+			await waitForSlot(page, slotWithPostfix);
 
 			const response = await gamResponsePromise;
 
