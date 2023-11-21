@@ -74,7 +74,7 @@ test.describe('pageskin on uk front', () => {
 				// need to wait for top-above-nav on mobile as it is out of view
 				await waitForSlot(page, `${slot}--mobile`);
 			} else {
-				return;
+				await waitForSlot(page, slot);
 			}
 
 			const response = await gamResponsePromise;
