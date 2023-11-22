@@ -62,6 +62,8 @@ const getSpaceFillerRules = (
 		return false;
 	};
 
+	console.log('ServerSideAds getSpaceFillerRules firstSlot', firstSlot);
+
 	return {
 		bodySelector: '.js-liveblog-body',
 		slotSelector: ' > .block',
@@ -77,11 +79,10 @@ const getSpaceFillerRules = (
 };
 
 const getSlotName = (isMobile: boolean, slotCounter: number): string => {
-	if (isMobile && slotCounter === 0) {
-		return 'top-above-nav';
-	} else if (isMobile) {
-		return `inline${slotCounter}`;
+	if (isMobile) {
+		return slotCounter === 0 ? 'top-above-nav' : `inline${slotCounter}`;
 	}
+
 	return `inline${slotCounter + 1}`;
 };
 
@@ -139,6 +140,20 @@ const onUpdate = () => {
 	void fill(rules);
 };
 
+// const onUpdate = () => {
+// 	// eslint-disable-next-line no-use-before-define -- circular reference
+// 	stopListening();
+
+// 	void fastdom
+// 		.measure(() => {
+// 			WINDOWHEIGHT = getWindowHeight();
+// 			return WINDOWHEIGHT;
+// 		})
+// 		.then(getSpaceFillerRules)
+// 		// eslint-disable-next-line no-use-before-define -- circular reference
+// 		.then((rules) => fill(rules));
+// };
+
 const startListening = () => {
 	document.addEventListener('liveblog:blocks-updated', onUpdate);
 };
@@ -147,24 +162,40 @@ const stopListening = () => {
 	document.removeEventListener('liveblog:blocks-updated', onUpdate);
 };
 
+const insertMoreAds = (rules: SpacefinderRules, isServerSideAds = false) => {
+	console.log('ServerSideAds inserting more ads');
+	const adContainerClass = !isServerSideAds
+		? '.ad-slot-container'
+		: getCurrentBreakpoint() === 'mobile'
+		? '.ad-slot-container.ad-slot-mobile'
+		: '.ad-slot-container.ad-slot-desktop';
+
+	console.log('ServerSideAds adContainerClass', adContainerClass);
+
+	if (AD_COUNTER < MAX_ADS) {
+		const el = document.querySelector(
+			`${rules.bodySelector} > ${adContainerClass}`,
+		);
+		if (el && el.previousSibling instanceof HTMLElement) {
+			firstSlot = el.previousSibling;
+			console.log('ServerSideAds firstSlot 1 ', firstSlot);
+		} else {
+			firstSlot = undefined;
+			console.log('ServerSideAds firstSlot 2', firstSlot);
+		}
+		startListening();
+	} else {
+		firstSlot = undefined;
+		console.log('ServerSideAds firstSlot 3', firstSlot);
+	}
+};
+
 const fill = (rules: SpacefinderRules) => {
 	const options: SpacefinderOptions = { pass: 'inline1' };
 
-	return spaceFiller.fillSpace(rules, insertAds, options).then(() => {
-		if (AD_COUNTER < MAX_ADS) {
-			const el = document.querySelector(
-				`${rules.bodySelector} > .ad-slot-container`,
-			);
-			if (el && el.previousSibling instanceof HTMLElement) {
-				firstSlot = el.previousSibling;
-			} else {
-				firstSlot = undefined;
-			}
-			startListening();
-		} else {
-			firstSlot = undefined;
-		}
-	});
+	return spaceFiller
+		.fillSpace(rules, insertAds, options)
+		.then(() => insertMoreAds(rules));
 };
 
 /**
@@ -175,15 +206,26 @@ export const init = (): Promise<void> => {
 		return Promise.resolve();
 	}
 
+	const firstMobileAdId = '#dfp-ad--inline1';
+	const firstDesktopAdId = '#dfp-ad--top-above-nav--mobile';
 	const isServerSideAdsMode =
-		window.guardian.config.tests?.serverSideLiveblogInlineAdsVariant ===
-		'variant';
+		!!document.querySelector(firstMobileAdId) ||
+		!!document.querySelector(firstDesktopAdId);
+
+	console.log('isServerSideAdsMode', isServerSideAdsMode);
+
 	if (isServerSideAdsMode) {
 		log(
 			'commercial',
 			'Server side inline ads mode. No client-side inline ad slots inserted',
 		);
-		return Promise.resolve();
+		return fastdom
+			.measure(() => {
+				WINDOWHEIGHT = getWindowHeight();
+				return WINDOWHEIGHT;
+			})
+			.then(getSpaceFillerRules)
+			.then((rules) => insertMoreAds(rules, true));
 	}
 
 	return fastdom
