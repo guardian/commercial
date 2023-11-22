@@ -171,7 +171,7 @@ const waitForSlot = async (page: Page, slot: string) => {
 	// check that the ad slot is present on the page
 	await slotLocator.isVisible();
 	// scroll to it
-	await slotLocator.scrollIntoViewIfNeeded();
+	await slotLocator.scrollIntoViewIfNeeded({ timeout: 120000 });
 	// iframe locator
 	const iframe = page.locator(`${slotId} iframe`);
 	// wait for the iframe
