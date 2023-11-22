@@ -31,6 +31,7 @@ const AD_SPACE_MULTIPLIER = 2;
 
 let AD_COUNTER = 0;
 let WINDOWHEIGHT: number;
+let IS_SERVER_SIDE_MODE = false;
 let firstSlot: HTMLElement | undefined;
 
 const getWindowHeight = (doc = document) => {
@@ -77,18 +78,22 @@ const getSpaceFillerRules = (
 };
 
 const getSlotName = (isMobile: boolean, slotCounter: number): string => {
-	if (isMobile && slotCounter === 0) {
-		return 'top-above-nav';
-	} else if (isMobile) {
-		return `inline${slotCounter}`;
+	if (isMobile) {
+		return slotCounter === 0 ? 'top-above-nav' : `inline${slotCounter}`;
 	}
+
 	return `inline${slotCounter + 1}`;
 };
 
 const insertAdAtPara = (para: Node) => {
 	const isMobile = getCurrentBreakpoint() === 'mobile';
 	const container: HTMLElement = document.createElement('div');
-	container.className = `ad-slot-container`;
+
+	let className = `ad-slot-container`;
+	if (IS_SERVER_SIDE_MODE) {
+		className += ` ad-slot-${isMobile ? 'mobile' : 'desktop'}`;
+	}
+	container.className = className;
 
 	const ad = createAdSlot('inline', {
 		name: getSlotName(isMobile, AD_COUNTER),
@@ -147,24 +152,35 @@ const stopListening = () => {
 	document.removeEventListener('liveblog:blocks-updated', onUpdate);
 };
 
-const fill = (rules: SpacefinderRules) => {
-	const options: SpacefinderOptions = { pass: 'inline1' };
+const insertMoreAds = (rules: SpacefinderRules) => {
+	const isMobile = getCurrentBreakpoint() === 'mobile';
 
-	return spaceFiller.fillSpace(rules, insertAds, options).then(() => {
-		if (AD_COUNTER < MAX_ADS) {
-			const el = document.querySelector(
-				`${rules.bodySelector} > .ad-slot-container`,
-			);
-			if (el && el.previousSibling instanceof HTMLElement) {
-				firstSlot = el.previousSibling;
-			} else {
-				firstSlot = undefined;
-			}
-			startListening();
+	let adContainerClass = '.ad-slot-container';
+	if (IS_SERVER_SIDE_MODE) {
+		adContainerClass += `.ad-slot-${isMobile ? 'mobile' : 'desktop'}`;
+	}
+
+	if (AD_COUNTER < MAX_ADS) {
+		const el = document.querySelector(
+			`${rules.bodySelector} > ${adContainerClass}`,
+		);
+		if (el && el.previousSibling instanceof HTMLElement) {
+			firstSlot = el.previousSibling;
 		} else {
 			firstSlot = undefined;
 		}
-	});
+		startListening();
+	} else {
+		firstSlot = undefined;
+	}
+};
+
+const fill = (rules: SpacefinderRules) => {
+	const options: SpacefinderOptions = { pass: 'inline1' };
+
+	return spaceFiller
+		.fillSpace(rules, insertAds, options)
+		.then(() => insertMoreAds(rules));
 };
 
 /**
@@ -175,14 +191,30 @@ export const init = (): Promise<void> => {
 		return Promise.resolve();
 	}
 
-	const isServerSideAdsMode =
-		window.guardian.config.tests?.serverSideLiveblogInlineAdsVariant ===
-		'variant';
-	if (isServerSideAdsMode) {
+	const isMobile = getCurrentBreakpoint() === 'mobile';
+	const firstAdId = isMobile
+		? '#dfp-ad--inline1'
+		: '#dfp-ad--top-above-nav--mobile';
+
+	IS_SERVER_SIDE_MODE = !!document.querySelector(firstAdId);
+
+	if (IS_SERVER_SIDE_MODE) {
 		log(
 			'commercial',
 			'Server side inline ads mode. No client-side inline ad slots inserted',
 		);
+		const selector = `.ad-slot-container.ad-slot-${
+			isMobile ? 'mobile' : 'desktop'
+		}`;
+
+		AD_COUNTER = document.querySelectorAll(selector).length;
+
+		// setTimeout(() => {
+		// 	console.log('dispatchEvent');
+		// 	document.dispatchEvent(new CustomEvent('liveblog:blocks-updated'));
+		// }, 10000);
+
+		startListening();
 		return Promise.resolve();
 	}
 
