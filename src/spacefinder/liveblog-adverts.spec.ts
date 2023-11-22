@@ -107,48 +107,4 @@ describe('Liveblog Dynamic Adverts', () => {
 			).toBe(14);
 		});
 	});
-
-	it('should insert ad slots if in the server-side ad slot test CONTROL group', async () => {
-		window.guardian.config.tests = window.guardian.config.tests ?? {};
-		window.guardian.config.tests.serverSideLiveblogInlineAdsControl =
-			'control';
-
-		const block1 = document.querySelector<HTMLElement>('.x1');
-		const block2 = document.querySelector<HTMLElement>('.x12');
-		if (block1 === null || block2 === null) {
-			throw Error();
-		}
-
-		spaceFillerStub.mockImplementationOnce(
-			createFillSpaceMock([block1, block2]),
-		);
-
-		await init().then(() => {
-			expect(
-				document.querySelector('.js-liveblog-body')?.children.length,
-			).toBe(14);
-		});
-	});
-
-	it('should NOT insert ad slots if in the server-side ad slot test VARIANT group', async () => {
-		window.guardian.config.tests = window.guardian.config.tests ?? {};
-		window.guardian.config.tests.serverSideLiveblogInlineAdsVariant =
-			'variant';
-
-		const block1 = document.querySelector<HTMLElement>('.x1');
-		const block2 = document.querySelector<HTMLElement>('.x12');
-		if (block1 === null || block2 === null) {
-			throw Error();
-		}
-
-		spaceFillerStub.mockImplementationOnce(
-			createFillSpaceMock([block1, block2]),
-		);
-
-		await init().then(() => {
-			expect(
-				document.querySelector('.js-liveblog-body')?.children.length,
-			).toBe(12);
-		});
-	});
 });
