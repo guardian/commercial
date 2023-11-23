@@ -82,14 +82,12 @@ describe('initialise', () => {
 				bidders: [],
 				maxBids: 1,
 				ortbNative: {
-					context: 1,
 					eventtrackers: [
 						{
 							event: 1,
-							methods: [1],
+							methods: [1, 2],
 						},
 					],
-					plcmttype: 1,
 				},
 				syncTimeout: 1000,
 				syncUrlModifier: {},
