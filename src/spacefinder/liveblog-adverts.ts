@@ -16,7 +16,7 @@ import type {
 /**
  * Maximum number of inline ads to display on the page.
  */
-const MAX_ADS = 8;
+const MAX_ADS = 18;
 
 /**
  * Multiplier of screen height that determines the distance from
@@ -27,41 +27,53 @@ const PAGE_TOP_MULTIPLIER = 1.5;
 /**
  * Multiplier of screen height that sets the minimum distance that two ads can be placed.
  */
-const AD_SPACE_MULTIPLIER = 2;
+const AD_SPACE_MULTIPLIER = 0.2;
 
 let AD_COUNTER = 0;
 let WINDOWHEIGHT: number;
 let IS_SERVER_SIDE_MODE = false;
 let firstSlot: HTMLElement | undefined;
 
-const getWindowHeight = (doc = document) => {
-	if (doc.documentElement.clientHeight) {
-		return doc.documentElement.clientHeight;
-	}
-	return 0; // #? zero, or throw an error?
-};
+const getWindowHeight = (doc = document) => doc.documentElement.clientHeight;
 
-const getSpaceFillerRules = (
-	windowHeight: number,
-	shouldUpdate = false,
-): SpacefinderRules => {
+const getSpaceFillerRules = (shouldUpdate = false): SpacefinderRules => {
 	let prevSlot: SpacefinderItem | undefined;
 
 	const isEnoughSpaceBetweenSlots = (
 		prevSlot: SpacefinderItem,
 		slot: SpacefinderItem,
-	) => Math.abs(slot.top - prevSlot.top) > windowHeight * AD_SPACE_MULTIPLIER;
+	) => {
+		console.log(
+			'*',
+			slot.top - prevSlot.top,
+			WINDOWHEIGHT * AD_SPACE_MULTIPLIER,
+		);
+		return (
+			Math.abs(slot.top - prevSlot.top) >
+			WINDOWHEIGHT * AD_SPACE_MULTIPLIER
+		);
+	};
 
 	const filterSlot = (slot: SpacefinderItem) => {
+		console.log('slot', slot);
 		if (!prevSlot) {
 			prevSlot = slot;
+			console.log('prevSlot 1', prevSlot);
 			return !shouldUpdate;
-		} else if (isEnoughSpaceBetweenSlots(prevSlot, slot)) {
+		}
+
+		if (isEnoughSpaceBetweenSlots(prevSlot, slot)) {
 			prevSlot = slot;
+			console.log('prevSlot 2', prevSlot);
 			return true;
 		}
+
+		console.log('prevSlot 3', prevSlot);
+
 		return false;
 	};
+
+	console.log('start at', shouldUpdate ? firstSlot : undefined);
 
 	return {
 		bodySelector: '.js-liveblog-body',
@@ -102,6 +114,8 @@ const insertAdAtPara = (para: Node) => {
 
 	container.appendChild(ad);
 
+	console.log('insertAdAtPara', container);
+
 	return fastdom
 		.mutate(() => {
 			if (para.parentNode) {
@@ -139,20 +153,22 @@ const insertAds: SpacefinderWriter = async (paras) => {
 const onUpdate = () => {
 	// eslint-disable-next-line no-use-before-define -- circular reference
 	stopListening();
-	const rules = getSpaceFillerRules(WINDOWHEIGHT, true);
+	const rules = getSpaceFillerRules(true);
 	// eslint-disable-next-line no-use-before-define -- circular reference
 	void fill(rules);
 };
 
 const startListening = () => {
+	console.log('Starting listening');
 	document.addEventListener('liveblog:blocks-updated', onUpdate);
 };
 
 const stopListening = () => {
+	console.log('Stopping listening');
 	document.removeEventListener('liveblog:blocks-updated', onUpdate);
 };
 
-const insertMoreAds = (rules: SpacefinderRules) => {
+const insertMoreAds = () => {
 	const isMobile = getCurrentBreakpoint() === 'mobile';
 
 	let adContainerClass = '.ad-slot-container';
@@ -160,9 +176,10 @@ const insertMoreAds = (rules: SpacefinderRules) => {
 		adContainerClass += `.ad-slot-${isMobile ? 'mobile' : 'desktop'}`;
 	}
 
+	console.log('AD_COUNTER', AD_COUNTER);
 	if (AD_COUNTER < MAX_ADS) {
 		const el = document.querySelector(
-			`${rules.bodySelector} > ${adContainerClass}`,
+			`.js-liveblog-body > ${adContainerClass}`,
 		);
 		if (el && el.previousSibling instanceof HTMLElement) {
 			firstSlot = el.previousSibling;
@@ -173,14 +190,14 @@ const insertMoreAds = (rules: SpacefinderRules) => {
 	} else {
 		firstSlot = undefined;
 	}
+
+	console.log('first slot', firstSlot);
 };
 
 const fill = (rules: SpacefinderRules) => {
 	const options: SpacefinderOptions = { pass: 'inline1' };
 
-	return spaceFiller
-		.fillSpace(rules, insertAds, options)
-		.then(() => insertMoreAds(rules));
+	return spaceFiller.fillSpace(rules, insertAds, options).then(insertMoreAds);
 };
 
 /**
@@ -209,10 +226,20 @@ export const init = (): Promise<void> => {
 
 		AD_COUNTER = document.querySelectorAll(selector).length;
 
-		// setTimeout(() => {
-		// 	console.log('dispatchEvent');
-		// 	document.dispatchEvent(new CustomEvent('liveblog:blocks-updated'));
-		// }, 10000);
+		setTimeout(() => {
+			console.log('dispatchEvent');
+			void fastdom
+				.measure(() => {
+					WINDOWHEIGHT = getWindowHeight();
+					return WINDOWHEIGHT;
+				})
+				.then(insertMoreAds)
+				.then(() => {
+					document.dispatchEvent(
+						new CustomEvent('liveblog:blocks-updated'),
+					);
+				});
+		}, 10000);
 
 		startListening();
 		return Promise.resolve();
@@ -221,9 +248,8 @@ export const init = (): Promise<void> => {
 	return fastdom
 		.measure(() => {
 			WINDOWHEIGHT = getWindowHeight();
-			return WINDOWHEIGHT;
 		})
-		.then(getSpaceFillerRules)
+		.then(() => getSpaceFillerRules(false))
 		.then(fill);
 };
 
