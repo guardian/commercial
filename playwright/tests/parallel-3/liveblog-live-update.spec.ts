@@ -36,9 +36,11 @@ test.describe.serial('Liveblog live updates', () => {
 					.waitFor({ state: 'attached' });
 
 				// count the initial inline slots
-				const startSlotCount = await page
-					.locator('#liveblog-body .ad-slot--liveblog-inline')
-					.count();
+				const isMobile = breakpoint === 'mobile';
+				const adClassName = `#liveblog-body .ad-slot--liveblog-inline${
+					isMobile ? '--mobile' : ''
+				}`;
+				const startSlotCount = await page.locator(adClassName).count();
 
 				console.log(`start slot count is ${startSlotCount}`);
 
@@ -65,10 +67,11 @@ test.describe.serial('Liveblog live updates', () => {
 
 				// new inline slot locator is the start slot count + 1
 				// except mobile where top-above-nav is also an inline
-				const isMobile = breakpoint === 'mobile';
 				const newInlineSlotLocator = `#liveblog-body .ad-slot--inline${
 					startSlotCount + (isMobile ? 0 : 1)
 				}`;
+
+				console.log('newInlineSlotLocator', newInlineSlotLocator);
 
 				// wait for the first new inline slot
 				await page
