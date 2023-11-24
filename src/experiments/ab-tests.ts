@@ -3,6 +3,7 @@ import { consentlessAds } from './tests/consentlessAds';
 import { eagerPrebid } from './tests/eager-prebid';
 import { elementsManager } from './tests/elements-manager';
 import { integrateIma } from './tests/integrate-ima';
+import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
 import { prebidKargo } from './tests/prebid-kargo';
 import { publicGoodTest } from './tests/public-good';
 import { signInGateCopyTestJan2023 } from './tests/sign-in-gate-copy-test-variant';
@@ -21,4 +22,5 @@ export const concurrentTests: readonly ABTest[] = [
 	eagerPrebid,
 	publicGoodTest,
 	prebidKargo,
+	mpuWhenNoEpic,
 ];
