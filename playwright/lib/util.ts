@@ -1,4 +1,5 @@
 import type { BrowserContext, Cookie, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import type { UserFeaturesResponse } from '../../src/types/membership';
 
 type Stage = 'code' | 'prod' | 'dev';
@@ -168,14 +169,16 @@ const waitForSlot = async (page: Page, slot: string) => {
 	const slotId = `#dfp-ad--${slot}`;
 	// create a locator for the slot
 	const slotLocator = page.locator(slotId);
-	// check that the ad slot is present on the page
-	await slotLocator.isVisible();
+	// wait for the slot to be attached to the DOM
+	await slotLocator.waitFor({ state: 'attached', timeout: 120_000 });
 	// scroll to it
-	await slotLocator.scrollIntoViewIfNeeded({ timeout: 120000 });
+	await slotLocator.scrollIntoViewIfNeeded();
+	// check that the ad slot is visible on the page
+	await expect(slotLocator).toBeVisible({ timeout: 120_000 });
 	// iframe locator
 	const iframe = page.locator(`${slotId} iframe`);
 	// wait for the iframe
-	await iframe.waitFor({ state: 'visible', timeout: 120000 });
+	await iframe.waitFor({ state: 'visible', timeout: 120_000 });
 };
 
 const waitForIsland = async (page: Page, island: string) => {
@@ -189,7 +192,7 @@ const waitForIsland = async (page: Page, island: string) => {
 	// wait for it to be hydrated
 	const hyrdatedIslandSelector = `gu-island[name="${island}"][data-island-status="hydrated"]`;
 	const hyrdatedIslandLocator = page.locator(hyrdatedIslandSelector);
-	await hyrdatedIslandLocator.waitFor({ state: 'visible', timeout: 120000 });
+	await hyrdatedIslandLocator.waitFor({ state: 'visible', timeout: 120_000 });
 };
 
 export {
