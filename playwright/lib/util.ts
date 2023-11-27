@@ -192,7 +192,15 @@ const waitForIsland = async (page: Page, island: string) => {
 	await hyrdatedIslandLocator.waitFor({ state: 'visible', timeout: 120000 });
 };
 
+const countLiveblogInlineSlots = async (page: Page, isMobile: boolean) => {
+	const mobileSuffix = isMobile ? '--mobile' : '';
+	const locator = `#liveblog-body .ad-slot--liveblog-inline${mobileSuffix}`;
+
+	return await page.locator(locator).count();
+};
+
 export {
+	countLiveblogInlineSlots,
 	fakeLogOut,
 	getStage,
 	getTestUrl,
