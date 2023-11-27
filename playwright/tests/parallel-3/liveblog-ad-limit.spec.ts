@@ -5,19 +5,19 @@ import { breakpoints } from '../../fixtures/breakpoints';
 import { blogs } from '../../fixtures/pages';
 import { cmpAcceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
+import { countLiveblogInlineSlots } from '../../lib/util';
 
 /**
  * TODO serial e2e tests
  * - It would be good to see if these tests could be run in parallel in the future
  */
-
 const pages = blogs.filter(({ name }) => name === 'ad-limit');
 
 const desktopBreakpoint = breakpoints.filter(
 	({ breakpoint }) => breakpoint === 'desktop',
 )[0] as unknown as BreakpointSizes;
 
-const maxAdSlots = 8;
+const MAX_AD_SLOTS = 8;
 
 const addAndAwaitNewBlocks = async (page: Page, blockContent: string) => {
 	// scroll to the top so we get a toast to click on
@@ -26,36 +26,45 @@ const addAndAwaitNewBlocks = async (page: Page, blockContent: string) => {
 		// @ts-expect-error -- browser land
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-call -- browser land
 		window.mockLiveUpdate({
-			numNewBlocks: 7,
+			numNewBlocks: 10,
 			html: `
-				<p style="height:1000px;" class="pending block">${blockContent}</p>
-				<p style="height:1000px;" class="pending block">New block</p>
-				<p style="height:1000px;" class="pending block">New block</p>
-				<p style="height:1000px;" class="pending block">New block</p>
-				<p style="height:1000px;" class="pending block">New block</p>
-				<p style="height:1000px;" class="pending block">New block</p>
-				<p style="height:1000px;" class="pending block">New block</p>
+				<p style="height:2000px;" class="pending block">${blockContent}</p>
+				<p style="height:2000px;" class="pending block">New block</p>
+				<p style="height:2000px;" class="pending block">New block</p>
+				<p style="height:2000px;" class="pending block">New block</p>
+				<p style="height:2000px;" class="pending block">New block</p>
+				<p style="height:2000px;" class="pending block">New block</p>
+				<p style="height:2000px;" class="pending block">New block</p>
+				<p style="height:2000px;" class="pending block">New block</p>
+				<p style="height:2000px;" class="pending block">New block</p>
+				<p style="height:2000px;" class="pending block">New block</p>
 			`,
 			mostRecentBlockId: 'abc',
 		});
 	}, blockContent);
+
 	// click on the toast to insert and scroll to the new blocks
-	await page.getByRole('button', { name: '7 new updates' }).click();
+	await page.getByRole('button', { name: '10 new updates' }).click();
 
 	// Here, we force the test to wait until the blocks are visible on the page before counting the ad slots
 	const newBlock = page.getByText(blockContent).first();
 	await expect(newBlock).toBeVisible();
 };
 
-const countInlineSlots = (page: Page) =>
-	page.locator('#liveblog-body .ad-slot--liveblog-inline').count();
-
-test.describe.serial('Ad slot limits', () => {
+test.describe('A minimum amount of ad slots load', () => {
 	pages.forEach(({ path, expectedMinInlineSlotsOnDesktop }) => {
-		let page: Page;
-		test.beforeAll(async ({ browser }) => {
-			const context = await browser.newContext();
-			page = await context.newPage();
+		/**
+		 * First ensure that the we receive the expected initial amount of ad slots.
+		 *
+		 * Something out of the Commercial teams control may occur that can affect how many ad slots
+		 * are initially inserted into the page, e.g. the line height of text content.
+		 *
+		 * It is important that the initial amount of ad slots on the page does not
+		 * equal the maximum amount of ad slots for this test to have value
+		 */
+		test('Extra ads are inserted upon update, but only up to the limit', async ({
+			page,
+		}) => {
 			await page.setViewportSize({
 				width: desktopBreakpoint.width,
 				height: desktopBreakpoint.height,
@@ -63,44 +72,27 @@ test.describe.serial('Ad slot limits', () => {
 
 			await loadPage(page, path);
 			await cmpAcceptAll(page);
-		});
 
-		test.afterAll(({ browser }) => {
-			browser.close;
-		});
-
-		test('Initial slot count and first insertion', async () => {
-			const initialSlotCount: number = await countInlineSlots(page);
-			console.log(`initial slot count is ${initialSlotCount}`);
+			const initialSlotCount = await countLiveblogInlineSlots(
+				page,
+				false,
+			);
 			expect(initialSlotCount).toEqual(expectedMinInlineSlotsOnDesktop);
 
 			await addAndAwaitNewBlocks(page, 'First batch of inserted blocks');
-
-			const afterFirstInsertSlotCount = await countInlineSlots(page);
-			console.log(
-				`slot count after first insertion is ${afterFirstInsertSlotCount}`,
+			const slotCountAfterFirstInsert = await countLiveblogInlineSlots(
+				page,
+				false,
 			);
-			expect(afterFirstInsertSlotCount).toBeGreaterThan(initialSlotCount);
-		});
+			expect(slotCountAfterFirstInsert).toBeGreaterThan(initialSlotCount);
+			expect(slotCountAfterFirstInsert).toEqual(MAX_AD_SLOTS);
 
-		test('Count slots after second insertion', async () => {
 			await addAndAwaitNewBlocks(page, 'Second batch of inserted blocks');
-
-			const afterSecondInsertSlotCount = await countInlineSlots(page);
-			console.log(
-				`slot count after second insertion is ${afterSecondInsertSlotCount}`,
+			const slotCountAfterSecondInsert = await countLiveblogInlineSlots(
+				page,
+				false,
 			);
-			expect(afterSecondInsertSlotCount).toEqual(maxAdSlots);
-		});
-
-		test('Count slots after third insertion', async () => {
-			await addAndAwaitNewBlocks(page, 'Third batch of inserted blocks');
-
-			const afterThirdInsertSlotCount = await countInlineSlots(page);
-			console.log(
-				`slot count after third insertion is ${afterThirdInsertSlotCount}`,
-			);
-			expect(afterThirdInsertSlotCount).toEqual(maxAdSlots);
+			expect(slotCountAfterSecondInsert).toEqual(MAX_AD_SLOTS);
 		});
 	});
 });
