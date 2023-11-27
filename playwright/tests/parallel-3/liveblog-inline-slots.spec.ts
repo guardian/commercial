@@ -3,6 +3,7 @@ import { breakpoints } from '../../fixtures/breakpoints';
 import { blogs } from '../../fixtures/pages';
 import { cmpAcceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
+import { countLiveblogInlineSlots } from '../../lib/util';
 
 const blogPages = blogs.filter(
 	(page) =>
@@ -10,23 +11,21 @@ const blogPages = blogs.filter(
 		'expectedMinInlineSlotsOnMobile' in page,
 );
 
-test.describe('Slots and iframes load on liveblog pages', () => {
+test.describe('A minimum number of ad slots load', () => {
 	blogPages.forEach(
-		(
-			{
-				path,
-				expectedMinInlineSlotsOnDesktop,
-				expectedMinInlineSlotsOnMobile,
-			},
-			index,
-		) => {
+		({
+			path,
+			expectedMinInlineSlotsOnDesktop,
+			expectedMinInlineSlotsOnMobile,
+		}) => {
 			breakpoints.forEach(({ breakpoint, width, height }) => {
+				const isMobile = breakpoint === 'mobile';
 				const expectedMinSlotsOnPage =
-					(breakpoint === 'mobile'
+					(isMobile
 						? expectedMinInlineSlotsOnMobile
 						: expectedMinInlineSlotsOnDesktop) ?? 999;
 
-				test(`Test blog ${index} has at least ${expectedMinSlotsOnPage} inline total slots at breakpoint ${breakpoint}`, async ({
+				test(`There are at least ${expectedMinSlotsOnPage} inline total slots at breakpoint ${breakpoint}`, async ({
 					page,
 				}) => {
 					await page.setViewportSize({
@@ -37,16 +36,10 @@ test.describe('Slots and iframes load on liveblog pages', () => {
 					await loadPage(page, path);
 					await cmpAcceptAll(page);
 
-					// wait for the first inline slot
-					// wait for state:hidden as the slot will be out of the viewport
-					await page
-						.locator('.ad-slot--liveblog-inline')
-						.first()
-						.waitFor({ state: 'hidden', timeout: 30000 });
-
-					const foundSlots = await page
-						.locator('.ad-slot--liveblog-inline')
-						.count();
+					const foundSlots = await countLiveblogInlineSlots(
+						page,
+						isMobile,
+					);
 
 					expect(foundSlots).toBeGreaterThanOrEqual(
 						expectedMinSlotsOnPage,
