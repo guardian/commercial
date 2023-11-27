@@ -218,9 +218,6 @@ export const init = (): Promise<void> => {
 	).length;
 	IS_SERVER_SIDE_MODE = numMobileAdsInServerSideMode > 0;
 
-	console.log('numMobileAdsInServerSideMode', numMobileAdsInServerSideMode);
-	console.log('IS_SERVER_SIDE_MODE', IS_SERVER_SIDE_MODE);
-
 	if (IS_SERVER_SIDE_MODE) {
 		log(
 			'commercial',
