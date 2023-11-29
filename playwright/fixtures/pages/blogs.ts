@@ -15,11 +15,11 @@ const blogs: GuPage[] = [
 	{
 		path: getTestUrl({
 			stage,
-			path: '/football/live/2023/aug/08/carabao-cup-first-round-wrexham-v-wigan-gillingham-v-southampton-live',
+			path: '/business/live/2023/nov/22/sam-altman-openai-return-jeremy-hunt-autumn-statement-tax-cuts-business-live',
 			type: 'liveblog',
 		}),
 		name: 'ad-limit',
-		expectedMinInlineSlotsOnDesktop: 5,
+		expectedMinInlineSlotsOnDesktop: 4,
 	},
 	{
 		path: getTestUrl({

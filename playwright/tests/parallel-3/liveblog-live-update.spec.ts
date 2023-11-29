@@ -3,6 +3,7 @@ import { breakpoints } from '../../fixtures/breakpoints';
 import { blogs } from '../../fixtures/pages';
 import { cmpAcceptAll } from '../../lib/cmp';
 import { loadPage } from '../../lib/load-page';
+import { countLiveblogInlineSlots } from '../../lib/util';
 
 /**
  * TODO serial e2e tests
@@ -35,12 +36,11 @@ test.describe.serial('Liveblog live updates', () => {
 					.locator('.ad-slot--inline1')
 					.waitFor({ state: 'attached' });
 
-				// count the initial inline slots
-				const startSlotCount = await page
-					.locator('#liveblog-body .ad-slot--liveblog-inline')
-					.count();
-
-				console.log(`start slot count is ${startSlotCount}`);
+				const isMobile = breakpoint === 'mobile';
+				const startSlotCount = await countLiveblogInlineSlots(
+					page,
+					isMobile,
+				);
 
 				await page.evaluate(() => {
 					// @ts-expect-error -- browser land
@@ -65,7 +65,6 @@ test.describe.serial('Liveblog live updates', () => {
 
 				// new inline slot locator is the start slot count + 1
 				// except mobile where top-above-nav is also an inline
-				const isMobile = breakpoint === 'mobile';
 				const newInlineSlotLocator = `#liveblog-body .ad-slot--inline${
 					startSlotCount + (isMobile ? 0 : 1)
 				}`;
@@ -75,12 +74,10 @@ test.describe.serial('Liveblog live updates', () => {
 					.locator(newInlineSlotLocator)
 					.waitFor({ state: 'attached' });
 
-				// count the inline slots
-				const endSlotCount = await page
-					.locator('#liveblog-body .ad-slot--liveblog-inline')
-					.count();
-
-				console.log(`end slot count is ${endSlotCount}`);
+				const endSlotCount = await countLiveblogInlineSlots(
+					page,
+					isMobile,
+				);
 
 				expect(endSlotCount).toBeGreaterThan(startSlotCount);
 			});
