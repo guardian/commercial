@@ -1,7 +1,5 @@
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { isInVariantSynchronous } from 'experiments/ab';
-import { elementsManager } from 'experiments/tests/elements-manager';
 import { dfpEnv } from '../dfp/dfp-env';
 import fastdom from './fastdom-promise';
 
@@ -31,11 +29,6 @@ const removeNodes = (nodes: Element[]): Promise<void> =>
 	);
 
 const removeSlots = (): Promise<void> => {
-	// Don't collapse slots when in the Elements Manager AB test variant.
-	if (isInVariantSynchronous(elementsManager, 'variant')) {
-		return Promise.resolve();
-	}
-
 	return removeNodes(selectNodes());
 };
 

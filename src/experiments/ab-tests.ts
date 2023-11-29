@@ -1,7 +1,6 @@
 import type { ABTest } from '@guardian/ab-core';
 import { consentlessAds } from './tests/consentlessAds';
 import { eagerPrebid } from './tests/eager-prebid';
-import { elementsManager } from './tests/elements-manager';
 import { integrateIma } from './tests/integrate-ima';
 import { prebidKargo } from './tests/prebid-kargo';
 import { publicGoodTest } from './tests/public-good';
@@ -17,7 +16,6 @@ export const concurrentTests: readonly ABTest[] = [
 	signInGateCopyTestJan2023,
 	consentlessAds,
 	integrateIma,
-	elementsManager,
 	eagerPrebid,
 	publicGoodTest,
 	prebidKargo,

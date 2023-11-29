@@ -6,8 +6,6 @@ import type { ConsentState } from '@guardian/consent-management-platform/dist/ty
 import { loadScript, log } from '@guardian/libs';
 import { EventTimer } from 'core/event-timer';
 import { init as initMessenger } from 'core/messenger';
-import { isInVariantSynchronous } from 'experiments/ab';
-import { elementsManager } from 'experiments/tests/elements-manager';
 import { getGoogleTagId, isUserLoggedInOktaRefactor } from 'identity/api';
 import { getPageTargeting } from 'lib/build-page-targeting';
 import { commercialFeatures } from 'lib/commercial-features';
@@ -87,11 +85,6 @@ const setPublisherProvidedId = (): void => {
 };
 
 export const init = (): Promise<void> => {
-	// Don't create Google ads (for now) if loading Elements Manager
-	if (isInVariantSynchronous(elementsManager, 'variant')) {
-		return Promise.resolve();
-	}
-
 	const setupAdvertising = (): Promise<void> => {
 		return onConsent().then(async (consentState: ConsentState) => {
 			EventTimer.get().mark('googletagInitStart');
