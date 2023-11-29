@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 11.23.2
+
+### Patch Changes
+
+- 7fde37e: Remove GEM AB test and related functionality
+- 7f877fe: when inserting inline ad slots server-side on liveblog pages, create the event listener to insert ad slots when more blocks are added to the page
+
 ## 11.23.1
 
 ### Patch Changes
