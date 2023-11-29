@@ -147,13 +147,13 @@ const stopListening = () => {
 
 const getPreviousContentBlock = (element: HTMLElement): HTMLElement | null => {
 	const prevElement = element.previousSibling;
-	if (prevElement === null) return null;
+	if (!(prevElement instanceof HTMLElement)) return null;
 
-	if ((prevElement as HTMLElement).classList.contains('block')) {
-		return prevElement as HTMLElement;
+	if (prevElement.classList.contains('block')) {
+		return prevElement;
 	}
 
-	return getPreviousContentBlock(prevElement as HTMLElement);
+	return getPreviousContentBlock(prevElement);
 };
 
 const insertMoreAds = () => {
@@ -173,10 +173,7 @@ const insertMoreAds = () => {
 				firstSlot = undefined;
 			} else {
 				const nearestContentBlock = getPreviousContentBlock(topAdvert);
-				firstSlot =
-					nearestContentBlock !== null
-						? nearestContentBlock
-						: undefined;
+				firstSlot = nearestContentBlock ?? undefined;
 			}
 		} else {
 			const el = document.querySelector(
