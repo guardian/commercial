@@ -4,7 +4,6 @@ import { adSizes, createAdSize } from 'core/ad-sizes';
 import { getCurrentBreakpoint } from 'detect/detect-breakpoint';
 import { commercialFeatures } from 'lib/commercial-features';
 import { removeDisabledSlots } from '../lib/remove-slots';
-import { includeAdsInMerch } from './ads-in-merchandising-test';
 import { createAdvert } from './create-advert';
 import { dfpEnv } from './dfp-env';
 import { displayAds } from './display-ads';
@@ -20,20 +19,15 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 		return {
 			desktop: [adSizes.billboard, createAdSize(900, 250)],
 		};
-	} else if (
-		(name === 'merchandising-high' || name === 'merchandising') &&
-		includeAdsInMerch()
-	) {
-		return {
-			mobile: [adSizes.mpu],
-			desktop: [adSizes.billboard],
-		};
-	} else if (contentType === 'LiveBlog' && name?.includes('inline')) {
+	}
+
+	if (contentType === 'LiveBlog' && name?.includes('inline')) {
 		return {
 			phablet: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
 			desktop: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
 		};
 	}
+
 	return {};
 };
 
