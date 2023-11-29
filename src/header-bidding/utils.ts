@@ -6,7 +6,6 @@ import {
 	matchesBreakpoints,
 } from 'detect/detect-breakpoint';
 import { isInVariantSynchronous } from 'experiments/ab';
-import { prebidKargo } from 'experiments/tests/prebid-kargo';
 import {
 	isInAuOrNz,
 	isInCanada,
@@ -189,8 +188,7 @@ export const shouldIncludeCriteo = (): boolean => !isInAuOrNz();
  */
 export const shouldIncludeSmart = (): boolean => isInUk() || isInRow();
 
-export const shouldIncludeKargo = (): boolean =>
-	isInUsa() && isInVariantSynchronous(prebidKargo, 'variant');
+export const shouldIncludeKargo = (): boolean => isInUsa();
 
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>

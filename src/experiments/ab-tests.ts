@@ -3,7 +3,6 @@ import { consentlessAds } from './tests/consentlessAds';
 import { eagerPrebid } from './tests/eager-prebid';
 import { elementsManager } from './tests/elements-manager';
 import { integrateIma } from './tests/integrate-ima';
-import { prebidKargo } from './tests/prebid-kargo';
 import { publicGoodTest } from './tests/public-good';
 import { signInGateCopyTestJan2023 } from './tests/sign-in-gate-copy-test-variant';
 import { signInGateMainControl } from './tests/sign-in-gate-main-control';
@@ -20,5 +19,4 @@ export const concurrentTests: readonly ABTest[] = [
 	elementsManager,
 	eagerPrebid,
 	publicGoodTest,
-	prebidKargo,
 ];
