@@ -1,6 +1,6 @@
 import type * as AdSizesType from 'core/ad-sizes';
 import { slotSizeMappings as slotSizeMappings_ } from 'core/ad-sizes';
-import { _, Advert } from './Advert';
+import { _, Advert, findSmallestAdHeightForSlot } from './Advert';
 
 const { getSlotSizeMapping } = _;
 
@@ -152,6 +152,32 @@ describe('getAdSizeMapping', () => {
 				: (value as AdSizesType.SlotName);
 			expect(getSlotSizeMapping(value)).toEqual(
 				slotSizeMappings_[slotName],
+			);
+		},
+	);
+});
+
+describe('findSmallestAdHeightForSlot', () => {
+	it.each([
+		['inline', 'desktop', 250],
+		['inline', 'phablet', 197],
+		['inline', 'tablet', 197],
+		['inline', 'mobile', 197],
+		['top-above-nav', 'desktop', 90],
+		['top-above-nav', 'tablet', 90],
+		['top-above-nav', 'phablet', 197],
+		['top-above-nav', 'mobile', 197],
+		['fronts-banner', 'mobile', null],
+		['fronts-banner', 'tablet', null],
+		['fronts-banner', 'desktop', 250],
+		['right', 'mobile', 250],
+		['right', 'tablet', 250],
+		['right', 'desktop', 250],
+	] as const)(
+		'should find the smallest size for %s slot at %s breakpoint',
+		(slot, breakpoint, expected) => {
+			expect(findSmallestAdHeightForSlot(slot, breakpoint)).toEqual(
+				expected,
 			);
 		},
 	);
