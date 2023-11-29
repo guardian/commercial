@@ -11,7 +11,7 @@ type BreakpointSizes = {
 	height: number;
 };
 
-const breakpointsToTest: Array<keyof BreakpointKeys> = [
+const allBreakpoints: Array<keyof BreakpointKeys> = [
 	'mobile',
 	'tablet',
 	'desktop',
@@ -25,10 +25,17 @@ const heights = {
 	wide: 1100,
 } as const;
 
-const breakpointSizes: BreakpointSizes[] = breakpointsToTest.map((b) => ({
-	breakpoint: b,
-	width: breakpoints[b],
-	height: heights[b],
-}));
+const testAtBreakpoints = (breakpointsToTest: Array<keyof BreakpointKeys>) =>
+	breakpointsToTest.map((b) => ({
+		breakpoint: b,
+		width: breakpoints[b],
+		height: heights[b],
+	}));
 
-export { breakpointSizes as breakpoints, type BreakpointSizes };
+const breakpointSizes: BreakpointSizes[] = testAtBreakpoints(allBreakpoints);
+
+export {
+	breakpointSizes as breakpoints,
+	testAtBreakpoints,
+	type BreakpointSizes,
+};
