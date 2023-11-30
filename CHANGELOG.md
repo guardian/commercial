@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.24.0
+
+### Minor Changes
+
+- 386f2f4: Removes adsInMerch AB test
+
 ## 11.23.2
 
 ### Patch Changes
