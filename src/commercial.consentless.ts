@@ -1,11 +1,11 @@
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { initArticleInline } from './consentless/dynamic/article-inline';
-import { initExclusionSlot } from './consentless/dynamic/exclusion-slot';
-import { initLiveblogInline } from './consentless/dynamic/liveblog-inline';
-import { initFixedSlots } from './consentless/init-fixed-slots';
-import { initConsentless } from './consentless/prepare-ootag';
-import { init as setAdTestCookie } from './lib/set-adtest-cookie';
-import { init as setAdTestInLabelsCookie } from './lib/set-adtest-in-labels-cookie';
+import { initArticleInline } from 'init/consentless/dynamic/article-inline';
+import { initExclusionSlot } from 'init/consentless/dynamic/exclusion-slot';
+import { initLiveblogInline } from 'init/consentless/dynamic/liveblog-inline';
+import { initFixedSlots } from 'init/consentless/init-fixed-slots';
+import { initConsentless } from 'init/consentless/prepare-ootag';
+import { init as setAdTestCookie } from 'init/shared/set-adtest-cookie';
+import { init as setAdTestInLabelsCookie } from 'init/shared/set-adtest-in-labels-cookie';
 
 const bootConsentless = async (
 	consentState: ConsentState,
