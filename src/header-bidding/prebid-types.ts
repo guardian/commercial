@@ -12,6 +12,7 @@ export type HeaderBiddingSlotName =
 	| 'top-above-nav'
 	| 'merchandising'
 	| 'merchandising-high'
+	| 'article-end'
 	| `fronts-banner-${number}`
 	| `inline${number}`;
 
