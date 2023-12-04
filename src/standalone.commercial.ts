@@ -108,27 +108,6 @@ if (!commercialFeatures.adFree) {
 	);
 }
 
-/**
- * Load modules specific to `dotcom-rendering`.
- * Not sure if this is needed. Currently no separate chunk is created
- * Introduced by @tomrf1
- */
-const loadDcrBundle = async (): Promise<void> => {
-	if (!isDotcomRendering) return;
-
-	if (window.guardian.config.switches.userFeaturesDcr === true) {
-		return;
-	}
-
-	const userFeatures = await import(
-		/* webpackChunkName: "dcr" */
-		'lib/user-features'
-	);
-
-	commercialExtraModules.push(['c-user-features', userFeatures.refresh]);
-	return;
-};
-
 const loadModules = (modules: Modules, eventName: string) => {
 	const modulePromises: Array<Promise<unknown>> = [];
 
@@ -203,8 +182,6 @@ const bootCommercial = async (): Promise<void> => {
 	};
 
 	try {
-		await loadDcrBundle();
-
 		const allModules: Array<Parameters<typeof loadModules>> = [
 			[commercialBaseModules, 'commercialBaseModulesLoaded'],
 			[commercialExtraModules, 'commercialExtraModulesLoaded'],
