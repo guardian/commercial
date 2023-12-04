@@ -5,7 +5,7 @@ import { getCurrentBreakpoint } from 'detect/detect-breakpoint';
 import { isInVariantSynchronous } from 'experiments/ab';
 import { mpuWhenNoEpic } from 'experiments/tests/mpu-when-no-epic';
 import { commercialFeatures } from 'lib/commercial-features';
-import { isInUk } from 'utils/geo-utils';
+import { isInUk, isInUsa } from 'utils/geo-utils';
 import { removeDisabledSlots } from '../lib/remove-slots';
 import { includeAdsInMerch } from './ads-in-merchandising-test';
 import { createAdvert } from './create-advert';
@@ -36,12 +36,17 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 			phablet: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
 			desktop: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
 		};
+	} else if (name === 'article-end' && isInUsa()) {
+		return {
+			mobile: [adSizes.fluid],
+		};
 	} else if (
 		name === 'article-end' &&
-		isInVariantSynchronous(mpuWhenNoEpic, 'variant')
+		isInVariantSynchronous(mpuWhenNoEpic, 'variant') &&
+		isInUk()
 	) {
 		return {
-			mobile: isInUk() ? [adSizes.mpu] : [],
+			mobile: [adSizes.mpu],
 		};
 	}
 	return {};
