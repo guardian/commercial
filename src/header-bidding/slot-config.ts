@@ -202,6 +202,8 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 		},
 		'article-end': {
 			mobile: isInUk() ? [adSizes.mpu] : [],
+			tablet: isInUk() ? [adSizes.mpu] : [],
+			desktop: isInUk() ? [adSizes.mpu] : [],
 		},
 	};
 };
