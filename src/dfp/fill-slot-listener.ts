@@ -1,8 +1,10 @@
+import type { SizeMapping } from 'core';
 import { dfpEnv } from './dfp-env';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 
 type ExternalSlotCustomEvent = CustomEvent<{
 	slotId: string;
+	additionalSizes?: SizeMapping;
 }>;
 
 const isCustomEvent = (event: Event): event is CustomEvent => {
@@ -28,7 +30,8 @@ const isCustomEvent = (event: Event): event is CustomEvent => {
 export const createSlotFillListener = () => {
 	document.addEventListener('gu.commercial.slot.fill', (event: Event) => {
 		if (isCustomEvent(event)) {
-			const { slotId } = (<ExternalSlotCustomEvent>event).detail;
+			const { slotId, additionalSizes } = (<ExternalSlotCustomEvent>event)
+				.detail;
 
 			if (dfpEnv.adverts.has(slotId)) {
 				return;
@@ -36,7 +39,7 @@ export const createSlotFillListener = () => {
 
 			const slot = document.getElementById(slotId);
 			if (slot) {
-				void fillDynamicAdSlot(slot, false);
+				void fillDynamicAdSlot(slot, false, additionalSizes);
 			}
 		}
 	});
