@@ -109,7 +109,7 @@
 		"fastdom": "^1.0.11",
 		"lodash-es": "^4.17.21",
 		"ophan-tracker-js": "^2.0.1",
-		"prebid.js": "guardian/prebid.js#c917a6e97beff4a0aea298fa469678208a25cd67",
+		"prebid.js": "guardian/prebid.js#ee7f43c7c85a5245bbe51920cfed18818866ea7b",
 		"process": "^0.11.10",
 		"raven-js": "^3.27.2",
 		"tslib": "^2.5.3",
