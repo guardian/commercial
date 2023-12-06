@@ -50,8 +50,7 @@ import { catchErrorsWithContext } from 'utils/robust';
 
 type Modules = Array<[`${string}-${string}`, () => Promise<unknown>]>;
 
-const { isDotcomRendering, frontendAssetsFullURL, switches, page } =
-	window.guardian.config;
+const { frontendAssetsFullURL, switches, page } = window.guardian.config;
 
 const decideAssetsPath = () => {
 	if (process.env.OVERRIDE_BUNDLE_PATH) {
@@ -107,12 +106,6 @@ if (!commercialFeatures.adFree) {
 		['cm-redplanet', initRedplanet],
 	);
 }
-
-/**
- * Load modules specific to `dotcom-rendering`.
- * Not sure if this is needed. Currently no separate chunk is created
- * Introduced by @tomrf1
- */
 
 const loadModules = (modules: Modules, eventName: string) => {
 	const modulePromises: Array<Promise<unknown>> = [];
@@ -226,9 +219,7 @@ const chooseAdvertisingTag = async () => {
 		void import(
 			/* webpackChunkName: "consentless" */
 			'./commercial.consentless'
-		).then(({ bootConsentless }) =>
-			bootConsentless(consentState, isDotcomRendering),
-		);
+		).then(({ bootConsentless }) => bootConsentless(consentState));
 	} else {
 		bootCommercialWhenReady();
 	}
