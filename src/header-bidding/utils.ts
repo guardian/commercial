@@ -190,7 +190,7 @@ export const shouldIncludeCriteo = (): boolean => !isInAuOrNz();
 export const shouldIncludeSmart = (): boolean => isInUk() || isInRow();
 
 export const shouldIncludeKargo = (): boolean =>
-	isInUsa() && isInVariantSynchronous(prebidKargo, 'variant');
+	isInUsa() && !isInVariantSynchronous(prebidKargo, 'variant');
 
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>
