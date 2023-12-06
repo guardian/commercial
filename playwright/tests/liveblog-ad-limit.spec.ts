@@ -11,7 +11,7 @@ import { countLiveblogInlineSlots } from '../lib/util';
  * TODO serial e2e tests
  * - It would be good to see if these tests could be run in parallel in the future
  */
-const pages = blogs.filter(({ name }) => name === 'ad-limit');
+const pages = blogs.filter(({ name }) => name === 'under-ad-limit');
 
 const desktopBreakpoint = breakpoints.filter(
 	({ breakpoint }) => breakpoint === 'desktop',
