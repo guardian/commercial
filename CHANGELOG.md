@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 11.25.0
+
+### Minor Changes
+
+- 293c761: Launch Kargo
+- f1c6514: Upgrade to prebid.js v8
+
 ## 11.24.0
 
 ### Minor Changes
