@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { breakpoints } from '../../fixtures/breakpoints';
-import { blogs } from '../../fixtures/pages';
-import { cmpAcceptAll } from '../../lib/cmp';
-import { loadPage } from '../../lib/load-page';
-import { countLiveblogInlineSlots } from '../../lib/util';
+import { breakpoints } from '../fixtures/breakpoints';
+import { blogs } from '../fixtures/pages';
+import { cmpAcceptAll } from '../lib/cmp';
+import { loadPage } from '../lib/load-page';
+import { countLiveblogInlineSlots } from '../lib/util';
 
 const blogPages = blogs.filter(
 	(page) =>

@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
-import { cmpAcceptAll } from '../../lib/cmp';
-import { loadPage } from '../../lib/load-page';
-import { getStage, getTestUrl, waitForSlot } from '../../lib/util';
+import { cmpAcceptAll } from '../lib/cmp';
+import { loadPage } from '../lib/load-page';
+import { getStage, getTestUrl, waitForSlot } from '../lib/util';
 
 test.describe('shouldLoadGoogletagSwitch', () => {
 	test('ad slot should be filled when switch is true', async ({ page }) => {
