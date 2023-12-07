@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.26.0
+
+### Minor Changes
+
+- c248fa0: add "firstvisit" key value for opt out
+
 ## 11.25.0
 
 ### Minor Changes
