@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        group: [1/5, 2/5, 3/5, 4/5, 5/5]
+        group: [1, 2, 3, 4, 5]
     steps:
       # Commercial
       - name: Checkout
@@ -64,12 +64,12 @@ jobs:
         working-directory: ./commercial
 
       - name: Run Playwright
-        run: yarn playwright test --shard=${{ matrix.group }}
+        run: yarn playwright test --shard=${{ matrix.group }}/5
         working-directory: ./commercial
 
       - uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.group }}
           path: ./commercial/playwright-report
           retention-days: 5
