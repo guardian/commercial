@@ -26,7 +26,6 @@ import { initPermutive } from 'dfp/prepare-permutive';
 import { init as preparePrebid } from 'dfp/prepare-prebid';
 import { init as initRedplanet } from 'dfp/redplanet';
 import { adFreeSlotRemove } from 'lib/ad-free-slot-remove';
-import { initAdblockAsk } from 'lib/adblock-ask';
 import { commercialFeatures } from 'lib/commercial-features';
 import { init as initComscore } from 'lib/comscore';
 import { init as initHighMerch } from 'lib/high-merch';
@@ -101,7 +100,6 @@ if (!commercialFeatures.adFree) {
 		['cm-liveblogAdverts', initLiveblogAdverts],
 		['cm-commentAdverts', initCommentAdverts],
 		['cm-commentsExpandedAdverts', initCommentsExpandedAdverts],
-		['rr-adblock-ask', initAdblockAsk],
 		['cm-thirdPartyTags', initThirdPartyTags],
 		['cm-redplanet', initRedplanet],
 	);

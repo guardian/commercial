@@ -2,43 +2,28 @@ import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'detect/detect-bre
 import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from '../identity/api';
 import { commercialFeatures } from './commercial-features';
 import type { CommercialFeaturesConstructor } from './commercial-features';
-import {
-	isAdFreeUser as isAdFreeUser_,
-	isPayingMember as isPayingMember_,
-	isRecentOneOffContributor as isRecentOneOffContributor_,
-	shouldHideSupportMessaging as shouldHideSupportMessaging_,
-} from './user-features';
+import { adFreeDataIsPresent as adFreeDataIsPresent_ } from './manage-ad-free-cookie';
 import userPrefs from './user-prefs';
 
-const isPayingMember = isPayingMember_ as jest.MockedFunction<
-	typeof isPayingMember_
->;
-const isRecentOneOffContributor =
-	isRecentOneOffContributor_ as jest.MockedFunction<
-		typeof isRecentOneOffContributor_
-	>;
-const shouldHideSupportMessaging =
-	shouldHideSupportMessaging_ as jest.MockedFunction<
-		typeof shouldHideSupportMessaging_
-	>;
-const isAdFreeUser = isAdFreeUser_ as jest.MockedFunction<typeof isAdFreeUser_>;
 const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
 	typeof getCurrentBreakpoint_
 >;
+
+const adFreeDataIsPresent = adFreeDataIsPresent_ as jest.MockedFunction<
+	typeof adFreeDataIsPresent_
+>;
+
 const isUserLoggedInOktaRefactor =
 	isUserLoggedInOktaRefactor_ as jest.MockedFunction<
 		typeof isUserLoggedInOktaRefactor_
 	>;
 
+jest.mock('./manage-ad-free-cookie', () => ({
+	adFreeDataIsPresent: jest.fn(),
+}));
+
 const CommercialFeatures =
 	commercialFeatures.constructor as CommercialFeaturesConstructor;
-
-jest.mock('./user-features', () => ({
-	isPayingMember: jest.fn(),
-	isRecentOneOffContributor: jest.fn(),
-	shouldHideSupportMessaging: jest.fn(),
-	isAdFreeUser: jest.fn(),
-}));
 
 jest.mock('detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
@@ -95,10 +80,6 @@ describe('Commercial features', () => {
 		userPrefs.removeSwitch('adverts');
 
 		getCurrentBreakpoint.mockReturnValue('desktop');
-		isPayingMember.mockResolvedValue(false);
-		isRecentOneOffContributor.mockReturnValue(false);
-		shouldHideSupportMessaging.mockResolvedValue(false);
-		isAdFreeUser.mockReturnValue(false);
 		isUserLoggedInOktaRefactor.mockResolvedValue(true);
 
 		expect.hasAssertions();
@@ -224,7 +205,7 @@ describe('Commercial features', () => {
 	describe('Article body adverts under ad-free', () => {
 		// LOL grammar
 		it('are disabled', () => {
-			isAdFreeUser.mockReturnValue(true);
+			adFreeDataIsPresent.mockReturnValue(true);
 			const features = new CommercialFeatures();
 			expect(features.articleBodyAdverts).toBe(false);
 		});
@@ -252,7 +233,7 @@ describe('Commercial features', () => {
 
 	describe('High-relevance commercial component under ad-free', () => {
 		beforeEach(() => {
-			isAdFreeUser.mockReturnValue(true);
+			adFreeDataIsPresent.mockReturnValue(true);
 		});
 
 		it('Does not run on fronts', () => {
@@ -311,7 +292,7 @@ describe('Commercial features', () => {
 
 	describe('Third party tags under ad-free', () => {
 		beforeEach(() => {
-			isAdFreeUser.mockReturnValue(true);
+			adFreeDataIsPresent.mockReturnValue(true);
 		});
 
 		it('Does not run by default', () => {
@@ -392,7 +373,7 @@ describe('Commercial features', () => {
 	describe('Comment adverts under ad-free', () => {
 		beforeEach(() => {
 			window.guardian.config.page.commentable = true;
-			isAdFreeUser.mockReturnValue(true);
+			adFreeDataIsPresent.mockReturnValue(true);
 		});
 
 		it('Does not display when page has comments', () => {
