@@ -7,10 +7,7 @@ import { initConsentless } from './consentless/prepare-ootag';
 import { init as setAdTestCookie } from './lib/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from './lib/set-adtest-in-labels-cookie';
 
-const bootConsentless = async (
-	consentState: ConsentState,
-	isDotcomRendering: boolean,
-): Promise<void> => {
+const bootConsentless = async (consentState: ConsentState): Promise<void> => {
 	const consentlessModuleList = [
 		setAdTestCookie(),
 		setAdTestInLabelsCookie(),
@@ -20,20 +17,6 @@ const bootConsentless = async (
 		initArticleInline(),
 		initLiveblogInline(),
 	];
-
-	//this is added so that we can load the subscriber cookie for DCR pages and correctly hide ads
-
-	if (
-		isDotcomRendering &&
-		window.guardian.config.switches.userFeaturesDcr !== true
-	) {
-		const userFeatures = await import(
-			/* webpackChunkName: "dcr" */
-			'lib/user-features'
-		);
-
-		consentlessModuleList.push(userFeatures.refresh());
-	}
 
 	await Promise.all(consentlessModuleList);
 
