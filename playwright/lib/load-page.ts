@@ -1,5 +1,5 @@
 import { type Page } from '@playwright/test';
-import { logGAMIds } from './util';
+import { logUnfilledSlots } from './util';
 
 const loadPage = async (page: Page, path: string, region = 'GB') => {
 	await page.addInitScript((region) => {
@@ -15,7 +15,7 @@ const loadPage = async (page: Page, path: string, region = 'GB') => {
 		);
 	}, region);
 
-	logGAMIds(page);
+	logUnfilledSlots(page);
 
 	// Abort all ophan requests as it stops the page from firing the 'load' event
 	//

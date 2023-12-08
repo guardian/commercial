@@ -199,43 +199,34 @@ const countLiveblogInlineSlots = async (page: Page, isMobile: boolean) => {
 	return await page.locator(locator).count();
 };
 
-interface Targeting {
-	[key: string]: string | Record<string, string>;
-	cust_params: Record<string, string>;
-	prev_scp: Record<string, string>;
-	prev_iu_szs: string;
-}
-
-const decodeAdRequest = (url: string) => {
+const getSlotName = (url: string) => {
 	const adRequest = new URL(url);
 	const adRequestParams = adRequest.searchParams;
 
-	const custParams = new URLSearchParams(
-		adRequestParams.get('cust_params') ?? '',
-	);
 	const prevScp = new URLSearchParams(adRequestParams.get('prev_scp') ?? '');
 
-	const obj = Object.fromEntries(adRequestParams.entries()) as Targeting;
-
-	obj.cust_params = Object.fromEntries(custParams.entries());
-	obj.prev_scp = Object.fromEntries(prevScp.entries());
-
-	return obj;
+	return prevScp.get('slot') ?? 'unknown';
 };
 
-// log line item ids for debugging by checking GAM request header `Google-Lineitem-Id`
-const logGAMIds = (page: Page) => {
+// Warn if any slots are unfilled
+const logUnfilledSlots = (page: Page) => {
 	page.on('response', (response) => {
 		const url = response.url();
 
-		const targeting = decodeAdRequest(url);
+		const slotName = getSlotName(url);
 
 		if (url.includes('securepubads.g.doubleclick.net/gampad/ads')) {
-			const slot = targeting.prev_scp.slot ?? 'unknown';
 			const lineItemId = response.headers()['google-lineitem-id'] ?? '';
 			const creativeId = response.headers()['google-creative-id'] ?? '';
-			console.log(`Line item id for ${slot}: ${lineItemId}`);
-			console.log(`Creative id for ${slot}: ${creativeId}`);
+
+			if (
+				!lineItemId ||
+				!creativeId ||
+				lineItemId === '-2' ||
+				creativeId === '-2'
+			) {
+				console.warn(`Unfilled slot: ${slotName}`);
+			}
 		}
 	});
 };
@@ -248,5 +239,5 @@ export {
 	setupFakeLogin,
 	waitForIsland,
 	waitForSlot,
-	logGAMIds,
+	logUnfilledSlots,
 };
