@@ -21,6 +21,7 @@ const loadPage = async (page: Page, path: string, region = 'GB') => {
 	//
 	// Instead of aborting ophan change the waituntil to 'domcontentloaded'
 	// rather than 'load'. Monitor this to see if it works for our use cases.
+	console.log('Loading page', path);
 	await page.goto(path, { waitUntil: 'domcontentloaded' });
 };
 
