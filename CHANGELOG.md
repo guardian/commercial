@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.26.1
+
+### Patch Changes
+
+- 1b13321: removes user-features module and related code as well as redundant refs to shady-pie in adblock-ask
+
 ## 11.26.0
 
 ### Minor Changes
