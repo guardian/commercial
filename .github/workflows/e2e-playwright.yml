@@ -56,7 +56,7 @@ jobs:
             ghcr.io/guardian/dotcom-rendering:main
 
       - name: Install Playwright Browsers
-        run: yarn playwright install --with-deps
+        run: yarn playwright install --with-deps chromium
         working-directory: ./commercial
 
       - name: Start Commercial server
