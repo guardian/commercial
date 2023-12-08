@@ -64,7 +64,7 @@ jobs:
         working-directory: ./commercial
 
       - name: Run Playwright
-        run: yarn playwright test parallel-${{ matrix.group }}
+        run: yarn playwright test --shard=${{ matrix.group }}/5
         working-directory: ./commercial
 
       - uses: actions/upload-artifact@v3
