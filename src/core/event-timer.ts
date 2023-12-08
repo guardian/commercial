@@ -27,7 +27,12 @@ const trackedSlots = ['top-above-nav', 'inline1', 'inline2'] as const;
 type TrackedSlot = (typeof trackedSlots)[number];
 
 // marks that we want to save as commercial metrics
-const slotMarks = ['slotReady', 'adRenderStart', 'adOnPage'] as const;
+const slotMarks = [
+	'slotReady',
+	'adRenderStart',
+	'adOnPage',
+	'viewable',
+] as const;
 
 type SlotMark = (typeof slotMarks)[number];
 
