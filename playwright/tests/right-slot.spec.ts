@@ -11,7 +11,7 @@ test.describe('right slot', () => {
 			// viewport width has to be >= 1300px for the right column to appear on liveblogs
 			await page.setViewportSize({
 				width: breakpoints['wide'],
-				height: 200,
+				height: 800,
 			});
 
 			await loadPage(page, path);
