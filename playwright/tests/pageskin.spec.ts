@@ -80,7 +80,7 @@ test.describe('pageskin on uk front', () => {
 			await cmpAcceptAll(page);
 
 			// need to wait for top-above-nav on mobile as it is out of view
-			await waitForSlot(page, slotWithPostfix);
+			await waitForSlot(page, slotWithPostfix, false);
 
 			const response = await gamResponsePromise;
 

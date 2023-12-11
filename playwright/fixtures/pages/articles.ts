@@ -32,14 +32,6 @@ const articles: GuPage[] = [
 		}),
 		name: 'sensitive-content',
 	},
-	{
-		path: getTestUrl({
-			stage,
-			path: '/politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',
-			type: 'article',
-			adtest: 'comdev',
-		}),
-	},
 ];
 
 export { articles };
