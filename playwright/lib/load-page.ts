@@ -1,4 +1,5 @@
 import { type Page } from '@playwright/test';
+import { logUnfilledSlots } from './util';
 
 const loadPage = async (page: Page, path: string, region = 'GB') => {
 	await page.addInitScript((region) => {
@@ -13,6 +14,9 @@ const loadPage = async (page: Page, path: string, region = 'GB') => {
 			`{"value":"${new Date().toISOString()}"}`,
 		);
 	}, region);
+
+	logUnfilledSlots(page);
+
 	// Abort all ophan requests as it stops the page from firing the 'load' event
 	//
 	// await page.route(/ophan.theguardian.com/, (route) => {

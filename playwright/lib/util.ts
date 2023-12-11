@@ -202,6 +202,38 @@ const countLiveblogInlineSlots = async (page: Page, isMobile: boolean) => {
 	return await page.locator(locator).count();
 };
 
+const getSlotName = (url: string) => {
+	const adRequest = new URL(url);
+	const adRequestParams = adRequest.searchParams;
+
+	const prevScp = new URLSearchParams(adRequestParams.get('prev_scp') ?? '');
+
+	return prevScp.get('slot') ?? 'unknown';
+};
+
+// Warn if any slots are unfilled
+const logUnfilledSlots = (page: Page) => {
+	page.on('response', (response) => {
+		const url = response.url();
+
+		const slotName = getSlotName(url);
+
+		if (url.includes('securepubads.g.doubleclick.net/gampad/ads')) {
+			const lineItemId = response.headers()['google-lineitem-id'] ?? '';
+			const creativeId = response.headers()['google-creative-id'] ?? '';
+
+			if (
+				!lineItemId ||
+				!creativeId ||
+				lineItemId === '-2' ||
+				creativeId === '-2'
+			) {
+				console.warn(`Unfilled slot: ${slotName}`);
+			}
+		}
+	});
+};
+
 export {
 	countLiveblogInlineSlots,
 	fakeLogOut,
@@ -210,4 +242,5 @@ export {
 	setupFakeLogin,
 	waitForIsland,
 	waitForSlot,
+	logUnfilledSlots,
 };
