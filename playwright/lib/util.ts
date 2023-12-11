@@ -164,7 +164,7 @@ const clearCookie = async (context: BrowserContext, cookieName: string) => {
 const fakeLogOut = async (context: BrowserContext) =>
 	await clearCookie(context, 'GU_U');
 
-const waitForSlot = async (page: Page, slot: string) => {
+const waitForSlot = async (page: Page, slot: string, waitForIframe = true) => {
 	const slotId = `#dfp-ad--${slot}`;
 	// create a locator for the slot
 	const slotLocator = page.locator(slotId);
@@ -172,10 +172,13 @@ const waitForSlot = async (page: Page, slot: string) => {
 	await slotLocator.isVisible();
 	// scroll to it
 	await slotLocator.scrollIntoViewIfNeeded();
-	// iframe locator
-	const iframe = page.locator(`${slotId} iframe`);
-	// wait for the iframe
-	await iframe.waitFor({ state: 'visible', timeout: 120000 });
+
+	if (waitForIframe) {
+		// iframe locator
+		const iframe = page.locator(`${slotId} iframe`);
+		// wait for the iframe
+		await iframe.waitFor({ state: 'visible', timeout: 120000 });
+	}
 };
 
 const waitForIsland = async (page: Page, island: string) => {

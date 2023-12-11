@@ -23,7 +23,7 @@ const filterDisabledNodes = (nodes: Element[]) => nodes.filter(isDisabled);
 const removeNodes = (nodes: Element[]): Promise<void> =>
 	fastdom.mutate(() =>
 		nodes.forEach((node) => {
-			log('commercial', `Removing ad slot ${node.id}`);
+			log('commercial', `Removing ad slot: ${node.id}`);
 			node.remove();
 		}),
 	);
