@@ -47,12 +47,12 @@ describe('Liveblog Dynamic Adverts', () => {
 	describe('getLowestContentBlock', () => {
 		it('should find the lowest slot on the page', async () => {
 			document.body.innerHTML = `
-			<div class="js-liveblog-body">
-				<div class="block x1"></div>
-				<div class="block x2"></div>
-				<div class="block x3"></div>
-			</div>';
-		`;
+				<div class="js-liveblog-body">
+					<div class="block x1"></div>
+					<div class="block x2"></div>
+					<div class="block x3"></div>
+				</div>';
+			`;
 
 			const result = await getLowestContentBlock();
 
@@ -63,13 +63,13 @@ describe('Liveblog Dynamic Adverts', () => {
 	describe('getFirstContentBlockAboveAd', () => {
 		it('should find the first content block above the ad slot', async () => {
 			document.body.innerHTML = `
-			<div class="js-liveblog-body">
-				<article class="block x1"></article>
-				<article class="block x2"></article>
-				<div class="ad-slot-container ad-slot-desktop"><div id="dfp-ad--inline1" /></div>
-				<article class="block x3"></article>
-			</div>';
-		`;
+				<div class="js-liveblog-body">
+					<article class="block x1"></article>
+					<article class="block x2"></article>
+					<div class="ad-slot-container ad-slot-desktop"><div id="dfp-ad--inline1" /></div>
+					<article class="block x3"></article>
+				</div>';
+			`;
 
 			const topAdvert = document.querySelector(
 				'.js-liveblog-body > .ad-slot-container.ad-slot-desktop',
@@ -82,17 +82,17 @@ describe('Liveblog Dynamic Adverts', () => {
 
 		it('should find the first content block above the top ad slot', async () => {
 			document.body.innerHTML = `
-			<div class="js-liveblog-body">
-				<article class="block x1"></article>
-				<article class="block x2"></article>
-				<article class="block x3"></article>
-				<div class="ad-slot-container ad-slot-desktop"><div id="dfp-ad--inline1" /></div>
-				<article class="block x4"></article>
-				<article class="block x5"></article>
-				<div class="ad-slot-container ad-slot-desktop"><div id="dfp-ad--inline2" /></div>
-				<article class="block x6"></article>
-			</div>';
-		`;
+				<div class="js-liveblog-body">
+					<article class="block x1"></article>
+					<article class="block x2"></article>
+					<article class="block x3"></article>
+					<div class="ad-slot-container ad-slot-desktop"><div id="dfp-ad--inline1" /></div>
+					<article class="block x4"></article>
+					<article class="block x5"></article>
+					<div class="ad-slot-container ad-slot-desktop"><div id="dfp-ad--inline2" /></div>
+					<article class="block x6"></article>
+				</div>';
+			`;
 
 			const topAdvert = document.querySelector(
 				'.js-liveblog-body > .ad-slot-container.ad-slot-desktop',
@@ -107,13 +107,13 @@ describe('Liveblog Dynamic Adverts', () => {
 	describe('getStartingContentBlock', () => {
 		it('should find the correct starting block', async () => {
 			document.body.innerHTML = `
-			<div class="js-liveblog-body">
-				<article class="block x1"></article>
-				<div class="ad-slot-container ad-slot-desktop"><div id="dfp-ad--inline1" /></div>
-				<article class="block x2"></article>
-				<article class="block x3"></article>
-			</div>';
-		`;
+				<div class="js-liveblog-body">
+					<article class="block x1"></article>
+					<div class="ad-slot-container ad-slot-desktop"><div id="dfp-ad--inline1" /></div>
+					<article class="block x2"></article>
+					<article class="block x3"></article>
+				</div>';
+			`;
 
 			const result = await getStartingContentBlock(
 				'.ad-slot-container.ad-slot-desktop',
@@ -124,12 +124,12 @@ describe('Liveblog Dynamic Adverts', () => {
 
 		it('should find the lowest block when zero ads', async () => {
 			document.body.innerHTML = `
-			<div class="js-liveblog-body">
-				<article class="block x1"></article>
-				<article class="block x2"></article>
-				<article class="block x3"></article>
-			</div>';
-		`;
+				<div class="js-liveblog-body">
+					<article class="block x1"></article>
+					<article class="block x2"></article>
+					<article class="block x3"></article>
+				</div>';
+			`;
 
 			const result = await getStartingContentBlock(
 				'.ad-slot-container.ad-slot-desktop',
