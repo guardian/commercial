@@ -199,7 +199,7 @@ export const shouldIncludeMobileSticky = once(
 			min: 'mobile',
 			max: 'mobileLandscape',
 		}) &&
-			(isInUsOrCa() || isInAuOrNz()) &&
+			!isInUk() &&
 			window.guardian.config.page.contentType === 'Article' &&
 			!window.guardian.config.page.isHosted),
 );
