@@ -14,12 +14,12 @@ import type {
 } from 'spacefinder/spacefinder';
 
 /**
- * Maximum number of inline ads to display on the page.
+ * Maximum number of inline ads to display on the page
  */
 const MAX_ADS = 8;
 
 /**
- * Multiplier of screen height that sets the minimum distance that any two ads can be placed.
+ * Multiplier of screen height that determines the minimum distance between any two ads
  */
 const AD_GAP_MULTIPLIER = 1.5;
 
