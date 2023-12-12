@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 11.27.0
+
+### Minor Changes
+
+- 1055092: Add mobile-sticky to ROW
+- 16c4358: More commercial metrics
+
 ## 11.26.1
 
 ### Patch Changes
