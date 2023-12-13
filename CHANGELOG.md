@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.27.1
+
+### Patch Changes
+
+- 642fc96: Remove client-side ad slot insertion on liveblog page load
+
 ## 11.27.0
 
 ### Minor Changes
