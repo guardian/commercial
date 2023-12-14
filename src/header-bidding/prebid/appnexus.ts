@@ -42,8 +42,7 @@ const getAppNexusDirectPlacementId = (sizes: HeaderBiddingSize[]): string => {
 	}
 
 	if (isInRow() && containsMobileSticky(sizes)) {
-			return '31512573';
-		}
+		return '31512573';
 	}
 
 	const defaultPlacementId = '9251752';
