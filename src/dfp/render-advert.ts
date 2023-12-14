@@ -90,6 +90,16 @@ sizeCallbacks[adSizes.outstreamMobile.toString()] = (advert: Advert) =>
 sizeCallbacks[adSizes.googleCard.toString()] = (advert: Advert) =>
 	advert.updateExtraSlotClasses('ad-slot--gc');
 
+sizeCallbacks[adSizes.billboard.toString()] = (advert: Advert) => {
+	if (
+		advert.node.dataset.name === 'merchandising' ||
+		advert.node.dataset.name === 'merchandising-high'
+	) {
+		advert.node.classList.add('ad-slot--merchandising-billboard');
+	}
+	return Promise.resolve();
+};
+
 /**
  * Out of page adverts - creatives that aren't directly shown on the page - need to be hidden,
  * and their containers closed up.
