@@ -6,6 +6,7 @@ import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
 	isInUk as isInUk_,
+	isInUsa as isInUsa_,
 	isInUsOrCa as isInUsOrCa_,
 } from 'utils/geo-utils';
 import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
@@ -45,6 +46,7 @@ const {
 	getXaxisPlacementId,
 	getTrustXAdUnitId,
 	indexExchangeBidders,
+	getOzonePlacementId,
 } = _;
 
 jest.mock('lib/build-page-targeting', () => ({
@@ -80,6 +82,7 @@ const isInAuOrNz = isInAuOrNz_ as jest.Mock;
 const isInRow = isInRow_ as jest.Mock;
 const isInUk = isInUk_ as jest.Mock;
 const isInUsOrCa = isInUsOrCa_ as jest.Mock;
+const isInUsa = isInUsa_ as jest.Mock;
 
 jest.mock('experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn(),
@@ -343,13 +346,11 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 		)[2];
-		if (typeof openXBid !== 'undefined') {
-			expect(openXBid.params).toEqual({
-				customParams: 'someAppNexusTargetingObject',
-				delDomain: 'guardian-d.openx.net',
-				unit: '540279541',
-			});
-		}
+		expect(openXBid?.params).toEqual({
+			customParams: 'someAppNexusTargetingObject',
+			delDomain: 'guardian-d.openx.net',
+			unit: '540279541',
+		});
 	});
 
 	test('should use correct parameters in OpenX bids geolocated in US', () => {
@@ -360,13 +361,11 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 		)[2];
-		if (typeof openXBid !== 'undefined') {
-			expect(openXBid.params).toEqual({
-				customParams: 'someAppNexusTargetingObject',
-				delDomain: 'guardian-us-d.openx.net',
-				unit: '540279544',
-			});
-		}
+		expect(openXBid?.params).toEqual({
+			customParams: 'someAppNexusTargetingObject',
+			delDomain: 'guardian-us-d.openx.net',
+			unit: '540279544',
+		});
 	});
 
 	test('should use correct parameters in OpenX bids geolocated in AU', () => {
@@ -377,16 +376,14 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 		)[2];
-		if (typeof openXBid !== 'undefined') {
-			expect(openXBid.params).toEqual({
-				customParams: 'someAppNexusTargetingObject',
-				delDomain: 'guardian-aus-d.openx.net',
-				unit: '540279542',
-			});
-		}
+		expect(openXBid?.params).toEqual({
+			customParams: 'someAppNexusTargetingObject',
+			delDomain: 'guardian-aus-d.openx.net',
+			unit: '540279542',
+		});
 	});
 
-	test('should use correct parameters in OpenX bids geolocated in FR', () => {
+	test('should use correct parameters in OpenX bids geolocated in FR for top-above-nav', () => {
 		shouldIncludeOpenx.mockReturnValue(true);
 		isInRow.mockReturnValue(true);
 		const openXBid = bids(
@@ -394,13 +391,26 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 		)[2];
-		if (typeof openXBid !== 'undefined') {
-			expect(openXBid.params).toEqual({
-				customParams: 'someAppNexusTargetingObject',
-				delDomain: 'guardian-d.openx.net',
-				unit: '540279541',
-			});
-		}
+		expect(openXBid?.params).toEqual({
+			customParams: 'someAppNexusTargetingObject',
+			delDomain: 'guardian-d.openx.net',
+			unit: '540279541',
+		});
+	});
+	test('should use correct parameters in OpenX bids geolocated in FR for mobile-sticky', () => {
+		shouldIncludeOpenx.mockReturnValue(true);
+		isInRow.mockReturnValue(true);
+		containsMobileSticky.mockReturnValue(true);
+		const openXBid = bids(
+			'dfp-ad--mobile-sticky',
+			[createAdSize(320, 50)],
+			mockPageTargeting,
+		)[2];
+		expect(openXBid?.params).toEqual({
+			customParams: 'someAppNexusTargetingObject',
+			delDomain: 'guardian-d.openx.net',
+			unit: '560429384',
+		});
 	});
 });
 
@@ -570,5 +580,25 @@ describe('getXaxisPlacementId', () => {
 		expect(generateTestIds()).toEqual([
 			20943669, 20943669, 20943670, 20943670, 20943670,
 		]);
+	});
+});
+
+describe('getOzonePlacementId', () => {
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
+
+	test('should return correct placementID for mobile-sticky in US', () => {
+		isInUsa.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMobileSticky.mockReturnValue(true);
+		expect(getOzonePlacementId([createAdSize(320, 50)])).toBe('3500014217');
+	});
+
+	test('should return correct placementID for mobile-sticky in ROW', () => {
+		isInRow.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMobileSticky.mockReturnValue(true);
+		expect(getOzonePlacementId([createAdSize(320, 50)])).toBe('1500000260');
 	});
 });

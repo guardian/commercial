@@ -599,4 +599,5 @@ export const _ = {
 	getXaxisPlacementId,
 	getTrustXAdUnitId,
 	indexExchangeBidders,
+	getOzonePlacementId,
 };
