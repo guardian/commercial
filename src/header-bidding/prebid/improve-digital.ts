@@ -3,6 +3,7 @@ import type { HeaderBiddingSize } from '../prebid-types';
 import {
 	containsBillboardNotLeaderboard,
 	containsLeaderboardOrBillboard,
+	containsMobileSticky,
 	containsMpuOrDmpu,
 	getBreakpointKey,
 	stripMobileSuffix,
@@ -42,6 +43,7 @@ const getImprovePlacementId = (sizes: HeaderBiddingSize[]): number => {
 				return -1;
 		}
 	}
+
 	if (isInRow()) {
 		switch (getBreakpointKey()) {
 			case 'D': // Desktop
@@ -55,6 +57,9 @@ const getImprovePlacementId = (sizes: HeaderBiddingSize[]): number => {
 			case 'M': // Mobile
 				if (containsMpuOrDmpu(sizes)) {
 					return 1116424;
+				}
+				if (containsMobileSticky(sizes)) {
+					return 23060750;
 				}
 				return -1;
 			case 'T': // Tablet

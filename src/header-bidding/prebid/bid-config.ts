@@ -6,7 +6,13 @@ import {
 	buildAppNexusTargetingObject,
 } from 'lib/build-page-targeting';
 import type { PrebidIndexSite } from 'types/global';
-import { isInAuOrNz, isInUk, isInUsa, isInUsOrCa } from 'utils/geo-utils';
+import {
+	isInAuOrNz,
+	isInRow,
+	isInUk,
+	isInUsa,
+	isInUsOrCa,
+} from 'utils/geo-utils';
 import { pbTestNameMap } from 'utils/url';
 import type {
 	BidderCode,
@@ -233,26 +239,35 @@ const openxClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 ) => ({
 	name: 'oxd',
 	switchName: 'prebidOpenx',
-	bidParams: (): PrebidOpenXParams => {
+	bidParams: (slotId, sizes): PrebidOpenXParams => {
+		const customParams = buildAppNexusTargetingObject(pageTargeting);
 		if (isInUsOrCa()) {
 			return {
 				delDomain: 'guardian-us-d.openx.net',
 				unit: '540279544',
-				customParams: buildAppNexusTargetingObject(pageTargeting),
+				customParams,
 			};
 		}
 		if (isInAuOrNz()) {
 			return {
 				delDomain: 'guardian-aus-d.openx.net',
 				unit: '540279542',
-				customParams: buildAppNexusTargetingObject(pageTargeting),
+				customParams,
+			};
+		}
+		// ROW has a unique unit ID for mobile-sticky
+		if (isInRow() && containsMobileSticky(sizes)) {
+			return {
+				delDomain: 'guardian-d.openx.net',
+				unit: '560429384',
+				customParams,
 			};
 		}
 		// UK and ROW
 		return {
 			delDomain: 'guardian-d.openx.net',
 			unit: '540279541',
-			customParams: buildAppNexusTargetingObject(pageTargeting),
+			customParams,
 		};
 	},
 });
@@ -268,7 +283,18 @@ const getOzonePlacementId = (sizes: HeaderBiddingSize[]) => {
 				return '3500010911';
 			}
 		}
+		if (getBreakpointKey() === 'M') {
+			if (containsMobileSticky(sizes)) {
+				return '3500014217';
+			}
+		}
 		return '1420436308';
+	}
+
+	if (isInRow()) {
+		if (containsMobileSticky(sizes)) {
+			return '1500000260';
+		}
 	}
 	return '0420420500';
 };
