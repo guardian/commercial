@@ -80,6 +80,7 @@ describe('getImprovePlacementId', () => {
 		{ sizes: [createAdSize(300, 250)], expectedId: 1116400 },
 		{ sizes: [createAdSize(300, 600)], expectedId: 1116400 },
 		{ sizes: [createAdSize(1, 2)], expectedId: -1 },
+		{ sizes: [createAdSize(320, 50)], expectedId: -1 },
 	])(
 		'in UK and on mobile %p returns correct placement id',
 		({ sizes, expectedId }) => {
@@ -137,6 +138,7 @@ describe('getImprovePlacementId', () => {
 		{ sizes: [createAdSize(300, 250)], expectedId: 1116424 },
 		{ sizes: [createAdSize(300, 600)], expectedId: 1116424 },
 		{ sizes: [createAdSize(1, 2)], expectedId: -1 },
+		{ sizes: [createAdSize(320, 50)], expectedId: 23060750 },
 	])(
 		'in ROW and on mobile %p returns correct placement id',
 		({ sizes, expectedId }) => {
@@ -153,6 +155,7 @@ describe('getImprovePlacementId', () => {
 		[[createAdSize(300, 250)]],
 		[[createAdSize(300, 600)]],
 		[[createAdSize(1, 2)]],
+		[[createAdSize(320, 50)]],
 	])('in US returns placement id -1', (sizes) => {
 		isInUsOrCa.mockReturnValue(true);
 		expect(getImprovePlacementId(sizes)).toBe(-1);
@@ -165,6 +168,7 @@ describe('getImprovePlacementId', () => {
 		[[createAdSize(300, 250)]],
 		[[createAdSize(300, 600)]],
 		[[createAdSize(1, 2)]],
+		[[createAdSize(320, 50)]],
 	])('in AUS returns placement id -1', (sizes) => {
 		isInAuOrNz.mockReturnValue(true);
 		expect(getImprovePlacementId(sizes)).toBe(-1);
