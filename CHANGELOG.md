@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.28.0
+
+### Minor Changes
+
+- 8384a6e: Add placement IDs to Prebid mobile-sticky
+
 ## 11.27.1
 
 ### Patch Changes
