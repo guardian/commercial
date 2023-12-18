@@ -46,7 +46,7 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 		isInUk()
 	) {
 		return {
-			mobile: [adSizes.mpu],
+			desktop: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
 		};
 	}
 	return {};
