@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.28.1
+
+### Patch Changes
+
+- 790278e: remove duplicate liveblog inline ads for reject-all users
+
 ## 11.28.0
 
 ### Minor Changes
