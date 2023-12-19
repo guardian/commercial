@@ -54,14 +54,14 @@ describe('enableLazyLoad', () => {
 		expect(windowIntersectionObserver).toBe(undefined);
 	});
 
-	it('should create a 20% observer if lazyLoadObserve is true', () => {
+	it('should create a 10% observer if lazyLoadObserve is true', () => {
 		dfpEnv.lazyLoadObserve = true;
 		enableLazyLoad(testAdvert as unknown as Advert);
 		expect(loadAdvert).not.toHaveBeenCalled();
 		expect(
 			window.IntersectionObserver as jest.Mock,
 		).toHaveBeenNthCalledWith(1, expect.anything(), {
-			rootMargin: '20% 0px',
+			rootMargin: '10% 0px',
 		});
 	});
 
