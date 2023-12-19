@@ -23,7 +23,9 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 		return {
 			desktop: [adSizes.billboard, createAdSize(900, 250)],
 		};
-	} else if (
+	}
+
+	if (
 		(name === 'merchandising-high' || name === 'merchandising') &&
 		includeAdsInMerch()
 	) {
@@ -31,16 +33,22 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 			mobile: [adSizes.mpu],
 			desktop: [adSizes.billboard],
 		};
-	} else if (contentType === 'LiveBlog' && name?.includes('inline')) {
+	}
+
+	if (contentType === 'LiveBlog' && name?.includes('inline')) {
 		return {
 			phablet: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
 			desktop: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
 		};
-	} else if (name === 'article-end' && isInUsa()) {
+	}
+
+	if (name === 'article-end' && isInUsa()) {
 		return {
 			mobile: [adSizes.fluid],
 		};
-	} else if (
+	}
+
+	if (
 		name === 'article-end' &&
 		isInVariantSynchronous(mpuWhenNoEpic, 'variant') &&
 		isInUk()
@@ -49,6 +57,7 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 			desktop: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
 		};
 	}
+
 	return {};
 };
 
