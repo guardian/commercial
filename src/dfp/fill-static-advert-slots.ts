@@ -2,7 +2,10 @@ import { isNonNullable, log } from '@guardian/libs';
 import type { SizeMapping } from 'core/ad-sizes';
 import { adSizes, createAdSize } from 'core/ad-sizes';
 import { getCurrentBreakpoint } from 'detect/detect-breakpoint';
+import { isInVariantSynchronous } from 'experiments/ab';
+import { mpuWhenNoEpic } from 'experiments/tests/mpu-when-no-epic';
 import { commercialFeatures } from 'lib/commercial-features';
+import { isInUk, isInUsa } from 'utils/geo-utils';
 import { removeDisabledSlots } from '../lib/remove-slots';
 import { createAdvert } from './create-advert';
 import { dfpEnv } from './dfp-env';
@@ -24,6 +27,22 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 	if (contentType === 'LiveBlog' && name?.includes('inline')) {
 		return {
 			phablet: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
+			desktop: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
+		};
+	}
+
+	if (name === 'article-end' && isInUsa()) {
+		return {
+			mobile: [adSizes.fluid],
+		};
+	}
+
+	if (
+		name === 'article-end' &&
+		isInVariantSynchronous(mpuWhenNoEpic, 'variant') &&
+		isInUk()
+	) {
+		return {
 			desktop: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
 		};
 	}
