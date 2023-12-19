@@ -344,17 +344,26 @@ describe('Utils', () => {
 		});
 	});
 
-	const regions: CountryCode[] = ['US', 'CA', 'AU', 'NZ'];
+	const regionsTestCases: Array<{ region: CountryCode; expected: boolean }> =
+		[
+			{ region: 'US', expected: true },
+			{ region: 'CA', expected: true },
+			{ region: 'AU', expected: true },
+			{ region: 'NZ', expected: true },
+			{ region: 'GB', expected: false },
+			{ region: 'BE', expected: true },
+			{ region: 'EG', expected: true },
+		];
 
-	regions.forEach((region) => {
-		test(`should include mobile sticky if geolocation is ${region} and content is Article on mobiles`, () => {
+	test.each(regionsTestCases)(
+		`should include mobile sticky $expected if geolocation is $region and content is Article on mobiles`,
+		({ region, expected }) => {
 			window.guardian.config.page.contentType = 'Article';
-
 			getCountryCode.mockReturnValue(region);
 			matchesBreakpoints.mockReturnValue(true);
-			expect(shouldIncludeMobileSticky()).toBe(true);
-		});
-	});
+			expect(shouldIncludeMobileSticky()).toBe(expected);
+		},
+	);
 
 	test('shouldIncludeMobileSticky should be false if all conditions true except content type ', () => {
 		window.guardian.config.page.contentType = 'Network Front';

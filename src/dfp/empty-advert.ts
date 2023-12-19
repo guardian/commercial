@@ -1,3 +1,4 @@
+import { log } from '@guardian/libs';
 import fastdom from 'fastdom';
 import type { Advert } from './Advert';
 import { dfpEnv } from './dfp-env';
@@ -18,6 +19,7 @@ const removeAd = (advert: Advert) => {
 };
 
 const emptyAdvert = (advert: Advert): void => {
+	log('commercial', `Removing empty advert: ${advert.id}`);
 	fastdom.mutate(() => {
 		window.googletag.destroySlots([advert.slot]);
 		removeAd(advert);

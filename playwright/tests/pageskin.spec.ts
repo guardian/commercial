@@ -1,11 +1,11 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
-import { breakpoints } from '../../fixtures/breakpoints';
-import { frontWithPageSkin } from '../../fixtures/pages';
-import { cmpAcceptAll } from '../../lib/cmp';
-import { assertHeader, waitForGAMResponseForSlot } from '../../lib/gam';
-import { loadPage } from '../../lib/load-page';
-import { waitForSlot } from '../../lib/util';
+import { breakpoints } from '../fixtures/breakpoints';
+import { frontWithPageSkin } from '../fixtures/pages';
+import { cmpAcceptAll } from '../lib/cmp';
+import { assertHeader, waitForGAMResponseForSlot } from '../lib/gam';
+import { loadPage } from '../lib/load-page';
+import { waitForSlot } from '../lib/util';
 
 const large = breakpoints.filter(
 	({ breakpoint }) => breakpoint === 'desktop' || breakpoint === 'wide',
@@ -80,7 +80,7 @@ test.describe('pageskin on uk front', () => {
 			await cmpAcceptAll(page);
 
 			// need to wait for top-above-nav on mobile as it is out of view
-			await waitForSlot(page, slotWithPostfix);
+			await waitForSlot(page, slotWithPostfix, false);
 
 			const response = await gamResponsePromise;
 

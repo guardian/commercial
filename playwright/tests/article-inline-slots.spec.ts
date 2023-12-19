@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
-import { breakpoints } from '../../fixtures/breakpoints';
-import { articles } from '../../fixtures/pages';
-import { cmpAcceptAll } from '../../lib/cmp';
-import { loadPage } from '../../lib/load-page';
+import { breakpoints } from '../fixtures/breakpoints';
+import { articles } from '../fixtures/pages';
+import { cmpAcceptAll } from '../lib/cmp';
+import { loadPage } from '../lib/load-page';
 
 const pages = articles.filter(({ name }) => name === 'inlineSlots');
 

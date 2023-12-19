@@ -1,4 +1,5 @@
 import { log } from '@guardian/libs';
+import { EventTimer } from 'core';
 import { outstreamSizes } from 'core/ad-sizes';
 import { AD_LABEL_HEIGHT } from 'core/constants/ad-label-height';
 import fastdom from 'lib/fastdom-promise';
@@ -121,12 +122,11 @@ const onSlotViewableFunction = (): ((
 ) => void) => {
 	const queryParams = getUrlVars();
 
-	if (queryParams.adrefresh !== 'false') {
-		return setSlotAdRefresh;
-	}
-
-	return () => {
-		/* */
+	return (event: googletag.events.ImpressionViewableEvent) => {
+		EventTimer.get().mark('viewable', event.slot.getTargeting('slot')[0]);
+		if (queryParams.adrefresh !== 'false') {
+			setSlotAdRefresh(event);
+		}
 	};
 };
 

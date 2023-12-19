@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
-import { allPages } from '../../fixtures/pages';
-import { cmpAcceptAll } from '../../lib/cmp';
-import { loadPage } from '../../lib/load-page';
-import { waitForSlot } from '../../lib/util';
+import { allPages } from '../fixtures/pages';
+import { cmpAcceptAll } from '../lib/cmp';
+import { loadPage } from '../lib/load-page';
+import { waitForSlot } from '../lib/util';
 
 test.describe('top-above-nav slot', () => {
 	[...allPages].forEach(({ path }, index) => {

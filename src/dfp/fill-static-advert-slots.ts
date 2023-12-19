@@ -7,7 +7,6 @@ import { mpuWhenNoEpic } from 'experiments/tests/mpu-when-no-epic';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInUk, isInUsa } from 'utils/geo-utils';
 import { removeDisabledSlots } from '../lib/remove-slots';
-import { includeAdsInMerch } from './ads-in-merchandising-test';
 import { createAdvert } from './create-advert';
 import { dfpEnv } from './dfp-env';
 import { displayAds } from './display-ads';
@@ -22,16 +21,6 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 	if (contentType === 'Gallery' && name?.includes('inline')) {
 		return {
 			desktop: [adSizes.billboard, createAdSize(900, 250)],
-		};
-	}
-
-	if (
-		(name === 'merchandising-high' || name === 'merchandising') &&
-		includeAdsInMerch()
-	) {
-		return {
-			mobile: [adSizes.mpu],
-			desktop: [adSizes.billboard],
 		};
 	}
 
@@ -67,7 +56,6 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
  * For dynamic ad slots that are created at js-runtime, see:
  *  - article-aside-adverts
  *  - article-body-adverts
- *  - liveblog-adverts
  *  - high-merch
  */
 const fillStaticAdvertSlots = async (): Promise<void> => {
