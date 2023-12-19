@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.29.0
+
+### Minor Changes
+
+- a6bac28: Added additional sizes to the custom event listener
+
 ## 11.28.1
 
 ### Patch Changes
