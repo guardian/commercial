@@ -17,18 +17,17 @@ import {
 	onConsent,
 } from '@guardian/consent-management-platform';
 import { log } from '@guardian/libs';
+import { init as prepareAdVerification } from 'ad-verification/prepare-ad-verification';
 import { EventTimer } from 'core/event-timer';
+import { adSlotIdPrefix } from 'dfp/dfp-env-globals';
+import { init as prepareA9 } from 'dfp/prepare-a9';
+import { init as prepareGoogletag } from 'dfp/prepare-googletag';
+import { initPermutive } from 'dfp/prepare-permutive';
+import { init as preparePrebid } from 'dfp/prepare-prebid';
+import { init as initRedplanet } from 'dfp/redplanet';
 import { adFreeSlotRemove } from 'lib/ad-free-slot-remove';
-import { init as prepareAdVerification } from 'lib/ad-verification/prepare-ad-verification';
-import { initAdblockAsk } from 'lib/adblock-ask';
 import { commercialFeatures } from 'lib/commercial-features';
 import { init as initComscore } from 'lib/comscore';
-import { adSlotIdPrefix } from 'lib/dfp/dfp-env-globals';
-import { init as prepareA9 } from 'lib/dfp/prepare-a9';
-import { init as prepareGoogletag } from 'lib/dfp/prepare-googletag';
-import { initPermutive } from 'lib/dfp/prepare-permutive';
-import { init as preparePrebid } from 'lib/dfp/prepare-prebid';
-import { init as initRedplanet } from 'lib/dfp/redplanet';
 import { init as initHighMerch } from 'lib/high-merch';
 import { init as initIpsosMori } from 'lib/ipsos-mori';
 import { init as initMobileSticky } from 'lib/mobile-sticky';
@@ -36,22 +35,21 @@ import { removeConsentedAdsOnConsentChange } from 'lib/remove-consented-ads-on-c
 import { removeDisabledSlots as closeDisabledSlots } from 'lib/remove-slots';
 import { init as setAdTestCookie } from 'lib/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from 'lib/set-adtest-in-labels-cookie';
-import { init as initArticleAsideAdverts } from 'lib/spacefinder/article-aside-adverts';
-import { init as initArticleBodyAdverts } from 'lib/spacefinder/article-body-adverts';
-import { initCommentAdverts } from 'lib/spacefinder/comment-adverts';
-import { initCommentsExpandedAdverts } from 'lib/spacefinder/comments-expanded-advert';
-import { init as initLiveblogAdverts } from 'lib/spacefinder/liveblog-adverts';
 import { initTeadsCookieless } from 'lib/teads-cookieless';
 import { init as initThirdPartyTags } from 'lib/third-party-tags';
 import { init as initTrackGpcSignal } from 'lib/track-gpc-signal';
 import { init as initTrackScrollDepth } from 'lib/track-scroll-depth';
-import { reportError } from 'lib/utils/report-error';
-import { catchErrorsWithContext } from 'lib/utils/robust';
+import { init as initArticleAsideAdverts } from 'spacefinder/article-aside-adverts';
+import { init as initArticleBodyAdverts } from 'spacefinder/article-body-adverts';
+import { initCommentAdverts } from 'spacefinder/comment-adverts';
+import { initCommentsExpandedAdverts } from 'spacefinder/comments-expanded-advert';
+import { init as initLiveblogAdverts } from 'spacefinder/liveblog-adverts';
+import { reportError } from 'utils/report-error';
+import { catchErrorsWithContext } from 'utils/robust';
 
 type Modules = Array<[`${string}-${string}`, () => Promise<unknown>]>;
 
-const { isDotcomRendering, frontendAssetsFullURL, switches, page } =
-	window.guardian.config;
+const { frontendAssetsFullURL, switches, page } = window.guardian.config;
 
 const decideAssetsPath = () => {
 	if (process.env.OVERRIDE_BUNDLE_PATH) {
@@ -102,28 +100,10 @@ if (!commercialFeatures.adFree) {
 		['cm-liveblogAdverts', initLiveblogAdverts],
 		['cm-commentAdverts', initCommentAdverts],
 		['cm-commentsExpandedAdverts', initCommentsExpandedAdverts],
-		['rr-adblock-ask', initAdblockAsk],
 		['cm-thirdPartyTags', initThirdPartyTags],
 		['cm-redplanet', initRedplanet],
 	);
 }
-
-/**
- * Load modules specific to `dotcom-rendering`.
- * Not sure if this is needed. Currently no separate chunk is created
- * Introduced by @tomrf1
- */
-const loadDcrBundle = async (): Promise<void> => {
-	if (!isDotcomRendering) return;
-
-	const userFeatures = await import(
-		/* webpackChunkName: "dcr" */
-		'lib/user-features'
-	);
-
-	commercialExtraModules.push(['c-user-features', userFeatures.refresh]);
-	return;
-};
 
 const loadModules = (modules: Modules, eventName: string) => {
 	const modulePromises: Array<Promise<unknown>> = [];
@@ -199,8 +179,6 @@ const bootCommercial = async (): Promise<void> => {
 	};
 
 	try {
-		await loadDcrBundle();
-
 		const allModules: Array<Parameters<typeof loadModules>> = [
 			[commercialBaseModules, 'commercialBaseModulesLoaded'],
 			[commercialExtraModules, 'commercialExtraModulesLoaded'],
@@ -239,9 +217,7 @@ const chooseAdvertisingTag = async () => {
 		void import(
 			/* webpackChunkName: "consentless" */
 			'./commercial.consentless'
-		).then(({ bootConsentless }) =>
-			bootConsentless(consentState, isDotcomRendering),
-		);
+		).then(({ bootConsentless }) => bootConsentless(consentState));
 	} else {
 		bootCommercialWhenReady();
 	}

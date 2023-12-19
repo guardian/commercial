@@ -70,6 +70,15 @@ const filterValues = (pageTargets: Record<string, unknown>) => {
 	return filtered;
 };
 
+// A consentless friendly way of determining if this is the users first visit to the page
+const isFirstVisit = (referrer: string): boolean => {
+	if (!referrer) {
+		return true;
+	}
+	const referrerUrl = new URL(document.referrer);
+	return referrerUrl.hostname !== window.location.hostname;
+};
+
 type BuildPageTargetingParams = {
 	adFree: boolean;
 	clientSideParticipations: Participations;
@@ -106,7 +115,7 @@ const buildPageTargeting = ({
 		keywords: sharedAdTargeting.k ?? [],
 	});
 
-	const getReferrer = () => document.referrer || '';
+	const referrer = document.referrer || '';
 
 	const sessionTargeting: SessionTargeting = getSessionTargeting({
 		adTest: getCookie({ name: 'adtest', shouldMemoize: true }),
@@ -117,7 +126,7 @@ const buildPageTargeting = ({
 			clientSideParticipations,
 			serverSideParticipations: window.guardian.config.tests ?? {},
 		},
-		referrer: getReferrer(),
+		referrer,
 	});
 
 	type Viewport = { width: number; height: number };
@@ -140,6 +149,12 @@ const buildPageTargeting = ({
 		youtube,
 	});
 
+	const consentlessTargeting: Partial<PageTargeting> = {};
+
+	if (!consentState.canTarget) {
+		consentlessTargeting.firstvisit = isFirstVisit(referrer) ? 't' : 'f';
+	}
+
 	const pageTargets: PageTargeting = {
 		...personalisedTargeting,
 		...sharedAdTargeting,
@@ -147,6 +162,7 @@ const buildPageTargeting = ({
 		...contentTargeting,
 		...sessionTargeting,
 		...viewportTargeting,
+		...consentlessTargeting,
 	};
 
 	// filter !(string | string[]) and empty values

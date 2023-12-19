@@ -15,11 +15,12 @@ const blogs: GuPage[] = [
 	{
 		path: getTestUrl({
 			stage,
-			path: '/football/live/2023/aug/08/carabao-cup-first-round-wrexham-v-wigan-gillingham-v-southampton-live',
+			path: '/business/live/2023/nov/22/sam-altman-openai-return-jeremy-hunt-autumn-statement-tax-cuts-business-live',
 			type: 'liveblog',
 		}),
-		name: 'ad-limit',
-		expectedMinInlineSlotsOnDesktop: 5,
+		name: 'under-ad-limit',
+		expectedMinInlineSlotsOnDesktop: 4,
+		expectedMinInlineSlotsOnMobile: 6,
 	},
 	{
 		path: getTestUrl({
@@ -27,8 +28,8 @@ const blogs: GuPage[] = [
 			path: '/business/live/2023/aug/07/halifax-house-prices-gradual-drop-annual-fall-in-july-interest-rates-mortgages-business-live',
 			type: 'liveblog',
 		}),
-		expectedMinInlineSlotsOnDesktop: 4,
-		expectedMinInlineSlotsOnMobile: 5,
+		expectedMinInlineSlotsOnDesktop: 5,
+		expectedMinInlineSlotsOnMobile: 7,
 	},
 ];
 

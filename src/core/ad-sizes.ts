@@ -341,6 +341,20 @@ const slotSizeMappings = {
 			adSizes.empty,
 			adSizes.merchandisingHigh,
 			adSizes.fluid,
+			adSizes.mpu,
+		],
+		tablet: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.merchandisingHigh,
+			adSizes.fluid,
+		],
+		desktop: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.merchandisingHigh,
+			adSizes.fluid,
+			adSizes.billboard,
 		],
 	},
 	'merchandising-high-lucky': {
@@ -352,6 +366,20 @@ const slotSizeMappings = {
 			adSizes.empty,
 			adSizes.merchandising,
 			adSizes.fluid,
+			adSizes.mpu,
+		],
+		tablet: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.merchandising,
+			adSizes.fluid,
+		],
+		desktop: [
+			adSizes.outOfPage,
+			adSizes.empty,
+			adSizes.merchandising,
+			adSizes.fluid,
+			adSizes.billboard,
 		],
 	},
 	survey: {
@@ -370,7 +398,7 @@ const slotSizeMappings = {
 		phablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
 	},
 	'article-end': {
-		mobile: [adSizes.fluid],
+		mobile: [], // Mappings are dynamically added for this slot using additionalSizes
 	},
 	exclusion: {
 		mobile: [adSizes.empty],

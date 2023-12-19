@@ -2,8 +2,8 @@ import { cmp as cmp_ } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type { TCFv2ConsentState } from '@guardian/consent-management-platform/dist/types/tcfv2';
 import { setCookie, storage } from '@guardian/libs';
-import { getAuthStatus as getAuthStatus_ } from 'lib/identity/api';
-import type { AuthStatus } from 'lib/identity/api';
+import { getAuthStatus as getAuthStatus_ } from 'identity/api';
+import type { AuthStatus } from 'identity/api';
 import { getLocale as getLocale_ } from '../lib/get-locale';
 import type { Edition } from '../types';
 import { buildPageTargeting } from './build-page-targeting';
@@ -20,7 +20,7 @@ const cmp = {
 		>,
 };
 
-jest.mock('../lib/get-locale', () => ({
+jest.mock('core/lib/get-locale', () => ({
 	getLocale: jest.fn(),
 }));
 
@@ -31,7 +31,7 @@ jest.mock('@guardian/consent-management-platform', () => ({
 	},
 }));
 
-jest.mock('../../lib/identity/api', () => ({
+jest.mock('identity/api', () => ({
 	isUserLoggedInOktaRefactor: () => true,
 	getAuthStatus: jest.fn(),
 	getOptionsHeadersWithOkta: jest.fn(),
@@ -463,6 +463,7 @@ describe('Build Page Targeting', () => {
 			consent_tcfv2: 'na',
 			dcre: 'f',
 			fr: '0',
+			firstvisit: 't',
 			inskin: 'f',
 			pa: 'f',
 			pv: '123456',
@@ -965,5 +966,52 @@ describe('Build Page Targeting', () => {
 				}).dcre,
 			).toBe('f');
 		});
+	});
+
+	it('should set firstvisit to true if this is the users first visit to the page', () => {
+		jest.spyOn(document, 'referrer', 'get').mockReturnValue('');
+		jest.spyOn(window, 'location', 'get').mockReturnValue({
+			hostname: 'theguardian.com',
+		} as unknown as Location);
+		expect(
+			buildPageTargeting({
+				adFree: false,
+				clientSideParticipations: {},
+				consentState: emptyConsent,
+				isSignedIn: true,
+			}).firstvisit,
+		).toBe('t');
+	});
+
+	it("should set firstvisit to false if this isn't the users first visit to the page", () => {
+		jest.spyOn(document, 'referrer', 'get').mockReturnValue(
+			'https://theguardian.com/uk',
+		);
+		jest.spyOn(window, 'location', 'get').mockReturnValue({
+			hostname: 'theguardian.com',
+		} as unknown as Location);
+		expect(
+			buildPageTargeting({
+				adFree: false,
+				clientSideParticipations: {},
+				consentState: emptyConsent,
+				isSignedIn: true,
+			}).firstvisit,
+		).toBe('f');
+	});
+
+	it('should not set firstvisit if consent is allowed', () => {
+		jest.spyOn(document, 'referrer', 'get').mockReturnValue('');
+		jest.spyOn(window, 'location', 'get').mockReturnValue({
+			hostname: 'theguardian.com',
+		} as unknown as Location);
+		expect(
+			buildPageTargeting({
+				adFree: false,
+				clientSideParticipations: {},
+				consentState: ccpaWithConsentMock,
+				isSignedIn: true,
+			}).firstvisit,
+		).toBeUndefined();
 	});
 });

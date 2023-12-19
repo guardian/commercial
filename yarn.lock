@@ -2259,15 +2259,12 @@
     tiny-glob "^0.2.9"
     tslib "^2.4.0"
 
-"@playwright/test@^1.37.1":
-  version "1.37.1"
-  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.37.1.tgz#e7f44ae0faf1be52d6360c6bbf689fd0057d9b6f"
-  integrity sha512-bq9zTli3vWJo8S3LwB91U0qDNQDpEXnw7knhxLM0nwDvexQAwx9tO8iKDZSqqneVq+URd/WIoz+BALMqUTgdSg==
+"@playwright/test@1.40.1":
+  version "1.40.1"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.40.1.tgz#9e66322d97b1d74b9f8718bacab15080f24cde65"
+  integrity sha512-EaaawMTOeEItCRvfmkI9v6rBkF1svM8wjl/YPRrg2N2Wmp+4qJYkWtJsbew1szfKKDm6fPLy4YAanBhIlf9dWw==
   dependencies:
-    "@types/node" "*"
-    playwright-core "1.37.1"
-  optionalDependencies:
-    fsevents "2.3.2"
+    playwright "1.40.1"
 
 "@polka/url@^1.0.0-next.20":
   version "1.0.0-next.21"
@@ -6147,17 +6144,17 @@ listr2@^5.0.7:
     through "^2.3.8"
     wrap-ansi "^7.0.0"
 
-live-connect-common@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/live-connect-common/-/live-connect-common-1.0.0.tgz#9cb558cd665c0418271770854538243420cd1354"
-  integrity sha512-LBZsvykcGeVRYI1eqqXrrNZsoBdL2a8cpyrYPIiGAF/CpixbyRbvqGslaFw511lH294QB16J3fYYg21aYuaM2Q==
+live-connect-common@^v3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/live-connect-common/-/live-connect-common-3.0.2.tgz#85111a551cf848d84e7560139ddf55dccba0d468"
+  integrity sha512-K3LNKd9CpREDJbXGdwKqPojjQaxd4G6c7OAD6Yzp3wsCWTH2hV8xNAbUksSOpOcVyyOT9ilteEFXIJQJrbODxQ==
 
-live-connect-js@^5.0.0:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/live-connect-js/-/live-connect-js-5.0.1.tgz#152372cf757e8af8eb4829f32979669b26cd9052"
-  integrity sha512-X/fFbKGG8MahpqIuxndApAc9udj1g5NIxL95zKPzvqoipPYoeqvh7SCDly1hPvbqsfFj/DIbOfdWbttXzCSryw==
+live-connect-js@^6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/live-connect-js/-/live-connect-js-6.3.0.tgz#032d6015969293774430872d4d22ca8bae8ff2c9"
+  integrity sha512-1SnXQZq9gxHIb0scXPX1Da1rQ0oY2sloMGgeRreTAwhCtdQEuip/IYwgOh3/ZeZ6yT6iG9FLb7+AjORC4pO46g==
   dependencies:
-    live-connect-common "^1.0.0"
+    live-connect-common "^v3.0.2"
     tiny-hashes "1.0.1"
 
 load-json-file@^4.0.0:
@@ -6906,14 +6903,23 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.37.1:
-  version "1.37.1"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.37.1.tgz#cb517d52e2e8cb4fa71957639f1cd105d1683126"
-  integrity sha512-17EuQxlSIYCmEMwzMqusJ2ztDgJePjrbttaefgdsiqeLWidjYz9BxXaTaZWxH1J95SHGk6tjE+dwgWILJoUZfA==
+playwright-core@1.40.1:
+  version "1.40.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.40.1.tgz#442d15e86866a87d90d07af528e0afabe4c75c05"
+  integrity sha512-+hkOycxPiV534c4HhpfX6yrlawqVUzITRKwHAmYfmsVreltEl6fAZJ3DPfLMOODw0H3s1Itd6MDCWmP1fl/QvQ==
 
-prebid.js@guardian/prebid.js#0b4cccd:
-  version "7.54.5"
-  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/0b4cccd55ab4e170b36bb944e9bdd2807a9da1c5"
+playwright@1.40.1:
+  version "1.40.1"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.40.1.tgz#a11bf8dca15be5a194851dbbf3df235b9f53d7ae"
+  integrity sha512-2eHI7IioIpQ0bS1Ovg/HszsN/XKNwEG1kbzSDDmADpclKc7CyqkHw7Mg2JCz/bbCxg25QUPcjksoMW7JcIFQmw==
+  dependencies:
+    playwright-core "1.40.1"
+  optionalDependencies:
+    fsevents "2.3.2"
+
+prebid.js@guardian/prebid.js#ee7f43c7c85a5245bbe51920cfed18818866ea7b:
+  version "8.24.0"
+  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/ee7f43c7c85a5245bbe51920cfed18818866ea7b"
   dependencies:
     "@babel/core" "^7.23.2"
     "@babel/plugin-transform-runtime" "^7.18.9"
@@ -6929,7 +6935,7 @@ prebid.js@guardian/prebid.js#0b4cccd:
     express "^4.15.4"
     fun-hooks "^0.9.9"
     just-clone "^1.0.2"
-    live-connect-js "^5.0.0"
+    live-connect-js "^6.3.0"
   optionalDependencies:
     fsevents "^2.3.2"
 

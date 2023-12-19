@@ -1,5 +1,106 @@
 # @guardian/commercial
 
+## 11.29.0
+
+### Minor Changes
+
+- a6bac28: Added additional sizes to the custom event listener
+
+## 11.28.1
+
+### Patch Changes
+
+- 790278e: remove duplicate liveblog inline ads for reject-all users
+
+## 11.28.0
+
+### Minor Changes
+
+- 8384a6e: Add placement IDs to Prebid mobile-sticky
+
+## 11.27.1
+
+### Patch Changes
+
+- 642fc96: Remove client-side ad slot insertion on liveblog page load
+
+## 11.27.0
+
+### Minor Changes
+
+- 1055092: Add mobile-sticky to ROW
+- 16c4358: More commercial metrics
+
+## 11.26.1
+
+### Patch Changes
+
+- 1b13321: removes user-features module and related code as well as redundant refs to shady-pie in adblock-ask
+
+## 11.26.0
+
+### Minor Changes
+
+- c248fa0: add "firstvisit" key value for opt out
+
+## 11.25.0
+
+### Minor Changes
+
+- 293c761: Launch Kargo
+- f1c6514: Upgrade to prebid.js v8
+
+## 11.24.0
+
+### Minor Changes
+
+- 386f2f4: Removes adsInMerch AB test
+
+## 11.23.2
+
+### Patch Changes
+
+- 7fde37e: Remove GEM AB test and related functionality
+- 7f877fe: when inserting inline ad slots server-side on liveblog pages, create the event listener to insert ad slots when more blocks are added to the page
+
+## 11.23.1
+
+### Patch Changes
+
+- ce6d299: Change order of ad rendering classes
+
+## 11.23.0
+
+### Minor Changes
+
+- a5aa368: Remove ads-in-merch AB test
+
+## 11.22.0
+
+### Minor Changes
+
+- 68b9acb: Unify ad centring
+
+## 11.21.0
+
+### Minor Changes
+
+- 4fe3874: Add a new Index site id for the mobile-sticky size
+- cec24f3: ding feature switch logic
+
+## 11.20.0
+
+### Minor Changes
+
+- d7e0c71: Show MPUs and Billboard ads in merchandising and merchandising-high slots
+
+## 11.19.1
+
+### Patch Changes
+
+- a07fa56: Use correct placement IDs for AppNexus and Improve for fronts-banner ads in UK desktop
+- d0cf664: Use the full hash for the link to `guardian/prebid.js` in deps
+
 ## 11.19.0
 
 ### Minor Changes

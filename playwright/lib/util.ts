@@ -3,6 +3,8 @@ import type { UserFeaturesResponse } from '../../src/types/membership';
 
 type Stage = 'code' | 'prod' | 'dev';
 
+type ContentType = 'article' | 'liveblog' | 'front' | 'tagFront';
+
 const normalizeStage = (stage: string): Stage =>
 	['code', 'prod', 'dev'].includes(stage) ? (stage as Stage) : 'dev';
 
@@ -27,27 +29,44 @@ const getHost = (stage?: Stage | undefined) => {
 	return hostnames[stage ?? getStage()] ?? hostnames.dev;
 };
 
+const getDcrContentType = (
+	type: ContentType,
+): 'Article' | 'Front' | 'TagFront' => {
+	switch (type) {
+		case 'front':
+			return 'Front';
+
+		case 'tagFront':
+			return 'TagFront';
+
+		default:
+			return 'Article';
+	}
+};
+
 /**
  * Generate the path for the request to DCR
  */
 const getPath = (
 	stage: Stage,
-	type: 'article' | 'liveblog' | 'front' = 'article',
+	type: ContentType = 'article',
 	path: string,
 	fixtureId: string | undefined,
 	fixture: Record<string, unknown> | undefined,
 ) => {
 	if (stage === 'dev') {
-		const dcrContentType =
-			type === 'liveblog' || type === 'article' ? 'Article' : 'Front';
+		const dcrContentType = getDcrContentType(type);
+
 		if (fixtureId) {
 			return `${dcrContentType}/http://localhost:3031/renderFixtureWithId/${fixtureId}/${path}`;
 		}
+
 		if (fixture) {
 			const fixtureJson = JSON.stringify(fixture);
 			const base64Fixture = Buffer.from(fixtureJson).toString('base64');
 			return `${dcrContentType}/http://localhost:3031/renderFixture/${path}?fixture=${base64Fixture}`;
 		}
+
 		return `${dcrContentType}/https://www.theguardian.com${path}`;
 	}
 	return path;
@@ -55,13 +74,6 @@ const getPath = (
 
 /**
  * Generate a full URL i.e domain and path
- *
- * @param {'dev' | 'code' | 'prod'} stage
- * @param {string} path
- * @param {'article' | 'liveblog' | 'front' } type
- * @adtest string
- * @fixtureId string
- * @returns {string} The full URL
  */
 const getTestUrl = ({
 	stage,
@@ -73,7 +85,7 @@ const getTestUrl = ({
 }: {
 	stage: Stage;
 	path: string;
-	type?: 'article' | 'liveblog' | 'front';
+	type?: ContentType;
 	adtest?: string;
 	fixtureId?: string;
 	fixture?: Record<string, unknown>;
@@ -152,7 +164,7 @@ const clearCookie = async (context: BrowserContext, cookieName: string) => {
 const fakeLogOut = async (context: BrowserContext) =>
 	await clearCookie(context, 'GU_U');
 
-const waitForSlot = async (page: Page, slot: string) => {
+const waitForSlot = async (page: Page, slot: string, waitForIframe = true) => {
 	const slotId = `#dfp-ad--${slot}`;
 	// create a locator for the slot
 	const slotLocator = page.locator(slotId);
@@ -160,10 +172,13 @@ const waitForSlot = async (page: Page, slot: string) => {
 	await slotLocator.isVisible();
 	// scroll to it
 	await slotLocator.scrollIntoViewIfNeeded();
-	// iframe locator
-	const iframe = page.locator(`${slotId} iframe`);
-	// wait for the iframe
-	await iframe.waitFor({ state: 'visible', timeout: 120000 });
+
+	if (waitForIframe) {
+		// iframe locator
+		const iframe = page.locator(`${slotId} iframe`);
+		// wait for the iframe
+		await iframe.waitFor({ state: 'visible', timeout: 120000 });
+	}
 };
 
 const waitForIsland = async (page: Page, island: string) => {
@@ -180,11 +195,52 @@ const waitForIsland = async (page: Page, island: string) => {
 	await hyrdatedIslandLocator.waitFor({ state: 'visible', timeout: 120000 });
 };
 
+const countLiveblogInlineSlots = async (page: Page, isMobile: boolean) => {
+	const mobileSuffix = isMobile ? '--mobile' : '';
+	const locator = `#liveblog-body .ad-slot--liveblog-inline${mobileSuffix}`;
+
+	return await page.locator(locator).count();
+};
+
+const getSlotName = (url: string) => {
+	const adRequest = new URL(url);
+	const adRequestParams = adRequest.searchParams;
+
+	const prevScp = new URLSearchParams(adRequestParams.get('prev_scp') ?? '');
+
+	return prevScp.get('slot') ?? 'unknown';
+};
+
+// Warn if any slots are unfilled
+const logUnfilledSlots = (page: Page) => {
+	page.on('response', (response) => {
+		const url = response.url();
+
+		const slotName = getSlotName(url);
+
+		if (url.includes('securepubads.g.doubleclick.net/gampad/ads')) {
+			const lineItemId = response.headers()['google-lineitem-id'] ?? '';
+			const creativeId = response.headers()['google-creative-id'] ?? '';
+
+			if (
+				!lineItemId ||
+				!creativeId ||
+				lineItemId === '-2' ||
+				creativeId === '-2'
+			) {
+				console.warn(`Unfilled slot: ${slotName}`);
+			}
+		}
+	});
+};
+
 export {
+	countLiveblogInlineSlots,
 	fakeLogOut,
-	setupFakeLogin,
 	getStage,
 	getTestUrl,
-	waitForSlot,
+	setupFakeLogin,
 	waitForIsland,
+	waitForSlot,
+	logUnfilledSlots,
 };

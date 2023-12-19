@@ -1,7 +1,7 @@
 // Polyfill test environment (done by polyfill.io in production)
 require('core-js');
 
-jest.mock('./src/lib/utils/am-i-used', () => ({
+jest.mock('./src/utils/am-i-used', () => ({
 	amIUsed: jest.fn(),
 }));
 
@@ -31,6 +31,13 @@ window.guardian = {
 		onDetect: [],
 	},
 };
+
+window.fetch = jest.fn().mockImplementation(() =>
+	Promise.resolve({
+		ok: true,
+		json: () => Promise.resolve({}),
+	}),
+);
 
 // Stub matchmedia
 window.matchMedia =
