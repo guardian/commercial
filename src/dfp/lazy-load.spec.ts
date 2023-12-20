@@ -1,18 +1,18 @@
+import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'detect/detect-breakpoint';
 import type { Advert } from './Advert';
 import { dfpEnv } from './dfp-env';
 import { getAdvertById } from './get-advert-by-id';
 import { enableLazyLoad } from './lazy-load';
 import { loadAdvert } from './load-advert';
 
+const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
+	typeof getCurrentBreakpoint_
+>;
 jest.mock('lodash-es', () => ({
 	...jest.requireActual('lodash-es'),
 	// Mock `once` as the identity function so we can re-run `enableLazyLoad`
 	// and generate different intersection observers
 	once: jest.fn().mockImplementation(<T>(f: T) => f),
-}));
-
-jest.mock('experiments/eager-prebid-check', () => ({
-	getEagerPrebidVariant: jest.fn().mockReturnValue(null),
 }));
 
 jest.mock('header-bidding/request-bids', () => ({
@@ -29,6 +29,10 @@ jest.mock('./get-advert-by-id');
 
 jest.mock('./load-advert', () => ({
 	loadAdvert: jest.fn(),
+}));
+
+jest.mock('detect/detect-breakpoint', () => ({
+	getCurrentBreakpoint: jest.fn(),
 }));
 
 describe('enableLazyLoad', () => {
@@ -58,7 +62,28 @@ describe('enableLazyLoad', () => {
 		expect(windowIntersectionObserver).toBe(undefined);
 	});
 
-	it('should create a 20% observer if lazyLoadObserve is true', () => {
+	it('should create a 10% and 50% observer if lazyLoadObserve is true and on desktop', () => {
+		dfpEnv.lazyLoadObserve = true;
+
+		getCurrentBreakpoint.mockReturnValue('desktop');
+
+		enableLazyLoad(testAdvert as unknown as Advert);
+		expect(loadAdvert).not.toHaveBeenCalled();
+		expect(
+			window.IntersectionObserver as jest.Mock,
+		).toHaveBeenNthCalledWith(1, expect.anything(), {
+			rootMargin: '10% 0px',
+		});
+
+		expect(
+			window.IntersectionObserver as jest.Mock,
+		).toHaveBeenNthCalledWith(2, expect.anything(), {
+			rootMargin: '50% 0px',
+		});
+	});
+
+	it('should create a 20% observer if lazyLoadObserve is true and on mobile', () => {
+		getCurrentBreakpoint.mockReturnValue('mobile');
 		dfpEnv.lazyLoadObserve = true;
 		enableLazyLoad(testAdvert as unknown as Advert);
 		expect(loadAdvert).not.toHaveBeenCalled();

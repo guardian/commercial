@@ -1,23 +1,11 @@
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { getEagerPrebidVariant } from 'experiments/eager-prebid-check';
+import { getCurrentBreakpoint } from 'detect/detect-breakpoint';
 import { requestBidsForAd } from 'header-bidding/request-bids';
 import type { Advert } from './Advert';
 import { dfpEnv } from './dfp-env';
 import { getAdvertById } from './get-advert-by-id';
 import { loadAdvert, refreshAdvert } from './load-advert';
-
-const eagerPrebidVariant = getEagerPrebidVariant() as
-	| 'control'
-	| 'variant-1'
-	| 'variant-2'
-	| null;
-
-const lazyLoadMarginOptions = {
-	control: '20% 0px',
-	'variant-1': '20% 0px', // same as control
-	'variant-2': '10% 0px',
-};
 
 const displayAd = (advertId: string) => {
 	const advert = getAdvertById(advertId);
@@ -81,11 +69,9 @@ const onIntersectPrebid = (
 		});
 };
 
-const getDisplayAdObserver = once(() => {
+const getDisplayAdObserver = once((isEagerPrebid: boolean) => {
 	return new window.IntersectionObserver(onIntersectDisplayAd, {
-		rootMargin: eagerPrebidVariant
-			? lazyLoadMarginOptions[eagerPrebidVariant]
-			: '20% 0px',
+		rootMargin: isEagerPrebid ? '10% 0px' : '20% 0px',
 	});
 });
 
@@ -95,13 +81,17 @@ const getPrebidObserver = once(() => {
 	});
 });
 
+/**
+ * Only load Prebid eagerly on desktop and above
+ */
+const shouldRunEagerPrebid = () =>
+	['desktop', 'wide'].includes(getCurrentBreakpoint());
+
 export const enableLazyLoad = (advert: Advert): void => {
 	if (dfpEnv.lazyLoadObserve) {
-		getDisplayAdObserver().observe(advert.node);
-		if (
-			getEagerPrebidVariant() !== null &&
-			getEagerPrebidVariant() !== 'control'
-		) {
+		const isEagerPrebid = shouldRunEagerPrebid();
+		getDisplayAdObserver(isEagerPrebid).observe(advert.node);
+		if (isEagerPrebid) {
 			getPrebidObserver().observe(advert.node);
 		}
 	} else {
