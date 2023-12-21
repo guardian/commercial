@@ -194,7 +194,15 @@ const renderAdvert = (
 					 * subsequent ad refreshes as they may not be prebid ads.
 					 * */
 					advert.hasPrebidSize = false;
-
+					if (
+						(advert.size !== 'fluid' &&
+							advert.node.dataset.name === 'merchandising') ||
+						advert.node.dataset.name === 'merchandising-high'
+					) {
+						void advert.updateExtraSlotClasses(
+							'ad-slot--merchandising-hide-below-desktop',
+						);
+					}
 					const sizeCallback = sizeCallbacks[advert.size.toString()];
 					return Promise.resolve(
 						sizeCallback !== undefined
