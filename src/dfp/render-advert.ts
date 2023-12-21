@@ -95,7 +95,9 @@ sizeCallbacks[adSizes.billboard.toString()] = (advert: Advert) => {
 		advert.node.dataset.name === 'merchandising' ||
 		advert.node.dataset.name === 'merchandising-high'
 	) {
-		advert.node.classList.add('ad-slot--merchandising-billboard');
+		return advert.updateExtraSlotClasses(
+			'ad-slot--merchandising-billboard',
+		);
 	}
 	return Promise.resolve();
 };
