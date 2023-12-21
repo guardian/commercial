@@ -200,7 +200,7 @@ const renderAdvert = (
 						advert.node.dataset.name === 'merchandising-high'
 					) {
 						void advert.updateExtraSlotClasses(
-							'ad-slot--merchandising-hide-below-desktop',
+							'ad-slot--collapse-below-desktop',
 						);
 					}
 					const sizeCallback = sizeCallbacks[advert.size.toString()];
