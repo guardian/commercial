@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 11.30.0
+
+### Minor Changes
+
+- b668f24: Roll out eager prebid on desktop with 10% lazy load margin
+
+### Patch Changes
+
+- ff6fd8c: hides merch slot if billboard sized ad and viewport is phablet or smaller
+
 ## 11.29.0
 
 ### Minor Changes
