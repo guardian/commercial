@@ -20,6 +20,19 @@ const loadPage = async (page: Page, path: string, region = 'GB') => {
 
 	logUnfilledSlots(page);
 
+	page.on('console', (msg) => {
+		const label = msg.args()[0]?.toString();
+		if (label?.includes('commercial')) {
+			console.log(
+				msg
+					.args()
+					.slice(4)
+					.map((arg) => arg.toString())
+					.join(' '),
+			);
+		}
+	});
+
 	// Abort all ophan requests as it stops the page from firing the 'load' event
 	//
 	// await page.route(/ophan.theguardian.com/, (route) => {
