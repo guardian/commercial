@@ -13,6 +13,9 @@ const loadPage = async (page: Page, path: string, region = 'GB') => {
 			'gu.prefs.engagementBannerLastClosedAt',
 			`{"value":"${new Date().toISOString()}"}`,
 		);
+
+		// subscribe to commercial logger
+		window.localStorage.setItem('gu.logger', '{"value":"commercial"}');
 	}, region);
 
 	logUnfilledSlots(page);
