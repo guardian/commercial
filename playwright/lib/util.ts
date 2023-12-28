@@ -222,6 +222,10 @@ const logUnfilledSlots = (page: Page) => {
 			const lineItemId = response.headers()['google-lineitem-id'] ?? '';
 			const creativeId = response.headers()['google-creative-id'] ?? '';
 
+			console.info(`Slot: ${slotName}`);
+			console.info(`Line item: ${lineItemId}`);
+			console.info(`Creative: ${creativeId}`);
+
 			if (
 				!lineItemId ||
 				!creativeId ||
