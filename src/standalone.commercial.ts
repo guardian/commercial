@@ -21,7 +21,6 @@ import { init as prepareAdVerification } from 'ad-verification/prepare-ad-verifi
 import { EventTimer } from 'core/event-timer';
 import { adSlotIdPrefix } from 'dfp/dfp-env-globals';
 import { adFreeSlotRemove } from 'init/consented/ad-free-slot-remove';
-import { initAdblockAsk } from 'init/consented/adblock-ask';
 import { init as initArticleAsideAdverts } from 'init/consented/article-aside-adverts';
 import { init as initArticleBodyAdverts } from 'init/consented/article-body-adverts';
 import { initCommentAdverts } from 'init/consented/comment-adverts';
@@ -50,8 +49,7 @@ import { catchErrorsWithContext } from 'utils/robust';
 
 type Modules = Array<[`${string}-${string}`, () => Promise<unknown>]>;
 
-const { isDotcomRendering, frontendAssetsFullURL, switches, page } =
-	window.guardian.config;
+const { frontendAssetsFullURL, switches, page } = window.guardian.config;
 
 const decideAssetsPath = () => {
 	if (process.env.OVERRIDE_BUNDLE_PATH) {
@@ -102,32 +100,10 @@ if (!commercialFeatures.adFree) {
 		['cm-liveblogAdverts', initLiveblogAdverts],
 		['cm-commentAdverts', initCommentAdverts],
 		['cm-commentsExpandedAdverts', initCommentsExpandedAdverts],
-		['rr-adblock-ask', initAdblockAsk],
 		['cm-thirdPartyTags', initThirdPartyTags],
 		['cm-redplanet', initRedplanet],
 	);
 }
-
-/**
- * Load modules specific to `dotcom-rendering`.
- * Not sure if this is needed. Currently no separate chunk is created
- * Introduced by @tomrf1
- */
-const loadDcrBundle = async (): Promise<void> => {
-	if (!isDotcomRendering) return;
-
-	if (window.guardian.config.switches.userFeaturesDcr === true) {
-		return;
-	}
-
-	const userFeatures = await import(
-		/* webpackChunkName: "dcr" */
-		'lib/user-features'
-	);
-
-	commercialExtraModules.push(['c-user-features', userFeatures.refresh]);
-	return;
-};
 
 const loadModules = (modules: Modules, eventName: string) => {
 	const modulePromises: Array<Promise<unknown>> = [];
@@ -203,8 +179,6 @@ const bootCommercial = async (): Promise<void> => {
 	};
 
 	try {
-		await loadDcrBundle();
-
 		const allModules: Array<Parameters<typeof loadModules>> = [
 			[commercialBaseModules, 'commercialBaseModulesLoaded'],
 			[commercialExtraModules, 'commercialExtraModulesLoaded'],
@@ -243,9 +217,7 @@ const chooseAdvertisingTag = async () => {
 		void import(
 			/* webpackChunkName: "consentless" */
 			'./commercial.consentless'
-		).then(({ bootConsentless }) =>
-			bootConsentless(consentState, isDotcomRendering),
-		);
+		).then(({ bootConsentless }) => bootConsentless(consentState));
 	} else {
 		bootCommercialWhenReady();
 	}

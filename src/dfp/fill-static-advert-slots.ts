@@ -2,9 +2,12 @@ import { isNonNullable, log } from '@guardian/libs';
 import type { SizeMapping } from 'core/ad-sizes';
 import { adSizes, createAdSize } from 'core/ad-sizes';
 import { getCurrentBreakpoint } from 'detect/detect-breakpoint';
+import { isInVariantSynchronous } from 'experiments/ab';
+import { mpuWhenNoEpic } from 'experiments/tests/mpu-when-no-epic';
+import { setupPrebidOnce } from 'init/consented/prepare-prebid';
+import { removeDisabledSlots } from 'init/consented/remove-slots';
 import { commercialFeatures } from 'lib/commercial-features';
-import { setupPrebidOnce } from '../init/consented/prepare-prebid';
-import { removeDisabledSlots } from '../init/consented/remove-slots';
+import { isInUk, isInUsa } from 'utils/geo-utils';
 import { createAdvert } from './create-advert';
 import { dfpEnv } from './dfp-env';
 import { displayAds } from './display-ads';
@@ -28,6 +31,22 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 		};
 	}
 
+	if (name === 'article-end' && isInUsa()) {
+		return {
+			mobile: [adSizes.fluid],
+		};
+	}
+
+	if (
+		name === 'article-end' &&
+		isInVariantSynchronous(mpuWhenNoEpic, 'variant') &&
+		isInUk()
+	) {
+		return {
+			desktop: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
+		};
+	}
+
 	return {};
 };
 
@@ -37,7 +56,6 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
  * For dynamic ad slots that are created at js-runtime, see:
  *  - article-aside-adverts
  *  - article-body-adverts
- *  - liveblog-adverts
  *  - high-merch
  */
 const fillStaticAdvertSlots = async (): Promise<void> => {

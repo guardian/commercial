@@ -1,11 +1,12 @@
 import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import { buildAppNexusTargetingObject } from 'lib/build-page-targeting';
-import { isInAuOrNz } from 'utils/geo-utils';
+import { isInAuOrNz, isInRow } from 'utils/geo-utils';
 import type { HeaderBiddingSize } from '../prebid-types';
 import {
 	containsBillboardNotLeaderboard,
 	containsLeaderboard,
 	containsLeaderboardOrBillboard,
+	containsMobileSticky,
 	containsMpu,
 	containsMpuOrDmpu,
 	getBreakpointKey,
@@ -38,6 +39,10 @@ const getAppNexusInvCode = (sizes: HeaderBiddingSize[]): string | undefined => {
 const getAppNexusDirectPlacementId = (sizes: HeaderBiddingSize[]): string => {
 	if (isInAuOrNz()) {
 		return '11016434';
+	}
+
+	if (isInRow() && containsMobileSticky(sizes)) {
+		return '31512573';
 	}
 
 	const defaultPlacementId = '9251752';

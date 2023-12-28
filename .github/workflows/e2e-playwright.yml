@@ -56,7 +56,7 @@ jobs:
             ghcr.io/guardian/dotcom-rendering:main
 
       - name: Install Playwright Browsers
-        run: yarn playwright install --with-deps
+        run: yarn playwright install --with-deps chromium
         working-directory: ./commercial
 
       - name: Start Commercial server
@@ -64,7 +64,7 @@ jobs:
         working-directory: ./commercial
 
       - name: Run Playwright
-        run: yarn playwright test parallel-${{ matrix.group }}
+        run: yarn playwright test --shard=${{ matrix.group }}/5
         working-directory: ./commercial
 
       - uses: actions/upload-artifact@v3

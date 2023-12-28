@@ -1,7 +1,9 @@
+import { removeDisabledSlots } from 'init/consented/remove-slots';
 import { defineSlot } from './define-slot';
 
-const initFixedSlots = (): Promise<void> => {
-	// get slots
+const initFixedSlots = async (): Promise<void> => {
+	await removeDisabledSlots();
+
 	const adverts = [
 		...document.querySelectorAll<HTMLElement>(
 			'.js-ad-slot:not(.ad-slot--survey)',

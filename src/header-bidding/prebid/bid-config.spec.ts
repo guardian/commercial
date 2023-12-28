@@ -6,12 +6,12 @@ import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
 	isInUk as isInUk_,
+	isInUsa as isInUsa_,
 	isInUsOrCa as isInUsOrCa_,
 } from 'utils/geo-utils';
 import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
 import {
 	containsBillboard as containsBillboard_,
-	containsBillboardNotLeaderboard as containsBillboardNotLeaderboard_,
 	containsDmpu as containsDmpu_,
 	containsLeaderboard as containsLeaderboard_,
 	containsLeaderboardOrBillboard as containsLeaderboardOrBillboard_,
@@ -31,10 +31,6 @@ import {
 	stripMobileSuffix as stripMobileSuffix_,
 } from '../utils';
 import { _, bids } from './bid-config';
-import {
-	getImprovePlacementId,
-	getImproveSkinPlacementId,
-} from './improve-digital';
 
 const mockPageTargeting = {} as unknown as PageTargeting;
 
@@ -50,6 +46,7 @@ const {
 	getXaxisPlacementId,
 	getTrustXAdUnitId,
 	indexExchangeBidders,
+	getOzonePlacementId,
 } = _;
 
 jest.mock('lib/build-page-targeting', () => ({
@@ -60,8 +57,6 @@ jest.mock('lib/build-page-targeting', () => ({
 
 jest.mock('../utils');
 const containsBillboard = containsBillboard_ as jest.Mock;
-const containsBillboardNotLeaderboard =
-	containsBillboardNotLeaderboard_ as jest.Mock;
 const containsDmpu = containsDmpu_ as jest.Mock;
 const containsLeaderboard = containsLeaderboard_ as jest.Mock;
 const containsLeaderboardOrBillboard =
@@ -87,6 +82,7 @@ const isInAuOrNz = isInAuOrNz_ as jest.Mock;
 const isInRow = isInRow_ as jest.Mock;
 const isInUk = isInUk_ as jest.Mock;
 const isInUsOrCa = isInUsOrCa_ as jest.Mock;
+const isInUsa = isInUsa_ as jest.Mock;
 
 jest.mock('experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn(),
@@ -123,208 +119,6 @@ const resetConfig = () => {
 	window.guardian.config.page.section = 'Magic';
 	window.guardian.config.page.isDev = false;
 };
-
-describe('getImprovePlacementId', () => {
-	beforeEach(() => {
-		resetConfig();
-	});
-
-	afterEach(() => {
-		jest.resetAllMocks();
-	});
-
-	const generateTestIds = () => {
-		const prebidSizes: HeaderBiddingSize[][] = [
-			[createAdSize(300, 250)],
-			[createAdSize(300, 600)],
-			[createAdSize(970, 250)],
-			[createAdSize(728, 90)],
-			[createAdSize(1, 2)],
-		];
-
-		return prebidSizes.map((size) => getImprovePlacementId(size));
-	};
-
-	test('should return -1 if no cases match', () => {
-		expect(getImprovePlacementId([createAdSize(1, 2)])).toBe(-1);
-	});
-
-	test('should give the expected values when there is a billboard but NOT a leaderboard', () => {
-		isInUk.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('D');
-		containsBillboardNotLeaderboard.mockReturnValueOnce(true);
-		containsMpuOrDmpu.mockReturnValueOnce(false);
-		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
-
-		expect(getImprovePlacementId([])).toEqual(22987847);
-	});
-
-	test('should give the expected values when there is a leaderboard but NOT a billboard', () => {
-		isInUk.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('D');
-		containsBillboardNotLeaderboard.mockReturnValueOnce(false);
-		containsMpuOrDmpu.mockReturnValueOnce(false);
-		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
-
-		expect(getImprovePlacementId([])).toEqual(1116397);
-	});
-
-	test('should give the expected values when there is a billboard AND a leaderboard', () => {
-		isInUk.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('D');
-		containsBillboardNotLeaderboard.mockReturnValueOnce(false);
-		containsMpuOrDmpu.mockReturnValueOnce(false);
-		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
-
-		expect(getImprovePlacementId([])).toEqual(1116397);
-	});
-
-	test('should return the expected values when geolocated in UK and on desktop device', () => {
-		isInUk.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('D');
-		containsMpuOrDmpu.mockReturnValueOnce(true);
-		containsMpuOrDmpu.mockReturnValueOnce(true);
-		containsMpuOrDmpu.mockReturnValue(false);
-		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
-		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
-		containsLeaderboardOrBillboard.mockReturnValue(false);
-		expect(generateTestIds()).toEqual([
-			1116396, 1116396, 1116397, 1116397, -1,
-		]);
-	});
-
-	test('should return the expected values when geolocated in UK and on tablet device', () => {
-		isInUk.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('T');
-		containsMpuOrDmpu.mockReturnValueOnce(true);
-		containsMpuOrDmpu.mockReturnValueOnce(true);
-		containsMpuOrDmpu.mockReturnValue(false);
-		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
-		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
-		containsLeaderboardOrBillboard.mockReturnValue(false);
-		expect(generateTestIds()).toEqual([
-			1116398, 1116398, 1116399, 1116399, -1,
-		]);
-	});
-
-	test('should return the expected values when geolocated in UK and on mobile device', () => {
-		isInUk.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('M');
-		containsMpuOrDmpu.mockReturnValueOnce(true);
-		containsMpuOrDmpu.mockReturnValueOnce(true);
-		containsMpuOrDmpu.mockReturnValue(false);
-		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
-		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
-		containsLeaderboardOrBillboard.mockReturnValue(false);
-		expect(generateTestIds()).toEqual([1116400, 1116400, -1, -1, -1]);
-	});
-
-	test('should return the expected values when geolocated in ROW region and on desktop device', () => {
-		isInRow.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('D');
-		containsMpuOrDmpu.mockReturnValueOnce(true);
-		containsMpuOrDmpu.mockReturnValueOnce(true);
-		containsMpuOrDmpu.mockReturnValue(false);
-		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
-		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
-		containsLeaderboardOrBillboard.mockReturnValue(false);
-		expect(generateTestIds()).toEqual([
-			1116420, 1116420, 1116421, 1116421, -1,
-		]);
-	});
-
-	test('should return the expected values when not geolocated in ROW region and on tablet device', () => {
-		isInRow.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('T');
-		containsMpuOrDmpu.mockReturnValueOnce(true);
-		containsMpuOrDmpu.mockReturnValueOnce(true);
-		containsMpuOrDmpu.mockReturnValue(false);
-		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
-		containsLeaderboardOrBillboard.mockReturnValueOnce(true);
-		containsLeaderboardOrBillboard.mockReturnValue(false);
-		expect(generateTestIds()).toEqual([
-			1116422, 1116422, 1116423, 1116423, -1,
-		]);
-	});
-
-	test('should return the expected values when geolocated in ROW region and on mobile device', () => {
-		isInRow.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('M');
-		containsMpuOrDmpu.mockReturnValueOnce(true);
-		containsMpuOrDmpu.mockReturnValueOnce(true);
-		containsMpuOrDmpu.mockReturnValue(false);
-		expect(generateTestIds()).toEqual([1116424, 1116424, -1, -1, -1]);
-	});
-
-	test('should return -1 if geolocated in US or AU regions', () => {
-		isInUsOrCa.mockReturnValue(true);
-		expect(generateTestIds()).toEqual([-1, -1, -1, -1, -1]);
-		isInAuOrNz.mockReturnValue(true);
-		expect(generateTestIds()).toEqual([-1, -1, -1, -1, -1]);
-	});
-});
-
-describe('getImproveSkinPlacementId', () => {
-	beforeEach(() => {
-		resetConfig();
-		getBreakpointKey.mockReturnValue('D');
-	});
-
-	afterEach(() => {
-		jest.resetAllMocks();
-	});
-
-	const ID_UK = 22526482;
-	const ID_ROW = 22526483;
-
-	test(`should return ${ID_UK} if in the UK`, () => {
-		isInUk.mockReturnValue(true);
-		expect(getImproveSkinPlacementId()).toBe(ID_UK);
-	});
-
-	test(`should return ${ID_UK} when geolocated in UK and on desktop device`, () => {
-		isInUk.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('D');
-		expect(getImproveSkinPlacementId()).toEqual(ID_UK);
-	});
-
-	test('should return -1 when geolocated in UK and on tablet device', () => {
-		isInUk.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('T');
-		expect(getImproveSkinPlacementId()).toEqual(-1);
-	});
-
-	test('should return -1 values when geolocated in UK and on mobile device', () => {
-		isInUk.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('M');
-		expect(getImproveSkinPlacementId()).toEqual(-1);
-	});
-
-	test(`should return ${ID_ROW} when geolocated in ROW region and on desktop device`, () => {
-		isInRow.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('D');
-		expect(getImproveSkinPlacementId()).toEqual(ID_ROW);
-	});
-
-	test('should return -1 when not geolocated in ROW region and on tablet device', () => {
-		isInRow.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('T');
-		expect(getImproveSkinPlacementId()).toEqual(-1);
-	});
-
-	test('should return -1 when geolocated in ROW region and on mobile device', () => {
-		isInRow.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('M');
-		expect(getImproveSkinPlacementId()).toEqual(-1);
-	});
-
-	test('should return -1 if geolocated in US or AU regions', () => {
-		isInUsOrCa.mockReturnValue(true);
-		expect(getImproveSkinPlacementId()).toEqual(-1);
-		isInAuOrNz.mockReturnValue(true);
-		expect(getImproveSkinPlacementId()).toEqual(-1);
-	});
-});
 
 describe('getTrustXAdUnitId', () => {
 	beforeEach(() => {
@@ -552,13 +346,11 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 		)[2];
-		if (typeof openXBid !== 'undefined') {
-			expect(openXBid.params).toEqual({
-				customParams: 'someAppNexusTargetingObject',
-				delDomain: 'guardian-d.openx.net',
-				unit: '540279541',
-			});
-		}
+		expect(openXBid?.params).toEqual({
+			customParams: 'someAppNexusTargetingObject',
+			delDomain: 'guardian-d.openx.net',
+			unit: '540279541',
+		});
 	});
 
 	test('should use correct parameters in OpenX bids geolocated in US', () => {
@@ -569,13 +361,11 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 		)[2];
-		if (typeof openXBid !== 'undefined') {
-			expect(openXBid.params).toEqual({
-				customParams: 'someAppNexusTargetingObject',
-				delDomain: 'guardian-us-d.openx.net',
-				unit: '540279544',
-			});
-		}
+		expect(openXBid?.params).toEqual({
+			customParams: 'someAppNexusTargetingObject',
+			delDomain: 'guardian-us-d.openx.net',
+			unit: '540279544',
+		});
 	});
 
 	test('should use correct parameters in OpenX bids geolocated in AU', () => {
@@ -586,16 +376,14 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 		)[2];
-		if (typeof openXBid !== 'undefined') {
-			expect(openXBid.params).toEqual({
-				customParams: 'someAppNexusTargetingObject',
-				delDomain: 'guardian-aus-d.openx.net',
-				unit: '540279542',
-			});
-		}
+		expect(openXBid?.params).toEqual({
+			customParams: 'someAppNexusTargetingObject',
+			delDomain: 'guardian-aus-d.openx.net',
+			unit: '540279542',
+		});
 	});
 
-	test('should use correct parameters in OpenX bids geolocated in FR', () => {
+	test('should use correct parameters in OpenX bids geolocated in FR for top-above-nav', () => {
 		shouldIncludeOpenx.mockReturnValue(true);
 		isInRow.mockReturnValue(true);
 		const openXBid = bids(
@@ -603,13 +391,26 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 		)[2];
-		if (typeof openXBid !== 'undefined') {
-			expect(openXBid.params).toEqual({
-				customParams: 'someAppNexusTargetingObject',
-				delDomain: 'guardian-d.openx.net',
-				unit: '540279541',
-			});
-		}
+		expect(openXBid?.params).toEqual({
+			customParams: 'someAppNexusTargetingObject',
+			delDomain: 'guardian-d.openx.net',
+			unit: '540279541',
+		});
+	});
+	test('should use correct parameters in OpenX bids geolocated in FR for mobile-sticky', () => {
+		shouldIncludeOpenx.mockReturnValue(true);
+		isInRow.mockReturnValue(true);
+		containsMobileSticky.mockReturnValue(true);
+		const openXBid = bids(
+			'dfp-ad--mobile-sticky',
+			[createAdSize(320, 50)],
+			mockPageTargeting,
+		)[2];
+		expect(openXBid?.params).toEqual({
+			customParams: 'someAppNexusTargetingObject',
+			delDomain: 'guardian-d.openx.net',
+			unit: '560429384',
+		});
 	});
 });
 
@@ -759,10 +560,6 @@ describe('getXaxisPlacementId', () => {
 		return prebidSizes.map(getXaxisPlacementId);
 	};
 
-	test('should return -1 if no cases match', () => {
-		expect(getImprovePlacementId([createAdSize(1, 2)])).toBe(-1);
-	});
-
 	test('should return the expected values for desktop device', () => {
 		getBreakpointKey.mockReturnValue('D');
 
@@ -783,5 +580,25 @@ describe('getXaxisPlacementId', () => {
 		expect(generateTestIds()).toEqual([
 			20943669, 20943669, 20943670, 20943670, 20943670,
 		]);
+	});
+});
+
+describe('getOzonePlacementId', () => {
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
+
+	test('should return correct placementID for mobile-sticky in US', () => {
+		isInUsa.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMobileSticky.mockReturnValue(true);
+		expect(getOzonePlacementId([createAdSize(320, 50)])).toBe('3500014217');
+	});
+
+	test('should return correct placementID for mobile-sticky in ROW', () => {
+		isInRow.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMobileSticky.mockReturnValue(true);
+		expect(getOzonePlacementId([createAdSize(320, 50)])).toBe('1500000260');
 	});
 });

@@ -1,16 +1,16 @@
 import type { Request } from '@playwright/test';
 import { expect, test } from '@playwright/test';
-import { allPages, articles } from '../../fixtures/pages';
-import type { GuPage } from '../../fixtures/pages/Page';
-import { bidderURLs, wins } from '../../fixtures/prebid';
-import { cmpAcceptAll } from '../../lib/cmp';
+import { allPages, articles } from '../fixtures/pages';
+import type { GuPage } from '../fixtures/pages/Page';
+import { bidderURLs, wins } from '../fixtures/prebid';
+import { cmpAcceptAll } from '../lib/cmp';
 import {
 	assertRequestParameter,
 	gamUrl,
 	getEncodedParamsFromRequest,
 	waitForGAMRequestForSlot,
-} from '../../lib/gam';
-import { loadPage } from '../../lib/load-page';
+} from '../lib/gam';
+import { loadPage } from '../lib/load-page';
 
 const article = articles[0] as unknown as GuPage;
 

@@ -1,9 +1,9 @@
 import { breakpoints } from '@guardian/source-foundations';
 import { test } from '@playwright/test';
-import { allPages } from '../../fixtures/pages';
-import { cmpAcceptAll } from '../../lib/cmp';
-import { loadPage } from '../../lib/load-page';
-import { waitForSlot } from '../../lib/util';
+import { allPages } from '../fixtures/pages';
+import { cmpAcceptAll } from '../lib/cmp';
+import { loadPage } from '../lib/load-page';
+import { waitForSlot } from '../lib/util';
 
 test.describe('right slot', () => {
 	[...allPages].forEach(({ path }, index) => {
@@ -11,7 +11,7 @@ test.describe('right slot', () => {
 			// viewport width has to be >= 1300px for the right column to appear on liveblogs
 			await page.setViewportSize({
 				width: breakpoints['wide'],
-				height: 200,
+				height: 800,
 			});
 
 			await loadPage(page, path);

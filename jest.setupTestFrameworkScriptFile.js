@@ -32,6 +32,13 @@ window.guardian = {
 	},
 };
 
+window.fetch = jest.fn().mockImplementation(() =>
+	Promise.resolve({
+		ok: true,
+		json: () => Promise.resolve({}),
+	}),
+);
+
 // Stub matchmedia
 window.matchMedia =
 	window.matchMedia ||

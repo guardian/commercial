@@ -398,7 +398,7 @@ const slotSizeMappings = {
 		phablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
 	},
 	'article-end': {
-		mobile: [adSizes.fluid],
+		mobile: [], // Mappings are dynamically added for this slot using additionalSizes
 	},
 	exclusion: {
 		mobile: [adSizes.empty],

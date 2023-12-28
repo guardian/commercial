@@ -1,7 +1,7 @@
 import type { ABTest } from '@guardian/ab-core';
 import { consentlessAds } from './tests/consentlessAds';
-import { eagerPrebid } from './tests/eager-prebid';
 import { integrateIma } from './tests/integrate-ima';
+import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
 import { prebidKargo } from './tests/prebid-kargo';
 import { publicGoodTest } from './tests/public-good';
 import { signInGateCopyTestJan2023 } from './tests/sign-in-gate-copy-test-variant';
@@ -16,7 +16,7 @@ export const concurrentTests: readonly ABTest[] = [
 	signInGateCopyTestJan2023,
 	consentlessAds,
 	integrateIma,
-	eagerPrebid,
 	publicGoodTest,
 	prebidKargo,
+	mpuWhenNoEpic,
 ];

@@ -1,5 +1,71 @@
 # @guardian/commercial
 
+## 11.30.0
+
+### Minor Changes
+
+- b668f24: Roll out eager prebid on desktop with 10% lazy load margin
+
+### Patch Changes
+
+- ff6fd8c: hides merch slot if billboard sized ad and viewport is phablet or smaller
+
+## 11.29.0
+
+### Minor Changes
+
+- a6bac28: Added additional sizes to the custom event listener
+
+## 11.28.1
+
+### Patch Changes
+
+- 790278e: remove duplicate liveblog inline ads for reject-all users
+
+## 11.28.0
+
+### Minor Changes
+
+- 8384a6e: Add placement IDs to Prebid mobile-sticky
+
+## 11.27.1
+
+### Patch Changes
+
+- 642fc96: Remove client-side ad slot insertion on liveblog page load
+
+## 11.27.0
+
+### Minor Changes
+
+- 1055092: Add mobile-sticky to ROW
+- 16c4358: More commercial metrics
+
+## 11.26.1
+
+### Patch Changes
+
+- 1b13321: removes user-features module and related code as well as redundant refs to shady-pie in adblock-ask
+
+## 11.26.0
+
+### Minor Changes
+
+- c248fa0: add "firstvisit" key value for opt out
+
+## 11.25.0
+
+### Minor Changes
+
+- 293c761: Launch Kargo
+- f1c6514: Upgrade to prebid.js v8
+
+## 11.24.0
+
+### Minor Changes
+
+- 386f2f4: Removes adsInMerch AB test
+
 ## 11.23.2
 
 ### Patch Changes

@@ -1,110 +1,141 @@
-import { spaceFiller } from 'spacefinder/space-filler';
-import type {
-	SpacefinderRules,
-	SpacefinderWriter,
-} from 'spacefinder/spacefinder';
 import { _, init } from './liveblog-adverts';
 
-const { getSlotName } = _;
+const {
+	getSlotName,
+	getLowestContentBlock,
+	getFirstContentBlockAboveAd,
+	getStartingContentBlock,
+} = _;
 
 jest.mock('utils/report-error', () => ({
 	reportError: jest.fn(),
 }));
-
 jest.mock('header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));
-
 jest.mock('ophan-tracker-js', () => null);
-
 jest.mock('utils/mediator');
-
 jest.mock('spacefinder/space-filler', () => ({
 	spaceFiller: {
 		fillSpace: jest.fn(() => Promise.resolve(true)),
 	},
 }));
-
 jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {
 		liveblogAdverts: true,
 	},
 }));
-
 jest.mock('dfp/fill-dynamic-advert-slot');
 
-const spaceFillerStub = spaceFiller.fillSpace as jest.MockedFunction<
-	typeof spaceFiller.fillSpace
->;
-
-const createFillSpaceMock =
-	(paras: HTMLElement[]) =>
-	(_: SpacefinderRules, writerCallback: SpacefinderWriter) => {
-		void writerCallback(paras);
-		return Promise.resolve(true);
-	};
-
 describe('Liveblog Dynamic Adverts', () => {
-	beforeEach(() => {
-		document.body.innerHTML = `
-			<div class="js-liveblog-body">
-				<div class="block x1"></div>
-				<div class="block x2"></div>
-				<div class="block x3"></div>
-				<div class="block x4"></div>
-				<div class="block x5"></div>
-				<div class="block x6"></div>
-				<div class="block x7"></div>
-				<div class="block x8"></div>
-				<div class="block x9"></div>
-				<div class="block x10"></div>
-				<div class="block x11"></div>
-				<div class="block x12"></div>
-			</div>';
-		`;
-	});
-
-	afterEach(() => {
-		document.body.innerHTML = '';
-	});
-
 	it('should exist', () => {
 		expect(init).toBeDefined();
 	});
 
-	it('should return the correct slot name', () => {
-		const firstMobileSlot = getSlotName(true, 0);
-		const otherMobileSlot = getSlotName(true, 2);
-		const desktopSlot = getSlotName(false, 0);
+	describe('getSlotName', () => {
+		it('should return the correct slot name', () => {
+			const firstMobileSlot = getSlotName(true, 0);
+			const thirdMobileSlot = getSlotName(true, 2);
+			const firstDesktopSlot = getSlotName(false, 0);
 
-		expect(firstMobileSlot).toBe('top-above-nav');
-		expect(otherMobileSlot).toBe('inline2');
-		expect(desktopSlot).toBe('inline1');
+			expect(firstMobileSlot).toBe('top-above-nav');
+			expect(thirdMobileSlot).toBe('inline2');
+			expect(firstDesktopSlot).toBe('inline1');
+		});
 	});
 
-	it('should insert ad slots', async () => {
-		const block1 = document.querySelector<HTMLElement>('.x1');
-		const block2 = document.querySelector<HTMLElement>('.x12');
-		if (block1 === null || block2 === null) {
-			throw Error();
-		}
+	describe('getLowestContentBlock', () => {
+		it('should find the lowest slot on the page', async () => {
+			document.body.innerHTML = `
+				<div class="js-liveblog-body">
+					<div class="block x1"></div>
+					<div class="block x2"></div>
+					<div class="block x3"></div>
+				</div>';
+			`;
 
-		spaceFillerStub.mockImplementationOnce(
-			createFillSpaceMock([block1, block2]),
-		);
+			const result = await getLowestContentBlock();
 
-		return init().then(() => {
-			expect(
-				document.querySelector('.x1')?.nextElementSibling
-					?.firstElementChild?.id,
-			).toEqual('dfp-ad--inline1');
-			expect(
-				document.querySelector('.x12')?.nextElementSibling
-					?.firstElementChild?.id,
-			).toEqual('dfp-ad--inline2');
-			expect(
-				document.querySelector('.js-liveblog-body')?.children.length,
-			).toBe(14);
+			expect(result?.classList).toContain('x3');
+		});
+	});
+
+	describe('getFirstContentBlockAboveAd', () => {
+		it('should find the first content block above the ad slot', async () => {
+			document.body.innerHTML = `
+				<div class="js-liveblog-body">
+					<article class="block x1"></article>
+					<article class="block x2"></article>
+					<div class="ad-slot-container ad-slot-desktop"><div id="dfp-ad--inline1" /></div>
+					<article class="block x3"></article>
+				</div>';
+			`;
+
+			const topAdvert = document.querySelector(
+				'.js-liveblog-body > .ad-slot-container.ad-slot-desktop',
+			) as Element;
+
+			const result = await getFirstContentBlockAboveAd(topAdvert);
+
+			expect(result?.classList).toContain('x2');
+		});
+
+		it('should find the first content block above the top ad slot', async () => {
+			document.body.innerHTML = `
+				<div class="js-liveblog-body">
+					<article class="block x1"></article>
+					<article class="block x2"></article>
+					<article class="block x3"></article>
+					<div class="ad-slot-container ad-slot-desktop"><div id="dfp-ad--inline1" /></div>
+					<article class="block x4"></article>
+					<article class="block x5"></article>
+					<div class="ad-slot-container ad-slot-desktop"><div id="dfp-ad--inline2" /></div>
+					<article class="block x6"></article>
+				</div>';
+			`;
+
+			const topAdvert = document.querySelector(
+				'.js-liveblog-body > .ad-slot-container.ad-slot-desktop',
+			) as Element;
+
+			const result = await getFirstContentBlockAboveAd(topAdvert);
+
+			expect(result?.classList).toContain('x3');
+		});
+	});
+
+	describe('getStartingContentBlock', () => {
+		it('should find the correct starting block', async () => {
+			document.body.innerHTML = `
+				<div class="js-liveblog-body">
+					<article class="block x1"></article>
+					<div class="ad-slot-container ad-slot-desktop"><div id="dfp-ad--inline1" /></div>
+					<article class="block x2"></article>
+					<article class="block x3"></article>
+				</div>';
+			`;
+
+			const result = await getStartingContentBlock(
+				'.ad-slot-container.ad-slot-desktop',
+			);
+
+			expect(result?.classList).toContain('x1');
+		});
+
+		it('should find the lowest block when zero ads', async () => {
+			document.body.innerHTML = `
+				<div class="js-liveblog-body">
+					<article class="block x1"></article>
+					<article class="block x2"></article>
+					<article class="block x3"></article>
+				</div>';
+			`;
+
+			const result = await getStartingContentBlock(
+				'.ad-slot-container.ad-slot-desktop',
+			);
+
+			expect(result?.classList).toContain('x3');
 		});
 	});
 });

@@ -102,8 +102,7 @@ const filterNearbyCandidates =
  * This function ensures we don't insert large height ads at the bottom of articles,
  * when there's not enough room.
  *
- * This is a hotfix to prevent adverts at the bottom of articles pushing down content.
- * Nudge @chrislomaxjones if you're reading this in 2023
+ * This prevents adverts at the bottom of articles pushing down content.
  */
 const decideAdditionalSizes = async (
 	winningPara: HTMLElement,
