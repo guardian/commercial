@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.31.0
+
+### Minor Changes
+
+- 5785f7f: Revert "collapse merchandise ad slots on viewport resize"
+
 ## 11.30.0
 
 ### Minor Changes
