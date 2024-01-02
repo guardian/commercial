@@ -178,9 +178,6 @@ const waitForSlot = async (page: Page, slot: string, waitForIframe = true) => {
 		const iframe = page.locator(`${slotId} iframe`);
 		// wait for the iframe
 		await iframe.waitFor({ state: 'visible', timeout: 120000 });
-
-		const text = await iframe.innerHTML();
-		console.log(text);
 	}
 };
 
@@ -225,10 +222,6 @@ const logUnfilledSlots = (page: Page) => {
 			const lineItemId = response.headers()['google-lineitem-id'] ?? '';
 			const creativeId = response.headers()['google-creative-id'] ?? '';
 
-			console.info(`Slot: ${slotName}`);
-			console.info(`Line item: ${lineItemId}`);
-			console.info(`Creative: ${creativeId}`);
-
 			if (
 				!lineItemId ||
 				!creativeId ||
@@ -237,6 +230,22 @@ const logUnfilledSlots = (page: Page) => {
 			) {
 				console.warn(`Unfilled slot: ${slotName}`);
 			}
+		}
+	});
+};
+
+// Log commercial logs to playwight console
+const logCommercial = (page: Page) => {
+	page.on('console', (msg) => {
+		const label = msg.args()[0]?.toString();
+		if (label?.includes('commercial')) {
+			console.log(
+				msg
+					.args()
+					.slice(4)
+					.map((arg) => arg.toString())
+					.join(' '),
+			);
 		}
 	});
 };
@@ -250,4 +259,5 @@ export {
 	waitForIsland,
 	waitForSlot,
 	logUnfilledSlots,
+	logCommercial,
 };

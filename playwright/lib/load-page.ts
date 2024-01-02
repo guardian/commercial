@@ -20,18 +20,8 @@ const loadPage = async (page: Page, path: string, region = 'GB') => {
 
 	logUnfilledSlots(page);
 
-	page.on('console', (msg) => {
-		const label = msg.args()[0]?.toString();
-		if (label?.includes('commercial')) {
-			console.log(
-				msg
-					.args()
-					.slice(4)
-					.map((arg) => arg.toString())
-					.join(' '),
-			);
-		}
-	});
+	// Uncomment to log commercial logs
+	// logCommercial(page);
 
 	// Abort all ophan requests as it stops the page from firing the 'load' event
 	//
