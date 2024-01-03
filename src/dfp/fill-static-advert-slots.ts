@@ -56,6 +56,7 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
  * For dynamic ad slots that are created at js-runtime, see:
  *  - article-aside-adverts
  *  - article-body-adverts
+ *  - liveblog-adverts
  *  - high-merch
  */
 const fillStaticAdvertSlots = async (): Promise<void> => {
