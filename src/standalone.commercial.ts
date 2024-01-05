@@ -45,6 +45,7 @@ import { init as initTrackScrollDepth } from 'init/consented/track-scroll-depth'
 import { init as setAdTestCookie } from 'init/shared/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from 'init/shared/set-adtest-in-labels-cookie';
 import { commercialFeatures } from 'lib/commercial-features';
+import { reloadPageOnConsentChange } from 'lib/reload-page-on-consent-change';
 import { reportError } from 'utils/report-error';
 import { catchErrorsWithContext } from 'utils/robust';
 
@@ -80,6 +81,7 @@ const commercialExtraModules: Modules = [
 	['cm-teadsCookieless', initTeadsCookieless],
 	['cm-trackScrollDepth', initTrackScrollDepth],
 	['cm-trackGpcSignal', initTrackGpcSignal],
+	['cm-reloadPageOnConsentChange', reloadPageOnConsentChange],
 ];
 
 if (!commercialFeatures.adFree) {
