@@ -8,8 +8,8 @@ import { a9Apstag } from 'core/__vendor/a9-apstag';
 import { isGoogleProxy } from 'detect/detect-google-proxy';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInCanada } from 'utils/geo-utils';
-import { a9 } from '../header-bidding/a9/a9';
-import { shouldIncludeOnlyA9 } from '../header-bidding/utils';
+import { a9 } from '../../header-bidding/a9/a9';
+import { shouldIncludeOnlyA9 } from '../../header-bidding/utils';
 
 const shouldLoadA9 = () =>
 	// There are two articles that InfoSec would like to avoid loading scripts on

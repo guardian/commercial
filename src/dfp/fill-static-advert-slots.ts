@@ -4,14 +4,14 @@ import { adSizes, createAdSize } from 'core/ad-sizes';
 import { getCurrentBreakpoint } from 'detect/detect-breakpoint';
 import { isInVariantSynchronous } from 'experiments/ab';
 import { mpuWhenNoEpic } from 'experiments/tests/mpu-when-no-epic';
+import { setupPrebidOnce } from 'init/consented/prepare-prebid';
+import { removeDisabledSlots } from 'init/consented/remove-slots';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInUk, isInUsa } from 'utils/geo-utils';
-import { removeDisabledSlots } from '../lib/remove-slots';
 import { createAdvert } from './create-advert';
 import { dfpEnv } from './dfp-env';
 import { displayAds } from './display-ads';
 import { displayLazyAds } from './display-lazy-ads';
-import { setupPrebidOnce } from './prepare-prebid';
 import { queueAdvert } from './queue-advert';
 
 const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {

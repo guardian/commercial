@@ -23,7 +23,7 @@ jest.mock('config', () => ({
 	get: jest.fn(() => false),
 }));
 
-jest.mock('./Advert', () => jest.fn(() => ({ advert: jest.fn() })));
+jest.mock('dfp/Advert', () => jest.fn(() => ({ advert: jest.fn() })));
 
 jest.mock('./get-advert-by-id');
 

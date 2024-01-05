@@ -8,8 +8,8 @@ import { once } from 'lodash-es';
 import { isGoogleProxy } from 'detect/detect-google-proxy';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInCanada } from 'utils/geo-utils';
-import { prebid } from '../header-bidding/prebid/prebid';
-import { shouldIncludeOnlyA9 } from '../header-bidding/utils';
+import { prebid } from '../../header-bidding/prebid/prebid';
+import { shouldIncludeOnlyA9 } from '../../header-bidding/utils';
 
 const shouldLoadPrebid = () =>
 	!isGoogleProxy() &&

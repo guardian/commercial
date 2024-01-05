@@ -18,12 +18,15 @@ import type {
 	SpacefinderRules,
 	SpacefinderWriter,
 } from 'spacefinder/spacefinder';
-import { fillDynamicAdSlot } from '../dfp/fill-dynamic-advert-slot';
-import { waitForAdvert } from '../dfp/wait-for-advert';
-import fastdom from '../lib/fastdom-promise';
-import { mediator } from '../utils/mediator';
-import { initCarrot } from './carrot-traffic-driver';
-import { computeStickyHeights, insertHeightStyles } from './sticky-inlines';
+import { fillDynamicAdSlot } from '../../dfp/fill-dynamic-advert-slot';
+import { waitForAdvert } from '../../dfp/wait-for-advert';
+import fastdom from '../../lib/fastdom-promise';
+import { initCarrot } from '../../spacefinder/carrot-traffic-driver';
+import {
+	computeStickyHeights,
+	insertHeightStyles,
+} from '../../spacefinder/sticky-inlines';
+import { mediator } from '../../utils/mediator';
 
 type SlotName = Parameters<typeof createAdSlot>[0];
 

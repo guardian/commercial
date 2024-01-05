@@ -13,9 +13,15 @@ const loadPage = async (page: Page, path: string, region = 'GB') => {
 			'gu.prefs.engagementBannerLastClosedAt',
 			`{"value":"${new Date().toISOString()}"}`,
 		);
+
+		// subscribe to commercial logger
+		window.localStorage.setItem('gu.logger', '{"value":"commercial"}');
 	}, region);
 
 	logUnfilledSlots(page);
+
+	// Uncomment to log commercial logs
+	// logCommercial(page);
 
 	// Abort all ophan requests as it stops the page from firing the 'load' event
 	//

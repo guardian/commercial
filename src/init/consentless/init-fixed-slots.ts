@@ -1,4 +1,4 @@
-import { removeDisabledSlots } from 'lib/remove-slots';
+import { removeDisabledSlots } from 'init/consented/remove-slots';
 import { defineSlot } from './define-slot';
 
 const initFixedSlots = async (): Promise<void> => {

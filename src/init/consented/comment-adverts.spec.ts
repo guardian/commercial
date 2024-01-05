@@ -3,12 +3,12 @@ import { adSizes } from 'core/ad-sizes';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'detect/detect-breakpoint';
 import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from 'identity/api';
 import { commercialFeatures } from 'lib/commercial-features';
-import type { Advert } from '../dfp/Advert';
-import { fillDynamicAdSlot } from '../dfp/fill-dynamic-advert-slot';
-import { getAdvertById as getAdvertById_ } from '../dfp/get-advert-by-id';
-import { refreshAdvert as refreshAdvert_ } from '../dfp/load-advert';
-import fastdom from '../lib/fastdom-promise';
-import { mediator as fakeMediator } from '../utils/mediator';
+import type { Advert } from '../../dfp/Advert';
+import { fillDynamicAdSlot } from '../../dfp/fill-dynamic-advert-slot';
+import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
+import { refreshAdvert as refreshAdvert_ } from '../../dfp/load-advert';
+import fastdom from '../../lib/fastdom-promise';
+import { mediator as fakeMediator } from '../../utils/mediator';
 import { _, initCommentAdverts } from './comment-adverts';
 
 // Mock advert type by overwriting slot property with only one function for defining size mapping
