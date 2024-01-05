@@ -9,7 +9,6 @@ import { init as prepareGoogletag } from 'init/consented/prepare-googletag';
 import { initPermutive } from 'init/consented/prepare-permutive';
 import { init as preparePrebid } from 'init/consented/prepare-prebid';
 import { init as initRedplanet } from 'init/consented/redplanet';
-import { removeConsentedAdsOnConsentChange } from 'init/consented/remove-consented-ads-on-consent-change';
 import { removeDisabledSlots as closeDisabledSlots } from 'init/consented/remove-slots';
 import { initTeadsCookieless } from 'init/consented/teads-cookieless';
 import { init as initThirdPartyTags } from 'init/consented/third-party-tags';
@@ -51,7 +50,6 @@ const commercialBaseModules: Modules = [];
 // remaining modules not necessary to load an ad
 const commercialExtraModules: Modules = [
 	['cm-adFreeSlotRemoveFronts', adFreeSlotRemove],
-	['cm-removeConsentedAdsOnConsentChange', removeConsentedAdsOnConsentChange],
 	['cm-closeDisabledSlots', closeDisabledSlots],
 	['cm-comscore', initComscore],
 	['cm-ipsosmori', initIpsosMori],
