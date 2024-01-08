@@ -270,4 +270,4 @@ const _ = {
 	trackedSlots,
 };
 
-export { EventTimer, _ };
+export { EventTimer, _, supportsPerformanceAPI };

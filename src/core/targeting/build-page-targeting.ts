@@ -3,6 +3,7 @@ import { cmp } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type { CountryCode } from '@guardian/libs';
 import { getCookie, isString } from '@guardian/libs';
+import { supportsPerformanceAPI } from 'core/event-timer';
 import { getLocale } from '../lib/get-locale';
 import type { False, True } from '../types';
 import type { ContentTargeting } from './content';
@@ -70,13 +71,33 @@ const filterValues = (pageTargets: Record<string, unknown>) => {
 	return filtered;
 };
 
+const getLastNavigationType = (): NavigationTimingType | undefined => {
+	if (!supportsPerformanceAPI()) {
+		return undefined;
+	}
+	const navigationEvents = performance.getEntriesByType('navigation');
+	const lastNavigationEvent = navigationEvents[navigationEvents.length - 1];
+	return lastNavigationEvent?.type;
+};
+
+const referrerMatchesHost = (referrer: string): boolean => {
+	if (!referrer) {
+		return false;
+	}
+	const referrerUrl = new URL(referrer);
+	return referrerUrl.hostname !== window.location.hostname;
+};
+
 // A consentless friendly way of determining if this is the users first visit to the page
 const isFirstVisit = (referrer: string): boolean => {
-	if (!referrer) {
+	console.log('supportsPerformanceAPI', supportsPerformanceAPI());
+	if (!supportsPerformanceAPI()) {
+		return referrer === '' && !referrerMatchesHost(referrer);
+	}
+	if (getLastNavigationType() === 'navigate' && referrer === '') {
 		return true;
 	}
-	const referrerUrl = new URL(document.referrer);
-	return referrerUrl.hostname !== window.location.hostname;
+	return false;
 };
 
 type BuildPageTargetingParams = {
@@ -153,6 +174,8 @@ const buildPageTargeting = ({
 
 	if (!consentState.canTarget) {
 		consentlessTargeting.firstvisit = isFirstVisit(referrer) ? 't' : 'f';
+
+		console.log('consentlessTargeting', consentlessTargeting);
 	}
 
 	const pageTargets: PageTargeting = {
