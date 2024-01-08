@@ -67,4 +67,8 @@ Frontend will then use the local bundle instead of the one from PROD/CODE.
 
 To test the bundle on CODE, create a PR, add the `[beta] @guardian/commercial` label, this will release a beta version of the bundle to NPM, the exact version will be commented on your PR.
 
+In order to do this, first run: `yarn changeset add`, again, This will create a new changeset file in the `.changeset` directory. Commit this file with your PR.
+
+**Note**: Sometimes you might need to remove and re-add the label to trigger the beta version.
+
 On a branch on frontend you can update the version of the bundle to the beta version and deploy to CODE to test.
