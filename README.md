@@ -35,6 +35,23 @@ To release a new version with your changes, run `yarn changeset add` and follow 
 
 When your PR is merged, changeset will analyse the changes and create a PR to release the new version.
 
+For an efficient and secure process, a script is available to update the version of commercial lib in Frontend to your specified version. You can find the script [here](https://gist.github.com/chrislomaxjones/2663b9bcafd0ad61857b9cd6191c1a78).
+
+Save the script to your `\code` directory for easy execution from the terminal.
+
+Execute the script as follows:
+
+```bash
+./bump_commercial.sh [VERSION_NUMBER]
+```
+
+Eg
+```bash
+./bump_commercial.sh 11.11.1
+```
+
+This will automatically create a pull request in the Frontend repository.
+
 ### Pull requests
 
 Try to write PR titles in the conventional commit format, and squash and merge when merging. That way your PR will trigger a release when you merge it (if necessary).
