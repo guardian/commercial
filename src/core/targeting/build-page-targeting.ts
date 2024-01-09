@@ -90,7 +90,6 @@ const referrerMatchesHost = (referrer: string): boolean => {
 
 // A consentless friendly way of determining if this is the users first visit to the page
 const isFirstVisit = (referrer: string): boolean => {
-	console.log('supportsPerformanceAPI', supportsPerformanceAPI());
 	if (!supportsPerformanceAPI()) {
 		return referrer === '' && !referrerMatchesHost(referrer);
 	}
@@ -174,8 +173,6 @@ const buildPageTargeting = ({
 
 	if (!consentState.canTarget) {
 		consentlessTargeting.firstvisit = isFirstVisit(referrer) ? 't' : 'f';
-
-		console.log('consentlessTargeting', consentlessTargeting);
 	}
 
 	const pageTargets: PageTargeting = {
