@@ -1,11 +1,7 @@
 {
 	"compilerOptions": {
-		"baseUrl": "src",
 		"declaration": true,
-		"noEmit": false,
-		"noUncheckedIndexedAccess": true,
-		"outDir": "dist",
-		"rootDir": "src"
+		"noEmit": false
 	},
 	"extends": "./tsconfig.json",
 	"include": ["src/core", "src/types"],
