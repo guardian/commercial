@@ -90,16 +90,11 @@ const referrerMatchesHost = (referrer: string): boolean => {
 
 // A consentless friendly way of determining if this is the users first visit to the page
 const isFirstVisit = (referrer: string): boolean => {
-	if (!supportsPerformanceAPI()) {
-		return !referrerMatchesHost(referrer);
+	if (supportsPerformanceAPI() && getLastNavigationType() !== 'navigate') {
+		return false;
 	}
-	if (
-		getLastNavigationType() === 'navigate' &&
-		!referrerMatchesHost(referrer)
-	) {
-		return true;
-	}
-	return false;
+
+	return !referrerMatchesHost(referrer);
 };
 
 type BuildPageTargetingParams = {
