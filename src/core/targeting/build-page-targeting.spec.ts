@@ -1063,7 +1063,7 @@ describe('Build Page Targeting', () => {
 		).toBe('f');
 	});
 
-	it('should set firstvisit to false referrer is the guardian and navigation type is not navigate', () => {
+	it('should set firstvisit to false if referrer is the guardian and navigation type is not navigate', () => {
 		jest.spyOn(window, 'performance', 'get').mockReturnValue({
 			getEntriesByType: () => [
 				{

@@ -85,15 +85,15 @@ const referrerMatchesHost = (referrer: string): boolean => {
 		return false;
 	}
 	const referrerUrl = new URL(referrer);
-	return referrerUrl.hostname !== window.location.hostname;
+	return referrerUrl.hostname === window.location.hostname;
 };
 
 // A consentless friendly way of determining if this is the users first visit to the page
 const isFirstVisit = (referrer: string): boolean => {
 	if (!supportsPerformanceAPI()) {
-		return referrer === '' && !referrerMatchesHost(referrer);
+		return !referrerMatchesHost(referrer);
 	}
-	if (getLastNavigationType() === 'navigate' && referrer === '') {
+	if (getLastNavigationType() === 'navigate' && !referrerMatchesHost(referrer)) {
 		return true;
 	}
 	return false;
