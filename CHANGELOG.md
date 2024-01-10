@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.32.0
+
+### Minor Changes
+
+- a2621af: Improve consentless "firstvisit" targeting
+
 ## 11.31.0
 
 ### Minor Changes
