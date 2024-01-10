@@ -93,7 +93,10 @@ const isFirstVisit = (referrer: string): boolean => {
 	if (!supportsPerformanceAPI()) {
 		return !referrerMatchesHost(referrer);
 	}
-	if (getLastNavigationType() === 'navigate' && !referrerMatchesHost(referrer)) {
+	if (
+		getLastNavigationType() === 'navigate' &&
+		!referrerMatchesHost(referrer)
+	) {
 		return true;
 	}
 	return false;

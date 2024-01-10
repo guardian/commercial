@@ -1090,6 +1090,33 @@ describe('Build Page Targeting', () => {
 		).toBe('f');
 	});
 
+	it('should set firstvisit to true if referrer is not the guardian and navigation type is navigate', () => {
+		jest.spyOn(window, 'performance', 'get').mockReturnValue({
+			getEntriesByType: () => [
+				{
+					type: 'navigate',
+				},
+			],
+			mark: () => {
+				//
+			},
+		} as unknown as Performance);
+		jest.spyOn(document, 'referrer', 'get').mockReturnValue(
+			'https://google.com/',
+		);
+		jest.spyOn(window, 'location', 'get').mockReturnValue({
+			hostname: 'theguardian.com',
+		} as unknown as Location);
+		expect(
+			buildPageTargeting({
+				adFree: false,
+				clientSideParticipations: {},
+				consentState: emptyConsent,
+				isSignedIn: true,
+			}).firstvisit,
+		).toBe('t');
+	});
+
 	it('should not set firstvisit if consent is allowed', () => {
 		jest.spyOn(document, 'referrer', 'get').mockReturnValue('');
 		jest.spyOn(window, 'location', 'get').mockReturnValue({
