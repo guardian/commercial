@@ -968,7 +968,10 @@ describe('Build Page Targeting', () => {
 		});
 	});
 
-	it('should set firstvisit to true if this is the users first visit to the page', () => {
+	it('should set firstvisit to true if referrer is empty and navigation api is missing', () => {
+		jest.spyOn(window, 'performance', 'get').mockReturnValue(
+			undefined as unknown as Performance,
+		);
 		jest.spyOn(document, 'referrer', 'get').mockReturnValue('');
 		jest.spyOn(window, 'location', 'get').mockReturnValue({
 			hostname: 'theguardian.com',
@@ -983,7 +986,67 @@ describe('Build Page Targeting', () => {
 		).toBe('t');
 	});
 
-	it("should set firstvisit to false if this isn't the users first visit to the page", () => {
+	it('should set firstvisit to true if referrer is empty and navigation type is navigate', () => {
+		jest.spyOn(window, 'performance', 'get').mockReturnValue({
+			getEntriesByType: () => [
+				{
+					type: 'navigate',
+				},
+			],
+			mark: () => {
+				//
+			},
+		} as unknown as Performance);
+		jest.spyOn(document, 'referrer', 'get').mockReturnValue('');
+		jest.spyOn(window, 'location', 'get').mockReturnValue({
+			hostname: 'theguardian.com',
+		} as unknown as Location);
+		expect(
+			buildPageTargeting({
+				adFree: false,
+				clientSideParticipations: {},
+				consentState: emptyConsent,
+				isSignedIn: true,
+			}).firstvisit,
+		).toBe('t');
+	});
+
+	it('should set firstvisit to false if referrer is empty and navigation type is not navigate', () => {
+		jest.spyOn(window, 'performance', 'get').mockReturnValue({
+			getEntriesByType: () => [
+				{
+					type: 'reload',
+				},
+			],
+			mark: () => {
+				//
+			},
+		} as unknown as Performance);
+		jest.spyOn(document, 'referrer', 'get').mockReturnValue('');
+		jest.spyOn(window, 'location', 'get').mockReturnValue({
+			hostname: 'theguardian.com',
+		} as unknown as Location);
+		expect(
+			buildPageTargeting({
+				adFree: false,
+				clientSideParticipations: {},
+				consentState: emptyConsent,
+				isSignedIn: true,
+			}).firstvisit,
+		).toBe('f');
+	});
+
+	it('should set firstvisit to false if referrer is the guardian and navigation type is navigate', () => {
+		jest.spyOn(window, 'performance', 'get').mockReturnValue({
+			getEntriesByType: () => [
+				{
+					type: 'navigate',
+				},
+			],
+			mark: () => {
+				//
+			},
+		} as unknown as Performance);
 		jest.spyOn(document, 'referrer', 'get').mockReturnValue(
 			'https://theguardian.com/uk',
 		);
@@ -998,6 +1061,60 @@ describe('Build Page Targeting', () => {
 				isSignedIn: true,
 			}).firstvisit,
 		).toBe('f');
+	});
+
+	it('should set firstvisit to false if referrer is the guardian and navigation type is not navigate', () => {
+		jest.spyOn(window, 'performance', 'get').mockReturnValue({
+			getEntriesByType: () => [
+				{
+					type: 'reload',
+				},
+			],
+			mark: () => {
+				//
+			},
+		} as unknown as Performance);
+		jest.spyOn(document, 'referrer', 'get').mockReturnValue(
+			'https://theguardian.com/uk',
+		);
+		jest.spyOn(window, 'location', 'get').mockReturnValue({
+			hostname: 'theguardian.com',
+		} as unknown as Location);
+		expect(
+			buildPageTargeting({
+				adFree: false,
+				clientSideParticipations: {},
+				consentState: emptyConsent,
+				isSignedIn: true,
+			}).firstvisit,
+		).toBe('f');
+	});
+
+	it('should set firstvisit to true if referrer is not the guardian and navigation type is navigate', () => {
+		jest.spyOn(window, 'performance', 'get').mockReturnValue({
+			getEntriesByType: () => [
+				{
+					type: 'navigate',
+				},
+			],
+			mark: () => {
+				//
+			},
+		} as unknown as Performance);
+		jest.spyOn(document, 'referrer', 'get').mockReturnValue(
+			'https://google.com/',
+		);
+		jest.spyOn(window, 'location', 'get').mockReturnValue({
+			hostname: 'theguardian.com',
+		} as unknown as Location);
+		expect(
+			buildPageTargeting({
+				adFree: false,
+				clientSideParticipations: {},
+				consentState: emptyConsent,
+				isSignedIn: true,
+			}).firstvisit,
+		).toBe('t');
 	});
 
 	it('should not set firstvisit if consent is allowed', () => {
