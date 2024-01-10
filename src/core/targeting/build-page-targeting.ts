@@ -3,7 +3,7 @@ import { cmp } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import type { CountryCode } from '@guardian/libs';
 import { getCookie, isString } from '@guardian/libs';
-import { supportsPerformanceAPI } from 'core/event-timer';
+import { supportsPerformanceAPI } from '../event-timer';
 import { getLocale } from '../lib/get-locale';
 import type { False, True } from '../types';
 import type { ContentTargeting } from './content';
