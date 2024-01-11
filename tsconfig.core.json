@@ -8,6 +8,7 @@
 		"typeRoots": ["./node_modules/@types", "./node_modules/web-vitals/dist"]
 	},
 	"extends": "./tsconfig.json",
+	"rootDir": "src",
 	"include": ["src/core", "src/types"],
 	"exclude": ["**/*.spec.*", "**/*.test.*"]
 }
