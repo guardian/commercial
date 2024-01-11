@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 11.32.1
+
+### Patch Changes
+
+- 956a70a: fix import issue with frontend
+
 ## 11.32.0
 
 ### Minor Changes
