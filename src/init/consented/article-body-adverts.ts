@@ -286,7 +286,7 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
-		pass: 'inline2',
+		pass: 'subsequent-inlines',
 	});
 };
 

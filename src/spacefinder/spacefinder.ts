@@ -51,7 +51,7 @@ type SpacefinderRules = {
 
 type SpacefinderWriter = (paras: HTMLElement[]) => Promise<void>;
 
-type SpacefinderPass = 'inline1' | 'inline2' | 'im' | 'carrot';
+type SpacefinderPass = 'inline1' | 'subsequent-inlines' | 'im' | 'carrot';
 
 type SpacefinderOptions = {
 	waitForImages?: boolean;
