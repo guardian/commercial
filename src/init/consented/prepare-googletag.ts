@@ -12,7 +12,6 @@ import { commercialFeatures } from 'lib/commercial-features';
 import raven from 'lib/raven';
 import { init as initMeasureAdLoad } from 'messenger/measure-ad-load';
 import { reportError } from 'utils/report-error';
-import { createSlotFillListener } from '../../dfp/fill-slot-listener';
 import { fillStaticAdvertSlots } from '../../dfp/fill-static-advert-slots';
 import { onSlotLoad } from '../../dfp/on-slot-load';
 import { onSlotRender } from '../../dfp/on-slot-render';
@@ -129,7 +128,6 @@ export const init = (): Promise<void> => {
 						setPageTargeting(consentState, isSignedIn);
 					},
 					() => {
-						createSlotFillListener();
 						// Note: this function isn't synchronous like most buffered cmds, it's a promise. It's put in here to ensure
 						// it strictly follows preceding prepare-googletag work (and the module itself ensures dependencies are
 						// fulfilled), but don't assume this function is complete when queueing subsequent work using cmd.push

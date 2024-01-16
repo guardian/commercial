@@ -1,6 +1,6 @@
 import type { SizeMapping } from 'core';
-import { dfpEnv } from './dfp-env';
-import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
+import { dfpEnv } from '../../dfp/dfp-env';
+import { fillDynamicAdSlot } from '../../dfp/fill-dynamic-advert-slot';
 
 type ExternalSlotCustomEvent = CustomEvent<{
 	slotId: string;
@@ -27,20 +27,28 @@ const isCustomEvent = (event: Event): event is CustomEvent => {
  * These events will not be received from a restricted iframe such, such as a
  * cross-origin or safeframe iframe.
  */
-export const createSlotFillListener = () => {
+const createSlotFillListener = () => {
 	document.addEventListener('gu.commercial.slot.fill', (event: Event) => {
-		if (isCustomEvent(event)) {
-			const { slotId, additionalSizes } = (<ExternalSlotCustomEvent>event)
-				.detail;
+		window.googletag.cmd.push(() => {
+			if (isCustomEvent(event)) {
+				const { slotId, additionalSizes } = (<ExternalSlotCustomEvent>(
+					event
+				)).detail;
 
-			if (dfpEnv.adverts.has(slotId)) {
-				return;
-			}
+				if (dfpEnv.adverts.has(slotId)) {
+					return;
+				}
 
-			const slot = document.getElementById(slotId);
-			if (slot) {
-				void fillDynamicAdSlot(slot, false, additionalSizes);
+				const slot = document.getElementById(slotId);
+				if (slot) {
+					void fillDynamicAdSlot(slot, false, additionalSizes);
+				}
 			}
-		}
+		});
 	});
 };
+
+const initFillSlotListener = (): Promise<void> =>
+	Promise.resolve(createSlotFillListener());
+
+export { initFillSlotListener };
