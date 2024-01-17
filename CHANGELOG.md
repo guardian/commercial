@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 12.0.0
+
+### Major Changes
+
+- 25c712b: update peer deps
+
 ## 11.32.1
 
 ### Patch Changes
