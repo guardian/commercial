@@ -391,6 +391,16 @@ const addDebugPanel = (): void => {
 	document.body.appendChild(style);
 };
 
+const selectFirstPass = (): void => {
+	const controls = document.querySelector('#sfdebug-panel .controls');
+	if (
+		controls?.hasChildNodes &&
+		controls.firstElementChild?.tagName === 'INPUT'
+	) {
+		(controls.firstElementChild as HTMLInputElement).click();
+	}
+};
+
 const init = (
 	exclusions: SpacefinderExclusions = {},
 	winners: SpacefinderItem[],
@@ -402,6 +412,7 @@ const init = (
 	addDebugPanel();
 	annotate(exclusions, winners, rules, pass);
 	addPassToDebugPanel(pass);
+	selectFirstPass();
 };
 
 export { init };

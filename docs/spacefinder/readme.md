@@ -86,6 +86,6 @@ On desktop, the first inline ad sits inside the body of the article copy. All su
 
 ## Debugging
 
-Adding `sfdebug=1` to the URL shows information about `inline1` ads. Adding `sfdebug=2` shows information about the other inline slots.
+Adding `?sfdebug` to the URL opens the Spacefinder debugger control panel. The panel contains buttons to show the data for the different times that Spacefinder runs to find space for an ad. You can click these buttons to see the data for that run.
 
 Further reading: https://github.com/guardian/frontend/pull/24618
