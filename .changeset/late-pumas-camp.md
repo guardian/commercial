@@ -1,5 +1,5 @@
 ---
-'@guardian/commercial': patch
+'@guardian/commercial': major
 ---
 
 update peer deps
