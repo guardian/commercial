@@ -26,6 +26,7 @@ import { init as initArticleBodyAdverts } from 'init/consented/article-body-adve
 import { initCommentAdverts } from 'init/consented/comment-adverts';
 import { initCommentsExpandedAdverts } from 'init/consented/comments-expanded-advert';
 import { init as initComscore } from 'init/consented/comscore';
+import { initFillSlotListener } from 'init/consented/fill-slot-listener';
 import { init as initHighMerch } from 'init/consented/high-merch';
 import { init as initIpsosMori } from 'init/consented/ipsos-mori';
 import { init as initLiveblogAdverts } from 'init/consented/liveblog-adverts';
@@ -90,6 +91,7 @@ if (!commercialFeatures.adFree) {
 		// The permutive lib however is loaded async with the third party tags
 		['cm-prepare-googletag', () => initPermutive().then(prepareGoogletag)],
 		['cm-prepare-a9', prepareA9],
+		['cm-prepare-fill-slot-listener', initFillSlotListener],
 	);
 	commercialExtraModules.push(
 		['cm-prepare-adverification', prepareAdVerification],
