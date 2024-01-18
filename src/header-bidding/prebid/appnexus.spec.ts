@@ -6,6 +6,7 @@ import {
 	isInUsa as isInUsa_,
 } from 'utils/geo-utils';
 import {
+	containsBillboard as containsBillboard_,
 	containsBillboardNotLeaderboard as containsBillboardNotLeaderboard_,
 	containsDmpu as containsDmpu_,
 	containsLeaderboard as containsLeaderboard_,
@@ -18,6 +19,7 @@ import {
 import { getAppNexusDirectPlacementId } from './appnexus';
 
 jest.mock('../utils');
+const containsBillboard = containsBillboard_ as jest.Mock;
 const containsBillboardNotLeaderboard =
 	containsBillboardNotLeaderboard_ as jest.Mock;
 const containsDmpu = containsDmpu_ as jest.Mock;
@@ -77,7 +79,7 @@ describe('getAppNexusDirectPlacementId', () => {
 		resetConfig();
 	});
 
-	test('should return correct placementID for any existing biding sizes in Australia or New Zealand', () => {
+	test('should return correct placementID for any existing bidding sizes in Australia or New Zealand', () => {
 		isInAuOrNz.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsMpu.mockReturnValue(true);
@@ -104,10 +106,8 @@ describe('getAppNexusDirectPlacementId', () => {
 		);
 	});
 
-	test('should return correct placementID for desktop billboard not leaderboad in UK, ROW and US', () => {
+	test('should return correct placementID for desktop billboard not leaderboad in UK', () => {
 		isInUk.mockReturnValue(true);
-		isInRow.mockReturnValue(true);
-		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsBillboardNotLeaderboard.mockReturnValue(true);
 		expect(getAppNexusDirectPlacementId([createAdSize(970, 250)])).toBe(
@@ -115,10 +115,8 @@ describe('getAppNexusDirectPlacementId', () => {
 		);
 	});
 
-	test('should return correct placementID for desktop mpu or dmpu in UK, ROW and US', () => {
+	test('should return correct placementID for desktop mpu or dmpu in UK', () => {
 		isInUk.mockReturnValue(true);
-		isInRow.mockReturnValue(true);
-		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsMpuOrDmpu.mockReturnValue(true);
 		expect(getAppNexusDirectPlacementId([createAdSize(300, 600)])).toBe(
@@ -129,10 +127,8 @@ describe('getAppNexusDirectPlacementId', () => {
 		);
 	});
 
-	test('should return correct placementID for desktop billboard or leaderboard in UK, ROW and US', () => {
-		isInUk.mockReturnValue(true);
+	test('should return correct placementID for desktop billboard or leaderboard in ROW', () => {
 		isInRow.mockReturnValue(true);
-		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsLeaderboardOrBillboard.mockReturnValue(true);
 		expect(getAppNexusDirectPlacementId([createAdSize(970, 250)])).toBe(
@@ -143,21 +139,21 @@ describe('getAppNexusDirectPlacementId', () => {
 		);
 	});
 
-	test('should return correct placementID for desktop leaderboard in UK, ROW and US', () => {
-		isInUk.mockReturnValue(true);
+	test('should return correct placementID for desktop leaderboard in ROW', () => {
 		isInRow.mockReturnValue(true);
-		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
+		containsBillboard.mockReturnValue(false);
 		containsLeaderboard.mockReturnValue(true);
+		containsLeaderboardOrBillboard.mockReturnValue(
+			containsBillboard() || containsLeaderboard(),
+		);
 		expect(getAppNexusDirectPlacementId([createAdSize(728, 90)])).toBe(
-			'9251752',
+			'9926678',
 		);
 	});
 
-	test('should return correct placementID for tablet mpu in UK, ROW and US', () => {
+	test('should return correct placementID for tablet mpu in UK', () => {
 		isInUk.mockReturnValue(true);
-		isInRow.mockReturnValue(true);
-		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('T');
 		containsMpu.mockReturnValue(true);
 		expect(getAppNexusDirectPlacementId([createAdSize(300, 250)])).toBe(
@@ -165,10 +161,8 @@ describe('getAppNexusDirectPlacementId', () => {
 		);
 	});
 
-	test('should return correct placementID for tablet leaderboard in UK, ROW and US', () => {
+	test('should return correct placementID for tablet leaderboard in UK', () => {
 		isInUk.mockReturnValue(true);
-		isInRow.mockReturnValue(true);
-		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('T');
 		containsLeaderboard.mockReturnValue(true);
 		expect(getAppNexusDirectPlacementId([createAdSize(728, 90)])).toBe(
@@ -176,10 +170,8 @@ describe('getAppNexusDirectPlacementId', () => {
 		);
 	});
 
-	test('should return correct placementID for tablet dmpu in UK, ROW and US', () => {
+	test('should return correct placementID for tablet dmpu in UK', () => {
 		isInUk.mockReturnValue(true);
-		isInRow.mockReturnValue(true);
-		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('T');
 		containsDmpu.mockReturnValue(true);
 		expect(getAppNexusDirectPlacementId([createAdSize(300, 600)])).toBe(
@@ -187,10 +179,8 @@ describe('getAppNexusDirectPlacementId', () => {
 		);
 	});
 
-	test('should return correct placementID for mobile mpu in UK, ROW and US', () => {
+	test('should return correct placementID for mobile mpu in UK', () => {
 		isInUk.mockReturnValue(true);
-		isInRow.mockReturnValue(true);
-		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
 		expect(getAppNexusDirectPlacementId([createAdSize(300, 250)])).toBe(
