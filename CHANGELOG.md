@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 12.1.0
+
+### Minor Changes
+
+- a887b44: Move fill ad slot listener to commercial.standalone
+
+### Patch Changes
+
+- 099f26f: Bump prebid Kargo test to 4%
+
 ## 12.0.0
 
 ### Major Changes
