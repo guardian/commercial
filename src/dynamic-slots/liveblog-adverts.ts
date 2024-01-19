@@ -5,13 +5,13 @@ import { getCurrentBreakpoint } from 'detect/detect-breakpoint';
 import { fillDynamicAdSlot } from 'dfp/fill-dynamic-advert-slot';
 import { commercialFeatures } from 'lib/commercial-features';
 import fastdom from 'lib/fastdom-promise';
-import { spaceFiller } from 'spacefinder/space-filler';
+import { spaceFiller } from 'dynamic-slots/spacefinder/space-filler';
 import type {
 	SpacefinderItem,
 	SpacefinderOptions,
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'spacefinder/spacefinder';
+} from 'dynamic-slots/spacefinder/spacefinder';
 
 /**
  * Maximum number of inline ads to display on the page

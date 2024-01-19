@@ -4,7 +4,7 @@ import fastdom from 'lib/fastdom-promise';
 import {
 	renderAdvertLabel,
 	renderStickyScrollForMoreLabel,
-} from '../dfp/render-advert-label';
+} from '../../dfp/render-advert-label';
 
 const isDCR = window.guardian.config.isDotcomRendering;
 

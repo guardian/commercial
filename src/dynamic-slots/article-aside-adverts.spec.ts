@@ -1,5 +1,5 @@
-import fastdom from '../../lib/fastdom-promise';
-import { mediator as fakeMediator } from '../../utils/mediator';
+import fastdom from '../lib/fastdom-promise';
+import { mediator as fakeMediator } from '../utils/mediator';
 import { init } from './article-aside-adverts';
 
 // This module removes sticky behaviour from ads in immersive article. Example below:

@@ -1,11 +1,11 @@
 import { createAdSlot } from 'core/create-ad-slot';
 import { getCurrentTweakpoint } from 'detect/detect-breakpoint';
 import { commercialFeatures } from 'lib/commercial-features';
-import { spaceFiller } from 'spacefinder/space-filler';
+import { spaceFiller } from 'dynamic-slots/spacefinder/space-filler';
 import type {
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'spacefinder/spacefinder';
+} from 'dynamic-slots/spacefinder/spacefinder';
 import { fillDynamicAdSlot } from '../dfp/fill-dynamic-advert-slot';
 import fastdom from '../lib/fastdom-promise';
 

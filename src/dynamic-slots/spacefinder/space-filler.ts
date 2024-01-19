@@ -1,10 +1,10 @@
-import raven from 'lib/raven';
 import type {
 	SpacefinderOptions,
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'spacefinder/spacefinder';
-import { findSpace, SpaceError } from 'spacefinder/spacefinder';
+} from 'dynamic-slots/spacefinder/spacefinder';
+import { findSpace, SpaceError } from 'dynamic-slots/spacefinder/spacefinder';
+import raven from 'lib/raven';
 
 class SpaceFiller {
 	queue = Promise.resolve(true);

@@ -10,23 +10,20 @@ import {
 	getCurrentBreakpoint,
 	getCurrentTweakpoint,
 } from 'detect/detect-breakpoint';
-import { commercialFeatures } from 'lib/commercial-features';
-import { spaceFiller } from 'spacefinder/space-filler';
+import { spaceFiller } from 'dynamic-slots/spacefinder/space-filler';
 import type {
 	RuleSpacing,
 	SpacefinderItem,
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'spacefinder/spacefinder';
-import { fillDynamicAdSlot } from '../../dfp/fill-dynamic-advert-slot';
-import { waitForAdvert } from '../../dfp/wait-for-advert';
-import fastdom from '../../lib/fastdom-promise';
-import { initCarrot } from '../../spacefinder/carrot-traffic-driver';
-import {
-	computeStickyHeights,
-	insertHeightStyles,
-} from '../../spacefinder/sticky-inlines';
-import { mediator } from '../../utils/mediator';
+} from 'dynamic-slots/spacefinder/spacefinder';
+import { commercialFeatures } from 'lib/commercial-features';
+import { fillDynamicAdSlot } from '../dfp/fill-dynamic-advert-slot';
+import { waitForAdvert } from '../dfp/wait-for-advert';
+import fastdom from '../lib/fastdom-promise';
+import { mediator } from '../utils/mediator';
+import { initCarrot } from './carrot-traffic-driver';
+import { computeStickyHeights, insertHeightStyles } from './sticky-inlines';
 
 type SlotName = Parameters<typeof createAdSlot>[0];
 

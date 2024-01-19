@@ -1,7 +1,7 @@
 import { createAdSlot } from 'core/create-ad-slot';
-import { fillDynamicAdSlot } from '../../dfp/fill-dynamic-advert-slot';
-import { shouldIncludeMobileSticky } from '../../header-bidding/utils';
-import fastdom from '../../lib/fastdom-promise';
+import { fillDynamicAdSlot } from '../dfp/fill-dynamic-advert-slot';
+import { shouldIncludeMobileSticky } from '../header-bidding/utils';
+import fastdom from '../lib/fastdom-promise';
 
 const createAdWrapperClassic = () => {
 	const wrapper = document.createElement('div');

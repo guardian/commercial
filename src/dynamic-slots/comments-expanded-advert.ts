@@ -3,8 +3,8 @@ import { adSizes } from 'core/ad-sizes';
 import { AD_LABEL_HEIGHT } from 'core/constants/ad-label-height';
 import { createAdSlot } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
-import { fillDynamicAdSlot } from '../../dfp/fill-dynamic-advert-slot';
-import fastdom from '../../lib/fastdom-promise';
+import { fillDynamicAdSlot } from '../dfp/fill-dynamic-advert-slot';
+import fastdom from '../lib/fastdom-promise';
 
 const tallestCommentAd = adSizes.mpu.height + AD_LABEL_HEIGHT;
 const tallestCommentsExpandedAd = adSizes.halfPage.height + AD_LABEL_HEIGHT;

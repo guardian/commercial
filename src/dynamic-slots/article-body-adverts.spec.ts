@@ -1,5 +1,5 @@
 import { commercialFeatures } from 'lib/commercial-features';
-import { spaceFiller } from 'spacefinder/space-filler';
+import { spaceFiller } from 'dynamic-slots/spacefinder/space-filler';
 import { init } from './article-body-adverts';
 
 const ads = {

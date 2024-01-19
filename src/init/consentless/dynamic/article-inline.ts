@@ -3,16 +3,16 @@ import { createAdSlot } from 'core/create-ad-slot';
 import { getCurrentBreakpoint } from 'detect/detect-breakpoint';
 import { commercialFeatures } from 'lib/commercial-features';
 import fastdom from 'lib/fastdom-promise';
-import { spaceFiller } from 'spacefinder/space-filler';
+import { spaceFiller } from 'dynamic-slots/spacefinder/space-filler';
 import type {
 	SpacefinderItem,
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'spacefinder/spacefinder';
+} from 'dynamic-slots/spacefinder/spacefinder';
 import {
 	computeStickyHeights,
 	insertHeightStyles,
-} from 'spacefinder/sticky-inlines';
+} from 'dynamic-slots/sticky-inlines';
 import { defineSlot } from '../define-slot';
 
 type SlotName = Parameters<typeof createAdSlot>[0];

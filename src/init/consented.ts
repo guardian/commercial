@@ -1,36 +1,11 @@
-/*
- * This standalone bundle is so called because it “stands alone”,
- * meaning it is not part of another webpack build process, and
- * can be imported as a JS <script>.
- *
- * See PR https://github.com/guardian/frontend/pull/24058
- *
- * The standalone commercial bundle is bundled from source files
- * here in Frontend, but is served from https://assets.guim.co.uk
- * in production DCR and Frontend.
- *
- * Changes here will be served on DCR & Frontend rendered pages.
- */
-
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
 import { log } from '@guardian/libs';
 import { init as prepareAdVerification } from 'ad-verification/prepare-ad-verification';
 import { EventTimer } from 'core/event-timer';
 import { adSlotIdPrefix } from 'dfp/dfp-env-globals';
 import { adFreeSlotRemove } from 'init/consented/ad-free-slot-remove';
-import { init as initArticleAsideAdverts } from 'init/consented/article-aside-adverts';
-import { init as initArticleBodyAdverts } from 'init/consented/article-body-adverts';
-import { initCommentAdverts } from 'init/consented/comment-adverts';
-import { initCommentsExpandedAdverts } from 'init/consented/comments-expanded-advert';
 import { init as initComscore } from 'init/consented/comscore';
 import { initFillSlotListener } from 'init/consented/fill-slot-listener';
-import { init as initHighMerch } from 'init/consented/high-merch';
 import { init as initIpsosMori } from 'init/consented/ipsos-mori';
-import { init as initLiveblogAdverts } from 'init/consented/liveblog-adverts';
-import { init as initMobileSticky } from 'init/consented/mobile-sticky';
 import { init as prepareA9 } from 'init/consented/prepare-a9';
 import { init as prepareGoogletag } from 'init/consented/prepare-googletag';
 import { initPermutive } from 'init/consented/prepare-permutive';
@@ -47,10 +22,12 @@ import { init as setAdTestInLabelsCookie } from 'init/shared/set-adtest-in-label
 import { commercialFeatures } from 'lib/commercial-features';
 import { reportError } from 'utils/report-error';
 import { catchErrorsWithContext } from 'utils/robust';
+import { initDfpListeners } from './consented/dfp-listeners';
+import { init as initMessenger } from './consented/messenger';
 
 type Modules = Array<[`${string}-${string}`, () => Promise<unknown>]>;
 
-const { frontendAssetsFullURL, switches, page } = window.guardian.config;
+const { frontendAssetsFullURL, page } = window.guardian.config;
 
 const decideAssetsPath = () => {
 	if (process.env.OVERRIDE_BUNDLE_PATH) {
@@ -84,24 +61,19 @@ const commercialExtraModules: Modules = [
 
 if (!commercialFeatures.adFree) {
 	commercialBaseModules.push(
+		['cm-messenger', initMessenger],
 		['cm-setAdTestCookie', setAdTestCookie],
 		['cm-setAdTestInLabelsCookie', setAdTestInLabelsCookie],
 		['cm-prepare-prebid', preparePrebid],
 		// Permutive init code must run before google tag enableServices()
 		// The permutive lib however is loaded async with the third party tags
+		['cm-dfp-listeners', initDfpListeners],
 		['cm-prepare-googletag', () => initPermutive().then(prepareGoogletag)],
 		['cm-prepare-a9', prepareA9],
 		['cm-prepare-fill-slot-listener', initFillSlotListener],
 	);
 	commercialExtraModules.push(
 		['cm-prepare-adverification', prepareAdVerification],
-		['cm-mobileSticky', initMobileSticky],
-		['cm-highMerch', initHighMerch],
-		['cm-articleAsideAdverts', initArticleAsideAdverts],
-		['cm-articleBodyAdverts', initArticleBodyAdverts],
-		['cm-liveblogAdverts', initLiveblogAdverts],
-		['cm-commentAdverts', initCommentAdverts],
-		['cm-commentsExpandedAdverts', initCommentsExpandedAdverts],
 		['cm-thirdPartyTags', initThirdPartyTags],
 		['cm-redplanet', initRedplanet],
 	);
@@ -202,35 +174,4 @@ const bootCommercialWhenReady = () => {
 	}
 };
 
-/**
- * Choose whether to launch Googletag or Opt Out tag (ootag) based on consent state
- */
-const chooseAdvertisingTag = async () => {
-	const consentState = await onConsent();
-	// Only load the Opt Out tag if:
-	// - in TCF region
-	// - no consent for Googletag
-	// - the user is not a subscriber
-	if (
-		consentState.tcfv2 &&
-		!getConsentFor('googletag', consentState) &&
-		!commercialFeatures.adFree
-	) {
-		void import(
-			/* webpackChunkName: "consentless" */
-			'./commercial.consentless'
-		).then(({ bootConsentless }) => bootConsentless(consentState));
-	} else {
-		bootCommercialWhenReady();
-	}
-};
-
-/**
- * If the consentless switch is on decide whether to boot consentless or normal consented
- * If the consentless switch is off boot normal consented
- */
-if (switches.optOutAdvertising) {
-	void chooseAdvertisingTag();
-} else {
-	bootCommercialWhenReady();
-}
+export { bootCommercialWhenReady };

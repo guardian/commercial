@@ -1,5 +1,5 @@
 import type { RegisterListener } from 'core/messenger';
-import { trackNativeAdLinkClick } from '../analytics/google';
+import { trackNativeAdLinkClick } from '../../analytics/google';
 import { init } from './click';
 
 jest.mock('analytics/google', () => ({

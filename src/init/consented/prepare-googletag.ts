@@ -5,64 +5,11 @@ import {
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { loadScript, log } from '@guardian/libs';
 import { EventTimer } from 'core/event-timer';
-import { init as initMessenger } from 'core/messenger';
 import { getGoogleTagId, isUserLoggedInOktaRefactor } from 'identity/api';
 import { getPageTargeting } from 'lib/build-page-targeting';
 import { commercialFeatures } from 'lib/commercial-features';
-import raven from 'lib/raven';
-import { init as initMeasureAdLoad } from 'messenger/measure-ad-load';
-import { reportError } from 'utils/report-error';
 import { fillStaticAdvertSlots } from '../../dfp/fill-static-advert-slots';
-import { onSlotLoad } from '../../dfp/on-slot-load';
-import { onSlotRender } from '../../dfp/on-slot-render';
-import { onSlotViewableFunction } from '../../dfp/on-slot-viewable';
-import { init as background } from '../../messenger/background';
-import { init as sendClick } from '../../messenger/click';
-import { init as disableRefresh } from '../../messenger/disable-refresh';
-import { init as fullwidth } from '../../messenger/full-width';
-import { init as initGetPageTargeting } from '../../messenger/get-page-targeting';
-import { init as initGetPageUrl } from '../../messenger/get-page-url';
-import { init as getStyles } from '../../messenger/get-stylesheet';
-import { init as passback } from '../../messenger/passback';
-import { init as passbackRefresh } from '../../messenger/passback-refresh';
-import { init as resize } from '../../messenger/resize';
-import { init as scroll } from '../../messenger/scroll';
-import { init as type } from '../../messenger/type';
-import { init as viewport } from '../../messenger/viewport';
 import { removeSlots } from './remove-slots';
-
-initMessenger(
-	[
-		type,
-		getStyles,
-		initGetPageTargeting,
-		initGetPageUrl,
-		initMeasureAdLoad,
-		passbackRefresh,
-		resize,
-		fullwidth,
-		sendClick,
-		background,
-		disableRefresh,
-		passback,
-	],
-	[scroll, viewport],
-	reportError,
-);
-
-const setDfpListeners = (): void => {
-	const pubads = window.googletag.pubads();
-
-	pubads.addEventListener(
-		'slotRenderEnded',
-		raven.wrap<typeof onSlotRender>(onSlotRender),
-	);
-	pubads.addEventListener(
-		'slotOnload',
-		raven.wrap<typeof onSlotLoad>(onSlotLoad),
-	);
-	pubads.addEventListener('impressionViewable', onSlotViewableFunction());
-};
 
 const setPageTargeting = (consentState: ConsentState, isSignedIn: boolean) =>
 	Object.entries(getPageTargeting(consentState, isSignedIn)).forEach(
@@ -123,7 +70,6 @@ export const init = (): Promise<void> => {
 				const isSignedIn = await isUserLoggedInOktaRefactor();
 				window.googletag.cmd.push(
 					() => EventTimer.get().mark('googletagInitEnd'),
-					setDfpListeners,
 					() => {
 						setPageTargeting(consentState, isSignedIn);
 					},
