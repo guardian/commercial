@@ -35,6 +35,7 @@ To release a new version with your changes, run `yarn changeset add` and follow 
 
 When your PR is merged, changeset will analyse the changes and create a PR to release the new version.
 
+### Running script to automatically produce a PR in Frontend
 For an efficient and secure process, a script is available to update the version of commercial lib in Frontend to your specified version. You can find the script [here](./bump_commercial.sh).
 
 Save the script to your `\code` directory for easy execution from the terminal.
