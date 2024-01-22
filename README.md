@@ -36,7 +36,7 @@ To release a new version with your changes, run `yarn changeset add` and follow 
 When your PR is merged, changeset will analyse the changes and create a PR to release the new version.
 
 ### Bumping @guardian/commercial in Frontend
-For an efficient and secure process, a script is available to update the version of commercial lib in Frontend to your specified version. You can find the script [here](./bump_commercial.sh).
+Run [this script](./scripts/bump_commercial.sh) to raise a PR that bumps `@guardian/commercial` in Frontend to the specified version.
 
 Save the script to your `\code` directory for easy execution from the terminal.
 
