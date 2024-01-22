@@ -38,12 +38,11 @@ When your PR is merged, changeset will analyse the changes and create a PR to re
 ### Bumping @guardian/commercial in Frontend
 Run [this script](./scripts/bump_commercial.sh) to raise a PR that bumps `@guardian/commercial` in Frontend to the specified version.
 
-Save the script to your `\code` directory for easy execution from the terminal.
 
 Execute the script as follows:
 
 ```bash
-./bump_commercial.sh [VERSION_NUMBER]
+./scripts/bump_commercial.sh [VERSION_NUMBER]
 ```
 
 Eg
