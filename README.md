@@ -48,7 +48,7 @@ Execute the script as follows:
 
 Eg
 ```bash
-./bump_commercial.sh 11.11.1
+./scripts/bump_commercial.sh 11.11.1
 ```
 
 This will automatically create a pull request in the Frontend repository.
