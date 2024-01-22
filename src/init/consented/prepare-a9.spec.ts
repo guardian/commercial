@@ -1,6 +1,6 @@
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInCanada } from 'utils/geo-utils';
-import { a9 } from '../../header-bidding/a9/a9';
+import { a9 } from '../../lib/header-bidding/a9/a9';
 import { _ } from './prepare-a9';
 
 const { setupA9 } = _;

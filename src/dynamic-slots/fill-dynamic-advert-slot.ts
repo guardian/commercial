@@ -1,12 +1,12 @@
 import { log } from '@guardian/libs';
 import type { SizeMapping } from 'core/ad-sizes';
 import { reportError } from 'utils/report-error';
-import type { Advert } from '../dfp/Advert';
-import { dfpEnv } from '../dfp/dfp-env';
-import { enableLazyLoad } from '../dfp/lazy-load';
-import { loadAdvert } from '../dfp/load-advert';
-import { queueAdvert } from '../dfp/queue-advert';
-import { createAdvert } from './create-advert';
+import type { Advert } from '../create-ads/Advert';
+import { createAdvert } from '../create-ads/create-advert';
+import { dfpEnv } from '../lib/dfp/dfp-env';
+import { queueAdvert } from '../lib/dfp/queue-advert';
+import { enableLazyLoad } from '../render-ads/lazy-load';
+import { loadAdvert } from '../render-ads/load-advert';
 
 const displayAd = (advert: Advert, forceDisplay: boolean) => {
 	if (dfpEnv.shouldLazyLoad() && !forceDisplay) {

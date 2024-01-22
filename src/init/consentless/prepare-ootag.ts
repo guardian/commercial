@@ -1,8 +1,8 @@
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { loadScript, log } from '@guardian/libs';
 import { buildPageTargetingConsentless } from 'core/targeting/build-page-targeting-consentless';
-import { isUserLoggedInOktaRefactor } from 'identity/api';
 import { commercialFeatures } from 'lib/commercial-features';
+import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
 
 function initConsentless(consentState: ConsentState): Promise<void> {
 	return new Promise((resolve) => {

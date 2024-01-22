@@ -1,7 +1,7 @@
 import raven from 'lib/raven';
-import { onSlotLoad } from '../../dfp/on-slot-load';
-import { onSlotRender } from '../../dfp/on-slot-render';
-import { onSlotViewableFunction } from '../../dfp/on-slot-viewable';
+import { onSlotLoad } from '../../post-render/on-slot-load';
+import { onSlotRender } from '../../post-render/on-slot-render';
+import { onSlotViewableFunction } from '../../post-render/on-slot-viewable';
 
 const initDfpListeners = (): Promise<void> => {
 	window.googletag.cmd.push(() => {

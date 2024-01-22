@@ -1,13 +1,13 @@
 import { adSizes } from 'core/ad-sizes';
 import { createAdSlot } from 'core/create-ad-slot';
-import { getCurrentBreakpoint } from 'detect/detect-breakpoint';
-import type { Advert } from 'dfp/Advert';
-import { getAdvertById } from 'dfp/get-advert-by-id';
-import { refreshAdvert } from 'dfp/load-advert';
+import type { Advert } from 'create-ads/Advert';
 import { fillDynamicAdSlot } from 'dynamic-slots/fill-dynamic-advert-slot';
-import { isUserLoggedInOktaRefactor } from 'identity/api';
 import { commercialFeatures } from 'lib/commercial-features';
+import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
+import { getAdvertById } from 'lib/dfp/get-advert-by-id';
 import fastdom from 'lib/fastdom-promise';
+import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
+import { refreshAdvert } from 'render-ads/load-advert';
 import { mediator } from 'utils/mediator';
 
 const createCommentSlot = (): HTMLElement => {

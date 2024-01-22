@@ -1,10 +1,10 @@
 import { init as initArticleAsideAdverts } from 'dynamic-slots/article-aside-adverts';
-import { init as initArticleBodyAdverts } from 'dynamic-slots/article-body-adverts';
 import { initCommentAdverts } from 'dynamic-slots/comment-adverts';
 import { initCommentsExpandedAdverts } from 'dynamic-slots/comments-expanded-advert';
 import { init as initHighMerch } from 'dynamic-slots/high-merch';
-import { init as initLiveblogAdverts } from 'dynamic-slots/liveblog-adverts';
 import { init as initMobileSticky } from 'dynamic-slots/mobile-sticky';
+import { init as initArticleBodyAdverts } from 'dynamic-slots/spacefinder/article-body-adverts';
+import { init as initLiveblogAdverts } from 'dynamic-slots/spacefinder/liveblog-adverts';
 import { reportError } from 'utils/report-error';
 
 type Modules = Array<[`${string}-${string}`, () => Promise<unknown>]>;

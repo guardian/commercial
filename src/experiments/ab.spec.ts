@@ -1,6 +1,6 @@
 import type { ABTest, Runnable, Variant } from '@guardian/ab-core';
 import type { Config } from 'types/global';
-import { _ } from '../analytics/mvt-cookie';
+import { _ } from '../lib/analytics/mvt-cookie';
 import type { concurrentTests as concurrentTestsMock } from './__mocks__/ab-tests';
 import {
 	getAsyncTestsToRun,

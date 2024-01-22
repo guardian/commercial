@@ -1,6 +1,6 @@
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { dfpEnv } from '../../dfp/dfp-env';
+import { dfpEnv } from '../../lib/dfp/dfp-env';
 import fastdom from '../../lib/fastdom-promise';
 
 // Remove ad slots

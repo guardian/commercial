@@ -1,12 +1,12 @@
 import { mocked } from 'jest-mock';
 import { adSizes } from 'core/ad-sizes';
-import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'detect/detect-breakpoint';
-import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from 'identity/api';
 import { commercialFeatures } from 'lib/commercial-features';
-import type { Advert } from '../dfp/Advert';
-import { getAdvertById as getAdvertById_ } from '../dfp/get-advert-by-id';
-import { refreshAdvert as refreshAdvert_ } from '../dfp/load-advert';
+import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
+import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from 'lib/identity/api';
+import type { Advert } from '../create-ads/Advert';
+import { getAdvertById as getAdvertById_ } from '../lib/dfp/get-advert-by-id';
 import fastdom from '../lib/fastdom-promise';
+import { refreshAdvert as refreshAdvert_ } from '../render-ads/load-advert';
 import { mediator as fakeMediator } from '../utils/mediator';
 import { _, initCommentAdverts } from './comment-adverts';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';

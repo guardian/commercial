@@ -1,7 +1,7 @@
 import { isString } from '@guardian/libs';
 import type { RegisterListener } from 'core/messenger';
-import { getAdvertById } from '../../dfp/get-advert-by-id';
-import { refreshAdvert } from '../../dfp/load-advert';
+import { getAdvertById } from '../../lib/dfp/get-advert-by-id';
+import { refreshAdvert } from '../../render-ads/load-advert';
 
 const passbackRefresh = (specs: string, adSlot: HTMLElement) => {
 	const advert = getAdvertById(adSlot.id);

@@ -5,11 +5,11 @@ import {
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { loadScript, log } from '@guardian/libs';
 import { EventTimer } from 'core/event-timer';
-import { getGoogleTagId, isUserLoggedInOktaRefactor } from 'identity/api';
 import { getPageTargeting } from 'lib/build-page-targeting';
 import { commercialFeatures } from 'lib/commercial-features';
-import { fillStaticAdvertSlots } from '../../dfp/fill-static-advert-slots';
+import { getGoogleTagId, isUserLoggedInOktaRefactor } from 'lib/identity/api';
 import { removeSlots } from './remove-slots';
+import { fillStaticAdvertSlots } from './static-ad-slots';
 
 const setPageTargeting = (consentState: ConsentState, isSignedIn: boolean) =>
 	Object.entries(getPageTargeting(consentState, isSignedIn)).forEach(

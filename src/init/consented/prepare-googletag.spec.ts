@@ -5,13 +5,13 @@ import {
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { loadScript } from '@guardian/libs';
 import type * as AdSizesType from 'core/ad-sizes';
-import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'detect/detect-breakpoint';
 import { commercialFeatures } from 'lib/commercial-features';
 import _config from 'lib/config';
-import { dfpEnv } from '../../dfp/dfp-env';
-import { fillStaticAdvertSlots } from '../../dfp/fill-static-advert-slots';
-import { loadAdvert } from '../../dfp/load-advert';
+import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
+import { dfpEnv } from '../../lib/dfp/dfp-env';
+import { loadAdvert } from '../../render-ads/load-advert';
 import { init as prepareGoogletag } from './prepare-googletag';
+import { fillStaticAdvertSlots } from './static-ad-slots';
 
 const config = _config as {
 	get: (k: string) => string;

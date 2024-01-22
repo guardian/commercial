@@ -12,8 +12,8 @@ import { twitter } from 'core/third-party-tags/twitter-uwt';
 import { commercialFeatures } from 'lib/commercial-features';
 import type { ThirdPartyTag } from 'types/global';
 import fastdom from '../../lib/fastdom-promise';
-import { imrWorldwide } from '../../third-party-tags/imr-worldwide';
-import { imrWorldwideLegacy } from '../../third-party-tags/imr-worldwide-legacy';
+import { imrWorldwide } from '../../lib/third-party-tags/imr-worldwide';
+import { imrWorldwideLegacy } from '../../lib/third-party-tags/imr-worldwide-legacy';
 
 const addScripts = (tags: ThirdPartyTag[]) => {
 	const ref = document.scripts[0];

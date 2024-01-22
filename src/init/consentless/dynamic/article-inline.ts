@@ -1,8 +1,5 @@
 import { adSizes } from 'core/ad-sizes';
 import { createAdSlot } from 'core/create-ad-slot';
-import { getCurrentBreakpoint } from 'detect/detect-breakpoint';
-import { commercialFeatures } from 'lib/commercial-features';
-import fastdom from 'lib/fastdom-promise';
 import { spaceFiller } from 'dynamic-slots/spacefinder/space-filler';
 import type {
 	SpacefinderItem,
@@ -13,6 +10,9 @@ import {
 	computeStickyHeights,
 	insertHeightStyles,
 } from 'dynamic-slots/sticky-inlines';
+import { commercialFeatures } from 'lib/commercial-features';
+import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
+import fastdom from 'lib/fastdom-promise';
 import { defineSlot } from '../define-slot';
 
 type SlotName = Parameters<typeof createAdSlot>[0];

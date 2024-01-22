@@ -7,7 +7,7 @@ import type { TCFv2ConsentState } from '@guardian/consent-management-platform/di
 import { log } from '@guardian/libs';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInCanada } from 'utils/geo-utils';
-import { prebid } from '../../header-bidding/prebid/prebid';
+import { prebid } from '../../lib/header-bidding/prebid/prebid';
 import { _ } from './prepare-prebid';
 
 const { setupPrebid } = _;

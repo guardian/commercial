@@ -1,6 +1,6 @@
 import type { RegisterListener } from 'core/messenger';
-import type { Viewport } from 'detect/detect-viewport';
-import { getViewport } from 'detect/detect-viewport';
+import type { Viewport } from 'lib/detect/detect-viewport';
+import { getViewport } from 'lib/detect/detect-viewport';
 import { addEventListener } from 'lib/events';
 import fastdom from 'lib/fastdom-promise';
 

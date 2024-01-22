@@ -1,7 +1,5 @@
 import { log } from '@guardian/libs';
-import { init as prepareAdVerification } from 'ad-verification/prepare-ad-verification';
 import { EventTimer } from 'core/event-timer';
-import { adSlotIdPrefix } from 'dfp/dfp-env-globals';
 import { adFreeSlotRemove } from 'init/consented/ad-free-slot-remove';
 import { init as initComscore } from 'init/consented/comscore';
 import { initFillSlotListener } from 'init/consented/fill-slot-listener';
@@ -19,7 +17,9 @@ import { init as initTrackGpcSignal } from 'init/consented/track-gpc-signal';
 import { init as initTrackScrollDepth } from 'init/consented/track-scroll-depth';
 import { init as setAdTestCookie } from 'init/shared/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from 'init/shared/set-adtest-in-labels-cookie';
+import { init as prepareAdVerification } from 'lib/ad-verification/prepare-ad-verification';
 import { commercialFeatures } from 'lib/commercial-features';
+import { adSlotIdPrefix } from 'lib/dfp/dfp-env-globals';
 import { reportError } from 'utils/report-error';
 import { catchErrorsWithContext } from 'utils/robust';
 import { initDfpListeners } from './consented/dfp-listeners';
