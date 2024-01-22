@@ -6917,9 +6917,9 @@ playwright@1.40.1:
   optionalDependencies:
     fsevents "2.3.2"
 
-prebid.js@guardian/prebid.js#ee7f43c7c85a5245bbe51920cfed18818866ea7b:
+prebid.js@guardian/prebid.js#23b621b364f4477710579ab6285e951a35cdad16:
   version "8.24.0"
-  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/ee7f43c7c85a5245bbe51920cfed18818866ea7b"
+  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/23b621b364f4477710579ab6285e951a35cdad16"
   dependencies:
     "@babel/core" "^7.23.2"
     "@babel/plugin-transform-runtime" "^7.18.9"
