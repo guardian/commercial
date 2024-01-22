@@ -1782,7 +1782,7 @@
   resolved "https://registry.yarnpkg.com/@guardian/identity-auth/-/identity-auth-1.0.0.tgz#ea8896a45d2aef9828e590cccdd858b5f46785d1"
   integrity sha512-JUkPai2Qnuq1quQ2rtvwWhLTtISqJBNe8XpxqbIr4jGaNWn5EL3kI1scAwq5PyNEg9135E7YXWTnjLNkm3ivoA==
 
-"@guardian/libs@15.6.4", "@guardian/libs@^15.6.4":
+"@guardian/libs@15.6.4":
   version "15.6.4"
   resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-15.6.4.tgz#13787065e5c58b884944c5c71d6e324c7f2e566a"
   integrity sha512-oN+xN7FBuVKLCbbjvAMdWjgWqOtvR38acnqwAKsjUDkFsBzRWU/pueDSEGTCTTVSFcRdCKOsWnop+Vwh59P47g==
@@ -1791,6 +1791,11 @@
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@guardian/ophan-tracker-js/-/ophan-tracker-js-2.0.4.tgz#899cf3b3d91d403fb5afb6842b258fff1c286c60"
   integrity sha512-kwUNUSfnL8SQwzTlVzInYh7a6VSMFy3zEq2A6Hm7cmKSbl8D7ed03y7ANqquViFuPffRZRQ0IrkJHSbMnsRmrA==
+
+"@guardian/libs@^16.0.0":
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-16.0.0.tgz#35c567039f3a2a8440e3f0520b1bd9d275e6ad97"
+  integrity sha512-2i9cN6htXnvABIGhfqJGb9Bh/DdQOayUjb5ruqBGTiXEeDBHztctdVsi7+rPfMlwyPxQ+0qYLhM19f6J94vvhQ==
 
 "@guardian/prettier@4.0.0":
   version "4.0.0"
@@ -6917,15 +6922,15 @@ playwright@1.40.1:
   optionalDependencies:
     fsevents "2.3.2"
 
-prebid.js@guardian/prebid.js#23b621b364f4477710579ab6285e951a35cdad16:
+prebid.js@guardian/prebid.js#a69808b0a18d5a7bd01f389202a4cc0330a7d9f3:
   version "8.24.0"
-  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/23b621b364f4477710579ab6285e951a35cdad16"
+  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/a69808b0a18d5a7bd01f389202a4cc0330a7d9f3"
   dependencies:
     "@babel/core" "^7.23.2"
     "@babel/plugin-transform-runtime" "^7.18.9"
     "@babel/preset-env" "^7.16.8"
     "@babel/runtime" "^7.18.9"
-    "@guardian/libs" "^15.6.4"
+    "@guardian/libs" "^16.0.0"
     core-js "^3.13.0"
     core-js-pure "^3.13.0"
     criteo-direct-rsa-validate "^1.1.0"
