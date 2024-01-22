@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 12.1.1
+
+### Patch Changes
+
+- 2a6158d: Prebid kargo ab test to 8%
+
 ## 12.1.0
 
 ### Minor Changes
