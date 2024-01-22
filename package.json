@@ -109,7 +109,7 @@
 		"@octokit/core": "^4.0.5",
 		"fastdom": "^1.0.11",
 		"lodash-es": "^4.17.21",
-		"prebid.js": "guardian/prebid.js#ee7f43c7c85a5245bbe51920cfed18818866ea7b",
+		"prebid.js": "guardian/prebid.js#23b621b364f4477710579ab6285e951a35cdad16",
 		"process": "^0.11.10",
 		"raven-js": "^3.27.2",
 		"tslib": "^2.5.3",
