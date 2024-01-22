@@ -8,7 +8,7 @@ import { setupPrebidOnce } from 'init/consented/prepare-prebid';
 import { removeDisabledSlots } from 'init/consented/remove-slots';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInUk, isInUsa } from 'utils/geo-utils';
-import { createAdvert } from './create-advert';
+import { createAdvert } from '../dynamic-slots/create-advert';
 import { dfpEnv } from './dfp-env';
 import { displayAds } from './display-ads';
 import { displayLazyAds } from './display-lazy-ads';

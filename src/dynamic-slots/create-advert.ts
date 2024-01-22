@@ -1,7 +1,7 @@
 import { log } from '@guardian/libs';
 import type { SizeMapping } from 'core/ad-sizes';
 import { reportError } from 'utils/report-error';
-import { Advert } from './Advert';
+import { Advert } from '../dfp/Advert';
 
 const createAdvert = (
 	adSlot: HTMLElement,
