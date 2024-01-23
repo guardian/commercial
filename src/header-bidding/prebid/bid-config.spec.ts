@@ -588,6 +588,24 @@ describe('getOzonePlacementId', () => {
 		jest.resetAllMocks();
 	});
 
+	test('should return correct placementID for billboard in US when it is in desktop', () => {
+		isInUsa.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('D');
+		containsBillboard.mockReturnValue(true);
+		expect(getOzonePlacementId([createAdSize(970, 250)])).toBe(
+			'3500010912',
+		);
+	});
+
+	test('should return correct placementID for mpu in US when it is in desktop', () => {
+		isInUsa.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('D');
+		containsMpu.mockReturnValue(true);
+		expect(getOzonePlacementId([createAdSize(300, 250)])).toBe(
+			'3500010911',
+		);
+	});
+
 	test('should return correct placementID for mobile-sticky in US', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
@@ -595,10 +613,28 @@ describe('getOzonePlacementId', () => {
 		expect(getOzonePlacementId([createAdSize(320, 50)])).toBe('3500014217');
 	});
 
+	test('should return correct placementID in US if none of the conditions are met', () => {
+		isInUsa.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMpu.mockReturnValue(true);
+		expect(getOzonePlacementId([createAdSize(300, 250)])).toBe(
+			'1420436308',
+		);
+	});
+
 	test('should return correct placementID for mobile-sticky in ROW', () => {
 		isInRow.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMobileSticky.mockReturnValue(true);
 		expect(getOzonePlacementId([createAdSize(320, 50)])).toBe('1500000260');
+	});
+
+	test('should return correct placementID if none of the conditions are met', () => {
+		isInUk.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('T');
+		containsMpu.mockReturnValue(true);
+		expect(getOzonePlacementId([createAdSize(300, 250)])).toBe(
+			'0420420500',
+		);
 	});
 });
