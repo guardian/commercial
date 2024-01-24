@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 12.1.2
+
+### Patch Changes
+
+- fa2eedf: Replace ophan-tracker-js with @guardian/ophan-tracker-js
+
 ## 12.1.1
 
 ### Patch Changes
