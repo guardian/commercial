@@ -2,4 +2,4 @@
 '@guardian/commercial': major
 ---
 
-Update Prebid to node 20, and update peer dependencies to match DCR
+Update Prebid to node 18, and update peer dependencies to match DCR
