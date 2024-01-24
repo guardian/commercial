@@ -5,6 +5,7 @@ import { initFixedSlots } from 'init/consentless/init-fixed-slots';
 import { initConsentless } from 'init/consentless/prepare-ootag';
 import { init as setAdTestCookie } from 'init/shared/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from 'init/shared/set-adtest-in-labels-cookie';
+import { reloadPageOnConsentChange } from 'lib/reload-page-on-consent-change';
 
 const bootConsentless = async (consentState: ConsentState): Promise<void> => {
 	const consentlessModuleList = [
@@ -14,6 +15,7 @@ const bootConsentless = async (consentState: ConsentState): Promise<void> => {
 		initExclusionSlot(),
 		initFixedSlots(),
 		initArticleInline(),
+		reloadPageOnConsentChange(),
 	];
 
 	await Promise.all(consentlessModuleList);
