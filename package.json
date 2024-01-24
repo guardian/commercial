@@ -51,7 +51,7 @@
 		"@babel/runtime": "^7.11.2",
 		"@guardian/ab-core": "5.0.0",
 		"@guardian/browserslist-config": "^5.1.0",
-		"@guardian/consent-management-platform": "^13.7.1",
+		"@guardian/consent-management-platform": "0.0.0-beta-20240124124059",
 		"@guardian/core-web-vitals": "5.1.0",
 		"@guardian/eslint-config-typescript": "^6.0.0",
 		"@guardian/identity-auth": "^1.0.0",

@@ -16,7 +16,7 @@ const _reloadPageOnConsentChange = (): void => {
 		if (initialConsentState.canTarget !== consent.canTarget) {
 			window.location.reload();
 		}
-	});
+	}, true);
 };
 
 const reloadPageOnConsentChange = once(() =>
