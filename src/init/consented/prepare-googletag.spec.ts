@@ -68,7 +68,7 @@ jest.mock('identity/api', () => ({
 	getGoogleTagId: jest.fn().mockResolvedValue('test-id-string'),
 	getUrl: jest.fn(),
 }));
-jest.mock('ophan-tracker-js', () => null);
+jest.mock('@guardian/ophan-tracker-js', () => null);
 jest.mock('analytics/beacon', () => void {});
 
 jest.mock('detect/detect-breakpoint', () => ({

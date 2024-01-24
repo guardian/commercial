@@ -13,7 +13,7 @@ jest.mock('utils/report-error', () => ({
 jest.mock('header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));
-jest.mock('ophan-tracker-js', () => null);
+jest.mock('@guardian/ophan-tracker-js', () => null);
 jest.mock('utils/mediator');
 jest.mock('spacefinder/space-filler', () => ({
 	spaceFiller: {
