@@ -12,7 +12,7 @@ declare module '*.svg' {
 	export default content;
 }
 
-declare module 'ophan-tracker-js' {
+declare module '@guardian/ophan-tracker-js' {
 	const ophan: Ophan;
 	// eslint-disable-next-line import/no-default-export -- that’s the ophan way
 	export default ophan;
