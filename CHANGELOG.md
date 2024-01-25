@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 13.0.0
+
+### Major Changes
+
+- 319f38d: Update Prebid to node 18, and update peer dependencies to match DCR
+
 ## 12.1.2
 
 ### Patch Changes
