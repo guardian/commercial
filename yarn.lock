@@ -1787,15 +1787,15 @@
   resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-15.6.4.tgz#13787065e5c58b884944c5c71d6e324c7f2e566a"
   integrity sha512-oN+xN7FBuVKLCbbjvAMdWjgWqOtvR38acnqwAKsjUDkFsBzRWU/pueDSEGTCTTVSFcRdCKOsWnop+Vwh59P47g==
 
-"@guardian/ophan-tracker-js@2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@guardian/ophan-tracker-js/-/ophan-tracker-js-2.0.4.tgz#899cf3b3d91d403fb5afb6842b258fff1c286c60"
-  integrity sha512-kwUNUSfnL8SQwzTlVzInYh7a6VSMFy3zEq2A6Hm7cmKSbl8D7ed03y7ANqquViFuPffRZRQ0IrkJHSbMnsRmrA==
-
 "@guardian/libs@^16.0.0":
   version "16.0.0"
   resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-16.0.0.tgz#35c567039f3a2a8440e3f0520b1bd9d275e6ad97"
   integrity sha512-2i9cN6htXnvABIGhfqJGb9Bh/DdQOayUjb5ruqBGTiXEeDBHztctdVsi7+rPfMlwyPxQ+0qYLhM19f6J94vvhQ==
+
+"@guardian/ophan-tracker-js@2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@guardian/ophan-tracker-js/-/ophan-tracker-js-2.0.4.tgz#899cf3b3d91d403fb5afb6842b258fff1c286c60"
+  integrity sha512-kwUNUSfnL8SQwzTlVzInYh7a6VSMFy3zEq2A6Hm7cmKSbl8D7ed03y7ANqquViFuPffRZRQ0IrkJHSbMnsRmrA==
 
 "@guardian/prettier@4.0.0":
   version "4.0.0"
@@ -6922,7 +6922,7 @@ playwright@1.40.1:
   optionalDependencies:
     fsevents "2.3.2"
 
-prebid.js@guardian/prebid.js#91cabf5cdfc3c01745f4b10e55044f95a9d7d1b4:
+"prebid.js@github:guardian/prebid.js#91cabf5cdfc3c01745f4b10e55044f95a9d7d1b4":
   version "8.24.0"
   resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/91cabf5cdfc3c01745f4b10e55044f95a9d7d1b4"
   dependencies:
