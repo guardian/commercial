@@ -6,7 +6,7 @@ const insertCrosswordsAd = (anchor: HTMLElement) => {
 
 	const testContainer = wrapSlotInContainer(testSlot, {
 		className:
-			'fc-container fc-container--commercial dfp-ad--mobile-sticky ad-slot-container--centre-slot',
+			'fc-container fc-container--commercial dfp-ad--mobile-sticky ad-slot-container--centre-slot mobile-banner',
 	});
 
 	testContainer.style.display = 'flex';
@@ -30,6 +30,7 @@ export const init = (): Promise<void> => {
 	const testAnchor: HTMLElement | null =
 		document.querySelector(testAnchorSelector);
 
+	console.log('TESTANCHOR', testAnchor);
 	if (testAnchor) {
 		insertCrosswordsAd(testAnchor);
 	} else {
