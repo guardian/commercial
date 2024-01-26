@@ -19,7 +19,10 @@ const insertCrosswordsAd = (anchor: HTMLElement) => {
 };
 
 export const init = (): Promise<void> => {
-	if (window.guardian.config.isDotcomRendering) {
+	if (
+		window.guardian.config.isDotcomRendering ||
+		!!window.guardian.config.switches.crosswordsMobileSticky
+	) {
 		return Promise.resolve();
 	}
 
@@ -30,7 +33,6 @@ export const init = (): Promise<void> => {
 	const testAnchor: HTMLElement | null =
 		document.querySelector(testAnchorSelector);
 
-	console.log('TESTANCHOR', testAnchor);
 	if (testAnchor) {
 		insertCrosswordsAd(testAnchor);
 	} else {
