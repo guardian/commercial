@@ -10,12 +10,12 @@ const {
 jest.mock('utils/report-error', () => ({
 	reportError: jest.fn(),
 }));
-jest.mock('header-bidding/prebid/prebid', () => ({
+jest.mock('lib/header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));
 jest.mock('ophan-tracker-js', () => null);
 jest.mock('utils/mediator');
-jest.mock('spacefinder/space-filler', () => ({
+jest.mock('dynamic-slots/spacefinder/space-filler', () => ({
 	spaceFiller: {
 		fillSpace: jest.fn(() => Promise.resolve(true)),
 	},
@@ -25,7 +25,7 @@ jest.mock('lib/commercial-features', () => ({
 		liveblogAdverts: true,
 	},
 }));
-jest.mock('dfp/fill-dynamic-advert-slot');
+jest.mock('dynamic-slots/fill-dynamic-advert-slot');
 
 describe('Liveblog Dynamic Adverts', () => {
 	it('should exist', () => {

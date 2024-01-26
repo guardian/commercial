@@ -18,9 +18,9 @@ jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));
 
-jest.mock('header-bidding/a9/a9');
+jest.mock('lib/header-bidding/a9/a9');
 
-jest.mock('dfp/Advert');
+jest.mock('create-ads/Advert');
 
 jest.mock('core/__vendor/a9-apstag', () => ({
 	a9Apstag: jest.fn(),
@@ -28,9 +28,9 @@ jest.mock('core/__vendor/a9-apstag', () => ({
 
 jest.mock('lib/build-page-targeting');
 
-jest.mock('header-bidding/prebid/bid-config');
+jest.mock('lib/header-bidding/prebid/bid-config');
 
-jest.mock('header-bidding/utils', () => ({
+jest.mock('lib/header-bidding/utils', () => ({
 	isInUsRegion: () => true,
 }));
 

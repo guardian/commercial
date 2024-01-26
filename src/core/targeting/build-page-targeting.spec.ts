@@ -31,7 +31,7 @@ jest.mock('@guardian/consent-management-platform', () => ({
 	},
 }));
 
-jest.mock('identity/api', () => ({
+jest.mock('lib/identity/api', () => ({
 	isUserLoggedInOktaRefactor: () => true,
 	getAuthStatus: jest.fn(),
 	getOptionsHeadersWithOkta: jest.fn(),

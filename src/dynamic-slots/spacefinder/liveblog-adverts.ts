@@ -11,7 +11,7 @@ import type {
 } from 'dynamic-slots/spacefinder/spacefinder';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
-import fastdom from 'lib/fastdom-promise';
+import fastdom from 'utils/fastdom-promise';
 
 /**
  * Maximum number of inline ads to display on the page

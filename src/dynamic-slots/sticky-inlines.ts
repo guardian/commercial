@@ -1,6 +1,6 @@
 import { isUndefined } from '@guardian/libs';
 import { breakpoints } from '@guardian/source-foundations';
-import fastdom from 'lib/fastdom-promise';
+import fastdom from 'utils/fastdom-promise';
 
 /**
  * Represents an element that has some presence in the right column that we need to account for

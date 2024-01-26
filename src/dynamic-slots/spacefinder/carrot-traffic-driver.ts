@@ -6,7 +6,7 @@ import type {
 } from 'dynamic-slots/spacefinder/spacefinder';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentTweakpoint } from 'lib/detect/detect-breakpoint';
-import fastdom from '../../lib/fastdom-promise';
+import fastdom from '../../utils/fastdom-promise';
 import { fillDynamicAdSlot } from '../fill-dynamic-advert-slot';
 
 const bodySelector = '.article-body-commercial-selector';

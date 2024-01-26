@@ -1,4 +1,4 @@
-import fastdom from '../lib/fastdom-promise';
+import fastdom from '../utils/fastdom-promise';
 import { mediator as fakeMediator } from '../utils/mediator';
 import { init } from './article-aside-adverts';
 

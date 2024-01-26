@@ -15,7 +15,7 @@ jest.mock('lodash-es', () => ({
 	once: jest.fn().mockImplementation(<T>(f: T) => f),
 }));
 
-jest.mock('header-bidding/request-bids', () => ({
+jest.mock('render-ads/request-bids', () => ({
 	requestBidsForAd: jest.fn(),
 }));
 
@@ -23,15 +23,15 @@ jest.mock('config', () => ({
 	get: jest.fn(() => false),
 }));
 
-jest.mock('dfp/Advert', () => jest.fn(() => ({ advert: jest.fn() })));
+jest.mock('create-ads/Advert', () => jest.fn(() => ({ advert: jest.fn() })));
 
-jest.mock('./get-advert-by-id');
+jest.mock('lib/dfp/get-advert-by-id');
 
-jest.mock('./load-advert', () => ({
+jest.mock('render-ads/load-advert', () => ({
 	loadAdvert: jest.fn(),
 }));
 
-jest.mock('detect/detect-breakpoint', () => ({
+jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 }));
 

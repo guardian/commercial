@@ -5,9 +5,9 @@ import { fillDynamicAdSlot } from 'dynamic-slots/fill-dynamic-advert-slot';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import { getAdvertById } from 'lib/dfp/get-advert-by-id';
-import fastdom from 'lib/fastdom-promise';
 import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
 import { refreshAdvert } from 'render-ads/load-advert';
+import fastdom from 'utils/fastdom-promise';
 import { mediator } from 'utils/mediator';
 
 const createCommentSlot = (): HTMLElement => {

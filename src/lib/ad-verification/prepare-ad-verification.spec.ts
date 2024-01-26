@@ -37,7 +37,7 @@ jest.mock('../dfp/get-advert-by-id', () => ({
 		};
 	}),
 }));
-jest.mock('../dfp/load-advert', () => ({
+jest.mock('render-ads/load-advert', () => ({
 	refreshAdvert: jest.fn(),
 }));
 

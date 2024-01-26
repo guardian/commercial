@@ -12,7 +12,7 @@ import {
 } from 'dynamic-slots/sticky-inlines';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
-import fastdom from 'lib/fastdom-promise';
+import fastdom from 'utils/fastdom-promise';
 import { defineSlot } from '../define-slot';
 
 type SlotName = Parameters<typeof createAdSlot>[0];

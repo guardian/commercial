@@ -8,7 +8,7 @@ const outstreamSizes = [
 	adSizes.outstreamGoogleDesktop.toString(),
 ];
 
-jest.mock('dfp/init-slot-ias', () => ({
+jest.mock('create-ads/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 

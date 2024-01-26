@@ -5,8 +5,8 @@ import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect
 import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from 'lib/identity/api';
 import type { Advert } from '../create-ads/Advert';
 import { getAdvertById as getAdvertById_ } from '../lib/dfp/get-advert-by-id';
-import fastdom from '../lib/fastdom-promise';
 import { refreshAdvert as refreshAdvert_ } from '../render-ads/load-advert';
+import fastdom from '../utils/fastdom-promise';
 import { mediator as fakeMediator } from '../utils/mediator';
 import { _, initCommentAdverts } from './comment-adverts';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
@@ -34,25 +34,25 @@ jest.mock('experiments/ab', () => ({
 	getSynchronousTestsToRun: jest.fn().mockReturnValue([]),
 }));
 
-jest.mock('header-bidding/prebid/prebid', () => ({
+jest.mock('lib/header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));
 
 jest.mock('lib/config', () => ({ page: {}, get: () => false }));
 
-jest.mock('dfp/fill-dynamic-advert-slot', () => ({
+jest.mock('dynamic-slots/fill-dynamic-advert-slot', () => ({
 	fillDynamicAdSlot: jest.fn(),
 }));
 
-jest.mock('dfp/load-advert', () => ({
+jest.mock('render-ads/load-advert', () => ({
 	refreshAdvert: jest.fn(),
 }));
 
-jest.mock('dfp/get-advert-by-id', () => ({
+jest.mock('lib/dfp/get-advert-by-id', () => ({
 	getAdvertById: jest.fn(),
 }));
 
-jest.mock('detect/detect-breakpoint', () => ({
+jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 }));
 
@@ -62,7 +62,7 @@ jest.mock('lib/commercial-features', () => ({
 	},
 }));
 
-jest.mock('identity/api', () => ({
+jest.mock('lib/identity/api', () => ({
 	isUserLoggedInOktaRefactor: jest.fn(),
 }));
 

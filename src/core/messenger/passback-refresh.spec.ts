@@ -4,7 +4,7 @@ import { _ } from './passback-refresh';
 
 const { passbackRefresh } = _;
 
-jest.mock('../dfp/get-advert-by-id', () => ({
+jest.mock('lib/dfp/get-advert-by-id', () => ({
 	getAdvertById: jest.fn().mockReturnValue({
 		slot: {
 			setTargeting: jest.fn(),
@@ -12,7 +12,7 @@ jest.mock('../dfp/get-advert-by-id', () => ({
 	}),
 }));
 
-jest.mock('../dfp/load-advert', () => ({
+jest.mock('render-ads/load-advert', () => ({
 	refreshAdvert: jest.fn(),
 }));
 

@@ -10,7 +10,7 @@ const getUrlVars = getUrlVars_ as jest.MockedFunction<
 	() => Record<string, string>
 >;
 
-jest.mock('detect/detect-breakpoint', () => ({
+jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 }));
 

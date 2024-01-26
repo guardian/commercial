@@ -25,11 +25,11 @@ jest.mock('./manage-ad-free-cookie', () => ({
 const CommercialFeatures =
 	commercialFeatures.constructor as CommercialFeaturesConstructor;
 
-jest.mock('detect/detect-breakpoint', () => ({
+jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 }));
 
-jest.mock('identity/api', () => ({
+jest.mock('lib/identity/api', () => ({
 	isUserLoggedInOktaRefactor: jest.fn(),
 }));
 

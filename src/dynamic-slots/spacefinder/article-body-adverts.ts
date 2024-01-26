@@ -19,7 +19,7 @@ import {
 	getCurrentTweakpoint,
 } from 'lib/detect/detect-breakpoint';
 import { waitForAdvert } from '../../lib/dfp/wait-for-advert';
-import fastdom from '../../lib/fastdom-promise';
+import fastdom from '../../utils/fastdom-promise';
 import { mediator } from '../../utils/mediator';
 import { fillDynamicAdSlot } from '../fill-dynamic-advert-slot';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';

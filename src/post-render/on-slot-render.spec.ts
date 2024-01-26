@@ -16,7 +16,7 @@ jest.mock('./render-advert', () => ({
 	renderAdvert: jest.fn().mockReturnValue(Promise.resolve(true)),
 }));
 
-jest.mock('./get-advert-by-id', () => ({
+jest.mock('lib/dfp/get-advert-by-id', () => ({
 	getAdvertById: jest.fn().mockImplementation(() => advert),
 }));
 

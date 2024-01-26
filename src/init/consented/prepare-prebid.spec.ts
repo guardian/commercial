@@ -25,13 +25,13 @@ jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));
 
-jest.mock('header-bidding/prebid/prebid', () => ({
+jest.mock('lib/header-bidding/prebid/prebid', () => ({
 	prebid: {
 		initialise: jest.fn(),
 	},
 }));
 
-jest.mock('dfp/Advert', () =>
+jest.mock('create-ads/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
 );
 
@@ -39,11 +39,11 @@ jest.mock('lib/build-page-targeting', () => ({
 	getPageTargeting: jest.fn(),
 }));
 
-jest.mock('header-bidding/prebid/bid-config', () => ({
+jest.mock('lib/header-bidding/prebid/bid-config', () => ({
 	isInVariant: jest.fn(),
 }));
 
-jest.mock('header-bidding/utils', () => ({
+jest.mock('lib/header-bidding/utils', () => ({
 	shouldIncludeOnlyA9: false,
 }));
 

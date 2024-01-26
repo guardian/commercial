@@ -1,6 +1,6 @@
 import { createAdSlot, wrapSlotInContainer } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
-import fastdom from '../lib/fastdom-promise';
+import fastdom from '../utils/fastdom-promise';
 
 /**
  * Initialise merchandising-high ad slot on Frontend rendered content

@@ -3,7 +3,7 @@ import { adSizes } from 'core/ad-sizes';
 import { AD_LABEL_HEIGHT } from 'core/constants/ad-label-height';
 import { createAdSlot } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
-import fastdom from '../lib/fastdom-promise';
+import fastdom from '../utils/fastdom-promise';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 
 const tallestCommentAd = adSizes.mpu.height + AD_LABEL_HEIGHT;

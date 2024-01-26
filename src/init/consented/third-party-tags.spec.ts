@@ -101,7 +101,7 @@ jest.mock('lib/commercial-features', () => ({
 	},
 }));
 
-jest.mock('third-party-tags/imr-worldwide', () => ({
+jest.mock('lib/third-party-tags/imr-worldwide', () => ({
 	imrWorldwide: {
 		shouldRun: true,
 		url: '//fakeThirdPartyTag.js',
