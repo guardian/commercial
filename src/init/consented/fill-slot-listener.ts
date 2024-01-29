@@ -1,6 +1,6 @@
 import type { SizeMapping } from 'core';
-import { dfpEnv } from '../../dfp/dfp-env';
-import { fillDynamicAdSlot } from '../../dfp/fill-dynamic-advert-slot';
+import { fillDynamicAdSlot } from '../../dynamic-slots/fill-dynamic-advert-slot';
+import { dfpEnv } from '../../lib/dfp/dfp-env';
 
 type ExternalSlotCustomEvent = CustomEvent<{
 	slotId: string;

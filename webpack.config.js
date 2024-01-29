@@ -4,11 +4,7 @@ const webpack = require('webpack');
 
 module.exports = {
 	entry: {
-		'commercial-standalone': path.join(
-			__dirname,
-			'src',
-			'standalone.commercial.ts',
-		),
+		'commercial-standalone': path.join(__dirname, 'src', 'commercial.ts'),
 	},
 	output: {
 		path: path.join(__dirname, 'dist', 'bundle'),

@@ -1,6 +1,6 @@
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInCanada } from 'utils/geo-utils';
-import { a9 } from '../../header-bidding/a9/a9';
+import { a9 } from '../../lib/header-bidding/a9/a9';
 import { _ } from './prepare-a9';
 
 const { setupA9 } = _;
@@ -18,9 +18,9 @@ jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));
 
-jest.mock('header-bidding/a9/a9');
+jest.mock('lib/header-bidding/a9/a9');
 
-jest.mock('dfp/Advert');
+jest.mock('create-ads/Advert');
 
 jest.mock('core/__vendor/a9-apstag', () => ({
 	a9Apstag: jest.fn(),
@@ -28,9 +28,9 @@ jest.mock('core/__vendor/a9-apstag', () => ({
 
 jest.mock('lib/build-page-targeting');
 
-jest.mock('header-bidding/prebid/bid-config');
+jest.mock('lib/header-bidding/prebid/bid-config');
 
-jest.mock('header-bidding/utils', () => ({
+jest.mock('lib/header-bidding/utils', () => ({
 	isInUsRegion: () => true,
 }));
 

@@ -1,7 +1,7 @@
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { dfpEnv } from '../../dfp/dfp-env';
-import fastdom from '../../lib/fastdom-promise';
+import { dfpEnv } from '../../lib/dfp/dfp-env';
+import fastdom from '../../utils/fastdom-promise';
 
 // Remove ad slots
 const selectors: string[] = [dfpEnv.adSlotSelector, '.top-banner-ad-container'];
