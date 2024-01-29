@@ -35,6 +35,23 @@ To release a new version with your changes, run `yarn changeset add` and follow 
 
 When your PR is merged, changeset will analyse the changes and create a PR to release the new version.
 
+### Bumping @guardian/commercial in Frontend
+Run [this script](./scripts/bump_commercial.sh) to raise a PR that bumps `@guardian/commercial` in Frontend to the specified version.
+
+
+Execute the script as follows:
+
+```bash
+./scripts/bump_commercial.sh [VERSION_NUMBER]
+```
+
+Eg
+```bash
+./scripts/bump_commercial.sh 11.11.1
+```
+
+This will automatically create a pull request in the Frontend repository.
+
 ### Pull requests
 
 Try to write PR titles in the conventional commit format, and squash and merge when merging. That way your PR will trigger a release when you merge it (if necessary).
@@ -66,5 +83,9 @@ Frontend will then use the local bundle instead of the one from PROD/CODE.
 ### Testing on CODE
 
 To test the bundle on CODE, create a PR, add the `[beta] @guardian/commercial` label, this will release a beta version of the bundle to NPM, the exact version will be commented on your PR.
+
+In order to do this, first run: `yarn changeset add`, again, This will create a new changeset file in the `.changeset` directory. Commit this file with your PR.
+
+**Note**: Sometimes you might need to remove and re-add the label to trigger the beta version.
 
 On a branch on frontend you can update the version of the bundle to the beta version and deploy to CODE to test.

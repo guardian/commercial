@@ -1782,10 +1782,20 @@
   resolved "https://registry.yarnpkg.com/@guardian/identity-auth/-/identity-auth-1.0.0.tgz#ea8896a45d2aef9828e590cccdd858b5f46785d1"
   integrity sha512-JUkPai2Qnuq1quQ2rtvwWhLTtISqJBNe8XpxqbIr4jGaNWn5EL3kI1scAwq5PyNEg9135E7YXWTnjLNkm3ivoA==
 
-"@guardian/libs@15.6.4", "@guardian/libs@^15.6.4":
+"@guardian/libs@15.6.4":
   version "15.6.4"
   resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-15.6.4.tgz#13787065e5c58b884944c5c71d6e324c7f2e566a"
   integrity sha512-oN+xN7FBuVKLCbbjvAMdWjgWqOtvR38acnqwAKsjUDkFsBzRWU/pueDSEGTCTTVSFcRdCKOsWnop+Vwh59P47g==
+
+"@guardian/ophan-tracker-js@2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@guardian/ophan-tracker-js/-/ophan-tracker-js-2.0.4.tgz#899cf3b3d91d403fb5afb6842b258fff1c286c60"
+  integrity sha512-kwUNUSfnL8SQwzTlVzInYh7a6VSMFy3zEq2A6Hm7cmKSbl8D7ed03y7ANqquViFuPffRZRQ0IrkJHSbMnsRmrA==
+
+"@guardian/libs@^16.0.0":
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-16.0.0.tgz#35c567039f3a2a8440e3f0520b1bd9d275e6ad97"
+  integrity sha512-2i9cN6htXnvABIGhfqJGb9Bh/DdQOayUjb5ruqBGTiXEeDBHztctdVsi7+rPfMlwyPxQ+0qYLhM19f6J94vvhQ==
 
 "@guardian/prettier@4.0.0":
   version "4.0.0"
@@ -6659,11 +6669,6 @@ opener@^1.5.2:
   resolved "https://registry.yarnpkg.com/opener/-/opener-1.5.2.tgz#5d37e1f35077b9dcac4301372271afdeb2a13598"
   integrity sha512-ur5UIdyw5Y7yEj9wLzhqXiy6GZ3Mwx0yGI+5sMn2r0N0v3cKJvUmFH5yPP+WXh9e0xfyzyJX95D8l088DNFj7A==
 
-ophan-tracker-js@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/ophan-tracker-js/-/ophan-tracker-js-2.0.1.tgz#568c9a8c127f511d4dc19e9d3421cc88e04ea910"
-  integrity sha512-HXH0rjZlLeV9ri4V9Q0t0AaD5Q3ue4o+YMCuBsov6cWLPWcWBiARHtSRlpY6fJD+/iUIEiSPsrlfPIJUz7inYA==
-
 optionator@^0.8.1:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/optionator/-/optionator-0.8.3.tgz#84fa1d036fe9d3c7e21d99884b601167ec8fb495"
@@ -6917,15 +6922,15 @@ playwright@1.40.1:
   optionalDependencies:
     fsevents "2.3.2"
 
-prebid.js@guardian/prebid.js#ee7f43c7c85a5245bbe51920cfed18818866ea7b:
+prebid.js@guardian/prebid.js#91cabf5cdfc3c01745f4b10e55044f95a9d7d1b4:
   version "8.24.0"
-  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/ee7f43c7c85a5245bbe51920cfed18818866ea7b"
+  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/91cabf5cdfc3c01745f4b10e55044f95a9d7d1b4"
   dependencies:
     "@babel/core" "^7.23.2"
     "@babel/plugin-transform-runtime" "^7.18.9"
     "@babel/preset-env" "^7.16.8"
     "@babel/runtime" "^7.18.9"
-    "@guardian/libs" "^15.6.4"
+    "@guardian/libs" "^16.0.0"
     core-js "^3.13.0"
     core-js-pure "^3.13.0"
     criteo-direct-rsa-validate "^1.1.0"
@@ -8232,10 +8237,10 @@ typescript-tuple@^2.2.1:
   dependencies:
     typescript-compare "^0.0.2"
 
-typescript@^5.1.3:
-  version "5.1.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.1.3.tgz#8d84219244a6b40b6fb2b33cc1c062f715b9e826"
-  integrity sha512-XH627E9vkeqhlZFQuL+UsyAXEnibT0kWR2FWONlr4sTjvxyJYnyefgrkyECLzM5NenmKzRAy2rR/OlYLA1HkZw==
+typescript@^5.3.3:
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.3.3.tgz#b3ce6ba258e72e6305ba66f5c9b452aaee3ffe37"
+  integrity sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==
 
 typescript@~4.9.5:
   version "4.9.5"

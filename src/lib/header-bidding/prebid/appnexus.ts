@@ -36,7 +36,9 @@ const getAppNexusInvCode = (sizes: HeaderBiddingSize[]): string | undefined => {
 	}
 };
 
-const getAppNexusDirectPlacementId = (sizes: HeaderBiddingSize[]): string => {
+export const getAppNexusDirectPlacementId = (
+	sizes: HeaderBiddingSize[],
+): string => {
 	if (isInAuOrNz()) {
 		return '11016434';
 	}
@@ -100,3 +102,5 @@ export const getAppNexusDirectBidParams = (
 		keywords: buildAppNexusTargetingObject(pageTargeting),
 	};
 };
+
+export const _ = { getAppNexusDirectPlacementId };

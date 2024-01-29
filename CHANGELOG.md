@@ -1,5 +1,23 @@
 # @guardian/commercial
 
+## 13.0.0
+
+### Major Changes
+
+- 319f38d: Update Prebid to node 18, and update peer dependencies to match DCR
+
+## 12.1.2
+
+### Patch Changes
+
+- fa2eedf: Replace ophan-tracker-js with @guardian/ophan-tracker-js
+
+## 12.1.1
+
+### Patch Changes
+
+- 2a6158d: Prebid kargo ab test to 8%
+
 ## 12.1.0
 
 ### Minor Changes
