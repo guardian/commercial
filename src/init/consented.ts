@@ -23,6 +23,7 @@ import { adSlotIdPrefix } from 'lib/dfp/dfp-env-globals';
 import { reportError } from 'utils/report-error';
 import { catchErrorsWithContext } from 'utils/robust';
 import { initDfpListeners } from './consented/dfp-listeners';
+import { initDynamicAdSlots } from './consented/dynamic-ad-slots';
 import { init as initMessenger } from './consented/messenger';
 
 type Modules = Array<[`${string}-${string}`, () => Promise<unknown>]>;
@@ -69,6 +70,7 @@ if (!commercialFeatures.adFree) {
 		// The permutive lib however is loaded async with the third party tags
 		['cm-dfp-listeners', initDfpListeners],
 		['cm-prepare-googletag', () => initPermutive().then(prepareGoogletag)],
+		['cm-dynamic-a-slots', initDynamicAdSlots],
 		['cm-prepare-a9', prepareA9],
 		['cm-prepare-fill-slot-listener', initFillSlotListener],
 	);

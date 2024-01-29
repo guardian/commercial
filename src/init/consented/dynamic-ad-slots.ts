@@ -19,8 +19,8 @@ const dynamicAdSlotModules: Modules = [
 	['cm-commentsExpandedAdverts', initCommentsExpandedAdverts],
 ];
 
-export const initDynamicAdSlots = (): Promise<void> => {
-	return Promise.all(
+export const initDynamicAdSlots = async (): Promise<void> => {
+	await Promise.all(
 		dynamicAdSlotModules.map(async ([name, init]) => {
 			try {
 				await init();
@@ -31,5 +31,5 @@ export const initDynamicAdSlots = (): Promise<void> => {
 				});
 			}
 		}),
-	).then(() => undefined);
+	);
 };
