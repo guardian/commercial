@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 14.0.0
+
+### Major Changes
+
+- 78bfe21: Updates `@guardian/identity-auth` and peer dependencies
+
+### Patch Changes
+
+- 32e3026: Update version of @guardian/consent-management-platform to 13.8.0
+
 ## 13.0.0
 
 ### Major Changes
