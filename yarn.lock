@@ -1742,10 +1742,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/browserslist-config/-/browserslist-config-5.1.0.tgz#61cd822388dc196cea1b39c693366ed550edcd10"
   integrity sha512-QsyaZ7OZ6jBl8lByiLWtnobcS0IvIPVzDeGz9XY+CvPy5v5Kb0RJo+fFLEZbCqRLrfK+5f2sjrwPqrwtJBe2Sw==
 
-"@guardian/consent-management-platform@0.0.0-beta-20240129231944":
-  version "0.0.0-beta-20240129231944"
-  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-0.0.0-beta-20240129231944.tgz#f980a59bbb5617614cea8f946e33a17316727d6f"
-  integrity sha512-0K+xzKZtqCLUZmPBXo+zVP17mcZnC6dvJuj2D0R7N8QovY5XZH5+JaqWN9O+YkcHyEKCwo4m+nJ4RpeGNMqdQQ==
+"@guardian/consent-management-platform@0.0.0-beta-20240130083130":
+  version "0.0.0-beta-20240130083130"
+  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-0.0.0-beta-20240130083130.tgz#b13564a4bb15c8d8119ddf1eecabb4bb940ae0c7"
+  integrity sha512-GEODdd7PiBPQUmtCcD6oQVQHbK7PFtW7xvQ21rj3kBWiNVwMAYW8IadzmHBZE0JON5PnLg4fVzmTz7fuuMN/WA==
 
 "@guardian/core-web-vitals@5.1.0":
   version "5.1.0"
@@ -1787,10 +1787,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-15.6.4.tgz#13787065e5c58b884944c5c71d6e324c7f2e566a"
   integrity sha512-oN+xN7FBuVKLCbbjvAMdWjgWqOtvR38acnqwAKsjUDkFsBzRWU/pueDSEGTCTTVSFcRdCKOsWnop+Vwh59P47g==
 
-"@guardian/libs@^16.0.0":
-  version "16.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-16.0.0.tgz#35c567039f3a2a8440e3f0520b1bd9d275e6ad97"
-  integrity sha512-2i9cN6htXnvABIGhfqJGb9Bh/DdQOayUjb5ruqBGTiXEeDBHztctdVsi7+rPfMlwyPxQ+0qYLhM19f6J94vvhQ==
+"@guardian/libs@^15.6.4":
+  version "15.9.1"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-15.9.1.tgz#6846c9f0debb19d650f1775b21314a99ea80248d"
+  integrity sha512-Mns6Gc3MQacVxQ44Ei5HaVak3y9HYQF5kZ4lZGnacJfRdWAfW9K5K5rphf7mSgqkygOGoTs5TMQ3gO37MP8hbw==
 
 "@guardian/ophan-tracker-js@2.0.4":
   version "2.0.4"
