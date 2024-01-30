@@ -1,6 +1,6 @@
+import { clickAcceptAllCookies as cmpAcceptAll } from '@guardian/consent-management-platform';
 import { test } from '@playwright/test';
 import { fronts, tagFronts } from '../fixtures/pages';
-import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 import { waitForSlot } from '../lib/util';
 
