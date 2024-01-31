@@ -150,10 +150,12 @@ const getOfflineCount = (): Metric[] =>
  * Allows for more granular monitoring of web page performance.
  */
 const getPerformanceMeasures = (...teams: TeamName[]): Metric[] =>
-	getMeasures(teams).map(({ detail: { team, name, action }, duration }) => ({
-		name: [team, name, action].filter(isNonNullable).join('_'),
-		value: duration,
-	}));
+	getMeasures(teams).map(
+		({ detail: { subscription, name, action }, duration }) => ({
+			name: [subscription, name, action].filter(isNonNullable).join('_'),
+			value: duration,
+		}),
+	);
 
 function gatherMetricsOnPageUnload(): void {
 	// Assemble commercial properties and metrics
