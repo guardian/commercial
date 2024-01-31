@@ -19,9 +19,10 @@ const insertCrosswordsAd = (anchor: HTMLElement) => {
 };
 
 export const init = (): Promise<void> => {
+	console.log('HERE', window.guardian.config.switches.crosswordsMobileSticky);
 	if (
 		window.guardian.config.isDotcomRendering ||
-		!!window.guardian.config.switches.crosswordsMobileSticky
+		window.guardian.config.switches.crosswordMobileBanner === false
 	) {
 		return Promise.resolve();
 	}
