@@ -23,7 +23,6 @@ import { adSlotIdPrefix } from 'dfp/dfp-env-globals';
 import { adFreeSlotRemove } from 'init/consented/ad-free-slot-remove';
 import { init as initArticleAsideAdverts } from 'init/consented/article-aside-adverts';
 import { init as initArticleBodyAdverts } from 'init/consented/article-body-adverts';
-import { initCommentAdverts } from 'init/consented/comment-adverts';
 import { initCommentsExpandedAdverts } from 'init/consented/comments-expanded-advert';
 import { init as initComscore } from 'init/consented/comscore';
 import { initFillSlotListener } from 'init/consented/fill-slot-listener';
@@ -100,7 +99,6 @@ if (!commercialFeatures.adFree) {
 		['cm-articleAsideAdverts', initArticleAsideAdverts],
 		['cm-articleBodyAdverts', initArticleBodyAdverts],
 		['cm-liveblogAdverts', initLiveblogAdverts],
-		['cm-commentAdverts', initCommentAdverts],
 		['cm-commentsExpandedAdverts', initCommentsExpandedAdverts],
 		['cm-thirdPartyTags', initThirdPartyTags],
 		['cm-redplanet', initRedplanet],
