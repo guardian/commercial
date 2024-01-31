@@ -26,19 +26,18 @@ export const init = (): Promise<void> => {
 		return Promise.resolve();
 	}
 
-	const testAnchorSelector = window.guardian.config.page.commentable
-		? '.below_controls + *'
+	const anchorSelector = window.guardian.config.page.commentable
+		? '.crossword__container__below-controls + *'
 		: '.content-footer > :first-child';
 
-	const testAnchor: HTMLElement | null =
-		document.querySelector(testAnchorSelector);
+	const anchor: HTMLElement | null = document.querySelector(anchorSelector);
 
-	if (testAnchor) {
-		insertCrosswordsAd(testAnchor);
+	if (anchor) {
+		insertCrosswordsAd(anchor);
 	} else {
-		window.addEventListener('crosswordLoaded', () => {
+		window.addEventListener('crossword-loaded', () => {
 			const anchor: HTMLElement | null =
-				document.querySelector(testAnchorSelector);
+				document.querySelector(anchorSelector);
 			if (anchor) {
 				insertCrosswordsAd(anchor);
 			} else return;
