@@ -2,18 +2,18 @@ import { createAdSlot, wrapSlotInContainer } from 'core/create-ad-slot';
 import fastdom from '../../lib/fastdom-promise';
 
 const insertCrosswordsAd = (anchor: HTMLElement) => {
-	const testSlot = createAdSlot('mobile-sticky');
+	const slot = createAdSlot('crossword-banner-mobile');
 
-	const testContainer = wrapSlotInContainer(testSlot, {
+	const container = wrapSlotInContainer(slot, {
 		className:
 			'fc-container fc-container--commercial dfp-ad--mobile-sticky ad-slot-container--centre-slot mobile-banner',
 	});
 
-	testContainer.style.display = 'flex';
-	testContainer.style.justifyContent = 'center';
+	container.style.display = 'flex';
+	container.style.justifyContent = 'center';
 	void fastdom.mutate(() => {
 		if (anchor.parentNode) {
-			anchor.parentNode.insertBefore(testContainer, anchor);
+			anchor.parentNode.insertBefore(container, anchor);
 		}
 	});
 };
