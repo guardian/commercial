@@ -100,6 +100,7 @@ type SlotName =
 	| 'comments-expanded'
 	| 'comments'
 	| 'crossword-banner'
+	| 'crossword-banner-mobile'
 	| 'epic'
 	| 'exclusion'
 	| 'external'
@@ -392,6 +393,9 @@ const slotSizeMappings = {
 		mobile: [adSizes.fluid],
 	},
 	'mobile-sticky': {
+		mobile: [adSizes.mobilesticky],
+	},
+	'crossword-banner-mobile': {
 		mobile: [adSizes.mobilesticky],
 	},
 	'crossword-banner': {
