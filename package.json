@@ -106,6 +106,7 @@
 	"dependencies": {
 		"@changesets/cli": "^2.26.2",
 		"@guardian/ophan-tracker-js": "2.0.4",
+		"@guardian/prebid.js": "8.24.0",
 		"@octokit/core": "^4.0.5",
 		"fastdom": "^1.0.11",
 		"lodash-es": "^4.17.21",
