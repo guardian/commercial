@@ -34,11 +34,14 @@ const insertAd = (anchor: HTMLElement) => {
 		.then(() => fillDynamicAdSlot(slot, false));
 };
 
-const insertAdMobile = (anchor: HTMLElement) => {
+const insertAdMobile = (anchor: HTMLElement, id: number) => {
 	log('commercial', 'Inserting mobile comments-expanded advert');
 	const slot = createAdSlot('comments-expanded', {
+		name: `comments-expanded-${id}`,
 		classes: 'comments-expanded',
 	});
+
+	//TODO: Add the label and margins/paddings for ads in DCR
 
 	const adSlotContainer = document.createElement('div');
 	adSlotContainer.className = 'ad-slot-container';
@@ -121,15 +124,18 @@ const handleCommentsExpandedEvent = (): void => {
 		void insertAd(rightColumnNode);
 	}
 
+	//TODO: Fix the total number of lists to return the correct one
+
 	if (
 		currentBreakpoint === 'mobile' &&
 		isEnoughCommentsForAd(commentsColumn)
 	) {
-		for (let i = 0; i < commentsColumn.childElementCount; i++) {
+		let counter = 0;
+		for (let i = 0; i < commentsColumn.children.length; i++) {
 			if (commentsColumn.children[i] && i % 3 === 0) {
-				console.log(i);
+				counter++;
 				const childElement = commentsColumn.children[i] as HTMLElement;
-				void insertAdMobile(childElement);
+				void insertAdMobile(childElement, counter);
 			}
 		}
 	}
