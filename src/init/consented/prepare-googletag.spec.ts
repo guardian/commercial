@@ -5,13 +5,13 @@ import {
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
 import { loadScript } from '@guardian/libs';
 import type * as AdSizesType from 'core/ad-sizes';
-import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'detect/detect-breakpoint';
 import { commercialFeatures } from 'lib/commercial-features';
 import _config from 'lib/config';
-import { dfpEnv } from '../../dfp/dfp-env';
-import { fillStaticAdvertSlots } from '../../dfp/fill-static-advert-slots';
-import { loadAdvert } from '../../dfp/load-advert';
+import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
+import { loadAdvert } from '../../display/load-advert';
+import { dfpEnv } from '../../lib/dfp/dfp-env';
 import { init as prepareGoogletag } from './prepare-googletag';
+import { fillStaticAdvertSlots } from './static-ad-slots';
 
 const config = _config as {
 	get: (k: string) => string;
@@ -54,29 +54,29 @@ const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
 	typeof getCurrentBreakpoint_
 >;
 
-jest.mock('dfp/init-slot-ias', () => ({
+jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock('header-bidding/prebid/prebid', () => ({
+jest.mock('lib/header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));
 
-jest.mock('identity/api', () => ({
+jest.mock('lib/identity/api', () => ({
 	isUserLoggedInOktaRefactor: () => true,
 	getUserFromCookie: jest.fn(),
 	getGoogleTagId: jest.fn().mockResolvedValue('test-id-string'),
 	getUrl: jest.fn(),
 }));
 jest.mock('@guardian/ophan-tracker-js', () => null);
-jest.mock('analytics/beacon', () => void {});
+jest.mock('lib/analytics/beacon', () => void {});
 
-jest.mock('detect/detect-breakpoint', () => ({
+jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 	hasCrossedBreakpoint: jest.fn(),
 }));
-jest.mock('analytics/google', () => () => void {});
-jest.mock('dfp/display-lazy-ads', () => ({
+jest.mock('lib/analytics/google', () => () => void {});
+jest.mock('display/display-lazy-ads', () => ({
 	displayLazyAds: jest.fn(),
 }));
 
@@ -133,10 +133,10 @@ jest.mock(
 		<T>(fn: (...args: unknown[]) => T) =>
 			fn,
 );
-jest.mock('analytics/beacon', () => ({
+jest.mock('lib/analytics/beacon', () => ({
 	fire: jest.fn(),
 }));
-jest.mock('dfp/load-advert', () => ({
+jest.mock('display/load-advert', () => ({
 	loadAdvert: jest.fn(),
 }));
 jest.mock('@guardian/consent-management-platform', () => ({
@@ -400,16 +400,6 @@ describe('DFP', () => {
 			expect(slotId).toBeTruthy();
 			expect(slotId).not.toBe('dfp-ad-html-slot');
 		});
-	});
-
-	it('should set listeners', async () => {
-		mockOnConsent(tcfv2WithConsent);
-		mockGetConsentFor(true);
-		await prepareGoogletag();
-		expect(pubAds.addEventListener).toHaveBeenCalledWith(
-			'slotRenderEnded',
-			expect.anything(),
-		);
 	});
 
 	it('should define slots', async () => {

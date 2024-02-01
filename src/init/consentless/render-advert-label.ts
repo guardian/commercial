@@ -3,7 +3,7 @@
 -- Nested fastdom measure-mutate promises throw the error:
 -- "Promise returned in function argument where a void return was expected"
 */
-import fastdom from 'lib/fastdom-promise';
+import fastdom from 'utils/fastdom-promise';
 
 const shouldRenderConsentlessLabel = (adSlotNode: HTMLElement): boolean => {
 	if (
