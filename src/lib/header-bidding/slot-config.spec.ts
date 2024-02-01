@@ -1,6 +1,6 @@
 import type { SizeMapping } from 'core/ad-sizes';
 import { adSizes } from 'core/ad-sizes';
-import { Advert } from '../../create-ads/Advert';
+import { Advert } from '../../define/Advert';
 import { getHeaderBiddingAdSlots } from './slot-config';
 import { getBreakpointKey, shouldIncludeMobileSticky } from './utils';
 import type * as Utils from './utils';
@@ -24,7 +24,7 @@ jest.mock('lib/cookies', () => ({
 	getCookie: jest.fn(),
 }));
 
-jest.mock('create-ads/init-slot-ias', () => ({
+jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 

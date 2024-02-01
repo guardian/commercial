@@ -1,5 +1,5 @@
+import { refreshAdvert } from 'display/load-advert';
 import { getAdvertById } from 'lib/dfp/get-advert-by-id';
-import { refreshAdvert } from 'render-ads/load-advert';
 import { _ } from './passback-refresh';
 
 const { passbackRefresh } = _;
@@ -12,7 +12,7 @@ jest.mock('lib/dfp/get-advert-by-id', () => ({
 	}),
 }));
 
-jest.mock('render-ads/load-advert', () => ({
+jest.mock('display/load-advert', () => ({
 	refreshAdvert: jest.fn(),
 }));
 

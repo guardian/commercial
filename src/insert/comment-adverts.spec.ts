@@ -3,9 +3,9 @@ import { adSizes } from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
 import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from 'lib/identity/api';
-import type { Advert } from '../create-ads/Advert';
+import type { Advert } from '../define/Advert';
+import { refreshAdvert as refreshAdvert_ } from '../display/load-advert';
 import { getAdvertById as getAdvertById_ } from '../lib/dfp/get-advert-by-id';
-import { refreshAdvert as refreshAdvert_ } from '../render-ads/load-advert';
 import fastdom from '../utils/fastdom-promise';
 import { mediator as fakeMediator } from '../utils/mediator';
 import { _, initCommentAdverts } from './comment-adverts';
@@ -40,11 +40,11 @@ jest.mock('lib/header-bidding/prebid/prebid', () => ({
 
 jest.mock('lib/config', () => ({ page: {}, get: () => false }));
 
-jest.mock('dynamic-slots/fill-dynamic-advert-slot', () => ({
+jest.mock('insert/fill-dynamic-advert-slot', () => ({
 	fillDynamicAdSlot: jest.fn(),
 }));
 
-jest.mock('render-ads/load-advert', () => ({
+jest.mock('display/load-advert', () => ({
 	refreshAdvert: jest.fn(),
 }));
 

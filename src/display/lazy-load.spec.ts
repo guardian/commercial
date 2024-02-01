@@ -1,5 +1,5 @@
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
-import type { Advert } from '../create-ads/Advert';
+import type { Advert } from '../define/Advert';
 import { dfpEnv } from '../lib/dfp/dfp-env';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { enableLazyLoad } from './lazy-load';
@@ -15,7 +15,7 @@ jest.mock('lodash-es', () => ({
 	once: jest.fn().mockImplementation(<T>(f: T) => f),
 }));
 
-jest.mock('render-ads/request-bids', () => ({
+jest.mock('display/request-bids', () => ({
 	requestBidsForAd: jest.fn(),
 }));
 
@@ -23,11 +23,11 @@ jest.mock('config', () => ({
 	get: jest.fn(() => false),
 }));
 
-jest.mock('create-ads/Advert', () => jest.fn(() => ({ advert: jest.fn() })));
+jest.mock('define/Advert', () => jest.fn(() => ({ advert: jest.fn() })));
 
 jest.mock('lib/dfp/get-advert-by-id');
 
-jest.mock('render-ads/load-advert', () => ({
+jest.mock('display/load-advert', () => ({
 	loadAdvert: jest.fn(),
 }));
 

@@ -1,14 +1,14 @@
 import { log } from '@guardian/libs';
 import { adSizes } from 'core/ad-sizes';
 import { createAdSlot } from 'core/create-ad-slot';
-import { fillDynamicAdSlot } from 'dynamic-slots/fill-dynamic-advert-slot';
-import { spaceFiller } from 'dynamic-slots/spacefinder/space-filler';
+import { fillDynamicAdSlot } from 'insert/fill-dynamic-advert-slot';
+import { spaceFiller } from 'insert/spacefinder/space-filler';
 import type {
 	SpacefinderItem,
 	SpacefinderOptions,
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'dynamic-slots/spacefinder/spacefinder';
+} from 'insert/spacefinder/spacefinder';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import fastdom from 'utils/fastdom-promise';

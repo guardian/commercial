@@ -1,8 +1,8 @@
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
+import { requestBidsForAd } from 'display/request-bids';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
-import { requestBidsForAd } from 'render-ads/request-bids';
-import type { Advert } from '../create-ads/Advert';
+import type { Advert } from '../define/Advert';
 import { dfpEnv } from '../lib/dfp/dfp-env';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { loadAdvert, refreshAdvert } from './load-advert';

@@ -44,7 +44,7 @@ const CcpaWithConsentMock = (callback: Callback) =>
 		framework: 'ccpa',
 	});
 
-jest.mock('create-ads/Advert', () =>
+jest.mock('define/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
 );
 

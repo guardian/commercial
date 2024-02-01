@@ -15,7 +15,7 @@ jest.mock('lib/header-bidding/prebid/prebid', () => ({
 }));
 jest.mock('@guardian/ophan-tracker-js', () => null);
 jest.mock('utils/mediator');
-jest.mock('dynamic-slots/spacefinder/space-filler', () => ({
+jest.mock('insert/spacefinder/space-filler', () => ({
 	spaceFiller: {
 		fillSpace: jest.fn(() => Promise.resolve(true)),
 	},
@@ -25,7 +25,7 @@ jest.mock('lib/commercial-features', () => ({
 		liveblogAdverts: true,
 	},
 }));
-jest.mock('dynamic-slots/fill-dynamic-advert-slot');
+jest.mock('insert/fill-dynamic-advert-slot');
 
 describe('Liveblog Dynamic Adverts', () => {
 	it('should exist', () => {

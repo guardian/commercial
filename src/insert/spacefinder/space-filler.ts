@@ -2,8 +2,8 @@ import type {
 	SpacefinderOptions,
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'dynamic-slots/spacefinder/spacefinder';
-import { findSpace, SpaceError } from 'dynamic-slots/spacefinder/spacefinder';
+} from 'insert/spacefinder/spacefinder';
+import { findSpace, SpaceError } from 'insert/spacefinder/spacefinder';
 import raven from 'lib/raven';
 
 class SpaceFiller {

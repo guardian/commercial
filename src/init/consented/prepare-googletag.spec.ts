@@ -8,8 +8,8 @@ import type * as AdSizesType from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
 import _config from 'lib/config';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
+import { loadAdvert } from '../../display/load-advert';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
-import { loadAdvert } from '../../render-ads/load-advert';
 import { init as prepareGoogletag } from './prepare-googletag';
 import { fillStaticAdvertSlots } from './static-ad-slots';
 
@@ -54,7 +54,7 @@ const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
 	typeof getCurrentBreakpoint_
 >;
 
-jest.mock('create-ads/init-slot-ias', () => ({
+jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 
@@ -76,7 +76,7 @@ jest.mock('lib/detect/detect-breakpoint', () => ({
 	hasCrossedBreakpoint: jest.fn(),
 }));
 jest.mock('lib/analytics/google', () => () => void {});
-jest.mock('render-ads/display-lazy-ads', () => ({
+jest.mock('display/display-lazy-ads', () => ({
 	displayLazyAds: jest.fn(),
 }));
 
@@ -136,7 +136,7 @@ jest.mock(
 jest.mock('lib/analytics/beacon', () => ({
 	fire: jest.fn(),
 }));
-jest.mock('render-ads/load-advert', () => ({
+jest.mock('display/load-advert', () => ({
 	loadAdvert: jest.fn(),
 }));
 jest.mock('@guardian/consent-management-platform', () => ({

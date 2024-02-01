@@ -1,6 +1,6 @@
 import { log } from '@guardian/libs';
 import fastdom from 'fastdom';
-import type { Advert } from '../create-ads/Advert';
+import type { Advert } from '../define/Advert';
 import { dfpEnv } from '../lib/dfp/dfp-env';
 
 const removeFromDfpEnv = (advert: Advert) => {

@@ -6,13 +6,13 @@ import {
 	createAdSlot,
 	wrapSlotInContainer,
 } from 'core/create-ad-slot';
-import { spaceFiller } from 'dynamic-slots/spacefinder/space-filler';
+import { spaceFiller } from 'insert/spacefinder/space-filler';
 import type {
 	RuleSpacing,
 	SpacefinderItem,
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'dynamic-slots/spacefinder/spacefinder';
+} from 'insert/spacefinder/spacefinder';
 import { commercialFeatures } from 'lib/commercial-features';
 import {
 	getCurrentBreakpoint,

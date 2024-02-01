@@ -20,7 +20,7 @@ jest.mock('lib/commercial-features', () => ({
 
 jest.mock('lib/header-bidding/a9/a9');
 
-jest.mock('create-ads/Advert');
+jest.mock('define/Advert');
 
 jest.mock('core/__vendor/a9-apstag', () => ({
 	a9Apstag: jest.fn(),

@@ -1,4 +1,4 @@
-import type { Advert } from '../create-ads/Advert';
+import type { Advert } from '../define/Advert';
 import { pageSkin } from '../lib/creatives/page-skin';
 import { dfpEnv } from '../lib/dfp/dfp-env';
 import { loadAdvert } from './load-advert';

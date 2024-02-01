@@ -1,5 +1,5 @@
 import { memoize } from 'lodash-es';
-import type { Advert } from '../../create-ads/Advert';
+import type { Advert } from '../../define/Advert';
 import { getAdvertById } from './get-advert-by-id';
 
 const CHECK_ADVERT_TIMEOUT_MS = 200;

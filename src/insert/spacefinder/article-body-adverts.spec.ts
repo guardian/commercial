@@ -1,4 +1,4 @@
-import { spaceFiller } from 'dynamic-slots/spacefinder/space-filler';
+import { spaceFiller } from 'insert/spacefinder/space-filler';
 import { commercialFeatures } from 'lib/commercial-features';
 import { init } from './article-body-adverts';
 
@@ -16,13 +16,13 @@ jest.mock('lib/header-bidding/prebid/prebid', () => ({
 jest.mock('lib/dfp/wait-for-advert', () => (id: keyof typeof ads) => {
 	return Promise.resolve(ads[id]);
 });
-jest.mock('dynamic-slots/fill-dynamic-advert-slot', () => ({
+jest.mock('insert/fill-dynamic-advert-slot', () => ({
 	fillDynamicAdSlot: jest.fn(),
 }));
 jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));
-jest.mock('dynamic-slots/spacefinder/space-filler', () => ({
+jest.mock('insert/spacefinder/space-filler', () => ({
 	spaceFiller: {
 		fillSpace: jest.fn(),
 	},

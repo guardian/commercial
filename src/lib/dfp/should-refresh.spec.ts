@@ -1,5 +1,5 @@
 import { adSizes, createAdSize } from 'core/ad-sizes';
-import { Advert } from '../../create-ads/Advert';
+import { Advert } from '../../define/Advert';
 import { shouldRefresh } from './should-refresh';
 
 const outstreamSizes = [
@@ -8,7 +8,7 @@ const outstreamSizes = [
 	adSizes.outstreamGoogleDesktop.toString(),
 ];
 
-jest.mock('create-ads/init-slot-ias', () => ({
+jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 

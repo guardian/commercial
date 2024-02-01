@@ -32,7 +32,7 @@ jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));
 
-jest.mock('create-ads/Advert');
+jest.mock('define/Advert');
 
 jest.mock('utils/geo-utils');
 

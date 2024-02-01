@@ -31,7 +31,7 @@ jest.mock('lib/header-bidding/prebid/prebid', () => ({
 	},
 }));
 
-jest.mock('create-ads/Advert', () =>
+jest.mock('define/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
 );
 

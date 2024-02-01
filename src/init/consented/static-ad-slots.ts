@@ -8,11 +8,11 @@ import { removeDisabledSlots } from 'init/consented/remove-slots';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import { isInUk, isInUsa } from 'utils/geo-utils';
-import { createAdvert } from '../../create-ads/create-advert';
+import { createAdvert } from '../../define/create-advert';
+import { displayAds } from '../../display/display-ads';
+import { displayLazyAds } from '../../display/display-lazy-ads';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
 import { queueAdvert } from '../../lib/dfp/queue-advert';
-import { displayAds } from '../../render-ads/display-ads';
-import { displayLazyAds } from '../../render-ads/display-lazy-ads';
 
 const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 	const { contentType } = window.guardian.config.page;

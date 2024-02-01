@@ -3,7 +3,7 @@ import { prebid } from './prebid';
 
 const getAdvertById = getAdvertById_ as jest.Mock;
 
-jest.mock('create-ads/Advert', () =>
+jest.mock('define/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
 );
 

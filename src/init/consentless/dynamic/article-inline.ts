@@ -1,15 +1,15 @@
 import { adSizes } from 'core/ad-sizes';
 import { createAdSlot } from 'core/create-ad-slot';
-import { spaceFiller } from 'dynamic-slots/spacefinder/space-filler';
+import { spaceFiller } from 'insert/spacefinder/space-filler';
 import type {
 	SpacefinderItem,
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'dynamic-slots/spacefinder/spacefinder';
+} from 'insert/spacefinder/spacefinder';
 import {
 	computeStickyHeights,
 	insertHeightStyles,
-} from 'dynamic-slots/sticky-inlines';
+} from 'insert/sticky-inlines';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import fastdom from 'utils/fastdom-promise';

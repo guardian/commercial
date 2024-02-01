@@ -7,7 +7,7 @@ import {
 	defineSlot,
 } from './define-slot';
 
-jest.mock('create-ads/init-slot-ias', () => ({
+jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 

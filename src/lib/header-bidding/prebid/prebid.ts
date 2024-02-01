@@ -8,7 +8,7 @@ import { createAdSize } from 'core/ad-sizes';
 import { PREBID_TIMEOUT } from 'core/constants/prebid-timeout';
 import { EventTimer } from 'core/event-timer';
 import type { PageTargeting } from 'core/targeting/build-page-targeting';
-import type { Advert } from 'create-ads/Advert';
+import type { Advert } from 'define/Advert';
 import { getPageTargeting } from 'lib/build-page-targeting';
 import { getAdvertById } from 'lib/dfp/get-advert-by-id';
 import { isUserLoggedInOktaRefactor } from 'lib/identity/api';

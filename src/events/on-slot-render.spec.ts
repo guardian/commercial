@@ -1,4 +1,4 @@
-import type { Advert } from '../create-ads/Advert';
+import type { Advert } from '../define/Advert';
 import { onSlotRender } from './on-slot-render';
 
 let advert: Partial<Advert>;

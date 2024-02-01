@@ -1,4 +1,4 @@
-import type { Advert } from '../../create-ads/Advert';
+import type { Advert } from '../../define/Advert';
 import { dfpEnv } from './dfp-env';
 
 export const queueAdvert = (advert: Advert): void => {

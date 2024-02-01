@@ -4,12 +4,12 @@ import { outstreamSizes } from 'core/ad-sizes';
 import { AD_LABEL_HEIGHT } from 'core/constants/ad-label-height';
 import fastdom from 'utils/fastdom-promise';
 import { getUrlVars } from 'utils/url';
-import type { Advert } from '../create-ads/Advert';
-import { isAdSize } from '../create-ads/Advert';
+import type { Advert } from '../define/Advert';
+import { isAdSize } from '../define/Advert';
+import { enableLazyLoad } from '../display/lazy-load';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { memoizedFetchNonRefreshableLineItemIds } from '../lib/dfp/non-refreshable-line-items';
 import { shouldRefresh } from '../lib/dfp/should-refresh';
-import { enableLazyLoad } from '../render-ads/lazy-load';
 
 const ADVERT_REFRESH_RATE = 30_000; // 30 seconds. The minimum time allowed by Google.
 
