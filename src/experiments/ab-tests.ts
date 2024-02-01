@@ -1,6 +1,7 @@
 import type { ABTest } from '@guardian/ab-core';
 import { consentlessAds } from './tests/consentlessAds';
 import { integrateIma } from './tests/integrate-ima';
+import { mobileDiscussionAds } from './tests/mobile-discussion-ads';
 import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
 import { prebidKargo } from './tests/prebid-kargo';
 import { publicGoodTest } from './tests/public-good';
@@ -19,4 +20,5 @@ export const concurrentTests: readonly ABTest[] = [
 	publicGoodTest,
 	prebidKargo,
 	mpuWhenNoEpic,
+	mobileDiscussionAds,
 ];
