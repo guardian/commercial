@@ -1,4 +1,6 @@
 import { log } from '@guardian/libs';
+import { getBreakpoint } from 'detect/detect-breakpoint';
+import { getViewport } from 'detect/detect-viewport';
 import { adSizes } from 'core/ad-sizes';
 import { AD_LABEL_HEIGHT } from 'core/constants/ad-label-height';
 import { createAdSlot } from 'core/create-ad-slot';
@@ -32,6 +34,23 @@ const insertAd = (anchor: HTMLElement) => {
 		.then(() => fillDynamicAdSlot(slot, false));
 };
 
+const insertAdMobile = (anchor: HTMLElement) => {
+	log('commercial', 'Inserting mobile comments-expanded advert');
+	const slot = createAdSlot('comments-expanded', {
+		classes: 'comments-expanded',
+	});
+
+	const adSlotContainer = document.createElement('div');
+	adSlotContainer.className = 'ad-slot-container';
+	adSlotContainer.appendChild(slot);
+
+	return fastdom
+		.mutate(() => {
+			anchor.appendChild(adSlotContainer);
+		})
+		.then(() => fillDynamicAdSlot(slot, false));
+};
+
 const getRightColumn = (): HTMLElement => {
 	const selector = window.guardian.config.isDotcomRendering
 		? '.commentsRightColumn'
@@ -43,6 +62,16 @@ const getRightColumn = (): HTMLElement => {
 	return rightColumn;
 };
 
+const getCommentsColumn = async (): Promise<HTMLElement> => {
+	return fastdom.measure(() => {
+		const commentsColumn: HTMLElement | null =
+			document.querySelector('.comments-column');
+		if (!commentsColumn) throw new Error('Comments are not expanded.');
+
+		return commentsColumn;
+	});
+};
+
 const isEnoughSpaceForAd = (rightColumnNode: HTMLElement): boolean => {
 	// Only insert a second advert into the right-hand rail if there is enough space.
 	// There is enough space if the right-hand rail is larger than:
@@ -52,6 +81,9 @@ const isEnoughSpaceForAd = (rightColumnNode: HTMLElement): boolean => {
 
 	return rightColumnNode.offsetHeight >= minHeightToPlaceAd;
 };
+
+const isEnoughCommentsForAd = (commentsColumn: HTMLElement): boolean =>
+	commentsColumn.childElementCount > 3;
 
 const createResizeObserver = (rightColumnNode: HTMLElement) => {
 	// When the comments load and are rendered, the height of the right column
@@ -82,10 +114,24 @@ const handleCommentsExpandedEvent = (): void => {
 	}
 
 	const rightColumnNode = getRightColumn();
+	const commentsColumn = await getCommentsColumn();
+	const currentBreakpoint = getBreakpoint(getViewport().width);
 
 	if (isEnoughSpaceForAd(rightColumnNode)) {
 		void insertAd(rightColumnNode);
-		return;
+	}
+
+	if (
+		currentBreakpoint === 'mobile' &&
+		isEnoughCommentsForAd(commentsColumn)
+	) {
+		for (let i = 0; i < commentsColumn.childElementCount; i++) {
+			if (commentsColumn.children[i] && i % 3 === 0) {
+				console.log(i);
+				const childElement = commentsColumn.children[i] as HTMLElement;
+				void insertAdMobile(childElement);
+			}
+		}
 	}
 
 	// Watch the right column and try to insert an ad when the comments are loaded.
