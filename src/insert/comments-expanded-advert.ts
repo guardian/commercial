@@ -5,6 +5,8 @@ import { adSizes } from 'core/ad-sizes';
 import { AD_LABEL_HEIGHT } from 'core/constants/ad-label-height';
 import { createAdSlot } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
+import { getBreakpoint } from 'lib/detect/detect-breakpoint';
+import { getViewport } from 'lib/detect/detect-viewport';
 import fastdom from '../utils/fastdom-promise';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 
