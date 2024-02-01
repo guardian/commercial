@@ -7,7 +7,7 @@ import type {
 	GoogleTrackConversionObject,
 	NetworkInformation,
 } from '../core/types';
-import type { DfpEnv } from '../dfp/dfp-env';
+import type { DfpEnv } from '../lib/dfp/dfp-env';
 import type { IasPETSlot } from './ias';
 
 type ServerSideABTest = `${string}${'Variant' | 'Control'}`;
