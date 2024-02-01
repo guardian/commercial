@@ -1742,10 +1742,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/browserslist-config/-/browserslist-config-5.1.0.tgz#61cd822388dc196cea1b39c693366ed550edcd10"
   integrity sha512-QsyaZ7OZ6jBl8lByiLWtnobcS0IvIPVzDeGz9XY+CvPy5v5Kb0RJo+fFLEZbCqRLrfK+5f2sjrwPqrwtJBe2Sw==
 
-"@guardian/consent-management-platform@^13.8.0":
-  version "13.8.0"
-  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-13.8.0.tgz#60d1d319a2b438cdc8c6587ac20adf7b553815d3"
-  integrity sha512-J8YBXxpl/oGLmDGtjvkSwGmkaTJtnr/rxmYJAynaX0dkqopdDvG9REdbxMZBz3kugBpqHzhREzAk5Ut/uiyl8w==
+"@guardian/consent-management-platform@0.0.0-beta-20240201150243":
+  version "0.0.0-beta-20240201150243"
+  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-0.0.0-beta-20240201150243.tgz#eb44c1e453c2238f2c2f115a27a34805416a1375"
+  integrity sha512-5x7Z/HTB+mn5076d1p1FW5ubLe1LmA7XWcu9hRHZZCQ6PdC7sKx/vWDuay7my/T2lqGtSJsZUX4TVv5DYopZdw==
 
 "@guardian/core-web-vitals@5.1.0":
   version "5.1.0"
@@ -1787,10 +1787,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-16.0.1.tgz#81214a701ef7159e8bdbba901af30bdaec901c28"
   integrity sha512-/pgkDwWu9xp4TAEx07LFu80XsJWIti0VHRxjRRV6vNCMIb44OktONXs5Lu9deoSXWNZh+VcyAEj8vFF2DRPdMA==
 
-"@guardian/libs@^16.0.0":
-  version "16.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-16.0.0.tgz#35c567039f3a2a8440e3f0520b1bd9d275e6ad97"
-  integrity sha512-2i9cN6htXnvABIGhfqJGb9Bh/DdQOayUjb5ruqBGTiXEeDBHztctdVsi7+rPfMlwyPxQ+0qYLhM19f6J94vvhQ==
+"@guardian/libs@^15.6.4":
+  version "15.9.1"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-15.9.1.tgz#6846c9f0debb19d650f1775b21314a99ea80248d"
+  integrity sha512-Mns6Gc3MQacVxQ44Ei5HaVak3y9HYQF5kZ4lZGnacJfRdWAfW9K5K5rphf7mSgqkygOGoTs5TMQ3gO37MP8hbw==
 
 "@guardian/ophan-tracker-js@2.0.4":
   version "2.0.4"
@@ -6930,7 +6930,7 @@ prebid.js@guardian/prebid.js#91cabf5cdfc3c01745f4b10e55044f95a9d7d1b4:
     "@babel/plugin-transform-runtime" "^7.18.9"
     "@babel/preset-env" "^7.16.8"
     "@babel/runtime" "^7.18.9"
-    "@guardian/libs" "^16.0.0"
+    "@guardian/libs" "^15.6.4"
     core-js "^3.13.0"
     core-js-pure "^3.13.0"
     criteo-direct-rsa-validate "^1.1.0"

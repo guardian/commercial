@@ -1,8 +1,9 @@
+import { clickAcceptAllCookies as cmpAcceptAll } from '@guardian/consent-management-platform';
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 import { articles } from '../fixtures/pages';
 import type { GuPage } from '../fixtures/pages/Page';
-import { cmpAcceptAll, cmpReconsent, cmpRejectAll } from '../lib/cmp';
+import { cmpReconsent, cmpRejectAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 import {
 	fakeLogOut,

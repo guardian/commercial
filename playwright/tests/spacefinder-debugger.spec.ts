@@ -1,7 +1,7 @@
+import { clickAcceptAllCookies as cmpAcceptAll } from '@guardian/consent-management-platform';
 import { test } from '@playwright/test';
 import { articles } from '../fixtures/pages';
 import type { GuPage } from '../fixtures/pages/Page';
-import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 
 const { path } = articles[0] as unknown as GuPage;

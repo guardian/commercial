@@ -1,7 +1,7 @@
+import { clickAcceptAllCookies as cmpAcceptAll } from '@guardian/consent-management-platform';
 import { expect, test } from '@playwright/test';
 import { breakpoints } from '../fixtures/breakpoints';
 import { blogs } from '../fixtures/pages';
-import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 import { countLiveblogInlineSlots } from '../lib/util';
 
