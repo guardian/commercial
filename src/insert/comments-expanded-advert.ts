@@ -126,20 +126,22 @@ const handleCommentsExpandedEvent = (): void => {
 		void insertAd(rightColumnNode);
 	}
 
-	//TODO: Fix the total number of lists to return the correct one
-
 	if (
 		currentBreakpoint === 'mobile' &&
 		isEnoughCommentsForAd(commentsColumn)
 	) {
 		let counter = 0;
-		for (let i = 0; i < commentsColumn.children.length; i++) {
-			if (commentsColumn.children[i] && i % 3 === 0) {
-				counter++;
-				const childElement = commentsColumn.children[i] as HTMLElement;
-				void insertAdMobile(childElement, counter);
+		setTimeout(() => {
+			for (let i = 0; i < commentsColumn.childElementCount; i++) {
+				if (commentsColumn.children[i] && (i - 3) % 5 === 0) {
+					counter++;
+					const childElement = commentsColumn.children[
+						i
+					] as HTMLElement;
+					void insertAdMobile(childElement, counter);
+				}
 			}
-		}
+		}, 500);
 	}
 
 	// Watch the right column and try to insert an ad when the comments are loaded.
