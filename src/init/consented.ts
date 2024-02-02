@@ -14,6 +14,7 @@ import { initTeadsCookieless } from 'init/consented/teads-cookieless';
 import { init as initThirdPartyTags } from 'init/consented/third-party-tags';
 import { init as initTrackGpcSignal } from 'init/consented/track-gpc-signal';
 import { init as initTrackScrollDepth } from 'init/consented/track-scroll-depth';
+import { reloadPageOnConsentChange } from 'init/shared/reload-page-on-consent-change';
 import { init as setAdTestCookie } from 'init/shared/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from 'init/shared/set-adtest-in-labels-cookie';
 import { init as prepareAdVerification } from 'lib/ad-verification/prepare-ad-verification';
@@ -63,6 +64,7 @@ if (!commercialFeatures.adFree) {
 		['cm-messenger', initMessenger],
 		['cm-setAdTestCookie', setAdTestCookie],
 		['cm-setAdTestInLabelsCookie', setAdTestInLabelsCookie],
+		['cm-reloadPageOnConsentChange', reloadPageOnConsentChange],
 		['cm-prepare-prebid', preparePrebid],
 		// Permutive init code must run before google tag enableServices()
 		// The permutive lib however is loaded async with the third party tags
