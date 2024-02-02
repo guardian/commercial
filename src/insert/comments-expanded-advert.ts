@@ -105,15 +105,19 @@ const createResizeObserver = (rightColumnNode: HTMLElement) => {
 };
 
 const removeMobileCommentsExpandedAds = (): Promise<void> => {
-	const commentsExpandedAds = document.querySelectorAll(
-		'.ad-slot--comments-expanded',
-	);
-	return fastdom.mutate(() =>
-		commentsExpandedAds.forEach((node) => {
-			log('commercial', `Removing ad slot: ${node.id}`);
-			node.remove();
-		}),
-	);
+	const currentBreakpoint = getBreakpoint(getViewport().width);
+	if (currentBreakpoint === 'mobile') {
+		const commentsExpandedAds = document.querySelectorAll(
+			'.ad-slot--comments-expanded',
+		);
+		return fastdom.mutate(() =>
+			commentsExpandedAds.forEach((node) => {
+				log('commercial', `Removing ad slot: ${node.id}`);
+				node.remove();
+			}),
+		);
+	}
+	return Promise.resolve();
 };
 
 /**
@@ -164,6 +168,13 @@ export const initCommentsExpandedAdverts = (): Promise<void> => {
 	document.addEventListener('comments-expanded', () =>
 		handleCommentsExpandedEvent(),
 	);
+
+	//TODO: Removing ad slots but getting conflict when we change page
+
+	document.addEventListener('comments-page-change', () => {
+		void removeMobileCommentsExpandedAds();
+		void handleCommentsExpandedEvent();
+	});
 
 	return Promise.resolve();
 };
