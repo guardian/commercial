@@ -104,6 +104,18 @@ const createResizeObserver = (rightColumnNode: HTMLElement) => {
 	resizeObserver.observe(rightColumnNode);
 };
 
+const removeMobileCommentsExpandedAds = (): Promise<void> => {
+	const commentsExpandedAds = document.querySelectorAll(
+		'.ad-slot--comments-expanded',
+	);
+	return fastdom.mutate(() =>
+		commentsExpandedAds.forEach((node) => {
+			log('commercial', `Removing ad slot: ${node.id}`);
+			node.remove();
+		}),
+	);
+};
+
 /**
  * Create a comments-expanded ad immediately if there is enough space for it. If not, then it
  * is possible that we are still waiting for the Discussion API to load the comments, so we
