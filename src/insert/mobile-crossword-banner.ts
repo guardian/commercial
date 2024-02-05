@@ -1,5 +1,6 @@
 import { createAdSlot, wrapSlotInContainer } from 'core/create-ad-slot';
-import fastdom from '../../lib/fastdom-promise';
+import fastdom from '../utils/fastdom-promise';
+import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 
 const insertCrosswordsAd = (anchor: HTMLElement) => {
 	const slot = createAdSlot('crossword-banner-mobile');
@@ -9,13 +10,13 @@ const insertCrosswordsAd = (anchor: HTMLElement) => {
 			'fc-container fc-container--commercial dfp-ad--mobile-sticky ad-slot-container--centre-slot mobile-banner',
 	});
 
-	container.style.display = 'flex';
-	container.style.justifyContent = 'center';
-	void fastdom.mutate(() => {
-		if (anchor.parentNode) {
-			anchor.parentNode.insertBefore(container, anchor);
-		}
-	});
+	void fastdom
+		.mutate(() => {
+			if (anchor.parentNode) {
+				anchor.parentNode.insertBefore(container, anchor);
+			}
+		})
+		.then(() => fillDynamicAdSlot(slot, false));
 };
 
 export const init = (): Promise<void> => {
