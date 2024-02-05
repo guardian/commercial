@@ -22,7 +22,7 @@ git checkout -b "$BRANCH_NAME"
 yarn upgrade "$REPO@$VERSION"
 
 # fix the flip flopping Prebid
-yarn cache clean prebid.js
+yarn cache clean @guardian/prebid.js
 yarn install --force
 
 git add package.json yarn.lock
