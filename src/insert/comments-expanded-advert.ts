@@ -7,6 +7,8 @@ import { createAdSlot } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getBreakpoint } from 'lib/detect/detect-breakpoint';
 import { getViewport } from 'lib/detect/detect-viewport';
+import { dfpEnv } from 'lib/dfp/dfp-env';
+import { getAdvertById } from 'lib/dfp/get-advert-by-id';
 import fastdom from '../utils/fastdom-promise';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 
@@ -113,7 +115,12 @@ const removeMobileCommentsExpandedAds = (): Promise<void> => {
 		return fastdom.mutate(() =>
 			commentsExpandedAds.forEach((node) => {
 				log('commercial', `Removing ad slot: ${node.id}`);
+				const advert = getAdvertById(node.id);
 				node.remove();
+				dfpEnv.adverts.delete(node.id);
+				dfpEnv.advertsToLoad = dfpEnv.advertsToLoad.filter(
+					(_) => _ !== advert,
+				);
 			}),
 		);
 	}
