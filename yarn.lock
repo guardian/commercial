@@ -1797,6 +1797,29 @@
   resolved "https://registry.yarnpkg.com/@guardian/ophan-tracker-js/-/ophan-tracker-js-2.0.4.tgz#899cf3b3d91d403fb5afb6842b258fff1c286c60"
   integrity sha512-kwUNUSfnL8SQwzTlVzInYh7a6VSMFy3zEq2A6Hm7cmKSbl8D7ed03y7ANqquViFuPffRZRQ0IrkJHSbMnsRmrA==
 
+"@guardian/prebid.js@8.34.0":
+  version "8.34.0"
+  resolved "https://registry.yarnpkg.com/@guardian/prebid.js/-/prebid.js-8.34.0.tgz#6ab69684d254e52c44a0fe58ad5fc334ee133953"
+  integrity sha512-DLH/EuWGsM6oZcMVm+qsuWhYPl+TE4nqkDzAVJRjOkiP3AHHOZ7AnQaGzF9Y9tG3EeFU/iJwqJ43JlIjDBOt1A==
+  dependencies:
+    "@babel/core" "^7.23.2"
+    "@babel/plugin-transform-runtime" "^7.18.9"
+    "@babel/preset-env" "^7.16.8"
+    "@babel/runtime" "^7.18.9"
+    "@guardian/libs" "^16.0.0"
+    core-js "^3.13.0"
+    core-js-pure "^3.13.0"
+    criteo-direct-rsa-validate "^1.1.0"
+    crypto-js "^4.2.0"
+    dlv "1.1.3"
+    dset "3.1.2"
+    express "^4.15.4"
+    fun-hooks "^0.9.9"
+    just-clone "^1.0.2"
+    live-connect-js "^6.3.4"
+  optionalDependencies:
+    fsevents "^2.3.2"
+
 "@guardian/prettier@4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@guardian/prettier/-/prettier-4.0.0.tgz#1ad1d7d079194937bfd0107789dde7b0fb84fa11"
@@ -6921,28 +6944,6 @@ playwright@1.40.1:
     playwright-core "1.40.1"
   optionalDependencies:
     fsevents "2.3.2"
-
-prebid.js@guardian/prebid.js#acc494eba475bae62c8c3f620032bd05e28d1bac:
-  version "8.34.0"
-  resolved "https://codeload.github.com/guardian/prebid.js/tar.gz/acc494eba475bae62c8c3f620032bd05e28d1bac"
-  dependencies:
-    "@babel/core" "^7.23.2"
-    "@babel/plugin-transform-runtime" "^7.18.9"
-    "@babel/preset-env" "^7.16.8"
-    "@babel/runtime" "^7.18.9"
-    "@guardian/libs" "^16.0.0"
-    core-js "^3.13.0"
-    core-js-pure "^3.13.0"
-    criteo-direct-rsa-validate "^1.1.0"
-    crypto-js "^4.2.0"
-    dlv "1.1.3"
-    dset "3.1.2"
-    express "^4.15.4"
-    fun-hooks "^0.9.9"
-    just-clone "^1.0.2"
-    live-connect-js "^6.3.4"
-  optionalDependencies:
-    fsevents "^2.3.2"
 
 preferred-pm@^3.0.0:
   version "3.0.3"
