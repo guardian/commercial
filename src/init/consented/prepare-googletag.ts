@@ -30,6 +30,19 @@ const setPublisherProvidedId = (): void => {
 	});
 };
 
+/**
+ * 	Track usage of cookieDeprecationLabel
+ */
+const setCookieDeprecationLabel = (): void => {
+	if ('cookieDeprecationLabel' in navigator) {
+		void navigator.cookieDeprecationLabel?.getValue().then((value) => {
+			window.googletag
+				.pubads()
+				.setTargeting('cookieDeprecationLabel', value);
+		});
+	}
+};
+
 export const init = (): Promise<void> => {
 	const setupAdvertising = (): Promise<void> => {
 		return onConsent().then(async (consentState: ConsentState) => {
@@ -38,6 +51,7 @@ export const init = (): Promise<void> => {
 
 			if (consentState.canTarget) {
 				window.googletag.cmd.push(setPublisherProvidedId);
+				window.googletag.cmd.push(setCookieDeprecationLabel);
 			}
 
 			if (consentState.ccpa) {
