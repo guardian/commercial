@@ -1797,10 +1797,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/ophan-tracker-js/-/ophan-tracker-js-2.0.4.tgz#899cf3b3d91d403fb5afb6842b258fff1c286c60"
   integrity sha512-kwUNUSfnL8SQwzTlVzInYh7a6VSMFy3zEq2A6Hm7cmKSbl8D7ed03y7ANqquViFuPffRZRQ0IrkJHSbMnsRmrA==
 
-"@guardian/prebid.js@8.24.0":
-  version "8.24.0"
-  resolved "https://registry.yarnpkg.com/@guardian/prebid.js/-/prebid.js-8.24.0.tgz#f987886ddc12fa8e833f5d7566fb57ce081ac7c1"
-  integrity sha512-ug0/r2kH3lPLFzmyPPfffE6E5k6CvN2XKguQErZTxK7T2bnepqUQ2qPCMXKWP4KDP1EljIedXOAxYvX2LrtVMg==
+"@guardian/prebid.js@8.34.0":
+  version "8.34.0"
+  resolved "https://registry.yarnpkg.com/@guardian/prebid.js/-/prebid.js-8.34.0.tgz#6ab69684d254e52c44a0fe58ad5fc334ee133953"
+  integrity sha512-DLH/EuWGsM6oZcMVm+qsuWhYPl+TE4nqkDzAVJRjOkiP3AHHOZ7AnQaGzF9Y9tG3EeFU/iJwqJ43JlIjDBOt1A==
   dependencies:
     "@babel/core" "^7.23.2"
     "@babel/plugin-transform-runtime" "^7.18.9"
@@ -1816,7 +1816,7 @@
     express "^4.15.4"
     fun-hooks "^0.9.9"
     just-clone "^1.0.2"
-    live-connect-js "^6.3.0"
+    live-connect-js "^6.3.4"
   optionalDependencies:
     fsevents "^2.3.2"
 
@@ -6177,17 +6177,17 @@ listr2@^5.0.7:
     through "^2.3.8"
     wrap-ansi "^7.0.0"
 
-live-connect-common@^v3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/live-connect-common/-/live-connect-common-3.0.2.tgz#85111a551cf848d84e7560139ddf55dccba0d468"
-  integrity sha512-K3LNKd9CpREDJbXGdwKqPojjQaxd4G6c7OAD6Yzp3wsCWTH2hV8xNAbUksSOpOcVyyOT9ilteEFXIJQJrbODxQ==
+live-connect-common@^v3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/live-connect-common/-/live-connect-common-3.1.1.tgz#7d0474bce04d6c03fb7157abebd37b0deac437a6"
+  integrity sha512-sV0oUvJnaTN41f30hOo3wDjZL2y8TYu5BQKvlxmek7Agpe2AGGN/dsPA8i2sHkessRKpcTfrPjmpnG2bIxq7Gg==
 
-live-connect-js@^6.3.0:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/live-connect-js/-/live-connect-js-6.3.0.tgz#032d6015969293774430872d4d22ca8bae8ff2c9"
-  integrity sha512-1SnXQZq9gxHIb0scXPX1Da1rQ0oY2sloMGgeRreTAwhCtdQEuip/IYwgOh3/ZeZ6yT6iG9FLb7+AjORC4pO46g==
+live-connect-js@^6.3.4:
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/live-connect-js/-/live-connect-js-6.5.0.tgz#3731fd8a20d117235c843f5d14502961483accd9"
+  integrity sha512-gZOKtGjPjTf6JuUtA6OZgg8w/uEP2lEtlAKWSox+rTiTRmD4U6o28MB9WEgSJWlZWwUwmWu9dL8ByxBFbsWZyg==
   dependencies:
-    live-connect-common "^v3.0.2"
+    live-connect-common "^v3.1.1"
     tiny-hashes "1.0.1"
 
 load-json-file@^4.0.0:
