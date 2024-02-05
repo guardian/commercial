@@ -116,6 +116,9 @@ const removeMobileCommentsExpandedAds = (): Promise<void> => {
 			commentsExpandedAds.forEach((node) => {
 				log('commercial', `Removing ad slot: ${node.id}`);
 				const advert = getAdvertById(node.id);
+				if (advert) {
+					window.googletag.destroySlots([advert.slot]);
+				}
 				node.remove();
 				dfpEnv.adverts.delete(node.id);
 				dfpEnv.advertsToLoad = dfpEnv.advertsToLoad.filter(
@@ -156,9 +159,9 @@ const handleCommentsExpandedEvent = (): void => {
 		let counter = 0;
 		setTimeout(() => {
 			for (let i = 0; i < commentsColumn.childElementCount; i++) {
-				if (commentsColumn.children[i] && (i - 3) % 5 === 0) {
+				if (commentsColumn.childNodes[i] && (i - 3) % 5 === 0) {
 					counter++;
-					const childElement = commentsColumn.children[
+					const childElement = commentsColumn.childNodes[
 						i
 					] as HTMLElement;
 					void insertAdMobile(childElement, counter);
@@ -179,8 +182,11 @@ export const initCommentsExpandedAdverts = (): Promise<void> => {
 	//TODO: Removing ad slots but getting conflict when we change page
 
 	document.addEventListener('comments-page-change', () => {
-		void removeMobileCommentsExpandedAds();
-		void handleCommentsExpandedEvent();
+		void removeMobileCommentsExpandedAds().then(
+			void setTimeout(() => {
+				void handleCommentsExpandedEvent();
+			}, 500),
+		);
 	});
 
 	return Promise.resolve();
