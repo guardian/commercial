@@ -45,10 +45,10 @@ const insertAdMobile = (anchor: HTMLElement, id: number) => {
 		classes: 'comments-expanded',
 	});
 
-	//TODO: Add the label and margins/paddings for ads in DCR
-
 	const adSlotContainer = document.createElement('div');
 	adSlotContainer.className = 'ad-slot-container';
+	adSlotContainer.style.width = '300px';
+	adSlotContainer.style.margin = '20px auto';
 	adSlotContainer.appendChild(slot);
 
 	return fastdom
