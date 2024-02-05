@@ -19,10 +19,14 @@ const insertCrosswordsAd = (anchor: HTMLElement) => {
 };
 
 export const init = (): Promise<void> => {
-	console.log('HERE', window.guardian.config.switches.crosswordsMobileSticky);
+	const isInABTest =
+		window.guardian.config.tests?.crosswordMobileBannerVariant ===
+		'variant';
+
 	if (
 		window.guardian.config.isDotcomRendering ||
-		window.guardian.config.switches.crosswordMobileBanner === false
+		!window.guardian.config.switches.crosswordMobileBanner ||
+		!isInABTest
 	) {
 		return Promise.resolve();
 	}
@@ -36,13 +40,17 @@ export const init = (): Promise<void> => {
 	if (anchor) {
 		insertCrosswordsAd(anchor);
 	} else {
-		window.addEventListener('crossword-loaded', () => {
-			const anchor: HTMLElement | null =
-				document.querySelector(anchorSelector);
-			if (anchor) {
-				insertCrosswordsAd(anchor);
-			} else return;
-		});
+		window.addEventListener(
+			'crossword-loaded',
+			() => {
+				const anchor: HTMLElement | null =
+					document.querySelector(anchorSelector);
+				if (anchor) {
+					insertCrosswordsAd(anchor);
+				}
+			},
+			{ once: true },
+		);
 	}
 
 	return Promise.resolve();
