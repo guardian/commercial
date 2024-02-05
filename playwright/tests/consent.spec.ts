@@ -228,4 +228,22 @@ test.describe('tcfv2 consent', () => {
 
 		await adSlotsAreFulfilled(page);
 	});
+
+	test(`Reject all, ad slots are present, accept all, page refreshes, ad slots are fulfilled`, async ({
+		page,
+	}) => {
+		await visitArticleNoOkta(page);
+
+		await cmpRejectAll(page);
+
+		await visitArticleNoOkta(page);
+
+		await adSlotsArePresent(page);
+
+		await cmpReconsent(page);
+
+		await page.waitForLoadState('domcontentloaded');
+
+		await adSlotsAreFulfilled(page);
+	});
 });
