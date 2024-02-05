@@ -19,6 +19,7 @@ interface EventTimerProperties {
 	lazyLoadMarginPercent?: number;
 	hasLabsContainer?: boolean;
 	labsUrl?: string;
+	cookieDeprecationLabel?: string;
 }
 
 // Events will be logged using the performance API for all slots, but only these slots will be tracked as commercial metrics and sent to the data lake

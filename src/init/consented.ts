@@ -121,6 +121,13 @@ const recordCommercialMetrics = () => {
 		`[id^="${adSlotIdPrefix}inline"]`,
 	).length;
 	eventTimer.setProperty('adSlotsInline', adSlotsInline);
+
+	// track usage of cookieDeprecationLabel
+	if ('cookieDeprecationLabel' in navigator) {
+		void navigator.cookieDeprecationLabel?.getValue().then((value) => {
+			eventTimer.setProperty('cookieDeprecationLabel', value);
+		});
+	}
 };
 
 const bootCommercial = async (): Promise<void> => {
