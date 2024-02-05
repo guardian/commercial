@@ -1,5 +1,16 @@
 # @guardian/commercial
 
+## 14.1.0
+
+### Minor Changes
+
+- fb5eee4: Reorganise main modules
+- 6d3efbd: Upgrade to prebid.js@8.34.0 and use from npm
+
+### Patch Changes
+
+- d6570a8: Downgrade @guardian/consent-management-platform from v13.8.0 to v13.7.3
+
 ## 14.0.0
 
 ### Major Changes
