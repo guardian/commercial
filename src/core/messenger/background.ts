@@ -81,6 +81,10 @@ const createParent = (
 
 			background.style.inset = '0';
 			background.style.transition = 'background 100ms ease';
+
+			if (scrollType === 'interscroller') {
+				background.style.height = '100vh';
+			}
 		}
 	}
 
