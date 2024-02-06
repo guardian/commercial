@@ -84,6 +84,7 @@ const createParent = (
 
 			if (scrollType === 'interscroller') {
 				background.style.height = '100vh';
+				background.style.height = '100svh';
 			}
 		}
 	}
