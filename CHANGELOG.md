@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 14.2.0
+
+### Minor Changes
+
+- a60b82d: Add comments-expanded add to frontend rendered articles
+
+### Patch Changes
+
+- a60b82d: remove comments slot module
+
 ## 14.1.0
 
 ### Minor Changes
