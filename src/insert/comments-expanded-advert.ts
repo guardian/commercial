@@ -32,16 +32,15 @@ const insertAd = (anchor: HTMLElement) => {
 		.then(() => fillDynamicAdSlot(slot, false));
 };
 
-const getRightColumn = async (): Promise<HTMLElement> => {
-	return fastdom.measure(() => {
-		const rightColumn: HTMLElement | null = document.querySelector(
-			'.commentsRightColumn',
-		);
+const getRightColumn = (): HTMLElement => {
+	const selector = window.guardian.config.isDotcomRendering
+		? '.commentsRightColumn'
+		: '.js-discussion__ad-slot';
+	const rightColumn: HTMLElement | null = document.querySelector(selector);
 
-		if (!rightColumn) throw new Error('Could not find right column.');
+	if (!rightColumn) throw new Error('Could not find right column.');
 
-		return rightColumn;
-	});
+	return rightColumn;
 };
 
 const isEnoughSpaceForAd = (rightColumnNode: HTMLElement): boolean => {
@@ -73,7 +72,7 @@ const createResizeObserver = (rightColumnNode: HTMLElement) => {
  * is possible that we are still waiting for the Discussion API to load the comments, so we
  * wait for the comments to load before checking again whether there is enough space to load an ad.
  */
-const handleCommentsExpandedEvent = async (): Promise<void> => {
+const handleCommentsExpandedEvent = (): void => {
 	if (!commercialFeatures.commentAdverts) {
 		log(
 			'commercial',
@@ -82,7 +81,7 @@ const handleCommentsExpandedEvent = async (): Promise<void> => {
 		return;
 	}
 
-	const rightColumnNode = await getRightColumn();
+	const rightColumnNode = getRightColumn();
 
 	if (isEnoughSpaceForAd(rightColumnNode)) {
 		void insertAd(rightColumnNode);
@@ -94,9 +93,9 @@ const handleCommentsExpandedEvent = async (): Promise<void> => {
 };
 
 export const initCommentsExpandedAdverts = (): Promise<void> => {
-	document.addEventListener('comments-expanded', () => {
-		void handleCommentsExpandedEvent();
-	});
+	document.addEventListener('comments-expanded', () =>
+		handleCommentsExpandedEvent(),
+	);
 
 	return Promise.resolve();
 };
