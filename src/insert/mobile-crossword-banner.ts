@@ -7,7 +7,7 @@ const insertCrosswordsAd = (anchor: HTMLElement) => {
 
 	const container = wrapSlotInContainer(slot, {
 		className:
-			'fc-container fc-container--commercial dfp-ad--mobile-sticky ad-slot-container--centre-slot mobile-banner',
+			'fc-container fc-container--commercial dfp-ad--mobile-sticky ad-slot-container--centre-slot crossword-mobile-banner-ad',
 	});
 
 	void fastdom
@@ -24,11 +24,7 @@ export const init = (): Promise<void> => {
 		window.guardian.config.tests?.crosswordMobileBannerVariant ===
 		'variant';
 
-	if (
-		window.guardian.config.isDotcomRendering ||
-		!window.guardian.config.switches.crosswordMobileBanner ||
-		!isInABTest
-	) {
+	if (window.guardian.config.isDotcomRendering || !isInABTest) {
 		return Promise.resolve();
 	}
 
