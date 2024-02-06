@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 14.4.0
+
+### Minor Changes
+
+- 6b48235: Extend expiry to make mpuWhenNoEpic live again after unblocking Teads
+
 ## 14.3.0
 
 ### Minor Changes
