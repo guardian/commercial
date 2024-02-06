@@ -3,11 +3,12 @@ import fastdom from '../utils/fastdom-promise';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 
 const insertCrosswordsAd = (anchor: HTMLElement) => {
+	console.log('Inserting mobile crossword banner INSODE FUNCTION');
 	const slot = createAdSlot('crossword-banner-mobile');
 
 	const container = wrapSlotInContainer(slot, {
 		className:
-			'fc-container fc-container--commercial dfp-ad--mobile-sticky ad-slot-container--centre-slot mobile-banner',
+			'fc-container fc-container--commercial dfp-ad--mobile-sticky ad-slot-container--centre-slot crossword-mobile-banner-ad',
 	});
 
 	void fastdom
@@ -22,13 +23,10 @@ const insertCrosswordsAd = (anchor: HTMLElement) => {
 export const init = (): Promise<void> => {
 	const isInABTest =
 		window.guardian.config.tests?.crosswordMobileBannerVariant ===
-		'variant';
+		'variant'; //if we are not in the ad test group the LEAVE
 
-	if (
-		window.guardian.config.isDotcomRendering ||
-		!window.guardian.config.switches.crosswordMobileBanner ||
-		!isInABTest
-	) {
+	if (window.guardian.config.isDotcomRendering || !isInABTest) {
+		console.log('Inserting mobile crossword banner');
 		return Promise.resolve();
 	}
 
@@ -37,6 +35,7 @@ export const init = (): Promise<void> => {
 		: '.content-footer > :first-child';
 
 	const anchor: HTMLElement | null = document.querySelector(anchorSelector);
+	console.log('ANCGOR', anchor);
 
 	if (anchor) {
 		insertCrosswordsAd(anchor);
