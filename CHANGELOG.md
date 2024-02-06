@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 14.2.1
+
+### Patch Changes
+
+- faf6379: Fix interscroller zoom issue
+
 ## 14.2.0
 
 ### Minor Changes
