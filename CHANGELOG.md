@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 14.3.0
+
+### Minor Changes
+
+- 9c89a10: add cookieDeprecationLabel to custom targeting
+
 ## 14.2.1
 
 ### Patch Changes
