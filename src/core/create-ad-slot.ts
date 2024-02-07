@@ -15,6 +15,7 @@ type SlotName =
 	| 'carrot'
 	| 'comments-expanded'
 	| 'comments'
+	| 'crossword-banner-mobile'
 	| 'exclusion'
 	| 'fronts-banner'
 	| 'merchandising-high'
