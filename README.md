@@ -21,12 +21,6 @@ To install dependencies, run `yarn`.
 
 To develop locally, run `yarn serve` to start a local server. This will watch for changes and rebuild the bundle. Serving it at `http://localhost:3031`.
 
-### Testing
-
-To run the unit tests, run `yarn test`.
-
-To run the Playwright e2e tests, run `yarn e2e` or `yarn e2e:ui`.
-
 ### Releasing
 
 This repository uses [changesets](https://github.com/changesets/changesets) for version management
@@ -58,9 +52,29 @@ Try to write PR titles in the conventional commit format, and squash and merge w
 
 ### Working locally with DCR
 
-To use the bundle locally with DCR, run `COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js PORT=3030 make dev` in the DCR directory.
+1.  To point DCR to the local commercial bundle, in the `dotcom-rendering/dotcom-rendering` directory run:
 
-DCR will then use the local bundle instead of the one from PROD/CODE.
+    `COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js PORT=3030 make dev`
+
+    This will override `commercialBundleUrl` passed via the page config from PROD/CODE.
+
+1. In another terminal start the commercial dev server to serve the local bundle:
+
+    `yarn serve`
+
+### Testing locally with DCR
+
+To run the unit tests:
+
+`yarn test`
+
+To run the Playwright e2e tests:
+
+Follow the steps above to run DCR against the local bundle.
+
+`yarn playwright:run` will run the tests on the command line
+
+`yarn playwright:open` will open the Playwright UI so you can inspect the tests as they run
 
 ### Working locally with Frontend
 

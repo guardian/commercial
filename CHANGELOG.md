@@ -1,5 +1,40 @@
 # @guardian/commercial
 
+## 14.4.1
+
+### Patch Changes
+
+- 4ba7fc9: Downgrade cmp peer dep
+- f4c633b: Explicitly set cookieDeprecationLabel targeting to 'empty'
+
+## 14.4.0
+
+### Minor Changes
+
+- 6b48235: Extend expiry to make mpuWhenNoEpic live again after unblocking Teads
+
+## 14.3.0
+
+### Minor Changes
+
+- 9c89a10: add cookieDeprecationLabel to custom targeting
+
+## 14.2.1
+
+### Patch Changes
+
+- faf6379: Fix interscroller zoom issue
+
+## 14.2.0
+
+### Minor Changes
+
+- a60b82d: Add comments-expanded add to frontend rendered articles
+
+### Patch Changes
+
+- a60b82d: remove comments slot module
+
 ## 14.1.0
 
 ### Minor Changes

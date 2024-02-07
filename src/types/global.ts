@@ -432,6 +432,9 @@ interface HeaderNotification {
 declare global {
 	interface Navigator {
 		readonly connection?: NetworkInformation;
+		readonly cookieDeprecationLabel?: {
+			getValue: () => Promise<string>;
+		};
 	}
 	interface Window {
 		guardian: {
