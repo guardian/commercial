@@ -21,12 +21,6 @@ To install dependencies, run `yarn`.
 
 To develop locally, run `yarn serve` to start a local server. This will watch for changes and rebuild the bundle. Serving it at `http://localhost:3031`.
 
-### Testing
-
-To run the unit tests, run `yarn test`.
-
-To run the Playwright e2e tests, run `yarn e2e` or `yarn e2e:ui`.
-
 ### Releasing
 
 This repository uses [changesets](https://github.com/changesets/changesets) for version management
@@ -68,11 +62,15 @@ Try to write PR titles in the conventional commit format, and squash and merge w
 
     `yarn serve`
 
-## Testing locally with DCR
+### Testing locally with DCR
 
-Follow the steps above to run DCR against the local bundle.
+To run the unit tests:
+
+`yarn test`
 
 To run the Playwright e2e tests:
+
+Follow the steps above to run DCR against the local bundle.
 
 `yarn playwright:run` will run the tests on the command line
 
