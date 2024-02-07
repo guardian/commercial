@@ -36,9 +36,10 @@ const setPublisherProvidedId = (): void => {
 const setCookieDeprecationLabel = (): void => {
 	if ('cookieDeprecationLabel' in navigator) {
 		void navigator.cookieDeprecationLabel?.getValue().then((value) => {
+			const cookieDeprecationLabel = value || 'empty';
 			window.googletag
 				.pubads()
-				.setTargeting('cookieDeprecationLabel', value);
+				.setTargeting('cookieDeprecationLabel', cookieDeprecationLabel);
 		});
 	}
 };
