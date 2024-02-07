@@ -1,6 +1,4 @@
 import { log } from '@guardian/libs';
-import { getBreakpoint } from 'detect/detect-breakpoint';
-import { getViewport } from 'detect/detect-viewport';
 import { adSizes } from 'core/ad-sizes';
 import { AD_LABEL_HEIGHT } from 'core/constants/ad-label-height';
 import { createAdSlot } from 'core/create-ad-slot';
@@ -90,7 +88,7 @@ const isEnoughSpaceForAd = (rightColumnNode: HTMLElement): boolean => {
 };
 
 const isEnoughCommentsForAd = (commentsColumn: HTMLElement): boolean =>
-	commentsColumn.childElementCount > 3;
+	commentsColumn.childElementCount > 5;
 
 const createResizeObserver = (rightColumnNode: HTMLElement) => {
 	// When the comments load and are rendered, the height of the right column
@@ -148,6 +146,7 @@ const handleCommentsExpandedEvent = (): void => {
 
 	if (isEnoughSpaceForAd(rightColumnNode)) {
 		void insertAd(rightColumnNode);
+		return;
 	}
 
 	// Watch the right column and try to insert an ad when the comments are loaded.
