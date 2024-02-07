@@ -198,16 +198,14 @@ const waitForIsland = async (page: Page, island: string) => {
 const countLiveblogInlineSlots = async (page: Page, isMobile: boolean) => {
 	const mobileSuffix = isMobile ? '--mobile' : '';
 	const locator = `#liveblog-body .ad-slot--liveblog-inline${mobileSuffix}`;
-
 	return await page.locator(locator).count();
 };
 
+// @ts-expect-error -- used when logging uncommented
 const getSlotName = (url: string) => {
 	const adRequest = new URL(url);
 	const adRequestParams = adRequest.searchParams;
-
 	const prevScp = new URLSearchParams(adRequestParams.get('prev_scp') ?? '');
-
 	return prevScp.get('slot') ?? 'unknown';
 };
 
@@ -215,8 +213,6 @@ const getSlotName = (url: string) => {
 const logUnfilledSlots = (page: Page) => {
 	page.on('response', (response) => {
 		const url = response.url();
-
-		const slotName = getSlotName(url);
 
 		if (url.includes('securepubads.g.doubleclick.net/gampad/ads')) {
 			const lineItemId = response.headers()['google-lineitem-id'] ?? '';
@@ -228,7 +224,7 @@ const logUnfilledSlots = (page: Page) => {
 				lineItemId === '-2' ||
 				creativeId === '-2'
 			) {
-				console.warn(`Unfilled slot: ${slotName}`);
+				// console.warn(`Unfilled slot: ${getSlotName(url)}`);
 			}
 		}
 	});
