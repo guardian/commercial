@@ -67,14 +67,13 @@ const getRightColumn = (): HTMLElement => {
 	return rightColumn;
 };
 
-const getCommentsColumn = async (): Promise<HTMLElement> => {
-	return fastdom.measure(() => {
-		const commentsColumn: HTMLElement | null =
-			document.querySelector('.comments-column');
-		if (!commentsColumn) throw new Error('Comments are not expanded.');
+const getCommentsColumn = (): HTMLElement => {
+	const commentsColumn: HTMLElement | null =
+		document.querySelector('.comments-column');
 
-		return commentsColumn;
-	});
+	if (!commentsColumn) throw new Error('Comments are not expanded.');
+
+	return commentsColumn;
 };
 
 const isEnoughSpaceForAd = (rightColumnNode: HTMLElement): boolean => {
@@ -153,8 +152,8 @@ const handleCommentsExpandedEvent = (): void => {
 	createResizeObserver(rightColumnNode);
 };
 
-const handleCommentsExpandedMobileEvents = async (): Promise<void> => {
-	const commentsColumn = await getCommentsColumn();
+const handleCommentsExpandedMobileEvents = (): void => {
+	const commentsColumn = getCommentsColumn();
 	const currentBreakpoint = getBreakpoint(getViewport().width);
 
 	if (
@@ -175,9 +174,14 @@ const handleCommentsExpandedMobileEvents = async (): Promise<void> => {
 };
 
 export const initCommentsExpandedAdverts = (): Promise<void> => {
-	document.addEventListener('comments-expanded', () =>
-		handleCommentsExpandedEvent(),
-	);
+	document.addEventListener('comments-expanded', () => {
+		const currentBreakpoint = getBreakpoint(getViewport().width);
+		if (currentBreakpoint === 'mobile') {
+			handleCommentsExpandedMobileEvents();
+		} else {
+			handleCommentsExpandedEvent();
+		}
+	});
 
 	document.addEventListener('comments-state-change', () => {
 		void removeMobileCommentsExpandedAds();
