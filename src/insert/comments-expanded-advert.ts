@@ -188,7 +188,7 @@ export const initCommentsExpandedAdverts = (): Promise<void> => {
 	});
 
 	document.addEventListener('comments-loaded', () => {
-		void handleCommentsExpandedMobileEvents();
+		handleCommentsExpandedMobileEvents();
 	});
 
 	return Promise.resolve();
