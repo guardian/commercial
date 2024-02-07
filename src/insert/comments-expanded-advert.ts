@@ -145,33 +145,34 @@ const handleCommentsExpandedEvent = (): void => {
 	}
 
 	const rightColumnNode = getRightColumn();
-	const commentsColumn = await getCommentsColumn();
-	const currentBreakpoint = getBreakpoint(getViewport().width);
 
 	if (isEnoughSpaceForAd(rightColumnNode)) {
 		void insertAd(rightColumnNode);
 	}
+
+	// Watch the right column and try to insert an ad when the comments are loaded.
+	createResizeObserver(rightColumnNode);
+};
+
+const handleCommentsExpandedMobileEvents = async (): Promise<void> => {
+	const commentsColumn = await getCommentsColumn();
+	const currentBreakpoint = getBreakpoint(getViewport().width);
 
 	if (
 		currentBreakpoint === 'mobile' &&
 		isEnoughCommentsForAd(commentsColumn)
 	) {
 		let counter = 0;
-		setTimeout(() => {
-			for (let i = 0; i < commentsColumn.childElementCount; i++) {
-				if (commentsColumn.childNodes[i] && (i - 3) % 5 === 0) {
-					counter++;
-					const childElement = commentsColumn.childNodes[
-						i
-					] as HTMLElement;
-					void insertAdMobile(childElement, counter);
-				}
+		for (let i = 0; i < commentsColumn.childElementCount; i++) {
+			if (commentsColumn.childNodes[i] && (i - 3) % 5 === 0) {
+				counter++;
+				const childElement = commentsColumn.childNodes[
+					i
+				] as HTMLElement;
+				void insertAdMobile(childElement, counter);
 			}
-		}, 500);
+		}
 	}
-
-	// Watch the right column and try to insert an ad when the comments are loaded.
-	createResizeObserver(rightColumnNode);
 };
 
 export const initCommentsExpandedAdverts = (): Promise<void> => {
@@ -179,14 +180,12 @@ export const initCommentsExpandedAdverts = (): Promise<void> => {
 		handleCommentsExpandedEvent(),
 	);
 
-	//TODO: Removing ad slots but getting conflict when we change page
+	document.addEventListener('comments-state-change', () => {
+		void removeMobileCommentsExpandedAds();
+	});
 
-	document.addEventListener('comments-page-change', () => {
-		void removeMobileCommentsExpandedAds().then(
-			void setTimeout(() => {
-				void handleCommentsExpandedEvent();
-			}, 500),
-		);
+	document.addEventListener('comments-loaded', () => {
+		void handleCommentsExpandedMobileEvents();
 	});
 
 	return Promise.resolve();
