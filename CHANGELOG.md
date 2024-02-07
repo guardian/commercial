@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 14.4.1
+
+### Patch Changes
+
+- 4ba7fc9: Downgrade cmp peer dep
+- f4c633b: Explicitly set cookieDeprecationLabel targeting to 'empty'
+
 ## 14.4.0
 
 ### Minor Changes
