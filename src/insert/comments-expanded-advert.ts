@@ -37,7 +37,7 @@ const insertAd = (anchor: HTMLElement) => {
 };
 
 const insertAdMobile = (anchor: HTMLElement, id: number) => {
-	log('commercial', 'Inserting mobile comments-expanded advert');
+	log('commercial', `Inserting mobile comments-expanded-${id} advert`);
 	const slot = createAdSlot('comments-expanded', {
 		name: `comments-expanded-${id}`,
 		classes: 'comments-expanded',
@@ -67,13 +67,14 @@ const getRightColumn = (): HTMLElement => {
 	return rightColumn;
 };
 
-const getCommentsColumn = (): HTMLElement => {
-	const commentsColumn: HTMLElement | null =
-		document.querySelector('.comments-column');
+const getCommentsColumn = async (): Promise<HTMLElement> => {
+	return fastdom.measure(() => {
+		const commentsColumn: HTMLElement | null =
+			document.querySelector('.comments-column');
+		if (!commentsColumn) throw new Error('Comments are not expanded.');
 
-	if (!commentsColumn) throw new Error('Comments are not expanded.');
-
-	return commentsColumn;
+		return commentsColumn;
+	});
 };
 
 const isEnoughSpaceForAd = (rightColumnNode: HTMLElement): boolean => {
@@ -152,8 +153,8 @@ const handleCommentsExpandedEvent = (): void => {
 	createResizeObserver(rightColumnNode);
 };
 
-const handleCommentsExpandedMobileEvents = (): void => {
-	const commentsColumn = getCommentsColumn();
+const handleCommentsExpandedMobileEvent = async (): Promise<void> => {
+	const commentsColumn = await getCommentsColumn();
 	const currentBreakpoint = getBreakpoint(getViewport().width);
 
 	if (
@@ -175,12 +176,7 @@ const handleCommentsExpandedMobileEvents = (): void => {
 
 export const initCommentsExpandedAdverts = (): Promise<void> => {
 	document.addEventListener('comments-expanded', () => {
-		const currentBreakpoint = getBreakpoint(getViewport().width);
-		if (currentBreakpoint === 'mobile') {
-			handleCommentsExpandedMobileEvents();
-		} else {
-			handleCommentsExpandedEvent();
-		}
+		handleCommentsExpandedEvent();
 	});
 
 	document.addEventListener('comments-state-change', () => {
@@ -188,7 +184,9 @@ export const initCommentsExpandedAdverts = (): Promise<void> => {
 	});
 
 	document.addEventListener('comments-loaded', () => {
-		handleCommentsExpandedMobileEvents();
+		void setTimeout(() => {
+			void handleCommentsExpandedMobileEvent();
+		}, 500);
 	});
 
 	return Promise.resolve();
