@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 14.4.2
+
+### Patch Changes
+
+- 0af2225: add crossword mobile banner
+
 ## 14.4.1
 
 ### Patch Changes
