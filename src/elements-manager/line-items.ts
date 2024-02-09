@@ -1,95 +1,79 @@
-import { createAdSize } from 'core';
-import type { AdSize, PageTargeting, SlotName } from 'core';
+import { once } from 'lodash-es';
+import type { PageTargeting } from 'core';
 
 interface Targeting {
-	bp?: Array<PageTargeting['bp']>;
-	slot?: SlotName[];
-	tn?: PageTargeting['tn'];
-	ab?: PageTargeting['ab'];
+	children: Array<{
+		children: Array<{
+			key: string;
+			values: string[];
+			operator: 'IS' | 'IS_NOT';
+		}>;
+		logicalOperator: 'AND' | 'OR';
+	}>;
+	logicalOperator: 'AND' | 'OR';
 }
-
 interface Creative {
-	id: string;
-	size: AdSize;
+	id: number;
+	size: {
+		width: number;
+		height: number;
+	};
+	type: 'image' | 'template';
+	name: string;
+	primaryImageAsset?: string;
+	destinationUrl: string;
 	assetUrl: string;
-	clickUrl: string;
-	targeting: Targeting;
 }
 
 interface LineItem {
-	id: string;
-	targeting: Targeting;
+	id: number;
+	name: string;
+	startDateTime: string;
+	endDateTime: string | null;
+	customTargeting: Targeting;
 	priority: number;
 	creatives: Creative[];
 }
 
-const lineItems: LineItem[] = [
-	{
-		id: '1',
-		targeting: {
-			tn: ['news'],
-		},
-		priority: 1,
-		creatives: [
-			{
-				id: '1',
-				size: createAdSize(300, 250),
-				assetUrl: 'https://via.placeholder.com/300x250',
-				clickUrl: 'https://www.theguardian.com',
-				targeting: {
-					slot: ['inline'],
-					bp: ['desktop'],
-				},
-			},
-			{
-				id: '2',
-				size: createAdSize(300, 600),
-				assetUrl: 'https://via.placeholder.com/300x600',
-				clickUrl: 'https://www.theguardian.com',
-				targeting: {
-					slot: ['right'],
-				},
-			},
-		],
-	},
-	{
-		id: '2',
-		targeting: {
-			tn: ['news'],
-		},
-		priority: 2,
-		creatives: [
-			{
-				id: '3',
-				size: createAdSize(300, 250),
-				assetUrl: 'https://via.placeholder.com/300x250',
-				clickUrl: 'https://www.theguardian.com',
-				targeting: {
-					slot: ['inline'],
-				},
-			},
-			{
-				id: '4',
-				size: createAdSize(300, 600),
-				assetUrl: 'https://via.placeholder.com/300x600',
-				clickUrl: 'https://www.theguardian.com',
-				targeting: {
-					slot: ['right'],
-				},
-			},
-		],
-	},
-];
-
 const keyInTargeting = (
-	key: string,
-	targeting: Targeting,
-): key is keyof Targeting => {
-	return !!key && key in targeting;
+	key: unknown,
+	targeting: PageTargeting,
+): key is keyof PageTargeting => {
+	return !!key && typeof key === 'string' && key in targeting;
 };
 
-const isTargetingValue = (value: unknown): value is string[] | string => {
-	return Array.isArray(value) && value.every((v) => typeof v === 'string');
+// const isTargetingValue = (value: unknown): value is string[] | string => {
+// 	return Array.isArray(value) && value.every((v) => typeof v === 'string');
+// };
+
+const matchesTargeting = (
+	lineItemTargeting: Targeting,
+	pageTargeting: PageTargeting,
+): boolean => {
+	const method =
+		lineItemTargeting.logicalOperator === 'OR' ? 'some' : 'every';
+	return lineItemTargeting.children[method]((child) => {
+		const method = child.logicalOperator === 'OR' ? 'some' : 'every';
+
+		return child.children[method](({ key, values, operator }) => {
+			if (keyInTargeting(key, pageTargeting)) {
+				const targetingValues = pageTargeting[key];
+				return values.some((value) => {
+					if (Array.isArray(targetingValues)) {
+						if (operator === 'IS') {
+							return targetingValues.includes(value);
+						}
+						return !targetingValues.includes(value);
+					}
+					if (operator === 'IS') {
+						return value === targetingValues;
+					}
+					return value !== targetingValues;
+				});
+			}
+			return true;
+		});
+	});
 };
 
 /**
@@ -99,24 +83,16 @@ const isTargetingValue = (value: unknown): value is string[] | string => {
  * @param displayTargeting
  * @returns
  */
-const findLineItems = (displayTargeting: Targeting) =>
-	lineItems
+const findLineItems = once(async (displayTargeting: PageTargeting) => {
+	const lineItems = (await fetch(
+		'http://localhost:3031/line-items.json',
+	).then((res) => res.json())) as LineItem[];
+	return lineItems
 		.sort((a, b) => b.priority - a.priority)
 		.filter((lineItem) => {
-			return Object.entries(lineItem.targeting).every(([key, value]) => {
-				if (
-					keyInTargeting(key, displayTargeting) &&
-					isTargetingValue(value)
-				) {
-					return (
-						displayTargeting[key]?.some(
-							(v) => v && value.includes(v),
-						) ?? false
-					);
-				}
-			});
+			return matchesTargeting(lineItem.customTargeting, displayTargeting);
 		});
-
+});
 /**
  * filter line item creatives by display targeting
  *
@@ -124,26 +100,26 @@ const findLineItems = (displayTargeting: Targeting) =>
  * @param displayTargeting
  * @returns
  */
-const filterLineItemCreatives = (
-	lineItem: LineItem,
-	displayTargeting: Targeting,
-) => {
-	return lineItem.creatives.filter((creative) => {
-		return Object.entries(creative.targeting).every(([key, value]) => {
-			if (
-				keyInTargeting(key, displayTargeting) &&
-				isTargetingValue(value)
-			) {
-				return (
-					displayTargeting[key]?.some(
-						(v) => v && value.includes(v),
-					) ?? false
-				);
-			}
-		});
-	});
-};
+// const filterLineItemCreatives = (
+// 	lineItem: LineItem,
+// 	displayTargeting: Targeting,
+// ) => {
+// 	return lineItem.creatives.filter((creative) => {
+// 		return Object.entries(creative.targeting).every(([key, value]) => {
+// 			if (
+// 				keyInTargeting(key, displayTargeting) &&
+// 				isTargetingValue(value)
+// 			) {
+// 				return (
+// 					displayTargeting[key]?.some(
+// 						(v) => v && value.includes(v),
+// 					) ?? false
+// 				);
+// 			}
+// 		});
+// 	});
+// };
 
-export { findLineItems, filterLineItemCreatives };
+export { findLineItems };
 
 export type { LineItem, Creative, Targeting };

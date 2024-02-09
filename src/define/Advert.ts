@@ -64,6 +64,25 @@ const isSlotName = (slotName: string): slotName is SlotName => {
 	return slotName in slotSizeMappings;
 };
 
+const getSlotName = (name: string): SlotName | false => {
+	let slotName: string;
+	if (name.includes('inline')) {
+		slotName = 'inline';
+	} else if (name.includes('fronts-banner')) {
+		slotName = 'fronts-banner';
+	} else if (name.includes('external')) {
+		slotName = 'external';
+	} else {
+		slotName = name;
+	}
+
+	if (isSlotName(slotName)) {
+		return slotName;
+	}
+
+	return false;
+};
+
 const getSlotSizeMapping = (name: string): SizeMapping => {
 	let slotName: string;
 	if (name.includes('inline')) {
@@ -239,7 +258,7 @@ const isAdSize = (size: Advert['size']): size is AdSize => {
 	return size !== null && size !== 'fluid';
 };
 
-export { Advert, findSmallestAdHeightForSlot, isAdSize };
+export { Advert, findSmallestAdHeightForSlot, isAdSize, getSlotName };
 
 export const _ = {
 	getSlotSizeMapping,

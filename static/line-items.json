@@ -1,0 +1,748 @@
+[
+  {
+    "id": 6191747486,
+    "name": "Fixed Puppies Ads - CI",
+    "priority": 2,
+    "startDateTime": "2022-12-29T15:26:00",
+    "endDateTime": null,
+    "customTargeting": {
+      "children": [
+        {
+          "children": [
+            {
+              "key": "at",
+              "values": [
+                "fixed-puppies-ci"
+              ],
+              "operator": "IS"
+            }
+          ],
+          "logicalOperator": "AND"
+        }
+      ],
+      "logicalOperator": "OR"
+    },
+    "creatives": [
+      {
+        "id": 138418285049,
+        "type": "image",
+        "name": "puppy-300x250",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418285049.jpg"
+      },
+      {
+        "id": 138418294469,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418294469.jpg"
+      },
+      {
+        "id": 138418294766,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418294766.jpg"
+      },
+      {
+        "id": 138418294943,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418294943.jpg"
+      },
+      {
+        "id": 138418294952,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418294952.jpg"
+      },
+      {
+        "id": 138418294967,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418294967.jpg"
+      },
+      {
+        "id": 138418303404,
+        "type": "template",
+        "name": "puppy-manual-mulitple",
+        "size": {
+          "width": 1,
+          "height": 1
+        },
+        "creativeTemplateId": 10063287,
+        "creativeTemplateVariableValues": [
+          {
+            "uniqueName": "TrackingId",
+            "value": null
+          },
+          {
+            "uniqueName": "Tone",
+            "value": "brand"
+          },
+          {
+            "uniqueName": "NumberofCards",
+            "value": "2"
+          },
+          {
+            "uniqueName": "Title",
+            "value": "Hey there  🐶"
+          },
+          {
+            "uniqueName": "TitleURL",
+            "value": "http://www.theguardian.com"
+          },
+          {
+            "uniqueName": "Explainer",
+            "value": "Testing"
+          },
+          {
+            "uniqueName": "ViewAll",
+            "value": null
+          },
+          {
+            "uniqueName": "IsProminent",
+            "value": "false"
+          },
+          {
+            "uniqueName": "Offer1Title",
+            "value": "Hello 1"
+          },
+          {
+            "uniqueName": "Offer1Image",
+            "asset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_cb7gwEQARgBKAEyCOYfrw121WeW"
+          },
+          {
+            "uniqueName": "Offer1Meta",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer1LinkText",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer1URL",
+            "value": "http://www.theguardian.com"
+          },
+          {
+            "uniqueName": "Offer2Title",
+            "value": "Hello 2"
+          },
+          {
+            "uniqueName": "Offer2Image",
+            "asset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_cb7gwEQARgBKAEyCOYfrw121WeW"
+          },
+          {
+            "uniqueName": "Offer2Meta",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer2LinkText",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer2URL",
+            "value": "http://www.theguardian.com"
+          },
+          {
+            "uniqueName": "Offer3Title",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer3Image",
+            "asset": null
+          },
+          {
+            "uniqueName": "Offer3Meta",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer3LinkText",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer3URL",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer4Title",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer4Image",
+            "asset": null
+          },
+          {
+            "uniqueName": "Offer4Meta",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer4LinkText",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer4URL",
+            "value": null
+          }
+        ],
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418303404.html"
+      },
+      {
+        "id": 138418304127,
+        "type": "image",
+        "name": "puppy-300x600",
+        "size": {
+          "width": 300,
+          "height": 600
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_ZG0fhCsAhjYBCgBMgiIfI0x2EBXRw",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418304127.jpg"
+      },
+      {
+        "id": 138418304265,
+        "type": "image",
+        "name": "puppy-970x250",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418304265.jpg"
+      },
+      {
+        "id": 138418312779,
+        "type": "template",
+        "name": "puppy-manual-mulitple (copy)",
+        "size": {
+          "width": 1,
+          "height": 1
+        },
+        "creativeTemplateId": 10063287,
+        "creativeTemplateVariableValues": [
+          {
+            "uniqueName": "TrackingId",
+            "value": null
+          },
+          {
+            "uniqueName": "Tone",
+            "value": "brand"
+          },
+          {
+            "uniqueName": "NumberofCards",
+            "value": "2"
+          },
+          {
+            "uniqueName": "Title",
+            "value": "Hey there  🐶"
+          },
+          {
+            "uniqueName": "TitleURL",
+            "value": "http://www.theguardian.com"
+          },
+          {
+            "uniqueName": "Explainer",
+            "value": "Testing"
+          },
+          {
+            "uniqueName": "ViewAll",
+            "value": null
+          },
+          {
+            "uniqueName": "IsProminent",
+            "value": "false"
+          },
+          {
+            "uniqueName": "Offer1Title",
+            "value": "Hello 1"
+          },
+          {
+            "uniqueName": "Offer1Image",
+            "asset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_cb7gwEQARgBKAEyCOYfrw121WeW"
+          },
+          {
+            "uniqueName": "Offer1Meta",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer1LinkText",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer1URL",
+            "value": "http://www.theguardian.com"
+          },
+          {
+            "uniqueName": "Offer2Title",
+            "value": "Hello 2"
+          },
+          {
+            "uniqueName": "Offer2Image",
+            "asset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_cb7gwEQARgBKAEyCOYfrw121WeW"
+          },
+          {
+            "uniqueName": "Offer2Meta",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer2LinkText",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer2URL",
+            "value": "http://www.theguardian.com"
+          },
+          {
+            "uniqueName": "Offer3Title",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer3Image",
+            "asset": null
+          },
+          {
+            "uniqueName": "Offer3Meta",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer3LinkText",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer3URL",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer4Title",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer4Image",
+            "asset": null
+          },
+          {
+            "uniqueName": "Offer4Meta",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer4LinkText",
+            "value": null
+          },
+          {
+            "uniqueName": "Offer4URL",
+            "value": null
+          }
+        ],
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418312779.html"
+      },
+      {
+        "id": 138418313349,
+        "type": "image",
+        "name": "puppy-300x600 (copy)",
+        "size": {
+          "width": 300,
+          "height": 600
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_ZG0fhCsAhjYBCgBMgiIfI0x2EBXRw",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418313349.jpg"
+      },
+      {
+        "id": 138418930909,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418930909.jpg"
+      },
+      {
+        "id": 138418930912,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418930912.jpg"
+      },
+      {
+        "id": 138418931014,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418931014.jpg"
+      },
+      {
+        "id": 138418931620,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418931620.jpg"
+      },
+      {
+        "id": 138418931671,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418931671.jpg"
+      },
+      {
+        "id": 138418931677,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418931677.jpg"
+      },
+      {
+        "id": 138418931959,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418931959.jpg"
+      },
+      {
+        "id": 138418931983,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418931983.jpg"
+      },
+      {
+        "id": 138418931992,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418931992.jpg"
+      },
+      {
+        "id": 138418931995,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418931995.jpg"
+      },
+      {
+        "id": 138418932004,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418932004.jpg"
+      },
+      {
+        "id": 138418932058,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418932058.jpg"
+      },
+      {
+        "id": 138418932079,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418932079.jpg"
+      },
+      {
+        "id": 138418932085,
+        "type": "image",
+        "name": "puppy-300x250 (copy)",
+        "size": {
+          "width": 300,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_b7YwAEQrAIY-gEoATIIc6XgW1FIe64",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138418932085.jpg"
+      },
+      {
+        "id": 138434417795,
+        "type": "image",
+        "name": "puppy-im",
+        "size": {
+          "width": 88,
+          "height": 85
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOC6r5CDQhDIARjyAygBMgjDhWSlree6pg",
+        "destinationUrl": "https://theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138434417795.png"
+      },
+      {
+        "id": 138457057956,
+        "type": "image",
+        "name": "puppy-970x250 (copy) (copy) (copy) (copy)",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138457057956.jpg"
+      },
+      {
+        "id": 138457057959,
+        "type": "image",
+        "name": "puppy-970x250 (copy) (copy) (copy)",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138457057959.jpg"
+      },
+      {
+        "id": 138457057962,
+        "type": "image",
+        "name": "puppy-970x250 (copy) (copy)",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138457057962.jpg"
+      },
+      {
+        "id": 138457057965,
+        "type": "image",
+        "name": "puppy-970x250 (copy) (copy)",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138457057965.jpg"
+      },
+      {
+        "id": 138457170014,
+        "type": "image",
+        "name": "puppy-970x250 (copy) (copy) (copy)",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138457170014.jpg"
+      },
+      {
+        "id": 138457170017,
+        "type": "image",
+        "name": "puppy-970x250 (copy) (copy) (copy)",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138457170017.jpg"
+      },
+      {
+        "id": 138457170020,
+        "type": "image",
+        "name": "puppy-970x250 (copy) (copy)",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138457170020.jpg"
+      },
+      {
+        "id": 138457170023,
+        "type": "image",
+        "name": "puppy-970x250 (copy)",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138457170023.jpg"
+      },
+      {
+        "id": 138457743850,
+        "type": "image",
+        "name": "puppy-970x250 (copy) (copy)",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138457743850.jpg"
+      },
+      {
+        "id": 138457743892,
+        "type": "image",
+        "name": "puppy-970x250 (copy)",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138457743892.jpg"
+      },
+      {
+        "id": 138457743895,
+        "type": "image",
+        "name": "puppy-970x250 (copy) (copy)",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138457743895.jpg"
+      },
+      {
+        "id": 138457743898,
+        "type": "image",
+        "name": "puppy-970x250 (copy) (copy) (copy)",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138457743898.jpg"
+      },
+      {
+        "id": 138457743946,
+        "type": "image",
+        "name": "puppy-970x250 (copy)",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138457743946.jpg"
+      },
+      {
+        "id": 138457743958,
+        "type": "image",
+        "name": "puppy-970x250 (copy)",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138457743958.jpg"
+      },
+      {
+        "id": 138457743994,
+        "type": "image",
+        "name": "puppy-970x250 (copy) (copy)",
+        "size": {
+          "width": 970,
+          "height": 250
+        },
+        "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCc_f6qBxDKBxj6ASgBMgiWiS0UGYkkSQ",
+        "destinationUrl": "http://www.theguardian.com",
+        "assetUrl": "http://localhost:3031/creatives/138457743994.jpg"
+      }
+    ]
+  }
+]
