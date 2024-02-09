@@ -36,11 +36,19 @@ const setupPrebid = (): Promise<void> =>
 			if (!consentState.framework) {
 				return Promise.reject('Unknown framework');
 			}
+			const hasConsentForGlobalPrebidVendor = getConsentFor(
+				'prebid',
+				consentState,
+			);
+			const hasConsentForCustomPrebidVendor = getConsentFor(
+				'prebidCustom',
+				consentState,
+			);
 			if (
 				// Check if we do NOT have consent to either the old global or custom prebid vendor
 				!(
-					getConsentFor('prebid', consentState) ||
-					getConsentFor('prebidCustom', consentState)
+					hasConsentForGlobalPrebidVendor ||
+					hasConsentForCustomPrebidVendor
 				)
 			) {
 				return Promise.reject('No consent for prebid');
