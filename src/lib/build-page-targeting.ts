@@ -4,8 +4,8 @@ import { once } from 'lodash-es';
 import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import { buildPageTargeting } from 'core/targeting/build-page-targeting';
 import { getSynchronousParticipations } from 'experiments/ab';
-import { removeFalsyValues } from '../header-bidding/utils';
 import { commercialFeatures } from './commercial-features';
+import { removeFalsyValues } from './header-bidding/utils';
 
 const formatAppNexusTargeting = (obj: Record<string, string | string[]>) => {
 	const asKeyValues = Object.entries(obj).map((entry) => {

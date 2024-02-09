@@ -1,5 +1,67 @@
 # @guardian/commercial
 
+## 14.4.2
+
+### Patch Changes
+
+- 0af2225: add crossword mobile banner
+
+## 14.4.1
+
+### Patch Changes
+
+- 4ba7fc9: Downgrade cmp peer dep
+- f4c633b: Explicitly set cookieDeprecationLabel targeting to 'empty'
+
+## 14.4.0
+
+### Minor Changes
+
+- 6b48235: Extend expiry to make mpuWhenNoEpic live again after unblocking Teads
+
+## 14.3.0
+
+### Minor Changes
+
+- 9c89a10: add cookieDeprecationLabel to custom targeting
+
+## 14.2.1
+
+### Patch Changes
+
+- faf6379: Fix interscroller zoom issue
+
+## 14.2.0
+
+### Minor Changes
+
+- a60b82d: Add comments-expanded add to frontend rendered articles
+
+### Patch Changes
+
+- a60b82d: remove comments slot module
+
+## 14.1.0
+
+### Minor Changes
+
+- fb5eee4: Reorganise main modules
+- 6d3efbd: Upgrade to prebid.js@8.34.0 and use from npm
+
+### Patch Changes
+
+- d6570a8: Downgrade @guardian/consent-management-platform from v13.8.0 to v13.7.3
+
+## 14.0.0
+
+### Major Changes
+
+- 78bfe21: Updates `@guardian/identity-auth` and peer dependencies
+
+### Patch Changes
+
+- 32e3026: Update version of @guardian/consent-management-platform to 13.8.0
+
 ## 13.0.0
 
 ### Major Changes

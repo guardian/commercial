@@ -23,15 +23,7 @@ const loadPage = async (page: Page, path: string, region = 'GB') => {
 	// Uncomment to log commercial logs
 	// logCommercial(page);
 
-	// Abort all ophan requests as it stops the page from firing the 'load' event
-	//
-	// await page.route(/ophan.theguardian.com/, (route) => {
-	// 	route.abort();
-	// });
-	//
-	// Instead of aborting ophan change the waituntil to 'domcontentloaded'
-	// rather than 'load'. Monitor this to see if it works for our use cases.
-	console.log('Loading page', path);
+	// console.log('Loading page', path);
 	await page.goto(path, { waitUntil: 'domcontentloaded' });
 };
 

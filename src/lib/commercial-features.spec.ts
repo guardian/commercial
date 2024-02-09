@@ -1,7 +1,7 @@
-import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'detect/detect-breakpoint';
-import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from '../identity/api';
+import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
 import { commercialFeatures } from './commercial-features';
 import type { CommercialFeaturesConstructor } from './commercial-features';
+import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from './identity/api';
 import { adFreeDataIsPresent as adFreeDataIsPresent_ } from './manage-ad-free-cookie';
 import userPrefs from './user-prefs';
 
@@ -25,11 +25,11 @@ jest.mock('./manage-ad-free-cookie', () => ({
 const CommercialFeatures =
 	commercialFeatures.constructor as CommercialFeaturesConstructor;
 
-jest.mock('detect/detect-breakpoint', () => ({
+jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 }));
 
-jest.mock('identity/api', () => ({
+jest.mock('lib/identity/api', () => ({
 	isUserLoggedInOktaRefactor: jest.fn(),
 }));
 
