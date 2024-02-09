@@ -204,6 +204,10 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 			tablet: isInUk() ? [adSizes.mpu] : [],
 			desktop: isInUk() ? [adSizes.mpu] : [],
 		},
+		'comments-expanded': {
+			desktop: [adSizes.skyscraper, adSizes.mpu, adSizes.halfPage],
+			tablet: [adSizes.skyscraper, adSizes.mpu, adSizes.halfPage],
+		},
 	};
 };
 
