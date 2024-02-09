@@ -37,8 +37,10 @@ const setupPrebid = (): Promise<void> =>
 				return Promise.reject('Unknown framework');
 			}
 			if (
-				!getConsentFor('prebid', consentState) &&
-				!getConsentFor('prebidCustom', consentState)
+				!(
+					getConsentFor('prebid', consentState) ||
+					getConsentFor('prebidCustom', consentState)
+				)
 			) {
 				return Promise.reject('No consent for prebid');
 			}
