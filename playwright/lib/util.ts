@@ -3,7 +3,7 @@ import type { UserFeaturesResponse } from '../../src/types/membership';
 
 type Stage = 'code' | 'prod' | 'dev';
 
-type ContentType = 'article' | 'liveblog' | 'front' | 'tagFront';
+type ContentType = 'article' | 'liveblog' | 'front' | 'tagPage';
 
 const normalizeStage = (stage: string): Stage =>
 	['code', 'prod', 'dev'].includes(stage) ? (stage as Stage) : 'dev';
@@ -31,13 +31,13 @@ const getHost = (stage?: Stage | undefined) => {
 
 const getDcrContentType = (
 	type: ContentType,
-): 'Article' | 'Front' | 'TagFront' => {
+): 'Article' | 'Front' | 'TagPage' => {
 	switch (type) {
 		case 'front':
 			return 'Front';
 
-		case 'tagFront':
-			return 'TagFront';
+		case 'tagPage':
+			return 'TagPage';
 
 		default:
 			return 'Article';
