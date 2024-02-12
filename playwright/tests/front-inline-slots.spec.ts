@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { fronts, tagFronts } from '../fixtures/pages';
+import { fronts, tagPages } from '../fixtures/pages';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 import { waitForSlot } from '../lib/util';
@@ -15,8 +15,8 @@ test.describe('Slots and iframes load on fronts pages', () => {
 	});
 });
 
-test.describe('Slots and iframes load on tagged fronts pages', () => {
-	tagFronts.forEach(({ path }) => {
+test.describe('Slots and iframes load on tag pages', () => {
+	tagPages.forEach(({ path }) => {
 		test(`fronts-banner ads are loaded on ${path}`, async ({ page }) => {
 			await loadPage(page, path);
 			await cmpAcceptAll(page);
