@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 14.4.3
+
+### Patch Changes
+
+- 2e1a72f: Check custom Prebid vendor for consent
+
 ## 14.4.2
 
 ### Patch Changes
