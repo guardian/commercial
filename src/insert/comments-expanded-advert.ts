@@ -2,6 +2,8 @@ import { log } from '@guardian/libs';
 import { adSizes } from 'core/ad-sizes';
 import { AD_LABEL_HEIGHT } from 'core/constants/ad-label-height';
 import { createAdSlot } from 'core/create-ad-slot';
+import { isInVariantSynchronous } from 'experiments/ab';
+import { mobileDiscussionAds } from 'experiments/tests/mobile-discussion-ads';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getBreakpoint } from 'lib/detect/detect-breakpoint';
 import { getViewport } from 'lib/detect/detect-viewport';
@@ -179,13 +181,15 @@ export const initCommentsExpandedAdverts = (): Promise<void> => {
 		handleCommentsExpandedEvent();
 	});
 
-	document.addEventListener('comments-state-change', () => {
-		void removeMobileCommentsExpandedAds();
-	});
+	if (isInVariantSynchronous(mobileDiscussionAds, 'variant')) {
+		document.addEventListener('comments-state-change', () => {
+			void removeMobileCommentsExpandedAds();
+		});
 
-	document.addEventListener('comments-loaded', () => {
-		void handleCommentsExpandedMobileEvent();
-	});
+		document.addEventListener('comments-loaded', () => {
+			void handleCommentsExpandedMobileEvent();
+		});
+	}
 
 	return Promise.resolve();
 };
