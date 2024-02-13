@@ -248,7 +248,8 @@ const slotSizeMappings = {
 		],
 	},
 	'comments-expanded': {
-		mobile: [
+		mobile: [adSizes.mpu],
+		desktop: [
 			adSizes.outOfPage,
 			adSizes.empty,
 			adSizes.mpu,
