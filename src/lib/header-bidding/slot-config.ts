@@ -67,6 +67,10 @@ const getHeaderBiddingKey = (
 		return 'fronts-banner';
 	}
 
+	if (name?.includes('comments-expanded')) {
+		return 'comments-expanded';
+	}
+
 	return undefined;
 };
 
@@ -203,6 +207,9 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 			mobile: isInUk() ? [adSizes.mpu] : [],
 			tablet: isInUk() ? [adSizes.mpu] : [],
 			desktop: isInUk() ? [adSizes.mpu] : [],
+		},
+		'comments-expanded': {
+			mobile: [adSizes.mpu],
 		},
 	};
 };
