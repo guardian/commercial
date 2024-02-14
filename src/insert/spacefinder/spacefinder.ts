@@ -204,16 +204,25 @@ const testCandidate = (
 	candidate: SpacefinderItem,
 	opponent: SpacefinderItem,
 ): boolean => {
-	const isMinAbove = candidate.top - opponent.bottom >= rule.minAbove;
-	const isMinBelow = opponent.top - candidate.top >= rule.minBelow;
+	candidate.meta?.rules.push([opponent.element, rule]);
 
-	const pass = isMinAbove || isMinBelow;
+	const isCandidateBelow =
+		candidate.top > opponent.top && candidate.bottom > opponent.bottom;
 
-	if (!pass) {
+	// top of candidate is where an ad would be placed
+	const isTopOfCandidateFarEnoughFromOpponent = isCandidateBelow
+		? rule.minBelow
+			? candidate.top - opponent.bottom >= rule.minBelow
+			: true
+		: rule.minAbove
+		? opponent.top - candidate.top >= rule.minAbove
+		: true;
+
+	if (!isTopOfCandidateFarEnoughFromOpponent) {
 		// if the test fails, add debug information to the candidate metadata
-		const isBelow = candidate.top < opponent.top;
-		const required = isBelow ? rule.minBelow : rule.minAbove;
-		const actual = isBelow
+		const required =
+			(isCandidateBelow ? rule.minBelow : rule.minAbove) ?? 0;
+		const actual = isCandidateBelow
 			? opponent.top - candidate.top
 			: candidate.top - opponent.bottom;
 
@@ -224,7 +233,8 @@ const testCandidate = (
 		});
 	}
 
-	return pass;
+
+	return isTopOfCandidateFarEnoughFromOpponent;
 };
 
 // test one element vs an array of other elements for the given rule
