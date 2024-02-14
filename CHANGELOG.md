@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 15.0.1
+
+### Patch Changes
+
+- cbfddc3: enables prebid to work on mobile crossword banner
+
 ## 15.0.0
 
 ### Major Changes
