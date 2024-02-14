@@ -1,5 +1,16 @@
 # @guardian/commercial
 
+## 15.0.0
+
+### Major Changes
+
+- b2c6622: remove redundant ad slots possible side affects to other bundles frontend and dcr
+
+### Patch Changes
+
+- b2c6622: remove redundant ad slots
+- d653a64: Improve readability of prebid consent check and log
+
 ## 14.4.3
 
 ### Patch Changes
