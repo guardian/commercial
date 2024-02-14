@@ -44,12 +44,14 @@ const setupPrebid = (): Promise<void> =>
 				'prebidCustom',
 				consentState,
 			);
+			log('commercial', {
+				hasConsentForGlobalPrebidVendor,
+				hasConsentForCustomPrebidVendor,
+			});
 			if (
-				// Check if we do NOT have consent to either the old global or custom prebid vendor
-				!(
-					hasConsentForGlobalPrebidVendor ||
-					hasConsentForCustomPrebidVendor
-				)
+				// Check if we do NOT have consent to BOTH the old global and custom prebid vendor
+				!hasConsentForGlobalPrebidVendor &&
+				!hasConsentForCustomPrebidVendor
 			) {
 				return Promise.reject('No consent for prebid');
 			}

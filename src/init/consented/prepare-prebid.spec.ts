@@ -435,7 +435,7 @@ describe('init', () => {
 		expect(prebid.initialise).toBeCalled();
 	});
 
-	it('should NOT initialise Prebid in TCF when neither the global vendor or custom vendor has consent', async () => {
+	it('should NOT initialise Prebid in TCF when BOTH the global vendor AND custom vendor do NOT have consent', async () => {
 		expect.hasAssertions();
 
 		window.guardian.config.switches = {
