@@ -48,6 +48,7 @@ const insertAdMobile = (anchor: HTMLElement, id: number) => {
 	const adSlotContainer = document.createElement('div');
 	adSlotContainer.className = 'ad-slot-container';
 	adSlotContainer.style.width = '300px';
+	adSlotContainer.style.height = `${adSizes.mpu.height + AD_LABEL_HEIGHT}px`;
 	adSlotContainer.style.margin = '20px auto';
 	adSlotContainer.appendChild(slot);
 
