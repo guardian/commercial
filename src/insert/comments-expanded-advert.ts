@@ -93,6 +93,13 @@ const isEnoughSpaceForAd = (rightColumnNode: HTMLElement): boolean => {
 const isEnoughCommentsForAd = (commentsColumn: HTMLElement): boolean =>
 	commentsColumn.childElementCount >= 5;
 
+const commentsExpandedAdsAlreadyExist = (): boolean => {
+	const commentsExpandedAds = document.querySelectorAll(
+		'.ad-slot--comments-expanded',
+	);
+	return commentsExpandedAds.length > 0 ? true : false;
+};
+
 const createResizeObserver = (rightColumnNode: HTMLElement) => {
 	// When the comments load and are rendered, the height of the right column
 	// will expand and there might be enough space to insert the ad.
@@ -162,7 +169,8 @@ const handleCommentsExpandedMobileEvent = async (): Promise<void> => {
 
 	if (
 		currentBreakpoint === 'mobile' &&
-		isEnoughCommentsForAd(commentsColumn)
+		isEnoughCommentsForAd(commentsColumn) &&
+		!commentsExpandedAdsAlreadyExist()
 	) {
 		let counter = 0;
 		for (let i = 0; i < commentsColumn.childElementCount; i++) {
