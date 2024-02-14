@@ -91,7 +91,7 @@ const isEnoughSpaceForAd = (rightColumnNode: HTMLElement): boolean => {
 };
 
 const isEnoughCommentsForAd = (commentsColumn: HTMLElement): boolean =>
-	commentsColumn.childElementCount > 5;
+	commentsColumn.childElementCount >= 5;
 
 const createResizeObserver = (rightColumnNode: HTMLElement) => {
 	// When the comments load and are rendered, the height of the right column
@@ -166,7 +166,11 @@ const handleCommentsExpandedMobileEvent = async (): Promise<void> => {
 	) {
 		let counter = 0;
 		for (let i = 0; i < commentsColumn.childElementCount; i++) {
-			if (commentsColumn.childNodes[i] && (i - 3) % 5 === 0) {
+			if (
+				commentsColumn.childNodes[i] &&
+				(i - 3) % 5 === 0 &&
+				i + 1 < commentsColumn.childElementCount
+			) {
 				counter++;
 				const childElement = commentsColumn.childNodes[
 					i
