@@ -89,8 +89,9 @@ const filterNearbyCandidates =
 		if (lastWinner === undefined) return true;
 
 		return (
+			!!adSlotContainerRules.minBelow &&
 			Math.abs(candidate.top - lastWinner.top) - maximumAdHeight >=
-			adSlotContainerRules.minBelow
+				adSlotContainerRules.minBelow
 		);
 	};
 
@@ -290,7 +291,7 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 const addMobileInlineAds = (): Promise<boolean> => {
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelector: ' > p',
+		slotSelector: ' > p,hr',
 		minAbove: 200,
 		minBelow: 200,
 		selectors: {
@@ -299,7 +300,15 @@ const addMobileInlineAds = (): Promise<boolean> => {
 				minBelow: 250,
 			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
-			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
+			[` > [data-spacefinder-type="model.dotcomrendering.pageElements.NumberedTitleBlockElement"]`]:
+				{
+					minBelow: 200,
+				},
+			[` > [data-spacefinder-type="model.dotcomrendering.pageElements.ItemLinkBlockElement"]`]:
+				{
+					minAbove: 50,
+				},
+			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type="model.dotcomrendering.pageElements.ItemLinkBlockElement"]):not([data-spacefinder-type="model.dotcomrendering.pageElements.NumberedTitleBlockElement"])`]:
 				{
 					minAbove: 35,
 					minBelow: 200,
@@ -329,7 +338,7 @@ const addMobileInlineAds = (): Promise<boolean> => {
 	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
-		pass: 'inline1',
+		pass: 'inline',
 	});
 };
 
