@@ -89,9 +89,8 @@ const filterNearbyCandidates =
 		if (lastWinner === undefined) return true;
 
 		return (
-			!!adSlotContainerRules.minBelow &&
 			Math.abs(candidate.top - lastWinner.top) - maximumAdHeight >=
-				adSlotContainerRules.minBelow
+			adSlotContainerRules.minBelow
 		);
 	};
 
@@ -302,11 +301,13 @@ const addMobileInlineAds = (): Promise<boolean> => {
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
 			[` > [data-spacefinder-type="model.dotcomrendering.pageElements.NumberedTitleBlockElement"]`]:
 				{
+					minAbove: 0,
 					minBelow: 200,
 				},
 			[` > [data-spacefinder-type="model.dotcomrendering.pageElements.ItemLinkBlockElement"]`]:
 				{
 					minAbove: 50,
+					minBelow: 0,
 				},
 			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type="model.dotcomrendering.pageElements.ItemLinkBlockElement"]):not([data-spacefinder-type="model.dotcomrendering.pageElements.NumberedTitleBlockElement"])`]:
 				{

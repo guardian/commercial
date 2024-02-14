@@ -220,8 +220,7 @@ const testCandidate = (
 
 	if (!isTopOfCandidateFarEnoughFromOpponent) {
 		// if the test fails, add debug information to the candidate metadata
-		const required =
-			(isCandidateBelow ? rule.minBelow : rule.minAbove) ?? 0;
+		const required = isCandidateBelow ? rule.minBelow : rule.minAbove;
 		const actual = isCandidateBelow
 			? opponent.top - candidate.top
 			: candidate.top - opponent.bottom;
