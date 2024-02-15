@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 15.1.0
+
+### Minor Changes
+
+- 307b16e: Add slot to AppNexus bidder key words
+
 ## 15.0.1
 
 ### Patch Changes
