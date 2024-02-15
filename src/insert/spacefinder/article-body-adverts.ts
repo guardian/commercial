@@ -295,21 +295,19 @@ const addMobileInlineAds = (): Promise<boolean> => {
 		minBelow: 200,
 		selectors: {
 			' > h2': {
-				minAbove: 100,
+				minAbove: 0,
 				minBelow: 250,
 			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
-			[` > [data-spacefinder-type="model.dotcomrendering.pageElements.NumberedTitleBlockElement"]`]:
-				{
-					minAbove: 0,
-					minBelow: 200,
-				},
-			[` > [data-spacefinder-type="model.dotcomrendering.pageElements.ItemLinkBlockElement"]`]:
-				{
-					minAbove: 50,
-					minBelow: 0,
-				},
-			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type="model.dotcomrendering.pageElements.ItemLinkBlockElement"]):not([data-spacefinder-type="model.dotcomrendering.pageElements.NumberedTitleBlockElement"])`]:
+			[` > [data-spacefinder-type$="NumberedTitleBlockElement"]`]: {
+				minAbove: 0,
+				minBelow: 200,
+			},
+			[` > [data-spacefinder-type$="ItemLinkBlockElement"]`]: {
+				minAbove: 50,
+				minBelow: 0,
+			},
+			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="ItemLinkBlockElement"]):not([data-spacefinder-type$="NumberedTitleBlockElement"])`]:
 				{
 					minAbove: 35,
 					minBelow: 200,
