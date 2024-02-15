@@ -290,7 +290,7 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 const addMobileInlineAds = (): Promise<boolean> => {
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelector: ' > p',
+		slotSelector: ' > p,hr',
 		minAbove: 200,
 		minBelow: 200,
 		selectors: {
@@ -299,7 +299,16 @@ const addMobileInlineAds = (): Promise<boolean> => {
 				minBelow: 250,
 			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
-			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
+			// The below 2 rules are for articles containing numbered title blocks and item link blocks e.g. https://www.theguardian.com/football/2024/feb/09/premier-league-10-things-to-look-out-for-this-weekend
+			[` > [data-spacefinder-type$="NumberedTitleBlockElement"]`]: {
+				minAbove: 0,
+				minBelow: 200,
+			},
+			[` > [data-spacefinder-type$="ItemLinkBlockElement"]`]: {
+				minAbove: 50,
+				minBelow: 0,
+			},
+			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="ItemLinkBlockElement"]):not([data-spacefinder-type$="NumberedTitleBlockElement"])`]:
 				{
 					minAbove: 35,
 					minBelow: 200,
@@ -329,7 +338,7 @@ const addMobileInlineAds = (): Promise<boolean> => {
 	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
-		pass: 'inline1',
+		pass: 'mobile-inlines',
 	});
 };
 
