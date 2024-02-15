@@ -72,8 +72,9 @@ const getRightColumn = (): HTMLElement => {
 
 const getCommentsColumn = async (): Promise<HTMLElement> => {
 	return fastdom.measure(() => {
-		const commentsColumn: HTMLElement | null =
-			document.querySelector('.comments-column');
+		const commentsColumn: HTMLElement | null = document.querySelector(
+			'[data-commercial-id="comments-column"]',
+		);
 		if (!commentsColumn) throw new Error('Comments are not expanded.');
 
 		return commentsColumn;
