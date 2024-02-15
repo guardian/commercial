@@ -295,10 +295,11 @@ const addMobileInlineAds = (): Promise<boolean> => {
 		minBelow: 200,
 		selectors: {
 			' > h2': {
-				minAbove: 0,
+				minAbove: 100,
 				minBelow: 250,
 			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
+			// The below 2 rules are for articles containing numbered title blocks and item link blocks e.g. https://www.theguardian.com/football/2024/feb/09/premier-league-10-things-to-look-out-for-this-weekend
 			[` > [data-spacefinder-type$="NumberedTitleBlockElement"]`]: {
 				minAbove: 0,
 				minBelow: 200,
