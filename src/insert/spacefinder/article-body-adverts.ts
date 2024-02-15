@@ -337,7 +337,7 @@ const addMobileInlineAds = (): Promise<boolean> => {
 	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
-		pass: 'inline',
+		pass: 'mobile-inlines',
 	});
 };
 

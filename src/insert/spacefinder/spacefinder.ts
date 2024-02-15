@@ -51,7 +51,12 @@ type SpacefinderRules = {
 
 type SpacefinderWriter = (paras: HTMLElement[]) => Promise<void>;
 
-type SpacefinderPass = 'inline1' | 'subsequent-inlines' | 'im' | 'carrot';
+type SpacefinderPass =
+	| 'inline1'
+	| 'mobile-inlines'
+	| 'subsequent-inlines'
+	| 'im'
+	| 'carrot';
 
 type SpacefinderOptions = {
 	waitForImages?: boolean;
@@ -204,8 +209,6 @@ const testCandidate = (
 	candidate: SpacefinderItem,
 	opponent: SpacefinderItem,
 ): boolean => {
-	candidate.meta?.rules.push([opponent.element, rule]);
-
 	const isCandidateBelow =
 		candidate.top > opponent.top && candidate.bottom > opponent.bottom;
 
@@ -231,7 +234,6 @@ const testCandidate = (
 			element: opponent.element,
 		});
 	}
-
 
 	return isTopOfCandidateFarEnoughFromOpponent;
 };
