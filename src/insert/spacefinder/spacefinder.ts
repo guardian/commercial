@@ -203,6 +203,59 @@ const partitionCandidates = <T>(
 	return [filtered, exclusions];
 };
 
+/**
+ * Check if the top of the candidate is far enough from the opponent
+ *
+ *                                                        │
+ *                     Candidate Below                    │             Candidate Above
+ *                                                        │
+ *                  ───────────────────  Top of container │          ───────────────────  Top of container
+ *                    ▲              ▲                    │            ▲              ▲
+ *                    │              │                    │            │              │ candidate.top
+ *                    │ ┌──────────┐ │                    │            │ ┌──────────┐ ▼   (insertion point)
+ *                    │ │          │ │opponent.bottom     │            │ │          │
+ *                    │ │ Opponent │ │                    │            │ │ Candidate│
+ *       candidate.top│ │          │ │                    │opponent.top│ │          │
+ *                    │ └──────────┘ ▼                    │            │ └──────────┘
+ *                    │           ▲                       │            │
+ *                    │           │ minBelow              │            │  ───────────
+ *                    │           ▼                       │            │           ▲
+ *                    │ ────────────                      │            │           │ minAbove
+ *                    │                                   │            │           ▼
+ * (insertion point)  ▼ ┌──────────┐                      │            ▼ ┌──────────┐
+ *                      │          │                      │              │          │
+ *                      │ Candidate│                      │              │ Opponent │
+ *                      │          │                      │              │          │
+ *                      └──────────┘                      │              └──────────┘
+ *                                                        │
+ *                                                        │
+ *
+ * @param candidate
+ * @param opponent
+ * @param rule
+ * @param isCandidateBelow
+ * @returns
+ */
+const isTopOfCandidateFarEnoughFromOpponent = (
+	candidate: SpacefinderItem,
+	opponent: SpacefinderItem,
+	rule: RuleSpacing,
+	isCandidateBelow: boolean,
+): boolean => {
+	const potentialInsertPosition = candidate.top;
+
+	if (isCandidateBelow && rule.minBelow) {
+		return opponent.bottom + rule.minBelow <= potentialInsertPosition;
+	}
+
+	if (!isCandidateBelow && rule.minAbove) {
+		return opponent.top - rule.minAbove >= potentialInsertPosition;
+	}
+
+	// if no rule is set (or they're 0), return true
+	return true;
+};
+
 // test one element vs another for the given rules
 const testCandidate = (
 	rule: RuleSpacing,
@@ -212,16 +265,14 @@ const testCandidate = (
 	const isCandidateBelow =
 		candidate.top > opponent.top && candidate.bottom > opponent.bottom;
 
-	// top of candidate is where an ad would be placed
-	const isTopOfCandidateFarEnoughFromOpponent = isCandidateBelow
-		? rule.minBelow
-			? candidate.top - opponent.bottom >= rule.minBelow
-			: true
-		: rule.minAbove
-		? opponent.top - candidate.top >= rule.minAbove
-		: true;
+	const pass = isTopOfCandidateFarEnoughFromOpponent(
+		candidate,
+		opponent,
+		rule,
+		isCandidateBelow,
+	);
 
-	if (!isTopOfCandidateFarEnoughFromOpponent) {
+	if (!pass) {
 		// if the test fails, add debug information to the candidate metadata
 		const required = isCandidateBelow ? rule.minBelow : rule.minAbove;
 		const actual = isCandidateBelow
@@ -235,7 +286,7 @@ const testCandidate = (
 		});
 	}
 
-	return isTopOfCandidateFarEnoughFromOpponent;
+	return pass;
 };
 
 // test one element vs an array of other elements for the given rule
