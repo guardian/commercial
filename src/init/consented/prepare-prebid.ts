@@ -44,7 +44,7 @@ const setupPrebid = (): Promise<void> =>
 				'prebidCustom',
 				consentState,
 			);
-			log('commercial', {
+			log('commercial', 'Prebid consent:', {
 				hasConsentForGlobalPrebidVendor,
 				hasConsentForCustomPrebidVendor,
 			});
