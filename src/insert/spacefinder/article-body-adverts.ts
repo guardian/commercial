@@ -290,12 +290,12 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 const addMobileInlineAds = (): Promise<boolean> => {
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelector: ' > p,hr',
+		slotSelector: ' > p,hr,h2',
 		minAbove: 200,
 		minBelow: 200,
 		selectors: {
 			' > h2': {
-				minAbove: 100,
+				minAbove: 0,
 				minBelow: 250,
 			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
