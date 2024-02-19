@@ -2,4 +2,4 @@
 '@guardian/commercial': minor
 ---
 
-Fix bug preventing ad insertion on "Ranked" list articles on mobile
+Improve spacefinder's handling of ranked and list articles on mobile

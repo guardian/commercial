@@ -8,46 +8,90 @@ const pages = articles.filter(({ name }) => name === 'inlineSlots');
 
 test.describe('Slots and iframes load on article pages', () => {
 	pages.forEach(
-		({
-			path,
-			expectedMinInlineSlotsOnDesktop,
-			expectedMinInlineSlotsOnMobile,
-		}) => {
-			breakpoints.forEach(({ breakpoint, width, height }, index) => {
+		(
+			{
+				path,
+				expectedMinInlineSlotsOnDesktop,
+				expectedMinInlineSlotsOnMobile,
+				expectedSlotIndicesOnMobile,
+				expectedSlotIndicesOnDesktop,
+			},
+			index,
+		) => {
+			breakpoints.forEach(({ breakpoint, width, height }) => {
 				const expectedMinSlotsOnPage =
 					(breakpoint === 'mobile'
 						? expectedMinInlineSlotsOnMobile
 						: expectedMinInlineSlotsOnDesktop) ?? 999;
 
-				test(`Test article ${index} has at least ${expectedMinSlotsOnPage} inline total slots at breakpoint ${breakpoint}`, async ({
-					page,
-				}) => {
-					await page.setViewportSize({
-						width,
-						height,
+				const expectedSlotIndices =
+					breakpoint === 'mobile'
+						? expectedSlotIndicesOnMobile
+						: expectedSlotIndicesOnDesktop;
+
+				if (!expectedSlotIndices) {
+					test(`Test article ${index} has at least ${expectedMinSlotsOnPage} inline total slots at breakpoint ${breakpoint}`, async ({
+						page,
+					}) => {
+						await page.setViewportSize({
+							width,
+							height,
+						});
+
+						await loadPage(page, path);
+						await cmpAcceptAll(page);
+
+						// wait for Spacefinder to place the first inline slot into the DOM
+						await page
+							.locator('.ad-slot--inline1')
+							.waitFor({ state: 'attached' });
+
+						// wait for Spacefinder to run a second time, to place the inline2+ slots
+						await page
+							.locator('.ad-slot--inline2')
+							.waitFor({ state: 'attached' });
+
+						const foundSlots = await page
+							.locator('.ad-slot--inline')
+							.count();
+
+						expect(foundSlots).toBeGreaterThanOrEqual(
+							expectedMinSlotsOnPage,
+						);
 					});
+				} else {
+					test(`Test article ${index} has slots at positions ${expectedSlotIndices.join(
+						',',
+					)} at breakpoint ${breakpoint}`, async ({ page }) => {
+						await page.setViewportSize({
+							width,
+							height,
+						});
 
-					await loadPage(page, path);
-					await cmpAcceptAll(page);
+						await loadPage(page, path);
+						await cmpAcceptAll(page);
 
-					// wait for Spacefinder to place the first inline slot into the DOM
-					await page
-						.locator('.ad-slot--inline1')
-						.waitFor({ state: 'attached' });
+						await page
+							.locator('.ad-slot--inline2')
+							.waitFor({ state: 'attached' });
 
-					// wait for Spacefinder to run a second time, to place the inline2+ slots
-					await page
-						.locator('.ad-slot--inline2')
-						.waitFor({ state: 'attached' });
+						const slotIndices = await page
+							.locator('.article-body-commercial-selector')
+							.evaluate((el) =>
+								Array.from(el.children)
+									.map((child, index) =>
+										child.classList.contains(
+											'ad-slot-container',
+										)
+											? index
+											: undefined,
+									)
+									.filter((index) => index !== undefined),
+							);
 
-					const foundSlots = await page
-						.locator('.ad-slot--inline')
-						.count();
-
-					expect(foundSlots).toBeGreaterThanOrEqual(
-						expectedMinSlotsOnPage,
-					);
-				});
+						expect(slotIndices).toEqual(expectedSlotIndices);
+					});
+				}
 			});
 		},
 	);
