@@ -3,6 +3,12 @@ import type { GuPage } from './Page';
 
 const stage = getStage();
 
+/**
+ * To get expectedSlotIndicesOnMobile and expectedSlotIndicesOnDesktop, run the following in the browser console:
+ * Array.from(document.querySelectorAll('.article-body-commercial-selector > *')).map((el, index) => el.classList.contains('ad-slot-container') ? index : undefined).filter((index) => index !== undefined)
+ *
+ * Make sure that you are on the same viewport size as the test you are trying to update.
+ **/
 const articles: GuPage[] = [
 	{
 		path: getTestUrl({
@@ -38,7 +44,6 @@ const articles: GuPage[] = [
 			path: '/football/2024/feb/09/premier-league-10-things-to-look-out-for-this-weekend',
 		}),
 		name: 'inlineSlots',
-		// Array.from(document.querySelectorAll('.article-body-commercial-selector > *')).map((el, index) => el.classList.contains('ad-slot-container') ? index : undefined).filter((index) => index !== undefined)
 		expectedSlotIndicesOnMobile: [6, 18, 24, 30, 48],
 		expectedSlotIndicesOnDesktop: [14, 30, 43, 55],
 	},
