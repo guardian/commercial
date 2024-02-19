@@ -1745,7 +1745,7 @@
 "@guardian/consent-management-platform@0.0.0-beta-20240208100931":
   version "0.0.0-beta-20240208100931"
   resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-0.0.0-beta-20240208100931.tgz#7f5e6efd197aaca2da6926bed2352a5ff0fdecc9"
-  integrity sha512-veAHL9UMAq8+J1czzTqB8BTHEJ1PV/oh35o6gTX+ZMFUdoT+Bep5IbbDIve5YxbdFBQgTk7t1q7AUK1SQn+DHQ==
+  integrity sha512-veAHL9UMAq8+J1czzTqB8BTHEJ1PV/oh35o6gTX+ZMFUdoT+Bep5IbbDIve5YxbdFBQgTk7t1q7AUK1SQn+DHQ
 
 "@guardian/core-web-vitals@5.1.0":
   version "5.1.0"

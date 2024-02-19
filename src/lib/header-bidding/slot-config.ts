@@ -191,6 +191,9 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 			desktop: isCrossword ? [adSizes.leaderboard] : [],
 			tablet: isCrossword ? [adSizes.leaderboard] : [],
 		},
+		'crossword-banner-mobile': {
+			mobile: [adSizes.mobilesticky],
+		},
 		merchandising: {
 			mobile: [adSizes.mpu],
 			desktop: [adSizes.billboard],

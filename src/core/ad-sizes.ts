@@ -100,13 +100,12 @@ type SlotName =
 	| 'comments-expanded'
 	| 'comments'
 	| 'crossword-banner'
-	| 'epic'
+	| 'crossword-banner-mobile'
 	| 'exclusion'
 	| 'external'
 	| 'fronts-banner'
 	| 'im'
 	| 'inline'
-	| 'merchandising-high-lucky'
 	| 'merchandising-high'
 	| 'merchandising'
 	| 'mobile-sticky'
@@ -357,9 +356,6 @@ const slotSizeMappings = {
 			adSizes.billboard,
 		],
 	},
-	'merchandising-high-lucky': {
-		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.fluid],
-	},
 	merchandising: {
 		mobile: [
 			adSizes.outOfPage,
@@ -388,10 +384,10 @@ const slotSizeMappings = {
 	carrot: {
 		mobile: [adSizes.fluid],
 	},
-	epic: {
-		mobile: [adSizes.fluid],
-	},
 	'mobile-sticky': {
+		mobile: [adSizes.mobilesticky],
+	},
+	'crossword-banner-mobile': {
 		mobile: [adSizes.mobilesticky],
 	},
 	'crossword-banner': {

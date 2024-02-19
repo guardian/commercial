@@ -1,5 +1,40 @@
 # @guardian/commercial
 
+## 15.1.0
+
+### Minor Changes
+
+- 307b16e: Add slot to AppNexus bidder key words
+
+## 15.0.1
+
+### Patch Changes
+
+- cbfddc3: enables prebid to work on mobile crossword banner
+
+## 15.0.0
+
+### Major Changes
+
+- b2c6622: remove redundant ad slots possible side affects to other bundles frontend and dcr
+
+### Patch Changes
+
+- b2c6622: remove redundant ad slots
+- d653a64: Improve readability of prebid consent check and log
+
+## 14.4.3
+
+### Patch Changes
+
+- 2e1a72f: Check custom Prebid vendor for consent
+
+## 14.4.2
+
+### Patch Changes
+
+- 0af2225: add crossword mobile banner
+
 ## 14.4.1
 
 ### Patch Changes
