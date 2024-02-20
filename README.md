@@ -10,10 +10,10 @@ To install the package, run `yarn add @guardian/commercial`.
 
 ### Requirements
 
--   Node
-    -   see [.nvmrc](../.nvmrc) for the current version
-    -   the version manager [fnm](https://github.com/Schniz/fnm) is recommended with additional configuration to automatically switch on [changing directory](https://github.com/Schniz/fnm#shell-setup)
--   Yarn
+- Node
+  - see [.nvmrc](../.nvmrc) for the current version
+  - the version manager [fnm](https://github.com/Schniz/fnm) is recommended with additional configuration to automatically switch on [changing directory](https://github.com/Schniz/fnm#shell-setup)
+- Yarn
 
 ### Setup
 
@@ -30,8 +30,8 @@ To release a new version with your changes, run `yarn changeset add` and follow 
 When your PR is merged, changeset will analyse the changes and create a PR to release the new version.
 
 ### Bumping @guardian/commercial in Frontend
-Run [this script](./scripts/bump_commercial.sh) to raise a PR that bumps `@guardian/commercial` in Frontend to the specified version.
 
+Run [this script](./scripts/bump_commercial.sh) to raise a PR that bumps `@guardian/commercial` in Frontend to the specified version.
 
 Execute the script as follows:
 
@@ -40,6 +40,7 @@ Execute the script as follows:
 ```
 
 Eg
+
 ```bash
 ./scripts/bump_commercial.sh 11.11.1
 ```
@@ -52,7 +53,7 @@ Try to write PR titles in the conventional commit format, and squash and merge w
 
 ### Working locally with DCR
 
-1.  To point DCR to the local commercial bundle, in the `dotcom-rendering/dotcom-rendering` directory run:
+1. To point DCR to the local commercial bundle, in the `dotcom-rendering/dotcom-rendering` directory run:
 
     `COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js PORT=3030 make dev`
 
@@ -80,7 +81,7 @@ Follow the steps above to run DCR against the local bundle.
 
 To use the bundle locally with Frontend, you can override your default Frontend configuration ([see the Frontend docs for more detail on this](https://github.com/guardian/frontend/blob/038406bb5f876afd139b4747711c76551e8a7add/docs/03-dev-howtos/14-override-default-configuration.md)) to point to a local commercial dev server. For example, save the following in `~/.gu/frontend.conf`:
 
-```
+```json
 devOverrides {
     commercial.overrideCommercialBundleUrl="http://localhost:3031/graun.standalone.commercial.js"
 }
