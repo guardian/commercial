@@ -20,7 +20,8 @@ export type HeaderBiddingSlotName =
 export type HeaderBiddingSizeKey =
 	| HeaderBiddingSlotName
 	| 'inline'
-	| 'fronts-banner';
+	| 'fronts-banner'
+	| 'comments-expanded';
 
 export type HeaderBiddingSlot = {
 	key: HeaderBiddingSizeKey;
