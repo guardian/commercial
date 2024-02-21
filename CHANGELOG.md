@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 15.2.0
+
+### Minor Changes
+
+- d285016: Add AB test to insert ads in mobile discussion
+
 ## 15.1.0
 
 ### Minor Changes
