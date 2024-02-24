@@ -36,10 +36,23 @@ const hasImages = !!window.guardian.config.page.lightboxImages?.images.length;
 const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
 
+let adSpacing = window.localStorage.getItem('gu.com:commercial:ad-spacing');
+
+const adSpacingFromUrl = new URL(window.location.href).searchParams.get(
+	'adSpacing',
+);
+
+if (adSpacingFromUrl !== null) {
+	adSpacing = adSpacingFromUrl;
+	window.localStorage.setItem('gu.com:commercial:ad-spacing', adSpacing);
+}
+
 const adSlotContainerRules: RuleSpacing = {
-	minAbove: 500,
-	minBelow: 500,
+	minAbove: Number(adSpacing) || 500,
+	minBelow: Number(adSpacing) || 500,
 };
+
+console.log('adSpacing', adSpacing);
 
 /**
  * Get the classname for an ad slot container
@@ -89,7 +102,7 @@ const filterNearbyCandidates =
 		if (lastWinner === undefined) return true;
 
 		return (
-			Math.abs(candidate.top - lastWinner.top) - maximumAdHeight >=
+			Math.abs(candidate.top - lastWinner.top) >=
 			adSlotContainerRules.minBelow
 		);
 	};
