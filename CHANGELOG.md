@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 16.0.0
+
+### Major Changes
+
+- f3030f0: bump consent-management-platform to include final parameter in onConsentChange function
+
 ## 15.2.0
 
 ### Minor Changes
