@@ -67,10 +67,6 @@ const getHeaderBiddingKey = (
 		return 'fronts-banner';
 	}
 
-	if (name?.includes('comments-expanded')) {
-		return 'comments-expanded';
-	}
-
 	return undefined;
 };
 
@@ -177,6 +173,9 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 		comments: {
 			desktop: [adSizes.skyscraper, adSizes.mpu, adSizes.halfPage],
 		},
+		'comments-expanded': {
+			desktop: [adSizes.skyscraper, adSizes.mpu, adSizes.halfPage],
+		},
 		banner: {
 			// Banner slots appear on interactives, like on
 			// https://www.theguardian.com/us-news/ng-interactive/2018/nov/06/midterm-elections-2018-live-results-latest-winners-and-seats
@@ -210,9 +209,6 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 			mobile: isInUk() ? [adSizes.mpu] : [],
 			tablet: isInUk() ? [adSizes.mpu] : [],
 			desktop: isInUk() ? [adSizes.mpu] : [],
-		},
-		'comments-expanded': {
-			mobile: [adSizes.mpu],
 		},
 	};
 };
