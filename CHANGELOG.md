@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 16.1.0
+
+### Minor Changes
+
+- 9c47d83: Enable Prebid for desktop comments-expanded ads, and disable it for mobile comments-expanded ads.
+
 ## 16.0.0
 
 ### Major Changes
