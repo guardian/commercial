@@ -13,8 +13,8 @@ test.describe('Slots and iframes load on article pages', () => {
 				path,
 				expectedMinInlineSlotsOnDesktop,
 				expectedMinInlineSlotsOnMobile,
-				expectedSlotIndicesOnMobile,
-				expectedSlotIndicesOnDesktop,
+				expectedSlotPositionsOnMobile,
+				expectedSlotPositionsOnDesktop,
 			},
 			index,
 		) => {
@@ -24,12 +24,12 @@ test.describe('Slots and iframes load on article pages', () => {
 						? expectedMinInlineSlotsOnMobile
 						: expectedMinInlineSlotsOnDesktop) ?? 999;
 
-				const expectedSlotIndices =
+				const expectedSlotPositions =
 					breakpoint === 'mobile'
-						? expectedSlotIndicesOnMobile
-						: expectedSlotIndicesOnDesktop;
+						? expectedSlotPositionsOnMobile
+						: expectedSlotPositionsOnDesktop;
 
-				if (!expectedSlotIndices) {
+				if (!expectedSlotPositions) {
 					test(`Test article ${index} has at least ${expectedMinSlotsOnPage} inline total slots at breakpoint ${breakpoint}`, async ({
 						page,
 					}) => {
@@ -60,7 +60,7 @@ test.describe('Slots and iframes load on article pages', () => {
 						);
 					});
 				} else {
-					test(`Test article ${index} has slots at positions ${expectedSlotIndices.join(
+					test(`Test article ${index} has slots at positions ${expectedSlotPositions.join(
 						',',
 					)} at breakpoint ${breakpoint}`, async ({ page }) => {
 						await page.setViewportSize({
@@ -75,7 +75,7 @@ test.describe('Slots and iframes load on article pages', () => {
 							.locator('.ad-slot--inline2')
 							.waitFor({ state: 'attached' });
 
-						const slotIndices = await page
+						const slotPositions = await page
 							.locator('.article-body-commercial-selector')
 							.evaluate((el) =>
 								Array.from(el.children)
@@ -89,7 +89,7 @@ test.describe('Slots and iframes load on article pages', () => {
 									.filter((index) => index !== undefined),
 							);
 
-						expect(slotIndices).toEqual(expectedSlotIndices);
+						expect(slotPositions).toEqual(expectedSlotPositions);
 					});
 				}
 			});
