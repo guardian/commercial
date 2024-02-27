@@ -206,6 +206,10 @@ const partitionCandidates = <T>(
 /**
  * Check if the top of the candidate is far enough from the opponent
  *
+ * The candidate is the element where we would like to insert an ad above. Candidates satisfy the `selector` rule.
+ *
+ * Opponents are other elements in the article that are in the spacefinder ruleset for the current pass. This includes slots inserted by a previous pass but not those in the current pass as they're all inserted at the end.
+ *
  *                                                        │
  *                     Candidate Below                    │             Candidate Above
  *                                                        │
@@ -229,12 +233,6 @@ const partitionCandidates = <T>(
  *                      └──────────┘                      │              └──────────┘
  *                                                        │
  *                                                        │
- *
- * @param candidate
- * @param opponent
- * @param rule
- * @param isCandidateBelow
- * @returns
  */
 const isTopOfCandidateFarEnoughFromOpponent = (
 	candidate: SpacefinderItem,
