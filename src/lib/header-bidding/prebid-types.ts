@@ -5,6 +5,7 @@ export type HeaderBiddingSize = AdSize;
 export type HeaderBiddingSlotName =
 	| 'banner'
 	| 'comments'
+	| 'comments-expanded'
 	| 'crossword-banner'
 	| 'crossword-banner-mobile'
 	| 'mobile-sticky'
