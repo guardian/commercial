@@ -102,7 +102,7 @@ const filterNearbyCandidates =
 		if (lastWinner === undefined) return true;
 
 		return (
-			Math.abs(candidate.top - lastWinner.top) >=
+			Math.abs(candidate.top - lastWinner.top) - maximumAdHeight >=
 			adSlotContainerRules.minBelow
 		);
 	};
