@@ -1,8 +1,7 @@
 import type { ABTest } from '@guardian/ab-core';
 import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
 
-// keep in sync with ab-tests in dotcom-rendering
-// https://github.com/guardian/dotcom-rendering/blob/main/dotcom-rendering/src/experiments/ab-tests.ts
+// You only need to add tests to this file if the code you are testing is here in the commercial code, so any test here also needs to be in DCR and Frontend. But tests in DCR and Frontend do not need to necessarily be added here.
 export const concurrentTests: readonly ABTest[] = [
 	// one test per line
 	mpuWhenNoEpic,
