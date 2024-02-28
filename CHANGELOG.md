@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 16.1.1
+
+### Patch Changes
+
+- f692d2f: Remove/Extend expired ab tests
+
 ## 16.1.0
 
 ### Minor Changes
