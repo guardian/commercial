@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 17.0.0
+
+### Major Changes
+
+- 718ede6: Update `@guardian/identity-auth` libraries
+
 ## 16.1.1
 
 ### Patch Changes
