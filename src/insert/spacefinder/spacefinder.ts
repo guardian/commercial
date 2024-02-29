@@ -506,6 +506,8 @@ const findSpace = async (
 			document.querySelector<HTMLElement>(rules.bodySelector)) ||
 		document;
 
+	window.performance.mark('commercial:spacefinder:findSpace:start');
+
 	await getReady(rules, options);
 
 	const candidates = getCandidates(rules, exclusions);
@@ -513,6 +515,25 @@ const findSpace = async (
 	const winners = enforceRules(measurements, rules, exclusions);
 
 	initSpacefinderDebugger(exclusions, winners, rules, options.pass);
+
+	window.performance.mark('commercial:spacefinder:findSpace:end');
+
+	const measure = window.performance.measure(
+		'commercial:spacefinder:findSpace',
+		'commercial:spacefinder:findSpace:start',
+		'commercial:spacefinder:findSpace:end',
+	);
+
+	log(
+		'commercial',
+		`Spacefinder took ${Math.round(measure?.duration ?? 0)}ms for '${
+			options.pass
+		}' pass`,
+		{
+			rules,
+			options,
+		},
+	);
 
 	// TODO Is this really an error condition?
 	if (!winners.length) {
