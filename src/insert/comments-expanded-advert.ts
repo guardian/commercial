@@ -14,7 +14,6 @@ const tallestCommentAd = adSizes.mpu.height + AD_LABEL_HEIGHT;
 const tallestCommentsExpandedAd = adSizes.halfPage.height + AD_LABEL_HEIGHT;
 
 const insertAd = (anchor: HTMLElement) => {
-	log('commercial', 'Inserting comments-expanded advert');
 	const slot = createAdSlot('comments-expanded', {
 		classes: 'comments-expanded',
 	});
@@ -29,6 +28,8 @@ const insertAd = (anchor: HTMLElement) => {
 	stickyContainer.style.flexGrow = '1';
 	stickyContainer.appendChild(adSlotContainer);
 
+	log('commercial', 'Inserting comments-expanded advert');
+
 	return fastdom
 		.mutate(() => {
 			anchor.appendChild(adSlotContainer);
@@ -37,7 +38,6 @@ const insertAd = (anchor: HTMLElement) => {
 };
 
 const insertAdMobile = (anchor: HTMLElement, id: number) => {
-	log('commercial', `Inserting mobile comments-expanded-${id} advert`);
 	const slot = createAdSlot('comments-expanded', {
 		name: `comments-expanded-${id}`,
 		classes: 'comments-expanded',
@@ -50,9 +50,14 @@ const insertAdMobile = (anchor: HTMLElement, id: number) => {
 	adSlotContainer.style.margin = '20px auto';
 	adSlotContainer.appendChild(slot);
 
+	const listElement = document.createElement('li');
+	listElement.appendChild(adSlotContainer);
+
+	log('commercial', `Inserting mobile comments-expanded-${id} advert`);
+
 	return fastdom
 		.mutate(() => {
-			anchor.appendChild(adSlotContainer);
+			anchor.after(listElement);
 		})
 		.then(() => fillDynamicAdSlot(slot, false));
 };
@@ -80,8 +85,8 @@ const getCommentsColumn = async (): Promise<HTMLElement> => {
 };
 
 const isEnoughSpaceForAd = (rightColumnNode: HTMLElement): boolean => {
-	// Only insert a second advert into the right-hand rail if there is enough space.
-	// There is enough space if the right-hand rail is larger than:
+	// Only insert a second advert into the right-hand column if there is enough space.
+	// There is enough space if the right-hand column is larger than:
 	// (the largest possible heights of both adverts) + (the gap between the two adverts)
 	const minHeightToPlaceAd =
 		tallestCommentAd + tallestCommentsExpandedAd + window.innerHeight;
@@ -96,92 +101,68 @@ const commentsExpandedAdsAlreadyExist = (): boolean => {
 	const commentsExpandedAds = document.querySelectorAll(
 		'.ad-slot--comments-expanded',
 	);
+
 	return commentsExpandedAds.length > 0 ? true : false;
-};
-
-const createResizeObserver = (rightColumnNode: HTMLElement) => {
-	// When the comments load and are rendered, the height of the right column
-	// will expand and there might be enough space to insert the ad.
-	const resizeObserver = new ResizeObserver(() => {
-		if (isEnoughSpaceForAd(rightColumnNode)) {
-			void insertAd(rightColumnNode);
-
-			resizeObserver.unobserve(rightColumnNode);
-		}
-	});
-
-	resizeObserver.observe(rightColumnNode);
 };
 
 const removeMobileCommentsExpandedAds = (): Promise<void> => {
 	const currentBreakpoint = getBreakpoint(getViewport().width);
-	if (currentBreakpoint === 'mobile') {
-		const commentsExpandedAds = document.querySelectorAll(
-			'.ad-slot--comments-expanded',
-		);
-		return fastdom.mutate(() =>
-			commentsExpandedAds.forEach((node) => {
-				log('commercial', `Removing ad slot: ${node.id}`);
-				const advert = getAdvertById(node.id);
-				if (advert) {
-					window.googletag.destroySlots([advert.slot]);
-				}
-				node.remove();
-				dfpEnv.adverts.delete(node.id);
-				dfpEnv.advertsToLoad = dfpEnv.advertsToLoad.filter(
-					(_) => _ !== advert,
-				);
-			}),
-		);
+	if (currentBreakpoint !== 'mobile') {
+		return Promise.resolve();
 	}
-	return Promise.resolve();
+
+	const commentsExpandedAds = document.querySelectorAll(
+		'.ad-slot--comments-expanded',
+	);
+
+	return fastdom.mutate(() =>
+		commentsExpandedAds.forEach((node) => {
+			log('commercial', `Removing ad slot: ${node.id}`);
+			const advert = getAdvertById(node.id);
+			if (advert) {
+				window.googletag.destroySlots([advert.slot]);
+			}
+			node.remove();
+			dfpEnv.adverts.delete(node.id);
+			dfpEnv.advertsToLoad = dfpEnv.advertsToLoad.filter(
+				(_) => _ !== advert,
+			);
+		}),
+	);
 };
 
 /**
- * Create a comments-expanded ad immediately if there is enough space for it. If not, then it
- * is possible that we are still waiting for the Discussion API to load the comments, so we
- * wait for the comments to load before checking again whether there is enough space to load an ad.
+ * If there is a right-hand column, inserts an ad if there is space for it.
  */
-const handleCommentsExpandedEvent = (): void => {
-	if (!commercialFeatures.commentAdverts) {
-		log(
-			'commercial',
-			'Adverts in comments are disabled in commercialFeatures',
-		);
-		return;
-	}
-
+const handleCommentsLoadedEvent = (): void => {
 	const rightColumnNode = getRightColumn();
 
 	if (isEnoughSpaceForAd(rightColumnNode)) {
 		void insertAd(rightColumnNode);
-		return;
 	}
-
-	// Watch the right column and try to insert an ad when the comments are loaded.
-	createResizeObserver(rightColumnNode);
 };
 
-const handleCommentsExpandedMobileEvent = async (): Promise<void> => {
+const handleCommentsLoadedMobileEvent = async (): Promise<void> => {
 	const commentsColumn = await getCommentsColumn();
-	const currentBreakpoint = getBreakpoint(getViewport().width);
+
+	// On frontend-rendered pages, there is a merchandising-high ad below the comments ad.
+	// We want a sufficient amount of content between these two ads.
+	const isDcr = window.guardian.config.isDotcomRendering;
+	const minCommentsBelowAd = isDcr ? 1 : 3;
 
 	if (
-		currentBreakpoint === 'mobile' &&
 		isEnoughCommentsForAd(commentsColumn) &&
 		!commentsExpandedAdsAlreadyExist()
 	) {
 		let counter = 0;
 		for (let i = 0; i < commentsColumn.childElementCount; i++) {
 			if (
-				commentsColumn.childNodes[i] &&
-				(i - 3) % 5 === 0 &&
-				i + 1 < commentsColumn.childElementCount
+				commentsColumn.children[i] &&
+				(i - 3) % 5 === 0 && // The fourth comment and then every fifth comment
+				i + minCommentsBelowAd < commentsColumn.childElementCount
 			) {
 				counter++;
-				const childElement = commentsColumn.childNodes[
-					i
-				] as HTMLElement;
+				const childElement = commentsColumn.children[i] as HTMLElement;
 				void insertAdMobile(childElement, counter);
 			}
 		}
@@ -189,19 +170,36 @@ const handleCommentsExpandedMobileEvent = async (): Promise<void> => {
 };
 
 export const initCommentsExpandedAdverts = (): Promise<void> => {
-	document.addEventListener('comments-expanded', () => {
-		handleCommentsExpandedEvent();
+	if (!commercialFeatures.commentAdverts) {
+		log(
+			'commercial',
+			'Adverts in comments are disabled in commercialFeatures',
+		);
+		return Promise.resolve();
+	}
+
+	document.addEventListener('comments-loaded', () => {
+		const currentBreakpoint = getBreakpoint(getViewport().width);
+		if (currentBreakpoint === 'mobile') {
+			if (
+				window.guardian.config.isDotcomRendering &&
+				!window.guardian.config.switches.mobileDiscussionAds
+			) {
+				return;
+			}
+			void handleCommentsLoadedMobileEvent();
+		} else {
+			void handleCommentsLoadedEvent();
+		}
 	});
 
-	if (window.guardian.config.switches.mobileDiscussionAds) {
-		document.addEventListener('comments-state-change', () => {
-			void removeMobileCommentsExpandedAds();
-		});
-
-		document.addEventListener('comments-loaded', () => {
-			void handleCommentsExpandedMobileEvent();
-		});
-	}
+	/**
+	 * If the page of comments is changed, or the ordering is updated, etc,
+	 * we need to remove the existing slots and create new slots.
+	 */
+	document.addEventListener('comments-state-change', () => {
+		void removeMobileCommentsExpandedAds();
+	});
 
 	return Promise.resolve();
 };
