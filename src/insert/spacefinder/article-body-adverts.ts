@@ -299,19 +299,16 @@ const addMobileInlineAds = (): Promise<boolean> => {
 				minBelowSlot: 250,
 			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
-			// The below 2 rules are for articles containing numbered title blocks and item link blocks e.g. https://www.theguardian.com/football/2024/feb/09/premier-league-10-things-to-look-out-for-this-weekend
-			[` > [data-spacefinder-type$="NumberedTitleBlockElement"]`]: {
-				minAboveSlot: 0,
-				minBelowSlot: 200,
+			// rich links are floated so give them a wide berth
+			[` > [data-spacefinder-role="richLink"]`]: {
+				minAboveSlot: 200,
+				minBelowSlot: 50,
 			},
-			[` > [data-spacefinder-type$="ItemLinkBlockElement"]`]: {
-				minAboveSlot: 50,
-				minBelowSlot: 0,
-			},
-			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="ItemLinkBlockElement"]):not([data-spacefinder-type$="NumberedTitleBlockElement"])`]:
+			// this is a catch-all for elements that are not covered by the above rules, these will generally be things like videos, embeds and atoms. minAboveSlot is higher to push ads a bit further down after these elements
+			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`]:
 				{
-					minAboveSlot: 35,
-					minBelowSlot: 200,
+					minAboveSlot: 100,
+					minBelowSlot: 20,
 				},
 		},
 		filter: filterNearbyCandidates(adSizes.mpu.height),
