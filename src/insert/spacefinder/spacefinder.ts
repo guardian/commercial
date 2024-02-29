@@ -211,15 +211,15 @@ const partitionCandidates = <T>(
  * Opponents are other elements in the article that are in the spacefinder ruleset for the current pass. This includes slots inserted by a previous pass but not those in the current pass as they're all inserted at the end.
  *
  *                                                        │
- *                     Candidate Below                    │             Candidate Above
+ *                     Opponent Below                     │             Opponent Above
  *                                                        │
  *                  ───────────────────  Top of container │          ───────────────────  Top of container
  *                    ▲              ▲                    │            ▲              ▲
- *                    │              │                    │            │              │ candidate.top
+ *                    │              │                    │            │              │ opponent.top
  *                    │ ┌──────────┐ │                    │            │ ┌──────────┐ ▼   (insertion point)
  *                    │ │          │ │opponent.bottom     │            │ │          │
- *                    │ │ Opponent │ │                    │            │ │ Candidate│
- *       candidate.top│ │          │ │                    │opponent.top│ │          │
+ *                    │ │ Candidate│ │                    │            │ │ Opponent |
+ *       opponent.top │ │          │ │                    candidate.top│ │          │
  *                    │ └──────────┘ ▼                    │            │ └──────────┘
  *                    │           ▲                       │            │
  *                    │           │ minBelow              │            │  ───────────
@@ -228,7 +228,7 @@ const partitionCandidates = <T>(
  *                    │                                   │            │           ▼
  * (insertion point)  ▼ ┌──────────┐                      │            ▼ ┌──────────┐
  *                      │          │                      │              │          │
- *                      │ Candidate│                      │              │ Opponent │
+ *                      │ Opponent |                      │              │ Candidate│
  *                      │          │                      │              │          │
  *                      └──────────┘                      │              └──────────┘
  *                                                        │
@@ -238,16 +238,16 @@ const isTopOfCandidateFarEnoughFromOpponent = (
 	candidate: SpacefinderItem,
 	opponent: SpacefinderItem,
 	rule: RuleSpacing,
-	isCandidateBelow: boolean,
+	isOpponentBelow: boolean,
 ): boolean => {
 	const potentialInsertPosition = candidate.top;
 
-	if (isCandidateBelow && rule.minBelow) {
-		return opponent.bottom + rule.minBelow <= potentialInsertPosition;
+	if (isOpponentBelow && rule.minBelow) {
+		return opponent.top - potentialInsertPosition >= rule.minBelow;
 	}
 
-	if (!isCandidateBelow && rule.minAbove) {
-		return opponent.top - rule.minAbove >= potentialInsertPosition;
+	if (!isOpponentBelow && rule.minAbove) {
+		return potentialInsertPosition - opponent.bottom >= rule.minAbove;
 	}
 
 	// if no rule is set (or they're 0), return true
@@ -260,20 +260,20 @@ const testCandidate = (
 	candidate: SpacefinderItem,
 	opponent: SpacefinderItem,
 ): boolean => {
-	const isCandidateBelow =
-		candidate.top > opponent.top && candidate.bottom > opponent.bottom;
+	const isOpponentBelow =
+		opponent.top > candidate.top && opponent.bottom > candidate.bottom;
 
 	const pass = isTopOfCandidateFarEnoughFromOpponent(
 		candidate,
 		opponent,
 		rule,
-		isCandidateBelow,
+		isOpponentBelow,
 	);
 
 	if (!pass) {
 		// if the test fails, add debug information to the candidate metadata
-		const required = isCandidateBelow ? rule.minBelow : rule.minAbove;
-		const actual = isCandidateBelow
+		const required = isOpponentBelow ? rule.minBelow : rule.minAbove;
+		const actual = isOpponentBelow
 			? opponent.top - candidate.top
 			: candidate.top - opponent.bottom;
 
