@@ -131,9 +131,6 @@ const removeMobileCommentsExpandedAds = (): Promise<void> => {
 	);
 };
 
-/**
- * If there is a right-hand column, inserts an ad if there is space for it.
- */
 const handleCommentsLoadedEvent = (): void => {
 	const rightColumnNode = getRightColumn();
 
