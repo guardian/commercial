@@ -19,42 +19,42 @@ const wideRules: SpacefinderRules = {
 	clearContentMeta: 0,
 	selectors: {
 		' .element-rich-link': {
-			minAbove: 100,
-			minBelow: 400,
+			minAboveSlot: 100,
+			minBelowSlot: 400,
 		},
 		' .element-image': {
-			minAbove: 440,
-			minBelow: 440,
+			minAboveSlot: 440,
+			minBelowSlot: 440,
 		},
 
 		' .player': {
-			minAbove: 50,
-			minBelow: 50,
+			minAboveSlot: 50,
+			minBelowSlot: 50,
 		},
 		' > h1': {
-			minAbove: 50,
-			minBelow: 50,
+			minAboveSlot: 50,
+			minBelowSlot: 50,
 		},
 		' > h2': {
-			minAbove: 50,
-			minBelow: 50,
+			minAboveSlot: 50,
+			minBelowSlot: 50,
 		},
 		' > *:not(p):not(h2):not(blockquote):not(#sign-in-gate)': {
-			minAbove: 50,
-			minBelow: 50,
+			minAboveSlot: 50,
+			minBelowSlot: 50,
 		},
 		' .ad-slot': {
-			minAbove: 100,
-			minBelow: 100,
+			minAboveSlot: 100,
+			minBelowSlot: 100,
 		},
 		' .element-pullquote': {
-			minAbove: 400,
-			minBelow: 400,
+			minAboveSlot: 400,
+			minBelowSlot: 400,
 		},
 		// Don't place carrot ads near newsletter sign-up blocks
 		' > figure[data-spacefinder-role="inline"]': {
-			minAbove: 400,
-			minBelow: 400,
+			minAboveSlot: 400,
+			minBelowSlot: 400,
 		},
 	},
 	fromBottom: true,
@@ -66,16 +66,16 @@ const desktopRules: SpacefinderRules = {
 	selectors: {
 		...wideRules.selectors,
 		' .element-rich-link': {
-			minAbove: 400,
-			minBelow: 400,
+			minAboveSlot: 400,
+			minBelowSlot: 400,
 		},
 		' .ad-slot': {
-			minAbove: 400,
-			minBelow: 400,
+			minAboveSlot: 400,
+			minBelowSlot: 400,
 		},
 		' .ad-slot--im': {
-			minAbove: 400,
-			minBelow: 400,
+			minAboveSlot: 400,
+			minBelowSlot: 400,
 		},
 	},
 };

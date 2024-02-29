@@ -7,8 +7,8 @@ import fastdom from 'utils/fastdom-promise';
 import { init as initSpacefinderDebugger } from './spacefinder-debug-tools';
 
 type RuleSpacing = {
-	minAbove: number;
-	minBelow: number;
+	minAboveSlot: number;
+	minBelowSlot: number;
 };
 
 type SpacefinderItem = {
@@ -242,12 +242,12 @@ const isTopOfCandidateFarEnoughFromOpponent = (
 ): boolean => {
 	const potentialInsertPosition = candidate.top;
 
-	if (isOpponentBelow && rule.minBelow) {
-		return opponent.top - potentialInsertPosition >= rule.minBelow;
+	if (isOpponentBelow && rule.minBelowSlot) {
+		return opponent.top - potentialInsertPosition >= rule.minBelowSlot;
 	}
 
-	if (!isOpponentBelow && rule.minAbove) {
-		return potentialInsertPosition - opponent.bottom >= rule.minAbove;
+	if (!isOpponentBelow && rule.minAboveSlot) {
+		return potentialInsertPosition - opponent.bottom >= rule.minAboveSlot;
 	}
 
 	// if no rule is set (or they're 0), return true
@@ -272,7 +272,9 @@ const testCandidate = (
 
 	if (!pass) {
 		// if the test fails, add debug information to the candidate metadata
-		const required = isOpponentBelow ? rule.minBelow : rule.minAbove;
+		const required = isOpponentBelow
+			? rule.minBelowSlot
+			: rule.minAboveSlot;
 		const actual = isOpponentBelow
 			? opponent.top - candidate.top
 			: candidate.top - opponent.bottom;

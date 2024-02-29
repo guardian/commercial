@@ -37,8 +37,8 @@ const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
 
 const adSlotContainerRules: RuleSpacing = {
-	minAbove: 500,
-	minBelow: 500,
+	minAboveSlot: 500,
+	minBelowSlot: 500,
 };
 
 /**
@@ -90,7 +90,7 @@ const filterNearbyCandidates =
 
 		return (
 			Math.abs(candidate.top - lastWinner.top) - maximumAdHeight >=
-			adSlotContainerRules.minBelow
+			adSlotContainerRules.minBelowSlot
 		);
 	};
 
@@ -148,21 +148,21 @@ const addDesktopInline1 = (): Promise<boolean> => {
 		minBelow: 300,
 		selectors: {
 			' > h2': {
-				minAbove: 5,
-				minBelow: 190,
+				minAboveSlot: 5,
+				minBelowSlot: 190,
 			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
 			[ignoreList]: {
-				minAbove: 35,
-				minBelow: 400,
+				minAboveSlot: 35,
+				minBelowSlot: 400,
 			},
 			' [data-spacefinder-role="immersive"]': {
-				minAbove: 0,
-				minBelow: 600,
+				minAboveSlot: 0,
+				minBelowSlot: 600,
 			},
 			' figure.element--supporting': {
-				minAbove: 500,
-				minBelow: 0,
+				minAboveSlot: 500,
+				minBelowSlot: 0,
 			},
 		},
 	};
@@ -225,8 +225,8 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 		selectors: {
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
 			' [data-spacefinder-role="immersive"]': {
-				minAbove: 0,
-				minBelow: 600,
+				minAboveSlot: 0,
+				minBelowSlot: 600,
 			},
 		},
 		filter: filterNearbyCandidates(largestSizeForSlot),
@@ -295,23 +295,23 @@ const addMobileInlineAds = (): Promise<boolean> => {
 		minBelow: 200,
 		selectors: {
 			' > h2': {
-				minAbove: 0,
-				minBelow: 250,
+				minAboveSlot: 0,
+				minBelowSlot: 250,
 			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
 			// The below 2 rules are for articles containing numbered title blocks and item link blocks e.g. https://www.theguardian.com/football/2024/feb/09/premier-league-10-things-to-look-out-for-this-weekend
 			[` > [data-spacefinder-type$="NumberedTitleBlockElement"]`]: {
-				minAbove: 0,
-				minBelow: 200,
+				minAboveSlot: 0,
+				minBelowSlot: 200,
 			},
 			[` > [data-spacefinder-type$="ItemLinkBlockElement"]`]: {
-				minAbove: 50,
-				minBelow: 0,
+				minAboveSlot: 50,
+				minBelowSlot: 0,
 			},
 			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="ItemLinkBlockElement"]):not([data-spacefinder-type$="NumberedTitleBlockElement"])`]:
 				{
-					minAbove: 35,
-					minBelow: 200,
+					minAboveSlot: 35,
+					minBelowSlot: 200,
 				},
 		},
 		filter: filterNearbyCandidates(adSizes.mpu.height),
@@ -368,22 +368,22 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 		minBelow: 300,
 		selectors: {
 			' > .merch': {
-				minAbove: 0,
-				minBelow: 0,
+				minAboveSlot: 0,
+				minBelowSlot: 0,
 			},
 			' > header': {
-				minAbove: isMobileOrTablet ? 300 : 700,
-				minBelow: 0,
+				minAboveSlot: isMobileOrTablet ? 300 : 700,
+				minBelowSlot: 0,
 			},
 			' > h2': {
-				minAbove: 100,
-				minBelow: 250,
+				minAboveSlot: 100,
+				minBelowSlot: 250,
 			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
 			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
 				{
-					minAbove: 200,
-					minBelow: 400,
+					minAboveSlot: 200,
+					minBelowSlot: 400,
 				},
 		},
 	};
