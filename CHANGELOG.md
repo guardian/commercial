@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 17.1.0
+
+### Minor Changes
+
+- 8a9bcd5: Add ads between comments on frontend-rendered pages
+
+### Patch Changes
+
+- 0ad05af: Remove top-level container from DOM when removing fronts-banner ad
+
 ## 17.0.0
 
 ### Major Changes
