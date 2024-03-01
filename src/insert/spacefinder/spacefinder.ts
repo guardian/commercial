@@ -244,6 +244,12 @@ const isTopOfCandidateFarEnoughFromOpponent = (
 	const potentialInsertPosition = candidate.top;
 
 	if (isOpponentBelow && rule.minBelowSlot) {
+		if (
+			rule.bypassMinBelow &&
+			candidate.element.matches(rule.bypassMinBelow)
+		) {
+			return true;
+		}
 		return opponent.top - potentialInsertPosition >= rule.minBelowSlot;
 	}
 
@@ -265,9 +271,6 @@ const testCandidate = (
 		return true;
 	}
 
-	if (rule.bypassMinBelow && candidate.element.matches(rule.bypassMinBelow)) {
-		return true;
-	}
 	const isOpponentBelow = opponent.bottom > candidate.bottom;
 
 	const pass = isTopOfCandidateFarEnoughFromOpponent(
