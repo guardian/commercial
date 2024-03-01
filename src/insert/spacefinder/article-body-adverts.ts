@@ -143,10 +143,10 @@ const addDesktopInline1 = (): Promise<boolean> => {
 
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelectors: ' > p',
+		candidateSelector: ' > p',
 		minAbove: isImmersive ? 700 : 300,
 		minBelow: 300,
-		selectors: {
+		opponentSelectorRules: {
 			' > h2': {
 				minAboveSlot: 5,
 				minBelowSlot: 190,
@@ -219,10 +219,10 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 	const largestSizeForSlot = adSizes.halfPage.height;
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelectors: ' > p',
+		candidateSelector: ' > p',
 		minAbove,
 		minBelow: 300,
-		selectors: {
+		opponentSelectorRules: {
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
 			' [data-spacefinder-role="immersive"]': {
 				minAboveSlot: 0,
@@ -290,7 +290,7 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 const addMobileInlineAds = (): Promise<boolean> => {
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelectors: [
+		candidateSelector: [
 			' > p',
 			' > hr',
 			' > h2',
@@ -298,7 +298,7 @@ const addMobileInlineAds = (): Promise<boolean> => {
 		],
 		minAbove: 200,
 		minBelow: 200,
-		selectors: {
+		opponentSelectorRules: {
 			// don't place ads right after a heading
 			' > h2': {
 				minAboveSlot: 100,
@@ -370,10 +370,10 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelectors: ' > p',
+		candidateSelector: ' > p',
 		minAbove: 300,
 		minBelow: 300,
-		selectors: {
+		opponentSelectorRules: {
 			' > .merch': {
 				minAboveSlot: 0,
 				minBelowSlot: 0,

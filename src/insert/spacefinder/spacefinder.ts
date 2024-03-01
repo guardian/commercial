@@ -28,7 +28,7 @@ type SpacefinderItem = {
 type SpacefinderRules = {
 	bodySelector: string;
 	body?: HTMLElement | Document;
-	slotSelectors: string | string[];
+	candidateSelector: string | string[];
 	// minimum from slot to top of page
 	absoluteMinAbove?: number;
 	// minimum from para to top of article
@@ -39,7 +39,7 @@ type SpacefinderRules = {
 	// used for carrot ads
 	clearContentMeta?: number;
 	// custom rules using selectors.
-	selectors?: Record<string, RuleSpacing>;
+	opponentSelectorRules?: Record<string, RuleSpacing>;
 	// will run each slot through this fn to check if it must be counted in
 	filter?: (x: SpacefinderItem, lastWinner?: SpacefinderItem) => boolean;
 	// will remove slots before this one
@@ -348,9 +348,11 @@ const enforceRules = (
 	}
 
 	// enforce selector rules
-	if (rules.selectors) {
+	if (rules.opponentSelectorRules) {
 		const selectorExclusions: SpacefinderItem[] = [];
-		for (const [selector, rule] of Object.entries(rules.selectors)) {
+		for (const [selector, rule] of Object.entries(
+			rules.opponentSelectorRules,
+		)) {
 			[filtered, exclusions] = partitionCandidates(
 				candidates,
 				(candidate) =>
@@ -423,7 +425,7 @@ const getCandidates = (
 	spacefinderExclusions: SpacefinderExclusions,
 ) => {
 	let candidates = query(
-		getCandidateSelector(rules.bodySelector, rules.slotSelectors),
+		getCandidateSelector(rules.bodySelector, rules.candidateSelector),
 	);
 	if (rules.fromBottom) {
 		candidates.reverse();
@@ -476,8 +478,8 @@ const getMeasurements = (
 	const contentMeta = rules.clearContentMeta
 		? document.querySelector<HTMLElement>('.js-content-meta') ?? undefined
 		: undefined;
-	const opponents = rules.selectors
-		? Object.keys(rules.selectors).map(
+	const opponents = rules.opponentSelectorRules
+		? Object.keys(rules.opponentSelectorRules).map(
 				(selector) =>
 					[selector, query(rules.bodySelector + selector)] as const,
 		  )

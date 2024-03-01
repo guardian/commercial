@@ -13,11 +13,11 @@ const bodySelector = '.article-body-commercial-selector';
 
 const wideRules: SpacefinderRules = {
 	bodySelector,
-	slotSelectors: ' > p',
+	candidateSelector: ' > p',
 	minAbove: 500,
 	minBelow: 400,
 	clearContentMeta: 0,
-	selectors: {
+	opponentSelectorRules: {
 		' .element-rich-link': {
 			minAboveSlot: 100,
 			minBelowSlot: 400,
@@ -63,8 +63,8 @@ const wideRules: SpacefinderRules = {
 // anything below leftCol (1140) : desktop, tablet, ..., mobile
 const desktopRules: SpacefinderRules = {
 	...wideRules,
-	selectors: {
-		...wideRules.selectors,
+	opponentSelectorRules: {
+		...wideRules.opponentSelectorRules,
 		' .element-rich-link': {
 			minAboveSlot: 400,
 			minBelowSlot: 400,

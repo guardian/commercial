@@ -98,10 +98,10 @@ const filterNearbyCandidates =
 const addMobileInlineAds = async () => {
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelectors: ' > p',
+		candidateSelector: ' > p',
 		minAbove: 200,
 		minBelow: 200,
-		selectors: {
+		opponentSelectorRules: {
 			' > h2': {
 				minAboveSlot: 100,
 				minBelowSlot: 250,
@@ -140,10 +140,10 @@ const addDesktopInlineAds = async () => {
 	// For any other inline
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelectors: ' > p',
+		candidateSelector: ' > p',
 		minAbove: 1000,
 		minBelow: 300,
-		selectors: {
+		opponentSelectorRules: {
 			' .ad-slot': adSlotClassSelectorSizes,
 			' [data-spacefinder-role="immersive"]': {
 				minAboveSlot: 0,
