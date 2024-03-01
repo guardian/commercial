@@ -311,12 +311,12 @@ const addMobileInlineAds = (): Promise<boolean> => {
 			},
 
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
-			// this is a catch-all for elements that are not covered by the above rules, these will generally be things like videos, embeds and atoms. minAboveSlot is higher to push ads a bit further down after these elements
+			// this is a catch-all for elements that are not covered by the above rules, these will generally be things like videos, embeds and atoms. minBelowSlot is higher to push ads a bit further down after these elements
 			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`]:
 				{
 					minAboveSlot: 35,
 					minBelowSlot: 200,
-					// heading candidates can bypass the min below rule so that ads can be placed directly before them to help with ad ratio
+					// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
 					bypassMinBelow:
 						'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 				},
