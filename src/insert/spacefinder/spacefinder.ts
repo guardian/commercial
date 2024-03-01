@@ -9,6 +9,7 @@ import { init as initSpacefinderDebugger } from './spacefinder-debug-tools';
 type RuleSpacing = {
 	minAboveSlot: number;
 	minBelowSlot: number;
+	bypassMinBelow?: string;
 };
 
 type SpacefinderItem = {
@@ -27,7 +28,7 @@ type SpacefinderItem = {
 type SpacefinderRules = {
 	bodySelector: string;
 	body?: HTMLElement | Document;
-	slotSelector: string;
+	slotSelectors: string | string[];
 	// minimum from slot to top of page
 	absoluteMinAbove?: number;
 	// minimum from para to top of article
@@ -260,8 +261,14 @@ const testCandidate = (
 	candidate: SpacefinderItem,
 	opponent: SpacefinderItem,
 ): boolean => {
-	const isOpponentBelow =
-		opponent.top > candidate.top && opponent.bottom > candidate.bottom;
+	if (candidate.element === opponent.element) {
+		return true;
+	}
+
+	if (rule.bypassMinBelow && candidate.element.matches(rule.bypassMinBelow)) {
+		return true;
+	}
+	const isOpponentBelow = opponent.bottom > candidate.bottom;
 
 	const pass = isTopOfCandidateFarEnoughFromOpponent(
 		candidate,
@@ -401,11 +408,23 @@ const getReady = (rules: SpacefinderRules, options: SpacefinderOptions) =>
 		}
 	});
 
+const getCandidateSelector = (
+	bodySelector: string,
+	slotSelectors: string | string[],
+) => {
+	return Array.isArray(slotSelectors)
+		? slotSelectors
+				.map((selector) => `${bodySelector} ${selector}`)
+				.join(', ')
+		: `${bodySelector} ${slotSelectors}`;
+};
 const getCandidates = (
 	rules: SpacefinderRules,
 	spacefinderExclusions: SpacefinderExclusions,
 ) => {
-	let candidates = query(rules.bodySelector + rules.slotSelector);
+	let candidates = query(
+		getCandidateSelector(rules.bodySelector, rules.slotSelectors),
+	);
 	if (rules.fromBottom) {
 		candidates.reverse();
 	}

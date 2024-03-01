@@ -13,7 +13,7 @@ const bodySelector = '.article-body-commercial-selector';
 
 const wideRules: SpacefinderRules = {
 	bodySelector,
-	slotSelector: ' > p',
+	slotSelectors: ' > p',
 	minAbove: 500,
 	minBelow: 400,
 	clearContentMeta: 0,

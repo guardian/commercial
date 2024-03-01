@@ -120,7 +120,7 @@ const getSpaceFillerRules = (
 
 	return {
 		bodySelector: '.js-liveblog-body',
-		slotSelector: ' > .block',
+		slotSelectors: ' > .block',
 		fromBottom: true,
 		startAt: startBlock,
 		absoluteMinAbove: 0,

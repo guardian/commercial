@@ -143,7 +143,7 @@ const addDesktopInline1 = (): Promise<boolean> => {
 
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelector: ' > p',
+		slotSelectors: ' > p',
 		minAbove: isImmersive ? 700 : 300,
 		minBelow: 300,
 		selectors: {
@@ -219,7 +219,7 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 	const largestSizeForSlot = adSizes.halfPage.height;
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelector: ' > p',
+		slotSelectors: ' > p',
 		minAbove,
 		minBelow: 300,
 		selectors: {
@@ -290,25 +290,35 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 const addMobileInlineAds = (): Promise<boolean> => {
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelector: ' > p,hr,h2',
+		slotSelectors: [
+			' > p',
+			' > hr',
+			' > h2',
+			' > [data-spacefinder-type$="NumberedTitleBlockElement"]',
+		],
 		minAbove: 200,
 		minBelow: 200,
 		selectors: {
+			// don't place ads right after a heading
 			' > h2': {
-				minAboveSlot: 0,
-				minBelowSlot: 250,
+				minAboveSlot: 100,
+				minBelowSlot: 0,
 			},
+			// these are just fancy headings
+			' > [data-spacefinder-type$="NumberedTitleBlockElement"]': {
+				minAboveSlot: 100,
+				minBelowSlot: 0,
+			},
+
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
-			// rich links are floated so give them a wide berth
-			[` > [data-spacefinder-role="richLink"]`]: {
-				minAboveSlot: 200,
-				minBelowSlot: 50,
-			},
 			// this is a catch-all for elements that are not covered by the above rules, these will generally be things like videos, embeds and atoms. minAboveSlot is higher to push ads a bit further down after these elements
 			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`]:
 				{
-					minAboveSlot: 100,
-					minBelowSlot: 20,
+					minAboveSlot: 35,
+					minBelowSlot: 200,
+					// heading candidates can bypass the min below rule so that ads can be placed directly before them to help with ad ratio
+					bypassMinBelow:
+						'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 				},
 		},
 		filter: filterNearbyCandidates(adSizes.mpu.height),
@@ -360,7 +370,7 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelector: ' > p',
+		slotSelectors: ' > p',
 		minAbove: 300,
 		minBelow: 300,
 		selectors: {

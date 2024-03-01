@@ -98,7 +98,7 @@ const filterNearbyCandidates =
 const addMobileInlineAds = async () => {
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelector: ' > p',
+		slotSelectors: ' > p',
 		minAbove: 200,
 		minBelow: 200,
 		selectors: {
@@ -140,7 +140,7 @@ const addDesktopInlineAds = async () => {
 	// For any other inline
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelector: ' > p',
+		slotSelectors: ' > p',
 		minAbove: 1000,
 		minBelow: 300,
 		selectors: {
