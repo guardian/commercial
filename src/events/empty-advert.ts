@@ -8,23 +8,49 @@ const removeFromDfpEnv = (advert: Advert) => {
 	dfpEnv.advertsToLoad = dfpEnv.advertsToLoad.filter((_) => _ !== advert);
 };
 
-const removeAd = (advert: Advert) => {
-	const parent: HTMLElement | null = advert.node.parentElement;
+/**
+ * Find the highest element responsible for the advert.
+ *
+ * Sometimes an advert has an advert container
+ * Sometimes that container has a top-level container
+ */
+const findElementToRemove = (advertNode: HTMLElement): HTMLElement => {
+	const parent = advertNode.parentElement;
+	const isAdContainer =
+		parent instanceof HTMLElement &&
+		parent.classList.contains('ad-slot-container');
 
-	if (parent?.classList.contains('ad-slot-container')) {
-		parent.remove();
-	} else {
-		advert.node.remove();
+	if (!isAdContainer) {
+		return advertNode;
 	}
+
+	if (
+		parent.parentElement?.classList.contains(
+			'top-fronts-banner-ad-container',
+		)
+	) {
+		return parent.parentElement;
+	}
+
+	return parent;
+};
+
+const removeAdFromDom = (advert: Advert) => {
+	const elementToRemove = findElementToRemove(advert.node);
+	elementToRemove.remove();
 };
 
 const emptyAdvert = (advert: Advert): void => {
 	log('commercial', `Removing empty advert: ${advert.id}`);
 	fastdom.mutate(() => {
 		window.googletag.destroySlots([advert.slot]);
-		removeAd(advert);
+		removeAdFromDom(advert);
 		removeFromDfpEnv(advert);
 	});
 };
 
 export { emptyAdvert };
+
+export const _ = {
+	findElementToRemove,
+};
