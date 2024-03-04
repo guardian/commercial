@@ -1,6 +1,5 @@
 import { onConsentChange } from '@guardian/consent-management-platform';
 import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { once } from 'lodash-es';
 
 let initialConsentState: ConsentState | undefined;
 
@@ -8,7 +7,7 @@ let initialConsentState: ConsentState | undefined;
  * If consent has been set, and if consent then changes, reload the page so the correct
  * state is reflected in the rendered page
  */
-const _reloadPageOnConsentChange = (): void => {
+const reloadPageOnConsentChange = (): Promise<void> => {
 	onConsentChange((consent) => {
 		if (initialConsentState === undefined) {
 			initialConsentState = consent;
@@ -17,10 +16,8 @@ const _reloadPageOnConsentChange = (): void => {
 			window.location.reload();
 		}
 	}, true);
-};
 
-const reloadPageOnConsentChange = once(() =>
-	Promise.resolve(_reloadPageOnConsentChange()),
-);
+	return Promise.resolve();
+};
 
 export { reloadPageOnConsentChange };
