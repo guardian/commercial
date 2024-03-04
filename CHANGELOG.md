@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 17.1.1
+
+### Patch Changes
+
+- 501656e: bmp beta
+
 ## 17.1.0
 
 ### Minor Changes
