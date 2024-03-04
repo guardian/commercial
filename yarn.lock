@@ -1745,7 +1745,7 @@
 "@guardian/consent-management-platform@0.0.0-beta-20240219110734":
   version "0.0.0-beta-20240219110734"
   resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-0.0.0-beta-20240219110734.tgz#79b87bb44bf54c940a6991a04adad9906864177f"
-  integrity sha512-0Vb52/L+ir8r/auW+a1l40L9ZtSv5f5UbFYK1kx9lCk7fIZmodlGpzKYYvLOM8LmbUcxU+e8zy9yM1asftwyaw==
+  integrity sha512-0Vb52/L+ir8r/auW+a1l40L9ZtSv5f5UbFYK1kx9lCk7fIZmodlGpzKYYvLOM8LmbUcxU+e8zy9yM1asftwyaw=
 
 "@guardian/core-web-vitals@5.1.0":
   version "5.1.0"
@@ -1772,15 +1772,15 @@
     eslint-plugin-eslint-comments "3.2.0"
     eslint-plugin-import "2.27.5"
 
-"@guardian/identity-auth-frontend@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/identity-auth-frontend/-/identity-auth-frontend-3.0.0.tgz#e20617ffbbbe62d64c29486fe277122d4b0d7317"
-  integrity sha512-EOZAr8zHBeh80jGh7hsD9/pH1cKX/vStmcNGqGUvoHMelM/kO4p3tKKmcDXu7/MtqGx2e85b1YoI7WmmWDBGGA==
+"@guardian/identity-auth-frontend@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/identity-auth-frontend/-/identity-auth-frontend-4.0.0.tgz#9c8d4320e95f9482f76aac5ac81d785212b356a7"
+  integrity sha512-lSXpRF54eEkxbQXEzJTXYDqzMDHl345Ac/Y7M8/OnKee0vtbR1hCjfm70HbcIXpUyx+TaNV8Ka4bqkR9VwJCPA==
 
-"@guardian/identity-auth@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@guardian/identity-auth/-/identity-auth-2.0.1.tgz#1164867ba84498058ad5d561337bc3c48dd30e6f"
-  integrity sha512-5EQB3LWDLxDaTKk/RHBGwoGy5mT90ZEa56XzrBStfyFi2FYma9bCvGdEEcOPmf3tLhdVxh93ikuooPveq76siA==
+"@guardian/identity-auth@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@guardian/identity-auth/-/identity-auth-2.1.0.tgz#836f72df35d127a7239987e5fc53155130d0cb4d"
+  integrity sha512-+AM0pcmRvRZUf92RYGJ2Q6KK1JpnQIxZ6pafsaBMGnF0IwiIk9DdfhaYZl0cyPQ3PwLTJJw2aSl453ivPAmHbw==
 
 "@guardian/libs@16.0.1":
   version "16.0.1"

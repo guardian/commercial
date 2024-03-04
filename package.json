@@ -1,6 +1,6 @@
 {
 	"name": "@guardian/commercial",
-	"version": "15.1.0",
+	"version": "17.1.0",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial#readme",
 	"bugs": {
@@ -54,8 +54,8 @@
 		"@guardian/consent-management-platform": "0.0.0-beta-20240219110734",
 		"@guardian/core-web-vitals": "5.1.0",
 		"@guardian/eslint-config-typescript": "^6.0.0",
-		"@guardian/identity-auth": "^2.0.1",
-		"@guardian/identity-auth-frontend": "^3.0.0",
+		"@guardian/identity-auth": "^2.1.0",
+		"@guardian/identity-auth-frontend": "^4.0.0",
 		"@guardian/libs": "16.0.1",
 		"@guardian/prettier": "4.0.0",
 		"@guardian/source-foundations": "13.0.0",
@@ -133,8 +133,8 @@
 		"@guardian/ab-core": "^7.0.1",
 		"@guardian/consent-management-platform": "0.0.0-beta-20240219110734",
 		"@guardian/core-web-vitals": "^6.0.0",
-		"@guardian/identity-auth": "^2.0.1",
-		"@guardian/identity-auth-frontend": "^3.0.0",
+		"@guardian/identity-auth": "^2.1.0",
+		"@guardian/identity-auth-frontend": "^4.0.0",
 		"@guardian/libs": "^16.0.0",
 		"@guardian/source-foundations": "^14.1.2",
 		"@guardian/support-dotcom-components": "^1.0.7"

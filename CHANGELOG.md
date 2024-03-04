@@ -1,5 +1,45 @@
 # @guardian/commercial
 
+## 17.1.0
+
+### Minor Changes
+
+- 8a9bcd5: Add ads between comments on frontend-rendered pages
+
+### Patch Changes
+
+- 0ad05af: Remove top-level container from DOM when removing fronts-banner ad
+
+## 17.0.0
+
+### Major Changes
+
+- 718ede6: Update `@guardian/identity-auth` libraries
+
+## 16.1.1
+
+### Patch Changes
+
+- f692d2f: Remove/Extend expired ab tests
+
+## 16.1.0
+
+### Minor Changes
+
+- 9c47d83: Enable Prebid for desktop comments-expanded ads, and disable it for mobile comments-expanded ads.
+
+## 16.0.0
+
+### Major Changes
+
+- f3030f0: bump consent-management-platform to include final parameter in onConsentChange function
+
+## 15.2.0
+
+### Minor Changes
+
+- d285016: Add AB test to insert ads in mobile discussion
+
 ## 15.1.0
 
 ### Minor Changes
