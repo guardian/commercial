@@ -168,7 +168,7 @@ describe('findSmallestAdHeightForSlot', () => {
 		['top-above-nav', 'phablet', 197],
 		['top-above-nav', 'mobile', 197],
 		['fronts-banner', 'mobile', null],
-		['fronts-banner', 'tablet', null],
+		['fronts-banner', 'tablet', 90],
 		['fronts-banner', 'desktop', 250],
 		['right', 'mobile', 250],
 		['right', 'tablet', 250],

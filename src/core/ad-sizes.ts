@@ -285,6 +285,7 @@ const slotSizeMappings = {
 		],
 	},
 	'fronts-banner': {
+		tablet: [adSizes.empty, adSizes.leaderboard],
 		desktop: [
 			adSizes.outOfPage,
 			adSizes.empty,
