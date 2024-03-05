@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 17.2.0
+
+### Minor Changes
+
+- 9baa4cb: Refresh the page when the user changes their consent
+
 ## 17.1.1
 
 ### Patch Changes
