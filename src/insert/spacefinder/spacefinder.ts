@@ -28,6 +28,7 @@ type SpacefinderItem = {
 type SpacefinderRules = {
 	bodySelector: string;
 	body?: HTMLElement | Document;
+	// selector(s) for the elements that we want to allow inserting ads above
 	candidateSelector: string | string[];
 	// minimum from slot to top of page
 	absoluteMinAbove?: number;
@@ -38,7 +39,7 @@ type SpacefinderRules = {
 	// vertical px to clear the content meta element (byline etc) by. 0 to ignore
 	// used for carrot ads
 	clearContentMeta?: number;
-	// custom rules using selectors.
+	// This is a map of selectors to rules. Each selector will be used to find opponents which are elements that we want to avoid placing ads too close to. If the opponent is too close to a candidate by the specified minAboveSlot or minBelowSlot, the candidate will be excluded.
 	opponentSelectorRules?: Record<string, RuleSpacing>;
 	// will run each slot through this fn to check if it must be counted in
 	filter?: (x: SpacefinderItem, lastWinner?: SpacefinderItem) => boolean;
@@ -218,7 +219,7 @@ const partitionCandidates = <T>(
  *                    ▲              ▲                    │            ▲              ▲
  *                    │              │                    │            │              │ opponent.top
  *                    │ ┌──────────┐ │                    │            │ ┌──────────┐ ▼   (insertion point)
- *                    │ │          │ │opponent.bottom     │            │ │          │
+ *                    │ │          │ |candidate.bottom    │            │ │          │
  *                    │ │ Candidate│ │                    │            │ │ Opponent |
  *       opponent.top │ │          │ │                    candidate.top│ │          │
  *                    │ └──────────┘ ▼                    │            │ └──────────┘
