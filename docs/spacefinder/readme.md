@@ -42,7 +42,7 @@ Within this space, 'candidate' elements are assessed if they are far enough from
 
 The space between candidates and opponents is calculated using the ‘getBoundingClientRect().top’ property of the candidate and `top` or `bottom` property of the opponent.
 
-Opponents usually include ads inserted by previous runs of Spacefinder, but can also include other elements such as images, pull quotes, and other ads.
+Opponents usually include ads inserted by previous runs of Spacefinder, but can also include other elements such as images, videos and embeds. The `opponentSelectorRules` are used to identify these elements.
 
 Spacefinder will also avoid ads that it has not yet inserted but will be inserted above a winning candidate element, the `filterNearbyAds` function is used for this. This function checks if the candidate is too close to the last winner also taking into account the maximum height of an ad in that slot, see image below.
 
