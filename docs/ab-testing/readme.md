@@ -6,7 +6,7 @@
 
 1. Follow steps 1-6 in [the DCR documentation](https://github.com/guardian/frontend/blob/main/common/app/conf/switches/ABTestSwitches.scala)
 1. Create a test in [src/experiments/tests](https://github.com/guardian/commercial-core/blob/main/src/experiments/tests)
-1. Add the test to [concurrent tests](https://github.com/guardian/commercial-core/blob/b668f247a6f938fc833da58449d9fa8b9011a5a2/src/experiments/ab-tests.ts)
+1. Add the test to [concurrent tests](https://github.com/guardian/commercial-core/blob/main/src/experiments/ab-tests.ts)
 
 ### Example usage
 
