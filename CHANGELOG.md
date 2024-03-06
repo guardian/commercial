@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 17.3.0
+
+### Minor Changes
+
+- bece12b: Improve spacefinder's handling of ranked and list articles on mobile
+
 ## 17.2.0
 
 ### Minor Changes
