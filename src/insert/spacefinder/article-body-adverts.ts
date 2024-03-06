@@ -292,7 +292,6 @@ const addMobileInlineAds = (): Promise<boolean> => {
 		bodySelector: articleBodySelector,
 		candidateSelector: [
 			' > p',
-			' > hr',
 			' > h2',
 			' > [data-spacefinder-type$="NumberedTitleBlockElement"]',
 		],
