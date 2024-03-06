@@ -429,7 +429,9 @@ const doInit = async (): Promise<boolean> => {
 		: Promise.resolve(false);
 	const inlineMerchAdded = await im;
 	if (inlineMerchAdded) await waitForAdvert('dfp-ad--im');
+
 	await addInlineAds();
+
 	await initCarrot();
 
 	return im;
