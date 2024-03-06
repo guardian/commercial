@@ -44,7 +44,7 @@ const articles: GuPage[] = [
 			path: '/football/2024/feb/09/premier-league-10-things-to-look-out-for-this-weekend',
 		}),
 		name: 'inlineSlots',
-		expectedSlotPositionsOnMobile: [6, 13, 19, 25, 31, 38, 45, 57],
+		expectedSlotPositionsOnMobile: [7, 14, 20, 26, 32, 39, 46, 58],
 		expectedSlotPositionsOnDesktop: [14, 30, 43, 55],
 	},
 	{
