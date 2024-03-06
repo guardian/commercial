@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 17.3.1
+
+### Patch Changes
+
+- 08e8a48: Remove HR as candidate for mobile spacefinder
+
 ## 17.3.0
 
 ### Minor Changes
