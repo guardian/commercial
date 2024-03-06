@@ -24,8 +24,8 @@ type ContainerOptions = {
 const articleBodySelector = '.article-body-commercial-selector';
 
 const adSlotClassSelectorSizes = {
-	minAbove: 500,
-	minBelow: 500,
+	minAboveSlot: 500,
+	minBelowSlot: 500,
 };
 
 /**
@@ -91,25 +91,25 @@ const filterNearbyCandidates =
 
 		return (
 			Math.abs(candidate.top - lastWinner.top) - maximumAdHeight >=
-			adSlotClassSelectorSizes.minBelow
+			adSlotClassSelectorSizes.minBelowSlot
 		);
 	};
 
 const addMobileInlineAds = async () => {
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelector: ' > p',
+		candidateSelector: ' > p',
 		minAbove: 200,
 		minBelow: 200,
-		selectors: {
+		opponentSelectorRules: {
 			' > h2': {
-				minAbove: 100,
-				minBelow: 250,
+				minAboveSlot: 100,
+				minBelowSlot: 250,
 			},
 			' .ad-slot': adSlotClassSelectorSizes,
 			' > :not(p):not(h2):not(.ad-slot):not(#sign-in-gate)': {
-				minAbove: 35,
-				minBelow: 200,
+				minAboveSlot: 35,
+				minBelowSlot: 200,
 			},
 		},
 		filter: filterNearbyCandidates(adSizes.mpu.height),
@@ -140,14 +140,14 @@ const addDesktopInlineAds = async () => {
 	// For any other inline
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelector: ' > p',
+		candidateSelector: ' > p',
 		minAbove: 1000,
 		minBelow: 300,
-		selectors: {
+		opponentSelectorRules: {
 			' .ad-slot': adSlotClassSelectorSizes,
 			' [data-spacefinder-role="immersive"]': {
-				minAbove: 0,
-				minBelow: 600,
+				minAboveSlot: 0,
+				minBelowSlot: 600,
 			},
 		},
 		filter: filterNearbyCandidates(adSizes.halfPage.height),

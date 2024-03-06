@@ -3,4 +3,6 @@ export type GuPage = {
 	name?: string;
 	expectedMinInlineSlotsOnMobile?: number;
 	expectedMinInlineSlotsOnDesktop?: number;
+	expectedSlotPositionsOnMobile?: number[];
+	expectedSlotPositionsOnDesktop?: number[];
 };

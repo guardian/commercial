@@ -37,8 +37,8 @@ const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
 
 const adSlotContainerRules: RuleSpacing = {
-	minAbove: 500,
-	minBelow: 500,
+	minAboveSlot: 500,
+	minBelowSlot: 500,
 };
 
 /**
@@ -90,7 +90,7 @@ const filterNearbyCandidates =
 
 		return (
 			Math.abs(candidate.top - lastWinner.top) - maximumAdHeight >=
-			adSlotContainerRules.minBelow
+			adSlotContainerRules.minBelowSlot
 		);
 	};
 
@@ -143,26 +143,26 @@ const addDesktopInline1 = (): Promise<boolean> => {
 
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelector: ' > p',
+		candidateSelector: ' > p',
 		minAbove: isImmersive ? 700 : 300,
 		minBelow: 300,
-		selectors: {
+		opponentSelectorRules: {
 			' > h2': {
-				minAbove: 5,
-				minBelow: 190,
+				minAboveSlot: 5,
+				minBelowSlot: 190,
 			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
 			[ignoreList]: {
-				minAbove: 35,
-				minBelow: 400,
+				minAboveSlot: 35,
+				minBelowSlot: 400,
 			},
 			' [data-spacefinder-role="immersive"]': {
-				minAbove: 0,
-				minBelow: 600,
+				minAboveSlot: 0,
+				minBelowSlot: 600,
 			},
 			' figure.element--supporting': {
-				minAbove: 500,
-				minBelow: 0,
+				minAboveSlot: 500,
+				minBelowSlot: 0,
 			},
 		},
 	};
@@ -219,14 +219,14 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 	const largestSizeForSlot = adSizes.halfPage.height;
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelector: ' > p',
+		candidateSelector: ' > p',
 		minAbove,
 		minBelow: 300,
-		selectors: {
+		opponentSelectorRules: {
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
 			' [data-spacefinder-role="immersive"]': {
-				minAbove: 0,
-				minBelow: 600,
+				minAboveSlot: 0,
+				minBelowSlot: 600,
 			},
 		},
 		filter: filterNearbyCandidates(largestSizeForSlot),
@@ -290,19 +290,35 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 const addMobileInlineAds = (): Promise<boolean> => {
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelector: ' > p',
+		candidateSelector: [
+			' > p',
+			' > hr',
+			' > h2',
+			' > [data-spacefinder-type$="NumberedTitleBlockElement"]',
+		],
 		minAbove: 200,
 		minBelow: 200,
-		selectors: {
+		opponentSelectorRules: {
+			// don't place ads right after a heading
 			' > h2': {
-				minAbove: 100,
-				minBelow: 250,
+				minAboveSlot: 100,
+				minBelowSlot: 0,
 			},
+			// these are just fancy headings
+			' > [data-spacefinder-type$="NumberedTitleBlockElement"]': {
+				minAboveSlot: 100,
+				minBelowSlot: 0,
+			},
+
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
-			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
+			// this is a catch-all for elements that are not covered by the above rules, these will generally be things like videos, embeds and atoms. minBelowSlot is higher to push ads a bit further down after these elements
+			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`]:
 				{
-					minAbove: 35,
-					minBelow: 200,
+					minAboveSlot: 35,
+					minBelowSlot: 200,
+					// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
+					bypassMinBelow:
+						'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 				},
 		},
 		filter: filterNearbyCandidates(adSizes.mpu.height),
@@ -329,7 +345,7 @@ const addMobileInlineAds = (): Promise<boolean> => {
 	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
-		pass: 'inline1',
+		pass: 'mobile-inlines',
 	});
 };
 
@@ -354,27 +370,27 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		slotSelector: ' > p',
+		candidateSelector: ' > p',
 		minAbove: 300,
 		minBelow: 300,
-		selectors: {
+		opponentSelectorRules: {
 			' > .merch': {
-				minAbove: 0,
-				minBelow: 0,
+				minAboveSlot: 0,
+				minBelowSlot: 0,
 			},
 			' > header': {
-				minAbove: isMobileOrTablet ? 300 : 700,
-				minBelow: 0,
+				minAboveSlot: isMobileOrTablet ? 300 : 700,
+				minBelowSlot: 0,
 			},
 			' > h2': {
-				minAbove: 100,
-				minBelow: 250,
+				minAboveSlot: 100,
+				minBelowSlot: 250,
 			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
 			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
 				{
-					minAbove: 200,
-					minBelow: 400,
+					minAboveSlot: 200,
+					minBelowSlot: 400,
 				},
 		},
 	};
