@@ -12,9 +12,9 @@
 
 ```ts
 import { isInVariantSynchronous } from 'experiments/ab';
-import { sectionAdDensity } from 'experiments/tests/section-ad-density.ts';
+import { sectionAdDensity } from 'experiments/tests/section-ad-density';
 
-const isInVariant = (): boolean => isInVariantSynchronous(sectionAdDensity, 'variant');
+const isInVariant = isInVariantSynchronous(sectionAdDensity, 'variant');
 ```
 
 ### How to test

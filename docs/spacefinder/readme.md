@@ -32,10 +32,10 @@ Within this space, 'candidate' elements are assessed if they are far enough from
     </tr>
     <tr>
         <td>
-        <img src="spacefinder-min-above.png" alt="Opponent Above">
+            <img src="spacefinder-min-above.png" alt="Opponent Above">
         </td>
         <td>
-        <img src="spacefinder-min-below.png" alt="Opponent Below">
+            <img src="spacefinder-min-below.png" alt="Opponent Below">
         </td>
     </tr>
 </table>

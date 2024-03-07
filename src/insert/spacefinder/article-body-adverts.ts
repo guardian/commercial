@@ -6,6 +6,7 @@ import {
 	createAdSlot,
 	wrapSlotInContainer,
 } from 'core/create-ad-slot';
+import { isInSectionAdDensityVariant } from 'experiments/utils';
 import { spaceFiller } from 'insert/spacefinder/space-filler';
 import type {
 	RuleSpacing,
@@ -36,9 +37,12 @@ const hasImages = !!window.guardian.config.page.lightboxImages?.images.length;
 const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
 
+const isInAdDensityVariant = isInSectionAdDensityVariant();
+const minDistanceBetweenAds = isInAdDensityVariant ? 400 : 500;
+
 const adSlotContainerRules: RuleSpacing = {
-	minAboveSlot: 500,
-	minBelowSlot: 500,
+	minAboveSlot: minDistanceBetweenAds,
+	minBelowSlot: minDistanceBetweenAds,
 };
 
 /**
@@ -147,9 +151,10 @@ const addDesktopInline1 = (): Promise<boolean> => {
 		minAbove: isImmersive ? 700 : 300,
 		minBelow: 300,
 		opponentSelectorRules: {
+			// don't place ads right after a heading
 			' > h2': {
-				minAboveSlot: 5,
-				minBelowSlot: 190,
+				minAboveSlot: 150,
+				minBelowSlot: 0,
 			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
 			[ignoreList]: {
@@ -197,7 +202,6 @@ const addDesktopInline1 = (): Promise<boolean> => {
 
 /**
  * Inserts all inline ads on desktop except for inline1.
- *
  */
 const addDesktopInline2PlusAds = (): Promise<boolean> => {
 	let minAbove = 1000;
@@ -288,6 +292,8 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 };
 
 const addMobileInlineAds = (): Promise<boolean> => {
+	const minDistanceFromArticleTop = isInAdDensityVariant ? 100 : 200;
+
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
 		candidateSelector: [
@@ -295,7 +301,7 @@ const addMobileInlineAds = (): Promise<boolean> => {
 			' > h2',
 			' > [data-spacefinder-type$="NumberedTitleBlockElement"]',
 		],
-		minAbove: 200,
+		minAbove: minDistanceFromArticleTop,
 		minBelow: 200,
 		opponentSelectorRules: {
 			// don't place ads right after a heading
