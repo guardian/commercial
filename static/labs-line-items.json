@@ -102,6 +102,7 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": null,
     "creatives": [
       {
@@ -113,8 +114,7 @@
           "height": 87
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDji6n8pAEQARgBKAEyCB0IpAfe1qjV",
-        "destinationUrl": "http://www.theguardian.com",
-        "assetUrl": "http://localhost:3031/creatives/64577365407.png"
+        "destinationUrl": "http://www.theguardian.com"
       },
       {
         "id": 68800119087,
@@ -125,8 +125,7 @@
           "height": 87
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDji6n8pAEQARgBKAEyCB0IpAfe1qjV",
-        "destinationUrl": "http://www.theguardian.com",
-        "assetUrl": "http://localhost:3031/creatives/68800119087.png"
+        "destinationUrl": "http://www.theguardian.com"
       },
       {
         "id": 138268492493,
@@ -137,8 +136,7 @@
           "height": 87
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDji6n8pAEQARgBKAEyCB0IpAfe1qjV",
-        "destinationUrl": "http://www.theguardian.com",
-        "assetUrl": "http://localhost:3031/creatives/138268492493.png"
+        "destinationUrl": "http://www.theguardian.com"
       }
     ]
   },
@@ -172,6 +170,7 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": null,
     "creatives": [
       {
@@ -197,8 +196,7 @@
             "value": "https://www.squarespace.com/"
           }
         ],
-        "destinationUrl": null,
-        "assetUrl": "http://localhost:3031/creatives/105315612567.html"
+        "destinationUrl": null
       },
       {
         "id": 105316741287,
@@ -223,8 +221,7 @@
             "value": "https://www.squarespace.com/"
           }
         ],
-        "destinationUrl": null,
-        "assetUrl": "http://localhost:3031/creatives/105316741287.html"
+        "destinationUrl": null
       }
     ]
   },
@@ -258,6 +255,7 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": null,
     "creatives": [
       {
@@ -307,8 +305,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "http://theguardian.com",
-        "assetUrl": "http://localhost:3031/creatives/105370569447.html"
+        "destinationUrl": "http://theguardian.com"
       }
     ]
   },
@@ -335,6 +332,7 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": null,
     "creatives": [
       {
@@ -372,8 +370,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138290385156.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138290387844,
@@ -494,8 +491,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138290387844.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138290399028,
@@ -616,8 +612,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138290399028.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138290499485,
@@ -738,8 +733,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138290499485.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138290782108,
@@ -776,8 +770,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138290782108.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138290782213,
@@ -814,8 +807,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138290782213.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138290782222,
@@ -852,8 +844,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138290782222.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       }
     ]
   },
@@ -902,10 +893,11 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": {
       "targetedLocations": [
-        2036,
-        2826
+        "Australia",
+        "United Kingdom"
       ],
       "excludedLocations": []
     },
@@ -957,8 +949,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/university-of-western-australia-post-graduate/2020/jan/28/back-to-the-books-why-job-seekers-are-returning-to-university-for-a-second-or-third-degree",
-        "assetUrl": "http://localhost:3031/creatives/138304128580.html"
+        "destinationUrl": "https://www.theguardian.com/university-of-western-australia-post-graduate/2020/jan/28/back-to-the-books-why-job-seekers-are-returning-to-university-for-a-second-or-third-degree"
       }
     ]
   },
@@ -985,9 +976,10 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": {
       "targetedLocations": [
-        2826
+        "United Kingdom"
       ],
       "excludedLocations": []
     },
@@ -1039,8 +1031,7 @@
             "asset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKCXzaugVRABGAEoATIImwDT2QMYwgw"
           }
         ],
-        "destinationUrl": null,
-        "assetUrl": "http://localhost:3031/creatives/138320786896.html"
+        "destinationUrl": null
       },
       {
         "id": 138320799514,
@@ -1089,8 +1080,7 @@
             "asset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKCXzaugVRABGAEoATIImwDT2QMYwgw"
           }
         ],
-        "destinationUrl": null,
-        "assetUrl": "http://localhost:3031/creatives/138320799514.html"
+        "destinationUrl": null
       },
       {
         "id": 138320799520,
@@ -1139,8 +1129,7 @@
             "asset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKCXzaugVRABGAEoATIImwDT2QMYwgw"
           }
         ],
-        "destinationUrl": null,
-        "assetUrl": "http://localhost:3031/creatives/138320799520.html"
+        "destinationUrl": null
       },
       {
         "id": 138320799607,
@@ -1189,8 +1178,7 @@
             "asset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKCXzaugVRABGAEoATIImwDT2QMYwgw"
           }
         ],
-        "destinationUrl": null,
-        "assetUrl": "http://localhost:3031/creatives/138320799607.html"
+        "destinationUrl": null
       },
       {
         "id": 138320799838,
@@ -1239,8 +1227,7 @@
             "asset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKCXzaugVRABGAEoATIImwDT2QMYwgw"
           }
         ],
-        "destinationUrl": null,
-        "assetUrl": "http://localhost:3031/creatives/138320799838.html"
+        "destinationUrl": null
       },
       {
         "id": 138320799841,
@@ -1289,8 +1276,7 @@
             "asset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKCXzaugVRABGAEoATIImwDT2QMYwgw"
           }
         ],
-        "destinationUrl": null,
-        "assetUrl": "http://localhost:3031/creatives/138320799841.html"
+        "destinationUrl": null
       },
       {
         "id": 138320799844,
@@ -1339,8 +1325,7 @@
             "asset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKCXzaugVRABGAEoATIImwDT2QMYwgw"
           }
         ],
-        "destinationUrl": null,
-        "assetUrl": "http://localhost:3031/creatives/138320799844.html"
+        "destinationUrl": null
       },
       {
         "id": 138320799856,
@@ -1389,8 +1374,7 @@
             "asset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKCXzaugVRABGAEoATIImwDT2QMYwgw"
           }
         ],
-        "destinationUrl": null,
-        "assetUrl": "http://localhost:3031/creatives/138320799856.html"
+        "destinationUrl": null
       },
       {
         "id": 138320799859,
@@ -1439,8 +1423,7 @@
             "asset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKCXzaugVRABGAEoATIImwDT2QMYwgw"
           }
         ],
-        "destinationUrl": null,
-        "assetUrl": "http://localhost:3031/creatives/138320799859.html"
+        "destinationUrl": null
       }
     ]
   },
@@ -1467,12 +1450,13 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": {
       "targetedLocations": [
-        20342,
-        20341,
-        20343,
-        20339
+        "Scotland",
+        "Northern Ireland",
+        "Wales",
+        "England"
       ],
       "excludedLocations": []
     },
@@ -1486,8 +1470,7 @@
           "height": 250
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDX44_4lgEQAhgCKAEyCKjjC4TDnDr9",
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138341758572.jpg"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138341762115,
@@ -1498,8 +1481,7 @@
           "height": 90
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDX46eaLhACGAIoATII7LtPJCpL-Q4",
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138341762115.jpg"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138341762118,
@@ -1510,8 +1492,7 @@
           "height": 250
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDX44_4lgEQAhgCKAEyCKjjC4TDnDr9",
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138341762118.jpg"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138341762121,
@@ -1522,8 +1503,7 @@
           "height": 250
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDX44_4lgEQAhgCKAEyCKjjC4TDnDr9",
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138341762121.jpg"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138341762331,
@@ -1534,8 +1514,7 @@
           "height": 600
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDX48-idhACGAIoATII9vQQy7rnxV0",
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138341762331.jpg"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138341762334,
@@ -1546,8 +1525,7 @@
           "height": 250
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDX44_4lgEQAhgCKAEyCKjjC4TDnDr9",
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138341762334.jpg"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138341762337,
@@ -1558,8 +1536,7 @@
           "height": 250
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDX44_4lgEQAhgCKAEyCKjjC4TDnDr9",
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138341762337.jpg"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138341762340,
@@ -1570,8 +1547,7 @@
           "height": 250
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDX44_4lgEQAhgCKAEyCKjjC4TDnDr9",
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138341762340.jpg"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138341762343,
@@ -1582,8 +1558,7 @@
           "height": 250
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDX44_4lgEQAhgCKAEyCKjjC4TDnDr9",
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138341762343.jpg"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138342145183,
@@ -1594,8 +1569,7 @@
           "height": 250
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDX44_4lgEQAhgCKAEyCKjjC4TDnDr9",
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138342145183.jpg"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138342145186,
@@ -1606,8 +1580,7 @@
           "height": 250
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDX44_4lgEQAhgCKAEyCKjjC4TDnDr9",
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138342145186.jpg"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138342146143,
@@ -1618,8 +1591,7 @@
           "height": 250
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDX44_4lgEQAhgCKAEyCKjjC4TDnDr9",
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138342146143.jpg"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138342146146,
@@ -1630,8 +1602,7 @@
           "height": 250
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgKDX44_4lgEQAhgCKAEyCKjjC4TDnDr9",
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138342146146.jpg"
+        "destinationUrl": "https://www.theguardian.com/uk"
       }
     ]
   },
@@ -1673,9 +1644,15 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": {
+      "targetedDeviceCategories": [
+        "Smartphone"
+      ],
+      "excludedDeviceCategories": []
+    },
     "geoTargeting": {
       "targetedLocations": [
-        2036
+        "Australia"
       ],
       "excludedLocations": []
     },
@@ -1704,6 +1681,7 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": null,
     "creatives": [
       {
@@ -1745,8 +1723,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138353646869.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138353647787,
@@ -1787,8 +1764,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138353647787.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138353674248,
@@ -1829,8 +1805,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138353674248.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       }
     ]
   },
@@ -1857,6 +1832,7 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": null,
     "creatives": [
       {
@@ -1898,8 +1874,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/my-sherry-amour/2022/mar/08/from-sushi-to-chocolate-souffle-six-perfect-food-pairings-for-sherry",
-        "assetUrl": "http://localhost:3031/creatives/138383441422.html"
+        "destinationUrl": "https://www.theguardian.com/my-sherry-amour/2022/mar/08/from-sushi-to-chocolate-souffle-six-perfect-food-pairings-for-sherry"
       },
       {
         "id": 138383441473,
@@ -1940,8 +1915,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138383441473.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138383441479,
@@ -1982,8 +1956,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138383441479.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       }
     ]
   },
@@ -2010,6 +1983,7 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": null,
     "creatives": [
       {
@@ -2051,8 +2025,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/what-if-in-california/2022/mar/02/from-vineyards-to-a-movie-star-locomotive-five-reasons-to-love-jamestown-california",
-        "assetUrl": "http://localhost:3031/creatives/138383282238.html"
+        "destinationUrl": "https://www.theguardian.com/what-if-in-california/2022/mar/02/from-vineyards-to-a-movie-star-locomotive-five-reasons-to-love-jamestown-california"
       },
       {
         "id": 138383767948,
@@ -2093,8 +2066,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/what-if-in-california/2022/mar/02/from-vineyards-to-a-movie-star-locomotive-five-reasons-to-love-jamestown-california",
-        "assetUrl": "http://localhost:3031/creatives/138383767948.html"
+        "destinationUrl": "https://www.theguardian.com/what-if-in-california/2022/mar/02/from-vineyards-to-a-movie-star-locomotive-five-reasons-to-love-jamestown-california"
       },
       {
         "id": 138383767963,
@@ -2135,8 +2107,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/what-if-in-california/2022/mar/02/from-vineyards-to-a-movie-star-locomotive-five-reasons-to-love-jamestown-california",
-        "assetUrl": "http://localhost:3031/creatives/138383767963.html"
+        "destinationUrl": "https://www.theguardian.com/what-if-in-california/2022/mar/02/from-vineyards-to-a-movie-star-locomotive-five-reasons-to-love-jamestown-california"
       }
     ]
   },
@@ -2163,6 +2134,7 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": null,
     "creatives": [
       {
@@ -2204,8 +2176,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/a-vision-for-better-food/2022/may/26/cooking-is-at-the-centre-of-life-food-entrepreneur-charlie-bigham-on-changing-an-industry",
-        "assetUrl": "http://localhost:3031/creatives/138393003092.html"
+        "destinationUrl": "https://www.theguardian.com/a-vision-for-better-food/2022/may/26/cooking-is-at-the-centre-of-life-food-entrepreneur-charlie-bigham-on-changing-an-industry"
       }
     ]
   },
@@ -2232,6 +2203,7 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": null,
     "creatives": [
       {
@@ -2273,8 +2245,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/celebrating-women-engineers-2022/2022/jun/23/united-by-sustainability-the-top-50-women-in-engineering-the-full-list-for-2022",
-        "assetUrl": "http://localhost:3031/creatives/138395710673.html"
+        "destinationUrl": "https://www.theguardian.com/celebrating-women-engineers-2022/2022/jun/23/united-by-sustainability-the-top-50-women-in-engineering-the-full-list-for-2022"
       },
       {
         "id": 138395710682,
@@ -2315,8 +2286,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/celebrating-women-engineers-2022/2022/jun/23/united-by-sustainability-the-top-50-women-in-engineering-the-full-list-for-2022",
-        "assetUrl": "http://localhost:3031/creatives/138395710682.html"
+        "destinationUrl": "https://www.theguardian.com/celebrating-women-engineers-2022/2022/jun/23/united-by-sustainability-the-top-50-women-in-engineering-the-full-list-for-2022"
       },
       {
         "id": 138395824926,
@@ -2357,8 +2327,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/celebrating-women-engineers-2022/2022/jun/23/united-by-sustainability-the-top-50-women-in-engineering-the-full-list-for-2022",
-        "assetUrl": "http://localhost:3031/creatives/138395824926.html"
+        "destinationUrl": "https://www.theguardian.com/celebrating-women-engineers-2022/2022/jun/23/united-by-sustainability-the-top-50-women-in-engineering-the-full-list-for-2022"
       }
     ]
   },
@@ -2385,6 +2354,7 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": null,
     "creatives": [
       {
@@ -2426,8 +2396,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/how-retail-got-real/2022/aug/02/rewilding-retail-the-independents-putting-the-human-factor-back-into-shopping",
-        "assetUrl": "http://localhost:3031/creatives/138401903485.html"
+        "destinationUrl": "https://www.theguardian.com/how-retail-got-real/2022/aug/02/rewilding-retail-the-independents-putting-the-human-factor-back-into-shopping"
       }
     ]
   },
@@ -2454,6 +2423,7 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": null,
     "creatives": [
       {
@@ -2495,8 +2465,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138433966109.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       }
     ]
   },
@@ -2523,6 +2492,7 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": null,
     "creatives": [
       {
@@ -2564,8 +2534,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.nspcc.org.uk/support-us/charity-fundraising/childhood-day/?utm_source=guardian&utm_medium=display&utm_campaign=BV7896*&utm_content=CHD_Brand+Display+Apr23&ac=",
-        "assetUrl": "http://localhost:3031/creatives/138434116751.html"
+        "destinationUrl": "https://www.nspcc.org.uk/support-us/charity-fundraising/childhood-day/?utm_source=guardian&utm_medium=display&utm_campaign=BV7896*&utm_content=CHD_Brand+Display+Apr23&ac="
       },
       {
         "id": 138435359266,
@@ -2606,8 +2575,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.nspcc.org.uk/support-us/charity-fundraising/childhood-day/?utm_source=guardian&utm_medium=display&utm_campaign=BV7896*&utm_content=CHD_Brand+Display+Apr23&ac=",
-        "assetUrl": "http://localhost:3031/creatives/138435359266.html"
+        "destinationUrl": "https://www.nspcc.org.uk/support-us/charity-fundraising/childhood-day/?utm_source=guardian&utm_medium=display&utm_campaign=BV7896*&utm_content=CHD_Brand+Display+Apr23&ac="
       },
       {
         "id": 138435359464,
@@ -2648,8 +2616,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.nspcc.org.uk/support-us/charity-fundraising/childhood-day/?utm_source=guardian&utm_medium=display&utm_campaign=BV7896*&utm_content=CHD_Brand+Display+Apr23&ac=",
-        "assetUrl": "http://localhost:3031/creatives/138435359464.html"
+        "destinationUrl": "https://www.nspcc.org.uk/support-us/charity-fundraising/childhood-day/?utm_source=guardian&utm_medium=display&utm_campaign=BV7896*&utm_content=CHD_Brand+Display+Apr23&ac="
       }
     ]
   },
@@ -2675,6 +2642,12 @@
         }
       ],
       "logicalOperator": "OR"
+    },
+    "deviceTargeting": {
+      "targetedDeviceCategories": [
+        "Smartphone"
+      ],
+      "excludedDeviceCategories": []
     },
     "geoTargeting": null,
     "creatives": [
@@ -2709,8 +2682,7 @@
             "value": "https://adops-assets.s3.eu-west-1.amazonaws.com/dap-fabrics/video_interscroller_video/cad-example.mp4"
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/help-at-home/2023/oct/16/its-the-difference-we-make-in-peoples-lives-a-day-in-the-life-of-a-professional-home-carer",
-        "assetUrl": "http://localhost:3031/creatives/138451380403.html"
+        "destinationUrl": "https://www.theguardian.com/help-at-home/2023/oct/16/its-the-difference-we-make-in-peoples-lives-a-day-in-the-life-of-a-professional-home-carer"
       }
     ]
   },
@@ -2743,6 +2715,12 @@
         }
       ],
       "logicalOperator": "OR"
+    },
+    "deviceTargeting": {
+      "targetedDeviceCategories": [
+        "Smartphone"
+      ],
+      "excludedDeviceCategories": []
     },
     "geoTargeting": null,
     "creatives": [
@@ -2777,8 +2755,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138453115227.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       }
     ]
   },
@@ -2811,6 +2788,12 @@
         }
       ],
       "logicalOperator": "OR"
+    },
+    "deviceTargeting": {
+      "targetedDeviceCategories": [
+        "Smartphone"
+      ],
+      "excludedDeviceCategories": []
     },
     "geoTargeting": null,
     "creatives": [
@@ -2845,8 +2828,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138453216038.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       }
     ]
   },
@@ -2893,9 +2875,10 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": {
       "targetedLocations": [
-        2826
+        "United Kingdom"
       ],
       "excludedLocations": []
     },
@@ -2991,8 +2974,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/the-year-of-your-gut",
-        "assetUrl": "http://localhost:3031/creatives/138463023806.html"
+        "destinationUrl": "https://www.theguardian.com/the-year-of-your-gut"
       }
     ]
   },
@@ -3039,9 +3021,10 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": {
       "targetedLocations": [
-        2826
+        "United Kingdom"
       ],
       "excludedLocations": []
     },
@@ -3137,8 +3120,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/energy-efficient-home",
-        "assetUrl": "http://localhost:3031/creatives/138464751638.html"
+        "destinationUrl": "https://www.theguardian.com/energy-efficient-home"
       }
     ]
   },
@@ -3185,9 +3167,10 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": {
       "targetedLocations": [
-        2826
+        "United Kingdom"
       ],
       "excludedLocations": []
     },
@@ -3271,8 +3254,7 @@
             "value": "4"
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138465605448.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       }
     ]
   },
@@ -3299,6 +3281,7 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": null,
     "creatives": [
       {
@@ -3420,8 +3403,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://ad.doubleclick.net/ddm/trackclk/N781874.4683169THEGUARDIANUK/B31582881.388616099;dc_trk_aid=579903390;dc_trk_cid=210927435;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;ltd=;dc_tdv=1",
-        "assetUrl": "http://localhost:3031/creatives/138465602967.html"
+        "destinationUrl": "https://ad.doubleclick.net/ddm/trackclk/N781874.4683169THEGUARDIANUK/B31582881.388616099;dc_trk_aid=579903390;dc_trk_cid=210927435;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;ltd=;dc_tdv=1"
       },
       {
         "id": 138465603621,
@@ -3432,8 +3414,7 @@
           "height": 250
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCt1dW3lAEQrAIY-gEoATII-EHUNdFSOAU",
-        "destinationUrl": "https://ad.doubleclick.net/ddm/trackclk/N781874.4683169THEGUARDIANUK/B31582881.388616093;dc_trk_aid=579903384;dc_trk_cid=210927429;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;ltd=;dc_tdv=1",
-        "assetUrl": "http://localhost:3031/creatives/138465603621.jpg"
+        "destinationUrl": "https://ad.doubleclick.net/ddm/trackclk/N781874.4683169THEGUARDIANUK/B31582881.388616093;dc_trk_aid=579903384;dc_trk_cid=210927429;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;ltd=;dc_tdv=1"
       },
       {
         "id": 138465776072,
@@ -3444,8 +3425,7 @@
           "height": 90
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCt1fWMUxDYBRhaKAEyCE7rq2Ty3jeo",
-        "destinationUrl": "https://ad.doubleclick.net/ddm/trackclk/N781874.4683169THEGUARDIANUK/B31582881.388616096;dc_trk_aid=579903387;dc_trk_cid=210927432;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;ltd=;dc_tdv=1",
-        "assetUrl": "http://localhost:3031/creatives/138465776072.jpg"
+        "destinationUrl": "https://ad.doubleclick.net/ddm/trackclk/N781874.4683169THEGUARDIANUK/B31582881.388616096;dc_trk_aid=579903387;dc_trk_cid=210927432;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;ltd=;dc_tdv=1"
       }
     ]
   },
@@ -3492,9 +3472,10 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": {
       "targetedLocations": [
-        2826
+        "United Kingdom"
       ],
       "excludedLocations": []
     },
@@ -3578,8 +3559,7 @@
             "value": "4"
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138465873113.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       }
     ]
   },
@@ -3626,9 +3606,10 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": {
       "targetedLocations": [
-        2826
+        "United Kingdom"
       ],
       "excludedLocations": []
     },
@@ -3724,8 +3705,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/transforming-higher-education",
-        "assetUrl": "http://localhost:3031/creatives/138466048553.html"
+        "destinationUrl": "https://www.theguardian.com/transforming-higher-education"
       }
     ]
   },
@@ -3772,9 +3752,10 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": {
       "targetedLocations": [
-        2826
+        "United Kingdom"
       ],
       "excludedLocations": []
     },
@@ -3870,8 +3851,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/i-came-by-train",
-        "assetUrl": "http://localhost:3031/creatives/138465886707.html"
+        "destinationUrl": "https://www.theguardian.com/i-came-by-train"
       }
     ]
   },
@@ -3898,6 +3878,7 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": null,
     "creatives": [
       {
@@ -4019,8 +4000,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138465896991.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138465897141,
@@ -4031,8 +4011,7 @@
           "height": 90
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCti_X4NxDYBRhaKAEyCHmEn4_cwVQQ",
-        "destinationUrl": "https://www.theguardian.com/an-ma-for-the-future/2024/feb/23/this-is-what-social-science-does-how-a-new-masters-degree-aims-to-tackle-the-climate-crisis",
-        "assetUrl": "http://localhost:3031/creatives/138465897141.jpg"
+        "destinationUrl": "https://www.theguardian.com/an-ma-for-the-future/2024/feb/23/this-is-what-social-science-does-how-a-new-masters-degree-aims-to-tackle-the-climate-crisis"
       },
       {
         "id": 138466062575,
@@ -4043,8 +4022,7 @@
           "height": 250
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgOCti_mR0gEQrAIY-gEoATIIeCIGAS6m8g4",
-        "destinationUrl": "https://www.theguardian.com/an-ma-for-the-future/2024/feb/23/this-is-what-social-science-does-how-a-new-masters-degree-aims-to-tackle-the-climate-crisis",
-        "assetUrl": "http://localhost:3031/creatives/138466062575.jpg"
+        "destinationUrl": "https://www.theguardian.com/an-ma-for-the-future/2024/feb/23/this-is-what-social-science-does-how-a-new-masters-degree-aims-to-tackle-the-climate-crisis"
       }
     ]
   },
@@ -4091,9 +4069,10 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": {
       "targetedLocations": [
-        2826
+        "United Kingdom"
       ],
       "excludedLocations": []
     },
@@ -4189,8 +4168,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/spark-your-journey-to-electric",
-        "assetUrl": "http://localhost:3031/creatives/138466101159.html"
+        "destinationUrl": "https://www.theguardian.com/spark-your-journey-to-electric"
       }
     ]
   },
@@ -4237,9 +4215,10 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": {
       "targetedLocations": [
-        2826
+        "United Kingdom"
       ],
       "excludedLocations": []
     },
@@ -4335,8 +4314,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/the-future-of-life-saving-research",
-        "assetUrl": "http://localhost:3031/creatives/138466785598.html"
+        "destinationUrl": "https://www.theguardian.com/the-future-of-life-saving-research"
       }
     ]
   },
@@ -4363,6 +4341,7 @@
       ],
       "logicalOperator": "OR"
     },
+    "deviceTargeting": null,
     "geoTargeting": null,
     "creatives": [
       {
@@ -4484,8 +4463,7 @@
             "value": null
           }
         ],
-        "destinationUrl": "https://www.theguardian.com/uk",
-        "assetUrl": "http://localhost:3031/creatives/138466807641.html"
+        "destinationUrl": "https://www.theguardian.com/uk"
       },
       {
         "id": 138467530036,
@@ -4496,8 +4474,7 @@
           "height": 250
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgODt2qzSGhCsAhj6ASgBMgi5p8BNOWrMlg",
-        "destinationUrl": "https://www.theguardian.com/creating-impact-from-campus-to-career/2024/feb/27/how-to-catch-a-liar-academic-research-sheds-new-light",
-        "assetUrl": "http://localhost:3031/creatives/138467530036.jpg"
+        "destinationUrl": "https://www.theguardian.com/creating-impact-from-campus-to-career/2024/feb/27/how-to-catch-a-liar-academic-research-sheds-new-light"
       },
       {
         "id": 138467530234,
@@ -4508,8 +4485,7 @@
           "height": 90
         },
         "primaryImageAsset": "https://tpc.googlesyndication.com/pageadimg/imgad?id=CICAgODtmr2r9wEQ2AUYWigBMggLNoH08jbaEg",
-        "destinationUrl": "https://www.theguardian.com/creating-impact-from-campus-to-career/2024/feb/27/how-to-catch-a-liar-academic-research-sheds-new-light",
-        "assetUrl": "http://localhost:3031/creatives/138467530234.jpg"
+        "destinationUrl": "https://www.theguardian.com/creating-impact-from-campus-to-career/2024/feb/27/how-to-catch-a-liar-academic-research-sheds-new-light"
       }
     ]
   }

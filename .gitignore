@@ -28,3 +28,6 @@ wip
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+static/creatives
+static/template_assets

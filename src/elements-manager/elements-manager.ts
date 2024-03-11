@@ -7,12 +7,14 @@ import {
 	slotSizeMappings,
 } from 'core';
 import {
+	createAdSize,
 	findAppliedSizesForBreakpoint,
 	type SlotName as SizeName,
 } from 'core/ad-sizes';
 import { getCurrentTweakpoint } from 'lib/detect/detect-breakpoint';
 import fastdom from 'utils/fastdom-promise';
 import { findCreative } from './find-creative';
+import type { Creative } from './line-items';
 
 type SlotTargeting = Record<string, string | string[]>;
 
@@ -132,8 +134,16 @@ class Ad {
 	private elementsManager: ElementsManager;
 	private name: string;
 	private slotElement: HTMLElement;
-	sizeMapping: SizeMapping = {};
 	private targeting: SlotTargeting = {};
+	sizeMapping: SizeMapping = {};
+	creative?: Creative;
+	isRendered = false;
+
+	get isFluid(): boolean {
+		return (
+			this.creative?.size.width === 1 && this.creative.size.height === 1
+		);
+	}
 
 	public constructor(
 		elementsManager: ElementsManager,
@@ -207,33 +217,18 @@ class Ad {
 
 	private async addTemplateElement(
 		assetUrl: string,
-		destinationUrl: string,
 		size: { width: number; height: number },
 	) {
 		const iframe = document.createElement('iframe');
 		iframe.src = assetUrl;
-		iframe.width = size.width;
-		iframe.height = size.height;
+		iframe.width = size.width === 1 ? '100%' : `${size.width}px`;
+		iframe.height = size.height === 1 ? '250px' : `${size.height}px`;
 		iframe.style.border = 'none';
-
-		const container = document.createElement('div');
-		container.classList.add('ad-slot');
-		container.style.margin = '0 auto';
-		container.style.maxWidth = '100%';
-		container.style.width = `${iframe.width}px`;
-
-		const anchor = document.createElement('a');
-		anchor.href;
-		anchor.target = '_blank';
-		anchor.rel = 'noopener noreferrer';
-		anchor.appendChild(iframe);
-
-		container.appendChild(anchor);
 
 		void addContainerClass(this.slotElement, true);
 
 		await fastdom.mutate(() => {
-			this.slotElement.appendChild(container);
+			this.slotElement.appendChild(iframe);
 		});
 	}
 
@@ -243,8 +238,12 @@ class Ad {
 		destinationUrl: string,
 		size: { width: number; height: number },
 	) {
+		if (this.isFluid) {
+			this.slotElement.classList.add('ad-slot--fluid');
+		}
 		if (type === 'template') {
-			return this.addTemplateElement(assetUrl, destinationUrl, size);
+			console.log('adding template element');
+			return this.addTemplateElement(assetUrl, size);
 		}
 		return this.addImageElement(assetUrl, destinationUrl, size);
 	}
@@ -276,6 +275,13 @@ class Ad {
 			'with sizes',
 			sizes,
 		);
+
+		// if (
+		// 	targeting.slot === 'merchandising' ||
+		// 	targeting.slot === 'merchandising-high'
+		// ) {
+		// 	sizes = [createAdSize(1, 1)];
+		// }
 		const creative = await findCreative(targeting, sizes);
 
 		if (!creative) {
@@ -285,8 +291,10 @@ class Ad {
 
 		const { assetUrl, destinationUrl, size, type } = creative;
 
-		// 1x1 is a special size that means "no ad"
-		if (size.width === 1 && size.height === 1) {
+		this.creative = creative;
+
+		// 2x2 is a special size that means "no ad"
+		if (size.width === 2 && size.height === 2) {
 			return;
 		}
 
@@ -298,6 +306,8 @@ class Ad {
 		);
 
 		void this.addLabel();
+
+		this.isRendered = true;
 
 		return addElements;
 	}

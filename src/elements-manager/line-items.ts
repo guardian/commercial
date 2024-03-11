@@ -30,7 +30,8 @@ interface LineItem {
 	name: string;
 	startDateTime: string;
 	endDateTime: string | null;
-	customTargeting: Targeting;
+	customTargeting: Targeting | null;
+	geoTargeting: string[] | null;
 	priority: number;
 	creatives: Creative[];
 }
@@ -47,9 +48,12 @@ const keyInTargeting = (
 // };
 
 const matchesTargeting = (
-	lineItemTargeting: Targeting,
+	lineItemTargeting: Targeting | null,
 	pageTargeting: PageTargeting,
 ): boolean => {
+	if (!lineItemTargeting) {
+		return true;
+	}
 	const method =
 		lineItemTargeting.logicalOperator === 'OR' ? 'some' : 'every';
 	return lineItemTargeting.children[method]((child) => {
@@ -84,9 +88,13 @@ const matchesTargeting = (
  * @returns
  */
 const findLineItems = once(async (displayTargeting: PageTargeting) => {
-	const lineItems = (await fetch(
+	const merchLineItems = (await fetch(
 		'http://localhost:3031/line-items.json',
 	).then((res) => res.json())) as LineItem[];
+	const labsLineItems = (await fetch(
+		'http://localhost:3031/labs-line-items.json',
+	).then((res) => res.json())) as LineItem[];
+	const lineItems = [...merchLineItems, ...labsLineItems];
 	return lineItems
 		.sort((a, b) => b.priority - a.priority)
 		.filter((lineItem) => {
