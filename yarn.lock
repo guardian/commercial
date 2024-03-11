@@ -1742,11 +1742,6 @@
   resolved "https://registry.yarnpkg.com/@guardian/browserslist-config/-/browserslist-config-5.1.0.tgz#61cd822388dc196cea1b39c693366ed550edcd10"
   integrity sha512-QsyaZ7OZ6jBl8lByiLWtnobcS0IvIPVzDeGz9XY+CvPy5v5Kb0RJo+fFLEZbCqRLrfK+5f2sjrwPqrwtJBe2Sw==
 
-"@guardian/consent-management-platform@13.12.0":
-  version "13.12.0"
-  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-13.12.0.tgz#7cd52881ac017eca8697b368c313678664acc10e"
-  integrity sha512-weLk3tR1ZtMvn5tfTFItvbIT84JFaXMdP5zcbu1Aynt+eTKZD8oVKTtuvdg6ZmTuxsEOIfsel0fFirjDUo5ccQ==
-
 "@guardian/core-web-vitals@5.1.0":
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@guardian/core-web-vitals/-/core-web-vitals-5.1.0.tgz#1a7224ff69e773e30698fa16bdd5be608a554ebf"
@@ -1782,10 +1777,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/identity-auth/-/identity-auth-2.1.0.tgz#836f72df35d127a7239987e5fc53155130d0cb4d"
   integrity sha512-+AM0pcmRvRZUf92RYGJ2Q6KK1JpnQIxZ6pafsaBMGnF0IwiIk9DdfhaYZl0cyPQ3PwLTJJw2aSl453ivPAmHbw==
 
-"@guardian/libs@16.0.1":
-  version "16.0.1"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-16.0.1.tgz#81214a701ef7159e8bdbba901af30bdaec901c28"
-  integrity sha512-/pgkDwWu9xp4TAEx07LFu80XsJWIti0VHRxjRRV6vNCMIb44OktONXs5Lu9deoSXWNZh+VcyAEj8vFF2DRPdMA==
+"@guardian/libs@0.0.0-canary-20240308155628":
+  version "0.0.0-canary-20240308155628"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-0.0.0-canary-20240308155628.tgz#16d4161fedc87ae427c91646fa88de1ce5f89a86"
+  integrity sha512-7MrHJ0nD3G3LLpczCLZLu36ZdLy1uBa4qDi4inQ0fLX6hdwFjqesv6Tk1gCgZxYQD3y8GwyPHlRcaDxd/ckeVg==
 
 "@guardian/libs@^16.0.0":
   version "16.0.0"
