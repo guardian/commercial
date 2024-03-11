@@ -9,7 +9,6 @@ export const bypassMetricsSampling = (): void => {
 };
 
 export const isInSectionAdDensityVariant = (): boolean => {
-	// TODO: verify these section names are correct
 	const highValueSections = [
 		'business',
 		'environment',
