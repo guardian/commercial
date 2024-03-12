@@ -38,11 +38,30 @@ const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
 
 const isInAdDensityVariant = isInSectionAdDensityVariant();
-const minDistanceBetweenAds = isInAdDensityVariant ? 400 : 500;
 
-const adSlotContainerRules: RuleSpacing = {
-	minAboveSlot: minDistanceBetweenAds,
-	minBelowSlot: minDistanceBetweenAds,
+const minDistanceBetweenAds = {
+	floated: 500,
+	inline: isInAdDensityVariant ? 500 : 750,
+};
+
+/**
+ * Rules for spacefinder to avoid inserting floated-right ads too close to each other
+ **/
+const adSlotContainerRulesFloated: Record<string, RuleSpacing> = {
+	[adSlotContainerClass]: {
+		minAboveSlot: minDistanceBetweenAds.floated,
+		minBelowSlot: minDistanceBetweenAds.floated,
+	},
+};
+
+/**
+ * Rules for spacefinder to avoid inserting inline ads too close to each other
+ **/
+const adSlotContainerRulesInline: Record<string, RuleSpacing> = {
+	[adSlotContainerClass]: {
+		minAboveSlot: minDistanceBetweenAds.inline,
+		minBelowSlot: minDistanceBetweenAds.inline,
+	},
 };
 
 /**
@@ -85,17 +104,29 @@ const insertAdAtPara = (
 		});
 };
 
-// this facilitates a second filtering, now taking into account the candidates' position/size relative to the other candidates
+/**
+ * This facilitates a second filtering, now taking into account the candidates' position/size
+ * relative to the other candidates
+ *
+ * @param maximumAdHeight - the maximum height of the ad that will be inserted
+ * @param isInsertedInline - whether the ad is inserted inline
+ **/
 const filterNearbyCandidates =
-	(maximumAdHeight: number) =>
+	(
+		maximumAdHeight: number,
+		minDistanceBetweenAds: number,
+		isInsertedInline?: boolean,
+	) =>
 	(candidate: SpacefinderItem, lastWinner?: SpacefinderItem): boolean => {
 		// No previous winner
 		if (lastWinner === undefined) return true;
 
-		return (
-			Math.abs(candidate.top - lastWinner.top) - maximumAdHeight >=
-			adSlotContainerRules.minBelowSlot
-		);
+		// This is different depending on whether the ads are inserted inline or not
+		const distanceBetweenAds = isInsertedInline
+			? candidate.top - lastWinner.top
+			: candidate.top - lastWinner.top - maximumAdHeight;
+
+		return distanceBetweenAds >= minDistanceBetweenAds;
 	};
 
 /**
@@ -156,7 +187,7 @@ const addDesktopInline1 = (): Promise<boolean> => {
 				minAboveSlot: 150,
 				minBelowSlot: 0,
 			},
-			[` .${adSlotContainerClass}`]: adSlotContainerRules,
+			...adSlotContainerRulesInline,
 			[ignoreList]: {
 				minAboveSlot: 35,
 				minBelowSlot: 400,
@@ -227,13 +258,13 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 		minAbove,
 		minBelow: 300,
 		opponentSelectorRules: {
-			[` .${adSlotContainerClass}`]: adSlotContainerRules,
+			...adSlotContainerRulesFloated,
 			' [data-spacefinder-role="immersive"]': {
 				minAboveSlot: 0,
 				minBelowSlot: 600,
 			},
 		},
-		filter: filterNearbyCandidates(largestSizeForSlot),
+		filter: filterNearbyCandidates(largestSizeForSlot, 500),
 	};
 
 	const insertAds: SpacefinderWriter = async (paras) => {
@@ -315,7 +346,7 @@ const addMobileInlineAds = (): Promise<boolean> => {
 				minBelowSlot: 0,
 			},
 
-			[` .${adSlotContainerClass}`]: adSlotContainerRules,
+			...adSlotContainerRulesInline,
 			// this is a catch-all for elements that are not covered by the above rules, these will generally be things like videos, embeds and atoms. minBelowSlot is higher to push ads a bit further down after these elements
 			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`]:
 				{
@@ -326,7 +357,11 @@ const addMobileInlineAds = (): Promise<boolean> => {
 						'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 				},
 		},
-		filter: filterNearbyCandidates(adSizes.mpu.height),
+		filter: filterNearbyCandidates(
+			adSizes.mpu.height,
+			minDistanceBetweenAds.inline,
+			true,
+		),
 	};
 
 	const insertAds: SpacefinderWriter = async (paras) => {
@@ -391,7 +426,7 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 				minAboveSlot: 100,
 				minBelowSlot: 250,
 			},
-			[` .${adSlotContainerClass}`]: adSlotContainerRules,
+			...adSlotContainerRulesInline,
 			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
 				{
 					minAboveSlot: 200,
@@ -440,7 +475,7 @@ const doInit = async (): Promise<boolean> => {
 
 	await initCarrot();
 
-	return im;
+	return true;
 };
 
 /**
