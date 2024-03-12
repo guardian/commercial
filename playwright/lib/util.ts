@@ -201,7 +201,6 @@ const countLiveblogInlineSlots = async (page: Page, isMobile: boolean) => {
 	return await page.locator(locator).count();
 };
 
-// @ts-expect-error -- used when logging uncommented
 const getSlotName = (url: string) => {
 	const adRequest = new URL(url);
 	const adRequestParams = adRequest.searchParams;
@@ -224,7 +223,7 @@ const logUnfilledSlots = (page: Page) => {
 				lineItemId === '-2' ||
 				creativeId === '-2'
 			) {
-				// console.warn(`Unfilled slot: ${getSlotName(url)}`);
+				console.warn(`Unfilled slot: ${getSlotName(url)}`);
 			}
 		}
 	});
