@@ -45,9 +45,9 @@ const minDistanceBetweenAds = {
 };
 
 /**
- * Rules for spacefinder to avoid inserting floated-right ads too close to each other
+ * Rules for spacefinder to avoid inserting ads in the right rail too close to each other
  **/
-const adSlotContainerRulesFloated: Record<string, RuleSpacing> = {
+const adSlotContainerRulesRightRail: Record<string, RuleSpacing> = {
 	[` .${adSlotContainerClass}`]: {
 		minAboveSlot: minDistanceBetweenAds.floated,
 		minBelowSlot: minDistanceBetweenAds.floated,
@@ -258,7 +258,7 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 		minAbove,
 		minBelow: 300,
 		opponentSelectorRules: {
-			...adSlotContainerRulesFloated,
+			...adSlotContainerRulesRightRail,
 			' [data-spacefinder-role="immersive"]': {
 				minAboveSlot: 0,
 				minBelowSlot: 600,
