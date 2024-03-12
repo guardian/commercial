@@ -245,7 +245,7 @@ const addDesktopRightRailAds = (): Promise<boolean> => {
 			if (!lastWinner) return true;
 			const distanceBetweenAds =
 				candidate.top - lastWinner.top - largestSizeForSlot;
-			return distanceBetweenAds >= minDistanceBetweenInlineAds;
+			return distanceBetweenAds >= minDistanceBetweenRightRailAds;
 		},
 	};
 
