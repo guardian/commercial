@@ -1,8 +1,8 @@
 import {
 	getConsentFor as getConsentFor_,
 	onConsentChange as onConsentChange_,
-} from '@guardian/consent-management-platform';
-import type { Callback } from '@guardian/consent-management-platform/dist/types';
+} from '@guardian/libs';
+import type { Callback } from '@guardian/libs';
 import { _, a9 } from './a9';
 
 const onConsentChange = onConsentChange_ as jest.MockedFunction<
@@ -60,7 +60,7 @@ jest.mock('../slot-config', () => ({
 	]),
 }));
 
-jest.mock('@guardian/consent-management-platform', () => ({
+jest.mock('@guardian/libs', () => ({
 	onConsentChange: jest.fn(),
 	getConsentFor: jest.fn(),
 }));

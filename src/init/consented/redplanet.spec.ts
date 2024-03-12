@@ -1,9 +1,5 @@
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { log } from '@guardian/libs';
+import type { ConsentState } from '@guardian/libs';
+import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInAuOrNz as isInAuOrNz_ } from 'utils/geo-utils';
 import { init, resetModule } from './redplanet';
@@ -41,8 +37,6 @@ jest.mock('experiments/ab');
 jest.mock('lib/cookies');
 
 jest.mock('lib/build-page-targeting');
-
-jest.mock('@guardian/consent-management-platform');
 
 jest.mock('@guardian/libs');
 

@@ -1,5 +1,5 @@
-import { onConsent } from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import type { ConsentState } from '@guardian/libs';
+import { onConsent } from '@guardian/libs';
 import { EventTimer } from './event-timer';
 import {
 	_,
@@ -15,7 +15,7 @@ const {
 	transformToObjectEntries,
 } = _;
 
-jest.mock('@guardian/consent-management-platform');
+jest.mock('@guardian/libs');
 
 const mockOnConsent = (consentState: ConsentState) =>
 	(onConsent as jest.Mock).mockImplementation(() =>

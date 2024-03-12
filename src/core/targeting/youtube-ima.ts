@@ -1,5 +1,5 @@
 import type { Participations } from '@guardian/ab-core';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import type { ConsentState } from '@guardian/libs';
 import { log } from '@guardian/libs';
 import type { CustomParams, MaybeArray } from '../types';
 import { buildPageTargeting, filterValues } from './build-page-targeting';

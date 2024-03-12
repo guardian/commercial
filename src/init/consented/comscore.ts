@@ -1,8 +1,4 @@
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
-import { loadScript, log } from '@guardian/libs';
+import { getConsentFor, loadScript, log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { commercialFeatures } from 'lib/commercial-features';
 import type { ComscoreGlobals } from 'types/global';

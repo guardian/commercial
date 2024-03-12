@@ -1,15 +1,12 @@
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import { getConsentFor, onConsent } from '@guardian/libs';
+import type { ConsentState } from '@guardian/libs';
 import { commercialFeatures } from 'lib/commercial-features';
 import type { ThirdPartyTag } from 'types/global';
 import { _, init } from './third-party-tags';
 
 const { insertScripts, loadOther } = _;
 
-jest.mock('@guardian/consent-management-platform');
+jest.mock('@guardian/libs');
 
 const tcfv2AllConsent = {
 	tcfv2: {

@@ -1,16 +1,11 @@
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import type { TCFv2ConsentState } from '@guardian/consent-management-platform/dist/types/tcfv2';
-import { loadScript } from '@guardian/libs';
+import type { ConsentState, TCFv2ConsentState } from '@guardian/libs';
+import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
 import { commercialFeatures } from 'lib/commercial-features';
 import { _ } from './comscore';
 
 const { setupComscore } = _;
 
-jest.mock('@guardian/consent-management-platform');
+jest.mock('@guardian/libs');
 
 const SOURCEPOINT_ID = '5efefe25b8e05c06542b2a77';
 
