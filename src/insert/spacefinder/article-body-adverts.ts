@@ -48,7 +48,7 @@ const minDistanceBetweenAds = {
  * Rules for spacefinder to avoid inserting floated-right ads too close to each other
  **/
 const adSlotContainerRulesFloated: Record<string, RuleSpacing> = {
-	[adSlotContainerClass]: {
+	[` .${adSlotContainerClass}`]: {
 		minAboveSlot: minDistanceBetweenAds.floated,
 		minBelowSlot: minDistanceBetweenAds.floated,
 	},
@@ -58,7 +58,7 @@ const adSlotContainerRulesFloated: Record<string, RuleSpacing> = {
  * Rules for spacefinder to avoid inserting inline ads too close to each other
  **/
 const adSlotContainerRulesInline: Record<string, RuleSpacing> = {
-	[adSlotContainerClass]: {
+	[` .${adSlotContainerClass}`]: {
 		minAboveSlot: minDistanceBetweenAds.inline,
 		minBelowSlot: minDistanceBetweenAds.inline,
 	},
@@ -475,7 +475,7 @@ const doInit = async (): Promise<boolean> => {
 
 	await initCarrot();
 
-	return true;
+	return im;
 };
 
 /**
