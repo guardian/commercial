@@ -44,9 +44,15 @@ The space between candidates and opponents is calculated using the ‘getBoundin
 
 Opponents usually include ads inserted by previous runs of Spacefinder, but can also include other elements such as images, videos and embeds. The `opponentSelectorRules` are used to identify these elements.
 
-Spacefinder will also avoid ads that it has not yet inserted but will be inserted above a winning candidate element, the `filterNearbyAds` function is used for this. This function checks if the candidate is too close to the last winner also taking into account the maximum height of an ad in that slot, see image below.
+### Avoiding other winning candidates
 
-![Spacefinder avoiding nearby ads](spacefinder-min-below-other-candidates.png)
+Spacefinder will also avoid ads that it has not yet inserted but will be inserted above a previous winning candidate element, this is done with the `filter` spacefinder rule and there is a slightly different approach for desktop and mobile.
+
+Desktop needs to take into account the potential height of an ad:
+![Spacefinder avoiding nearby ads on desktop](spacefinder-desktop.png)
+
+Mobile does not need to take into account the potential height of an ad:
+![Spacefinder avoiding nearby ads on mobile](spacefinder-mobile.png)
 
 ---
 

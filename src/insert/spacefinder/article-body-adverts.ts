@@ -10,7 +10,6 @@ import { isInSectionAdDensityVariant } from 'experiments/utils';
 import { spaceFiller } from 'insert/spacefinder/space-filler';
 import type {
 	RuleSpacing,
-	SpacefinderItem,
 	SpacefinderRules,
 	SpacefinderWriter,
 } from 'insert/spacefinder/spacefinder';
@@ -101,31 +100,6 @@ const insertAdAtPara = (
 			await fillDynamicAdSlot(ad, shouldForceDisplay, sizes);
 		});
 };
-
-/**
- * This facilitates a second filtering, now taking into account the candidates' position/size
- * relative to the other candidates
- *
- * @param maximumAdHeight - the maximum height of the ad that will be inserted
- * @param isInsertedInline - whether the ad is inserted inline
- **/
-const filterNearbyCandidates =
-	(
-		maximumAdHeight: number,
-		minDistanceBetweenAds: number,
-		isInsertedInline?: boolean,
-	) =>
-	(candidate: SpacefinderItem, lastWinner?: SpacefinderItem): boolean => {
-		// No previous winner
-		if (lastWinner === undefined) return true;
-
-		// This is different depending on whether the ads are inserted inline or not
-		const distanceBetweenAds = isInsertedInline
-			? candidate.top - lastWinner.top
-			: candidate.top - lastWinner.top - maximumAdHeight;
-
-		return distanceBetweenAds >= minDistanceBetweenAds;
-	};
 
 /**
  * Decide whether we have enough space to add additional sizes for a given advert.
@@ -232,7 +206,7 @@ const addDesktopInline1 = (): Promise<boolean> => {
 /**
  * Inserts all inline ads on desktop except for inline1.
  */
-const addDesktopInline2PlusAds = (): Promise<boolean> => {
+const addDesktopRightRailAds = (): Promise<boolean> => {
 	let minAbove = 1000;
 
 	/**
@@ -262,10 +236,17 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 				minBelowSlot: 600,
 			},
 		},
-		filter: filterNearbyCandidates(
-			largestSizeForSlot,
-			minDistanceBetweenRightRailAds,
-		),
+		/**
+		 * Filter out any candidates that are too close to the last winner
+		 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
+		 * for more information
+		 **/
+		filter: (candidate, lastWinner) => {
+			if (!lastWinner) return true;
+			const distanceBetweenAds =
+				candidate.top - lastWinner.top - largestSizeForSlot;
+			return distanceBetweenAds >= minDistanceBetweenInlineAds;
+		},
 	};
 
 	const insertAds: SpacefinderWriter = async (paras) => {
@@ -358,11 +339,16 @@ const addMobileInlineAds = (): Promise<boolean> => {
 						'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 				},
 		},
-		filter: filterNearbyCandidates(
-			adSizes.mpu.height,
-			minDistanceBetweenInlineAds,
-			true,
-		),
+		/**
+		 * Filter out any candidates that are too close to the last winner
+		 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
+		 * for more information
+		 **/
+		filter: (candidate, lastWinner) => {
+			if (!lastWinner) return true;
+			const distanceBetweenAds = candidate.top - lastWinner.top;
+			return distanceBetweenAds >= minDistanceBetweenInlineAds;
+		},
 	};
 
 	const insertAds: SpacefinderWriter = async (paras) => {
@@ -397,12 +383,12 @@ const addInlineAds = (): Promise<boolean> => {
 	}
 
 	if (isPaidContent) {
-		return addDesktopInline2PlusAds();
+		return addDesktopRightRailAds();
 	}
 
 	// Add the rest of the inline ad slots after a position for inline1 has been found.
 	// We don't wan't inline1 and inline2 targeting the same paragraph.
-	return addDesktopInline1().then(() => addDesktopInline2PlusAds());
+	return addDesktopInline1().then(() => addDesktopRightRailAds());
 };
 
 const attemptToAddInlineMerchAd = (): Promise<boolean> => {
