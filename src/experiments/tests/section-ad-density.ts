@@ -18,5 +18,6 @@ export const sectionAdDensity: ABTest = {
 		{ id: 'control', test: noop },
 		{ id: 'variant', test: noop },
 	],
+	showForSensitive: true,
 	canRun: () => true,
 };
