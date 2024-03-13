@@ -56,6 +56,12 @@ const articles: GuPage[] = [
 		expectedSlotPositionsOnMobile: [4, 11, 18, 25, 32, 39, 46, 53, 57, 64],
 		expectedSlotPositionsOnDesktop: [6, 13, 20, 30, 37, 44, 51, 58, 65],
 	},
+	{
+		path: getTestUrl({
+			stage,
+			path: '/commentisfree/2024/feb/05/cook-gas-induction-hob-electric',
+		}),
+	},
 ];
 
 export { articles };
