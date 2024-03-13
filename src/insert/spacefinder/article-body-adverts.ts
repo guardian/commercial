@@ -140,7 +140,7 @@ const addDesktopInline1 = (): Promise<boolean> => {
 	const tweakpoint = getCurrentTweakpoint();
 	const hasLeftCol = ['leftCol', 'wide'].includes(tweakpoint);
 
-	let ignoreList = ` > :not(p):not(h2):not(ul):not(.${adSlotContainerClass}):not(#sign-in-gate)`;
+	let ignoreList = ` > :not(p):not(h2):not(ul):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.line)`;
 	if (hasLeftCol) {
 		ignoreList +=
 			':not([data-spacefinder-role="richLink"]):not([data-spacefinder-role="thumbnail"])';
@@ -159,7 +159,10 @@ const addDesktopInline1 = (): Promise<boolean> => {
 				minAboveSlot: 150,
 				minBelowSlot: 0,
 			},
-			...inlineAdSlotContainerRules,
+			[` .${adSlotContainerClass}`]: {
+				minAboveSlot: 500,
+				minBelowSlot: 500,
+			},
 			[ignoreList]: {
 				minAboveSlot: 35,
 				minBelowSlot: 400,
@@ -242,7 +245,9 @@ const addDesktopRightRailAds = (): Promise<boolean> => {
 		 * for more information
 		 **/
 		filter: (candidate, lastWinner) => {
-			if (!lastWinner) return true;
+			if (!lastWinner) {
+				return true;
+			}
 			const distanceBetweenAds =
 				candidate.top - lastWinner.top - largestSizeForSlot;
 			return distanceBetweenAds >= minDistanceBetweenRightRailAds;
@@ -345,7 +350,9 @@ const addMobileInlineAds = (): Promise<boolean> => {
 		 * for more information
 		 **/
 		filter: (candidate, lastWinner) => {
-			if (!lastWinner) return true;
+			if (!lastWinner) {
+				return true;
+			}
 			const distanceBetweenAds = candidate.top - lastWinner.top;
 			return distanceBetweenAds >= minDistanceBetweenInlineAds;
 		},
@@ -414,7 +421,7 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 				minBelowSlot: 250,
 			},
 			...inlineAdSlotContainerRules,
-			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
+			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.line)`]:
 				{
 					minAboveSlot: 200,
 					minBelowSlot: 400,
