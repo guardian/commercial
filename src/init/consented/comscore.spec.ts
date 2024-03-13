@@ -5,8 +5,6 @@ import { _ } from './comscore';
 
 const { setupComscore } = _;
 
-jest.mock('@guardian/libs');
-
 const SOURCEPOINT_ID = '5efefe25b8e05c06542b2a77';
 
 const defaultTCFv2State = {
@@ -75,6 +73,8 @@ const AusWithConsent = {
 jest.mock('@guardian/libs', () => ({
 	loadScript: jest.fn(() => Promise.resolve()),
 	log: jest.fn(),
+	onConsent: jest.fn(),
+	getConsentFor: jest.fn(),
 }));
 
 jest.mock('lib/commercial-features', () => ({

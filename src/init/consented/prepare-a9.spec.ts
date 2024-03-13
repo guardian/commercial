@@ -36,8 +36,6 @@ jest.mock('lib/header-bidding/utils', () => ({
 
 jest.mock('@guardian/libs');
 
-jest.mock('@guardian/libs');
-
 const originalUA = navigator.userAgent;
 const fakeUserAgent = (userAgent?: string) => {
 	Object.defineProperty(navigator, 'userAgent', {

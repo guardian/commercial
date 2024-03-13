@@ -15,7 +15,11 @@ const {
 	transformToObjectEntries,
 } = _;
 
-jest.mock('@guardian/libs');
+jest.mock('@guardian/libs', () => ({
+	// eslint-disable-next-line -- ESLint doesn't understand jest.requireActual
+	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
+	onConsent: jest.fn(),
+}));
 
 const mockOnConsent = (consentState: ConsentState) =>
 	(onConsent as jest.Mock).mockImplementation(() =>

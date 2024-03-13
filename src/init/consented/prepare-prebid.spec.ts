@@ -43,12 +43,9 @@ jest.mock('lib/header-bidding/utils', () => ({
 }));
 
 jest.mock('@guardian/libs', () => ({
+	log: jest.fn(),
 	onConsent: jest.fn(),
 	getConsentFor: jest.fn(),
-}));
-
-jest.mock('@guardian/libs', () => ({
-	log: jest.fn(),
 }));
 
 const mockOnConsent = (consentState: ConsentState) =>

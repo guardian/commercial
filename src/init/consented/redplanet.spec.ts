@@ -38,7 +38,13 @@ jest.mock('lib/cookies');
 
 jest.mock('lib/build-page-targeting');
 
-jest.mock('@guardian/libs');
+jest.mock('@guardian/libs', () => ({
+	// eslint-disable-next-line -- ESLint doesn't understand jest.requireActual
+	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
+	log: jest.fn(),
+	onConsent: jest.fn(),
+	getConsentFor: jest.fn(),
+}));
 
 window.launchpad = jest.fn().mockImplementationOnce(() => jest.fn());
 

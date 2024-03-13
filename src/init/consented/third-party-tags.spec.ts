@@ -6,7 +6,12 @@ import { _, init } from './third-party-tags';
 
 const { insertScripts, loadOther } = _;
 
-jest.mock('@guardian/libs');
+jest.mock('@guardian/libs', () => ({
+	// eslint-disable-next-line -- ESLint doesn't understand jest.requireActual
+	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
+	onConsent: jest.fn(),
+	getConsentFor: jest.fn(),
+}));
 
 const tcfv2AllConsent = {
 	tcfv2: {

@@ -121,6 +121,12 @@ jest.mock('@guardian/libs', () => {
 			'@guardian/libs',
 		),
 		loadScript: jest.fn(() => Promise.resolve()),
+		onConsent: jest.fn(),
+		getConsentFor: jest.fn(),
+		cmp: {
+			hasInitialised: jest.fn(),
+			willShowPrivacySync: jest.fn(),
+		},
 	};
 });
 jest.mock(
@@ -135,14 +141,7 @@ jest.mock('lib/analytics/beacon', () => ({
 jest.mock('display/load-advert', () => ({
 	loadAdvert: jest.fn(),
 }));
-jest.mock('@guardian/libs', () => ({
-	onConsent: jest.fn(),
-	getConsentFor: jest.fn(),
-	cmp: {
-		hasInitialised: jest.fn(),
-		willShowPrivacySync: jest.fn(),
-	},
-}));
+
 jest.mock('./prepare-prebid', () => ({
 	setupPrebidOnce: jest
 		.fn()
