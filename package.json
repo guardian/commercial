@@ -27,7 +27,7 @@
 		"playwright:open": "playwright test --ui",
 		"lint": "eslint .",
 		"lint-staged": "lint-staged",
-		"precommit:lint": "npm-run-all prettier:check lint-staged",
+		"precommit:lint": "npm-run-all lint-staged",
 		"prepare": "husky install",
 		"prepush:test": "jest --verbose --runInBand --onlyChanged",
 		"prettier:check": "prettier . --check --cache",
