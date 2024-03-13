@@ -181,7 +181,7 @@ const renderLine = (pass: SpacefinderPass): void => {
 	// Create line if it doesn't already exist
 	if (!line) {
 		line = document.createElement('div');
-		line.className = 'line';
+		line.className = 'line sfdebug';
 
 		body.appendChild(line);
 	}
