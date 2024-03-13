@@ -1,12 +1,13 @@
 import { breakpoints } from '@guardian/source-foundations';
 import { expect, test } from '@playwright/test';
-import { articles } from '../fixtures/pages';
-import type { GuPage } from '../fixtures/pages/Page';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
-import { waitForIsland, waitForSlot } from '../lib/util';
+import { getStage, getTestUrl, waitForIsland, waitForSlot } from '../lib/util';
 
-const { path } = articles[6] as unknown as GuPage;
+const path = getTestUrl({
+	stage: getStage(),
+	path: '/commentisfree/2024/feb/05/cook-gas-induction-hob-electric',
+});
 
 test.describe('desktop comments-expanded slot', () => {
 	test(`Check that comments-expanded slot is added when comments are expanded on desktop`, async ({
