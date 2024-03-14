@@ -1,10 +1,5 @@
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import type { TCFv2ConsentState } from '@guardian/consent-management-platform/dist/types/tcfv2';
-import { log } from '@guardian/libs';
+import type { ConsentState, TCFv2ConsentState } from '@guardian/libs';
+import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInCanada } from 'utils/geo-utils';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
@@ -47,13 +42,10 @@ jest.mock('lib/header-bidding/utils', () => ({
 	shouldIncludeOnlyA9: false,
 }));
 
-jest.mock('@guardian/consent-management-platform', () => ({
-	onConsent: jest.fn(),
-	getConsentFor: jest.fn(),
-}));
-
 jest.mock('@guardian/libs', () => ({
 	log: jest.fn(),
+	onConsent: jest.fn(),
+	getConsentFor: jest.fn(),
 }));
 
 const mockOnConsent = (consentState: ConsentState) =>

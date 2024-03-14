@@ -1,16 +1,6 @@
-import {
-	getConsentFor as getConsentFor_,
-	onConsentChange as onConsentChange_,
-} from '@guardian/consent-management-platform';
-import type { Callback } from '@guardian/consent-management-platform/dist/types';
+import { getConsentFor, onConsentChange } from '@guardian/libs';
+import type { Callback } from '@guardian/libs';
 import { _, a9 } from './a9';
-
-const onConsentChange = onConsentChange_ as jest.MockedFunction<
-	typeof onConsentChange_
->;
-const getConsentFor = getConsentFor_ as jest.MockedFunction<
-	typeof getConsentFor_
->;
 
 const tcfv2WithConsentMock = (callback: Callback) =>
 	callback({
@@ -60,10 +50,19 @@ jest.mock('../slot-config', () => ({
 	]),
 }));
 
-jest.mock('@guardian/consent-management-platform', () => ({
-	onConsentChange: jest.fn(),
+jest.mock('@guardian/libs', () => ({
+	// eslint-disable-next-line -- ESLint doesn't understand jest.requireActual
+	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
+	log: jest.fn(),
 	getConsentFor: jest.fn(),
+	onConsentChange: jest.fn(),
 }));
+
+const mockOnConsentChange = (mfn: (callback: Callback) => void) =>
+	(onConsentChange as jest.Mock).mockImplementation(mfn);
+
+const mockGetConsentFor = (hasConsent: boolean) =>
+	(getConsentFor as jest.Mock).mockReturnValueOnce(hasConsent);
 
 beforeEach(() => {
 	jest.resetModules();
@@ -81,16 +80,16 @@ afterAll(() => {
 
 describe('initialise', () => {
 	it('should generate initialise A9 library when TCFv2 consent has been given', () => {
-		onConsentChange.mockImplementation(tcfv2WithConsentMock);
-		getConsentFor.mockReturnValue(true);
+		mockOnConsentChange(tcfv2WithConsentMock);
+		mockGetConsentFor(true);
 		a9.initialise();
 		expect(window.apstag).toBeDefined();
 		expect(window.apstag?.init).toHaveBeenCalled();
 	});
 
 	it('should generate initialise A9 library when CCPA consent has been given', () => {
-		onConsentChange.mockImplementation(CcpaWithConsentMock);
-		getConsentFor.mockReturnValue(true);
+		mockOnConsentChange(CcpaWithConsentMock);
+		mockGetConsentFor(true);
 		a9.initialise();
 		expect(window.apstag).toBeDefined();
 		expect(window.apstag?.init).toHaveBeenCalled();

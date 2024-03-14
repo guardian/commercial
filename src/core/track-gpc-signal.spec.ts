@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import type { ConsentState } from '@guardian/libs';
 import { EventTimer } from './event-timer';
 import { initTrackGpcSignal } from './track-gpc-signal';
 

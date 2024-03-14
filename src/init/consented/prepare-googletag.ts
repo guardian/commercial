@@ -1,9 +1,5 @@
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { loadScript, log } from '@guardian/libs';
+import type { ConsentState } from '@guardian/libs';
+import { getConsentFor, loadScript, log, onConsent } from '@guardian/libs';
 import { EventTimer } from 'core/event-timer';
 import { getPageTargeting } from 'lib/build-page-targeting';
 import { commercialFeatures } from 'lib/commercial-features';

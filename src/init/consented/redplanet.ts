@@ -1,8 +1,4 @@
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
-import { log } from '@guardian/libs';
+import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { launchpad } from 'core/__vendor/launchpad';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInAuOrNz } from 'utils/geo-utils';

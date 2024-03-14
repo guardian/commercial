@@ -1,6 +1,5 @@
-import { onConsent } from '@guardian/consent-management-platform';
-import type { Framework } from '@guardian/consent-management-platform/dist/types';
-import { isString, log } from '@guardian/libs';
+import type { Framework } from '@guardian/libs';
+import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import { pubmatic } from 'core/__vendor/pubmatic';
 import type { AdSize } from 'core/ad-sizes';
