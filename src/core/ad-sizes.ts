@@ -387,7 +387,7 @@ const slotSizeMappings = {
 		mobile: [adSizes.fluid],
 	},
 	'mobile-sticky': {
-		mobile: [adSizes.mobilesticky],
+		mobile: [adSizes.mobilesticky, adSizes.empty],
 	},
 	'crossword-banner-mobile': {
 		mobile: [adSizes.mobilesticky],
