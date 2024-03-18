@@ -133,7 +133,7 @@ const addDesktopInline1 = (): Promise<boolean> => {
 	const tweakpoint = getCurrentTweakpoint();
 	const hasLeftCol = ['leftCol', 'wide'].includes(tweakpoint);
 
-	let ignoreList = ` > :not(p):not(h2):not(ul):not(.${adSlotContainerClass}):not(#sign-in-gate)`;
+	let ignoreList = ` > :not(p):not(h2):not(ul):not(.${adSlotContainerClass})`;
 	if (hasLeftCol) {
 		ignoreList +=
 			':not([data-spacefinder-role="richLink"]):not([data-spacefinder-role="thumbnail"])';
@@ -311,7 +311,7 @@ const addMobileInlineAds = (): Promise<boolean> => {
 
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
 			// this is a catch-all for elements that are not covered by the above rules, these will generally be things like videos, embeds and atoms. minBelowSlot is higher to push ads a bit further down after these elements
-			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`]:
+			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not([data-spacefinder-type$="NumberedTitleBlockElement"])`]:
 				{
 					minAboveSlot: 35,
 					minBelowSlot: 200,
@@ -386,11 +386,10 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 				minBelowSlot: 250,
 			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
-			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
-				{
-					minAboveSlot: 200,
-					minBelowSlot: 400,
-				},
+			[` > :not(p):not(h2):not(.${adSlotContainerClass})`]: {
+				minAboveSlot: 200,
+				minBelowSlot: 400,
+			},
 		},
 	};
 
@@ -438,13 +437,18 @@ const doInit = async (): Promise<boolean> => {
 /**
  * Initialise article body ad slots
  */
-export const init = (): Promise<boolean> => {
-	// Also init when the main article is redisplayed
-	// For instance by the signin gate.
-	mediator.on('page:article:redisplayed', doInit);
-	// DCR doesn't have mediator, so listen for CustomEvent
-	document.addEventListener('article:sign-in-gate-dismissed', () => {
+export const init = (): Promise<void> => {
+	const isSignInGate = document.querySelector('#sign-in-gate');
+	if (isSignInGate) {
+		// Don't show inline ads when there is a sign in gate
+		mediator.on('page:article:redisplayed', doInit);
+		// DCR doesn't have mediator, so listen for CustomEvent
+		document.addEventListener('article:sign-in-gate-dismissed', () => {
+			void doInit();
+		});
+	} else {
 		void doInit();
-	});
-	return doInit();
+	}
+
+	return Promise.resolve();
 };
