@@ -156,8 +156,8 @@ const addDesktopInline1 = (): Promise<boolean> => {
 		opponentSelectorRules: {
 			// don't place ads right after a heading
 			' > h2': {
-				minAboveSlot: 150,
-				minBelowSlot: 0,
+				minAboveSlot: isInAdDensityVariant ? 150 : 5,
+				minBelowSlot: isInAdDensityVariant ? 0 : 190,
 			},
 			[` .${adSlotContainerClass}`]: {
 				minAboveSlot: 500,
