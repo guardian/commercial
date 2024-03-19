@@ -385,6 +385,10 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 				minAboveSlot: 100,
 				minBelowSlot: 250,
 			},
+			' > #sign-in-gate': {
+				minAboveSlot: 0,
+				minBelowSlot: 400,
+			},
 			[` .${adSlotContainerClass}`]: adSlotContainerRules,
 			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
 				{
