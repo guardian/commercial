@@ -6,10 +6,10 @@ import {
 	createAdSlot,
 	wrapSlotInContainer,
 } from 'core/create-ad-slot';
+import { isInSectionAdDensityVariant } from 'experiments/utils';
 import { spaceFiller } from 'insert/spacefinder/space-filler';
 import type {
 	RuleSpacing,
-	SpacefinderItem,
 	SpacefinderRules,
 	SpacefinderWriter,
 } from 'insert/spacefinder/spacefinder';
@@ -36,9 +36,29 @@ const hasImages = !!window.guardian.config.page.lightboxImages?.images.length;
 const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
 
-const adSlotContainerRules: RuleSpacing = {
-	minAboveSlot: 500,
-	minBelowSlot: 500,
+const isInAdDensityVariant = isInSectionAdDensityVariant();
+
+const minDistanceBetweenRightRailAds = 500;
+const minDistanceBetweenInlineAds = isInAdDensityVariant ? 500 : 750;
+
+/**
+ * Rules to avoid inserting ads in the right rail too close to each other
+ **/
+const rightRailAdSlotContainerRules: Record<string, RuleSpacing> = {
+	[` .${adSlotContainerClass}`]: {
+		minAboveSlot: minDistanceBetweenRightRailAds,
+		minBelowSlot: minDistanceBetweenRightRailAds,
+	},
+};
+
+/**
+ * Rules to avoid inserting inline ads too close to each other
+ **/
+const inlineAdSlotContainerRules: Record<string, RuleSpacing> = {
+	[` .${adSlotContainerClass}`]: {
+		minAboveSlot: minDistanceBetweenInlineAds,
+		minBelowSlot: minDistanceBetweenInlineAds,
+	},
 };
 
 /**
@@ -81,19 +101,6 @@ const insertAdAtPara = (
 		});
 };
 
-// this facilitates a second filtering, now taking into account the candidates' position/size relative to the other candidates
-const filterNearbyCandidates =
-	(maximumAdHeight: number) =>
-	(candidate: SpacefinderItem, lastWinner?: SpacefinderItem): boolean => {
-		// No previous winner
-		if (lastWinner === undefined) return true;
-
-		return (
-			Math.abs(candidate.top - lastWinner.top) - maximumAdHeight >=
-			adSlotContainerRules.minBelowSlot
-		);
-	};
-
 /**
  * Decide whether we have enough space to add additional sizes for a given advert.
  * This function ensures we don't insert large height ads at the bottom of articles,
@@ -133,7 +140,7 @@ const addDesktopInline1 = (): Promise<boolean> => {
 	const tweakpoint = getCurrentTweakpoint();
 	const hasLeftCol = ['leftCol', 'wide'].includes(tweakpoint);
 
-	let ignoreList = ` > :not(p):not(h2):not(ul):not(.${adSlotContainerClass}):not(#sign-in-gate)`;
+	let ignoreList = ` > :not(p):not(h2):not(ul):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.sfdebug)`;
 	if (hasLeftCol) {
 		ignoreList +=
 			':not([data-spacefinder-role="richLink"]):not([data-spacefinder-role="thumbnail"])';
@@ -147,11 +154,15 @@ const addDesktopInline1 = (): Promise<boolean> => {
 		minAbove: isImmersive ? 700 : 300,
 		minBelow: 300,
 		opponentSelectorRules: {
+			// don't place ads right after a heading
 			' > h2': {
-				minAboveSlot: 5,
-				minBelowSlot: 190,
+				minAboveSlot: isInAdDensityVariant ? 150 : 5,
+				minBelowSlot: isInAdDensityVariant ? 0 : 190,
 			},
-			[` .${adSlotContainerClass}`]: adSlotContainerRules,
+			[` .${adSlotContainerClass}`]: {
+				minAboveSlot: 500,
+				minBelowSlot: 500,
+			},
 			[ignoreList]: {
 				minAboveSlot: 35,
 				minBelowSlot: 400,
@@ -197,9 +208,8 @@ const addDesktopInline1 = (): Promise<boolean> => {
 
 /**
  * Inserts all inline ads on desktop except for inline1.
- *
  */
-const addDesktopInline2PlusAds = (): Promise<boolean> => {
+const addDesktopRightRailAds = (): Promise<boolean> => {
 	let minAbove = 1000;
 
 	/**
@@ -223,13 +233,25 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 		minAbove,
 		minBelow: 300,
 		opponentSelectorRules: {
-			[` .${adSlotContainerClass}`]: adSlotContainerRules,
+			...rightRailAdSlotContainerRules,
 			' [data-spacefinder-role="immersive"]': {
 				minAboveSlot: 0,
 				minBelowSlot: 600,
 			},
 		},
-		filter: filterNearbyCandidates(largestSizeForSlot),
+		/**
+		 * Filter out any candidates that are too close to the last winner
+		 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
+		 * for more information
+		 **/
+		filter: (candidate, lastWinner) => {
+			if (!lastWinner) {
+				return true;
+			}
+			const distanceBetweenAds =
+				candidate.top - lastWinner.top - largestSizeForSlot;
+			return distanceBetweenAds >= minDistanceBetweenRightRailAds;
+		},
 	};
 
 	const insertAds: SpacefinderWriter = async (paras) => {
@@ -288,6 +310,8 @@ const addDesktopInline2PlusAds = (): Promise<boolean> => {
 };
 
 const addMobileInlineAds = (): Promise<boolean> => {
+	const minDistanceFromArticleTop = isInAdDensityVariant ? 100 : 200;
+
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
 		candidateSelector: [
@@ -295,7 +319,7 @@ const addMobileInlineAds = (): Promise<boolean> => {
 			' > h2',
 			' > [data-spacefinder-type$="NumberedTitleBlockElement"]',
 		],
-		minAbove: 200,
+		minAbove: minDistanceFromArticleTop,
 		minBelow: 200,
 		opponentSelectorRules: {
 			// don't place ads right after a heading
@@ -309,7 +333,7 @@ const addMobileInlineAds = (): Promise<boolean> => {
 				minBelowSlot: 0,
 			},
 
-			[` .${adSlotContainerClass}`]: adSlotContainerRules,
+			...inlineAdSlotContainerRules,
 			// this is a catch-all for elements that are not covered by the above rules, these will generally be things like videos, embeds and atoms. minBelowSlot is higher to push ads a bit further down after these elements
 			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`]:
 				{
@@ -320,7 +344,18 @@ const addMobileInlineAds = (): Promise<boolean> => {
 						'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 				},
 		},
-		filter: filterNearbyCandidates(adSizes.mpu.height),
+		/**
+		 * Filter out any candidates that are too close to the last winner
+		 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
+		 * for more information
+		 **/
+		filter: (candidate, lastWinner) => {
+			if (!lastWinner) {
+				return true;
+			}
+			const distanceBetweenAds = candidate.top - lastWinner.top;
+			return distanceBetweenAds >= minDistanceBetweenInlineAds;
+		},
 	};
 
 	const insertAds: SpacefinderWriter = async (paras) => {
@@ -355,12 +390,12 @@ const addInlineAds = (): Promise<boolean> => {
 	}
 
 	if (isPaidContent) {
-		return addDesktopInline2PlusAds();
+		return addDesktopRightRailAds();
 	}
 
 	// Add the rest of the inline ad slots after a position for inline1 has been found.
 	// We don't wan't inline1 and inline2 targeting the same paragraph.
-	return addDesktopInline1().then(() => addDesktopInline2PlusAds());
+	return addDesktopInline1().then(() => addDesktopRightRailAds());
 };
 
 const attemptToAddInlineMerchAd = (): Promise<boolean> => {
@@ -389,8 +424,8 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 				minAboveSlot: 0,
 				minBelowSlot: 400,
 			},
-			[` .${adSlotContainerClass}`]: adSlotContainerRules,
-			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
+			...inlineAdSlotContainerRules,
+			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.sfdebug)`]:
 				{
 					minAboveSlot: 200,
 					minBelowSlot: 400,
@@ -433,7 +468,9 @@ const doInit = async (): Promise<boolean> => {
 		: Promise.resolve(false);
 	const inlineMerchAdded = await im;
 	if (inlineMerchAdded) await waitForAdvert('dfp-ad--im');
+
 	await addInlineAds();
+
 	await initCarrot();
 
 	return im;

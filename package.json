@@ -1,6 +1,6 @@
 {
 	"name": "@guardian/commercial",
-	"version": "17.3.1",
+	"version": "17.4.0",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial#readme",
 	"bugs": {
@@ -27,7 +27,7 @@
 		"playwright:open": "playwright test --ui",
 		"lint": "eslint .",
 		"lint-staged": "lint-staged",
-		"precommit:lint": "npm-run-all prettier:check lint-staged",
+		"precommit:lint": "npm-run-all lint-staged",
 		"prepare": "husky install",
 		"prepush:test": "jest --verbose --runInBand --onlyChanged",
 		"prettier:check": "prettier . --check --cache",

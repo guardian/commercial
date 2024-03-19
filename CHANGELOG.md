@@ -1,5 +1,17 @@
 # @guardian/commercial
 
+## 17.4.0
+
+### Minor Changes
+
+- 6d621db: Fix a bug with spacefinder avoiding other ads on mobile
+- 6d621db: Add "high value sections" ab test, increasing ad density on articles in high value sections
+
+### Patch Changes
+
+- 6d621db: Fix bug with spacefinder avoiding sfdebug elements
+- be423b1: adds the 2x2 slot to allow the mobile-sticky to be empty
+
 ## 17.3.1
 
 ### Patch Changes
