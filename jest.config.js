@@ -1,6 +1,8 @@
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
 
+const esModules = ['@guardian/', 'lodash-es'].join('|');
+
 module.exports = {
 	clearMocks: true,
 	preset: 'ts-jest/presets/js-with-babel',
@@ -20,7 +22,7 @@ module.exports = {
 	testEnvironmentOptions: {
 		url: 'http://testurl.theguardian.com',
 	},
-	transformIgnorePatterns: ['/node_modules/(?!(@guardian|lodash-es)/)'],
+	transformIgnorePatterns: [`/node_modules/.pnpm/(?!${esModules})`],
 	transform: {
 		'^.+\\.(ts|tsx)$': 'ts-jest',
 	},
