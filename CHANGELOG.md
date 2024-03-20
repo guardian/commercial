@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 17.5.0
+
+### Minor Changes
+
+- 849bb32: Update inline merch spacefinder opponentSelectorRules for sign-in-gate
+
 ## 17.4.1
 
 ### Patch Changes
