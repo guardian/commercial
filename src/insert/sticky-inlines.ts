@@ -127,7 +127,7 @@ const computeStickyHeights = async (
 
 				// Retrieve the next element to which we'll extend the container height
 				// This can be undefined if there is no next item
-				const next = items[index + 1] as RightColItem | undefined;
+				const next = items[index + 1];
 
 				// If there is no `next` element we've reached the final element in the article body
 				// In this case we want to make the sticky distance extend until the bottom of the article body,

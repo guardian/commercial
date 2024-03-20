@@ -10,7 +10,7 @@ const normalizeStage = (stage: string): Stage =>
 
 /**
  * Set the stage via environment variable STAGE
- * e.g. `STAGE=code yarn playwright test`
+ * e.g. `STAGE=code pnpm playwright test`
  */
 const getStage = (): Stage => {
 	// TODO check playwright picks up the STAGE env var
