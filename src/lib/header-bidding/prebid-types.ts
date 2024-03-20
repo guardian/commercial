@@ -8,6 +8,7 @@ export type HeaderBiddingSlotName =
 	| 'comments-expanded'
 	| 'crossword-banner'
 	| 'crossword-banner-mobile'
+	| 'football-right'
 	| 'mobile-sticky'
 	| 'mostpop'
 	| 'right'

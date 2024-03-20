@@ -197,6 +197,14 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 		'crossword-banner-mobile': {
 			mobile: [adSizes.mobilesticky],
 		},
+		'football-right': {
+			desktop: [
+				adSizes.empty,
+				adSizes.mpu,
+				adSizes.skyscraper,
+				adSizes.halfPage,
+			],
+		},
 		merchandising: {
 			mobile: [adSizes.mpu],
 			desktop: [adSizes.billboard],

@@ -1,5 +1,6 @@
 import { init as initArticleAsideAdverts } from 'insert/article-aside-adverts';
 import { initCommentsExpandedAdverts } from 'insert/comments-expanded-advert';
+import { init as initFootballRightAds } from 'insert/fixures';
 import { init as initHighMerch } from 'insert/high-merch';
 import { init as initMobileCrosswordsAdvert } from 'insert/mobile-crossword-banner';
 import { init as initMobileSticky } from 'insert/mobile-sticky';
@@ -17,6 +18,7 @@ const dynamicAdSlotModules: Modules = [
 	['cm-liveblogAdverts', initLiveblogAdverts],
 	['cm-commentsExpandedAdverts', initCommentsExpandedAdverts],
 	['cm-crosswordBannerMobile', initMobileCrosswordsAdvert],
+	['cm-footballRight', initFootballRightAds],
 ];
 
 export const initDynamicAdSlots = async (): Promise<void> => {
