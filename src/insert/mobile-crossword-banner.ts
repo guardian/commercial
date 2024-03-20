@@ -29,7 +29,7 @@ export const init = (): Promise<void> => {
 	}
 
 	const anchorSelector = isInABTest
-		? '.crossword__container__game + *'
+		? '.crossword__container__above-controls + *'
 		: '.crossword__container__below-controls + *';
 
 	const anchor: HTMLElement | null = document.querySelector(anchorSelector);
