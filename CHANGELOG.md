@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 17.4.1
+
+### Patch Changes
+
+- 5c52621: adds banner to all users in mobile crosswords and another option for those in AB test
+
 ## 17.4.0
 
 ### Minor Changes
