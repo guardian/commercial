@@ -259,6 +259,9 @@ type ComscoreGlobals = {
 	c2: string;
 	cs_ucfr: string;
 	comscorekw?: string;
+	options?: {
+		enableFirstPartyCookie?: boolean;
+	};
 };
 
 type CustomIdTokenClaims = CustomClaims & {
