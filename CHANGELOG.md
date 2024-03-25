@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 17.6.0
+
+### Minor Changes
+
+- 2551e48: Enable comscore first party cookie
+
 ## 17.5.0
 
 ### Minor Changes
