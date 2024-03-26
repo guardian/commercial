@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 17.7.0
+
+### Minor Changes
+
+- 737a9ab: Remove dcr discussion ads switch
+
 ## 17.6.0
 
 ### Minor Changes
