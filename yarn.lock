@@ -1777,10 +1777,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/identity-auth/-/identity-auth-2.1.0.tgz#836f72df35d127a7239987e5fc53155130d0cb4d"
   integrity sha512-+AM0pcmRvRZUf92RYGJ2Q6KK1JpnQIxZ6pafsaBMGnF0IwiIk9DdfhaYZl0cyPQ3PwLTJJw2aSl453ivPAmHbw==
 
-"@guardian/libs@0.0.0-canary-20240312112226":
-  version "0.0.0-canary-20240312112226"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-0.0.0-canary-20240312112226.tgz#0c8bc4dfad8cd3b6a93a772d23d8474fffd0e7b5"
-  integrity sha512-/p/R7eQ4YP6vZoD9hQExGbcyzevlg2xLjVulbnR55bumKS3GmtGVJ5DsFNoe8i2gCZM/Z+nN3hKIo2r0VPlmMA==
+"@guardian/libs@0.0.0-canary-20240325210020":
+  version "0.0.0-canary-20240325210020"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-0.0.0-canary-20240325210020.tgz#4afd7a2864709bc8ea877cf91c7b6a5c245f5eda"
+  integrity sha512-hmPR5dnKNn/Gdbr9g6vEcfhYWdGEnVzBcF5tiZrwxBvZimCT+qXtUIJezOIkqobiNKUP7X7Ih5UN33Hrk/CifQ==
 
 "@guardian/libs@^16.0.0":
   version "16.0.0"

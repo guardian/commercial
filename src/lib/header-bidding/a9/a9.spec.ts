@@ -1,8 +1,8 @@
 import { getConsentFor, onConsentChange } from '@guardian/libs';
-import type { Callback } from '@guardian/libs';
+import type { OnConsentChangeCallback } from '@guardian/libs';
 import { _, a9 } from './a9';
 
-const tcfv2WithConsentMock = (callback: Callback) =>
+const tcfv2WithConsentMock = (callback: OnConsentChangeCallback) =>
 	callback({
 		tcfv2: {
 			consents: {
@@ -27,7 +27,7 @@ const tcfv2WithConsentMock = (callback: Callback) =>
 		framework: 'tcfv2',
 	});
 
-const CcpaWithConsentMock = (callback: Callback) =>
+const CcpaWithConsentMock = (callback: OnConsentChangeCallback) =>
 	callback({
 		ccpa: { doNotSell: false },
 		canTarget: true,
@@ -58,8 +58,9 @@ jest.mock('@guardian/libs', () => ({
 	onConsentChange: jest.fn(),
 }));
 
-const mockOnConsentChange = (mfn: (callback: Callback) => void) =>
-	(onConsentChange as jest.Mock).mockImplementation(mfn);
+const mockOnConsentChange = (
+	mfn: (callback: OnConsentChangeCallback) => void,
+) => (onConsentChange as jest.Mock).mockImplementation(mfn);
 
 const mockGetConsentFor = (hasConsent: boolean) =>
 	(getConsentFor as jest.Mock).mockReturnValueOnce(hasConsent);
