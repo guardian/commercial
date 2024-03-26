@@ -179,9 +179,8 @@ export const initCommentsExpandedAdverts = (): Promise<void> => {
 		const currentBreakpoint = getBreakpoint(getViewport().width);
 		if (currentBreakpoint === 'mobile') {
 			if (
-				window.guardian.config.isDotcomRendering &&
 				window.guardian.config.tests?.commercialMegaTestControl ===
-					'control'
+				'control'
 			) {
 				return;
 			}
@@ -197,9 +196,8 @@ export const initCommentsExpandedAdverts = (): Promise<void> => {
 	 */
 	document.addEventListener('comments-state-change', () => {
 		if (
-			window.guardian.config.isDotcomRendering &&
 			window.guardian.config.tests?.commercialMegaTestControl ===
-				'control'
+			'control'
 		) {
 			return;
 		}
