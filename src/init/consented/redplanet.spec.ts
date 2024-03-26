@@ -1,9 +1,5 @@
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { log } from '@guardian/libs';
+import type { ConsentState } from '@guardian/libs';
+import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInAuOrNz as isInAuOrNz_ } from 'utils/geo-utils';
 import { init, resetModule } from './redplanet';
@@ -42,9 +38,13 @@ jest.mock('lib/cookies');
 
 jest.mock('lib/build-page-targeting');
 
-jest.mock('@guardian/consent-management-platform');
-
-jest.mock('@guardian/libs');
+jest.mock('@guardian/libs', () => ({
+	// eslint-disable-next-line -- ESLint doesn't understand jest.requireActual
+	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
+	log: jest.fn(),
+	onConsent: jest.fn(),
+	getConsentFor: jest.fn(),
+}));
 
 window.launchpad = jest.fn().mockImplementationOnce(() => jest.fn());
 

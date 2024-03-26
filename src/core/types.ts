@@ -1,4 +1,4 @@
-import type { VendorName } from '@guardian/consent-management-platform/dist/types';
+import type { VendorName } from '@guardian/libs';
 
 export type ConnectionType =
 	| 'bluetooth'
