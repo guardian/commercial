@@ -66,6 +66,7 @@ const getRightColumn = (): HTMLElement => {
 	const selector = window.guardian.config.isDotcomRendering
 		? '.commentsRightColumn'
 		: '.js-discussion__ad-slot';
+
 	const rightColumn: HTMLElement | null = document.querySelector(selector);
 
 	if (!rightColumn) throw new Error('Could not find right column.');
@@ -186,6 +187,13 @@ export const initCommentsExpandedAdverts = (): Promise<void> => {
 			}
 			void handleCommentsLoadedMobileEvent();
 		} else {
+			if (
+				!window.guardian.config.isDotcomRendering &&
+				window.guardian.config.tests?.commercialMegaTestControl ===
+					'control'
+			) {
+				return;
+			}
 			void handleCommentsLoadedEvent();
 		}
 	});
