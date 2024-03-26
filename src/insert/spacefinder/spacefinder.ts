@@ -299,7 +299,10 @@ const testCandidate = (
 	candidate: SpacefinderItem,
 	opponent: SpacefinderItem,
 ): boolean => {
-	if (candidate.element === opponent.element) {
+	if (
+		candidate.element === opponent.element ||
+		opponent.element.contains(candidate.element)
+	) {
 		return true;
 	}
 
@@ -571,6 +574,8 @@ const findSpace = async (
 	const candidates = getCandidates(rules, exclusions);
 	const measurements = await getMeasurements(rules, candidates);
 	const winners = enforceRules(measurements, rules, exclusions);
+
+	console.log('candidates', candidates);
 
 	initSpacefinderDebugger(exclusions, winners, rules, options.pass);
 
