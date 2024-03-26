@@ -1,5 +1,41 @@
 # @guardian/commercial
 
+## 17.7.0
+
+### Minor Changes
+
+- 737a9ab: Remove dcr discussion ads switch
+
+## 17.6.0
+
+### Minor Changes
+
+- 2551e48: Enable comscore first party cookie
+
+## 17.5.0
+
+### Minor Changes
+
+- 849bb32: Update inline merch spacefinder opponentSelectorRules for sign-in-gate
+
+## 17.4.1
+
+### Patch Changes
+
+- 5c52621: adds banner to all users in mobile crosswords and another option for those in AB test
+
+## 17.4.0
+
+### Minor Changes
+
+- 6d621db: Fix a bug with spacefinder avoiding other ads on mobile
+- 6d621db: Add "high value sections" ab test, increasing ad density on articles in high value sections
+
+### Patch Changes
+
+- 6d621db: Fix bug with spacefinder avoiding sfdebug elements
+- be423b1: adds the 2x2 slot to allow the mobile-sticky to be empty
+
 ## 17.3.1
 
 ### Patch Changes

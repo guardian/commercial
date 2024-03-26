@@ -12,6 +12,9 @@ const getGlobals = (keywords: string): ComscoreGlobals => {
 		c1: comscoreC1,
 		c2: comscoreC2,
 		cs_ucfr: '1',
+		options: {
+			enableFirstPartyCookie: true,
+		},
 	};
 
 	if (keywords !== 'Network Front') {

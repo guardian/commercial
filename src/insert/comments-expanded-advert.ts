@@ -178,12 +178,6 @@ export const initCommentsExpandedAdverts = (): Promise<void> => {
 	document.addEventListener('comments-loaded', () => {
 		const currentBreakpoint = getBreakpoint(getViewport().width);
 		if (currentBreakpoint === 'mobile') {
-			if (
-				window.guardian.config.isDotcomRendering &&
-				!window.guardian.config.switches.mobileDiscussionAds
-			) {
-				return;
-			}
 			void handleCommentsLoadedMobileEvent();
 		} else {
 			void handleCommentsLoadedEvent();

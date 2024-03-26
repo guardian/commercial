@@ -24,13 +24,13 @@ export const init = (): Promise<void> => {
 		window.guardian.config.tests?.crosswordMobileBannerVariant ===
 		'variant';
 
-	if (window.guardian.config.isDotcomRendering || !isInABTest) {
+	if (window.guardian.config.isDotcomRendering) {
 		return Promise.resolve();
 	}
 
-	const anchorSelector = window.guardian.config.page.commentable
-		? '.crossword__container__below-controls + *'
-		: '.content-footer > :first-child';
+	const anchorSelector = isInABTest
+		? '.crossword__container__above-controls + *'
+		: '.crossword__container__below-controls + *';
 
 	const anchor: HTMLElement | null = document.querySelector(anchorSelector);
 
