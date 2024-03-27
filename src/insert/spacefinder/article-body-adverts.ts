@@ -61,6 +61,11 @@ const inlineAdSlotContainerRules: Record<string, RuleSpacing> = {
 	},
 };
 
+const selectors = {
+	paragraph: ':scope > p, [data-spacefinder-role="nested"] > p',
+	heading: ':scope > h2, [data-spacefinder-role="nested"] > h2',
+} as const;
+
 /**
  * Get the classname for an ad slot container
  *
@@ -140,7 +145,7 @@ const addDesktopInline1 = (): Promise<boolean> => {
 	const tweakpoint = getCurrentTweakpoint();
 	const hasLeftCol = ['leftCol', 'wide'].includes(tweakpoint);
 
-	let ignoreList = ` > :not(p):not(h2):not(ul):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.sfdebug)`;
+	let ignoreList = `:scope > :not(p):not(h2):not(ul):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.sfdebug)`;
 	if (hasLeftCol) {
 		ignoreList +=
 			':not([data-spacefinder-role="richLink"]):not([data-spacefinder-role="thumbnail"])';
@@ -150,16 +155,16 @@ const addDesktopInline1 = (): Promise<boolean> => {
 
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		candidateSelector: [' > p', ' [data-spacefinder-role="nested"] > p'],
+		candidateSelector: selectors.paragraph,
 		minAbove: isImmersive ? 700 : 300,
 		minBelow: 300,
 		opponentSelectorRules: {
 			// don't place ads right after a heading
-			' > h2': {
+			[selectors.heading]: {
 				minAboveSlot: isInAdDensityVariant ? 150 : 5,
 				minBelowSlot: isInAdDensityVariant ? 0 : 190,
 			},
-			[` .${adSlotContainerClass}`]: {
+			[`.${adSlotContainerClass}`]: {
 				minAboveSlot: 500,
 				minBelowSlot: 500,
 			},
@@ -167,11 +172,11 @@ const addDesktopInline1 = (): Promise<boolean> => {
 				minAboveSlot: 35,
 				minBelowSlot: 400,
 			},
-			' [data-spacefinder-role="immersive"]': {
+			'[data-spacefinder-role="immersive"]': {
 				minAboveSlot: 0,
 				minBelowSlot: 600,
 			},
-			' figure.element--supporting': {
+			'figure.element--supporting': {
 				minAboveSlot: 500,
 				minBelowSlot: 0,
 			},
@@ -229,12 +234,12 @@ const addDesktopRightRailAds = (): Promise<boolean> => {
 	const largestSizeForSlot = adSizes.halfPage.height;
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		candidateSelector: [' > p', ' [data-spacefinder-role="nested"] > p'],
+		candidateSelector: selectors.paragraph,
 		minAbove,
 		minBelow: 300,
 		opponentSelectorRules: {
 			...rightRailAdSlotContainerRules,
-			' [data-spacefinder-role="immersive"]': {
+			'[data-spacefinder-role="immersive"]': {
 				minAboveSlot: 0,
 				minBelowSlot: 600,
 			},
@@ -312,40 +317,30 @@ const addDesktopRightRailAds = (): Promise<boolean> => {
 const addMobileInlineAds = (): Promise<boolean> => {
 	const minDistanceFromArticleTop = isInAdDensityVariant ? 100 : 200;
 
+	const ignoreList = `:not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`;
+
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
 		candidateSelector: [
-			' > p',
-			' > h2',
-			' > [data-spacefinder-type$="NumberedTitleBlockElement"]',
-			' [data-spacefinder-role="nested"] > p',
+			selectors.paragraph,
+			selectors.heading,
+			':scope > [data-spacefinder-type$="NumberedTitleBlockElement"]',
 		],
 		minAbove: minDistanceFromArticleTop,
 		minBelow: 200,
 		opponentSelectorRules: {
 			// don't place ads right after a heading
-			' > h2': {
+			[selectors.heading]: {
 				minAboveSlot: 100,
 				minBelowSlot: 0,
 			},
-			// these are just fancy headings
-			' > [data-spacefinder-type$="NumberedTitleBlockElement"]': {
+			'[data-spacefinder-type$="NumberedTitleBlockElement"]': {
 				minAboveSlot: 100,
 				minBelowSlot: 0,
 			},
-
 			...inlineAdSlotContainerRules,
 			// this is a catch-all for elements that are not covered by the above rules, these will generally be things like videos, embeds and atoms. minBelowSlot is higher to push ads a bit further down after these elements
-			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`]:
-				{
-					minAboveSlot: 35,
-					minBelowSlot: 200,
-					// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
-					bypassMinBelow:
-						'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
-				},
-
-			[` [data-spacefinder-role="nested"] > p > :not(p):not(h2):not(.${adSlotContainerClass})`]:
+			[`:scope > ${ignoreList}, [data-spacefinder-role="nested"] > ${ignoreList}`]:
 				{
 					minAboveSlot: 35,
 					minBelowSlot: 200,
@@ -414,28 +409,28 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		candidateSelector: ' > p',
+		candidateSelector: ':scope > p',
 		minAbove: 300,
 		minBelow: 300,
 		opponentSelectorRules: {
-			' > .merch': {
+			':scope > .merch': {
 				minAboveSlot: 0,
 				minBelowSlot: 0,
 			},
-			' > header': {
+			':scope > header': {
 				minAboveSlot: isMobileOrTablet ? 300 : 700,
 				minBelowSlot: 0,
 			},
-			' > h2': {
+			':scope > h2': {
 				minAboveSlot: 100,
 				minBelowSlot: 250,
 			},
-			' > #sign-in-gate': {
+			':scope > #sign-in-gate': {
 				minAboveSlot: 0,
 				minBelowSlot: 400,
 			},
 			...inlineAdSlotContainerRules,
-			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.sfdebug)`]:
+			[`:scope > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.sfdebug)`]:
 				{
 					minAboveSlot: 200,
 					minBelowSlot: 400,

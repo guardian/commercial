@@ -448,22 +448,18 @@ const getReady = (rules: SpacefinderRules, options: SpacefinderOptions) =>
 		}
 	});
 
-const getCandidateSelector = (
-	bodySelector: string,
-	slotSelectors: string | string[],
-) => {
+const getCandidateSelector = (slotSelectors: string | string[]) => {
 	return Array.isArray(slotSelectors)
-		? slotSelectors
-				.map((selector) => `${bodySelector} ${selector}`)
-				.join(', ')
-		: `${bodySelector} ${slotSelectors}`;
+		? slotSelectors.join(', ')
+		: slotSelectors;
 };
 const getCandidates = (
 	rules: SpacefinderRules,
 	spacefinderExclusions: SpacefinderExclusions,
 ) => {
 	let candidates = query(
-		getCandidateSelector(rules.bodySelector, rules.candidateSelector),
+		getCandidateSelector(rules.candidateSelector),
+		rules.body,
 	);
 	if (rules.fromBottom) {
 		candidates.reverse();
@@ -518,8 +514,7 @@ const getMeasurements = (
 		: undefined;
 	const opponents = rules.opponentSelectorRules
 		? Object.keys(rules.opponentSelectorRules).map(
-				(selector) =>
-					[selector, query(rules.bodySelector + selector)] as const,
+				(selector) => [selector, query(selector, rules.body)] as const,
 		  )
 		: [];
 
