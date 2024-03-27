@@ -312,7 +312,38 @@ const addDesktopRightRailAds = (): Promise<boolean> => {
 const addMobileInlineAds = (): Promise<boolean> => {
 	const minDistanceFromArticleTop = isInAdDensityVariant ? 100 : 200;
 
-	const rules: SpacefinderRules = {
+	const isInMegaTestControl =
+		window.guardian.config.tests?.commercialMegaTestControl === 'control';
+
+	console.log('isInMegaTestControl', isInMegaTestControl);
+
+	const oldRules: SpacefinderRules = {
+		bodySelector: articleBodySelector,
+		candidateSelector: ' > p',
+		minAbove: 200,
+		minBelow: 200,
+		opponentSelectorRules: {
+			' > h2': {
+				minAboveSlot: 100,
+				minBelowSlot: 250,
+			},
+			...inlineAdSlotContainerRules,
+			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
+				{
+					minAboveSlot: 35,
+					minBelowSlot: 200,
+				},
+		},
+		filter: (candidate, lastWinner) => {
+			if (!lastWinner) {
+				return true;
+			}
+			const distanceBetweenAds = candidate.top - lastWinner.top;
+			return distanceBetweenAds >= minDistanceBetweenInlineAds;
+		},
+	};
+
+	const newRules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
 		candidateSelector: [
 			' > p',
@@ -357,6 +388,10 @@ const addMobileInlineAds = (): Promise<boolean> => {
 			return distanceBetweenAds >= minDistanceBetweenInlineAds;
 		},
 	};
+
+	const rules = isInMegaTestControl ? oldRules : newRules;
+
+	console.log('rules', rules);
 
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const slots = paras.map((para, i) =>
