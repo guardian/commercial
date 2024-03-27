@@ -36,10 +36,16 @@ const hasImages = !!window.guardian.config.page.lightboxImages?.images.length;
 const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
 
-const isInAdDensityVariant = isInSectionAdDensityVariant();
+const isInMegaTestControl =
+	window.guardian.config.tests?.commercialMegaTestControl === 'control';
+
+const isInAdDensityVariantOrMegaTestControl =
+	isInSectionAdDensityVariant() || isInMegaTestControl;
 
 const minDistanceBetweenRightRailAds = 500;
-const minDistanceBetweenInlineAds = isInAdDensityVariant ? 500 : 750;
+const minDistanceBetweenInlineAds = isInAdDensityVariantOrMegaTestControl
+	? 500
+	: 750;
 
 /**
  * Rules to avoid inserting ads in the right rail too close to each other
@@ -156,8 +162,8 @@ const addDesktopInline1 = (): Promise<boolean> => {
 		opponentSelectorRules: {
 			// don't place ads right after a heading
 			' > h2': {
-				minAboveSlot: isInAdDensityVariant ? 150 : 5,
-				minBelowSlot: isInAdDensityVariant ? 0 : 190,
+				minAboveSlot: isInAdDensityVariantOrMegaTestControl ? 150 : 5,
+				minBelowSlot: isInAdDensityVariantOrMegaTestControl ? 0 : 190,
 			},
 			[` .${adSlotContainerClass}`]: {
 				minAboveSlot: 500,
@@ -310,12 +316,9 @@ const addDesktopRightRailAds = (): Promise<boolean> => {
 };
 
 const addMobileInlineAds = (): Promise<boolean> => {
-	const minDistanceFromArticleTop = isInAdDensityVariant ? 100 : 200;
-
-	const isInMegaTestControl =
-		window.guardian.config.tests?.commercialMegaTestControl === 'control';
-
-	console.log('isInMegaTestControl', isInMegaTestControl);
+	const minDistanceFromArticleTop = isInAdDensityVariantOrMegaTestControl
+		? 100
+		: 200;
 
 	const oldRules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
@@ -390,8 +393,6 @@ const addMobileInlineAds = (): Promise<boolean> => {
 	};
 
 	const rules = isInMegaTestControl ? oldRules : newRules;
-
-	console.log('rules', rules);
 
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const slots = paras.map((para, i) =>
