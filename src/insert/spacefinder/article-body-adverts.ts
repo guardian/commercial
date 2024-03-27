@@ -61,11 +61,6 @@ const inlineAdSlotContainerRules: Record<string, RuleSpacing> = {
 	},
 };
 
-const selectors = {
-	paragraph: ':scope > p, [data-spacefinder-role="nested"] > p',
-	heading: ':scope > h2, [data-spacefinder-role="nested"] > h2',
-} as const;
-
 /**
  * Get the classname for an ad slot container
  *
@@ -155,12 +150,12 @@ const addDesktopInline1 = (): Promise<boolean> => {
 
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		candidateSelector: selectors.paragraph,
+		candidateSelector: ':scope > p, [data-spacefinder-role="nested"] > p',
 		minAbove: isImmersive ? 700 : 300,
 		minBelow: 300,
 		opponentSelectorRules: {
 			// don't place ads right after a heading
-			[selectors.heading]: {
+			':scope > h2, [data-spacefinder-role="nested"] > h2': {
 				minAboveSlot: isInAdDensityVariant ? 150 : 5,
 				minBelowSlot: isInAdDensityVariant ? 0 : 190,
 			},
@@ -234,7 +229,7 @@ const addDesktopRightRailAds = (): Promise<boolean> => {
 	const largestSizeForSlot = adSizes.halfPage.height;
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		candidateSelector: selectors.paragraph,
+		candidateSelector: ':scope > p, [data-spacefinder-role="nested"] > p',
 		minAbove,
 		minBelow: 300,
 		opponentSelectorRules: {
@@ -321,23 +316,17 @@ const addMobileInlineAds = (): Promise<boolean> => {
 
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		candidateSelector: [
-			selectors.paragraph,
-			selectors.heading,
-			':scope > [data-spacefinder-type$="NumberedTitleBlockElement"]',
-		],
+		candidateSelector:
+			':scope > p, :scope > h2, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"], [data-spacefinder-role="nested"] > p',
 		minAbove: minDistanceFromArticleTop,
 		minBelow: 200,
 		opponentSelectorRules: {
 			// don't place ads right after a heading
-			[selectors.heading]: {
-				minAboveSlot: 100,
-				minBelowSlot: 0,
-			},
-			'[data-spacefinder-type$="NumberedTitleBlockElement"]': {
-				minAboveSlot: 100,
-				minBelowSlot: 0,
-			},
+			':scope > h2, [data-spacefinder-role="nested"] > h2, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"]':
+				{
+					minAboveSlot: 100,
+					minBelowSlot: 0,
+				},
 			...inlineAdSlotContainerRules,
 			// this is a catch-all for elements that are not covered by the above rules, these will generally be things like videos, embeds and atoms. minBelowSlot is higher to push ads a bit further down after these elements
 			[`:scope > ${ignoreList}, [data-spacefinder-role="nested"] > ${ignoreList}`]:

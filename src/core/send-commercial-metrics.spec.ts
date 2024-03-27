@@ -115,6 +115,10 @@ beforeEach(() => {
 	jest.resetAllMocks();
 });
 
+afterEach(() => {
+	jest.spyOn(global.Math, 'random').mockRestore();
+});
+
 describe('send commercial metrics', () => {
 	Object.defineProperty(navigator, 'sendBeacon', {
 		configurable: true,
@@ -432,7 +436,7 @@ describe('send commercial metrics', () => {
 				adBlockerInUse: ADBLOCK_NOT_IN_USE,
 			});
 
-			const mathRandomSpy = jest.spyOn(Math, 'random');
+			const mathRandomSpy = jest.spyOn(global.Math, 'random');
 			mathRandomSpy.mockImplementation(() => 0.5);
 
 			expect(willSendMetrics).toEqual(false);

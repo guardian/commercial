@@ -20,7 +20,8 @@ module.exports = {
 			lodash: 'lodash-es',
 		},
 		extensions: ['.js', '.ts', '.tsx', '.jsx'],
-		symlinks: false, // Inserted to enable linking @guardian/consent-management-platform
+		// Originally inserted to enable linking @guardian/consent-management-platform, breaks pnpm build
+		// symlinks: false,
 	},
 	module: {
 		rules: [
