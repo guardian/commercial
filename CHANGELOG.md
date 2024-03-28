@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 17.7.1
+
+### Patch Changes
+
+- c272ada: Upgrade to pnpm
+
 ## 17.7.0
 
 ### Minor Changes
