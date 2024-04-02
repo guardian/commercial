@@ -60,7 +60,17 @@ const mockOnConsent = (consentState: ConsentState) =>
 	(onConsent as jest.Mock).mockReturnValueOnce(Promise.resolve(consentState));
 
 const mockGetConsentFor = (hasConsent: boolean) =>
-	(getConsentFor as jest.Mock).mockReturnValueOnce(hasConsent);
+	(getConsentFor as jest.Mock)
+		.mockReturnValueOnce(hasConsent)
+		.mockReturnValueOnce(hasConsent);
+
+const mockGetConsentForWithCustom = (
+	hasGlobalVendorConsent: boolean,
+	hasCustomVendorConsent: boolean,
+) =>
+	(getConsentFor as jest.Mock)
+		.mockReturnValueOnce(hasGlobalVendorConsent)
+		.mockReturnValueOnce(hasCustomVendorConsent);
 
 const defaultTCFv2State: TCFv2ConsentState = {
 	consents: { 1: false },
@@ -390,6 +400,57 @@ describe('init', () => {
 			'commercial',
 			expect.stringContaining('Failed to execute prebid'),
 			expect.stringContaining('Unknown framework'),
+		);
+
+		expect(prebid.initialise).not.toBeCalled();
+	});
+
+	it('should initialise Prebid in TCF when global vendor has consent and custom vendor does not', async () => {
+		expect.hasAssertions();
+
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
+		commercialFeatures.shouldLoadGoogletag = true;
+		commercialFeatures.adFree = false;
+		mockOnConsent(tcfv2WithConsent);
+		mockGetConsentForWithCustom(true, false);
+
+		await setupPrebid();
+		expect(prebid.initialise).toBeCalled();
+	});
+
+	it('should initialise Prebid in TCF when global vendor does not have consent but the custom vendor does', async () => {
+		expect.hasAssertions();
+
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
+		commercialFeatures.shouldLoadGoogletag = true;
+		commercialFeatures.adFree = false;
+		mockOnConsent(tcfv2WithConsent);
+		mockGetConsentForWithCustom(false, true);
+
+		await setupPrebid();
+		expect(prebid.initialise).toBeCalled();
+	});
+
+	it('should NOT initialise Prebid in TCF when BOTH the global vendor AND custom vendor do NOT have consent', async () => {
+		expect.hasAssertions();
+
+		window.guardian.config.switches = {
+			prebidHeaderBidding: true,
+		};
+		commercialFeatures.shouldLoadGoogletag = true;
+		commercialFeatures.adFree = false;
+		mockOnConsent(tcfv2WithConsent);
+		mockGetConsentForWithCustom(false, false);
+
+		await setupPrebid();
+		expect(log).toHaveBeenCalledWith(
+			'commercial',
+			expect.stringContaining('Failed to execute prebid'),
+			expect.stringContaining('No consent for prebid'),
 		);
 
 		expect(prebid.initialise).not.toBeCalled();

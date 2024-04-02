@@ -231,7 +231,12 @@ const appNexusBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	bidParams: (
 		slotId: string,
 		sizes: HeaderBiddingSize[],
-	): PrebidAppNexusParams => getAppNexusDirectBidParams(sizes, pageTargeting),
+	): PrebidAppNexusParams =>
+		getAppNexusDirectBidParams(
+			sizes,
+			pageTargeting,
+			stripDfpAdPrefixFrom(slotId),
+		),
 });
 
 const openxClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (

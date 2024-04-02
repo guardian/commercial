@@ -1,5 +1,134 @@
 # @guardian/commercial
 
+## 17.7.0
+
+### Minor Changes
+
+- 737a9ab: Remove dcr discussion ads switch
+
+## 17.6.0
+
+### Minor Changes
+
+- 2551e48: Enable comscore first party cookie
+
+## 17.5.0
+
+### Minor Changes
+
+- 849bb32: Update inline merch spacefinder opponentSelectorRules for sign-in-gate
+
+## 17.4.1
+
+### Patch Changes
+
+- 5c52621: adds banner to all users in mobile crosswords and another option for those in AB test
+
+## 17.4.0
+
+### Minor Changes
+
+- 6d621db: Fix a bug with spacefinder avoiding other ads on mobile
+- 6d621db: Add "high value sections" ab test, increasing ad density on articles in high value sections
+
+### Patch Changes
+
+- 6d621db: Fix bug with spacefinder avoiding sfdebug elements
+- be423b1: adds the 2x2 slot to allow the mobile-sticky to be empty
+
+## 17.3.1
+
+### Patch Changes
+
+- 08e8a48: Remove HR as candidate for mobile spacefinder
+
+## 17.3.0
+
+### Minor Changes
+
+- bece12b: Improve spacefinder's handling of ranked and list articles on mobile
+
+## 17.2.0
+
+### Minor Changes
+
+- 9baa4cb: Refresh the page when the user changes their consent
+
+## 17.1.1
+
+### Patch Changes
+
+- 501656e: bmp beta
+
+## 17.1.0
+
+### Minor Changes
+
+- 8a9bcd5: Add ads between comments on frontend-rendered pages
+
+### Patch Changes
+
+- 0ad05af: Remove top-level container from DOM when removing fronts-banner ad
+
+## 17.0.0
+
+### Major Changes
+
+- 718ede6: Update `@guardian/identity-auth` libraries
+
+## 16.1.1
+
+### Patch Changes
+
+- f692d2f: Remove/Extend expired ab tests
+
+## 16.1.0
+
+### Minor Changes
+
+- 9c47d83: Enable Prebid for desktop comments-expanded ads, and disable it for mobile comments-expanded ads.
+
+## 16.0.0
+
+### Major Changes
+
+- f3030f0: bump consent-management-platform to include final parameter in onConsentChange function
+
+## 15.2.0
+
+### Minor Changes
+
+- d285016: Add AB test to insert ads in mobile discussion
+
+## 15.1.0
+
+### Minor Changes
+
+- 307b16e: Add slot to AppNexus bidder key words
+
+## 15.0.1
+
+### Patch Changes
+
+- cbfddc3: enables prebid to work on mobile crossword banner
+
+## 15.0.0
+
+### Major Changes
+
+- b2c6622: remove redundant ad slots possible side affects to other bundles frontend and dcr
+
+### Patch Changes
+
+- b2c6622: remove redundant ad slots
+- d653a64: Improve readability of prebid consent check and log
+
+## 14.4.3
+
+### Patch Changes
+
+- 2e1a72f: Check custom Prebid vendor for consent
+
 ## 14.4.2
 
 ### Patch Changes

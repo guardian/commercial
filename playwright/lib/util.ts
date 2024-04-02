@@ -3,14 +3,14 @@ import type { UserFeaturesResponse } from '../../src/types/membership';
 
 type Stage = 'code' | 'prod' | 'dev';
 
-type ContentType = 'article' | 'liveblog' | 'front' | 'tagFront';
+type ContentType = 'article' | 'liveblog' | 'front' | 'tagPage';
 
 const normalizeStage = (stage: string): Stage =>
 	['code', 'prod', 'dev'].includes(stage) ? (stage as Stage) : 'dev';
 
 /**
  * Set the stage via environment variable STAGE
- * e.g. `STAGE=code yarn playwright test`
+ * e.g. `STAGE=code pnpm playwright test`
  */
 const getStage = (): Stage => {
 	// TODO check playwright picks up the STAGE env var
@@ -31,13 +31,13 @@ const getHost = (stage?: Stage | undefined) => {
 
 const getDcrContentType = (
 	type: ContentType,
-): 'Article' | 'Front' | 'TagFront' => {
+): 'Article' | 'Front' | 'TagPage' => {
 	switch (type) {
 		case 'front':
 			return 'Front';
 
-		case 'tagFront':
-			return 'TagFront';
+		case 'tagPage':
+			return 'TagPage';
 
 		default:
 			return 'Article';
@@ -201,7 +201,6 @@ const countLiveblogInlineSlots = async (page: Page, isMobile: boolean) => {
 	return await page.locator(locator).count();
 };
 
-// @ts-expect-error -- used when logging uncommented
 const getSlotName = (url: string) => {
 	const adRequest = new URL(url);
 	const adRequestParams = adRequest.searchParams;
@@ -224,7 +223,7 @@ const logUnfilledSlots = (page: Page) => {
 				lineItemId === '-2' ||
 				creativeId === '-2'
 			) {
-				// console.warn(`Unfilled slot: ${getSlotName(url)}`);
+				console.warn(`Unfilled slot: ${getSlotName(url)}`);
 			}
 		}
 	});

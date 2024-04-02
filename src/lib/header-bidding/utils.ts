@@ -1,8 +1,6 @@
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { createAdSize } from 'core/ad-sizes';
-import { isInVariantSynchronous } from 'experiments/ab';
-import { prebidKargo } from 'experiments/tests/prebid-kargo';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
@@ -189,8 +187,7 @@ export const shouldIncludeCriteo = (): boolean => !isInAuOrNz();
  */
 export const shouldIncludeSmart = (): boolean => isInUk() || isInRow();
 
-export const shouldIncludeKargo = (): boolean =>
-	isInUsa() && !isInVariantSynchronous(prebidKargo, 'variant');
+export const shouldIncludeKargo = (): boolean => isInUsa();
 
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>

@@ -6,3 +6,4 @@ README.md
 CHANGELOG.md
 .vscode/settings.json
 playwright-report/
+pnpm-lock.yaml

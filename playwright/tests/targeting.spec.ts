@@ -68,7 +68,7 @@ test.describe('GAM targeting', () => {
 	});
 });
 
-test.skip('Prebid targeting', () => {
+test.describe('Prebid targeting', () => {
 	test.beforeEach(async ({ page }) => {
 		return page.route(bidderURLs.criteo, (route) => {
 			const url = route.request().url();

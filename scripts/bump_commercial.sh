@@ -19,13 +19,13 @@ git checkout main
 git pull origin main
 
 git checkout -b "$BRANCH_NAME"
-yarn upgrade "$REPO@$VERSION"
+pnpm upgrade "$REPO@$VERSION"
 
 # fix the flip flopping Prebid
-yarn cache clean @guardian/prebid.js
-yarn install --force
+pnpm cache clean @guardian/prebid.js
+pnpm install --force
 
-git add package.json yarn.lock
+git add package.json pnpm-lock.yaml
 
 git commit -m "Bump commercial to $VERSION"
 

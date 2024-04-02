@@ -91,6 +91,8 @@ const getSlotSizeMapping = (name: string): SizeMapping => {
 		slotName = 'fronts-banner';
 	} else if (name.includes('external')) {
 		slotName = 'external';
+	} else if (name.includes('comments-expanded')) {
+		slotName = 'comments-expanded';
 	} else {
 		slotName = name;
 	}

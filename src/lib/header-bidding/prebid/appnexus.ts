@@ -83,6 +83,7 @@ export const getAppNexusDirectPlacementId = (
 export const getAppNexusDirectBidParams = (
 	sizes: HeaderBiddingSize[],
 	pageTargeting: PageTargeting,
+	slotId: string,
 ): AppNexusDirectBidParams => {
 	if (isInAuOrNz() && window.guardian.config.switches.prebidAppnexusInvcode) {
 		const invCode = getAppNexusInvCode(sizes);
@@ -93,13 +94,17 @@ export const getAppNexusDirectBidParams = (
 				keywords: {
 					invc: [invCode],
 					...buildAppNexusTargetingObject(pageTargeting),
+					slot: slotId,
 				},
 			};
 		}
 	}
 	return {
 		placementId: getAppNexusDirectPlacementId(sizes),
-		keywords: buildAppNexusTargetingObject(pageTargeting),
+		keywords: {
+			...buildAppNexusTargetingObject(pageTargeting),
+			slot: slotId,
+		},
 	};
 };
 

@@ -22,9 +22,8 @@ import {
 // because we only run one epic test and one banner test per pageview.
 // We memoize this because it can't change for a given pageview, and because getParticipations()
 // and isInVariantSynchronous() depend on it and these are called in many places.
-export const getSynchronousTestsToRun = memoize(() =>
-	allRunnableTests(concurrentTests),
-);
+export const getSynchronousTestsToRun: () => ReadonlyArray<Runnable<ABTest>> =
+	memoize(() => allRunnableTests(concurrentTests));
 export const getAsyncTestsToRun = (): Promise<
 	ReadonlyArray<Runnable<ABTest>>
 > => Promise.all([]).then((tests) => tests.filter(Boolean));

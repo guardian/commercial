@@ -101,13 +101,11 @@ type SlotName =
 	| 'comments'
 	| 'crossword-banner'
 	| 'crossword-banner-mobile'
-	| 'epic'
 	| 'exclusion'
 	| 'external'
 	| 'fronts-banner'
 	| 'im'
 	| 'inline'
-	| 'merchandising-high-lucky'
 	| 'merchandising-high'
 	| 'merchandising'
 	| 'mobile-sticky'
@@ -248,7 +246,8 @@ const slotSizeMappings = {
 		],
 	},
 	'comments-expanded': {
-		mobile: [
+		mobile: [adSizes.mpu, adSizes.empty],
+		desktop: [
 			adSizes.outOfPage,
 			adSizes.empty,
 			adSizes.mpu,
@@ -286,6 +285,7 @@ const slotSizeMappings = {
 		],
 	},
 	'fronts-banner': {
+		tablet: [adSizes.empty, adSizes.leaderboard],
 		desktop: [
 			adSizes.outOfPage,
 			adSizes.empty,
@@ -358,9 +358,6 @@ const slotSizeMappings = {
 			adSizes.billboard,
 		],
 	},
-	'merchandising-high-lucky': {
-		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.fluid],
-	},
 	merchandising: {
 		mobile: [
 			adSizes.outOfPage,
@@ -389,11 +386,8 @@ const slotSizeMappings = {
 	carrot: {
 		mobile: [adSizes.fluid],
 	},
-	epic: {
-		mobile: [adSizes.fluid],
-	},
 	'mobile-sticky': {
-		mobile: [adSizes.mobilesticky],
+		mobile: [adSizes.mobilesticky, adSizes.empty],
 	},
 	'crossword-banner-mobile': {
 		mobile: [adSizes.mobilesticky],
