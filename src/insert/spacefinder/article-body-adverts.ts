@@ -6,7 +6,6 @@ import {
 	createAdSlot,
 	wrapSlotInContainer,
 } from 'core/create-ad-slot';
-import { isInSectionAdDensityVariant } from 'experiments/utils';
 import { spaceFiller } from 'insert/spacefinder/space-filler';
 import type {
 	RuleSpacing,
@@ -24,6 +23,7 @@ import { mediator } from '../../utils/mediator';
 import { fillDynamicAdSlot } from '../fill-dynamic-advert-slot';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
 import { initCarrot } from './carrot-traffic-driver';
+import { isInHighValueSection } from './utils';
 
 type SlotName = Parameters<typeof createAdSlot>[0];
 
@@ -39,8 +39,10 @@ const hasShowcaseMainElement =
 const isInMegaTestControl =
 	window.guardian.config.tests?.commercialMegaTestControl === 'control';
 
+const increaseAdDensity = isInHighValueSection && !isInMegaTestControl;
+
 const minDistanceBetweenRightRailAds = 500;
-const minDistanceBetweenInlineAds = isInMegaTestControl ? 750 : 500;
+const minDistanceBetweenInlineAds = increaseAdDensity ? 500 : 750;
 
 /**
  * Rules to avoid inserting ads in the right rail too close to each other
@@ -157,8 +159,8 @@ const addDesktopInline1 = (): Promise<boolean> => {
 		opponentSelectorRules: {
 			// don't place ads right after a heading
 			' > h2': {
-				minAboveSlot: !isInMegaTestControl ? 150 : 5,
-				minBelowSlot: !isInMegaTestControl ? 0 : 190,
+				minAboveSlot: increaseAdDensity ? 150 : 5,
+				minBelowSlot: increaseAdDensity ? 0 : 190,
 			},
 			[` .${adSlotContainerClass}`]: {
 				minAboveSlot: 500,
