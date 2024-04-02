@@ -369,7 +369,7 @@ class ElementsManager {
 			.map((adSlot) => {
 				const name = adSlot.getAttribute('data-name');
 
-				if (!name) {
+				if (!name || name === 'survey') {
 					log(
 						'commercial',
 						'tried to create a static advert with an invalid name',
