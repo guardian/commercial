@@ -51,6 +51,8 @@ const matchesTargeting = (
 	lineItemTargeting: Targeting | null,
 	pageTargeting: PageTargeting,
 ): boolean => {
+	console.log('lineItemTargeting', lineItemTargeting?.children);
+	console.log('pageTargeting', pageTargeting);
 	if (!lineItemTargeting) {
 		return true;
 	}
@@ -61,17 +63,37 @@ const matchesTargeting = (
 
 		return child.children[method](({ key, values, operator }) => {
 			if (keyInTargeting(key, pageTargeting)) {
+				console.log('keyInTargeting', key, pageTargeting);
 				const targetingValues = pageTargeting[key];
 				return values.some((value) => {
 					if (Array.isArray(targetingValues)) {
-						if (operator === 'IS') {
-							return targetingValues.includes(value);
+						const includes = targetingValues.includes(value);
+						if (operator === 'IS' && includes) {
+							console.log('matches', value, targetingValues);
+							return true;
+						} else if (operator === 'IS_NOT' && !includes) {
+							console.log('matches', value, targetingValues);
+							return true;
 						}
-						return !targetingValues.includes(value);
+						console.log(
+							'does not match',
+							operator,
+							value,
+							targetingValues,
+						);
+						return false;
 					}
-					if (operator === 'IS') {
-						return value === targetingValues;
+					if (operator === 'IS' && value === targetingValues) {
+						console.log('matches', value, targetingValues);
+						return true;
+					} else if (
+						operator === 'IS_NOT' &&
+						value !== targetingValues
+					) {
+						console.log('matches', value, targetingValues);
+						return true;
 					}
+					console.log('does not match', value, targetingValues);
 					return value !== targetingValues;
 				});
 			}
@@ -80,6 +102,18 @@ const matchesTargeting = (
 	});
 };
 
+const getLineItems = once(async () => {
+	const jobsMerchLineItems = (await fetch(
+		'http://localhost:3031/test.json',
+	).then((res) => res.json())) as LineItem[];
+	// const labsLineItems = (await fetch(
+	// 	'http://localhost:3031/labs-line-items.json',
+	// ).then((res) => res.json())) as LineItem[];
+	const lineItems = [jobsMerchLineItems].flat();
+
+	// const lineItems = merchLineItems;
+	return lineItems.sort((a, b) => b.priority - a.priority);
+});
 /**
  * filter line items by display targeting
  *
@@ -87,20 +121,16 @@ const matchesTargeting = (
  * @param displayTargeting
  * @returns
  */
-const findLineItems = once(async (displayTargeting: PageTargeting) => {
-	const merchLineItems = (await fetch(
-		'http://localhost:3031/line-items.json',
-	).then((res) => res.json())) as LineItem[];
-	const labsLineItems = (await fetch(
-		'http://localhost:3031/labs-line-items.json',
-	).then((res) => res.json())) as LineItem[];
-	const lineItems = [...merchLineItems, ...labsLineItems];
-	return lineItems
-		.sort((a, b) => b.priority - a.priority)
-		.filter((lineItem) => {
-			return matchesTargeting(lineItem.customTargeting, displayTargeting);
-		});
-});
+const findLineItems = async (displayTargeting: PageTargeting) => {
+	const lineItems = await getLineItems();
+	const found = lineItems.filter((lineItem) => {
+		return matchesTargeting(lineItem.customTargeting, displayTargeting);
+	});
+
+	console.log('found', found);
+
+	return found;
+};
 /**
  * filter line item creatives by display targeting
  *
