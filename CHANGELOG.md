@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 17.8.0
+
+### Minor Changes
+
+- 9831737: Add commercial mega test to evaluate the revenue effect of changes made during Q4
+
+### Patch Changes
+
+- c272ada: Upgrade to pnpm
+
 ## 17.7.0
 
 ### Minor Changes
