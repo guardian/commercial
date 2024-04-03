@@ -26,17 +26,12 @@ export const init = (): Promise<void> => {
 
 	const isInMegaTestControl =
 		window.guardian.config.tests?.commercialMegaTestControl === 'control';
+
 	if (isInMegaTestControl) {
 		return Promise.resolve();
 	}
 
-	const isInCrosswordsABTestVariant =
-		window.guardian.config.tests?.crosswordMobileBannerVariant ===
-		'variant';
-
-	const anchorSelector = isInCrosswordsABTestVariant
-		? '.crossword__container__above-controls + *'
-		: '.crossword__container__below-controls + *';
+	const anchorSelector = '.crossword__container__above-controls + *';
 
 	const anchor: HTMLElement | null = document.querySelector(anchorSelector);
 
