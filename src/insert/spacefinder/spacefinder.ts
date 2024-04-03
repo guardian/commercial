@@ -296,6 +296,10 @@ const isTopOfCandidateFarEnoughFromOpponent = (
 	return true;
 };
 
+/**
+ * These 2 sets of candidate test functions are for the changes to "ranked" articles as part of the mega test
+ */
+
 // test one element vs another for the given rules
 const newTestCandidate = (
 	rule: RuleSpacing,

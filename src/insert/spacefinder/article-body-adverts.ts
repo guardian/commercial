@@ -315,6 +315,9 @@ const addDesktopRightRailAds = (): Promise<boolean> => {
 const addMobileInlineAds = (): Promise<boolean> => {
 	const minDistanceFromArticleTop = !isInMegaTestControl ? 100 : 200;
 
+	/**
+	 * These 2 sets of rules are for the changes to "ranked" articles as part of the mega test
+	 */
 	const oldRules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
 		candidateSelector: ' > p',
