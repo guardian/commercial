@@ -13,19 +13,19 @@ To install the package, run `yarn add @guardian/commercial`.
 -   Node
     -   see [.nvmrc](../.nvmrc) for the current version
     -   the version manager [fnm](https://github.com/Schniz/fnm) is recommended with additional configuration to automatically switch on [changing directory](https://github.com/Schniz/fnm#shell-setup)
--   Yarn
+-   pnpm
 
 ### Setup
 
-To install dependencies, run `yarn`.
+To install dependencies, run `pnpm`.
 
-To develop locally, run `yarn serve` to start a local server. This will watch for changes and rebuild the bundle. Serving it at `http://localhost:3031`.
+To develop locally, run `pnpm serve` to start a local server. This will watch for changes and rebuild the bundle. Serving it at `http://localhost:3031`.
 
 ### Releasing
 
 This repository uses [changesets](https://github.com/changesets/changesets) for version management
 
-To release a new version with your changes, run `yarn changeset add` and follow the prompts. This will create a new changeset file in the `.changeset` directory. Commit this file with your PR.
+To release a new version with your changes, run `pnpm changeset add` and follow the prompts. This will create a new changeset file in the `.changeset` directory. Commit this file with your PR.
 
 When your PR is merged, changeset will analyse the changes and create a PR to release the new version.
 
@@ -60,21 +60,21 @@ Try to write PR titles in the conventional commit format, and squash and merge w
 
 1. In another terminal start the commercial dev server to serve the local bundle:
 
-    `yarn serve`
+    `pnpm serve`
 
 ### Testing locally with DCR
 
 To run the unit tests:
 
-`yarn test`
+`pnpm test`
 
 To run the Playwright e2e tests:
 
 Follow the steps above to run DCR against the local bundle.
 
-`yarn playwright:run` will run the tests on the command line
+`pnpm playwright:run` will run the tests on the command line
 
-`yarn playwright:open` will open the Playwright UI so you can inspect the tests as they run
+`pnpm playwright:open` will open the Playwright UI so you can inspect the tests as they run
 
 ### Working locally with Frontend
 
@@ -90,7 +90,7 @@ Frontend will then use the local bundle instead of the one from PROD/CODE. Front
 
 ### Linking
 
-To use the production bundle locally with Frontend, run `yarn link` in the bundle directory. Then run `yarn link @guardian/commercial` in the frontend directory. Finally, start the frontend server as usual.
+To use the production bundle locally with Frontend, run `pnpm link` in the bundle directory. Then run `yarn link @guardian/commercial` in the frontend directory. Finally, start the frontend server as usual.
 
 Frontend will then use the local bundle instead of the one from PROD/CODE.
 
@@ -98,7 +98,7 @@ Frontend will then use the local bundle instead of the one from PROD/CODE.
 
 To test the bundle on CODE, create a PR, add the `[beta] @guardian/commercial` label, this will release a beta version of the bundle to NPM, the exact version will be commented on your PR.
 
-In order to do this, first run: `yarn changeset add`, again, This will create a new changeset file in the `.changeset` directory. Commit this file with your PR.
+In order to do this, first run: `pnpm changeset add`, again, This will create a new changeset file in the `.changeset` directory. Commit this file with your PR.
 
 **Note**: Sometimes you might need to remove and re-add the label to trigger the beta version.
 

@@ -1,6 +1,6 @@
 {
 	"name": "@guardian/commercial",
-	"version": "17.7.0",
+	"version": "17.8.0",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial#readme",
 	"bugs": {
@@ -32,7 +32,7 @@
 		"prepush:test": "jest --verbose --runInBand --onlyChanged",
 		"prettier:check": "prettier . --check --cache",
 		"prettier:fix": "prettier . --write --cache",
-		"serve": "OVERRIDE_BUNDLE=true yarn webpack-dev-server -c ./webpack.config.dev.js",
+		"serve": "OVERRIDE_BUNDLE=true pnpm webpack-dev-server -c ./webpack.config.dev.js",
 		"test": "jest",
 		"tsc": "tsc --noEmit",
 		"validate": "npm-run-all tsc lint test build"
@@ -64,10 +64,10 @@
 		"@types/googletag": "~3.0.3",
 		"@types/jest": "^29.4.0",
 		"@types/lodash-es": "^4.17.6",
-		"@types/node": "20.8.0",
+		"@types/node": "20.11.30",
 		"@types/webpack-env": "^1.18.0",
-		"@typescript-eslint/eslint-plugin": "^5.59.9",
-		"@typescript-eslint/parser": "^5.59.9",
+		"@typescript-eslint/eslint-plugin": "5.59.9",
+		"@typescript-eslint/parser": "5.59.9",
 		"babel-core": "^7.0.0-bridge.0",
 		"babel-jest": "^29.4.0",
 		"babel-loader": "^9.1.0",
@@ -121,8 +121,8 @@
 	"prettier": "@guardian/prettier",
 	"lint-staged": {
 		"src/**/*.(js|ts)": [
-			"yarn eslint --fix",
-			"yarn prettier:fix"
+			"pnpm eslint --fix",
+			"pnpm prettier:fix"
 		]
 	},
 	"publishConfig": {
@@ -139,5 +139,6 @@
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"
-	]
+	],
+	"packageManager": "pnpm@8.15.5"
 }
