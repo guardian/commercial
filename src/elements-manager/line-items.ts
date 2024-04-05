@@ -25,6 +25,11 @@ interface Creative {
 	assetUrl: string;
 }
 
+interface DeviceTargeting {
+	targeted: Array<PageTargeting['bp']>;
+	excluded: Array<PageTargeting['bp']>;
+}
+
 interface LineItem {
 	id: number;
 	name: string;
@@ -32,6 +37,7 @@ interface LineItem {
 	endDateTime: string | null;
 	customTargeting: Targeting | null;
 	geoTargeting: string[] | null;
+	deviceTargeting: DeviceTargeting;
 	priority: number;
 	creatives: Creative[];
 }
@@ -47,18 +53,17 @@ const keyInTargeting = (
 // 	return Array.isArray(value) && value.every((v) => typeof v === 'string');
 // };
 
-const matchesTargeting = (
-	lineItemTargeting: Targeting | null,
+const matchesCustomTargeting = (
+	customTargeting: Targeting | null,
 	pageTargeting: PageTargeting,
 ): boolean => {
-	console.log('lineItemTargeting', lineItemTargeting?.children);
+	console.log('lineItemTargeting', customTargeting?.children);
 	console.log('pageTargeting', pageTargeting);
-	if (!lineItemTargeting) {
+	if (!customTargeting) {
 		return true;
 	}
-	const method =
-		lineItemTargeting.logicalOperator === 'OR' ? 'some' : 'every';
-	return lineItemTargeting.children[method]((child) => {
+	const method = customTargeting.logicalOperator === 'OR' ? 'some' : 'every';
+	return customTargeting.children[method]((child) => {
 		const method = child.logicalOperator === 'OR' ? 'some' : 'every';
 
 		return child.children[method](({ key, values, operator }) => {
@@ -102,14 +107,21 @@ const matchesTargeting = (
 	});
 };
 
+const matchesDeviceTargeting = (
+	deviceTargeting: DeviceTargeting,
+	bp: PageTargeting['bp'],
+): boolean => {
+	const { targeted, excluded } = deviceTargeting;
+	const isTargeted = targeted.includes(bp);
+	const isExcluded = excluded.includes(bp);
+	return isTargeted && !isExcluded;
+};
+
 const getLineItems = once(async () => {
-	const jobsMerchLineItems = (await fetch(
-		'http://localhost:3031/test.json',
-	).then((res) => res.json())) as LineItem[];
-	// const labsLineItems = (await fetch(
-	// 	'http://localhost:3031/labs-line-items.json',
-	// ).then((res) => res.json())) as LineItem[];
-	const lineItems = [jobsMerchLineItems].flat();
+	const house = (await fetch('http://localhost:3031/house.json').then((res) =>
+		res.json(),
+	)) as LineItem[];
+	const lineItems = [house].flat();
 
 	// const lineItems = merchLineItems;
 	return lineItems.sort((a, b) => b.priority - a.priority);
@@ -124,7 +136,16 @@ const getLineItems = once(async () => {
 const findLineItems = async (displayTargeting: PageTargeting) => {
 	const lineItems = await getLineItems();
 	const found = lineItems.filter((lineItem) => {
-		return matchesTargeting(lineItem.customTargeting, displayTargeting);
+		return (
+			matchesCustomTargeting(
+				lineItem.customTargeting,
+				displayTargeting,
+			) &&
+			matchesDeviceTargeting(
+				lineItem.deviceTargeting,
+				displayTargeting.bp,
+			)
+		);
 	});
 
 	console.log('found', found);

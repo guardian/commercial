@@ -38,9 +38,11 @@ const findCreative = async (
 		await findLineItems(pageTargeting)
 	).filter((lineItem) => lineItem.creatives.length > 0);
 
+	const slot = pageTargeting.slot as string;
+
 	log(
 		'commercial',
-		`Found ${matchingLineItemsAndCreatives.length} line items for ${pageTargeting.slot}`,
+		`Found ${matchingLineItemsAndCreatives.length} line items for ${slot}`,
 	);
 
 	console.log(
@@ -54,7 +56,10 @@ const findCreative = async (
 	const lineItem = pickLineItem(matchingLineItemsAndCreatives);
 
 	if (!lineItem) {
-		log('commercial', `No line items found for ${pageTargeting.slot}`);
+		log(
+			'commercial',
+			`No line items found for ${pageTargeting.slot as string}`,
+		);
 		return;
 	}
 
@@ -86,7 +91,9 @@ const findCreative = async (
 
 	log(
 		'commercial',
-		`Found ${creatives.length} creatives for ${pageTargeting.slot}`,
+		`Found ${creatives.length} creatives for ${
+			pageTargeting.slot as string
+		}`,
 	);
 
 	const randomIndex = Math.floor(Math.random() * creatives.length);
