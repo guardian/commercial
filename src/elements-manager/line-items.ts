@@ -14,10 +14,7 @@ interface Targeting {
 }
 interface Creative {
 	id: number;
-	size: {
-		width: number;
-		height: number;
-	};
+	size: [number, number];
 	type: 'image' | 'template';
 	name: string;
 	primaryImageAsset?: string;
@@ -37,7 +34,7 @@ interface LineItem {
 	endDateTime: string | null;
 	customTargeting: Targeting | null;
 	geoTargeting: string[] | null;
-	deviceTargeting: DeviceTargeting;
+	deviceTargeting: DeviceTargeting | null;
 	priority: number;
 	creatives: Creative[];
 }
@@ -53,64 +50,113 @@ const keyInTargeting = (
 // 	return Array.isArray(value) && value.every((v) => typeof v === 'string');
 // };
 
+// eslint-disable-next-line prefer-const -- asdf
+let debugCustomTargeting: true | false = true;
+
 const matchesCustomTargeting = (
 	customTargeting: Targeting | null,
 	pageTargeting: PageTargeting,
 ): boolean => {
-	console.log('lineItemTargeting', customTargeting?.children);
-	console.log('pageTargeting', pageTargeting);
+	// console.log('lineItemTargeting', customTargeting?.children);
+	// console.log('pageTargeting', pageTargeting);
 	if (!customTargeting) {
 		return true;
 	}
 	const method = customTargeting.logicalOperator === 'OR' ? 'some' : 'every';
-	return customTargeting.children[method]((child) => {
+	console.log('1st method', method);
+	const firstLevelMatches = customTargeting.children[method]((child) => {
 		const method = child.logicalOperator === 'OR' ? 'some' : 'every';
 
-		return child.children[method](({ key, values, operator }) => {
-			if (keyInTargeting(key, pageTargeting)) {
-				console.log('keyInTargeting', key, pageTargeting);
+		console.log('2nd method', method);
+
+		const secondLevelMatches = child.children[method](
+			({ key, values, operator }) => {
+				// if (keyInTargeting(key, pageTargeting)) {
+				// console.log('keyInTargeting', key, pageTargeting);
 				const targetingValues = pageTargeting[key];
 				return values.some((value) => {
 					if (Array.isArray(targetingValues)) {
 						const includes = targetingValues.includes(value);
-						if (operator === 'IS' && includes) {
-							console.log('matches', value, targetingValues);
-							return true;
-						} else if (operator === 'IS_NOT' && !includes) {
-							console.log('matches', value, targetingValues);
+						if (
+							(operator === 'IS' && includes) ||
+							(operator === 'IS_NOT' && !includes)
+						) {
+							debugCustomTargeting &&
+								console.log(
+									'✅ ',
+									key,
+									': ',
+									value,
+									operator,
+									'IN',
+									targetingValues,
+								);
 							return true;
 						}
-						console.log(
-							'does not match',
-							operator,
-							value,
-							targetingValues,
-						);
+						debugCustomTargeting &&
+							console.log(
+								'❌ ',
+								key,
+								': ',
+								value,
+								operator,
+								'IN',
+								targetingValues,
+							);
 						return false;
 					}
-					if (operator === 'IS' && value === targetingValues) {
-						console.log('matches', value, targetingValues);
-						return true;
-					} else if (
-						operator === 'IS_NOT' &&
-						value !== targetingValues
+					if (
+						(operator === 'IS' && value === targetingValues) ||
+						(operator === 'IS_NOT' && value !== targetingValues)
 					) {
-						console.log('matches', value, targetingValues);
+						debugCustomTargeting &&
+							console.log(
+								'✅ ',
+								key,
+								': ',
+								value,
+
+								operator,
+
+								targetingValues,
+							);
 						return true;
 					}
-					console.log('does not match', value, targetingValues);
-					return value !== targetingValues;
+					debugCustomTargeting &&
+						console.log(
+							'❌ ',
+							key,
+							': ',
+							value,
+
+							operator,
+
+							targetingValues,
+						);
+					return false;
 				});
-			}
-			return true;
-		});
+				// }
+				// return false;
+			},
+		);
+
+		console.log('secondLevelMatches', secondLevelMatches);
+
+		return secondLevelMatches;
 	});
+
+	console.log('firstLevelMatches', firstLevelMatches);
+
+	return firstLevelMatches;
 };
 
 const matchesDeviceTargeting = (
-	deviceTargeting: DeviceTargeting,
+	deviceTargeting: DeviceTargeting | null,
 	bp: PageTargeting['bp'],
 ): boolean => {
+	if (!deviceTargeting) {
+		return true;
+	}
 	const { targeted, excluded } = deviceTargeting;
 	const isTargeted = targeted.includes(bp);
 	const isExcluded = excluded.includes(bp);
@@ -121,7 +167,18 @@ const getLineItems = once(async () => {
 	const house = (await fetch('http://localhost:3031/house.json').then((res) =>
 		res.json(),
 	)) as LineItem[];
-	const lineItems = [house].flat();
+	const house2 = (await fetch('http://localhost:3031/house2.json').then(
+		(res) => res.json(),
+	)) as LineItem[];
+	const merch = (await fetch('http://localhost:3031/merch.json').then((res) =>
+		res.json(),
+	)) as LineItem[];
+
+	const lineItems = [house, house2, merch].flat();
+
+	// const lineItems = (await fetch('http://localhost:3031/test.json').then(
+	// 	(res) => res.json(),
+	// )) as LineItem[];
 
 	// const lineItems = merchLineItems;
 	return lineItems.sort((a, b) => b.priority - a.priority);
@@ -147,8 +204,6 @@ const findLineItems = async (displayTargeting: PageTargeting) => {
 			)
 		);
 	});
-
-	console.log('found', found);
 
 	return found;
 };

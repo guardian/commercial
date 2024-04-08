@@ -45,13 +45,13 @@ const findCreative = async (
 		`Found ${matchingLineItemsAndCreatives.length} line items for ${slot}`,
 	);
 
-	console.log(
-		matchingLineItemsAndCreatives.map((x) => ({
-			id: x.id,
-			priority: x.priority,
-			name: x.name,
-		})),
-	);
+	// console.log(
+	// 	matchingLineItemsAndCreatives.map((x) => ({
+	// 		id: x.id,
+	// 		priority: x.priority,
+	// 		name: x.name,
+	// 	})),
+	// );
 
 	const lineItem = pickLineItem(matchingLineItemsAndCreatives);
 
@@ -68,11 +68,13 @@ const findCreative = async (
 		`Selected line item ${lineItem.id} with priority ${lineItem.priority}`,
 	);
 
+	log('commercial', 'Selected line item', lineItem);
+
 	const creatives = lineItem.creatives.filter((creative) => {
 		return sizes.some((size) => {
 			return (
-				creative.size.width === size.width &&
-				creative.size.height === size.height
+				creative.size[0] === size.width &&
+				creative.size[1] === size.height
 			);
 		});
 	});

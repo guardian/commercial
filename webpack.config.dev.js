@@ -50,14 +50,14 @@ module.exports = webpackMerge.smart(config, {
 			directory: path.join(__dirname, 'static'),
 		},
 		allowedHosts: 'all',
-		watchFiles: [
-			path.join(__dirname, 'src'),
-		],
+		watchFiles: [path.join(__dirname, 'src')],
 
 		headers: {
-			"Access-Control-Allow-Origin": "*",
-			"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-			"Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
-		  }
+			'Access-Control-Allow-Origin': '*',
+			'Access-Control-Allow-Methods':
+				'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+			'Access-Control-Allow-Headers':
+				'X-Requested-With, content-type, Authorization',
+		},
 	},
 });

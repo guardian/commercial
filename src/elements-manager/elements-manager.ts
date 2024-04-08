@@ -140,9 +140,7 @@ class Ad {
 	isRendered = false;
 
 	get isFluid(): boolean {
-		return (
-			this.creative?.size.width === 1 && this.creative.size.height === 1
-		);
+		return this.creative?.size[0] === 1 && this.creative.size[1] === 1;
 	}
 
 	public constructor(
@@ -174,21 +172,21 @@ class Ad {
 	private async addImageElement(
 		assetUrl: string,
 		destinationUrl: string,
-		size: { width: number; height: number },
+		size: [number, number],
 	) {
 		const img = document.createElement('img');
-		const container = document.createElement('div');
+		// const container = document.createElement('div');
 
 		const addImage = new Promise<void>((resolve) => {
 			img.onload = () => {
-				container.classList.add('ad-slot--rendered');
+				this.slotElement.classList.add('ad-slot--rendered');
 				resolve();
 			};
 		});
 		img.src = assetUrl;
 		img.alt = 'Advertisement';
-		img.width = size.width;
-		img.height = size.height;
+		img.width = size[0];
+		img.height = size[1];
 
 		const anchor = document.createElement('a');
 		anchor.href = destinationUrl;
@@ -196,33 +194,30 @@ class Ad {
 		anchor.rel = 'noopener noreferrer';
 		anchor.appendChild(img);
 
-		container.classList.add('ad-slot');
-		if (size.width === 0 && size.height === 0) {
-			container.classList.add('ad-slot--fluid');
+		// container.classList.add('ad-slot');
+		if (size[0] === 0 && size[1] === 0) {
+			this.slotElement.classList.add('ad-slot--fluid');
 		}
-		container.style.margin = '0 auto';
-		container.style.maxWidth = '100%';
-		container.style.width = `${img.width}px`;
+		// container.style.margin = '0 auto';
+		// container.style.maxWidth = '100%';
+		// container.style.width = `${img.width}px`;
 
-		container.appendChild(anchor);
+		// this.slotElement.appendChild(anchor);
 
 		void addContainerClass(this.slotElement, true);
 
 		await fastdom.mutate(() => {
-			this.slotElement.appendChild(container);
+			this.slotElement.appendChild(anchor);
 		});
 
 		await addImage;
 	}
 
-	private async addTemplateElement(
-		assetUrl: string,
-		size: { width: number; height: number },
-	) {
+	private async addTemplateElement(assetUrl: string, size: [number, number]) {
 		const iframe = document.createElement('iframe');
 		iframe.src = assetUrl;
-		iframe.width = size.width === 1 ? '100%' : `${size.width}px`;
-		iframe.height = size.height === 1 ? '250px' : `${size.height}px`;
+		iframe.width = size[0] === 1 ? '100%' : `${size[0]}px`;
+		iframe.height = size[1] === 1 ? '250px' : `${size[1]}px`;
 		iframe.style.border = 'none';
 
 		void addContainerClass(this.slotElement, true);
@@ -236,7 +231,7 @@ class Ad {
 		type: 'image' | 'template',
 		assetUrl: string,
 		destinationUrl: string,
-		size: { width: number; height: number },
+		size: [number, number],
 	) {
 		if (this.isFluid) {
 			this.slotElement.classList.add('ad-slot--fluid');
@@ -294,7 +289,7 @@ class Ad {
 		this.creative = creative;
 
 		// 2x2 is a special size that means "no ad"
-		if (size.width === 2 && size.height === 2) {
+		if (size[0] === 2 && size[1] === 2) {
 			return;
 		}
 
@@ -384,4 +379,18 @@ class ElementsManager {
 	}
 }
 
-export { ElementsManager };
+const createAdvert = (
+	name: string,
+	element: HTMLElement,
+	targeting?: SlotTargeting,
+) => {
+	const ad = ElementsManager.elementsManager?.createAdvert(
+		name,
+		element,
+		targeting,
+	);
+
+	void ad?.display();
+};
+
+export { ElementsManager, createAdvert };
