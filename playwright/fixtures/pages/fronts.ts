@@ -60,7 +60,6 @@ const frontWithPageSkin: Front = {
 	section: 'uk',
 };
 
-// This is a tag front, not supported by DCR yet, we can use prod and
 const frontWithExclusion: Front = {
 	path: getTestUrl({
 		stage,
