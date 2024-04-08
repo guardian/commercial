@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { frontWithExclusion } from '../fixtures/pages/fronts';
 import { cmpAcceptAll } from '../lib/cmp';
+import { waitForGAMRequestForSlot } from '../lib/gam';
 import { loadPage } from '../lib/load-page';
 
 const { path } = frontWithExclusion;
@@ -13,8 +14,12 @@ test.describe('Exclusion targeting', () => {
 
 		await cmpAcceptAll(page);
 
+		await waitForGAMRequestForSlot(page, 'top-above-nav');
+
 		expect(
-			await page.locator('.top-banner-ad-container').isVisible(),
+			await page.locator('.top-banner-ad-container').isVisible({
+				timeout: 3000,
+			}),
 		).toBeFalsy();
 	});
 });
