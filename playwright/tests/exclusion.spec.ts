@@ -18,7 +18,6 @@ test.describe('Exclusion targeting', () => {
 
 		const response = await gamResponse;
 
-		// check single request mode
 		const matched = await assertHeader(
 			response,
 			'google-lineitem-id',
