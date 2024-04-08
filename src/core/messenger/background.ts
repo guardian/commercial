@@ -229,6 +229,11 @@ const setupBackground = async (
 				video.style.height = '100%';
 				video.style.transform = 'translate(-50%, -50%)';
 				background.appendChild(video);
+
+				video.ontimeupdate = function () {
+					const percent = 100 * (video.currentTime / video.duration);
+					console.log(`${percent}% complete`);
+				};
 			}
 		} else {
 			adSlot.insertBefore(backgroundParent, adSlot.firstChild);
