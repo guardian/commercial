@@ -19,8 +19,6 @@ import {
 } from 'lib/detect/detect-breakpoint';
 import { waitForAdvert } from '../../lib/dfp/wait-for-advert';
 import fastdom from '../../utils/fastdom-promise';
-import { mediator } from '../../utils/mediator';
-import { fillDynamicAdSlot } from '../fill-dynamic-advert-slot';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
 import { initCarrot } from './carrot-traffic-driver';
 import { isInHighValueSection } from './utils';
@@ -77,14 +75,13 @@ const inlineAdSlotContainerRules: Record<string, RuleSpacing> = {
 const getStickyContainerClassname = (i: number) =>
 	`${adSlotContainerClass}-${i + 2}`;
 
-const insertAdAtPara = (
+const insertSlotAtPara = async (
 	para: Node,
 	name: string,
 	type: SlotName,
 	classes?: string,
-	sizes?: SizeMapping,
 	containerOptions: ContainerOptions = {},
-): Promise<void> => {
+): Promise<HTMLElement> => {
 	const ad = createAdSlot(type, {
 		name,
 		classes,
@@ -92,17 +89,21 @@ const insertAdAtPara = (
 
 	const node = wrapSlotInContainer(ad, containerOptions);
 
-	return fastdom
-		.mutate(() => {
-			if (para.parentNode) {
-				para.parentNode.insertBefore(node, para);
-			}
-		})
-		.then(async () => {
-			const shouldForceDisplay = ['im', 'carrot'].includes(name);
-			await fillDynamicAdSlot(ad, shouldForceDisplay, sizes);
-		});
+	await fastdom.mutate(() => {
+		if (para.parentNode) {
+			para.parentNode.insertBefore(node, para);
+		}
+	});
+
+	return ad;
 };
+
+type FillAdSlot = (
+	name: string,
+	slot: HTMLElement,
+	/* additional sizes to be added to the slot (used only by googletag) */
+	additionalSizes?: SizeMapping,
+) => Promise<void>;
 
 /**
  * Decide whether we have enough space to add additional sizes for a given advert.
@@ -139,7 +140,7 @@ const decideAdditionalSizes = async (
 	);
 };
 
-const addDesktopInline1 = (): Promise<boolean> => {
+const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 	const tweakpoint = getCurrentTweakpoint();
 	const hasLeftCol = ['leftCol', 'wide'].includes(tweakpoint);
 
@@ -190,13 +191,9 @@ const addDesktopInline1 = (): Promise<boolean> => {
 
 	const insertAd: SpacefinderWriter = async (paras) => {
 		const slots = paras.slice(0, 1).map(async (para) => {
-			return insertAdAtPara(
-				para,
-				'inline1',
-				'inline',
-				'inline',
-				additionalSizes,
-			);
+			const name = 'inline1';
+			const slot = await insertSlotAtPara(para, name, 'inline', 'inline');
+			await fillSlot(name, slot, additionalSizes);
 		});
 
 		await Promise.all(slots);
@@ -212,7 +209,7 @@ const addDesktopInline1 = (): Promise<boolean> => {
 /**
  * Inserts all inline ads on desktop except for inline1.
  */
-const addDesktopRightRailAds = (): Promise<boolean> => {
+const addDesktopRightRailAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 	let minAbove = 1000;
 
 	/**
@@ -292,14 +289,15 @@ const addDesktopRightRailAds = (): Promise<boolean> => {
 				),
 			};
 
-			return insertAdAtPara(
+			const slot = await insertSlotAtPara(
 				para,
 				`inline${i + 2}`,
 				'inline',
 				'inline',
-				additionalSizes,
 				containerOptions,
 			);
+
+			return fillSlot(`inline${i + 2}`, slot, additionalSizes);
 		});
 
 		await Promise.all(slots);
@@ -312,7 +310,7 @@ const addDesktopRightRailAds = (): Promise<boolean> => {
 	});
 };
 
-const addMobileInlineAds = (): Promise<boolean> => {
+const addMobileInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 	const minDistanceFromArticleTop = !isInMegaTestControl ? 100 : 200;
 
 	/**
@@ -393,20 +391,21 @@ const addMobileInlineAds = (): Promise<boolean> => {
 	const rules = isInMegaTestControl ? oldRules : newRules;
 
 	const insertAds: SpacefinderWriter = async (paras) => {
-		const slots = paras.map((para, i) =>
-			insertAdAtPara(
-				para,
-				i === 0 ? 'top-above-nav' : `inline${i}`,
-				i === 0 ? 'top-above-nav' : 'inline',
-				'inline',
+		const slots = paras.map(async (para, i) => {
+			const name = i === 0 ? 'top-above-nav' : `inline${i}`;
+			const type = i === 0 ? 'top-above-nav' : 'inline';
+			const slot = await insertSlotAtPara(para, name, type, 'inline');
+			return fillSlot(
+				name,
+				slot,
 				// Add the mobile portrait interstitial size to inline1 and inline2
 				i == 1 || i == 2
 					? {
 							mobile: [adSizes.portraitInterstitial],
 					  }
 					: undefined,
-			),
-		);
+			);
+		});
 		await Promise.all(slots);
 	};
 
@@ -417,22 +416,31 @@ const addMobileInlineAds = (): Promise<boolean> => {
 	});
 };
 
-const addInlineAds = (): Promise<boolean> => {
+/**
+ * Add inline slots to the article body
+ * @param fillSlot A function to call that will fill the slot when each ad slot has been inserted,
+ * these could be google display ads or opt opt consentless ads.
+ */
+const addInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 	const isMobile = getCurrentBreakpoint() === 'mobile';
 	if (isMobile) {
-		return addMobileInlineAds();
+		return addMobileInlineAds(fillSlot);
 	}
 
 	if (isPaidContent) {
-		return addDesktopRightRailAds();
+		return addDesktopRightRailAds(fillSlot);
 	}
 
 	// Add the rest of the inline ad slots after a position for inline1 has been found.
 	// We don't wan't inline1 and inline2 targeting the same paragraph.
-	return addDesktopInline1().then(() => addDesktopRightRailAds());
+	return addDesktopInline1(fillSlot).then(() =>
+		addDesktopRightRailAds(fillSlot),
+	);
 };
 
-const attemptToAddInlineMerchAd = (): Promise<boolean> => {
+const attemptToAddInlineMerchAd = (
+	fillAdSlot: FillAdSlot,
+): Promise<boolean> => {
 	const breakpoint = getCurrentBreakpoint();
 	const isMobileOrTablet = breakpoint === 'mobile' || breakpoint === 'tablet';
 
@@ -467,22 +475,17 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 		},
 	};
 
-	const insertAds: SpacefinderWriter = (paras) => {
+	const insertAds: SpacefinderWriter = async (paras) => {
 		if (typeof paras[0] === 'undefined') {
 			throw new Error(
 				'Trying to insert inline merch before a node that does not exist',
 			);
 		}
-		return insertAdAtPara(
-			paras[0],
-			'im',
-			'im',
-			'',
-			{},
-			{
-				className: 'ad-slot-container--im',
-			},
-		);
+		const slot = await insertSlotAtPara(paras[0], 'im', 'im', '', {
+			className: 'ad-slot-container--im',
+		});
+
+		await fillAdSlot('im', slot);
 	};
 
 	return spaceFiller.fillSpace(rules, insertAds, {
@@ -492,34 +495,22 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 	});
 };
 
-const doInit = async (): Promise<boolean> => {
+const init = async (fillAdSlot: FillAdSlot): Promise<boolean> => {
 	if (!commercialFeatures.articleBodyAdverts) {
 		return Promise.resolve(false);
 	}
 
 	const im = window.guardian.config.page.hasInlineMerchandise
-		? attemptToAddInlineMerchAd()
+		? attemptToAddInlineMerchAd(fillAdSlot)
 		: Promise.resolve(false);
 	const inlineMerchAdded = await im;
 	if (inlineMerchAdded) await waitForAdvert('dfp-ad--im');
 
-	await addInlineAds();
+	await addInlineAds(fillAdSlot);
 
 	await initCarrot();
 
 	return im;
 };
 
-/**
- * Initialise article body ad slots
- */
-export const init = (): Promise<boolean> => {
-	// Also init when the main article is redisplayed
-	// For instance by the signin gate.
-	mediator.on('page:article:redisplayed', doInit);
-	// DCR doesn't have mediator, so listen for CustomEvent
-	document.addEventListener('article:sign-in-gate-dismissed', () => {
-		void doInit();
-	});
-	return doInit();
-};
+export { init, addInlineAds, type FillAdSlot };
