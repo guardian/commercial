@@ -26,13 +26,17 @@ const defineSlot = (
 
 	const filledCallback: OptOutFilledCallback = (
 		_adSlot,
-		{ width, height },
+		{ width, height, optOutExt },
 	) => {
 		log('commercial', `Filled consentless ${slotId}`);
 
 		const isFluid = width === 1 && height === 1;
 		if (isFluid) {
 			slot.classList.add('ad-slot--fluid');
+		}
+
+		if (optOutExt.tags.includes('NATIVE')) {
+			slot.classList.add('ad-slot--native');
 		}
 
 		void renderConsentlessAdvertLabel(slot);
