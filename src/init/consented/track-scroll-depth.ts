@@ -1,5 +1,4 @@
-import { onConsent } from '@guardian/consent-management-platform';
-import { log } from '@guardian/libs';
+import { log, onConsent } from '@guardian/libs';
 import { initTrackScrollDepth } from 'core/track-scroll-depth';
 
 /**

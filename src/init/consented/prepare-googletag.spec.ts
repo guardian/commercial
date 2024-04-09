@@ -1,9 +1,5 @@
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { loadScript } from '@guardian/libs';
+import type { ConsentState } from '@guardian/libs';
+import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
 import type * as AdSizesType from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
 import _config from 'lib/config';
@@ -125,6 +121,12 @@ jest.mock('@guardian/libs', () => {
 			'@guardian/libs',
 		),
 		loadScript: jest.fn(() => Promise.resolve()),
+		onConsent: jest.fn(),
+		getConsentFor: jest.fn(),
+		cmp: {
+			hasInitialised: jest.fn(),
+			willShowPrivacySync: jest.fn(),
+		},
 	};
 });
 jest.mock(
@@ -139,14 +141,7 @@ jest.mock('lib/analytics/beacon', () => ({
 jest.mock('display/load-advert', () => ({
 	loadAdvert: jest.fn(),
 }));
-jest.mock('@guardian/consent-management-platform', () => ({
-	onConsent: jest.fn(),
-	getConsentFor: jest.fn(),
-	cmp: {
-		hasInitialised: jest.fn(),
-		willShowPrivacySync: jest.fn(),
-	},
-}));
+
 jest.mock('./prepare-prebid', () => ({
 	setupPrebidOnce: jest
 		.fn()

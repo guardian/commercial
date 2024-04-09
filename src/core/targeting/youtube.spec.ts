@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import type { ConsentState } from '@guardian/libs';
 import { buildPageTargeting } from './build-page-targeting';
 import { buildAdsConfigWithConsent } from './youtube';
 
