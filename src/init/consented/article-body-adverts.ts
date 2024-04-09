@@ -23,10 +23,6 @@ const fillAdSlot: FillAdSlot = async (
  * Initialise article body ad slots
  */
 const initArticleBodyAdverts = () => {
-	// Also init when the main article is redisplayed
-	// For instance by the signin gate.
-	mediator.on('page:article:redisplayed', () => initSpacefinder(fillAdSlot));
-	// DCR doesn't have mediator, so listen for CustomEvent
 	document.addEventListener('article:sign-in-gate-dismissed', () => {
 		void initSpacefinder(fillAdSlot);
 	});
