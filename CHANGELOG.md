@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 17.9.0
+
+### Minor Changes
+
+- 63ff467: collapse top-above-nav container when exclusion is served
+
+### Patch Changes
+
+- 03b5725: use cmp from libs
+
 ## 17.8.0
 
 ### Minor Changes
