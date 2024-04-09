@@ -4,7 +4,7 @@ import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import { defineSlot } from '../define-slot';
 
-const fillAdSlot: FillAdSlot = (name, slot) => {
+const fillConsentlessAdSlot: FillAdSlot = (name, slot) => {
 	const isMobile = getCurrentBreakpoint() === 'mobile';
 
 	const slotKind = isMobile || name === 'inline1' ? 'inline' : 'inline-right';
@@ -20,7 +20,7 @@ const initArticleInline = async (): Promise<void> => {
 		return;
 	}
 
-	await addInlineAds(fillAdSlot);
+	await addInlineAds(fillConsentlessAdSlot);
 };
 
 export { initArticleInline };

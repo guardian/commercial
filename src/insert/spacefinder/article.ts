@@ -495,6 +495,10 @@ const attemptToAddInlineMerchAd = (
 	});
 };
 
+/**
+ * Init all the article body adverts, including `im` and `carrot`
+ * @param fillAdSlot a function to fill the ad slots
+ */
 const init = async (fillAdSlot: FillAdSlot): Promise<boolean> => {
 	if (!commercialFeatures.articleBodyAdverts) {
 		return Promise.resolve(false);

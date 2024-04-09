@@ -2,7 +2,6 @@ import type { SizeMapping } from 'core';
 import { fillDynamicAdSlot } from 'insert/fill-dynamic-advert-slot';
 import type { FillAdSlot } from 'insert/spacefinder/article';
 import { init as initSpacefinder } from 'insert/spacefinder/article';
-import { mediator } from 'utils/mediator';
 
 /**
  * Fill an ad slot with a googletag advert
