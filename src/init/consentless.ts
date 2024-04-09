@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import type { ConsentState } from '@guardian/libs';
 import { initArticleInline } from 'init/consentless/dynamic/article-inline';
 import { initExclusionSlot } from 'init/consentless/dynamic/exclusion-slot';
 import { initFixedSlots } from 'init/consentless/init-fixed-slots';

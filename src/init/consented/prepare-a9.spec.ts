@@ -34,8 +34,6 @@ jest.mock('lib/header-bidding/utils', () => ({
 	isInUsRegion: () => true,
 }));
 
-jest.mock('@guardian/consent-management-platform');
-
 jest.mock('@guardian/libs');
 
 const originalUA = navigator.userAgent;

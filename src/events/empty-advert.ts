@@ -27,7 +27,8 @@ const findElementToRemove = (advertNode: HTMLElement): HTMLElement => {
 	if (
 		parent.parentElement?.classList.contains(
 			'top-fronts-banner-ad-container',
-		)
+		) ||
+		parent.parentElement?.classList.contains('top-banner-ad-container')
 	) {
 		return parent.parentElement;
 	}
@@ -35,8 +36,8 @@ const findElementToRemove = (advertNode: HTMLElement): HTMLElement => {
 	return parent;
 };
 
-const removeAdFromDom = (advert: Advert) => {
-	const elementToRemove = findElementToRemove(advert.node);
+const removeSlotFromDom = (slotElement: HTMLElement) => {
+	const elementToRemove = findElementToRemove(slotElement);
 	elementToRemove.remove();
 };
 
@@ -44,12 +45,12 @@ const emptyAdvert = (advert: Advert): void => {
 	log('commercial', `Removing empty advert: ${advert.id}`);
 	fastdom.mutate(() => {
 		window.googletag.destroySlots([advert.slot]);
-		removeAdFromDom(advert);
+		removeSlotFromDom(advert.node);
 		removeFromDfpEnv(advert);
 	});
 };
 
-export { emptyAdvert };
+export { emptyAdvert, removeSlotFromDom };
 
 export const _ = {
 	findElementToRemove,

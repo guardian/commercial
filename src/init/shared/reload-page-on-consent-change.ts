@@ -1,5 +1,5 @@
-import { onConsentChange } from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import { onConsentChange } from '@guardian/libs';
+import type { ConsentState } from '@guardian/libs';
 
 let initialConsentState: ConsentState | undefined;
 

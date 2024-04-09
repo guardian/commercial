@@ -109,6 +109,9 @@ type Measurements = {
 	opponents?: ElementDimensionMap;
 };
 
+const isInMegaTestControl =
+	window.guardian.config.tests?.commercialMegaTestControl === 'control';
+
 const query = (selector: string, context?: HTMLElement | Document) => [
 	...(context ?? document).querySelectorAll<HTMLElement>(selector),
 ];
@@ -293,8 +296,12 @@ const isTopOfCandidateFarEnoughFromOpponent = (
 	return true;
 };
 
+/**
+ * These 2 sets of candidate test functions are for the changes to "ranked" articles as part of the mega test
+ */
+
 // test one element vs another for the given rules
-const testCandidate = (
+const newTestCandidate = (
 	rule: RuleSpacing,
 	candidate: SpacefinderItem,
 	opponent: SpacefinderItem,
@@ -333,6 +340,36 @@ const testCandidate = (
 
 	return pass;
 };
+
+const oldTestCandidate = (
+	rule: RuleSpacing,
+	candidate: SpacefinderItem,
+	opponent: SpacefinderItem,
+): boolean => {
+	const isMinAbove = candidate.top - opponent.bottom >= rule.minAboveSlot;
+	const isMinBelow = opponent.top - candidate.top >= rule.minBelowSlot;
+
+	const pass = isMinAbove || isMinBelow;
+
+	if (!pass) {
+		// if the test fails, add debug information to the candidate metadata
+		const isBelow = candidate.top < opponent.top;
+		const required = isBelow ? rule.minBelowSlot : rule.minAboveSlot;
+		const actual = isBelow
+			? opponent.top - candidate.top
+			: candidate.top - opponent.bottom;
+
+		candidate.meta?.tooClose.push({
+			required,
+			actual,
+			element: opponent.element,
+		});
+	}
+
+	return pass;
+};
+
+const testCandidate = isInMegaTestControl ? oldTestCandidate : newTestCandidate;
 
 // test one element vs an array of other elements for the given rule
 const testCandidates = (

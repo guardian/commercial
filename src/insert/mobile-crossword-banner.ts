@@ -20,17 +20,18 @@ const insertCrosswordsAd = (anchor: HTMLElement) => {
 };
 
 export const init = (): Promise<void> => {
-	const isInABTest =
-		window.guardian.config.tests?.crosswordMobileBannerVariant ===
-		'variant';
-
 	if (window.guardian.config.isDotcomRendering) {
 		return Promise.resolve();
 	}
 
-	const anchorSelector = isInABTest
-		? '.crossword__container__above-controls + *'
-		: '.crossword__container__below-controls + *';
+	const isInMegaTestControl =
+		window.guardian.config.tests?.commercialMegaTestControl === 'control';
+
+	if (isInMegaTestControl) {
+		return Promise.resolve();
+	}
+
+	const anchorSelector = '.crossword__container__above-controls + *';
 
 	const anchor: HTMLElement | null = document.querySelector(anchorSelector);
 
