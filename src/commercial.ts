@@ -1,7 +1,4 @@
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
+import { getConsentFor, onConsent } from '@guardian/libs';
 import { bootCommercialWhenReady } from 'init/consented';
 import { commercialFeatures } from 'lib/commercial-features';
 

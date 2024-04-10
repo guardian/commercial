@@ -60,4 +60,14 @@ const frontWithPageSkin: Front = {
 	section: 'uk',
 };
 
-export { frontWithPageSkin, fronts, tagPages };
+const frontWithExclusion: Front = {
+	path: getTestUrl({
+		stage,
+		path: '/us-news/baltimore-bridge-collapse',
+		type: 'tagPage',
+		adtest: 'clear',
+	}),
+	section: 'us-news',
+};
+
+export { frontWithPageSkin, fronts, tagPages, frontWithExclusion };

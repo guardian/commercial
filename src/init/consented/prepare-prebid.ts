@@ -1,9 +1,5 @@
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
-import type { Framework } from '@guardian/consent-management-platform/dist/types';
-import { log } from '@guardian/libs';
+import type { ConsentFramework } from '@guardian/libs';
+import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isGoogleProxy } from 'lib/detect/detect-google-proxy';
@@ -20,7 +16,7 @@ const shouldLoadPrebid = () =>
 	!shouldIncludeOnlyA9 &&
 	!isInCanada();
 
-const loadPrebid = async (framework: Framework): Promise<void> => {
+const loadPrebid = async (framework: ConsentFramework): Promise<void> => {
 	if (shouldLoadPrebid()) {
 		await import(
 			// @ts-expect-error -- there’s no types for Prebid.js

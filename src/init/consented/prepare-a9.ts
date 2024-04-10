@@ -1,8 +1,4 @@
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
-import { log } from '@guardian/libs';
+import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { a9Apstag } from 'core/__vendor/a9-apstag';
 import { commercialFeatures } from 'lib/commercial-features';

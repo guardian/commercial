@@ -1,9 +1,6 @@
 /* A regionalised container for all the commercial tags. */
 
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
+import { getConsentFor, onConsent } from '@guardian/libs';
 import { ias } from 'core/third-party-tags/ias';
 import { inizio } from 'core/third-party-tags/inizio';
 import { permutive } from 'core/third-party-tags/permutive';

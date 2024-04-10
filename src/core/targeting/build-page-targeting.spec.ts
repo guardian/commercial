@@ -1,7 +1,5 @@
-import { cmp as cmp_ } from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import type { TCFv2ConsentState } from '@guardian/consent-management-platform/dist/types/tcfv2';
-import { setCookie, storage } from '@guardian/libs';
+import type { ConsentState, TCFv2ConsentState } from '@guardian/libs';
+import { cmp as cmp_, setCookie, storage } from '@guardian/libs';
 import { getAuthStatus as getAuthStatus_ } from 'lib/identity/api';
 import type { AuthStatus } from 'lib/identity/api';
 import { getLocale as getLocale_ } from '../lib/get-locale';
@@ -24,7 +22,9 @@ jest.mock('core/lib/get-locale', () => ({
 	getLocale: jest.fn(),
 }));
 
-jest.mock('@guardian/consent-management-platform', () => ({
+jest.mock('@guardian/libs', () => ({
+	// eslint-disable-next-line -- ESLint doesn't understand jest.requireActual
+	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
 	cmp: {
 		hasInitialised: jest.fn(),
 		willShowPrivacyMessageSync: jest.fn(),
