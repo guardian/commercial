@@ -229,6 +229,60 @@ const setupBackground = async (
 				video.style.height = '100%';
 				video.style.transform = 'translate(-50%, -50%)';
 				background.appendChild(video);
+
+				if (!window.guardian.config.switches.sentinelLogger) return;
+
+				const sendVideoProgress = () => {
+					const endpoint = window.guardian.config.page.isDev
+						? '//logs.code.dev-guardianapis.com/log'
+						: '//logs.guardianapis.com/log';
+
+					// TODO: might need to add a new variable to the template to allow us to link video data to a specific creative
+					const videoAdId = 'id_goes_here';
+
+					const event = {
+						label: 'commercial.videoadprogresstracking',
+						properties: [
+							{
+								name: 'video_ad_id',
+								value: videoAdId,
+							},
+							{
+								name: 'percent_progress',
+								value:
+									100 * (video.currentTime / video.duration),
+							},
+						],
+					};
+
+					console.log('Sending video ad progress data');
+
+					window.navigator.sendBeacon(
+						endpoint,
+						JSON.stringify(event),
+					);
+				};
+
+				const listener = (e: Event): void => {
+					switch (e.type) {
+						case 'visibilitychange':
+							if (document.visibilityState === 'hidden') {
+								sendVideoProgress();
+							}
+							return;
+						case 'pagehide':
+							sendVideoProgress();
+							return;
+					}
+				};
+
+				// Report video ad progress when the page is unloaded or in background.
+				window.addEventListener('visibilitychange', listener, {
+					once: true,
+				});
+
+				// Safari does not reliably fire the `visibilitychange` on page unload.
+				window.addEventListener('pagehide', listener, { once: true });
 			}
 		} else {
 			adSlot.insertBefore(backgroundParent, adSlot.firstChild);
