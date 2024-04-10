@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 17.10.0
+
+### Minor Changes
+
+- 426431e: Don't add an advertisement label for native templates served through opt out
+- 3f50350: Use the same spacefinder rules for both consented and consentless
+
 ## 17.9.0
 
 ### Minor Changes
