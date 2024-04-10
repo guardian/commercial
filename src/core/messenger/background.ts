@@ -230,11 +230,6 @@ const setupBackground = async (
 				video.style.transform = 'translate(-50%, -50%)';
 				background.appendChild(video);
 
-				// video.ontimeupdate = function () {
-				// 	const percent = 100 * (video.currentTime / video.duration);
-				// 	console.log(`${percent}% complete`);
-				// };
-
 				if (!window.guardian.config.switches.sentinelLogger) return;
 
 				const sendVideoProgress = () => {
