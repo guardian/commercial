@@ -14,7 +14,7 @@ const fillConsentlessAdSlot: FillAdSlot = (name, slot) => {
 	return Promise.resolve();
 };
 
-const initArticleInline = async (): Promise<void> => {
+const initArticleBodyAdverts = async (): Promise<void> => {
 	// do we need to rerun for the sign-in gate?
 	if (!commercialFeatures.articleBodyAdverts) {
 		return;
@@ -23,4 +23,4 @@ const initArticleInline = async (): Promise<void> => {
 	await addInlineAds(fillConsentlessAdSlot);
 };
 
-export { initArticleInline };
+export { initArticleBodyAdverts };
