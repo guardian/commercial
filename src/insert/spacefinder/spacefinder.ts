@@ -37,7 +37,7 @@ type SpacefinderRules = {
 	/**
 	 * Selector(s) for the elements that we want to allow inserting ads above
 	 */
-	candidateSelector: string | string[];
+	candidateSelector: string;
 	/**
 	 * Minimum distance from slot to top of page
 	 */
@@ -485,19 +485,12 @@ const getReady = (rules: SpacefinderRules, options: SpacefinderOptions) =>
 		}
 	});
 
-const getCandidateSelector = (slotSelectors: string | string[]) => {
-	return Array.isArray(slotSelectors)
-		? slotSelectors.join(', ')
-		: slotSelectors;
-};
 const getCandidates = (
 	rules: SpacefinderRules,
 	spacefinderExclusions: SpacefinderExclusions,
 ) => {
-	let candidates = query(
-		getCandidateSelector(rules.candidateSelector),
-		rules.body,
-	);
+	let candidates = query(rules.candidateSelector, rules.body);
+
 	if (rules.fromBottom) {
 		candidates.reverse();
 	}
@@ -606,8 +599,6 @@ const findSpace = async (
 	const candidates = getCandidates(rules, exclusions);
 	const measurements = await getMeasurements(rules, candidates);
 	const winners = enforceRules(measurements, rules, exclusions);
-
-	console.log('candidates', candidates);
 
 	initSpacefinderDebugger(exclusions, winners, rules, options.pass);
 
