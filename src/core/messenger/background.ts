@@ -237,6 +237,7 @@ const setupBackground = async (
 						? '//logs.code.dev-guardianapis.com/log'
 						: '//logs.guardianapis.com/log';
 
+					// TODO: might need to add a new variable to the template to allow us to link video data to a specific creative
 					const videoAdId = 'id_goes_here';
 
 					const event = {
@@ -275,7 +276,7 @@ const setupBackground = async (
 					}
 				};
 
-				// Report all available metrics when the page is unloaded or in background.
+				// Report video ad progress when the page is unloaded or in background.
 				window.addEventListener('visibilitychange', listener, {
 					once: true,
 				});
