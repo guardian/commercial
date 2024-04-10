@@ -254,6 +254,8 @@ const setupBackground = async (
 						],
 					};
 
+					console.log('Sending video ad progress data');
+
 					window.navigator.sendBeacon(
 						endpoint,
 						JSON.stringify(event),
