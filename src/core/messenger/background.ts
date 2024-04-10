@@ -229,6 +229,52 @@ const setupBackground = async (
 				video.style.height = '100%';
 				video.style.transform = 'translate(-50%, -50%)';
 				background.appendChild(video);
+
+				if (!window.guardian.config.switches.sentinelLogger) return;
+
+				const sendVideoProgress = () => {
+					const endpoint = window.guardian.config.page.isDev
+						? '//logs.code.dev-guardianapis.com/log'
+						: '//logs.guardianapis.com/log';
+
+					// TODO: might need to add a new variable to the template to allow us to link video data to a specific creative
+					const videoAdId = 'testing';
+
+					const event = {
+						label: 'commercial.videoadprogresstracking',
+						properties: [
+							{
+								name: 'video_ad_id',
+								value: videoAdId,
+							},
+							{
+								name: 'percent_progress',
+								value: Math.round(
+									100 * (video.currentTime / video.duration),
+								),
+							},
+						],
+					};
+
+					console.log('Sending video ad progress data');
+
+					window.navigator.sendBeacon(
+						endpoint,
+						JSON.stringify(event),
+					);
+				};
+
+				const listener = (): void => {
+					if (document.visibilityState === 'hidden') {
+						sendVideoProgress();
+					}
+					return;
+				};
+
+				// Report video ad progress when the page is unloaded or in background.
+				window.addEventListener('visibilitychange', listener, {
+					once: true,
+				});
 			}
 		} else {
 			adSlot.insertBefore(backgroundParent, adSlot.firstChild);
