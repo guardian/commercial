@@ -238,7 +238,7 @@ const setupBackground = async (
 						: '//logs.guardianapis.com/log';
 
 					// TODO: might need to add a new variable to the template to allow us to link video data to a specific creative
-					const videoAdId = 'id_goes_here';
+					const videoAdId = 'testing';
 
 					const event = {
 						label: 'commercial.videoadprogresstracking',
@@ -249,8 +249,9 @@ const setupBackground = async (
 							},
 							{
 								name: 'percent_progress',
-								value:
+								value: Math.round(
 									100 * (video.currentTime / video.duration),
+								),
 							},
 						],
 					};
@@ -263,26 +264,17 @@ const setupBackground = async (
 					);
 				};
 
-				const listener = (e: Event): void => {
-					switch (e.type) {
-						case 'visibilitychange':
-							if (document.visibilityState === 'hidden') {
-								sendVideoProgress();
-							}
-							return;
-						case 'pagehide':
-							sendVideoProgress();
-							return;
+				const listener = (): void => {
+					if (document.visibilityState === 'hidden') {
+						sendVideoProgress();
 					}
+					return;
 				};
 
 				// Report video ad progress when the page is unloaded or in background.
 				window.addEventListener('visibilitychange', listener, {
 					once: true,
 				});
-
-				// Safari does not reliably fire the `visibilitychange` on page unload.
-				window.addEventListener('pagehide', listener, { once: true });
 			}
 		} else {
 			adSlot.insertBefore(backgroundParent, adSlot.firstChild);
