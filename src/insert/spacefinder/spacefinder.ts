@@ -2,7 +2,6 @@
 
 import { log } from '@guardian/libs';
 import { memoize } from 'lodash-es';
-import { amIUsed } from 'utils/am-i-used';
 import fastdom from 'utils/fastdom-promise';
 import { init as initSpacefinderDebugger } from './spacefinder-debug-tools';
 
@@ -132,8 +131,6 @@ const isIframeLoaded = (iframe: HTMLIFrameElement) => {
 	try {
 		return iframe.contentWindow?.document.readyState === 'complete';
 	} catch (err) {
-		// TODO remove try / catch if an error is never thrown
-		amIUsed('spacefinder.ts', 'isIframeLoaded');
 		return true;
 	}
 };
