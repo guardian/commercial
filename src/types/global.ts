@@ -125,8 +125,8 @@ interface PageConfig extends CommercialPageConfig {
 	pageId: string;
 	publication: string;
 	revisionNumber: string; // https://github.com/guardian/frontend/blob/1b6f41c3/common/app/model/meta.scala#L388
-	section: string;
-	sectionName: string;
+	section?: string;
+	sectionName?: string;
 	sentryHost: string;
 	sentryPublicApiKey: string;
 	series: string;

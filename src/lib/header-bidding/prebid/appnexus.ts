@@ -27,11 +27,11 @@ const getAppNexusInvCode = (sizes: HeaderBiddingSize[]): string | undefined => {
 	const device = getBreakpointKey() === 'M' ? 'M' : 'D';
 	// section is optional and makes it through to the config object as an empty string... OTL
 	const sectionName =
-		window.guardian.config.page.section ||
-		window.guardian.config.page.sectionName.replace(/ /g, '-');
+		window.guardian.config.page.section ??
+		window.guardian.config.page.sectionName?.replace(/ /g, '-');
 
 	const slotSize = getLargestSize(sizes);
-	if (slotSize) {
+	if (slotSize && sectionName) {
 		return `${device}${sectionName.toLowerCase()}${slotSize.join('x')}`;
 	}
 };
