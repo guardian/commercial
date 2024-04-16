@@ -1,6 +1,6 @@
 import { spaceFiller } from 'insert/spacefinder/space-filler';
 import { commercialFeatures } from 'lib/commercial-features';
-import { init } from './article-body-adverts';
+import { init } from './article';
 
 const ads = {
 	'dfp-ad--im': true,
@@ -62,8 +62,9 @@ describe('Article Body Adverts', () => {
 	});
 
 	it('should exit if commercial feature disabled', () => {
+		const fillAdSlot = jest.fn();
 		commercialFeatures.articleBodyAdverts = false;
-		return init().then(() => {
+		return init(fillAdSlot).then(() => {
 			expect(spaceFillerStub).not.toHaveBeenCalled();
 		});
 	});

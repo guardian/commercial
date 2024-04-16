@@ -1,5 +1,5 @@
 import type { ConsentState } from '@guardian/libs';
-import { initArticleInline } from 'init/consentless/dynamic/article-inline';
+import { initArticleBodyAdverts } from 'init/consentless/dynamic/article-body-adverts';
 import { initExclusionSlot } from 'init/consentless/dynamic/exclusion-slot';
 import { initFixedSlots } from 'init/consentless/init-fixed-slots';
 import { initConsentless } from 'init/consentless/prepare-ootag';
@@ -14,7 +14,7 @@ const bootConsentless = async (consentState: ConsentState): Promise<void> => {
 		initConsentless(consentState),
 		initExclusionSlot(),
 		initFixedSlots(),
-		initArticleInline(),
+		initArticleBodyAdverts(),
 		reloadPageOnConsentChange(),
 	];
 
