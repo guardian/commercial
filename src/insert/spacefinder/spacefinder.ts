@@ -294,6 +294,19 @@ const isTopOfCandidateFarEnoughFromOpponent = (
 };
 
 /**
+ * Check if 1 - the candidate is the same as the opponent or 2- if the opponent contains the candidate
+ *
+ * 1 can happen when the candidate and opponent selectors overlap
+ * 2 can happen when there are nested candidates, it may try t avoid it's own ancestor
+ */
+const bypassTestCandidate = (
+	candidate: SpacefinderItem,
+	opponent: SpacefinderItem,
+) =>
+	candidate.element === opponent.element ||
+	opponent.element.contains(candidate.element);
+
+/**
  * These 2 sets of candidate test functions are for the changes to "ranked" articles as part of the mega test
  */
 
@@ -303,10 +316,7 @@ const newTestCandidate = (
 	candidate: SpacefinderItem,
 	opponent: SpacefinderItem,
 ): boolean => {
-	if (
-		candidate.element === opponent.element ||
-		opponent.element.contains(candidate.element)
-	) {
+	if (bypassTestCandidate(candidate, opponent)) {
 		return true;
 	}
 
