@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 17.11.0
+
+### Minor Changes
+
+- 7819916: Insert ads in certain nested block elements
+
 ## 17.10.0
 
 ### Minor Changes
