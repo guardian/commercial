@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 17.12.0
+
+### Minor Changes
+
+- ecc0d04: New commercial metric for recording ad-block detection
+
 ## 17.11.0
 
 ### Minor Changes
