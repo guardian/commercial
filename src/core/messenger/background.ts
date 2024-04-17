@@ -232,20 +232,30 @@ const setupBackground = async (
 
 				if (!window.guardian.config.switches.sentinelLogger) return;
 
+				const getCreativeId = () => {
+					const slots = googletag.pubads().getSlots();
+
+					for (const slot of slots) {
+						const creativeTemplateId =
+							slot.getResponseInformation()?.creativeTemplateId;
+						if (creativeTemplateId === 11885667) {
+							return slot.getResponseInformation()?.creativeId;
+						}
+					}
+					return null;
+				};
+
 				const sendVideoProgress = () => {
 					const endpoint = window.guardian.config.page.isDev
 						? '//logs.code.dev-guardianapis.com/log'
 						: '//logs.guardianapis.com/log';
-
-					// TODO: might need to add a new variable to the template to allow us to link video data to a specific creative
-					const videoAdId = 'testing';
 
 					const event = {
 						label: 'commercial.videoadprogresstracking',
 						properties: [
 							{
 								name: 'video_ad_id',
-								value: videoAdId,
+								value: String(getCreativeId()),
 							},
 							{
 								name: 'percent_progress',
@@ -255,8 +265,6 @@ const setupBackground = async (
 							},
 						],
 					};
-
-					console.log('Sending video ad progress data');
 
 					window.navigator.sendBeacon(
 						endpoint,
