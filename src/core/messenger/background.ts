@@ -229,6 +229,60 @@ const setupBackground = async (
 				video.style.height = '100%';
 				video.style.transform = 'translate(-50%, -50%)';
 				background.appendChild(video);
+
+				if (!window.guardian.config.switches.sentinelLogger) return;
+
+				const getCreativeId = () => {
+					const slots = googletag.pubads().getSlots();
+
+					for (const slot of slots) {
+						const creativeTemplateId =
+							slot.getResponseInformation()?.creativeTemplateId;
+						if (creativeTemplateId === 11885667) {
+							return slot.getResponseInformation()?.creativeId;
+						}
+					}
+					return null;
+				};
+
+				const sendVideoProgress = () => {
+					const endpoint = window.guardian.config.page.isDev
+						? '//logs.code.dev-guardianapis.com/log'
+						: '//logs.guardianapis.com/log';
+
+					const event = {
+						label: 'commercial.videoadprogresstracking',
+						properties: [
+							{
+								name: 'video_ad_id',
+								value: String(getCreativeId()),
+							},
+							{
+								name: 'percent_progress',
+								value: Math.round(
+									100 * (video.currentTime / video.duration),
+								),
+							},
+						],
+					};
+
+					window.navigator.sendBeacon(
+						endpoint,
+						JSON.stringify(event),
+					);
+				};
+
+				const listener = (): void => {
+					if (document.visibilityState === 'hidden') {
+						sendVideoProgress();
+					}
+					return;
+				};
+
+				// Report video ad progress when the page is unloaded or in background.
+				window.addEventListener('visibilitychange', listener, {
+					once: true,
+				});
 			}
 		} else {
 			adSlot.insertBefore(backgroundParent, adSlot.firstChild);
