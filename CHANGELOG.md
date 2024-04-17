@@ -1,5 +1,24 @@
 # @guardian/commercial
 
+## 17.12.0
+
+### Minor Changes
+
+- ecc0d04: New commercial metric for recording ad-block detection
+
+## 17.11.0
+
+### Minor Changes
+
+- 7819916: Insert ads in certain nested block elements
+
+## 17.10.0
+
+### Minor Changes
+
+- 426431e: Don't add an advertisement label for native templates served through opt out
+- 3f50350: Use the same spacefinder rules for both consented and consentless
+
 ## 17.9.0
 
 ### Minor Changes
