@@ -11,8 +11,8 @@ const removeFromDfpEnv = (advert: Advert) => {
 /**
  * Find the highest element responsible for the advert.
  *
- * Sometimes an advert has an advert container
- * Sometimes that container has a top-level container
+ * Sometimes an advert has an advert container as a direct parent
+ * Sometimes that container has a top-level container ancestor
  */
 const findElementToRemove = (advertNode: HTMLElement): HTMLElement => {
 	const parent = advertNode.parentElement;
@@ -24,16 +24,15 @@ const findElementToRemove = (advertNode: HTMLElement): HTMLElement => {
 		return advertNode;
 	}
 
-	if (
-		parent.parentElement?.classList.contains(
-			'top-fronts-banner-ad-container',
-		) ||
-		parent.parentElement?.classList.contains('top-banner-ad-container')
-	) {
-		return parent.parentElement;
+	const topLevelContainer = parent.closest<HTMLElement>(
+		'.top-fronts-banner-ad-container, .top-banner-ad-container',
+	);
+
+	if (!topLevelContainer) {
+		return parent;
 	}
 
-	return parent;
+	return topLevelContainer;
 };
 
 const removeSlotFromDom = (slotElement: HTMLElement) => {
