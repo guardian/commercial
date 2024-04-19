@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 17.13.0
+
+### Minor Changes
+
+- 7b956e4: Assume less about DOM structure when finding ad container elements to remove
+
 ## 17.12.0
 
 ### Minor Changes
