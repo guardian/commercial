@@ -58,7 +58,6 @@
 		"@guardian/libs": "16.1.0",
 		"@guardian/prettier": "4.0.0",
 		"@guardian/source-foundations": "14.1.4",
-		"@guardian/support-dotcom-components": "1.0.7",
 		"@playwright/test": "1.40.1",
 		"@types/google.analytics": "^0.0.42",
 		"@types/googletag": "~3.0.3",
@@ -134,8 +133,7 @@
 		"@guardian/identity-auth": "^2.1.0",
 		"@guardian/identity-auth-frontend": "^4.0.0",
 		"@guardian/libs": "^16.1.0",
-		"@guardian/source-foundations": "^14.1.2",
-		"@guardian/support-dotcom-components": "^1.0.7"
+		"@guardian/source-foundations": "^14.1.2"
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"
