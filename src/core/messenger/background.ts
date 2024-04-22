@@ -1,4 +1,5 @@
 import { isObject } from '@guardian/libs';
+import { EventTimer } from 'core/event-timer';
 import type { RegisterListener } from 'core/messenger';
 import fastdom from 'utils/fastdom-promise';
 import {
@@ -230,8 +231,6 @@ const setupBackground = async (
 				video.style.transform = 'translate(-50%, -50%)';
 				background.appendChild(video);
 
-				if (!window.guardian.config.switches.sentinelLogger) return;
-
 				const getCreativeId = () => {
 					const slots = googletag.pubads().getSlots();
 
@@ -242,47 +241,23 @@ const setupBackground = async (
 							return slot.getResponseInformation()?.creativeId;
 						}
 					}
-					return null;
+					return undefined;
 				};
 
-				const sendVideoProgress = () => {
-					const endpoint = window.guardian.config.page.isDev
-						? '//logs.code.dev-guardianapis.com/log'
-						: '//logs.guardianapis.com/log';
+				EventTimer.get().setProperty(
+					'videoInterscrollerCreativeId',
+					getCreativeId(),
+				);
 
-					const event = {
-						label: 'commercial.videoadprogresstracking',
-						properties: [
-							{
-								name: 'video_ad_id',
-								value: String(getCreativeId()),
-							},
-							{
-								name: 'percent_progress',
-								value: Math.round(
-									100 * (video.currentTime / video.duration),
-								),
-							},
-						],
-					};
-
-					window.navigator.sendBeacon(
-						endpoint,
-						JSON.stringify(event),
+				video.ontimeupdate = function () {
+					const percent = Math.round(
+						100 * (video.currentTime / video.duration),
+					);
+					EventTimer.get().setProperty(
+						'videoInterscrollerPercentageProgress',
+						percent,
 					);
 				};
-
-				const listener = (): void => {
-					if (document.visibilityState === 'hidden') {
-						sendVideoProgress();
-					}
-					return;
-				};
-
-				// Report video ad progress when the page is unloaded or in background.
-				window.addEventListener('visibilitychange', listener, {
-					once: true,
-				});
 			}
 		} else {
 			adSlot.insertBefore(backgroundParent, adSlot.firstChild);
