@@ -74,6 +74,8 @@ const getSlotSizeMapping = (name: string): SizeMapping => {
 		slotName = 'external';
 	} else if (name.includes('comments-expanded')) {
 		slotName = 'comments-expanded';
+	} else if (name.includes('interactive')) {
+		slotName = 'interactive';
 	} else {
 		slotName = name;
 	}
