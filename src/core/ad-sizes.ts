@@ -27,10 +27,19 @@ class AdSize extends Array<number> {
 	readonly [0]: number;
 	readonly [1]: number;
 
-	constructor([width, height]: [number, number]) {
-		super();
-		this[0] = width;
-		this[1] = height;
+	constructor(arraySize: number);
+	constructor([width, height]: [number, number]);
+	constructor(args: [number, number] | number) {
+		// The class needs to be able to be instantiable with a single number like a normal `Array`, so that it can be used in jest, where the constructor is called with a single number for comparisons
+		if (typeof args === 'number') {
+			super(args);
+			this[0] = 0;
+			this[1] = 0;
+		} else {
+			super();
+			this[0] = args[0];
+			this[1] = args[1];
+		}
 	}
 
 	public toString(): AdSizeString {
@@ -475,16 +484,10 @@ const findAppliedSizesForBreakpoint = (
 // Export for testing
 export const _ = { createAdSize };
 
-export type {
-	AdSizeString,
-	AdSize,
-	SizeKeys,
-	SizeMapping,
-	SlotSizeMappings,
-	SlotName,
-};
+export type { AdSizeString, SizeKeys, SizeMapping, SlotSizeMappings, SlotName };
 
 export {
+	AdSize,
 	adSizes,
 	standardAdSizes,
 	outstreamSizes,

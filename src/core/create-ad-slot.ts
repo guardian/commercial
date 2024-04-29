@@ -122,13 +122,19 @@ const concatSizeMappings = (
 				throw new Error(`Unknown device breakpoint: ${device}`);
 			}
 
-			const sizes = [...(combinedSizeMapping[device] ?? [])];
-
-			for (const size of optionSizes) {
-				if (!sizes.some((s) => s.width === size.width)) {
-					sizes.push(size);
-				}
-			}
+			const sizes = optionSizes.reduce(
+				(acc, size) => {
+					const existingSize = acc.find(
+						(s) =>
+							s.width === size.width && s.height === size.height,
+					);
+					if (!existingSize) {
+						acc.push(size);
+					}
+					return acc;
+				},
+				[...(combinedSizeMapping[device] ?? [])],
+			);
 
 			return {
 				...combinedSizeMapping,
