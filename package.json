@@ -115,7 +115,7 @@
 		"wolfy87-eventemitter": "^5.2.9"
 	},
 	"resolutions": {
-		"typescript": "~4.9.5"
+		"typescript": "~5.3.3"
 	},
 	"prettier": "@guardian/prettier",
 	"lint-staged": {
