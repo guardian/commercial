@@ -23,6 +23,10 @@ interface EventTimerProperties {
 	 * distinct from the property we pass into commercial metrics, and in the
 	 * future _could_ be removed in favour of this property */
 	detectedAdBlocker?: boolean;
+	/** creative ID of a video interscroller for video reporting metrics */
+	videoInterscrollerCreativeId?: number | null | undefined;
+	/** percentage progress of video interscroller on page unload */
+	videoInterscrollerPercentageProgress?: number;
 }
 
 // Events will be logged using the performance API for all slots, but only these slots will be tracked as commercial metrics and sent to the data lake

@@ -1,4 +1,5 @@
 import { isObject } from '@guardian/libs';
+import { EventTimer } from 'core/event-timer';
 import type { RegisterListener } from 'core/messenger';
 import fastdom from 'utils/fastdom-promise';
 import {
@@ -229,6 +230,34 @@ const setupBackground = async (
 				video.style.height = '100%';
 				video.style.transform = 'translate(-50%, -50%)';
 				background.appendChild(video);
+
+				const getCreativeId = () => {
+					const slots = googletag.pubads().getSlots();
+
+					for (const slot of slots) {
+						const creativeTemplateId =
+							slot.getResponseInformation()?.creativeTemplateId;
+						if (creativeTemplateId === 11885667) {
+							return slot.getResponseInformation()?.creativeId;
+						}
+					}
+					return undefined;
+				};
+
+				EventTimer.get().setProperty(
+					'videoInterscrollerCreativeId',
+					getCreativeId(),
+				);
+
+				video.ontimeupdate = function () {
+					const percent = Math.round(
+						100 * (video.currentTime / video.duration),
+					);
+					EventTimer.get().setProperty(
+						'videoInterscrollerPercentageProgress',
+						percent,
+					);
+				};
 			}
 		} else {
 			adSlot.insertBefore(backgroundParent, adSlot.firstChild);

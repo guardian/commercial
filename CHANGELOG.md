@@ -1,5 +1,18 @@
 # @guardian/commercial
 
+## 17.14.0
+
+### Minor Changes
+
+- 75f0f1b: Video progress reporting for video interscroller
+- a7d5242: Add labels to opt-out fabrics
+
+## 17.13.1
+
+### Patch Changes
+
+- 24a8fd7: Drop @guardian/support-dotcom-components as a dependency, it's not used anywhere
+
 ## 17.13.0
 
 ### Minor Changes
