@@ -74,10 +74,6 @@ describe('concatSizeMappings', () => {
 			tablet: [createAdSize(728, 90)],
 		};
 
-		const test = concatSizeMappings(sizeMapping1, sizeMapping2);
-
-		console.log(test);
-
 		expect(concatSizeMappings(sizeMapping1, sizeMapping2)).toEqual({
 			mobile: [createAdSize(300, 250)],
 			tablet: [createAdSize(728, 90)],

@@ -11,6 +11,7 @@ const breakpointViewports: Record<keyof SizeMapping, [number, number]> = {
 	phablet: [sourceBreakpoints.phablet, 0],
 	tablet: [sourceBreakpoints.tablet, 0],
 	desktop: [sourceBreakpoints.desktop, 0],
+	wide: [sourceBreakpoints.wide, 0],
 };
 
 const adUnit = once((): string => {
