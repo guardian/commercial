@@ -207,9 +207,9 @@ describe('getPrebidAdSlots', () => {
 		);
 		expect(hbSlots).toHaveLength(1);
 		expect(hbSlots[0]?.sizes).toEqual([
-			adSizes.skyscraper,
-			adSizes.halfPage,
-			adSizes.mpu,
+			createAdSize(160, 600),
+			createAdSize(300, 600),
+			createAdSize(300, 250),
 		]);
 	});
 });
