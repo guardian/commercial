@@ -1,5 +1,4 @@
 import { log } from '@guardian/libs';
-import { findAppliedSizesForBreakpoint } from './ad-sizes';
 import type { SizeMapping } from './ad-sizes';
 import { isBreakpoint } from './lib/breakpoint';
 
@@ -117,20 +116,30 @@ const concatSizeMappings = (
 	defaultSizeMappings: SizeMapping,
 	optionSizeMappings: SizeMapping = {},
 ): SizeMapping =>
-	Object.entries(optionSizeMappings).reduce<SizeMapping>(
-		(sizeMappings, [breakpoint, optionSizes]) => {
-			// Only perform concatenation if breakpoint is of the correct type
-			if (isBreakpoint(breakpoint)) {
-				const sizes = findAppliedSizesForBreakpoint(
-					sizeMappings,
-					breakpoint,
-				);
-
-				// Concatenate the option sizes onto any existing sizes present for a given breakpoint
-				sizeMappings[breakpoint] = sizes.concat(optionSizes);
+	Object.entries(optionSizeMappings).reduce(
+		(combinedSizeMapping, [device, optionSizes]) => {
+			if (!isBreakpoint(device)) {
+				throw new Error(`Unknown device breakpoint: ${device}`);
 			}
 
-			return sizeMappings;
+			const sizes = optionSizes.reduce(
+				(acc, size) => {
+					const existingSize = acc.find(
+						(s) =>
+							s.width === size.width && s.height === size.height,
+					);
+					if (!existingSize) {
+						acc.push(size);
+					}
+					return acc;
+				},
+				[...(combinedSizeMapping[device] ?? [])],
+			);
+
+			return {
+				...combinedSizeMapping,
+				[device]: sizes,
+			};
 		},
 		{ ...defaultSizeMappings },
 	);
