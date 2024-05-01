@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 18.0.0
+
+### Major Changes
+
+- eefdcb5: Pin typescript@5.3.3 and remove resolution
+
+### Minor Changes
+
+- e69f610: Add 'interactive' slot to size mappings, instead of falling back to data attributes , merge them with size mappings
+
 ## 17.14.0
 
 ### Minor Changes
