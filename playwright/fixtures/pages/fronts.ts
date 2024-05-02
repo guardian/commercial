@@ -43,7 +43,7 @@ const tagPages: TagPage[] = [
 	{
 		path: getTestUrl({
 			stage,
-			path: '/world/americas',
+			path: '/tone/recipes/all',
 			type: 'tagPage',
 			adtest: 'fixed-puppies',
 		}),
