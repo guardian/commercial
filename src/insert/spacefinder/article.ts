@@ -17,6 +17,8 @@ import {
 	getCurrentBreakpoint,
 	getCurrentTweakpoint,
 } from 'lib/detect/detect-breakpoint';
+import { isInVariantSynchronous } from '../../experiments/ab';
+import { deeplyReadRightColumn } from '../../experiments/tests/deeply-read-right-column';
 import { waitForAdvert } from '../../lib/dfp/wait-for-advert';
 import fastdom from '../../utils/fastdom-promise';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
@@ -33,6 +35,11 @@ const hasImages = !!window.guardian.config.page.lightboxImages?.images.length;
 
 const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
+
+const isInDeeplyReadMostViewedVariant = isInVariantSynchronous(
+	deeplyReadRightColumn,
+	'deeply-read-and-most-viewed',
+);
 
 const minDistanceBetweenRightRailAds = 500;
 const minDistanceBetweenInlineAds = isInHighValueSection ? 500 : 750;
@@ -205,7 +212,7 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
  * Inserts all inline ads on desktop except for inline1.
  */
 const addDesktopRightRailAds = (fillSlot: FillAdSlot): Promise<boolean> => {
-	let minAbove = 1000;
+	let minAbove = isInDeeplyReadMostViewedVariant ? 1650 : 1000;
 
 	/**
 	 * In special cases, inline2 can overlap the "Most viewed" island, so
