@@ -53,10 +53,6 @@ jobs:
             -e "COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js" \
             ghcr.io/guardian/dotcom-rendering:main
 
-      - name: Install Puppeteer Browsers
-        run: pnpm puppeteer install --with-deps chromium
-        working-directory: ./commercial
-
       - name: Start Commercial server
         run: pnpm serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
         working-directory: ./commercial

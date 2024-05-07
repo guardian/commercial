@@ -34,7 +34,7 @@
 		"prettier:fix": "prettier . --write --cache",
 		"serve": "OVERRIDE_BUNDLE=true pnpm webpack-dev-server -c ./webpack.config.dev.js",
 		"test": "jest",
-		"time-to-load-ad": "node scripts/test-time-to-load-ad.mjs",
+		"time-to-load-ad": "node node_modules/puppeteer/install.mjs && node scripts/test-time-to-load-ad.mjs",
 		"tsc": "tsc --noEmit",
 		"validate": "npm-run-all tsc lint test build"
 	},
