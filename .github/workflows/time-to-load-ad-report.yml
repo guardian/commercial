@@ -54,7 +54,7 @@ jobs:
             ghcr.io/guardian/dotcom-rendering:main
 
       - name: Install Puppeteer Browsers
-        run: pnpm puppeteer install --with-deps chrome
+        run: pnpm puppeteer install --with-deps chromium
         working-directory: ./commercial
 
       - name: Start Commercial server
