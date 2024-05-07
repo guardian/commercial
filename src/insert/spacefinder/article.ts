@@ -212,7 +212,11 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
  * Inserts all inline ads on desktop except for inline1.
  */
 const addDesktopRightRailAds = (fillSlot: FillAdSlot): Promise<boolean> => {
-	let minAbove = isInDeeplyReadMostViewedVariant ? 1650 : 1000;
+	let minAbove = 1000;
+
+	if (isInDeeplyReadMostViewedVariant) {
+		minAbove += 650;
+	}
 
 	/**
 	 * In special cases, inline2 can overlap the "Most viewed" island, so
