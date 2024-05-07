@@ -18,16 +18,16 @@ const wideRules: SpacefinderRules = {
 	minBelow: 400,
 	clearContentMeta: 0,
 	opponentSelectorRules: {
-		':scope .element-rich-link': {
+		'.element-rich-link': {
 			minAboveSlot: 100,
 			minBelowSlot: 400,
 		},
-		':scope .element-image': {
+		'.element-image': {
 			minAboveSlot: 440,
 			minBelowSlot: 440,
 		},
 
-		':scope .player': {
+		'.player': {
 			minAboveSlot: 50,
 			minBelowSlot: 50,
 		},
@@ -43,11 +43,11 @@ const wideRules: SpacefinderRules = {
 			minAboveSlot: 50,
 			minBelowSlot: 50,
 		},
-		':scope .ad-slot': {
+		'.ad-slot': {
 			minAboveSlot: 100,
 			minBelowSlot: 100,
 		},
-		':scope .element-pullquote': {
+		'.element-pullquote': {
 			minAboveSlot: 400,
 			minBelowSlot: 400,
 		},
@@ -65,15 +65,15 @@ const desktopRules: SpacefinderRules = {
 	...wideRules,
 	opponentSelectorRules: {
 		...wideRules.opponentSelectorRules,
-		':scope .element-rich-link': {
+		'.element-rich-link': {
 			minAboveSlot: 400,
 			minBelowSlot: 400,
 		},
-		':scope .ad-slot': {
+		'.ad-slot': {
 			minAboveSlot: 400,
 			minBelowSlot: 400,
 		},
-		':scope .ad-slot--im': {
+		'.ad-slot--im': {
 			minAboveSlot: 400,
 			minBelowSlot: 400,
 		},
