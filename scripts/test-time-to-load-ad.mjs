@@ -6,12 +6,12 @@ const articles = [
 	'https://www.theguardian.com/sport/2024/mar/25/jasmin-paris-interview-barkley-marathons-ultramarathon-history',
 	'https://www.theguardian.com/food/2023/oct/04/how-to-make-the-perfect-marmite-spaghetti-recipe-felicity-cloake-comfort-food',
 	'https://www.theguardian.com/travel/2024/apr/12/readers-favourite-trips-to-scandinavia-sweden-norway-denmark',
+	'https://www.theguardian.com/science/2024/mar/31/can-you-solve-it-best-pub-quiz-questions-ever',
 	'https://www.theguardian.com/commentisfree/2022/oct/27/we-can-go-to-the-moon-so-why-cant-we-stop-my-glasses-sliding-down-my-nose',
 	'https://www.theguardian.com/culture/2018/jan/25/the-20-greatest-oscar-snubs-ever-ranked',
 	'https://www.theguardian.com/lifeandstyle/2023/sep/29/21-things-ive-learned-about-skin-care-sali-hughes',
 	'https://www.theguardian.com/lifeandstyle/2024/apr/21/favourite-flowers-and-moles-making-merry',
 	'https://www.theguardian.com/science/2024/feb/23/quantum-physics-microscopic-gravity-discovery',
-	'https://www.theguardian.com/science/2024/mar/31/can-you-solve-it-best-pub-quiz-questions-ever',
 	'https://www.theguardian.com/commentisfree/2024/may/01/vote-for-my-friend-sadiq-khan-dont-let-toxic-incompetent-tory-rule-ruin-london',
 	'https://www.theguardian.com/books/2024/may/01/what-were-reading-writers-and-readers-on-the-books-they-enjoyed-in-april',
 	'https://www.theguardian.com/travel/2024/may/01/its-not-the-zambezi-but-the-tweed-has-its-moments-canoeing-in-the-scottish-borders',
@@ -31,7 +31,7 @@ void puppeteer.launch().then(async (browser) => {
 	const page = await browser.newPage();
 
 	// Connect to Chrome DevTools
-	const client = await page.target().createCDPSession();
+	const client = await page.createCDPSession();
 
 	// Set throttling property
 	// * 1024/8 converts from kilobits to bytes per second
