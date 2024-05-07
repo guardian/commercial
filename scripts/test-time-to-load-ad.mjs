@@ -37,8 +37,8 @@ void puppeteer.launch().then(async (browser) => {
 	// * 1024/8 converts from kilobits to bytes per second
 	await client.send('Network.emulateNetworkConditions', {
 		offline: false,
-		downloadThroughput: 4000 * (1024 / 8),
-		uploadThroughput: 2000 * (1024 / 8),
+		downloadThroughput: 2000 * (1024 / 8),
+		uploadThroughput: 1000 * (1024 / 8),
 		latency: 150,
 	});
 
