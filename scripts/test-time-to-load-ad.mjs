@@ -6,7 +6,6 @@ const articles = [
 	'https://www.theguardian.com/sport/2024/mar/25/jasmin-paris-interview-barkley-marathons-ultramarathon-history',
 	'https://www.theguardian.com/food/2023/oct/04/how-to-make-the-perfect-marmite-spaghetti-recipe-felicity-cloake-comfort-food',
 	'https://www.theguardian.com/travel/2024/apr/12/readers-favourite-trips-to-scandinavia-sweden-norway-denmark',
-	'https://www.theguardian.com/books/2022/jul/18/tomorrow-and-tomorrow-and-tomorrow-by-gabrielle-zevin-review-when-game-boy-meets-game-girl',
 	'https://www.theguardian.com/commentisfree/2022/oct/27/we-can-go-to-the-moon-so-why-cant-we-stop-my-glasses-sliding-down-my-nose',
 	'https://www.theguardian.com/culture/2018/jan/25/the-20-greatest-oscar-snubs-ever-ranked',
 	'https://www.theguardian.com/lifeandstyle/2023/sep/29/21-things-ive-learned-about-skin-care-sali-hughes',
@@ -23,6 +22,7 @@ const articles = [
 	'https://www.theguardian.com/games/2020/mar/16/animal-crossing-new-horizons-review-nintendo-switch',
 	'https://www.theguardian.com/money/2024/apr/29/meal-prepping-is-booming-but-beware-the-health-dangers',
 	'https://www.theguardian.com/technology/2024/apr/30/amazon-sales-report-ai',
+	'https://www.theguardian.com/books/2022/jul/18/tomorrow-and-tomorrow-and-tomorrow-by-gabrielle-zevin-review-when-game-boy-meets-game-girl',
 ];
 
 void puppeteer.launch().then(async (browser) => {
