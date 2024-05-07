@@ -1,6 +1,6 @@
 import type { ABTest } from '@guardian/ab-core';
-import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
 import { deeplyReadRightColumn } from './tests/deeply-read-right-column';
+import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
 
 /**
  * You only need to add tests to this file if the code you are testing is here in
