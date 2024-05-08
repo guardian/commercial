@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 18.1.0
+
+### Minor Changes
+
+- 0177571: Move im below inline1 to reduce revenue impact when the im won't serve ads"
+- bd08a53: missing `:scope` in some spacefinder selectors
+
 ## 18.0.0
 
 ### Major Changes
