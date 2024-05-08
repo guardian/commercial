@@ -13,14 +13,14 @@ test(`Test how long top-above-nav takes to load`, async ({ page }) => {
 
 	await loadPage(page, path);
 
-	const client = await page.context().newCDPSession(page);
+	// const client = await page.context().newCDPSession(page);
 
-	await client.send('Network.emulateNetworkConditions', {
-		offline: false,
-		downloadThroughput: 5000 * (1024 / 8),
-		uploadThroughput: 2500 * (1024 / 8),
-		latency: 150,
-	});
+	// await client.send('Network.emulateNetworkConditions', {
+	// 	offline: false,
+	// 	downloadThroughput: 5000 * (1024 / 8),
+	// 	uploadThroughput: 2500 * (1024 / 8),
+	// 	latency: 150,
+	// });
 
 	await page.setViewportSize({ width: 1400, height: 800 });
 
