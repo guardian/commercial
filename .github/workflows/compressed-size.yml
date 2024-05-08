@@ -2,6 +2,8 @@ name: Commercial Bundle Compressed Size
 on:
   pull_request:
 
+permissions: write-all
+
 jobs:
   build:
     name: Build
