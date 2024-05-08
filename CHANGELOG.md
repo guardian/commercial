@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 18.2.0
+
+### Minor Changes
+
+- 0cf4ae0: Add didDisplayAdBlockAsk to event timer properties
+
 ## 18.1.0
 
 ### Minor Changes
