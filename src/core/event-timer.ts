@@ -23,6 +23,8 @@ interface EventTimerProperties {
 	 * distinct from the property we pass into commercial metrics, and in the
 	 * future _could_ be removed in favour of this property */
 	detectedAdBlocker?: boolean;
+	/** Record whether we've shown the adblock as message */
+	didDisplayAdBlockAsk?: boolean;
 	/** creative ID of a video interscroller for video reporting metrics */
 	videoInterscrollerCreativeId?: number | null | undefined;
 	/** percentage progress of video interscroller on page unload */
