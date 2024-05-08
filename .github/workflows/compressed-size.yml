@@ -1,0 +1,24 @@
+name: Commercial Bundle Compressed Size
+on:
+  pull_request:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: ./.github/actions/setup-node-env
+
+      - name: Build package
+        run: pnpm build
+
+      - uses: preactjs/compressed-size-action@v2
+        with:
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          build-script: build
+          strip-hash: "dist/\\w{20}"
+          pattern: 'dist/**/*.js'
