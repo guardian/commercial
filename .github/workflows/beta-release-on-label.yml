@@ -68,13 +68,13 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 ${version} published to npm as a beta release
+              body: `🚀 \`${version}\` published to npm as a beta release
 
             To install the beta version, run one of the following commands in your project directory:
             \`\`\`
-              npm install @guardian/commercial@${version}
-              pnpm add @guardian/commercial@${version}
-              yarn add @guardian/commercial@${version}
+            npm install @guardian/commercial@${version}
+            pnpm add @guardian/commercial@${version}
+            yarn add @guardian/commercial@${version}
             \`\`\`
             `
             })
