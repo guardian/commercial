@@ -19,8 +19,8 @@ test(`Test how long top-above-nav takes to load`, async ({ page }) => {
 
 	await client.send('Network.emulateNetworkConditions', {
 		offline: false,
-		downloadThroughput: 5000 * (1024 / 8),
-		uploadThroughput: 2500 * (1024 / 8),
+		downloadThroughput: 3000 * (1024 / 8),
+		uploadThroughput: 1500 * (1024 / 8),
 		latency: 150,
 	});
 
