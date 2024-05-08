@@ -34,13 +34,8 @@ const hasImages = !!window.guardian.config.page.lightboxImages?.images.length;
 const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
 
-const isInMegaTestControl =
-	window.guardian.config.tests?.commercialMegaTestControl === 'control';
-
-const increaseAdDensity = isInHighValueSection && !isInMegaTestControl;
-
 const minDistanceBetweenRightRailAds = 500;
-const minDistanceBetweenInlineAds = increaseAdDensity ? 500 : 750;
+const minDistanceBetweenInlineAds = isInHighValueSection ? 500 : 750;
 
 /**
  * Rules to avoid inserting ads in the right rail too close to each other
@@ -160,8 +155,8 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 		opponentSelectorRules: {
 			// don't place ads right after a heading
 			':scope > h2, [data-spacefinder-role="nested"] > h2': {
-				minAboveSlot: increaseAdDensity ? 150 : 5,
-				minBelowSlot: increaseAdDensity ? 0 : 190,
+				minAboveSlot: isInHighValueSection ? 150 : 5,
+				minBelowSlot: isInHighValueSection ? 0 : 190,
 			},
 			[`.${adSlotContainerClass}`]: {
 				minAboveSlot: 500,
@@ -311,40 +306,11 @@ const addDesktopRightRailAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 };
 
 const addMobileInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
-	const minDistanceFromArticleTop = !isInMegaTestControl ? 100 : 200;
-
-	/**
-	 * These 2 sets of rules are for the changes to "ranked" articles as part of the mega test
-	 */
-	const oldRules: SpacefinderRules = {
-		bodySelector: articleBodySelector,
-		candidateSelector: ':scope > p',
-		minAbove: 200,
-		minBelow: 200,
-		opponentSelectorRules: {
-			':scope > h2': {
-				minAboveSlot: 100,
-				minBelowSlot: 250,
-			},
-			...inlineAdSlotContainerRules,
-			[`:scope > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
-				{
-					minAboveSlot: 35,
-					minBelowSlot: 200,
-				},
-		},
-		filter: (candidate, lastWinner) => {
-			if (!lastWinner) {
-				return true;
-			}
-			const distanceBetweenAds = candidate.top - lastWinner.top;
-			return distanceBetweenAds >= minDistanceBetweenInlineAds;
-		},
-	};
+	const minDistanceFromArticleTop = 100;
 
 	const ignoreList = `:not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`;
 
-	const newRules: SpacefinderRules = {
+	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
 		candidateSelector:
 			':scope > p, :scope > h2, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"], [data-spacefinder-role="nested"] > p',
@@ -381,8 +347,6 @@ const addMobileInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 			return distanceBetweenAds >= minDistanceBetweenInlineAds;
 		},
 	};
-
-	const rules = isInMegaTestControl ? oldRules : newRules;
 
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const slots = paras.map(async (para, i) => {
