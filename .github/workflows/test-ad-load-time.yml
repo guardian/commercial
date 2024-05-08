@@ -70,6 +70,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-ad-load-speed-report
-          path: ./commercial/ad-load-time-report
+          name: ad-load-time-report
+          path: ./commercial/playwright-report
           retention-days: 5
