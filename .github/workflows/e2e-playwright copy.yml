@@ -1,14 +1,10 @@
-name: E2E
+name: Test ad load time
 on:
   push:
     branches:
       - main
   workflow_dispatch:
   pull_request:
-
-concurrency:
-  group: 'playwright-${{ github.head_ref }}'
-  cancel-in-progress: true
 
 jobs:
   test:
@@ -17,8 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        group: [1, 2, 3, 4, 5]
     steps:
       # Commercial
       - name: Checkout
@@ -70,12 +64,12 @@ jobs:
         working-directory: ./commercial
 
       - name: Run Playwright
-        run: pnpm playwright test --grep-invert test-ad-load-speed.spec.ts --shard=${{ matrix.group }}/5
+        run: pnpm playwright test test-ad-load-speed.spec.ts
         working-directory: ./commercial
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report-${{ matrix.group }}
-          path: ./commercial/playwright-report
+          path: ./commercial/ad-load-speed-report
           retention-days: 5
