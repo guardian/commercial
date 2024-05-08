@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import type { ConsentState } from '@guardian/libs';
 import { buildPageTargeting as buildPageTargeting_ } from 'core/targeting/build-page-targeting';
 import { getPageTargeting } from './build-page-targeting';
 import { isUserLoggedInOktaRefactor } from './identity/api';

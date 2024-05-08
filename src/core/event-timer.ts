@@ -12,13 +12,23 @@ interface EventTimerProperties {
 	effectiveType?: string;
 	adSlotsInline?: number;
 	adSlotsTotal?: number;
-	// the height of the page / the viewport height
+	/** the height of the page / the viewport height  */
 	pageHeightVH?: number;
 	gpcSignal?: number;
-	// distance in percentage of viewport height at which ads are lazy loaded
+	/** distance in percentage of viewport height at which ads are lazy loaded */
 	lazyLoadMarginPercent?: number;
 	hasLabsContainer?: boolean;
 	labsUrl?: string;
+	/** Record whether we've detected an ad blocker. This is intentionally
+	 * distinct from the property we pass into commercial metrics, and in the
+	 * future _could_ be removed in favour of this property */
+	detectedAdBlocker?: boolean;
+	/** Record whether we've shown the adblock as message */
+	didDisplayAdBlockAsk?: boolean;
+	/** creative ID of a video interscroller for video reporting metrics */
+	videoInterscrollerCreativeId?: number | null | undefined;
+	/** percentage progress of video interscroller on page unload */
+	videoInterscrollerPercentageProgress?: number;
 }
 
 // Events will be logged using the performance API for all slots, but only these slots will be tracked as commercial metrics and sent to the data lake

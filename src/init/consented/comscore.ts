@@ -1,8 +1,4 @@
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
-import { loadScript, log } from '@guardian/libs';
+import { getConsentFor, loadScript, log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { commercialFeatures } from 'lib/commercial-features';
 import type { ComscoreGlobals } from 'types/global';
@@ -16,6 +12,9 @@ const getGlobals = (keywords: string): ComscoreGlobals => {
 		c1: comscoreC1,
 		c2: comscoreC2,
 		cs_ucfr: '1',
+		options: {
+			enableFirstPartyCookie: true,
+		},
 	};
 
 	if (keywords !== 'Network Front') {

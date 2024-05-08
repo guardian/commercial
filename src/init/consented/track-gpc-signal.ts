@@ -1,6 +1,5 @@
-import { onConsent } from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { log } from '@guardian/libs';
+import type { ConsentState } from '@guardian/libs';
+import { log, onConsent } from '@guardian/libs';
 import { initTrackGpcSignal } from 'core/track-gpc-signal';
 
 /**

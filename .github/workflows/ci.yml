@@ -17,17 +17,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'yarn'
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Set up Node
+        uses: ./.github/actions/setup-node-env
 
       - name: Run unit tests
-        run: yarn test --ci
+        run: pnpm test -- --ci
 
   lint:
     name: Lint
@@ -36,20 +30,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'yarn'
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Set up Node
+        uses: ./.github/actions/setup-node-env
 
       - name: Lint files
-        run: yarn lint
+        run: pnpm lint
 
       - name: Check formatting
-        run: yarn prettier:check
+        run: pnpm prettier:check
 
   types:
     name: Type check
@@ -58,17 +46,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'yarn'
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Set up Node
+        uses: ./.github/actions/setup-node-env
 
       - name: Check types
-        run: yarn tsc
+        run: pnpm tsc
 
   build:
     name: Build
@@ -77,17 +59,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'yarn'
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Set up Node
+        uses: ./.github/actions/setup-node-env
 
       - name: Build package
-        run: yarn build
+        run: pnpm build
 
       - name: Save build
         if: github.ref == 'refs/heads/main'
@@ -108,14 +84,8 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'yarn'
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Set up Node
+        uses: ./.github/actions/setup-node-env
 
       - name: Fetch build
         uses: actions/download-artifact@v4
@@ -123,11 +93,26 @@ jobs:
           name: dist
           path: dist
 
-      - name: Create Release
+      - name: Use GitHub App Token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ secrets.GU_CHANGESETS_APP_ID }}
+          private-key: ${{ secrets.GU_CHANGESETS_PRIVATE_KEY }}
+
+      - name: Set git user to Gu Changesets app
+        run: |
+          git config user.name "gu-changesets-release-pr[bot]"
+          git config user.email "gu-changesets-release-pr[bot]@users.noreply.github.com"
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
         uses: changesets/action@v1
         with:
-          publish: yarn changeset publish
+          publish: pnpm changeset publish
+          title: '🦋 Release package updates'
+          commit: 'Bump package versions'
+          setupGitUser: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          HUSKY: 0

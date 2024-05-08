@@ -1,5 +1,104 @@
 # @guardian/commercial
 
+## 18.2.0
+
+### Minor Changes
+
+- 0cf4ae0: Add didDisplayAdBlockAsk to event timer properties
+
+## 18.1.0
+
+### Minor Changes
+
+- 0177571: Move im below inline1 to reduce revenue impact when the im won't serve ads"
+- bd08a53: missing `:scope` in some spacefinder selectors
+
+## 18.0.0
+
+### Major Changes
+
+- eefdcb5: Pin typescript@5.3.3 and remove resolution
+
+### Minor Changes
+
+- e69f610: Add 'interactive' slot to size mappings, instead of falling back to data attributes , merge them with size mappings
+
+## 17.14.0
+
+### Minor Changes
+
+- 75f0f1b: Video progress reporting for video interscroller
+- a7d5242: Add labels to opt-out fabrics
+
+## 17.13.1
+
+### Patch Changes
+
+- 24a8fd7: Drop @guardian/support-dotcom-components as a dependency, it's not used anywhere
+
+## 17.13.0
+
+### Minor Changes
+
+- 7b956e4: Assume less about DOM structure when finding ad container elements to remove
+
+## 17.12.0
+
+### Minor Changes
+
+- ecc0d04: New commercial metric for recording ad-block detection
+
+## 17.11.0
+
+### Minor Changes
+
+- 7819916: Insert ads in certain nested block elements
+
+## 17.10.0
+
+### Minor Changes
+
+- 426431e: Don't add an advertisement label for native templates served through opt out
+- 3f50350: Use the same spacefinder rules for both consented and consentless
+
+## 17.9.0
+
+### Minor Changes
+
+- 63ff467: collapse top-above-nav container when exclusion is served
+
+### Patch Changes
+
+- 03b5725: use cmp from libs
+
+## 17.8.0
+
+### Minor Changes
+
+- 9831737: Add commercial mega test to evaluate the revenue effect of changes made during Q4
+
+### Patch Changes
+
+- c272ada: Upgrade to pnpm
+
+## 17.7.0
+
+### Minor Changes
+
+- 737a9ab: Remove dcr discussion ads switch
+
+## 17.6.0
+
+### Minor Changes
+
+- 2551e48: Enable comscore first party cookie
+
+## 17.5.0
+
+### Minor Changes
+
+- 849bb32: Update inline merch spacefinder opponentSelectorRules for sign-in-gate
+
 ## 17.4.1
 
 ### Patch Changes

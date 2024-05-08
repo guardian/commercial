@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import type { ConsentState } from '@guardian/libs';
 import { loadScript, log } from '@guardian/libs';
 import { buildPageTargetingConsentless } from 'core/targeting/build-page-targeting-consentless';
 import { commercialFeatures } from 'lib/commercial-features';

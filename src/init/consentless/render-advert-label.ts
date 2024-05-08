@@ -7,12 +7,6 @@ import fastdom from 'utils/fastdom-promise';
 
 const shouldRenderConsentlessLabel = (adSlotNode: HTMLElement): boolean => {
 	if (
-		adSlotNode.classList.contains('ad-slot--merchandising') ||
-		adSlotNode.classList.contains('ad-slot--merchandising-high')
-	) {
-		return true;
-	}
-	if (
 		adSlotNode.classList.contains('ad-slot--frame') ||
 		adSlotNode.classList.contains('ad-slot--gc') ||
 		adSlotNode.classList.contains('u-h') ||

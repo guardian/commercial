@@ -2,7 +2,6 @@
 
 import { log } from '@guardian/libs';
 import { memoize } from 'lodash-es';
-import { amIUsed } from 'utils/am-i-used';
 import fastdom from 'utils/fastdom-promise';
 import { init as initSpacefinderDebugger } from './spacefinder-debug-tools';
 
@@ -37,7 +36,7 @@ type SpacefinderRules = {
 	/**
 	 * Selector(s) for the elements that we want to allow inserting ads above
 	 */
-	candidateSelector: string | string[];
+	candidateSelector: string;
 	/**
 	 * Minimum distance from slot to top of page
 	 */
@@ -109,6 +108,9 @@ type Measurements = {
 	opponents?: ElementDimensionMap;
 };
 
+const isInMegaTestControl =
+	window.guardian.config.tests?.commercialMegaTestControl === 'control';
+
 const query = (selector: string, context?: HTMLElement | Document) => [
 	...(context ?? document).querySelectorAll<HTMLElement>(selector),
 ];
@@ -129,8 +131,6 @@ const isIframeLoaded = (iframe: HTMLIFrameElement) => {
 	try {
 		return iframe.contentWindow?.document.readyState === 'complete';
 	} catch (err) {
-		// TODO remove try / catch if an error is never thrown
-		amIUsed('spacefinder.ts', 'isIframeLoaded');
 		return true;
 	}
 };
@@ -293,13 +293,30 @@ const isTopOfCandidateFarEnoughFromOpponent = (
 	return true;
 };
 
+/**
+ * Check if 1 - the candidate is the same as the opponent or 2- if the opponent contains the candidate
+ *
+ * 1 can happen when the candidate and opponent selectors overlap
+ * 2 can happen when there are nested candidates, it may try t avoid it's own ancestor
+ */
+const bypassTestCandidate = (
+	candidate: SpacefinderItem,
+	opponent: SpacefinderItem,
+) =>
+	candidate.element === opponent.element ||
+	opponent.element.contains(candidate.element);
+
+/**
+ * These 2 sets of candidate test functions are for the changes to "ranked" articles as part of the mega test
+ */
+
 // test one element vs another for the given rules
-const testCandidate = (
+const newTestCandidate = (
 	rule: RuleSpacing,
 	candidate: SpacefinderItem,
 	opponent: SpacefinderItem,
 ): boolean => {
-	if (candidate.element === opponent.element) {
+	if (bypassTestCandidate(candidate, opponent)) {
 		return true;
 	}
 
@@ -330,6 +347,36 @@ const testCandidate = (
 
 	return pass;
 };
+
+const oldTestCandidate = (
+	rule: RuleSpacing,
+	candidate: SpacefinderItem,
+	opponent: SpacefinderItem,
+): boolean => {
+	const isMinAbove = candidate.top - opponent.bottom >= rule.minAboveSlot;
+	const isMinBelow = opponent.top - candidate.top >= rule.minBelowSlot;
+
+	const pass = isMinAbove || isMinBelow;
+
+	if (!pass) {
+		// if the test fails, add debug information to the candidate metadata
+		const isBelow = candidate.top < opponent.top;
+		const required = isBelow ? rule.minBelowSlot : rule.minAboveSlot;
+		const actual = isBelow
+			? opponent.top - candidate.top
+			: candidate.top - opponent.bottom;
+
+		candidate.meta?.tooClose.push({
+			required,
+			actual,
+			element: opponent.element,
+		});
+	}
+
+	return pass;
+};
+
+const testCandidate = isInMegaTestControl ? oldTestCandidate : newTestCandidate;
 
 // test one element vs an array of other elements for the given rule
 const testCandidates = (
@@ -445,23 +492,12 @@ const getReady = (rules: SpacefinderRules, options: SpacefinderOptions) =>
 		}
 	});
 
-const getCandidateSelector = (
-	bodySelector: string,
-	slotSelectors: string | string[],
-) => {
-	return Array.isArray(slotSelectors)
-		? slotSelectors
-				.map((selector) => `${bodySelector} ${selector}`)
-				.join(', ')
-		: `${bodySelector} ${slotSelectors}`;
-};
 const getCandidates = (
 	rules: SpacefinderRules,
 	spacefinderExclusions: SpacefinderExclusions,
 ) => {
-	let candidates = query(
-		getCandidateSelector(rules.bodySelector, rules.candidateSelector),
-	);
+	let candidates = query(rules.candidateSelector, rules.body);
+
 	if (rules.fromBottom) {
 		candidates.reverse();
 	}
@@ -515,8 +551,7 @@ const getMeasurements = (
 		: undefined;
 	const opponents = rules.opponentSelectorRules
 		? Object.keys(rules.opponentSelectorRules).map(
-				(selector) =>
-					[selector, query(rules.bodySelector + selector)] as const,
+				(selector) => [selector, query(selector, rules.body)] as const,
 		  )
 		: [];
 

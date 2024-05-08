@@ -114,7 +114,8 @@ type SlotName =
 	| 'right'
 	| 'sponsor-logo'
 	| 'survey'
-	| 'top-above-nav';
+	| 'top-above-nav'
+	| 'interactive';
 
 type SizeMapping = Partial<Record<Breakpoint, Readonly<AdSize[]>>>;
 
@@ -424,6 +425,12 @@ const slotSizeMappings = {
 			adSizes.sponsorLogo,
 		],
 	},
+	interactive: {
+		// Mappings are dynamically added for this slot using data attributes
+		mobile: [adSizes.outOfPage, adSizes.empty],
+		tablet: [adSizes.outOfPage, adSizes.empty],
+		desktop: [adSizes.outOfPage, adSizes.empty],
+	},
 } as const satisfies SlotSizeMappings;
 
 const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
@@ -477,16 +484,10 @@ const findAppliedSizesForBreakpoint = (
 // Export for testing
 export const _ = { createAdSize };
 
-export type {
-	AdSizeString,
-	AdSize,
-	SizeKeys,
-	SizeMapping,
-	SlotSizeMappings,
-	SlotName,
-};
+export type { AdSizeString, SizeKeys, SizeMapping, SlotSizeMappings, SlotName };
 
 export {
+	AdSize,
 	adSizes,
 	standardAdSizes,
 	outstreamSizes,

@@ -4,9 +4,9 @@ import { init as initFootballRightAds } from 'insert/fixures';
 import { init as initHighMerch } from 'insert/high-merch';
 import { init as initMobileCrosswordsAdvert } from 'insert/mobile-crossword-banner';
 import { init as initMobileSticky } from 'insert/mobile-sticky';
-import { init as initArticleBodyAdverts } from 'insert/spacefinder/article-body-adverts';
 import { init as initLiveblogAdverts } from 'insert/spacefinder/liveblog-adverts';
 import { reportError } from 'utils/report-error';
+import { initArticleBodyAdverts } from './article-body-adverts';
 
 type Modules = Array<[`${string}-${string}`, () => Promise<unknown>]>;
 

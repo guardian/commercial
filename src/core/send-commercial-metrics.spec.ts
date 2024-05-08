@@ -1,5 +1,5 @@
-import { onConsent } from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import type { ConsentState } from '@guardian/libs';
+import { onConsent } from '@guardian/libs';
 import { EventTimer } from './event-timer';
 import {
 	_,
@@ -15,7 +15,11 @@ const {
 	transformToObjectEntries,
 } = _;
 
-jest.mock('@guardian/consent-management-platform');
+jest.mock('@guardian/libs', () => ({
+	// eslint-disable-next-line -- ESLint doesn't understand jest.requireActual
+	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
+	onConsent: jest.fn(),
+}));
 
 const mockOnConsent = (consentState: ConsentState) =>
 	(onConsent as jest.Mock).mockImplementation(() =>
@@ -113,6 +117,10 @@ const setVisibility = (value: 'hidden' | 'visible'): void => {
 beforeEach(() => {
 	reset();
 	jest.resetAllMocks();
+});
+
+afterEach(() => {
+	jest.spyOn(global.Math, 'random').mockRestore();
 });
 
 describe('send commercial metrics', () => {
@@ -432,7 +440,7 @@ describe('send commercial metrics', () => {
 				adBlockerInUse: ADBLOCK_NOT_IN_USE,
 			});
 
-			const mathRandomSpy = jest.spyOn(Math, 'random');
+			const mathRandomSpy = jest.spyOn(global.Math, 'random');
 			mathRandomSpy.mockImplementation(() => 0.5);
 
 			expect(willSendMetrics).toEqual(false);

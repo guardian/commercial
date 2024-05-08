@@ -9,6 +9,9 @@ const adverts = {
 	adSlotWithoutAdContainer: `<div class="not-a-container">${adSlot}</div>`,
 	adSlotWithAdContainer: `<div class="ad-slot-container">${adSlot}</div>`,
 	frontsBannerAd: `<div class="top-fronts-banner-ad-container"><div class="ad-slot-container">${adSlot}</div></div>`,
+	frontsBannerAdWithExtraDivs: `<div class="top-fronts-banner-ad-container"><div><div><div class="ad-slot-container">${adSlot}</div></div></div></div>`,
+	topBannerAd: `<div class="top-banner-ad-container"><div class="ad-slot-container">${adSlot}</div></div>`,
+	topBannerAdWithExtraDivs: `<div class="top-banner-ad-container"><div><div><div class="ad-slot-container">${adSlot}</div></div></div></div>`,
 } satisfies Record<string, string>;
 
 const createAd = (html: string) => {
@@ -39,5 +42,23 @@ describe('findElementToRemove', () => {
 		createAd(adverts['frontsBannerAd']);
 		const result = findElementToRemove(getAd());
 		expect(result.classList).toContain('top-fronts-banner-ad-container');
+	});
+
+	it('returns the top-level fronts banner container when separated from the container by extra divs', () => {
+		createAd(adverts['frontsBannerAdWithExtraDivs']);
+		const result = findElementToRemove(getAd());
+		expect(result.classList).toContain('top-fronts-banner-ad-container');
+	});
+
+	it('returns the top-level banner container', () => {
+		createAd(adverts['topBannerAd']);
+		const result = findElementToRemove(getAd());
+		expect(result.classList).toContain('top-banner-ad-container');
+	});
+
+	it('returns the top-level banner container when separated from the container by extra divs', () => {
+		createAd(adverts['topBannerAdWithExtraDivs']);
+		const result = findElementToRemove(getAd());
+		expect(result.classList).toContain('top-banner-ad-container');
 	});
 });

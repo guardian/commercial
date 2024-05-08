@@ -1,6 +1,5 @@
-import { onConsent } from '@guardian/consent-management-platform';
-import type { Framework } from '@guardian/consent-management-platform/dist/types';
-import { isString, log } from '@guardian/libs';
+import type { ConsentFramework } from '@guardian/libs';
+import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import { pubmatic } from 'core/__vendor/pubmatic';
 import type { AdSize } from 'core/ad-sizes';
@@ -236,7 +235,10 @@ const bidderTimeout = PREBID_TIMEOUT;
 let requestQueue: Promise<void> = Promise.resolve();
 let initialised = false;
 
-const initialise = (window: Window, framework: Framework = 'tcfv2'): void => {
+const initialise = (
+	window: Window,
+	framework: ConsentFramework = 'tcfv2',
+): void => {
 	if (!window.pbjs) {
 		log('commercial', 'window.pbjs not found on window');
 		return; // We couldn’t initialise
