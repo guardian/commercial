@@ -498,13 +498,13 @@ const init = async (fillAdSlot: FillAdSlot): Promise<boolean> => {
 		return Promise.resolve(false);
 	}
 
+	await addInlineAds(fillAdSlot);
+
 	const im = window.guardian.config.page.hasInlineMerchandise
 		? attemptToAddInlineMerchAd(fillAdSlot)
 		: Promise.resolve(false);
 	const inlineMerchAdded = await im;
 	if (inlineMerchAdded) await waitForAdvert('dfp-ad--im');
-
-	await addInlineAds(fillAdSlot);
 
 	await initCarrot();
 
