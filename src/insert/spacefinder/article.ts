@@ -318,16 +318,16 @@ const addMobileInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 	 */
 	const oldRules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		candidateSelector: ' > p',
+		candidateSelector: ':scope > p',
 		minAbove: 200,
 		minBelow: 200,
 		opponentSelectorRules: {
-			' > h2': {
+			':scope > h2': {
 				minAboveSlot: 100,
 				minBelowSlot: 250,
 			},
 			...inlineAdSlotContainerRules,
-			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
+			[`:scope > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate)`]:
 				{
 					minAboveSlot: 35,
 					minBelowSlot: 200,
