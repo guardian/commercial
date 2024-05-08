@@ -9,18 +9,20 @@ import { waitForSlot } from '../lib/util';
 test(`Test how long top-above-nav takes to load`, async ({ page }) => {
 	test.setTimeout(300000);
 
+	// warm up step to accept all and set up network conditions
+
 	const { path } = articles[0] as unknown as GuPage;
 
 	await loadPage(page, path);
 
-	// const client = await page.context().newCDPSession(page);
+	const client = await page.context().newCDPSession(page);
 
-	// await client.send('Network.emulateNetworkConditions', {
-	// 	offline: false,
-	// 	downloadThroughput: 5000 * (1024 / 8),
-	// 	uploadThroughput: 2500 * (1024 / 8),
-	// 	latency: 150,
-	// });
+	await client.send('Network.emulateNetworkConditions', {
+		offline: false,
+		downloadThroughput: 5000 * (1024 / 8),
+		uploadThroughput: 2500 * (1024 / 8),
+		latency: 150,
+	});
 
 	await page.setViewportSize({ width: 1400, height: 800 });
 
@@ -28,10 +30,10 @@ test(`Test how long top-above-nav takes to load`, async ({ page }) => {
 
 	let totalAdRenderTime = 0;
 
+	// now we loop through the 20 test articles to calculate the average ad render time
+
 	for (const article of loadTimePages) {
 		const { path } = article;
-
-		await new Promise((r) => setTimeout(r, 2000));
 
 		const startRenderingTime = Date.now();
 
@@ -42,14 +44,16 @@ test(`Test how long top-above-nav takes to load`, async ({ page }) => {
 
 		await waitForSlot(page, 'top-above-nav');
 
-		const endRenderingTime = Date.now();
+		const renderingTime = Date.now() - startRenderingTime;
 
-		console.log(
-			`Ad rendered in ${endRenderingTime - startRenderingTime} ms`,
-		);
+		console.log(`Ad rendered in ${renderingTime} ms`);
 
-		totalAdRenderTime += endRenderingTime - startRenderingTime;
+		totalAdRenderTime += renderingTime;
 	}
 
-	console.log(`Average ad render time is ${totalAdRenderTime / 20} ms`);
+	console.log(
+		`Average ad render time is ${
+			totalAdRenderTime / loadTimePages.length
+		} ms`,
+	);
 });
