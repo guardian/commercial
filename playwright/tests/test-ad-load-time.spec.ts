@@ -7,7 +7,7 @@ import { loadPage } from '../lib/load-page';
 import { waitForSlot } from '../lib/util';
 
 test(`Test how long top-above-nav takes to load`, async ({ page }) => {
-	test.setTimeout(100000);
+	test.setTimeout(300000);
 
 	const { path } = articles[0] as unknown as GuPage;
 
@@ -51,5 +51,5 @@ test(`Test how long top-above-nav takes to load`, async ({ page }) => {
 		totalAdRenderTime += endRenderingTime - startRenderingTime;
 	}
 
-	console.log(`Average ad render time is ${totalAdRenderTime / 5} ms`);
+	console.log(`Average ad render time is ${totalAdRenderTime / 20} ms`);
 });
