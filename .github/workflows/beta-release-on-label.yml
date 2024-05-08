@@ -13,6 +13,7 @@ jobs:
   has-permission:
     name: Check permissions
     runs-on: ubuntu-latest
+    if: github.event.label.name == '[beta] @guardian/commercial'
     steps:
       - name: 'Check if user has admin access'
         uses: 'lannonbr/repo-permission-check-action@2.0.2'
@@ -20,6 +21,7 @@ jobs:
           permission: 'admin'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   release:
     name: '@guardian/commercial'
     runs-on: ubuntu-latest
@@ -49,15 +51,43 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - uses: actions/github-script@v7
+      - name: Comment on PR
+        uses: actions/github-script@v7
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const publishedPackages = ${{ steps.changeset.outputs.publishedPackages }};
+
+            if(publishedPackages.length === 0) {
+              throw new Error('No packages published, did you forget to add a changeset?');
+            }
+
             const version = publishedPackages[0].version;
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 ${version} published to npm as a beta release`
+              body: `🚀 ${version} published to npm as a beta release
+
+            To install the beta version, run one of the following commands in your project directory:
+            \`\`\`
+              npm install @guardian/commercial@${version}
+              pnpm add @guardian/commercial@${version}
+              yarn add @guardian/commercial@${version}
+            \`\`\`
+            `
+            })
+
+      - name: Remove label
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.removeLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: '[beta] @guardian/commercial'
             })

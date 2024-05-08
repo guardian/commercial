@@ -100,6 +100,6 @@ To test the bundle on CODE, create a PR, add the `[beta] @guardian/commercial` l
 
 In order to do this, first run: `pnpm changeset add`, again, This will create a new changeset file in the `.changeset` directory. Commit this file with your PR.
 
-**Note**: Sometimes you might need to remove and re-add the label to trigger the beta version.
+**Note**: Once the beta version is released, the label will be removed from the PR, so you will need to add it again if you want to release subsequent new versions.
 
 On a branch on frontend you can update the version of the bundle to the beta version and deploy to CODE to test.
