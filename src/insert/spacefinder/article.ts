@@ -27,6 +27,14 @@ import { isInHighValueSection } from './utils';
 
 type SlotName = Parameters<typeof createAdSlot>[0];
 
+/**
+ * As estimation of the height of the most viewed island.
+ * This appears from desktop breakpoints on the right-hand side.
+ * Knowing the height of the element is useful when
+ * calculating where to place ads in the right column.
+ */
+const MOST_VIEWED_HEIGHT = 600;
+
 const articleBodySelector = '.article-body-commercial-selector';
 
 const isPaidContent = window.guardian.config.page.isPaidContent;
@@ -214,17 +222,14 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 const addDesktopRightRailAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 	let minAbove = 1000;
 
-	if (isInDeeplyReadMostViewedVariant) {
-		minAbove += 650;
-	}
-
 	/**
 	 * In special cases, inline2 can overlap the "Most viewed" island, so
-	 * we need to make an adjustment to move the inline2 further down the page.
+	 * we need to make an adjustment to move the inline2 further down page
 	 */
-	if (isPaidContent) {
-		minAbove += 600;
+	if (isInDeeplyReadMostViewedVariant || isPaidContent) {
+		minAbove += MOST_VIEWED_HEIGHT;
 	}
+
 	// Some old articles don't have a main image, which means the first paragraph is much higher
 	if (!hasImages) {
 		minAbove += 600;
