@@ -224,7 +224,7 @@ const addDesktopRightRailAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 
 	/**
 	 * In special cases, inline2 can overlap the "Most viewed" island, so
-	 * we need to make an adjustment to move the inline2 further down page
+	 * we need to make an adjustment to move the inline2 further down the page
 	 */
 	if (isInDeeplyReadMostViewedVariant || isPaidContent) {
 		minAbove += MOST_VIEWED_HEIGHT;
