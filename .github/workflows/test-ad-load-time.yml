@@ -43,15 +43,12 @@ jobs:
 
       - name: Install Playwright Browsers
         run: pnpm playwright install --with-deps chromium
-        working-directory: ./commercial
 
       - name: Start Commercial server
         run: pnpm serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
-        working-directory: ./commercial
 
       - name: Run Playwright
         run: pnpm playwright test test-ad-load-time.spec.ts
-        working-directory: ./commercial
 
       - uses: actions/upload-artifact@v4
         if: always()
