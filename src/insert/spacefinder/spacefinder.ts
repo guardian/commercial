@@ -234,24 +234,6 @@ const partitionCandidates = <T>(
 	return [filtered, exclusions];
 };
 
-const opponentPositionRelativeToCandidate = (
-	candidate: SpacefinderItem,
-	opponent: SpacefinderItem,
-): 'above' | 'below' | 'surrounding' | 'surrounded' => {
-	if (opponent.bottom < candidate.top) {
-		return 'above';
-	}
-	if (opponent.top < candidate.bottom) {
-		return 'below';
-	}
-
-	if (opponent.top < candidate.top && opponent.bottom > candidate.bottom) {
-		return 'surrounding';
-	}
-
-	return 'surrounded';
-};
-
 /**
  * Check if the top of the candidate is far enough from the opponent
  *
