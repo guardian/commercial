@@ -179,21 +179,8 @@ export const initCommentsExpandedAdverts = (): Promise<void> => {
 	document.addEventListener('comments-loaded', () => {
 		const currentBreakpoint = getBreakpoint(getViewport().width);
 		if (currentBreakpoint === 'mobile') {
-			if (
-				window.guardian.config.tests?.commercialMegaTestControl ===
-				'control'
-			) {
-				return;
-			}
 			void handleCommentsLoadedMobileEvent();
 		} else {
-			if (
-				!window.guardian.config.isDotcomRendering &&
-				window.guardian.config.tests?.commercialMegaTestControl ===
-					'control'
-			) {
-				return;
-			}
 			void handleCommentsLoadedEvent();
 		}
 	});
@@ -203,12 +190,6 @@ export const initCommentsExpandedAdverts = (): Promise<void> => {
 	 * we need to remove the existing slots and create new slots.
 	 */
 	document.addEventListener('comments-state-change', () => {
-		if (
-			window.guardian.config.tests?.commercialMegaTestControl ===
-			'control'
-		) {
-			return;
-		}
 		void removeMobileCommentsExpandedAds();
 	});
 
