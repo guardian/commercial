@@ -16,9 +16,7 @@ jobs:
     steps:
       # Commercial
       - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          path: ./commercial
+        uses: actions/checkout@v4
 
       - run: corepack enable
         working-directory: ./commercial
