@@ -18,20 +18,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - run: corepack enable
-        working-directory: ./commercial
-        shell: bash
-
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: './commercial/.nvmrc'
-          cache: 'pnpm'
-          cache-dependency-path: './commercial/pnpm-lock.yaml'
-
-      - name: Install dependencies
-        working-directory: ./commercial
-        run: pnpm install --frozen-lockfile
+      - name: Set up Node
+        uses: ./.github/actions/setup-node-env
 
       # We always run our commercial code against the latest main of DCR
       # This does make our tests sensitive to changes in DCR
