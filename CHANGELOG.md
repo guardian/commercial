@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 18.3.0
+
+### Minor Changes
+
+- 40cbc73: Remove mega test
+
 ## 18.2.0
 
 ### Minor Changes
