@@ -171,7 +171,7 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 				minBelowSlot: 600,
 			},
 			'figure.element--supporting': {
-				minAboveSlot: 500,
+				minAboveSlot: 100,
 				minBelowSlot: 0,
 			},
 		},
