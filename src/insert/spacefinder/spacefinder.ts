@@ -17,16 +17,19 @@ type RuleSpacing = {
 	bypassMinBelow?: string;
 };
 
+type SpacefinderMetaItem = {
+	required?: number;
+	actual?: number;
+	element: HTMLElement;
+};
+
 type SpacefinderItem = {
 	top: number;
 	bottom: number;
 	element: HTMLElement;
-	meta?: {
-		tooClose: Array<{
-			required: number;
-			actual: number;
-			element: HTMLElement;
-		}>;
+	meta: {
+		tooClose: SpacefinderMetaItem[];
+		overlaps: SpacefinderMetaItem[];
 	};
 };
 
@@ -313,29 +316,45 @@ const testCandidate = (
 		return true;
 	}
 
-	const isOpponentBelow = opponent.bottom > candidate.bottom;
+	const isOpponentBelow =
+		opponent.bottom > candidate.bottom && opponent.top > candidate.bottom;
+	const isOpponentAbove =
+		opponent.top < candidate.top && opponent.bottom < candidate.top;
 
-	const pass = isTopOfCandidateFarEnoughFromOpponent(
-		candidate,
-		opponent,
-		rule,
-		isOpponentBelow,
-	);
+	// this can happen when the an opponent like an image or interactive is floated right
+	const opponentOverlaps =
+		(isOpponentAbove && isOpponentBelow) ||
+		(!isOpponentAbove && !isOpponentBelow);
+
+	const pass =
+		!opponentOverlaps &&
+		isTopOfCandidateFarEnoughFromOpponent(
+			candidate,
+			opponent,
+			rule,
+			isOpponentBelow,
+		);
 
 	if (!pass) {
-		// if the test fails, add debug information to the candidate metadata
-		const required = isOpponentBelow
-			? rule.minBelowSlot
-			: rule.minAboveSlot;
-		const actual = isOpponentBelow
-			? opponent.top - candidate.top
-			: candidate.top - opponent.bottom;
+		if (opponentOverlaps) {
+			candidate.meta.overlaps.push({
+				element: opponent.element,
+			});
+		} else {
+			// if the test fails, add debug information to the candidate metadata
+			const required = isOpponentBelow
+				? rule.minBelowSlot
+				: rule.minAboveSlot;
+			const actual = isOpponentBelow
+				? opponent.top - candidate.top
+				: candidate.top - opponent.bottom;
 
-		candidate.meta?.tooClose.push({
-			required,
-			actual,
-			element: opponent.element,
-		});
+			candidate.meta.tooClose.push({
+				required,
+				actual,
+				element: opponent.element,
+			});
+		}
 	}
 
 	return pass;
@@ -502,6 +521,7 @@ const getDimensions = (element: HTMLElement): Readonly<SpacefinderItem> =>
 		element,
 		meta: {
 			tooClose: [],
+			overlaps: [],
 		},
 	});
 
@@ -609,4 +629,5 @@ export type {
 	SpacefinderItem,
 	SpacefinderExclusions,
 	SpacefinderPass,
+	SpacefinderMetaItem,
 };

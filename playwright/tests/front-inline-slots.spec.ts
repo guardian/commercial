@@ -15,7 +15,8 @@ test.describe('Slots and iframes load on fronts pages', () => {
 	});
 });
 
-test.describe('Slots and iframes load on tag pages', () => {
+// currently no banners on tag fronts
+test.skip('Slots and iframes load on tag pages', () => {
 	tagPages.forEach(({ path }) => {
 		test(`fronts-banner ads are loaded on ${path}`, async ({ page }) => {
 			await loadPage(page, path);
