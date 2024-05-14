@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 18.4.0
+
+### Minor Changes
+
+- 6758606: Spacefinder - Handle opponents/candidates overlapping
+
 ## 18.3.0
 
 ### Minor Changes
