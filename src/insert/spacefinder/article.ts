@@ -397,7 +397,7 @@ const addMobileSubsequentInlineAds = (
 
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const slots = paras.map(async (para, i) => {
-			const name = `inline${i}`;
+			const name = `inline${i + 1}`;
 			const type = 'inline';
 			const slot = await insertSlotAtPara(para, name, type, 'inline');
 			return fillSlot(
