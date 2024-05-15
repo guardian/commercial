@@ -1,4 +1,4 @@
-name: E2E
+name: Test ad load time
 on:
   push:
     branches:
@@ -6,40 +6,20 @@ on:
   workflow_dispatch:
   pull_request:
 
-concurrency:
-  group: 'playwright-${{ github.head_ref }}'
-  cancel-in-progress: true
-
 jobs:
   test:
-    name: Playwright
+    name: Test time to load top-above-nav
     timeout-minutes: 30
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        group: [1, 2, 3, 4, 5]
     steps:
       # Commercial
       - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          path: ./commercial
+        uses: actions/checkout@v4
 
-      - run: corepack enable
-        working-directory: ./commercial
-        shell: bash
-
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: './commercial/.nvmrc'
-          cache: 'pnpm'
-          cache-dependency-path: './commercial/pnpm-lock.yaml'
-
-      - name: Install dependencies
-        working-directory: ./commercial
-        run: pnpm install --frozen-lockfile
+      - name: Set up Node
+        uses: ./.github/actions/setup-node-env
 
       # We always run our commercial code against the latest main of DCR
       # This does make our tests sensitive to changes in DCR
@@ -63,19 +43,16 @@ jobs:
 
       - name: Install Playwright Browsers
         run: pnpm playwright install --with-deps chromium
-        working-directory: ./commercial
 
       - name: Start Commercial server
         run: pnpm serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
-        working-directory: ./commercial
 
       - name: Run Playwright
-        run: pnpm playwright test --grep-invert test-ad-load-time.spec.ts --shard=${{ matrix.group }}/5
-        working-directory: ./commercial
+        run: pnpm playwright test test-ad-load-time.spec.ts
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report-${{ matrix.group }}
+          name: ad-load-time-report
           path: ./commercial/playwright-report
           retention-days: 5
