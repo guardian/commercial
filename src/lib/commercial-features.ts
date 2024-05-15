@@ -86,12 +86,12 @@ class CommercialFeatures {
 
 		// Detect presence of space for football-right ad slot
 		const { pageId } = window.guardian.config.page;
-		const isFootballPage = pageId.startsWith('football/');
+		const isFootballPage = pageId?.startsWith('football/');
 		const isPageWithRightAdSpace =
-			pageId.endsWith('/fixtures') ||
-			pageId.endsWith('/results') ||
-			pageId.endsWith('/tables') ||
-			pageId.endsWith('/table');
+			pageId?.endsWith('/fixtures') ||
+			pageId?.endsWith('/results') ||
+			pageId?.endsWith('/tables') ||
+			pageId?.endsWith('/table');
 
 		this.footballFixturesAdverts = isFootballPage && isPageWithRightAdSpace;
 
