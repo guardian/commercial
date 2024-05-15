@@ -57,6 +57,7 @@ class CommercialFeatures {
 	comscore: boolean;
 	launchpad: boolean;
 	youtubeAdvertising: boolean;
+	footballFixturesAdverts: boolean;
 
 	constructor() {
 		// this is used for SpeedCurve tests
@@ -82,6 +83,17 @@ class CommercialFeatures {
 
 		// TODO Convert detect.js to TypeScript
 		const isUnsupportedBrowser: boolean = isInternetExplorer();
+
+		// Detect presence of space for football-right ad slot
+		const { pageId } = window.guardian.config.page;
+		const isFootballPage = pageId.startsWith('football/');
+		const isPageWithRightAdSpace =
+			pageId.endsWith('/fixtures') ||
+			pageId.endsWith('/results') ||
+			pageId.endsWith('/tables') ||
+			pageId.endsWith('/table');
+
+		this.footballFixturesAdverts = isFootballPage && isPageWithRightAdSpace;
 
 		this.isSecureContact = [
 			'help/ng-interactive/2017/mar/17/contact-the-guardian-securely',
