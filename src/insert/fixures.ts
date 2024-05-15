@@ -1,6 +1,5 @@
 import { AD_LABEL_HEIGHT } from 'core/constants';
 import { createAdSlot, wrapSlotInContainer } from 'core/create-ad-slot';
-import { commercialFeatures } from 'lib/commercial-features';
 import { getBreakpoint } from 'lib/detect/detect-breakpoint';
 import { getViewport } from 'lib/detect/detect-viewport';
 import fastdom from '../utils/fastdom-promise';
@@ -31,6 +30,19 @@ const insertFootballRightAd = (anchor: HTMLElement) => {
 		.then(() => fillDynamicAdSlot(slot, false));
 };
 
+const isPageWithAdSpace = () => {
+	const { pageId } = window.guardian.config.page;
+
+	const isFootballPage = pageId.startsWith('football/');
+	const isPageWithRightAdSpace =
+		pageId.endsWith('/fixtures') ||
+		pageId.endsWith('/results') ||
+		pageId.endsWith('/tables') ||
+		pageId.endsWith('/table');
+
+	return isFootballPage && isPageWithRightAdSpace;
+};
+
 /**
  * Inserts an advert on certain football fixtures/results/tables
  * pages in the right column.
@@ -45,7 +57,7 @@ export const init = (): Promise<void> => {
 		return Promise.resolve();
 	}
 
-	if (!commercialFeatures.footballFixturesAdverts) {
+	if (!isPageWithAdSpace()) {
 		return Promise.resolve();
 	}
 
