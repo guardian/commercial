@@ -508,25 +508,22 @@ const attemptToAddInlineMerchAd = (
  * Init all the article body adverts, including `im` and `carrot`
  * @param fillAdSlot a function to fill the ad slots
  */
-const init = async (fillAdSlot: FillAdSlot): Promise<boolean> => {
+const init = async (fillAdSlot: FillAdSlot): Promise<void> => {
 	if (!commercialFeatures.articleBodyAdverts) {
-		return Promise.resolve(false);
+		return Promise.resolve();
 	}
 
 	// We add the first inline ad before finding a place for an im so that the inline1 doesn't get pushed down
 	await addFirstInlineAd(fillAdSlot);
 
-	const im = window.guardian.config.page.hasInlineMerchandise
-		? attemptToAddInlineMerchAd(fillAdSlot)
-		: Promise.resolve(false);
-	await im;
+	if (window.guardian.config.page.hasInlineMerchandise) {
+		await attemptToAddInlineMerchAd(fillAdSlot);
+	}
 
 	// Add the other inline slots after the im, so that there is space left for the im ad
 	await addSubsequentInlineAds(fillAdSlot);
 
 	await initCarrot();
-
-	return im;
 };
 
 export { init, addFirstInlineAd, addSubsequentInlineAds, type FillAdSlot };
