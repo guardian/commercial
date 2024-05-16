@@ -19,7 +19,6 @@ import {
 } from 'lib/detect/detect-breakpoint';
 import { isInVariantSynchronous } from '../../experiments/ab';
 import { deeplyReadRightColumn } from '../../experiments/tests/deeply-read-right-column';
-import { waitForAdvert } from '../../lib/dfp/wait-for-advert';
 import fastdom from '../../utils/fastdom-promise';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
 import { initCarrot } from './carrot-traffic-driver';
@@ -520,8 +519,7 @@ const init = async (fillAdSlot: FillAdSlot): Promise<boolean> => {
 	const im = window.guardian.config.page.hasInlineMerchandise
 		? attemptToAddInlineMerchAd(fillAdSlot)
 		: Promise.resolve(false);
-	const inlineMerchAdded = await im;
-	if (inlineMerchAdded) await waitForAdvert('dfp-ad--im');
+	await im;
 
 	// Add the other inline slots after the im, so that there is space left for the im ad
 	await addSubsequentInlineAds(fillAdSlot);

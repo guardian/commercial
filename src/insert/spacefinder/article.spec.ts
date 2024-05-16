@@ -2,9 +2,6 @@ import { spaceFiller } from 'insert/spacefinder/space-filler';
 import { commercialFeatures } from 'lib/commercial-features';
 import { init } from './article';
 
-const ads = {
-	'dfp-ad--im': true,
-} as const;
 jest.mock('utils/report-error', () => ({
 	reportError: jest.fn(),
 }));
@@ -13,9 +10,6 @@ jest.mock('lib/header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));
 
-jest.mock('lib/dfp/wait-for-advert', () => (id: keyof typeof ads) => {
-	return Promise.resolve(ads[id]);
-});
 jest.mock('insert/fill-dynamic-advert-slot', () => ({
 	fillDynamicAdSlot: jest.fn(),
 }));
