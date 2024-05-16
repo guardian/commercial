@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 18.5.0
+
+### Minor Changes
+
+- 060642b: Add Deeply Read 0% AB test
+
 ## 18.4.0
 
 ### Minor Changes
