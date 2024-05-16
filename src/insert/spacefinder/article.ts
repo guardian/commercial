@@ -17,6 +17,8 @@ import {
 	getCurrentBreakpoint,
 	getCurrentTweakpoint,
 } from 'lib/detect/detect-breakpoint';
+import { isInVariantSynchronous } from '../../experiments/ab';
+import { deeplyReadRightColumn } from '../../experiments/tests/deeply-read-right-column';
 import { waitForAdvert } from '../../lib/dfp/wait-for-advert';
 import fastdom from '../../utils/fastdom-promise';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
@@ -24,6 +26,14 @@ import { initCarrot } from './carrot-traffic-driver';
 import { isInHighValueSection } from './utils';
 
 type SlotName = Parameters<typeof createAdSlot>[0];
+
+/**
+ * As estimation of the height of the most viewed island.
+ * This appears from desktop breakpoints on the right-hand side.
+ * Knowing the height of the element is useful when
+ * calculating where to place ads in the right column.
+ */
+const MOST_VIEWED_HEIGHT = 600;
 
 const articleBodySelector = '.article-body-commercial-selector';
 
@@ -33,6 +43,11 @@ const hasImages = !!window.guardian.config.page.lightboxImages?.images.length;
 
 const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
+
+const isInDeeplyReadMostViewedVariant = isInVariantSynchronous(
+	deeplyReadRightColumn,
+	'deeply-read-and-most-viewed',
+);
 
 const minDistanceBetweenRightRailAds = 500;
 const minDistanceBetweenInlineAds = isInHighValueSection ? 500 : 750;
@@ -209,11 +224,12 @@ const addDesktopRightRailAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 
 	/**
 	 * In special cases, inline2 can overlap the "Most viewed" island, so
-	 * we need to make an adjustment to move the inline2 further down the page.
+	 * we need to make an adjustment to move the inline2 further down the page
 	 */
-	if (isPaidContent) {
-		minAbove += 600;
+	if (isInDeeplyReadMostViewedVariant || isPaidContent) {
+		minAbove += MOST_VIEWED_HEIGHT;
 	}
+
 	// Some old articles don't have a main image, which means the first paragraph is much higher
 	if (!hasImages) {
 		minAbove += 600;
