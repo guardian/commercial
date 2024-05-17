@@ -322,7 +322,7 @@ const addDesktopRightRailAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 };
 
 const addMobileInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
-	const minDistanceFromArticleTop = 100;
+	const minDistanceFromArticleTop = 200;
 
 	const ignoreList = `:not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`;
 
