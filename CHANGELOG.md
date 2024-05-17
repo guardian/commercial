@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 18.6.2
+
+### Patch Changes
+
+- 9cad9fe: Increase spacefinder mobile minAbove distance to 250px
+
 ## 18.6.1
 
 ### Patch Changes
