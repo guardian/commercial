@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 18.6.1
+
+### Patch Changes
+
+- 2db5b8f: Increase spacefinder minAbove distance by 100px
+
 ## 18.6.0
 
 ### Minor Changes
