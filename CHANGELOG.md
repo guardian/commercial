@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 18.6.0
+
+### Minor Changes
+
+- 6580399: Use fetch instead of sendBeacon for commercial metrics
+
 ## 18.5.0
 
 ### Minor Changes
