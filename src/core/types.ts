@@ -36,14 +36,9 @@ export type ThirdPartyTag = {
 
 export type GetThirdPartyTag = (arg0: { shouldRun: boolean }) => ThirdPartyTag;
 
-export type GuardianAnalyticsConfig = {
-	trackers: Record<string, string>;
-};
-
 export type Edition = 'UK' | 'AU' | 'US';
 
 export type GuardianWindowConfig = {
-	googleAnalytics?: GuardianAnalyticsConfig;
 	isDotcomRendering: boolean;
 	ophan: {
 		// somewhat redundant with guardian.ophan
