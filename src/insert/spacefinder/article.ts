@@ -19,7 +19,6 @@ import {
 } from 'lib/detect/detect-breakpoint';
 import { isInVariantSynchronous } from '../../experiments/ab';
 import { deeplyReadRightColumn } from '../../experiments/tests/deeply-read-right-column';
-import { waitForAdvert } from '../../lib/dfp/wait-for-advert';
 import fastdom from '../../utils/fastdom-promise';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
 import { initCarrot } from './carrot-traffic-driver';
@@ -321,35 +320,66 @@ const addDesktopRightRailAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 	});
 };
 
-const addMobileInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
-	const minDistanceFromArticleTop = 250;
+const mobileMinDistanceFromArticleTop = 250;
 
-	const ignoreList = `:not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`;
+const mobileIgnoreList = `:not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`;
 
+const mobileOpponentSelectorRules = {
+	// don't place ads right after a heading
+	':scope > h2, [data-spacefinder-role="nested"] > h2, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"]':
+		{
+			minAboveSlot: 100,
+			minBelowSlot: 0,
+		},
+	...inlineAdSlotContainerRules,
+	// this is a catch-all for elements that are not covered by the above rules, these will generally be things like videos, embeds and atoms. minBelowSlot is higher to push ads a bit further down after these elements
+	[`:scope > ${mobileIgnoreList}, [data-spacefinder-role="nested"] > ${mobileIgnoreList}`]:
+		{
+			minAboveSlot: 35,
+			minBelowSlot: 200,
+			// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
+			bypassMinBelow:
+				'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
+		},
+};
+
+const addMobileTopAboveNav = (fillSlot: FillAdSlot): Promise<boolean> => {
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
 		candidateSelector:
 			':scope > p, :scope > h2, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"], [data-spacefinder-role="nested"] > p',
-		minAbove: minDistanceFromArticleTop,
+		minAbove: mobileMinDistanceFromArticleTop,
 		minBelow: 200,
-		opponentSelectorRules: {
-			// don't place ads right after a heading
-			':scope > h2, [data-spacefinder-role="nested"] > h2, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"]':
-				{
-					minAboveSlot: 100,
-					minBelowSlot: 0,
-				},
-			...inlineAdSlotContainerRules,
-			// this is a catch-all for elements that are not covered by the above rules, these will generally be things like videos, embeds and atoms. minBelowSlot is higher to push ads a bit further down after these elements
-			[`:scope > ${ignoreList}, [data-spacefinder-role="nested"] > ${ignoreList}`]:
-				{
-					minAboveSlot: 35,
-					minBelowSlot: 200,
-					// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
-					bypassMinBelow:
-						'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
-				},
-		},
+		opponentSelectorRules: mobileOpponentSelectorRules,
+	};
+
+	const insertAds: SpacefinderWriter = async (paras) => {
+		const slots = paras.slice(0, 1).map(async (para) => {
+			const name = 'top-above-nav';
+			const type = 'top-above-nav';
+			const slot = await insertSlotAtPara(para, name, type, 'inline');
+			return fillSlot(name, slot);
+		});
+		await Promise.all(slots);
+	};
+
+	return spaceFiller.fillSpace(rules, insertAds, {
+		waitForImages: true,
+		waitForInteractives: true,
+		pass: 'mobile-top-above-nav',
+	});
+};
+
+const addMobileSubsequentInlineAds = (
+	fillSlot: FillAdSlot,
+): Promise<boolean> => {
+	const rules: SpacefinderRules = {
+		bodySelector: articleBodySelector,
+		candidateSelector:
+			':scope > p, :scope > h2, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"], [data-spacefinder-role="nested"] > p',
+		minAbove: mobileMinDistanceFromArticleTop,
+		minBelow: 200,
+		opponentSelectorRules: mobileOpponentSelectorRules,
 		/**
 		 * Filter out any candidates that are too close to the last winner
 		 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
@@ -366,8 +396,8 @@ const addMobileInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const slots = paras.map(async (para, i) => {
-			const name = i === 0 ? 'top-above-nav' : `inline${i}`;
-			const type = i === 0 ? 'top-above-nav' : 'inline';
+			const name = `inline${i + 1}`;
+			const type = 'inline';
 			const slot = await insertSlotAtPara(para, name, type, 'inline');
 			return fillSlot(
 				name,
@@ -386,7 +416,7 @@ const addMobileInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
-		pass: 'mobile-inlines',
+		pass: 'mobile-subsequent-inlines',
 	});
 };
 
@@ -395,21 +425,26 @@ const addMobileInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
  * @param fillSlot A function to call that will fill the slot when each ad slot has been inserted,
  * these could be google display ads or opt opt consentless ads.
  */
-const addInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
+const addFirstInlineAd = (fillSlot: FillAdSlot): Promise<boolean> => {
 	const isMobile = getCurrentBreakpoint() === 'mobile';
 	if (isMobile) {
-		return addMobileInlineAds(fillSlot);
+		return addMobileTopAboveNav(fillSlot);
 	}
 
 	if (isPaidContent) {
-		return addDesktopRightRailAds(fillSlot);
+		return Promise.resolve(false);
 	}
 
-	// Add the rest of the inline ad slots after a position for inline1 has been found.
-	// We don't wan't inline1 and inline2 targeting the same paragraph.
-	return addDesktopInline1(fillSlot).then(() =>
-		addDesktopRightRailAds(fillSlot),
-	);
+	return addDesktopInline1(fillSlot);
+};
+
+const addSubsequentInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
+	const isMobile = getCurrentBreakpoint() === 'mobile';
+	if (isMobile) {
+		return addMobileSubsequentInlineAds(fillSlot);
+	}
+
+	return addDesktopRightRailAds(fillSlot);
 };
 
 const attemptToAddInlineMerchAd = (
@@ -473,22 +508,22 @@ const attemptToAddInlineMerchAd = (
  * Init all the article body adverts, including `im` and `carrot`
  * @param fillAdSlot a function to fill the ad slots
  */
-const init = async (fillAdSlot: FillAdSlot): Promise<boolean> => {
+const init = async (fillAdSlot: FillAdSlot): Promise<void> => {
 	if (!commercialFeatures.articleBodyAdverts) {
-		return Promise.resolve(false);
+		return Promise.resolve();
 	}
 
-	await addInlineAds(fillAdSlot);
+	// We add the first inline ad before finding a place for an im so that the inline1 doesn't get pushed down
+	await addFirstInlineAd(fillAdSlot);
 
-	const im = window.guardian.config.page.hasInlineMerchandise
-		? attemptToAddInlineMerchAd(fillAdSlot)
-		: Promise.resolve(false);
-	const inlineMerchAdded = await im;
-	if (inlineMerchAdded) await waitForAdvert('dfp-ad--im');
+	if (window.guardian.config.page.hasInlineMerchandise) {
+		await attemptToAddInlineMerchAd(fillAdSlot);
+	}
+
+	// Add the other inline slots after the im, so that there is space left for the im ad
+	await addSubsequentInlineAds(fillAdSlot);
 
 	await initCarrot();
-
-	return im;
 };
 
-export { init, addInlineAds, type FillAdSlot };
+export { init, addFirstInlineAd, addSubsequentInlineAds, type FillAdSlot };
