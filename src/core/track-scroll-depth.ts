@@ -13,40 +13,39 @@ const initTrackScrollDepth = () => {
 
 	// this if statement is here to handle a bug in Firefox in Android where the innerHeight
 	// of a new tab can be 0, so we end up dividing by 0 and looping through infinity
-	if (intViewportHeight > 0) {
-		// how many viewports tall is the page?
-		const pageHeightVH = Math.floor(pageHeight / intViewportHeight);
-		const eventTimer = EventTimer.get();
-		eventTimer.setProperty('pageHeightVH', pageHeightVH);
+	if (intViewportHeight === 0) {
+		return;
+	}
 
-		const observer = new IntersectionObserver(
-			/* istanbul ignore next */
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						const currentDepthVH = String(
-							entry.target.getAttribute('data-depth'),
-						);
-						log(
-							'commercial',
-							`current scroll depth ${currentDepthVH}`,
-						);
-						eventTimer.mark(`scroll-depth-vh-${currentDepthVH}`);
-						observer.unobserve(entry.target);
-					}
-				});
-			},
-		);
+	// how many viewports tall is the page?
+	const pageHeightVH = Math.floor(pageHeight / intViewportHeight);
+	const eventTimer = EventTimer.get();
+	eventTimer.setProperty('pageHeightVH', pageHeightVH);
 
-		for (let depth = 1; depth <= pageHeightVH; depth++) {
-			const div = document.createElement('div');
-			div.dataset.depth = String(depth);
-			div.style.top = String(100 * depth) + '%';
-			div.style.position = 'absolute';
-			div.className = 'scroll-depth-marker';
-			document.body.appendChild(div);
-			observer.observe(div);
-		}
+	const observer = new IntersectionObserver(
+		/* istanbul ignore next */
+		(entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					const currentDepthVH = String(
+						entry.target.getAttribute('data-depth'),
+					);
+					log('commercial', `current scroll depth ${currentDepthVH}`);
+					eventTimer.mark(`scroll-depth-vh-${currentDepthVH}`);
+					observer.unobserve(entry.target);
+				}
+			});
+		},
+	);
+
+	for (let depth = 1; depth <= pageHeightVH; depth++) {
+		const div = document.createElement('div');
+		div.dataset.depth = String(depth);
+		div.style.top = String(100 * depth) + '%';
+		div.style.position = 'absolute';
+		div.className = 'scroll-depth-marker';
+		document.body.appendChild(div);
+		observer.observe(div);
 	}
 };
 
