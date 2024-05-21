@@ -81,11 +81,6 @@ describe('EventTimer', () => {
 		window.guardian = {
 			config: {
 				...DEFAULT_CONFIG,
-				googleAnalytics: {
-					trackers: {
-						editorial: 'gaTrackerTest',
-					},
-				},
 			},
 		} as typeof window.guardian;
 
