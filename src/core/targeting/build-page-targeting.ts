@@ -1,6 +1,8 @@
 import type { Participations } from '@guardian/ab-core';
 import type { ConsentState, CountryCode } from '@guardian/libs';
 import { cmp, getCookie, isString } from '@guardian/libs';
+//web-vitals is imported after we removed GA because PerformanceNavigationTiming type uses the ambient types in web-vitals
+import {} from 'web-vitals';
 import { supportsPerformanceAPI } from '../event-timer';
 import { getLocale } from '../lib/get-locale';
 import type { False, True } from '../types';
