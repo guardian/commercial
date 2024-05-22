@@ -109,6 +109,7 @@ type SlotName =
 	| 'merchandising-high'
 	| 'merchandising'
 	| 'mobile-sticky'
+	| 'football-right'
 	| 'mostpop'
 	| 'right'
 	| 'sponsor-logo'
@@ -395,6 +396,14 @@ const slotSizeMappings = {
 	},
 	'crossword-banner': {
 		phablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
+	},
+	'football-right': {
+		desktop: [
+			adSizes.empty,
+			adSizes.mpu,
+			adSizes.skyscraper,
+			adSizes.halfPage,
+		],
 	},
 	'article-end': {
 		mobile: [], // Mappings are dynamically added for this slot using additionalSizes
