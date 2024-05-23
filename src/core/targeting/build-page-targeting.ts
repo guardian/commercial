@@ -1,8 +1,6 @@
 import type { Participations } from '@guardian/ab-core';
 import type { ConsentState, CountryCode } from '@guardian/libs';
 import { cmp, getCookie, isString } from '@guardian/libs';
-//web-vitals is imported after we removed GA because PerformanceNavigationTiming type uses the ambient types in web-vitals
-import {} from 'web-vitals';
 import { supportsPerformanceAPI } from '../event-timer';
 import { getLocale } from '../lib/get-locale';
 import type { False, True } from '../types';
@@ -71,13 +69,14 @@ const filterValues = (pageTargets: Record<string, unknown>) => {
 	return filtered;
 };
 
-const getLastNavigationType = (): NavigationTimingType | undefined => {
+const lastPerformanceEntryIsNavigationType = (): boolean => {
 	if (!supportsPerformanceAPI()) {
-		return undefined;
+		return false;
 	}
 	const navigationEvents = performance.getEntriesByType('navigation');
 	const lastNavigationEvent = navigationEvents[navigationEvents.length - 1];
-	return lastNavigationEvent?.type;
+	// https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEntry/entryType#navigation
+	return lastNavigationEvent?.entryType === 'navigation';
 };
 
 const referrerMatchesHost = (referrer: string): boolean => {
@@ -90,7 +89,7 @@ const referrerMatchesHost = (referrer: string): boolean => {
 
 // A consentless friendly way of determining if this is the users first visit to the page
 const isFirstVisit = (referrer: string): boolean => {
-	if (supportsPerformanceAPI() && getLastNavigationType() !== 'navigate') {
+	if (supportsPerformanceAPI() && !lastPerformanceEntryIsNavigationType()) {
 		return false;
 	}
 
