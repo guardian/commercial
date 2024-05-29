@@ -250,18 +250,17 @@ const setupBackground = async (
 				const observer = new IntersectionObserver(
 					(entries) => {
 						entries.forEach((entry) => {
-							const intersecting = entry.isIntersecting;
-							if (intersecting && !played) {
+							if (entry.isIntersecting && !played) {
 								void video.play();
 							} else {
 								video.pause();
 							}
 						});
 					},
-					{ threshold: 0.2 },
+					{ root: null, rootMargin: '0px', threshold: 0.2 },
 				);
 
-				observer.observe(video);
+				observer.observe(backgroundParent);
 
 				EventTimer.get().setProperty(
 					'videoInterscrollerCreativeId',
