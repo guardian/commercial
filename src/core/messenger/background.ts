@@ -244,6 +244,24 @@ const setupBackground = async (
 					return undefined;
 				};
 
+				let played = false;
+				video.onended = () => (played = true);
+
+				const observer = new IntersectionObserver(
+					(entries) => {
+						entries.forEach((entry) => {
+							if (entry.isIntersecting && !played) {
+								video.paused && void video.play();
+							} else {
+								!video.paused && video.pause();
+							}
+						});
+					},
+					{ root: null, rootMargin: '0px', threshold: 0.2 },
+				);
+
+				observer.observe(backgroundParent);
+
 				EventTimer.get().setProperty(
 					'videoInterscrollerCreativeId',
 					getCreativeId(),
