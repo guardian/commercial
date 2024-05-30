@@ -251,9 +251,9 @@ const setupBackground = async (
 					(entries) => {
 						entries.forEach((entry) => {
 							if (entry.isIntersecting && !played) {
-								void video.play();
+								video.paused && void video.play();
 							} else {
-								video.pause();
+								!video.paused && video.pause();
 							}
 						});
 					},
