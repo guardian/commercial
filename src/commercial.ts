@@ -1,17 +1,30 @@
 import { getConsentFor, onConsent } from '@guardian/libs';
-import { bootCommercialWhenReady } from 'init/consented';
 import { commercialFeatures } from 'lib/commercial-features';
+
+const { frontendAssetsFullURL, page } = window.guardian.config;
+
+const decideAssetsPath = () => {
+	if (process.env.OVERRIDE_BUNDLE_PATH) {
+		return process.env.OVERRIDE_BUNDLE_PATH;
+	}
+	const assetsPath = frontendAssetsFullURL ?? page.assetsPath;
+	return `${assetsPath}javascripts/commercial/`;
+};
+
+__webpack_public_path__ = decideAssetsPath();
 
 /**
  * Choose whether to launch Googletag or Opt Out tag (ootag) based on consent state
  */
-const chooseAdvertisingTag = async () => {
+void (async () => {
 	const consentState = await onConsent();
 	// Only load the Opt Out tag if:
+	// - Opt Out switch is on
 	// - in TCF region
 	// - no consent for Googletag
 	// - the user is not a subscriber
 	if (
+		window.guardian.config.switches.optOutAdvertising &&
 		consentState.tcfv2 &&
 		!getConsentFor('googletag', consentState) &&
 		!commercialFeatures.adFree
@@ -21,16 +34,9 @@ const chooseAdvertisingTag = async () => {
 			'./init/consentless'
 		).then(({ bootConsentless }) => bootConsentless(consentState));
 	} else {
-		bootCommercialWhenReady();
+		void import(
+			/* webpackChunkName: "consented" */
+			'./init/consented'
+		).then(({ bootCommercialWhenReady }) => bootCommercialWhenReady());
 	}
-};
-
-/**
- * If the consentless switch is on decide whether to boot consentless or normal consented
- * If the consentless switch is off boot normal consented
- */
-if (window.guardian.config.switches.optOutAdvertising) {
-	void chooseAdvertisingTag();
-} else {
-	bootCommercialWhenReady();
-}
+})();
