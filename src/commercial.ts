@@ -1,6 +1,18 @@
 import { getConsentFor, onConsent } from '@guardian/libs';
 import { commercialFeatures } from 'lib/commercial-features';
 
+const { frontendAssetsFullURL, page } = window.guardian.config;
+
+const decideAssetsPath = () => {
+	if (process.env.OVERRIDE_BUNDLE_PATH) {
+		return process.env.OVERRIDE_BUNDLE_PATH;
+	}
+	const assetsPath = frontendAssetsFullURL ?? page.assetsPath;
+	return `${assetsPath}javascripts/commercial/`;
+};
+
+__webpack_public_path__ = decideAssetsPath();
+
 /**
  * Choose whether to launch Googletag or Opt Out tag (ootag) based on consent state
  */
