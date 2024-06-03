@@ -42,8 +42,8 @@ jobs:
 
             const body = `### Ad load time test results
 
-            For \`consented\`, \`top-above-nav\` took ${consented}ms to load.
-            For \`consentless\`, \`top-above-nav\` took ${consentless}ms to load.
+            For \`consented\`, \`top-above-nav\` took on average ${consented}ms to load.
+            For \`consentless\`, \`top-above-nav\` took on average ${consentless}ms to load.
 
             Test condtions:
             - 5mpbs download speed
