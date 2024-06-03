@@ -35,6 +35,7 @@ module.exports = webpackMerge.smart(config, {
 		}),
 		new webpack.DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify('production'),
+			'process.env.OVERRIDE_BUNDLE_PATH': JSON.stringify(false),
 			...gitCommitSHA(),
 		}),
 	],
