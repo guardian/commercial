@@ -48,15 +48,17 @@ jobs:
             - 1.5mpbs upload speed
             - 150ms latency`;
 
-            const existingComment = await github.rest.issues.listComments({
+            const comments = await github.rest.issues.listComments({
               issue_number: context.issue.number,
               owner: context.repo.owner,
-              repo: context.repo.repo
+              repo: context.repo.repo,
             });
 
-            if (existingComment.data.length > 0) {
+            const existingComment = comments.data.find(comment => comment.body.includes('Ad load time test results'));
+
+            if (existingComment) {
               await github.rest.issues.updateComment({
-                comment_id: existingComment.data[0].id,
+                comment_id: existingComment.id,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 body
