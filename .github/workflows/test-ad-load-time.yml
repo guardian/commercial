@@ -24,6 +24,8 @@ jobs:
 
       - name: Build Prod (used for rewriting by playwright)
         run: pnpm build:prod
+        env:
+          BUNDLE_PREFIX: ''
 
       - name: Run Playwright
         run: pnpm benchmark
