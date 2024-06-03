@@ -6,6 +6,8 @@ on:
   workflow_dispatch:
   pull_request:
 
+permissions: write-all
+
 jobs:
   benchmark:
     name: Test time to load top-above-nav
