@@ -16,11 +16,13 @@ const gitCommitSHA = () => {
 	}
 };
 
+const prefix = process.env.BUNDLE_PREFIX ?? '[chunkhash]/';
+
 module.exports = webpackMerge.smart(config, {
 	mode: 'production',
 	output: {
-		filename: `[chunkhash]/graun.standalone.commercial.js`,
-		chunkFilename: `[chunkhash]/graun.[name].commercial.js`,
+		filename: `${prefix}graun.standalone.commercial.js`,
+		chunkFilename: `${prefix}graun.[name].commercial.js`,
 		path: path.join(__dirname, 'dist', 'bundle', 'prod'),
 		clean: true,
 	},
@@ -33,7 +35,6 @@ module.exports = webpackMerge.smart(config, {
 		}),
 		new webpack.DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify('production'),
-			'process.env.OVERRIDE_BUNDLE_PATH': JSON.stringify(false),
 			...gitCommitSHA(),
 		}),
 	],
