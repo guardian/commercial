@@ -50,36 +50,9 @@ jobs:
             - 1.5mbps upload speed
             - 150ms latency`;
 
-            if (context.github.ref === 'refs/head/main') {
-              const {data} = await github.rest.issues.update({
-                issue_number: 1402,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body
-              });
-            } else {
-              const comments = await github.rest.issues.listComments({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-              });
-
-              const existingComment = comments.data.find(comment => comment.body.includes('Ad load time test results'));
-
-              if (existingComment) {
-                await github.rest.issues.updateComment({
-                  comment_id: existingComment.id,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  body
-                });
-                return;
-              } else {
-                const { data } = await github.rest.issues.createComment({
-                  issue_number: context.issue.number,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  body
-                });
-              }
-            }
+            const {data} = await github.rest.issues.update({
+              issue_number: 1402,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
