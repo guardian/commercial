@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 import { articles } from '../fixtures/pages';
 import { type GuPage } from '../fixtures/pages/Page';
-import { cmpAcceptAll } from '../lib/cmp';
+import { cmpRejectAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 
 const viewport = { width: 1400, height: 800 };
@@ -15,7 +15,7 @@ test('setup', async ({ page }) => {
 
 	await loadPage(page, loadPath);
 
-	await cmpAcceptAll(page);
+	await cmpRejectAll(page);
 
 	await page.context().storageState({ path: authFile });
 });
