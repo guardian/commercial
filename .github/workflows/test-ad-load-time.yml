@@ -50,7 +50,7 @@ jobs:
             - 1.5mbps upload speed
             - 150ms latency`;
 
-            if (context.ref === 'refs/head/main') {
+            if (context.ref === 'refs/heads/main') {
               const {data} = await github.rest.issues.update({
                 issue_number: 1402,
                 owner: context.repo.owner,
