@@ -50,14 +50,14 @@ jobs:
             - 1.5mbps upload speed
             - 150ms latency`;
 
-            if (context.github.ref === 'refs/head/main') {
+            if (context.ref === 'refs/head/main') {
               const {data} = await github.rest.issues.update({
                 issue_number: 1402,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 body
               });
-            } else if (context.github.event_name === 'pull_request') {
+            } else if (context.eventName === 'pull_request') {
               const comments = await github.rest.issues.listComments({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
