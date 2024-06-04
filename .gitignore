@@ -26,5 +26,7 @@ wip
 
 # Playwright
 /test-results/
+/benchmark-results/
 /playwright-report/
 /playwright/.cache/
+/playwright/.auth/

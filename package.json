@@ -33,6 +33,7 @@
 		"prettier:check": "prettier . --check --cache",
 		"prettier:fix": "prettier . --write --cache",
 		"serve": "OVERRIDE_BUNDLE=true pnpm webpack-dev-server -c ./webpack.config.dev.js",
+		"benchmark": "STAGE=prod playwright test -c playwright.benchmark.config.ts --project=consented-average --project=consentless-average",
 		"test": "jest",
 		"tsc": "tsc --noEmit",
 		"validate": "npm-run-all tsc lint test build"
