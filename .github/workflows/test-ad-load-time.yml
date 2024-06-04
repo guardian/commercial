@@ -45,7 +45,7 @@ jobs:
             For \`consented\`, \`top-above-nav\` took on average ${consented}ms to load.
             For \`consentless\`, \`top-above-nav\` took on average ${consentless}ms to load.
 
-            Test condtions:
+            Test conditions:
             - 5mpbs download speed
             - 1.5mpbs upload speed
             - 150ms latency`;
