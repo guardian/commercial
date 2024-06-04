@@ -1,6 +1,7 @@
 import { isObject } from '@guardian/libs';
 import { EventTimer } from 'core/event-timer';
 import type { RegisterListener } from 'core/messenger';
+import { bypassCommercialMetricsSampling } from 'core/send-commercial-metrics';
 import fastdom from 'utils/fastdom-promise';
 import {
 	renderAdvertLabel,
@@ -266,6 +267,8 @@ const setupBackground = async (
 					'videoInterscrollerCreativeId',
 					getCreativeId(),
 				);
+
+				void bypassCommercialMetricsSampling();
 
 				video.ontimeupdate = function () {
 					const percent = Math.round(
