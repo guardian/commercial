@@ -1,5 +1,19 @@
 # @guardian/commercial
 
+## 19.0.0
+
+### Major Changes
+
+- e1b6032: add new football-right slot and show ads on fixture pages
+
+### Minor Changes
+
+- 835c06f: Move im spacefinder pass before subsequent inlines pass
+
+### Patch Changes
+
+- 0ad79c0: Resolve bug for new tabs on Firefox on Android
+
 ## 18.6.2
 
 ### Patch Changes

@@ -70,7 +70,7 @@ jobs:
         working-directory: ./commercial
 
       - name: Run Playwright
-        run: pnpm playwright test --grep-invert test-ad-load-time.spec.ts --shard=${{ matrix.group }}/5
+        run: pnpm playwright test --shard=${{ matrix.group }}/5
         working-directory: ./commercial
 
       - uses: actions/upload-artifact@v4

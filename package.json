@@ -1,6 +1,6 @@
 {
 	"name": "@guardian/commercial",
-	"version": "18.6.2",
+	"version": "19.0.0",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial#readme",
 	"bugs": {
@@ -33,6 +33,7 @@
 		"prettier:check": "prettier . --check --cache",
 		"prettier:fix": "prettier . --write --cache",
 		"serve": "OVERRIDE_BUNDLE=true pnpm webpack-dev-server -c ./webpack.config.dev.js",
+		"benchmark": "STAGE=prod playwright test -c playwright.benchmark.config.ts --project=consented-average --project=consentless-average",
 		"test": "jest",
 		"tsc": "tsc --noEmit",
 		"validate": "npm-run-all tsc lint test build"
