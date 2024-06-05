@@ -28,18 +28,6 @@ import { init as initMessenger } from './consented/messenger';
 
 type Modules = Array<[`${string}-${string}`, () => Promise<unknown>]>;
 
-const { frontendAssetsFullURL, page } = window.guardian.config;
-
-const decideAssetsPath = () => {
-	if (process.env.OVERRIDE_BUNDLE_PATH) {
-		return process.env.OVERRIDE_BUNDLE_PATH;
-	}
-	const assetsPath = frontendAssetsFullURL ?? page.assetsPath;
-	return `${assetsPath}javascripts/commercial/`;
-};
-
-__webpack_public_path__ = decideAssetsPath();
-
 const tags: Record<string, string> = {
 	feature: 'commercial',
 	bundle: 'standalone',
