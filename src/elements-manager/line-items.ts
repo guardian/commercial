@@ -57,8 +57,6 @@ const matchesCustomTargeting = (
 	customTargeting: Targeting | null,
 	pageTargeting: PageTargeting,
 ): boolean => {
-	// console.log('lineItemTargeting', customTargeting?.children);
-	// console.log('pageTargeting', pageTargeting);
 	if (!customTargeting) {
 		return true;
 	}
@@ -71,8 +69,6 @@ const matchesCustomTargeting = (
 
 		const secondLevelMatches = child.children[method](
 			({ key, values, operator }) => {
-				// if (keyInTargeting(key, pageTargeting)) {
-				// console.log('keyInTargeting', key, pageTargeting);
 				const targetingValues = pageTargeting[key];
 				return values.some((value) => {
 					if (Array.isArray(targetingValues)) {
@@ -135,8 +131,6 @@ const matchesCustomTargeting = (
 						);
 					return false;
 				});
-				// }
-				// return false;
 			},
 		);
 
@@ -170,11 +164,14 @@ const getLineItems = once(async () => {
 	const house2 = (await fetch('http://localhost:3031/house2.json').then(
 		(res) => res.json(),
 	)) as LineItem[];
+	const giffgaff = (await fetch('http://localhost:3031/giffgaff.json').then(
+		(res) => res.json(),
+	)) as LineItem[];
 	const merch = (await fetch('http://localhost:3031/merch.json').then((res) =>
 		res.json(),
 	)) as LineItem[];
 
-	const lineItems = [house, house2, merch].flat();
+	const lineItems = [house, house2, merch, giffgaff].flat();
 
 	// const lineItems = (await fetch('http://localhost:3031/test.json').then(
 	// 	(res) => res.json(),

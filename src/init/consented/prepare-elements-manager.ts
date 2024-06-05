@@ -1,4 +1,4 @@
-import { onConsent } from '@guardian/consent-management-platform';
+import { onConsent } from '@guardian/libs';
 import { initArticleInline } from 'elements-manager/article-inline';
 import { ElementsManager } from 'elements-manager/elements-manager';
 import { getPageTargeting } from 'lib/build-page-targeting';
