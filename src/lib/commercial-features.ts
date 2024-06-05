@@ -55,7 +55,6 @@ class CommercialFeatures {
 	liveblogAdverts: boolean;
 	adFree: boolean;
 	comscore: boolean;
-	launchpad: boolean;
 	youtubeAdvertising: boolean;
 	footballFixturesAdverts: boolean;
 
@@ -176,13 +175,6 @@ class CommercialFeatures {
 			externalAdvertising &&
 			!isIdentityPage &&
 			!this.isSecureContact;
-
-		this.launchpad =
-			!this.adFree &&
-			externalAdvertising &&
-			!isIdentityPage &&
-			!this.isSecureContact &&
-			!!window.guardian.config.switches.redplanetForAus;
 
 		this.commentAdverts =
 			this.shouldLoadGoogletag &&
