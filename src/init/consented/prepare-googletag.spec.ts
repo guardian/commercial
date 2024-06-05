@@ -216,13 +216,13 @@ const ausRejected: ConsentState = {
 };
 
 const ccpaWithConsent: ConsentState = {
-	ccpa: { doNotSell: false },
+	ccpa: { doNotSell: false, signalStatus: 'ready' },
 	canTarget: true,
 	framework: 'ccpa',
 };
 
 const ccpaWithoutConsent: ConsentState = {
-	ccpa: { doNotSell: true },
+	ccpa: { doNotSell: true, signalStatus: 'ready' },
 	canTarget: false,
 	framework: 'ccpa',
 };

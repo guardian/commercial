@@ -41,6 +41,7 @@ const tcfv2WithoutConsent = {
 const ccpaWithConsent = {
 	ccpa: {
 		doNotSell: false,
+		signalStatus: 'ready',
 	},
 	canTarget: true,
 	framework: 'ccpa',
@@ -49,6 +50,7 @@ const ccpaWithConsent = {
 const ccpaWithoutConsent = {
 	ccpa: {
 		doNotSell: true,
+		signalStatus: 'ready',
 	},
 	canTarget: false,
 	framework: 'ccpa',

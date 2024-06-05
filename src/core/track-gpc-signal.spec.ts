@@ -26,6 +26,7 @@ describe('initTrackGpcSignal', () => {
 		const consentState: ConsentState = {
 			ccpa: {
 				doNotSell: false,
+				signalStatus: 'ready',
 			},
 			canTarget: true,
 			framework: 'ccpa',
@@ -43,6 +44,7 @@ describe('initTrackGpcSignal', () => {
 		const consentState: ConsentState = {
 			ccpa: {
 				doNotSell: false,
+				signalStatus: 'ready',
 			},
 			canTarget: true,
 			framework: 'ccpa',

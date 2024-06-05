@@ -75,7 +75,7 @@ describe('Personalised targeting', () => {
 	describe('CCPA', () => {
 		it('Full Consent', () => {
 			const state: ConsentState = {
-				ccpa: { doNotSell: false },
+				ccpa: { doNotSell: false, signalStatus: 'ready' },
 				canTarget: true,
 				framework: 'ccpa',
 			};
@@ -97,7 +97,7 @@ describe('Personalised targeting', () => {
 
 		it('Do Not Sell', () => {
 			const state: ConsentState = {
-				ccpa: { doNotSell: true },
+				ccpa: { doNotSell: true, signalStatus: 'ready' },
 				canTarget: false,
 				framework: 'ccpa',
 			};
@@ -191,7 +191,7 @@ describe('Personalised targeting', () => {
 		];
 		test.each(frequencies)('Should get `%s` for %f', (fr, val) => {
 			const state: ConsentState = {
-				ccpa: { doNotSell: false },
+				ccpa: { doNotSell: false, signalStatus: 'ready' },
 				canTarget: true,
 				framework: 'ccpa',
 			};
@@ -232,7 +232,7 @@ describe('Personalised targeting', () => {
 
 		test.each(groups)('Should get `%s` if it exists', (amtgrp, val) => {
 			const state: ConsentState = {
-				ccpa: { doNotSell: false },
+				ccpa: { doNotSell: false, signalStatus: 'ready' },
 				canTarget: true,
 				framework: 'ccpa',
 			};
@@ -279,7 +279,7 @@ describe('Personalised targeting', () => {
 
 		test('Ad manager group IS set if ccpa and consent not given', () => {
 			const state: ConsentState = {
-				ccpa: { doNotSell: true },
+				ccpa: { doNotSell: true, signalStatus: 'ready' },
 				canTarget: false,
 				framework: 'ccpa',
 			};
@@ -311,7 +311,7 @@ describe('Personalised targeting', () => {
 
 		test('Should set `permutive` to correct values if `youtube` is set to false', () => {
 			const state: ConsentState = {
-				ccpa: { doNotSell: false },
+				ccpa: { doNotSell: false, signalStatus: 'ready' },
 				canTarget: true,
 				framework: 'ccpa',
 			};
@@ -328,7 +328,7 @@ describe('Personalised targeting', () => {
 
 		test('Should set `permutive` to correct values if `youtube` is set to true', () => {
 			const state: ConsentState = {
-				ccpa: { doNotSell: false },
+				ccpa: { doNotSell: false, signalStatus: 'ready' },
 				canTarget: true,
 				framework: 'ccpa',
 			};

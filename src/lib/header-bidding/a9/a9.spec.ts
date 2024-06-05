@@ -29,7 +29,7 @@ const tcfv2WithConsentMock = (callback: OnConsentChangeCallback) =>
 
 const CcpaWithConsentMock = (callback: OnConsentChangeCallback) =>
 	callback({
-		ccpa: { doNotSell: false },
+		ccpa: { doNotSell: false, signalStatus: 'ready' },
 		canTarget: true,
 		framework: 'ccpa',
 	});

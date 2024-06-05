@@ -198,7 +198,7 @@ describe('third party tags', () => {
 		});
 		it('should add scripts to the document when CCPA consent has been given', async () => {
 			mockOnConsent({
-				ccpa: { doNotSell: false },
+				ccpa: { doNotSell: false, signalStatus: 'ready' },
 				canTarget: true,
 				framework: 'ccpa',
 			});
@@ -211,7 +211,7 @@ describe('third party tags', () => {
 		});
 		it('should only add performance scripts to the document when CCPA consent has not been given', async () => {
 			mockOnConsent({
-				ccpa: { doNotSell: true },
+				ccpa: { doNotSell: true, signalStatus: 'ready' },
 				canTarget: false,
 				framework: 'ccpa',
 			});
