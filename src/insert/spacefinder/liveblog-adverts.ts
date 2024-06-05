@@ -120,7 +120,7 @@ const getSpaceFillerRules = (
 
 	return {
 		bodySelector: '.js-liveblog-body',
-		candidateSelector: ' > .block',
+		candidateSelector: ':scope > .block',
 		fromBottom: true,
 		startAt: startBlock,
 		absoluteMinAbove: 0,

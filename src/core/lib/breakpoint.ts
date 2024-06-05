@@ -1,7 +1,7 @@
 /**
  * Breakpoints ordered from smallest to largest
  */
-const breakpoints = ['mobile', 'phablet', 'tablet', 'desktop'] as const;
+const breakpoints = ['mobile', 'phablet', 'tablet', 'desktop', 'wide'] as const;
 
 type Breakpoint = (typeof breakpoints)[number];
 

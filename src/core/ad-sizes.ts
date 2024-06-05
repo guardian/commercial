@@ -109,11 +109,13 @@ type SlotName =
 	| 'merchandising-high'
 	| 'merchandising'
 	| 'mobile-sticky'
+	| 'football-right'
 	| 'mostpop'
 	| 'right'
 	| 'sponsor-logo'
 	| 'survey'
-	| 'top-above-nav';
+	| 'top-above-nav'
+	| 'interactive';
 
 type SizeMapping = Partial<Record<Breakpoint, Readonly<AdSize[]>>>;
 
@@ -395,6 +397,14 @@ const slotSizeMappings = {
 	'crossword-banner': {
 		phablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
 	},
+	'football-right': {
+		desktop: [
+			adSizes.empty,
+			adSizes.mpu,
+			adSizes.skyscraper,
+			adSizes.halfPage,
+		],
+	},
 	'article-end': {
 		mobile: [], // Mappings are dynamically added for this slot using additionalSizes
 	},
@@ -414,6 +424,12 @@ const slotSizeMappings = {
 			adSizes.fluid,
 			adSizes.sponsorLogo,
 		],
+	},
+	interactive: {
+		// Mappings are dynamically added for this slot using data attributes
+		mobile: [adSizes.outOfPage, adSizes.empty],
+		tablet: [adSizes.outOfPage, adSizes.empty],
+		desktop: [adSizes.outOfPage, adSizes.empty],
 	},
 } as const satisfies SlotSizeMappings;
 
@@ -468,16 +484,10 @@ const findAppliedSizesForBreakpoint = (
 // Export for testing
 export const _ = { createAdSize };
 
-export type {
-	AdSizeString,
-	AdSize,
-	SizeKeys,
-	SizeMapping,
-	SlotSizeMappings,
-	SlotName,
-};
+export type { AdSizeString, SizeKeys, SizeMapping, SlotSizeMappings, SlotName };
 
 export {
+	AdSize,
 	adSizes,
 	standardAdSizes,
 	outstreamSizes,

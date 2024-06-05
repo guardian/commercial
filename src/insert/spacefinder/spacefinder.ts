@@ -2,7 +2,6 @@
 
 import { log } from '@guardian/libs';
 import { memoize } from 'lodash-es';
-import { amIUsed } from 'utils/am-i-used';
 import fastdom from 'utils/fastdom-promise';
 import { init as initSpacefinderDebugger } from './spacefinder-debug-tools';
 
@@ -18,16 +17,19 @@ type RuleSpacing = {
 	bypassMinBelow?: string;
 };
 
+type SpacefinderMetaItem = {
+	required?: number;
+	actual?: number;
+	element: HTMLElement;
+};
+
 type SpacefinderItem = {
 	top: number;
 	bottom: number;
 	element: HTMLElement;
-	meta?: {
-		tooClose: Array<{
-			required: number;
-			actual: number;
-			element: HTMLElement;
-		}>;
+	meta: {
+		tooClose: SpacefinderMetaItem[];
+		overlaps: SpacefinderMetaItem[];
 	};
 };
 
@@ -37,7 +39,7 @@ type SpacefinderRules = {
 	/**
 	 * Selector(s) for the elements that we want to allow inserting ads above
 	 */
-	candidateSelector: string | string[];
+	candidateSelector: string;
 	/**
 	 * Minimum distance from slot to top of page
 	 */
@@ -84,8 +86,9 @@ type SpacefinderWriter = (paras: HTMLElement[]) => Promise<void>;
 
 type SpacefinderPass =
 	| 'inline1'
-	| 'mobile-inlines'
+	| 'mobile-top-above-nav'
 	| 'subsequent-inlines'
+	| 'mobile-subsequent-inlines'
 	| 'im'
 	| 'carrot';
 
@@ -129,8 +132,6 @@ const isIframeLoaded = (iframe: HTMLIFrameElement) => {
 	try {
 		return iframe.contentWindow?.document.readyState === 'complete';
 	} catch (err) {
-		// TODO remove try / catch if an error is never thrown
-		amIUsed('spacefinder.ts', 'isIframeLoaded');
 		return true;
 	}
 };
@@ -293,39 +294,68 @@ const isTopOfCandidateFarEnoughFromOpponent = (
 	return true;
 };
 
+/**
+ * Check if 1 - the candidate is the same as the opponent or 2- if the opponent contains the candidate
+ *
+ * 1 can happen when the candidate and opponent selectors overlap
+ * 2 can happen when there are nested candidates, it may try t avoid it's own ancestor
+ */
+const bypassTestCandidate = (
+	candidate: SpacefinderItem,
+	opponent: SpacefinderItem,
+) =>
+	candidate.element === opponent.element ||
+	opponent.element.contains(candidate.element);
+
 // test one element vs another for the given rules
 const testCandidate = (
 	rule: RuleSpacing,
 	candidate: SpacefinderItem,
 	opponent: SpacefinderItem,
 ): boolean => {
-	if (candidate.element === opponent.element) {
+	if (bypassTestCandidate(candidate, opponent)) {
 		return true;
 	}
 
-	const isOpponentBelow = opponent.bottom > candidate.bottom;
+	const isOpponentBelow =
+		opponent.bottom > candidate.bottom && opponent.top > candidate.bottom;
+	const isOpponentAbove =
+		opponent.top < candidate.top && opponent.bottom < candidate.top;
 
-	const pass = isTopOfCandidateFarEnoughFromOpponent(
-		candidate,
-		opponent,
-		rule,
-		isOpponentBelow,
-	);
+	// this can happen when the an opponent like an image or interactive is floated right
+	const opponentOverlaps =
+		(isOpponentAbove && isOpponentBelow) ||
+		(!isOpponentAbove && !isOpponentBelow);
+
+	const pass =
+		!opponentOverlaps &&
+		isTopOfCandidateFarEnoughFromOpponent(
+			candidate,
+			opponent,
+			rule,
+			isOpponentBelow,
+		);
 
 	if (!pass) {
-		// if the test fails, add debug information to the candidate metadata
-		const required = isOpponentBelow
-			? rule.minBelowSlot
-			: rule.minAboveSlot;
-		const actual = isOpponentBelow
-			? opponent.top - candidate.top
-			: candidate.top - opponent.bottom;
+		if (opponentOverlaps) {
+			candidate.meta.overlaps.push({
+				element: opponent.element,
+			});
+		} else {
+			// if the test fails, add debug information to the candidate metadata
+			const required = isOpponentBelow
+				? rule.minBelowSlot
+				: rule.minAboveSlot;
+			const actual = isOpponentBelow
+				? opponent.top - candidate.top
+				: candidate.top - opponent.bottom;
 
-		candidate.meta?.tooClose.push({
-			required,
-			actual,
-			element: opponent.element,
-		});
+			candidate.meta.tooClose.push({
+				required,
+				actual,
+				element: opponent.element,
+			});
+		}
 	}
 
 	return pass;
@@ -445,23 +475,12 @@ const getReady = (rules: SpacefinderRules, options: SpacefinderOptions) =>
 		}
 	});
 
-const getCandidateSelector = (
-	bodySelector: string,
-	slotSelectors: string | string[],
-) => {
-	return Array.isArray(slotSelectors)
-		? slotSelectors
-				.map((selector) => `${bodySelector} ${selector}`)
-				.join(', ')
-		: `${bodySelector} ${slotSelectors}`;
-};
 const getCandidates = (
 	rules: SpacefinderRules,
 	spacefinderExclusions: SpacefinderExclusions,
 ) => {
-	let candidates = query(
-		getCandidateSelector(rules.bodySelector, rules.candidateSelector),
-	);
+	let candidates = query(rules.candidateSelector, rules.body);
+
 	if (rules.fromBottom) {
 		candidates.reverse();
 	}
@@ -503,6 +522,7 @@ const getDimensions = (element: HTMLElement): Readonly<SpacefinderItem> =>
 		element,
 		meta: {
 			tooClose: [],
+			overlaps: [],
 		},
 	});
 
@@ -515,8 +535,7 @@ const getMeasurements = (
 		: undefined;
 	const opponents = rules.opponentSelectorRules
 		? Object.keys(rules.opponentSelectorRules).map(
-				(selector) =>
-					[selector, query(rules.bodySelector + selector)] as const,
+				(selector) => [selector, query(selector, rules.body)] as const,
 		  )
 		: [];
 
@@ -611,4 +630,5 @@ export type {
 	SpacefinderItem,
 	SpacefinderExclusions,
 	SpacefinderPass,
+	SpacefinderMetaItem,
 };

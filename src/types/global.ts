@@ -1,5 +1,5 @@
-import type { VendorName } from '@guardian/consent-management-platform/dist/types';
 import type { CustomClaims } from '@guardian/identity-auth';
+import type { VendorName } from '@guardian/libs';
 import type { EventTimer } from '../core/event-timer';
 import type { PageTargeting } from '../core/targeting/build-page-targeting';
 import type {

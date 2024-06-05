@@ -1,5 +1,7 @@
 import { isObject } from '@guardian/libs';
+import { EventTimer } from 'core/event-timer';
 import type { RegisterListener } from 'core/messenger';
+import { bypassCommercialMetricsSampling } from 'core/send-commercial-metrics';
 import fastdom from 'utils/fastdom-promise';
 import {
 	renderAdvertLabel,
@@ -229,6 +231,54 @@ const setupBackground = async (
 				video.style.height = '100%';
 				video.style.transform = 'translate(-50%, -50%)';
 				background.appendChild(video);
+
+				const getCreativeId = () => {
+					const slots = googletag.pubads().getSlots();
+
+					for (const slot of slots) {
+						const creativeTemplateId =
+							slot.getResponseInformation()?.creativeTemplateId;
+						if (creativeTemplateId === 11885667) {
+							return slot.getResponseInformation()?.creativeId;
+						}
+					}
+					return undefined;
+				};
+
+				let played = false;
+				video.onended = () => (played = true);
+
+				const observer = new IntersectionObserver(
+					(entries) => {
+						entries.forEach((entry) => {
+							if (entry.isIntersecting && !played) {
+								video.paused && void video.play();
+							} else {
+								!video.paused && video.pause();
+							}
+						});
+					},
+					{ root: null, rootMargin: '0px', threshold: 0.2 },
+				);
+
+				observer.observe(backgroundParent);
+
+				EventTimer.get().setProperty(
+					'videoInterscrollerCreativeId',
+					getCreativeId(),
+				);
+
+				void bypassCommercialMetricsSampling();
+
+				video.ontimeupdate = function () {
+					const percent = Math.round(
+						100 * (video.currentTime / video.duration),
+					);
+					EventTimer.get().setProperty(
+						'videoInterscrollerPercentageProgress',
+						percent,
+					);
+				};
 			}
 		} else {
 			adSlot.insertBefore(backgroundParent, adSlot.firstChild);

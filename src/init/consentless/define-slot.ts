@@ -1,5 +1,6 @@
 import { log } from '@guardian/libs';
 import fastdom from 'fastdom';
+import { removeSlotFromDom } from 'events/empty-advert';
 import type { OptOutFilledCallback } from 'types/global';
 import { renderConsentlessAdvertLabel } from './render-advert-label';
 
@@ -25,7 +26,7 @@ const defineSlot = (
 
 	const filledCallback: OptOutFilledCallback = (
 		_adSlot,
-		{ width, height },
+		{ width, height, optOutExt },
 	) => {
 		log('commercial', `Filled consentless ${slotId}`);
 
@@ -34,13 +35,17 @@ const defineSlot = (
 			slot.classList.add('ad-slot--fluid');
 		}
 
+		if (optOutExt.tags.includes('NATIVE')) {
+			slot.classList.add('ad-slot--native');
+		}
+
 		void renderConsentlessAdvertLabel(slot);
 	};
 
 	const emptyCallback = () => {
 		log('commercial', `Empty consentless ${slotId}`);
 		fastdom.mutate(() => {
-			slot.remove();
+			removeSlotFromDom(slot);
 		});
 	};
 

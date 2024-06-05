@@ -62,7 +62,7 @@ Mobile does not need to take into account the potential height of an ad:
 
 ## Spacefinder rules
 
-There are different rules for different passes see [article-body-adverts.ts](https://github.com/guardian/commercial/blob/main/src/insert/spacefinder/article-body-adverts.ts)
+There are different rules for different passes see [article.ts](https://github.com/guardian/commercial/blob/main/src/insert/spacefinder/article.ts)
 
 ---
 

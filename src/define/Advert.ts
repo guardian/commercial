@@ -93,6 +93,8 @@ const getSlotSizeMapping = (name: string): SizeMapping => {
 		slotName = 'external';
 	} else if (name.includes('comments-expanded')) {
 		slotName = 'comments-expanded';
+	} else if (name.includes('interactive')) {
+		slotName = 'interactive';
 	} else {
 		slotName = name;
 	}
@@ -208,31 +210,28 @@ class Advert {
 	 * @returns A mapping of breakpoints to ad sizes
 	 */
 	generateSizeMapping(additionalSizeMapping: SizeMapping): SizeMapping {
-		// Try to used size mappings if available
+		// Try to use size mappings defined in core if available
 		const defaultSizeMappingForSlot = this.node.dataset.name
 			? getSlotSizeMapping(this.node.dataset.name)
 			: {};
+
+		// Data attribute size mappings are used in interactives e.g. https://www.theguardian.com/education/ng-interactive/2021/sep/11/the-best-uk-universities-2022-rankings
+		const dataAttrSizeMapping = getSlotSizeMappingsFromDataAttrs(this.node);
 
 		let sizeMapping = concatSizeMappings(
 			defaultSizeMappingForSlot,
 			additionalSizeMapping,
 		);
 
-		/**
-		 * If the size mapping is empty, use the data attributes to create a size mapping,
-		 * this is used on some interactives e.g. https://www.theguardian.com/education/ng-interactive/2021/sep/11/the-best-uk-universities-2022-rankings
-		 */
-		if (isSizeMappingEmpty(sizeMapping)) {
-			sizeMapping = getSlotSizeMappingsFromDataAttrs(this.node);
+		sizeMapping = concatSizeMappings(sizeMapping, dataAttrSizeMapping);
 
-			// If the size mapping is still empty, throw an error as this should never happen
-			if (isSizeMappingEmpty(sizeMapping)) {
-				throw new Error(
-					`Tried to render ad slot '${
-						this.node.dataset.name ?? ''
-					}' without any size mappings`,
-				);
-			}
+		// If the size mapping is still empty, throw an error as this should never happen
+		if (isSizeMappingEmpty(sizeMapping)) {
+			throw new Error(
+				`Tried to render ad slot '${
+					this.node.dataset.name ?? ''
+				}' without any size mappings`,
+			);
 		}
 
 		return sizeMapping;

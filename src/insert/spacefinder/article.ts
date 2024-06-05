@@ -6,7 +6,6 @@ import {
 	createAdSlot,
 	wrapSlotInContainer,
 } from 'core/create-ad-slot';
-import { isInSectionAdDensityVariant } from 'experiments/utils';
 import { spaceFiller } from 'insert/spacefinder/space-filler';
 import type {
 	RuleSpacing,
@@ -18,14 +17,22 @@ import {
 	getCurrentBreakpoint,
 	getCurrentTweakpoint,
 } from 'lib/detect/detect-breakpoint';
-import { waitForAdvert } from '../../lib/dfp/wait-for-advert';
+import { isInVariantSynchronous } from '../../experiments/ab';
+import { deeplyReadRightColumn } from '../../experiments/tests/deeply-read-right-column';
 import fastdom from '../../utils/fastdom-promise';
-import { mediator } from '../../utils/mediator';
-import { fillDynamicAdSlot } from '../fill-dynamic-advert-slot';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
 import { initCarrot } from './carrot-traffic-driver';
+import { isInHighValueSection } from './utils';
 
 type SlotName = Parameters<typeof createAdSlot>[0];
+
+/**
+ * As estimation of the height of the most viewed island.
+ * This appears from desktop breakpoints on the right-hand side.
+ * Knowing the height of the element is useful when
+ * calculating where to place ads in the right column.
+ */
+const MOST_VIEWED_HEIGHT = 600;
 
 const articleBodySelector = '.article-body-commercial-selector';
 
@@ -36,10 +43,13 @@ const hasImages = !!window.guardian.config.page.lightboxImages?.images.length;
 const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
 
-const isInAdDensityVariant = isInSectionAdDensityVariant();
+const isInDeeplyReadMostViewedVariant = isInVariantSynchronous(
+	deeplyReadRightColumn,
+	'deeply-read-and-most-viewed',
+);
 
 const minDistanceBetweenRightRailAds = 500;
-const minDistanceBetweenInlineAds = isInAdDensityVariant ? 500 : 750;
+const minDistanceBetweenInlineAds = isInHighValueSection ? 500 : 750;
 
 /**
  * Rules to avoid inserting ads in the right rail too close to each other
@@ -74,14 +84,13 @@ const inlineAdSlotContainerRules: Record<string, RuleSpacing> = {
 const getStickyContainerClassname = (i: number) =>
 	`${adSlotContainerClass}-${i + 2}`;
 
-const insertAdAtPara = (
+const insertSlotAtPara = async (
 	para: Node,
 	name: string,
 	type: SlotName,
 	classes?: string,
-	sizes?: SizeMapping,
 	containerOptions: ContainerOptions = {},
-): Promise<void> => {
+): Promise<HTMLElement> => {
 	const ad = createAdSlot(type, {
 		name,
 		classes,
@@ -89,17 +98,21 @@ const insertAdAtPara = (
 
 	const node = wrapSlotInContainer(ad, containerOptions);
 
-	return fastdom
-		.mutate(() => {
-			if (para.parentNode) {
-				para.parentNode.insertBefore(node, para);
-			}
-		})
-		.then(async () => {
-			const shouldForceDisplay = ['im', 'carrot'].includes(name);
-			await fillDynamicAdSlot(ad, shouldForceDisplay, sizes);
-		});
+	await fastdom.mutate(() => {
+		if (para.parentNode) {
+			para.parentNode.insertBefore(node, para);
+		}
+	});
+
+	return ad;
 };
+
+type FillAdSlot = (
+	name: string,
+	slot: HTMLElement,
+	/* additional sizes to be added to the slot (used only by googletag) */
+	additionalSizes?: SizeMapping,
+) => Promise<void>;
 
 /**
  * Decide whether we have enough space to add additional sizes for a given advert.
@@ -136,11 +149,11 @@ const decideAdditionalSizes = async (
 	);
 };
 
-const addDesktopInline1 = (): Promise<boolean> => {
+const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 	const tweakpoint = getCurrentTweakpoint();
 	const hasLeftCol = ['leftCol', 'wide'].includes(tweakpoint);
 
-	let ignoreList = ` > :not(p):not(h2):not(ul):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.sfdebug)`;
+	let ignoreList = `:scope > :not(p):not(h2):not(ul):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.sfdebug)`;
 	if (hasLeftCol) {
 		ignoreList +=
 			':not([data-spacefinder-role="richLink"]):not([data-spacefinder-role="thumbnail"])';
@@ -150,16 +163,16 @@ const addDesktopInline1 = (): Promise<boolean> => {
 
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		candidateSelector: ' > p',
+		candidateSelector: ':scope > p, [data-spacefinder-role="nested"] > p',
 		minAbove: isImmersive ? 700 : 300,
 		minBelow: 300,
 		opponentSelectorRules: {
 			// don't place ads right after a heading
-			' > h2': {
-				minAboveSlot: isInAdDensityVariant ? 150 : 5,
-				minBelowSlot: isInAdDensityVariant ? 0 : 190,
+			':scope > h2, [data-spacefinder-role="nested"] > h2': {
+				minAboveSlot: isInHighValueSection ? 150 : 5,
+				minBelowSlot: isInHighValueSection ? 0 : 190,
 			},
-			[` .${adSlotContainerClass}`]: {
+			[`.${adSlotContainerClass}`]: {
 				minAboveSlot: 500,
 				minBelowSlot: 500,
 			},
@@ -167,12 +180,12 @@ const addDesktopInline1 = (): Promise<boolean> => {
 				minAboveSlot: 35,
 				minBelowSlot: 400,
 			},
-			' [data-spacefinder-role="immersive"]': {
+			'[data-spacefinder-role="immersive"]': {
 				minAboveSlot: 0,
 				minBelowSlot: 600,
 			},
-			' figure.element--supporting': {
-				minAboveSlot: 500,
+			'figure.element--supporting': {
+				minAboveSlot: 100,
 				minBelowSlot: 0,
 			},
 		},
@@ -187,13 +200,9 @@ const addDesktopInline1 = (): Promise<boolean> => {
 
 	const insertAd: SpacefinderWriter = async (paras) => {
 		const slots = paras.slice(0, 1).map(async (para) => {
-			return insertAdAtPara(
-				para,
-				'inline1',
-				'inline',
-				'inline',
-				additionalSizes,
-			);
+			const name = 'inline1';
+			const slot = await insertSlotAtPara(para, name, 'inline', 'inline');
+			await fillSlot(name, slot, additionalSizes);
 		});
 
 		await Promise.all(slots);
@@ -209,16 +218,17 @@ const addDesktopInline1 = (): Promise<boolean> => {
 /**
  * Inserts all inline ads on desktop except for inline1.
  */
-const addDesktopRightRailAds = (): Promise<boolean> => {
+const addDesktopRightRailAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 	let minAbove = 1000;
 
 	/**
 	 * In special cases, inline2 can overlap the "Most viewed" island, so
-	 * we need to make an adjustment to move the inline2 further down the page.
+	 * we need to make an adjustment to move the inline2 further down the page
 	 */
-	if (isPaidContent) {
-		minAbove += 600;
+	if (isInDeeplyReadMostViewedVariant || isPaidContent) {
+		minAbove += MOST_VIEWED_HEIGHT;
 	}
+
 	// Some old articles don't have a main image, which means the first paragraph is much higher
 	if (!hasImages) {
 		minAbove += 600;
@@ -229,12 +239,12 @@ const addDesktopRightRailAds = (): Promise<boolean> => {
 	const largestSizeForSlot = adSizes.halfPage.height;
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		candidateSelector: ' > p',
+		candidateSelector: ':scope > p, [data-spacefinder-role="nested"] > p',
 		minAbove,
 		minBelow: 300,
 		opponentSelectorRules: {
 			...rightRailAdSlotContainerRules,
-			' [data-spacefinder-role="immersive"]': {
+			'[data-spacefinder-role="immersive"]': {
 				minAboveSlot: 0,
 				minBelowSlot: 600,
 			},
@@ -289,14 +299,15 @@ const addDesktopRightRailAds = (): Promise<boolean> => {
 				),
 			};
 
-			return insertAdAtPara(
+			const slot = await insertSlotAtPara(
 				para,
 				`inline${i + 2}`,
 				'inline',
 				'inline',
-				additionalSizes,
 				containerOptions,
 			);
+
+			return fillSlot(`inline${i + 2}`, slot, additionalSizes);
 		});
 
 		await Promise.all(slots);
@@ -309,41 +320,66 @@ const addDesktopRightRailAds = (): Promise<boolean> => {
 	});
 };
 
-const addMobileInlineAds = (): Promise<boolean> => {
-	const minDistanceFromArticleTop = isInAdDensityVariant ? 100 : 200;
+const mobileMinDistanceFromArticleTop = 250;
 
+const mobileIgnoreList = `:not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`;
+
+const mobileOpponentSelectorRules = {
+	// don't place ads right after a heading
+	':scope > h2, [data-spacefinder-role="nested"] > h2, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"]':
+		{
+			minAboveSlot: 100,
+			minBelowSlot: 0,
+		},
+	...inlineAdSlotContainerRules,
+	// this is a catch-all for elements that are not covered by the above rules, these will generally be things like videos, embeds and atoms. minBelowSlot is higher to push ads a bit further down after these elements
+	[`:scope > ${mobileIgnoreList}, [data-spacefinder-role="nested"] > ${mobileIgnoreList}`]:
+		{
+			minAboveSlot: 35,
+			minBelowSlot: 200,
+			// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
+			bypassMinBelow:
+				'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
+		},
+};
+
+const addMobileTopAboveNav = (fillSlot: FillAdSlot): Promise<boolean> => {
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		candidateSelector: [
-			' > p',
-			' > h2',
-			' > [data-spacefinder-type$="NumberedTitleBlockElement"]',
-		],
-		minAbove: minDistanceFromArticleTop,
+		candidateSelector:
+			':scope > p, :scope > h2, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"], [data-spacefinder-role="nested"] > p',
+		minAbove: mobileMinDistanceFromArticleTop,
 		minBelow: 200,
-		opponentSelectorRules: {
-			// don't place ads right after a heading
-			' > h2': {
-				minAboveSlot: 100,
-				minBelowSlot: 0,
-			},
-			// these are just fancy headings
-			' > [data-spacefinder-type$="NumberedTitleBlockElement"]': {
-				minAboveSlot: 100,
-				minBelowSlot: 0,
-			},
+		opponentSelectorRules: mobileOpponentSelectorRules,
+	};
 
-			...inlineAdSlotContainerRules,
-			// this is a catch-all for elements that are not covered by the above rules, these will generally be things like videos, embeds and atoms. minBelowSlot is higher to push ads a bit further down after these elements
-			[` > :not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`]:
-				{
-					minAboveSlot: 35,
-					minBelowSlot: 200,
-					// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
-					bypassMinBelow:
-						'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
-				},
-		},
+	const insertAds: SpacefinderWriter = async (paras) => {
+		const slots = paras.slice(0, 1).map(async (para) => {
+			const name = 'top-above-nav';
+			const type = 'top-above-nav';
+			const slot = await insertSlotAtPara(para, name, type, 'inline');
+			return fillSlot(name, slot);
+		});
+		await Promise.all(slots);
+	};
+
+	return spaceFiller.fillSpace(rules, insertAds, {
+		waitForImages: true,
+		waitForInteractives: true,
+		pass: 'mobile-top-above-nav',
+	});
+};
+
+const addMobileSubsequentInlineAds = (
+	fillSlot: FillAdSlot,
+): Promise<boolean> => {
+	const rules: SpacefinderRules = {
+		bodySelector: articleBodySelector,
+		candidateSelector:
+			':scope > p, :scope > h2, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"], [data-spacefinder-role="nested"] > p',
+		minAbove: mobileMinDistanceFromArticleTop,
+		minBelow: 200,
+		opponentSelectorRules: mobileOpponentSelectorRules,
 		/**
 		 * Filter out any candidates that are too close to the last winner
 		 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
@@ -359,73 +395,88 @@ const addMobileInlineAds = (): Promise<boolean> => {
 	};
 
 	const insertAds: SpacefinderWriter = async (paras) => {
-		const slots = paras.map((para, i) =>
-			insertAdAtPara(
-				para,
-				i === 0 ? 'top-above-nav' : `inline${i}`,
-				i === 0 ? 'top-above-nav' : 'inline',
-				'inline',
+		const slots = paras.map(async (para, i) => {
+			const name = `inline${i + 1}`;
+			const type = 'inline';
+			const slot = await insertSlotAtPara(para, name, type, 'inline');
+			return fillSlot(
+				name,
+				slot,
 				// Add the mobile portrait interstitial size to inline1 and inline2
 				i == 1 || i == 2
 					? {
 							mobile: [adSizes.portraitInterstitial],
 					  }
 					: undefined,
-			),
-		);
+			);
+		});
 		await Promise.all(slots);
 	};
 
 	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
-		pass: 'mobile-inlines',
+		pass: 'mobile-subsequent-inlines',
 	});
 };
 
-const addInlineAds = (): Promise<boolean> => {
+/**
+ * Add inline slots to the article body
+ * @param fillSlot A function to call that will fill the slot when each ad slot has been inserted,
+ * these could be google display ads or opt opt consentless ads.
+ */
+const addFirstInlineAd = (fillSlot: FillAdSlot): Promise<boolean> => {
 	const isMobile = getCurrentBreakpoint() === 'mobile';
 	if (isMobile) {
-		return addMobileInlineAds();
+		return addMobileTopAboveNav(fillSlot);
 	}
 
 	if (isPaidContent) {
-		return addDesktopRightRailAds();
+		return Promise.resolve(false);
 	}
 
-	// Add the rest of the inline ad slots after a position for inline1 has been found.
-	// We don't wan't inline1 and inline2 targeting the same paragraph.
-	return addDesktopInline1().then(() => addDesktopRightRailAds());
+	return addDesktopInline1(fillSlot);
 };
 
-const attemptToAddInlineMerchAd = (): Promise<boolean> => {
+const addSubsequentInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
+	const isMobile = getCurrentBreakpoint() === 'mobile';
+	if (isMobile) {
+		return addMobileSubsequentInlineAds(fillSlot);
+	}
+
+	return addDesktopRightRailAds(fillSlot);
+};
+
+const attemptToAddInlineMerchAd = (
+	fillAdSlot: FillAdSlot,
+): Promise<boolean> => {
 	const breakpoint = getCurrentBreakpoint();
 	const isMobileOrTablet = breakpoint === 'mobile' || breakpoint === 'tablet';
 
 	const rules: SpacefinderRules = {
 		bodySelector: articleBodySelector,
-		candidateSelector: ' > p',
+		candidateSelector: ':scope > p',
 		minAbove: 300,
 		minBelow: 300,
 		opponentSelectorRules: {
-			' > .merch': {
+			':scope > .merch': {
 				minAboveSlot: 0,
 				minBelowSlot: 0,
 			},
-			' > header': {
+			':scope > header': {
 				minAboveSlot: isMobileOrTablet ? 300 : 700,
 				minBelowSlot: 0,
 			},
-			' > h2': {
+			':scope > h2': {
 				minAboveSlot: 100,
 				minBelowSlot: 250,
 			},
-			' > #sign-in-gate': {
+			':scope > #sign-in-gate': {
 				minAboveSlot: 0,
 				minBelowSlot: 400,
 			},
 			...inlineAdSlotContainerRules,
-			[` > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.sfdebug)`]:
+			[`:scope > :not(p):not(h2):not(.${adSlotContainerClass}):not(#sign-in-gate):not(.sfdebug)`]:
 				{
 					minAboveSlot: 200,
 					minBelowSlot: 400,
@@ -433,22 +484,17 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 		},
 	};
 
-	const insertAds: SpacefinderWriter = (paras) => {
+	const insertAds: SpacefinderWriter = async (paras) => {
 		if (typeof paras[0] === 'undefined') {
 			throw new Error(
 				'Trying to insert inline merch before a node that does not exist',
 			);
 		}
-		return insertAdAtPara(
-			paras[0],
-			'im',
-			'im',
-			'',
-			{},
-			{
-				className: 'ad-slot-container--im',
-			},
-		);
+		const slot = await insertSlotAtPara(paras[0], 'im', 'im', '', {
+			className: 'ad-slot-container--im',
+		});
+
+		await fillAdSlot('im', slot);
 	};
 
 	return spaceFiller.fillSpace(rules, insertAds, {
@@ -458,34 +504,26 @@ const attemptToAddInlineMerchAd = (): Promise<boolean> => {
 	});
 };
 
-const doInit = async (): Promise<boolean> => {
+/**
+ * Init all the article body adverts, including `im` and `carrot`
+ * @param fillAdSlot a function to fill the ad slots
+ */
+const init = async (fillAdSlot: FillAdSlot): Promise<void> => {
 	if (!commercialFeatures.articleBodyAdverts) {
-		return Promise.resolve(false);
+		return Promise.resolve();
 	}
 
-	const im = window.guardian.config.page.hasInlineMerchandise
-		? attemptToAddInlineMerchAd()
-		: Promise.resolve(false);
-	const inlineMerchAdded = await im;
-	if (inlineMerchAdded) await waitForAdvert('dfp-ad--im');
+	// We add the first inline ad before finding a place for an im so that the inline1 doesn't get pushed down
+	await addFirstInlineAd(fillAdSlot);
 
-	await addInlineAds();
+	if (window.guardian.config.page.hasInlineMerchandise) {
+		await attemptToAddInlineMerchAd(fillAdSlot);
+	}
+
+	// Add the other inline slots after the im, so that there is space left for the im ad
+	await addSubsequentInlineAds(fillAdSlot);
 
 	await initCarrot();
-
-	return im;
 };
 
-/**
- * Initialise article body ad slots
- */
-export const init = (): Promise<boolean> => {
-	// Also init when the main article is redisplayed
-	// For instance by the signin gate.
-	mediator.on('page:article:redisplayed', doInit);
-	// DCR doesn't have mediator, so listen for CustomEvent
-	document.addEventListener('article:sign-in-gate-dismissed', () => {
-		void doInit();
-	});
-	return doInit();
-};
+export { init, addFirstInlineAd, addSubsequentInlineAds, type FillAdSlot };

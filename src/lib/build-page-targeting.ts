@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import type { ConsentState } from '@guardian/libs';
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import type { PageTargeting } from 'core/targeting/build-page-targeting';

@@ -1,15 +1,17 @@
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import { getConsentFor, onConsent } from '@guardian/libs';
+import type { ConsentState } from '@guardian/libs';
 import { commercialFeatures } from 'lib/commercial-features';
 import type { ThirdPartyTag } from 'types/global';
 import { _, init } from './third-party-tags';
 
 const { insertScripts, loadOther } = _;
 
-jest.mock('@guardian/consent-management-platform');
+jest.mock('@guardian/libs', () => ({
+	// eslint-disable-next-line -- ESLint doesn't understand jest.requireActual
+	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
+	onConsent: jest.fn(),
+	getConsentFor: jest.fn(),
+}));
 
 const tcfv2AllConsent = {
 	tcfv2: {

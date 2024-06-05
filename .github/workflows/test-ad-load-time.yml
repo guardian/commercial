@@ -1,0 +1,85 @@
+name: Test ad load time
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  pull_request:
+
+permissions: write-all
+
+jobs:
+  benchmark:
+    name: Test time to load top-above-nav
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      # Commercial
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: ./.github/actions/setup-node-env
+
+      - name: Install Playwright Browsers
+        run: pnpm playwright install --with-deps chromium
+
+      - name: Build Prod (used for rewriting by playwright)
+        run: pnpm build:prod
+        env:
+          BUNDLE_PREFIX: ''
+
+      - name: Run Playwright
+        run: pnpm benchmark
+
+      - uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const { readFileSync, resolve } = require('fs');
+            const consented = readFileSync('./benchmark-results/consented/average.txt', 'utf8');
+            const consentless = readFileSync('./benchmark-results/consentless/average.txt', 'utf8');
+
+            const body = `### Ad load time test results
+
+            For \`consented\`, \`top-above-nav\` took on average ${consented}ms to load.
+            For \`consentless\`, \`top-above-nav\` took on average ${consentless}ms to load.
+
+            Test conditions:
+            - 5mbps download speed
+            - 1.5mbps upload speed
+            - 150ms latency`;
+
+            if (context.ref === 'refs/heads/main') {
+              const {data} = await github.rest.issues.update({
+                issue_number: 1402,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body
+              });
+            } else if (context.eventName === 'pull_request') {
+              const comments = await github.rest.issues.listComments({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+              });
+
+              const existingComment = comments.data.find(comment => comment.body.includes('Ad load time test results'));
+
+              if (existingComment) {
+                await github.rest.issues.updateComment({
+                  comment_id: existingComment.id,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body
+                });
+                return;
+              } else {
+                const { data } = await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body
+                });
+              }
+            }

@@ -66,6 +66,7 @@ const getRightColumn = (): HTMLElement => {
 	const selector = window.guardian.config.isDotcomRendering
 		? '.commentsRightColumn'
 		: '.js-discussion__ad-slot';
+
 	const rightColumn: HTMLElement | null = document.querySelector(selector);
 
 	if (!rightColumn) throw new Error('Could not find right column.');

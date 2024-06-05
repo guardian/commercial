@@ -1,5 +1,5 @@
-import { onConsent } from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import type { ConsentState } from '@guardian/libs';
+import { onConsent } from '@guardian/libs';
 import { EventTimer } from './event-timer';
 import {
 	_,
@@ -15,7 +15,11 @@ const {
 	transformToObjectEntries,
 } = _;
 
-jest.mock('@guardian/consent-management-platform');
+jest.mock('@guardian/libs', () => ({
+	// eslint-disable-next-line -- ESLint doesn't understand jest.requireActual
+	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
+	onConsent: jest.fn(),
+}));
 
 const mockOnConsent = (consentState: ConsentState) =>
 	(onConsent as jest.Mock).mockImplementation(() =>
@@ -41,6 +45,14 @@ const defaultMetrics = {
 			value: 'false',
 		},
 	],
+};
+
+const expectedOptions = {
+	method: 'POST',
+	body: JSON.stringify(defaultMetrics),
+	keepalive: true,
+	cache: 'no-store',
+	mode: 'no-cors',
 };
 
 const tcfv2AllConsent: ConsentState = {
@@ -120,7 +132,7 @@ afterEach(() => {
 });
 
 describe('send commercial metrics', () => {
-	Object.defineProperty(navigator, 'sendBeacon', {
+	Object.defineProperty(window, 'fetch', {
 		configurable: true,
 		enumerable: true,
 		value: jest.fn(),
@@ -143,8 +155,8 @@ describe('send commercial metrics', () => {
 		setVisibility('hidden');
 		global.dispatchEvent(new Event('visibilitychange'));
 
-		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
-			[Endpoints.PROD, JSON.stringify(defaultMetrics)],
+		expect((window.fetch as jest.Mock).mock.calls).toEqual([
+			[Endpoints.PROD, expectedOptions],
 		]);
 	});
 
@@ -162,7 +174,7 @@ describe('send commercial metrics', () => {
 		setVisibility('visible');
 		global.dispatchEvent(new Event('visibilitychange'));
 
-		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([]);
+		expect((window.fetch as jest.Mock).mock.calls).toEqual([]);
 	});
 
 	it('does not send metrics when user is not in sampling group', async () => {
@@ -179,7 +191,7 @@ describe('send commercial metrics', () => {
 		setVisibility('hidden');
 		global.dispatchEvent(new Event('visibilitychange'));
 
-		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([]);
+		expect((window.fetch as jest.Mock).mock.calls).toEqual([]);
 	});
 
 	it('does not send metrics when consent does not include purpose 8', async () => {
@@ -196,7 +208,7 @@ describe('send commercial metrics', () => {
 		setVisibility('hidden');
 		global.dispatchEvent(new Event('visibilitychange'));
 
-		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([]);
+		expect((window.fetch as jest.Mock).mock.calls).toEqual([]);
 	});
 
 	it('sends metrics when non-TCFv2 user (i.e. USA or Australia) consents', async () => {
@@ -213,8 +225,8 @@ describe('send commercial metrics', () => {
 		setVisibility('hidden');
 		global.dispatchEvent(new Event('visibilitychange'));
 
-		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
-			[Endpoints.PROD, JSON.stringify(defaultMetrics)],
+		expect((window.fetch as jest.Mock).mock.calls).toEqual([
+			[Endpoints.PROD, expectedOptions],
 		]);
 	});
 
@@ -232,8 +244,8 @@ describe('send commercial metrics', () => {
 		setVisibility('hidden');
 		global.dispatchEvent(new Event('visibilitychange'));
 
-		expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
-			[Endpoints.PROD, JSON.stringify(defaultMetrics)],
+		expect((window.fetch as jest.Mock).mock.calls).toEqual([
+			[Endpoints.PROD, expectedOptions],
 		]);
 	});
 
@@ -276,8 +288,8 @@ describe('send commercial metrics', () => {
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('visibilitychange'));
 
-			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
-				[Endpoints.PROD, JSON.stringify(defaultMetrics)],
+			expect((window.fetch as jest.Mock).mock.calls).toEqual([
+				[Endpoints.PROD, expectedOptions],
 			]);
 		});
 
@@ -296,7 +308,7 @@ describe('send commercial metrics', () => {
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('visibilitychange'));
 
-			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([]);
+			expect((window.fetch as jest.Mock).mock.calls).toEqual([]);
 		});
 
 		it('expects to be initialised before calling bypassCoreWebVitalsSampling', async () => {
@@ -329,16 +341,22 @@ describe('send commercial metrics', () => {
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('visibilitychange'));
 
-			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+			expect((window.fetch as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.CODE,
-					JSON.stringify({
-						...defaultMetrics,
-						properties: [
-							{ name: 'isDev', value: 'testurl.theguardian.com' },
-							{ name: 'adBlockerInUse', value: 'false' },
-						],
-					}),
+					{
+						...expectedOptions,
+						body: JSON.stringify({
+							...defaultMetrics,
+							properties: [
+								{
+									name: 'isDev',
+									value: 'testurl.theguardian.com',
+								},
+								{ name: 'adBlockerInUse', value: 'false' },
+							],
+						}),
+					},
 				],
 			]);
 		});
@@ -364,17 +382,20 @@ describe('send commercial metrics', () => {
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('visibilitychange'));
 
-			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+			expect((window.fetch as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.PROD,
-					JSON.stringify({
-						...defaultMetrics,
-						properties: [
-							{ name: 'downlink', value: '1' },
-							{ name: 'effectiveType', value: '4g' },
-							{ name: 'adBlockerInUse', value: 'false' },
-						],
-					}),
+					{
+						...expectedOptions,
+						body: JSON.stringify({
+							...defaultMetrics,
+							properties: [
+								{ name: 'downlink', value: '1' },
+								{ name: 'effectiveType', value: '4g' },
+								{ name: 'adBlockerInUse', value: 'false' },
+							],
+						}),
+					},
 				],
 			]);
 		});
@@ -400,18 +421,24 @@ describe('send commercial metrics', () => {
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('pagehide'));
 
-			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+			expect((window.fetch as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.CODE,
-					JSON.stringify({
-						...defaultMetrics,
-						properties: [
-							{ name: 'downlink', value: '1' },
-							{ name: 'effectiveType', value: '4g' },
-							{ name: 'isDev', value: 'testurl.theguardian.com' },
-							{ name: 'adBlockerInUse', value: 'false' },
-						],
-					}),
+					{
+						...expectedOptions,
+						body: JSON.stringify({
+							...defaultMetrics,
+							properties: [
+								{ name: 'downlink', value: '1' },
+								{ name: 'effectiveType', value: '4g' },
+								{
+									name: 'isDev',
+									value: 'testurl.theguardian.com',
+								},
+								{ name: 'adBlockerInUse', value: 'false' },
+							],
+						}),
+					},
 				],
 			]);
 		});
@@ -463,17 +490,23 @@ describe('send commercial metrics', () => {
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('pagehide'));
 
-			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+			expect((window.fetch as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.CODE,
-					JSON.stringify({
-						...defaultMetrics,
-						properties: [
-							{ name: 'downlink', value: '1' },
-							{ name: 'effectiveType', value: '4g' },
-							{ name: 'isDev', value: 'testurl.theguardian.com' },
-						],
-					}),
+					{
+						...expectedOptions,
+						body: JSON.stringify({
+							...defaultMetrics,
+							properties: [
+								{ name: 'downlink', value: '1' },
+								{ name: 'effectiveType', value: '4g' },
+								{
+									name: 'isDev',
+									value: 'testurl.theguardian.com',
+								},
+							],
+						}),
+					},
 				],
 			]);
 		});
@@ -494,17 +527,23 @@ describe('send commercial metrics', () => {
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('pagehide'));
 
-			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+			expect((window.fetch as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.CODE,
-					JSON.stringify({
-						...defaultMetrics,
-						properties: [
-							{ name: 'adSlotsInline', value: '5' },
-							{ name: 'adSlotsTotal', value: '10' },
-							{ name: 'isDev', value: 'testurl.theguardian.com' },
-						],
-					}),
+					{
+						...expectedOptions,
+						body: JSON.stringify({
+							...defaultMetrics,
+							properties: [
+								{ name: 'adSlotsInline', value: '5' },
+								{ name: 'adSlotsTotal', value: '10' },
+								{
+									name: 'isDev',
+									value: 'testurl.theguardian.com',
+								},
+							],
+						}),
+					},
 				],
 			]);
 		});
@@ -527,13 +566,16 @@ describe('send commercial metrics', () => {
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('pagehide'));
 
-			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+			expect((window.fetch as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.PROD,
-					JSON.stringify({
-						...defaultMetrics,
-						metrics: [{ name: 'offlineCount', value: 3 }],
-					}),
+					{
+						...expectedOptions,
+						body: JSON.stringify({
+							...defaultMetrics,
+							metrics: [{ name: 'offlineCount', value: 3 }],
+						}),
+					},
 				],
 			]);
 		});
@@ -554,13 +596,16 @@ describe('send commercial metrics', () => {
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('pagehide'));
 
-			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+			expect((window.fetch as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.PROD,
-					JSON.stringify({
-						...defaultMetrics,
-						metrics: [{ name: 'offlineCount', value: 0 }],
-					}),
+					{
+						...expectedOptions,
+						body: JSON.stringify({
+							...defaultMetrics,
+							metrics: [{ name: 'offlineCount', value: 0 }],
+						}),
+					},
 				],
 			]);
 		});
@@ -581,13 +626,16 @@ describe('send commercial metrics', () => {
 			setVisibility('hidden');
 			global.dispatchEvent(new Event('pagehide'));
 
-			expect((navigator.sendBeacon as jest.Mock).mock.calls).toEqual([
+			expect((window.fetch as jest.Mock).mock.calls).toEqual([
 				[
 					Endpoints.PROD,
-					JSON.stringify({
-						...defaultMetrics,
-						metrics: [],
-					}),
+					{
+						...expectedOptions,
+						body: JSON.stringify({
+							...defaultMetrics,
+							metrics: [],
+						}),
+					},
 				],
 			]);
 		});

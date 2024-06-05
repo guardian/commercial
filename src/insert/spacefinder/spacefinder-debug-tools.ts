@@ -58,6 +58,10 @@ const exclusionTypes = {
 		colour: colours.blue,
 		reason: 'Too close to other element',
 	},
+	overlaps: {
+		colour: colours.blue,
+		reason: 'Overlaps other element',
+	},
 } as const;
 
 const isExclusionType = (type: string): type is keyof typeof exclusionTypes =>
@@ -72,7 +76,9 @@ const addOverlay = (element: HTMLElement, text: string) => {
 
 const addHoverListener = (
 	candidate: HTMLElement,
-	tooClose: Exclude<SpacefinderItem['meta'], undefined>['tooClose'],
+	tooClose: Exclude<SpacefinderItem['meta'], undefined>[
+		| 'tooClose'
+		| 'overlaps'],
 	pass: SpacefinderPass,
 ) => {
 	tooClose.forEach((opponent) => {
@@ -100,10 +106,12 @@ const addHoverListener = (
 			}
 
 			opponent.element.classList.add('blocking-element');
-			addOverlay(
-				opponent.element,
-				`${opponent.actual}px/${opponent.required}px`,
-			);
+			if (opponent.actual && opponent.required) {
+				addOverlay(
+					opponent.element,
+					`${opponent.actual}px/${opponent.required}px`,
+				);
+			}
 		});
 
 		candidate.addEventListener('mouseleave', () => {
@@ -138,6 +146,9 @@ const annotateExclusions = (
 				element.setAttribute(`data-sfdebug-${pass}`, 'isStartAt');
 			} else if (type) {
 				element.setAttribute(`data-sfdebug-${pass}`, key);
+			} else if (meta && meta.overlaps.length > 0) {
+				element.setAttribute(`data-sfdebug-${pass}`, 'overlaps');
+				addHoverListener(element, meta.overlaps, pass);
 			} else if (meta && meta.tooClose.length > 0) {
 				element.setAttribute(`data-sfdebug-${pass}`, 'tooClose');
 				addHoverListener(element, meta.tooClose, pass);
