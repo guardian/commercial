@@ -2,4 +2,4 @@
 '@guardian/commercial': minor
 ---
 
-Remove google analytics from Web and AMP on the Guardian's main domain
+Stop sending commercial-related events to Google Analytics
