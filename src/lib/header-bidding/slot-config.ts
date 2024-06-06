@@ -188,7 +188,9 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 			],
 		},
 		'mobile-sticky': {
-			mobile: shouldIncludeMobileSticky() ? [adSizes.mobilesticky] : [],
+			mobile: shouldIncludeMobileSticky()
+				? [adSizes.mobilesticky, createAdSize(300, 50)]
+				: [],
 		},
 		'crossword-banner': {
 			desktop: isCrossword ? [adSizes.leaderboard] : [],
