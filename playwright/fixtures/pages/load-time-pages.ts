@@ -145,7 +145,7 @@ const loadTimePages: GuPage[] = [
 	{
 		path: getTestUrl({
 			stage,
-			path: '/environment/article/2024/may/23/fishing-barbara-creecy-minister-court-south-african-penguins-facing-extinction',
+			path: '/environment/article/2024/jun/04/country-diary-these-summer-migrants-are-remarkable-and-humbling',
 		}),
 	},
 	{
