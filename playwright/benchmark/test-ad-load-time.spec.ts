@@ -43,7 +43,7 @@ test.describe.configure({ mode: 'parallel' });
 test.describe('Test how long top-above-nav takes to load', () => {
 	for (let i = 0; i < 3; i++) {
 		for (const article of loadTimePages) {
-			test(`${article.path}`, async ({ page }, testInfo) => {
+			test(`${article.path} run ${i}`, async ({ page }, testInfo) => {
 				await interceptCommercial(page);
 
 				const client = await page.context().newCDPSession(page);
