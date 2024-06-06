@@ -151,7 +151,7 @@ const loadTimePages: GuPage[] = [
 	{
 		path: getTestUrl({
 			stage,
-			path: '/travel/article/2024/jun/05/sailing-voyage-the-wash-norfolk-potatoes-chip-shop-kings-lynn',
+			path: '/travel/article/2024/may/29/an-alternative-guide-to-the-lake-district-cumbria',
 		}),
 	},
 	{
