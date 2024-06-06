@@ -41,49 +41,47 @@ const interceptCommercial = (page: Page) =>
 test.describe.configure({ mode: 'parallel' });
 
 test.describe('Test how long top-above-nav takes to load', () => {
-	for (let i = 0; i < 3; i++) {
-		for (const article of loadTimePages) {
-			test(`${article.path} run ${i}`, async ({ page }, testInfo) => {
-				await interceptCommercial(page);
+	for (const article of loadTimePages) {
+		test(`${article.path}`, async ({ page }, testInfo) => {
+			await interceptCommercial(page);
 
-				const client = await page.context().newCDPSession(page);
+			const client = await page.context().newCDPSession(page);
 
-				await client.send(
-					'Network.emulateNetworkConditions',
-					networkConditions,
+			await client.send(
+				'Network.emulateNetworkConditions',
+				networkConditions,
+			);
+
+			await page.setViewportSize(viewport);
+
+			await loadPage(page, article.path);
+
+			const startRenderingTime = Date.now();
+
+			await waitForSlot(page, 'top-above-nav');
+
+			const renderingTime = Date.now() - startRenderingTime;
+
+			console.log(`Ad rendered in ${renderingTime} ms`);
+
+			const file = resolve(
+				__dirname,
+				`../../benchmark-results/${testInfo.project.name}/ad-rendering-time-${testInfo.workerIndex}.txt`,
+			);
+
+			if (!existsSync(file)) {
+				mkdirSync(
+					resolve(
+						__dirname,
+						`../../benchmark-results/${testInfo.project.name}`,
+					),
+					{
+						recursive: true,
+					},
 				);
+			}
 
-				await page.setViewportSize(viewport);
-
-				await loadPage(page, article.path);
-
-				const startRenderingTime = Date.now();
-
-				await waitForSlot(page, 'top-above-nav');
-
-				const renderingTime = Date.now() - startRenderingTime;
-
-				console.log(`Ad rendered in ${renderingTime} ms`);
-
-				const file = resolve(
-					__dirname,
-					`../../benchmark-results/${testInfo.project.name}/ad-rendering-time-${testInfo.workerIndex}.txt`,
-				);
-
-				if (!existsSync(file)) {
-					mkdirSync(
-						resolve(
-							__dirname,
-							`../../benchmark-results/${testInfo.project.name}`,
-						),
-						{
-							recursive: true,
-						},
-					);
-				}
-
-				await appendFile(file, String(renderingTime) + '\n');
-			});
-		}
+			await appendFile(file, String(renderingTime) + '\n');
+		});
 	}
 });
