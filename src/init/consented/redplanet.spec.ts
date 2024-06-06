@@ -19,7 +19,7 @@ const AusWithoutConsent = {
 } as ConsentState;
 
 const CcpaWithConsent = {
-	ccpa: { doNotSell: false },
+	ccpa: { doNotSell: false, signalStatus: 'ready' },
 	canTarget: true,
 	framework: 'ccpa',
 } as ConsentState;

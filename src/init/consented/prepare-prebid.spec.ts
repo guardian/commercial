@@ -92,13 +92,13 @@ const tcfv2WithoutConsent = {
 } as ConsentState;
 
 const ccpaWithConsent = {
-	ccpa: { doNotSell: false },
+	ccpa: { doNotSell: false, signalStatus: 'ready' },
 	canTarget: true,
 	framework: 'ccpa',
 } as ConsentState;
 
 const ccpaWithoutConsent = {
-	ccpa: { doNotSell: true },
+	ccpa: { doNotSell: true, signalStatus: 'ready' },
 	canTarget: false,
 	framework: 'ccpa',
 } as ConsentState;

@@ -16,6 +16,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			consentState: {
 				ccpa: {
 					doNotSell: false, // *
+					signalStatus: 'ready',
 				},
 				canTarget: true,
 				framework: 'ccpa',
@@ -42,6 +43,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			consentState: {
 				ccpa: {
 					doNotSell: true, // *
+					signalStatus: 'ready',
 				},
 				canTarget: false,
 				framework: 'ccpa',
@@ -68,6 +70,7 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			consentState: {
 				ccpa: {
 					doNotSell: false,
+					signalStatus: 'ready',
 				},
 				canTarget: true,
 				framework: 'ccpa',
