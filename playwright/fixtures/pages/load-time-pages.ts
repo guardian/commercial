@@ -124,6 +124,66 @@ const loadTimePages: GuPage[] = [
 			path: '/technology/2024/apr/30/amazon-sales-report-ai',
 		}),
 	},
+	{
+		path: getTestUrl({
+			stage,
+			path: '/film/article/2024/jun/06/show-me-the-money-how-unofficial-merch-is-cashing-in-on-movie-quotes',
+		}),
+	},
+	{
+		path: getTestUrl({
+			stage,
+			path: '/sport/article/2024/jun/05/family-mum-of-three-helen-glover-2024-olympics-paris-rowing-team-gb',
+		}),
+	},
+	{
+		path: getTestUrl({
+			stage,
+			path: '/travel/article/2024/may/26/how-to-keep-your-cool-cycling-up-italian-mountains-with-a-teenager-in-tow',
+		}),
+	},
+	{
+		path: getTestUrl({
+			stage,
+			path: '/environment/article/2024/may/23/fishing-barbara-creecy-minister-court-south-african-penguins-facing-extinction',
+		}),
+	},
+	{
+		path: getTestUrl({
+			stage,
+			path: '/travel/article/2024/jun/05/sailing-voyage-the-wash-norfolk-potatoes-chip-shop-kings-lynn',
+		}),
+	},
+	{
+		path: getTestUrl({
+			stage,
+			path: '/food/2024/apr/09/swapping-red-meat-for-herring-sardines-and-anchovies-could-save-75000-lives-study-suggests',
+		}),
+	},
+	{
+		path: getTestUrl({
+			stage,
+			path: '/science/article/2024/jun/05/carbon-detected-in-galaxy-observed-350m-years-after-big-bang',
+		}),
+	},
+	{
+		path: getTestUrl({
+			stage,
+			path: '/commentisfree/article/2024/jun/06/undecided-voters-british-politics-vote-election',
+		}),
+	},
+	{
+		path: getTestUrl({
+			stage,
+			path: '/lifeandstyle/article/2024/may/31/t26-surprisingly-useful-gadgets-you-didnt-know-you-needed',
+		}),
+	},
+	{
+		path: getTestUrl({
+			stage,
+			path: '/books/ng-interactive/2024/jun/05/this-months-best-paperbacks-zadie-smith-matthew-perry-and-more',
+		}),
+	},
 ];
 
 export { loadTimePages };
