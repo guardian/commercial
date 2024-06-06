@@ -1,5 +1,17 @@
 # @guardian/commercial
 
+## 19.1.0
+
+### Minor Changes
+
+- a027366: Only play interscroller video ad when ad is in the viewport
+- 15fdb02: Split consented & consentless code
+- 244b7aa: Adds 300x50 ad size to mobile-sticky
+
+### Patch Changes
+
+- f2b2788: Bypass metrics sampling for video interscroller
+
 ## 19.0.0
 
 ### Major Changes
