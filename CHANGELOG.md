@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 19.2.0
+
+### Minor Changes
+
+- 2ac1ca4: Adds 300x50 ad size to Prebid for mobile-sticky
+
 ## 19.1.0
 
 ### Minor Changes
