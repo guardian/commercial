@@ -2,4 +2,4 @@
 '@guardian/commercial': minor
 ---
 
-Stop sending commercial-related events to Google Analytics
+Prepare code to remove GA from Commercial
