@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 19.3.0
+
+### Minor Changes
+
+- a90f1d4: Prepare code to remove GA from Commercial
+
 ## 19.2.0
 
 ### Minor Changes
