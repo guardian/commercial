@@ -71,7 +71,6 @@ jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 	hasCrossedBreakpoint: jest.fn(),
 }));
-jest.mock('lib/analytics/google', () => () => void {});
 jest.mock('display/display-lazy-ads', () => ({
 	displayLazyAds: jest.fn(),
 }));

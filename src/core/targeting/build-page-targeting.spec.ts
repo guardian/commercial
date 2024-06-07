@@ -986,11 +986,11 @@ describe('Build Page Targeting', () => {
 		).toBe('t');
 	});
 
-	it('should set firstvisit to true if referrer is empty and navigation type is navigate', () => {
+	it('should set firstvisit to true if referrer is empty and navigation type is navigation', () => {
 		jest.spyOn(window, 'performance', 'get').mockReturnValue({
 			getEntriesByType: () => [
 				{
-					type: 'navigate',
+					entryType: 'navigation',
 				},
 			],
 			mark: () => {
@@ -1011,11 +1011,11 @@ describe('Build Page Targeting', () => {
 		).toBe('t');
 	});
 
-	it('should set firstvisit to false if referrer is empty and navigation type is not navigate', () => {
+	it('should set firstvisit to false if referrer is empty and navigation type is not navigation', () => {
 		jest.spyOn(window, 'performance', 'get').mockReturnValue({
 			getEntriesByType: () => [
 				{
-					type: 'reload',
+					entryType: 'reload',
 				},
 			],
 			mark: () => {
@@ -1036,11 +1036,11 @@ describe('Build Page Targeting', () => {
 		).toBe('f');
 	});
 
-	it('should set firstvisit to false if referrer is the guardian and navigation type is navigate', () => {
+	it('should set firstvisit to false if referrer is the guardian and navigation type is navigation', () => {
 		jest.spyOn(window, 'performance', 'get').mockReturnValue({
 			getEntriesByType: () => [
 				{
-					type: 'navigate',
+					entryType: 'navigation',
 				},
 			],
 			mark: () => {
@@ -1063,11 +1063,11 @@ describe('Build Page Targeting', () => {
 		).toBe('f');
 	});
 
-	it('should set firstvisit to false if referrer is the guardian and navigation type is not navigate', () => {
+	it('should set firstvisit to false if referrer is the guardian and navigation type is not navigation', () => {
 		jest.spyOn(window, 'performance', 'get').mockReturnValue({
 			getEntriesByType: () => [
 				{
-					type: 'reload',
+					entryType: 'reload',
 				},
 			],
 			mark: () => {
@@ -1090,11 +1090,11 @@ describe('Build Page Targeting', () => {
 		).toBe('f');
 	});
 
-	it('should set firstvisit to true if referrer is not the guardian and navigation type is navigate', () => {
+	it('should set firstvisit to true if referrer is not the guardian and navigation type is navigation', () => {
 		jest.spyOn(window, 'performance', 'get').mockReturnValue({
 			getEntriesByType: () => [
 				{
-					type: 'navigate',
+					entryType: 'navigation',
 				},
 			],
 			mark: () => {

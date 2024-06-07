@@ -1,6 +1,5 @@
 import { initMessenger } from 'core';
 import { init as background } from 'core/messenger/background';
-import { init as sendClick } from 'core/messenger/click';
 import { init as disableRefresh } from 'core/messenger/disable-refresh';
 import { init as fullwidth } from 'core/messenger/full-width';
 import { init as initGetPageTargeting } from 'core/messenger/get-page-targeting';
@@ -28,7 +27,6 @@ initMessenger(
 		passbackRefresh,
 		resize,
 		fullwidth,
-		sendClick,
 		background,
 		disableRefresh,
 		passback,
