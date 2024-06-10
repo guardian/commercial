@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 19.4.0
+
+### Minor Changes
+
+- 7d9bad7: Start Deeply Read AB test
+
 ## 19.3.0
 
 ### Minor Changes
