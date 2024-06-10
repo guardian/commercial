@@ -22,7 +22,7 @@ test('average', ({ page }, testInfo) => {
 	const testSum = lines.reduce((acc, line) => acc + parseInt(line), 0);
 
 	// average of all the lines in all the files
-	const average = testSum / lines.length;
+	const average = Math.round(testSum / lines.length);
 
 	writeFileSync(resolve(path, `average.txt`), String(average));
 
