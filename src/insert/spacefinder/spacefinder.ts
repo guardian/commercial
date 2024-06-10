@@ -3,7 +3,7 @@
 import { log } from '@guardian/libs';
 import { memoize } from 'lodash-es';
 import fastdom from 'utils/fastdom-promise';
-import { init as initSpacefinderDebugger } from './spacefinder-debug-tools';
+import { getUrlVars } from 'utils/url';
 
 type RuleSpacing = {
 	/**
@@ -591,7 +591,13 @@ const findSpace = async (
 	const measurements = await getMeasurements(rules, candidates);
 	const winners = enforceRules(measurements, rules, exclusions);
 
-	initSpacefinderDebugger(exclusions, winners, rules, options.pass);
+	const enableDebug = !!getUrlVars().sfdebug;
+
+	if (enableDebug) {
+		void import('./spacefinder-debug-tools').then((debugTools) => {
+			debugTools.init(exclusions, winners, rules, options.pass);
+		});
+	}
 
 	window.performance.mark('commercial:spacefinder:findSpace:end');
 

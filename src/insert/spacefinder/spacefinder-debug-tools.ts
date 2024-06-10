@@ -1,5 +1,4 @@
 import { log } from '@guardian/libs';
-import { getUrlVars } from 'utils/url';
 import type {
 	SpacefinderExclusions,
 	SpacefinderItem,
@@ -7,8 +6,6 @@ import type {
 	SpacefinderRules,
 } from './spacefinder';
 import logo from './spacefinder-logo.svg';
-
-const enableDebug = !!getUrlVars().sfdebug;
 
 const isCurrentPass = (pass: SpacefinderPass) => {
 	const sfdebugPass = document.querySelector<HTMLInputElement>(
@@ -418,8 +415,6 @@ const init = (
 	rules: SpacefinderRules,
 	pass: SpacefinderPass,
 ): void => {
-	if (!enableDebug) return;
-
 	addDebugPanel();
 	annotate(exclusions, winners, rules, pass);
 	addPassToDebugPanel(pass);
