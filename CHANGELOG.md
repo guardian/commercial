@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 19.5.0
+
+### Minor Changes
+
+- 00497c5: Delete redplanet
+
 ## 19.4.0
 
 ### Minor Changes
