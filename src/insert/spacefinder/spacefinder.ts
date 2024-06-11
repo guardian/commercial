@@ -594,8 +594,9 @@ const findSpace = async (
 	const enableDebug = !!getUrlVars().sfdebug;
 
 	if (enableDebug) {
-		void import('./spacefinder-debug-tools').then((debugTools) => {
-			debugTools.init(exclusions, winners, rules, options.pass);
+		const pass = options.pass;
+		void import('./spacefinder-debug-tools').then(({ init }) => {
+			init(exclusions, winners, rules, pass);
 		});
 	}
 
