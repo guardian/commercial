@@ -198,12 +198,12 @@ const setupBackground = async (
 
 	if (shouldTestBeacon) {
 		const beaconEvent = {
-			label: 'commercial.amiused.test_send_beacon',
+			label: 'commercial.test_send_beacon',
 			properties: [{ name: 'userAgent', value: navigator.userAgent }],
 		};
 
 		const fetchEvent = {
-			label: 'commercial.amiused.test_fetch',
+			label: 'commercial.test_fetch',
 			properties: [{ name: 'userAgent', value: navigator.userAgent }],
 		};
 
