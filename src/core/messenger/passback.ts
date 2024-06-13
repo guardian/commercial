@@ -205,15 +205,34 @@ const init = (register: RegisterListener): void => {
 										`Passback: ad height is ${adHeight}`,
 									);
 									void fastdom.mutate(() => {
-										const slotHeight = `${
-											adHeight + adLabelHeight
-										}px`;
+										//The 100 is to redue CLS if Teads passes back so we don't resize back to 274px for desktop if we get an mpu
+										const slotHeight =
+											getCurrentBreakpoint() === 'mobile'
+												? `${
+														adHeight + adLabelHeight
+												  }px`
+												: `${
+														adHeight +
+														adLabelHeight +
+														100
+												  }px`;
 										log(
 											'commercial',
 											`Passback: setting height of passback slot to ${slotHeight}`,
 										);
 										slotElement.style.height = slotHeight;
-
+										const passbackElement =
+											document.getElementById(
+												`${passbackElementId}`,
+											) as HTMLDivElement | null;
+										if (
+											passbackElement &&
+											getCurrentBreakpoint() ===
+												'desktop' &&
+											passbackElement.offsetHeight === 250
+										) {
+											passbackElement.style.top = '60px';
+										}
 										// Also resize the initial outstream iframe so
 										// it doesn't block text selection directly under
 										// the new ad
