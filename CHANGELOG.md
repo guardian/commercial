@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 19.6.0
+
+### Minor Changes
+
+- 500a157: Only import spacefinder debug tools when the sfdebug url param is present
+
+### Patch Changes
+
+- 9e47081: Add sendBeacon test to messenger code
+
 ## 19.5.0
 
 ### Minor Changes
