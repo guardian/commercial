@@ -9,6 +9,10 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+    groups:
+      npm:
+        patterns:
+          - '*'
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
