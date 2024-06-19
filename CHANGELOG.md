@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 19.7.0
+
+### Minor Changes
+
+- d8beb18: Switch off Deeply Read test
+
 ## 19.6.0
 
 ### Minor Changes
