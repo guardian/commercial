@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 19.7.1
+
+### Patch Changes
+
+- 08dc533: fix native add max height for <980px breakpoint
+
 ## 19.7.0
 
 ### Minor Changes
