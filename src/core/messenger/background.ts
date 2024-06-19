@@ -194,7 +194,7 @@ const setupBackground = async (
 		? '//logs.code.dev-guardianapis.com/log'
 		: '//logs.guardianapis.com/log';
 
-	const shouldTestBeacon = Math.random() <= 10 / 100;
+	const shouldTestBeacon = Math.random() <= 1 / 100;
 
 	if (shouldTestBeacon) {
 		const beaconEvent = {
