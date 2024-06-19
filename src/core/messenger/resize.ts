@@ -67,8 +67,9 @@ const resize = (
 
 		if (iframeContainer) {
 			Object.assign(iframeContainer.style, styles);
-			adSlot.style.maxHeight = 'none';
 		}
+
+		adSlot.style.maxHeight = 'none';
 	});
 };
 
