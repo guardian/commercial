@@ -224,6 +224,8 @@ const init = (register: RegisterListener): void => {
 											'column';
 										passbackElement.style.justifyContent =
 											'center';
+										passbackElement.style.alignItems =
+											'center';
 										passbackElement.style.height =
 											'calc(100% - 24px)';
 
