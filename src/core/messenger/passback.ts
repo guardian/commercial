@@ -127,14 +127,14 @@ const init = (register: RegisterListener): void => {
 								passbackElement,
 							);
 						})
-						.then(() => passbackElement.id);
+						.then(() => passbackElement);
 				},
 			);
 
 			/**
 			 * Create and display the new passback slot
 			 */
-			void createNewSlotElementPromise.then((passbackElementId) => {
+			void createNewSlotElementPromise.then((passbackElement) => {
 				/**
 				 * Find the initial slot object from googletag
 				 */
@@ -196,7 +196,7 @@ const init = (register: RegisterListener): void => {
 							event: googletag.events.SlotRenderEndedEvent,
 						) {
 							const slotId = event.slot.getSlotElementId();
-							if (slotId === passbackElementId) {
+							if (slotId === passbackElement.id) {
 								const size = event.size;
 								if (Array.isArray(size) && size[1]) {
 									const adHeight = size[1];
@@ -205,34 +205,28 @@ const init = (register: RegisterListener): void => {
 										`Passback: ad height is ${adHeight}`,
 									);
 									void fastdom.mutate(() => {
-										//The 100 is to redue CLS if Teads passes back so we don't resize back to 274px for desktop if we get an mpu
-										const slotHeight =
-											getCurrentBreakpoint() === 'mobile'
-												? `${
-														adHeight + adLabelHeight
-												  }px`
-												: `${
-														adHeight +
-														adLabelHeight +
-														100
-												  }px`;
+										const slotHeight = `${
+											(getCurrentBreakpoint() === 'mobile'
+												? adHeight
+												: adSizes.outstreamDesktop
+														.height) + adLabelHeight
+										}px`;
 										log(
 											'commercial',
 											`Passback: setting height of passback slot to ${slotHeight}`,
 										);
 										slotElement.style.height = slotHeight;
-										const passbackElement =
-											document.getElementById(
-												`${passbackElementId}`,
-											) as HTMLDivElement | null;
-										if (
-											passbackElement &&
-											getCurrentBreakpoint() ===
-												'desktop' &&
-											passbackElement.offsetHeight === 250
-										) {
-											passbackElement.style.top = '60px';
-										}
+
+										/*The centre styling is added in here instead of where the element is created
+										because googletag removes the display style on the passbackElement */
+										passbackElement.style.display = 'flex';
+										passbackElement.style.flexDirection =
+											'column';
+										passbackElement.style.justifyContent =
+											'center';
+										passbackElement.style.height =
+											'calc(100% - 24px)';
+
 										// Also resize the initial outstream iframe so
 										// it doesn't block text selection directly under
 										// the new ad
@@ -253,7 +247,7 @@ const init = (register: RegisterListener): void => {
 					const passbackSlot = googletag.defineSlot(
 						initialSlot.getAdUnitPath(),
 						[mpu, outstreamMobile, outstreamDesktop],
-						passbackElementId,
+						passbackElement.id,
 					);
 					if (passbackSlot) {
 						// https://developers.google.com/publisher-tag/guides/ad-sizes#responsive_ads
@@ -278,9 +272,9 @@ const init = (register: RegisterListener): void => {
 						);
 						log(
 							'commercial',
-							`Passback: displaying slot '${passbackElementId}'`,
+							`Passback: displaying slot '${passbackElement.id}'`,
 						);
-						googletag.display(passbackElementId);
+						googletag.display(passbackElement.id);
 					}
 				});
 			});
