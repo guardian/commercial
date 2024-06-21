@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 19.8.0
+
+### Minor Changes
+
+- f2a5842: Bump @guardian/libs to 17.0.0
+
+### Patch Changes
+
+- 925cf67: Reduce sendBeacon test sampling to 1%
+
 ## 19.7.1
 
 ### Patch Changes
