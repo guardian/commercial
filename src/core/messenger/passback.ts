@@ -227,7 +227,7 @@ const init = (register: RegisterListener): void => {
 										passbackElement.style.alignItems =
 											'center';
 										passbackElement.style.height =
-											'calc(100% - 24px)';
+											`calc(100% - ${adLabelHeight}px)`;
 
 										// Also resize the initial outstream iframe so
 										// it doesn't block text selection directly under
