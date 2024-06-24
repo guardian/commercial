@@ -320,7 +320,7 @@ const addDesktopRightRailAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 	});
 };
 
-const mobileMinDistanceFromArticleTop = 250;
+const mobileMinDistanceFromArticleTop = 200;
 
 const mobileIgnoreList = `:not(p):not(h2):not(hr):not(.${adSlotContainerClass}):not(#sign-in-gate):not([data-spacefinder-type$="NumberedTitleBlockElement"])`;
 
