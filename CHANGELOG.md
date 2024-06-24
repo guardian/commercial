@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 19.9.0
+
+### Minor Changes
+
+- 4b02107: Reduces CLS for inline1 when Teads passback and centre ad in case of mpu
+
 ## 19.8.0
 
 ### Minor Changes
