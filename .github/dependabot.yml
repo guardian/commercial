@@ -9,14 +9,66 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+      time: '09:00'
+      day: 'tuesday'
     groups:
-      npm:
+      changesets:
         patterns:
-          - '*'
+          - '@changesets/*'
+      babel:
+        patterns:
+          - '@babel/*'
+          - 'babel-*'
+      guardian:
+        patterns:
+          - '@guardian/*'
+      typescript:
+        patterns:
+          - '@types/*'
+          - 'typescript'
+          - 'type-fest'
+          - 'tslib'
+      eslint:
+        patterns:
+          - '*eslint*'
+      prettier:
+        patterns:
+          - '*prettier*'
+      playwright:
+        patterns:
+          - '@playwright/*'
+      jest:
+        patterns:
+          - '*jest*'
+      webpack:
+        patterns:
+          - 'webpack*'
+      dependencies:
+        dependency-type: 'production'
+        update-types: ['minor', 'patch']
+      devDependencies:
+        dependency-type: 'development'
+        update-types: ['minor', 'patch']
+        exclude-patterns:
+          - '@changesets/*'
+          - '@babel/*'
+          - 'babel-*'
+          - '@guardian/*'
+          - '@types/*'
+          - 'typescript'
+          - 'type-fest'
+          - 'tslib'
+          - '*eslint*'
+          - '*prettier*'
+          - '@playwright/*'
+          - '*jest*'
+          - 'webpack*'
     ignore:
       - dependency-name: '*'
         # ignore all major updates as we want to do them manually
         update-types: ['version-update:semver-major']
+    # The default is 5 but as we are going to group dependencies we might need to increase it
+    open-pull-requests-limit: 10
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
