@@ -22,10 +22,9 @@ updates:
       guardian:
         patterns:
           - '@guardian/*'
-      typescript:
+      types:
         patterns:
           - '@types/*'
-          - 'typescript'
           - 'type-fest'
           - 'tslib'
       eslint:
@@ -42,27 +41,32 @@ updates:
           - '*jest*'
       webpack:
         patterns:
-          - 'webpack*'
+          - '*webpack*'
+          - '*-loader'
       dependencies:
         dependency-type: 'production'
-        update-types: ['minor', 'patch']
+        update-types:
+          - 'minor'
+          - 'patch'
       devDependencies:
         dependency-type: 'development'
-        update-types: ['minor', 'patch']
+        update-types:
+          - 'minor'
+          - 'patch'
         exclude-patterns:
           - '@changesets/*'
           - '@babel/*'
           - 'babel-*'
           - '@guardian/*'
           - '@types/*'
-          - 'typescript'
           - 'type-fest'
           - 'tslib'
           - '*eslint*'
           - '*prettier*'
           - '@playwright/*'
           - '*jest*'
-          - 'webpack*'
+          - '*webpack*'
+          - '*-loader'
     ignore:
       - dependency-name: '*'
         # ignore all major updates as we want to do them manually
