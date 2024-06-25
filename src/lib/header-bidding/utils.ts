@@ -170,7 +170,7 @@ export const shouldUseOzoneAdaptor = (): boolean =>
 
 export const shouldIncludeAppNexus = (): boolean =>
 	isInAuOrNz() ||
-	(window.guardian.config.switches.prebidAppnexusUkRow && !isInUsOrCa()) ||
+	(!!window.guardian.config.switches.prebidAppnexusUkRow && !isInUsOrCa()) ||
 	!!pbTestNameMap().and;
 
 export const shouldIncludeXaxis = (): boolean => isInUk();

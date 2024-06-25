@@ -155,7 +155,7 @@ const bootCommercial = async (): Promise<void> => {
 };
 
 const bootCommercialWhenReady = () => {
-	if (window.guardian.mustardCut || window.guardian.polyfilled) {
+	if (!!window.guardian.mustardCut || !!window.guardian.polyfilled) {
 		void bootCommercial();
 	} else {
 		window.guardian.queue.push(bootCommercial);

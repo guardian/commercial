@@ -61,8 +61,8 @@ export const init = (): Promise<void> => {
 
 	if (
 		anchor === null ||
-		anchor.parentElement === null ||
-		anchor.parentElement.offsetHeight < minSpaceForAd
+		(anchor.parentElement?.offsetHeight &&
+			anchor.parentElement.offsetHeight < minSpaceForAd)
 	) {
 		return Promise.resolve();
 	}
