@@ -52,7 +52,6 @@ let commercialMetricsPayload: CommercialMetricsPayload = {
 
 let devProperties: Property[] | [] = [];
 let adBlockerProperties: Property[] | [] = [];
-let initialised = false;
 let endpoint: Endpoints;
 
 const setEndpoint = (isDev: boolean) =>
@@ -225,7 +224,7 @@ const checkConsent = async (): Promise<boolean> => {
  * A method to asynchronously send metrics after initialization.
  */
 async function bypassCommercialMetricsSampling(): Promise<void> {
-	if (!initialised) {
+	if (!window.guardian.config.commercialMetricsInitialised) {
 		console.warn('initCommercialMetrics not yet initialised');
 		return;
 	}
@@ -269,11 +268,11 @@ async function initCommercialMetrics({
 	setDevProperties(isDev);
 	setAdBlockerProperties(adBlockerInUse);
 
-	if (initialised) {
+	if (window.guardian.config.commercialMetricsInitialised) {
 		return false;
 	}
 
-	initialised = true;
+	window.guardian.config.commercialMetricsInitialised = true;
 
 	const userIsInSamplingGroup = Math.random() <= sampling;
 
@@ -296,7 +295,7 @@ export const _ = {
 	roundTimeStamp,
 	transformToObjectEntries,
 	reset: (): void => {
-		initialised = false;
+		window.guardian.config.commercialMetricsInitialised = false;
 		commercialMetricsPayload = {
 			page_view_id: undefined,
 			browser_id: undefined,
