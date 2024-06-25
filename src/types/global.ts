@@ -145,6 +145,7 @@ interface PageConfig extends CommercialPageConfig {
 }
 
 interface Config {
+	commercialMetricsInitialised?: boolean;
 	frontendAssetsFullURL?: string;
 	isDotcomRendering: boolean;
 	ophan: {
