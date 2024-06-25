@@ -578,10 +578,9 @@ const findSpace = async (
 	exclusions: SpacefinderExclusions = {},
 ): Promise<HTMLElement[]> => {
 	options = { ...defaultOptions, ...options };
-	rules.body =
-		(rules.bodySelector &&
-			document.querySelector<HTMLElement>(rules.bodySelector)) ||
-		document;
+	rules.body = rules.bodySelector
+		? document.querySelector<HTMLElement>(rules.bodySelector) ?? document
+		: document;
 
 	window.performance.mark('commercial:spacefinder:findSpace:start');
 

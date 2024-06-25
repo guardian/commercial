@@ -33,7 +33,7 @@ const normalise = (length: string | number): string => {
 	}
 
 	const number = matches[1];
-	const unit = matches[2] === undefined ? defaultUnit : matches[2];
+	const unit = matches[2] ?? defaultUnit;
 
 	if (!number) {
 		return '';
