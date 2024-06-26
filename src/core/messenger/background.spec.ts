@@ -14,8 +14,6 @@ const adSpec: BackgroundSpecs = {
 	transform: 'translate3d(0,0,0)',
 };
 
-navigator.sendBeacon = jest.fn();
-
 describe('Cross-frame messenger: setupBackground', () => {
 	class IntersectionObserver {
 		constructor() {
