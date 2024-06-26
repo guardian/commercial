@@ -39,6 +39,7 @@ export type GetThirdPartyTag = (arg0: { shouldRun: boolean }) => ThirdPartyTag;
 export type Edition = 'UK' | 'AU' | 'US';
 
 export type GuardianWindowConfig = {
+	commercialMetricsInitialised: boolean;
 	isDotcomRendering: boolean;
 	ophan: {
 		// somewhat redundant with guardian.ophan
