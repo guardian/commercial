@@ -106,6 +106,7 @@ type SlotName =
 	| 'fronts-banner'
 	| 'im'
 	| 'inline'
+	| 'liveblog-top'
 	| 'merchandising-high'
 	| 'merchandising'
 	| 'mobile-sticky'
@@ -337,6 +338,11 @@ const slotSizeMappings = {
 			adSizes.inlineMerchandising,
 			adSizes.fluid,
 		],
+	},
+	'liveblog-top': {
+		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.mpu, adSizes.fluid],
+		tablet: [],
+		desktop: [],
 	},
 	'merchandising-high': {
 		mobile: [
