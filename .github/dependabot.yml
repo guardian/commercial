@@ -15,40 +15,62 @@ updates:
       changesets:
         patterns:
           - '@changesets/*'
+        update-types:
+          - 'minor'
+          - 'patch'
       babel:
         patterns:
           - '@babel/*'
           - 'babel-*'
+        update-types:
+          - 'minor'
+          - 'patch'
       guardian:
         patterns:
           - '@guardian/*'
+        update-types:
+          - 'minor'
+          - 'patch'
       types:
         patterns:
           - '@types/*'
           - 'type-fest'
           - 'tslib'
-      eslint:
+        update-types:
+          - 'minor'
+          - 'patch'
+      trouble-makers:
         patterns:
           - '*eslint*'
-      prettier:
-        patterns:
           - '*prettier*'
+        update-types:
+          - 'minor'
+          - 'patch'
       playwright:
         patterns:
           - '@playwright/*'
+        update-types:
+          - 'minor'
+          - 'patch'
       jest:
         patterns:
           - '*jest*'
+        update-types:
+          - 'minor'
+          - 'patch'
       webpack:
         patterns:
           - '*webpack*'
           - '*-loader'
-      dependencies:
+        update-types:
+          - 'minor'
+          - 'patch'
+      minor-dependencies:
         dependency-type: 'production'
         update-types:
           - 'minor'
           - 'patch'
-      devDependencies:
+      minor-devDependencies:
         dependency-type: 'development'
         update-types:
           - 'minor'
@@ -67,10 +89,16 @@ updates:
           - '*jest*'
           - '*webpack*'
           - '*-loader'
-    ignore:
-      - dependency-name: '*'
-        # ignore all major updates as we want to do them manually
-        update-types: ['version-update:semver-major']
+      # We can have a PR for all major updates for production or development dependencies.
+      # if we want to be more granular we can create a group with update-type major for each dependency.
+      major-dependencies:
+        dependency-type: 'production'
+        update-types:
+          - 'major'
+      major-devDependencies:
+        dependency-type: 'development'
+        update-types:
+          - 'major'
     # The default is 5 but as we are going to group dependencies we might need to increase it
     open-pull-requests-limit: 10
   - package-ecosystem: 'github-actions'
