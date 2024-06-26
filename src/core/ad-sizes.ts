@@ -106,9 +106,11 @@ type SlotName =
 	| 'fronts-banner'
 	| 'im'
 	| 'inline'
+	| 'liveblog-top'
 	| 'merchandising-high'
 	| 'merchandising'
 	| 'mobile-sticky'
+	| 'football-right'
 	| 'mostpop'
 	| 'right'
 	| 'sponsor-logo'
@@ -337,6 +339,11 @@ const slotSizeMappings = {
 			adSizes.fluid,
 		],
 	},
+	'liveblog-top': {
+		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.mpu, adSizes.fluid],
+		tablet: [],
+		desktop: [],
+	},
 	'merchandising-high': {
 		mobile: [
 			adSizes.outOfPage,
@@ -388,13 +395,21 @@ const slotSizeMappings = {
 		mobile: [adSizes.fluid],
 	},
 	'mobile-sticky': {
-		mobile: [adSizes.mobilesticky, adSizes.empty],
+		mobile: [adSizes.mobilesticky, adSizes.empty, createAdSize(300, 50)],
 	},
 	'crossword-banner-mobile': {
 		mobile: [adSizes.mobilesticky],
 	},
 	'crossword-banner': {
 		phablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
+	},
+	'football-right': {
+		desktop: [
+			adSizes.empty,
+			adSizes.mpu,
+			adSizes.skyscraper,
+			adSizes.halfPage,
+		],
 	},
 	'article-end': {
 		mobile: [], // Mappings are dynamically added for this slot using additionalSizes

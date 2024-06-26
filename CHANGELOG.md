@@ -1,5 +1,129 @@
 # @guardian/commercial
 
+## 19.9.0
+
+### Minor Changes
+
+- 4b02107: Reduces CLS for inline1 when Teads passback and centre ad in case of mpu
+
+## 19.8.0
+
+### Minor Changes
+
+- f2a5842: Bump @guardian/libs to 17.0.0
+
+### Patch Changes
+
+- 925cf67: Reduce sendBeacon test sampling to 1%
+
+## 19.7.1
+
+### Patch Changes
+
+- 08dc533: fix native add max height for <980px breakpoint
+
+## 19.7.0
+
+### Minor Changes
+
+- d8beb18: Switch off Deeply Read test
+
+## 19.6.0
+
+### Minor Changes
+
+- 500a157: Only import spacefinder debug tools when the sfdebug url param is present
+
+### Patch Changes
+
+- 9e47081: Add sendBeacon test to messenger code
+
+## 19.5.0
+
+### Minor Changes
+
+- 00497c5: Delete redplanet
+
+## 19.4.0
+
+### Minor Changes
+
+- 7d9bad7: Start Deeply Read AB test
+
+## 19.3.0
+
+### Minor Changes
+
+- a90f1d4: Prepare code to remove GA from Commercial
+
+## 19.2.0
+
+### Minor Changes
+
+- 2ac1ca4: Adds 300x50 ad size to Prebid for mobile-sticky
+
+## 19.1.0
+
+### Minor Changes
+
+- a027366: Only play interscroller video ad when ad is in the viewport
+- 15fdb02: Split consented & consentless code
+- 244b7aa: Adds 300x50 ad size to mobile-sticky
+
+### Patch Changes
+
+- f2b2788: Bypass metrics sampling for video interscroller
+
+## 19.0.0
+
+### Major Changes
+
+- e1b6032: add new football-right slot and show ads on fixture pages
+
+### Minor Changes
+
+- 835c06f: Move im spacefinder pass before subsequent inlines pass
+
+### Patch Changes
+
+- 0ad79c0: Resolve bug for new tabs on Firefox on Android
+
+## 18.6.2
+
+### Patch Changes
+
+- 9cad9fe: Increase spacefinder mobile minAbove distance to 250px
+
+## 18.6.1
+
+### Patch Changes
+
+- 2db5b8f: Increase spacefinder minAbove distance by 100px
+
+## 18.6.0
+
+### Minor Changes
+
+- 6580399: Use fetch instead of sendBeacon for commercial metrics
+
+## 18.5.0
+
+### Minor Changes
+
+- 060642b: Add Deeply Read 0% AB test
+
+## 18.4.0
+
+### Minor Changes
+
+- 6758606: Spacefinder - Handle opponents/candidates overlapping
+
+## 18.3.0
+
+### Minor Changes
+
+- 40cbc73: Remove mega test
+
 ## 18.2.0
 
 ### Minor Changes

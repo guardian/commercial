@@ -238,6 +238,7 @@ const logCommercial = (page: Page) => {
 				msg
 					.args()
 					.slice(4)
+					// eslint-disable-next-line @typescript-eslint/no-base-to-string -- it's just a log
 					.map((arg) => arg.toString())
 					.join(' '),
 			);

@@ -9,6 +9,14 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+    groups:
+      npm:
+        patterns:
+          - '*'
+    ignore:
+      - dependency-name: '*'
+        # ignore all major updates as we want to do them manually
+        update-types: ['version-update:semver-major']
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:

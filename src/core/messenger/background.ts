@@ -1,6 +1,7 @@
 import { isObject } from '@guardian/libs';
 import { EventTimer } from 'core/event-timer';
 import type { RegisterListener } from 'core/messenger';
+import { bypassCommercialMetricsSampling } from 'core/send-commercial-metrics';
 import fastdom from 'utils/fastdom-promise';
 import {
 	renderAdvertLabel,
@@ -183,6 +184,38 @@ const setupBackground = async (
 		specs.scrollType,
 	);
 
+	/* We're sending both sendBeacon and fetch messages here to test if we receive the same numbers of each.
+	Our hypothesis is that sendBeacon is less reliable because it gets blocked by some ad blockers. This messenger
+	code only fires if a template ad (eg fabric or interscroller) is present on the page and sends a message. This
+	means we can control for ad blockers, as there should be no ad blocker present if we reach this code. So if
+	our hypothesis is true, we should observe parity in the number of messages received using each method */
+
+	const endpoint = window.guardian.config.page.isDev
+		? '//logs.code.dev-guardianapis.com/log'
+		: '//logs.guardianapis.com/log';
+
+	const shouldTestBeacon = Math.random() <= 1 / 100;
+
+	if (shouldTestBeacon) {
+		const beaconEvent = {
+			label: 'commercial.test_send_beacon',
+			properties: [{ name: 'userAgent', value: navigator.userAgent }],
+		};
+
+		const fetchEvent = {
+			label: 'commercial.test_fetch',
+			properties: [{ name: 'userAgent', value: navigator.userAgent }],
+		};
+
+		window.navigator.sendBeacon(endpoint, JSON.stringify(beaconEvent));
+
+		void fetch(endpoint, {
+			method: 'POST',
+			body: JSON.stringify(fetchEvent),
+			keepalive: true,
+		});
+	}
+
 	return fastdom.mutate(() => {
 		setBackgroundStyles(specs, background);
 
@@ -244,10 +277,30 @@ const setupBackground = async (
 					return undefined;
 				};
 
+				let played = false;
+				video.onended = () => (played = true);
+
+				const observer = new IntersectionObserver(
+					(entries) => {
+						entries.forEach((entry) => {
+							if (entry.isIntersecting && !played) {
+								video.paused && void video.play();
+							} else {
+								!video.paused && video.pause();
+							}
+						});
+					},
+					{ root: null, rootMargin: '0px', threshold: 0.2 },
+				);
+
+				observer.observe(backgroundParent);
+
 				EventTimer.get().setProperty(
 					'videoInterscrollerCreativeId',
 					getCreativeId(),
 				);
+
+				void bypassCommercialMetricsSampling();
 
 				video.ontimeupdate = function () {
 					const percent = Math.round(

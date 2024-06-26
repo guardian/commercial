@@ -10,6 +10,17 @@ import { EventTimer } from './event-timer';
 const initTrackScrollDepth = () => {
 	const pageHeight = document.body.offsetHeight;
 	const intViewportHeight = window.innerHeight;
+
+	// this if statement is here to handle a bug in Firefox in Android where the innerHeight
+	// of a new tab can be 0, so we end up dividing by 0 and looping through infinity
+	if (intViewportHeight === 0) {
+		log(
+			'commercial',
+			`Not tracking scroll depth because viewport height cannot be determined`,
+		);
+		return;
+	}
+
 	// how many viewports tall is the page?
 	const pageHeightVH = Math.floor(pageHeight / intViewportHeight);
 	const eventTimer = EventTimer.get();

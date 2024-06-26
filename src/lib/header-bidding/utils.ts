@@ -40,6 +40,11 @@ const contains = (
 	size: HeaderBiddingSize,
 ): boolean => Boolean(sizes.find((s) => s[0] === size[0] && s[1] === size[1]));
 
+const isValidPageForMobileSticky = (): boolean => {
+	const { contentType, pageId } = window.guardian.config.page;
+	return contentType === 'Article' || pageId.startsWith('football/');
+};
+
 /**
  * Cleans an object for targetting. Removes empty strings and other falsy values.
  * @param o object with falsy values
@@ -165,7 +170,7 @@ export const shouldUseOzoneAdaptor = (): boolean =>
 
 export const shouldIncludeAppNexus = (): boolean =>
 	isInAuOrNz() ||
-	(window.guardian.config.switches.prebidAppnexusUkRow && !isInUsOrCa()) ||
+	(!!window.guardian.config.switches.prebidAppnexusUkRow && !isInUsOrCa()) ||
 	!!pbTestNameMap().and;
 
 export const shouldIncludeXaxis = (): boolean => isInUk();
@@ -197,7 +202,7 @@ export const shouldIncludeMobileSticky = once(
 			max: 'mobileLandscape',
 		}) &&
 			!isInUk() &&
-			window.guardian.config.page.contentType === 'Article' &&
+			isValidPageForMobileSticky() &&
 			!window.guardian.config.page.isHosted),
 );
 

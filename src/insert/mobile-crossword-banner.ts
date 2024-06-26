@@ -24,13 +24,6 @@ export const init = (): Promise<void> => {
 		return Promise.resolve();
 	}
 
-	const isInMegaTestControl =
-		window.guardian.config.tests?.commercialMegaTestControl === 'control';
-
-	if (isInMegaTestControl) {
-		return Promise.resolve();
-	}
-
 	const anchorSelector = '.crossword__container__above-controls + *';
 
 	const anchor: HTMLElement | null = document.querySelector(anchorSelector);

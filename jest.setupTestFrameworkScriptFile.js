@@ -13,6 +13,7 @@ window.guardian = {
 		page: {
 			idApiUrl: 'https://idapi.theguardian.com',
 			idUrl: 'https://profile.theguardian.com',
+			pageId: 'uk-politics',
 		},
 		images: {
 			commercial: {},

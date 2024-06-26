@@ -115,10 +115,13 @@ function sendMetrics() {
 		commercialMetricsPayload,
 	);
 
-	return navigator.sendBeacon(
-		endpoint,
-		JSON.stringify(commercialMetricsPayload),
-	);
+	void fetch(endpoint, {
+		method: 'POST',
+		body: JSON.stringify(commercialMetricsPayload),
+		keepalive: true,
+		cache: 'no-store',
+		mode: 'no-cors',
+	});
 }
 
 type ArrayMetric = [key: string, value: string | number];

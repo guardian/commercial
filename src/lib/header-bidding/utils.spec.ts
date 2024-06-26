@@ -69,6 +69,7 @@ const resetConfig = () => {
 	window.guardian.config.page.section = 'Magic';
 	window.guardian.config.page.edition = 'UK';
 	window.guardian.config.page.isDev = false;
+	window.guardian.config.page.pageId = '';
 };
 
 describe('Utils', () => {
@@ -365,8 +366,19 @@ describe('Utils', () => {
 		},
 	);
 
-	test('shouldIncludeMobileSticky should be false if all conditions true except content type ', () => {
+	test.each(regionsTestCases)(
+		`should include mobile sticky $expected if geolocation is $region and pageId is football/ on mobiles`,
+		({ region, expected }) => {
+			window.guardian.config.page.pageId = 'football/';
+			getCountryCode.mockReturnValue(region);
+			matchesBreakpoints.mockReturnValue(true);
+			expect(shouldIncludeMobileSticky()).toBe(expected);
+		},
+	);
+
+	test('shouldIncludeMobileSticky should be false if all conditions true except pageId or content type ', () => {
 		window.guardian.config.page.contentType = 'Network Front';
+		window.guardian.config.page.pageId = 'lifeandstyle/';
 		matchesBreakpoints.mockReturnValue(true);
 		getCountryCode.mockReturnValue('US');
 		expect(shouldIncludeMobileSticky()).toBe(false);

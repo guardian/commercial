@@ -224,7 +224,7 @@ class EventTimer {
 			name = `${origin}_${name}`;
 		}
 
-		if (this._marks.get(name) || !supportsPerformanceAPI()) {
+		if (!!this._marks.get(name) || !supportsPerformanceAPI()) {
 			return;
 		}
 

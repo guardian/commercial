@@ -3,7 +3,7 @@
 import { log } from '@guardian/libs';
 import { memoize } from 'lodash-es';
 import fastdom from 'utils/fastdom-promise';
-import { init as initSpacefinderDebugger } from './spacefinder-debug-tools';
+import { getUrlVars } from 'utils/url';
 
 type RuleSpacing = {
 	/**
@@ -17,16 +17,19 @@ type RuleSpacing = {
 	bypassMinBelow?: string;
 };
 
+type SpacefinderMetaItem = {
+	required?: number;
+	actual?: number;
+	element: HTMLElement;
+};
+
 type SpacefinderItem = {
 	top: number;
 	bottom: number;
 	element: HTMLElement;
-	meta?: {
-		tooClose: Array<{
-			required: number;
-			actual: number;
-			element: HTMLElement;
-		}>;
+	meta: {
+		tooClose: SpacefinderMetaItem[];
+		overlaps: SpacefinderMetaItem[];
 	};
 };
 
@@ -83,8 +86,9 @@ type SpacefinderWriter = (paras: HTMLElement[]) => Promise<void>;
 
 type SpacefinderPass =
 	| 'inline1'
-	| 'mobile-inlines'
+	| 'mobile-top-above-nav'
 	| 'subsequent-inlines'
+	| 'mobile-subsequent-inlines'
 	| 'im'
 	| 'carrot';
 
@@ -107,9 +111,6 @@ type Measurements = {
 	contentMeta?: SpacefinderItem;
 	opponents?: ElementDimensionMap;
 };
-
-const isInMegaTestControl =
-	window.guardian.config.tests?.commercialMegaTestControl === 'control';
 
 const query = (selector: string, context?: HTMLElement | Document) => [
 	...(context ?? document).querySelectorAll<HTMLElement>(selector),
@@ -306,12 +307,8 @@ const bypassTestCandidate = (
 	candidate.element === opponent.element ||
 	opponent.element.contains(candidate.element);
 
-/**
- * These 2 sets of candidate test functions are for the changes to "ranked" articles as part of the mega test
- */
-
 // test one element vs another for the given rules
-const newTestCandidate = (
+const testCandidate = (
 	rule: RuleSpacing,
 	candidate: SpacefinderItem,
 	opponent: SpacefinderItem,
@@ -320,63 +317,49 @@ const newTestCandidate = (
 		return true;
 	}
 
-	const isOpponentBelow = opponent.bottom > candidate.bottom;
+	const isOpponentBelow =
+		opponent.bottom > candidate.bottom && opponent.top > candidate.bottom;
+	const isOpponentAbove =
+		opponent.top < candidate.top && opponent.bottom < candidate.top;
 
-	const pass = isTopOfCandidateFarEnoughFromOpponent(
-		candidate,
-		opponent,
-		rule,
-		isOpponentBelow,
-	);
+	// this can happen when the an opponent like an image or interactive is floated right
+	const opponentOverlaps =
+		(isOpponentAbove && isOpponentBelow) ||
+		(!isOpponentAbove && !isOpponentBelow);
+
+	const pass =
+		!opponentOverlaps &&
+		isTopOfCandidateFarEnoughFromOpponent(
+			candidate,
+			opponent,
+			rule,
+			isOpponentBelow,
+		);
 
 	if (!pass) {
-		// if the test fails, add debug information to the candidate metadata
-		const required = isOpponentBelow
-			? rule.minBelowSlot
-			: rule.minAboveSlot;
-		const actual = isOpponentBelow
-			? opponent.top - candidate.top
-			: candidate.top - opponent.bottom;
+		if (opponentOverlaps) {
+			candidate.meta.overlaps.push({
+				element: opponent.element,
+			});
+		} else {
+			// if the test fails, add debug information to the candidate metadata
+			const required = isOpponentBelow
+				? rule.minBelowSlot
+				: rule.minAboveSlot;
+			const actual = isOpponentBelow
+				? opponent.top - candidate.top
+				: candidate.top - opponent.bottom;
 
-		candidate.meta?.tooClose.push({
-			required,
-			actual,
-			element: opponent.element,
-		});
+			candidate.meta.tooClose.push({
+				required,
+				actual,
+				element: opponent.element,
+			});
+		}
 	}
 
 	return pass;
 };
-
-const oldTestCandidate = (
-	rule: RuleSpacing,
-	candidate: SpacefinderItem,
-	opponent: SpacefinderItem,
-): boolean => {
-	const isMinAbove = candidate.top - opponent.bottom >= rule.minAboveSlot;
-	const isMinBelow = opponent.top - candidate.top >= rule.minBelowSlot;
-
-	const pass = isMinAbove || isMinBelow;
-
-	if (!pass) {
-		// if the test fails, add debug information to the candidate metadata
-		const isBelow = candidate.top < opponent.top;
-		const required = isBelow ? rule.minBelowSlot : rule.minAboveSlot;
-		const actual = isBelow
-			? opponent.top - candidate.top
-			: candidate.top - opponent.bottom;
-
-		candidate.meta?.tooClose.push({
-			required,
-			actual,
-			element: opponent.element,
-		});
-	}
-
-	return pass;
-};
-
-const testCandidate = isInMegaTestControl ? oldTestCandidate : newTestCandidate;
 
 // test one element vs an array of other elements for the given rule
 const testCandidates = (
@@ -539,6 +522,7 @@ const getDimensions = (element: HTMLElement): Readonly<SpacefinderItem> =>
 		element,
 		meta: {
 			tooClose: [],
+			overlaps: [],
 		},
 	});
 
@@ -594,10 +578,9 @@ const findSpace = async (
 	exclusions: SpacefinderExclusions = {},
 ): Promise<HTMLElement[]> => {
 	options = { ...defaultOptions, ...options };
-	rules.body =
-		(rules.bodySelector &&
-			document.querySelector<HTMLElement>(rules.bodySelector)) ||
-		document;
+	rules.body = rules.bodySelector
+		? document.querySelector<HTMLElement>(rules.bodySelector) ?? document
+		: document;
 
 	window.performance.mark('commercial:spacefinder:findSpace:start');
 
@@ -607,7 +590,14 @@ const findSpace = async (
 	const measurements = await getMeasurements(rules, candidates);
 	const winners = enforceRules(measurements, rules, exclusions);
 
-	initSpacefinderDebugger(exclusions, winners, rules, options.pass);
+	const enableDebug = !!getUrlVars().sfdebug;
+
+	if (enableDebug) {
+		const pass = options.pass;
+		void import('./spacefinder-debug-tools').then(({ init }) => {
+			init(exclusions, winners, rules, pass);
+		});
+	}
 
 	window.performance.mark('commercial:spacefinder:findSpace:end');
 
@@ -646,4 +636,5 @@ export type {
 	SpacefinderItem,
 	SpacefinderExclusions,
 	SpacefinderPass,
+	SpacefinderMetaItem,
 };

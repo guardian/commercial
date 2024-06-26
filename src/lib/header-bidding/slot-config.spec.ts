@@ -119,7 +119,7 @@ describe('getPrebidAdSlots', () => {
 		).toEqual([
 			{
 				key: 'mobile-sticky',
-				sizes: [createAdSize(320, 50)],
+				sizes: [createAdSize(320, 50), createAdSize(300, 50)],
 			},
 		]);
 	});

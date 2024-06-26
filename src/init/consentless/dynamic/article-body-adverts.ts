@@ -1,5 +1,8 @@
 import type { FillAdSlot } from 'insert/spacefinder/article';
-import { addInlineAds } from 'insert/spacefinder/article';
+import {
+	addFirstInlineAd,
+	addSubsequentInlineAds,
+} from 'insert/spacefinder/article';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import { defineSlot } from '../define-slot';
@@ -20,7 +23,9 @@ const initArticleBodyAdverts = async (): Promise<void> => {
 		return;
 	}
 
-	await addInlineAds(fillConsentlessAdSlot);
+	await addFirstInlineAd(fillConsentlessAdSlot).then(() =>
+		addSubsequentInlineAds(fillConsentlessAdSlot),
+	);
 };
 
 export { initArticleBodyAdverts };

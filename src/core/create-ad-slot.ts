@@ -16,6 +16,7 @@ type SlotName =
 	| 'comments'
 	| 'crossword-banner-mobile'
 	| 'exclusion'
+	| 'football-right'
 	| 'fronts-banner'
 	| 'merchandising-high'
 	| 'im'
