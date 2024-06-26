@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 19.9.1
+
+### Patch Changes
+
+- 3249b47: add `liveblog-top` ad sizes
+- d1331c0: reduce min height from top of article for first inline ad on mobile
+
 ## 19.9.0
 
 ### Minor Changes
