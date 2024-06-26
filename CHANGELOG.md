@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 19.10.0
+
+### Minor Changes
+
+- 48fbdc9: Add commercialMetricsInitialised to the window
+
+### Patch Changes
+
+- ead0d88: Remove the sendBeacon for no ad blocker test
+
 ## 19.9.1
 
 ### Patch Changes
