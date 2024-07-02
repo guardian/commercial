@@ -1,0 +1,22 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+RED='\033[0;31m'
+ENDCOLOR='\033[0m'
+
+changedFiles="$(git diff-tree -r --name-only --no-commit-id HEAD@{1} HEAD)"
+changedLock="$(echo "$changedFiles" | { grep -E 'pnpm-lock.yaml' || :; })"
+changedNode="$(echo "$changedFiles" | { grep '.nvmrc' || :; })"
+
+if [[ ! -z $changedNode ]]
+then
+	version="$(cat .nvmrc)"
+	echo "${RED}This project needs Node "$version". Please run 'nvm use', 'fnm use' or 'asdf install' (or whatever is appropriate) then run 'pnpm install --frozen-lockfile'${ENDCOLOR}"
+	exit 1
+fi
+
+if [[ ! -z $changedLock ]]
+then
+	echo "${RED}This application has updated dependencies. Installing with pnpm...${ENDCOLOR}"
+	pnpm install --frozen-lockfile
+fi
