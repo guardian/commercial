@@ -1,91 +1,115 @@
-import type { ABTest, Participations, Runnable } from '@guardian/ab-core';
-import { memoize } from 'lodash-es';
-import { allRunnableTests } from './ab-core';
-import {
-	getParticipationsFromLocalStorage,
-	setParticipationsInLocalStorage,
-} from './ab-local-storage';
-import {
-	registerCompleteEvents,
-	registerImpressionEvents,
-	trackABTests,
-} from './ab-ophan';
+import type { ABTest } from '@guardian/ab-core';
+import { AB } from '@guardian/ab-core';
+import { getCookie, log } from '@guardian/libs';
 import { concurrentTests } from './ab-tests';
 import { getForcedParticipationsFromUrl } from './ab-url';
-import {
-	runnableTestsToParticipations,
-	testExclusionsWhoseSwitchExists,
-} from './ab-utils';
 
-// These are the tests which will actually take effect on this pageview.
-// Note that this is a subset of the potentially runnable tests,
-// because we only run one epic test and one banner test per pageview.
-// We memoize this because it can't change for a given pageview, and because getParticipations()
-// and isInVariantSynchronous() depend on it and these are called in many places.
-export const getSynchronousTestsToRun: () => ReadonlyArray<Runnable<ABTest>> =
-	memoize(() => allRunnableTests(concurrentTests));
-export const getAsyncTestsToRun = (): Promise<
-	ReadonlyArray<Runnable<ABTest>>
-> => Promise.all([]).then((tests) => tests.filter(Boolean));
+const mvtMinValue = 1;
+const mvtMaxValue = 1_000_000;
 
-// This excludes epic & banner tests
-export const getSynchronousParticipations = (): Participations =>
-	runnableTestsToParticipations(getSynchronousTestsToRun());
+/** Parse a valid MVT ID between 1 and 1,000,000 or undefined if it fails */
+const parseMvtId = (id: string | null): number | undefined => {
+	if (!id) return; // null or empty string
+	const number = Number(id);
+	if (Number.isNaN(number)) return;
+	if (number < mvtMinValue) return;
+	if (number > mvtMaxValue) return;
+	return number;
+};
 
-// This excludes epic & banner tests
-export const isInVariantSynchronous = (
-	test: ABTest,
-	variantId: string,
-): boolean =>
-	getSynchronousTestsToRun().some(
-		({ id, variantToRun }) =>
-			id === test.id && variantToRun.id === variantId,
+const getMvtId = (): number | undefined =>
+	parseMvtId(
+		getCookie({
+			name: 'GU_mvt_id',
+			shouldMemoize: true,
+		}),
 	);
 
-// This excludes epic & banner tests
-// checks if the user in in a given test with any variant
-export const isInABTestSynchronous = (test: ABTest): boolean =>
-	getSynchronousTestsToRun().some(({ id }) => id === test.id);
+type OphanRecordFunction = (
+	event: Record<string, unknown> & {
+		/**
+		 * the experiences key will override previously set values.
+		 * Use `recordExperiences` instead.
+		 */
+		experiences?: never;
+	},
+	callback?: () => void,
+) => void;
+/**
+ * Store a reference to Ophan so that we don't need to load/enhance it more than once.
+ */
+let cachedOphan: typeof window.guardian.ophan;
 
-export const runAndTrackAbTests = (): Promise<void> => {
-	const testsToRun = getSynchronousTestsToRun();
+const getOphan = () => {
+	const { ophan } = window.guardian;
 
-	testsToRun.forEach((test) =>
-		test.variantToRun.test(test as unknown as Record<string, unknown>),
-	);
+	const record: OphanRecordFunction = (event, callback) => {
+		ophan.record(event, callback);
+		log('dotcom', '🧿 Ophan event recorded:', event);
+	};
 
-	registerImpressionEvents(testsToRun);
-	registerCompleteEvents(testsToRun);
-	trackABTests(testsToRun);
-
-	// If a test has a 'notintest' variant specified in localStorage,
-	// it will prevent them from participating in the test.
-	// This is typically set by the URL hash, but we want it to persist for
-	// subsequent pageviews so we save it to localStorage.
-	// We don't persist those whose switch is gone from the backend,
-	// to ensure that old tests get cleaned out and localStorage doesn't keep growing.
-	const testExclusions: Participations = testExclusionsWhoseSwitchExists({
-		...getParticipationsFromLocalStorage(),
-		...getForcedParticipationsFromUrl(),
-	});
-
-	setParticipationsInLocalStorage({
-		...runnableTestsToParticipations(testsToRun),
-		...testExclusions,
-	});
-
-	return getAsyncTestsToRun().then((tests) => {
-		tests.forEach((test) =>
-			test.variantToRun.test(test as unknown as Record<string, unknown>),
-		);
-
-		registerImpressionEvents(tests);
-		registerCompleteEvents(tests);
-		trackABTests(tests);
-
-		setParticipationsInLocalStorage({
-			...getParticipationsFromLocalStorage(),
-			...runnableTestsToParticipations(tests),
+	const trackComponentAttention: typeof ophan.trackComponentAttention = (
+		name,
+		el,
+		visibilityThreshold,
+	) => {
+		ophan.trackComponentAttention(name, el, visibilityThreshold);
+		log('dotcom', '🧿 Ophan tracking component attention:', name, {
+			el,
+			visibilityThreshold,
 		});
+	};
+
+	cachedOphan = { ...ophan, record, trackComponentAttention };
+	return cachedOphan;
+};
+
+const mvtId = getMvtId();
+const abTestSwitches = Object.entries(window.guardian.config.switches).reduce(
+	(prev, [key, val]) => ({ ...prev, [key]: val }),
+	{},
+);
+
+const init = () => {
+	const ab = new AB({
+		mvtId: mvtId ?? -1,
+		mvtMaxValue,
+		pageIsSensitive: window.guardian.config.page.isSensitive,
+		abTestSwitches, // Ensure abTestSwitches is initialized as an empty object if undefined
+		arrayOfTestObjects: concurrentTests, //how to get this to be readonly?
+		forcedTestVariants: getForcedParticipationsFromUrl(),
+		ophanRecord: getOphan().record,
+		serverSideTests: window.guardian.config.tests ?? {},
+		errorReporter: (error) => {
+			console.log('AB tests error:', error);
+		},
 	});
+
+	const allRunnableTests = ab.allRunnableTests(concurrentTests);
+	ab.trackABTests(allRunnableTests);
+	ab.registerImpressionEvents(allRunnableTests);
+	ab.registerCompleteEvents(allRunnableTests);
+	log('dotcom', 'AB tests initialised');
+	ab.isUserInVariant;
+
+	return ab;
+};
+
+export const getParticipations = () => {
+	const ab = init(); // Initialize AB
+	const runnableTests = ab.allRunnableTests(concurrentTests);
+
+	const participations = runnableTests.reduce<
+		Record<string, { variant: string }>
+	>((acc, test) => {
+		acc[test.id] = { variant: test.variantToRun.id };
+		return acc;
+	}, {});
+
+	return participations;
+};
+
+export const isUserInVariant = (test: ABTest, variantId: string): boolean => {
+	const ab = init();
+	return ab.isUserInVariant(test.id, variantId);
 };

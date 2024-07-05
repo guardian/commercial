@@ -16,7 +16,7 @@ jest.mock('lib/dfp/get-advert-by-id', () => ({
 }));
 
 jest.mock('experiments/ab', () => ({
-	isInVariantSynchronous: jest.fn(),
+	isUserInVariant: jest.fn(),
 }));
 
 const resetPrebid = () => {
