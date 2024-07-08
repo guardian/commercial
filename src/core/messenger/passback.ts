@@ -10,7 +10,20 @@ type PassbackMessagePayload = { source: string };
 
 const adLabelHeight = 24;
 
+/**
+ * Passback size mappings
+ * https://developers.google.com/publisher-tag/guides/ad-sizes#responsive_ads
+ *
+ * [
+ *   [
+ *     [viewport-width-1, viewport-height-1],
+ *     [ad-width-1, ad-height-1], [ad-width-2, ad-height-2], ...]
+ *   ],
+ * ]
+ *
+ */
 const mpu: [number, number] = [adSizes.mpu.width, adSizes.mpu.height];
+
 const outstreamDesktop: [number, number] = [
 	adSizes.outstreamDesktop.width,
 	adSizes.outstreamDesktop.height,
@@ -20,7 +33,54 @@ const outstreamMobile: [number, number] = [
 	adSizes.outstreamMobile.height,
 ];
 
-const getValuesForKeys = (
+const outstreamSizes = [mpu, outstreamMobile, outstreamDesktop];
+
+const oustreamSizeMappings = [
+	[
+		[breakpoints.phablet, 0],
+		[mpu, outstreamDesktop],
+	],
+	[
+		[breakpoints.mobile, 0],
+		[mpu, outstreamMobile],
+	],
+] satisfies googletag.SizeMappingArray;
+
+const mobileSticky: [number, number] = [
+	adSizes.mobilesticky.width,
+	adSizes.mobilesticky.height,
+];
+
+const mobileStickySizes = [mpu, mobileSticky];
+
+const mobileStickySizeMappings = [
+	[[breakpoints.mobile, 0], [mobileSticky]],
+] satisfies googletag.SizeMappingArray;
+
+const defaultSizeMappings = [
+	[[breakpoints.mobile, 0], [mpu]],
+] satisfies googletag.SizeMappingArray;
+
+const decideSizes = (source: string) => {
+	if (source === 'teads') {
+		return {
+			sizes: outstreamSizes,
+			sizeMappings: oustreamSizeMappings,
+		};
+	}
+	if (source === 'ogury') {
+		return {
+			sizes: mobileStickySizes,
+			sizeMappings: mobileStickySizeMappings,
+		};
+	}
+	return {
+		sizes: [mpu],
+		sizeMappings: defaultSizeMappings,
+	};
+};
+
+const mapValues = (
 	keys: string[],
 	valueFn: (key: string) => string[],
 ): Array<[string, string[]]> => keys.map((key) => [key, valueFn(key)]);
@@ -35,6 +95,11 @@ const getPassbackValue = (source: string): string => {
  * A listener for 'passback' messages from ad slot iFrames
  * Ad providers will postMessage a 'passback' message to tell us they have not filled this slot
  * In which case we create a 'passback' slot to fulfil the slot with another ad
+ *
+ * More details:
+ * https://github.com/guardian/frontend/pull/24724
+ * https://github.com/guardian/frontend/pull/24903
+ * https://github.com/guardian/frontend/pull/25008
  */
 const init = (register: RegisterListener): void => {
 	register('passback', (messagePayload, ret, iframe) => {
@@ -154,11 +219,11 @@ const init = (register: RegisterListener): void => {
 				/**
 				 * Copy the targeting from the initial slot
 				 */
-				const pageTargeting = getValuesForKeys(
+				const pageTargeting = mapValues(
 					window.googletag.pubads().getTargetingKeys(),
 					(key) => window.googletag.pubads().getTargeting(key),
 				);
-				const slotTargeting = getValuesForKeys(
+				const slotTargeting = mapValues(
 					initialSlot.getTargetingKeys(),
 					(key) => initialSlot.getTargeting(key),
 				);
@@ -217,8 +282,10 @@ const init = (register: RegisterListener): void => {
 										);
 										slotElement.style.height = slotHeight;
 
-										/*The centre styling is added in here instead of where the element is created
-										because googletag removes the display style on the passbackElement */
+										/**
+										 * The centre styling is added in here instead of where the element is created
+										 * because googletag removes the display style on the passbackElement
+										 */
 										passbackElement.style.display = 'flex';
 										passbackElement.style.flexDirection =
 											'column';
@@ -228,9 +295,10 @@ const init = (register: RegisterListener): void => {
 											'center';
 										passbackElement.style.height = `calc(100% - ${adLabelHeight}px)`;
 
-										// Also resize the initial outstream iframe so
-										// it doesn't block text selection directly under
-										// the new ad
+										/**
+										 * Also resize the initial outstream iframe so it doesn't block text selection
+										 * directly under the new ad
+										 */
 										iframe.style.height = slotHeight;
 										iFrameContainer.style.height =
 											slotHeight;
@@ -244,24 +312,16 @@ const init = (register: RegisterListener): void => {
 				 * Define and display the new passback slot
 				 */
 				window.googletag.cmd.push(() => {
+					const { sizes, sizeMappings } = decideSizes(source);
 					// https://developers.google.com/publisher-tag/reference#googletag.defineSlot
 					const passbackSlot = googletag.defineSlot(
 						initialSlot.getAdUnitPath(),
-						[mpu, outstreamMobile, outstreamDesktop],
+						sizes,
 						passbackElement.id,
 					);
 					if (passbackSlot) {
 						// https://developers.google.com/publisher-tag/guides/ad-sizes#responsive_ads
-						passbackSlot.defineSizeMapping([
-							[
-								[breakpoints.phablet, 0],
-								[mpu, outstreamDesktop],
-							],
-							[
-								[breakpoints.mobile, 0],
-								[mpu, outstreamMobile],
-							],
-						]);
+						passbackSlot.defineSizeMapping(sizeMappings);
 						passbackSlot.addService(window.googletag.pubads());
 						passbackTargeting.forEach(([key, value]) => {
 							passbackSlot.setTargeting(key, value);
