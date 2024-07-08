@@ -1,5 +1,4 @@
 import type { ABTest } from '@guardian/ab-core';
-import { deeplyReadRightColumn } from './tests/deeply-read-right-column';
 import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
 
 /**
@@ -10,5 +9,4 @@ import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
 export const concurrentTests: readonly ABTest[] = [
 	// one test per line
 	mpuWhenNoEpic,
-	deeplyReadRightColumn,
 ];

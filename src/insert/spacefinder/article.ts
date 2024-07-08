@@ -17,8 +17,6 @@ import {
 	getCurrentBreakpoint,
 	getCurrentTweakpoint,
 } from 'lib/detect/detect-breakpoint';
-import { isInVariantSynchronous } from '../../experiments/ab';
-import { deeplyReadRightColumn } from '../../experiments/tests/deeply-read-right-column';
 import fastdom from '../../utils/fastdom-promise';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
 import { initCarrot } from './carrot-traffic-driver';
@@ -42,11 +40,6 @@ const hasImages = !!window.guardian.config.page.lightboxImages?.images.length;
 
 const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
-
-const isInDeeplyReadMostViewedVariant = isInVariantSynchronous(
-	deeplyReadRightColumn,
-	'deeply-read-and-most-viewed',
-);
 
 const minDistanceBetweenRightRailAds = 500;
 const minDistanceBetweenInlineAds = isInHighValueSection ? 500 : 750;
@@ -225,7 +218,7 @@ const addDesktopRightRailAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 	 * In special cases, inline2 can overlap the "Most viewed" island, so
 	 * we need to make an adjustment to move the inline2 further down the page
 	 */
-	if (isInDeeplyReadMostViewedVariant || isPaidContent) {
+	if (isPaidContent) {
 		minAbove += MOST_VIEWED_HEIGHT;
 	}
 
