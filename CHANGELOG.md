@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 19.11.0
+
+### Minor Changes
+
+- 6d6e9b9: Remove deeply read right column test
+
+### Patch Changes
+
+- eab3b11: Test
+
 ## 19.10.0
 
 ### Minor Changes
