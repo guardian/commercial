@@ -282,7 +282,7 @@ async function initCommercialMetrics({
 
 	const userIsInSamplingGroup = Math.random() <= sampling;
 
-	if (userIsInSamplingGroup) {
+	if (isDev || userIsInSamplingGroup) {
 		const consented = await checkConsent();
 		if (consented) {
 			window.guardian.config.shouldSendCommercialMetrics = true;
