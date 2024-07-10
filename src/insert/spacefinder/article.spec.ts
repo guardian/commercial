@@ -21,30 +21,7 @@ jest.mock('insert/spacefinder/space-filler', () => ({
 		fillSpace: jest.fn(),
 	},
 }));
-jest.mock('lib/config', () => ({
-	get: (key: string) => {
-		if (key === 'page') {
-			return {
-				adUnit: '/123456/theguardian.com/front',
-				contentType: 'Article',
-				edition: 'us',
-				isFront: true,
-				keywordIds: 'world/korea,world/ukraine',
-				pageId: 'world/uk',
-				section: 'news',
-				seriesId: 'learning/series/happy-times',
-				sharedAdTargeting: {
-					ct: 'Article',
-					edition: 'us',
-					k: ['korea', 'ukraine'],
-					se: ['happy-times'],
-				},
-			};
-		}
-		return undefined;
-	},
-	set: jest.fn(),
-}));
+jest.mock('lib/config', () => ({ page: {}, get: () => false }));
 
 jest.mock('experiments/ab', () => ({
 	isUserInVariant: () => false,
