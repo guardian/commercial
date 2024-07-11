@@ -75,8 +75,8 @@ const init = () => {
 		mvtId: mvtId ?? -1,
 		mvtMaxValue,
 		pageIsSensitive: window.guardian.config.page.isSensitive,
-		abTestSwitches, // Ensure abTestSwitches is initialized as an empty object if undefined
-		arrayOfTestObjects: concurrentTests, //how to get this to be readonly?
+		abTestSwitches,
+		arrayOfTestObjects: concurrentTests,
 		forcedTestVariants: getForcedParticipationsFromUrl(),
 		ophanRecord: getOphan().record,
 		serverSideTests: window.guardian.config.tests ?? {},
@@ -96,7 +96,7 @@ const init = () => {
 };
 
 export const getParticipations = () => {
-	const ab = init(); // Initialize AB
+	const ab = init();
 	const runnableTests = ab.allRunnableTests(concurrentTests);
 
 	const participations = runnableTests.reduce<

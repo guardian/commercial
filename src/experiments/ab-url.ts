@@ -1,5 +1,4 @@
 import type { Participations } from '@guardian/ab-core';
-// import { testAndParticipationsToVariant } from './ab-utils';
 
 export const getForcedParticipationsFromUrl = (): Participations => {
 	if (window.location.hash.startsWith('#ab')) {
