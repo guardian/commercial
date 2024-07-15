@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 19.12.0
+
+### Minor Changes
+
+- 25d0df8: Refactor metrics bypassing
+
+### Patch Changes
+
+- aa3cbc1: Add labels for Hosted By template ads on opt out
+
 ## 19.11.0
 
 ### Minor Changes
