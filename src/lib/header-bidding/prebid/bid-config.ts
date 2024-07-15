@@ -8,6 +8,7 @@ import { dfpEnv } from 'lib/dfp/dfp-env';
 import type { PrebidIndexSite } from 'types/global';
 import {
 	isInAuOrNz,
+	isInAustralia,
 	isInRow,
 	isInUk,
 	isInUsa,
@@ -24,6 +25,7 @@ import type {
 	PrebidImproveParams,
 	PrebidIndexExchangeParams,
 	PrebidKargoParams,
+	PrebidMagniteParams,
 	PrebidOpenXParams,
 	PrebidOzoneParams,
 	PrebidPubmaticParams,
@@ -41,6 +43,8 @@ import {
 	containsMobileSticky,
 	containsMpu,
 	containsMpuOrDmpu,
+	containsPortraitInterstitial,
+	containsWS,
 	getBreakpointKey,
 	shouldIncludeAdYouLike,
 	shouldIncludeAppNexus,
@@ -48,6 +52,7 @@ import {
 	shouldIncludeImproveDigital,
 	shouldIncludeImproveDigitalSkin,
 	shouldIncludeKargo,
+	shouldIncludeMagnite,
 	shouldIncludeOpenx,
 	shouldIncludeSmart,
 	shouldIncludeSonobi,
@@ -384,6 +389,71 @@ const getKargoPlacementId = (sizes: HeaderBiddingSize[]): string => {
 	return '_y9LINEsbfh';
 };
 
+const getMagniteZoneId = (sizes: HeaderBiddingSize[]): number => {
+	if (isInUk()) {
+		switch (getBreakpointKey()) {
+			case 'D':
+				if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
+					return 3426780;
+				}
+				// top-above-nav on desktop
+				if (containsLeaderboardOrBillboard(sizes)) {
+					return 3426786;
+				}
+				// Fronts-banners on desktop
+				if (containsBillboard(sizes)) {
+					return 3426790;
+				}
+				break;
+			case 'M':
+				if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+					return 3426778;
+				}
+				break;
+		}
+	}
+	return -1;
+};
+
+const getMagniteSiteId = (): number => {
+	if (isInUk()) {
+		switch (getBreakpointKey()) {
+			case 'D':
+				return 549358;
+			case 'M':
+				return 549374;
+		}
+	}
+
+	if (isInRow()) {
+		switch (getBreakpointKey()) {
+			case 'D':
+				return 549496;
+			case 'M':
+				return 549498;
+		}
+	}
+
+	if (isInUsa()) {
+		switch (getBreakpointKey()) {
+			case 'D':
+				return 554244;
+			case 'M':
+				return 554248;
+		}
+	}
+
+	if (isInAustralia()) {
+		switch (getBreakpointKey()) {
+			case 'D':
+				return 554256;
+			case 'M':
+				return 554258;
+		}
+	}
+	return -1;
+};
+
 const pubmaticBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 	const defaultParams = {
 		name: 'pubmatic' as BidderCode,
@@ -533,6 +603,19 @@ const kargoBidder: PrebidBidder = {
 	}),
 };
 
+const magniteBidder: PrebidBidder = {
+	name: 'magnite',
+	switchName: 'prebidMagnite',
+	bidParams: (
+		_slotId: string,
+		sizes: HeaderBiddingSize[],
+	): PrebidMagniteParams => ({
+		accountId: 26644,
+		siteId: getMagniteSiteId(),
+		zoneId: getMagniteZoneId(sizes),
+	}),
+};
+
 // There's an IX bidder for every size that the slot can take
 const indexExchangeBidders = (
 	slotSizes: HeaderBiddingSize[],
@@ -577,6 +660,7 @@ const currentBidders = (
 		[shouldUseOzoneAdaptor(), ozoneClientSideBidder(pageTargeting)],
 		[shouldIncludeOpenx(), openxClientSideBidder(pageTargeting)],
 		[shouldIncludeKargo(), kargoBidder],
+		[shouldIncludeMagnite(), magniteBidder],
 	];
 
 	const otherBidders = biddersToCheck
