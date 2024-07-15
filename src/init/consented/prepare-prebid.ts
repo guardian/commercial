@@ -20,7 +20,7 @@ const loadPrebid = async (framework: ConsentFramework): Promise<void> => {
 	if (shouldLoadPrebid()) {
 		await import(
 			// @ts-expect-error -- there’s no types for Prebid.js
-			/* webpackChunkName: "Prebid.js" */ '@guardian/prebid.js/build/dist/prebid'
+			/* webpackChunkName: "Prebid.js" */ 'prebid.js/build/dist/prebid'
 		);
 		prebid.initialise(window, framework);
 	}
