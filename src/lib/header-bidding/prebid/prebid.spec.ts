@@ -24,7 +24,7 @@ const resetPrebid = () => {
 	// @ts-expect-error -- there’s no types for this
 	delete window.pbjsChunk;
 	jest.resetModules();
-	jest.requireActual('@guardian/prebid.js/build/dist/prebid');
+	jest.requireActual('prebid.js/build/dist/prebid');
 };
 
 describe('initialise', () => {
@@ -71,6 +71,7 @@ describe('initialise', () => {
 			deviceAccess: true,
 			disableAjaxTimeout: false,
 			enableSendAllBids: true,
+			maxBid: 5000,
 			maxNestedIframes: 10,
 			mediaTypePriceGranularity: {},
 			priceGranularity: 'custom',
