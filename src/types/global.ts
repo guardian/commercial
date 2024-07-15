@@ -154,6 +154,7 @@ interface Config {
 		pageViewId: string;
 	};
 	page: PageConfig;
+	shouldSendCommercialMetrics?: boolean;
 	stage: Stage;
 	switches: Record<string, boolean | undefined>;
 	tests?: {

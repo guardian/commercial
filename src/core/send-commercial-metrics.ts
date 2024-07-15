@@ -185,15 +185,17 @@ function gatherMetricsOnPageUnload(): void {
 }
 
 const listener = (e: Event): void => {
-	switch (e.type) {
-		case 'visibilitychange':
-			if (document.visibilityState === 'hidden') {
+	if (window.guardian.config.shouldSendCommercialMetrics === true) {
+		switch (e.type) {
+			case 'visibilitychange':
+				if (document.visibilityState === 'hidden') {
+					gatherMetricsOnPageUnload();
+				}
+				return;
+			case 'pagehide':
 				gatherMetricsOnPageUnload();
-			}
-			return;
-		case 'pagehide':
-			gatherMetricsOnPageUnload();
-			return;
+				return;
+		}
 	}
 };
 
@@ -232,7 +234,7 @@ async function bypassCommercialMetricsSampling(): Promise<void> {
 	const consented = await checkConsent();
 
 	if (consented) {
-		addVisibilityListeners();
+		window.guardian.config.shouldSendCommercialMetrics = true;
 	} else {
 		log('commercial', "Metrics won't be sent because consent wasn't given");
 	}
@@ -267,6 +269,7 @@ async function initCommercialMetrics({
 	setEndpoint(isDev);
 	setDevProperties(isDev);
 	setAdBlockerProperties(adBlockerInUse);
+	addVisibilityListeners();
 
 	if (window.guardian.config.commercialMetricsInitialised) {
 		return false;
@@ -279,7 +282,7 @@ async function initCommercialMetrics({
 	if (isDev || userIsInSamplingGroup) {
 		const consented = await checkConsent();
 		if (consented) {
-			addVisibilityListeners();
+			window.guardian.config.shouldSendCommercialMetrics = true;
 			return true;
 		}
 		log('commercial', "Metrics won't be sent because consent wasn't given");
@@ -296,6 +299,7 @@ export const _ = {
 	transformToObjectEntries,
 	reset: (): void => {
 		window.guardian.config.commercialMetricsInitialised = false;
+		window.guardian.config.shouldSendCommercialMetrics = false;
 		commercialMetricsPayload = {
 			page_view_id: undefined,
 			browser_id: undefined,
