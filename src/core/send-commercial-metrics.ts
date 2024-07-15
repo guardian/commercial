@@ -185,20 +185,17 @@ function gatherMetricsOnPageUnload(): void {
 }
 
 const listener = (e: Event): void => {
-	switch (e.type) {
-		case 'visibilitychange':
-			if (
-				document.visibilityState === 'hidden' &&
-				window.guardian.config.shouldSendCommercialMetrics === true
-			) {
+	if (window.guardian.config.shouldSendCommercialMetrics === true) {
+		switch (e.type) {
+			case 'visibilitychange':
+				if (document.visibilityState === 'hidden') {
+					gatherMetricsOnPageUnload();
+				}
+				return;
+			case 'pagehide':
 				gatherMetricsOnPageUnload();
-			}
-			return;
-		case 'pagehide':
-			if (window.guardian.config.shouldSendCommercialMetrics === true) {
-				gatherMetricsOnPageUnload();
-			}
-			return;
+				return;
+		}
 	}
 };
 
