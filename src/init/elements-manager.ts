@@ -1,5 +1,5 @@
 import { onConsent } from '@guardian/libs';
-import { initArticleInline } from 'elements-manager/article-inline';
+import { initArticleBodyAdverts } from 'elements-manager/article-body-adverts';
 import { ElementsManager } from 'elements-manager/elements-manager';
 import { getPageTargeting } from 'lib/build-page-targeting';
 import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
@@ -18,7 +18,7 @@ const initElementsManager = async (): Promise<void> => {
 
 	void Promise.all(staticAdverts.map((ad) => ad.display()));
 
-	void initArticleInline();
+	void initArticleBodyAdverts();
 };
 
 export { initElementsManager };

@@ -1,6 +1,6 @@
 // import { getConsentFor, onConsent } from '@guardian/libs';
 // import { commercialFeatures } from 'lib/commercial-features';
-import { initElementsManager } from 'init/consented/prepare-elements-manager';
+import { initElementsManager } from 'init/elements-manager';
 
 const { frontendAssetsFullURL, page } = window.guardian.config;
 

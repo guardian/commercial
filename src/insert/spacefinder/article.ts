@@ -105,7 +105,7 @@ type FillAdSlot = (
 	slot: HTMLElement,
 	/* additional sizes to be added to the slot (used only by googletag) */
 	additionalSizes?: SizeMapping,
-) => Promise<void>;
+) => Promise<void> | void;
 
 /**
  * Decide whether we have enough space to add additional sizes for a given advert.

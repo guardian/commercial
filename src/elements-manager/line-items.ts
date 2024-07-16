@@ -158,26 +158,11 @@ const matchesDeviceTargeting = (
 };
 
 const getLineItems = once(async () => {
-	const house = (await fetch('http://localhost:3031/house.json').then((res) =>
-		res.json(),
-	)) as LineItem[];
-	const house2 = (await fetch('http://localhost:3031/house2.json').then(
+
+	const lineItems = (await fetch('https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/line-items.json').then(
 		(res) => res.json(),
 	)) as LineItem[];
-	const giffgaff = (await fetch('http://localhost:3031/giffgaff.json').then(
-		(res) => res.json(),
-	)) as LineItem[];
-	const merch = (await fetch('http://localhost:3031/merch.json').then((res) =>
-		res.json(),
-	)) as LineItem[];
 
-	const lineItems = [house, house2, merch, giffgaff].flat();
-
-	// const lineItems = (await fetch('http://localhost:3031/test.json').then(
-	// 	(res) => res.json(),
-	// )) as LineItem[];
-
-	// const lineItems = merchLineItems;
 	return lineItems.sort((a, b) => b.priority - a.priority);
 });
 /**
