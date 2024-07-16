@@ -1,4 +1,4 @@
-import { breakpoints } from '@guardian/source-foundations';
+import { breakpoints } from '@guardian/source/foundations';
 import { test } from '@playwright/test';
 import { allPages } from '../fixtures/pages';
 import { cmpAcceptAll } from '../lib/cmp';

@@ -1,5 +1,5 @@
 import { log } from '@guardian/libs';
-import { breakpoints } from '@guardian/source-foundations';
+import { breakpoints } from '@guardian/source/foundations';
 import { adSizes } from 'core/ad-sizes';
 import type { RegisterListener } from 'core/messenger';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';

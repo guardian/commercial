@@ -1,4 +1,4 @@
-import { breakpoints } from '@guardian/source-foundations';
+import { breakpoints } from '@guardian/source/foundations';
 
 type BreakpointKeys = Pick<
 	typeof breakpoints,
