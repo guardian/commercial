@@ -139,15 +139,13 @@ const mobileOpponentSelectorRules = {
 		minAboveSlot: 35,
 		minBelowSlot: 200,
 		// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
-		bypassMinBelow:
-			'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
+		bypassMinBelow: mobileHeadingSelector,
 	},
 	[rightColumnOpponentSelector]: {
 		minAboveSlot: 35,
 		minBelowSlot: 200,
 		// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
-		bypassMinBelow:
-			'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
+		bypassMinBelow: mobileHeadingSelector,
 	},
 };
 
