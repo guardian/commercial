@@ -410,6 +410,92 @@ const getMagniteZoneId = (sizes: HeaderBiddingSize[]): number => {
 					return 3426778;
 				}
 				break;
+			default:
+				return -1;
+		}
+	}
+
+	if (isInRow()) {
+		switch (getBreakpointKey()) {
+			case 'D':
+				if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
+					return 3426822;
+				}
+				// top-above-nav on desktop
+				if (containsLeaderboardOrBillboard(sizes)) {
+					return 3426828;
+				}
+				// Fronts-banners on desktop
+				if (containsBillboard(sizes)) {
+					return 3426834;
+				}
+				break;
+			case 'M':
+				if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+					return 3426836;
+				}
+				if (containsMobileSticky(sizes)) {
+					return 3477560;
+				}
+				break;
+			default:
+				return -1;
+		}
+	}
+
+	if (isInUsa()) {
+		switch (getBreakpointKey()) {
+			case 'D':
+				if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
+					return 3471422;
+				}
+				// top-above-nav on desktop
+				if (containsLeaderboardOrBillboard(sizes)) {
+					return 3471428;
+				}
+				// Fronts-banners on desktop
+				if (containsBillboard(sizes)) {
+					return 3471434;
+				}
+				break;
+			case 'M':
+				if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+					return 3471436;
+				}
+				if (containsMobileSticky(sizes)) {
+					return 3471440;
+				}
+				break;
+			default:
+				return -1;
+		}
+	}
+
+	if (isInAustralia()) {
+		switch (getBreakpointKey()) {
+			case 'D':
+				if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
+					return 3471452;
+				}
+				// top-above-nav on desktop
+				if (containsLeaderboardOrBillboard(sizes)) {
+					return 3471458;
+				}
+				// Fronts-banners on desktop
+				if (containsBillboard(sizes)) {
+					return 3471462;
+				}
+				break;
+			case 'M':
+				if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+					return 3471464;
+				}
+				if (containsMobileSticky(sizes)) {
+					return 3471468;
+				}
+				break;
+			default:
+				return -1;
 		}
 	}
 	return -1;
