@@ -90,7 +90,6 @@ const init = () => {
 	ab.registerImpressionEvents(allRunnableTests);
 	ab.registerCompleteEvents(allRunnableTests);
 	log('dotcom', 'AB tests initialised');
-	ab.isUserInVariant;
 
 	return ab;
 };
