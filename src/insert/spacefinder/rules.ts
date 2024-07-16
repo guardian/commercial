@@ -1,7 +1,5 @@
 import { adSizes } from 'core';
 import { adSlotContainerClass } from 'core/create-ad-slot';
-import { isInVariantSynchronous } from 'experiments/ab';
-import { deeplyReadRightColumn } from 'experiments/tests/deeply-read-right-column';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import type { SpacefinderRules } from './spacefinder';
 import { isInHighValueSection } from './utils';
@@ -24,11 +22,6 @@ const isPaidContent = window.guardian.config.page.isPaidContent;
 
 const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
-
-const isInDeeplyReadMostViewedVariant = isInVariantSynchronous(
-	deeplyReadRightColumn,
-	'deeply-read-and-most-viewed',
-);
 
 const minDistanceBetweenRightRailAds = 500;
 const minDistanceBetweenInlineAds = isInHighValueSection ? 500 : 750;
@@ -80,7 +73,7 @@ const desktopRightRailMinAbove = () => {
 	 * In special cases, inline2 can overlap the "Most viewed" island, so
 	 * we need to make an adjustment to move the inline2 further down the page
 	 */
-	if (isInDeeplyReadMostViewedVariant || isPaidContent || !hasImages) {
+	if (isPaidContent || !hasImages) {
 		return base + MOST_VIEWED_HEIGHT;
 	}
 
