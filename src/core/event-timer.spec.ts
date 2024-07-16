@@ -10,7 +10,7 @@ const mockGetEntriesByName = (names: string[]) =>
 						name: 'commercial event',
 						startTime: 1,
 					},
-			  ]
+				]
 			: [],
 	);
 

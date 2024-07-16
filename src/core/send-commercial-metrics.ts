@@ -70,7 +70,7 @@ const setAdBlockerProperties = (adBlockerInUse?: boolean): void => {
 						name: 'adBlockerInUse',
 						value: adBlockerInUse.toString(),
 					},
-			  ]
+				]
 			: [];
 };
 
@@ -141,7 +141,7 @@ const getOfflineCount = (): Metric[] =>
 					name: 'offlineCount',
 					value: window.guardian.offlineCount,
 				},
-		  ]
+			]
 		: [];
 
 /**
