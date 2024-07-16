@@ -125,11 +125,11 @@
 		"access": "public"
 	},
 	"peerDependencies": {
-		"@guardian/ab-core": "^7.0.1",
-		"@guardian/core-web-vitals": "^6.0.0",
-		"@guardian/identity-auth": "^2.1.0",
-		"@guardian/identity-auth-frontend": "^4.0.0",
-		"@guardian/libs": "^17.0.0",
+		"@guardian/ab-core": "^8.0.0",
+		"@guardian/core-web-vitals": "^7.0.0",
+		"@guardian/identity-auth": "^3.0.0",
+		"@guardian/identity-auth-frontend": "^5.0.0",
+		"@guardian/libs": "^18.0.0",
 		"@guardian/source": "^6.0.0",
 		"typescript": "~5.5.3"
 	},
