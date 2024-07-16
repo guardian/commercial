@@ -56,7 +56,7 @@
 		"@guardian/eslint-config-typescript": "^10.0.1",
 		"@guardian/identity-auth": "^2.1.0",
 		"@guardian/identity-auth-frontend": "^4.0.0",
-		"@guardian/libs": "17.0.0",
+		"@guardian/libs": "17.0.1",
 		"@guardian/prettier": "4.0.0",
 		"@guardian/source-foundations": "14.1.4",
 		"@playwright/test": "1.45.1",

@@ -81,19 +81,19 @@ devDependencies:
     version: 5.1.0(browserslist@4.23.2)(tslib@2.6.3)
   '@guardian/core-web-vitals':
     specifier: 6.0.1
-    version: 6.0.1(@guardian/libs@17.0.0)(tslib@2.6.3)(typescript@5.3.3)(web-vitals@3.5.2)
+    version: 6.0.1(@guardian/libs@17.0.1)(tslib@2.6.3)(typescript@5.3.3)(web-vitals@3.5.2)
   '@guardian/eslint-config-typescript':
     specifier: ^10.0.1
     version: 10.0.1(eslint@8.57.0)(tslib@2.6.3)(typescript@5.3.3)
   '@guardian/identity-auth':
     specifier: ^2.1.0
-    version: 2.1.1(@guardian/libs@17.0.0)(tslib@2.6.3)(typescript@5.3.3)
+    version: 2.1.1(@guardian/libs@17.0.1)(tslib@2.6.3)(typescript@5.3.3)
   '@guardian/identity-auth-frontend':
     specifier: ^4.0.0
-    version: 4.0.1(@guardian/identity-auth@2.1.1)(@guardian/libs@17.0.0)(tslib@2.6.3)(typescript@5.3.3)
+    version: 4.0.1(@guardian/identity-auth@2.1.1)(@guardian/libs@17.0.1)(tslib@2.6.3)(typescript@5.3.3)
   '@guardian/libs':
-    specifier: 17.0.0
-    version: 17.0.0(tslib@2.6.3)(typescript@5.3.3)
+    specifier: 17.0.1
+    version: 17.0.1(tslib@2.6.3)(typescript@5.3.3)
   '@guardian/prettier':
     specifier: 4.0.0
     version: 4.0.0(prettier@2.8.8)(tslib@2.6.3)
@@ -1951,7 +1951,7 @@ packages:
       tslib: 2.6.3
     dev: true
 
-  /@guardian/core-web-vitals@6.0.1(@guardian/libs@17.0.0)(tslib@2.6.3)(typescript@5.3.3)(web-vitals@3.5.2):
+  /@guardian/core-web-vitals@6.0.1(@guardian/libs@17.0.1)(tslib@2.6.3)(typescript@5.3.3)(web-vitals@3.5.2):
     resolution: {integrity: sha512-Zlv4/QO32HZn2NhuurX08DBoN/5gdYjpJ5mTcHTj6P1AxIzsyt1p+wNBDnf9TTVQM6Ro7lTie6vtQVaCUNB3YA==}
     peerDependencies:
       '@guardian/libs': ^16.0.0
@@ -1962,7 +1962,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@guardian/libs': 17.0.0(tslib@2.6.3)(typescript@5.3.3)
+      '@guardian/libs': 17.0.1(tslib@2.6.3)(typescript@5.3.3)
       tslib: 2.6.3
       typescript: 5.3.3
       web-vitals: 3.5.2
@@ -2007,7 +2007,7 @@ packages:
       - supports-color
     dev: true
 
-  /@guardian/identity-auth-frontend@4.0.1(@guardian/identity-auth@2.1.1)(@guardian/libs@17.0.0)(tslib@2.6.3)(typescript@5.3.3):
+  /@guardian/identity-auth-frontend@4.0.1(@guardian/identity-auth@2.1.1)(@guardian/libs@17.0.1)(tslib@2.6.3)(typescript@5.3.3):
     resolution: {integrity: sha512-iwZzdVNaJ2EAP6ZAK/dDY6zVZl0GlrAzPckoILuJ0x5REHpaGF3Qa89tW2DD+EHtrUBQ7vtMAsffachAUYWLiA==}
     peerDependencies:
       '@guardian/identity-auth': ^2.1.0
@@ -2018,13 +2018,13 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@guardian/identity-auth': 2.1.1(@guardian/libs@17.0.0)(tslib@2.6.3)(typescript@5.3.3)
-      '@guardian/libs': 17.0.0(tslib@2.6.3)(typescript@5.3.3)
+      '@guardian/identity-auth': 2.1.1(@guardian/libs@17.0.1)(tslib@2.6.3)(typescript@5.3.3)
+      '@guardian/libs': 17.0.1(tslib@2.6.3)(typescript@5.3.3)
       tslib: 2.6.3
       typescript: 5.3.3
     dev: true
 
-  /@guardian/identity-auth@2.1.1(@guardian/libs@17.0.0)(tslib@2.6.3)(typescript@5.3.3):
+  /@guardian/identity-auth@2.1.1(@guardian/libs@17.0.1)(tslib@2.6.3)(typescript@5.3.3):
     resolution: {integrity: sha512-xQqzQP6qo9PcWJ61cCO1DyicwySLfPZGUrBTIfjiolNrVHzBi+rdeeAKRedKBH1KusWe9QqRTmNeZdOLg5WO8w==}
     peerDependencies:
       '@guardian/libs': ^16.0.0
@@ -2034,7 +2034,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@guardian/libs': 17.0.0(tslib@2.6.3)(typescript@5.3.3)
+      '@guardian/libs': 17.0.1(tslib@2.6.3)(typescript@5.3.3)
       tslib: 2.6.3
       typescript: 5.3.3
     dev: true
@@ -2052,8 +2052,8 @@ packages:
       typescript: 5.3.3
     dev: false
 
-  /@guardian/libs@17.0.0(tslib@2.6.3)(typescript@5.3.3):
-    resolution: {integrity: sha512-9/DshbBrF+0DyLuKiDIzRr9t/NYGuv5fDJVZwHs73H4AQBaC0er+9aKUjjRueDILKKefOaBVTerWm2Jw4YCmmQ==}
+  /@guardian/libs@17.0.1(tslib@2.6.3)(typescript@5.3.3):
+    resolution: {integrity: sha512-uv+EF+lAgeSzBllULwT6morI/fsJWml8ROT2f/xLl2IejMio1zRt3HfTijdzVr4hYHlcGWntcHfrThjgqJgFHA==}
     peerDependencies:
       tslib: ^2.6.2
       typescript: ~5.3.3
