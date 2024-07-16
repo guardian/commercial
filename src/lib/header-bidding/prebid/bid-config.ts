@@ -389,7 +389,10 @@ const getKargoPlacementId = (sizes: HeaderBiddingSize[]): string => {
 	return '_y9LINEsbfh';
 };
 
-const getMagniteZoneId = (sizes: HeaderBiddingSize[]): number => {
+const getMagniteZoneId = (
+	slotId: string,
+	sizes: HeaderBiddingSize[],
+): number => {
 	if (isInUk()) {
 		switch (getBreakpointKey()) {
 			case 'D':
@@ -397,11 +400,17 @@ const getMagniteZoneId = (sizes: HeaderBiddingSize[]): number => {
 					return 3426780;
 				}
 				// top-above-nav on desktop
-				if (containsLeaderboardOrBillboard(sizes)) {
+				if (
+					containsLeaderboardOrBillboard(sizes) &&
+					slotId === 'dfp-ad--top-above-nav'
+				) {
 					return 3426786;
 				}
 				// Fronts-banners on desktop
-				if (containsBillboard(sizes)) {
+				if (
+					containsBillboard(sizes) &&
+					slotId.includes('fronts-banner')
+				) {
 					return 3426790;
 				}
 				break;
@@ -422,11 +431,17 @@ const getMagniteZoneId = (sizes: HeaderBiddingSize[]): number => {
 					return 3426822;
 				}
 				// top-above-nav on desktop
-				if (containsLeaderboardOrBillboard(sizes)) {
+				if (
+					containsLeaderboardOrBillboard(sizes) &&
+					slotId === 'dfp-ad--top-above-nav'
+				) {
 					return 3426828;
 				}
 				// Fronts-banners on desktop
-				if (containsBillboard(sizes)) {
+				if (
+					containsBillboard(sizes) &&
+					slotId.includes('fronts-banner')
+				) {
 					return 3426834;
 				}
 				break;
@@ -450,11 +465,17 @@ const getMagniteZoneId = (sizes: HeaderBiddingSize[]): number => {
 					return 3471422;
 				}
 				// top-above-nav on desktop
-				if (containsLeaderboardOrBillboard(sizes)) {
+				if (
+					containsLeaderboardOrBillboard(sizes) &&
+					slotId === 'dfp-ad--top-above-nav'
+				) {
 					return 3471428;
 				}
 				// Fronts-banners on desktop
-				if (containsBillboard(sizes)) {
+				if (
+					containsBillboard(sizes) &&
+					slotId.includes('fronts-banner')
+				) {
 					return 3471434;
 				}
 				break;
@@ -478,11 +499,17 @@ const getMagniteZoneId = (sizes: HeaderBiddingSize[]): number => {
 					return 3471452;
 				}
 				// top-above-nav on desktop
-				if (containsLeaderboardOrBillboard(sizes)) {
+				if (
+					containsLeaderboardOrBillboard(sizes) &&
+					slotId === 'dfp-ad--top-above-nav'
+				) {
 					return 3471458;
 				}
 				// Fronts-banners on desktop
-				if (containsBillboard(sizes)) {
+				if (
+					containsBillboard(sizes) &&
+					slotId.includes('fronts-banner')
+				) {
 					return 3471462;
 				}
 				break;
@@ -698,7 +725,7 @@ const magniteBidder: PrebidBidder = {
 	): PrebidMagniteParams => ({
 		accountId: 26644,
 		siteId: getMagniteSiteId(),
-		zoneId: getMagniteZoneId(sizes),
+		zoneId: getMagniteZoneId(_slotId, sizes),
 	}),
 };
 
