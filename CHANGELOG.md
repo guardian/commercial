@@ -1,5 +1,116 @@
 # @guardian/commercial
 
+## 19.12.0
+
+### Minor Changes
+
+- 25d0df8: Refactor metrics bypassing
+
+### Patch Changes
+
+- aa3cbc1: Add labels for Hosted By template ads on opt out
+
+## 19.11.0
+
+### Minor Changes
+
+- 6d6e9b9: Remove deeply read right column test
+
+### Patch Changes
+
+- eab3b11: Test
+
+## 19.10.0
+
+### Minor Changes
+
+- 48fbdc9: Add commercialMetricsInitialised to the window
+
+### Patch Changes
+
+- ead0d88: Remove the sendBeacon for no ad blocker test
+
+## 19.9.1
+
+### Patch Changes
+
+- 3249b47: add `liveblog-top` ad sizes
+- d1331c0: reduce min height from top of article for first inline ad on mobile
+
+## 19.9.0
+
+### Minor Changes
+
+- 4b02107: Reduces CLS for inline1 when Teads passback and centre ad in case of mpu
+
+## 19.8.0
+
+### Minor Changes
+
+- f2a5842: Bump @guardian/libs to 17.0.0
+
+### Patch Changes
+
+- 925cf67: Reduce sendBeacon test sampling to 1%
+
+## 19.7.1
+
+### Patch Changes
+
+- 08dc533: fix native add max height for <980px breakpoint
+
+## 19.7.0
+
+### Minor Changes
+
+- d8beb18: Switch off Deeply Read test
+
+## 19.6.0
+
+### Minor Changes
+
+- 500a157: Only import spacefinder debug tools when the sfdebug url param is present
+
+### Patch Changes
+
+- 9e47081: Add sendBeacon test to messenger code
+
+## 19.5.0
+
+### Minor Changes
+
+- 00497c5: Delete redplanet
+
+## 19.4.0
+
+### Minor Changes
+
+- 7d9bad7: Start Deeply Read AB test
+
+## 19.3.0
+
+### Minor Changes
+
+- a90f1d4: Prepare code to remove GA from Commercial
+
+## 19.2.0
+
+### Minor Changes
+
+- 2ac1ca4: Adds 300x50 ad size to Prebid for mobile-sticky
+
+## 19.1.0
+
+### Minor Changes
+
+- a027366: Only play interscroller video ad when ad is in the viewport
+- 15fdb02: Split consented & consentless code
+- 244b7aa: Adds 300x50 ad size to mobile-sticky
+
+### Patch Changes
+
+- f2b2788: Bypass metrics sampling for video interscroller
+
 ## 19.0.0
 
 ### Major Changes

@@ -8,7 +8,6 @@ import { init as prepareA9 } from 'init/consented/prepare-a9';
 import { init as prepareGoogletag } from 'init/consented/prepare-googletag';
 import { initPermutive } from 'init/consented/prepare-permutive';
 import { init as preparePrebid } from 'init/consented/prepare-prebid';
-import { init as initRedplanet } from 'init/consented/redplanet';
 import { removeDisabledSlots as closeDisabledSlots } from 'init/consented/remove-slots';
 import { initTeadsCookieless } from 'init/consented/teads-cookieless';
 import { init as initThirdPartyTags } from 'init/consented/third-party-tags';
@@ -27,18 +26,6 @@ import { initDynamicAdSlots } from './consented/dynamic-ad-slots';
 import { init as initMessenger } from './consented/messenger';
 
 type Modules = Array<[`${string}-${string}`, () => Promise<unknown>]>;
-
-const { frontendAssetsFullURL, page } = window.guardian.config;
-
-const decideAssetsPath = () => {
-	if (process.env.OVERRIDE_BUNDLE_PATH) {
-		return process.env.OVERRIDE_BUNDLE_PATH;
-	}
-	const assetsPath = frontendAssetsFullURL ?? page.assetsPath;
-	return `${assetsPath}javascripts/commercial/`;
-};
-
-__webpack_public_path__ = decideAssetsPath();
 
 const tags: Record<string, string> = {
 	feature: 'commercial',
@@ -77,7 +64,6 @@ if (!commercialFeatures.adFree) {
 	commercialExtraModules.push(
 		['cm-prepare-adverification', prepareAdVerification],
 		['cm-thirdPartyTags', initThirdPartyTags],
-		['cm-redplanet', initRedplanet],
 	);
 }
 
@@ -169,7 +155,7 @@ const bootCommercial = async (): Promise<void> => {
 };
 
 const bootCommercialWhenReady = () => {
-	if (window.guardian.mustardCut || window.guardian.polyfilled) {
+	if (!!window.guardian.mustardCut || !!window.guardian.polyfilled) {
 		void bootCommercial();
 	} else {
 		window.guardian.queue.push(bootCommercial);

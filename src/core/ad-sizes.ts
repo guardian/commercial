@@ -106,6 +106,7 @@ type SlotName =
 	| 'fronts-banner'
 	| 'im'
 	| 'inline'
+	| 'liveblog-top'
 	| 'merchandising-high'
 	| 'merchandising'
 	| 'mobile-sticky'
@@ -338,6 +339,11 @@ const slotSizeMappings = {
 			adSizes.fluid,
 		],
 	},
+	'liveblog-top': {
+		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.mpu, adSizes.fluid],
+		tablet: [],
+		desktop: [],
+	},
 	'merchandising-high': {
 		mobile: [
 			adSizes.outOfPage,
@@ -389,7 +395,7 @@ const slotSizeMappings = {
 		mobile: [adSizes.fluid],
 	},
 	'mobile-sticky': {
-		mobile: [adSizes.mobilesticky, adSizes.empty],
+		mobile: [adSizes.mobilesticky, adSizes.empty, createAdSize(300, 50)],
 	},
 	'crossword-banner-mobile': {
 		mobile: [adSizes.mobilesticky],

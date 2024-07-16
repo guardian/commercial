@@ -9,7 +9,7 @@ export const init = async (): Promise<void> => {
 	const state = await onConsent();
 	if (
 		// Purpose 8 - Measure content performance
-		(state.framework == 'tcfv2' && state.tcfv2?.consents[8]) ||
+		(state.framework == 'tcfv2' && !!state.tcfv2?.consents[8]) ||
 		state.canTarget
 	) {
 		initTrackScrollDepth();

@@ -145,13 +145,8 @@ interface PageConfig extends CommercialPageConfig {
 }
 
 interface Config {
+	commercialMetricsInitialised?: boolean;
 	frontendAssetsFullURL?: string;
-	googleAnalytics?: {
-		timingEvents?: GoogleTimingEvent[];
-		trackers?: {
-			editorial?: string;
-		};
-	};
 	isDotcomRendering: boolean;
 	ophan: {
 		// somewhat redundant with guardian.ophan
@@ -159,6 +154,7 @@ interface Config {
 		pageViewId: string;
 	};
 	page: PageConfig;
+	shouldSendCommercialMetrics?: boolean;
 	stage: Stage;
 	switches: Record<string, boolean | undefined>;
 	tests?: {
@@ -501,7 +497,6 @@ declare global {
 		nol_t: (pvar: { cid: string; content: string; server: string }) => Trac;
 
 		// Google
-		ga?: UniversalAnalytics.ga | null;
 		google_trackConversion?: (arg0: GoogleTrackConversionObject) => void;
 		google_tag_params?: GoogleTagParams;
 

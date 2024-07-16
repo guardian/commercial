@@ -9,6 +9,88 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+      time: '09:00'
+      day: 'tuesday'
+    groups:
+      changesets:
+        patterns:
+          - '@changesets/*'
+        update-types:
+          - 'minor'
+          - 'patch'
+      babel:
+        patterns:
+          - '@babel/*'
+          - 'babel-*'
+        update-types:
+          - 'minor'
+          - 'patch'
+      guardian:
+        patterns:
+          - '@guardian/*'
+        update-types:
+          - 'minor'
+          - 'patch'
+      types:
+        patterns:
+          - '@types/*'
+          - 'type-fest'
+          - 'tslib'
+        update-types:
+          - 'minor'
+          - 'patch'
+      trouble-makers:
+        patterns:
+          - '*eslint*'
+          - '*prettier*'
+        update-types:
+          - 'minor'
+          - 'patch'
+      playwright:
+        patterns:
+          - '@playwright/*'
+        update-types:
+          - 'minor'
+          - 'patch'
+      jest:
+        patterns:
+          - '*jest*'
+        update-types:
+          - 'minor'
+          - 'patch'
+      webpack:
+        patterns:
+          - '*webpack*'
+          - '*-loader'
+        update-types:
+          - 'minor'
+          - 'patch'
+      minor-dependencies:
+        dependency-type: 'production'
+        update-types:
+          - 'minor'
+          - 'patch'
+      minor-devDependencies:
+        dependency-type: 'development'
+        update-types:
+          - 'minor'
+          - 'patch'
+        exclude-patterns:
+          - '@changesets/*'
+          - '@babel/*'
+          - 'babel-*'
+          - '@guardian/*'
+          - '@types/*'
+          - 'type-fest'
+          - 'tslib'
+          - '*eslint*'
+          - '*prettier*'
+          - '@playwright/*'
+          - '*jest*'
+          - '*webpack*'
+          - '*-loader'
+    # The default is 5 but as we are going to group dependencies we might need to increase it
+    open-pull-requests-limit: 10
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
