@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 19.13.0
+
+### Minor Changes
+
+- 4321040: Upgrade prebid.js to 8.52.0
+
 ## 19.12.0
 
 ### Minor Changes
