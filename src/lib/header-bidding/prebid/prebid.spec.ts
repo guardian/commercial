@@ -71,6 +71,7 @@ describe('initialise', () => {
 			deviceAccess: true,
 			disableAjaxTimeout: false,
 			enableSendAllBids: true,
+			maxBid: 5000,
 			maxNestedIframes: 10,
 			mediaTypePriceGranularity: {},
 			priceGranularity: 'custom',
