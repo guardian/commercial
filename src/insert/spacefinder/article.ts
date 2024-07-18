@@ -399,7 +399,7 @@ const addMobileSubsequentInlineAds = (
 				i == 1 || i == 2
 					? {
 							mobile: [adSizes.portraitInterstitial],
-					  }
+						}
 					: undefined,
 			);
 		});

@@ -1,4 +1,4 @@
-import { breakpoints as sourceBreakpoints } from '@guardian/source-foundations';
+import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { once } from 'lodash-es';
 import { EventTimer } from 'core';
 import type { SizeMapping, SlotName } from 'core/ad-sizes';
@@ -19,7 +19,7 @@ const adUnit = once((): string => {
 	return urlVars['ad-unit']
 		? `/${window.guardian.config.page.dfpAccountId}/${String(
 				urlVars['ad-unit'],
-		  )}`
+			)}`
 		: window.guardian.config.page.adUnit;
 });
 
@@ -172,7 +172,7 @@ const defineSlot = (
 	}
 
 	Object.entries(slotTargeting).forEach(([key, value]) => {
-		slot?.setTargeting(key, value);
+		slot.setTargeting(key, value);
 	});
 
 	slot.addService(window.googletag.pubads())

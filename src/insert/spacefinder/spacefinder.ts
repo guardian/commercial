@@ -531,12 +531,12 @@ const getMeasurements = (
 	candidates: HTMLElement[],
 ): Promise<Measurements> => {
 	const contentMeta = rules.clearContentMeta
-		? document.querySelector<HTMLElement>('.js-content-meta') ?? undefined
+		? (document.querySelector<HTMLElement>('.js-content-meta') ?? undefined)
 		: undefined;
 	const opponents = rules.opponentSelectorRules
 		? Object.keys(rules.opponentSelectorRules).map(
 				(selector) => [selector, query(selector, rules.body)] as const,
-		  )
+			)
 		: [];
 
 	return fastdom.measure((): Measurements => {
@@ -579,7 +579,7 @@ const findSpace = async (
 ): Promise<HTMLElement[]> => {
 	options = { ...defaultOptions, ...options };
 	rules.body = rules.bodySelector
-		? document.querySelector<HTMLElement>(rules.bodySelector) ?? document
+		? (document.querySelector<HTMLElement>(rules.bodySelector) ?? document)
 		: document;
 
 	window.performance.mark('commercial:spacefinder:findSpace:start');

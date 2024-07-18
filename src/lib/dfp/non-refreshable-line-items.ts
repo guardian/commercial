@@ -28,7 +28,7 @@ export const fetchNonRefreshableLineItemIds = async (): Promise<number[]> => {
 					? { lineItems: [...accum.lineItems, lineItemId] }
 					: Error(
 							'Failed to parse element in non-refreshable line item array as number',
-					  ),
+						),
 			{ lineItems: [] },
 		);
 

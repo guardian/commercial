@@ -51,7 +51,7 @@ const amIUsed = (
 						name,
 						value: String(value),
 					})),
-			  ]
+				]
 			: properties,
 	};
 
