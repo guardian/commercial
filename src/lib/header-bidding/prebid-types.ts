@@ -119,6 +119,13 @@ export type PrebidKargoParams = {
 	placementId: string;
 };
 
+//This is used to be called Rubicon but now it's called Magnite. You can find it in the Prebid.js codebase as Rubicon
+export type PrebidMagniteParams = {
+	accountId: number;
+	siteId: number;
+	zoneId: number;
+};
+
 export type BidderCode =
 	| 'adyoulike'
 	| 'and'
@@ -127,6 +134,7 @@ export type BidderCode =
 	| 'improvedigital'
 	| 'ix'
 	| 'kargo'
+	| 'magnite'
 	| 'oxd'
 	| 'ozone'
 	| 'pubmatic'
@@ -143,6 +151,7 @@ export type PrebidParams =
 	| PrebidImproveParams
 	| PrebidIndexExchangeParams
 	| PrebidKargoParams
+	| PrebidMagniteParams
 	| PrebidOpenXParams
 	| PrebidOzoneParams
 	| PrebidPubmaticParams

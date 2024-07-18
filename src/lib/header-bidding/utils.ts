@@ -1,12 +1,15 @@
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { createAdSize } from 'core/ad-sizes';
+import { isInVariantSynchronous } from 'experiments/ab';
+import { prebidMagnite } from 'experiments/tests/prebid-magnite';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
 } from 'lib/detect/detect-breakpoint';
 import {
 	isInAuOrNz,
+	isInAustralia,
 	isInCanada,
 	isInRow,
 	isInUk,
@@ -104,6 +107,10 @@ export const containsLeaderboardOrBillboard = (
 	sizes: HeaderBiddingSize[],
 ): boolean => containsLeaderboard(sizes) || containsBillboard(sizes);
 
+export const containsPortraitInterstitial = (
+	sizes: HeaderBiddingSize[],
+): boolean => contains(sizes, createAdSize(320, 480));
+
 export const getLargestSize = (
 	sizes: HeaderBiddingSize[],
 ): HeaderBiddingSize | null => {
@@ -193,6 +200,11 @@ export const shouldIncludeCriteo = (): boolean => !isInAuOrNz();
 export const shouldIncludeSmart = (): boolean => isInUk() || isInRow();
 
 export const shouldIncludeKargo = (): boolean => isInUsa();
+
+//Add the switch here and the AB test checks
+export const shouldIncludeMagnite = (): boolean =>
+	(isInUk() || isInRow() || isInUsa() || isInAustralia()) &&
+	isInVariantSynchronous(prebidMagnite, 'variant');
 
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>
