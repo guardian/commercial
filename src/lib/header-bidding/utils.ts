@@ -203,6 +203,7 @@ export const shouldIncludeKargo = (): boolean => isInUsa();
 //Add the switch here and the AB test checks
 export const shouldIncludeMagnite = (): boolean =>
 	(isInUk() || isInRow() || isInUsOrCa() || isInAuOrNz()) &&
+	!!window.guardian.config.switches.prebidMagnite &&
 	isInVariantSynchronous(prebidMagnite, 'variant');
 
 export const shouldIncludeMobileSticky = once(
