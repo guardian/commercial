@@ -1,5 +1,5 @@
 import { isUndefined } from '@guardian/libs';
-import { breakpoints } from '@guardian/source-foundations';
+import { breakpoints } from '@guardian/source/foundations';
 import fastdom from 'utils/fastdom-promise';
 
 /**

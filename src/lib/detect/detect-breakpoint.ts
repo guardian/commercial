@@ -1,5 +1,5 @@
-import { breakpoints as sourceBreakpoints } from '@guardian/source-foundations';
-import type { Breakpoint as SourceBreakpoint } from '@guardian/source-foundations';
+import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
+import type { Breakpoint as SourceBreakpoint } from '@guardian/source/foundations';
 import { getViewport } from './detect-viewport';
 
 const breakpoints = {
