@@ -4,12 +4,12 @@ export const prebidMagnite: ABTest = {
 	id: 'PrebidMagnite',
 	author: '@commercial-dev',
 	start: '2024-07-22',
-	expiry: '2024-09-20',
+	expiry: '2024-09-30',
 	audience: 0 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',
 	successMeasure: '',
-	description: 'Test Prebid Magnite integration.',
+	description: 'Test Magnite as a prebid bdidder.',
 	variants: [
 		{
 			id: 'control',

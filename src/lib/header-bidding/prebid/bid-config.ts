@@ -8,7 +8,6 @@ import { dfpEnv } from 'lib/dfp/dfp-env';
 import type { PrebidIndexSite } from 'types/global';
 import {
 	isInAuOrNz,
-	isInAustralia,
 	isInRow,
 	isInUk,
 	isInUsa,
@@ -458,7 +457,7 @@ const getMagniteZoneId = (
 		}
 	}
 
-	if (isInUsa()) {
+	if (isInUsOrCa()) {
 		switch (getBreakpointKey()) {
 			case 'D':
 				if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
@@ -492,7 +491,7 @@ const getMagniteZoneId = (
 		}
 	}
 
-	if (isInAustralia()) {
+	if (isInAuOrNz()) {
 		switch (getBreakpointKey()) {
 			case 'D':
 				if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
@@ -547,7 +546,7 @@ const getMagniteSiteId = (): number => {
 		}
 	}
 
-	if (isInUsa()) {
+	if (isInUsOrCa()) {
 		switch (getBreakpointKey()) {
 			case 'D':
 				return 554244;
@@ -556,7 +555,7 @@ const getMagniteSiteId = (): number => {
 		}
 	}
 
-	if (isInAustralia()) {
+	if (isInAuOrNz()) {
 		switch (getBreakpointKey()) {
 			case 'D':
 				return 554256;

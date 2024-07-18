@@ -9,7 +9,6 @@ import {
 } from 'lib/detect/detect-breakpoint';
 import {
 	isInAuOrNz,
-	isInAustralia,
 	isInCanada,
 	isInRow,
 	isInUk,
@@ -203,7 +202,7 @@ export const shouldIncludeKargo = (): boolean => isInUsa();
 
 //Add the switch here and the AB test checks
 export const shouldIncludeMagnite = (): boolean =>
-	(isInUk() || isInRow() || isInUsa() || isInAustralia()) &&
+	(isInUk() || isInRow() || isInUsOrCa() || isInAuOrNz()) &&
 	isInVariantSynchronous(prebidMagnite, 'variant');
 
 export const shouldIncludeMobileSticky = once(
