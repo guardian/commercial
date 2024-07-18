@@ -45,7 +45,7 @@ const getOphan = () => {
 
 	const record: OphanRecordFunction = (event, callback) => {
 		ophan.record(event, callback);
-		log('dotcom', '🧿 Ophan event recorded:', event);
+		log('commercial', '🧿 Ophan event recorded:', event);
 	};
 
 	const trackComponentAttention: typeof ophan.trackComponentAttention = (
@@ -54,7 +54,7 @@ const getOphan = () => {
 		visibilityThreshold,
 	) => {
 		ophan.trackComponentAttention(name, el, visibilityThreshold);
-		log('dotcom', '🧿 Ophan tracking component attention:', name, {
+		log('commercial', '🧿 Ophan tracking component attention:', name, {
 			el,
 			visibilityThreshold,
 		});
@@ -89,7 +89,7 @@ const init = () => {
 	ab.trackABTests(allRunnableTests);
 	ab.registerImpressionEvents(allRunnableTests);
 	ab.registerCompleteEvents(allRunnableTests);
-	log('dotcom', 'AB tests initialised');
+	log('commercial', 'AB tests initialised');
 
 	return ab;
 };
