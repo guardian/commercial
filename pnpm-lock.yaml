@@ -12,8 +12,8 @@ dependencies:
     specifier: 2.1.1
     version: 2.1.1
   '@guardian/prebid.js':
-    specifier: 8.52.0
-    version: 8.52.0(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.3.3)
+    specifier: 8.52.0-1
+    version: 8.52.0-1(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.3.3)
   '@octokit/core':
     specifier: ^6.1.2
     version: 6.1.2
@@ -2070,8 +2070,8 @@ packages:
     engines: {node: '>=16'}
     dev: false
 
-  /@guardian/prebid.js@8.52.0(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.3.3):
-    resolution: {integrity: sha512-ttN87kbWNDeIfyBBd9zEoFDK4ofY3fa3Tqgi0vSa6L+EiQBvZ6WfXk3dvHBsFssXYM3Zz6jNcbq3XnGY1C5iRA==}
+  /@guardian/prebid.js@8.52.0-1(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.3.3):
+    resolution: {integrity: sha512-nXEKVwJ0dGpKFZp31tiAHQ4gQAgLq6Ob/e3X6cxx1P87FeFBg7zFj3pgk6VfxySz6R6SXIL5BOts/SSTkVwlUQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@babel/core': 7.24.7
