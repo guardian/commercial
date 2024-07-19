@@ -1,6 +1,6 @@
 import type { CountryCode } from '@guardian/libs';
 import { createAdSize } from 'core/ad-sizes';
-import { isInVariantSynchronous as isInVariantSynchronous_ } from 'experiments/ab';
+import { isUserInVariant as isUserInVariant_ } from 'experiments/ab';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
 	matchesBreakpoints as matchesBreakpoints_,
@@ -34,8 +34,8 @@ const getCurrentTweakpoint = getCurrentTweakpoint_ as jest.MockedFunction<
 const matchesBreakpoints = matchesBreakpoints_ as jest.MockedFunction<
 	typeof matchesBreakpoints_
 >;
-const isInVariantSynchronous = isInVariantSynchronous_ as jest.MockedFunction<
-	typeof isInVariantSynchronous_
+const isUserInVariant = isUserInVariant_ as jest.MockedFunction<
+	typeof isUserInVariant_
 >;
 
 jest.mock('lodash-es/once', () => (fn: (...args: unknown[]) => unknown) => fn);
@@ -45,7 +45,7 @@ jest.mock('utils/geolocation', () => ({
 }));
 
 jest.mock('experiments/ab', () => ({
-	isInVariantSynchronous: jest.fn(),
+	isUserInVariant: jest.fn(),
 }));
 
 jest.mock('lib/detect/detect-breakpoint', () => ({
@@ -235,7 +235,7 @@ describe('Utils', () => {
 	});
 
 	test('shouldIncludeXaxis should be true if geolocation is GB and opted in AB test variant', () => {
-		isInVariantSynchronous.mockImplementationOnce(
+		isUserInVariant.mockImplementationOnce(
 			(testId, variantId) => variantId === 'variant',
 		);
 		window.guardian.config.page.isDev = true;

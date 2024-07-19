@@ -22,8 +22,9 @@ jest.mock('insert/spacefinder/space-filler', () => ({
 	},
 }));
 jest.mock('lib/config', () => ({ page: {}, get: () => false }));
+
 jest.mock('experiments/ab', () => ({
-	isInVariantSynchronous: () => false,
+	isUserInVariant: () => false,
 }));
 
 const spaceFillerStub = spaceFiller.fillSpace as jest.MockedFunction<

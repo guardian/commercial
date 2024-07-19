@@ -1,7 +1,7 @@
 import { isNonNullable, log } from '@guardian/libs';
 import type { SizeMapping } from 'core/ad-sizes';
 import { adSizes, createAdSize } from 'core/ad-sizes';
-import { isInVariantSynchronous } from 'experiments/ab';
+import { isUserInVariant } from 'experiments/ab';
 import { mpuWhenNoEpic } from 'experiments/tests/mpu-when-no-epic';
 import { setupPrebidOnce } from 'init/consented/prepare-prebid';
 import { removeDisabledSlots } from 'init/consented/remove-slots';
@@ -39,7 +39,7 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 
 	if (
 		name === 'article-end' &&
-		isInVariantSynchronous(mpuWhenNoEpic, 'variant') &&
+		isUserInVariant(mpuWhenNoEpic, 'variant') &&
 		isInUk()
 	) {
 		return {
