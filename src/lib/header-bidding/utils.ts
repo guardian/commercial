@@ -1,7 +1,7 @@
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { createAdSize } from 'core/ad-sizes';
-import { isInVariantSynchronous } from 'experiments/ab';
+import { isUserInVariant } from 'experiments/ab';
 import { prebidMagnite } from 'experiments/tests/prebid-magnite';
 import {
 	getCurrentTweakpoint,
@@ -204,7 +204,7 @@ export const shouldIncludeKargo = (): boolean => isInUsa();
 export const shouldIncludeMagnite = (): boolean =>
 	(isInUk() || isInRow() || isInUsOrCa() || isInAuOrNz()) &&
 	!!window.guardian.config.switches.prebidMagnite &&
-	isInVariantSynchronous(prebidMagnite, 'variant');
+	isUserInVariant(prebidMagnite, 'variant');
 
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>
