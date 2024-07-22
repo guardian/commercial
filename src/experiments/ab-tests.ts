@@ -7,7 +7,7 @@ import { prebidMagnite } from './tests/prebid-magnite';
  * the commercial code. Any test here also needs to be in both DCR and Frontend,
  * but any tests in DCR and Frontend do not need to necessarily be added here.
  */
-export const concurrentTests: readonly ABTest[] = [
+export const concurrentTests: ABTest[] = [
 	// one test per line
 	mpuWhenNoEpic,
 	prebidMagnite,

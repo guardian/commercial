@@ -164,11 +164,25 @@ interface Config {
 	user?: UserConfig;
 }
 
+type OphanRecordFunction = (
+	event: Record<string, unknown> & {
+		/**
+		 * the experiences key will override previously set values.
+		 * Use `recordExperiences` instead.
+		 */
+		experiences?: never;
+	},
+	callback?: () => void,
+) => void;
 interface Ophan {
-	setEventEmitter: unknown;
-	trackComponentAttention: unknown;
-	record: (...args: unknown[]) => void;
-	viewId: unknown;
+	setEventEmitter: () => void; // We don't currently have a custom eventEmitter on DCR - like 'mediator' in Frontend.
+	trackComponentAttention: (
+		name: string,
+		el: Element,
+		visiblityThreshold: number,
+	) => void;
+	record: OphanRecordFunction;
+	viewId: string;
 	pageViewId: string;
 }
 
@@ -518,6 +532,7 @@ export type {
 	GoogleTimingEvent,
 	Ophan,
 	OptOutFilledCallback,
+	OphanRecordFunction,
 	PageConfig,
 	Permutive,
 	PrebidIndexSite,

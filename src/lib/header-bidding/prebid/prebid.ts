@@ -255,7 +255,7 @@ const initialise = (
 						filter: 'include',
 					},
 				},
-		  }
+			}
 		: { syncEnabled: false };
 
 	const consentManagement = (): ConsentManagement => {

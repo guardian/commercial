@@ -28,12 +28,12 @@ module.exports = webpackMerge.smart(config, {
 					'process.env.OVERRIDE_BUNDLE_PATH':
 						JSON.stringify(overrideBundlePath),
 				}),
-		  ]
+			]
 		: [
 				new webpack.ProvidePlugin({
 					process: 'process/browser',
 				}),
-		  ],
+			],
 	resolve: {
 		alias: {
 			process: 'process/browser',

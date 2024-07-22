@@ -6,7 +6,7 @@ export const genVariant = (id: string, canRun?: boolean): Variant => ({
 	...(canRun != null
 		? {
 				canRun: () => !!canRun,
-		  }
+			}
 		: {}),
 });
 

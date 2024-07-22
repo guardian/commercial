@@ -7,7 +7,7 @@ const adUnit = once((): string => {
 	return urlVars['ad-unit']
 		? `/${window.guardian.config.page.dfpAccountId}/${String(
 				urlVars['ad-unit'],
-		  )}`
+			)}`
 		: window.guardian.config.page.adUnit;
 });
 

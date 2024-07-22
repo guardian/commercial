@@ -11,7 +11,7 @@ jest.mock('utils/geolocation', () => ({
 	getCountryCode: jest.fn(),
 }));
 jest.mock('experiments/ab', () => ({
-	getSynchronousParticipations: jest.fn(),
+	getParticipations: jest.fn(),
 }));
 jest.mock('core/targeting/build-page-targeting', () => ({
 	buildPageTargeting: jest.fn(),

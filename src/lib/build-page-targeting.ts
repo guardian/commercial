@@ -3,7 +3,7 @@ import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import { buildPageTargeting } from 'core/targeting/build-page-targeting';
-import { getSynchronousParticipations } from 'experiments/ab';
+import { getParticipations } from 'experiments/ab';
 import { commercialFeatures } from './commercial-features';
 import { removeFalsyValues } from './header-bidding/utils';
 
@@ -49,7 +49,7 @@ const getPageTargeting = (
 
 	const pageTargeting = buildPageTargeting({
 		adFree: commercialFeatures.adFree,
-		clientSideParticipations: getSynchronousParticipations(),
+		clientSideParticipations: getParticipations(),
 		consentState,
 		isSignedIn,
 	});
