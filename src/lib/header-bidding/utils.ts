@@ -1,6 +1,8 @@
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { createAdSize } from 'core/ad-sizes';
+import { isUserInVariant } from 'experiments/ab';
+import { prebidMagnite } from 'experiments/tests/prebid-magnite';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
@@ -201,7 +203,8 @@ export const shouldIncludeKargo = (): boolean => isInUsa();
 //Add the switch here and the AB test checks
 export const shouldIncludeMagnite = (): boolean =>
 	(isInUk() || isInRow() || isInUsOrCa() || isInAuOrNz()) &&
-	!!window.guardian.config.switches.prebidMagnite;
+	!!window.guardian.config.switches.prebidMagnite &&
+	isUserInVariant(prebidMagnite, 'variant');
 
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>
