@@ -716,7 +716,8 @@ const kargoBidder: PrebidBidder = {
 };
 
 const magniteBidder: PrebidBidder = {
-	name: 'magnite',
+	//Rubicon is the old name for Magnite but it is still used for the integration
+	name: 'rubicon',
 	switchName: 'prebidMagnite',
 	bidParams: (
 		_slotId: string,

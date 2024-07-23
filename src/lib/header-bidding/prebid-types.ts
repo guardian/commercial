@@ -134,7 +134,7 @@ export type BidderCode =
 	| 'improvedigital'
 	| 'ix'
 	| 'kargo'
-	| 'magnite'
+	| 'rubicon'
 	| 'oxd'
 	| 'ozone'
 	| 'pubmatic'
