@@ -104,6 +104,10 @@ export const containsLeaderboardOrBillboard = (
 	sizes: HeaderBiddingSize[],
 ): boolean => containsLeaderboard(sizes) || containsBillboard(sizes);
 
+export const containsPortraitInterstitial = (
+	sizes: HeaderBiddingSize[],
+): boolean => contains(sizes, createAdSize(320, 480));
+
 export const getLargestSize = (
 	sizes: HeaderBiddingSize[],
 ): HeaderBiddingSize | null => {
@@ -193,6 +197,11 @@ export const shouldIncludeCriteo = (): boolean => !isInAuOrNz();
 export const shouldIncludeSmart = (): boolean => isInUk() || isInRow();
 
 export const shouldIncludeKargo = (): boolean => isInUsa();
+
+//Add the switch here and the AB test checks
+export const shouldIncludeMagnite = (): boolean =>
+	(isInUk() || isInRow() || isInUsOrCa() || isInAuOrNz()) &&
+	!!window.guardian.config.switches.prebidMagnite;
 
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>
