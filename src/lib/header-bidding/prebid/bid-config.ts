@@ -541,12 +541,12 @@ const magniteBidder: PrebidBidder = {
 	name: 'rubicon',
 	switchName: 'prebidMagnite',
 	bidParams: (
-		_slotId: string,
+		slotId: string,
 		sizes: HeaderBiddingSize[],
 	): PrebidMagniteParams => ({
 		accountId: 26644,
 		siteId: getMagniteSiteId(),
-		zoneId: getMagniteZoneId(_slotId, sizes),
+		zoneId: getMagniteZoneId(slotId, sizes),
 	}),
 };
 

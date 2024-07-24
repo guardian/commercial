@@ -15,176 +15,97 @@ export const getMagniteZoneId = (
 	slotId: string,
 	sizes: HeaderBiddingSize[],
 ): number => {
-	if (isInUk()) {
-		switch (getBreakpointKey()) {
-			case 'D':
-				if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
+	switch (getBreakpointKey()) {
+		case 'D':
+			if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
+				if (isInUk()) {
 					return 3426780;
-				}
-				// top-above-nav on desktop
-				if (
-					containsLeaderboardOrBillboard(sizes) &&
-					slotId === 'dfp-ad--top-above-nav'
-				) {
-					return 3426786;
-				}
-				// Fronts-banners on desktop
-				if (
-					containsBillboard(sizes) &&
-					slotId.includes('fronts-banner')
-				) {
-					return 3426790;
-				}
-				break;
-			case 'M':
-				if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
-					return 3426778;
-				}
-				break;
-			default:
-				return -1;
-		}
-	}
-
-	if (isInRow()) {
-		switch (getBreakpointKey()) {
-			case 'D':
-				if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
+				} else if (isInRow()) {
 					return 3426822;
-				}
-				// top-above-nav on desktop
-				if (
-					containsLeaderboardOrBillboard(sizes) &&
-					slotId === 'dfp-ad--top-above-nav'
-				) {
-					return 3426828;
-				}
-				// Fronts-banners on desktop
-				if (
-					containsBillboard(sizes) &&
-					slotId.includes('fronts-banner')
-				) {
-					return 3426834;
-				}
-				break;
-			case 'M':
-				if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
-					return 3426836;
-				}
-				if (containsMobileSticky(sizes)) {
-					return 3477560;
-				}
-				break;
-			default:
-				return -1;
-		}
-	}
-
-	if (isInUsOrCa()) {
-		switch (getBreakpointKey()) {
-			case 'D':
-				if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
+				} else if (isInUsOrCa()) {
 					return 3471422;
-				}
-				// top-above-nav on desktop
-				if (
-					containsLeaderboardOrBillboard(sizes) &&
-					slotId === 'dfp-ad--top-above-nav'
-				) {
-					return 3471428;
-				}
-				// Fronts-banners on desktop
-				if (
-					containsBillboard(sizes) &&
-					slotId.includes('fronts-banner')
-				) {
-					return 3471434;
-				}
-				break;
-			case 'M':
-				if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
-					return 3471436;
-				}
-				if (containsMobileSticky(sizes)) {
-					return 3471440;
-				}
-				break;
-			default:
-				return -1;
-		}
-	}
-
-	if (isInAuOrNz()) {
-		switch (getBreakpointKey()) {
-			case 'D':
-				if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
+				} else if (isInAuOrNz()) {
 					return 3471452;
 				}
-				// top-above-nav on desktop
-				if (
-					containsLeaderboardOrBillboard(sizes) &&
-					slotId === 'dfp-ad--top-above-nav'
-				) {
+			}
+			// top-above-nav on desktop
+			if (
+				containsLeaderboardOrBillboard(sizes) &&
+				slotId === 'dfp-ad--top-above-nav'
+			) {
+				if (isInUk()) {
+					return 3426786;
+				} else if (isInRow()) {
+					return 3426828;
+				} else if (isInUsOrCa()) {
+					return 3471428;
+				} else if (isInAuOrNz()) {
 					return 3471458;
 				}
-				// Fronts-banners on desktop
-				if (
-					containsBillboard(sizes) &&
-					slotId.includes('fronts-banner')
-				) {
+			}
+			// Fronts-banners on desktop
+			if (containsBillboard(sizes) && slotId.includes('fronts-banner')) {
+				if (isInUk()) {
+					return 3426790;
+				} else if (isInRow()) {
+					return 3426834;
+				} else if (isInUsOrCa()) {
+					return 3471434;
+				} else if (isInAuOrNz()) {
 					return 3471462;
 				}
-				break;
-			case 'M':
-				if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+			}
+			break;
+		case 'M':
+			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+				if (isInUk()) {
+					return 3426778;
+				} else if (isInRow()) {
+					return 3426836;
+				} else if (isInUsOrCa()) {
+					return 3471436;
+				} else if (isInAuOrNz()) {
 					return 3471464;
 				}
-				if (containsMobileSticky(sizes)) {
+			}
+			if (containsMobileSticky(sizes)) {
+				if (isInRow()) {
+					return 3477560;
+				} else if (isInUsOrCa()) {
+					return 3471440;
+				} else if (isInAuOrNz()) {
 					return 3471468;
 				}
-				break;
-			default:
-				return -1;
-		}
+			}
+			break;
 	}
 	return -1;
 };
 
 export const getMagniteSiteId = (): number => {
-	if (isInUk()) {
-		switch (getBreakpointKey()) {
-			case 'D':
+	switch (getBreakpointKey()) {
+		case 'D':
+			if (isInUk()) {
 				return 549358;
-			case 'M':
-				return 549374;
-		}
-	}
-
-	if (isInRow()) {
-		switch (getBreakpointKey()) {
-			case 'D':
+			} else if (isInRow()) {
 				return 549496;
-			case 'M':
-				return 549498;
-		}
-	}
-
-	if (isInUsOrCa()) {
-		switch (getBreakpointKey()) {
-			case 'D':
+			} else if (isInUsOrCa()) {
 				return 554244;
-			case 'M':
-				return 554248;
-		}
-	}
-
-	if (isInAuOrNz()) {
-		switch (getBreakpointKey()) {
-			case 'D':
+			} else if (isInAuOrNz()) {
 				return 554256;
-			case 'M':
+			}
+			break;
+		case 'M':
+			if (isInUk()) {
+				return 549374;
+			} else if (isInRow()) {
+				return 549498;
+			} else if (isInUsOrCa()) {
+				return 554248;
+			} else if (isInAuOrNz()) {
 				return 554258;
-		}
+			}
+			break;
 	}
 	return -1;
 };
