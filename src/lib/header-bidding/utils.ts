@@ -201,7 +201,6 @@ export const shouldIncludeSmart = (): boolean => isInUk() || isInRow();
 export const shouldIncludeKargo = (): boolean => isInUsa();
 
 export const shouldIncludeMagnite = (): boolean =>
-	(isInUk() || isInRow() || isInUsOrCa() || isInAuOrNz()) &&
 	!!window.guardian.config.switches.prebidMagnite &&
 	isUserInVariant(prebidMagnite, 'variant');
 
