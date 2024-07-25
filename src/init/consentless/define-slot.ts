@@ -1,7 +1,8 @@
 import { log } from '@guardian/libs';
-import fastdom from 'fastdom';
 import { removeSlotFromDom } from 'events/empty-advert';
+import { getElementsManager } from 'init/elements-manager';
 import type { OptOutFilledCallback } from 'types/global';
+import fastdom from 'utils/fastdom-promise';
 import { renderConsentlessAdvertLabel } from './render-advert-label';
 
 /**
@@ -48,8 +49,18 @@ const defineSlot = (
 
 	const emptyCallback = () => {
 		log('commercial', `Empty consentless ${slotId}`);
-		fastdom.mutate(() => {
-			removeSlotFromDom(slot);
+
+		void fastdom.mutate(() => {
+			void (async () => {
+				const didDisplay = await getElementsManager()
+					.createAdvert(slotName, slot)
+					.display();
+
+				if (didDisplay) {
+					return;
+				}
+				removeSlotFromDom(slot);
+			})();
 		});
 	};
 

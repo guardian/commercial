@@ -202,7 +202,7 @@ class Ad {
 		});
 	}
 
-	public async display() {
+	public async display(): Promise<boolean> {
 		const targeting: PageTargeting = {
 			...this.elementsManager.pageTargeting,
 			...this.targeting,
@@ -230,7 +230,7 @@ class Ad {
 
 		if (!creative) {
 			log('commercial', `No creative found for ${this.name}`);
-			return;
+			return false;
 		}
 
 		const { assetUrl, destinationUrl, size, type } = creative;
@@ -239,7 +239,7 @@ class Ad {
 
 		// 2x2 is a special size that means "no ad"
 		if (size[0] === 2 && size[1] === 2) {
-			return;
+			return true;
 		}
 
 		const addElements = this.addElements(
@@ -253,7 +253,7 @@ class Ad {
 
 		this.isRendered = true;
 
-		return addElements;
+		return addElements.then(() => true);
 	}
 }
 
