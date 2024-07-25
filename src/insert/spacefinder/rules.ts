@@ -49,7 +49,7 @@ const desktopInline1: SpacefinderRules = {
 	opponentSelectorRules: {
 		// don't place ads right after a heading
 		[headingSelector]: {
-			minAboveSlot: isInHighValueSection ? 150 : 5,
+			minAboveSlot: 150,
 			minBelowSlot: isInHighValueSection ? 0 : 190,
 		},
 		[adSlotContainerSelector]: {
