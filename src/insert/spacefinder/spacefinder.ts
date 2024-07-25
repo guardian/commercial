@@ -318,9 +318,9 @@ const testCandidate = (
 	}
 
 	const isOpponentBelow =
-		opponent.bottom > candidate.bottom && opponent.top > candidate.bottom;
+		opponent.bottom > candidate.bottom && opponent.top >= candidate.bottom;
 	const isOpponentAbove =
-		opponent.top < candidate.top && opponent.bottom < candidate.top;
+		opponent.top < candidate.top && opponent.bottom <= candidate.top;
 
 	// this can happen when the an opponent like an image or interactive is floated right
 	const opponentOverlaps =
