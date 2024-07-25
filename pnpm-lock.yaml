@@ -13,7 +13,7 @@ dependencies:
     version: 2.1.1
   '@guardian/prebid.js':
     specifier: 8.52.0-1
-    version: 8.52.0-1(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.3.3)
+    version: 8.52.0-1(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.5.3)
   '@octokit/core':
     specifier: ^6.1.2
     version: 6.1.2
@@ -146,8 +146,8 @@ devDependencies:
     specifier: ^8.57.0
     version: 8.57.0
   eslint-config-prettier:
-    specifier: ^8.8.0
-    version: 8.10.0(eslint@8.57.0)
+    specifier: ^9.1.0
+    version: 9.1.0(eslint@8.57.0)
   eslint-import-resolver-alias:
     specifier: ^1.1.2
     version: 1.1.2(eslint-plugin-import@2.29.1)
@@ -165,7 +165,7 @@ devDependencies:
     version: 27.9.0(@typescript-eslint/eslint-plugin@7.11.0)(eslint@8.57.0)(jest@29.7.0)(typescript@5.5.3)
   eslint-plugin-prettier:
     specifier: ^4.0.0
-    version: 4.2.1(eslint-config-prettier@8.10.0)(eslint@8.57.0)(prettier@3.3.3)
+    version: 4.2.1(eslint-config-prettier@9.1.0)(eslint@8.57.0)(prettier@3.3.3)
   husky:
     specifier: ^9.1.1
     version: 9.1.1
@@ -2070,7 +2070,7 @@ packages:
     engines: {node: '>=16'}
     dev: false
 
-  /@guardian/prebid.js@8.52.0-1(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.3.3):
+  /@guardian/prebid.js@8.52.0-1(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.5.3):
     resolution: {integrity: sha512-nXEKVwJ0dGpKFZp31tiAHQ4gQAgLq6Ob/e3X6cxx1P87FeFBg7zFj3pgk6VfxySz6R6SXIL5BOts/SSTkVwlUQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
@@ -4753,15 +4753,6 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /eslint-config-prettier@8.10.0(eslint@8.57.0):
-    resolution: {integrity: sha512-SM8AMJdeQqRYT9O9zguiruQZaN7+z+E4eAP9oiLNGKMtomwaB1E9dcgUD6ZAn/eQAb52USbvezbiljfZUhbJcg==}
-    hasBin: true
-    peerDependencies:
-      eslint: '>=7.0.0'
-    dependencies:
-      eslint: 8.57.0
-    dev: true
-
   /eslint-config-prettier@9.1.0(eslint@8.57.0):
     resolution: {integrity: sha512-NSWl5BFQWEPi1j4TjVNItzYV7dZXZ+wP6I6ZhrBGpChQhZRUaElihE9uRRkcbRnNb76UMKDF3r+WTmNcGPKsqw==}
     hasBin: true
@@ -4911,7 +4902,7 @@ packages:
       - typescript
     dev: true
 
-  /eslint-plugin-prettier@4.2.1(eslint-config-prettier@8.10.0)(eslint@8.57.0)(prettier@3.3.3):
+  /eslint-plugin-prettier@4.2.1(eslint-config-prettier@9.1.0)(eslint@8.57.0)(prettier@3.3.3):
     resolution: {integrity: sha512-f/0rXLXUt0oFYs8ra4w49wYZBG5GKZpAYsJSm6rnYL5uVDjd+zowwMwVZHnAjf4edNrKpCDYfXDgmRE/Ak7QyQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -4923,7 +4914,7 @@ packages:
         optional: true
     dependencies:
       eslint: 8.57.0
-      eslint-config-prettier: 8.10.0(eslint@8.57.0)
+      eslint-config-prettier: 9.1.0(eslint@8.57.0)
       prettier: 3.3.3
       prettier-linter-helpers: 1.0.0
     dev: true
