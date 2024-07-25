@@ -44,29 +44,29 @@ const headingSelector = `:scope > h2, [data-spacefinder-role="nested"] > h2, :sc
 const desktopInline1: SpacefinderRules = {
 	bodySelector,
 	candidateSelector,
-	minAbove: isImmersive ? 700 : 300,
-	minBelow: 300,
+	minDistanceFromTop: isImmersive ? 700 : 300,
+	minDistanceFromBottom: 300,
 	opponentSelectorRules: {
 		// don't place ads right after a heading
 		[headingSelector]: {
-			minAboveSlot: 150,
-			minBelowSlot: isInHighValueSection ? 0 : 190,
+			marginBottom: 150,
+			marginTop: isInHighValueSection ? 0 : 190,
 		},
 		[adSlotContainerSelector]: {
-			minAboveSlot: 500,
-			minBelowSlot: 500,
+			marginBottom: 500,
+			marginTop: 500,
 		},
 		[inlineOpponentSelector]: {
-			minAboveSlot: 35,
-			minBelowSlot: 400,
+			marginBottom: 35,
+			marginTop: 400,
 		},
 		[rightColumnOpponentSelector]: {
-			minAboveSlot: 0,
-			minBelowSlot: 600,
+			marginBottom: 0,
+			marginTop: 600,
 		},
 		['[data-spacefinder-role="supporting"]']: {
-			minAboveSlot: 0,
-			minBelowSlot: 100,
+			marginBottom: 0,
+			marginTop: 100,
 		},
 	},
 };
@@ -90,12 +90,12 @@ const desktopRightRailMinAbove = () => {
 const desktopRightRail: SpacefinderRules = {
 	bodySelector,
 	candidateSelector,
-	minAbove: desktopRightRailMinAbove(),
-	minBelow: 300,
+	minDistanceFromTop: desktopRightRailMinAbove(),
+	minDistanceFromBottom: 300,
 	opponentSelectorRules: {
 		[rightColumnOpponentSelector]: {
-			minAboveSlot: 0,
-			minBelowSlot: 600,
+			marginBottom: 0,
+			marginTop: 600,
 		},
 	},
 	/**
@@ -124,23 +124,23 @@ const mobileHeadingSelector = `${headingSelector}, :scope > [data-spacefinder-ty
 const mobileOpponentSelectorRules = {
 	// don't place ads right after a heading
 	[mobileHeadingSelector]: {
-		minAboveSlot: 100,
-		minBelowSlot: 0,
+		marginBottom: 100,
+		marginTop: 0,
 	},
 	[adSlotContainerSelector]: {
-		minAboveSlot: minDistanceBetweenInlineAds,
-		minBelowSlot: minDistanceBetweenInlineAds,
+		marginBottom: minDistanceBetweenInlineAds,
+		marginTop: minDistanceBetweenInlineAds,
 	},
 	[inlineOpponentSelector]: {
-		minAboveSlot: 35,
-		minBelowSlot: 200,
+		marginBottom: 35,
+		marginTop: 200,
 		// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
 		bypassMinBelow:
 			'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 	},
 	[rightColumnOpponentSelector]: {
-		minAboveSlot: 35,
-		minBelowSlot: 200,
+		marginBottom: 35,
+		marginTop: 200,
 		// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
 		bypassMinBelow:
 			'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
@@ -150,8 +150,8 @@ const mobileOpponentSelectorRules = {
 const mobileSubsequentInlineAds: SpacefinderRules = {
 	bodySelector,
 	candidateSelector: mobileCandidateSelector,
-	minAbove: mobileMinDistanceFromArticleTop,
-	minBelow: 200,
+	minDistanceFromTop: mobileMinDistanceFromArticleTop,
+	minDistanceFromBottom: 200,
 	opponentSelectorRules: mobileOpponentSelectorRules,
 	/**
 	 * Filter out any candidates that are too close to the last winner
@@ -170,8 +170,8 @@ const mobileSubsequentInlineAds: SpacefinderRules = {
 const mobileTopAboveNav: SpacefinderRules = {
 	bodySelector,
 	candidateSelector: mobileCandidateSelector,
-	minAbove: mobileMinDistanceFromArticleTop,
-	minBelow: 200,
+	minDistanceFromTop: mobileMinDistanceFromArticleTop,
+	minDistanceFromBottom: 200,
 	opponentSelectorRules: mobileOpponentSelectorRules,
 };
 
@@ -181,36 +181,36 @@ const isMobileOrTablet = breakpoint === 'mobile' || breakpoint === 'tablet';
 const inlineMerchandising: SpacefinderRules = {
 	bodySelector,
 	candidateSelector: ':scope > p',
-	minAbove: 300,
-	minBelow: 300,
+	minDistanceFromTop: 300,
+	minDistanceFromBottom: 300,
 	opponentSelectorRules: {
 		':scope > .merch': {
-			minAboveSlot: 0,
-			minBelowSlot: 0,
+			marginBottom: 0,
+			marginTop: 0,
 		},
 		':scope > header': {
-			minAboveSlot: isMobileOrTablet ? 300 : 700,
-			minBelowSlot: 0,
+			marginBottom: isMobileOrTablet ? 300 : 700,
+			marginTop: 0,
 		},
 		':scope > h2': {
-			minAboveSlot: 100,
-			minBelowSlot: 250,
+			marginBottom: 100,
+			marginTop: 250,
 		},
 		':scope > #sign-in-gate': {
-			minAboveSlot: 0,
-			minBelowSlot: 400,
+			marginBottom: 0,
+			marginTop: 400,
 		},
 		[adSlotContainerSelector]: {
-			minAboveSlot: minDistanceBetweenInlineAds,
-			minBelowSlot: minDistanceBetweenInlineAds,
+			marginBottom: minDistanceBetweenInlineAds,
+			marginTop: minDistanceBetweenInlineAds,
 		},
 		[inlineOpponentSelector]: {
-			minAboveSlot: 200,
-			minBelowSlot: 400,
+			marginBottom: 200,
+			marginTop: 400,
 		},
 		[rightColumnOpponentSelector]: {
-			minAboveSlot: 200,
-			minBelowSlot: 400,
+			marginBottom: 200,
+			marginTop: 400,
 		},
 	},
 };
