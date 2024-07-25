@@ -1,5 +1,26 @@
 # @guardian/commercial
 
+## 20.0.0
+
+### Major Changes
+
+- ba4b7d9: Major bumps to @guardian dependencies
+
+### Minor Changes
+
+- cdfd6d1: Spacefinder rule optimisation
+- 131043a: Add magnite aka rubicon as a prebid bidder
+
+### Patch Changes
+
+- 25031be: replaces current ab test library with @guardian/ab-core
+
+## 19.13.0
+
+### Minor Changes
+
+- 4321040: Upgrade prebid.js to 8.52.0
+
 ## 19.12.0
 
 ### Minor Changes

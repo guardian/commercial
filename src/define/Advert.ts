@@ -1,4 +1,4 @@
-import { breakpoints as sourceBreakpoints } from '@guardian/source-foundations';
+import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import type { AdSize, SizeMapping, SlotName } from 'core/ad-sizes';
 import {
 	createAdSize,

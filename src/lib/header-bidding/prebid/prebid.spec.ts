@@ -16,7 +16,7 @@ jest.mock('lib/dfp/get-advert-by-id', () => ({
 }));
 
 jest.mock('experiments/ab', () => ({
-	isInVariantSynchronous: jest.fn(),
+	isUserInVariant: jest.fn(),
 }));
 
 const resetPrebid = () => {
@@ -71,6 +71,7 @@ describe('initialise', () => {
 			deviceAccess: true,
 			disableAjaxTimeout: false,
 			enableSendAllBids: true,
+			maxBid: 5000,
 			maxNestedIframes: 10,
 			mediaTypePriceGranularity: {},
 			priceGranularity: 'custom',

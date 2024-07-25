@@ -115,7 +115,7 @@ const getImproveSizeParam = (
 		? {
 				w: 300,
 				h: 250,
-		  }
+			}
 		: {};
 };
 

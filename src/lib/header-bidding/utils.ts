@@ -1,6 +1,8 @@
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { createAdSize } from 'core/ad-sizes';
+import { isUserInVariant } from 'experiments/ab';
+import { prebidMagnite } from 'experiments/tests/prebid-magnite';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
@@ -104,6 +106,10 @@ export const containsLeaderboardOrBillboard = (
 	sizes: HeaderBiddingSize[],
 ): boolean => containsLeaderboard(sizes) || containsBillboard(sizes);
 
+export const containsPortraitInterstitial = (
+	sizes: HeaderBiddingSize[],
+): boolean => contains(sizes, createAdSize(320, 480));
+
 export const getLargestSize = (
 	sizes: HeaderBiddingSize[],
 ): HeaderBiddingSize | null => {
@@ -193,6 +199,10 @@ export const shouldIncludeCriteo = (): boolean => !isInAuOrNz();
 export const shouldIncludeSmart = (): boolean => isInUk() || isInRow();
 
 export const shouldIncludeKargo = (): boolean => isInUsa();
+
+export const shouldIncludeMagnite = (): boolean =>
+	!!window.guardian.config.switches.prebidMagnite &&
+	isUserInVariant(prebidMagnite, 'variant');
 
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>

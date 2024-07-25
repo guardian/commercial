@@ -210,7 +210,7 @@ const renderAdvert = (
 				isRendered
 					? fastdom.mutate(() => {
 							advert.node.classList.add('ad-slot--rendered');
-					  })
+						})
 					: Promise.resolve();
 
 			return callSizeCallback()

@@ -149,7 +149,7 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 						adSizes.outstreamMobile,
 						adSizes.mpu,
 						adSizes.portraitInterstitial,
-				  ]
+					]
 				: [adSizes.mpu],
 		},
 		inline2: {
