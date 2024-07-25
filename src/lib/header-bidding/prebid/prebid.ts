@@ -142,6 +142,7 @@ type BidderSettings = {
 	ozone?: Partial<BidderSetting>;
 	criteo?: Partial<BidderSetting>;
 	kargo?: Partial<BidderSetting>;
+	magnite?: Partial<BidderSetting>;
 };
 
 class PrebidAdUnit {
@@ -439,6 +440,12 @@ const initialise = (
 
 	if (window.guardian.config.switches.prebidKargo) {
 		window.pbjs.bidderSettings.kargo = {
+			storageAllowed: true,
+		};
+	}
+
+	if (window.guardian.config.switches.prebidMagnite) {
+		window.pbjs.bidderSettings.magnite = {
 			storageAllowed: true,
 		};
 	}
