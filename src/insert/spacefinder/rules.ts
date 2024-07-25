@@ -61,8 +61,12 @@ const desktopInline1: SpacefinderRules = {
 			minBelowSlot: 400,
 		},
 		[rightColumnOpponentSelector]: {
-			minAboveSlot: 35,
-			minBelowSlot: 400,
+			minAboveSlot: 0,
+			minBelowSlot: 600,
+		},
+		['[data-spacefinder-role="supporting"]']: {
+			minAboveSlot: 0,
+			minBelowSlot: 100,
 		},
 	},
 };
