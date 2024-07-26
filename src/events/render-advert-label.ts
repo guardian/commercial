@@ -9,14 +9,6 @@ import crossIcon from '../../static/svg/icon/cross.svg';
 
 const shouldRenderLabel = (adSlotNode: HTMLElement): boolean => {
 	if (
-		adSlotNode.classList.contains('ad-slot--fluid') &&
-		!adSlotNode.classList.contains('ad-slot--interscroller') &&
-		!adSlotNode.classList.contains('ad-slot--article-end')
-	) {
-		return false;
-	}
-
-	if (
 		adSlotNode.classList.contains('ad-slot--frame') ||
 		adSlotNode.classList.contains('ad-slot--gc') ||
 		adSlotNode.classList.contains('u-h') ||
@@ -108,6 +100,7 @@ const renderAdvertLabel = (adSlotNode: HTMLElement): Promise<Promise<void>> => {
 
 			return fastdom.mutate(() => {
 				adSlotNode.setAttribute('data-label-show', 'true');
+				adSlotNode.setAttribute('my-test-one', 'true');
 				adSlotNode.setAttribute('ad-label-text', adLabelContent);
 				// Remove this once new `ad-slot-container--centre-slot` class is in place
 				if (
