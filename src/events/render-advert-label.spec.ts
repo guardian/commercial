@@ -61,11 +61,11 @@ describe('shouldRenderLabel', () => {
 		});
 	});
 
-	it('does NOT render an ad label for fluid ads', async () => {
+	it('renders an ad label for fluid ads', async () => {
 		createAd(adverts['fluid']);
 		return renderAdvertLabel(getAd()).then(() => {
 			const ad = getAd();
-			expect(shouldRenderLabel(ad)).toBeFalsy();
+			expect(shouldRenderLabel(ad)).toBeTruthy();
 		});
 	});
 
