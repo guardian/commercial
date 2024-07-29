@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 20.1.0
+
+### Minor Changes
+
+- baef315: Remove magnite prebid AB test
+
 ## 20.0.1
 
 ### Patch Changes
