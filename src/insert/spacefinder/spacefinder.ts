@@ -33,6 +33,8 @@ type SpacefinderItem = {
 	};
 };
 
+type OpponentSelectorRules = Record<string, RuleSpacing>;
+
 type SpacefinderRules = {
 	bodySelector: string;
 	body?: HTMLElement | Document;
@@ -63,7 +65,7 @@ type SpacefinderRules = {
 	 * is too close to a candidate by the specified marginTop or marginBottom, the
 	 * candidate will be excluded.
 	 */
-	opponentSelectorRules?: Record<string, RuleSpacing>;
+	opponentSelectorRules?: OpponentSelectorRules;
 	/**
 	 * Will run each slot through this fn to check if it must be counted in
 	 */
@@ -630,6 +632,7 @@ export { findSpace, SpaceError };
 
 export type {
 	RuleSpacing,
+	OpponentSelectorRules,
 	SpacefinderRules,
 	SpacefinderWriter,
 	SpacefinderOptions,

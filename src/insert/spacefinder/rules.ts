@@ -1,7 +1,7 @@
 import { adSizes } from 'core';
 import { adSlotContainerClass } from 'core/create-ad-slot';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
-import type { SpacefinderRules } from './spacefinder';
+import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
 import { isInHighValueSection } from './utils';
 
 const bodySelector = '.article-body-commercial-selector';
@@ -121,7 +121,7 @@ const mobileCandidateSelector =
 
 const mobileHeadingSelector = `${headingSelector}, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"]`;
 
-const mobileOpponentSelectorRules = {
+const mobileOpponentSelectorRules: OpponentSelectorRules = {
 	// don't place ads right after a heading
 	[mobileHeadingSelector]: {
 		marginBottom: 100,
@@ -135,15 +135,13 @@ const mobileOpponentSelectorRules = {
 		marginBottom: 35,
 		marginTop: 200,
 		// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
-		bypassMinBelow:
-			'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
+		bypassMinTop: 'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 	},
 	[rightColumnOpponentSelector]: {
 		marginBottom: 35,
 		marginTop: 200,
 		// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
-		bypassMinBelow:
-			'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
+		bypassMinTop: 'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 	},
 };
 
