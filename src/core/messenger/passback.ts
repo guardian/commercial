@@ -3,6 +3,7 @@ import { breakpoints } from '@guardian/source/foundations';
 import { adSizes } from 'core/ad-sizes';
 import type { RegisterListener } from 'core/messenger';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
+import { getAdvertById } from 'lib/dfp/get-advert-by-id';
 import fastdom from 'utils/fastdom-promise';
 import { adSlotIdPrefix } from '../../lib/dfp/dfp-env-globals';
 
@@ -167,10 +168,12 @@ const init = (register: RegisterListener): void => {
 				iFrameContainer.style.visibility = 'hidden';
 				// Allows passback slot to position absolutely over the parent slot
 				slotElement.style.position = 'relative';
-				// Remove any outstream styling for this slot
+				// Remove any outstream styling for the parent slot
 				slotElement.classList.remove('ad-slot--outstream');
 				// Prevent refreshing of the parent slot
 				slotElement.setAttribute('data-refresh', 'false');
+				const advert = getAdvertById(slotElement.id);
+				if (advert) advert.shouldRefresh = false;
 			});
 
 			/**
