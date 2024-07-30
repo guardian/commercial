@@ -39,7 +39,7 @@ const inlineOpponentSelector = [
 	.map((role) => `[data-spacefinder-role="${role}"]`)
 	.join(',');
 
-const headingSelector = ':scope > h2, [data-spacefinder-role="nested"] > h2';
+const headingSelector = `:scope > h2, [data-spacefinder-role="nested"] > h2, :scope > h3, [data-spacefinder-role="nested"] > h3`;
 
 const desktopInline1: SpacefinderRules = {
 	bodySelector,
@@ -49,7 +49,7 @@ const desktopInline1: SpacefinderRules = {
 	opponentSelectorRules: {
 		// don't place ads right after a heading
 		[headingSelector]: {
-			minAboveSlot: isInHighValueSection ? 150 : 5,
+			minAboveSlot: 150,
 			minBelowSlot: isInHighValueSection ? 0 : 190,
 		},
 		[adSlotContainerSelector]: {
@@ -119,8 +119,7 @@ const mobileMinDistanceFromArticleTop = 200;
 const mobileCandidateSelector =
 	':scope > p, :scope > h2, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"], [data-spacefinder-role="nested"] > p';
 
-const mobileHeadingSelector =
-	':scope > h2, [data-spacefinder-role="nested"] > h2, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"]';
+const mobileHeadingSelector = `${headingSelector}, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"]`;
 
 const mobileOpponentSelectorRules = {
 	// don't place ads right after a heading

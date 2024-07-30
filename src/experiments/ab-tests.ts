@@ -1,6 +1,5 @@
 import type { ABTest } from '@guardian/ab-core';
 import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
-import { prebidMagnite } from './tests/prebid-magnite';
 
 /**
  * You only need to add tests to this file if the code you are testing is here in
@@ -10,5 +9,4 @@ import { prebidMagnite } from './tests/prebid-magnite';
 export const concurrentTests: ABTest[] = [
 	// one test per line
 	mpuWhenNoEpic,
-	prebidMagnite,
 ];
