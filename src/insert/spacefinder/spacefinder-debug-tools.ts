@@ -159,7 +159,10 @@ const annotateExclusions = (
 const annotateBody = (rules: SpacefinderRules, pass: SpacefinderPass) => {
 	const body = document.querySelector(rules.bodySelector) as HTMLElement;
 	body.id = 'sfdebug-body';
-	body.setAttribute(`data-sfdebug-min-above-${pass}`, `${rules.minAbove}px`);
+	body.setAttribute(
+		`data-sfdebug-min-above-${pass}`,
+		`${rules.minDistanceFromTop}px`,
+	);
 };
 
 const annotate = (
