@@ -165,10 +165,12 @@ const init = (register: RegisterListener): void => {
 			 */
 			const updateInitialSlotPromise = fastdom.mutate(() => {
 				iFrameContainer.style.visibility = 'hidden';
-				// TODO: this should be promoted to default styles for the initial slot
+				// Allows passback slot to position absolutely over the parent slot
 				slotElement.style.position = 'relative';
 				// Remove any outstream styling for this slot
 				slotElement.classList.remove('ad-slot--outstream');
+				// Prevent refreshing of the parent slot
+				slotElement.setAttribute('data-refresh', 'false');
 			});
 
 			/**
