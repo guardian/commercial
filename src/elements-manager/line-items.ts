@@ -39,19 +39,7 @@ interface LineItem {
 	creatives: Creative[];
 }
 
-const keyInTargeting = (
-	key: unknown,
-	targeting: PageTargeting,
-): key is keyof PageTargeting => {
-	return !!key && typeof key === 'string' && key in targeting;
-};
-
-// const isTargetingValue = (value: unknown): value is string[] | string => {
-// 	return Array.isArray(value) && value.every((v) => typeof v === 'string');
-// };
-
-// eslint-disable-next-line prefer-const -- asdf
-let debugCustomTargeting: true | false = true;
+const debugCustomTargeting = true as true | false;
 
 const matchesCustomTargeting = (
 	customTargeting: Targeting | null,
@@ -158,10 +146,9 @@ const matchesDeviceTargeting = (
 };
 
 const getLineItems = once(async () => {
-
-	const lineItems = (await fetch('https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/line-items.json').then(
-		(res) => res.json(),
-	)) as LineItem[];
+	const lineItems = (await fetch(
+		'https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/line-items.json',
+	).then((res) => res.json())) as LineItem[];
 
 	return lineItems.sort((a, b) => b.priority - a.priority);
 });

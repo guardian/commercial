@@ -30,11 +30,10 @@ describe('pickLineItem', () => {
 			if (!lineItem) {
 				throw new Error('No line item found');
 			}
-			if (lineItem.priority in priorityCounts) {
-				priorityCounts[lineItem.priority]++;
-			} else {
-				priorityCounts[lineItem.priority] = 1;
-			}
+
+			const count = priorityCounts[lineItem.priority] ?? 0;
+
+			priorityCounts[lineItem.priority] = count + 1;
 		}
 
 		//check order of priorities sorted by counts is as expected aka descending

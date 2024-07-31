@@ -1,13 +1,7 @@
 /* eslint-disable no-use-before-define -- classes reference each other */
 import { isNonNullable, log } from '@guardian/libs';
+import { type PageTargeting, type SizeMapping, slotSizeMappings } from 'core';
 import {
-	type AdSize,
-	type PageTargeting,
-	type SizeMapping,
-	slotSizeMappings,
-} from 'core';
-import {
-	createAdSize,
 	findAppliedSizesForBreakpoint,
 	type SlotName as SizeName,
 } from 'core/ad-sizes';
@@ -40,51 +34,6 @@ const getCurrentBreakpoint = (): ElementsManagerBreakpoint => {
 			return tweakpoint;
 	}
 };
-
-/**
- * Get the closest breakpoint size from the size mapping, e.g. if the current breakpoint is 'tablet' and
- * the size mapping does not have a 'tablet' size, it will return the closest size getting smaller, e.g. 'mobile'
- * if the size mapping does not have a 'mobile' size, it will return empty array
- *
- *
- * @param sizeMapping
- * @returns
- */
-const getClosetBreakpointSizes = (
-	sizeMapping: SizeMapping,
-): readonly AdSize[] => {
-	const currentBreakpoint = getCurrentBreakpoint();
-	const breakpointIndex =
-		elementsManagerBreakpoints.indexOf(currentBreakpoint);
-
-	for (let i = breakpointIndex; i >= 0; i--) {
-		const breakpoint = elementsManagerBreakpoints[i];
-		if (
-			breakpoint &&
-			breakpoint in sizeMapping &&
-			sizeMapping[breakpoint]
-		) {
-			const sizes = sizeMapping[breakpoint];
-			if (sizes) {
-				return sizes;
-			}
-		}
-	}
-
-	return [];
-};
-
-// const isSlotName = (name: string): boolean  => {
-// 	if (name.includes('inline') || name.includes('fronts-banner') || name.includes('external')) {
-// 		return true;
-// 	}
-
-// 	if (isSlotName(slotName)) {
-// 		return slotName;
-// 	}
-
-// 	return false;
-// }
 
 const isSizeName = (slotName: string): slotName is SizeName => {
 	return slotName in slotSizeMappings;

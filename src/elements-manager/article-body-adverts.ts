@@ -8,10 +8,7 @@ import { createAdvert } from './elements-manager';
  * @param slot The slot element
  * @param additionalSizes Additional sizes to be added to the slot
  */
-const fillAdSlot: FillAdSlot = (
-	name: string,
-	slot: HTMLElement,
-) => {
+const fillAdSlot: FillAdSlot = (name: string, slot: HTMLElement) => {
 	createAdvert(name, slot);
 };
 
