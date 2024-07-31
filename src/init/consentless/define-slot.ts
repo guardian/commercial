@@ -1,6 +1,6 @@
 import { log } from '@guardian/libs';
 import { removeSlotFromDom } from 'events/empty-advert';
-import { getElementsManager } from 'init/elements-manager';
+import { initElementsManager } from 'init/elements-manager';
 import type { OptOutFilledCallback } from 'types/global';
 import fastdom from 'utils/fastdom-promise';
 import { renderConsentlessAdvertLabel } from './render-advert-label';
@@ -52,7 +52,8 @@ const defineSlot = (
 
 		void fastdom.mutate(() => {
 			void (async () => {
-				const didDisplay = await getElementsManager()
+				const elementsManager = await initElementsManager();
+				const didDisplay = await elementsManager
 					.createAdvert(slotName, slot)
 					.display();
 

@@ -6,9 +6,9 @@ import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
 
 let elementsManager: ElementsManager | undefined;
 
-const initElementsManager = async (): Promise<void> => {
+const initElementsManager = async (): Promise<ElementsManager> => {
 	if(elementsManager) {
-		return;
+		return elementsManager;
 	}
 
 	const [consentState, isSignedIn] = await Promise.all([
@@ -19,6 +19,7 @@ const initElementsManager = async (): Promise<void> => {
 	const pageTargeting = getPageTargeting(consentState, isSignedIn);
 
 	elementsManager = ElementsManager.init(pageTargeting);
+	return elementsManager;
 };
 
 const getElementsManager = (): ElementsManager => {
