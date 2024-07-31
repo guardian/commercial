@@ -1,5 +1,8 @@
 import { getConsentFor, onConsent } from '@guardian/libs';
-import { initElementsManager } from 'init/elements-manager';
+import {
+	fillAdSlots as gemFillAdSlots,
+	initElementsManager,
+} from 'init/elements-manager';
 import { commercialFeatures } from 'lib/commercial-features';
 
 const { frontendAssetsFullURL, page } = window.guardian.config;
@@ -21,7 +24,8 @@ void (async () => {
 	const params = new URLSearchParams(window.location.search);
 	if (params.has('forcegem')) {
 		await initElementsManager();
-		await
+		await gemFillAdSlots();
+		return;
 	}
 
 	const consentState = await onConsent();
