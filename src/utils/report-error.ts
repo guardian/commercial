@@ -33,7 +33,7 @@ const reportError = (
 ): void => {
 	const localError: FrontendError = convertError(err);
 	if (sampleRate >= Math.random()) {
-		raven.captureException(localError, { tags });
+		raven.captureException(localError, { tags, stacktrace: true });
 	}
 	if (shouldThrow) {
 		localError.reported = true;
