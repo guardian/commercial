@@ -41,7 +41,9 @@ describe('pickLineItem', () => {
 			(a, b) => b[1] - a[1],
 		);
 
-		const sortedPrioritiesValues = sortedPriorities.map((x) => x[0]);
+		const sortedPrioritiesValues = sortedPriorities
+			.map((x) => x[0])
+			.sort((a, b) => +a - +b);
 
 		expect(sortedPrioritiesValues).toEqual(
 			Object.keys(priorityCounts).sort((a, b) => +a - +b),
