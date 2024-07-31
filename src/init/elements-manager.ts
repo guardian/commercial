@@ -7,7 +7,7 @@ import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
 let elementsManager: ElementsManager | undefined;
 
 const initElementsManager = async (): Promise<ElementsManager> => {
-	if(elementsManager) {
+	if (elementsManager) {
 		return elementsManager;
 	}
 
@@ -28,7 +28,7 @@ const getElementsManager = (): ElementsManager => {
 	}
 
 	return elementsManager;
-}
+};
 
 /**
  * Use the ElementsManager to fill all ad slots on the page
@@ -37,13 +37,11 @@ const getElementsManager = (): ElementsManager => {
 const fillAdSlots = async (): Promise<void> => {
 	const staticAdverts = getElementsManager().createStaticAdverts();
 
-  const fillStatic = Promise.all(staticAdverts.map((ad) => ad.display()));
+	const fillStatic = Promise.all(staticAdverts.map((ad) => ad.display()));
 
-  const fillDynamic = initArticleBodyAdverts();
+	const fillDynamic = initArticleBodyAdverts();
 
-  await Promise.all([fillStatic, fillDynamic]);
-}
-
-
+	await Promise.all([fillStatic, fillDynamic]);
+};
 
 export { initElementsManager, getElementsManager, fillAdSlots };
