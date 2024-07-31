@@ -234,14 +234,7 @@ const logCommercial = (page: Page) => {
 	page.on('console', (msg) => {
 		const label = msg.args()[0]?.toString();
 		if (label?.includes('commercial')) {
-			console.log(
-				msg
-					.args()
-					.slice(4)
-					// eslint-disable-next-line @typescript-eslint/no-base-to-string -- it's just a log
-					.map((arg) => arg.toString())
-					.join(' '),
-			);
+			console.log(msg.args().slice(4).map(String).join(' '));
 		}
 	});
 };
