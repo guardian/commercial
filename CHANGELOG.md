@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 20.2.0
+
+### Minor Changes
+
+- c76fae9: Ogury passback for mobile sticky
+- 17ec313: Rename spacefinder options
+
 ## 20.1.0
 
 ### Minor Changes
