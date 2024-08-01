@@ -1,6 +1,8 @@
 import type { ConsentState } from '@guardian/libs';
 import { loadScript, log } from '@guardian/libs';
 import { buildPageTargetingConsentless } from 'core/targeting/build-page-targeting-consentless';
+import { isUserInVariant } from 'experiments/ab';
+import { optOutFrequencyCap } from 'experiments/tests/opt-out-frequency-cap';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
 
@@ -11,6 +13,11 @@ function initConsentless(consentState: ConsentState): Promise<void> {
 		window.ootag = {
 			queue: [],
 		};
+
+		const isInFrequencyCapTest = isUserInVariant(
+			optOutFrequencyCap,
+			'variant',
+		);
 
 		window.ootag.queue.push(function () {
 			// Ensures Opt Out logs are namespaced under Commercial
@@ -24,6 +31,10 @@ function initConsentless(consentState: ConsentState): Promise<void> {
 				noLogging: 1,
 				alwaysNoConsent: 1,
 				noRequestsOnPageLoad: 1,
+				frequencyScript: isInFrequencyCapTest
+					? 'https://frequencycappingwithoutpersonaldata.com/script/iframe'
+					: undefined,
+				debug_forceCap: isInFrequencyCapTest ? 1 : undefined,
 			});
 
 			void isUserLoggedInOktaRefactor().then((isSignedIn) => {
