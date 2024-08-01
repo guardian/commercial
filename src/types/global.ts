@@ -330,6 +330,8 @@ interface OptOutInitializeOptions {
 	noLogging?: 0 | 1;
 	lazyLoading?: { fractionInView?: number; viewPortMargin?: string };
 	noRequestsOnPageLoad?: 0 | 1;
+	frequencyScript?: string;
+	debug_forceCap?: number;
 }
 
 interface OptOutResponse {
