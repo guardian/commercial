@@ -3,8 +3,8 @@ import type { ABTest } from '@guardian/ab-core';
 export const optOutFrequencyCap: ABTest = {
 	id: 'optOutFrequencyCap',
 	author: '@commercial-dev',
-	start: '2024-07-18',
-	expiry: '2024-09-30',
+	start: '2024-08-01',
+	expiry: '2024-08-30',
 	audience: 0 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',
