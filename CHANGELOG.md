@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 20.2.1
+
+### Patch Changes
+
+- ac4a96c: Add opt out frequency capping behind test for debugging
+
 ## 20.2.0
 
 ### Minor Changes
