@@ -7,7 +7,25 @@ import { getCookie } from '@guardian/libs';
 import fastdom from 'utils/fastdom-promise';
 import crossIcon from '../../static/svg/icon/cross.svg';
 
-const shouldRenderLabel = (adSlotNode: HTMLElement): boolean => {
+const CAPI_SINGLE_PAIDFOR = 10077207;
+const CAPI_MULTIPLE_PAIDFOR = 10069167;
+const EVENTS_API_MULTIPLE_STYLE = 12317037;
+const CAPI_MULTIPLE_HOSTED = 10070487;
+const MANUAL_MULTIPLE = 10063287;
+
+const shouldRenderLabel = (
+	adSlotNode: HTMLElement,
+	creativeTemplateId: number,
+): boolean => {
+	if (
+		creativeTemplateId === CAPI_SINGLE_PAIDFOR ||
+		creativeTemplateId === CAPI_MULTIPLE_PAIDFOR ||
+		creativeTemplateId === EVENTS_API_MULTIPLE_STYLE ||
+		creativeTemplateId === CAPI_MULTIPLE_HOSTED ||
+		creativeTemplateId === MANUAL_MULTIPLE
+	) {
+		return true;
+	}
 	if (
 		adSlotNode.classList.contains('ad-slot--frame') ||
 		adSlotNode.classList.contains('ad-slot--gc') ||
@@ -81,9 +99,13 @@ const createAdTestCookieRemovalLink = (): HTMLElement => {
 	return adTestCookieRemovalLink;
 };
 
-const renderAdvertLabel = (adSlotNode: HTMLElement): Promise<Promise<void>> => {
+const renderAdvertLabel = (
+	adSlotNode: HTMLElement,
+	creativeTemplateId: number,
+): Promise<Promise<void>> => {
 	return fastdom.measure(() => {
-		if (shouldRenderLabel(adSlotNode)) {
+		if (shouldRenderLabel(adSlotNode, creativeTemplateId)) {
+			///here
 			const renderAdTestLabel = shouldRenderAdTestLabel(adSlotNode);
 			const adTestClearExists =
 				adSlotNode.parentNode?.firstElementChild
@@ -100,7 +122,6 @@ const renderAdvertLabel = (adSlotNode: HTMLElement): Promise<Promise<void>> => {
 
 			return fastdom.mutate(() => {
 				adSlotNode.setAttribute('data-label-show', 'true');
-				adSlotNode.setAttribute('my-test-one', 'true');
 				adSlotNode.setAttribute('ad-label-text', adLabelContent);
 				// Remove this once new `ad-slot-container--centre-slot` class is in place
 				if (
