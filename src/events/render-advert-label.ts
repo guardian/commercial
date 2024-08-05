@@ -7,24 +7,20 @@ import { getCookie } from '@guardian/libs';
 import fastdom from 'utils/fastdom-promise';
 import crossIcon from '../../static/svg/icon/cross.svg';
 
-const CAPI_SINGLE_PAIDFOR = 10077207;
-const CAPI_MULTIPLE_PAIDFOR = 10069167;
-const EVENTS_API_MULTIPLE_STYLE = 12317037;
-const CAPI_MULTIPLE_HOSTED = 10070487;
-const MANUAL_MULTIPLE = 10063287;
+const templatesWithoutLabels = [
+	10077207, // CAPI_MULTIPLE_HOSTED
+	10069167, // CAPI_MULTIPLE_PAIDFOR
+	12317037, // EVENTS_MULTIPLE
+	10070487, // CAPI_SINGLE_PAIDFOR
+	10063287, // MANUAL_MULTIPLE
+];
 
 const shouldRenderLabel = (
 	adSlotNode: HTMLElement,
 	creativeTemplateId: number,
 ): boolean => {
-	if (
-		creativeTemplateId === CAPI_SINGLE_PAIDFOR ||
-		creativeTemplateId === CAPI_MULTIPLE_PAIDFOR ||
-		creativeTemplateId === EVENTS_API_MULTIPLE_STYLE ||
-		creativeTemplateId === CAPI_MULTIPLE_HOSTED ||
-		creativeTemplateId === MANUAL_MULTIPLE
-	) {
-		return true;
+	if (templatesWithoutLabels.includes(creativeTemplateId)) {
+		return false;
 	}
 	if (
 		adSlotNode.classList.contains('ad-slot--frame') ||
@@ -105,7 +101,6 @@ const renderAdvertLabel = (
 ): Promise<Promise<void>> => {
 	return fastdom.measure(() => {
 		if (shouldRenderLabel(adSlotNode, creativeTemplateId)) {
-			///here
 			const renderAdTestLabel = shouldRenderAdTestLabel(adSlotNode);
 			const adTestClearExists =
 				adSlotNode.parentNode?.firstElementChild
