@@ -9,8 +9,8 @@ dependencies:
     specifier: ^2.26.2
     version: 2.27.7
   '@guardian/ophan-tracker-js':
-    specifier: 2.1.1
-    version: 2.1.1
+    specifier: 2.2.2
+    version: 2.2.2
   '@guardian/prebid.js':
     specifier: 8.52.0-1
     version: 8.52.0-1(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.5.4)
@@ -98,8 +98,8 @@ devDependencies:
     specifier: 8.0.1
     version: 8.0.1(prettier@3.3.3)(tslib@2.6.3)
   '@guardian/source':
-    specifier: 6.0.0
-    version: 6.0.0(tslib@2.6.3)(typescript@5.5.4)
+    specifier: 6.1.0
+    version: 6.1.0(tslib@2.6.3)(typescript@5.5.4)
   '@playwright/test':
     specifier: 1.45.3
     version: 1.45.3
@@ -2147,9 +2147,11 @@ packages:
       typescript: 5.5.4
     dev: true
 
-  /@guardian/ophan-tracker-js@2.1.1:
-    resolution: {integrity: sha512-Ktk9kDJfe//NJFfpT15jweTj4KQbgkQuo8pWRYrlNZpq1oaTpSeMtI/eSCtqK8yhXKlBJDsMbEyCYsEgQRYFag==}
+  /@guardian/ophan-tracker-js@2.2.2:
+    resolution: {integrity: sha512-g+Xouc0bU1fC+8qltuLexBxK67V534ZFDQ/bGWQtYDFSJJJtyPIq6ytPcn4KULNOQc+zRsUcRIfO0uRnjJScbw==}
     engines: {node: '>=16'}
+    dependencies:
+      '@guardian/tsconfig': 1.0.0
     dev: false
 
   /@guardian/prebid.js@8.52.0-1(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.5.4):
@@ -2242,8 +2244,8 @@ packages:
       tslib: 2.6.3
     dev: true
 
-  /@guardian/source@6.0.0(tslib@2.6.3)(typescript@5.5.4):
-    resolution: {integrity: sha512-LsUXAo0d2hYQ1M/Nn9sLx6VEH1zMtr3rk0RG5r0T843d0ZWCTaP2gX3AOdD8S9XPESSWEH8/wxuQkPiCzI18nw==}
+  /@guardian/source@6.1.0(tslib@2.6.3)(typescript@5.5.4):
+    resolution: {integrity: sha512-Vez2zPyOa6SLNUSQ6XOIwFPGOcgRrg9MgRQTvG9ERUsYamuDFC3WiGi5U3tMll23WEekKSshd8jDZsAyWz5u5w==}
     peerDependencies:
       '@emotion/react': ^11.11.3
       '@types/react': ^18.2.11
@@ -2264,6 +2266,10 @@ packages:
       tslib: 2.6.3
       typescript: 5.5.4
     dev: true
+
+  /@guardian/tsconfig@1.0.0:
+    resolution: {integrity: sha512-xgajw/jq4lEtQoN72vnmiXeRnejUcd3DgNFmH6TfAbWV6NRK4KC4hAjzKf0H69zBSJMxEfFVfGKP9wBzGII7qg==}
+    dev: false
 
   /@humanwhocodes/config-array@0.11.14:
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
