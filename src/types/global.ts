@@ -175,7 +175,6 @@ type OphanRecordFunction = (
 	callback?: () => void,
 ) => void;
 interface Ophan {
-	setEventEmitter: () => void; // We don't currently have a custom eventEmitter on DCR - like 'mediator' in Frontend.
 	trackComponentAttention: (
 		name: string,
 		el: Element,
@@ -534,7 +533,6 @@ export type {
 	GoogleTimingEvent,
 	Ophan,
 	OptOutFilledCallback,
-	OphanRecordFunction,
 	PageConfig,
 	Permutive,
 	PrebidIndexSite,
