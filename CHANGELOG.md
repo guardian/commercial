@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 20.3.0
+
+### Minor Changes
+
+- 28c1b56: Log interscroller progress with logs and metrics
+
 ## 20.2.1
 
 ### Patch Changes
