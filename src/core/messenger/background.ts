@@ -1,7 +1,9 @@
 import { isObject } from '@guardian/libs';
-import { EventTimer } from 'core/event-timer';
+import {
+	initVideoProgressReporting,
+	updateVideoProgress,
+} from 'core/lib/video-interscroller-progress';
 import type { RegisterListener } from 'core/messenger';
-import { bypassCommercialMetricsSampling } from 'core/send-commercial-metrics';
 import fastdom from 'utils/fastdom-promise';
 import {
 	renderAdvertLabel,
@@ -239,7 +241,10 @@ const setupBackground = async (
 						const creativeTemplateId =
 							slot.getResponseInformation()?.creativeTemplateId;
 						if (creativeTemplateId === 11885667) {
-							return slot.getResponseInformation()?.creativeId;
+							return (
+								slot.getResponseInformation()?.creativeId ??
+								undefined
+							);
 						}
 					}
 					return undefined;
@@ -263,21 +268,17 @@ const setupBackground = async (
 
 				observer.observe(backgroundParent);
 
-				EventTimer.get().setProperty(
-					'videoInterscrollerCreativeId',
-					getCreativeId(),
-				);
+				const creativeId = getCreativeId();
 
-				void bypassCommercialMetricsSampling();
+				if (creativeId) {
+					initVideoProgressReporting(creativeId);
+				}
 
 				video.ontimeupdate = function () {
 					const percent = Math.round(
 						100 * (video.currentTime / video.duration),
 					);
-					EventTimer.get().setProperty(
-						'videoInterscrollerPercentageProgress',
-						percent,
-					);
+					updateVideoProgress(percent);
 				};
 			}
 		} else {
