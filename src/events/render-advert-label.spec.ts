@@ -50,6 +50,7 @@ describe('shouldRenderLabel', () => {
 	});
 
 	const testCreativeTemplateId = 1234567;
+	const interscrollerTemplateId = 11885667;
 
 	it('renders an ad label for normal ads', async () => {
 		createAd(adverts['withLabel']);
@@ -61,9 +62,9 @@ describe('shouldRenderLabel', () => {
 
 	it('renders an ad label for interscroller ads', async () => {
 		createAd(adverts['interscroller']);
-		return renderAdvertLabel(getAd(), testCreativeTemplateId).then(() => {
+		return renderAdvertLabel(getAd(), interscrollerTemplateId).then(() => {
 			const ad = getAd();
-			expect(shouldRenderLabel(ad, testCreativeTemplateId)).toBeTruthy();
+			expect(shouldRenderLabel(ad, interscrollerTemplateId)).toBeTruthy();
 		});
 	});
 
