@@ -54,9 +54,9 @@ describe('shouldRenderLabel', () => {
 
 	it('renders an ad label for normal ads', async () => {
 		createAd(adverts['withLabel']);
-		return renderAdvertLabel(getAd(), testCreativeTemplateId).then(() => {
+		return renderAdvertLabel(getAd()).then(() => {
 			const ad = getAd();
-			expect(shouldRenderLabel(ad, testCreativeTemplateId)).toBeTruthy();
+			expect(shouldRenderLabel(ad)).toBeTruthy();
 		});
 	});
 
@@ -87,49 +87,49 @@ describe('shouldRenderLabel', () => {
 
 	it('does NOT render an ad label for collapsed ads', async () => {
 		createAd(adverts['collapse']);
-		return renderAdvertLabel(getAd(), testCreativeTemplateId).then(() => {
+		return renderAdvertLabel(getAd()).then(() => {
 			const ad = getAd();
-			expect(shouldRenderLabel(ad, testCreativeTemplateId)).toBeFalsy();
+			expect(shouldRenderLabel(ad)).toBeFalsy();
 		});
 	});
 
 	it('renders an ad label when data label attribute is true', async () => {
 		createAd(adverts['dataLabelTrue']);
-		return renderAdvertLabel(getAd(), testCreativeTemplateId).then(() => {
+		return renderAdvertLabel(getAd()).then(() => {
 			const ad = getAd();
-			expect(shouldRenderLabel(ad, testCreativeTemplateId)).toBeTruthy();
+			expect(shouldRenderLabel(ad)).toBeTruthy();
 		});
 	});
 
 	it('does NOT render an ad label when data label attribute is false', async () => {
 		createAd(adverts['dataLabelFalse']);
-		return renderAdvertLabel(getAd(), testCreativeTemplateId).then(() => {
+		return renderAdvertLabel(getAd()).then(() => {
 			const ad = getAd();
-			expect(shouldRenderLabel(ad, testCreativeTemplateId)).toBeFalsy();
+			expect(shouldRenderLabel(ad)).toBeFalsy();
 		});
 	});
 
 	it('Will not add a label to frame ads', async () => {
 		createAd(adverts['frame']);
-		return renderAdvertLabel(getAd(), testCreativeTemplateId).then(() => {
+		return renderAdvertLabel(getAd()).then(() => {
 			const ad = getAd();
-			expect(shouldRenderLabel(ad, testCreativeTemplateId)).toBeFalsy();
+			expect(shouldRenderLabel(ad)).toBeFalsy();
 		});
 	});
 
 	it('Will not add a label to an ad slot with a hidden u-h class', async () => {
 		createAd(adverts['uh']);
-		return renderAdvertLabel(getAd(), testCreativeTemplateId).then(() => {
+		return renderAdvertLabel(getAd()).then(() => {
 			const ad = getAd();
-			expect(shouldRenderLabel(ad, testCreativeTemplateId)).toBeFalsy();
+			expect(shouldRenderLabel(ad)).toBeFalsy();
 		});
 	});
 
 	it('When the ad is top above nav and the label is NOT toggleable, render the label dynamically', async () => {
 		createAd(adverts['topAboveNav']);
-		return renderAdvertLabel(getAd(), testCreativeTemplateId).then(() => {
+		return renderAdvertLabel(getAd()).then(() => {
 			const ad = getAd();
-			expect(shouldRenderLabel(ad, testCreativeTemplateId)).toBeTruthy();
+			expect(shouldRenderLabel(ad)).toBeTruthy();
 		});
 	});
 });

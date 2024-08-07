@@ -17,9 +17,9 @@ const templatesWithoutLabels = [
 
 const shouldRenderLabel = (
 	adSlotNode: HTMLElement,
-	creativeTemplateId: number,
+	creativeTemplateId?: number,
 ): boolean => {
-	if (templatesWithoutLabels.includes(creativeTemplateId)) {
+	if (templatesWithoutLabels.includes(creativeTemplateId ?? 0)) {
 		return false;
 	}
 	if (
@@ -97,7 +97,7 @@ const createAdTestCookieRemovalLink = (): HTMLElement => {
 
 const renderAdvertLabel = (
 	adSlotNode: HTMLElement,
-	creativeTemplateId: number,
+	creativeTemplateId?: number,
 ): Promise<Promise<void>> => {
 	return fastdom.measure(() => {
 		if (shouldRenderLabel(adSlotNode, creativeTemplateId)) {
