@@ -1,4 +1,8 @@
 import { getConsentFor, onConsent } from '@guardian/libs';
+import {
+	fillAdSlots as gemFillAdSlots,
+	initElementsManager,
+} from 'init/elements-manager';
 import { commercialFeatures } from 'lib/commercial-features';
 
 const { frontendAssetsFullURL, page } = window.guardian.config;
@@ -17,6 +21,13 @@ __webpack_public_path__ = decideAssetsPath();
  * Choose whether to launch Googletag or Opt Out tag (ootag) based on consent state
  */
 void (async () => {
+	const params = new URLSearchParams(window.location.search);
+	if (params.has('forcegem')) {
+		await initElementsManager();
+		await gemFillAdSlots();
+		return;
+	}
+
 	const consentState = await onConsent();
 	// Only load the Opt Out tag if:
 	// - Opt Out switch is on

@@ -30,3 +30,7 @@ wip
 /playwright-report/
 /playwright/.cache/
 /playwright/.auth/
+
+static/creatives
+static/template_assets
+static/line-items
