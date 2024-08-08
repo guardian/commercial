@@ -187,7 +187,8 @@ const renderAdvert = (
 
 	return getAdIframe(advert.node)
 		.then((isRendered) => {
-			const creativeTemplateId = slotRenderEndedEvent.creativeTemplateId;
+			const creativeTemplateId =
+				slotRenderEndedEvent.creativeTemplateId ?? undefined;
 			const callSizeCallback = () => {
 				if (advert.size) {
 					/**
@@ -215,9 +216,7 @@ const renderAdvert = (
 					: Promise.resolve();
 
 			return callSizeCallback()
-				.then(() =>
-					renderAdvertLabel(advert.node, creativeTemplateId ?? 0),
-				)
+				.then(() => renderAdvertLabel(advert.node, creativeTemplateId))
 				.then(() => addContainerClass(advert.node, isRendered))
 				.then(addRenderedClass)
 				.then(() => isRendered);

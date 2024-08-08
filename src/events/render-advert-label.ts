@@ -19,7 +19,10 @@ const shouldRenderLabel = (
 	adSlotNode: HTMLElement,
 	creativeTemplateId?: number,
 ): boolean => {
-	if (templatesWithoutLabels.includes(creativeTemplateId ?? 0)) {
+	if (
+		creativeTemplateId &&
+		templatesWithoutLabels.includes(creativeTemplateId)
+	) {
 		return false;
 	}
 	if (
