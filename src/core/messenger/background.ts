@@ -186,6 +186,8 @@ const setupBackground = async (
 		specs.scrollType,
 	);
 
+	const interscrollerTemplateId = 11885667;
+
 	return fastdom.mutate(() => {
 		setBackgroundStyles(specs, background);
 
@@ -212,7 +214,7 @@ const setupBackground = async (
 				adSlot.style.position = 'relative';
 			}
 
-			void renderAdvertLabel(adSlot);
+			void renderAdvertLabel(adSlot, interscrollerTemplateId);
 			void renderStickyScrollForMoreLabel(backgroundParent);
 
 			isDCR && renderBottomLine(background, backgroundParent);
