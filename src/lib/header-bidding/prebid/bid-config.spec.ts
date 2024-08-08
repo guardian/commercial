@@ -99,7 +99,6 @@ const resetConfig = () => {
 		record: () => {
 			// do nothing;
 		},
-		setEventEmitter: jest.fn(),
 		trackComponentAttention: jest.fn(),
 	};
 	window.guardian.config.switches = {

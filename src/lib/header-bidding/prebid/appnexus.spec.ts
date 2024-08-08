@@ -52,7 +52,6 @@ const resetConfig = () => {
 		record: () => {
 			// do nothing;
 		},
-		setEventEmitter: () => {},
 		trackComponentAttention: () => {},
 	};
 	window.guardian.config.switches = {
