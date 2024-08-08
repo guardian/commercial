@@ -155,7 +155,7 @@ const defineSlot = (
 
 	const isbn = window.guardian.config.page.isbn;
 
-	if (slotTarget === 'im' && isbn) {
+	if (slotTarget === isbn) {
 		slot.setTargeting('isbn', isbn);
 	}
 
