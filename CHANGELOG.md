@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 20.3.1
+
+### Patch Changes
+
+- 27d13b9: centre ad label for ad slots
+
 ## 20.3.0
 
 ### Minor Changes
