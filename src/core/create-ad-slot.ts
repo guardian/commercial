@@ -19,7 +19,6 @@ type SlotName =
 	| 'football-right'
 	| 'fronts-banner'
 	| 'merchandising-high'
-	| 'im'
 	| 'inline'
 	| 'mobile-sticky'
 	| 'top-above-nav';
@@ -32,10 +31,6 @@ type CreateSlotOptions = {
 };
 
 const adSlotConfigs: AdSlotConfigs = {
-	im: {
-		label: false,
-		refresh: false,
-	},
 	'merchandising-high': {
 		refresh: false,
 	},

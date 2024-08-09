@@ -3,7 +3,7 @@ import { dfpEnv } from '../lib/dfp/dfp-env';
 import { enableLazyLoad } from './lazy-load';
 import { loadAdvert } from './load-advert';
 
-const instantLoadAdvertIds = ['dfp-ad--im'];
+const instantLoadAdvertIds: string[] = [];
 
 const displayLazyAds = (): void => {
 	window.googletag.pubads().collapseEmptyDivs();

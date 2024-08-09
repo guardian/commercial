@@ -1,6 +1,5 @@
 import { adSizes } from 'core';
 import { adSlotContainerClass } from 'core/create-ad-slot';
-import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
 import { isInHighValueSection } from './utils';
 
@@ -173,50 +172,9 @@ const mobileTopAboveNav: SpacefinderRules = {
 	opponentSelectorRules: mobileOpponentSelectorRules,
 };
 
-const breakpoint = getCurrentBreakpoint();
-const isMobileOrTablet = breakpoint === 'mobile' || breakpoint === 'tablet';
-
-const inlineMerchandising: SpacefinderRules = {
-	bodySelector,
-	candidateSelector: ':scope > p',
-	minDistanceFromTop: 300,
-	minDistanceFromBottom: 300,
-	opponentSelectorRules: {
-		':scope > .merch': {
-			marginBottom: 0,
-			marginTop: 0,
-		},
-		':scope > header': {
-			marginBottom: isMobileOrTablet ? 300 : 700,
-			marginTop: 0,
-		},
-		':scope > h2': {
-			marginBottom: 100,
-			marginTop: 250,
-		},
-		':scope > #sign-in-gate': {
-			marginBottom: 0,
-			marginTop: 400,
-		},
-		[adSlotContainerSelector]: {
-			marginBottom: minDistanceBetweenInlineAds,
-			marginTop: minDistanceBetweenInlineAds,
-		},
-		[inlineOpponentSelector]: {
-			marginBottom: 200,
-			marginTop: 400,
-		},
-		[rightColumnOpponentSelector]: {
-			marginBottom: 200,
-			marginTop: 400,
-		},
-	},
-};
-
 export const rules = {
 	desktopInline1,
 	desktopRightRail,
 	mobileTopAboveNav,
 	mobileSubsequentInlineAds,
-	inlineMerchandising,
 };

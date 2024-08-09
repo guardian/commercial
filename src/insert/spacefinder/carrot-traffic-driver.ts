@@ -73,10 +73,6 @@ const desktopRules: SpacefinderRules = {
 			marginBottom: 400,
 			marginTop: 400,
 		},
-		'.ad-slot--im': {
-			marginBottom: 400,
-			marginTop: 400,
-		},
 	},
 };
 

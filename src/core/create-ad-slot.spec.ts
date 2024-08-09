@@ -1,16 +1,6 @@
 import { createAdSize } from './ad-sizes';
 import { concatSizeMappings, createAdSlot } from './create-ad-slot';
 
-const imHtml = `
-<div id="dfp-ad--im"
-    class="js-ad-slot ad-slot ad-slot--im"
-    data-link-name="ad slot im"
-    data-name="im"
-    aria-hidden="true"
-    data-label="false"
-    data-refresh="false"></div>
-`;
-
 const inline1Html = `
 <div id="dfp-ad--inline1"
     class="js-ad-slot ad-slot ad-slot--inline ad-slot--inline1"
@@ -26,12 +16,6 @@ describe('Create Ad Slot', () => {
 	});
 
 	it.each([
-		{
-			type: 'im' as const,
-			htmls: imHtml,
-			name: undefined,
-			classes: undefined,
-		},
 		{
 			type: 'inline' as const,
 			classes: 'inline',
