@@ -91,7 +91,6 @@ type SpacefinderPass =
 	| 'mobile-top-above-nav'
 	| 'subsequent-inlines'
 	| 'mobile-subsequent-inlines'
-	| 'im'
 	| 'carrot';
 
 type SpacefinderOptions = {
