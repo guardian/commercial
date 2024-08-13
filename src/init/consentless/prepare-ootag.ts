@@ -34,7 +34,6 @@ function initConsentless(consentState: ConsentState): Promise<void> {
 				frequencyScript: isInFrequencyCapTest
 					? 'https://frequencycappingwithoutpersonaldata.com/script/iframe'
 					: undefined,
-				debug_forceCap: isInFrequencyCapTest ? 1 : undefined,
 			});
 
 			void isUserLoggedInOktaRefactor().then((isSignedIn) => {
