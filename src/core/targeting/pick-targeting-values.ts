@@ -47,7 +47,7 @@ const isValidTargeting = (value: unknown): value is string | string[] => {
  * ```
  */
 export const pickTargetingValues = <
-	T extends Record<string, string | Readonly<string[]> | undefined>,
+	T extends Record<string, string | readonly string[] | undefined>,
 >(
 	obj: T,
 ): ValidTargetingObject<T> => {
