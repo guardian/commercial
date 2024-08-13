@@ -118,7 +118,7 @@ type SlotName =
 	| 'top-above-nav'
 	| 'interactive';
 
-type SizeMapping = Partial<Record<Breakpoint, Readonly<AdSize[]>>>;
+type SizeMapping = Partial<Record<Breakpoint, readonly AdSize[]>>;
 
 type SlotSizeMappings = Record<SlotName, SizeMapping>;
 
@@ -465,7 +465,7 @@ const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
 const findAppliedSizesForBreakpoint = (
 	sizeMappings: SizeMapping,
 	breakpoint: Breakpoint,
-): Readonly<AdSize[]> => {
+): readonly AdSize[] => {
 	if (!isBreakpoint(breakpoint)) {
 		return [];
 	}
