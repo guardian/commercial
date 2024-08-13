@@ -259,7 +259,7 @@ const addSubsequentInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 };
 
 /**
- * Init all the article body adverts, including `im` and `carrot`
+ * Init all the article body adverts, including `carrot`
  * @param fillAdSlot a function to fill the ad slots
  */
 const init = async (fillAdSlot: FillAdSlot): Promise<void> => {
@@ -267,10 +267,8 @@ const init = async (fillAdSlot: FillAdSlot): Promise<void> => {
 		return Promise.resolve();
 	}
 
-	// We add the first inline ad before finding a place for an im so that the inline1 doesn't get pushed down
 	await addFirstInlineAd(fillAdSlot);
 
-	// Add the other inline slots after the im, so that there is space left for the im ad
 	await addSubsequentInlineAds(fillAdSlot);
 
 	await initCarrot();
