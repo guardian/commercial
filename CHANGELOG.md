@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 20.3.2
+
+### Patch Changes
+
+- 2166482: remove debug_forceCap
+
 ## 20.3.1
 
 ### Patch Changes
