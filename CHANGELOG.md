@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 20.4.0
+
+### Minor Changes
+
+- e9b8e0a: Remove inline-merchandising slot
+
 ## 20.3.2
 
 ### Patch Changes
