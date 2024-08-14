@@ -1,7 +1,7 @@
 import type { ABTest } from '@guardian/ab-core';
 
 export const optimiseSpacefinderInline: ABTest = {
-	id: 'optimiseSpacefinderInline',
+	id: 'OptimiseSpacefinderInline',
 	author: '@commercial-dev',
 	start: '2024-08-08',
 	expiry: '2024-09-13',
