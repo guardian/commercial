@@ -1,5 +1,7 @@
 import { adSizes } from 'core';
 import { adSlotContainerClass } from 'core/create-ad-slot';
+import { isUserInVariant } from 'experiments/ab';
+import { optimiseSpacefinderInline } from 'experiments/tests/optimise-spacefinder-inline';
 import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
 import { isInHighValueSection } from './utils';
 
@@ -27,18 +29,20 @@ const minDistanceBetweenInlineAds = isInHighValueSection ? 500 : 750;
 
 const candidateSelector = ':scope > p, [data-spacefinder-role="nested"] > p';
 
+const leftColumnOpponentSelector = ['richLink', 'thumbnail']
+	.map((role) => `[data-spacefinder-role="${role}"]`)
+	.join(',');
 const rightColumnOpponentSelector = '[data-spacefinder-role="immersive"]';
-const inlineOpponentSelector = [
-	'inline',
-	'supporting',
-	'showcase',
-	'thumbnail',
-	'richLink',
-]
+const inlineOpponentSelector = ['inline', 'supporting', 'showcase']
 	.map((role) => `[data-spacefinder-role="${role}"]`)
 	.join(',');
 
 const headingSelector = `:scope > h2, [data-spacefinder-role="nested"] > h2, :scope > h3, [data-spacefinder-role="nested"] > h3`;
+
+const isInInlineSpacefinderOptimisationTest = isUserInVariant(
+	optimiseSpacefinderInline,
+	'variant',
+);
 
 const desktopInline1: SpacefinderRules = {
 	bodySelector,
@@ -57,11 +61,15 @@ const desktopInline1: SpacefinderRules = {
 		},
 		[inlineOpponentSelector]: {
 			marginBottom: 35,
-			marginTop: 400,
+			marginTop: isInInlineSpacefinderOptimisationTest ? 200 : 400,
+		},
+		[leftColumnOpponentSelector]: {
+			marginBottom: isInInlineSpacefinderOptimisationTest ? 0 : 35,
+			marginTop: isInInlineSpacefinderOptimisationTest ? 100 : 400,
 		},
 		[rightColumnOpponentSelector]: {
 			marginBottom: 0,
-			marginTop: 600,
+			marginTop: isInInlineSpacefinderOptimisationTest ? 150 : 600,
 		},
 		['[data-spacefinder-role="supporting"]']: {
 			marginBottom: 0,
