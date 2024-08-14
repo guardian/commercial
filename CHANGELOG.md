@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 20.5.0
+
+### Minor Changes
+
+- 89e83f2: Add a test for new spacefinder margin values
+
+### Patch Changes
+
+- 4419ab4: Add pageview id to video interscroller logs
+
 ## 20.4.0
 
 ### Minor Changes
