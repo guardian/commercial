@@ -127,7 +127,10 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 /**
  * Inserts all inline ads on desktop except for inline1.
  */
-const addDesktopRightRailAds = (fillSlot: FillAdSlot): Promise<boolean> => {
+const addDesktopRightRailAds = (
+	fillSlot: FillAdSlot,
+	isConsentless: boolean,
+): Promise<boolean> => {
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const stickyContainerHeights = await computeStickyHeights(
 			paras,
@@ -177,11 +180,15 @@ const addDesktopRightRailAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 		await Promise.all(slots);
 	};
 
-	return spaceFiller.fillSpace(rules.desktopRightRail, insertAds, {
-		waitForImages: true,
-		waitForInteractives: true,
-		pass: 'subsequent-inlines',
-	});
+	return spaceFiller.fillSpace(
+		rules.desktopRightRail(isConsentless),
+		insertAds,
+		{
+			waitForImages: true,
+			waitForInteractives: true,
+			pass: 'subsequent-inlines',
+		},
+	);
 };
 
 const addMobileTopAboveNav = (fillSlot: FillAdSlot): Promise<boolean> => {
@@ -249,13 +256,16 @@ const addFirstInlineAd = (fillSlot: FillAdSlot): Promise<boolean> => {
 	return addDesktopInline1(fillSlot);
 };
 
-const addSubsequentInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
+const addSubsequentInlineAds = (
+	fillSlot: FillAdSlot,
+	isConsentless: boolean,
+): Promise<boolean> => {
 	const isMobile = getCurrentBreakpoint() === 'mobile';
 	if (isMobile) {
 		return addMobileSubsequentInlineAds(fillSlot);
 	}
 
-	return addDesktopRightRailAds(fillSlot);
+	return addDesktopRightRailAds(fillSlot, isConsentless);
 };
 
 /**
@@ -269,7 +279,7 @@ const init = async (fillAdSlot: FillAdSlot): Promise<void> => {
 
 	await addFirstInlineAd(fillAdSlot);
 
-	await addSubsequentInlineAds(fillAdSlot);
+	await addSubsequentInlineAds(fillAdSlot, false);
 
 	await initCarrot();
 };

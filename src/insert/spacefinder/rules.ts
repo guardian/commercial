@@ -78,13 +78,13 @@ const desktopInline1: SpacefinderRules = {
 	},
 };
 
-const desktopRightRailMinAbove = () => {
+const desktopRightRailMinAbove = (isConsentless: boolean) => {
 	const base = 1000;
 	/**
 	 * In special cases, inline2 can overlap the "Most viewed" island, so
 	 * we need to make an adjustment to move the inline2 further down the page
 	 */
-	if (isPaidContent || !hasImages) {
+	if (isPaidContent || !hasImages || isConsentless) {
 		return base + MOST_VIEWED_HEIGHT;
 	}
 
@@ -94,31 +94,33 @@ const desktopRightRailMinAbove = () => {
 	return base;
 };
 
-const desktopRightRail: SpacefinderRules = {
-	bodySelector,
-	candidateSelector,
-	minDistanceFromTop: desktopRightRailMinAbove(),
-	minDistanceFromBottom: 300,
-	opponentSelectorRules: {
-		[rightColumnOpponentSelector]: {
-			marginBottom: 0,
-			marginTop: 600,
+const desktopRightRail = (isConsentless: boolean): SpacefinderRules => {
+	return {
+		bodySelector,
+		candidateSelector,
+		minDistanceFromTop: desktopRightRailMinAbove(isConsentless),
+		minDistanceFromBottom: 300,
+		opponentSelectorRules: {
+			[rightColumnOpponentSelector]: {
+				marginBottom: 0,
+				marginTop: 600,
+			},
 		},
-	},
-	/**
-	 * Filter out any candidates that are too close to the last winner
-	 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
-	 * for more information
-	 **/
-	filter: (candidate, lastWinner) => {
-		if (!lastWinner) {
-			return true;
-		}
-		const largestSizeForSlot = adSizes.halfPage.height;
-		const distanceBetweenAds =
-			candidate.top - lastWinner.top - largestSizeForSlot;
-		return distanceBetweenAds >= minDistanceBetweenRightRailAds;
-	},
+		/**
+		 * Filter out any candidates that are too close to the last winner
+		 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
+		 * for more information
+		 **/
+		filter: (candidate, lastWinner) => {
+			if (!lastWinner) {
+				return true;
+			}
+			const largestSizeForSlot = adSizes.halfPage.height;
+			const distanceBetweenAds =
+				candidate.top - lastWinner.top - largestSizeForSlot;
+			return distanceBetweenAds >= minDistanceBetweenRightRailAds;
+		},
+	};
 };
 
 const mobileMinDistanceFromArticleTop = 200;
