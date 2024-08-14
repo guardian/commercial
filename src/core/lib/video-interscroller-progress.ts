@@ -1,4 +1,5 @@
 import { EventTimer } from 'core/event-timer';
+import { checkConsent as checkConsentForReporting } from 'core/send-commercial-metrics';
 import { bypassMetricsSampling } from 'experiments/utils';
 
 const endpoint = window.guardian.config.page.isDev
@@ -12,6 +13,7 @@ const sendProgress = () => {
 	if (!creativeId || !progress) {
 		return;
 	}
+
 	void fetch(endpoint, {
 		method: 'POST',
 		body: JSON.stringify({
@@ -19,6 +21,10 @@ const sendProgress = () => {
 			properties: [
 				{ name: 'id', value: creativeId },
 				{ name: 'progress', value: progress },
+				{
+					name: 'pageviewId',
+					value: window.guardian.config.ophan.pageViewId,
+				},
 			],
 		}),
 		keepalive: true,
@@ -27,10 +33,14 @@ const sendProgress = () => {
 	});
 };
 
-const sendProgressOnUnloadViaLogs = () => {
-	window.addEventListener('visibilitychange', sendProgress, { once: true });
-	// Safari does not reliably fire the `visibilitychange` on page unload.
-	window.addEventListener('pagehide', sendProgress, { once: true });
+const sendProgressOnUnloadViaLogs = async () => {
+	if (await checkConsentForReporting()) {
+		window.addEventListener('visibilitychange', sendProgress, {
+			once: true,
+		});
+		// Safari does not reliably fire the `visibilitychange` on page unload.
+		window.addEventListener('pagehide', sendProgress, { once: true });
+	}
 };
 
 const initVideoProgressReporting = (gamCreativeId: number) => {
@@ -40,7 +50,7 @@ const initVideoProgressReporting = (gamCreativeId: number) => {
 
 	bypassMetricsSampling();
 
-	sendProgressOnUnloadViaLogs();
+	void sendProgressOnUnloadViaLogs();
 };
 
 const updateVideoProgress = (updatedProgress: number) => {
