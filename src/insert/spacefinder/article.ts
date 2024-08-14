@@ -258,31 +258,8 @@ const addSubsequentInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 	return addDesktopRightRailAds(fillSlot);
 };
 
-const attemptToAddInlineMerchAd = (
-	fillAdSlot: FillAdSlot,
-): Promise<boolean> => {
-	const insertAds: SpacefinderWriter = async (paras) => {
-		if (typeof paras[0] === 'undefined') {
-			throw new Error(
-				'Trying to insert inline merch before a node that does not exist',
-			);
-		}
-		const slot = await insertSlotAtPara(paras[0], 'im', 'im', '', {
-			className: 'ad-slot-container--im',
-		});
-
-		await fillAdSlot('im', slot);
-	};
-
-	return spaceFiller.fillSpace(rules.inlineMerchandising, insertAds, {
-		waitForImages: true,
-		waitForInteractives: true,
-		pass: 'im',
-	});
-};
-
 /**
- * Init all the article body adverts, including `im` and `carrot`
+ * Init all the article body adverts, including `carrot`
  * @param fillAdSlot a function to fill the ad slots
  */
 const init = async (fillAdSlot: FillAdSlot): Promise<void> => {
@@ -290,14 +267,8 @@ const init = async (fillAdSlot: FillAdSlot): Promise<void> => {
 		return Promise.resolve();
 	}
 
-	// We add the first inline ad before finding a place for an im so that the inline1 doesn't get pushed down
 	await addFirstInlineAd(fillAdSlot);
 
-	if (window.guardian.config.page.hasInlineMerchandise) {
-		await attemptToAddInlineMerchAd(fillAdSlot);
-	}
-
-	// Add the other inline slots after the im, so that there is space left for the im ad
 	await addSubsequentInlineAds(fillAdSlot);
 
 	await initCarrot();
