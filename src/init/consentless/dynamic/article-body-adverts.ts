@@ -24,7 +24,7 @@ const initArticleBodyAdverts = async (): Promise<void> => {
 	}
 
 	await addFirstInlineAd(fillConsentlessAdSlot).then(() =>
-		addSubsequentInlineAds(fillConsentlessAdSlot),
+		addSubsequentInlineAds(fillConsentlessAdSlot, true),
 	);
 };
 
