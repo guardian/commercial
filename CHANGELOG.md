@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 20.5.1
+
+### Patch Changes
+
+- 858ba65: Fix inline2 overlapping most viewed for consentless ads
+
 ## 20.5.0
 
 ### Minor Changes
