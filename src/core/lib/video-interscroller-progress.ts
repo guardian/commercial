@@ -1,3 +1,4 @@
+import { once } from 'lodash-es';
 import { EventTimer } from 'core/event-timer';
 import { checkConsent as checkConsentForReporting } from 'core/send-commercial-metrics';
 import { bypassMetricsSampling } from 'experiments/utils';
@@ -9,7 +10,7 @@ const endpoint = window.guardian.config.page.isDev
 let creativeId: number | undefined;
 let progress: number = 0;
 
-const sendProgress = () => {
+const sendProgress = once(() => {
 	if (!creativeId || !progress) {
 		return;
 	}
@@ -31,7 +32,7 @@ const sendProgress = () => {
 		cache: 'no-store',
 		mode: 'no-cors',
 	});
-};
+});
 
 const sendProgressOnUnloadViaLogs = async () => {
 	if (await checkConsentForReporting()) {
