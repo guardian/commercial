@@ -261,7 +261,7 @@ const initialise = (
 	const consentManagement = (): ConsentManagement => {
 		switch (framework) {
 			case 'aus':
-			case 'ccpa':
+			case 'usnat':
 				// https://docs.prebid.org/dev-docs/modules/consentManagementUsp.html
 				return {
 					usp: {
