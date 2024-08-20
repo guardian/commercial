@@ -31,7 +31,7 @@ const CcpaWithConsentMock = (callback: OnConsentChangeCallback) =>
 	callback({
 		ccpa: { doNotSell: false, signalStatus: 'ready' },
 		canTarget: true,
-		framework: 'ccpa',
+		framework: 'usnat',
 	});
 
 jest.mock('define/Advert', () =>

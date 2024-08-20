@@ -44,7 +44,7 @@ const ccpaWithConsent = {
 		signalStatus: 'ready',
 	},
 	canTarget: true,
-	framework: 'ccpa',
+	framework: 'usnat',
 } as ConsentState;
 
 const ccpaWithoutConsent = {
@@ -53,7 +53,7 @@ const ccpaWithoutConsent = {
 		signalStatus: 'ready',
 	},
 	canTarget: false,
-	framework: 'ccpa',
+	framework: 'usnat',
 } as ConsentState;
 
 const AusWithoutConsent = {

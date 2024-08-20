@@ -94,13 +94,13 @@ const tcfv2WithoutConsent = {
 const ccpaWithConsent = {
 	ccpa: { doNotSell: false, signalStatus: 'ready' },
 	canTarget: true,
-	framework: 'ccpa',
+	framework: 'usnat',
 } as ConsentState;
 
 const ccpaWithoutConsent = {
 	ccpa: { doNotSell: true, signalStatus: 'ready' },
 	canTarget: false,
-	framework: 'ccpa',
+	framework: 'usnat',
 } as ConsentState;
 
 const ausWithConsent = {

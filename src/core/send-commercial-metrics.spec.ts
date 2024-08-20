@@ -106,13 +106,13 @@ const tcfv2AllConsentExceptPurpose8: ConsentState = {
 const ccpaConsent: ConsentState = {
 	ccpa: { doNotSell: false, signalStatus: 'ready' },
 	canTarget: true,
-	framework: 'ccpa',
+	framework: 'usnat',
 };
 
 const ccpaNonConsent: ConsentState = {
 	ccpa: { doNotSell: true, signalStatus: 'ready' },
 	canTarget: false,
-	framework: 'ccpa',
+	framework: 'usnat',
 };
 
 const setVisibility = (value: 'hidden' | 'visible'): void => {

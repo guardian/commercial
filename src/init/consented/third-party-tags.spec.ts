@@ -198,7 +198,7 @@ describe('third party tags', () => {
 			mockOnConsent({
 				ccpa: { doNotSell: false, signalStatus: 'ready' },
 				canTarget: true,
-				framework: 'ccpa',
+				framework: 'usnat',
 			});
 			mockGetConsentFor(true);
 			await insertScripts(
@@ -211,7 +211,7 @@ describe('third party tags', () => {
 			mockOnConsent({
 				ccpa: { doNotSell: true, signalStatus: 'ready' },
 				canTarget: false,
-				framework: 'ccpa',
+				framework: 'usnat',
 			});
 			mockGetConsentFor(false);
 			await insertScripts(
