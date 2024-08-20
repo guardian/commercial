@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 20.6.0
+
+### Minor Changes
+
+- 2b58235: Enable interscroller ads in consentless advertising
+
+### Patch Changes
+
+- 0db47f2: Wrap interscroller progress callback with once
+
 ## 20.5.1
 
 ### Patch Changes
