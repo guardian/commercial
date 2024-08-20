@@ -95,8 +95,6 @@ afterEach(() => {
 	document.body.innerHTML = '';
 });
 
-jest.mock('@guardian/ophan-tracker-js', () => null);
-
 jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {
 		thirdPartyTags: true,

@@ -8,8 +8,6 @@ jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock('@guardian/ophan-tracker-js', () => null);
-
 jest.mock('core/ad-sizes', () => {
 	const adSizes: typeof AdSizesType = jest.requireActual('core/ad-sizes');
 	const slotSizeMappings = adSizes.slotSizeMappings;

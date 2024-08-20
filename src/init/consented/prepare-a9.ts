@@ -9,13 +9,14 @@ import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
 
 const shouldLoadA9 = () =>
 	// There are two articles that InfoSec would like to avoid loading scripts on
-	!commercialFeatures.isSecureContact &&
-	!isGoogleProxy() &&
-	window.guardian.config.switches.a9HeaderBidding &&
-	commercialFeatures.shouldLoadGoogletag &&
-	!commercialFeatures.adFree &&
-	!window.guardian.config.page.hasPageSkin &&
-	!isInCanada();
+	(!commercialFeatures.isSecureContact &&
+		!isGoogleProxy() &&
+		window.guardian.config.switches.a9HeaderBidding &&
+		commercialFeatures.shouldLoadGoogletag &&
+		!commercialFeatures.adFree &&
+		!window.guardian.config.page.hasPageSkin &&
+		!isInCanada()) ??
+	false;
 
 const setupA9 = (): Promise<void | boolean> => {
 	if (shouldLoadA9() || shouldIncludeOnlyA9) {

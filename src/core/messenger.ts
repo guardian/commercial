@@ -63,7 +63,7 @@ type ListenerCallback = (
 	 * predict what the iframe will send. It is the responsibility of the callback
 	 * to obtain a value of the desired type (or fail gracefully)
 	 */
-	specs: unknown | undefined,
+	specs: unknown,
 	/**
 	 * Non-persistent callbacks can be chained together. This value is the return
 	 * value of the previously fired callback in the chain. It is the responsibility

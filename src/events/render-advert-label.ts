@@ -7,15 +7,24 @@ import { getCookie } from '@guardian/libs';
 import fastdom from 'utils/fastdom-promise';
 import crossIcon from '../../static/svg/icon/cross.svg';
 
-const shouldRenderLabel = (adSlotNode: HTMLElement): boolean => {
+const templatesWithoutLabels = [
+	10077207, // CAPI_MULTIPLE_HOSTED
+	10069167, // CAPI_MULTIPLE_PAIDFOR
+	12317037, // EVENTS_MULTIPLE
+	10070487, // CAPI_SINGLE_PAIDFOR
+	10063287, // MANUAL_MULTIPLE
+];
+
+const shouldRenderLabel = (
+	adSlotNode: HTMLElement,
+	creativeTemplateId?: number,
+): boolean => {
 	if (
-		adSlotNode.classList.contains('ad-slot--fluid') &&
-		!adSlotNode.classList.contains('ad-slot--interscroller') &&
-		!adSlotNode.classList.contains('ad-slot--article-end')
+		creativeTemplateId &&
+		templatesWithoutLabels.includes(creativeTemplateId)
 	) {
 		return false;
 	}
-
 	if (
 		adSlotNode.classList.contains('ad-slot--frame') ||
 		adSlotNode.classList.contains('ad-slot--gc') ||
@@ -89,9 +98,12 @@ const createAdTestCookieRemovalLink = (): HTMLElement => {
 	return adTestCookieRemovalLink;
 };
 
-const renderAdvertLabel = (adSlotNode: HTMLElement): Promise<Promise<void>> => {
+const renderAdvertLabel = (
+	adSlotNode: HTMLElement,
+	creativeTemplateId?: number,
+): Promise<Promise<void>> => {
 	return fastdom.measure(() => {
-		if (shouldRenderLabel(adSlotNode)) {
+		if (shouldRenderLabel(adSlotNode, creativeTemplateId)) {
 			const renderAdTestLabel = shouldRenderAdTestLabel(adSlotNode);
 			const adTestClearExists =
 				adSlotNode.parentNode?.firstElementChild
@@ -165,4 +177,9 @@ const renderStickyScrollForMoreLabel = (
 		adSlotNode.appendChild(scrollForMoreLabel);
 	});
 
-export { renderAdvertLabel, renderStickyScrollForMoreLabel, shouldRenderLabel };
+export {
+	renderAdvertLabel,
+	renderStickyScrollForMoreLabel,
+	shouldRenderLabel,
+	templatesWithoutLabels,
+};

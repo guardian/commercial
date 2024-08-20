@@ -25,6 +25,7 @@ window.guardian = {
 	},
 	ophan: {
 		pageViewId: 'dummy_pvid_123456790',
+		record: jest.fn(),
 	},
 	css: {},
 	adBlockers: {

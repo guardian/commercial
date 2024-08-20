@@ -101,7 +101,6 @@ interface PageConfig extends CommercialPageConfig {
 	dcrCouldRender: boolean;
 	edition: Edition;
 	frontendAssetsFullURL?: string; // only in DCR
-	hasInlineMerchandise: boolean;
 	hasPageSkin: boolean; // https://github.com/guardian/frontend/blob/b952f6b9/common/app/views/support/JavaScriptPage.scala#L48
 	hasShowcaseMainElement: boolean;
 	headline: string;
@@ -145,13 +144,8 @@ interface PageConfig extends CommercialPageConfig {
 }
 
 interface Config {
+	commercialMetricsInitialised?: boolean;
 	frontendAssetsFullURL?: string;
-	googleAnalytics?: {
-		timingEvents?: GoogleTimingEvent[];
-		trackers?: {
-			editorial?: string;
-		};
-	};
 	isDotcomRendering: boolean;
 	ophan: {
 		// somewhat redundant with guardian.ophan
@@ -159,6 +153,7 @@ interface Config {
 		pageViewId: string;
 	};
 	page: PageConfig;
+	shouldSendCommercialMetrics?: boolean;
 	stage: Stage;
 	switches: Record<string, boolean | undefined>;
 	tests?: {
@@ -168,11 +163,24 @@ interface Config {
 	user?: UserConfig;
 }
 
+type OphanRecordFunction = (
+	event: Record<string, unknown> & {
+		/**
+		 * the experiences key will override previously set values.
+		 * Use `recordExperiences` instead.
+		 */
+		experiences?: never;
+	},
+	callback?: () => void,
+) => void;
 interface Ophan {
-	setEventEmitter: unknown;
-	trackComponentAttention: unknown;
-	record: (...args: unknown[]) => void;
-	viewId: unknown;
+	trackComponentAttention: (
+		name: string,
+		el: Element,
+		visiblityThreshold: number,
+	) => void;
+	record: OphanRecordFunction;
+	viewId: string;
 	pageViewId: string;
 }
 
@@ -320,6 +328,8 @@ interface OptOutInitializeOptions {
 	noLogging?: 0 | 1;
 	lazyLoading?: { fractionInView?: number; viewPortMargin?: string };
 	noRequestsOnPageLoad?: 0 | 1;
+	frequencyScript?: string;
+	debug_forceCap?: number;
 }
 
 interface OptOutResponse {
@@ -501,7 +511,6 @@ declare global {
 		nol_t: (pvar: { cid: string; content: string; server: string }) => Trac;
 
 		// Google
-		ga?: UniversalAnalytics.ga | null;
 		google_trackConversion?: (arg0: GoogleTrackConversionObject) => void;
 		google_tag_params?: GoogleTagParams;
 

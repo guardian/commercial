@@ -24,6 +24,7 @@ import type {
 	PrebidImproveParams,
 	PrebidIndexExchangeParams,
 	PrebidKargoParams,
+	PrebidMagniteParams,
 	PrebidOpenXParams,
 	PrebidOzoneParams,
 	PrebidPubmaticParams,
@@ -48,6 +49,7 @@ import {
 	shouldIncludeImproveDigital,
 	shouldIncludeImproveDigitalSkin,
 	shouldIncludeKargo,
+	shouldIncludeMagnite,
 	shouldIncludeOpenx,
 	shouldIncludeSmart,
 	shouldIncludeSonobi,
@@ -64,6 +66,7 @@ import {
 	getImproveSizeParam,
 	getImproveSkinPlacementId,
 } from './improve-digital';
+import { getMagniteSiteId, getMagniteZoneId } from './magnite';
 
 const isArticle = window.guardian.config.page.contentType === 'Article';
 const isDesktopAndArticle = getBreakpointKey() === 'D' && isArticle;
@@ -533,6 +536,20 @@ const kargoBidder: PrebidBidder = {
 	}),
 };
 
+const magniteBidder: PrebidBidder = {
+	//Rubicon is the old name for Magnite but it is still used for the integration
+	name: 'rubicon',
+	switchName: 'prebidMagnite',
+	bidParams: (
+		slotId: string,
+		sizes: HeaderBiddingSize[],
+	): PrebidMagniteParams => ({
+		accountId: 26644,
+		siteId: getMagniteSiteId(),
+		zoneId: getMagniteZoneId(slotId, sizes),
+	}),
+};
+
 // There's an IX bidder for every size that the slot can take
 const indexExchangeBidders = (
 	slotSizes: HeaderBiddingSize[],
@@ -577,6 +594,7 @@ const currentBidders = (
 		[shouldUseOzoneAdaptor(), ozoneClientSideBidder(pageTargeting)],
 		[shouldIncludeOpenx(), openxClientSideBidder(pageTargeting)],
 		[shouldIncludeKargo(), kargoBidder],
+		[shouldIncludeMagnite(), magniteBidder],
 	];
 
 	const otherBidders = biddersToCheck

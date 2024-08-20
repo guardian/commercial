@@ -39,6 +39,10 @@ const defineSlot = (
 			slot.classList.add('ad-slot--native');
 		}
 
+		if (optOutExt.tags.includes('HOSTEDBY')) {
+			slot.classList.add('ad-slot--hostedby');
+		}
+
 		void renderConsentlessAdvertLabel(slot);
 	};
 

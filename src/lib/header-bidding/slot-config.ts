@@ -30,7 +30,7 @@ const getHbBreakpoint = () => {
  * (this does not include inline1)
  */
 const filterBySizeMapping =
-	(slotSizes: Readonly<AdSize[]> = []) =>
+	(slotSizes: readonly AdSize[] = []) =>
 	({ key, sizes }: HeaderBiddingSlot): HeaderBiddingSlot => {
 		// For now, only apply filtering to inline header bidding slots
 		// In the future we may want to expand this to all slots
@@ -149,7 +149,7 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 						adSizes.outstreamMobile,
 						adSizes.mpu,
 						adSizes.portraitInterstitial,
-				  ]
+					]
 				: [adSizes.mpu],
 		},
 		inline2: {
@@ -188,7 +188,9 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 			],
 		},
 		'mobile-sticky': {
-			mobile: shouldIncludeMobileSticky() ? [adSizes.mobilesticky] : [],
+			mobile: shouldIncludeMobileSticky()
+				? [adSizes.mobilesticky, createAdSize(300, 50)]
+				: [],
 		},
 		'crossword-banner': {
 			desktop: isCrossword ? [adSizes.leaderboard] : [],

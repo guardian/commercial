@@ -48,7 +48,8 @@ const setupComscore = async (): Promise<void> => {
 		TODO move this logic to getConsentFor
 		*/
 		const canRunTcfv2 =
-			consentState.tcfv2 && getConsentFor('comscore', consentState);
+			(consentState.tcfv2 && getConsentFor('comscore', consentState)) ??
+			false;
 		const canRunAus = !!consentState.aus;
 		const canRunCcpa = !!consentState.ccpa && !consentState.ccpa.doNotSell;
 

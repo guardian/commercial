@@ -1,6 +1,6 @@
 import { createAdSize } from 'core/ad-sizes';
 import type { PageTargeting } from 'core/targeting/build-page-targeting';
-import { isInVariantSynchronous as isInVariantSynchronous_ } from 'experiments/ab';
+import { isUserInVariant as isUserInVariant_ } from 'experiments/ab';
 import config from 'lib/config';
 import {
 	isInAuOrNz as isInAuOrNz_,
@@ -75,7 +75,7 @@ const shouldIncludeTripleLift = shouldIncludeTripleLift_ as jest.Mock;
 const shouldIncludeCriteo = shouldIncludeCriteo_ as jest.Mock;
 const stripMobileSuffix = stripMobileSuffix_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
-const isInVariantSynchronous = isInVariantSynchronous_ as jest.Mock;
+const isUserInVariant = isUserInVariant_ as jest.Mock;
 
 jest.mock('utils/geo-utils');
 const isInAuOrNz = isInAuOrNz_ as jest.Mock;
@@ -85,7 +85,7 @@ const isInUsOrCa = isInUsOrCa_ as jest.Mock;
 const isInUsa = isInUsa_ as jest.Mock;
 
 jest.mock('experiments/ab', () => ({
-	isInVariantSynchronous: jest.fn(),
+	isUserInVariant: jest.fn(),
 }));
 
 jest.mock('lib/cookies', () => ({
@@ -99,8 +99,7 @@ const resetConfig = () => {
 		record: () => {
 			// do nothing;
 		},
-		setEventEmitter: null,
-		trackComponentAttention: null,
+		trackComponentAttention: jest.fn(),
 	};
 	window.guardian.config.switches = {
 		prebidAppnexus: true,
@@ -325,7 +324,7 @@ describe('bids', () => {
 
 	test('should only include multiple bidders being tested, even when their switches are off', () => {
 		setQueryString('pbtest=xhb&pbtest=sonobi');
-		isInVariantSynchronous.mockImplementation(
+		isUserInVariant.mockImplementation(
 			(testId, variantId) => variantId === 'variant',
 		);
 		window.guardian.config.switches.prebidXaxis = false;

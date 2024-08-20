@@ -38,7 +38,7 @@ const isInUk = isInUk_ as jest.Mock;
 const isInUsa = isInUsa_ as jest.Mock;
 
 jest.mock('experiments/ab', () => ({
-	isInVariantSynchronous: jest.fn(),
+	isUserInVariant: jest.fn(),
 }));
 
 jest.mock('lib/cookies', () => ({
@@ -52,8 +52,7 @@ const resetConfig = () => {
 		record: () => {
 			// do nothing;
 		},
-		setEventEmitter: null,
-		trackComponentAttention: null,
+		trackComponentAttention: () => {},
 	};
 	window.guardian.config.switches = {
 		prebidAppnexus: true,

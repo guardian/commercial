@@ -52,7 +52,6 @@ let commercialMetricsPayload: CommercialMetricsPayload = {
 
 let devProperties: Property[] | [] = [];
 let adBlockerProperties: Property[] | [] = [];
-let initialised = false;
 let endpoint: Endpoints;
 
 const setEndpoint = (isDev: boolean) =>
@@ -71,7 +70,7 @@ const setAdBlockerProperties = (adBlockerInUse?: boolean): void => {
 						name: 'adBlockerInUse',
 						value: adBlockerInUse.toString(),
 					},
-			  ]
+				]
 			: [];
 };
 
@@ -142,7 +141,7 @@ const getOfflineCount = (): Metric[] =>
 					name: 'offlineCount',
 					value: window.guardian.offlineCount,
 				},
-		  ]
+			]
 		: [];
 
 /**
@@ -186,15 +185,17 @@ function gatherMetricsOnPageUnload(): void {
 }
 
 const listener = (e: Event): void => {
-	switch (e.type) {
-		case 'visibilitychange':
-			if (document.visibilityState === 'hidden') {
+	if (window.guardian.config.shouldSendCommercialMetrics === true) {
+		switch (e.type) {
+			case 'visibilitychange':
+				if (document.visibilityState === 'hidden') {
+					gatherMetricsOnPageUnload();
+				}
+				return;
+			case 'pagehide':
 				gatherMetricsOnPageUnload();
-			}
-			return;
-		case 'pagehide':
-			gatherMetricsOnPageUnload();
-			return;
+				return;
+		}
 	}
 };
 
@@ -225,7 +226,7 @@ const checkConsent = async (): Promise<boolean> => {
  * A method to asynchronously send metrics after initialization.
  */
 async function bypassCommercialMetricsSampling(): Promise<void> {
-	if (!initialised) {
+	if (!window.guardian.config.commercialMetricsInitialised) {
 		console.warn('initCommercialMetrics not yet initialised');
 		return;
 	}
@@ -233,7 +234,7 @@ async function bypassCommercialMetricsSampling(): Promise<void> {
 	const consented = await checkConsent();
 
 	if (consented) {
-		addVisibilityListeners();
+		window.guardian.config.shouldSendCommercialMetrics = true;
 	} else {
 		log('commercial', "Metrics won't be sent because consent wasn't given");
 	}
@@ -268,19 +269,20 @@ async function initCommercialMetrics({
 	setEndpoint(isDev);
 	setDevProperties(isDev);
 	setAdBlockerProperties(adBlockerInUse);
+	addVisibilityListeners();
 
-	if (initialised) {
+	if (window.guardian.config.commercialMetricsInitialised) {
 		return false;
 	}
 
-	initialised = true;
+	window.guardian.config.commercialMetricsInitialised = true;
 
 	const userIsInSamplingGroup = Math.random() <= sampling;
 
 	if (isDev || userIsInSamplingGroup) {
 		const consented = await checkConsent();
 		if (consented) {
-			addVisibilityListeners();
+			window.guardian.config.shouldSendCommercialMetrics = true;
 			return true;
 		}
 		log('commercial', "Metrics won't be sent because consent wasn't given");
@@ -296,7 +298,8 @@ export const _ = {
 	roundTimeStamp,
 	transformToObjectEntries,
 	reset: (): void => {
-		initialised = false;
+		window.guardian.config.commercialMetricsInitialised = false;
+		window.guardian.config.shouldSendCommercialMetrics = false;
 		commercialMetricsPayload = {
 			page_view_id: undefined,
 			browser_id: undefined,
@@ -310,4 +313,4 @@ export const _ = {
 };
 
 export type { Property, TimedEvent, Metric };
-export { bypassCommercialMetricsSampling, initCommercialMetrics };
+export { bypassCommercialMetricsSampling, initCommercialMetrics, checkConsent };

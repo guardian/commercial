@@ -3,18 +3,18 @@
 import { log } from '@guardian/libs';
 import { memoize } from 'lodash-es';
 import fastdom from 'utils/fastdom-promise';
-import { init as initSpacefinderDebugger } from './spacefinder-debug-tools';
+import { getUrlVars } from 'utils/url';
 
 type RuleSpacing = {
 	/**
-	 * Minimum distance between an ad and the element, where the element is above the ad
+	 * Don't place an ad closer than this to the bottom of the opponent
 	 */
-	minAboveSlot: number;
+	marginBottom: number;
 	/**
-	 * Minimum distance between an ad and the element, where the element is below the ad
+	 * Don't place an ad closer than this to the top of the opponent
 	 */
-	minBelowSlot: number;
-	bypassMinBelow?: string;
+	marginTop: number;
+	bypassMinTop?: string;
 };
 
 type SpacefinderMetaItem = {
@@ -33,6 +33,8 @@ type SpacefinderItem = {
 	};
 };
 
+type OpponentSelectorRules = Record<string, RuleSpacing>;
+
 type SpacefinderRules = {
 	bodySelector: string;
 	body?: HTMLElement | Document;
@@ -43,15 +45,15 @@ type SpacefinderRules = {
 	/**
 	 * Minimum distance from slot to top of page
 	 */
-	absoluteMinAbove?: number;
+	absoluteMinDistanceFromTop?: number;
 	/**
 	 * Minimum distance from paragraph to top of article
 	 */
-	minAbove: number;
+	minDistanceFromTop: number;
 	/**
 	 * Minimum distance from (top of) paragraph to bottom of article
 	 */
-	minBelow: number;
+	minDistanceFromBottom: number;
 	/**
 	 * Vertical px to clear the content meta element (byline etc) by. 0 to ignore.
 	 * used for carrot ads
@@ -60,10 +62,10 @@ type SpacefinderRules = {
 	/**
 	 * This is a map of selectors to rules. Each selector will be used to find opponents
 	 * which are elements that we want to avoid placing ads too close to. If the opponent
-	 * is too close to a candidate by the specified minAboveSlot or minBelowSlot, the
+	 * is too close to a candidate by the specified marginTop or marginBottom, the
 	 * candidate will be excluded.
 	 */
-	opponentSelectorRules?: Record<string, RuleSpacing>;
+	opponentSelectorRules?: OpponentSelectorRules;
 	/**
 	 * Will run each slot through this fn to check if it must be counted in
 	 */
@@ -89,7 +91,6 @@ type SpacefinderPass =
 	| 'mobile-top-above-nav'
 	| 'subsequent-inlines'
 	| 'mobile-subsequent-inlines'
-	| 'im'
 	| 'carrot';
 
 type SpacefinderOptions = {
@@ -255,11 +256,11 @@ const partitionCandidates = <T>(
  *                    │ │ Candidate│ │                    │            │ │ Opponent |
  *       opponent.top │ │          │ │                    candidate.top│ │          │
  *                    │ └──────────┘ ▼                    │            │ └──────────┘
- *                    │           ▲                       │            │
- *                    │           │ minBelow              │            │  ───────────
- *                    │           ▼                       │            │           ▲
- *                    │ ────────────                      │            │           │ minAbove
- *                    │                                   │            │           ▼
+ *                    │                                   │            │           ▲
+ *                    │ ────────────                      │            │           │ marginBottom
+ *                    │           ▲                       │            │           ▼
+ *                    │           │ marginTop             │            │  ───────────
+ *                    │           ▼                       │            │
  * (insertion point)  ▼ ┌──────────┐                      │            ▼ ┌──────────┐
  *                      │          │                      │              │          │
  *                      │ Opponent |                      │              │ Candidate│
@@ -276,18 +277,15 @@ const isTopOfCandidateFarEnoughFromOpponent = (
 ): boolean => {
 	const potentialInsertPosition = candidate.top;
 
-	if (isOpponentBelow && rule.minBelowSlot) {
-		if (
-			rule.bypassMinBelow &&
-			candidate.element.matches(rule.bypassMinBelow)
-		) {
+	if (isOpponentBelow && rule.marginTop) {
+		if (rule.bypassMinTop && candidate.element.matches(rule.bypassMinTop)) {
 			return true;
 		}
-		return opponent.top - potentialInsertPosition >= rule.minBelowSlot;
+		return opponent.top - potentialInsertPosition >= rule.marginTop;
 	}
 
-	if (!isOpponentBelow && rule.minAboveSlot) {
-		return potentialInsertPosition - opponent.bottom >= rule.minAboveSlot;
+	if (!isOpponentBelow && rule.marginBottom) {
+		return potentialInsertPosition - opponent.bottom >= rule.marginBottom;
 	}
 
 	// if no rule is set (or they're 0), return true
@@ -318,9 +316,9 @@ const testCandidate = (
 	}
 
 	const isOpponentBelow =
-		opponent.bottom > candidate.bottom && opponent.top > candidate.bottom;
+		opponent.bottom > candidate.bottom && opponent.top >= candidate.bottom;
 	const isOpponentAbove =
-		opponent.top < candidate.top && opponent.bottom < candidate.top;
+		opponent.top < candidate.top && opponent.bottom <= candidate.top;
 
 	// this can happen when the an opponent like an image or interactive is floated right
 	const opponentOverlaps =
@@ -344,8 +342,8 @@ const testCandidate = (
 		} else {
 			// if the test fails, add debug information to the candidate metadata
 			const required = isOpponentBelow
-				? rule.minBelowSlot
-				: rule.minAboveSlot;
+				? rule.marginTop
+				: rule.marginBottom;
 			const actual = isOpponentBelow
 				? opponent.top - candidate.top
 				: candidate.top - opponent.bottom;
@@ -378,21 +376,24 @@ const enforceRules = (
 ) => {
 	let candidates = measurements.candidates;
 
-	// enforce absoluteMinAbove rule
+	// enforce absoluteMinDistanceFromTop rule
 	let [filtered, exclusions] = partitionCandidates(
 		candidates,
 		(candidate) =>
-			!rules.absoluteMinAbove ||
-			candidate.top + measurements.bodyTop >= rules.absoluteMinAbove,
+			!rules.absoluteMinDistanceFromTop ||
+			candidate.top + measurements.bodyTop >=
+				rules.absoluteMinDistanceFromTop,
 	);
-	spacefinderExclusions.absoluteMinAbove = exclusions;
+	spacefinderExclusions.absoluteMinDistanceFromTop = exclusions;
 	candidates = filtered;
 
 	// enforce minAbove and minBelow rules
 	[filtered, exclusions] = partitionCandidates(candidates, (candidate) => {
-		const farEnoughFromTopOfBody = candidate.top >= rules.minAbove;
+		const farEnoughFromTopOfBody =
+			candidate.top >= rules.minDistanceFromTop;
 		const farEnoughFromBottomOfBody =
-			candidate.top + rules.minBelow <= measurements.bodyHeight;
+			candidate.top + rules.minDistanceFromBottom <=
+			measurements.bodyHeight;
 		return farEnoughFromTopOfBody && farEnoughFromBottomOfBody;
 	});
 	spacefinderExclusions.aboveAndBelow = exclusions;
@@ -531,12 +532,12 @@ const getMeasurements = (
 	candidates: HTMLElement[],
 ): Promise<Measurements> => {
 	const contentMeta = rules.clearContentMeta
-		? document.querySelector<HTMLElement>('.js-content-meta') ?? undefined
+		? (document.querySelector<HTMLElement>('.js-content-meta') ?? undefined)
 		: undefined;
 	const opponents = rules.opponentSelectorRules
 		? Object.keys(rules.opponentSelectorRules).map(
 				(selector) => [selector, query(selector, rules.body)] as const,
-		  )
+			)
 		: [];
 
 	return fastdom.measure((): Measurements => {
@@ -578,10 +579,9 @@ const findSpace = async (
 	exclusions: SpacefinderExclusions = {},
 ): Promise<HTMLElement[]> => {
 	options = { ...defaultOptions, ...options };
-	rules.body =
-		(rules.bodySelector &&
-			document.querySelector<HTMLElement>(rules.bodySelector)) ||
-		document;
+	rules.body = rules.bodySelector
+		? (document.querySelector<HTMLElement>(rules.bodySelector) ?? document)
+		: document;
 
 	window.performance.mark('commercial:spacefinder:findSpace:start');
 
@@ -591,7 +591,14 @@ const findSpace = async (
 	const measurements = await getMeasurements(rules, candidates);
 	const winners = enforceRules(measurements, rules, exclusions);
 
-	initSpacefinderDebugger(exclusions, winners, rules, options.pass);
+	const enableDebug = !!getUrlVars().sfdebug;
+
+	if (enableDebug) {
+		const pass = options.pass;
+		void import('./spacefinder-debug-tools').then(({ init }) => {
+			init(exclusions, winners, rules, pass);
+		});
+	}
 
 	window.performance.mark('commercial:spacefinder:findSpace:end');
 
@@ -624,6 +631,7 @@ export { findSpace, SpaceError };
 
 export type {
 	RuleSpacing,
+	OpponentSelectorRules,
 	SpacefinderRules,
 	SpacefinderWriter,
 	SpacefinderOptions,

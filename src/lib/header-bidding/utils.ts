@@ -104,6 +104,10 @@ export const containsLeaderboardOrBillboard = (
 	sizes: HeaderBiddingSize[],
 ): boolean => containsLeaderboard(sizes) || containsBillboard(sizes);
 
+export const containsPortraitInterstitial = (
+	sizes: HeaderBiddingSize[],
+): boolean => contains(sizes, createAdSize(320, 480));
+
 export const getLargestSize = (
 	sizes: HeaderBiddingSize[],
 ): HeaderBiddingSize | null => {
@@ -170,7 +174,7 @@ export const shouldUseOzoneAdaptor = (): boolean =>
 
 export const shouldIncludeAppNexus = (): boolean =>
 	isInAuOrNz() ||
-	(window.guardian.config.switches.prebidAppnexusUkRow && !isInUsOrCa()) ||
+	(!!window.guardian.config.switches.prebidAppnexusUkRow && !isInUsOrCa()) ||
 	!!pbTestNameMap().and;
 
 export const shouldIncludeXaxis = (): boolean => isInUk();
@@ -193,6 +197,9 @@ export const shouldIncludeCriteo = (): boolean => !isInAuOrNz();
 export const shouldIncludeSmart = (): boolean => isInUk() || isInRow();
 
 export const shouldIncludeKargo = (): boolean => isInUsa();
+
+export const shouldIncludeMagnite = (): boolean =>
+	!!window.guardian.config.switches.prebidMagnite;
 
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>

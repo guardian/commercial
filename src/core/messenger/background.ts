@@ -1,7 +1,9 @@
 import { isObject } from '@guardian/libs';
-import { EventTimer } from 'core/event-timer';
+import {
+	initVideoProgressReporting,
+	updateVideoProgress,
+} from 'core/lib/video-interscroller-progress';
 import type { RegisterListener } from 'core/messenger';
-import { bypassCommercialMetricsSampling } from 'core/send-commercial-metrics';
 import fastdom from 'utils/fastdom-promise';
 import {
 	renderAdvertLabel,
@@ -184,6 +186,8 @@ const setupBackground = async (
 		specs.scrollType,
 	);
 
+	const interscrollerTemplateId = 11885667;
+
 	return fastdom.mutate(() => {
 		setBackgroundStyles(specs, background);
 
@@ -208,9 +212,10 @@ const setupBackground = async (
 				adSlot.style.height = '85vh';
 				adSlot.style.marginBottom = '12px';
 				adSlot.style.position = 'relative';
+				adSlot.style.width = '100%';
 			}
 
-			void renderAdvertLabel(adSlot);
+			void renderAdvertLabel(adSlot, interscrollerTemplateId);
 			void renderStickyScrollForMoreLabel(backgroundParent);
 
 			isDCR && renderBottomLine(background, backgroundParent);
@@ -239,7 +244,10 @@ const setupBackground = async (
 						const creativeTemplateId =
 							slot.getResponseInformation()?.creativeTemplateId;
 						if (creativeTemplateId === 11885667) {
-							return slot.getResponseInformation()?.creativeId;
+							return (
+								slot.getResponseInformation()?.creativeId ??
+								undefined
+							);
 						}
 					}
 					return undefined;
@@ -263,21 +271,17 @@ const setupBackground = async (
 
 				observer.observe(backgroundParent);
 
-				EventTimer.get().setProperty(
-					'videoInterscrollerCreativeId',
-					getCreativeId(),
-				);
+				const creativeId = getCreativeId();
 
-				void bypassCommercialMetricsSampling();
+				if (creativeId) {
+					initVideoProgressReporting(creativeId);
+				}
 
 				video.ontimeupdate = function () {
 					const percent = Math.round(
 						100 * (video.currentTime / video.duration),
 					);
-					EventTimer.get().setProperty(
-						'videoInterscrollerPercentageProgress',
-						percent,
-					);
+					updateVideoProgress(percent);
 				};
 			}
 		} else {
