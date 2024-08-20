@@ -5,7 +5,7 @@ import { init as initHighMerch } from 'insert/high-merch';
 import { init as initMobileCrosswordsAdvert } from 'insert/mobile-crossword-banner';
 import { init as initMobileSticky } from 'insert/mobile-sticky';
 import { init as initLiveblogAdverts } from 'insert/spacefinder/liveblog-adverts';
-import { reportError } from 'utils/report-error';
+// import { reportError } from 'utils/report-error';
 import { initArticleBodyAdverts } from './article-body-adverts';
 
 type Modules = Array<[`${string}-${string}`, () => Promise<unknown>]>;
@@ -27,10 +27,18 @@ export const initDynamicAdSlots = async (): Promise<void> => {
 			try {
 				await init();
 			} catch (error) {
-				reportError(error, {
-					feature: 'commercial',
-					tag: name,
-				});
+				if (window.guardian?.modules?.sentry?.reportError) {
+					window.guardian.modules.sentry.reportError(
+						error,
+						'commercial',
+					);
+				} else {
+					console.error('Error reporting is not available:', error);
+				}
+				// reportError(error, {
+				// 	feature: 'commercial',
+				// 	tag: name,
+				// });
 			}
 		}),
 	);

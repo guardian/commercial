@@ -42,11 +42,22 @@ const addCookie = (name, value, daysToLive, isCrossSubdomain = false) => {
 	const expires = new Date();
 
 	if (!isValidCookieValue(name) || !isValidCookieValue(value)) {
-		reportError(
-			new Error(`${ERR_INVALID_COOKIE_NAME} .${name}=${value}`),
-			{},
-			false,
-		);
+		if (window.guardian?.modules?.sentry?.reportError) {
+			window.guardian.modules.sentry.reportError(
+				new Error(`${ERR_INVALID_COOKIE_NAME} .${name}=${value}`),
+				'commercial',
+			);
+		} else {
+			console.error(
+				'Error reporting is not available:',
+				new Error(`${ERR_INVALID_COOKIE_NAME} .${name}=${value}`),
+			);
+		}
+		// reportError(
+		// 	new Error(`${ERR_INVALID_COOKIE_NAME} .${name}=${value}`),
+		// 	{},
+		// 	false,
+		// );
 	}
 
 	if (daysToLive) {

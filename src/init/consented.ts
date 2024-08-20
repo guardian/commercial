@@ -19,7 +19,7 @@ import { init as setAdTestInLabelsCookie } from 'init/shared/set-adtest-in-label
 import { init as prepareAdVerification } from 'lib/ad-verification/prepare-ad-verification';
 import { commercialFeatures } from 'lib/commercial-features';
 import { adSlotIdPrefix } from 'lib/dfp/dfp-env-globals';
-import { reportError } from 'utils/report-error';
+// import { reportError } from 'utils/report-error';
 import { catchErrorsWithContext } from 'utils/robust';
 import { initDfpListeners } from './consented/dfp-listeners';
 import { initDynamicAdSlots } from './consented/dynamic-ad-slots';
@@ -150,7 +150,15 @@ const bootCommercial = async (): Promise<void> => {
 		await Promise.all(promises).then(recordCommercialMetrics);
 	} catch (error) {
 		// report async errors in bootCommercial to Sentry with the commercial feature tag
-		reportError(error, tags, false);
+		if (window.guardian?.modules?.sentry?.reportError) {
+			window.guardian.modules.sentry.reportError(
+				error,
+				'consented-commercial',
+			);
+		} else {
+			console.error('Error reporting is not available:', error);
+		}
+		// reportError(error, tags, false);
 	}
 };
 

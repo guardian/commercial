@@ -1,7 +1,7 @@
 import { adSizes } from 'core/ad-sizes';
 import { $$ } from 'utils/$$';
 import fastdom from 'utils/fastdom-promise';
-import { reportError } from 'utils/report-error';
+// import { reportError } from 'utils/report-error';
 import type { Advert } from '../define/Advert';
 import { getAdIframe } from '../lib/dfp/get-ad-iframe';
 import { renderAdvertLabel } from './render-advert-label';
@@ -173,7 +173,18 @@ const addContainerClass = (adSlotNode: HTMLElement, isRendered: boolean) => {
 			}
 		});
 };
-
+//Just a local test to check function from window.guardian.modules.sentry
+if (process.env.NODE_ENV !== 'production') {
+	try {
+		throw new Error('>>>>Test error for sentry');
+	} catch (err) {
+		if (window.guardian?.modules?.sentry?.reportError) {
+			window.guardian.modules.sentry.reportError(err, 'test-feature');
+		} else {
+			console.error('>>>>Error reporting is not available:', err);
+		}
+	}
+}
 /**
  * @param advert - as defined in lib/dfp/Advert
  * @param slotRenderEndedEvent - GPT slotRenderEndedEvent
@@ -184,7 +195,7 @@ const renderAdvert = (
 	slotRenderEndedEvent: googletag.events.SlotRenderEndedEvent,
 ): Promise<boolean> => {
 	addContentClass(advert.node);
-
+	console.log('renderAdvert', window.guardian.modules.sentry);
 	return getAdIframe(advert.node)
 		.then((isRendered) => {
 			const creativeTemplateId =
@@ -222,14 +233,11 @@ const renderAdvert = (
 				.then(() => isRendered);
 		})
 		.catch((err) => {
-			reportError(
-				err,
-				{
-					feature: 'commercial',
-				},
-				false,
-			);
-
+			if (window.guardian?.modules?.sentry?.reportError) {
+				window.guardian.modules.sentry.reportError(err, 'commercial');
+			} else {
+				console.error('Error reporting is not available:', err);
+			}
 			return Promise.resolve(false);
 		});
 };

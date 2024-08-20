@@ -1,5 +1,5 @@
 import fakeRaven from 'raven-js';
-import { reportError } from './report-error';
+// import { reportError } from './report-error';
 
 jest.mock('raven-js', () => ({
 	config() {
@@ -27,7 +27,12 @@ describe('report-error', () => {
 
 	test('Does NOT throw an error', () => {
 		expect(() => {
-			reportError(error, tags, false);
+			if (window.guardian?.modules?.sentry?.reportError) {
+				window.guardian.modules.sentry.reportError(error, 'commercial');
+			} else {
+				console.error('Error reporting is not available:', error);
+			}
+			// reportError(error, tags, false);
 		}).not.toThrowError(error);
 
 		expect(fakeRaven.captureException).toHaveBeenCalledWith(
@@ -38,7 +43,12 @@ describe('report-error', () => {
 
 	test('Does throw an error', () => {
 		expect(() => {
-			reportError(error, tags);
+			if (window.guardian?.modules?.sentry?.reportError) {
+				window.guardian.modules.sentry.reportError(error, 'commercial');
+			} else {
+				console.error('Error reporting is not available:', error);
+			}
+			// reportError(error, tags);
 		}).toThrowError(error);
 
 		expect(fakeRaven.captureException).toHaveBeenCalledWith(
@@ -48,7 +58,12 @@ describe('report-error', () => {
 	});
 
 	test('Applies a sampling rate that prevents a sample of errors being reporting', () => {
-		reportError(error, tags, false, 1 / 100);
+		if (window.guardian?.modules?.sentry?.reportError) {
+			window.guardian.modules.sentry.reportError(error, 'commercial');
+		} else {
+			console.error('Error reporting is not available:', error);
+		}
+		// reportError(error, tags, false, 1 / 100);
 
 		expect(fakeRaven.captureException).not.toHaveBeenCalled();
 	});

@@ -1,6 +1,6 @@
 import { log } from '@guardian/libs';
 import type { SizeMapping } from 'core/ad-sizes';
-import { reportError } from 'utils/report-error';
+// import { reportError } from 'utils/report-error';
 import type { Advert } from '../define/Advert';
 import { createAdvert } from '../define/create-advert';
 import { enableLazyLoad } from '../display/lazy-load';
@@ -29,14 +29,25 @@ const fillDynamicAdSlot = (
 			if (dfpEnv.adverts.has(adSlot.id)) {
 				const errorMessage = `Attempting to add slot with exisiting id ${adSlot.id}`;
 				log('commercial', errorMessage);
-				reportError(
-					Error(errorMessage),
-					{
-						feature: 'commercial',
-						slotId: adSlot.id,
-					},
-					false,
-				);
+				if (window.guardian?.modules?.sentry?.reportError) {
+					window.guardian.modules.sentry.reportError(
+						Error(errorMessage),
+						'commercial',
+					);
+				} else {
+					console.error(
+						'Error reporting is not available:',
+						Error(errorMessage),
+					);
+				}
+				// reportError(
+				// 	Error(errorMessage),
+				// 	{
+				// 		feature: 'commercial',
+				// 		slotId: adSlot.id,
+				// 	},
+				// 	false,
+				// );
 
 				return;
 			}
