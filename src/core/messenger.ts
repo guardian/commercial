@@ -374,9 +374,17 @@ const onMessage = async (event: MessageEvent): Promise<void> => {
 				respond(message.id, event.source, null, response);
 			})
 			.catch((ex: Error) => {
-				reportError(ex, {
-					feature: 'native-ads',
-				});
+				if (window.guardian?.modules?.sentry?.reportError) {
+					window.guardian.modules.sentry.reportError(
+						ex,
+						'native-ads',
+					);
+				} else {
+					console.error('Error reporting is not available:', ex);
+				}
+				// reportError(ex, {
+				// 	feature: 'native-ads',
+				// });
 				respond(
 					message.id,
 					event.source,
