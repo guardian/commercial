@@ -212,6 +212,7 @@ const setupBackground = async (
 				adSlot.style.height = '85vh';
 				adSlot.style.marginBottom = '12px';
 				adSlot.style.position = 'relative';
+				adSlot.style.width = '100%';
 			}
 
 			void renderAdvertLabel(adSlot, interscrollerTemplateId);
