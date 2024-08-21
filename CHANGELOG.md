@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 20.6.2
+
+### Patch Changes
+
+- a3000d6: Add Spacefinder test to test array
+
 ## 20.6.1
 
 ### Patch Changes
