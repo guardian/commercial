@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 20.6.1
+
+### Patch Changes
+
+- 13db71f: Update intercsroller progress tracking
+
 ## 20.6.0
 
 ### Minor Changes
