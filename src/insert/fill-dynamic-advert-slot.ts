@@ -29,25 +29,10 @@ const fillDynamicAdSlot = (
 			if (dfpEnv.adverts.has(adSlot.id)) {
 				const errorMessage = `Attempting to add slot with exisiting id ${adSlot.id}`;
 				log('commercial', errorMessage);
-				if (window.guardian?.modules?.sentry?.reportError) {
-					window.guardian.modules.sentry.reportError(
-						Error(errorMessage),
-						'commercial',
-					);
-				} else {
-					console.error(
-						'Error reporting is not available:',
-						Error(errorMessage),
-					);
-				}
-				// reportError(
-				// 	Error(errorMessage),
-				// 	{
-				// 		feature: 'commercial',
-				// 		slotId: adSlot.id,
-				// 	},
-				// 	false,
-				// );
+				window.guardian.modules.sentry.reportError(
+					Error(errorMessage),
+					'commercial',
+				);
 
 				return;
 			}

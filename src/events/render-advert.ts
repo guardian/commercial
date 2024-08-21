@@ -183,11 +183,7 @@ if (process.env.NODE_ENV !== 'production') {
 	try {
 		throw new Error('>>>>Test error for sentry');
 	} catch (err) {
-		if (window.guardian?.modules?.sentry?.reportError) {
-			window.guardian.modules.sentry.reportError(err, 'test-feature');
-		} else {
-			console.error('>>>>Error reporting is not available:', err);
-		}
+		window.guardian.modules.sentry.reportError(err, 'test-feature');
 	}
 }
 /**
@@ -200,7 +196,6 @@ const renderAdvert = (
 	slotRenderEndedEvent: googletag.events.SlotRenderEndedEvent,
 ): Promise<boolean> => {
 	addContentClass(advert.node);
-	console.log('renderAdvert', window.guardian.modules.sentry);
 	return getAdIframe(advert.node)
 		.then((isRendered) => {
 			const creativeTemplateId =
@@ -238,11 +233,7 @@ const renderAdvert = (
 				.then(() => isRendered);
 		})
 		.catch((err) => {
-			if (window.guardian?.modules?.sentry?.reportError) {
-				window.guardian.modules.sentry.reportError(err, 'commercial');
-			} else {
-				console.error('Error reporting is not available:', err);
-			}
+			window.guardian.modules.sentry.reportError(err, 'commercial');
 			return Promise.resolve(false);
 		});
 };

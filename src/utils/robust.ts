@@ -21,18 +21,9 @@ const catchErrors = (fn: ModuleFunction): Error | undefined => {
 	return error;
 };
 
-const logError = (
-	moduleName: string,
-	error: Error,
-	tags?: Record<string, string>,
-): void => {
+const logError = (moduleName: string, error: Error): void => {
 	window.console.warn('Caught error.', error.stack);
-	if (window.guardian?.modules?.sentry?.reportError) {
-		window.guardian.modules.sentry.reportError(error, 'commercial');
-	} else {
-		console.error('Error reporting is not available:', error);
-	}
-	// reportError(error, { module: moduleName, ...tags }, false);
+	window.guardian.modules.sentry.reportError(error, 'commercial');
 };
 
 const catchAndLogError = (

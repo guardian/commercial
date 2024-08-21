@@ -23,22 +23,11 @@ const dynamicAdSlotModules: Modules = [
 
 export const initDynamicAdSlots = async (): Promise<void> => {
 	await Promise.all(
-		dynamicAdSlotModules.map(async ([name, init]) => {
+		dynamicAdSlotModules.map(async ([, init]) => {
 			try {
 				await init();
 			} catch (error) {
-				if (window.guardian?.modules?.sentry?.reportError) {
-					window.guardian.modules.sentry.reportError(
-						error,
-						'commercial',
-					);
-				} else {
-					console.error('Error reporting is not available:', error);
-				}
-				// reportError(error, {
-				// 	feature: 'commercial',
-				// 	tag: name,
-				// });
+				window.guardian.modules.sentry.reportError(error, 'commercial');
 			}
 		}),
 	);
