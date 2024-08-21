@@ -154,7 +154,7 @@ const mobileOpponentSelectorRules: OpponentSelectorRules = {
 	},
 };
 
-const mobileSubsequentInlineAds: SpacefinderRules = {
+const mobileInlines: SpacefinderRules = {
 	bodySelector,
 	candidateSelector: mobileCandidateSelector,
 	minDistanceFromTop: mobileMinDistanceFromArticleTop,
@@ -174,17 +174,8 @@ const mobileSubsequentInlineAds: SpacefinderRules = {
 	},
 };
 
-const mobileTopAboveNav: SpacefinderRules = {
-	bodySelector,
-	candidateSelector: mobileCandidateSelector,
-	minDistanceFromTop: mobileMinDistanceFromArticleTop,
-	minDistanceFromBottom: 200,
-	opponentSelectorRules: mobileOpponentSelectorRules,
-};
-
 export const rules = {
 	desktopInline1,
 	desktopRightRail,
-	mobileTopAboveNav,
-	mobileSubsequentInlineAds,
+	mobileInlines,
 };

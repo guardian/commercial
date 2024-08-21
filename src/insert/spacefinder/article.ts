@@ -191,31 +191,11 @@ const addDesktopRightRailAds = (
 	);
 };
 
-const addMobileTopAboveNav = (fillSlot: FillAdSlot): Promise<boolean> => {
-	const insertAds: SpacefinderWriter = async (paras) => {
-		const slots = paras.slice(0, 1).map(async (para) => {
-			const name = 'top-above-nav';
-			const type = 'top-above-nav';
-			const slot = await insertSlotAtPara(para, name, type, 'inline');
-			return fillSlot(name, slot);
-		});
-		await Promise.all(slots);
-	};
-
-	return spaceFiller.fillSpace(rules.mobileTopAboveNav, insertAds, {
-		waitForImages: true,
-		waitForInteractives: true,
-		pass: 'mobile-top-above-nav',
-	});
-};
-
-const addMobileSubsequentInlineAds = (
-	fillSlot: FillAdSlot,
-): Promise<boolean> => {
+const addMobileInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const slots = paras.map(async (para, i) => {
-			const name = `inline${i + 1}`;
-			const type = 'inline';
+			const name = i === 0 ? 'top-above-nav' : `inline${i}`;
+			const type = i === 0 ? 'top-above-nav' : 'inline';
 			const slot = await insertSlotAtPara(para, name, type, 'inline');
 			return fillSlot(
 				name,
@@ -231,10 +211,10 @@ const addMobileSubsequentInlineAds = (
 		await Promise.all(slots);
 	};
 
-	return spaceFiller.fillSpace(rules.mobileSubsequentInlineAds, insertAds, {
+	return spaceFiller.fillSpace(rules.mobileInlines, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
-		pass: 'mobile-subsequent-inlines',
+		pass: 'mobile-inlines',
 	});
 };
 
@@ -243,29 +223,22 @@ const addMobileSubsequentInlineAds = (
  * @param fillSlot A function to call that will fill the slot when each ad slot has been inserted,
  * these could be google display ads or opt opt consentless ads.
  */
-const addFirstInlineAd = (fillSlot: FillAdSlot): Promise<boolean> => {
-	const isMobile = getCurrentBreakpoint() === 'mobile';
-	if (isMobile) {
-		return addMobileTopAboveNav(fillSlot);
-	}
-
-	if (isPaidContent) {
-		return Promise.resolve(false);
-	}
-
-	return addDesktopInline1(fillSlot);
-};
-
-const addSubsequentInlineAds = (
+const addInlineAds = (
 	fillSlot: FillAdSlot,
 	isConsentless: boolean,
 ): Promise<boolean> => {
 	const isMobile = getCurrentBreakpoint() === 'mobile';
 	if (isMobile) {
-		return addMobileSubsequentInlineAds(fillSlot);
+		return addMobileInlineAds(fillSlot);
 	}
 
-	return addDesktopRightRailAds(fillSlot, isConsentless);
+	if (isPaidContent) {
+		return addDesktopRightRailAds(fillSlot, isConsentless);
+	}
+
+	return addDesktopInline1(fillSlot).then(() =>
+		addDesktopRightRailAds(fillSlot, isConsentless),
+	);
 };
 
 /**
@@ -277,11 +250,9 @@ const init = async (fillAdSlot: FillAdSlot): Promise<void> => {
 		return Promise.resolve();
 	}
 
-	await addFirstInlineAd(fillAdSlot);
-
-	await addSubsequentInlineAds(fillAdSlot, false);
+	await addInlineAds(fillAdSlot, false);
 
 	await initCarrot();
 };
 
-export { init, addFirstInlineAd, addSubsequentInlineAds, type FillAdSlot };
+export { init, addInlineAds, type FillAdSlot };
