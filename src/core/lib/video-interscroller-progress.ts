@@ -1,13 +1,12 @@
 import { once } from 'lodash-es';
-import { EventTimer } from 'core/event-timer';
 import { checkConsent as checkConsentForReporting } from 'core/send-commercial-metrics';
-import { bypassMetricsSampling } from 'experiments/utils';
 
 const endpoint = window.guardian.config.page.isDev
 	? '//logs.code.dev-guardianapis.com/log'
 	: '//logs.guardianapis.com/log';
 
-let creativeId: number | undefined;
+let creativeId: number;
+let lineItemId: number;
 let progress: number = 0;
 
 const sendProgress = once(() => {
@@ -20,7 +19,8 @@ const sendProgress = once(() => {
 		body: JSON.stringify({
 			label: 'commercial.interscroller.videoProgress',
 			properties: [
-				{ name: 'id', value: creativeId },
+				{ name: 'creativeId', value: creativeId },
+				{ name: 'lineItemId', value: lineItemId },
 				{ name: 'progress', value: progress },
 				{
 					name: 'pageviewId',
@@ -44,22 +44,18 @@ const sendProgressOnUnloadViaLogs = async () => {
 	}
 };
 
-const initVideoProgressReporting = (gamCreativeId: number) => {
+const initVideoProgressReporting = (
+	gamCreativeId: number,
+	gamLineItemId: number,
+) => {
 	creativeId = gamCreativeId;
-
-	EventTimer.get().setProperty('videoInterscrollerCreativeId', creativeId);
-
-	bypassMetricsSampling();
+	lineItemId = gamLineItemId;
 
 	void sendProgressOnUnloadViaLogs();
 };
 
 const updateVideoProgress = (updatedProgress: number) => {
 	progress = updatedProgress;
-	EventTimer.get().setProperty(
-		'videoInterscrollerPercentageProgress',
-		updatedProgress,
-	);
 };
 
 export { initVideoProgressReporting, updateVideoProgress };

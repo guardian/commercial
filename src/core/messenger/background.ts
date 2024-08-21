@@ -244,10 +244,14 @@ const setupBackground = async (
 						const creativeTemplateId =
 							slot.getResponseInformation()?.creativeTemplateId;
 						if (creativeTemplateId === 11885667) {
-							return (
-								slot.getResponseInformation()?.creativeId ??
-								undefined
-							);
+							const creativeId =
+								slot.getResponseInformation()?.creativeId;
+							const lineItemId =
+								slot.getResponseInformation()?.lineItemId;
+
+							if (creativeId && lineItemId) {
+								return { creativeId, lineItemId };
+							}
 						}
 					}
 					return undefined;
@@ -271,10 +275,13 @@ const setupBackground = async (
 
 				observer.observe(backgroundParent);
 
-				const creativeId = getCreativeId();
+				const creativeInfo = getCreativeId();
 
-				if (creativeId) {
-					initVideoProgressReporting(creativeId);
+				if (creativeInfo) {
+					initVideoProgressReporting(
+						creativeInfo.creativeId,
+						creativeInfo.lineItemId,
+					);
 				}
 
 				video.ontimeupdate = function () {
