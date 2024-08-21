@@ -6,6 +6,7 @@ import { findLineItems, type LineItem } from './line-items';
  * LineItems have a priority from 1 to 16, with 1 being the highest priority.
  * This function will pick a line item from the list of line items to display using weighted random selection.
  * The higher the priority, the more likely the line item will be picked.
+ * If a sponsorship level priority is present, the highest priority line item will be served.
  * @param lineItems
  */
 const pickLineItem = (lineItems: LineItem[]) => {
