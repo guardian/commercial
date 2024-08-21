@@ -19,6 +19,17 @@ const pickLineItem = (lineItems: LineItem[]) => {
 		(a, b) => 1 / a.priority - 1 / b.priority,
 	);
 
+	const highestPriorityLineItem = sortedLineItems[-1];
+
+	// Takeovers have a priority of 4 or less, so if the highest priority
+	// line item has a priority of 4 or less, we should return that
+	if (
+		highestPriorityLineItem !== undefined &&
+		highestPriorityLineItem.priority < 5
+	) {
+		return highestPriorityLineItem;
+	}
+
 	const randomNumber = Math.random() * randomMultiplier;
 
 	let accumulator = 0;
