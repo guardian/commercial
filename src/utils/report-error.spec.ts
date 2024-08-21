@@ -27,12 +27,7 @@ describe('report-error', () => {
 
 	test('Does NOT throw an error', () => {
 		expect(() => {
-			if (window.guardian?.modules?.sentry?.reportError) {
-				window.guardian.modules.sentry.reportError(error, 'commercial');
-			} else {
-				console.error('Error reporting is not available:', error);
-			}
-			// reportError(error, tags, false);
+			window.guardian.modules.sentry.reportError(error, 'commercial');
 		}).not.toThrowError(error);
 
 		expect(fakeRaven.captureException).toHaveBeenCalledWith(
@@ -43,12 +38,7 @@ describe('report-error', () => {
 
 	test('Does throw an error', () => {
 		expect(() => {
-			if (window.guardian?.modules?.sentry?.reportError) {
-				window.guardian.modules.sentry.reportError(error, 'commercial');
-			} else {
-				console.error('Error reporting is not available:', error);
-			}
-			// reportError(error, tags);
+			window.guardian.modules.sentry.reportError(error, 'commercial');
 		}).toThrowError(error);
 
 		expect(fakeRaven.captureException).toHaveBeenCalledWith(
@@ -58,12 +48,7 @@ describe('report-error', () => {
 	});
 
 	test('Applies a sampling rate that prevents a sample of errors being reporting', () => {
-		if (window.guardian?.modules?.sentry?.reportError) {
-			window.guardian.modules.sentry.reportError(error, 'commercial');
-		} else {
-			console.error('Error reporting is not available:', error);
-		}
-		// reportError(error, tags, false, 1 / 100);
+		window.guardian.modules.sentry.reportError(error, 'commercial');
 
 		expect(fakeRaven.captureException).not.toHaveBeenCalled();
 	});

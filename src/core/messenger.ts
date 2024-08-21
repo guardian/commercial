@@ -163,9 +163,6 @@ type RespondCallback = (
 
 const LISTENERS: Listeners = {};
 let REGISTERED_LISTENERS = 0;
-let reportError: MessengerErrorHandler = () => {
-	// not set yet
-};
 
 const error405 = {
 	code: 405,
@@ -374,17 +371,7 @@ const onMessage = async (event: MessageEvent): Promise<void> => {
 				respond(message.id, event.source, null, response);
 			})
 			.catch((ex: Error) => {
-				if (window.guardian?.modules?.sentry?.reportError) {
-					window.guardian.modules.sentry.reportError(
-						ex,
-						'native-ads',
-					);
-				} else {
-					console.error('Error reporting is not available:', ex);
-				}
-				// reportError(ex, {
-				// 	feature: 'native-ads',
-				// });
+				window.guardian.modules.sentry.reportError(ex, 'native-ads');
 				respond(
 					message.id,
 					event.source,
@@ -522,7 +509,6 @@ export const init = (
 	>,
 	errorHandler: MessengerErrorHandler,
 ): void => {
-	reportError = errorHandler;
 	listeners.forEach((moduleInit) => moduleInit(register, errorHandler));
 	persistentListeners.forEach((moduleInit) =>
 		moduleInit(registerPersistentListener, errorHandler),

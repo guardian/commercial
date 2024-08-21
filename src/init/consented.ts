@@ -150,15 +150,10 @@ const bootCommercial = async (): Promise<void> => {
 		await Promise.all(promises).then(recordCommercialMetrics);
 	} catch (error) {
 		// report async errors in bootCommercial to Sentry with the commercial feature tag
-		if (window.guardian?.modules?.sentry?.reportError) {
-			window.guardian.modules.sentry.reportError(
-				error,
-				'consented-commercial',
-			);
-		} else {
-			console.error('Error reporting is not available:', error);
-		}
-		// reportError(error, tags, false);
+		window.guardian.modules.sentry.reportError(
+			error,
+			'consented-commercial',
+		);
 	}
 };
 

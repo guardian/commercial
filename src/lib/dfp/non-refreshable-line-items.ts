@@ -42,19 +42,7 @@ export const fetchNonRefreshableLineItemIds = async (): Promise<number[]> => {
 	// Report an error to Sentry if we don't get an ok response
 	// Note that in other cases (JSON parsing failure) we throw but don't report the error
 	const error = Error('Failed to fetch non-refreshable line items');
-	if (window.guardian?.modules?.sentry?.reportError) {
-		window.guardian.modules.sentry.reportError(error, 'commercial');
-	} else {
-		console.error('Error reporting is not available:', error);
-	}
-	// reportError(
-	// 	error,
-	// 	{
-	// 		feature: 'commercial',
-	// 		status: String(response.status),
-	// 	},
-	// 	false,
-	// );
+	window.guardian.modules.sentry.reportError(error, 'commercial');
 	throw error;
 };
 
