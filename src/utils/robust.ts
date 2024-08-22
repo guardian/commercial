@@ -3,8 +3,6 @@
     For example "comments throwing an exception should not stop auto refresh"
  */
 
-import { convertError } from './report-error';
-
 type ModuleFunction = () => void;
 type Module = [string, ModuleFunction];
 type Modules = Module[];
@@ -15,7 +13,7 @@ const catchErrors = (fn: ModuleFunction): Error | undefined => {
 	try {
 		fn();
 	} catch (e) {
-		error = convertError(e);
+		error = e instanceof Error ? e : new Error(String(e));
 	}
 
 	return error;
@@ -26,23 +24,16 @@ const logError = (moduleName: string, error: Error): void => {
 	window.guardian.modules.sentry.reportError(error, 'commercial');
 };
 
-const catchAndLogError = (
-	name: string,
-	fn: ModuleFunction,
-	tags?: Record<string, string>,
-): void => {
+const catchAndLogError = (name: string, fn: ModuleFunction): void => {
 	const error = catchErrors(fn);
 
 	if (error) {
-		logError(name, error, tags);
+		logError(name, error);
 	}
 };
 
-const catchErrorsWithContext = (
-	modules: Modules,
-	tags?: Record<string, string>,
-): void => {
-	modules.forEach(([name, fn]) => catchAndLogError(name, fn, tags));
+const catchErrorsWithContext = (modules: Modules): void => {
+	modules.forEach(([name, fn]) => catchAndLogError(name, fn));
 };
 
 export { catchErrorsWithContext };
