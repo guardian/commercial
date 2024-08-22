@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 20.6.3
+
+### Patch Changes
+
+- 579498f: Set Spacefinder test to 5%
+
 ## 20.6.2
 
 ### Patch Changes
