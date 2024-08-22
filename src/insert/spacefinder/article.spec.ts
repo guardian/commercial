@@ -2,10 +2,6 @@ import { spaceFiller } from 'insert/spacefinder/space-filler';
 import { commercialFeatures } from 'lib/commercial-features';
 import { init } from './article';
 
-jest.mock('utils/report-error', () => ({
-	reportError: jest.fn(),
-}));
-
 jest.mock('lib/header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));

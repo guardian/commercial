@@ -10,7 +10,6 @@ import { initConsentless } from 'init/consentless/prepare-ootag';
 import { reloadPageOnConsentChange } from 'init/shared/reload-page-on-consent-change';
 import { init as setAdTestCookie } from 'init/shared/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from 'init/shared/set-adtest-in-labels-cookie';
-import { reportError } from 'utils/report-error';
 
 const bootConsentless = async (consentState: ConsentState): Promise<void> => {
 	const consentlessModuleList = [

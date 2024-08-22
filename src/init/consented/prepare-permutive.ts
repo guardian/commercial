@@ -1,6 +1,5 @@
 import type { Edition } from 'core/types';
 import type { Config, PageConfig, Permutive, UserConfig } from 'types/global';
-import { reportError } from 'utils/report-error';
 
 interface PermutivePageConfig {
 	page: Pick<
@@ -157,7 +156,7 @@ const runPermutive = (
 			page: payload,
 		});
 	} catch (err) {
-		logger(err, { feature: 'commercial' }, false);
+		logger(err);
 	}
 };
 
