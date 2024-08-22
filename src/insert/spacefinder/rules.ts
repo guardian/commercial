@@ -64,7 +64,7 @@ const desktopInline1: SpacefinderRules = {
 			marginTop: isInInlineSpacefinderOptimisationTest ? 200 : 400,
 		},
 		[leftColumnOpponentSelector]: {
-			marginBottom: isInInlineSpacefinderOptimisationTest ? 0 : 35,
+			marginBottom: isInInlineSpacefinderOptimisationTest ? 50 : 35,
 			marginTop: isInInlineSpacefinderOptimisationTest ? 100 : 400,
 		},
 		[rightColumnOpponentSelector]: {
