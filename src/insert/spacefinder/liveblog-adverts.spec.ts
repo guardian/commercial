@@ -7,6 +7,9 @@ const {
 	getStartingContentBlock,
 } = _;
 
+jest.mock('utils/report-error', () => ({
+	reportError: jest.fn(),
+}));
 jest.mock('lib/header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));

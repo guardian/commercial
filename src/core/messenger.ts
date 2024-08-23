@@ -1,3 +1,4 @@
+import { reportError } from 'utils/report-error';
 import { postMessage } from './messenger/post-message';
 
 /**
@@ -371,7 +372,7 @@ const onMessage = async (event: MessageEvent): Promise<void> => {
 				respond(message.id, event.source, null, response);
 			})
 			.catch((ex: Error) => {
-				window.guardian.modules.sentry.reportError(ex, 'native-ads');
+				reportError(ex, 'native-ads');
 				respond(
 					message.id,
 					event.source,

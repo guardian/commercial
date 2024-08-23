@@ -1,7 +1,7 @@
 import { isString } from '@guardian/libs';
 import type { AdSize } from 'core/ad-sizes';
 import { createAdSize } from 'core/ad-sizes';
-// import { reportError } from 'utils/report-error';
+import { reportError } from 'utils/report-error';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { emptyAdvert } from './empty-advert';
 import { renderAdvert } from './render-advert';
@@ -11,9 +11,7 @@ const reportEmptyResponse = () => {
 	// let's report these and diagnose the problem in sentry.
 	// Keep the sample rate low, otherwise we'll get rate-limited (report-error will also sample down)
 	if (Math.random() < 1 / 10_000) {
-		// const adUnitPath = event.slot.getAdUnitPath();
-
-		window.guardian.modules.sentry.reportError(
+		reportError(
 			new Error('dfp returned an empty ad response'),
 			'commercial',
 		);

@@ -1,3 +1,4 @@
+import { reportError } from 'utils/report-error';
 import { _, catchErrorsWithContext } from './robust';
 import type { Modules } from './robust';
 
@@ -9,7 +10,6 @@ beforeEach(() => {
 	jest.clearAllMocks();
 	origConsoleWarn = window.console.warn;
 	window.console.warn = jest.fn();
-	window.guardian.modules.sentry.reportError = jest.fn();
 });
 
 afterEach(() => {
@@ -40,17 +40,12 @@ describe('robust', () => {
 
 	test('catchAndLogError() - default reporter with no error', () => {
 		catchAndLogError('test', noError);
-		expect(
-			window.guardian.modules.sentry.reportError,
-		).not.toHaveBeenCalled();
+		expect(reportError).not.toHaveBeenCalled();
 	});
 
 	test('catchAndLogError() - default reporter with error', () => {
 		catchAndLogError('test', throwError);
-		expect(window.guardian.modules.sentry.reportError).toHaveBeenCalledWith(
-			ERROR,
-			META,
-		);
+		expect(reportError).toHaveBeenCalledWith(ERROR, META);
 	});
 
 	test('catchErrorsWithContext()', () => {

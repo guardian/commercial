@@ -1,5 +1,6 @@
 import { log } from '@guardian/libs';
 import type { SizeMapping } from 'core/ad-sizes';
+import { reportError } from 'utils/report-error';
 import { Advert } from './Advert';
 
 const createAdvert = (
@@ -20,10 +21,7 @@ const createAdvert = (
 		log('commercial', errMsg);
 
 		if (!navigator.userAgent.includes('DuckDuckGo')) {
-			window.guardian.modules.sentry.reportError(
-				new Error(errMsg),
-				'commercial',
-			);
+			reportError(new Error(errMsg), 'commercial');
 		}
 
 		return null;
