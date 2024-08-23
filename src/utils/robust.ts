@@ -1,7 +1,9 @@
 /*
-    Swallows (and reports) exceptions. Designed to wrap around modules at the "bootstrap" level.
-    For example "comments throwing an exception should not stop auto refresh"
- */
+Swallows (and reports) exceptions. Designed to wrap around modules at the "bootstrap" level.
+For example "comments throwing an exception should not stop auto refresh"
+*/
+
+import { reportError } from 'utils/report-error';
 
 type ModuleFunction = () => void;
 type Module = [string, ModuleFunction];
@@ -21,7 +23,7 @@ const catchErrors = (fn: ModuleFunction): Error | undefined => {
 
 const logError = (moduleName: string, error: Error): void => {
 	window.console.warn('Caught error.', error.stack);
-	window.guardian.modules.sentry.reportError(error, 'commercial');
+	reportError(error, 'commercial');
 };
 
 const catchAndLogError = (name: string, fn: ModuleFunction): void => {

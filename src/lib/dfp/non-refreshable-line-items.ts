@@ -1,5 +1,5 @@
 import { memoize } from 'lodash-es';
-// import { reportError } from 'utils/report-error';
+import { reportError } from 'utils/report-error';
 
 export const fetchNonRefreshableLineItemIds = async (): Promise<number[]> => {
 	// When the env is CODE or local, use the CODE env's non-refreshable line items file
@@ -42,7 +42,7 @@ export const fetchNonRefreshableLineItemIds = async (): Promise<number[]> => {
 	// Report an error to Sentry if we don't get an ok response
 	// Note that in other cases (JSON parsing failure) we throw but don't report the error
 	const error = Error('Failed to fetch non-refreshable line items');
-	window.guardian.modules.sentry.reportError(error, 'commercial');
+	reportError(error, 'commercial');
 	throw error;
 };
 

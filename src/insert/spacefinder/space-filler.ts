@@ -4,6 +4,7 @@ import type {
 	SpacefinderWriter,
 } from 'insert/spacefinder/spacefinder';
 import { findSpace, SpaceError } from 'insert/spacefinder/spacefinder';
+import { reportError } from 'utils/report-error';
 
 class SpaceFiller {
 	queue = Promise.resolve(true);
@@ -34,7 +35,7 @@ class SpaceFiller {
 
 		this.queue = this.queue.then(insertNextContent).catch((e) => {
 			// e.g. if writer fails
-			window.guardian.modules.sentry.reportError(e, 'space-filler');
+			reportError(e, 'space-filler');
 			return false;
 		});
 

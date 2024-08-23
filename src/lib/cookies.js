@@ -43,7 +43,7 @@ const addCookie = (name, value, daysToLive, isCrossSubdomain = false) => {
 
 	if (!isValidCookieValue(name) || !isValidCookieValue(value)) {
 		if (window.guardian?.modules?.sentry?.reportError) {
-			window.guardian.modules.sentry.reportError(
+			reportError(
 				new Error(`${ERR_INVALID_COOKIE_NAME} .${name}=${value}`),
 				'commercial',
 			);

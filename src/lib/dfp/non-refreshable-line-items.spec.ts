@@ -1,3 +1,4 @@
+import { reportError } from 'utils/report-error';
 import {
 	fetchNonRefreshableLineItemIds,
 	memoizedFetchNonRefreshableLineItemIds,
@@ -17,9 +18,7 @@ describe('nonRefreshableLineItems', () => {
 
 		const ids = await fetchNonRefreshableLineItemIds();
 
-		expect(
-			window.guardian.modules.sentry.reportError,
-		).not.toHaveBeenCalled();
+		expect(reportError).not.toHaveBeenCalled();
 
 		expect(ids).toEqual([1, 2, 3]);
 	});
@@ -39,9 +38,7 @@ describe('nonRefreshableLineItems', () => {
 			'Failed to parse non-refreshable line items as an array',
 		);
 
-		expect(
-			window.guardian.modules.sentry.reportError,
-		).not.toHaveBeenCalled();
+		expect(reportError).not.toHaveBeenCalled();
 	});
 
 	it('returns undefined when the API returns string array', async () => {
@@ -59,9 +56,7 @@ describe('nonRefreshableLineItems', () => {
 			'Failed to parse element in non-refreshable line item array as number',
 		);
 
-		expect(
-			window.guardian.modules.sentry.reportError,
-		).not.toHaveBeenCalled();
+		expect(reportError).not.toHaveBeenCalled();
 	});
 
 	it('returns undefined and reports error when the API call fails', async () => {
@@ -79,7 +74,7 @@ describe('nonRefreshableLineItems', () => {
 			'Failed to fetch non-refreshable line items',
 		);
 
-		expect(window.guardian.modules.sentry.reportError).toHaveBeenCalledWith(
+		expect(reportError).toHaveBeenCalledWith(
 			new Error('Failed to fetch non-refreshable line items'),
 			'commercial',
 		);
