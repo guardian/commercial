@@ -10,9 +10,10 @@ import {
 	isInCanada,
 	isInRow,
 	isInUk,
+	isInUsa,
 	isInUsOrCa,
-} from 'lib/utils/geo-utils';
-import { pbTestNameMap } from 'lib/utils/url';
+} from 'utils/geo-utils';
+import { pbTestNameMap } from 'utils/url';
 import type { HeaderBiddingSize } from './prebid-types';
 
 type StringManipulation = (a: string, b: string) => string;
@@ -39,12 +40,17 @@ const contains = (
 	size: HeaderBiddingSize,
 ): boolean => Boolean(sizes.find((s) => s[0] === size[0] && s[1] === size[1]));
 
+const isValidPageForMobileSticky = (): boolean => {
+	const { contentType, pageId } = window.guardian.config.page;
+	return contentType === 'Article' || pageId.startsWith('football/');
+};
+
 /**
- * Cleans an object for targetting. Removes empty strings and other falsey values.
- * @param o object with falsey values
+ * Cleans an object for targetting. Removes empty strings and other falsy values.
+ * @param o object with falsy values
  * @returns {Record<string, string | string[]>} object with only non-empty strings, or arrays of non-empty strings.
  */
-export const removeFalseyValues = <O extends Record<string, unknown>>(
+export const removeFalsyValues = <O extends Record<string, unknown>>(
 	o: O,
 ): Record<string, string | string[]> =>
 	Object.entries(o).reduce<Record<string, string | string[]>>(
@@ -98,6 +104,10 @@ export const containsLeaderboardOrBillboard = (
 	sizes: HeaderBiddingSize[],
 ): boolean => containsLeaderboard(sizes) || containsBillboard(sizes);
 
+export const containsPortraitInterstitial = (
+	sizes: HeaderBiddingSize[],
+): boolean => contains(sizes, createAdSize(320, 480));
+
 export const getLargestSize = (
 	sizes: HeaderBiddingSize[],
 ): HeaderBiddingSize | null => {
@@ -149,7 +159,8 @@ export const shouldIncludeOpenx = (): boolean => !isInUsOrCa();
 
 export const shouldIncludeTrustX = (): boolean => isInUsOrCa();
 
-export const shouldIncludeTripleLift = (): boolean => isInUsOrCa();
+export const shouldIncludeTripleLift = (): boolean =>
+	isInUsOrCa() || isInAuOrNz();
 
 export const shouldIncludeAdYouLike = (
 	slotSizes: HeaderBiddingSize[],
@@ -163,7 +174,7 @@ export const shouldUseOzoneAdaptor = (): boolean =>
 
 export const shouldIncludeAppNexus = (): boolean =>
 	isInAuOrNz() ||
-	(window.guardian.config.switches.prebidAppnexusUkRow && !isInUsOrCa()) ||
+	(!!window.guardian.config.switches.prebidAppnexusUkRow && !isInUsOrCa()) ||
 	!!pbTestNameMap().and;
 
 export const shouldIncludeXaxis = (): boolean => isInUk();
@@ -185,6 +196,11 @@ export const shouldIncludeCriteo = (): boolean => !isInAuOrNz();
  */
 export const shouldIncludeSmart = (): boolean => isInUk() || isInRow();
 
+export const shouldIncludeKargo = (): boolean => isInUsa();
+
+export const shouldIncludeMagnite = (): boolean =>
+	!!window.guardian.config.switches.prebidMagnite;
+
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>
 		window.location.hash.includes('#mobile-sticky') ||
@@ -192,8 +208,8 @@ export const shouldIncludeMobileSticky = once(
 			min: 'mobile',
 			max: 'mobileLandscape',
 		}) &&
-			(isInUsOrCa() || isInAuOrNz()) &&
-			window.guardian.config.page.contentType === 'Article' &&
+			!isInUk() &&
+			isValidPageForMobileSticky() &&
 			!window.guardian.config.page.isHosted),
 );
 

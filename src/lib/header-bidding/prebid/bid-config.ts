@@ -4,9 +4,16 @@ import {
 	buildAppNexusTargeting,
 	buildAppNexusTargetingObject,
 } from 'lib/build-page-targeting';
-import { isInAuOrNz, isInUk, isInUsa, isInUsOrCa } from 'lib/utils/geo-utils';
-import { pbTestNameMap } from 'lib/utils/url';
+import { dfpEnv } from 'lib/dfp/dfp-env';
 import type { PrebidIndexSite } from 'types/global';
+import {
+	isInAuOrNz,
+	isInRow,
+	isInUk,
+	isInUsa,
+	isInUsOrCa,
+} from 'utils/geo-utils';
+import { pbTestNameMap } from 'utils/url';
 import type {
 	BidderCode,
 	HeaderBiddingSize,
@@ -16,6 +23,8 @@ import type {
 	PrebidBidder,
 	PrebidImproveParams,
 	PrebidIndexExchangeParams,
+	PrebidKargoParams,
+	PrebidMagniteParams,
 	PrebidOpenXParams,
 	PrebidOzoneParams,
 	PrebidPubmaticParams,
@@ -25,7 +34,9 @@ import type {
 	PrebidXaxisParams,
 } from '../prebid-types';
 import {
+	containsBillboard,
 	containsBillboardNotLeaderboard,
+	containsDmpu,
 	containsLeaderboard,
 	containsLeaderboardOrBillboard,
 	containsMobileSticky,
@@ -37,6 +48,8 @@ import {
 	shouldIncludeCriteo,
 	shouldIncludeImproveDigital,
 	shouldIncludeImproveDigitalSkin,
+	shouldIncludeKargo,
+	shouldIncludeMagnite,
 	shouldIncludeOpenx,
 	shouldIncludeSmart,
 	shouldIncludeSonobi,
@@ -53,13 +66,10 @@ import {
 	getImproveSizeParam,
 	getImproveSkinPlacementId,
 } from './improve-digital';
+import { getMagniteSiteId, getMagniteZoneId } from './magnite';
 
 const isArticle = window.guardian.config.page.contentType === 'Article';
-
 const isDesktopAndArticle = getBreakpointKey() === 'D' && isArticle;
-
-const { tests } = window.guardian.config;
-const isInFrontsBannerVariant = tests?.frontsBannerAdsVariant === 'variant';
 
 const getTrustXAdUnitId = (
 	slotId: string,
@@ -116,11 +126,35 @@ const getTrustXAdUnitId = (
 	}
 };
 
-const getIndexSiteId = (): string => {
+/**
+ * We store a mapping of sections to Index site ids server-side, where each is
+ * split out by breakpoint. These are transferred to the client via the window,
+ * and read here
+ *
+ * This appears to be an old method of assigning site ids, with the newer method
+ * being to assign them according to ad size (@see getIndexSiteId)
+ */
+const getIndexSiteIdFromConfig = (): string => {
 	const site = window.guardian.config.page.pbIndexSites.find(
 		(s: PrebidIndexSite) => s.bp === getBreakpointKey(),
 	);
 	return site?.id ? site.id.toString() : '';
+};
+
+const getIndexSiteId = (slotSizes: HeaderBiddingSize[]) => {
+	// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
+	// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
+	if (containsBillboardNotLeaderboard(slotSizes)) {
+		return '983842';
+	}
+
+	// Return a specific site id for the mobile sticky slot
+	if (containsMobileSticky(slotSizes)) {
+		return '1047869';
+	}
+
+	// Fall back to reading the site id from the window
+	return getIndexSiteIdFromConfig();
 };
 
 const getXaxisPlacementId = (sizes: HeaderBiddingSize[]): number => {
@@ -156,18 +190,33 @@ const getTripleLiftInventoryCode = (
 	sizes: HeaderBiddingSize[],
 ): string => {
 	if (containsLeaderboard(sizes)) {
-		return 'theguardian_topbanner_728x90_prebid';
+		if (isInUsOrCa()) {
+			return 'theguardian_topbanner_728x90_prebid';
+		} else if (isInAuOrNz()) {
+			return 'theguardian_topbanner_728x90_prebid_AU';
+		}
 	}
 
 	if (containsMpu(sizes)) {
-		return isArticle
-			? 'theguardian_article_300x250_prebid'
-			: 'theguardian_sectionfront_300x250_prebid';
+		if (isInUsOrCa()) {
+			return isArticle
+				? 'theguardian_article_300x250_prebid'
+				: 'theguardian_sectionfront_300x250_prebid';
+		} else if (isInAuOrNz()) {
+			return isArticle
+				? 'theguardian_article_300x250_prebid_AU'
+				: 'theguardian_sectionfront_300x250_prebid_AU';
+		}
 	}
 
-	if (containsMobileSticky(sizes)) return 'theguardian_320x50_HDX';
+	if (containsMobileSticky(sizes)) {
+		if (isInUsOrCa()) {
+			return 'theguardian_320x50_HDX';
+		} else if (isInAuOrNz()) {
+			return 'theguardian_320x50_HDX_AU';
+		}
+	}
 
-	console.log(`PREBID: Failed to get TripleLift ad unit for slot ${slotId}.`);
 	return '';
 };
 
@@ -189,7 +238,7 @@ const appNexusBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 		getAppNexusDirectBidParams(
 			sizes,
 			pageTargeting,
-			isInFrontsBannerVariant,
+			stripDfpAdPrefixFrom(slotId),
 		),
 });
 
@@ -198,49 +247,97 @@ const openxClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 ) => ({
 	name: 'oxd',
 	switchName: 'prebidOpenx',
-	bidParams: (): PrebidOpenXParams => {
+	bidParams: (slotId, sizes): PrebidOpenXParams => {
+		const customParams = buildAppNexusTargetingObject(pageTargeting);
 		if (isInUsOrCa()) {
 			return {
 				delDomain: 'guardian-us-d.openx.net',
 				unit: '540279544',
-				customParams: buildAppNexusTargetingObject(pageTargeting),
+				customParams,
 			};
 		}
 		if (isInAuOrNz()) {
 			return {
 				delDomain: 'guardian-aus-d.openx.net',
 				unit: '540279542',
-				customParams: buildAppNexusTargetingObject(pageTargeting),
+				customParams,
+			};
+		}
+		// ROW has a unique unit ID for mobile-sticky
+		if (isInRow() && containsMobileSticky(sizes)) {
+			return {
+				delDomain: 'guardian-d.openx.net',
+				unit: '560429384',
+				customParams,
 			};
 		}
 		// UK and ROW
 		return {
 			delDomain: 'guardian-d.openx.net',
 			unit: '540279541',
-			customParams: buildAppNexusTargetingObject(pageTargeting),
+			customParams,
 		};
 	},
 });
 
-const getOzonePlacementId = () => (isInUsa() ? '1420436308' : '0420420500');
+const getOzonePlacementId = (sizes: HeaderBiddingSize[]) => {
+	if (isInUsa()) {
+		if (getBreakpointKey() === 'D') {
+			if (containsBillboard(sizes)) {
+				return '3500010912';
+			}
+
+			if (containsMpu(sizes)) {
+				return '3500010911';
+			}
+		}
+		if (getBreakpointKey() === 'M') {
+			if (containsMobileSticky(sizes)) {
+				return '3500014217';
+			}
+		}
+		return '1420436308';
+	}
+
+	if (isInRow()) {
+		if (containsMobileSticky(sizes)) {
+			return '1500000260';
+		}
+	}
+	return '0420420500';
+};
 
 const ozoneClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	pageTargeting: PageTargeting,
 ) => ({
 	name: 'ozone',
 	switchName: 'prebidOzone',
-	bidParams: (): PrebidOzoneParams => ({
-		publisherId: 'OZONEGMG0001',
-		siteId: '4204204209',
-		placementId: getOzonePlacementId(),
-		customData: [
-			{
-				settings: {},
-				targeting: buildAppNexusTargetingObject(pageTargeting),
-			},
-		],
-		ozoneData: {}, // TODO: confirm if we need to send any
-	}),
+	bidParams: (
+		_slotId: string,
+		sizes: HeaderBiddingSize[],
+	): PrebidOzoneParams => {
+		const advert = dfpEnv.adverts.get(_slotId);
+		const testgroup = advert?.testgroup
+			? { testgroup: advert.testgroup }
+			: {};
+
+		return {
+			publisherId: 'OZONEGMG0001',
+			siteId: '4204204209',
+			placementId: getOzonePlacementId(sizes),
+			customData: [
+				{
+					settings: {},
+					targeting: {
+						// Assigns a random integer between 0 and 99
+						...testgroup,
+						...buildAppNexusTargetingObject(pageTargeting),
+					},
+				},
+			],
+			ozoneData: {}, // TODO: confirm if we need to send any
+		};
+	},
 });
 
 const sonobiBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
@@ -268,6 +365,28 @@ const getPubmaticPublisherId = (): string => {
 	return '157207';
 };
 
+const getKargoPlacementId = (sizes: HeaderBiddingSize[]): string => {
+	if (getBreakpointKey() === 'D') {
+		// top-above-nav on desktop, fronts-banners in the future
+		if (containsLeaderboardOrBillboard(sizes)) {
+			return '_yflg9S7c2x';
+		}
+		// right hand slots on desktop, aka right, inline2+ or mostpop
+		if (containsMpu(sizes) && containsDmpu(sizes)) {
+			return '_zOpeEAyfiz';
+		}
+		// other MPUs on desktop (inline1)
+		return '_qDBbBXYtzA';
+	}
+	// mobile-sticky on mobile
+	if (containsMobileSticky(sizes)) {
+		return '_odszPLn2hK';
+	}
+
+	// MPUs on mobile aka top-above-nav, inline on mobile and tablet
+	return '_y9LINEsbfh';
+};
+
 const pubmaticBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 	const defaultParams = {
 		name: 'pubmatic' as BidderCode,
@@ -278,18 +397,16 @@ const pubmaticBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 		}),
 	};
 
-	if (isInFrontsBannerVariant) {
-		// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
-		// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
-		if (containsBillboardNotLeaderboard(slotSizes)) {
-			return {
-				...defaultParams,
-				bidParams: (slotId: string): PrebidPubmaticParams => ({
-					...defaultParams.bidParams(slotId),
-					placementId: 'theguardian_970x250_only',
-				}),
-			};
-		}
+	// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
+	// This check is to distinguish from the top-above-nav which, includes a leaderboard
+	if (containsBillboardNotLeaderboard(slotSizes)) {
+		return {
+			...defaultParams,
+			bidParams: (slotId: string): PrebidPubmaticParams => ({
+				...defaultParams.bidParams(slotId),
+				placementId: 'theguardian_970x250_only',
+			}),
+		};
 	}
 
 	return defaultParams;
@@ -321,7 +438,8 @@ const improveDigitalBidder: PrebidBidder = {
 		slotId: string,
 		sizes: HeaderBiddingSize[],
 	): PrebidImproveParams => ({
-		placementId: getImprovePlacementId(sizes, isInFrontsBannerVariant),
+		publisherId: 995,
+		placementId: getImprovePlacementId(sizes),
 		size: getImproveSizeParam(slotId, isDesktopAndArticle),
 	}),
 };
@@ -378,17 +496,15 @@ const criteoBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 		switchName: 'prebidCriteo',
 	};
 
-	if (isInFrontsBannerVariant) {
-		// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
-		// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
-		if (containsBillboardNotLeaderboard(slotSizes)) {
-			return {
-				...defaultParams,
-				bidParams: () => ({
-					zoneId: 1759354,
-				}),
-			};
-		}
+	// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
+	// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
+	if (containsBillboardNotLeaderboard(slotSizes)) {
+		return {
+			...defaultParams,
+			bidParams: () => ({
+				zoneId: 1759354,
+			}),
+		};
 	}
 
 	return {
@@ -409,25 +525,41 @@ const smartBidder: PrebidBidder = {
 	}),
 };
 
+const kargoBidder: PrebidBidder = {
+	name: 'kargo',
+	switchName: 'prebidKargo',
+	bidParams: (
+		_slotId: string,
+		sizes: HeaderBiddingSize[],
+	): PrebidKargoParams => ({
+		placementId: getKargoPlacementId(sizes),
+	}),
+};
+
+const magniteBidder: PrebidBidder = {
+	//Rubicon is the old name for Magnite but it is still used for the integration
+	name: 'rubicon',
+	switchName: 'prebidMagnite',
+	bidParams: (
+		slotId: string,
+		sizes: HeaderBiddingSize[],
+	): PrebidMagniteParams => ({
+		accountId: 26644,
+		siteId: getMagniteSiteId(),
+		zoneId: getMagniteZoneId(slotId, sizes),
+	}),
+};
+
 // There's an IX bidder for every size that the slot can take
 const indexExchangeBidders = (
 	slotSizes: HeaderBiddingSize[],
-	isInFrontsBannerVariant: boolean,
 ): PrebidBidder[] => {
-	let indexSiteId = getIndexSiteId();
-	if (isInFrontsBannerVariant) {
-		// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
-		// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
-		if (containsBillboardNotLeaderboard(slotSizes)) {
-			indexSiteId = '983842';
-		}
-	}
-
+	const siteId = getIndexSiteId(slotSizes);
 	return slotSizes.map((size) => ({
 		name: 'ix',
 		switchName: 'prebidIndexExchange',
 		bidParams: (): PrebidIndexExchangeParams => ({
-			siteId: indexSiteId,
+			siteId,
 			size,
 		}),
 	}));
@@ -461,16 +593,15 @@ const currentBidders = (
 		[shouldIncludeAdYouLike(slotSizes), adYouLikeBidder],
 		[shouldUseOzoneAdaptor(), ozoneClientSideBidder(pageTargeting)],
 		[shouldIncludeOpenx(), openxClientSideBidder(pageTargeting)],
+		[shouldIncludeKargo(), kargoBidder],
+		[shouldIncludeMagnite(), magniteBidder],
 	];
 
 	const otherBidders = biddersToCheck
 		.filter(([shouldInclude]) => inPbTestOr(shouldInclude))
 		.map(([, bidder]) => bidder);
 
-	const allBidders = indexExchangeBidders(
-		slotSizes,
-		isInFrontsBannerVariant,
-	).concat(otherBidders);
+	const allBidders = indexExchangeBidders(slotSizes).concat(otherBidders);
 	return isPbTestOn()
 		? biddersBeingTested(allBidders)
 		: biddersSwitchedOn(allBidders);
@@ -487,8 +618,9 @@ export const bids = (
 	}));
 
 export const _ = {
-	getIndexSiteId,
+	getIndexSiteIdFromConfig,
 	getXaxisPlacementId,
 	getTrustXAdUnitId,
 	indexExchangeBidders,
+	getOzonePlacementId,
 };

@@ -1,3 +1,4 @@
+import { log } from '@guardian/libs';
 import type { SizeMapping } from './ad-sizes';
 import { isBreakpoint } from './lib/breakpoint';
 
@@ -13,16 +14,13 @@ type SlotName =
 	| 'carrot'
 	| 'comments-expanded'
 	| 'comments'
-	| 'epic'
+	| 'crossword-banner-mobile'
 	| 'exclusion'
+	| 'football-right'
 	| 'fronts-banner'
-	| 'high-merch-lucky'
-	| 'high-merch-paid'
-	| 'high-merch'
-	| 'im'
+	| 'merchandising-high'
 	| 'inline'
 	| 'mobile-sticky'
-	| 'mostpop'
 	| 'top-above-nav';
 
 type AdSlotConfigs = Partial<Record<SlotName, AdSlotConfig>>;
@@ -33,34 +31,13 @@ type CreateSlotOptions = {
 };
 
 const adSlotConfigs: AdSlotConfigs = {
-	im: {
-		label: false,
+	'merchandising-high': {
 		refresh: false,
-	},
-	'high-merch': {
-		label: false,
-		refresh: false,
-		name: 'merchandising-high',
-	},
-	'high-merch-lucky': {
-		label: false,
-		refresh: false,
-		name: 'merchandising-high-lucky',
-	},
-	'high-merch-paid': {
-		label: false,
-		refresh: false,
-		name: 'merchandising-high',
 	},
 	carrot: {
 		label: false,
 		refresh: false,
 		name: 'carrot',
-	},
-	epic: {
-		label: false,
-		refresh: false,
-		name: 'epic',
 	},
 	'mobile-sticky': {
 		label: true,
@@ -77,7 +54,7 @@ type DataAttributes = Record<string, string>;
   Insert that element as siblings at the place you want adverts to appear.
 
   Note that for the DFP slot to be filled by GTP, you'll have to
-  use addSlot from add-slot.js
+  use addSlot from fill-dynamic-advert-slot.ts
 */
 const createAdSlotElement = (
 	name: string,
@@ -93,9 +70,11 @@ const createAdSlotElement = (
 		// introduce dfp-ad--top-above-nav then there isn't already one.
 		const node = document.getElementById(id);
 		if (node?.parentNode) {
-			const pnode = node.parentNode;
-			console.log(`warning: cleaning up dom node id: dfp-ad--${name}`);
-			pnode.removeChild(node);
+			log(
+				'commercial',
+				`warning: cleaning up dom node id: dfp-ad--${name}`,
+			);
+			node.parentNode.removeChild(node);
 		}
 	}
 
@@ -128,25 +107,55 @@ const createClasses = (
  *
  * 1. Check that the options size mappings use known device names
  * 2. If so concat the size mappings
- *
  */
 const concatSizeMappings = (
 	defaultSizeMappings: SizeMapping,
 	optionSizeMappings: SizeMapping = {},
 ): SizeMapping =>
-	Object.entries(optionSizeMappings).reduce<SizeMapping>(
-		(sizeMappings, [breakpoint, optionSizes]) => {
-			// Only perform concatenation if breakpoint is of the correct type
-			if (isBreakpoint(breakpoint)) {
-				// Concatenate the option sizes onto any existing sizes present for a given breakpoint
-				sizeMappings[breakpoint] = (
-					sizeMappings[breakpoint] ?? []
-				).concat(optionSizes);
+	Object.entries(optionSizeMappings).reduce(
+		(combinedSizeMapping, [device, optionSizes]) => {
+			if (!isBreakpoint(device)) {
+				throw new Error(`Unknown device breakpoint: ${device}`);
 			}
-			return sizeMappings;
+
+			const sizes = optionSizes.reduce(
+				(acc, size) => {
+					const existingSize = acc.find(
+						(s) =>
+							s.width === size.width && s.height === size.height,
+					);
+					if (!existingSize) {
+						acc.push(size);
+					}
+					return acc;
+				},
+				[...(combinedSizeMapping[device] ?? [])],
+			);
+
+			return {
+				...combinedSizeMapping,
+				[device]: sizes,
+			};
 		},
 		{ ...defaultSizeMappings },
 	);
+
+type ContainerOptions = {
+	className?: string;
+};
+
+const adSlotContainerClass = 'ad-slot-container';
+
+const wrapSlotInContainer = (
+	adSlot: HTMLElement,
+	options: ContainerOptions = {},
+) => {
+	const container = document.createElement('div');
+	container.className = `${adSlotContainerClass} ${options.className ?? ''}`;
+	container.appendChild(adSlot);
+
+	return container;
+};
 
 const createAdSlot = (
 	name: SlotName,
@@ -171,4 +180,10 @@ const createAdSlot = (
 	);
 };
 
-export { createAdSlot, concatSizeMappings };
+export {
+	adSlotContainerClass,
+	concatSizeMappings,
+	createAdSlot,
+	wrapSlotInContainer,
+};
+export type { ContainerOptions };

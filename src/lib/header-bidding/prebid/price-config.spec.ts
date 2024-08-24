@@ -87,7 +87,7 @@ describe('price granularity', () => {
 			[[300, 250], ozoneGranularityOption2],
 			[[620, 350], ozoneGranularityOption2],
 			[[300, 197], ozoneGranularityOption2],
-		])(
+		] as const)(
 			'Ozone slot with size %s gives correct granularity',
 			([width, height], expectedGranularity) => {
 				expect(ozonePriceGranularity(width, height)).toEqual(
@@ -139,7 +139,7 @@ describe('price granularity', () => {
 			[[728, 90], indexPrebidGranularityOption2],
 			[[970, 250], indexPrebidGranularityOption2],
 			[[300, 250], indexPrebidGranularityOption2],
-		])(
+		] as const)(
 			'Index Prebid slot with size %s gives correct granularity',
 			([width, height], expectedGranularity) => {
 				expect(indexPriceGranularity(width, height)).toEqual(

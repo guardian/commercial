@@ -1,11 +1,9 @@
 import type { SizeMapping } from 'core/ad-sizes';
-import { adSizes } from 'core/ad-sizes';
-import { Advert } from '../dfp/Advert';
+import { adSizes, createAdSize } from 'core/ad-sizes';
+import { Advert } from '../../define/Advert';
 import { getHeaderBiddingAdSlots } from './slot-config';
 import { getBreakpointKey, shouldIncludeMobileSticky } from './utils';
 import type * as Utils from './utils';
-
-jest.mock('lib/raven');
 
 jest.mock('./utils', () => {
 	const original: typeof Utils = jest.requireActual('./utils');
@@ -16,7 +14,7 @@ jest.mock('./utils', () => {
 	};
 });
 
-jest.mock('lib/experiments/ab', () => ({
+jest.mock('experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn(
 		(testId, variantId) => variantId === 'variant',
 	),
@@ -26,12 +24,17 @@ jest.mock('lib/cookies', () => ({
 	getCookie: jest.fn(),
 }));
 
+jest.mock('define/init-slot-ias', () => ({
+	initSlotIas: jest.fn(() => Promise.resolve()),
+}));
+
 const slotPrototype = {
 	fake: 'slot',
 	defineSizeMapping: () => slotPrototype,
 	addService: () => slotPrototype,
 	setTargeting: () => slotPrototype,
 	setSafeFrameConfig: () => slotPrototype,
+	getTargeting: () => slotPrototype,
 };
 
 // Mock window.googletag
@@ -57,19 +60,12 @@ const buildAdvert = (name: string, sizes?: SizeMapping, id?: string) => {
 };
 
 describe('getPrebidAdSlots', () => {
-	afterEach(() => {
-		jest.resetAllMocks();
-	});
-
 	test('should return the correct top-above-nav slot at breakpoint D', () => {
 		(getBreakpointKey as jest.Mock).mockReturnValue('D');
 		expect(getHeaderBiddingAdSlots(buildAdvert('top-above-nav'))).toEqual([
 			{
 				key: 'top-above-nav',
-				sizes: [
-					[970, 250],
-					[728, 90],
-				],
+				sizes: [createAdSize(970, 250), createAdSize(728, 90)],
 			},
 		]);
 	});
@@ -98,7 +94,7 @@ describe('getPrebidAdSlots', () => {
 		expect(getHeaderBiddingAdSlots(buildAdvert('top-above-nav'))).toEqual([
 			{
 				key: 'top-above-nav',
-				sizes: [[728, 90]],
+				sizes: [createAdSize(728, 90)],
 			},
 		]);
 	});
@@ -108,7 +104,7 @@ describe('getPrebidAdSlots', () => {
 		expect(getHeaderBiddingAdSlots(buildAdvert('top-above-nav'))).toEqual([
 			{
 				key: 'top-above-nav',
-				sizes: [[300, 250]],
+				sizes: [createAdSize(300, 250)],
 			},
 		]);
 	});
@@ -123,7 +119,7 @@ describe('getPrebidAdSlots', () => {
 		).toEqual([
 			{
 				key: 'mobile-sticky',
-				sizes: [[320, 50]],
+				sizes: [createAdSize(320, 50), createAdSize(300, 50)],
 			},
 		]);
 	});
@@ -134,9 +130,9 @@ describe('getPrebidAdSlots', () => {
 
 		const hbSlots = getHeaderBiddingAdSlots(buildAdvert('inline1'));
 		expect(hbSlots).toHaveLength(1);
-		expect(hbSlots[0].sizes).toEqual([
-			[300, 250],
-			[620, 350],
+		expect(hbSlots[0]?.sizes).toEqual([
+			createAdSize(300, 250),
+			createAdSize(620, 350),
 		]);
 	});
 
@@ -146,10 +142,10 @@ describe('getPrebidAdSlots', () => {
 
 		const hbSlots = getHeaderBiddingAdSlots(buildAdvert('inline1'));
 		expect(hbSlots).toHaveLength(1);
-		expect(hbSlots[0].sizes).toEqual([
-			[300, 197],
-			[300, 250],
-			[320, 480],
+		expect(hbSlots[0]?.sizes).toEqual([
+			createAdSize(300, 197),
+			createAdSize(300, 250),
+			createAdSize(320, 480),
 		]);
 	});
 
@@ -159,10 +155,10 @@ describe('getPrebidAdSlots', () => {
 
 		const hbSlots = getHeaderBiddingAdSlots(buildAdvert('inline2'));
 		expect(hbSlots).toHaveLength(1);
-		expect(hbSlots[0].sizes).toEqual([
-			[160, 600],
-			[300, 600],
-			[300, 250],
+		expect(hbSlots[0]?.sizes).toEqual([
+			createAdSize(160, 600),
+			createAdSize(300, 600),
+			createAdSize(300, 250),
 		]);
 	});
 
@@ -172,9 +168,9 @@ describe('getPrebidAdSlots', () => {
 
 		const hbSlots = getHeaderBiddingAdSlots(buildAdvert('inline2'));
 		expect(hbSlots).toHaveLength(1);
-		expect(hbSlots[0].sizes).toEqual([
-			[300, 250],
-			[320, 480],
+		expect(hbSlots[0]?.sizes).toEqual([
+			createAdSize(300, 250),
+			createAdSize(320, 480),
 		]);
 	});
 
@@ -184,7 +180,10 @@ describe('getPrebidAdSlots', () => {
 		const hbSlots = getHeaderBiddingAdSlots(buildAdvert('inline4'));
 
 		expect(hbSlots).toContainEqual(
-			expect.objectContaining({ key: 'inline', sizes: [[300, 250]] }),
+			expect.objectContaining({
+				key: 'inline',
+				sizes: [createAdSize(300, 250)],
+			}),
 		);
 	});
 
@@ -194,7 +193,7 @@ describe('getPrebidAdSlots', () => {
 
 		const hbSlots = getHeaderBiddingAdSlots(buildAdvert('inline4'));
 		expect(hbSlots).toHaveLength(1);
-		expect(hbSlots[0].sizes).toEqual([[300, 250]]);
+		expect(hbSlots[0]?.sizes).toEqual([createAdSize(300, 250)]);
 	});
 
 	test('should return the correct inline slot at breakpoint D with additional size mappings', () => {
@@ -207,10 +206,10 @@ describe('getPrebidAdSlots', () => {
 			}),
 		);
 		expect(hbSlots).toHaveLength(1);
-		expect(hbSlots[0].sizes).toEqual([
-			[160, 600],
-			[300, 600],
-			[300, 250],
+		expect(hbSlots[0]?.sizes).toEqual([
+			createAdSize(160, 600),
+			createAdSize(300, 600),
+			createAdSize(300, 250),
 		]);
 	});
 });

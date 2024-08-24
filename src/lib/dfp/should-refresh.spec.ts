@@ -1,5 +1,5 @@
 import { adSizes, createAdSize } from 'core/ad-sizes';
-import { Advert } from './Advert';
+import { Advert } from '../../define/Advert';
 import { shouldRefresh } from './should-refresh';
 
 const outstreamSizes = [
@@ -7,6 +7,10 @@ const outstreamSizes = [
 	adSizes.outstreamMobile.toString(),
 	adSizes.outstreamGoogleDesktop.toString(),
 ];
+
+jest.mock('define/init-slot-ias', () => ({
+	initSlotIas: jest.fn(() => Promise.resolve()),
+}));
 
 describe('shouldRefresh', () => {
 	let googleSlot: googletag.Slot;
@@ -32,6 +36,7 @@ describe('shouldRefresh', () => {
 			setSafeFrameConfig: jest.fn(() => googleSlot),
 			setTargeting: jest.fn(() => googleSlot),
 			addService: jest.fn(() => googleSlot),
+			getTargeting: jest.fn(() => []),
 		};
 
 		const partialGoogletag: Partial<typeof googletag> = {

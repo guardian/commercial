@@ -1,7 +1,7 @@
 // Polyfill test environment (done by polyfill.io in production)
 require('core-js');
 
-jest.mock('./src/lib/utils/am-i-used', () => ({
+jest.mock('./src/utils/am-i-used', () => ({
 	amIUsed: jest.fn(),
 }));
 
@@ -13,6 +13,7 @@ window.guardian = {
 		page: {
 			idApiUrl: 'https://idapi.theguardian.com',
 			idUrl: 'https://profile.theguardian.com',
+			pageId: 'uk-politics',
 		},
 		images: {
 			commercial: {},
@@ -24,6 +25,7 @@ window.guardian = {
 	},
 	ophan: {
 		pageViewId: 'dummy_pvid_123456790',
+		record: jest.fn(),
 	},
 	css: {},
 	adBlockers: {
@@ -31,6 +33,13 @@ window.guardian = {
 		onDetect: [],
 	},
 };
+
+window.fetch = jest.fn().mockImplementation(() =>
+	Promise.resolve({
+		ok: true,
+		json: () => Promise.resolve({}),
+	}),
+);
 
 // Stub matchmedia
 window.matchMedia =

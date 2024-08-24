@@ -5,11 +5,17 @@ export type HeaderBiddingSize = AdSize;
 export type HeaderBiddingSlotName =
 	| 'banner'
 	| 'comments'
+	| 'comments-expanded'
 	| 'crossword-banner'
+	| 'crossword-banner-mobile'
+	| 'football-right'
 	| 'mobile-sticky'
 	| 'mostpop'
 	| 'right'
 	| 'top-above-nav'
+	| 'merchandising'
+	| 'merchandising-high'
+	| 'article-end'
 	| `fronts-banner-${number}`
 	| `inline${number}`;
 
@@ -64,6 +70,7 @@ export type PrebidTripleLiftParams = {
 };
 
 export type PrebidImproveParams = {
+	publisherId?: number;
 	placementId: number;
 	size: {
 		w?: number;
@@ -108,6 +115,17 @@ export type PrebidSmartParams = {
 	formatId: number;
 };
 
+export type PrebidKargoParams = {
+	placementId: string;
+};
+
+//This is used to be called Rubicon but now it's called Magnite. You can find it in the Prebid.js codebase as Rubicon
+export type PrebidMagniteParams = {
+	accountId: number;
+	siteId: number;
+	zoneId: number;
+};
+
 export type BidderCode =
 	| 'adyoulike'
 	| 'and'
@@ -115,6 +133,8 @@ export type BidderCode =
 	| 'criteo'
 	| 'improvedigital'
 	| 'ix'
+	| 'kargo'
+	| 'rubicon'
 	| 'oxd'
 	| 'ozone'
 	| 'pubmatic'
@@ -130,6 +150,8 @@ export type PrebidParams =
 	| PrebidCriteoParams
 	| PrebidImproveParams
 	| PrebidIndexExchangeParams
+	| PrebidKargoParams
+	| PrebidMagniteParams
 	| PrebidOpenXParams
 	| PrebidOzoneParams
 	| PrebidPubmaticParams

@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import type { ConsentState } from '@guardian/libs';
 import type { PageTargeting } from './build-page-targeting';
 import { buildPageTargeting } from './build-page-targeting';
 
@@ -12,6 +12,7 @@ const consentlessTargetingKeys = [
 	'ct',
 	'dcre',
 	'edition',
+	'firstvisit',
 	'k',
 	'rc',
 	'rp',
@@ -42,16 +43,19 @@ const isConsentlessKey = (key: unknown): key is ConsentlessTargetingKeys =>
  *
  * @param  {ConsentState} consentState
  * @param  {boolean} adFree
+ * @param  {boolean} isSignedIn
  * @returns ConsentlessPageTargeting
  */
 const buildPageTargetingConsentless = (
 	consentState: ConsentState,
 	adFree: boolean,
+	isSignedIn: boolean,
 ): ConsentlessPageTargeting => {
 	const consentedPageTargeting: PageTargeting = buildPageTargeting({
 		adFree,
 		consentState,
 		clientSideParticipations: {},
+		isSignedIn,
 	});
 
 	return Object.fromEntries(

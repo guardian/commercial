@@ -4,7 +4,7 @@ import {
 	hasCrossedBreakpoint,
 	matchesBreakpoints,
 } from 'lib/detect/detect-breakpoint';
-import { mediator } from 'lib/utils/mediator';
+import { mediator } from 'utils/mediator';
 
 const pageSkin = (): void => {
 	const bodyEl = document.body;

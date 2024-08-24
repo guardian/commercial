@@ -1,6 +1,5 @@
-import { onConsent } from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import { log } from '@guardian/libs';
+import type { ConsentState, TeamName } from '@guardian/libs';
+import { getMeasures, isNonNullable, log, onConsent } from '@guardian/libs';
 import { EventTimer } from './event-timer';
 import type { ConnectionType } from './types';
 
@@ -17,6 +16,11 @@ type Property = {
 type TimedEvent = {
 	name: string;
 	ts: number;
+};
+
+type DurationEvent = {
+	name: string;
+	duration: number;
 };
 
 type EventProperties = {
@@ -48,7 +52,6 @@ let commercialMetricsPayload: CommercialMetricsPayload = {
 
 let devProperties: Property[] | [] = [];
 let adBlockerProperties: Property[] | [] = [];
-let initialised = false;
 let endpoint: Endpoints;
 
 const setEndpoint = (isDev: boolean) =>
@@ -67,7 +70,7 @@ const setAdBlockerProperties = (adBlockerInUse?: boolean): void => {
 						name: 'adBlockerInUse',
 						value: adBlockerInUse.toString(),
 					},
-			  ]
+				]
 			: [];
 };
 
@@ -87,11 +90,21 @@ const mapEventTimerPropertiesToString = (
 	}));
 };
 
-const roundTimeStamp = (events: TimedEvent[]): Metric[] => {
-	return events.map(({ name, ts }) => ({
+const roundTimeStamp = (
+	events: TimedEvent[],
+	measures: DurationEvent[],
+): Metric[] => {
+	const roundedEvents = events.map(({ name, ts }) => ({
 		name,
 		value: Math.ceil(ts),
 	}));
+
+	const roundedMeasures = measures.map(({ name, duration }) => ({
+		name,
+		value: Math.ceil(duration),
+	}));
+
+	return [...roundedEvents, ...roundedMeasures];
 };
 
 function sendMetrics() {
@@ -101,10 +114,13 @@ function sendMetrics() {
 		commercialMetricsPayload,
 	);
 
-	return navigator.sendBeacon(
-		endpoint,
-		JSON.stringify(commercialMetricsPayload),
-	);
+	void fetch(endpoint, {
+		method: 'POST',
+		body: JSON.stringify(commercialMetricsPayload),
+		keepalive: true,
+		cache: 'no-store',
+		mode: 'no-cors',
+	});
 }
 
 type ArrayMetric = [key: string, value: string | number];
@@ -125,8 +141,21 @@ const getOfflineCount = (): Metric[] =>
 					name: 'offlineCount',
 					value: window.guardian.offlineCount,
 				},
-		  ]
+			]
 		: [];
+
+/**
+ * Measures added with @guardian/libs’s `startPerformanceMeasure`
+ *
+ * Allows for more granular monitoring of web page performance.
+ */
+const getPerformanceMeasures = (...teams: TeamName[]): Metric[] =>
+	getMeasures(teams).map(
+		({ detail: { subscription, name, action }, duration }) => ({
+			name: [subscription, name, action].filter(isNonNullable).join('_'),
+			value: duration,
+		}),
+	);
 
 function gatherMetricsOnPageUnload(): void {
 	// Assemble commercial properties and metrics
@@ -144,24 +173,29 @@ function gatherMetricsOnPageUnload(): void {
 		.concat(adBlockerProperties);
 	commercialMetricsPayload.properties = properties;
 
-	const metrics: readonly Metric[] = roundTimeStamp(eventTimer.events).concat(
-		getOfflineCount(),
-	);
+	const metrics: readonly Metric[] = roundTimeStamp(
+		eventTimer.marks,
+		eventTimer.measures,
+	)
+		.concat(getOfflineCount())
+		.concat(getPerformanceMeasures('dotcom'));
 	commercialMetricsPayload.metrics = metrics;
 
 	sendMetrics();
 }
 
 const listener = (e: Event): void => {
-	switch (e.type) {
-		case 'visibilitychange':
-			if (document.visibilityState === 'hidden') {
+	if (window.guardian.config.shouldSendCommercialMetrics === true) {
+		switch (e.type) {
+			case 'visibilitychange':
+				if (document.visibilityState === 'hidden') {
+					gatherMetricsOnPageUnload();
+				}
+				return;
+			case 'pagehide':
 				gatherMetricsOnPageUnload();
-			}
-			return;
-		case 'pagehide':
-			gatherMetricsOnPageUnload();
-			return;
+				return;
+		}
 	}
 };
 
@@ -192,7 +226,7 @@ const checkConsent = async (): Promise<boolean> => {
  * A method to asynchronously send metrics after initialization.
  */
 async function bypassCommercialMetricsSampling(): Promise<void> {
-	if (!initialised) {
+	if (!window.guardian.config.commercialMetricsInitialised) {
 		console.warn('initCommercialMetrics not yet initialised');
 		return;
 	}
@@ -200,7 +234,7 @@ async function bypassCommercialMetricsSampling(): Promise<void> {
 	const consented = await checkConsent();
 
 	if (consented) {
-		addVisibilityListeners();
+		window.guardian.config.shouldSendCommercialMetrics = true;
 	} else {
 		log('commercial', "Metrics won't be sent because consent wasn't given");
 	}
@@ -216,6 +250,7 @@ interface InitCommercialMetricsArgs {
 
 /**
  * A method to initialise metrics.
+ * Note: this is initialised in the frontend/DCR bundles, not the commercial bundle.
  * @param init.pageViewId - identifies the page view. Usually available on `guardian.config.ophan.pageViewId`. Defaults to `null`
  * @param init.browserId - identifies the browser. Usually available via `getCookie({ name: 'bwid' })`. Defaults to `null`
  * @param init.isDev - used to determine whether to use CODE or PROD endpoints.
@@ -234,26 +269,23 @@ async function initCommercialMetrics({
 	setEndpoint(isDev);
 	setDevProperties(isDev);
 	setAdBlockerProperties(adBlockerInUse);
+	addVisibilityListeners();
 
-	if (initialised) {
+	if (window.guardian.config.commercialMetricsInitialised) {
 		return false;
 	}
 
-	initialised = true;
+	window.guardian.config.commercialMetricsInitialised = true;
 
 	const userIsInSamplingGroup = Math.random() <= sampling;
 
 	if (isDev || userIsInSamplingGroup) {
 		const consented = await checkConsent();
 		if (consented) {
-			addVisibilityListeners();
+			window.guardian.config.shouldSendCommercialMetrics = true;
 			return true;
-		} else {
-			log(
-				'commercial',
-				"Metrics won't be sent because consent wasn't given",
-			);
 		}
+		log('commercial', "Metrics won't be sent because consent wasn't given");
 	}
 
 	return false;
@@ -266,7 +298,8 @@ export const _ = {
 	roundTimeStamp,
 	transformToObjectEntries,
 	reset: (): void => {
-		initialised = false;
+		window.guardian.config.commercialMetricsInitialised = false;
+		window.guardian.config.shouldSendCommercialMetrics = false;
 		commercialMetricsPayload = {
 			page_view_id: undefined,
 			browser_id: undefined,
@@ -280,4 +313,4 @@ export const _ = {
 };
 
 export type { Property, TimedEvent, Metric };
-export { bypassCommercialMetricsSampling, initCommercialMetrics };
+export { bypassCommercialMetricsSampling, initCommercialMetrics, checkConsent };

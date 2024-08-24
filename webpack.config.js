@@ -4,11 +4,7 @@ const webpack = require('webpack');
 
 module.exports = {
 	entry: {
-		'commercial-standalone': path.join(
-			__dirname,
-			'src',
-			'standalone.commercial.ts',
-		),
+		'commercial-standalone': path.join(__dirname, 'src', 'commercial.ts'),
 	},
 	output: {
 		path: path.join(__dirname, 'dist', 'bundle'),
@@ -24,7 +20,8 @@ module.exports = {
 			lodash: 'lodash-es',
 		},
 		extensions: ['.js', '.ts', '.tsx', '.jsx'],
-		symlinks: false, // Inserted to enable linking @guardian/consent-management-platform
+		// Originally inserted to enable linking @guardian/consent-management-platform, breaks pnpm build
+		// symlinks: false,
 	},
 	module: {
 		rules: [

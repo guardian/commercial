@@ -1,6 +1,5 @@
-import { onConsent } from '@guardian/consent-management-platform';
-import type { Framework } from '@guardian/consent-management-platform/dist/types';
-import { isString, log } from '@guardian/libs';
+import type { ConsentFramework } from '@guardian/libs';
+import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import { pubmatic } from 'core/__vendor/pubmatic';
 import type { AdSize } from 'core/ad-sizes';
@@ -8,10 +7,10 @@ import { createAdSize } from 'core/ad-sizes';
 import { PREBID_TIMEOUT } from 'core/constants/prebid-timeout';
 import { EventTimer } from 'core/event-timer';
 import type { PageTargeting } from 'core/targeting/build-page-targeting';
+import type { Advert } from 'define/Advert';
 import { getPageTargeting } from 'lib/build-page-targeting';
-import type { Advert } from 'lib/dfp/Advert';
-import { dfpEnv } from 'lib/dfp/dfp-env';
 import { getAdvertById } from 'lib/dfp/get-advert-by-id';
+import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
 import type {
 	BidderCode,
 	HeaderBiddingSlot,
@@ -142,6 +141,8 @@ type BidderSettings = {
 	improvedigital?: Partial<BidderSetting>;
 	ozone?: Partial<BidderSetting>;
 	criteo?: Partial<BidderSetting>;
+	kargo?: Partial<BidderSetting>;
+	magnite?: Partial<BidderSetting>;
 };
 
 class PrebidAdUnit {
@@ -235,7 +236,10 @@ const bidderTimeout = PREBID_TIMEOUT;
 let requestQueue: Promise<void> = Promise.resolve();
 let initialised = false;
 
-const initialise = (window: Window, framework: Framework = 'tcfv2'): void => {
+const initialise = (
+	window: Window,
+	framework: ConsentFramework = 'tcfv2',
+): void => {
 	if (!window.pbjs) {
 		log('commercial', 'window.pbjs not found on window');
 		return; // We couldn’t initialise
@@ -251,7 +255,7 @@ const initialise = (window: Window, framework: Framework = 'tcfv2'): void => {
 						filter: 'include',
 					},
 				},
-		  }
+			}
 		: { syncEnabled: false };
 
 	const consentManagement = (): ConsentManagement => {
@@ -303,7 +307,13 @@ const initialise = (window: Window, framework: Framework = 'tcfv2'): void => {
 				{
 					name: 'permutive',
 					params: {
-						acBidders: ['appnexus', 'ozone', 'pubmatic', 'trustx'],
+						acBidders: [
+							'appnexus',
+							'ix',
+							'ozone',
+							'pubmatic',
+							'trustx',
+						],
 						overwrites: {
 							pubmatic,
 						},
@@ -428,6 +438,18 @@ const initialise = (window: Window, framework: Framework = 'tcfv2'): void => {
 		};
 	}
 
+	if (window.guardian.config.switches.prebidKargo) {
+		window.pbjs.bidderSettings.kargo = {
+			storageAllowed: true,
+		};
+	}
+
+	if (window.guardian.config.switches.prebidMagnite) {
+		window.pbjs.bidderSettings.magnite = {
+			storageAllowed: true,
+		};
+	}
+
 	window.pbjs.setConfig(pbjsConfig);
 
 	// Adjust slot size when prebid ad loads
@@ -467,10 +489,7 @@ const bidsBackHandler = (
 
 		adUnits.forEach((adUnit) => {
 			if (isString(adUnit.code)) {
-				eventTimer.trigger(
-					'prebidEnd',
-					stripDfpAdPrefixFrom(adUnit.code),
-				);
+				eventTimer.mark('prebidEnd', stripDfpAdPrefixFrom(adUnit.code));
 			}
 		});
 	});
@@ -485,14 +504,15 @@ const requestBids = async (
 		return requestQueue;
 	}
 
-	if (!dfpEnv.hbImpl.prebid) {
+	if (!window.guardian.config.switches.prebidHeaderBidding) {
 		return requestQueue;
 	}
 
 	const adUnits = await onConsent()
-		.then((consentState) => {
+		.then(async (consentState) => {
 			// calculate this once before mapping over
-			const pageTargeting = getPageTargeting(consentState);
+			const isSignedIn = await isUserLoggedInOktaRefactor();
+			const pageTargeting = getPageTargeting(consentState, isSignedIn);
 			return flatten(
 				adverts.map((advert) =>
 					getHeaderBiddingAdSlots(advert, slotFlatMap)
@@ -517,7 +537,7 @@ const requestBids = async (
 			new Promise<void>((resolve) => {
 				adUnits.forEach((adUnit) => {
 					if (isString(adUnit.code)) {
-						eventTimer.trigger(
+						eventTimer.mark(
 							'prebidStart',
 							stripDfpAdPrefixFrom(adUnit.code),
 						);

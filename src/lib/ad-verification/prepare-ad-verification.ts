@@ -2,8 +2,8 @@ import { loadScript, log } from '@guardian/libs';
 import { EventTimer } from 'core/event-timer';
 import { bypassCommercialMetricsSampling } from 'core/send-commercial-metrics';
 import type { ConfiantCallback } from 'types/global';
+import { refreshAdvert } from '../../display/load-advert';
 import { getAdvertById } from '../dfp/get-advert-by-id';
-import { refreshAdvert } from '../dfp/load-advert';
 import { stripDfpAdPrefixFrom } from '../header-bidding/utils';
 
 const errorHandler = (error: Error) => {
@@ -45,7 +45,7 @@ const maybeRefreshBlockedSlotOnce: ConfiantCallback = (
 	if (!advert) throw new Error(`No slot found for ${blockedSlotPath}`);
 
 	const eventTimer = EventTimer.get();
-	eventTimer.trigger(`${stripDfpAdPrefixFrom(advert.id)}-blockedByConfiant`);
+	eventTimer.mark(`${stripDfpAdPrefixFrom(advert.id)}-blockedByConfiant`);
 
 	void bypassCommercialMetricsSampling();
 

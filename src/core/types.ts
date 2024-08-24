@@ -1,4 +1,4 @@
-import type { VendorName } from '@guardian/consent-management-platform/dist/types';
+import type { VendorName } from '@guardian/libs';
 
 export type ConnectionType =
 	| 'bluetooth'
@@ -36,14 +36,10 @@ export type ThirdPartyTag = {
 
 export type GetThirdPartyTag = (arg0: { shouldRun: boolean }) => ThirdPartyTag;
 
-export type GuardianAnalyticsConfig = {
-	trackers: Record<string, string>;
-};
-
 export type Edition = 'UK' | 'AU' | 'US';
 
 export type GuardianWindowConfig = {
-	googleAnalytics?: GuardianAnalyticsConfig;
+	commercialMetricsInitialised: boolean;
 	isDotcomRendering: boolean;
 	ophan: {
 		// somewhat redundant with guardian.ophan
@@ -119,3 +115,17 @@ export type True = 't';
 export type False = 'f';
 
 export type NotApplicable = 'na';
+
+/**
+ * Generates a type which represents possible indices of this array
+ *
+ * Example usage:
+ * const list = ['foo', 'bar', 'baz'] as const;
+ * type Test = Indices<typeof list>
+ */
+export type Indices<T extends readonly unknown[]> = Exclude<
+	Partial<T>['length'],
+	T['length']
+>;
+
+export const isDefined = <T>(x: T | undefined): x is T => x !== undefined;

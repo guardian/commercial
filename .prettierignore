@@ -5,3 +5,6 @@ dist
 README.md
 CHANGELOG.md
 riff-raff.yaml
+.vscode/settings.json
+playwright-report/
+pnpm-lock.yaml

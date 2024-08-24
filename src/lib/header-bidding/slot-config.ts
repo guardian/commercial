@@ -1,6 +1,7 @@
 import type { AdSize } from 'core/ad-sizes';
 import { adSizes, createAdSize } from 'core/ad-sizes';
-import type { Advert } from 'lib/dfp/Advert';
+import type { Advert } from 'define/Advert';
+import { isInUk } from 'utils/geo-utils';
 import type {
 	HeaderBiddingSizeKey,
 	HeaderBiddingSizeMapping,
@@ -29,7 +30,7 @@ const getHbBreakpoint = () => {
  * (this does not include inline1)
  */
 const filterBySizeMapping =
-	(slotSizes: AdSize[] = []) =>
+	(slotSizes: readonly AdSize[] = []) =>
 	({ key, sizes }: HeaderBiddingSlot): HeaderBiddingSlot => {
 		// For now, only apply filtering to inline header bidding slots
 		// In the future we may want to expand this to all slots
@@ -88,7 +89,7 @@ const filterByAdvert = (
 		return [];
 	}
 
-	const sizes = sizeMapping[key][breakpoint];
+	const sizes = sizeMapping[key]?.[breakpoint];
 
 	if (!sizes || sizes.length < 1) {
 		return [];
@@ -148,7 +149,7 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 						adSizes.outstreamMobile,
 						adSizes.mpu,
 						adSizes.portraitInterstitial,
-				  ]
+					]
 				: [adSizes.mpu],
 		},
 		inline2: {
@@ -172,6 +173,9 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 		comments: {
 			desktop: [adSizes.skyscraper, adSizes.mpu, adSizes.halfPage],
 		},
+		'comments-expanded': {
+			desktop: [adSizes.skyscraper, adSizes.mpu, adSizes.halfPage],
+		},
 		banner: {
 			// Banner slots appear on interactives, like on
 			// https://www.theguardian.com/us-news/ng-interactive/2018/nov/06/midterm-elections-2018-live-results-latest-winners-and-seats
@@ -184,11 +188,37 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 			],
 		},
 		'mobile-sticky': {
-			mobile: shouldIncludeMobileSticky() ? [adSizes.mobilesticky] : [],
+			mobile: shouldIncludeMobileSticky()
+				? [adSizes.mobilesticky, createAdSize(300, 50)]
+				: [],
 		},
 		'crossword-banner': {
 			desktop: isCrossword ? [adSizes.leaderboard] : [],
 			tablet: isCrossword ? [adSizes.leaderboard] : [],
+		},
+		'crossword-banner-mobile': {
+			mobile: [adSizes.mobilesticky],
+		},
+		'football-right': {
+			desktop: [
+				adSizes.empty,
+				adSizes.mpu,
+				adSizes.skyscraper,
+				adSizes.halfPage,
+			],
+		},
+		merchandising: {
+			mobile: [adSizes.mpu],
+			desktop: [adSizes.billboard],
+		},
+		'merchandising-high': {
+			mobile: [adSizes.mpu],
+			desktop: [adSizes.billboard],
+		},
+		'article-end': {
+			mobile: isInUk() ? [adSizes.mpu] : [],
+			tablet: isInUk() ? [adSizes.mpu] : [],
+			desktop: isInUk() ? [adSizes.mpu] : [],
 		},
 	};
 };

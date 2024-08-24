@@ -1,5 +1,5 @@
 import type { Participations } from '@guardian/ab-core';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import type { ConsentState } from '@guardian/libs';
 import { constructQuery } from '../lib/construct-query';
 import type {
 	AdsConfig,
@@ -18,6 +18,7 @@ const buildAdsConfig = (
 	adUnit: string,
 	customParams: CustomParams,
 	clientSideParticipations: Participations,
+	isSignedIn = false,
 ): AdsConfig => {
 	const mergedCustomParams = {
 		...customParams,
@@ -25,6 +26,7 @@ const buildAdsConfig = (
 			adFree: false,
 			clientSideParticipations,
 			consentState: cmpConsent,
+			isSignedIn: isSignedIn,
 			youtube: true,
 		}),
 		// 19/04/2023 This is a temporary update to assist reporting for a YouTube IMA test
@@ -39,35 +41,27 @@ const buildAdsConfig = (
 		},
 	};
 
-	if (cmpConsent.ccpa) {
-		const canTarget = !cmpConsent.ccpa.doNotSell;
+	if (cmpConsent.framework === 'ccpa' || cmpConsent.framework === 'aus') {
 		return {
 			...defaultAdsConfig,
-			restrictedDataProcessor: !canTarget,
-		} as AdsConfigCCPAorAus;
+			restrictedDataProcessor: !cmpConsent.canTarget,
+		} satisfies AdsConfigCCPAorAus;
 	}
 
-	if (cmpConsent.aus) {
-		const canTarget = cmpConsent.aus.personalisedAdvertising;
-		return {
-			...defaultAdsConfig,
-			restrictedDataProcessor: !canTarget,
-		} as AdsConfigCCPAorAus;
-	}
-
-	if (cmpConsent.tcfv2) {
+	if (cmpConsent.framework === 'tcfv2') {
 		const tcfData = cmpConsent.tcfv2;
-		const canTarget = Object.values(tcfData.consents).every(Boolean);
-		const mergedAdTagParameters = {
-			...defaultAdsConfig.adTagParameters,
-			cmpGdpr: tcfData.gdprApplies ? 1 : 0,
-			cmpGvcd: tcfData.addtlConsent,
-			cmpVcd: tcfData.tcString,
-		};
-		return {
-			adTagParameters: mergedAdTagParameters,
-			nonPersonalizedAd: !canTarget,
-		} as AdsConfigTCFV2;
+		if (tcfData) {
+			const mergedAdTagParameters = {
+				...defaultAdsConfig.adTagParameters,
+				cmpGdpr: tcfData.gdprApplies ? 1 : 0,
+				cmpGvcd: tcfData.addtlConsent,
+				cmpVcd: tcfData.tcString,
+			};
+			return {
+				adTagParameters: mergedAdTagParameters,
+				nonPersonalizedAd: !cmpConsent.canTarget,
+			} satisfies AdsConfigTCFV2;
+		}
 	}
 
 	// Shouldn't happen but handle if no matching framework
@@ -80,6 +74,7 @@ type BuildAdsConfigWithConsent = {
 	customParams: CustomParams;
 	consentState: ConsentState;
 	clientSideParticipations: Participations;
+	isSignedIn: boolean;
 };
 
 const buildAdsConfigWithConsent = ({
@@ -88,6 +83,7 @@ const buildAdsConfigWithConsent = ({
 	consentState,
 	customParams,
 	isAdFreeUser,
+	isSignedIn,
 }: BuildAdsConfigWithConsent): AdsConfig => {
 	if (isAdFreeUser) {
 		return disabledAds;
@@ -97,6 +93,7 @@ const buildAdsConfigWithConsent = ({
 		adUnit,
 		customParams,
 		clientSideParticipations,
+		isSignedIn,
 	);
 };
 

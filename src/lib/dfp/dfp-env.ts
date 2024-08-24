@@ -1,23 +1,18 @@
-import { getUrlVars as _getUrlVars } from 'lib/utils/url';
-import type { Advert } from './Advert';
+import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
+import { getUrlVars as _getUrlVars } from 'utils/url';
+import type { Advert } from '../../define/Advert';
 
 const getUrlVars = _getUrlVars as (arg?: string) => Record<string, string>;
 
 interface DfpEnv {
 	renderStartTime: number;
 	adSlotSelector: string;
-	hbImpl: Record<string, boolean>;
 	lazyLoadEnabled: boolean;
 	lazyLoadObserve: boolean;
-	creativeIDs: string[];
-	advertIds: Record<string, number>;
 	advertsToLoad: Advert[];
-	advertsToRefresh: Advert[];
-	adverts: Advert[];
+	adverts: Map<Advert['id'], Advert>;
 	shouldLazyLoad: () => boolean;
 }
-
-const { switches } = window.guardian.config;
 
 const dfpEnv: DfpEnv = {
 	/* renderStartTime: integer. Point in time when DFP kicks in */
@@ -26,40 +21,33 @@ const dfpEnv: DfpEnv = {
 	/* adSlotSelector: string. A CSS selector to query ad slots in the DOM */
 	adSlotSelector: '.js-ad-slot',
 
-	/* hbImpl: Returns an object {'prebid': boolean, 'a9': boolean} to indicate which header bidding implementations are switched on */
-	hbImpl: {
-		// TODO: fix the Switch type upstream
-		prebid: switches.prebidHeaderBidding ?? false,
-		a9: switches.a9HeaderBidding ?? false,
-	},
 	/* lazyLoadEnabled: boolean. Set to true when adverts are lazy-loaded */
 	lazyLoadEnabled: false,
 
 	/* lazyLoadObserve: boolean. Use IntersectionObserver in supporting browsers */
 	lazyLoadObserve: 'IntersectionObserver' in window,
 
-	/* creativeIDs: array<string>. List of loaded creative IDs */
-	creativeIDs: [],
-
-	/* advertIds: map<string -> int>. Keeps track of slot IDs and their position in the array of adverts */
-	advertIds: {},
-
-	/* advertsToLoad: array<Advert>. Lists adverts waiting to be loaded */
+	/* advertsToLoad - Lists adverts waiting to be loaded */
 	advertsToLoad: [],
 
-	/* advertsToRefresh: array<Advert>. Lists adverts refreshed when a breakpoint has been crossed */
-	advertsToRefresh: [],
-
-	/* adverts: array<Advert>. Keeps track of adverts and their state */
-	adverts: [],
+	/* adverts - Keeps track of adverts and their state */
+	adverts: new Map(),
 
 	/* shouldLazyLoad: () -> boolean. Determines whether ads should be lazy loaded */
 	shouldLazyLoad(): boolean {
-		// We do not want lazy loading on pageskins because it messes up the roadblock
-		// Also, if the special dll parameter is passed with a value of 1, we don't lazy load
-		return (
-			!window.guardian.config.page.hasPageSkin && getUrlVars().dll !== '1'
-		);
+		if (getUrlVars().dll === '1') {
+			return false;
+		}
+
+		if (['mobile', 'tablet'].includes(getCurrentBreakpoint())) {
+			return true;
+		}
+
+		if (window.guardian.config.page.hasPageSkin) {
+			return false;
+		}
+
+		return true;
 	},
 };
 
@@ -69,3 +57,4 @@ window.guardian.commercial = window.guardian.commercial ?? {};
 window.guardian.commercial.dfpEnv = dfpEnv;
 
 export { dfpEnv };
+export type { DfpEnv };

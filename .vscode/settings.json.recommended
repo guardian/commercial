@@ -1,0 +1,39 @@
+// Recommended VS Code settings for this project.
+// Copy these to .vscode/settings.json to apply them to your editor
+// https://github.com/guardian/recommendations/blob/main/VSCode.md#do-not-commit-vscode
+{
+	"[javascript]": {
+		"editor.formatOnSave": true
+	},
+	"[typescript]": {
+		"editor.formatOnSave": true
+	},
+	"editor.codeActionsOnSave": {
+		"source.fixAll": true,
+		"source.organizeImports": true
+	},
+	"workbench.colorCustomizations": {
+		"titleBar.activeBackground": "#0b3e11",
+		"titleBar.activeForeground": "#cccccc",
+		"titleBar.inactiveBackground": "#041d07",
+		"titleBar.inactiveForeground": "#999999"
+	},
+	"cSpell.words": [
+		"AMTGRP",
+		"Bonzai",
+		"Brandmetrics",
+		"CAPI",
+		"CCPA",
+		"Googletag",
+		"Inizio",
+		"leaderboard",
+		"mobilesticky",
+		"outstream",
+		"Permutive",
+		"Prebid",
+		"remarketing",
+		"TCFV",
+		"viewability",
+		"Youtube"
+	],
+}

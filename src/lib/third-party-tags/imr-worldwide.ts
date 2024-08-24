@@ -1,4 +1,4 @@
-import { isInAuOrNz } from 'lib/utils/geo-utils';
+import { isInAuOrNz } from 'utils/geo-utils';
 
 // NOLCMB is a global function defined by the IMR worldwide library
 
@@ -59,8 +59,8 @@ const guMetadata: Record<string, string> = {
 
 const onLoad = (): void => {
 	const sectionFromMeta = window.guardian.config.page.section.toLowerCase();
-	const subBrandApId =
-		guMetadata[sectionFromMeta] || guMetadata['brand-only'];
+	const subBrandApId = (guMetadata[sectionFromMeta] ??
+		guMetadata['brand-only']) as string;
 
 	const sectionRef =
 		sectionFromMeta in guMetadata

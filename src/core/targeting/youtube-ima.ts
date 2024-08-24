@@ -1,5 +1,5 @@
 import type { Participations } from '@guardian/ab-core';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import type { ConsentState } from '@guardian/libs';
 import { log } from '@guardian/libs';
 import type { CustomParams, MaybeArray } from '../types';
 import { buildPageTargeting, filterValues } from './build-page-targeting';
@@ -26,6 +26,7 @@ const mergeCustomParamsWithTargeting = (
 	customParams: CustomParams,
 	consentState: ConsentState,
 	clientSideParticipations: Participations,
+	isSignedIn: boolean,
 ) => {
 	let pageTargeting = {};
 	try {
@@ -33,6 +34,7 @@ const mergeCustomParamsWithTargeting = (
 			adFree: false,
 			clientSideParticipations,
 			consentState: consentState,
+			isSignedIn: isSignedIn,
 		});
 	} catch (e) {
 		/**
@@ -55,6 +57,7 @@ type BuildImaAdTagUrl = {
 	customParams: CustomParams;
 	consentState: ConsentState;
 	clientSideParticipations: Participations;
+	isSignedIn: boolean;
 };
 
 const buildImaAdTagUrl = ({
@@ -62,11 +65,13 @@ const buildImaAdTagUrl = ({
 	clientSideParticipations,
 	consentState,
 	customParams,
+	isSignedIn,
 }: BuildImaAdTagUrl): string => {
 	const mergedCustomParams = mergeCustomParamsWithTargeting(
 		customParams,
 		consentState,
 		clientSideParticipations,
+		isSignedIn,
 	);
 	const queryParams = {
 		iu: adUnit,

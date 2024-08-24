@@ -1,51 +1,36 @@
-import config from 'lib/config';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
 import { commercialFeatures } from './commercial-features';
 import type { CommercialFeaturesConstructor } from './commercial-features';
-import { isUserLoggedIn as isUserLoggedIn_ } from './identity/api';
-import {
-	isAdFreeUser as isAdFreeUser_,
-	isPayingMember as isPayingMember_,
-	isRecentOneOffContributor as isRecentOneOffContributor_,
-	shouldHideSupportMessaging as shouldHideSupportMessaging_,
-} from './user-features';
+import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from './identity/api';
+import { adFreeDataIsPresent as adFreeDataIsPresent_ } from './manage-ad-free-cookie';
 import userPrefs from './user-prefs';
 
-const isPayingMember = isPayingMember_ as jest.MockedFunction<
-	typeof isPayingMember_
->;
-const isRecentOneOffContributor =
-	isRecentOneOffContributor_ as jest.MockedFunction<
-		typeof isRecentOneOffContributor_
-	>;
-const shouldHideSupportMessaging =
-	shouldHideSupportMessaging_ as jest.MockedFunction<
-		typeof shouldHideSupportMessaging_
-	>;
-const isAdFreeUser = isAdFreeUser_ as jest.MockedFunction<typeof isAdFreeUser_>;
 const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
 	typeof getCurrentBreakpoint_
 >;
-const isUserLoggedIn = isUserLoggedIn_ as jest.MockedFunction<
-	typeof isUserLoggedIn_
+
+const adFreeDataIsPresent = adFreeDataIsPresent_ as jest.MockedFunction<
+	typeof adFreeDataIsPresent_
 >;
+
+const isUserLoggedInOktaRefactor =
+	isUserLoggedInOktaRefactor_ as jest.MockedFunction<
+		typeof isUserLoggedInOktaRefactor_
+	>;
+
+jest.mock('./manage-ad-free-cookie', () => ({
+	adFreeDataIsPresent: jest.fn(),
+}));
 
 const CommercialFeatures =
 	commercialFeatures.constructor as CommercialFeaturesConstructor;
-
-jest.mock('./user-features', () => ({
-	isPayingMember: jest.fn(),
-	isRecentOneOffContributor: jest.fn(),
-	shouldHideSupportMessaging: jest.fn(),
-	isAdFreeUser: jest.fn(),
-}));
 
 jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 }));
 
-jest.mock('./identity/api', () => ({
-	isUserLoggedIn: jest.fn(),
+jest.mock('lib/identity/api', () => ({
+	isUserLoggedInOktaRefactor: jest.fn(),
 }));
 
 const originalUserAgent = navigator.userAgent;
@@ -72,32 +57,30 @@ describe('Commercial features', () => {
 		clearUserAgent();
 
 		// Set up a happy path by default
-		config.set('page', {
-			contentType: 'Article',
-			isMinuteArticle: false,
-			section: 'politics',
-			pageId: 'politics-article',
-			shouldHideAdverts: false,
-			shouldHideReaderRevenue: false,
-			isFront: false,
-			showRelatedContent: true,
-		});
-
-		config.set('switches', {
-			commercial: true,
-			enableDiscussionSwitch: true,
-		});
+		window.guardian.config = {
+			// @ts-expect-error -- It's a partial for a mock
+			page: {
+				contentType: 'Article',
+				isMinuteArticle: false,
+				section: 'politics',
+				pageId: 'politics-article',
+				shouldHideAdverts: false,
+				shouldHideReaderRevenue: false,
+				isFront: false,
+				showRelatedContent: true,
+			},
+			switches: {
+				shouldLoadGoogletag: true,
+				enableDiscussionSwitch: true,
+			},
+		};
 
 		window.location.hash = '';
 
 		userPrefs.removeSwitch('adverts');
 
 		getCurrentBreakpoint.mockReturnValue('desktop');
-		isPayingMember.mockReturnValue(false);
-		isRecentOneOffContributor.mockReturnValue(false);
-		shouldHideSupportMessaging.mockReturnValue(false);
-		isAdFreeUser.mockReturnValue(false);
-		isUserLoggedIn.mockReturnValue(true);
+		isUserLoggedInOktaRefactor.mockResolvedValue(true);
 
 		expect.hasAssertions();
 	});
@@ -105,7 +88,7 @@ describe('Commercial features', () => {
 	describe('DFP advertising', () => {
 		it('Runs by default', () => {
 			const features = new CommercialFeatures();
-			expect(features.dfpAdvertising).toBe(true);
+			expect(features.shouldLoadGoogletag).toBe(true);
 		});
 
 		it('Is disabled on sensitive pages', () => {
@@ -113,28 +96,28 @@ describe('Commercial features', () => {
 			// Showing adverts on these pages would be crass - callous, even.
 			window.guardian.config.page.shouldHideAdverts = true;
 			const features = new CommercialFeatures();
-			expect(features.dfpAdvertising).toBe(false);
+			expect(features.shouldLoadGoogletag).toBe(false);
 		});
 
 		it('Is disabled on the children`s book site', () => {
 			// ASA guidelines prohibit us from showing adverts on anything that might be deemed childrens' content
 			window.guardian.config.page.section = 'childrens-books-site';
 			const features = new CommercialFeatures();
-			expect(features.dfpAdvertising).toBe(false);
+			expect(features.shouldLoadGoogletag).toBe(false);
 		});
 
 		it('Is skipped for speedcurve tests', () => {
 			// We don't want external dependencies getting in the way of perf tests
 			window.location.hash = '#noads';
 			const features = new CommercialFeatures();
-			expect(features.dfpAdvertising).toBe(false);
+			expect(features.shouldLoadGoogletag).toBe(false);
 		});
 
 		it('Is disabled for speedcurve tests in ad-free mode', () => {
 			window.location.hash = '#noadsaf';
 			const features = new CommercialFeatures();
 			expect(features.adFree).toBe(true);
-			expect(features.dfpAdvertising).toBe(false);
+			expect(features.shouldLoadGoogletag).toBe(false);
 		});
 
 		describe('In browser', () => {
@@ -164,7 +147,7 @@ describe('Commercial features', () => {
 			it.each(unsupportedBrowsers)('%s is disabled', (_, userAgent) => {
 				mockUserAgent(userAgent);
 				const features = new CommercialFeatures();
-				expect(features.dfpAdvertising).toBe(false);
+				expect(features.shouldLoadGoogletag).toBe(false);
 			});
 
 			const someSupportedBrowsers = [
@@ -189,7 +172,7 @@ describe('Commercial features', () => {
 			it.each(someSupportedBrowsers)('%s is enabled', (_, userAgent) => {
 				mockUserAgent(userAgent);
 				const features = new CommercialFeatures();
-				expect(features.dfpAdvertising).toBe(true);
+				expect(features.shouldLoadGoogletag).toBe(true);
 			});
 		});
 	});
@@ -222,7 +205,7 @@ describe('Commercial features', () => {
 	describe('Article body adverts under ad-free', () => {
 		// LOL grammar
 		it('are disabled', () => {
-			isAdFreeUser.mockReturnValue(true);
+			adFreeDataIsPresent.mockReturnValue(true);
 			const features = new CommercialFeatures();
 			expect(features.articleBodyAdverts).toBe(false);
 		});
@@ -250,7 +233,7 @@ describe('Commercial features', () => {
 
 	describe('High-relevance commercial component under ad-free', () => {
 		beforeEach(() => {
-			isAdFreeUser.mockReturnValue(true);
+			adFreeDataIsPresent.mockReturnValue(true);
 		});
 
 		it('Does not run on fronts', () => {
@@ -292,20 +275,15 @@ describe('Commercial features', () => {
 		});
 
 		it('Does not run on the secure contact interactive', () => {
-			config.set(
-				'page.pageId',
-				'help/ng-interactive/2017/mar/17/contact-the-guardian-securely',
-			);
-
+			window.guardian.config.page.pageId =
+				'help/ng-interactive/2017/mar/17/contact-the-guardian-securely';
 			const features = new CommercialFeatures();
 			expect(features.thirdPartyTags).toBe(false);
 		});
 
 		it('Does not run on secure contact help page', () => {
-			config.set(
-				'page.pageId',
-				'help/2016/sep/19/how-to-contact-the-guardian-securely',
-			);
+			window.guardian.config.page.pageId =
+				'help/2016/sep/19/how-to-contact-the-guardian-securely';
 
 			const features = new CommercialFeatures();
 			expect(features.thirdPartyTags).toBe(false);
@@ -314,7 +292,7 @@ describe('Commercial features', () => {
 
 	describe('Third party tags under ad-free', () => {
 		beforeEach(() => {
-			isAdFreeUser.mockReturnValue(true);
+			adFreeDataIsPresent.mockReturnValue(true);
 		});
 
 		it('Does not run by default', () => {
@@ -336,10 +314,8 @@ describe('Commercial features', () => {
 		});
 
 		it('Does not run on secure contact pages', () => {
-			config.set(
-				'page.pageId',
-				'help/ng-interactive/2017/mar/17/contact-the-guardian-securely',
-			);
+			window.guardian.config.page.contentType =
+				'help/ng-interactive/2017/mar/17/contact-the-guardian-securely';
 
 			const features = new CommercialFeatures();
 			expect(features.thirdPartyTags).toBe(false);
@@ -349,7 +325,7 @@ describe('Commercial features', () => {
 	describe('Comment adverts', () => {
 		beforeEach(() => {
 			window.guardian.config.page.commentable = true;
-			isUserLoggedIn.mockReturnValue(true);
+			isUserLoggedInOktaRefactor.mockResolvedValue(true);
 		});
 
 		it('Displays when page has comments', () => {
@@ -358,7 +334,7 @@ describe('Commercial features', () => {
 		});
 
 		it('Will also display when the user is not logged in', () => {
-			isUserLoggedIn.mockReturnValue(false);
+			isUserLoggedInOktaRefactor.mockResolvedValue(false);
 			const features = new CommercialFeatures();
 			expect(features.commentAdverts).toBe(true);
 		});
@@ -397,7 +373,7 @@ describe('Commercial features', () => {
 	describe('Comment adverts under ad-free', () => {
 		beforeEach(() => {
 			window.guardian.config.page.commentable = true;
-			isAdFreeUser.mockReturnValue(true);
+			adFreeDataIsPresent.mockReturnValue(true);
 		});
 
 		it('Does not display when page has comments', () => {
@@ -412,7 +388,7 @@ describe('Commercial features', () => {
 		});
 
 		it('Does not appear when user signed out', () => {
-			isUserLoggedIn.mockReturnValue(false);
+			isUserLoggedInOktaRefactor.mockResolvedValue(false);
 			const features = new CommercialFeatures();
 			expect(features.commentAdverts).toBe(false);
 		});
@@ -472,20 +448,16 @@ describe('Commercial features', () => {
 		});
 
 		it('Does not run on the secure contact interactive', () => {
-			config.set(
-				'page.pageId',
-				'help/ng-interactive/2017/mar/17/contact-the-guardian-securely',
-			);
+			window.guardian.config.page.pageId =
+				'help/ng-interactive/2017/mar/17/contact-the-guardian-securely';
 
 			const features = new CommercialFeatures();
 			expect(features.comscore).toBe(false);
 		});
 
 		it('Does not run on secure contact help page', () => {
-			config.set(
-				'page.pageId',
-				'help/2016/sep/19/how-to-contact-the-guardian-securely',
-			);
+			window.guardian.config.page.pageId =
+				'help/2016/sep/19/how-to-contact-the-guardian-securely';
 
 			const features = new CommercialFeatures();
 			expect(features.comscore).toBe(false);

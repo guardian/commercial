@@ -13,27 +13,38 @@ To install the package, run `yarn add @guardian/commercial`.
 -   Node
     -   see [.nvmrc](../.nvmrc) for the current version
     -   the version manager [fnm](https://github.com/Schniz/fnm) is recommended with additional configuration to automatically switch on [changing directory](https://github.com/Schniz/fnm#shell-setup)
--   Yarn
+-   pnpm
 
 ### Setup
 
-To install dependencies, run `yarn`.
+To install dependencies, run `pnpm`.
 
-To develop locally, run `yarn serve` to start a local server. This will watch for changes and rebuild the bundle. Serving it at `http://localhost:3031`.
-
-### Testing
-
-To run the unit tests, run `yarn test`.
-
-To run the integration tests, switch to the `e2e` workspace to run `yarn cypress:open` or `yarn cypress:run` to run cypress integration tests.
+To develop locally, run `pnpm serve` to start a local server. This will watch for changes and rebuild the bundle. Serving it at `http://localhost:3031`.
 
 ### Releasing
 
 This repository uses [changesets](https://github.com/changesets/changesets) for version management
 
-To release a new version with your changes, run `yarn changeset add` and follow the prompts. This will create a new changeset file in the `.changeset` directory. Commit this file with your PR.
+To release a new version with your changes, run `pnpm changeset add` and follow the prompts. This will create a new changeset file in the `.changeset` directory. Commit this file with your PR.
 
 When your PR is merged, changeset will analyse the changes and create a PR to release the new version.
+
+### Bumping @guardian/commercial in Frontend
+Run [this script](./scripts/bump_commercial.sh) to raise a PR that bumps `@guardian/commercial` in Frontend to the specified version.
+
+
+Execute the script as follows:
+
+```bash
+./scripts/bump_commercial.sh [VERSION_NUMBER]
+```
+
+Eg
+```bash
+./scripts/bump_commercial.sh 11.11.1
+```
+
+This will automatically create a pull request in the Frontend repository.
 
 ### Pull requests
 
@@ -41,9 +52,29 @@ Try to write PR titles in the conventional commit format, and squash and merge w
 
 ### Working locally with DCR
 
-To use the bundle locally with DCR, run `COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js PORT=3030 make dev` in the DCR directory.
+1.  To point DCR to the local commercial bundle, in the `dotcom-rendering/dotcom-rendering` directory run:
 
-DCR will then use the local bundle instead of the one from PROD/CODE.
+    `COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js PORT=3030 make dev`
+
+    This will override `commercialBundleUrl` passed via the page config from PROD/CODE.
+
+1. In another terminal start the commercial dev server to serve the local bundle:
+
+    `pnpm serve`
+
+### Testing locally with DCR
+
+To run the unit tests:
+
+`pnpm test`
+
+To run the Playwright e2e tests:
+
+Follow the steps above to run DCR against the local bundle.
+
+`pnpm playwright:run` will run the tests on the command line
+
+`pnpm playwright:open` will open the Playwright UI so you can inspect the tests as they run
 
 ### Working locally with Frontend
 
@@ -59,12 +90,16 @@ Frontend will then use the local bundle instead of the one from PROD/CODE. Front
 
 ### Linking
 
-To use the production bundle locally with Frontend, run `yarn link` in the bundle directory. Then run `yarn link @guardian/commercial` in the frontend directory. Finally, start the frontend server as usual.
+To use the production bundle locally with Frontend, run `pnpm link` in the bundle directory. Then run `yarn link @guardian/commercial` in the frontend directory. Finally, start the frontend server as usual.
 
 Frontend will then use the local bundle instead of the one from PROD/CODE.
 
 ### Testing on CODE
 
 To test the bundle on CODE, create a PR, add the `[beta] @guardian/commercial` label, this will release a beta version of the bundle to NPM, the exact version will be commented on your PR.
+
+In order to do this, first run: `pnpm changeset add`, again, This will create a new changeset file in the `.changeset` directory. Commit this file with your PR.
+
+**Note**: Once the beta version is released, the label will be removed from the PR, so you will need to add it again if you want to release subsequent new versions.
 
 On a branch on frontend you can update the version of the bundle to the beta version and deploy to CODE to test.

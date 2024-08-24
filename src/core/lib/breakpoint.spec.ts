@@ -7,7 +7,7 @@ describe('isBreakpoint', () => {
 		['tablet', true],
 		['desktop', true],
 		['foo', false],
-		['wide', false],
+		['wide', true],
 		['leftCol', false],
 	];
 	it.each(cases)(

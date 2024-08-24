@@ -1,11 +1,12 @@
 import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import { buildAppNexusTargetingObject } from 'lib/build-page-targeting';
-import { isInAuOrNz } from 'lib/utils/geo-utils';
+import { isInAuOrNz, isInRow } from 'utils/geo-utils';
 import type { HeaderBiddingSize } from '../prebid-types';
 import {
 	containsBillboardNotLeaderboard,
 	containsLeaderboard,
 	containsLeaderboardOrBillboard,
+	containsMobileSticky,
 	containsMpu,
 	containsMpuOrDmpu,
 	getBreakpointKey,
@@ -35,23 +36,24 @@ const getAppNexusInvCode = (sizes: HeaderBiddingSize[]): string | undefined => {
 	}
 };
 
-const getAppNexusDirectPlacementId = (
+export const getAppNexusDirectPlacementId = (
 	sizes: HeaderBiddingSize[],
-	isInFrontsBannerVariant: boolean,
 ): string => {
 	if (isInAuOrNz()) {
 		return '11016434';
 	}
 
+	if (isInRow() && containsMobileSticky(sizes)) {
+		return '31512573';
+	}
+
 	const defaultPlacementId = '9251752';
 	switch (getBreakpointKey()) {
 		case 'D':
-			if (isInFrontsBannerVariant) {
-				// The only prebid compatible size for fronts-banner-ads is the billboard (970x250)
-				// This check is to distinguish from the top-above-nav which includes a leaderboard
-				if (containsBillboardNotLeaderboard(sizes)) {
-					return '30017511';
-				}
+			// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
+			// This check is to distinguish from the top-above-nav which includes a leaderboard
+			if (containsBillboardNotLeaderboard(sizes)) {
+				return '30017511';
 			}
 			if (containsMpuOrDmpu(sizes)) {
 				return '9251752';
@@ -81,7 +83,7 @@ const getAppNexusDirectPlacementId = (
 export const getAppNexusDirectBidParams = (
 	sizes: HeaderBiddingSize[],
 	pageTargeting: PageTargeting,
-	isInFrontsBannerVariant: boolean,
+	slotId: string,
 ): AppNexusDirectBidParams => {
 	if (isInAuOrNz() && window.guardian.config.switches.prebidAppnexusInvcode) {
 		const invCode = getAppNexusInvCode(sizes);
@@ -92,15 +94,18 @@ export const getAppNexusDirectBidParams = (
 				keywords: {
 					invc: [invCode],
 					...buildAppNexusTargetingObject(pageTargeting),
+					slot: slotId,
 				},
 			};
 		}
 	}
 	return {
-		placementId: getAppNexusDirectPlacementId(
-			sizes,
-			isInFrontsBannerVariant,
-		),
-		keywords: buildAppNexusTargetingObject(pageTargeting),
+		placementId: getAppNexusDirectPlacementId(sizes),
+		keywords: {
+			...buildAppNexusTargetingObject(pageTargeting),
+			slot: slotId,
+		},
 	};
 };
+
+export const _ = { getAppNexusDirectPlacementId };

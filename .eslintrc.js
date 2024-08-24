@@ -18,6 +18,7 @@ module.exports = {
 		curly: ['error', 'multi-line'],
 		'no-use-before-define': ['error', { functions: true, classes: true }],
 		'import/exports-last': 'error',
+		'no-else-return': 'error',
 	},
 	overrides: [
 		{

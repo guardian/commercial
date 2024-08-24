@@ -1,5 +1,5 @@
-import type { VendorName } from '@guardian/consent-management-platform/dist/types';
-import type { Advert } from 'lib/dfp/Advert';
+import type { CustomClaims } from '@guardian/identity-auth';
+import type { VendorName } from '@guardian/libs';
 import type { EventTimer } from '../core/event-timer';
 import type { PageTargeting } from '../core/targeting/build-page-targeting';
 import type {
@@ -7,21 +7,8 @@ import type {
 	GoogleTrackConversionObject,
 	NetworkInformation,
 } from '../core/types';
+import type { DfpEnv } from '../lib/dfp/dfp-env';
 import type { IasPETSlot } from './ias';
-
-interface DfpEnv {
-	renderStartTime: number;
-	adSlotSelector: string;
-	hbImpl: Record<string, boolean>;
-	lazyLoadEnabled: boolean;
-	lazyLoadObserve: boolean;
-	creativeIDs: string[];
-	advertIds: Record<string, number>;
-	advertsToLoad: Advert[];
-	advertsToRefresh: Advert[];
-	adverts: Advert[];
-	shouldLazyLoad: () => boolean;
-}
 
 type ServerSideABTest = `${string}${'Variant' | 'Control'}`;
 
@@ -101,6 +88,8 @@ interface LightboxImages {
 	images: Array<{ src: string }>;
 }
 
+type Stage = 'DEV' | 'CODE' | 'PROD';
+
 interface PageConfig extends CommercialPageConfig {
 	ajaxUrl?: string; // https://github.com/guardian/frontend/blob/33db7bbd/common/app/views/support/JavaScriptPage.scala#L72
 	assetsPath: string;
@@ -112,7 +101,6 @@ interface PageConfig extends CommercialPageConfig {
 	dcrCouldRender: boolean;
 	edition: Edition;
 	frontendAssetsFullURL?: string; // only in DCR
-	hasInlineMerchandise: boolean;
 	hasPageSkin: boolean; // https://github.com/guardian/frontend/blob/b952f6b9/common/app/views/support/JavaScriptPage.scala#L48
 	hasShowcaseMainElement: boolean;
 	headline: string;
@@ -156,13 +144,8 @@ interface PageConfig extends CommercialPageConfig {
 }
 
 interface Config {
+	commercialMetricsInitialised?: boolean;
 	frontendAssetsFullURL?: string;
-	googleAnalytics?: {
-		timingEvents?: GoogleTimingEvent[];
-		trackers?: {
-			editorial?: string;
-		};
-	};
 	isDotcomRendering: boolean;
 	ophan: {
 		// somewhat redundant with guardian.ophan
@@ -170,6 +153,8 @@ interface Config {
 		pageViewId: string;
 	};
 	page: PageConfig;
+	shouldSendCommercialMetrics?: boolean;
+	stage: Stage;
 	switches: Record<string, boolean | undefined>;
 	tests?: {
 		[key: `${string}Control`]: 'control';
@@ -178,11 +163,24 @@ interface Config {
 	user?: UserConfig;
 }
 
+type OphanRecordFunction = (
+	event: Record<string, unknown> & {
+		/**
+		 * the experiences key will override previously set values.
+		 * Use `recordExperiences` instead.
+		 */
+		experiences?: never;
+	},
+	callback?: () => void,
+) => void;
 interface Ophan {
-	setEventEmitter: unknown;
-	trackComponentAttention: unknown;
-	record: (...args: unknown[]) => void;
-	viewId: unknown;
+	trackComponentAttention: (
+		name: string,
+		el: Element,
+		visiblityThreshold: number,
+	) => void;
+	record: OphanRecordFunction;
+	viewId: string;
 	pageViewId: string;
 }
 
@@ -269,6 +267,14 @@ type ComscoreGlobals = {
 	c2: string;
 	cs_ucfr: string;
 	comscorekw?: string;
+	options?: {
+		enableFirstPartyCookie?: boolean;
+	};
+};
+
+type CustomIdTokenClaims = CustomClaims & {
+	email: string;
+	google_tag_id: string;
 };
 
 type AdBlockers = {
@@ -322,6 +328,8 @@ interface OptOutInitializeOptions {
 	noLogging?: 0 | 1;
 	lazyLoading?: { fractionInView?: number; viewPortMargin?: string };
 	noRequestsOnPageLoad?: 0 | 1;
+	frequencyScript?: string;
+	debug_forceCap?: number;
 }
 
 interface OptOutResponse {
@@ -437,6 +445,9 @@ interface HeaderNotification {
 declare global {
 	interface Navigator {
 		readonly connection?: NetworkInformation;
+		readonly cookieDeprecationLabel?: {
+			getValue: () => Promise<string>;
+		};
 	}
 	interface Window {
 		guardian: {
@@ -500,7 +511,6 @@ declare global {
 		nol_t: (pvar: { cid: string; content: string; server: string }) => Trac;
 
 		// Google
-		ga?: UniversalAnalytics.ga | null;
 		google_trackConversion?: (arg0: GoogleTrackConversionObject) => void;
 		google_tag_params?: GoogleTagParams;
 
@@ -527,6 +537,8 @@ export type {
 	PrebidIndexSite,
 	UserConfig,
 	ServerSideABTest,
+	Stage,
 	TagAttribute,
 	ThirdPartyTag,
+	CustomIdTokenClaims,
 };

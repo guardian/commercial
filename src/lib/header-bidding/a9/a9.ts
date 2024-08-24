@@ -1,8 +1,7 @@
 import { flatten } from 'lodash-es';
-import type { Advert } from 'lib/dfp/Advert';
-import { dfpEnv } from 'lib/dfp/dfp-env';
-import { noop } from 'lib/utils/noop';
+import type { Advert } from 'define/Advert';
 import type { A9AdUnitInterface } from 'types/global';
+import { noop } from 'utils/noop';
 import type { HeaderBiddingSlot, SlotFlatMap } from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';
 
@@ -49,7 +48,7 @@ const requestBids = async (
 		return requestQueue;
 	}
 
-	if (!dfpEnv.hbImpl.a9) {
+	if (!window.guardian.config.switches.a9HeaderBidding) {
 		return requestQueue;
 	}
 

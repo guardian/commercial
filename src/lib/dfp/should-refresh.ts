@@ -1,6 +1,6 @@
 import type { AdSizeString } from 'core/ad-sizes';
 import { outstreamSizes } from 'core/ad-sizes';
-import type { Advert } from './Advert';
+import type { Advert } from '../../define/Advert';
 
 /**
  * Determine whether an advert should refresh, taking into account
@@ -23,6 +23,11 @@ const shouldRefresh = (
 	nonRefreshableLineItemIds: number[] = [],
 ): boolean => {
 	const sizeString = advert.size?.toString();
+
+	// Do not refresh ads in slots labelled data-refresh="false"
+	if (advert.node.dataset.refresh === 'false') {
+		return false;
+	}
 
 	// Fluid adverts should not refresh
 	const isFluid = sizeString === 'fluid';

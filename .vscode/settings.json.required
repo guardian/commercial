@@ -1,0 +1,11 @@
+{
+	"eslint.format.enable": true,
+	"eslint.workingDirectories": [
+		{
+			"directory": "src",
+			"changeProcessCWD": true
+		}
+	],
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"jest.rootPath": "core"
+}

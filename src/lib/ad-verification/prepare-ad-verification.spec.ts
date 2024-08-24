@@ -5,8 +5,6 @@ const validIds = ['slot-a', 'slot-2'];
 const mockVariantSynchronous = jest.fn<boolean, unknown[]>();
 const mockLog = jest.fn<void, unknown[]>();
 
-jest.mock('lib/raven');
-jest.mock('ophan-tracker-js', () => null);
 jest.mock('@guardian/libs', () => ({
 	storage: {
 		local: {
@@ -26,7 +24,7 @@ jest.mock('@guardian/libs', () => ({
 	},
 	log: jest.fn((...args) => mockLog(...args)),
 }));
-jest.mock('lib/experiments/ab', () => ({
+jest.mock('experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn(() => mockVariantSynchronous()),
 }));
 jest.mock('../dfp/get-advert-by-id', () => ({
@@ -38,7 +36,7 @@ jest.mock('../dfp/get-advert-by-id', () => ({
 		};
 	}),
 }));
-jest.mock('../dfp/load-advert', () => ({
+jest.mock('display/load-advert', () => ({
 	refreshAdvert: jest.fn(),
 }));
 

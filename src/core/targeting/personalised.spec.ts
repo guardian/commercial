@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
+import type { ConsentState } from '@guardian/libs';
 import { storage } from '@guardian/libs';
 import type { PersonalisedTargeting } from './personalised';
 import { getPersonalisedTargeting } from './personalised';

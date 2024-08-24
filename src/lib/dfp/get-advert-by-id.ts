@@ -1,7 +1,7 @@
-import type { Advert } from './Advert';
+import type { Advert } from '../../define/Advert';
 import { dfpEnv } from './dfp-env';
 
 const getAdvertById = (id: string): Advert | null =>
-	id in dfpEnv.advertIds ? dfpEnv.adverts[dfpEnv.advertIds[id]] : null;
+	dfpEnv.adverts.get(id) ?? null;
 
 export { getAdvertById };

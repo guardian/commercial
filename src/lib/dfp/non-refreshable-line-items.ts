@@ -1,5 +1,5 @@
 import { memoize } from 'lodash-es';
-import { reportError } from 'lib/utils/report-error';
+import { reportError } from 'utils/report-error';
 
 export const fetchNonRefreshableLineItemIds = async (): Promise<number[]> => {
 	// When the env is CODE or local, use the CODE env's non-refreshable line items file
@@ -28,7 +28,7 @@ export const fetchNonRefreshableLineItemIds = async (): Promise<number[]> => {
 					? { lineItems: [...accum.lineItems, lineItemId] }
 					: Error(
 							'Failed to parse element in non-refreshable line item array as number',
-					  ),
+						),
 			{ lineItems: [] },
 		);
 

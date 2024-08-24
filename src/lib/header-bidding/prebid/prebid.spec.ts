@@ -3,9 +3,7 @@ import { prebid } from './prebid';
 
 const getAdvertById = getAdvertById_ as jest.Mock;
 
-jest.mock('lib/raven');
-
-jest.mock('lib/dfp/Advert', () =>
+jest.mock('define/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
 );
 
@@ -17,8 +15,8 @@ jest.mock('lib/dfp/get-advert-by-id', () => ({
 	getAdvertById: jest.fn(),
 }));
 
-jest.mock('lib/experiments/ab', () => ({
-	isInVariantSynchronous: jest.fn(),
+jest.mock('experiments/ab', () => ({
+	isUserInVariant: jest.fn(),
 }));
 
 const resetPrebid = () => {
@@ -26,13 +24,12 @@ const resetPrebid = () => {
 	// @ts-expect-error -- there’s no types for this
 	delete window.pbjsChunk;
 	jest.resetModules();
-	jest.requireActual('prebid.js/build/dist/prebid');
+	jest.requireActual('@guardian/prebid.js/build/dist/prebid');
 };
 
 describe('initialise', () => {
 	beforeEach(() => {
 		resetPrebid();
-		window.guardian.config.switches.commercial = true;
 		window.guardian.config.switches.consentManagement = true;
 		window.guardian.config.switches.prebidUserSync = true;
 		window.guardian.config.switches.prebidAppNexus = true;
@@ -44,35 +41,6 @@ describe('initialise', () => {
 	test('should generate correct Prebid config when all switches on', () => {
 		prebid.initialise(window, 'tcfv2');
 		expect(window.pbjs?.getConfig()).toEqual({
-			_auctionOptions: {},
-			_bidderSequence: 'random',
-			_bidderTimeout: 1500,
-			_customPriceBucket: {
-				buckets: [
-					{
-						max: 10,
-						increment: 0.01,
-					},
-					{
-						max: 15,
-						increment: 0.1,
-					},
-					{
-						max: 100,
-						increment: 1,
-					},
-				],
-			},
-			_debug: false,
-			_deviceAccess: true,
-			_disableAjaxTimeout: false,
-			_maxNestedIframes: 10,
-			_mediaTypePriceGranularity: {},
-			_priceGranularity: 'custom',
-			_publisherDomain: null,
-			_sendAllBids: true,
-			_timeoutBuffer: 400,
-			_useBidCache: false,
 			auctionOptions: {},
 			bidderSequence: 'random',
 			bidderTimeout: 1500,
@@ -103,10 +71,11 @@ describe('initialise', () => {
 			deviceAccess: true,
 			disableAjaxTimeout: false,
 			enableSendAllBids: true,
+			maxBid: 5000,
 			maxNestedIframes: 10,
 			mediaTypePriceGranularity: {},
 			priceGranularity: 'custom',
-			publisherDomain: null,
+			publisherDomain: undefined,
 			s2sConfig: {
 				adapter: 'prebidServer',
 				adapterOptions: {},
@@ -114,14 +83,12 @@ describe('initialise', () => {
 				bidders: [],
 				maxBids: 1,
 				ortbNative: {
-					context: 1,
 					eventtrackers: [
 						{
 							event: 1,
-							methods: [1],
+							methods: [1, 2],
 						},
 					],
-					plcmttype: 1,
 				},
 				syncTimeout: 1000,
 				syncUrlModifier: {},
@@ -218,6 +185,7 @@ describe('initialise', () => {
 		expect(rtcData?.name).toEqual('permutive');
 		expect(rtcData?.params.acBidders).toEqual([
 			'appnexus',
+			'ix',
 			'ozone',
 			'pubmatic',
 			'trustx',

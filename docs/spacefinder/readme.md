@@ -19,25 +19,40 @@ Some ad slots on the website are fixed. Come rain or shine, they're there. These
 
 By contrast, ad slots identified by Spacefinder vary from page to page. A short article may only have space for one, while a long read ought to fit many more.
 
-Once a page has loaded, Spacefinder cycles through the paragraphs inside the `article-body-commercial-selector` container, highlighted below. (The Adobe / Billie Eilish ad is an example of an ad inserted by Spacefinder.)
+Once a page has loaded, Spacefinder cycles through the eligible elements (matching the `candidateSelector` rule) inside the `article-body-commercial-selector` container, highlighted below. (The Adobe / Billie Eilish ad is an example of an ad inserted by Spacefinder.) This may happen in multiple passes for example n desktop inline1 is added first with specific rules because it is inline, then inline2+ are added with different rules because they are in the right rail.
 
 ![Article body section of a Guardian article](spacefinder-article-body-example.png)
 
-Within this space, ‘candidate’ paragraphs are assessed in relation to the last ‘winner’. If the candidate paragraph is far enough away from the last winning paragraph - and from any other specified element types - an ad can be added in front of it. If not, Spacefinder moves on to the next paragraph.
+Within this space, 'candidate' elements are assessed if they are far enough from other 'opponent' elements that the candidate must be far enough away from (specified by `opponentSelectorRules`). If the candidate paragraph is far enough away from it's 'opponents', an ad can be added above it. If not, Spacefinder moves on to the next paragraph. Candidate's are also checked if they appear too close to other ads, and if they are too close to the top or bottom of the article.
 
-![Visual explainer of how Spacefinder tests for ad slots](spacefinder-process-visualised.png)
+<table>
+    <tr>
+        <th>Opponent Above</th>
+        <th>Opponent Below</th>
+    </tr>
+    <tr>
+        <td>
+            <img src="spacefinder-min-above.png" alt="Opponent Above">
+        </td>
+        <td>
+            <img src="spacefinder-min-below.png" alt="Opponent Below">
+        </td>
+    </tr>
+</table>
 
-The space between paragraphs is calculated using the CSS ‘top’ property. There are too many moving parts (e.g. filtering for specific elements) for there to be a catch-all equation that sums up what Spacefinder does, but the gist of it is:
+The space between candidates and opponents is calculated using the ‘getBoundingClientRect().top’ property of the candidate and `top` or `bottom` property of the opponent.
 
-**_If the distance between the top of the last winning paragraph and the top of the candidate paragraph is greater than or equal to the maximum potential ad height plus padding, the candidate paragraph qualifies for an ad._**
+Opponents usually include ads inserted by previous runs of Spacefinder, but can also include other elements such as images, videos and embeds. The `opponentSelectorRules` are used to identify these elements.
 
-Or to simplify it further:
+### Avoiding other winning candidates
 
-![Pseudo equation explaining Spacefinder logic in a nutshell](spacefinder-equation.png)
+Spacefinder will also avoid ads that it has not yet inserted but will be inserted above a previous winning candidate element, this is done with the `filter` spacefinder rule and there is a slightly different approach for desktop and mobile.
 
-The value names above are made up to try to boil the essentials down - they don’t match what’s going on in the code itself. The ad heights mentioned are pulled in from [`ad-sizes.js`][].
+Desktop needs to take into account the potential height of an ad:
+![Spacefinder avoiding nearby ads on desktop](spacefinder-desktop.png)
 
-[`ad-sizes.js`]: https://github.com/guardian/commercial-core/blob/main/src/ad-sizes.ts
+Mobile does not need to take into account the potential height of an ad:
+![Spacefinder avoiding nearby ads on mobile](spacefinder-mobile.png)
 
 ---
 
@@ -47,32 +62,7 @@ The value names above are made up to try to boil the essentials down - they don�
 
 ## Spacefinder rules
 
-Rules are currently set in [`article-body-adverts.ts`][] in the frontend repository. The desktop configuration sits inside `addDesktopInlineAds`, which has two sets of rules. The mobile configuration is inside `addMobileInlineAds`.
-
-[`article-body-adverts.ts`]: https://github.com/guardian/frontend/blob/bf645be0e865e148e9a0977a581d57eb26f02504/static/src/javascripts/projects/commercial/modules/article-body-adverts.ts
-
-### Desktop
-
-#### First round (`defaultRules`) - skipped for paid content pages
-
--   At least 300px of space above (700px on immersive pages)
--   At least 300px of space below (700px if `isDotcomRendering` returns `false`)
--   At least 5px above and 190px below any `<h2>` elements
--   At least 500px from any other ad, above and below
-
-#### Second round (`relaxedRules`)
-
--   At least 1000px of space above (1600px on paid content)
--   At least 300px of space below paragraph (800px if `isDotcomRendering` returns `false`)
--   At least 500px from any other ad, above and below
-
-### Mobile
-
-#### Only round (`rules`)
-
--   Minimum of 200px of space above and below paragraph
--   At least 100px above and 250px below any `<h2>` elements
--   At least 500px from any other ad, above and below
+There are different rules for different passes see [article.ts](https://github.com/guardian/commercial/blob/main/src/insert/spacefinder/article.ts)
 
 ---
 
@@ -86,6 +76,6 @@ On desktop, the first inline ad sits inside the body of the article copy. All su
 
 ## Debugging
 
-Adding `sfdebug=1` to the URL shows information about `inline1` ads. Adding `sfdebug=2` shows information about the other inline slots.
+Adding `?sfdebug` to the URL opens the Spacefinder debugger control panel. The panel contains buttons to show the data for the different times that Spacefinder runs to find space for an ad. You can click these buttons to see the data for that run.
 
 Further reading: https://github.com/guardian/frontend/pull/24618

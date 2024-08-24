@@ -25,14 +25,14 @@
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"strict": true,
-		"target": "ESNEXT"
+		"target": "ESNEXT",
+		"noUncheckedIndexedAccess": true
 	},
 	"exclude": [
 		"node_modules",
 		"dist",
 		"coverage",
 		".eslintrc.js",
-		"cypress",
-		"./cypress.config.js"
+		"playwright-report"
 	]
 }

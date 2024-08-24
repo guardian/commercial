@@ -1,4 +1,10 @@
-import { _, adSizes, getAdSize } from './ad-sizes';
+import {
+	_,
+	adSizes,
+	findAppliedSizesForBreakpoint,
+	getAdSize,
+} from './ad-sizes';
+import type { SizeMapping } from './ad-sizes';
 
 const { createAdSize } = _;
 
@@ -55,6 +61,62 @@ describe('ad size splicing', () => {
 	});
 });
 
+describe('findAppliedSizesForBreakpoint', () => {
+	const exampleSizeMappingOne: SizeMapping = {
+		mobile: [adSizes.outstreamMobile, adSizes.mpu],
+		desktop: [adSizes.billboard],
+	};
+	const exampleSizeMappingTwo: SizeMapping = {
+		tablet: [adSizes.billboard],
+	};
+
+	describe('sizes defined for specified breakpoint', () => {
+		it('should return correct sizes for mobile', () => {
+			expect(
+				findAppliedSizesForBreakpoint(exampleSizeMappingOne, 'mobile'),
+			).toEqual([adSizes.outstreamMobile, adSizes.mpu]);
+		});
+		it('should return correct sizes for phablet', () => {
+			expect(
+				findAppliedSizesForBreakpoint(exampleSizeMappingOne, 'desktop'),
+			).toEqual([adSizes.billboard]);
+		});
+		it('should return correct sizes for tablet', () => {
+			expect(
+				findAppliedSizesForBreakpoint(exampleSizeMappingTwo, 'tablet'),
+			).toEqual([adSizes.billboard]);
+		});
+	});
+
+	describe('no sizes defined for specified breakpoint', () => {
+		it('should return correct sizes for phablet', () => {
+			expect(
+				findAppliedSizesForBreakpoint(exampleSizeMappingOne, 'phablet'),
+			).toEqual([adSizes.outstreamMobile, adSizes.mpu]);
+		});
+		it('should return correct sizes for tablet', () => {
+			expect(
+				findAppliedSizesForBreakpoint(exampleSizeMappingOne, 'tablet'),
+			).toEqual([adSizes.outstreamMobile, adSizes.mpu]);
+		});
+		it('should return correct sizes for tablet', () => {
+			expect(
+				findAppliedSizesForBreakpoint(exampleSizeMappingTwo, 'mobile'),
+			).toEqual([]);
+		});
+		it('should return correct sizes for tablet', () => {
+			expect(
+				findAppliedSizesForBreakpoint(exampleSizeMappingTwo, 'phablet'),
+			).toEqual([]);
+		});
+		it('should return correct sizes for tablet', () => {
+			expect(
+				findAppliedSizesForBreakpoint(exampleSizeMappingTwo, 'desktop'),
+			).toEqual([adSizes.billboard]);
+		});
+	});
+});
+
 describe('isProxy', () => {
 	it.each([
 		[160, 600],
@@ -77,6 +139,7 @@ describe('isProxy', () => {
 		[0, 0],
 		[1, 1],
 		[2, 2],
+		[3, 3],
 		[88, 71],
 		[88, 85],
 		[88, 87],

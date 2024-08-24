@@ -1,8 +1,7 @@
 import type { Participations } from '@guardian/ab-core';
-import { cmp } from '@guardian/consent-management-platform';
-import type { ConsentState } from '@guardian/consent-management-platform/dist/types';
-import type { CountryCode } from '@guardian/libs';
-import { getCookie, isString } from '@guardian/libs';
+import type { ConsentState, CountryCode } from '@guardian/libs';
+import { cmp, getCookie, isString } from '@guardian/libs';
+import { supportsPerformanceAPI } from '../event-timer';
 import { getLocale } from '../lib/get-locale';
 import type { False, True } from '../types';
 import type { ContentTargeting } from './content';
@@ -70,10 +69,38 @@ const filterValues = (pageTargets: Record<string, unknown>) => {
 	return filtered;
 };
 
+const lastPerformanceEntryIsNavigationType = (): boolean => {
+	if (!supportsPerformanceAPI()) {
+		return false;
+	}
+	const navigationEvents = performance.getEntriesByType('navigation');
+	const lastNavigationEvent = navigationEvents[navigationEvents.length - 1];
+	// https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEntry/entryType#navigation
+	return lastNavigationEvent?.entryType === 'navigation';
+};
+
+const referrerMatchesHost = (referrer: string): boolean => {
+	if (!referrer) {
+		return false;
+	}
+	const referrerUrl = new URL(referrer);
+	return referrerUrl.hostname === window.location.hostname;
+};
+
+// A consentless friendly way of determining if this is the users first visit to the page
+const isFirstVisit = (referrer: string): boolean => {
+	if (supportsPerformanceAPI() && !lastPerformanceEntryIsNavigationType()) {
+		return false;
+	}
+
+	return !referrerMatchesHost(referrer);
+};
+
 type BuildPageTargetingParams = {
 	adFree: boolean;
 	clientSideParticipations: Participations;
 	consentState: ConsentState;
+	isSignedIn?: boolean;
 	youtube?: boolean;
 };
 
@@ -81,6 +108,7 @@ const buildPageTargeting = ({
 	adFree,
 	clientSideParticipations,
 	consentState,
+	isSignedIn = false,
 	youtube = false,
 }: BuildPageTargetingParams): Record<string, string | string[]> => {
 	const { page, isDotcomRendering } = window.guardian.config;
@@ -104,18 +132,18 @@ const buildPageTargeting = ({
 		keywords: sharedAdTargeting.k ?? [],
 	});
 
-	const getReferrer = () => document.referrer || '';
+	const referrer = document.referrer || '';
 
 	const sessionTargeting: SessionTargeting = getSessionTargeting({
 		adTest: getCookie({ name: 'adtest', shouldMemoize: true }),
 		countryCode: getLocale(),
-		isSignedIn: !!getCookie({ name: 'GU_U' }),
+		isSignedIn,
 		pageViewId: window.guardian.config.ophan.pageViewId,
 		participations: {
 			clientSideParticipations,
 			serverSideParticipations: window.guardian.config.tests ?? {},
 		},
-		referrer: getReferrer(),
+		referrer,
 	});
 
 	type Viewport = { width: number; height: number };
@@ -138,6 +166,12 @@ const buildPageTargeting = ({
 		youtube,
 	});
 
+	const consentlessTargeting: Partial<PageTargeting> = {};
+
+	if (!consentState.canTarget) {
+		consentlessTargeting.firstvisit = isFirstVisit(referrer) ? 't' : 'f';
+	}
+
 	const pageTargets: PageTargeting = {
 		...personalisedTargeting,
 		...sharedAdTargeting,
@@ -145,6 +179,7 @@ const buildPageTargeting = ({
 		...contentTargeting,
 		...sessionTargeting,
 		...viewportTargeting,
+		...consentlessTargeting,
 	};
 
 	// filter !(string | string[]) and empty values

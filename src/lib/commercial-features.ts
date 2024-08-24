@@ -1,6 +1,6 @@
-import { log } from '@guardian/libs';
+import { getCookie, log } from '@guardian/libs';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
-import { isAdFreeUser } from './user-features';
+import { adFreeDataIsPresent } from './manage-ad-free-cookie';
 import userPrefs from './user-prefs';
 
 /**
@@ -35,9 +35,17 @@ const isInternetExplorer = () => {
 	return !!navigator.userAgent.match(/MSIE|Trident/g)?.length;
 };
 
+const DIGITAL_SUBSCRIBER_COOKIE = 'gu_digital_subscriber';
+
+const isDigitalSubscriber = (): boolean =>
+	getCookie({ name: DIGITAL_SUBSCRIBER_COOKIE }) === 'true';
+
+const isAdFreeUser = (): boolean =>
+	isDigitalSubscriber() || adFreeDataIsPresent();
+
 // Having a constructor means we can easily re-instantiate the object in a test
 class CommercialFeatures {
-	dfpAdvertising: boolean;
+	shouldLoadGoogletag: boolean;
 	isSecureContact: boolean;
 	articleBodyAdverts: boolean;
 	carrotTrafficDriver: boolean;
@@ -47,8 +55,8 @@ class CommercialFeatures {
 	liveblogAdverts: boolean;
 	adFree: boolean;
 	comscore: boolean;
-	launchpad: boolean;
 	youtubeAdvertising: boolean;
+	footballFixturesAdverts: boolean;
 
 	constructor() {
 		// this is used for SpeedCurve tests
@@ -75,6 +83,17 @@ class CommercialFeatures {
 		// TODO Convert detect.js to TypeScript
 		const isUnsupportedBrowser: boolean = isInternetExplorer();
 
+		// Detect presence of space for football-right ad slot
+		const { pageId } = window.guardian.config.page;
+		const isFootballPage = pageId.startsWith('football/');
+		const isPageWithRightAdSpace =
+			pageId.endsWith('/fixtures') ||
+			pageId.endsWith('/results') ||
+			pageId.endsWith('/tables') ||
+			pageId.endsWith('/table');
+
+		this.footballFixturesAdverts = isFootballPage && isPageWithRightAdSpace;
+
 		this.isSecureContact = [
 			'help/ng-interactive/2017/mar/17/contact-the-guardian-securely',
 			'help/2016/sep/19/how-to-contact-the-guardian-securely',
@@ -85,27 +104,29 @@ class CommercialFeatures {
 
 		this.youtubeAdvertising = !this.adFree && !sensitiveContent;
 
-		const dfpAdvertisingTrueConditions = {
-			'switches.commercial': !!switches.commercial,
+		const shouldLoadGoogletagTrueConditions = {
+			'switches.shouldLoadGoogletag': !!switches.shouldLoadGoogletag,
 			externalAdvertising,
 		};
 
-		const dfpAdvertisingFalseConditions = {
+		const shouldLoadGoogletagFalseConditions = {
 			sensitiveContent,
 			isIdentityPage,
 			adFree: this.adFree,
 			isUnsupportedBrowser,
 		};
 
-		this.dfpAdvertising =
+		this.shouldLoadGoogletag =
 			forceAds ||
-			(Object.values(dfpAdvertisingTrueConditions).every(Boolean) &&
-				!Object.values(dfpAdvertisingFalseConditions).some(Boolean));
+			(Object.values(shouldLoadGoogletagTrueConditions).every(Boolean) &&
+				!Object.values(shouldLoadGoogletagFalseConditions).some(
+					Boolean,
+				));
 
-		if (!this.dfpAdvertising) {
+		if (!this.shouldLoadGoogletag) {
 			adsDisabledLogger(
-				dfpAdvertisingTrueConditions,
-				dfpAdvertisingFalseConditions,
+				shouldLoadGoogletagTrueConditions,
+				shouldLoadGoogletagFalseConditions,
 			);
 		}
 
@@ -121,7 +142,7 @@ class CommercialFeatures {
 		};
 
 		this.articleBodyAdverts =
-			this.dfpAdvertising &&
+			this.shouldLoadGoogletag &&
 			!this.adFree &&
 			Object.values(articleBodyAdvertsTrueConditions).every(Boolean) &&
 			!Object.values(articleBodyAdvertsFalseConditions).some(Boolean);
@@ -137,11 +158,10 @@ class CommercialFeatures {
 		this.carrotTrafficDriver =
 			!this.adFree &&
 			this.articleBodyAdverts &&
-			!!window.guardian.config.switches.carrotTrafficDriver &&
 			!window.guardian.config.page.isPaidContent;
 
 		this.highMerch =
-			this.dfpAdvertising &&
+			this.shouldLoadGoogletag &&
 			!this.adFree &&
 			!isMinuteArticle &&
 			!isHosted &&
@@ -156,15 +176,8 @@ class CommercialFeatures {
 			!isIdentityPage &&
 			!this.isSecureContact;
 
-		this.launchpad =
-			!this.adFree &&
-			externalAdvertising &&
-			!isIdentityPage &&
-			!this.isSecureContact &&
-			!!window.guardian.config.switches.redplanetForAus;
-
 		this.commentAdverts =
-			this.dfpAdvertising &&
+			this.shouldLoadGoogletag &&
 			!this.adFree &&
 			!isMinuteArticle &&
 			!!window.guardian.config.switches.enableDiscussionSwitch &&
@@ -172,7 +185,7 @@ class CommercialFeatures {
 			(!isLiveBlog || isWidePage);
 
 		this.liveblogAdverts =
-			!!isLiveBlog && this.dfpAdvertising && !this.adFree;
+			!!isLiveBlog && this.shouldLoadGoogletag && !this.adFree;
 
 		this.comscore =
 			!!window.guardian.config.switches.comscore &&
