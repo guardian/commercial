@@ -77,7 +77,7 @@ describe('Personalised targeting', () => {
 			const state: ConsentState = {
 				ccpa: { doNotSell: false, signalStatus: 'ready' },
 				canTarget: true,
-				framework: 'usnat',
+				framework: 'ccpa',
 			};
 
 			storage.local.setRaw(FREQUENCY_KEY, '4');
@@ -99,7 +99,7 @@ describe('Personalised targeting', () => {
 			const state: ConsentState = {
 				ccpa: { doNotSell: true, signalStatus: 'ready' },
 				canTarget: false,
-				framework: 'usnat',
+				framework: 'ccpa',
 			};
 
 			storage.local.setRaw(FREQUENCY_KEY, '4');
@@ -193,7 +193,7 @@ describe('Personalised targeting', () => {
 			const state: ConsentState = {
 				ccpa: { doNotSell: false, signalStatus: 'ready' },
 				canTarget: true,
-				framework: 'usnat',
+				framework: 'ccpa',
 			};
 
 			storage.local.setRaw(FREQUENCY_KEY, String(val));
@@ -234,7 +234,7 @@ describe('Personalised targeting', () => {
 			const state: ConsentState = {
 				ccpa: { doNotSell: false, signalStatus: 'ready' },
 				canTarget: true,
-				framework: 'usnat',
+				framework: 'ccpa',
 			};
 
 			storage.local.remove(AMTGRP_STORAGE_KEY);
@@ -281,7 +281,7 @@ describe('Personalised targeting', () => {
 			const state: ConsentState = {
 				ccpa: { doNotSell: true, signalStatus: 'ready' },
 				canTarget: false,
-				framework: 'usnat',
+				framework: 'ccpa',
 			};
 
 			const targeting = getPersonalisedTargeting({
@@ -313,7 +313,7 @@ describe('Personalised targeting', () => {
 			const state: ConsentState = {
 				ccpa: { doNotSell: false, signalStatus: 'ready' },
 				canTarget: true,
-				framework: 'usnat',
+				framework: 'ccpa',
 			};
 
 			storage.local.setRaw(PERMUTIVE_KEY, '[1, 2, 3]');
@@ -330,7 +330,7 @@ describe('Personalised targeting', () => {
 			const state: ConsentState = {
 				ccpa: { doNotSell: false, signalStatus: 'ready' },
 				canTarget: true,
-				framework: 'usnat',
+				framework: 'ccpa',
 			};
 
 			storage.local.setRaw(PERMUTIVE_KEY, '[]');

@@ -216,13 +216,13 @@ const ausRejected: ConsentState = {
 const ccpaWithConsent: ConsentState = {
 	ccpa: { doNotSell: false, signalStatus: 'ready' },
 	canTarget: true,
-	framework: 'usnat',
+	framework: 'ccpa',
 };
 
 const ccpaWithoutConsent: ConsentState = {
 	ccpa: { doNotSell: true, signalStatus: 'ready' },
 	canTarget: false,
-	framework: 'usnat',
+	framework: 'ccpa',
 };
 
 describe('DFP', () => {

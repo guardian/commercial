@@ -56,13 +56,13 @@ const mockViewport = (width: number, height: number): void => {
 const ccpaWithConsentMock: ConsentState = {
 	ccpa: { doNotSell: false, signalStatus: 'ready' },
 	canTarget: true,
-	framework: 'usnat',
+	framework: 'ccpa',
 };
 
 const ccpaWithoutConsentMock: ConsentState = {
 	ccpa: { doNotSell: true, signalStatus: 'ready' },
 	canTarget: false,
-	framework: 'usnat',
+	framework: 'ccpa',
 };
 
 // AUS

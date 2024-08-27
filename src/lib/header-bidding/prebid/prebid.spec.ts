@@ -112,7 +112,7 @@ describe('initialise', () => {
 	});
 
 	test('should generate correct Prebid config consent management in CCPA', () => {
-		prebid.initialise(window, 'usnat');
+		prebid.initialise(window, 'ccpa');
 		expect(window.pbjs?.getConfig('consentManagement')).toEqual({
 			usp: {
 				cmpApi: 'iab',
