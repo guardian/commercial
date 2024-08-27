@@ -45,7 +45,7 @@ describe('findLineItems', () => {
 			slot: 'merchandising',
 			ct: 'article',
 		} as PageTargeting;
-		const lineItemIds = await getLineItemIds(targeting, true);
+		const lineItemIds = await getLineItemIds(targeting);
 
 		expect(lineItemIds).toContain(microsoftAiAdId);
 	});
@@ -68,7 +68,7 @@ describe('findLineItems', () => {
 			ct: 'section',
 			se: ['climate-countdown'],
 		} as PageTargeting;
-		const lineItemIds = await getLineItemIds(targeting, true);
+		const lineItemIds = await getLineItemIds(targeting);
 
 		expect(lineItemIds).not.toContain(microsoftAiAdId);
 	});

@@ -44,8 +44,6 @@ const matchesCustomTargeting = (
 	pageTargeting: PageTargeting,
 	debugCustomTargeting: boolean,
 ): boolean => {
-	console.log(pageTargeting);
-
 	if (!customTargeting) {
 		return true;
 	}
