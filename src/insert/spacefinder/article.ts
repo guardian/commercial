@@ -191,11 +191,20 @@ const addDesktopRightRailAds = (
 	);
 };
 
-const addMobileInlineAds = (fillSlot: FillAdSlot): Promise<boolean> => {
+const addMobileInlineAds = (
+	fillSlot: FillAdSlot,
+	currentBreakpoint: ReturnType<typeof getCurrentBreakpoint>,
+): Promise<boolean> => {
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const slots = paras.map(async (para, i) => {
-			const name = i === 0 ? 'top-above-nav' : `inline${i}`;
-			const type = i === 0 ? 'top-above-nav' : 'inline';
+			const name =
+				currentBreakpoint === 'mobile' && i === 0
+					? 'top-above-nav'
+					: `inline${i}`;
+			const type =
+				currentBreakpoint === 'mobile' && i === 0
+					? 'top-above-nav'
+					: 'inline';
 			const slot = await insertSlotAtPara(para, name, type, 'inline');
 			return fillSlot(
 				name,
@@ -227,9 +236,9 @@ const addInlineAds = (
 	fillSlot: FillAdSlot,
 	isConsentless: boolean,
 ): Promise<boolean> => {
-	const isMobile = getCurrentBreakpoint() === 'mobile';
-	if (isMobile) {
-		return addMobileInlineAds(fillSlot);
+	const currentBreakpoint = getCurrentBreakpoint();
+	if (['mobile', 'tablet'].includes(currentBreakpoint)) {
+		return addMobileInlineAds(fillSlot, currentBreakpoint);
 	}
 
 	if (isPaidContent) {
