@@ -42,6 +42,8 @@ import {
 	containsMobileSticky,
 	containsMpu,
 	containsMpuOrDmpu,
+	containsPortraitInterstitial,
+	containsWS,
 	getBreakpointKey,
 	shouldIncludeAdYouLike,
 	shouldIncludeAppNexus,
@@ -387,6 +389,64 @@ const getKargoPlacementId = (sizes: HeaderBiddingSize[]): string => {
 	return '_y9LINEsbfh';
 };
 
+const getAdYouLikePlacementId = (sizes: HeaderBiddingSize[]) => {
+	if (isInUk()) {
+		if (getBreakpointKey() === 'D') {
+			// right column ads
+			if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
+				return 'f13e6a47512bf890773b71ce4db22716';
+			}
+			// fronts banner ads
+			if (containsBillboardNotLeaderboard(sizes)) {
+				return '6c4808fb7433e73fb4286ce9de37e008';
+			}
+			// top-above-nav ads
+			if (containsLeaderboardOrBillboard(sizes)) {
+				return '36f00dee2120882f586386b4099e765d';
+			}
+		}
+
+		if (getBreakpointKey() === 'M') {
+			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+				return '46ce2d1ab64e2f57e676276741134129';
+			}
+
+			if (containsMobileSticky(sizes)) {
+				return 'eb72424b9cc2e064a3ea7a422c9ae8e6';
+			}
+		}
+	}
+
+	if (isInUsa()) {
+		if (getBreakpointKey() === 'D') {
+			// right column ads
+			if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
+				return 'fa1a02c6e1d5b2927ada54668c564ac5';
+			}
+			// fronts banner ads
+			if (containsBillboardNotLeaderboard(sizes)) {
+				return '7b3e5955c24514cacd19586a0c3ca8d1';
+			}
+			// top-above-nav ads
+			if (containsLeaderboardOrBillboard(sizes)) {
+				return '6538fe3160263c1db103fa48935fa1ca';
+			}
+		}
+
+		if (getBreakpointKey() === 'M') {
+			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+				return 'c0a40010a5fb523c0c1f28063cf095bc';
+			}
+
+			if (containsMobileSticky(sizes)) {
+				return 'c1a7d9313dc64e5e174da07b29d62ace';
+			}
+		}
+	}
+
+	return '';
+};
+
 const pubmaticBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 	const defaultParams = {
 		name: 'pubmatic' as BidderCode,
@@ -467,27 +527,12 @@ const xaxisBidder: PrebidBidder = {
 const adYouLikeBidder: PrebidBidder = {
 	name: 'adyoulike',
 	switchName: 'prebidAdYouLike',
-	bidParams: (): PrebidAdYouLikeParams => {
-		if (isInUk()) {
-			return {
-				placement: '2b4d757e0ec349583ce704699f1467dd',
-			};
-		}
-		if (isInUsOrCa()) {
-			return {
-				placement: '7fdf0cd05e1d4bf39a2d3df9c61b3495',
-			};
-		}
-		if (isInAuOrNz()) {
-			return {
-				placement: '5cf05e1705a2d57ba5d51e03f2af9208',
-			};
-		}
-		// ROW
-		return {
-			placement: 'c1853ee8bfe0d4e935cbf2db9bb76a8b',
-		};
-	},
+	bidParams: (
+		slotId: string,
+		sizes: HeaderBiddingSize[],
+	): PrebidAdYouLikeParams => ({
+		placement: getAdYouLikePlacementId(sizes),
+	}),
 };
 
 const criteoBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
