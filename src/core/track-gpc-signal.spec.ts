@@ -9,9 +9,10 @@ describe('initTrackGpcSignal', () => {
 		const consentState: ConsentState = {
 			ccpa: {
 				doNotSell: false,
+				signalStatus: 'ready',
 			},
 			canTarget: true,
-			framework: 'ccpa',
+			framework: 'usnat',
 		};
 
 		initTrackGpcSignal(consentState);
@@ -25,9 +26,10 @@ describe('initTrackGpcSignal', () => {
 		const consentState: ConsentState = {
 			ccpa: {
 				doNotSell: false,
+				signalStatus: 'ready',
 			},
 			canTarget: true,
-			framework: 'ccpa',
+			framework: 'usnat',
 			gpcSignal: false,
 		};
 
@@ -42,9 +44,10 @@ describe('initTrackGpcSignal', () => {
 		const consentState: ConsentState = {
 			ccpa: {
 				doNotSell: false,
+				signalStatus: 'ready',
 			},
 			canTarget: true,
-			framework: 'ccpa',
+			framework: 'usnat',
 			gpcSignal: true,
 		};
 
