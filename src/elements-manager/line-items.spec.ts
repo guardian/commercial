@@ -2,8 +2,8 @@ import type { PageTargeting } from 'core';
 import lineItemFixture from '../__fixtures__/line-items-fixtures.json';
 import { findLineItems } from './line-items';
 
-async function getLineItemIds(targeting: PageTargeting) {
-	const lineItems = await findLineItems(targeting);
+async function getLineItemIds(targeting: PageTargeting, debug = false) {
+	const lineItems = await findLineItems(targeting, debug);
 	return lineItems.map((item) => item.id);
 }
 
@@ -28,7 +28,7 @@ describe('findLineItems', () => {
 		});
 	});
 
-	it('returns items when targeting matches required custom parameters', async () => {
+	it('returns items when targeting matches required custom parameters - specific values', async () => {
 		const rhubarbFeastAdId = 6753800134;
 		const targeting = {
 			at: 'rhubarb_feast',
@@ -39,7 +39,18 @@ describe('findLineItems', () => {
 		expect(lineItemIds).toContain(rhubarbFeastAdId);
 	});
 
-	it('does not return items when targeting is not an exact match to the custom targeting', async () => {
+	it('returns items when targeting matches required custom parameters and does not match excluded parameters', async () => {
+		const microsoftAiAdId = 6745162272;
+		const targeting = {
+			slot: 'merchandising',
+			ct: 'article',
+		} as PageTargeting;
+		const lineItemIds = await getLineItemIds(targeting, true);
+
+		expect(lineItemIds).toContain(microsoftAiAdId);
+	});
+
+	it('does not return items when targeting is not an exact match to the required custom targeting', async () => {
 		const rhubarbFeastAdId = 6753800134;
 		const targeting = {
 			at: 'rhubarb_feast',
@@ -48,5 +59,17 @@ describe('findLineItems', () => {
 		const lineItemIds = await getLineItemIds(targeting);
 
 		expect(lineItemIds).not.toContain(rhubarbFeastAdId);
+	});
+
+	it('does not return items when targeting includes items excluded by the custom targeting', async () => {
+		const microsoftAiAdId = 6745162272;
+		const targeting = {
+			slot: 'merchandising',
+			ct: 'section',
+			se: ['climate-countdown'],
+		} as PageTargeting;
+		const lineItemIds = await getLineItemIds(targeting, true);
+
+		expect(lineItemIds).not.toContain(microsoftAiAdId);
 	});
 });

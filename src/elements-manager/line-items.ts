@@ -44,6 +44,8 @@ const matchesCustomTargeting = (
 	pageTargeting: PageTargeting,
 	debugCustomTargeting: boolean,
 ): boolean => {
+	console.log(pageTargeting);
+
 	if (!customTargeting) {
 		return true;
 	}
@@ -57,7 +59,7 @@ const matchesCustomTargeting = (
 		const secondLevelMatches = child.children[method](
 			({ key, values, operator }) => {
 				const targetingValues = pageTargeting[key];
-				return values.some((value) => {
+				return values.every((value) => {
 					if (Array.isArray(targetingValues)) {
 						const includes = targetingValues.includes(value);
 						if (
