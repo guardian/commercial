@@ -57,7 +57,7 @@ const matchesCustomTargeting = (
 		const secondLevelMatches = child.children[method](
 			({ key, values, operator }) => {
 				const targetingValues = pageTargeting[key];
-				return values.every((value) => {
+				return values[method]((value) => {
 					if (Array.isArray(targetingValues)) {
 						const includes = targetingValues.includes(value);
 						if (
