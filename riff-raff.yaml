@@ -3,7 +3,7 @@ stacks: [frontend]
 allowedStages:
   - CODE
 deployments:
-  frontend-static/test_commercial_bundles:
+  frontend-static/commercial-bundle:
     type: aws-s3
     parameters:
       bucketSsmKey: /account/services/dotcom-static.bucket

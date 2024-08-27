@@ -95,16 +95,13 @@ jobs:
           name: dist
           path: dist
 
-      - uses: aws-actions/configure-aws-credentials@v2
+      - name: Riff-Raff Upload
+        uses: guardian/actions-riff-raff@v4
         with:
-          aws-region: eu-west-1
-          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
-
-      - uses: guardian/actions-riff-raff@v2
-        with:
-          # Temporary project name that'll never actually get used
-          projectName: dotcom:testing-commercial
+          roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          projectName: dotcom:commercial-bundle
           configPath: ./riff-raff.yaml
           contentDirectories: |
-            frontend-static/test_commercial_bundles:
+            frontend-static/commercial:
               - dist/bundle/prod
