@@ -2,6 +2,11 @@ import type { PageTargeting } from 'core';
 import lineItemFixture from '../__fixtures__/line-items-fixtures.json';
 import { findLineItems } from './line-items';
 
+async function getLineItemIds(targeting: PageTargeting) {
+	const lineItems = await findLineItems(targeting);
+	return lineItems.map((item) => item.id);
+}
+
 beforeEach(() => {
 	global.fetch = jest.fn(() =>
 		Promise.resolve({
@@ -16,23 +21,32 @@ describe('findLineItems', () => {
 			lineItem.customTargeting === null ? lineItem.id : [],
 		);
 		const targeting = {} as PageTargeting;
-
-		const lineItems = await findLineItems(targeting);
-		const lineItemIds = lineItems.map((item) => item.id);
+		const lineItemIds = await getLineItemIds(targeting);
 
 		noTargetingIds.forEach((id) => {
 			expect(lineItemIds).toContain(id);
 		});
 	});
 
-	it('returns items when targeting matches custom parameters', async () => {
+	it('returns items when targeting matches required custom parameters', async () => {
+		const rhubarbFeastAdId = 6753800134;
 		const targeting = {
 			at: 'rhubarb_feast',
 			url: '/music/article/2024/jul/12/will-i-just-disappear-laura-marling-on-the-ecstasy-of-motherhood-and-why-she-might-quit-music',
 		} as PageTargeting;
-		const lineItems = await findLineItems(targeting);
-		const lineItemIds = lineItems.map((item) => item.id);
+		const lineItemIds = await getLineItemIds(targeting);
 
-		expect(lineItemIds).toContain(6753800134);
+		expect(lineItemIds).toContain(rhubarbFeastAdId);
+	});
+
+	it('does not return items when targeting is not an exact match to the custom targeting', async () => {
+		const rhubarbFeastAdId = 6753800134;
+		const targeting = {
+			at: 'rhubarb_feast',
+			url: '/education/article/2024/aug/20/add-ice-lolly-licking-to-england-primary-school-curriculum-urge-scientists',
+		} as PageTargeting;
+		const lineItemIds = await getLineItemIds(targeting);
+
+		expect(lineItemIds).not.toContain(rhubarbFeastAdId);
 	});
 });
