@@ -20,12 +20,12 @@ test.describe('Slots and iframes load on article pages', () => {
 		) => {
 			breakpoints.forEach(({ breakpoint, width, height }) => {
 				const expectedMinSlotsOnPage =
-					(breakpoint === 'mobile'
+					(breakpoint === 'mobile' || breakpoint === 'tablet'
 						? expectedMinInlineSlotsOnMobile
 						: expectedMinInlineSlotsOnDesktop) ?? 999;
 
 				const expectedSlotPositions =
-					breakpoint === 'mobile'
+					breakpoint === 'mobile' || breakpoint === 'tablet'
 						? expectedSlotPositionsOnMobile
 						: expectedSlotPositionsOnDesktop;
 
