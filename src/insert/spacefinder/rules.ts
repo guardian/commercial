@@ -101,6 +101,10 @@ const desktopRightRail = (isConsentless: boolean): SpacefinderRules => {
 		minDistanceFromTop: desktopRightRailMinAbove(isConsentless),
 		minDistanceFromBottom: 300,
 		opponentSelectorRules: {
+			[adSlotContainerSelector]: {
+				marginBottom: 500,
+				marginTop: 500,
+			},
 			[rightColumnOpponentSelector]: {
 				marginBottom: 0,
 				marginTop: 600,
