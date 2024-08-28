@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 20.6.4
+
+### Patch Changes
+
+- 3a51d3f: Add Spacefinder rules for rich links and thumbnails on mobile
+- 15c60b6: Check for article video as well as images when deciding min above for inline2
+
 ## 20.6.3
 
 ### Patch Changes
