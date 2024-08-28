@@ -191,7 +191,7 @@ const addDesktopRightRailAds = (
 	);
 };
 
-const addMobileInlineAds = (
+const addMobileAndTabletInlineAds = (
 	fillSlot: FillAdSlot,
 	currentBreakpoint: ReturnType<typeof getCurrentBreakpoint>,
 ): Promise<boolean> => {
@@ -220,7 +220,7 @@ const addMobileInlineAds = (
 		await Promise.all(slots);
 	};
 
-	return spaceFiller.fillSpace(rules.mobileInlines, insertAds, {
+	return spaceFiller.fillSpace(rules.mobileAndTabletInlines, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
 		pass: 'mobile-inlines',
@@ -238,7 +238,7 @@ const addInlineAds = (
 ): Promise<boolean> => {
 	const currentBreakpoint = getCurrentBreakpoint();
 	if (['mobile', 'tablet'].includes(currentBreakpoint)) {
-		return addMobileInlineAds(fillSlot, currentBreakpoint);
+		return addMobileAndTabletInlineAds(fillSlot, currentBreakpoint);
 	}
 
 	if (isPaidContent) {
