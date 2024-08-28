@@ -118,6 +118,7 @@ const setCtaURL = (
 const renderBottomLine = (
 	background: HTMLElement,
 	backgroundParent: HTMLElement,
+	isGallery: boolean,
 ): void => {
 	background.style.position = 'fixed';
 	const bottomLine = document.createElement('div');
@@ -125,7 +126,12 @@ const renderBottomLine = (
 	bottomLine.style.position = 'absolute';
 	bottomLine.style.width = '100%';
 	bottomLine.style.bottom = '0';
-	bottomLine.style.borderBottom = '1px solid #dcdcdc';
+	if (isGallery) {
+		bottomLine.style.borderBottom = '1px solid #333333';
+	} else {
+		bottomLine.style.borderBottom = '1px solid #dcdcdc';
+	}
+
 	backgroundParent.appendChild(bottomLine);
 };
 
@@ -211,10 +217,7 @@ const setupBackground = async (
 
 			void renderAdvertLabel(adSlot, interscrollerTemplateId);
 			void renderStickyScrollForMoreLabel(backgroundParent, isGallery);
-
-			if (!isGallery) {
-				void renderBottomLine(background, backgroundParent);
-			}
+			void renderBottomLine(background, backgroundParent, isGallery);
 
 			if (specs.ctaUrl) {
 				const anchor = setCtaURL(specs.ctaUrl, backgroundParent);
