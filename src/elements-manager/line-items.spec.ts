@@ -15,7 +15,7 @@ beforeEach(() => {
 	) as jest.Mock;
 });
 
-describe('findLineItems', () => {
+describe('findLineItems - custom targeting', () => {
 	it('always returns items with no custom targeting', async () => {
 		const noTargetingIds = lineItemFixture.flatMap((lineItem) =>
 			lineItem.customTargeting === null ? lineItem.id : [],
@@ -72,4 +72,22 @@ describe('findLineItems', () => {
 
 		expect(lineItemIds).not.toContain(microsoftAiAdId);
 	});
+
+	it('returns items when one optional condition is met', async () => {
+		const dummyFixtureOneId = 6739402048;
+
+		const targeting = {
+			at: 'banana_feast',
+			ct: 'liveblog',
+		} as PageTargeting;
+		const lineItemIds = await getLineItemIds(targeting);
+
+		expect(lineItemIds).toContain(dummyFixtureOneId);
+	})
 });
+
+describe('findLineItems - device targeting', () => {
+	it('always returns items that do not have device-specific targeting', () => {
+		
+	})
+})
