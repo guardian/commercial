@@ -103,6 +103,7 @@ interface PageConfig extends CommercialPageConfig {
 	frontendAssetsFullURL?: string; // only in DCR
 	hasPageSkin: boolean; // https://github.com/guardian/frontend/blob/b952f6b9/common/app/views/support/JavaScriptPage.scala#L48
 	hasShowcaseMainElement: boolean;
+	hasYouTubeAtom: boolean;
 	headline: string;
 	host: string;
 	idApiUrl?: string;
