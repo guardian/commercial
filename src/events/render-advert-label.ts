@@ -160,6 +160,7 @@ const renderAdvertLabel = (
 
 const renderStickyScrollForMoreLabel = (
 	adSlotNode: HTMLElement,
+	isGallery: boolean,
 ): Promise<void> =>
 	fastdom.mutate(() => {
 		const scrollForMoreLabel = document.createElement('div');
@@ -173,6 +174,10 @@ const renderStickyScrollForMoreLabel = (
 			});
 			event.preventDefault();
 		};
+
+		if (isGallery) {
+			scrollForMoreLabel.classList.add('ad-slot--dark');
+		}
 
 		adSlotNode.appendChild(scrollForMoreLabel);
 	});
