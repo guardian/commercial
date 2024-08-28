@@ -12,7 +12,7 @@ describe('initTrackGpcSignal', () => {
 				signalStatus: 'ready',
 			},
 			canTarget: true,
-			framework: 'usnat',
+			framework: 'ccpa',
 		};
 
 		initTrackGpcSignal(consentState);
@@ -29,7 +29,7 @@ describe('initTrackGpcSignal', () => {
 				signalStatus: 'ready',
 			},
 			canTarget: true,
-			framework: 'usnat',
+			framework: 'ccpa',
 			gpcSignal: false,
 		};
 
@@ -47,7 +47,7 @@ describe('initTrackGpcSignal', () => {
 				signalStatus: 'ready',
 			},
 			canTarget: true,
-			framework: 'usnat',
+			framework: 'ccpa',
 			gpcSignal: true,
 		};
 
