@@ -85,14 +85,14 @@ describe('findLineItems - custom targeting', () => {
 		const lineItemIds = await getLineItemIds(targeting);
 
 		expect(lineItemIds).toContain(dummyFixtureOneId);
-	})
+	});
 });
 
 describe('findLineItems - device targeting', () => {
 	it('does not return items which exclude the current breakpoint', async () => {
 		const mobileTabletAdId = 6839075892;
 		const targeting = {
-			bp: 'desktop'
+			bp: 'desktop',
 		} as PageTargeting;
 		const lineItemIds = await getLineItemIds(targeting);
 
@@ -102,7 +102,7 @@ describe('findLineItems - device targeting', () => {
 	it('returns items which match the current breakpoint', async () => {
 		const mobileTabletAdId = 6839075892;
 		const targeting = {
-			bp: 'mobile'
+			bp: 'mobile',
 		} as PageTargeting;
 		const lineItemIds = await getLineItemIds(targeting);
 
@@ -113,7 +113,7 @@ describe('findLineItems - device targeting', () => {
 		const mobileRhubarbAdId = 6029384758;
 		const targeting = {
 			bp: 'mobile',
-			at: 'rhubarb_feast'
+			at: 'rhubarb_feast',
 		} as PageTargeting;
 		const lineItemIds = await getLineItemIds(targeting);
 
@@ -124,7 +124,7 @@ describe('findLineItems - device targeting', () => {
 		const mobileRhubarbAdId = 6029384758;
 		const targeting = {
 			bp: 'desktop',
-			at: 'rhubarb_feast'
+			at: 'rhubarb_feast',
 		} as PageTargeting;
 		const lineItemIds = await getLineItemIds(targeting);
 
