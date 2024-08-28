@@ -10,8 +10,6 @@ import {
 	renderStickyScrollForMoreLabel,
 } from '../../events/render-advert-label';
 
-const isDCR = window.guardian.config.isDotcomRendering;
-
 interface BackgroundSpecs {
 	backgroundImage: string;
 	backgroundRepeat?: string;
@@ -75,20 +73,18 @@ const createParent = (
 
 		backgroundParent.appendChild(background);
 
-		if (isDCR) {
-			backgroundParent.style.zIndex = '-1';
-			backgroundParent.style.position = 'absolute';
-			backgroundParent.style.inset = '0';
-			backgroundParent.style.clipPath =
-				'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
-			backgroundParent.style.overflow = 'hidden';
+		backgroundParent.style.zIndex = '-1';
+		backgroundParent.style.position = 'absolute';
+		backgroundParent.style.inset = '0';
+		backgroundParent.style.clipPath =
+			'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
+		backgroundParent.style.overflow = 'hidden';
 
-			background.style.inset = '0';
-			background.style.transition = 'background 100ms ease';
+		background.style.inset = '0';
+		background.style.transition = 'background 100ms ease';
 
-			if (scrollType === 'interscroller') {
-				background.style.height = '100vh';
-			}
+		if (scrollType === 'interscroller') {
+			background.style.height = '100vh';
 		}
 	}
 
@@ -198,9 +194,7 @@ const setupBackground = async (
 		// fixed background is very similar to interscroller, generally with a smaller height
 		if (specs.scrollType === 'fixed') {
 			adSlot.style.position = 'relative';
-			if (isDCR) {
-				background.style.position = 'fixed';
-			}
+			background.style.position = 'fixed';
 
 			if (specs.backgroundColor) {
 				backgroundParent.style.backgroundColor = specs.backgroundColor;
@@ -208,17 +202,14 @@ const setupBackground = async (
 		}
 
 		if (specs.scrollType === 'interscroller') {
-			if (isDCR) {
-				adSlot.style.height = '85vh';
-				adSlot.style.marginBottom = '12px';
-				adSlot.style.position = 'relative';
-				adSlot.style.width = '100%';
-			}
+			adSlot.style.height = '85vh';
+			adSlot.style.marginBottom = '12px';
+			adSlot.style.position = 'relative';
+			adSlot.style.width = '100%';
 
 			void renderAdvertLabel(adSlot, interscrollerTemplateId);
 			void renderStickyScrollForMoreLabel(backgroundParent);
-
-			isDCR && renderBottomLine(background, backgroundParent);
+			void renderBottomLine(background, backgroundParent);
 
 			if (specs.ctaUrl) {
 				const anchor = setCtaURL(specs.ctaUrl, backgroundParent);
