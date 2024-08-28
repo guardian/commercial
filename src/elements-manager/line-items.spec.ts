@@ -16,10 +16,12 @@ beforeEach(() => {
 });
 
 describe('findLineItems - custom targeting', () => {
-	it('always returns items with no custom targeting', async () => {
-		const noTargetingIds = lineItemFixture.flatMap((lineItem) =>
-			lineItem.customTargeting === null ? lineItem.id : [],
-		);
+	it('always returns items that do not have device-specific or other custom targeting', async () => {
+		const noTargetingIds = lineItemFixture.flatMap((lineItem) => {
+			const noDeviceTargeting = lineItem.deviceTargeting === null;
+			const noCustomTargeting = lineItem.customTargeting === null;
+			return noCustomTargeting && noDeviceTargeting ? lineItem.id : [];
+		});
 		const targeting = {} as PageTargeting;
 		const lineItemIds = await getLineItemIds(targeting);
 
@@ -87,7 +89,45 @@ describe('findLineItems - custom targeting', () => {
 });
 
 describe('findLineItems - device targeting', () => {
-	it('always returns items that do not have device-specific targeting', () => {
-		
-	})
-})
+	it('does not return items which exclude the current breakpoint', async () => {
+		const mobileTabletAdId = 6839075892;
+		const targeting = {
+			bp: 'desktop'
+		} as PageTargeting;
+		const lineItemIds = await getLineItemIds(targeting);
+
+		expect(lineItemIds).not.toContain(mobileTabletAdId);
+	});
+
+	it('returns items which match the current breakpoint', async () => {
+		const mobileTabletAdId = 6839075892;
+		const targeting = {
+			bp: 'mobile'
+		} as PageTargeting;
+		const lineItemIds = await getLineItemIds(targeting);
+
+		expect(lineItemIds).toContain(mobileTabletAdId);
+	});
+
+	it('returns items when both the breakpoint and custom targeting are a match', async () => {
+		const mobileRhubarbAdId = 6029384758;
+		const targeting = {
+			bp: 'mobile',
+			at: 'rhubarb_feast'
+		} as PageTargeting;
+		const lineItemIds = await getLineItemIds(targeting);
+
+		expect(lineItemIds).toContain(mobileRhubarbAdId);
+	});
+
+	it('does not items when the breakpoint and custom targeting are not both a match', async () => {
+		const mobileRhubarbAdId = 6029384758;
+		const targeting = {
+			bp: 'desktop',
+			at: 'rhubarb_feast'
+		} as PageTargeting;
+		const lineItemIds = await getLineItemIds(targeting);
+
+		expect(lineItemIds).not.toContain(mobileRhubarbAdId);
+	});
+});

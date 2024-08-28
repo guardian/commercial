@@ -785,5 +785,45 @@
 				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138480491160.html"
 			}
 		]
+	},
+	{
+		"id": 6029384758,
+		"name": "Labs | Merchandising | Hosted | Dummy Fixture 3",
+		"priority": 7,
+		"startDateTime": "2024-06-27T14:29:00",
+		"endDateTime": "2024-08-08T12:01:00",
+		"customTargeting": {
+			"children": [
+				{
+					"children": [
+						{
+							"key": "at",
+							"values": ["rhubarb_feast"],
+							"operator": "IS"
+						}
+					],
+					"logicalOperator": "AND"
+				}
+			],
+			"logicalOperator": "OR"
+		},
+		"deviceTargeting": {
+			"targeted": ["mobile", "tablet"],
+			"excluded": ["desktop"]
+		},
+		"geoTargeting": {
+			"targetedLocations": ["United Kingdom"],
+			"excludedLocations": []
+		},
+		"creatives": [
+			{
+				"id": 138480491160,
+				"type": "template",
+				"name": "Labs | Hosted By | Microsoft AI 2024",
+				"size": [1, 1],
+				"destinationUrl": "https://www.theguardian.com/uk",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138480491160.html"
+			}
+		]
 	}
 ]
