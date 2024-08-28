@@ -10,6 +10,8 @@ import {
 	renderStickyScrollForMoreLabel,
 } from '../../events/render-advert-label';
 
+const isGallery = window.guardian.config.page.contentType === 'Gallery';
+
 interface BackgroundSpecs {
 	backgroundImage: string;
 	backgroundRepeat?: string;
@@ -208,8 +210,11 @@ const setupBackground = async (
 			adSlot.style.width = '100%';
 
 			void renderAdvertLabel(adSlot, interscrollerTemplateId);
-			void renderStickyScrollForMoreLabel(backgroundParent);
-			void renderBottomLine(background, backgroundParent);
+			void renderStickyScrollForMoreLabel(backgroundParent, isGallery);
+
+			if (!isGallery) {
+				void renderBottomLine(background, backgroundParent);
+			}
 
 			if (specs.ctaUrl) {
 				const anchor = setCtaURL(specs.ctaUrl, backgroundParent);
