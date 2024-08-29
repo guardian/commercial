@@ -11,7 +11,6 @@ describe('initTrackGpcSignal', () => {
 		const eventTimer = EventTimer.get();
 
 		const consentState: ConsentState = {
-			ccpa: usnatConsent,
 			usnat: usnatConsent,
 			canTarget: true,
 			framework: 'usnat',
@@ -26,7 +25,6 @@ describe('initTrackGpcSignal', () => {
 		const eventTimer = EventTimer.get();
 
 		const consentState: ConsentState = {
-			ccpa: usnatConsent,
 			usnat: usnatConsent,
 			canTarget: true,
 			framework: 'usnat',
@@ -42,7 +40,6 @@ describe('initTrackGpcSignal', () => {
 		const eventTimer = EventTimer.get();
 
 		const consentState: ConsentState = {
-			ccpa: usnatConsent,
 			usnat: usnatConsent,
 			canTarget: true,
 			framework: 'usnat',

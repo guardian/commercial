@@ -68,14 +68,12 @@ const usnatNonConsent: USNATConsentState = {
 
 // USNAT
 const usnatWithConsentMock: ConsentState = {
-	ccpa: usnatConsent,
 	usnat: usnatConsent,
 	canTarget: true,
 	framework: 'usnat',
 };
 
 const usnatWithoutConsentMock: ConsentState = {
-	ccpa: usnatNonConsent,
 	usnat: usnatNonConsent,
 	canTarget: false,
 	framework: 'usnat',

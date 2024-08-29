@@ -24,7 +24,6 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			msg: 'creates adsConfig for USNAT personalised targeting allowed',
 			isSignedIn: 't',
 			consentState: {
-				ccpa: usnatConsent,
 				usnat: usnatConsent,
 				canTarget: true,
 				framework: 'usnat',
@@ -49,7 +48,6 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			msg: 'creates adsConfig for USNAT personalised targeting NOT allowed',
 			isSignedIn: 't',
 			consentState: {
-				ccpa: usnatNonConsent,
 				usnat: usnatNonConsent,
 				canTarget: false,
 				framework: 'usnat',
@@ -74,7 +72,6 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			msg: 'creates adsConfig for USNAT when user is signed out',
 			isSignedIn: 'f', // *
 			consentState: {
-				ccpa: usnatConsent,
 				usnat: usnatConsent,
 				canTarget: true,
 				framework: 'usnat',

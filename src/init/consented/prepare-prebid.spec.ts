@@ -106,14 +106,12 @@ const usnatNonConsent: USNATConsentState = {
 };
 
 const usnatWithConsent = {
-	ccpa: usnatConsent,
 	usnat: usnatConsent,
 	canTarget: true,
 	framework: 'usnat',
 } as ConsentState;
 
 const usnatWithoutConsent = {
-	ccpa: usnatNonConsent,
 	usnat: usnatNonConsent,
 	canTarget: false,
 	framework: 'usnat',

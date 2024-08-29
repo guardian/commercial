@@ -224,14 +224,12 @@ const ausRejected: ConsentState = {
 };
 
 const usnatWithConsent: ConsentState = {
-	ccpa: usnatConsent,
 	usnat: usnatConsent,
 	canTarget: true,
 	framework: 'usnat',
 };
 
 const usnatWithoutConsent: ConsentState = {
-	ccpa: usnatNonConsent,
 	usnat: usnatNonConsent,
 	canTarget: false,
 	framework: 'usnat',
@@ -603,7 +601,7 @@ describe('DFP', () => {
 				restrictDataProcessing: false,
 			});
 		});
-		it('when CCPA consent is denied', async () => {
+		it('when USNAT consent is denied', async () => {
 			mockOnConsent(usnatWithoutConsent);
 			mockGetConsentFor(false);
 			await prepareGoogletag();

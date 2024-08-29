@@ -37,7 +37,6 @@ const usnatConsent: USNATConsentState = {
 
 const usnatWithConsentMock = (callback: OnConsentChangeCallback) =>
 	callback({
-		ccpa: usnatConsent,
 		usnat: usnatConsent,
 		canTarget: true,
 		framework: 'usnat',

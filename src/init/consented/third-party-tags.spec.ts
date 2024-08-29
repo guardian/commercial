@@ -90,11 +90,6 @@ const usnatConsent: USNATConsentState = {
 	signalStatus: 'ready',
 };
 
-const usnatNonConsent: USNATConsentState = {
-	doNotSell: true,
-	signalStatus: 'ready',
-};
-
 beforeEach(() => {
 	const firstScript = document.createElement('script');
 	document.body.appendChild(firstScript);
@@ -206,7 +201,6 @@ describe('third party tags', () => {
 		});
 		it('should add scripts to the document when USNAT consent has been given', async () => {
 			mockOnConsent({
-				ccpa: usnatConsent,
 				usnat: usnatConsent,
 				canTarget: true,
 				framework: 'usnat',
@@ -220,7 +214,6 @@ describe('third party tags', () => {
 		});
 		it('should only add performance scripts to the document when USNAT consent has not been given', async () => {
 			mockOnConsent({
-				ccpa: usnatNonConsent,
 				canTarget: false,
 				framework: 'usnat',
 			});

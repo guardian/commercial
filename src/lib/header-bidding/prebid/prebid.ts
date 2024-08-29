@@ -272,7 +272,6 @@ const initialise = (
 					},
 				};
 			case 'usnat':
-			case 'ccpa':
 				// https://docs.prebid.org/dev-docs/modules/consentManagementGpp.html
 				return {
 					gpp: {

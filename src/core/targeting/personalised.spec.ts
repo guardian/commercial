@@ -85,7 +85,6 @@ describe('Personalised targeting', () => {
 	describe('USNAT', () => {
 		it('Full Consent', () => {
 			const state: ConsentState = {
-				ccpa: usnatConsent,
 				usnat: usnatConsent,
 				canTarget: true,
 				framework: 'usnat',
@@ -108,7 +107,6 @@ describe('Personalised targeting', () => {
 
 		it('Do Not Sell', () => {
 			const state: ConsentState = {
-				ccpa: usnatNonConsent,
 				usnat: usnatNonConsent,
 				canTarget: false,
 				framework: 'usnat',
@@ -203,7 +201,6 @@ describe('Personalised targeting', () => {
 		];
 		test.each(frequencies)('Should get `%s` for %f', (fr, val) => {
 			const state: ConsentState = {
-				ccpa: usnatConsent,
 				usnat: usnatConsent,
 				canTarget: true,
 				framework: 'usnat',
@@ -245,7 +242,6 @@ describe('Personalised targeting', () => {
 
 		test.each(groups)('Should get `%s` if it exists', (amtgrp, val) => {
 			const state: ConsentState = {
-				ccpa: usnatConsent,
 				usnat: usnatConsent,
 				canTarget: true,
 				framework: 'usnat',
@@ -293,7 +289,6 @@ describe('Personalised targeting', () => {
 
 		test('Ad manager group IS set if usnat and consent not given', () => {
 			const state: ConsentState = {
-				ccpa: usnatNonConsent,
 				usnat: usnatNonConsent,
 				canTarget: false,
 				framework: 'usnat',
@@ -326,7 +321,6 @@ describe('Personalised targeting', () => {
 
 		test('Should set `permutive` to correct values if `youtube` is set to false', () => {
 			const state: ConsentState = {
-				ccpa: usnatConsent,
 				usnat: usnatConsent,
 				canTarget: true,
 				framework: 'usnat',
@@ -344,7 +338,6 @@ describe('Personalised targeting', () => {
 
 		test('Should set `permutive` to correct values if `youtube` is set to true', () => {
 			const state: ConsentState = {
-				ccpa: usnatConsent,
 				usnat: usnatConsent,
 				canTarget: true,
 				framework: 'usnat',
