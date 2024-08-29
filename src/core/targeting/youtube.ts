@@ -41,11 +41,7 @@ const buildAdsConfig = (
 		},
 	};
 
-	if (
-		cmpConsent.framework === 'ccpa' ||
-		cmpConsent.framework === 'usnat' ||
-		cmpConsent.framework === 'aus'
-	) {
+	if (cmpConsent.framework === 'usnat' || cmpConsent.framework === 'aus') {
 		return {
 			...defaultAdsConfig,
 			restrictedDataProcessor: !cmpConsent.canTarget,
