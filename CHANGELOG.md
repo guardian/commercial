@@ -1,5 +1,17 @@
 # @guardian/commercial
 
+## 20.7.0
+
+### Minor Changes
+
+- 0ef6a41: Fix issue with double ads on tablets
+- 0ef6a41: Fix issue with first right rail ad very close to inline1
+
+### Patch Changes
+
+- ed53190: Allow interscroller ads on galleries
+- 3266b49: Add extra 100px to minAbove for articles with video but no images
+
 ## 20.6.4
 
 ### Patch Changes
