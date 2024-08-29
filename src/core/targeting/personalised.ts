@@ -125,8 +125,8 @@ const getRawWithConsent = (key: string, state: ConsentState): string | null => {
 	if (state.tcfv2) {
 		if (state.tcfv2.consents['1']) return storage.local.getRaw(key);
 	}
-	if (state.ccpa) {
-		if (!state.ccpa.doNotSell) return storage.local.getRaw(key);
+	if (state.usnat) {
+		if (!state.usnat.doNotSell) return storage.local.getRaw(key);
 	}
 	if (state.aus) {
 		if (state.aus.personalisedAdvertising) return storage.local.getRaw(key);
@@ -175,7 +175,7 @@ const getCMPTargeting = (state: ConsentState): CMPTargeting => {
 		};
 	}
 
-	if (state.ccpa) {
+	if (state.usnat) {
 		return {
 			consent_tcfv2: 'na',
 			rdp: !state.canTarget ? 't' : 'f',

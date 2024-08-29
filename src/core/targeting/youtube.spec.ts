@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { buildPageTargeting } from './build-page-targeting';
 import { buildAdsConfigWithConsent } from './youtube';
 
@@ -8,17 +8,25 @@ afterEach(() => {
 	jest.clearAllMocks();
 });
 
+const usnatConsent: USNATConsentState = {
+	doNotSell: false,
+	signalStatus: 'ready',
+};
+
+const usnatNonConsent: USNATConsentState = {
+	doNotSell: true,
+	signalStatus: 'ready',
+};
+
 describe('YouTube Ad Targeting Object for consent frameworks', () => {
 	test.each([
 		{
-			msg: 'creates adsConfig for CCPA personalised targeting allowed',
+			msg: 'creates adsConfig for USNAT personalised targeting allowed',
 			isSignedIn: 't',
 			consentState: {
-				ccpa: {
-					doNotSell: false, // *
-				},
+				usnat: usnatConsent,
 				canTarget: true,
-				framework: 'ccpa',
+				framework: 'usnat',
 			} as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
@@ -37,14 +45,12 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			},
 		},
 		{
-			msg: 'creates adsConfig for CCPA personalised targeting NOT allowed',
+			msg: 'creates adsConfig for USNAT personalised targeting NOT allowed',
 			isSignedIn: 't',
 			consentState: {
-				ccpa: {
-					doNotSell: true, // *
-				},
+				usnat: usnatNonConsent,
 				canTarget: false,
-				framework: 'ccpa',
+				framework: 'usnat',
 			} as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',
@@ -63,14 +69,12 @@ describe('YouTube Ad Targeting Object for consent frameworks', () => {
 			},
 		},
 		{
-			msg: 'creates adsConfig for CCPA when user is signed out',
+			msg: 'creates adsConfig for USNAT when user is signed out',
 			isSignedIn: 'f', // *
 			consentState: {
-				ccpa: {
-					doNotSell: false,
-				},
+				usnat: usnatConsent,
 				canTarget: true,
-				framework: 'ccpa',
+				framework: 'usnat',
 			} as ConsentState,
 			isAdFreeUser: false,
 			adUnit: 'someAdUnit',

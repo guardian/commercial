@@ -4,9 +4,9 @@ import { constructQuery } from '../lib/construct-query';
 import type {
 	AdsConfig,
 	AdsConfigBasic,
-	AdsConfigCCPAorAus,
 	AdsConfigDisabled,
 	AdsConfigTCFV2,
+	AdsConfigUSNATorAus,
 	CustomParams,
 } from '../types';
 import { buildPageTargeting } from './build-page-targeting';
@@ -41,11 +41,11 @@ const buildAdsConfig = (
 		},
 	};
 
-	if (cmpConsent.framework === 'ccpa' || cmpConsent.framework === 'aus') {
+	if (cmpConsent.framework === 'usnat' || cmpConsent.framework === 'aus') {
 		return {
 			...defaultAdsConfig,
 			restrictedDataProcessor: !cmpConsent.canTarget,
-		} satisfies AdsConfigCCPAorAus;
+		} satisfies AdsConfigUSNATorAus;
 	}
 
 	if (cmpConsent.framework === 'tcfv2') {
