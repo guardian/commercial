@@ -1,5 +1,4 @@
 import fastdom from '../utils/fastdom-promise';
-import { mediator as fakeMediator } from '../utils/mediator';
 import { init } from './article-aside-adverts';
 
 // This module removes sticky behaviour from ads in immersive article. Example below:
@@ -17,7 +16,6 @@ const mockMeasure = (mainColHeight: number, immersiveOffset: number) => {
 
 const sharedBeforeEach = (domSnippet: string) => () => {
 	jest.resetAllMocks();
-	fakeMediator.removeAllListeners();
 	window.guardian.config.page.isImmersive = false;
 	window.guardian.config.page.hasShowcaseMainElement = false;
 
