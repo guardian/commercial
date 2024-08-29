@@ -18,9 +18,9 @@ const MOST_VIEWED_HEIGHT = 600;
 
 const isImmersive = window.guardian.config.page.isImmersive;
 
-const hasImagesOrVideo =
-	!!window.guardian.config.page.lightboxImages?.images.length ||
-	window.guardian.config.page.hasYouTubeAtom;
+const hasImages = !!window.guardian.config.page.lightboxImages?.images.length;
+
+const hasVideo = window.guardian.config.page.hasYouTubeAtom;
 
 const isPaidContent = window.guardian.config.page.isPaidContent;
 
@@ -87,11 +87,11 @@ const desktopRightRailMinAbove = (isConsentless: boolean) => {
 	 * In special cases, inline2 can overlap the "Most viewed" island, so
 	 * we need to make an adjustment to move the inline2 further down the page
 	 */
-	if (isPaidContent || !hasImagesOrVideo || isConsentless) {
+	if (isPaidContent || (!hasImages && !hasVideo) || isConsentless) {
 		return base + MOST_VIEWED_HEIGHT;
 	}
 
-	if (hasShowcaseMainElement) {
+	if (hasShowcaseMainElement || (!hasImages && hasVideo)) {
 		return base + 100;
 	}
 	return base;
