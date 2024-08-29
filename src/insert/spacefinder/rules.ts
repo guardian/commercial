@@ -33,11 +33,12 @@ const minDistanceBetweenInlineAds = isInHighValueSection ? 500 : 750;
 const candidateSelector = ':scope > p, [data-spacefinder-role="nested"] > p';
 
 const leftColumnOpponentSelector = ['richLink', 'thumbnail']
-	.map((role) => `[data-spacefinder-role="${role}"]`)
+	.map((role) => `:scope > [data-spacefinder-role="${role}"]`)
 	.join(',');
-const rightColumnOpponentSelector = '[data-spacefinder-role="immersive"]';
+const rightColumnOpponentSelector =
+	':scope > [data-spacefinder-role="immersive"]';
 const inlineOpponentSelector = ['inline', 'supporting', 'showcase']
-	.map((role) => `[data-spacefinder-role="${role}"]`)
+	.map((role) => `:scope > [data-spacefinder-role="${role}"]`)
 	.join(',');
 
 const headingSelector = `:scope > h2, [data-spacefinder-role="nested"] > h2, :scope > h3, [data-spacefinder-role="nested"] > h3`;
@@ -104,6 +105,10 @@ const desktopRightRail = (isConsentless: boolean): SpacefinderRules => {
 		minDistanceFromTop: desktopRightRailMinAbove(isConsentless),
 		minDistanceFromBottom: 300,
 		opponentSelectorRules: {
+			[adSlotContainerSelector]: {
+				marginBottom: 500,
+				marginTop: 500,
+			},
 			[rightColumnOpponentSelector]: {
 				marginBottom: 0,
 				marginTop: 600,
@@ -157,7 +162,7 @@ const mobileOpponentSelectorRules: OpponentSelectorRules = {
 	},
 };
 
-const mobileInlines: SpacefinderRules = {
+const mobileAndTabletInlines: SpacefinderRules = {
 	bodySelector,
 	candidateSelector: mobileCandidateSelector,
 	minDistanceFromTop: mobileMinDistanceFromArticleTop,
@@ -180,5 +185,5 @@ const mobileInlines: SpacefinderRules = {
 export const rules = {
 	desktopInline1,
 	desktopRightRail,
-	mobileInlines,
+	mobileAndTabletInlines,
 };

@@ -108,6 +108,8 @@ const addHoverListener = (
 					opponent.element,
 					`${opponent.actual}px/${opponent.required}px`,
 				);
+			} else {
+				addOverlay(opponent.element, 'Blocking element');
 			}
 		});
 
