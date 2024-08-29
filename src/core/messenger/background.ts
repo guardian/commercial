@@ -10,7 +10,7 @@ import {
 	renderStickyScrollForMoreLabel,
 } from '../../events/render-advert-label';
 
-const isDCR = window.guardian.config.isDotcomRendering;
+const isGallery = window.guardian.config.page.contentType === 'Gallery';
 
 interface BackgroundSpecs {
 	backgroundImage: string;
@@ -75,20 +75,18 @@ const createParent = (
 
 		backgroundParent.appendChild(background);
 
-		if (isDCR) {
-			backgroundParent.style.zIndex = '-1';
-			backgroundParent.style.position = 'absolute';
-			backgroundParent.style.inset = '0';
-			backgroundParent.style.clipPath =
-				'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
-			backgroundParent.style.overflow = 'hidden';
+		backgroundParent.style.zIndex = '-1';
+		backgroundParent.style.position = 'absolute';
+		backgroundParent.style.inset = '0';
+		backgroundParent.style.clipPath =
+			'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
+		backgroundParent.style.overflow = 'hidden';
 
-			background.style.inset = '0';
-			background.style.transition = 'background 100ms ease';
+		background.style.inset = '0';
+		background.style.transition = 'background 100ms ease';
 
-			if (scrollType === 'interscroller') {
-				background.style.height = '100vh';
-			}
+		if (scrollType === 'interscroller') {
+			background.style.height = '100vh';
 		}
 	}
 
@@ -120,6 +118,7 @@ const setCtaURL = (
 const renderBottomLine = (
 	background: HTMLElement,
 	backgroundParent: HTMLElement,
+	isGallery: boolean,
 ): void => {
 	background.style.position = 'fixed';
 	const bottomLine = document.createElement('div');
@@ -127,7 +126,12 @@ const renderBottomLine = (
 	bottomLine.style.position = 'absolute';
 	bottomLine.style.width = '100%';
 	bottomLine.style.bottom = '0';
-	bottomLine.style.borderBottom = '1px solid #dcdcdc';
+	if (isGallery) {
+		bottomLine.style.borderBottom = '1px solid #333333';
+	} else {
+		bottomLine.style.borderBottom = '1px solid #dcdcdc';
+	}
+
 	backgroundParent.appendChild(bottomLine);
 };
 
@@ -198,9 +202,7 @@ const setupBackground = async (
 		// fixed background is very similar to interscroller, generally with a smaller height
 		if (specs.scrollType === 'fixed') {
 			adSlot.style.position = 'relative';
-			if (isDCR) {
-				background.style.position = 'fixed';
-			}
+			background.style.position = 'fixed';
 
 			if (specs.backgroundColor) {
 				backgroundParent.style.backgroundColor = specs.backgroundColor;
@@ -208,17 +210,14 @@ const setupBackground = async (
 		}
 
 		if (specs.scrollType === 'interscroller') {
-			if (isDCR) {
-				adSlot.style.height = '85vh';
-				adSlot.style.marginBottom = '12px';
-				adSlot.style.position = 'relative';
-				adSlot.style.width = '100%';
-			}
+			adSlot.style.height = '85vh';
+			adSlot.style.marginBottom = '12px';
+			adSlot.style.position = 'relative';
+			adSlot.style.width = '100%';
 
 			void renderAdvertLabel(adSlot, interscrollerTemplateId);
-			void renderStickyScrollForMoreLabel(backgroundParent);
-
-			isDCR && renderBottomLine(background, backgroundParent);
+			void renderStickyScrollForMoreLabel(backgroundParent, isGallery);
+			void renderBottomLine(background, backgroundParent, isGallery);
 
 			if (specs.ctaUrl) {
 				const anchor = setCtaURL(specs.ctaUrl, backgroundParent);
