@@ -15,12 +15,20 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.label.name == '[beta] @guardian/commercial'
     steps:
-      - name: 'Check if user has admin access'
-        uses: 'lannonbr/repo-permission-check-action@2.0.2'
+      - name: Check if organization member
+        id: is_organization_member
+        uses: JamesSingleton/is-organization-member@1.0.0
         with:
-          permission: 'admin'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          organization: guardian
+          username: ${{ github.actor }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+    # steps:
+    #   - name: 'Check if user has admin access'
+    #     uses: 'lannonbr/repo-permission-check-action@2.0.2'
+    #     with:
+    #       permission: 'admin'
+    #     env:
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     name: '@guardian/commercial'
