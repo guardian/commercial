@@ -1,4 +1,8 @@
-import type { ConsentState, TCFv2ConsentState } from '@guardian/libs';
+import type {
+	ConsentState,
+	TCFv2ConsentState,
+	USNATConsentState,
+} from '@guardian/libs';
 import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
 import { commercialFeatures } from 'lib/commercial-features';
 import { _ } from './comscore';
@@ -15,6 +19,16 @@ const defaultTCFv2State = {
 	gdprApplies: true,
 	tcString: 'YAAA',
 } as TCFv2ConsentState;
+
+const usnatConsent: USNATConsentState = {
+	doNotSell: false,
+	signalStatus: 'ready',
+};
+
+const usnatNonConsent: USNATConsentState = {
+	doNotSell: true,
+	signalStatus: 'ready',
+};
 
 const tcfv2WithConsent = {
 	tcfv2: {
@@ -38,20 +52,18 @@ const tcfv2WithoutConsent = {
 	framework: 'tcfv2',
 } as ConsentState;
 
-const ccpaWithConsent = {
-	ccpa: {
-		doNotSell: false,
-	},
+const usnatWithConsent = {
+	ccpa: usnatConsent,
+	usnat: usnatConsent,
 	canTarget: true,
-	framework: 'ccpa',
+	framework: 'usnat',
 } as ConsentState;
 
-const ccpaWithoutConsent = {
-	ccpa: {
-		doNotSell: true,
-	},
+const usnatWithoutConsent = {
+	ccpa: usnatNonConsent,
+	usnat: usnatNonConsent,
 	canTarget: false,
-	framework: 'ccpa',
+	framework: 'usnat',
 } as ConsentState;
 
 const AusWithoutConsent = {
@@ -121,14 +133,14 @@ describe('setupComscore', () => {
 			await setupComscore();
 			expect(loadScript).not.toBeCalled();
 		});
-		it('CCPA with consent: runs', async () => {
-			mockOnConsent(ccpaWithConsent);
+		it('USNAT with consent: runs', async () => {
+			mockOnConsent(usnatWithConsent);
 			await setupComscore();
 			expect(loadScript).toBeCalled();
 		});
 
-		it('CCPA without consent: does not run', async () => {
-			mockOnConsent(ccpaWithoutConsent);
+		it('USNAT without consent: does not run', async () => {
+			mockOnConsent(usnatWithoutConsent);
 			await setupComscore();
 			expect(loadScript).not.toBeCalled();
 		});

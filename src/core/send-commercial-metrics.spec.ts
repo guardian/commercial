@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { onConsent } from '@guardian/libs';
 import { EventTimer } from './event-timer';
 import {
@@ -103,16 +103,28 @@ const tcfv2AllConsentExceptPurpose8: ConsentState = {
 	framework: 'tcfv2',
 };
 
-const ccpaConsent: ConsentState = {
-	ccpa: { doNotSell: false },
-	canTarget: true,
-	framework: 'ccpa',
+const usnatNonConsentObject: USNATConsentState = {
+	doNotSell: true,
+	signalStatus: 'ready',
 };
 
-const ccpaNonConsent: ConsentState = {
-	ccpa: { doNotSell: true },
+const usnatConsentObject: USNATConsentState = {
+	doNotSell: false,
+	signalStatus: 'ready',
+};
+
+const usnatConsent: ConsentState = {
+	ccpa: usnatConsentObject,
+	usnat: usnatConsentObject,
+	canTarget: true,
+	framework: 'usnat',
+};
+
+const usnatNonConsent: ConsentState = {
+	ccpa: usnatNonConsentObject,
+	usnat: usnatNonConsentObject,
 	canTarget: false,
-	framework: 'ccpa',
+	framework: 'usnat',
 };
 
 const setVisibility = (value: 'hidden' | 'visible'): void => {
@@ -212,7 +224,7 @@ describe('send commercial metrics', () => {
 	});
 
 	it('sends metrics when non-TCFv2 user (i.e. USA or Australia) consents', async () => {
-		mockOnConsent(ccpaConsent);
+		mockOnConsent(usnatConsent);
 
 		await initCommercialMetrics({
 			pageViewId: PAGE_VIEW_ID,
@@ -231,7 +243,7 @@ describe('send commercial metrics', () => {
 	});
 
 	it('sends metrics when non-TCFv2 user (i.e. USA or Australia) does not consent', async () => {
-		mockOnConsent(ccpaNonConsent);
+		mockOnConsent(usnatNonConsent);
 
 		await initCommercialMetrics({
 			pageViewId: PAGE_VIEW_ID,
