@@ -1,16 +1,18 @@
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { EventTimer } from './event-timer';
 import { initTrackGpcSignal } from './track-gpc-signal';
 
 describe('initTrackGpcSignal', () => {
+	const usnatConsent: USNATConsentState = {
+		doNotSell: false,
+		signalStatus: 'ready',
+	};
 	test('tracks an undefined gpcSignal on ConsentState', () => {
 		const eventTimer = EventTimer.get();
 
 		const consentState: ConsentState = {
-			ccpa: {
-				doNotSell: false,
-				signalStatus: 'ready',
-			},
+			ccpa: usnatConsent,
+			usnat: usnatConsent,
 			canTarget: true,
 			framework: 'usnat',
 		};
@@ -24,10 +26,8 @@ describe('initTrackGpcSignal', () => {
 		const eventTimer = EventTimer.get();
 
 		const consentState: ConsentState = {
-			ccpa: {
-				doNotSell: false,
-				signalStatus: 'ready',
-			},
+			ccpa: usnatConsent,
+			usnat: usnatConsent,
 			canTarget: true,
 			framework: 'usnat',
 			gpcSignal: false,
@@ -42,10 +42,8 @@ describe('initTrackGpcSignal', () => {
 		const eventTimer = EventTimer.get();
 
 		const consentState: ConsentState = {
-			ccpa: {
-				doNotSell: false,
-				signalStatus: 'ready',
-			},
+			ccpa: usnatConsent,
+			usnat: usnatConsent,
 			canTarget: true,
 			framework: 'usnat',
 			gpcSignal: true,

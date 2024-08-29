@@ -1,5 +1,8 @@
 import { getConsentFor, onConsentChange } from '@guardian/libs';
-import type { OnConsentChangeCallback } from '@guardian/libs';
+import type {
+	OnConsentChangeCallback,
+	USNATConsentState,
+} from '@guardian/libs';
 import { _, a9 } from './a9';
 
 const tcfv2WithConsentMock = (callback: OnConsentChangeCallback) =>
@@ -27,11 +30,17 @@ const tcfv2WithConsentMock = (callback: OnConsentChangeCallback) =>
 		framework: 'tcfv2',
 	});
 
-const CcpaWithConsentMock = (callback: OnConsentChangeCallback) =>
+const usnatConsent: USNATConsentState = {
+	doNotSell: false,
+	signalStatus: 'ready',
+};
+
+const usnatWithConsentMock = (callback: OnConsentChangeCallback) =>
 	callback({
-		ccpa: { doNotSell: false, signalStatus: 'ready' },
+		ccpa: usnatConsent,
+		usnat: usnatConsent,
 		canTarget: true,
-		framework: 'ccpa',
+		framework: 'usnat',
 	});
 
 jest.mock('define/Advert', () =>
@@ -88,8 +97,8 @@ describe('initialise', () => {
 		expect(window.apstag?.init).toHaveBeenCalled();
 	});
 
-	it('should generate initialise A9 library when CCPA consent has been given', () => {
-		mockOnConsentChange(CcpaWithConsentMock);
+	it('should generate initialise A9 library when USNAT consent has been given', () => {
+		mockOnConsentChange(usnatWithConsentMock);
 		mockGetConsentFor(true);
 		a9.initialise();
 		expect(window.apstag).toBeDefined();

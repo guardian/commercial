@@ -1,5 +1,5 @@
 import { getConsentFor, onConsent } from '@guardian/libs';
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { commercialFeatures } from 'lib/commercial-features';
 import type { ThirdPartyTag } from 'types/global';
 import { _, init } from './third-party-tags';
@@ -84,6 +84,16 @@ const tcfv2WithoutConsent = {
 	canTarget: false,
 	framework: 'tcfv2',
 } as ConsentState;
+
+const usnatConsent: USNATConsentState = {
+	doNotSell: false,
+	signalStatus: 'ready',
+};
+
+const usnatNonConsent: USNATConsentState = {
+	doNotSell: true,
+	signalStatus: 'ready',
+};
 
 beforeEach(() => {
 	const firstScript = document.createElement('script');
@@ -194,11 +204,12 @@ describe('third party tags', () => {
 			);
 			expect(document.scripts.length).toBe(2);
 		});
-		it('should add scripts to the document when CCPA consent has been given', async () => {
+		it('should add scripts to the document when USNAT consent has been given', async () => {
 			mockOnConsent({
-				ccpa: { doNotSell: false, signalStatus: 'ready' },
+				ccpa: usnatConsent,
+				usnat: usnatConsent,
 				canTarget: true,
-				framework: 'ccpa',
+				framework: 'usnat',
 			});
 			mockGetConsentFor(true);
 			await insertScripts(
@@ -207,11 +218,11 @@ describe('third party tags', () => {
 			);
 			expect(document.scripts.length).toBe(3);
 		});
-		it('should only add performance scripts to the document when CCPA consent has not been given', async () => {
+		it('should only add performance scripts to the document when USNAT consent has not been given', async () => {
 			mockOnConsent({
-				ccpa: { doNotSell: true, signalStatus: 'ready' },
+				ccpa: usnatNonConsent,
 				canTarget: false,
-				framework: 'ccpa',
+				framework: 'usnat',
 			});
 			mockGetConsentFor(false);
 			await insertScripts(

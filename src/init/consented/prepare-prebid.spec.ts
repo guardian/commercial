@@ -1,4 +1,8 @@
-import type { ConsentState, TCFv2ConsentState } from '@guardian/libs';
+import type {
+	ConsentState,
+	TCFv2ConsentState,
+	USNATConsentState,
+} from '@guardian/libs';
 import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isInCanada } from 'utils/geo-utils';
@@ -91,16 +95,28 @@ const tcfv2WithoutConsent = {
 	framework: 'tcfv2',
 } as ConsentState;
 
-const ccpaWithConsent = {
-	ccpa: { doNotSell: false, signalStatus: 'ready' },
+const usnatConsent: USNATConsentState = {
+	doNotSell: false,
+	signalStatus: 'ready',
+};
+
+const usnatNonConsent: USNATConsentState = {
+	doNotSell: true,
+	signalStatus: 'ready',
+};
+
+const usnatWithConsent = {
+	ccpa: usnatConsent,
+	usnat: usnatConsent,
 	canTarget: true,
-	framework: 'ccpa',
+	framework: 'usnat',
 } as ConsentState;
 
-const ccpaWithoutConsent = {
-	ccpa: { doNotSell: true, signalStatus: 'ready' },
+const usnatWithoutConsent = {
+	ccpa: usnatNonConsent,
+	usnat: usnatNonConsent,
 	canTarget: false,
-	framework: 'ccpa',
+	framework: 'usnat',
 } as ConsentState;
 
 const ausWithConsent = {
@@ -306,7 +322,7 @@ describe('init', () => {
 		expect(prebid.initialise).not.toBeCalled();
 	});
 
-	it('should initialise Prebid in CCPA if doNotSell is false', async () => {
+	it('should initialise Prebid in USNAT if doNotSell is false', async () => {
 		expect.hasAssertions();
 
 		window.guardian.config.switches = {
@@ -314,13 +330,13 @@ describe('init', () => {
 		};
 		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
-		mockOnConsent(ccpaWithConsent);
+		mockOnConsent(usnatWithConsent);
 		mockGetConsentFor(true);
 		await setupPrebid();
 		expect(prebid.initialise).toBeCalled();
 	});
 
-	it('should not initialise Prebid in CCPA if doNotSell is true', async () => {
+	it('should not initialise Prebid in USNAT if doNotSell is true', async () => {
 		expect.assertions(2);
 
 		window.guardian.config.switches = {
@@ -328,7 +344,7 @@ describe('init', () => {
 		};
 		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
-		mockOnConsent(ccpaWithoutConsent);
+		mockOnConsent(usnatWithoutConsent);
 		mockGetConsentFor(false);
 
 		await setupPrebid();
