@@ -46,8 +46,11 @@ const findCreative = async (
 	pageTargeting: PageTargeting,
 	sizes: readonly AdSize[],
 ) => {
+	// Toggle to debug in browser
+	const debugCustomTargeting = true as true | false;
+
 	const matchingLineItemsAndCreatives = (
-		await findLineItems(pageTargeting)
+		await findLineItems(pageTargeting, debugCustomTargeting)
 	).filter((lineItem) => lineItem.creatives.length > 0);
 
 	const slot = pageTargeting.slot as string;

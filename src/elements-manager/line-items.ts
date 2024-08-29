@@ -39,11 +39,10 @@ interface LineItem {
 	creatives: Creative[];
 }
 
-const debugCustomTargeting = true as true | false;
-
 const matchesCustomTargeting = (
 	customTargeting: Targeting | null,
 	pageTargeting: PageTargeting,
+	debugCustomTargeting: boolean,
 ): boolean => {
 	if (!customTargeting) {
 		return true;
@@ -58,7 +57,7 @@ const matchesCustomTargeting = (
 		const secondLevelMatches = child.children[method](
 			({ key, values, operator }) => {
 				const targetingValues = pageTargeting[key];
-				return values.some((value) => {
+				return values[method]((value) => {
 					if (Array.isArray(targetingValues)) {
 						const includes = targetingValues.includes(value);
 						if (
@@ -159,13 +158,17 @@ const getLineItems = once(async () => {
  * @param displayTargeting
  * @returns
  */
-const findLineItems = async (displayTargeting: PageTargeting) => {
+const findLineItems = async (
+	displayTargeting: PageTargeting,
+	debugCustomTargeting = false,
+) => {
 	const lineItems = await getLineItems();
 	const found = lineItems.filter((lineItem) => {
 		return (
 			matchesCustomTargeting(
 				lineItem.customTargeting,
 				displayTargeting,
+				debugCustomTargeting,
 			) &&
 			matchesDeviceTargeting(
 				lineItem.deviceTargeting,
