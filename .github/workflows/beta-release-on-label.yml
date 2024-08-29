@@ -22,13 +22,6 @@ jobs:
           organization: guardian
           username: ${{ github.actor }}
           token: ${{ secrets.GITHUB_TOKEN }}
-    # steps:
-    #   - name: 'Check if user has admin access'
-    #     uses: 'lannonbr/repo-permission-check-action@2.0.2'
-    #     with:
-    #       permission: 'admin'
-    #     env:
-    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     name: '@guardian/commercial'
