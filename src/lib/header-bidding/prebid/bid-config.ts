@@ -404,9 +404,7 @@ const getAdYouLikePlacementId = (sizes: HeaderBiddingSize[]) => {
 			if (containsLeaderboardOrBillboard(sizes)) {
 				return '36f00dee2120882f586386b4099e765d';
 			}
-		}
-
-		if (getBreakpointKey() === 'M') {
+		} else {
 			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
 				return '46ce2d1ab64e2f57e676276741134129';
 			}
@@ -431,9 +429,7 @@ const getAdYouLikePlacementId = (sizes: HeaderBiddingSize[]) => {
 			if (containsLeaderboardOrBillboard(sizes)) {
 				return '6538fe3160263c1db103fa48935fa1ca';
 			}
-		}
-
-		if (getBreakpointKey() === 'M') {
+		} else {
 			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
 				return 'c0a40010a5fb523c0c1f28063cf095bc';
 			}
@@ -458,9 +454,7 @@ const getAdYouLikePlacementId = (sizes: HeaderBiddingSize[]) => {
 			if (containsLeaderboardOrBillboard(sizes)) {
 				return 'bb68a1ef4d72921b540620a4e97264b8';
 			}
-		}
-
-		if (getBreakpointKey() === 'M') {
+		} else {
 			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
 				return '7a95bbb40a6d37dedf68c9be7b15e2ca';
 			}
@@ -485,9 +479,7 @@ const getAdYouLikePlacementId = (sizes: HeaderBiddingSize[]) => {
 			if (containsLeaderboardOrBillboard(sizes)) {
 				return 'b76bab7ff7c81b36b0524415d94d3f61';
 			}
-		}
-
-		if (getBreakpointKey() === 'M') {
+		} else {
 			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
 				return 'e9e27e87d2f4d9440500f86a1ee87ed0';
 			}
