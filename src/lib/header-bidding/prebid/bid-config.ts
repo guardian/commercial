@@ -51,7 +51,6 @@ import {
 	shouldIncludeKargo,
 	shouldIncludeMagnite,
 	shouldIncludeOpenx,
-	shouldIncludeSmart,
 	shouldIncludeSonobi,
 	shouldIncludeTripleLift,
 	shouldIncludeTrustX,
@@ -515,16 +514,6 @@ const criteoBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 	};
 };
 
-const smartBidder: PrebidBidder = {
-	name: 'smartadserver',
-	switchName: 'prebidSmart',
-	bidParams: () => ({
-		siteId: 465656,
-		pageId: 1472549,
-		formatId: 105870,
-	}),
-};
-
 const kargoBidder: PrebidBidder = {
 	name: 'kargo',
 	switchName: 'prebidKargo',
@@ -581,7 +570,6 @@ const currentBidders = (
 ): PrebidBidder[] => {
 	const biddersToCheck: Array<[boolean, PrebidBidder]> = [
 		[shouldIncludeCriteo(), criteoBidder(slotSizes)],
-		[shouldIncludeSmart(), smartBidder],
 		[shouldIncludeSonobi(), sonobiBidder(pageTargeting)],
 		[shouldIncludeTrustX(), trustXBidder],
 		[shouldIncludeTripleLift(), tripleLiftBidder],

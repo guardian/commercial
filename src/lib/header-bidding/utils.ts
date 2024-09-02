@@ -191,11 +191,6 @@ export const shouldIncludeImproveDigitalSkin = (): boolean =>
  */
 export const shouldIncludeCriteo = (): boolean => !isInAuOrNz();
 
-/**
- * Determine whether to include Smart as a prebid bidder
- */
-export const shouldIncludeSmart = (): boolean => isInUk() || isInRow();
-
 export const shouldIncludeKargo = (): boolean => isInUsa();
 
 export const shouldIncludeMagnite = (): boolean =>
