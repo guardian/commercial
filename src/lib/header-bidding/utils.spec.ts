@@ -12,7 +12,6 @@ import {
 	getBreakpointKey,
 	getLargestSize,
 	removeFalsyValues,
-	shouldIncludeAdYouLike,
 	shouldIncludeAppNexus,
 	shouldIncludeImproveDigital,
 	shouldIncludeMobileSticky,
@@ -301,17 +300,6 @@ describe('Utils', () => {
 		expect(stripTrailingNumbersAbove1('inline23')).toBe('inline');
 		expect(stripTrailingNumbersAbove1('inline101')).toBe('inline');
 		expect(stripTrailingNumbersAbove1('inline456')).toBe('inline');
-	});
-
-	test('shouldIncludeAdYouLike when not in any tests', () => {
-		expect(shouldIncludeAdYouLike([createAdSize(300, 250)])).toBe(true);
-		expect(
-			shouldIncludeAdYouLike([
-				createAdSize(300, 600),
-				createAdSize(300, 250),
-			]),
-		).toBe(true);
-		expect(shouldIncludeAdYouLike([createAdSize(728, 90)])).toBe(false);
 	});
 
 	test('removeFalsyValues correctly remove non-truthy values', () => {

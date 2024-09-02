@@ -162,10 +162,6 @@ export const shouldIncludeTrustX = (): boolean => isInUsOrCa();
 export const shouldIncludeTripleLift = (): boolean =>
 	isInUsOrCa() || isInAuOrNz();
 
-export const shouldIncludeAdYouLike = (
-	slotSizes: HeaderBiddingSize[],
-): boolean => containsMpu(slotSizes);
-
 // TODO: Check is we want regional restrictions on where we load the ozoneBidAdapter
 export const shouldUseOzoneAdaptor = (): boolean =>
 	!isInCanada() &&
