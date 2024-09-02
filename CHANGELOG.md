@@ -1,5 +1,13 @@
 # @guardian/commercial
 
+## 20.8.0
+
+### Minor Changes
+
+- ce8b2bf: Remove Smart SSP from prebid and it's config
+- 97b8b8f: Update adYouLike placement IDs
+- 4035d42: Remove mediator
+
 ## 20.7.0
 
 ### Minor Changes
