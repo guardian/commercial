@@ -42,8 +42,9 @@ import {
 	containsMobileSticky,
 	containsMpu,
 	containsMpuOrDmpu,
+	containsPortraitInterstitial,
+	containsWS,
 	getBreakpointKey,
-	shouldIncludeAdYouLike,
 	shouldIncludeAppNexus,
 	shouldIncludeCriteo,
 	shouldIncludeImproveDigital,
@@ -386,6 +387,110 @@ const getKargoPlacementId = (sizes: HeaderBiddingSize[]): string => {
 	return '_y9LINEsbfh';
 };
 
+const getAdYouLikePlacementId = (sizes: HeaderBiddingSize[]) => {
+	if (isInUk()) {
+		if (getBreakpointKey() === 'D') {
+			// right column ads
+			if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
+				return 'f13e6a47512bf890773b71ce4db22716';
+			}
+			// fronts banner ads
+			if (containsBillboardNotLeaderboard(sizes)) {
+				return '6c4808fb7433e73fb4286ce9de37e008';
+			}
+			// top-above-nav ads
+			if (containsLeaderboardOrBillboard(sizes)) {
+				return '36f00dee2120882f586386b4099e765d';
+			}
+		} else {
+			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+				return '46ce2d1ab64e2f57e676276741134129';
+			}
+
+			if (containsMobileSticky(sizes)) {
+				return 'eb72424b9cc2e064a3ea7a422c9ae8e6';
+			}
+		}
+	}
+
+	if (isInUsa()) {
+		if (getBreakpointKey() === 'D') {
+			// right column ads
+			if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
+				return 'fa1a02c6e1d5b2927ada54668c564ac5';
+			}
+			// fronts banner ads
+			if (containsBillboardNotLeaderboard(sizes)) {
+				return '7b3e5955c24514cacd19586a0c3ca8d1';
+			}
+			// top-above-nav ads
+			if (containsLeaderboardOrBillboard(sizes)) {
+				return '6538fe3160263c1db103fa48935fa1ca';
+			}
+		} else {
+			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+				return 'c0a40010a5fb523c0c1f28063cf095bc';
+			}
+
+			if (containsMobileSticky(sizes)) {
+				return 'c1a7d9313dc64e5e174da07b29d62ace';
+			}
+		}
+	}
+
+	if (isInAuOrNz()) {
+		if (getBreakpointKey() === 'D') {
+			// right column ads
+			if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
+				return '1a026103c696e2924fff74c362f4c44e';
+			}
+			// fronts banner ads
+			if (containsBillboardNotLeaderboard(sizes)) {
+				return 'd2ba4b6f6371c81976d7b0356e088dc8';
+			}
+			// top-above-nav ads
+			if (containsLeaderboardOrBillboard(sizes)) {
+				return 'bb68a1ef4d72921b540620a4e97264b8';
+			}
+		} else {
+			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+				return '7a95bbb40a6d37dedf68c9be7b15e2ca';
+			}
+
+			if (containsMobileSticky(sizes)) {
+				return 'd2f94e1671435be5adab1b7e222803f2';
+			}
+		}
+	}
+
+	if (isInRow()) {
+		if (getBreakpointKey() === 'D') {
+			// right column ads
+			if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {
+				return '98bfc2a063396e3fdd1d5b729d77b5ae';
+			}
+			// fronts banner ads
+			if (containsBillboardNotLeaderboard(sizes)) {
+				return 'c985777ffdbe07f0a91ccfc701e3e00c';
+			}
+			// top-above-nav ads
+			if (containsLeaderboardOrBillboard(sizes)) {
+				return 'b76bab7ff7c81b36b0524415d94d3f61';
+			}
+		} else {
+			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+				return 'e9e27e87d2f4d9440500f86a1ee87ed0';
+			}
+
+			if (containsMobileSticky(sizes)) {
+				return '479e1cc587ea707e7ed2421f60d0e1b1';
+			}
+		}
+	}
+
+	return '';
+};
+
 const pubmaticBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 	const defaultParams = {
 		name: 'pubmatic' as BidderCode,
@@ -466,27 +571,12 @@ const xaxisBidder: PrebidBidder = {
 const adYouLikeBidder: PrebidBidder = {
 	name: 'adyoulike',
 	switchName: 'prebidAdYouLike',
-	bidParams: (): PrebidAdYouLikeParams => {
-		if (isInUk()) {
-			return {
-				placement: '2b4d757e0ec349583ce704699f1467dd',
-			};
-		}
-		if (isInUsOrCa()) {
-			return {
-				placement: '7fdf0cd05e1d4bf39a2d3df9c61b3495',
-			};
-		}
-		if (isInAuOrNz()) {
-			return {
-				placement: '5cf05e1705a2d57ba5d51e03f2af9208',
-			};
-		}
-		// ROW
-		return {
-			placement: 'c1853ee8bfe0d4e935cbf2db9bb76a8b',
-		};
-	},
+	bidParams: (
+		slotId: string,
+		sizes: HeaderBiddingSize[],
+	): PrebidAdYouLikeParams => ({
+		placement: getAdYouLikePlacementId(sizes),
+	}),
 };
 
 const criteoBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
@@ -578,7 +668,7 @@ const currentBidders = (
 		[shouldIncludeImproveDigitalSkin(), improveDigitalSkinBidder],
 		[shouldIncludeXaxis(), xaxisBidder],
 		[true, pubmaticBidder(slotSizes)],
-		[shouldIncludeAdYouLike(slotSizes), adYouLikeBidder],
+		[true, adYouLikeBidder],
 		[shouldUseOzoneAdaptor(), ozoneClientSideBidder(pageTargeting)],
 		[shouldIncludeOpenx(), openxClientSideBidder(pageTargeting)],
 		[shouldIncludeKargo(), kargoBidder],
