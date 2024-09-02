@@ -422,7 +422,7 @@ describe('triplelift adapter', () => {
 	});
 
 	test('should include triplelift adapter if condition is true ', () => {
-		expect(getBidders()).toEqual(['ix', 'triplelift']);
+		expect(getBidders()).toEqual(['ix', 'triplelift', 'adyoulike']);
 	});
 
 	test('should return correct triplelift adapter params for leaderboard, with requests from US or Canada', () => {
