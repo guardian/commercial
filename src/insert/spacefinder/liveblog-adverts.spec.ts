@@ -13,7 +13,6 @@ jest.mock('utils/report-error', () => ({
 jest.mock('lib/header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));
-jest.mock('utils/mediator');
 jest.mock('insert/spacefinder/space-filler', () => ({
 	spaceFiller: {
 		fillSpace: jest.fn(() => Promise.resolve(true)),

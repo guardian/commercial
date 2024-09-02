@@ -4,7 +4,6 @@ import {
 	hasCrossedBreakpoint,
 	matchesBreakpoints,
 } from 'lib/detect/detect-breakpoint';
-import { mediator } from 'utils/mediator';
 
 const pageSkin = (): void => {
 	const bodyEl = document.body;
@@ -142,12 +141,6 @@ const pageSkin = (): void => {
 		},
 		false,
 	);
-
-	mediator.on('window:throttledResize', togglePageSkin);
-
-	if (hasPageSkin) {
-		mediator.on('window:throttledScroll', repositionSkins);
-	}
 };
 
 export { pageSkin };

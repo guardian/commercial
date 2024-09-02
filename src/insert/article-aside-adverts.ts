@@ -1,6 +1,5 @@
 import { $$ } from 'utils/$$';
 import fastdom from 'utils/fastdom-promise';
-import { mediator } from 'utils/mediator';
 
 const minArticleHeight = 1300;
 
@@ -104,8 +103,7 @@ export const init = (): Promise<void | boolean> => {
 			}
 			return adSlotsWithinRightCol[0];
 		})
-		.then((adSlot) => {
-			mediator.emit('page:defaultcommercial:right', adSlot);
+		.then(() => {
 			return true;
 		});
 };
