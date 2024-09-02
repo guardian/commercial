@@ -9,8 +9,8 @@ dependencies:
     specifier: ^2.26.2
     version: 2.27.7
   '@guardian/prebid.js':
-    specifier: 8.52.0-1
-    version: 8.52.0-1(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.5.4)
+    specifier: 8.52.0-2
+    version: 8.52.0-2(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.5.4)
   '@octokit/core':
     specifier: ^6.1.2
     version: 6.1.2
@@ -1710,7 +1710,6 @@ packages:
       make-dir: 2.1.0
       pirates: 4.0.6
       source-map-support: 0.5.21
-    dev: true
 
   /@babel/regjsgen@0.8.0:
     resolution: {integrity: sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==}
@@ -2115,19 +2114,6 @@ packages:
       typescript: 5.5.4
     dev: true
 
-  /@guardian/libs@16.1.2(tslib@2.6.3)(typescript@5.5.4):
-    resolution: {integrity: sha512-lE0mzuKWvf03mTPvvcdlfDQwNewfRKFzQqqz3r6ghpHLsTwt9crBrC5/ZCS+R4eymPORB5SrUsfjsp7BQizcpg==}
-    peerDependencies:
-      tslib: ^2.6.2
-      typescript: ~5.3.3
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      tslib: 2.6.3
-      typescript: 5.5.4
-    dev: false
-
   /@guardian/libs@18.0.0(tslib@2.6.3)(typescript@5.5.4):
     resolution: {integrity: sha512-V/aVeCg3yEDBiw6ykAIRux3HCpORKPAzTReDogg2ZHf8BV0v7P2ysc/etO5TW4+8FVd6X8SpX3GmTP3YePx8FQ==}
     peerDependencies:
@@ -2139,17 +2125,17 @@ packages:
     dependencies:
       tslib: 2.6.3
       typescript: 5.5.4
-    dev: true
 
-  /@guardian/prebid.js@8.52.0-1(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.5.4):
-    resolution: {integrity: sha512-nXEKVwJ0dGpKFZp31tiAHQ4gQAgLq6Ob/e3X6cxx1P87FeFBg7zFj3pgk6VfxySz6R6SXIL5BOts/SSTkVwlUQ==}
+  /@guardian/prebid.js@8.52.0-2(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.5.4):
+    resolution: {integrity: sha512-bm4Gtf+CYUdbqF/v1IVSSRj4/tq3frmMTLwgIzgrxB+vxMCgEvJcbD0ZkdS5MAno6e3BWw9ovuzVN8QC3ceSpA==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@babel/core': 7.25.2
       '@babel/plugin-transform-runtime': 7.24.7(@babel/core@7.25.2)
       '@babel/preset-env': 7.25.3(@babel/core@7.25.2)
+      '@babel/register': 7.24.6(@babel/core@7.25.2)
       '@babel/runtime': 7.25.0
-      '@guardian/libs': 16.1.2(tslib@2.6.3)(typescript@5.5.4)
+      '@guardian/libs': 18.0.0(tslib@2.6.3)(typescript@5.5.4)
       core-js: 3.36.1
       core-js-pure: 3.36.1
       criteo-direct-rsa-validate: 1.1.0
@@ -3958,7 +3944,6 @@ packages:
 
   /buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
-    dev: true
 
   /bufferstreams@1.0.1:
     resolution: {integrity: sha512-LZmiIfQprMLS6/k42w/PTc7awhU8AdNNcUerxTgr01WlP9agR2SgMv0wjlYYFD6eDOi8WvofrTX8RayjR/AeUQ==}
@@ -4102,7 +4087,6 @@ packages:
       is-plain-object: 2.0.4
       kind-of: 6.0.3
       shallow-clone: 3.0.1
-    dev: true
 
   /co@4.6.0:
     resolution: {integrity: sha512-QVb0dM5HvG+uaxitm8wONl7jltx8dqhfU33DcqtOZcLSVIKSDDLDi7+0LbAKiyI8hD9u42m2YxXSkMGWThaecQ==}
@@ -4168,7 +4152,6 @@ packages:
 
   /commondir@1.0.1:
     resolution: {integrity: sha512-W9pAhw0ja1Edb5GVdIF1mjZw/ASI0AlShXM83UUGe2DVr5TdAPEA1OA8m/g8zWp9x6On7gqufY+FatDbC3MDQg==}
-    dev: true
 
   /compressible@2.0.18:
     resolution: {integrity: sha512-AF3r7P5dWxL8MxyITRMlORQNaOA2IkAFaTr4k7BUumjPtRpGDTZpl0Pb1XCO6JeDCBdp126Cgs9sMxqSjgYyRg==}
@@ -5518,7 +5501,6 @@ packages:
       commondir: 1.0.1
       make-dir: 2.1.0
       pkg-dir: 3.0.0
-    dev: true
 
   /find-cache-dir@4.0.0:
     resolution: {integrity: sha512-9ZonPT4ZAK4a+1pUPVPZJapbi7O5qbbJPdYw/NOQWZZbVLdDTYM3A4R9z/DpAM08IDaFGsvPgiGZ82WEwUDWjg==}
@@ -5533,7 +5515,6 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       locate-path: 3.0.0
-    dev: true
 
   /find-up@4.1.0:
     resolution: {integrity: sha512-PpOwAdQ/YlXQ2vj8a3h8IipDuYRi3wceVQQGYWxNINccq40Anw7BlsEXCMbt1Zt+OLA6Fq9suIpIWD0OsnISlw==}
@@ -7006,7 +6987,6 @@ packages:
   /kind-of@6.0.3:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /kleur@3.0.3:
     resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
@@ -7137,7 +7117,6 @@ packages:
     dependencies:
       p-locate: 3.0.0
       path-exists: 3.0.0
-    dev: true
 
   /locate-path@5.0.0:
     resolution: {integrity: sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==}
@@ -7216,7 +7195,6 @@ packages:
     dependencies:
       pify: 4.0.1
       semver: 5.7.2
-    dev: true
 
   /make-dir@4.0.0:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
@@ -7608,7 +7586,6 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       p-limit: 2.3.0
-    dev: true
 
   /p-locate@4.1.0:
     resolution: {integrity: sha512-R79ZZ/0wAxKGu3oYMlz8jy/kbhsNrS7SKZ7PxEHBgJ5+F2mtFW2fK2cOtBh1cHYkQsbzFV7I+EoRKe6Yt0oK7A==}
@@ -7684,7 +7661,6 @@ packages:
   /path-exists@3.0.0:
     resolution: {integrity: sha512-bpC7GYwiDYQ4wYLe+FA8lhRjhQCMcQGuSgGGqDkg/QerRWw9CmGRT0iSOVRSZJ29NMLZgIzqaljJ63oaL4NIJQ==}
     engines: {node: '>=4'}
-    dev: true
 
   /path-exists@4.0.0:
     resolution: {integrity: sha512-ak9Qy5Q7jYb2Wwcey5Fpvg2KoAc/ZIhLSLOSBmRmygPsGwkVVt0fZa0qrtMz+m6tJTAHfZQ8FnmB4MG4LWy7/w==}
@@ -7763,14 +7739,12 @@ packages:
   /pirates@4.0.6:
     resolution: {integrity: sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==}
     engines: {node: '>= 6'}
-    dev: true
 
   /pkg-dir@3.0.0:
     resolution: {integrity: sha512-/E57AYkoeQ25qkxMj5PBOVgF8Kiu/h7cYS30Z5+R7WaiCCBfLq58ZI/dSeaEKb9WVJV5n/03QwrN3IeWIFllvw==}
     engines: {node: '>=6'}
     dependencies:
       find-up: 3.0.0
-    dev: true
 
   /pkg-dir@4.2.0:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
@@ -8210,7 +8184,6 @@ packages:
   /semver@5.7.2:
     resolution: {integrity: sha512-cBznnQ9KjJqU67B52RMC65CMarK2600WFnbkcaiwWq3xy/5haFJlshgnpjovMVJ+Hff49d8GEn0b87C5pDQ10g==}
     hasBin: true
-    dev: true
 
   /semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
@@ -8314,7 +8287,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       kind-of: 6.0.3
-    dev: true
 
   /shebang-command@1.2.0:
     resolution: {integrity: sha512-EV3L1+UQWGor21OmnvojK36mhg+TyIKDh3iFBKBohr5xeXIhNBcx8oWdgkTEEQ+BEFFYdLRuqMfd5L84N1V5Vg==}
@@ -8404,12 +8376,10 @@ packages:
     dependencies:
       buffer-from: 1.1.2
       source-map: 0.6.1
-    dev: true
 
   /source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /source-map@0.7.4:
     resolution: {integrity: sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==}
