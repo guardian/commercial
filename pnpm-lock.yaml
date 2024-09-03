@@ -214,6 +214,9 @@ devDependencies:
   webpack-dev-server:
     specifier: ^4.9.3
     version: 4.15.2(webpack-cli@4.10.0)(webpack@5.93.0)
+  webpack-manifest-plugin:
+    specifier: ^5.0.0
+    version: 5.0.0(webpack@5.93.0)
   webpack-merge:
     specifier: ^4.1.0
     version: 4.2.2
@@ -8364,6 +8367,10 @@ packages:
       websocket-driver: 0.7.4
     dev: true
 
+  /source-list-map@2.0.1:
+    resolution: {integrity: sha512-qnQ7gVMxGNxsiL4lEuJwe/To8UnK7fAnmbGEEH8RpLouuKbeEm0lhbQVFIrNSuB+G7tVrAlVsZgETT5nljf+Iw==}
+    dev: true
+
   /source-map-support@0.5.13:
     resolution: {integrity: sha512-SHSKFHadjVA5oR4PPqhtAVdcBWwRYVd6g6cAXnIbRiIwc2EhPrTuKUBdSLvlEKyIP3GCf89fltvcZiP9MMFA1w==}
     dependencies:
@@ -9208,6 +9215,17 @@ packages:
       - utf-8-validate
     dev: true
 
+  /webpack-manifest-plugin@5.0.0(webpack@5.93.0):
+    resolution: {integrity: sha512-8RQfMAdc5Uw3QbCQ/CBV/AXqOR8mt03B6GJmRbhWopE8GzRfEpn+k0ZuWywxW+5QZsffhmFDY1J6ohqJo+eMuw==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      webpack: ^5.47.0
+    dependencies:
+      tapable: 2.2.1
+      webpack: 5.93.0(webpack-cli@4.10.0)
+      webpack-sources: 2.3.1
+    dev: true
+
   /webpack-merge@4.2.2:
     resolution: {integrity: sha512-TUE1UGoTX2Cd42j3krGYqObZbOD+xF7u28WB7tfUordytSjbWTIjK/8V0amkBfTYN4/pB/GIDlJZZ657BGG19g==}
     dependencies:
@@ -9221,6 +9239,14 @@ packages:
       clone-deep: 4.0.1
       flat: 5.0.2
       wildcard: 2.0.1
+    dev: true
+
+  /webpack-sources@2.3.1:
+    resolution: {integrity: sha512-y9EI9AO42JjEcrTJFOYmVywVZdKVUfOvDUPsJea5GIr1JOEGFVqwlY2K098fFoIjOkDzHn2AjRvM8dsBZu+gCA==}
+    engines: {node: '>=10.13.0'}
+    dependencies:
+      source-list-map: 2.0.1
+      source-map: 0.6.1
     dev: true
 
   /webpack-sources@3.2.3:

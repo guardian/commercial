@@ -72,11 +72,13 @@ jobs:
           name: dist
           path: dist
 
-  release:
-    name: Release
+  deploy:
+    name: Deploy
     needs: [build, test, lint, types]
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -93,26 +95,13 @@ jobs:
           name: dist
           path: dist
 
-      - name: Use GitHub App Token
-        uses: actions/create-github-app-token@v1
-        id: app-token
+      - name: Riff-Raff Upload
+        uses: guardian/actions-riff-raff@v4
         with:
-          app-id: ${{ secrets.GU_CHANGESETS_APP_ID }}
-          private-key: ${{ secrets.GU_CHANGESETS_PRIVATE_KEY }}
-
-      - name: Set git user to Gu Changesets app
-        run: |
-          git config user.name "gu-changesets-release-pr[bot]"
-          git config user.email "gu-changesets-release-pr[bot]@users.noreply.github.com"
-
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          publish: pnpm changeset publish
-          title: '🦋 Release package updates'
-          commit: 'Bump package versions'
-          setupGitUser: false
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          projectName: dotcom:commercial-bundle
+          configPath: ./riff-raff.yaml
+          contentDirectories: |
+            frontend-static/commercial:
+              - dist/bundle/prod
