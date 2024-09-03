@@ -78,7 +78,6 @@ type SizeKeys =
 	| 'fluid'
 	| 'googleCard'
 	| 'halfPage'
-	| 'inlineMerchandising'
 	| 'leaderboard'
 	| 'merchandising'
 	| 'merchandisingHigh'
@@ -104,7 +103,6 @@ type SlotName =
 	| 'exclusion'
 	| 'external'
 	| 'fronts-banner'
-	| 'im'
 	| 'inline'
 	| 'liveblog-top'
 	| 'merchandising-high'
@@ -118,7 +116,7 @@ type SlotName =
 	| 'top-above-nav'
 	| 'interactive';
 
-type SizeMapping = Partial<Record<Breakpoint, Readonly<AdSize[]>>>;
+type SizeMapping = Partial<Record<Breakpoint, readonly AdSize[]>>;
 
 type SlotSizeMappings = Record<SlotName, SizeMapping>;
 
@@ -168,7 +166,6 @@ const proprietaryAdSizes = {
 const guardianProprietaryAdSizes = {
 	empty: createAdSize(2, 2),
 	fabric: createAdSize(88, 71),
-	inlineMerchandising: createAdSize(88, 85),
 	merchandising: createAdSize(88, 88),
 	merchandisingHigh: createAdSize(88, 87),
 	merchandisingHighAdFeature: createAdSize(88, 89),
@@ -331,14 +328,6 @@ const slotSizeMappings = {
 			adSizes.fluid,
 		],
 	},
-	im: {
-		mobile: [
-			adSizes.outOfPage,
-			adSizes.empty,
-			adSizes.inlineMerchandising,
-			adSizes.fluid,
-		],
-	},
 	'liveblog-top': {
 		mobile: [adSizes.outOfPage, adSizes.empty, adSizes.mpu, adSizes.fluid],
 		tablet: [],
@@ -465,7 +454,7 @@ const getAdSize = (size: SizeKeys): AdSize => adSizes[size];
 const findAppliedSizesForBreakpoint = (
 	sizeMappings: SizeMapping,
 	breakpoint: Breakpoint,
-): Readonly<AdSize[]> => {
+): readonly AdSize[] => {
 	if (!isBreakpoint(breakpoint)) {
 		return [];
 	}

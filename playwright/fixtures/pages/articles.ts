@@ -28,8 +28,11 @@ const articles: GuPage[] = [
 			path: '/environment/2020/oct/13/maverick-rewilders-endangered-species-extinction-conservation-uk-wildlife',
 		}),
 		name: 'inlineSlots',
-		expectedMinInlineSlotsOnDesktop: 11,
-		expectedMinInlineSlotsOnMobile: 16,
+		expectedMinInlineSlots: {
+			desktop: 11,
+			tablet: 18,
+			mobile: 16,
+		},
 	},
 	{
 		path: getTestUrl({
@@ -44,8 +47,11 @@ const articles: GuPage[] = [
 			path: '/football/2024/feb/09/premier-league-10-things-to-look-out-for-this-weekend',
 		}),
 		name: 'inlineSlots',
-		expectedSlotPositionsOnMobile: [7, 14, 20, 26, 32, 39, 46, 58],
-		expectedSlotPositionsOnDesktop: [14, 30, 43, 55],
+		expectedSlotPositions: {
+			mobile: [7, 14, 20, 26, 32, 39, 46, 58],
+			tablet: [7, 14, 25, 37, 44, 56],
+			desktop: [14, 30, 43, 55],
+		},
 	},
 	{
 		path: getTestUrl({
@@ -53,8 +59,11 @@ const articles: GuPage[] = [
 			path: '/culture/2024/feb/08/say-it-with-a-kiss-the-20-greatest-smooches-on-film-ranked',
 		}),
 		name: 'inlineSlots',
-		expectedSlotPositionsOnMobile: [4, 11, 18, 25, 32, 39, 46, 53, 57, 64],
-		expectedSlotPositionsOnDesktop: [6, 13, 20, 30, 37, 44, 51, 58, 65],
+		expectedSlotPositions: {
+			mobile: [4, 11, 18, 25, 32, 39, 46, 53, 57, 64],
+			tablet: [4, 11, 18, 25, 32, 39, 46, 53, 60, 67],
+			desktop: [6, 13, 20, 30, 37, 44, 51, 58, 65],
+		},
 	},
 ];
 

@@ -313,4 +313,4 @@ export const _ = {
 };
 
 export type { Property, TimedEvent, Metric };
-export { bypassCommercialMetricsSampling, initCommercialMetrics };
+export { bypassCommercialMetricsSampling, initCommercialMetrics, checkConsent };

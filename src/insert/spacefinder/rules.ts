@@ -1,7 +1,8 @@
 import { adSizes } from 'core';
 import { adSlotContainerClass } from 'core/create-ad-slot';
-import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
-import type { SpacefinderRules } from './spacefinder';
+import { isUserInVariant } from 'experiments/ab';
+import { optimiseSpacefinderInline } from 'experiments/tests/optimise-spacefinder-inline';
+import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
 import { isInHighValueSection } from './utils';
 
 const bodySelector = '.article-body-commercial-selector';
@@ -18,6 +19,9 @@ const MOST_VIEWED_HEIGHT = 600;
 const isImmersive = window.guardian.config.page.isImmersive;
 
 const hasImages = !!window.guardian.config.page.lightboxImages?.images.length;
+
+const hasVideo = window.guardian.config.page.hasYouTubeAtom;
+
 const isPaidContent = window.guardian.config.page.isPaidContent;
 
 const hasShowcaseMainElement =
@@ -28,90 +32,103 @@ const minDistanceBetweenInlineAds = isInHighValueSection ? 500 : 750;
 
 const candidateSelector = ':scope > p, [data-spacefinder-role="nested"] > p';
 
-const rightColumnOpponentSelector = '[data-spacefinder-role="immersive"]';
-const inlineOpponentSelector = [
-	'inline',
-	'supporting',
-	'showcase',
-	'thumbnail',
-	'richLink',
-]
-	.map((role) => `[data-spacefinder-role="${role}"]`)
+const leftColumnOpponentSelector = ['richLink', 'thumbnail']
+	.map((role) => `:scope > [data-spacefinder-role="${role}"]`)
+	.join(',');
+const rightColumnOpponentSelector =
+	':scope > [data-spacefinder-role="immersive"]';
+const inlineOpponentSelector = ['inline', 'supporting', 'showcase']
+	.map((role) => `:scope > [data-spacefinder-role="${role}"]`)
 	.join(',');
 
-const headingSelector = ':scope > h2, [data-spacefinder-role="nested"] > h2';
+const headingSelector = `:scope > h2, [data-spacefinder-role="nested"] > h2, :scope > h3, [data-spacefinder-role="nested"] > h3`;
+
+const isInInlineSpacefinderOptimisationTest = isUserInVariant(
+	optimiseSpacefinderInline,
+	'variant',
+);
 
 const desktopInline1: SpacefinderRules = {
 	bodySelector,
 	candidateSelector,
-	minAbove: isImmersive ? 700 : 300,
-	minBelow: 300,
+	minDistanceFromTop: isImmersive ? 700 : 300,
+	minDistanceFromBottom: 300,
 	opponentSelectorRules: {
 		// don't place ads right after a heading
 		[headingSelector]: {
-			minAboveSlot: isInHighValueSection ? 150 : 5,
-			minBelowSlot: isInHighValueSection ? 0 : 190,
+			marginBottom: 150,
+			marginTop: isInHighValueSection ? 0 : 190,
 		},
 		[adSlotContainerSelector]: {
-			minAboveSlot: 500,
-			minBelowSlot: 500,
+			marginBottom: 500,
+			marginTop: 500,
 		},
 		[inlineOpponentSelector]: {
-			minAboveSlot: 35,
-			minBelowSlot: 400,
+			marginBottom: 35,
+			marginTop: isInInlineSpacefinderOptimisationTest ? 200 : 400,
+		},
+		[leftColumnOpponentSelector]: {
+			marginBottom: isInInlineSpacefinderOptimisationTest ? 50 : 35,
+			marginTop: isInInlineSpacefinderOptimisationTest ? 100 : 400,
 		},
 		[rightColumnOpponentSelector]: {
-			minAboveSlot: 0,
-			minBelowSlot: 600,
+			marginBottom: 0,
+			marginTop: isInInlineSpacefinderOptimisationTest ? 150 : 600,
 		},
 		['[data-spacefinder-role="supporting"]']: {
-			minAboveSlot: 0,
-			minBelowSlot: 100,
+			marginBottom: 0,
+			marginTop: 100,
 		},
 	},
 };
 
-const desktopRightRailMinAbove = () => {
+const desktopRightRailMinAbove = (isConsentless: boolean) => {
 	const base = 1000;
 	/**
 	 * In special cases, inline2 can overlap the "Most viewed" island, so
 	 * we need to make an adjustment to move the inline2 further down the page
 	 */
-	if (isPaidContent || !hasImages) {
+	if (isPaidContent || (!hasImages && !hasVideo) || isConsentless) {
 		return base + MOST_VIEWED_HEIGHT;
 	}
 
-	if (hasShowcaseMainElement) {
+	if (hasShowcaseMainElement || (!hasImages && hasVideo)) {
 		return base + 100;
 	}
 	return base;
 };
 
-const desktopRightRail: SpacefinderRules = {
-	bodySelector,
-	candidateSelector,
-	minAbove: desktopRightRailMinAbove(),
-	minBelow: 300,
-	opponentSelectorRules: {
-		[rightColumnOpponentSelector]: {
-			minAboveSlot: 0,
-			minBelowSlot: 600,
+const desktopRightRail = (isConsentless: boolean): SpacefinderRules => {
+	return {
+		bodySelector,
+		candidateSelector,
+		minDistanceFromTop: desktopRightRailMinAbove(isConsentless),
+		minDistanceFromBottom: 300,
+		opponentSelectorRules: {
+			[adSlotContainerSelector]: {
+				marginBottom: 500,
+				marginTop: 500,
+			},
+			[rightColumnOpponentSelector]: {
+				marginBottom: 0,
+				marginTop: 600,
+			},
 		},
-	},
-	/**
-	 * Filter out any candidates that are too close to the last winner
-	 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
-	 * for more information
-	 **/
-	filter: (candidate, lastWinner) => {
-		if (!lastWinner) {
-			return true;
-		}
-		const largestSizeForSlot = adSizes.halfPage.height;
-		const distanceBetweenAds =
-			candidate.top - lastWinner.top - largestSizeForSlot;
-		return distanceBetweenAds >= minDistanceBetweenRightRailAds;
-	},
+		/**
+		 * Filter out any candidates that are too close to the last winner
+		 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
+		 * for more information
+		 **/
+		filter: (candidate, lastWinner) => {
+			if (!lastWinner) {
+				return true;
+			}
+			const largestSizeForSlot = adSizes.halfPage.height;
+			const distanceBetweenAds =
+				candidate.top - lastWinner.top - largestSizeForSlot;
+			return distanceBetweenAds >= minDistanceBetweenRightRailAds;
+		},
+	};
 };
 
 const mobileMinDistanceFromArticleTop = 200;
@@ -119,40 +136,37 @@ const mobileMinDistanceFromArticleTop = 200;
 const mobileCandidateSelector =
 	':scope > p, :scope > h2, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"], [data-spacefinder-role="nested"] > p';
 
-const mobileHeadingSelector =
-	':scope > h2, [data-spacefinder-role="nested"] > h2, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"]';
+const mobileHeadingSelector = `${headingSelector}, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"]`;
 
-const mobileOpponentSelectorRules = {
+const mobileOpponentSelectorRules: OpponentSelectorRules = {
 	// don't place ads right after a heading
 	[mobileHeadingSelector]: {
-		minAboveSlot: 100,
-		minBelowSlot: 0,
+		marginBottom: 100,
+		marginTop: 0,
 	},
 	[adSlotContainerSelector]: {
-		minAboveSlot: minDistanceBetweenInlineAds,
-		minBelowSlot: minDistanceBetweenInlineAds,
+		marginBottom: minDistanceBetweenInlineAds,
+		marginTop: minDistanceBetweenInlineAds,
 	},
-	[inlineOpponentSelector]: {
-		minAboveSlot: 35,
-		minBelowSlot: 200,
+	[`${inlineOpponentSelector},${leftColumnOpponentSelector}`]: {
+		marginBottom: 35,
+		marginTop: 200,
 		// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
-		bypassMinBelow:
-			'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
+		bypassMinTop: 'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 	},
 	[rightColumnOpponentSelector]: {
-		minAboveSlot: 35,
-		minBelowSlot: 200,
+		marginBottom: 35,
+		marginTop: 200,
 		// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
-		bypassMinBelow:
-			'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
+		bypassMinTop: 'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 	},
 };
 
-const mobileSubsequentInlineAds: SpacefinderRules = {
+const mobileAndTabletInlines: SpacefinderRules = {
 	bodySelector,
 	candidateSelector: mobileCandidateSelector,
-	minAbove: mobileMinDistanceFromArticleTop,
-	minBelow: 200,
+	minDistanceFromTop: mobileMinDistanceFromArticleTop,
+	minDistanceFromBottom: 200,
 	opponentSelectorRules: mobileOpponentSelectorRules,
 	/**
 	 * Filter out any candidates that are too close to the last winner
@@ -168,58 +182,8 @@ const mobileSubsequentInlineAds: SpacefinderRules = {
 	},
 };
 
-const mobileTopAboveNav: SpacefinderRules = {
-	bodySelector,
-	candidateSelector: mobileCandidateSelector,
-	minAbove: mobileMinDistanceFromArticleTop,
-	minBelow: 200,
-	opponentSelectorRules: mobileOpponentSelectorRules,
-};
-
-const breakpoint = getCurrentBreakpoint();
-const isMobileOrTablet = breakpoint === 'mobile' || breakpoint === 'tablet';
-
-const inlineMerchandising: SpacefinderRules = {
-	bodySelector,
-	candidateSelector: ':scope > p',
-	minAbove: 300,
-	minBelow: 300,
-	opponentSelectorRules: {
-		':scope > .merch': {
-			minAboveSlot: 0,
-			minBelowSlot: 0,
-		},
-		':scope > header': {
-			minAboveSlot: isMobileOrTablet ? 300 : 700,
-			minBelowSlot: 0,
-		},
-		':scope > h2': {
-			minAboveSlot: 100,
-			minBelowSlot: 250,
-		},
-		':scope > #sign-in-gate': {
-			minAboveSlot: 0,
-			minBelowSlot: 400,
-		},
-		[adSlotContainerSelector]: {
-			minAboveSlot: minDistanceBetweenInlineAds,
-			minBelowSlot: minDistanceBetweenInlineAds,
-		},
-		[inlineOpponentSelector]: {
-			minAboveSlot: 200,
-			minBelowSlot: 400,
-		},
-		[rightColumnOpponentSelector]: {
-			minAboveSlot: 200,
-			minBelowSlot: 400,
-		},
-	},
-};
-
 export const rules = {
 	desktopInline1,
 	desktopRightRail,
-	mobileTopAboveNav,
-	mobileSubsequentInlineAds,
-	inlineMerchandising,
+	mobileAndTabletInlines,
 };

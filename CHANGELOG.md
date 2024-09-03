@@ -1,5 +1,125 @@
 # @guardian/commercial
 
+## 20.8.0
+
+### Minor Changes
+
+- ce8b2bf: Remove Smart SSP from prebid and it's config
+- 97b8b8f: Update adYouLike placement IDs
+- 4035d42: Remove mediator
+
+## 20.7.0
+
+### Minor Changes
+
+- 0ef6a41: Fix issue with double ads on tablets
+- 0ef6a41: Fix issue with first right rail ad very close to inline1
+
+### Patch Changes
+
+- ed53190: Allow interscroller ads on galleries
+- 3266b49: Add extra 100px to minAbove for articles with video but no images
+
+## 20.6.4
+
+### Patch Changes
+
+- 3a51d3f: Add Spacefinder rules for rich links and thumbnails on mobile
+- 15c60b6: Check for article video as well as images when deciding min above for inline2
+
+## 20.6.3
+
+### Patch Changes
+
+- 579498f: Set Spacefinder test to 5%
+
+## 20.6.2
+
+### Patch Changes
+
+- a3000d6: Add Spacefinder test to test array
+
+## 20.6.1
+
+### Patch Changes
+
+- 13db71f: Update intercsroller progress tracking
+
+## 20.6.0
+
+### Minor Changes
+
+- 2b58235: Enable interscroller ads in consentless advertising
+
+### Patch Changes
+
+- 0db47f2: Wrap interscroller progress callback with once
+
+## 20.5.1
+
+### Patch Changes
+
+- 858ba65: Fix inline2 overlapping most viewed for consentless ads
+
+## 20.5.0
+
+### Minor Changes
+
+- 89e83f2: Add a test for new spacefinder margin values
+
+### Patch Changes
+
+- 4419ab4: Add pageview id to video interscroller logs
+
+## 20.4.0
+
+### Minor Changes
+
+- e9b8e0a: Remove inline-merchandising slot
+
+## 20.3.2
+
+### Patch Changes
+
+- 2166482: remove debug_forceCap
+
+## 20.3.1
+
+### Patch Changes
+
+- 27d13b9: centre ad label for ad slots
+
+## 20.3.0
+
+### Minor Changes
+
+- 28c1b56: Log interscroller progress with logs and metrics
+
+## 20.2.1
+
+### Patch Changes
+
+- ac4a96c: Add opt out frequency capping behind test for debugging
+
+## 20.2.0
+
+### Minor Changes
+
+- c76fae9: Ogury passback for mobile sticky
+- 17ec313: Rename spacefinder options
+
+## 20.1.0
+
+### Minor Changes
+
+- baef315: Remove magnite prebid AB test
+
+## 20.0.1
+
+### Patch Changes
+
+- 759aea9: spacefinder should avoid h3 headings
+
 ## 20.0.0
 
 ### Major Changes

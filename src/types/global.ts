@@ -101,9 +101,9 @@ interface PageConfig extends CommercialPageConfig {
 	dcrCouldRender: boolean;
 	edition: Edition;
 	frontendAssetsFullURL?: string; // only in DCR
-	hasInlineMerchandise: boolean;
 	hasPageSkin: boolean; // https://github.com/guardian/frontend/blob/b952f6b9/common/app/views/support/JavaScriptPage.scala#L48
 	hasShowcaseMainElement: boolean;
+	hasYouTubeAtom: boolean;
 	headline: string;
 	host: string;
 	idApiUrl?: string;
@@ -175,7 +175,6 @@ type OphanRecordFunction = (
 	callback?: () => void,
 ) => void;
 interface Ophan {
-	setEventEmitter: () => void; // We don't currently have a custom eventEmitter on DCR - like 'mediator' in Frontend.
 	trackComponentAttention: (
 		name: string,
 		el: Element,
@@ -330,6 +329,8 @@ interface OptOutInitializeOptions {
 	noLogging?: 0 | 1;
 	lazyLoading?: { fractionInView?: number; viewPortMargin?: string };
 	noRequestsOnPageLoad?: 0 | 1;
+	frequencyScript?: string;
+	debug_forceCap?: number;
 }
 
 interface OptOutResponse {
@@ -532,7 +533,6 @@ export type {
 	GoogleTimingEvent,
 	Ophan,
 	OptOutFilledCallback,
-	OphanRecordFunction,
 	PageConfig,
 	Permutive,
 	PrebidIndexSite,

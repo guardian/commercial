@@ -4,7 +4,6 @@ import type {
 	IDToken,
 } from '@guardian/identity-auth';
 import { getCookie } from '@guardian/libs';
-import { mediator } from 'utils/mediator';
 import type { CustomIdTokenClaims } from '../../types/global';
 
 // Types info coming from https://github.com/guardian/discussion-rendering/blob/fc14c26db73bfec8a04ff7a503ed9f90f1a1a8ad/src/types.ts
@@ -44,8 +43,6 @@ const cookieName = 'GU_U';
 
 const idApiRoot =
 	window.guardian.config.page.idApiUrl ?? '/ID_API_ROOT_URL_NOT_FOUND';
-
-mediator.emit('module:identity:api:loaded');
 
 const decodeBase64 = (str: string): string =>
 	decodeURIComponent(

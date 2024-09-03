@@ -52,7 +52,7 @@ const addAndAwaitNewBlocks = async (page: Page, blockContent: string) => {
 };
 
 test.describe('A minimum amount of ad slots load', () => {
-	pages.forEach(({ path, expectedMinInlineSlotsOnDesktop }) => {
+	pages.forEach(({ path, expectedMinInlineSlots }) => {
 		/**
 		 * First ensure that the we receive the expected initial amount of ad slots.
 		 *
@@ -77,7 +77,12 @@ test.describe('A minimum amount of ad slots load', () => {
 				page,
 				false,
 			);
-			expect(initialSlotCount).toEqual(expectedMinInlineSlotsOnDesktop);
+
+			if (expectedMinInlineSlots) {
+				expect(initialSlotCount).toEqual(
+					expectedMinInlineSlots.desktop,
+				);
+			}
 
 			await addAndAwaitNewBlocks(page, 'First batch of inserted blocks');
 			const slotCountAfterFirstInsert = await countLiveblogInlineSlots(

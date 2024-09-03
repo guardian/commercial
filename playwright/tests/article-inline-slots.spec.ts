@@ -8,28 +8,19 @@ const pages = articles.filter(({ name }) => name === 'inlineSlots');
 
 test.describe('Slots and iframes load on article pages', () => {
 	pages.forEach(
-		(
-			{
-				path,
-				expectedMinInlineSlotsOnDesktop,
-				expectedMinInlineSlotsOnMobile,
-				expectedSlotPositionsOnMobile,
-				expectedSlotPositionsOnDesktop,
-			},
-			index,
-		) => {
+		({ path, expectedMinInlineSlots, expectedSlotPositions }, index) => {
 			breakpoints.forEach(({ breakpoint, width, height }) => {
 				const expectedMinSlotsOnPage =
-					(breakpoint === 'mobile'
-						? expectedMinInlineSlotsOnMobile
-						: expectedMinInlineSlotsOnDesktop) ?? 999;
+					expectedMinInlineSlots?.[
+						breakpoint as keyof typeof expectedMinInlineSlots
+					];
 
-				const expectedSlotPositions =
-					breakpoint === 'mobile'
-						? expectedSlotPositionsOnMobile
-						: expectedSlotPositionsOnDesktop;
+				const expectedSlotPositionsForBreakpoint =
+					expectedSlotPositions?.[
+						breakpoint as keyof typeof expectedSlotPositions
+					];
 
-				if (!expectedSlotPositions) {
+				if (expectedMinSlotsOnPage) {
 					test(`Test article ${index} has at least ${expectedMinSlotsOnPage} inline total slots at breakpoint ${breakpoint}`, async ({
 						page,
 					}) => {
@@ -59,8 +50,8 @@ test.describe('Slots and iframes load on article pages', () => {
 							expectedMinSlotsOnPage,
 						);
 					});
-				} else {
-					test(`Test article ${index} has slots at positions ${expectedSlotPositions.join(
+				} else if (expectedSlotPositionsForBreakpoint) {
+					test(`Test article ${index} has slots at positions ${expectedSlotPositionsForBreakpoint.join(
 						',',
 					)} at breakpoint ${breakpoint}`, async ({ page }) => {
 						await page.setViewportSize({
@@ -89,7 +80,9 @@ test.describe('Slots and iframes load on article pages', () => {
 									.filter((index) => index !== undefined),
 							);
 
-						expect(slotPositions).toEqual(expectedSlotPositions);
+						expect(slotPositions).toEqual(
+							expectedSlotPositionsForBreakpoint,
+						);
 					});
 				}
 			});

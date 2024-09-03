@@ -19,7 +19,6 @@ import {
 	containsMpu as containsMpu_,
 	containsMpuOrDmpu as containsMpuOrDmpu_,
 	getBreakpointKey as getBreakpointKey_,
-	shouldIncludeAdYouLike as shouldIncludeAdYouLike_,
 	shouldIncludeAppNexus as shouldIncludeAppNexus_,
 	shouldIncludeCriteo as shouldIncludeCriteo_,
 	shouldIncludeImproveDigital as shouldIncludeImproveDigital_,
@@ -64,7 +63,6 @@ const containsLeaderboardOrBillboard =
 const containsMobileSticky = containsMobileSticky_ as jest.Mock;
 const containsMpu = containsMpu_ as jest.Mock;
 const containsMpuOrDmpu = containsMpuOrDmpu_ as jest.Mock;
-const shouldIncludeAdYouLike = shouldIncludeAdYouLike_ as jest.Mock;
 const shouldIncludeAppNexus = shouldIncludeAppNexus_ as jest.Mock;
 const shouldIncludeImproveDigital = shouldIncludeImproveDigital_ as jest.Mock;
 const shouldIncludeOpenx = shouldIncludeOpenx_ as jest.Mock;
@@ -99,7 +97,6 @@ const resetConfig = () => {
 		record: () => {
 			// do nothing;
 		},
-		setEventEmitter: jest.fn(),
 		trackComponentAttention: jest.fn(),
 	};
 	window.guardian.config.switches = {
@@ -241,7 +238,6 @@ describe('bids', () => {
 		containsLeaderboardOrBillboard.mockReturnValue(false);
 		containsMpu.mockReturnValue(false);
 		containsMpuOrDmpu.mockReturnValue(false);
-		shouldIncludeAdYouLike.mockReturnValue(true);
 		shouldIncludeAppNexus.mockReturnValue(false);
 		shouldIncludeTrustX.mockReturnValue(false);
 		stripMobileSuffix.mockImplementation((str: string) => str);
@@ -426,7 +422,7 @@ describe('triplelift adapter', () => {
 	});
 
 	test('should include triplelift adapter if condition is true ', () => {
-		expect(getBidders()).toEqual(['ix', 'triplelift']);
+		expect(getBidders()).toEqual(['ix', 'triplelift', 'adyoulike']);
 	});
 
 	test('should return correct triplelift adapter params for leaderboard, with requests from US or Canada', () => {

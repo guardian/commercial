@@ -1,6 +1,7 @@
 import type { ABTest } from '@guardian/ab-core';
 import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
-import { prebidMagnite } from './tests/prebid-magnite';
+import { optOutFrequencyCap } from './tests/opt-out-frequency-cap';
+import { optimiseSpacefinderInline } from './tests/optimise-spacefinder-inline';
 
 /**
  * You only need to add tests to this file if the code you are testing is here in
@@ -10,5 +11,6 @@ import { prebidMagnite } from './tests/prebid-magnite';
 export const concurrentTests: ABTest[] = [
 	// one test per line
 	mpuWhenNoEpic,
-	prebidMagnite,
+	optOutFrequencyCap,
+	optimiseSpacefinderInline,
 ];

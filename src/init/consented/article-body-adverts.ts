@@ -14,7 +14,7 @@ const fillAdSlot: FillAdSlot = async (
 	slot: HTMLElement,
 	additionalSizes?: SizeMapping,
 ) => {
-	const shouldForceDisplay = ['im', 'carrot'].includes(name);
+	const shouldForceDisplay = ['carrot'].includes(name);
 	await fillDynamicAdSlot(slot, shouldForceDisplay, additionalSizes);
 };
 

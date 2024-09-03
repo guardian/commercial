@@ -1,4 +1,8 @@
-import { renderAdvertLabel, shouldRenderLabel } from './render-advert-label';
+import {
+	renderAdvertLabel,
+	shouldRenderLabel,
+	templatesWithoutLabels,
+} from './render-advert-label';
 
 jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
@@ -45,6 +49,9 @@ describe('shouldRenderLabel', () => {
 		document.body.innerHTML = '';
 	});
 
+	const testCreativeTemplateId = 1234567;
+	const interscrollerTemplateId = 11885667;
+
 	it('renders an ad label for normal ads', async () => {
 		createAd(adverts['withLabel']);
 		return renderAdvertLabel(getAd()).then(() => {
@@ -55,18 +62,27 @@ describe('shouldRenderLabel', () => {
 
 	it('renders an ad label for interscroller ads', async () => {
 		createAd(adverts['interscroller']);
-		return renderAdvertLabel(getAd()).then(() => {
+		return renderAdvertLabel(getAd(), interscrollerTemplateId).then(() => {
 			const ad = getAd();
-			expect(shouldRenderLabel(ad)).toBeTruthy();
+			expect(shouldRenderLabel(ad, interscrollerTemplateId)).toBeTruthy();
 		});
 	});
 
-	it('does NOT render an ad label for fluid ads', async () => {
+	it('renders an ad label for fluid ads', async () => {
 		createAd(adverts['fluid']);
-		return renderAdvertLabel(getAd()).then(() => {
+		return renderAdvertLabel(getAd(), testCreativeTemplateId).then(() => {
 			const ad = getAd();
-			expect(shouldRenderLabel(ad)).toBeFalsy();
+			expect(shouldRenderLabel(ad, testCreativeTemplateId)).toBeTruthy();
 		});
+	});
+
+	it('does NOT render an ad label for an ad with an excluded nativeStyleId', async () => {
+		for (const nativeAdId of templatesWithoutLabels) {
+			createAd(adverts['fluid']);
+			await renderAdvertLabel(getAd(), nativeAdId);
+			const ad = getAd();
+			expect(shouldRenderLabel(ad, nativeAdId)).toBeFalsy();
+		}
 	});
 
 	it('does NOT render an ad label for collapsed ads', async () => {

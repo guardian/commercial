@@ -12,19 +12,6 @@ updates:
       time: '09:00'
       day: 'tuesday'
     groups:
-      changesets:
-        patterns:
-          - '@changesets/*'
-        update-types:
-          - 'minor'
-          - 'patch'
-      babel:
-        patterns:
-          - '@babel/*'
-          - 'babel-*'
-        update-types:
-          - 'minor'
-          - 'patch'
       guardian:
         patterns:
           - '@guardian/*'
@@ -39,7 +26,7 @@ updates:
         update-types:
           - 'minor'
           - 'patch'
-      trouble-makers:
+      linters:
         patterns:
           - '*eslint*'
           - '*prettier*'
@@ -49,19 +36,6 @@ updates:
       playwright:
         patterns:
           - '@playwright/*'
-        update-types:
-          - 'minor'
-          - 'patch'
-      jest:
-        patterns:
-          - '*jest*'
-        update-types:
-          - 'minor'
-          - 'patch'
-      webpack:
-        patterns:
-          - '*webpack*'
-          - '*-loader'
         update-types:
           - 'minor'
           - 'patch'
@@ -76,9 +50,6 @@ updates:
           - 'minor'
           - 'patch'
         exclude-patterns:
-          - '@changesets/*'
-          - '@babel/*'
-          - 'babel-*'
           - '@guardian/*'
           - '@types/*'
           - 'type-fest'
@@ -86,9 +57,6 @@ updates:
           - '*eslint*'
           - '*prettier*'
           - '@playwright/*'
-          - '*jest*'
-          - '*webpack*'
-          - '*-loader'
     # The default is 5 but as we are going to group dependencies we might need to increase it
     open-pull-requests-limit: 10
   - package-ecosystem: 'github-actions'
