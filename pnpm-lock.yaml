@@ -10,7 +10,7 @@ dependencies:
     version: 2.27.7
   '@guardian/prebid.js':
     specifier: 8.52.0-2
-    version: 8.52.0-2(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.5.4)
+    version: 8.52.0-2(babel-core@7.0.0-bridge.0)(tslib@2.7.0)(typescript@5.5.4)
   '@octokit/core':
     specifier: ^6.1.2
     version: 6.1.2
@@ -28,7 +28,7 @@ dependencies:
     version: 3.27.2
   tslib:
     specifier: ^2.6.2
-    version: 2.6.3
+    version: 2.7.0
   web-vitals:
     specifier: ^4.2.1
     version: 4.2.3
@@ -69,31 +69,31 @@ devDependencies:
     version: 7.25.0
   '@guardian/ab-core':
     specifier: 8.0.0
-    version: 8.0.0(tslib@2.6.3)(typescript@5.5.4)
+    version: 8.0.0(tslib@2.7.0)(typescript@5.5.4)
   '@guardian/browserslist-config':
     specifier: ^6.1.1
-    version: 6.1.1(browserslist@4.23.3)(tslib@2.6.3)
+    version: 6.1.1(browserslist@4.23.3)(tslib@2.7.0)
   '@guardian/core-web-vitals':
     specifier: 7.0.0
-    version: 7.0.0(@guardian/libs@18.0.1)(tslib@2.6.3)(typescript@5.5.4)(web-vitals@4.2.3)
+    version: 7.0.0(@guardian/libs@18.0.1)(tslib@2.7.0)(typescript@5.5.4)(web-vitals@4.2.3)
   '@guardian/eslint-config-typescript':
     specifier: ^11.0.0
-    version: 11.0.0(eslint@8.57.0)(tslib@2.6.3)(typescript@5.5.4)
+    version: 11.0.0(eslint@8.57.0)(tslib@2.7.0)(typescript@5.5.4)
   '@guardian/identity-auth':
     specifier: ^3.0.0
-    version: 3.0.0(@guardian/libs@18.0.1)(tslib@2.6.3)(typescript@5.5.4)
+    version: 3.0.0(@guardian/libs@18.0.1)(tslib@2.7.0)(typescript@5.5.4)
   '@guardian/identity-auth-frontend':
     specifier: ^5.0.0
-    version: 5.0.0(@guardian/identity-auth@3.0.0)(@guardian/libs@18.0.1)(tslib@2.6.3)(typescript@5.5.4)
+    version: 5.0.0(@guardian/identity-auth@3.0.0)(@guardian/libs@18.0.1)(tslib@2.7.0)(typescript@5.5.4)
   '@guardian/libs':
     specifier: 18.0.1
-    version: 18.0.1(tslib@2.6.3)(typescript@5.5.4)
+    version: 18.0.1(tslib@2.7.0)(typescript@5.5.4)
   '@guardian/prettier':
     specifier: 8.0.1
-    version: 8.0.1(prettier@3.3.3)(tslib@2.6.3)
+    version: 8.0.1(prettier@3.3.3)(tslib@2.7.0)
   '@guardian/source':
     specifier: 6.1.0
-    version: 6.1.0(tslib@2.6.3)(typescript@5.5.4)
+    version: 6.1.0(tslib@2.7.0)(typescript@5.5.4)
   '@playwright/test':
     specifier: 1.46.0
     version: 1.46.0
@@ -198,7 +198,7 @@ devDependencies:
     version: 9.5.1(typescript@5.5.4)(webpack@5.94.0)
   type-fest:
     specifier: ^4.3.3
-    version: 4.23.0
+    version: 4.26.0
   typescript:
     specifier: 5.5.4
     version: 5.5.4
@@ -2003,7 +2003,7 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@guardian/ab-core@8.0.0(tslib@2.6.3)(typescript@5.5.4):
+  /@guardian/ab-core@8.0.0(tslib@2.7.0)(typescript@5.5.4):
     resolution: {integrity: sha512-I6KV03kROJPnU7FdRbqkmEAzsTDMMK/bgnB7rbL/qht8+hrK9y52ySFSJF5WX0zPX/9MoMRyAgmf+wBWOeogBA==}
     peerDependencies:
       tslib: ^2.6.2
@@ -2012,21 +2012,21 @@ packages:
       typescript:
         optional: true
     dependencies:
-      tslib: 2.6.3
+      tslib: 2.7.0
       typescript: 5.5.4
     dev: true
 
-  /@guardian/browserslist-config@6.1.1(browserslist@4.23.3)(tslib@2.6.3):
+  /@guardian/browserslist-config@6.1.1(browserslist@4.23.3)(tslib@2.7.0):
     resolution: {integrity: sha512-62fVcqE5opXxN1bgm5lF6ykPrKM2/U8WdGH7gcrFGV6f5VVz+oFloMX+C2Svj19fdmXpfHj6+I1AmJbqSAX5CQ==}
     peerDependencies:
       browserslist: ^4.22.2
       tslib: ^2.6.2
     dependencies:
       browserslist: 4.23.3
-      tslib: 2.6.3
+      tslib: 2.7.0
     dev: true
 
-  /@guardian/core-web-vitals@7.0.0(@guardian/libs@18.0.1)(tslib@2.6.3)(typescript@5.5.4)(web-vitals@4.2.3):
+  /@guardian/core-web-vitals@7.0.0(@guardian/libs@18.0.1)(tslib@2.7.0)(typescript@5.5.4)(web-vitals@4.2.3):
     resolution: {integrity: sha512-1JLUQjkLY8SXYJqcy0TiE9/9hCcmyIlmMpRoW8Ygn/qGtyNxG+zzwkwsgtJIP+B0ZjtDqfukra2IV9l7wX5A0g==}
     peerDependencies:
       '@guardian/libs': ^18.0.0
@@ -2037,26 +2037,26 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@guardian/libs': 18.0.1(tslib@2.6.3)(typescript@5.5.4)
-      tslib: 2.6.3
+      '@guardian/libs': 18.0.1(tslib@2.7.0)(typescript@5.5.4)
+      tslib: 2.7.0
       typescript: 5.5.4
       web-vitals: 4.2.3
     dev: true
 
-  /@guardian/eslint-config-typescript@11.0.0(eslint@8.57.0)(tslib@2.6.3)(typescript@5.5.4):
+  /@guardian/eslint-config-typescript@11.0.0(eslint@8.57.0)(tslib@2.7.0)(typescript@5.5.4):
     resolution: {integrity: sha512-SP1ixVXAO85bWeUKX0cpTMhDkzYfko9hTyGB5hyUvTtggGp3gZoRoA8fvmLomUS3Lns//Dej5YxlHXr3gaGvEA==}
     peerDependencies:
       eslint: ^8.56.0
       tslib: ^2.6.2
       typescript: ~5.5.2
     dependencies:
-      '@guardian/eslint-config': 8.0.1(@typescript-eslint/parser@7.11.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)(tslib@2.6.3)
+      '@guardian/eslint-config': 8.0.1(@typescript-eslint/parser@7.11.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)(tslib@2.7.0)
       '@typescript-eslint/eslint-plugin': 7.11.0(@typescript-eslint/parser@7.11.0)(eslint@8.57.0)(typescript@5.5.4)
       '@typescript-eslint/parser': 7.11.0(eslint@8.57.0)(typescript@5.5.4)
       eslint: 8.57.0
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@7.11.0)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
       eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.11.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
-      tslib: 2.6.3
+      tslib: 2.7.0
       typescript: 5.5.4
     transitivePeerDependencies:
       - eslint-import-resolver-node
@@ -2064,7 +2064,7 @@ packages:
       - supports-color
     dev: true
 
-  /@guardian/eslint-config@8.0.1(@typescript-eslint/parser@7.11.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)(tslib@2.6.3):
+  /@guardian/eslint-config@8.0.1(@typescript-eslint/parser@7.11.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)(tslib@2.7.0):
     resolution: {integrity: sha512-pvXXJhtRqsBW7RxeWIFcXro0Y7hV7rQ4wJYiNiTtBRHo1cmML9lHLFNkIuAncVcc6YodgqCRWAeljaAJrGJJLQ==}
     peerDependencies:
       eslint: ^8.56.0
@@ -2074,7 +2074,7 @@ packages:
       eslint-config-prettier: 9.1.0(eslint@8.57.0)
       eslint-plugin-eslint-comments: 3.2.0(eslint@8.57.0)
       eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.11.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
-      tslib: 2.6.3
+      tslib: 2.7.0
     transitivePeerDependencies:
       - '@typescript-eslint/parser'
       - eslint-import-resolver-typescript
@@ -2082,7 +2082,7 @@ packages:
       - supports-color
     dev: true
 
-  /@guardian/identity-auth-frontend@5.0.0(@guardian/identity-auth@3.0.0)(@guardian/libs@18.0.1)(tslib@2.6.3)(typescript@5.5.4):
+  /@guardian/identity-auth-frontend@5.0.0(@guardian/identity-auth@3.0.0)(@guardian/libs@18.0.1)(tslib@2.7.0)(typescript@5.5.4):
     resolution: {integrity: sha512-Y5wIg8Zo92jl/ChZ4v/Ve3CGQWnoZSfkrhwSOIoZPm88YvijEASxHteVF04QOy/rhVs1O6AQJfl5Ilx244zS6w==}
     peerDependencies:
       '@guardian/identity-auth': ^3.0.0
@@ -2093,13 +2093,13 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@guardian/identity-auth': 3.0.0(@guardian/libs@18.0.1)(tslib@2.6.3)(typescript@5.5.4)
-      '@guardian/libs': 18.0.1(tslib@2.6.3)(typescript@5.5.4)
-      tslib: 2.6.3
+      '@guardian/identity-auth': 3.0.0(@guardian/libs@18.0.1)(tslib@2.7.0)(typescript@5.5.4)
+      '@guardian/libs': 18.0.1(tslib@2.7.0)(typescript@5.5.4)
+      tslib: 2.7.0
       typescript: 5.5.4
     dev: true
 
-  /@guardian/identity-auth@3.0.0(@guardian/libs@18.0.1)(tslib@2.6.3)(typescript@5.5.4):
+  /@guardian/identity-auth@3.0.0(@guardian/libs@18.0.1)(tslib@2.7.0)(typescript@5.5.4):
     resolution: {integrity: sha512-DKXeym8sJxkoQfgrwAq4tdSBZPMi8b1muAF0L4p442//KvWPa+q/EAd/ATEmFNnD9jbYGrZ0Q+P958mITvPvsw==}
     peerDependencies:
       '@guardian/libs': ^18.0.0
@@ -2109,12 +2109,12 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@guardian/libs': 18.0.1(tslib@2.6.3)(typescript@5.5.4)
-      tslib: 2.6.3
+      '@guardian/libs': 18.0.1(tslib@2.7.0)(typescript@5.5.4)
+      tslib: 2.7.0
       typescript: 5.5.4
     dev: true
 
-  /@guardian/libs@18.0.1(tslib@2.6.3)(typescript@5.5.4):
+  /@guardian/libs@18.0.1(tslib@2.7.0)(typescript@5.5.4):
     resolution: {integrity: sha512-wYYR696o9R/cngnh6crZCPPV+nvgRqpQb5XNOw8hcxjN3FN8Jq6AjyMAtQDUEUdSdOM87Ayj0+/oSJXY2rqkVA==}
     peerDependencies:
       tslib: ^2.6.2
@@ -2123,10 +2123,10 @@ packages:
       typescript:
         optional: true
     dependencies:
-      tslib: 2.6.3
+      tslib: 2.7.0
       typescript: 5.5.4
 
-  /@guardian/prebid.js@8.52.0-2(babel-core@7.0.0-bridge.0)(tslib@2.6.3)(typescript@5.5.4):
+  /@guardian/prebid.js@8.52.0-2(babel-core@7.0.0-bridge.0)(tslib@2.7.0)(typescript@5.5.4):
     resolution: {integrity: sha512-bm4Gtf+CYUdbqF/v1IVSSRj4/tq3frmMTLwgIzgrxB+vxMCgEvJcbD0ZkdS5MAno6e3BWw9ovuzVN8QC3ceSpA==}
     engines: {node: '>=12.0.0'}
     dependencies:
@@ -2135,7 +2135,7 @@ packages:
       '@babel/preset-env': 7.25.3(@babel/core@7.25.2)
       '@babel/register': 7.24.6(@babel/core@7.25.2)
       '@babel/runtime': 7.25.0
-      '@guardian/libs': 18.0.1(tslib@2.6.3)(typescript@5.5.4)
+      '@guardian/libs': 18.0.1(tslib@2.7.0)(typescript@5.5.4)
       core-js: 3.36.1
       core-js-pure: 3.36.1
       criteo-direct-rsa-validate: 1.1.0
@@ -2207,17 +2207,17 @@ packages:
       - whiskers
     dev: false
 
-  /@guardian/prettier@8.0.1(prettier@3.3.3)(tslib@2.6.3):
+  /@guardian/prettier@8.0.1(prettier@3.3.3)(tslib@2.7.0):
     resolution: {integrity: sha512-mELIji0FezEj5YTyHkylB6VNeCN1+/jsHW/iZ0RItDMn/GjU6gbaPP5D2m+BZwrTYNrxYhCoFqCE/ObkEghtdg==}
     peerDependencies:
       prettier: ^3.2.2
       tslib: ^2.6.2
     dependencies:
       prettier: 3.3.3
-      tslib: 2.6.3
+      tslib: 2.7.0
     dev: true
 
-  /@guardian/source@6.1.0(tslib@2.6.3)(typescript@5.5.4):
+  /@guardian/source@6.1.0(tslib@2.7.0)(typescript@5.5.4):
     resolution: {integrity: sha512-Vez2zPyOa6SLNUSQ6XOIwFPGOcgRrg9MgRQTvG9ERUsYamuDFC3WiGi5U3tMll23WEekKSshd8jDZsAyWz5u5w==}
     peerDependencies:
       '@emotion/react': ^11.11.3
@@ -2236,7 +2236,7 @@ packages:
         optional: true
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tslib: 2.6.3
+      tslib: 2.7.0
       typescript: 5.5.4
     dev: true
 
@@ -2536,35 +2536,35 @@ packages:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  /@jsonjoy.com/base64@1.1.2(tslib@2.6.3):
+  /@jsonjoy.com/base64@1.1.2(tslib@2.7.0):
     resolution: {integrity: sha512-q6XAnWQDIMA3+FTiOYajoYqySkO+JSat0ytXGSuRdq9uXE7o92gzuQwQM14xaCRlBLGq3v5miDGC4vkVTn54xA==}
     engines: {node: '>=10.0'}
     peerDependencies:
       tslib: '2'
     dependencies:
-      tslib: 2.6.3
+      tslib: 2.7.0
     dev: true
 
-  /@jsonjoy.com/json-pack@1.1.0(tslib@2.6.3):
+  /@jsonjoy.com/json-pack@1.1.0(tslib@2.7.0):
     resolution: {integrity: sha512-zlQONA+msXPPwHWZMKFVS78ewFczIll5lXiVPwFPCZUsrOKdxc2AvxU1HoNBmMRhqDZUR9HkC3UOm+6pME6Xsg==}
     engines: {node: '>=10.0'}
     peerDependencies:
       tslib: '2'
     dependencies:
-      '@jsonjoy.com/base64': 1.1.2(tslib@2.6.3)
-      '@jsonjoy.com/util': 1.3.0(tslib@2.6.3)
+      '@jsonjoy.com/base64': 1.1.2(tslib@2.7.0)
+      '@jsonjoy.com/util': 1.3.0(tslib@2.7.0)
       hyperdyperid: 1.2.0
-      thingies: 1.21.0(tslib@2.6.3)
-      tslib: 2.6.3
+      thingies: 1.21.0(tslib@2.7.0)
+      tslib: 2.7.0
     dev: true
 
-  /@jsonjoy.com/util@1.3.0(tslib@2.6.3):
+  /@jsonjoy.com/util@1.3.0(tslib@2.7.0):
     resolution: {integrity: sha512-Cebt4Vk7k1xHy87kHY7KSPLT77A7Ev7IfOblyLZhtYEhrdQ6fX4EoLq3xOQ3O/DRMEh2ok5nyC180E+ABS8Wmw==}
     engines: {node: '>=10.0'}
     peerDependencies:
       tslib: '2'
     dependencies:
-      tslib: 2.6.3
+      tslib: 2.7.0
     dev: true
 
   /@leichtgewicht/ip-codec@2.0.5:
@@ -7329,10 +7329,10 @@ packages:
     resolution: {integrity: sha512-LZcMTBAgqUUKNXZagcZxvXXfgF1bHX7Y7nQ0QyEiNbRJgE29GhgPd8Yna1VQcLlPiHt/5RFJMWYN9Uv/VPNvjQ==}
     engines: {node: '>= 4.0.0'}
     dependencies:
-      '@jsonjoy.com/json-pack': 1.1.0(tslib@2.6.3)
-      '@jsonjoy.com/util': 1.3.0(tslib@2.6.3)
-      tree-dump: 1.0.2(tslib@2.6.3)
-      tslib: 2.6.3
+      '@jsonjoy.com/json-pack': 1.1.0(tslib@2.7.0)
+      '@jsonjoy.com/util': 1.3.0(tslib@2.7.0)
+      tree-dump: 1.0.2(tslib@2.7.0)
+      tslib: 2.7.0
     dev: true
 
   /memorystream@0.3.1:
@@ -8816,13 +8816,13 @@ packages:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
     dev: true
 
-  /thingies@1.21.0(tslib@2.6.3):
+  /thingies@1.21.0(tslib@2.7.0):
     resolution: {integrity: sha512-hsqsJsFMsV+aD4s3CWKk85ep/3I9XzYV/IXaSouJMYIoDlgyi11cBhsqYe9/geRfB0YIikBQg6raRaM+nIMP9g==}
     engines: {node: '>=10.18'}
     peerDependencies:
       tslib: ^2
     dependencies:
-      tslib: 2.6.3
+      tslib: 2.7.0
     dev: true
 
   /through2@3.0.2:
@@ -8888,13 +8888,13 @@ packages:
       punycode: 2.3.1
     dev: true
 
-  /tree-dump@1.0.2(tslib@2.6.3):
+  /tree-dump@1.0.2(tslib@2.7.0):
     resolution: {integrity: sha512-dpev9ABuLWdEubk+cIaI9cHwRNNDjkBBLXTwI4UCUFdQ5xXKqNXoK4FEciw/vxf+NQ7Cb7sGUyeUtORvHIdRXQ==}
     engines: {node: '>=10.0'}
     peerDependencies:
       tslib: '2'
     dependencies:
-      tslib: 2.6.3
+      tslib: 2.7.0
     dev: true
 
   /tryit@1.0.3:
@@ -8974,8 +8974,8 @@ packages:
       strip-bom: 3.0.0
     dev: true
 
-  /tslib@2.6.3:
-    resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
+  /tslib@2.7.0:
+    resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
 
   /type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
@@ -9004,8 +9004,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /type-fest@4.23.0:
-    resolution: {integrity: sha512-ZiBujro2ohr5+Z/hZWHESLz3g08BBdrdLMieYFULJO+tWc437sn8kQsWLJoZErY8alNhxre9K4p3GURAG11n+w==}
+  /type-fest@4.26.0:
+    resolution: {integrity: sha512-OduNjVJsFbifKb57UqZ2EMP1i4u64Xwow3NYXUtBbD4vIwJdQd4+xl8YDou1dlm4DVrtwT/7Ky8z8WyCULVfxw==}
     engines: {node: '>=16'}
     dev: true
 
