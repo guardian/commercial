@@ -1,0 +1,829 @@
+[
+	{
+		"id": 6745162272,
+		"name": "Labs | Merchandising | Hosted |  Microsoft AI 2024 | ROS",
+		"priority": 7,
+		"startDateTime": "2024-06-27T14:29:00",
+		"endDateTime": "2024-08-08T12:01:00",
+		"customTargeting": {
+			"children": [
+				{
+					"children": [
+						{
+							"key": "slot",
+							"values": ["merchandising"],
+							"operator": "IS"
+						},
+						{
+							"key": "ct",
+							"values": ["network-front", "section", "liveblog"],
+							"operator": "IS_NOT"
+						},
+						{
+							"key": "se",
+							"values": [
+								"the-age-of-extinction",
+								"climate-countdown",
+								"guardian-climate-pledge-2022",
+								"covering-climate-now",
+								"cotton-capital"
+							],
+							"operator": "IS_NOT"
+						}
+					],
+					"logicalOperator": "AND"
+				}
+			],
+			"logicalOperator": "OR"
+		},
+		"deviceTargeting": null,
+		"geoTargeting": {
+			"targetedLocations": ["United Kingdom"],
+			"excludedLocations": []
+		},
+		"creatives": [
+			{
+				"id": 138480491160,
+				"type": "template",
+				"name": "Labs | Hosted By | Microsoft AI 2024",
+				"size": [1, 1],
+				"destinationUrl": "https://www.theguardian.com/uk",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138480491160.html"
+			}
+		]
+	},
+	{
+		"id": 6752477430,
+		"name": "Labs | Merchandising | Hosted | Hamburg City | ROS",
+		"priority": 7,
+		"startDateTime": "2024-07-15T12:58:00",
+		"endDateTime": "2024-07-31T12:01:00",
+		"customTargeting": {
+			"children": [
+				{
+					"children": [
+						{
+							"key": "slot",
+							"values": ["merchandising"],
+							"operator": "IS"
+						},
+						{
+							"key": "ct",
+							"values": ["network-front", "section", "liveblog"],
+							"operator": "IS_NOT"
+						},
+						{
+							"key": "se",
+							"values": [
+								"the-age-of-extinction",
+								"climate-countdown",
+								"guardian-climate-pledge-2022",
+								"covering-climate-now",
+								"cotton-capital"
+							],
+							"operator": "IS_NOT"
+						}
+					],
+					"logicalOperator": "AND"
+				}
+			],
+			"logicalOperator": "OR"
+		},
+		"deviceTargeting": null,
+		"geoTargeting": {
+			"targetedLocations": ["United Kingdom"],
+			"excludedLocations": []
+		},
+		"creatives": [
+			{
+				"id": 138482513567,
+				"type": "template",
+				"name": "Labs | Merchandising | Hosted | Hamburg City | ROS",
+				"size": [1, 1],
+				"destinationUrl": "https://www.theguardian.com/uk",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482513567.html"
+			}
+		]
+	},
+	{
+		"id": 6723114132,
+		"name": "GUARDIAN & OBSERVER HOUSE ADS_RUN OF SECTION_RUN OF NETWORK - FABRIC XL_CPM_UK_ORD-2208093-1-1 Standard Formats",
+		"priority": 14,
+		"startDateTime": "2024-07-10T00:00:00",
+		"endDateTime": "2024-08-04T23:59:59",
+		"customTargeting": null,
+		"deviceTargeting": null,
+		"geoTargeting": {
+			"targetedLocations": ["United Kingdom"],
+			"excludedLocations": []
+		},
+		"creatives": [
+			{
+				"id": 138481683573,
+				"type": "image",
+				"name": "Feast_Mobile-Intertitial_pizza",
+				"size": [320, 480],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1e4ovmim",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481683573.gif"
+			},
+			{
+				"id": 138481832021,
+				"type": "image",
+				"name": "Feast_Mpu_Rhubarb_desktop",
+				"size": [300, 250],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=MPU_SQU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481832021.gif"
+			},
+			{
+				"id": 138481833110,
+				"type": "image",
+				"name": "Feast_Mpu_Pumpkin_desktop",
+				"size": [300, 250],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=MPU_SQU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481833110.gif"
+			},
+			{
+				"id": 138481833113,
+				"type": "image",
+				"name": "Feast_Mpu_Carrots_desktop",
+				"size": [300, 250],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=MPU_AUB&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481833113.gif"
+			},
+			{
+				"id": 138481833116,
+				"type": "image",
+				"name": "Feast_Mpu_Pizza_desktop",
+				"size": [300, 250],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=MPU_PIZZA&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481833116.gif"
+			},
+			{
+				"id": 138481835426,
+				"type": "image",
+				"name": "Feast_On_Platform_Sticky_320x50",
+				"size": [320, 50],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1ejju4cp",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835426.gif"
+			},
+			{
+				"id": 138481835429,
+				"type": "image",
+				"name": "Feast_Mobile-Intertitial_Pumpkin",
+				"size": [320, 480],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1e2q6ijv",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835429.gif"
+			},
+			{
+				"id": 138481835432,
+				"type": "image",
+				"name": "Feast_Mobile-Intertitial_Aubergine",
+				"size": [320, 480],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1epzlyjr",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835432.gif"
+			},
+			{
+				"id": 138481835435,
+				"type": "image",
+				"name": "Feast_Leaderboard_Rhubarb_mobile",
+				"size": [728, 90],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1ew25aoj",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835435.gif"
+			},
+			{
+				"id": 138481835888,
+				"type": "image",
+				"name": "Feast_Leaderboard_pumpkin_Mobile",
+				"size": [728, 90],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1er7gx1o",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835888.gif"
+			},
+			{
+				"id": 138481835891,
+				"type": "image",
+				"name": "Feast_Leaderboard_Carrots_mobile",
+				"size": [728, 90],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1exn8uoy",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835891.gif"
+			},
+			{
+				"id": 138481835894,
+				"type": "image",
+				"name": "Feast_Leaderboard_Carrots_desktop",
+				"size": [728, 90],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=LB_CAR&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835894.gif"
+			},
+			{
+				"id": 138481835897,
+				"type": "image",
+				"name": "Feast_Leaderboard_Aubergine_desktop",
+				"size": [728, 90],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=LB_AUB&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835897.gif"
+			},
+			{
+				"id": 138481835900,
+				"type": "image",
+				"name": "Feast_Leaderboard_Pizza_desktop",
+				"size": [728, 90],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=LB_PIZZA&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835900.gif"
+			},
+			{
+				"id": 138481835903,
+				"type": "image",
+				"name": "Feast_Billboard_Rhubarb_mobile",
+				"size": [970, 250],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1earafir",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835903.gif"
+			},
+			{
+				"id": 138481835906,
+				"type": "image",
+				"name": "Feast_Billboard_Pumpkin_mobile",
+				"size": [970, 250],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1e3x8r5v",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835906.gif"
+			},
+			{
+				"id": 138481835909,
+				"type": "image",
+				"name": "Feast_Billboard_Carrot_mobile",
+				"size": [970, 250],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1evzguxa",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835909.gif"
+			},
+			{
+				"id": 138481835912,
+				"type": "image",
+				"name": "Feast_Billboard_Carrot_desktop",
+				"size": [970, 250],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=BB_CAR&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835912.gif"
+			},
+			{
+				"id": 138481835915,
+				"type": "image",
+				"name": "Feast_Billboard_Aubergine_desktop",
+				"size": [970, 250],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=BB_AUB&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835915.gif"
+			},
+			{
+				"id": 138481835918,
+				"type": "image",
+				"name": "Feast_Billboard_Pizza_desktop",
+				"size": [970, 250],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=BB_PIZZA&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835918.gif"
+			},
+			{
+				"id": 138481835921,
+				"type": "image",
+				"name": "Feast_Dmpu_Rhubarb_mobile",
+				"size": [300, 600],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1e4tg1jf",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835921.gif"
+			},
+			{
+				"id": 138481835924,
+				"type": "image",
+				"name": "Feast_Dmpu_Pumpkin_mobile",
+				"size": [300, 600],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1e4ktbei",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835924.gif"
+			},
+			{
+				"id": 138481835927,
+				"type": "image",
+				"name": "Feast_Dmpu_Carrot_mobile",
+				"size": [300, 600],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1ehyshpd",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835927.gif"
+			},
+			{
+				"id": 138481835930,
+				"type": "image",
+				"name": "Feast_Dmpu_Carrot_desktop",
+				"size": [300, 600],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=DMPU_CAR&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835930.gif"
+			},
+			{
+				"id": 138481835933,
+				"type": "image",
+				"name": "Feast_Dmpu_aubergine_desktop",
+				"size": [300, 600],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=DMPU_AUB&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835933.gif"
+			},
+			{
+				"id": 138481835936,
+				"type": "image",
+				"name": "Feast_Dmpu_Pizza_desktop",
+				"size": [300, 600],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=DMPU_PIZZA&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481835936.gif"
+			},
+			{
+				"id": 138482440474,
+				"type": "image",
+				"name": "Feast_Mpu_Rhubarb_Mobile",
+				"size": [300, 250],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1eueym4k",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482440474.gif"
+			},
+			{
+				"id": 138482440477,
+				"type": "image",
+				"name": "Feast_Mpu_Pumpkin_Mobile",
+				"size": [300, 250],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1ek5tbh0",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482440477.gif"
+			},
+			{
+				"id": 138482440480,
+				"type": "image",
+				"name": "Feast_Mpu_Carrots_Mobile",
+				"size": [300, 250],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1eh5mjjq",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482440480.gif"
+			},
+			{
+				"id": 138482440483,
+				"type": "image",
+				"name": "Feast_Mpu_Aubergine_Mobile",
+				"size": [300, 250],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1e2q6ijv",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482440483.gif"
+			},
+			{
+				"id": 138482440486,
+				"type": "image",
+				"name": "Feast_Mpu_Pizza_Mobile",
+				"size": [300, 250],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1eyp9bb9",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482440486.gif"
+			},
+			{
+				"id": 138482443531,
+				"type": "image",
+				"name": "Feast_Mobile-Intertitial_Rhubarb",
+				"size": [320, 480],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1ea66qgm",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443531.gif"
+			},
+			{
+				"id": 138482443534,
+				"type": "image",
+				"name": "Feast_Mobile-Intertitial_carrot",
+				"size": [320, 480],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1ejvghij",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443534.gif"
+			},
+			{
+				"id": 138482443537,
+				"type": "image",
+				"name": "Feast_Leaderboard_Rhubarb_desktop",
+				"size": [728, 90],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=LB_RHU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443537.gif"
+			},
+			{
+				"id": 138482443540,
+				"type": "image",
+				"name": "Feast_Leaderboard_pumpkin_desktop",
+				"size": [728, 90],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=LB_SQU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443540.gif"
+			},
+			{
+				"id": 138482443543,
+				"type": "image",
+				"name": "Feast_Leaderboard_Aubergine_mobile",
+				"size": [728, 90],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1e6318cd",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443543.gif"
+			},
+			{
+				"id": 138482443546,
+				"type": "image",
+				"name": "Feast_Leaderboard_Pizza_mobile",
+				"size": [728, 90],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1essotdn",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443546.gif"
+			},
+			{
+				"id": 138482443549,
+				"type": "image",
+				"name": "Feast_Billboard_Rhubarb_desktop",
+				"size": [970, 250],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=BB_RHU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443549.gif"
+			},
+			{
+				"id": 138482443552,
+				"type": "image",
+				"name": "Feast_Billboard_Pumpkin_desktop",
+				"size": [970, 250],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=BB_SQU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443552.gif"
+			},
+			{
+				"id": 138482443555,
+				"type": "image",
+				"name": "Feast_Billboard_Aubergine_mobile",
+				"size": [970, 250],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1e3hehah",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443555.gif"
+			},
+			{
+				"id": 138482443558,
+				"type": "image",
+				"name": "Feast_Billboard_Pizza_mobile",
+				"size": [970, 250],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1elusr5w",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443558.gif"
+			},
+			{
+				"id": 138482443561,
+				"type": "image",
+				"name": "Feast_Dmpu_Rhubarb_desktop",
+				"size": [300, 600],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=DMPU_RHU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443561.gif"
+			},
+			{
+				"id": 138482443564,
+				"type": "image",
+				"name": "Feast_Dmpu_Pumpkin_desktop",
+				"size": [300, 600],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=DMPU_SQU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443564.gif"
+			},
+			{
+				"id": 138482443567,
+				"type": "image",
+				"name": "Feast_Dmpu_aubergine_Mobile",
+				"size": [300, 600],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1ens1d8c",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443567.gif"
+			},
+			{
+				"id": 138482443573,
+				"type": "image",
+				"name": "Feast_Dmpu_Pizza_mobile",
+				"size": [300, 600],
+				"destinationUrl": "https://guardian-feast.go.link?adj_t=1esbepkb",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443573.gif"
+			}
+		]
+	},
+	{
+		"id": 6753800134,
+		"name": "TEST TEST GUARDIAN & OBSERVER HOUSE ADS_RUN OF SECTION_RUN OF NETWORK - FABRIC XL_CPM_UK_ORD-2208093-1-1 Standard Formats (copy 1)",
+		"priority": 1,
+		"startDateTime": "2024-07-12T12:54:00",
+		"endDateTime": "2024-08-04T23:59:59",
+		"customTargeting": {
+			"children": [
+				{
+					"children": [
+						{
+							"key": "at",
+							"values": ["rhubarb_feast"],
+							"operator": "IS"
+						},
+						{
+							"key": "url",
+							"values": [
+								"/music/article/2024/jul/12/will-i-just-disappear-laura-marling-on-the-ecstasy-of-motherhood-and-why-she-might-quit-music"
+							],
+							"operator": "IS"
+						}
+					],
+					"logicalOperator": "AND"
+				}
+			],
+			"logicalOperator": "OR"
+		},
+		"deviceTargeting": null,
+		"geoTargeting": null,
+		"creatives": [
+			{
+				"id": 138481832021,
+				"type": "image",
+				"name": "Feast_Mpu_Rhubarb_desktop",
+				"size": [300, 250],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=MPU_SQU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481832021.gif"
+			},
+			{
+				"id": 138482212296,
+				"type": "image",
+				"name": "Feast_Mpu_Rhubarb_desktop (copy)",
+				"size": [300, 250],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=MPU_SQU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482212296.gif"
+			},
+			{
+				"id": 138482212302,
+				"type": "image",
+				"name": "Feast_Dmpu_Rhubarb_desktop (copy)",
+				"size": [300, 600],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=DMPU_RHU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482212302.gif"
+			},
+			{
+				"id": 138482212305,
+				"type": "image",
+				"name": "Feast_Mpu_Rhubarb_desktop (copy)",
+				"size": [300, 250],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=MPU_SQU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482212305.gif"
+			},
+			{
+				"id": 138482360135,
+				"type": "image",
+				"name": "Feast_Dmpu_Rhubarb_desktop (copy)",
+				"size": [300, 600],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=DMPU_RHU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482360135.gif"
+			},
+			{
+				"id": 138482360150,
+				"type": "image",
+				"name": "Feast_Mpu_Rhubarb_desktop (copy)",
+				"size": [300, 250],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=MPU_SQU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482360150.gif"
+			},
+			{
+				"id": 138482360153,
+				"type": "image",
+				"name": "Feast_Dmpu_Rhubarb_desktop (copy)",
+				"size": [300, 600],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=DMPU_RHU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482360153.gif"
+			},
+			{
+				"id": 138482443537,
+				"type": "image",
+				"name": "Feast_Leaderboard_Rhubarb_desktop",
+				"size": [728, 90],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=LB_RHU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443537.gif"
+			},
+			{
+				"id": 138482443549,
+				"type": "image",
+				"name": "Feast_Billboard_Rhubarb_desktop",
+				"size": [970, 250],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=BB_RHU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443549.gif"
+			},
+			{
+				"id": 138482443561,
+				"type": "image",
+				"name": "Feast_Dmpu_Rhubarb_desktop",
+				"size": [300, 600],
+				"destinationUrl": "https://www.theguardian.com/help/insideguardian/2024/apr/17/introducing-the-feast-app?utm_medium=ACQUISITIONS_HOUSE_ADS&utm_campaign=FEAST&utm_content=DMPU_RHU&utm_term=UK_ONPLATFORM&utm_source=GUARDIAN_WEB",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482443561.gif"
+			}
+		]
+	},
+	{
+		"id": 6384868286,
+		"name": "Video | Pre-roll | Support Campaign filler campaign | 60 sec and 30 sec",
+		"priority": 16,
+		"startDateTime": "2023-09-21T00:00:00",
+		"endDateTime": null,
+		"customTargeting": null,
+		"deviceTargeting": null,
+		"geoTargeting": {
+			"targetedLocations": ["United Kingdom"],
+			"excludedLocations": []
+		},
+		"creatives": []
+	},
+	{
+		"id": 6748131567,
+		"name": "JOBS HOUSE JULY ELECTION CAMPAIGN - ROS LINE",
+		"priority": 15,
+		"startDateTime": "2024-07-05T17:30:00",
+		"endDateTime": "2024-07-28T23:59:00",
+		"customTargeting": null,
+		"deviceTargeting": null,
+		"geoTargeting": {
+			"targetedLocations": ["United Kingdom"],
+			"excludedLocations": []
+		},
+		"creatives": [
+			{
+				"id": 138481403982,
+				"type": "image",
+				"name": "Jobs_dmpu_B2B",
+				"size": [300, 600],
+				"destinationUrl": "https://www.guardianjobsrecruiter.co.uk/",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481403982.gif"
+			},
+			{
+				"id": 138481404567,
+				"type": "image",
+				"name": "Jobs_Billboard_LP",
+				"size": [970, 250],
+				"destinationUrl": "https://jobs.theguardian.com/",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481404567.gif"
+			},
+			{
+				"id": 138481404777,
+				"type": "image",
+				"name": "Jobs_dmpu_LP",
+				"size": [300, 600],
+				"destinationUrl": "https://jobs.theguardian.com/",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481404777.gif"
+			},
+			{
+				"id": 138481404864,
+				"type": "image",
+				"name": "Jobs_mpu_LP",
+				"size": [300, 250],
+				"destinationUrl": "https://jobs.theguardian.com/",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481404864.gif"
+			},
+			{
+				"id": 138481545911,
+				"type": "image",
+				"name": "Jobs_MI_LP",
+				"size": [320, 480],
+				"destinationUrl": "https://jobs.theguardian.com/",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481545911.gif"
+			},
+			{
+				"id": 138481546850,
+				"type": "image",
+				"name": "Jobs_Billboard_B2B",
+				"size": [970, 250],
+				"destinationUrl": "https://www.guardianjobsrecruiter.co.uk/",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138481546850.jpg"
+			},
+			{
+				"id": 138482153803,
+				"type": "image",
+				"name": "Jobs_MobileInterstatial_B2B",
+				"size": [320, 480],
+				"destinationUrl": "https://www.guardianjobsrecruiter.co.uk/",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482153803.gif"
+			},
+			{
+				"id": 138482153890,
+				"type": "image",
+				"name": "Jobs_mpu_B2B",
+				"size": [300, 250],
+				"destinationUrl": "https://www.guardianjobsrecruiter.co.uk/",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482153890.gif"
+			},
+			{
+				"id": 138482154544,
+				"type": "image",
+				"name": "Jobs_Billboard_B2C",
+				"size": [970, 250],
+				"destinationUrl": "https://jobs.theguardian.com/",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482154544.gif"
+			},
+			{
+				"id": 138482154703,
+				"type": "image",
+				"name": "Jobs_MobileInterstitial_B2C",
+				"size": [320, 480],
+				"destinationUrl": "https://jobs.theguardian.com/",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482154703.gif"
+			},
+			{
+				"id": 138482154931,
+				"type": "image",
+				"name": "Jobs_dmpu_B2C",
+				"size": [300, 600],
+				"destinationUrl": "https://jobs.theguardian.com/",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482154931.gif"
+			},
+			{
+				"id": 138482155042,
+				"type": "image",
+				"name": "Jobs_mpu_B2C",
+				"size": [300, 250],
+				"destinationUrl": "https://jobs.theguardian.com/",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138482155042.gif"
+			}
+		]
+	},
+	{
+		"id": 6739402048,
+		"name": "Labs | Merchandising | Hosted | Dummy Fixture 1",
+		"priority": 7,
+		"startDateTime": "2024-06-27T14:29:00",
+		"endDateTime": "2024-08-08T12:01:00",
+		"customTargeting": {
+			"children": [
+				{
+					"children": [
+						{
+							"key": "at",
+							"values": ["rhubarb_feast"],
+							"operator": "IS"
+						},
+						{
+							"key": "ct",
+							"values": ["liveblog"],
+							"operator": "IS"
+						}
+					],
+					"logicalOperator": "OR"
+				}
+			],
+			"logicalOperator": "OR"
+		},
+		"deviceTargeting": null,
+		"geoTargeting": {
+			"targetedLocations": ["United Kingdom"],
+			"excludedLocations": []
+		},
+		"creatives": [
+			{
+				"id": 138480491160,
+				"type": "template",
+				"name": "Labs | Hosted By | Microsoft AI 2024",
+				"size": [1, 1],
+				"destinationUrl": "https://www.theguardian.com/uk",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138480491160.html"
+			}
+		]
+	},
+	{
+		"id": 6839075892,
+		"name": "Labs | Merchandising | Hosted | Dummy Fixture 2",
+		"priority": 7,
+		"startDateTime": "2024-06-27T14:29:00",
+		"endDateTime": "2024-08-08T12:01:00",
+		"customTargeting": null,
+		"deviceTargeting": {
+			"targeted": ["mobile", "tablet"],
+			"excluded": ["desktop"]
+		},
+		"geoTargeting": {
+			"targetedLocations": ["United Kingdom"],
+			"excludedLocations": []
+		},
+		"creatives": [
+			{
+				"id": 138480491160,
+				"type": "template",
+				"name": "Labs | Hosted By | Microsoft AI 2024",
+				"size": [1, 1],
+				"destinationUrl": "https://www.theguardian.com/uk",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138480491160.html"
+			}
+		]
+	},
+	{
+		"id": 6029384758,
+		"name": "Labs | Merchandising | Hosted | Dummy Fixture 3",
+		"priority": 7,
+		"startDateTime": "2024-06-27T14:29:00",
+		"endDateTime": "2024-08-08T12:01:00",
+		"customTargeting": {
+			"children": [
+				{
+					"children": [
+						{
+							"key": "at",
+							"values": ["rhubarb_feast"],
+							"operator": "IS"
+						}
+					],
+					"logicalOperator": "AND"
+				}
+			],
+			"logicalOperator": "OR"
+		},
+		"deviceTargeting": {
+			"targeted": ["mobile", "tablet"],
+			"excluded": ["desktop"]
+		},
+		"geoTargeting": {
+			"targetedLocations": ["United Kingdom"],
+			"excludedLocations": []
+		},
+		"creatives": [
+			{
+				"id": 138480491160,
+				"type": "template",
+				"name": "Labs | Hosted By | Microsoft AI 2024",
+				"size": [1, 1],
+				"destinationUrl": "https://www.theguardian.com/uk",
+				"assetUrl": "https://adops-assets.s3.eu-west-1.amazonaws.com/elements-manager/creatives/138480491160.html"
+			}
+		]
+	}
+]
