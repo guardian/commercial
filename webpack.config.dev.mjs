@@ -1,36 +1,37 @@
-const webpack = require('webpack');
-const webpackMerge = require('webpack-merge');
-const config = require('./webpack.config.js');
-const path = require('path');
-const {
-	setupFixturesServer,
-} = require('./scripts/fixtures/fixtures-server.js');
+import { join } from 'path';
+import webpack from 'webpack';
+import { merge } from 'webpack-merge';
+import { setupFixturesServer } from './scripts/fixtures/fixtures-server.js';
+import config from './webpack.config.mjs';
+
+const { DefinePlugin, ProvidePlugin } = webpack;
 
 const port = 3031;
 const overrideBundlePath = `http://localhost:${port}/`;
 const shouldOverrideBundle = !!process.env.OVERRIDE_BUNDLE;
 
-module.exports = webpackMerge.smart(config, {
+// eslint-disable-next-line import/no-default-export -- webpack config
+export default merge(config, {
 	devtool: 'inline-source-map',
 	mode: 'development',
 	output: {
 		filename: `graun.standalone.commercial.js`,
 		chunkFilename: `graun.[name].commercial.js`,
-		path: path.join(__dirname, 'dist', 'bundle', 'dev'),
+		path: join(import.meta.dirname, 'dist', 'bundle', 'dev'),
 		clean: true,
 	},
 	plugins: shouldOverrideBundle
 		? [
-				new webpack.ProvidePlugin({
+				new ProvidePlugin({
 					process: 'process/browser',
 				}),
-				new webpack.DefinePlugin({
+				new DefinePlugin({
 					'process.env.OVERRIDE_BUNDLE_PATH':
 						JSON.stringify(overrideBundlePath),
 				}),
 			]
 		: [
-				new webpack.ProvidePlugin({
+				new ProvidePlugin({
 					process: 'process/browser',
 				}),
 			],
@@ -45,6 +46,10 @@ module.exports = webpackMerge.smart(config, {
 		compress: true,
 		hot: false,
 		liveReload: true,
-		onAfterSetupMiddleware: setupFixturesServer,
+		setupMiddlewares: (middlewares, devServer) => {
+			setupFixturesServer(devServer);
+
+			return middlewares;
+		},
 	},
 });

@@ -1,27 +1,31 @@
-const path = require('path');
-const CircularDependencyPlugin = require('circular-dependency-plugin');
-const webpack = require('webpack');
+import { join } from 'path';
+import CircularDependencyPlugin from 'circular-dependency-plugin';
 
-module.exports = {
+/**
+ * @type {import('webpack').Configuration}
+ */
+const config = {
 	entry: {
-		'commercial-standalone': path.join(__dirname, 'src', 'commercial.ts'),
+		'commercial-standalone': join(
+			import.meta.dirname,
+			'src',
+			'commercial.ts',
+		),
 	},
 	output: {
-		path: path.join(__dirname, 'dist', 'bundle'),
+		path: join(import.meta.dirname, 'dist', 'bundle'),
 		clean: true,
 	},
 	resolve: {
 		modules: [
-			path.join(__dirname, 'src'),
+			join(import.meta.dirname, 'src'),
 			'node_modules', // default location, but we're overiding above, so it needs to be explicit
 		],
 		alias: {
-			svgs: path.join(__dirname, 'static', 'svg'),
+			svgs: join(import.meta.dirname, 'static', 'svg'),
 			lodash: 'lodash-es',
 		},
 		extensions: ['.js', '.ts', '.tsx', '.jsx'],
-		// Originally inserted to enable linking @guardian/consent-management-platform, breaks pnpm build
-		// symlinks: false,
 	},
 	module: {
 		rules: [
@@ -35,7 +39,10 @@ module.exports = {
 						loader: 'ts-loader',
 						options: {
 							transpileOnly: true,
-							configFile: path.join(__dirname, 'tsconfig.json'),
+							configFile: join(
+								import.meta.dirname,
+								'tsconfig.json',
+							),
 						},
 					},
 				],
@@ -48,6 +55,7 @@ module.exports = {
 		],
 	},
 	plugins: [
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-call -- circular-dependency-plugin is not typed
 		new CircularDependencyPlugin({
 			// exclude detection of files based on a RegExp
 			exclude: /node_modules/,
@@ -56,3 +64,6 @@ module.exports = {
 		}),
 	],
 };
+
+// eslint-disable-next-line import/no-default-export -- webpack config
+export default config;

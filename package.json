@@ -18,8 +18,8 @@
 	"module": "dist/esm/core/index.js",
 	"scripts": {
 		"build": "npm-run-all clean --parallel compile:core:* build:prod build:dev",
-		"build:dev": "webpack -c webpack.config.dev.js",
-		"build:prod": "webpack -c webpack.config.prod.js",
+		"build:dev": "webpack -c webpack.config.dev.mjs",
+		"build:prod": "webpack -c webpack.config.prod.mjs",
 		"clean": "rm -rf dist",
 		"compile:core:common": "tsc --project ./tsconfig.core.json --outDir ./dist/cjs --module CommonJS",
 		"compile:core:esm": "tsc --project ./tsconfig.core.json --outDir ./dist/esm",
@@ -32,7 +32,7 @@
 		"prepush:test": "jest --verbose --runInBand --onlyChanged",
 		"prettier:check": "prettier . --check --cache",
 		"prettier:fix": "prettier . --write --cache",
-		"serve": "OVERRIDE_BUNDLE=true pnpm webpack-dev-server -c ./webpack.config.dev.js",
+		"serve": "OVERRIDE_BUNDLE=true pnpm webpack-dev-server -c ./webpack.config.dev.mjs",
 		"benchmark": "STAGE=prod playwright test -c playwright.benchmark.config.ts --project=consented-average --project=consentless-average",
 		"test": "jest",
 		"tsc": "tsc --noEmit",
@@ -95,11 +95,11 @@
 		"ts-loader": "^9.4.2",
 		"type-fest": "^4.3.3",
 		"typescript": "5.5.4",
-		"webpack": "^5.76.0",
-		"webpack-bundle-analyzer": "^4.7.0",
-		"webpack-cli": "^4.10.0",
-		"webpack-dev-server": "^4.9.3",
-		"webpack-merge": "^4.1.0"
+		"webpack": "^5.94.0",
+		"webpack-bundle-analyzer": "^4.10.0",
+		"webpack-cli": "^5.1.0",
+		"webpack-dev-server": "^5.0.4",
+		"webpack-merge": "^6.0.1"
 	},
 	"dependencies": {
 		"@changesets/cli": "^2.26.2",
