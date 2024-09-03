@@ -1,11 +1,12 @@
-const webpack = require('webpack');
-const { merge } = require('webpack-merge');
-const BundleAnalyzerPlugin =
-	require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const config = require('./webpack.config.js');
-const TerserPlugin = require('terser-webpack-plugin');
-const path = require('path');
-const { execSync } = require('child_process');
+import { execSync } from 'child_process';
+import { join } from 'path';
+import TerserPlugin from 'terser-webpack-plugin';
+import webpack from 'webpack';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import { merge } from 'webpack-merge';
+import config from './webpack.config.mjs';
+
+const { DefinePlugin } = webpack;
 
 const gitCommitSHA = () => {
 	try {
@@ -18,22 +19,24 @@ const gitCommitSHA = () => {
 
 const prefix = process.env.BUNDLE_PREFIX ?? '[chunkhash]/';
 
-module.exports = merge(config, {
+// eslint-disable-next-line import/no-default-export -- webpack config
+export default merge(config, {
 	mode: 'production',
 	output: {
 		filename: `${prefix}graun.standalone.commercial.js`,
 		chunkFilename: `${prefix}graun.[name].commercial.js`,
-		path: path.join(__dirname, 'dist', 'bundle', 'prod'),
+		path: join(import.meta.dirname, 'dist', 'bundle', 'prod'),
 		clean: true,
 	},
 	devtool: 'source-map',
 	plugins: [
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-call -- circular-dependency-plugin is not typed
 		new BundleAnalyzerPlugin({
 			reportFilename: './commercial-bundle-analyzer-report.html',
 			analyzerMode: 'static',
 			openAnalyzer: false,
 		}),
-		new webpack.DefinePlugin({
+		new DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify('production'),
 			'process.env.OVERRIDE_BUNDLE_PATH': JSON.stringify(false),
 			...gitCommitSHA(),
