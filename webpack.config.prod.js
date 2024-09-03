@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const webpackMerge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const BundleAnalyzerPlugin =
 	require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const config = require('./webpack.config.js');
@@ -18,7 +18,7 @@ const gitCommitSHA = () => {
 
 const prefix = process.env.BUNDLE_PREFIX ?? '[chunkhash]/';
 
-module.exports = webpackMerge.smart(config, {
+module.exports = merge(config, {
 	mode: 'production',
 	output: {
 		filename: `${prefix}graun.standalone.commercial.js`,

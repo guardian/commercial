@@ -95,11 +95,11 @@
 		"ts-loader": "^9.4.2",
 		"type-fest": "^4.3.3",
 		"typescript": "5.5.4",
-		"webpack": "^5.76.0",
-		"webpack-bundle-analyzer": "^4.7.0",
-		"webpack-cli": "^4.10.0",
-		"webpack-dev-server": "^4.9.3",
-		"webpack-merge": "^4.1.0"
+		"webpack": "^5.94.0",
+		"webpack-bundle-analyzer": "^4.10.0",
+		"webpack-cli": "^5.1.0",
+		"webpack-dev-server": "^5.0.4",
+		"webpack-merge": "^6.0.1"
 	},
 	"dependencies": {
 		"@changesets/cli": "^2.26.2",

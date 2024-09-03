@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const webpackMerge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const config = require('./webpack.config.js');
 const path = require('path');
 const {
@@ -10,7 +10,7 @@ const port = 3031;
 const overrideBundlePath = `http://localhost:${port}/`;
 const shouldOverrideBundle = !!process.env.OVERRIDE_BUNDLE;
 
-module.exports = webpackMerge.smart(config, {
+module.exports = merge(config, {
 	devtool: 'inline-source-map',
 	mode: 'development',
 	output: {
@@ -45,6 +45,10 @@ module.exports = webpackMerge.smart(config, {
 		compress: true,
 		hot: false,
 		liveReload: true,
-		onAfterSetupMiddleware: setupFixturesServer,
+		setupMiddlewares: (middlewares, devServer) => {
+			const fixturesMiddleware = setupFixturesServer(devServer);
+
+			return middlewares;
+		},
 	},
 });
