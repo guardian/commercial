@@ -1,7 +1,5 @@
 import { adSizes } from 'core';
 import { adSlotContainerClass } from 'core/create-ad-slot';
-import { isUserInVariant } from 'experiments/ab';
-import { optimiseSpacefinderInline } from 'experiments/tests/optimise-spacefinder-inline';
 import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
 import { isInHighValueSection } from './utils';
 
@@ -43,11 +41,6 @@ const inlineOpponentSelector = ['inline', 'supporting', 'showcase']
 
 const headingSelector = `:scope > h2, [data-spacefinder-role="nested"] > h2, :scope > h3, [data-spacefinder-role="nested"] > h3`;
 
-const isInInlineSpacefinderOptimisationTest = isUserInVariant(
-	optimiseSpacefinderInline,
-	'variant',
-);
-
 const desktopInline1: SpacefinderRules = {
 	bodySelector,
 	candidateSelector,
@@ -65,15 +58,15 @@ const desktopInline1: SpacefinderRules = {
 		},
 		[inlineOpponentSelector]: {
 			marginBottom: 35,
-			marginTop: isInInlineSpacefinderOptimisationTest ? 200 : 400,
+			marginTop: 200,
 		},
 		[leftColumnOpponentSelector]: {
-			marginBottom: isInInlineSpacefinderOptimisationTest ? 50 : 35,
-			marginTop: isInInlineSpacefinderOptimisationTest ? 100 : 400,
+			marginBottom: 50,
+			marginTop: 100,
 		},
 		[rightColumnOpponentSelector]: {
 			marginBottom: 0,
-			marginTop: isInInlineSpacefinderOptimisationTest ? 150 : 600,
+			marginTop: 150,
 		},
 		['[data-spacefinder-role="supporting"]']: {
 			marginBottom: 0,
