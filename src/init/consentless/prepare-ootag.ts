@@ -22,17 +22,17 @@ function initConsentless(consentState: ConsentState): Promise<void> {
 			queue: [],
 		};
 
-		const frequencyCapVariant = getVariant(optOutFrequencyCap);
-
-		const isInFrequencyCapTest =
-			frequencyCapVariant !== undefined &&
-			frequencyCapVariant !== 'control';
-
 		window.ootag.queue.push(function () {
 			// Ensures Opt Out logs are namespaced under Commercial
 			window.ootag.logger = (...args: unknown[]) => {
 				log('commercial', '[Opt Out Ads]', ...args);
 			};
+
+			const frequencyCapVariant = getVariant(optOutFrequencyCap);
+
+			const isInFrequencyCapTest =
+				frequencyCapVariant !== undefined &&
+				frequencyCapVariant !== 'control';
 
 			const timeoutFrequencyCappingMS = isInFrequencyCapTest
 				? frequencyCapTimeoutFromVariant(frequencyCapVariant)
