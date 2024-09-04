@@ -1,5 +1,17 @@
 # @guardian/commercial
 
+## 21.0.0
+
+### Major Changes
+
+- a0283db: Remove YouTube targeting as no longer used
+
+  Update IMA pubads domain to securepubads
+
+### Minor Changes
+
+- 2ac0ee8: Remove `optimiseSpacefinderInline` test and set changes live
+
 ## 20.8.0
 
 ### Minor Changes
