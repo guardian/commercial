@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 21.0.1
+
+### Patch Changes
+
+- 90e1a30: Add more variants to frequencycap test for testing timeout
+
 ## 21.0.0
 
 ### Major Changes
