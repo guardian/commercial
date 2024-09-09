@@ -1,10 +1,18 @@
 import type { ConsentState } from '@guardian/libs';
 import { loadScript, log } from '@guardian/libs';
 import { buildPageTargetingConsentless } from 'core/targeting/build-page-targeting-consentless';
-import { isUserInVariant } from 'experiments/ab';
+import { getVariant } from 'experiments/ab';
 import { optOutFrequencyCap } from 'experiments/tests/opt-out-frequency-cap';
 import { commercialFeatures } from 'lib/commercial-features';
 import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
+
+const frequencyCapTimeoutFromVariant = (variant: string): number => {
+	if (!variant.startsWith('timeout-')) {
+		return 0;
+	}
+	const timeout = variant.replace('timeout-', '');
+	return parseInt(timeout, 10);
+};
 
 function initConsentless(consentState: ConsentState): Promise<void> {
 	return new Promise((resolve) => {
@@ -14,16 +22,21 @@ function initConsentless(consentState: ConsentState): Promise<void> {
 			queue: [],
 		};
 
-		const isInFrequencyCapTest = isUserInVariant(
-			optOutFrequencyCap,
-			'variant',
-		);
-
 		window.ootag.queue.push(function () {
 			// Ensures Opt Out logs are namespaced under Commercial
 			window.ootag.logger = (...args: unknown[]) => {
 				log('commercial', '[Opt Out Ads]', ...args);
 			};
+
+			const frequencyCapVariant = getVariant(optOutFrequencyCap);
+
+			const isInFrequencyCapTest =
+				frequencyCapVariant !== undefined &&
+				frequencyCapVariant !== 'control';
+
+			const timeoutFrequencyCappingMS = isInFrequencyCapTest
+				? frequencyCapTimeoutFromVariant(frequencyCapVariant)
+				: undefined;
 
 			window.ootag.initializeOo({
 				publisher: 33,
@@ -34,6 +47,7 @@ function initConsentless(consentState: ConsentState): Promise<void> {
 				frequencyScript: isInFrequencyCapTest
 					? 'https://frequencycappingwithoutpersonaldata.com/script/iframe'
 					: undefined,
+				timeoutFrequencyCappingMS,
 			});
 
 			void isUserLoggedInOktaRefactor().then((isSignedIn) => {

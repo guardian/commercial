@@ -112,3 +112,9 @@ export const isUserInVariant = (test: ABTest, variantId: string): boolean => {
 	const ab = init();
 	return ab.isUserInVariant(test.id, variantId);
 };
+
+export const getVariant = (test: ABTest): string | undefined => {
+	const participations = getParticipations();
+
+	return participations[test.id]?.variant;
+};
