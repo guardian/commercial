@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 21.0.2
+
+### Patch Changes
+
+- e0a24e0: Check that googletag is defined before using it to find creative id
+
 ## 21.0.1
 
 ### Patch Changes
