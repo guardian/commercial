@@ -237,22 +237,26 @@ const setupBackground = async (
 				background.appendChild(video);
 
 				const getCreativeId = () => {
-					const slots = googletag.pubads().getSlots();
+					if (typeof googletag !== 'undefined') {
+						const slots = googletag.pubads().getSlots();
 
-					for (const slot of slots) {
-						const creativeTemplateId =
-							slot.getResponseInformation()?.creativeTemplateId;
-						if (creativeTemplateId === 11885667) {
-							const creativeId =
-								slot.getResponseInformation()?.creativeId;
-							const lineItemId =
-								slot.getResponseInformation()?.lineItemId;
+						for (const slot of slots) {
+							const creativeTemplateId =
+								slot.getResponseInformation()
+									?.creativeTemplateId;
+							if (creativeTemplateId === 11885667) {
+								const creativeId =
+									slot.getResponseInformation()?.creativeId;
+								const lineItemId =
+									slot.getResponseInformation()?.lineItemId;
 
-							if (creativeId && lineItemId) {
-								return { creativeId, lineItemId };
+								if (creativeId && lineItemId) {
+									return { creativeId, lineItemId };
+								}
 							}
 						}
 					}
+
 					return undefined;
 				};
 
