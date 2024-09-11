@@ -75,19 +75,19 @@ devDependencies:
     version: 6.1.1(browserslist@4.23.3)(tslib@2.7.0)
   '@guardian/core-web-vitals':
     specifier: 7.0.0
-    version: 7.0.0(@guardian/libs@18.0.1)(tslib@2.7.0)(typescript@5.6.2)(web-vitals@4.2.3)
+    version: 7.0.0(@guardian/libs@18.0.2)(tslib@2.7.0)(typescript@5.6.2)(web-vitals@4.2.3)
   '@guardian/eslint-config-typescript':
     specifier: ^11.0.0
     version: 11.0.0(eslint@8.57.0)(tslib@2.7.0)(typescript@5.6.2)
   '@guardian/identity-auth':
     specifier: ^3.0.0
-    version: 3.0.0(@guardian/libs@18.0.1)(tslib@2.7.0)(typescript@5.6.2)
+    version: 3.0.1(@guardian/libs@18.0.2)(tslib@2.7.0)(typescript@5.6.2)
   '@guardian/identity-auth-frontend':
     specifier: ^5.0.0
-    version: 5.0.0(@guardian/identity-auth@3.0.0)(@guardian/libs@18.0.1)(tslib@2.7.0)(typescript@5.6.2)
+    version: 5.0.0(@guardian/identity-auth@3.0.1)(@guardian/libs@18.0.2)(tslib@2.7.0)(typescript@5.6.2)
   '@guardian/libs':
-    specifier: 18.0.1
-    version: 18.0.1(tslib@2.7.0)(typescript@5.6.2)
+    specifier: 18.0.2
+    version: 18.0.2(tslib@2.7.0)(typescript@5.6.2)
   '@guardian/prettier':
     specifier: 8.0.1
     version: 8.0.1(prettier@3.3.3)(tslib@2.7.0)
@@ -1883,7 +1883,7 @@ packages:
       tslib: 2.7.0
     dev: true
 
-  /@guardian/core-web-vitals@7.0.0(@guardian/libs@18.0.1)(tslib@2.7.0)(typescript@5.6.2)(web-vitals@4.2.3):
+  /@guardian/core-web-vitals@7.0.0(@guardian/libs@18.0.2)(tslib@2.7.0)(typescript@5.6.2)(web-vitals@4.2.3):
     resolution: {integrity: sha512-1JLUQjkLY8SXYJqcy0TiE9/9hCcmyIlmMpRoW8Ygn/qGtyNxG+zzwkwsgtJIP+B0ZjtDqfukra2IV9l7wX5A0g==}
     peerDependencies:
       '@guardian/libs': ^18.0.0
@@ -1894,7 +1894,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@guardian/libs': 18.0.1(tslib@2.7.0)(typescript@5.6.2)
+      '@guardian/libs': 18.0.2(tslib@2.7.0)(typescript@5.6.2)
       tslib: 2.7.0
       typescript: 5.6.2
       web-vitals: 4.2.3
@@ -1939,7 +1939,7 @@ packages:
       - supports-color
     dev: true
 
-  /@guardian/identity-auth-frontend@5.0.0(@guardian/identity-auth@3.0.0)(@guardian/libs@18.0.1)(tslib@2.7.0)(typescript@5.6.2):
+  /@guardian/identity-auth-frontend@5.0.0(@guardian/identity-auth@3.0.1)(@guardian/libs@18.0.2)(tslib@2.7.0)(typescript@5.6.2):
     resolution: {integrity: sha512-Y5wIg8Zo92jl/ChZ4v/Ve3CGQWnoZSfkrhwSOIoZPm88YvijEASxHteVF04QOy/rhVs1O6AQJfl5Ilx244zS6w==}
     peerDependencies:
       '@guardian/identity-auth': ^3.0.0
@@ -1950,14 +1950,14 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@guardian/identity-auth': 3.0.0(@guardian/libs@18.0.1)(tslib@2.7.0)(typescript@5.6.2)
-      '@guardian/libs': 18.0.1(tslib@2.7.0)(typescript@5.6.2)
+      '@guardian/identity-auth': 3.0.1(@guardian/libs@18.0.2)(tslib@2.7.0)(typescript@5.6.2)
+      '@guardian/libs': 18.0.2(tslib@2.7.0)(typescript@5.6.2)
       tslib: 2.7.0
       typescript: 5.6.2
     dev: true
 
-  /@guardian/identity-auth@3.0.0(@guardian/libs@18.0.1)(tslib@2.7.0)(typescript@5.6.2):
-    resolution: {integrity: sha512-DKXeym8sJxkoQfgrwAq4tdSBZPMi8b1muAF0L4p442//KvWPa+q/EAd/ATEmFNnD9jbYGrZ0Q+P958mITvPvsw==}
+  /@guardian/identity-auth@3.0.1(@guardian/libs@18.0.2)(tslib@2.7.0)(typescript@5.6.2):
+    resolution: {integrity: sha512-QwvQY6BmirP9Me2DkVkNCq0VQeNMzko9zG73G9l0XpQKk5+tTPUf31kyj06Uw11pWUfNacscjbfSU4rDqZOxCA==}
     peerDependencies:
       '@guardian/libs': ^18.0.0
       tslib: ^2.6.2
@@ -1966,13 +1966,13 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@guardian/libs': 18.0.1(tslib@2.7.0)(typescript@5.6.2)
+      '@guardian/libs': 18.0.2(tslib@2.7.0)(typescript@5.6.2)
       tslib: 2.7.0
       typescript: 5.6.2
     dev: true
 
-  /@guardian/libs@18.0.1(tslib@2.7.0)(typescript@5.6.2):
-    resolution: {integrity: sha512-wYYR696o9R/cngnh6crZCPPV+nvgRqpQb5XNOw8hcxjN3FN8Jq6AjyMAtQDUEUdSdOM87Ayj0+/oSJXY2rqkVA==}
+  /@guardian/libs@18.0.2(tslib@2.7.0)(typescript@5.6.2):
+    resolution: {integrity: sha512-MX7mo/ZADgJJ9uMBHw9SoJBW1AJXB8Vg3NFUkpfJ7uwkN0LKHHxi8w2YkZDMPUDcMx5I3dpIf1LuqQQLR6RAVA==}
     peerDependencies:
       tslib: ^2.6.2
       typescript: ~5.5.2
@@ -1992,7 +1992,7 @@ packages:
       '@babel/preset-env': 7.25.4(@babel/core@7.25.2)
       '@babel/register': 7.24.6(@babel/core@7.25.2)
       '@babel/runtime': 7.25.6
-      '@guardian/libs': 18.0.1(tslib@2.7.0)(typescript@5.6.2)
+      '@guardian/libs': 18.0.2(tslib@2.7.0)(typescript@5.6.2)
       core-js: 3.36.1
       core-js-pure: 3.36.1
       criteo-direct-rsa-validate: 1.1.0
