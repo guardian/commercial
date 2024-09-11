@@ -12,19 +12,15 @@ const blogPages = blogs.filter(
 );
 
 test.describe.serial('A minimum number of ad slots load', () => {
-	blogPages.forEach(
-		({
-			path,
-			expectedMinInlineSlotsOnDesktop,
-			expectedMinInlineSlotsOnMobile,
-		}) => {
-			breakpoints.forEach(({ breakpoint, width, height }) => {
-				const isMobile = breakpoint === 'mobile';
-				const expectedMinSlotsOnPage =
-					(isMobile
-						? expectedMinInlineSlotsOnMobile
-						: expectedMinInlineSlotsOnDesktop) ?? 999;
+	blogPages.forEach(({ path, expectedMinInlineSlots }) => {
+		breakpoints.forEach(({ breakpoint, width, height }) => {
+			const isMobile = breakpoint === 'mobile';
+			const expectedMinSlotsOnPage =
+				expectedMinInlineSlots?.[
+					breakpoint as keyof typeof expectedMinInlineSlots
+				];
 
+			if (expectedMinSlotsOnPage) {
 				test(`There are at least ${expectedMinSlotsOnPage} inline total slots at breakpoint ${breakpoint}`, async ({
 					page,
 				}) => {
@@ -45,9 +41,9 @@ test.describe.serial('A minimum number of ad slots load', () => {
 						expectedMinSlotsOnPage,
 					);
 				});
-			});
-		},
-	);
+			}
+		});
+	});
 });
 
 test.describe.serial('Correct set of slots are displayed', () => {

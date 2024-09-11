@@ -162,10 +162,6 @@ export const shouldIncludeTrustX = (): boolean => isInUsOrCa();
 export const shouldIncludeTripleLift = (): boolean =>
 	isInUsOrCa() || isInAuOrNz();
 
-export const shouldIncludeAdYouLike = (
-	slotSizes: HeaderBiddingSize[],
-): boolean => containsMpu(slotSizes);
-
 // TODO: Check is we want regional restrictions on where we load the ozoneBidAdapter
 export const shouldUseOzoneAdaptor = (): boolean =>
 	!isInCanada() &&
@@ -190,11 +186,6 @@ export const shouldIncludeImproveDigitalSkin = (): boolean =>
  * Determine whether to include Criteo as a bidder
  */
 export const shouldIncludeCriteo = (): boolean => !isInAuOrNz();
-
-/**
- * Determine whether to include Smart as a prebid bidder
- */
-export const shouldIncludeSmart = (): boolean => isInUk() || isInRow();
 
 export const shouldIncludeKargo = (): boolean => isInUsa();
 

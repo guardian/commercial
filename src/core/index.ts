@@ -37,7 +37,6 @@ export {
 } from './permutive';
 export { initTrackScrollDepth } from './track-scroll-depth';
 export { initTrackGpcSignal } from './track-gpc-signal';
-export { buildAdsConfigWithConsent, disabledAds } from './targeting/youtube';
 export { createAdSlot, concatSizeMappings } from '../core/create-ad-slot';
 export type {
 	AdsConfig,

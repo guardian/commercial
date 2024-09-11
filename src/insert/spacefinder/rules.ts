@@ -1,7 +1,5 @@
 import { adSizes } from 'core';
 import { adSlotContainerClass } from 'core/create-ad-slot';
-import { isUserInVariant } from 'experiments/ab';
-import { optimiseSpacefinderInline } from 'experiments/tests/optimise-spacefinder-inline';
 import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
 import { isInHighValueSection } from './utils';
 
@@ -19,6 +17,9 @@ const MOST_VIEWED_HEIGHT = 600;
 const isImmersive = window.guardian.config.page.isImmersive;
 
 const hasImages = !!window.guardian.config.page.lightboxImages?.images.length;
+
+const hasVideo = window.guardian.config.page.hasYouTubeAtom;
+
 const isPaidContent = window.guardian.config.page.isPaidContent;
 
 const hasShowcaseMainElement =
@@ -30,19 +31,15 @@ const minDistanceBetweenInlineAds = isInHighValueSection ? 500 : 750;
 const candidateSelector = ':scope > p, [data-spacefinder-role="nested"] > p';
 
 const leftColumnOpponentSelector = ['richLink', 'thumbnail']
-	.map((role) => `[data-spacefinder-role="${role}"]`)
+	.map((role) => `:scope > [data-spacefinder-role="${role}"]`)
 	.join(',');
-const rightColumnOpponentSelector = '[data-spacefinder-role="immersive"]';
+const rightColumnOpponentSelector =
+	':scope > [data-spacefinder-role="immersive"]';
 const inlineOpponentSelector = ['inline', 'supporting', 'showcase']
-	.map((role) => `[data-spacefinder-role="${role}"]`)
+	.map((role) => `:scope > [data-spacefinder-role="${role}"]`)
 	.join(',');
 
 const headingSelector = `:scope > h2, [data-spacefinder-role="nested"] > h2, :scope > h3, [data-spacefinder-role="nested"] > h3`;
-
-const isInInlineSpacefinderOptimisationTest = isUserInVariant(
-	optimiseSpacefinderInline,
-	'variant',
-);
 
 const desktopInline1: SpacefinderRules = {
 	bodySelector,
@@ -61,15 +58,15 @@ const desktopInline1: SpacefinderRules = {
 		},
 		[inlineOpponentSelector]: {
 			marginBottom: 35,
-			marginTop: isInInlineSpacefinderOptimisationTest ? 200 : 400,
+			marginTop: 200,
 		},
 		[leftColumnOpponentSelector]: {
-			marginBottom: isInInlineSpacefinderOptimisationTest ? 0 : 35,
-			marginTop: isInInlineSpacefinderOptimisationTest ? 100 : 400,
+			marginBottom: 50,
+			marginTop: 100,
 		},
 		[rightColumnOpponentSelector]: {
 			marginBottom: 0,
-			marginTop: isInInlineSpacefinderOptimisationTest ? 150 : 600,
+			marginTop: 150,
 		},
 		['[data-spacefinder-role="supporting"]']: {
 			marginBottom: 0,
@@ -84,11 +81,11 @@ const desktopRightRailMinAbove = (isConsentless: boolean) => {
 	 * In special cases, inline2 can overlap the "Most viewed" island, so
 	 * we need to make an adjustment to move the inline2 further down the page
 	 */
-	if (isPaidContent || !hasImages || isConsentless) {
+	if (isPaidContent || (!hasImages && !hasVideo) || isConsentless) {
 		return base + MOST_VIEWED_HEIGHT;
 	}
 
-	if (hasShowcaseMainElement) {
+	if (hasShowcaseMainElement || (!hasImages && hasVideo)) {
 		return base + 100;
 	}
 	return base;
@@ -101,6 +98,10 @@ const desktopRightRail = (isConsentless: boolean): SpacefinderRules => {
 		minDistanceFromTop: desktopRightRailMinAbove(isConsentless),
 		minDistanceFromBottom: 300,
 		opponentSelectorRules: {
+			[adSlotContainerSelector]: {
+				marginBottom: 500,
+				marginTop: 500,
+			},
 			[rightColumnOpponentSelector]: {
 				marginBottom: 0,
 				marginTop: 600,
@@ -140,7 +141,7 @@ const mobileOpponentSelectorRules: OpponentSelectorRules = {
 		marginBottom: minDistanceBetweenInlineAds,
 		marginTop: minDistanceBetweenInlineAds,
 	},
-	[inlineOpponentSelector]: {
+	[`${inlineOpponentSelector},${leftColumnOpponentSelector}`]: {
 		marginBottom: 35,
 		marginTop: 200,
 		// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
@@ -154,7 +155,7 @@ const mobileOpponentSelectorRules: OpponentSelectorRules = {
 	},
 };
 
-const mobileSubsequentInlineAds: SpacefinderRules = {
+const mobileAndTabletInlines: SpacefinderRules = {
 	bodySelector,
 	candidateSelector: mobileCandidateSelector,
 	minDistanceFromTop: mobileMinDistanceFromArticleTop,
@@ -174,17 +175,8 @@ const mobileSubsequentInlineAds: SpacefinderRules = {
 	},
 };
 
-const mobileTopAboveNav: SpacefinderRules = {
-	bodySelector,
-	candidateSelector: mobileCandidateSelector,
-	minDistanceFromTop: mobileMinDistanceFromArticleTop,
-	minDistanceFromBottom: 200,
-	opponentSelectorRules: mobileOpponentSelectorRules,
-};
-
 export const rules = {
 	desktopInline1,
 	desktopRightRail,
-	mobileTopAboveNav,
-	mobileSubsequentInlineAds,
+	mobileAndTabletInlines,
 };

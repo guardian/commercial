@@ -23,6 +23,54 @@ export const optOutFrequencyCap: ABTest = {
 				/* no-op */
 			},
 		},
+		{
+			id: 'timeout-0',
+			test: (): void => {
+				/* no-op */
+			},
+		},
+		{
+			id: 'timeout-10',
+			test: (): void => {
+				/* no-op */
+			},
+		},
+		{
+			id: 'timeout-15',
+			test: (): void => {
+				/* no-op */
+			},
+		},
+		{
+			id: 'timeout-20',
+			test: (): void => {
+				/* no-op */
+			},
+		},
+		{
+			id: 'timeout-25',
+			test: (): void => {
+				/* no-op */
+			},
+		},
+		{
+			id: 'timeout-30',
+			test: (): void => {
+				/* no-op */
+			},
+		},
+		{
+			id: 'timeout-50',
+			test: (): void => {
+				/* no-op */
+			},
+		},
+		{
+			id: 'timeout-100',
+			test: (): void => {
+				/* no-op */
+			},
+		},
 	],
 	canRun: () => true,
 };

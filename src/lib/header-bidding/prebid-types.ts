@@ -109,12 +109,6 @@ export type PrebidCriteoParams =
 			zoneId: number;
 	  };
 
-export type PrebidSmartParams = {
-	siteId: number;
-	pageId: number;
-	formatId: number;
-};
-
 export type PrebidKargoParams = {
 	placementId: string;
 };
@@ -138,7 +132,6 @@ export type BidderCode =
 	| 'oxd'
 	| 'ozone'
 	| 'pubmatic'
-	| 'smartadserver'
 	| 'sonobi'
 	| 'triplelift'
 	| 'trustx'
@@ -155,7 +148,6 @@ export type PrebidParams =
 	| PrebidOpenXParams
 	| PrebidOzoneParams
 	| PrebidPubmaticParams
-	| PrebidSmartParams
 	| PrebidSonobiParams
 	| PrebidTripleLiftParams
 	| PrebidTrustXParams

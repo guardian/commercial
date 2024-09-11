@@ -2,7 +2,6 @@ export const bidderURLs = {
 	adnxx: 'https://ib.adnxs.com/ut/v3/prebid',
 	casalemedia: 'https://htlb.casalemedia.com/cygnus**',
 	pubmatic: 'https://hbopenbid.pubmatic.com/translator?source=prebid-client',
-	smartadserver: 'https://prg.smartadserver.com/prebid/v1',
 	openx: 'https://rtb.openx.net/sync/prebid**',
 	ozone: 'https://elb.the-ozone-project.com/openrtb2/auction',
 	criteo: 'https://bidder.criteo.com/cdb**',

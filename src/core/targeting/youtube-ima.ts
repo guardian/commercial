@@ -100,7 +100,7 @@ const buildImaAdTagUrl = ({
 		queryParamsArray.push(`${k}=${v}`);
 	}
 	return (
-		'https://pubads.g.doubleclick.net/gampad/ads?' +
+		'https://securepubads.g.doubleclick.net/gampad/ads?' +
 		queryParamsArray.join('&')
 	);
 };

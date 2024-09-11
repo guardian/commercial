@@ -1,5 +1,84 @@
 # @guardian/commercial
 
+## 21.0.2
+
+### Patch Changes
+
+- e0a24e0: Check that googletag is defined before using it to find creative id
+
+## 21.0.1
+
+### Patch Changes
+
+- 90e1a30: Add more variants to frequencycap test for testing timeout
+
+## 21.0.0
+
+### Major Changes
+
+- a0283db: Remove YouTube targeting as no longer used
+
+  Update IMA pubads domain to securepubads
+
+### Minor Changes
+
+- 2ac0ee8: Remove `optimiseSpacefinderInline` test and set changes live
+
+## 20.8.0
+
+### Minor Changes
+
+- ce8b2bf: Remove Smart SSP from prebid and it's config
+- 97b8b8f: Update adYouLike placement IDs
+- 4035d42: Remove mediator
+
+## 20.7.0
+
+### Minor Changes
+
+- 0ef6a41: Fix issue with double ads on tablets
+- 0ef6a41: Fix issue with first right rail ad very close to inline1
+
+### Patch Changes
+
+- ed53190: Allow interscroller ads on galleries
+- 3266b49: Add extra 100px to minAbove for articles with video but no images
+
+## 20.6.4
+
+### Patch Changes
+
+- 3a51d3f: Add Spacefinder rules for rich links and thumbnails on mobile
+- 15c60b6: Check for article video as well as images when deciding min above for inline2
+
+## 20.6.3
+
+### Patch Changes
+
+- 579498f: Set Spacefinder test to 5%
+
+## 20.6.2
+
+### Patch Changes
+
+- a3000d6: Add Spacefinder test to test array
+
+## 20.6.1
+
+### Patch Changes
+
+- 13db71f: Update intercsroller progress tracking
+
+## 20.6.0
+
+### Minor Changes
+
+- 2b58235: Enable interscroller ads in consentless advertising
+
+### Patch Changes
+
+- 0db47f2: Wrap interscroller progress callback with once
+
 ## 20.5.1
 
 ### Patch Changes

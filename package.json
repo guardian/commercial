@@ -1,6 +1,6 @@
 {
 	"name": "@guardian/commercial",
-	"version": "20.5.1",
+	"version": "21.0.2",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial#readme",
 	"bugs": {
@@ -18,8 +18,8 @@
 	"module": "dist/esm/core/index.js",
 	"scripts": {
 		"build": "npm-run-all clean --parallel compile:core:* build:prod build:dev",
-		"build:dev": "webpack -c webpack.config.dev.js",
-		"build:prod": "webpack -c webpack.config.prod.js",
+		"build:dev": "webpack -c webpack.config.dev.mjs",
+		"build:prod": "webpack -c webpack.config.prod.mjs",
 		"clean": "rm -rf dist",
 		"compile:core:common": "tsc --project ./tsconfig.core.json --outDir ./dist/cjs --module CommonJS",
 		"compile:core:esm": "tsc --project ./tsconfig.core.json --outDir ./dist/esm",
@@ -32,7 +32,7 @@
 		"prepush:test": "jest --verbose --runInBand --onlyChanged",
 		"prettier:check": "prettier . --check --cache",
 		"prettier:fix": "prettier . --write --cache",
-		"serve": "OVERRIDE_BUNDLE=true pnpm webpack-dev-server -c ./webpack.config.dev.js",
+		"serve": "OVERRIDE_BUNDLE=true pnpm webpack-dev-server -c ./webpack.config.dev.mjs",
 		"benchmark": "STAGE=prod playwright test -c playwright.benchmark.config.ts --project=consented-average --project=consentless-average",
 		"test": "jest",
 		"tsc": "tsc --noEmit",
@@ -53,10 +53,10 @@
 		"@guardian/ab-core": "8.0.0",
 		"@guardian/browserslist-config": "^6.1.1",
 		"@guardian/core-web-vitals": "7.0.0",
-		"@guardian/eslint-config-typescript": "^11.0.0",
+		"@guardian/eslint-config-typescript": "^12.0.0",
 		"@guardian/identity-auth": "^3.0.0",
 		"@guardian/identity-auth-frontend": "^5.0.0",
-		"@guardian/libs": "0.0.0-canary-20240911151236",
+		"@guardian/libs": "18.0.2",
 		"@guardian/prettier": "8.0.1",
 		"@guardian/source": "6.1.0",
 		"@playwright/test": "1.46.0",
@@ -94,24 +94,23 @@
 		"ts-jest": "^29.0.5",
 		"ts-loader": "^9.4.2",
 		"type-fest": "^4.3.3",
-		"typescript": "5.5.4",
-		"webpack": "^5.76.0",
-		"webpack-bundle-analyzer": "^4.7.0",
-		"webpack-cli": "^4.10.0",
-		"webpack-dev-server": "^4.9.3",
-		"webpack-merge": "^4.1.0"
+		"typescript": "5.6.2",
+		"webpack": "^5.94.0",
+		"webpack-bundle-analyzer": "^4.10.0",
+		"webpack-cli": "^5.1.0",
+		"webpack-dev-server": "^5.0.4",
+		"webpack-merge": "^6.0.1"
 	},
 	"dependencies": {
 		"@changesets/cli": "^2.26.2",
-		"@guardian/prebid.js": "8.52.0-1",
+		"@guardian/prebid.js": "8.52.0-2",
 		"@octokit/core": "^6.1.2",
 		"fastdom": "^1.0.11",
 		"lodash-es": "^4.17.21",
 		"process": "^0.11.10",
 		"raven-js": "^3.27.2",
 		"tslib": "^2.6.2",
-		"web-vitals": "^4.2.1",
-		"wolfy87-eventemitter": "^5.2.9"
+		"web-vitals": "^4.2.1"
 	},
 	"prettier": "@guardian/prettier",
 	"lint-staged": {

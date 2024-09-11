@@ -88,9 +88,8 @@ type SpacefinderWriter = (paras: HTMLElement[]) => Promise<void>;
 
 type SpacefinderPass =
 	| 'inline1'
-	| 'mobile-top-above-nav'
 	| 'subsequent-inlines'
-	| 'mobile-subsequent-inlines'
+	| 'mobile-inlines'
 	| 'carrot';
 
 type SpacefinderOptions = {
