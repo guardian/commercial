@@ -75,19 +75,19 @@ devDependencies:
     version: 6.1.1(browserslist@4.23.0)(tslib@2.6.2)
   '@guardian/core-web-vitals':
     specifier: 7.0.0
-    version: 7.0.0(@guardian/libs@18.0.2)(tslib@2.6.2)(typescript@5.6.2)(web-vitals@4.2.3)
+    version: 7.0.0(@guardian/libs@0.0.0-canary-20240911151236)(tslib@2.6.2)(typescript@5.6.2)(web-vitals@4.2.3)
   '@guardian/eslint-config-typescript':
     specifier: ^12.0.0
     version: 12.0.0(eslint@8.57.0)(tslib@2.6.2)(typescript@5.6.2)
   '@guardian/identity-auth':
     specifier: ^3.0.0
-    version: 3.0.1(@guardian/libs@18.0.2)(tslib@2.6.2)(typescript@5.6.2)
+    version: 3.0.1(@guardian/libs@0.0.0-canary-20240911151236)(tslib@2.6.2)(typescript@5.6.2)
   '@guardian/identity-auth-frontend':
     specifier: ^5.0.0
-    version: 5.0.0(@guardian/identity-auth@3.0.1)(@guardian/libs@18.0.2)(tslib@2.6.2)(typescript@5.6.2)
+    version: 5.0.0(@guardian/identity-auth@3.0.1)(@guardian/libs@0.0.0-canary-20240911151236)(tslib@2.6.2)(typescript@5.6.2)
   '@guardian/libs':
-    specifier: 18.0.2
-    version: 18.0.2(tslib@2.6.2)(typescript@5.6.2)
+    specifier: 0.0.0-canary-20240911151236
+    version: 0.0.0-canary-20240911151236(tslib@2.6.2)(typescript@5.6.2)
   '@guardian/prettier':
     specifier: 8.0.1
     version: 8.0.1(prettier@3.3.3)(tslib@2.6.2)
@@ -1755,7 +1755,7 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@guardian/core-web-vitals@7.0.0(@guardian/libs@18.0.2)(tslib@2.6.2)(typescript@5.6.2)(web-vitals@4.2.3):
+  /@guardian/core-web-vitals@7.0.0(@guardian/libs@0.0.0-canary-20240911151236)(tslib@2.6.2)(typescript@5.6.2)(web-vitals@4.2.3):
     resolution: {integrity: sha512-1JLUQjkLY8SXYJqcy0TiE9/9hCcmyIlmMpRoW8Ygn/qGtyNxG+zzwkwsgtJIP+B0ZjtDqfukra2IV9l7wX5A0g==}
     peerDependencies:
       '@guardian/libs': ^18.0.0
@@ -1766,7 +1766,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@guardian/libs': 18.0.2(tslib@2.6.2)(typescript@5.6.2)
+      '@guardian/libs': 0.0.0-canary-20240911151236(tslib@2.6.2)(typescript@5.6.2)
       tslib: 2.6.2
       typescript: 5.6.2
       web-vitals: 4.2.3
@@ -1812,7 +1812,7 @@ packages:
       - supports-color
     dev: true
 
-  /@guardian/identity-auth-frontend@5.0.0(@guardian/identity-auth@3.0.1)(@guardian/libs@18.0.2)(tslib@2.6.2)(typescript@5.6.2):
+  /@guardian/identity-auth-frontend@5.0.0(@guardian/identity-auth@3.0.1)(@guardian/libs@0.0.0-canary-20240911151236)(tslib@2.6.2)(typescript@5.6.2):
     resolution: {integrity: sha512-Y5wIg8Zo92jl/ChZ4v/Ve3CGQWnoZSfkrhwSOIoZPm88YvijEASxHteVF04QOy/rhVs1O6AQJfl5Ilx244zS6w==}
     peerDependencies:
       '@guardian/identity-auth': ^3.0.0
@@ -1823,13 +1823,13 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@guardian/identity-auth': 3.0.1(@guardian/libs@18.0.2)(tslib@2.6.2)(typescript@5.6.2)
-      '@guardian/libs': 18.0.2(tslib@2.6.2)(typescript@5.6.2)
+      '@guardian/identity-auth': 3.0.1(@guardian/libs@0.0.0-canary-20240911151236)(tslib@2.6.2)(typescript@5.6.2)
+      '@guardian/libs': 0.0.0-canary-20240911151236(tslib@2.6.2)(typescript@5.6.2)
       tslib: 2.6.2
       typescript: 5.6.2
     dev: true
 
-  /@guardian/identity-auth@3.0.1(@guardian/libs@18.0.2)(tslib@2.6.2)(typescript@5.6.2):
+  /@guardian/identity-auth@3.0.1(@guardian/libs@0.0.0-canary-20240911151236)(tslib@2.6.2)(typescript@5.6.2):
     resolution: {integrity: sha512-QwvQY6BmirP9Me2DkVkNCq0VQeNMzko9zG73G9l0XpQKk5+tTPUf31kyj06Uw11pWUfNacscjbfSU4rDqZOxCA==}
     peerDependencies:
       '@guardian/libs': ^18.0.0
@@ -1839,7 +1839,20 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@guardian/libs': 18.0.2(tslib@2.6.2)(typescript@5.6.2)
+      '@guardian/libs': 0.0.0-canary-20240911151236(tslib@2.6.2)(typescript@5.6.2)
+      tslib: 2.6.2
+      typescript: 5.6.2
+    dev: true
+
+  /@guardian/libs@0.0.0-canary-20240911151236(tslib@2.6.2)(typescript@5.6.2):
+    resolution: {integrity: sha512-yYo+dEXhDrNa1HAzsx2meiSy1zdS3md1nYhY+yb3OGnN6uTKA+CcAoavld/R3RQTPAHCrYmKuOvd5ELwi7/Fcw==}
+    peerDependencies:
+      tslib: ^2.6.2
+      typescript: ~5.5.2
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
       tslib: 2.6.2
       typescript: 5.6.2
     dev: true
@@ -1855,6 +1868,7 @@ packages:
     dependencies:
       tslib: 2.6.2
       typescript: 5.6.2
+    dev: false
 
   /@guardian/prebid.js@8.52.0-2(babel-core@7.0.0-bridge.0)(tslib@2.6.2)(typescript@5.6.2):
     resolution: {integrity: sha512-bm4Gtf+CYUdbqF/v1IVSSRj4/tq3frmMTLwgIzgrxB+vxMCgEvJcbD0ZkdS5MAno6e3BWw9ovuzVN8QC3ceSpA==}
