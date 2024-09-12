@@ -31,7 +31,6 @@ initMessenger(
 		passback,
 	],
 	[scroll, viewport],
-	reportError,
 );
 
 const init = () => Promise.resolve();
