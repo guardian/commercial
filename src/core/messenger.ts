@@ -118,11 +118,6 @@ type ListenerOptions = {
 	window?: WindowProxy;
 };
 
-type MessengerErrorHandler = (
-	err: Error,
-	features: Record<string, string>,
-) => void;
-
 /**
  * Types of functions to register a listener for a given type of iframe message
  */
@@ -496,23 +491,12 @@ export const unregister: UnregisterListener = (type, callback, options) => {
  * @param persistentListeners The persistent listener registration functions
  */
 export const init = (
-	listeners: Array<
-		(
-			register: RegisterListener,
-			errorHandler: MessengerErrorHandler,
-		) => void
-	>,
-	persistentListeners: Array<
-		(
-			register: RegisterPersistentListener,
-			errorHandler: MessengerErrorHandler,
-		) => void
-	>,
-	errorHandler: MessengerErrorHandler,
+	listeners: Array<(register: RegisterListener) => void>,
+	persistentListeners: Array<(register: RegisterPersistentListener) => void>,
 ): void => {
-	listeners.forEach((moduleInit) => moduleInit(register, errorHandler));
+	listeners.forEach((moduleInit) => moduleInit(register));
 	persistentListeners.forEach((moduleInit) =>
-		moduleInit(registerPersistentListener, errorHandler),
+		moduleInit(registerPersistentListener),
 	);
 };
 
@@ -524,5 +508,4 @@ export type {
 	RegisterPersistentListener,
 	UnregisterListener,
 	ListenerOptions,
-	MessengerErrorHandler,
 };
