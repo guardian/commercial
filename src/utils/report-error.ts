@@ -1,16 +1,20 @@
 // This function is used to report errors to Sentry.
 // This uses the `reportError` function from the `window.guardian.modules.sentry` object.
-export const reportError = window.guardian.modules.sentry.reportError;
+const reportError = window.guardian.modules.sentry.reportError;
 
-export const wrapWithErrorReporting = (
-	fn: (...args: unknown[]) => void,
+type ErrorReportingFunction<T> = (event: T) => void;
+
+const wrapWithErrorReporting = <T>(
+	fn: ErrorReportingFunction<T>,
 	tags: Record<string, string> = {},
-) => {
-	return function (...args: unknown[]) {
+): ErrorReportingFunction<T> => {
+	return function (event: T) {
 		try {
-			fn(...args);
+			fn(event);
 		} catch (e) {
 			reportError(e, JSON.stringify(tags));
 		}
 	};
 };
+
+export { reportError, wrapWithErrorReporting };
