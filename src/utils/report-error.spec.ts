@@ -19,13 +19,6 @@ describe('report-error', () => {
 		}).not.toThrowError(error);
 	});
 
-	// temporarily disabled due to flakiness
-	// test('Does throw an error', () => {
-	// 	expect(() => {
-	// 		reportError(error, tags);
-	// 	}).toThrowError(error);
-	// });
-
 	test('Applies a sampling rate that prevents a sample of errors being reporting', () => {
 		reportError(error, tags);
 	});
