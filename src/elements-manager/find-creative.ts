@@ -35,8 +35,6 @@ const pickLineItem = (lineItems: LineItem[]) => {
 				lineItem.priority === highestPriorityLineItem.priority,
 		);
 
-		console.log(competingSponsorshipLineItems);
-
 		// If there are no competitors, we can just return the original highest priority line item
 		if (competingSponsorshipLineItems.length === 1) {
 			return highestPriorityLineItem;
@@ -47,9 +45,27 @@ const pickLineItem = (lineItems: LineItem[]) => {
 			(a, b) => a.deliveryGoal.number - b.deliveryGoal.number,
 		);
 
-		console.log(sortedByDeliveryGoal[sortedByDeliveryGoal.length - 1]);
+		// Find the line item with the highest delivery goal
+		const lineItemWithHighestDeliveryGoal =
+			sortedByDeliveryGoal[sortedByDeliveryGoal.length - 1];
 
-		return sortedByDeliveryGoal[sortedByDeliveryGoal.length - 1];
+		// Now we check if any other line items have the same delivery goal
+		const competingHighestDeliveryGoals =
+			competingSponsorshipLineItems.filter(
+				(lineItem) =>
+					lineItem.deliveryGoal.number ===
+					lineItemWithHighestDeliveryGoal?.deliveryGoal.number,
+			);
+
+		// If the line item with the highest delivery goal has no competitors, return it
+		if (competingHighestDeliveryGoals.length === 1) {
+			return lineItemWithHighestDeliveryGoal;
+		}
+
+		// If multiple line items have the same priority and delivery goal, randomly choose one
+		return competingHighestDeliveryGoals[
+			Math.floor(Math.random() * competingHighestDeliveryGoals.length)
+		];
 	}
 
 	const randomNumber = Math.random() * randomMultiplier;
