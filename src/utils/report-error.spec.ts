@@ -18,8 +18,4 @@ describe('report-error', () => {
 			reportError(error, tags);
 		}).not.toThrowError(error);
 	});
-
-	test('Applies a sampling rate that prevents a sample of errors being reporting', () => {
-		reportError(error, tags);
-	});
 });
