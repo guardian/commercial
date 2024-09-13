@@ -7,6 +7,7 @@ import { findLineItems, type LineItem } from './line-items';
  * This function will pick a line item from the list of line items to display using weighted random selection.
  * The higher the priority, the more likely the line item will be picked.
  * If a sponsorship level priority is present, the highest priority line item will be served.
+ * If there are multiple sponsorship line items of the same priority level, the one with the highest % delivery goal will be selected.
  * @param lineItems
  */
 const pickLineItem = (lineItems: LineItem[]) => {
@@ -20,7 +21,7 @@ const pickLineItem = (lineItems: LineItem[]) => {
 		(a, b) => 1 / a.priority - 1 / b.priority,
 	);
 
-	const highestPriorityLineItem = sortedLineItems[-1];
+	const highestPriorityLineItem = sortedLineItems[sortedLineItems.length - 1];
 
 	// Takeovers have a priority of 4 or less, so if the highest priority
 	// line item has a priority of 4 or less, we should return that
@@ -28,7 +29,27 @@ const pickLineItem = (lineItems: LineItem[]) => {
 		highestPriorityLineItem !== undefined &&
 		highestPriorityLineItem.priority < 5
 	) {
-		return highestPriorityLineItem;
+		// Builds an array of all line items that have the same priority value as the highest priority line item
+		const competingSponsorshipLineItems = sortedLineItems.filter(
+			(lineItem) =>
+				lineItem.priority === highestPriorityLineItem.priority,
+		);
+
+		console.log(competingSponsorshipLineItems);
+
+		// If there are no competitors, we can just return the original highest priority line item
+		if (competingSponsorshipLineItems.length === 1) {
+			return highestPriorityLineItem;
+		}
+
+		// Sort competing line items by delivery goal number, so that any with 100% (takeovers) are at the end of the array
+		const sortedByDeliveryGoal = competingSponsorshipLineItems.sort(
+			(a, b) => a.deliveryGoal.number - b.deliveryGoal.number,
+		);
+
+		console.log(sortedByDeliveryGoal[sortedByDeliveryGoal.length - 1]);
+
+		return sortedByDeliveryGoal[sortedByDeliveryGoal.length - 1];
 	}
 
 	const randomNumber = Math.random() * randomMultiplier;

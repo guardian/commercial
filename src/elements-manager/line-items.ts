@@ -36,6 +36,10 @@ interface LineItem {
 	geoTargeting: string[] | null;
 	deviceTargeting: DeviceTargeting | null;
 	priority: number;
+	deliveryGoal: {
+		type: string;
+		number: number;
+	};
 	creatives: Creative[];
 }
 
