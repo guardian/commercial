@@ -42,17 +42,10 @@ const addCookie = (name, value, daysToLive, isCrossSubdomain = false) => {
 	const expires = new Date();
 
 	if (!isValidCookieValue(name) || !isValidCookieValue(value)) {
-		if (window.guardian?.modules?.sentry?.reportError) {
-			reportError(
-				new Error(`${ERR_INVALID_COOKIE_NAME} .${name}=${value}`),
-				'commercial',
-			);
-		} else {
-			console.error(
-				'Error reporting is not available:',
-				new Error(`${ERR_INVALID_COOKIE_NAME} .${name}=${value}`),
-			);
-		}
+		reportError(
+			new Error(`${ERR_INVALID_COOKIE_NAME} .${name}=${value}`),
+			'commercial',
+		);
 	}
 
 	if (daysToLive) {
