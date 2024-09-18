@@ -88,7 +88,7 @@ export type AdsConfigBasic = {
 	};
 };
 
-export type AdsConfigCCPAorAus = AdsConfigBasic & {
+export type AdsConfigUSNATorAus = AdsConfigBasic & {
 	restrictedDataProcessor: boolean;
 };
 
@@ -103,7 +103,7 @@ export type AdsConfigTCFV2 = AdsConfigBasic & {
 
 export type AdsConfigEnabled =
 	| AdsConfigBasic
-	| AdsConfigCCPAorAus
+	| AdsConfigUSNATorAus
 	| AdsConfigTCFV2;
 
 export type AdsConfig = AdsConfigEnabled | AdsConfigDisabled;
