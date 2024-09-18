@@ -21,21 +21,32 @@ const catchErrors = (fn: ModuleFunction): Error | undefined => {
 	return error;
 };
 
-const logError = (moduleName: string, error: Error): void => {
+const logError = (
+	moduleName: string,
+	error: Error,
+	tags?: Record<string, string>,
+): void => {
 	window.console.warn('Caught error.', error.stack);
-	reportError(error, 'commercial');
+	reportError(error, 'commercial', { ...tags, module: moduleName });
 };
 
-const catchAndLogError = (name: string, fn: ModuleFunction): void => {
+const catchAndLogError = (
+	name: string,
+	fn: ModuleFunction,
+	tags?: Record<string, string>,
+): void => {
 	const error = catchErrors(fn);
 
 	if (error) {
-		logError(name, error);
+		logError(name, error, tags);
 	}
 };
 
-const catchErrorsWithContext = (modules: Modules): void => {
-	modules.forEach(([name, fn]) => catchAndLogError(name, fn));
+const catchErrorsWithContext = (
+	modules: Modules,
+	tags?: Record<string, string>,
+): void => {
+	modules.forEach(([name, fn]) => catchAndLogError(name, fn, tags));
 };
 
 export { catchErrorsWithContext };

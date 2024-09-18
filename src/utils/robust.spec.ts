@@ -19,6 +19,9 @@ afterEach(() => {
 describe('robust', () => {
 	const ERROR = new Error('Something broke.');
 	const META = 'commercial';
+	const TAGS = {
+		module: 'test',
+	};
 
 	const noError = () => true;
 
@@ -45,7 +48,7 @@ describe('robust', () => {
 
 	test('catchAndLogError() - default reporter with error', () => {
 		catchAndLogError('test', throwError);
-		expect(reportError).toHaveBeenCalledWith(ERROR, META);
+		expect(reportError).toHaveBeenCalledWith(ERROR, META, TAGS);
 	});
 
 	test('catchErrorsWithContext()', () => {

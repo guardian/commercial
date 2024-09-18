@@ -470,7 +470,11 @@ declare global {
 			offlineCount?: number;
 			modules: {
 				sentry: {
-					reportError: (error: unknown, feature: string) => void;
+					reportError: (
+						error: unknown,
+						feature: string,
+						tags?: Record<string, string>,
+					) => void;
 				};
 			};
 		};

@@ -27,6 +27,10 @@ import { init as initMessenger } from './consented/messenger';
 
 type Modules = Array<[`${string}-${string}`, () => Promise<unknown>]>;
 
+const tags: Record<string, string> = {
+	feature: 'commercial',
+	bundle: 'standalone',
+};
 // modules necessary to load the first ads on the page
 const commercialBaseModules: Modules = [];
 
@@ -68,15 +72,18 @@ const loadModules = (modules: Modules, eventName: string) => {
 	modules.forEach((module) => {
 		const [moduleName, moduleInit] = module;
 
-		catchErrorsWithContext([
+		catchErrorsWithContext(
 			[
-				moduleName,
-				function pushAfterComplete(): void {
-					const result = moduleInit();
-					modulePromises.push(result);
-				},
+				[
+					moduleName,
+					function pushAfterComplete(): void {
+						const result = moduleInit();
+						modulePromises.push(result);
+					},
+				],
 			],
-		]);
+			tags,
+		);
 	});
 
 	return Promise.allSettled(modulePromises).then(() => {

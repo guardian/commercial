@@ -11,11 +11,11 @@ describe('report-error', () => {
 	});
 
 	const error = new Error('Something broke.');
-	const tags = 'testValue';
+	const tags = { test: 'testValue' };
 
 	test('Does NOT throw an error', () => {
 		expect(() => {
-			reportError(error, tags);
+			reportError(error, 'commercial', tags);
 		}).not.toThrowError(error);
 	});
 });
