@@ -51,6 +51,9 @@ type ConsentManagement =
 	  }
 	| {
 			usp: USPConfig;
+	  }
+	| {
+			gpp: USPConfig;
 	  };
 
 type UserSync =
@@ -261,10 +264,17 @@ const initialise = (
 	const consentManagement = (): ConsentManagement => {
 		switch (framework) {
 			case 'aus':
-			case 'ccpa':
 				// https://docs.prebid.org/dev-docs/modules/consentManagementUsp.html
 				return {
 					usp: {
+						cmpApi: 'iab',
+						timeout: 1500,
+					},
+				};
+			case 'usnat':
+				// https://docs.prebid.org/dev-docs/modules/consentManagementGpp.html
+				return {
+					gpp: {
 						cmpApi: 'iab',
 						timeout: 1500,
 					},

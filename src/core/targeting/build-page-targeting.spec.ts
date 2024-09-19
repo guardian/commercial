@@ -1,4 +1,8 @@
-import type { ConsentState, TCFv2ConsentState } from '@guardian/libs';
+import type {
+	ConsentState,
+	TCFv2ConsentState,
+	USNATConsentState,
+} from '@guardian/libs';
 import { cmp as cmp_, setCookie, storage } from '@guardian/libs';
 import { getAuthStatus as getAuthStatus_ } from 'lib/identity/api';
 import type { AuthStatus } from 'lib/identity/api';
@@ -52,17 +56,27 @@ const mockViewport = (width: number, height: number): void => {
 	});
 };
 
-// CCPA
-const ccpaWithConsentMock: ConsentState = {
-	ccpa: { doNotSell: false },
-	canTarget: true,
-	framework: 'ccpa',
+const usnatConsent: USNATConsentState = {
+	doNotSell: false,
+	signalStatus: 'ready',
 };
 
-const ccpaWithoutConsentMock: ConsentState = {
-	ccpa: { doNotSell: true },
+const usnatNonConsent: USNATConsentState = {
+	doNotSell: true,
+	signalStatus: 'ready',
+};
+
+// USNAT
+const usnatWithConsentMock: ConsentState = {
+	usnat: usnatConsent,
+	canTarget: true,
+	framework: 'usnat',
+};
+
+const usnatWithoutConsentMock: ConsentState = {
+	usnat: usnatNonConsent,
 	canTarget: false,
-	framework: 'ccpa',
+	framework: 'usnat',
 };
 
 // AUS
@@ -258,7 +272,7 @@ describe('Build Page Targeting', () => {
 			buildPageTargeting({
 				adFree: false,
 				clientSideParticipations: {},
-				consentState: ccpaWithConsentMock,
+				consentState: usnatWithConsentMock,
 				isSignedIn: true,
 			}).pa,
 		).toBe('t');
@@ -266,7 +280,7 @@ describe('Build Page Targeting', () => {
 			buildPageTargeting({
 				adFree: false,
 				clientSideParticipations: {},
-				consentState: ccpaWithoutConsentMock,
+				consentState: usnatWithoutConsentMock,
 				isSignedIn: true,
 			}).pa,
 		).toBe('f');
@@ -293,7 +307,7 @@ describe('Build Page Targeting', () => {
 			buildPageTargeting({
 				adFree: false,
 				clientSideParticipations: {},
-				consentState: ccpaWithConsentMock,
+				consentState: usnatWithConsentMock,
 				isSignedIn: true,
 			}).rdp,
 		).toBe('f');
@@ -301,7 +315,7 @@ describe('Build Page Targeting', () => {
 			buildPageTargeting({
 				adFree: false,
 				clientSideParticipations: {},
-				consentState: ccpaWithoutConsentMock,
+				consentState: usnatWithoutConsentMock,
 				isSignedIn: true,
 			}).rdp,
 		).toBe('t');
@@ -598,7 +612,7 @@ describe('Build Page Targeting', () => {
 				buildPageTargeting({
 					adFree: false,
 					clientSideParticipations: {},
-					consentState: ccpaWithConsentMock,
+					consentState: usnatWithConsentMock,
 					isSignedIn: true,
 				}).permutive,
 			).toEqual(['1', '2', '3']);
@@ -612,7 +626,7 @@ describe('Build Page Targeting', () => {
 				buildPageTargeting({
 					adFree: false,
 					clientSideParticipations: {},
-					consentState: ccpaWithConsentMock,
+					consentState: usnatWithConsentMock,
 					isSignedIn: true,
 				}).fr,
 			).toEqual('5');
@@ -624,7 +638,7 @@ describe('Build Page Targeting', () => {
 				buildPageTargeting({
 					adFree: false,
 					clientSideParticipations: {},
-					consentState: ccpaWithConsentMock,
+					consentState: usnatWithConsentMock,
 					isSignedIn: true,
 				}).fr,
 			).toEqual('16-19');
@@ -636,7 +650,7 @@ describe('Build Page Targeting', () => {
 				buildPageTargeting({
 					adFree: false,
 					clientSideParticipations: {},
-					consentState: ccpaWithConsentMock,
+					consentState: usnatWithConsentMock,
 					isSignedIn: true,
 				}).fr,
 			).toEqual('30plus');
@@ -648,7 +662,7 @@ describe('Build Page Targeting', () => {
 				buildPageTargeting({
 					adFree: false,
 					clientSideParticipations: {},
-					consentState: ccpaWithConsentMock,
+					consentState: usnatWithConsentMock,
 					isSignedIn: true,
 				}).fr,
 			).toEqual('0');
@@ -660,7 +674,7 @@ describe('Build Page Targeting', () => {
 				buildPageTargeting({
 					adFree: false,
 					clientSideParticipations: {},
-					consentState: ccpaWithConsentMock,
+					consentState: usnatWithConsentMock,
 					isSignedIn: true,
 				}).fr,
 			).toEqual('0');
@@ -672,7 +686,7 @@ describe('Build Page Targeting', () => {
 				buildPageTargeting({
 					adFree: false,
 					clientSideParticipations: {},
-					consentState: ccpaWithoutConsentMock,
+					consentState: usnatWithoutConsentMock,
 					isSignedIn: true,
 				}).fr,
 			).toEqual('0');
@@ -902,8 +916,8 @@ describe('Build Page Targeting', () => {
 		});
 
 		it.each([
-			[ccpaWithConsentMock, '9'],
-			[ccpaWithoutConsentMock, '9'],
+			[usnatWithConsentMock, '9'],
+			[usnatWithoutConsentMock, '9'],
 
 			[ausWithConsentMock, '9'],
 			[ausWithoutConsentMock, '9'],
@@ -1126,7 +1140,7 @@ describe('Build Page Targeting', () => {
 			buildPageTargeting({
 				adFree: false,
 				clientSideParticipations: {},
-				consentState: ccpaWithConsentMock,
+				consentState: usnatWithConsentMock,
 				isSignedIn: true,
 			}).firstvisit,
 		).toBeUndefined();
