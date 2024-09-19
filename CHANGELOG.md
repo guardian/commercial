@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 21.0.3
+
+### Patch Changes
+
+- ba5ccd2: Bump Prebid version to resolve vulnerability in dset
+
 ## 21.0.2
 
 ### Patch Changes
