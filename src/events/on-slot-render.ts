@@ -6,14 +6,29 @@ import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { emptyAdvert } from './empty-advert';
 import { renderAdvert } from './render-advert';
 
-const reportEmptyResponse = () => {
+const reportEmptyResponse = (
+	adSlotId: string,
+	event: googletag.events.SlotRenderEndedEvent,
+) => {
 	// This empty slot could be caused by a targeting problem,
 	// let's report these and diagnose the problem in sentry.
 	// Keep the sample rate low, otherwise we'll get rate-limited (report-error will also sample down)
 	if (Math.random() < 1 / 10_000) {
+		const adUnitPath = event.slot.getAdUnitPath();
+		const adTargetingKeys = event.slot.getTargetingKeys();
+		const adTargetingKValues = adTargetingKeys.includes('k')
+			? event.slot.getTargeting('k')
+			: [];
+		const adKeywords = adTargetingKValues.join(', ');
 		reportError(
 			new Error('dfp returned an empty ad response'),
 			'commercial',
+			{
+				feature: 'commercial',
+				adUnit: adUnitPath,
+				adSlot: adSlotId,
+				adKeywords,
+			},
 		);
 	}
 };
@@ -35,7 +50,7 @@ export const onSlotRender = (
 
 	if (event.isEmpty) {
 		emptyAdvert(advert);
-		reportEmptyResponse();
+		reportEmptyResponse(advert.id, event);
 		advert.finishedRendering(false);
 	} else {
 		/**
