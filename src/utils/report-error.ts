@@ -12,7 +12,7 @@ const wrapWithErrorReporting = <T>(
 		try {
 			fn(event);
 		} catch (e) {
-			reportError(e, JSON.stringify(tags));
+			reportError(e, 'on-slot-render ', { tags: JSON.stringify(tags) });
 		}
 	};
 };
