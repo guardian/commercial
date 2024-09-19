@@ -42,7 +42,10 @@ export const fetchNonRefreshableLineItemIds = async (): Promise<number[]> => {
 	// Report an error to Sentry if we don't get an ok response
 	// Note that in other cases (JSON parsing failure) we throw but don't report the error
 	const error = Error('Failed to fetch non-refreshable line items');
-	reportError(error, 'commercial');
+	reportError(error, 'commercial', {
+		feature: 'commercial',
+		status: String(response.status),
+	});
 	throw error;
 };
 
