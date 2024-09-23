@@ -4,6 +4,10 @@ import type { Modules } from './robust';
 
 const { catchAndLogError } = _;
 
+jest.mock('utils/report-error', () => ({
+	reportError: jest.fn(),
+}));
+
 let origConsoleWarn: typeof window.console.warn;
 
 beforeEach(() => {

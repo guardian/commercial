@@ -4,6 +4,10 @@ import {
 	memoizedFetchNonRefreshableLineItemIds,
 } from './non-refreshable-line-items';
 
+jest.mock('utils/report-error', () => ({
+	reportError: jest.fn(),
+}));
+
 describe('nonRefreshableLineItems', () => {
 	it('returns the same IDs as the API', async () => {
 		const response = {
