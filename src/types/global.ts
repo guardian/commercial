@@ -469,8 +469,8 @@ declare global {
 			commercialTimer?: EventTimer;
 			offlineCount?: number;
 			modules: {
-				sentry: {
-					reportError: (
+				sentry?: {
+					reportError?: (
 						error: unknown,
 						feature: string,
 						tags?: Record<string, string>,
