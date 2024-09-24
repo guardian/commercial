@@ -90,6 +90,7 @@ type SizeKeys =
 	| 'outstreamMobile'
 	| 'portrait'
 	| 'portraitInterstitial'
+	| 'pubmaticInterscroller'
 	| 'skyscraper'
 	| 'sponsorLogo';
 
@@ -158,6 +159,7 @@ const proprietaryAdSizes = {
 	fluid: createAdSize(0, 0),
 	googleCard: createAdSize(300, 274),
 	outOfPage: createAdSize(1, 1),
+	pubmaticInterscroller: createAdSize(371, 660), // pubmatic only mobile size
 };
 
 /**

@@ -158,7 +158,11 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 				: [adSizes.mpu],
 			tablet: [adSizes.mpu],
 			mobile: isArticle
-				? [adSizes.mpu, adSizes.portraitInterstitial]
+				? [
+						adSizes.mpu,
+						adSizes.portraitInterstitial,
+						adSizes.pubmaticInterscroller,
+					]
 				: [adSizes.mpu],
 		},
 		mostpop: {
