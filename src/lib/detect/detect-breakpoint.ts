@@ -23,7 +23,7 @@ const tweakpoints = {
 	leftCol: sourceBreakpoints['leftCol'],
 };
 
-const breakpointNames: SourceBreakpoint[] = [
+const sourceBreakpointNames: SourceBreakpoint[] = [
 	'wide',
 	'leftCol',
 	'desktop',
@@ -45,7 +45,7 @@ const getPoint = <IncludeTweakpoints extends boolean>(
 	includeTweakpoint: IncludeTweakpoints,
 	width: number,
 ): Point<IncludeTweakpoints> => {
-	const point = breakpointNames.find((point) => {
+	const point = sourceBreakpointNames.find((point) => {
 		if (isBreakpoint(point)) {
 			return width >= breakpoints[point];
 		} else if (includeTweakpoint) {
@@ -105,15 +105,15 @@ const updateBreakpoint = (breakpoint: SourceBreakpoint): void => {
  * using getViewPort, which utilizes window.innerWidth which causes a reflow.
  */
 const initMediaQueryListeners = () => {
-	Object.entries(sourceBreakpoints).forEach(([bp], index, bps) => {
+	[...sourceBreakpointNames].reverse().forEach((bp, index, bps) => {
 		if (isSourceBreakpoint(bp)) {
-			// noUncheckedIndexedAccess is not enabled
-			const nextBp = bps[index + 1] as
-				| [SourceBreakpoint, number]
-				| undefined;
+			const nextBp = bps[index + 1];
 
 			const mql = window.matchMedia(
-				getMediaQuery({ min: bp, max: nextBp ? nextBp[1] : undefined }),
+				getMediaQuery({
+					min: bp,
+					max: nextBp ? sourceBreakpoints[nextBp] : undefined,
+				}),
 			);
 
 			const listener = (mql: MediaQueryListEvent | MediaQueryList) =>
