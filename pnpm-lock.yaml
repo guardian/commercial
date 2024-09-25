@@ -9,8 +9,8 @@ dependencies:
     specifier: ^2.26.2
     version: 2.27.7
   '@guardian/prebid.js':
-    specifier: 8.52.0-3
-    version: 8.52.0-3(babel-core@7.0.0-bridge.0)(tslib@2.7.0)(typescript@5.6.2)
+    specifier: 8.52.0-4
+    version: 8.52.0-4(babel-core@7.0.0-bridge.0)(tslib@2.7.0)(typescript@5.6.2)
   '@octokit/core':
     specifier: ^6.1.2
     version: 6.1.2
@@ -1984,8 +1984,8 @@ packages:
       tslib: 2.7.0
       typescript: 5.6.2
 
-  /@guardian/prebid.js@8.52.0-3(babel-core@7.0.0-bridge.0)(tslib@2.7.0)(typescript@5.6.2):
-    resolution: {integrity: sha512-Euwnn6kbuYFO2HXjScjNMYqi02lmqi6AItkPOZLHXc5RhXr8tTbO8+rmUnXrXWXavxkuQy2yudUdpDqadPLV6Q==}
+  /@guardian/prebid.js@8.52.0-4(babel-core@7.0.0-bridge.0)(tslib@2.7.0)(typescript@5.6.2):
+    resolution: {integrity: sha512-rshCk2zJKdgCNMiqNy/d50SsZne/CFf8VQqQ3que5Hln5cxufOE5dEHIfmVKjqDeffKX5WEbsa3gVCtNx+sZaQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@babel/core': 7.25.2
