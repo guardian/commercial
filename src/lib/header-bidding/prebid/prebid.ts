@@ -9,7 +9,7 @@ import { EventTimer } from 'core/event-timer';
 import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import type { Advert } from 'define/Advert';
 import { isUserInVariant } from 'experiments/ab';
-import { prebidSharedId } from 'experiments/prebid-shared-id';
+import { prebidSharedId } from 'experiments/tests/prebid-shared-id';
 import { getPageTargeting } from 'lib/build-page-targeting';
 import { getAdvertById } from 'lib/dfp/get-advert-by-id';
 import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
