@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 22.0.0
+
+### Major Changes
+
+- 8730523: Bump source to 8.0.0
+
+### Minor Changes
+
+- d4fabe3: Add prebid sharedId module and test
+
 ## 21.0.3
 
 ### Patch Changes
