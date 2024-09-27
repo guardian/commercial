@@ -30,7 +30,7 @@ const fillDynamicAdSlot = (
 				const errorMessage = `Attempting to add slot with exisiting id ${adSlot.id}`;
 				log('commercial', errorMessage);
 				reportError(Error(errorMessage), 'commercial', {
-					adSlot: adSlot.id,
+					slotId: adSlot.id,
 				});
 
 				return;

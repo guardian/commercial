@@ -23,11 +23,11 @@ const dynamicAdSlotModules: Modules = [
 
 export const initDynamicAdSlots = async (): Promise<void> => {
 	await Promise.all(
-		dynamicAdSlotModules.map(async ([, init]) => {
+		dynamicAdSlotModules.map(async ([name, init]) => {
 			try {
 				await init();
 			} catch (error) {
-				reportError(error, 'commercial');
+				reportError(error, 'commercial', { tag: name });
 			}
 		}),
 	);
