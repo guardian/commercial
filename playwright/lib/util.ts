@@ -175,7 +175,7 @@ const waitForSlot = async (page: Page, slot: string, waitForIframe = true) => {
 
 	if (waitForIframe) {
 		// iframe locator
-		const iframe = page.locator(`${slotId} iframe`);
+		const iframe = page.locator(`${slotId} iframe:first-child`);
 		// wait for the iframe
 		await iframe.waitFor({ state: 'visible', timeout: 120000 });
 	}
