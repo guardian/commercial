@@ -81,7 +81,7 @@ describe('nonRefreshableLineItems', () => {
 		expect(reportError).toHaveBeenCalledWith(
 			new Error('Failed to fetch non-refreshable line items'),
 			'commercial',
-			{ feature: 'commercial', status: response.status },
+			{ status: response.status },
 		);
 	});
 });

@@ -43,7 +43,6 @@ export const fetchNonRefreshableLineItemIds = async (): Promise<number[]> => {
 	// Note that in other cases (JSON parsing failure) we throw but don't report the error
 	const error = Error('Failed to fetch non-refreshable line items');
 	reportError(error, 'commercial', {
-		feature: 'commercial',
 		status: String(response.status),
 	});
 	throw error;

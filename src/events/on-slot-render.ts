@@ -24,7 +24,6 @@ const reportEmptyResponse = (
 			new Error('dfp returned an empty ad response'),
 			'commercial',
 			{
-				feature: 'commercial',
 				adUnit: adUnitPath,
 				adSlot: adSlotId,
 				adKeywords,

@@ -120,15 +120,18 @@ const bootCommercial = async (): Promise<void> => {
 	// Init Commercial event timers
 	EventTimer.init();
 
-	catchErrorsWithContext([
+	catchErrorsWithContext(
 		[
-			'ga-user-timing-commercial-start',
-			function runTrackPerformance() {
-				EventTimer.get().mark('commercialStart');
-				EventTimer.get().mark('commercialBootStart');
-			},
+			[
+				'ga-user-timing-commercial-start',
+				function runTrackPerformance() {
+					EventTimer.get().mark('commercialStart');
+					EventTimer.get().mark('commercialBootStart');
+				},
+			],
 		],
-	]);
+		tags,
+	);
 
 	// Stub the command queue
 	// @ts-expect-error -- it’s a stub, not the whole Googletag object
@@ -146,7 +149,7 @@ const bootCommercial = async (): Promise<void> => {
 		await Promise.all(promises).then(recordCommercialMetrics);
 	} catch (error) {
 		// report async errors in bootCommercial to Sentry with the commercial feature tag
-		reportError(error, 'commercial');
+		reportError(error, 'commercial', tags);
 	}
 };
 

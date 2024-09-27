@@ -316,25 +316,11 @@ describe('Generating Permutive payload utils', () => {
 		const validConfigForPayload = {
 			page: { ...testPageConfig, section: 'uk' },
 		};
-
-		it('catches errors and calls the logger correctly when no global permutive', () => {
-			const logger = jest.fn();
-			_.runPermutive(
-				{
-					page: testPageConfig,
-				},
-				undefined,
-				logger,
-			);
-			const err = (logger.mock.calls[0] as Error[])[0];
-			expect(err).toBeInstanceOf(Error);
-			expect(err?.message).toBe('Global Permutive setup error');
-		});
 		it('calls the permutive addon method with the correct payload', () => {
 			const mockPermutive = { addon: jest.fn(), identify: jest.fn() };
 			const logger = jest.fn();
 
-			_.runPermutive(validConfigForPayload, mockPermutive, logger);
+			_.runPermutive(validConfigForPayload, mockPermutive);
 			expect(mockPermutive.addon).toHaveBeenCalledWith('web', {
 				page: {
 					content: expect.objectContaining({ section: 'uk' }) as {
@@ -356,7 +342,7 @@ describe('Generating Permutive payload utils', () => {
 				...validConfigForPayload,
 			};
 
-			_.runPermutive(config, mockPermutive, logger);
+			_.runPermutive(config, mockPermutive);
 			expect(mockPermutive.identify).toHaveBeenCalledWith([
 				{ tag: 'ophan', id: bwid },
 			]);
@@ -364,14 +350,13 @@ describe('Generating Permutive payload utils', () => {
 		});
 		it("calls permutive's identify before it calls addon, if the browser ID is present", () => {
 			const mockPermutive = { addon: jest.fn(), identify: jest.fn() };
-			const logger = jest.fn();
 			const bwid = '1234567890abcdef';
 			const config = {
 				ophan: { browserId: bwid, pageViewId: 'pvid' },
 				...validConfigForPayload,
 			};
 
-			_.runPermutive(config, mockPermutive, logger);
+			_.runPermutive(config, mockPermutive);
 			const [identifyCallOrder] =
 				mockPermutive.identify.mock.invocationCallOrder;
 			const [addonCallOrder] = mockPermutive.addon.mock
@@ -382,7 +367,7 @@ describe('Generating Permutive payload utils', () => {
 			const mockPermutive = { addon: jest.fn(), identify: jest.fn() };
 			const logger = jest.fn();
 
-			_.runPermutive(validConfigForPayload, mockPermutive, logger);
+			_.runPermutive(validConfigForPayload, mockPermutive);
 			expect(mockPermutive.identify).not.toHaveBeenCalled();
 			expect(logger).not.toHaveBeenCalled();
 		});
