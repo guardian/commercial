@@ -204,7 +204,7 @@ const additionalMobileAndTabletInlineSizes = (index: number) => {
 			],
 		};
 	}
-	return {};
+	return undefined;
 };
 
 const addMobileAndTabletInlineAds = (
