@@ -90,6 +90,11 @@ sizeCallbacks[adSizes.outstreamMobile.toString()] = (advert: Advert) =>
 sizeCallbacks[adSizes.googleCard.toString()] = (advert: Advert) =>
 	advert.updateExtraSlotClasses('ad-slot--gc');
 
+sizeCallbacks[adSizes.pubmaticInterscroller.toString()] = (advert: Advert) => {
+	advert.shouldRefresh = false;
+	return Promise.resolve();
+};
+
 /**
  * Out of page adverts - creatives that aren't directly shown on the page - need to be hidden,
  * and their containers closed up.
