@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 22.1.0
+
+### Minor Changes
+
+- c9dd980: Add new 371x660 size to prebid
+
 ## 22.0.0
 
 ### Major Changes
