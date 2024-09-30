@@ -3,10 +3,17 @@ import type { RegisterListener } from 'core/messenger';
 import { refreshAdvert } from '../../display/load-advert';
 import { getAdvertById } from '../../lib/dfp/get-advert-by-id';
 
+const ineligiblePassbacks = ['teadsdesktop', 'teadsmobile', 'teads'];
+
 const passbackRefresh = (specs: string, adSlot: HTMLElement) => {
 	const advert = getAdvertById(adSlot.id);
 	if (advert) {
 		advert.slot.setTargeting('passback', specs);
+
+		if (ineligiblePassbacks.includes(specs)) {
+			advert.slot.setTargeting('teadsEligible', 'false');
+		}
+
 		refreshAdvert(advert);
 	}
 };

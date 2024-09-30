@@ -7,6 +7,7 @@ import {
 } from 'core/ad-sizes';
 import { concatSizeMappings } from 'core/create-ad-slot';
 import type { Breakpoint } from 'core/lib/breakpoint';
+import { isEligibleForTeads } from 'core/targeting/teads-eligibility';
 import fastdom from 'utils/fastdom-promise';
 import { breakpointNameToAttribute } from '../lib/breakpoint-name-to-attribute';
 import type { HeaderBiddingSize } from '../lib/header-bidding/prebid-types';
@@ -140,6 +141,12 @@ class Advert {
 		this.id = adSlotNode.id;
 		this.node = adSlotNode;
 		this.sizes = this.generateSizeMapping(additionalSizeMapping);
+
+		if (isEligibleForTeads(adSlotNode.id)) {
+			slotTargeting['teadsEligible'] = 'true';
+		} else {
+			slotTargeting['teadsEligible'] = 'false';
+		}
 
 		const slotDefinition = defineSlot(
 			adSlotNode,
