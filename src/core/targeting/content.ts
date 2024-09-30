@@ -179,5 +179,5 @@ const getContentTargeting = ({
 	};
 };
 
-export { getContentTargeting };
+export { getContentTargeting, getUrlKeywords };
 export type { ContentTargeting };
