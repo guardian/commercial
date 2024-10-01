@@ -44,8 +44,7 @@ const addCookie = (name, value, daysToLive, isCrossSubdomain = false) => {
 	if (!isValidCookieValue(name) || !isValidCookieValue(value)) {
 		reportError(
 			new Error(`${ERR_INVALID_COOKIE_NAME} .${name}=${value}`),
-			{},
-			false,
+			'commercial',
 		);
 	}
 

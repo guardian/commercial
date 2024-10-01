@@ -29,14 +29,9 @@ const fillDynamicAdSlot = (
 			if (dfpEnv.adverts.has(adSlot.id)) {
 				const errorMessage = `Attempting to add slot with exisiting id ${adSlot.id}`;
 				log('commercial', errorMessage);
-				reportError(
-					Error(errorMessage),
-					{
-						feature: 'commercial',
-						slotId: adSlot.id,
-					},
-					false,
-				);
+				reportError(Error(errorMessage), 'commercial', {
+					slotId: adSlot.id,
+				});
 
 				return;
 			}

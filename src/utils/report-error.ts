@@ -1,44 +1,35 @@
-import raven from 'lib/raven';
-
-type FrontendError = (Error & { reported?: boolean }) | string;
-
-const convertError = (err: unknown): Error => {
-	if (err instanceof Error) {
-		return err;
-	}
-	if (typeof err === 'string') {
-		return new Error(err);
-	}
-	return new Error(String(err));
-};
-
 /**
- * Report errors to Sentry with optional tags metadata.
- * @param err - An error object or string.
- * @param tags - Tags to assign to the event.
- * @param shouldThrow - Flag to optionally re-throw the error (true by default). This halts
- *  execution to ensure the error is still logged to the console via browsers' built-in logging
- *  for uncaught exceptions. This is optional because sometimes we log errors for tracking
- *  non-error data.
- * @param sampleRate - A sampling rate to apply to events, used for highly frequent errors.
- *  A value of 0 will send no events, and a value of 1 (default) will send an event for
- *  users that have downloaded the raven client (0.8% of all users).
- *  See https://github.com/guardian/frontend/blob/faf2bb4f5e4aa123d1da86ea98cbd693c4e8ffd0/static/src/javascripts/lib/utils/raven.ts#L68
+ * This function is used to report errors to Sentry
+ * It uses the function `window.guardian.modules.sentry.reportError` set by DCR
  */
 const reportError = (
-	err: unknown,
-	tags: Record<string, string>,
-	shouldThrow = true,
-	sampleRate = 1,
-): void => {
-	const localError: FrontendError = convertError(err);
-	if (sampleRate >= Math.random()) {
-		raven.captureException(localError, { tags });
-	}
-	if (shouldThrow) {
-		localError.reported = true;
-		throw localError;
+	error: unknown,
+	feature: string,
+	tags: Record<string, string> = {},
+) => {
+	try {
+		const err = error instanceof Error ? error : new Error(String(error));
+		if (window.guardian.modules.sentry?.reportError) {
+			window.guardian.modules.sentry.reportError(err, feature, tags);
+		}
+	} catch (e) {
+		console.error('Error reporting error to Sentry', e, feature, tags);
 	}
 };
 
-export { convertError, reportError };
+type ErrorReportingFunction<T> = (event: T) => void;
+
+const wrapWithErrorReporting = <T>(
+	fn: ErrorReportingFunction<T>,
+	tags: Record<string, string> = {},
+): ErrorReportingFunction<T> => {
+	return function (event: T) {
+		try {
+			fn(event);
+		} catch (e) {
+			reportError(e, 'commercial', tags);
+		}
+	};
+};
+
+export { reportError, wrapWithErrorReporting };
