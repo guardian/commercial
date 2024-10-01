@@ -135,7 +135,7 @@ const isEligibleForTeads = (slotId: string) => {
 
 	const urlKeywords = getUrlKeywords(`/${pageId}`);
 
-	const instancesOfBannedKeywords = urlKeywords.filter((keyword) =>
+	const hasBannedKeywords = urlKeywords.some((keyword) =>
 		bannedUrlKeywords.includes(keyword),
 	);
 
@@ -143,7 +143,7 @@ const isEligibleForTeads = (slotId: string) => {
 		slotId === 'dfp-ad--inline1' &&
 		allowedContentTypes.includes(contentType) &&
 		!isSensitive &&
-		instancesOfBannedKeywords.length === 0
+		!hasBannedKeywords
 	) {
 		return true;
 	}
