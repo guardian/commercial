@@ -20,7 +20,7 @@ import { init as prepareAdVerification } from 'lib/ad-verification/prepare-ad-ve
 import { commercialFeatures } from 'lib/commercial-features';
 import { adSlotIdPrefix } from 'lib/dfp/dfp-env-globals';
 import { reportError } from 'utils/report-error';
-import { catchErrorsWithContext } from 'utils/robust';
+import { catchErrorsAndReport } from 'utils/robust';
 import { initDfpListeners } from './consented/dfp-listeners';
 import { initDynamicAdSlots } from './consented/dynamic-ad-slots';
 import { init as initMessenger } from './consented/messenger';
@@ -28,7 +28,6 @@ import { init as initMessenger } from './consented/messenger';
 type Modules = Array<[`${string}-${string}`, () => Promise<unknown>]>;
 
 const tags: Record<string, string> = {
-	feature: 'commercial',
 	bundle: 'standalone',
 };
 // modules necessary to load the first ads on the page
@@ -72,7 +71,7 @@ const loadModules = (modules: Modules, eventName: string) => {
 	modules.forEach((module) => {
 		const [moduleName, moduleInit] = module;
 
-		catchErrorsWithContext(
+		catchErrorsAndReport(
 			[
 				[
 					moduleName,
@@ -120,7 +119,7 @@ const bootCommercial = async (): Promise<void> => {
 	// Init Commercial event timers
 	EventTimer.init();
 
-	catchErrorsWithContext(
+	catchErrorsAndReport(
 		[
 			[
 				'ga-user-timing-commercial-start',
