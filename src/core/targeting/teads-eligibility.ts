@@ -131,22 +131,18 @@ const bannedUrlKeywords = [
 ];
 
 const isEligibleForTeads = (slotId: string) => {
-	const { page } = window.guardian.config;
+	const { contentType, pageId, isSensitive } = window.guardian.config.page;
 
-	const contentType = page.contentType;
-
-	const urlKeywords = getUrlKeywords(`/${page.pageId}`);
+	const urlKeywords = getUrlKeywords(`/${pageId}`);
 
 	const instancesOfBannedKeywords = urlKeywords.filter((keyword) =>
 		bannedUrlKeywords.includes(keyword),
 	);
 
-	const sensitive = page.isSensitive;
-
 	if (
 		slotId === 'dfp-ad--inline1' &&
 		allowedContentTypes.includes(contentType) &&
-		!sensitive &&
+		!isSensitive &&
 		instancesOfBannedKeywords.length === 0
 	) {
 		return true;
