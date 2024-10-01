@@ -1,6 +1,6 @@
 /**
  * This function is used to report errors to Sentry
- * This uses the `reportError` function from the `window.guardian.modules.sentry` object set by DCR
+ * It uses the function `window.guardian.modules.sentry.reportError` set by DCR
  */
 const reportError = (
 	error: unknown,
