@@ -316,6 +316,22 @@ describe('Generating Permutive payload utils', () => {
 		const validConfigForPayload = {
 			page: { ...testPageConfig, section: 'uk' },
 		};
+
+		it('catches errors and calls reportError correctly when no global permutive', () => {
+			const reportError = window.guardian.modules.sentry?.reportError;
+			_.runPermutive(
+				{
+					page: testPageConfig,
+				},
+				undefined,
+			);
+			const err = (
+				(reportError as jest.Mock).mock.calls[0] as Error[]
+			)[0];
+			expect(err).toBeInstanceOf(Error);
+			expect(err?.message).toBe('Global Permutive setup error');
+		});
+
 		it('calls the permutive addon method with the correct payload', () => {
 			const mockPermutive = { addon: jest.fn(), identify: jest.fn() };
 			const logger = jest.fn();
