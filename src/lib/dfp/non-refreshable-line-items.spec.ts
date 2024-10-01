@@ -66,7 +66,7 @@ describe('nonRefreshableLineItems', () => {
 	it('returns undefined and reports error when the API call fails', async () => {
 		const response = {
 			ok: false,
-			status: '404',
+			status: 404,
 		};
 
 		Object.defineProperty(window, 'fetch', {
@@ -81,7 +81,7 @@ describe('nonRefreshableLineItems', () => {
 		expect(reportError).toHaveBeenCalledWith(
 			new Error('Failed to fetch non-refreshable line items'),
 			'commercial',
-			{ status: response.status },
+			{ status: '404' },
 		);
 	});
 });

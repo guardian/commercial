@@ -5,6 +5,7 @@ import { init } from './article';
 jest.mock('utils/report-error', () => ({
 	reportError: jest.fn(),
 }));
+
 jest.mock('lib/header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),
 }));
@@ -12,14 +13,17 @@ jest.mock('lib/header-bidding/prebid/prebid', () => ({
 jest.mock('insert/fill-dynamic-advert-slot', () => ({
 	fillDynamicAdSlot: jest.fn(),
 }));
+
 jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));
+
 jest.mock('insert/spacefinder/space-filler', () => ({
 	spaceFiller: {
 		fillSpace: jest.fn(),
 	},
 }));
+
 jest.mock('lib/config', () => ({ page: {}, get: () => false }));
 
 jest.mock('experiments/ab', () => ({
