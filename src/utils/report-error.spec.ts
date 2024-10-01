@@ -1,7 +1,7 @@
 import { reportError } from './report-error';
 
 describe('report-error', () => {
-	const error = new Error('Something broke');
+	const error = new Error('Deliberate test error');
 	const tags = { test: 'testValue' };
 
 	test('Calls window.guardian.modules.sentry.reportError', () => {
