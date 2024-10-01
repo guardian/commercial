@@ -1,21 +1,20 @@
 import { reportError } from './report-error';
 
 describe('report-error', () => {
-	beforeEach(() => {
-		jest.spyOn(global.Math, 'random').mockReturnValue(0.5);
-	});
-
-	afterEach(() => {
-		jest.spyOn(global.Math, 'random').mockRestore();
-		jest.resetAllMocks();
-	});
-
-	const error = new Error('Something broke.');
+	const error = new Error('Something broke');
 	const tags = { test: 'testValue' };
 
-	test('Does NOT throw an error', () => {
-		expect(() => {
-			reportError(error, 'commercial', tags);
-		}).not.toThrowError(error);
+	test('Calls window.guardian.modules.sentry.reportError', () => {
+		reportError(error, 'commercial', tags);
+		expect(
+			window.guardian.modules.sentry?.reportError as jest.Mock,
+		).toHaveBeenCalledWith(error, 'commercial', tags);
+	});
+
+	test('Converts error if of an unknown type', () => {
+		reportError('unknown', 'commercial', tags);
+		expect(
+			window.guardian.modules.sentry?.reportError as jest.Mock,
+		).toHaveBeenCalledWith(expect.any(Error), 'commercial', tags);
 	});
 });
