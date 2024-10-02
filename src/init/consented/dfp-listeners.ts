@@ -1,7 +1,7 @@
-import raven from 'lib/raven';
 import { onSlotLoad } from '../../events/on-slot-load';
 import { onSlotRender } from '../../events/on-slot-render';
 import { onSlotViewableFunction } from '../../events/on-slot-viewable';
+import { wrapWithErrorReporting } from '../../utils/report-error';
 
 const initDfpListeners = (): Promise<void> => {
 	window.googletag.cmd.push(() => {
@@ -9,11 +9,11 @@ const initDfpListeners = (): Promise<void> => {
 
 		pubads.addEventListener(
 			'slotRenderEnded',
-			raven.wrap<typeof onSlotRender>(onSlotRender),
+			wrapWithErrorReporting(onSlotRender),
 		);
 		pubads.addEventListener(
 			'slotOnload',
-			raven.wrap<typeof onSlotLoad>(onSlotLoad),
+			wrapWithErrorReporting(onSlotLoad),
 		);
 		pubads.addEventListener('impressionViewable', onSlotViewableFunction());
 	});

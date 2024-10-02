@@ -1,6 +1,6 @@
 import type { Edition } from 'core/types';
 import type { Config, PageConfig, Permutive, UserConfig } from 'types/global';
-import { reportError } from 'utils/report-error';
+import { reportError } from '../../utils/report-error';
 
 interface PermutivePageConfig {
 	page: Pick<
@@ -140,7 +140,6 @@ const generatePermutiveIdentities = (
 const runPermutive = (
 	pageConfig: PermutivePageConfig,
 	permutiveGlobal: Permutive | undefined,
-	logger: typeof reportError,
 ): void => {
 	try {
 		if (!permutiveGlobal?.addon) {
@@ -157,7 +156,7 @@ const runPermutive = (
 			page: payload,
 		});
 	} catch (err) {
-		logger(err, { feature: 'commercial' }, false);
+		reportError(err, 'commercial');
 	}
 };
 
@@ -237,7 +236,7 @@ export const initPermutive = (): Promise<void> => {
 		page: window.guardian.config.page,
 		ophan: window.guardian.config.ophan,
 	};
-	runPermutive(permutiveConfig, window.permutive, reportError);
+	runPermutive(permutiveConfig, window.permutive);
 
 	return Promise.resolve();
 };
