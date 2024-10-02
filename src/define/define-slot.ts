@@ -172,11 +172,13 @@ const defineSlot = (
 		slot.setTargeting('slot-fabric', slotFabric);
 	}
 
-	if (isEligibleForTeads(id)) {
-		slot.setTargeting('teadsEligible', 'true');
-	} else {
-		slot.setTargeting('teadsEligible', 'false');
-	}
+	void isEligibleForTeads(id).then((isEligible) => {
+		if (isEligible) {
+			slot.setTargeting('teadsEligible', 'true');
+		} else {
+			slot.setTargeting('teadsEligible', 'false');
+		}
+	});
 
 	Object.entries(slotTargeting).forEach(([key, value]) => {
 		slot.setTargeting(key, value);

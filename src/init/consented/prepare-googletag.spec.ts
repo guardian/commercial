@@ -156,6 +156,14 @@ jest.mock('./prepare-prebid', () => ({
 		.mockImplementation(() => Promise.resolve(undefined)),
 }));
 
+beforeEach(() => {
+	global.fetch = jest.fn(() =>
+		Promise.resolve({
+			json: () => Promise.resolve(['ukraine']),
+		}),
+	) as jest.Mock;
+});
+
 const mockOnConsent = (consentState: ConsentState) =>
 	(onConsent as jest.Mock).mockReturnValueOnce(Promise.resolve(consentState));
 

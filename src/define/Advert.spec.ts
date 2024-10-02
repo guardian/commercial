@@ -38,6 +38,14 @@ jest.mock('core/ad-sizes', () => {
 	};
 });
 
+beforeEach(() => {
+	global.fetch = jest.fn(() =>
+		Promise.resolve({
+			json: () => Promise.resolve(['ukraine']),
+		}),
+	) as jest.Mock;
+});
+
 describe('Advert', () => {
 	let googleSlot: googletag.Slot;
 

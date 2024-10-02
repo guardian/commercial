@@ -1,139 +1,22 @@
+import { once } from 'lodash-es';
 import { getUrlKeywords } from './content';
+
+const getBannedKeywords = once(async () => {
+	const bannedKeywords = (await fetch(
+		'https://adops-assets.s3.eu-west-1.amazonaws.com/teads-targeting/banned-keywords.json',
+	).then((res) => res.json())) as string[];
+
+	return bannedKeywords;
+});
 
 const allowedContentTypes = ['Article', 'LiveBlog'];
 
-const bannedUrlKeywords = [
-	'adult',
-	'arms',
-	'arrest',
-	'arrested',
-	'arrests',
-	'assault',
-	'assaulted',
-	'assaulting',
-	'attack',
-	'attacks',
-	'bomber',
-	'cartels',
-	'collision',
-	'conflict',
-	'conflicts',
-	'conspiracy',
-	'corpse',
-	'covid',
-	'crash',
-	'crime',
-	'dead',
-	'death',
-	'deaths',
-	'die',
-	'died',
-	'dies',
-	'dismember',
-	'dismembered',
-	'download',
-	'drown',
-	'drowned',
-	'drowns',
-	'drugs',
-	'farright',
-	'fatal',
-	'fighter',
-	'fighters',
-	'fighting',
-	'gunshot',
-	'hatespeech',
-	'holocaust',
-	'injured',
-	'injury',
-	'invasion',
-	'kidnapping',
-	'kill',
-	'killed',
-	'killer',
-	'killers',
-	'killing',
-	'killings',
-	'leftwing',
-	'military',
-	'militia',
-	'militias',
-	'mob',
-	'mobs',
-	'murder',
-	'murdered',
-	'murderer',
-	'murderers',
-	'murdering',
-	'murders',
-	'muslim',
-	'mutilation',
-	'mutilations',
-	'nazi',
-	'nazis',
-	'nuclear',
-	'nude',
-	'nudes',
-	'obscenity',
-	'paedophilia',
-	'poison',
-	'poisoned',
-	'porn',
-	'pornography',
-	'purge',
-	'putin',
-	'racism',
-	'racist',
-	'rape',
-	'rapes',
-	'rapist',
-	'rapists',
-	'rebel',
-	'rebels',
-	'rightwing',
-	'russia',
-	'russian',
-	'scam',
-	'scammers',
-	'scams',
-	'sex',
-	'sexual',
-	'sexualisation',
-	'shelling',
-	'shoot',
-	'shooting',
-	'shoots',
-	'shot',
-	'slavery',
-	'stabbed',
-	'supremacist',
-	'supremacists',
-	'suspect',
-	'suspects',
-	'syria',
-	'syrian',
-	'syrians',
-	'terror',
-	'terrorism',
-	'terrorist',
-	'threats',
-	'tobacco',
-	'torture',
-	'trafficking',
-	'troops',
-	'trump',
-	'ukraine',
-	'ukrainian',
-	'vagina',
-	'war',
-	'wars',
-	'wounded',
-];
-
-const isEligibleForTeads = (slotId: string) => {
+const isEligibleForTeads = async (slotId: string) => {
 	const { contentType, pageId, isSensitive } = window.guardian.config.page;
 
 	const urlKeywords = getUrlKeywords(`/${pageId}`);
+
+	const bannedUrlKeywords = await getBannedKeywords();
 
 	const hasBannedKeywords = urlKeywords.some((keyword) =>
 		bannedUrlKeywords.includes(keyword),
@@ -151,4 +34,4 @@ const isEligibleForTeads = (slotId: string) => {
 	return false;
 };
 
-export { isEligibleForTeads };
+export { isEligibleForTeads, getBannedKeywords };
