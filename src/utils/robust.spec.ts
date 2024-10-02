@@ -1,8 +1,8 @@
-import { reportError } from 'utils/report-error';
+import { reportError } from './report-error';
 import { catchErrorsAndReport } from './robust';
 import type { Modules } from './robust';
 
-jest.mock('utils/report-error', () => ({
+jest.mock('./report-error', () => ({
 	reportError: jest.fn(),
 }));
 

@@ -1,7 +1,7 @@
 /**
  * Swallows and reports exceptions. Designed to wrap around modules at the "bootstrap" level.
  */
-import { reportError } from 'utils/report-error';
+import { reportError } from './report-error';
 
 type ModuleFunction = () => void;
 type Module = [string, ModuleFunction];
