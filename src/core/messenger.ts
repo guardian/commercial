@@ -1,4 +1,4 @@
-import { reportError } from 'utils/report-error';
+import { reportError } from '../utils/report-error';
 import { postMessage } from './messenger/post-message';
 
 /**

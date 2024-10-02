@@ -4,7 +4,7 @@ import type {
 	SpacefinderWriter,
 } from 'insert/spacefinder/spacefinder';
 import { findSpace, SpaceError } from 'insert/spacefinder/spacefinder';
-import { reportError } from 'utils/report-error';
+import { reportError } from '../../utils/report-error';
 
 class SpaceFiller {
 	queue = Promise.resolve(true);
