@@ -28,6 +28,14 @@ jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 
+beforeEach(() => {
+	global.fetch = jest.fn(() =>
+		Promise.resolve({
+			json: () => Promise.resolve(['ukraine']),
+		}),
+	) as jest.Mock;
+});
+
 const slotPrototype = {
 	fake: 'slot',
 	defineSizeMapping: () => slotPrototype,

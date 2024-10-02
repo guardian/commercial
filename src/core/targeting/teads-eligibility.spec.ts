@@ -1,7 +1,15 @@
 import { isEligibleForTeads } from './teads-eligibility';
 
+beforeEach(() => {
+	global.fetch = jest.fn(() =>
+		Promise.resolve({
+			json: () => Promise.resolve(['ukraine']),
+		}),
+	) as jest.Mock;
+});
+
 describe('Teads Eligibility', () => {
-	it('should be eligible for teads when slot is inline1, on an allowed content type, not sensitive, and there are no banned keywords', () => {
+	it('should be eligible for teads when slot is inline1, on an allowed content type, not sensitive, and there are no banned keywords', async () => {
 		window.guardian = {
 			config: {
 				page: {
@@ -12,12 +20,10 @@ describe('Teads Eligibility', () => {
 			},
 		} as typeof window.guardian;
 
-		const teadsEligibility = isEligibleForTeads('dfp-ad--inline1');
-
-		expect(teadsEligibility).toBe(true);
+		expect(await isEligibleForTeads('dfp-ad--inline1')).toBe(true);
 	});
 
-	it('should not be eligible for teads when slot is not inline1', () => {
+	it('should not be eligible for teads when slot is not inline1', async () => {
 		window.guardian = {
 			config: {
 				page: {
@@ -28,12 +34,10 @@ describe('Teads Eligibility', () => {
 			},
 		} as typeof window.guardian;
 
-		const teadsEligibility = isEligibleForTeads('dfp-ad--inline2');
-
-		expect(teadsEligibility).toBe(false);
+		expect(await isEligibleForTeads('dfp-ad--inline2')).toBe(false);
 	});
 
-	it('should not be eligible for teads when content type is not article or liveblog', () => {
+	it('should not be eligible for teads when content type is not article or liveblog', async () => {
 		window.guardian = {
 			config: {
 				page: {
@@ -44,12 +48,10 @@ describe('Teads Eligibility', () => {
 			},
 		} as typeof window.guardian;
 
-		const teadsEligibility = isEligibleForTeads('dfp-ad--inline1');
-
-		expect(teadsEligibility).toBe(false);
+		expect(await isEligibleForTeads('dfp-ad--inline1')).toBe(false);
 	});
 
-	it('should not be eligible for teads when content is marked as sensitive', () => {
+	it('should not be eligible for teads when content is marked as sensitive', async () => {
 		window.guardian = {
 			config: {
 				page: {
@@ -60,12 +62,10 @@ describe('Teads Eligibility', () => {
 			},
 		} as typeof window.guardian;
 
-		const teadsEligibility = isEligibleForTeads('dfp-ad--inline1');
-
-		expect(teadsEligibility).toBe(false);
+		expect(await isEligibleForTeads('dfp-ad--inline1')).toBe(false);
 	});
 
-	it('should not be eligible for teads when url keywords contain a banned keyword', () => {
+	it('should not be eligible for teads when url keywords contain a banned keyword', async () => {
 		window.guardian = {
 			config: {
 				page: {
@@ -76,8 +76,6 @@ describe('Teads Eligibility', () => {
 			},
 		} as typeof window.guardian;
 
-		const teadsEligibility = isEligibleForTeads('dfp-ad--inline1');
-
-		expect(teadsEligibility).toBe(false);
+		expect(await isEligibleForTeads('dfp-ad--inline1')).toBe(false);
 	});
 });
