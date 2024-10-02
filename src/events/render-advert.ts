@@ -189,7 +189,6 @@ const renderAdvert = (
 	slotRenderEndedEvent: googletag.events.SlotRenderEndedEvent,
 ): Promise<boolean> => {
 	addContentClass(advert.node);
-
 	return getAdIframe(advert.node)
 		.then((isRendered) => {
 			const creativeTemplateId =
@@ -227,14 +226,7 @@ const renderAdvert = (
 				.then(() => isRendered);
 		})
 		.catch((err) => {
-			reportError(
-				err,
-				{
-					feature: 'commercial',
-				},
-				false,
-			);
-
+			reportError(err, 'commercial');
 			return Promise.resolve(false);
 		});
 };

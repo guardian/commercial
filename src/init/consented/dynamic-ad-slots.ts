@@ -27,10 +27,7 @@ export const initDynamicAdSlots = async (): Promise<void> => {
 			try {
 				await init();
 			} catch (error) {
-				reportError(error, {
-					feature: 'commercial',
-					tag: name,
-				});
+				reportError(error, 'commercial', { tag: name });
 			}
 		}),
 	);

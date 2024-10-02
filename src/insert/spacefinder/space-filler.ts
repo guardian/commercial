@@ -4,7 +4,7 @@ import type {
 	SpacefinderWriter,
 } from 'insert/spacefinder/spacefinder';
 import { findSpace, SpaceError } from 'insert/spacefinder/spacefinder';
-import raven from 'lib/raven';
+import { reportError } from 'utils/report-error';
 
 class SpaceFiller {
 	queue = Promise.resolve(true);
@@ -35,7 +35,7 @@ class SpaceFiller {
 
 		this.queue = this.queue.then(insertNextContent).catch((e) => {
 			// e.g. if writer fails
-			raven.captureException(e);
+			reportError(e, 'space-filler');
 			return false;
 		});
 

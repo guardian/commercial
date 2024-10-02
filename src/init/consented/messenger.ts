@@ -12,7 +12,6 @@ import { init as resize } from 'core/messenger/resize';
 import { init as scroll } from 'core/messenger/scroll';
 import { init as type } from 'core/messenger/type';
 import { init as viewport } from 'core/messenger/viewport';
-import { reportError } from 'utils/report-error';
 
 /**
  * Messenger gets to skip the promise chain and run immediately.
@@ -32,7 +31,6 @@ initMessenger(
 		passback,
 	],
 	[scroll, viewport],
-	reportError,
 );
 
 const init = () => Promise.resolve();

@@ -1,3 +1,4 @@
+import { reportError } from 'utils/report-error';
 import { postMessage } from './messenger/post-message';
 
 /**
@@ -117,11 +118,6 @@ type ListenerOptions = {
 	window?: WindowProxy;
 };
 
-type MessengerErrorHandler = (
-	err: Error,
-	features: Record<string, string>,
-) => void;
-
 /**
  * Types of functions to register a listener for a given type of iframe message
  */
@@ -163,9 +159,6 @@ type RespondCallback = (
 
 const LISTENERS: Listeners = {};
 let REGISTERED_LISTENERS = 0;
-let reportError: MessengerErrorHandler = () => {
-	// not set yet
-};
 
 const error405 = {
 	code: 405,
@@ -374,9 +367,7 @@ const onMessage = async (event: MessageEvent): Promise<void> => {
 				respond(message.id, event.source, null, response);
 			})
 			.catch((ex: Error) => {
-				reportError(ex, {
-					feature: 'native-ads',
-				});
+				reportError(ex, 'native-ads');
 				respond(
 					message.id,
 					event.source,
@@ -500,24 +491,12 @@ export const unregister: UnregisterListener = (type, callback, options) => {
  * @param persistentListeners The persistent listener registration functions
  */
 export const init = (
-	listeners: Array<
-		(
-			register: RegisterListener,
-			errorHandler: MessengerErrorHandler,
-		) => void
-	>,
-	persistentListeners: Array<
-		(
-			register: RegisterPersistentListener,
-			errorHandler: MessengerErrorHandler,
-		) => void
-	>,
-	errorHandler: MessengerErrorHandler,
+	listeners: Array<(register: RegisterListener) => void>,
+	persistentListeners: Array<(register: RegisterPersistentListener) => void>,
 ): void => {
-	reportError = errorHandler;
-	listeners.forEach((moduleInit) => moduleInit(register, errorHandler));
+	listeners.forEach((moduleInit) => moduleInit(register));
 	persistentListeners.forEach((moduleInit) =>
-		moduleInit(registerPersistentListener, errorHandler),
+		moduleInit(registerPersistentListener),
 	);
 };
 
@@ -529,5 +508,4 @@ export type {
 	RegisterPersistentListener,
 	UnregisterListener,
 	ListenerOptions,
-	MessengerErrorHandler,
 };

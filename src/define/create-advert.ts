@@ -21,14 +21,7 @@ const createAdvert = (
 		log('commercial', errMsg);
 
 		if (!navigator.userAgent.includes('DuckDuckGo')) {
-			reportError(
-				new Error(errMsg),
-				{
-					feature: 'commercial',
-				},
-				false,
-				1 / 100,
-			);
+			reportError(new Error(errMsg), 'commercial');
 		}
 
 		return null;
