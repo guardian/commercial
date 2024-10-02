@@ -100,6 +100,7 @@ describe('initialise', () => {
 				syncDelay: 3000,
 				syncEnabled: true,
 				syncsPerBidder: 0,
+				userIds: [],
 				auctionDelay: 0,
 				filterSettings: {
 					all: {

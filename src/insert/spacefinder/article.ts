@@ -191,6 +191,22 @@ const addDesktopRightRailAds = (
 	);
 };
 
+const additionalMobileAndTabletInlineSizes = (index: number) => {
+	if (index === 1) {
+		return {
+			mobile: [adSizes.portraitInterstitial],
+		};
+	} else if (index === 2) {
+		return {
+			mobile: [
+				adSizes.portraitInterstitial,
+				adSizes.pubmaticInterscroller,
+			],
+		};
+	}
+	return undefined;
+};
+
 const addMobileAndTabletInlineAds = (
 	fillSlot: FillAdSlot,
 	currentBreakpoint: ReturnType<typeof getCurrentBreakpoint>,
@@ -209,12 +225,7 @@ const addMobileAndTabletInlineAds = (
 			return fillSlot(
 				name,
 				slot,
-				// Add the mobile portrait interstitial size to inline1 and inline2
-				i == 1 || i == 2
-					? {
-							mobile: [adSizes.portraitInterstitial],
-						}
-					: undefined,
+				additionalMobileAndTabletInlineSizes(i),
 			);
 		});
 		await Promise.all(slots);

@@ -8,6 +8,8 @@ import { PREBID_TIMEOUT } from 'core/constants/prebid-timeout';
 import { EventTimer } from 'core/event-timer';
 import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import type { Advert } from 'define/Advert';
+import { isUserInVariant } from 'experiments/ab';
+import { prebidSharedId } from 'experiments/tests/prebid-shared-id';
 import { getPageTargeting } from 'lib/build-page-targeting';
 import { getAdvertById } from 'lib/dfp/get-advert-by-id';
 import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
@@ -56,6 +58,16 @@ type ConsentManagement =
 			gpp: USPConfig;
 	  };
 
+type UserId = {
+	name: string;
+	params?: Record<string, string>;
+	storage: {
+		type: 'cookie';
+		name: string;
+		expires: number;
+	};
+};
+
 type UserSync =
 	| {
 			syncsPerBidder: number;
@@ -65,6 +77,7 @@ type UserSync =
 					filter: string;
 				};
 			};
+			userIds: UserId[];
 	  }
 	| {
 			syncEnabled: false;
@@ -249,6 +262,8 @@ const initialise = (
 	}
 	initialised = true;
 
+	const testSharedId = isUserInVariant(prebidSharedId, 'variant');
+
 	const userSync: UserSync = window.guardian.config.switches.prebidUserSync
 		? {
 				syncsPerBidder: 0, // allow all syncs
@@ -258,6 +273,18 @@ const initialise = (
 						filter: 'include',
 					},
 				},
+				userIds: testSharedId
+					? [
+							{
+								name: 'sharedId',
+								storage: {
+									type: 'cookie',
+									name: '_pubcid',
+									expires: 365,
+								},
+							},
+						]
+					: [],
 			}
 		: { syncEnabled: false };
 

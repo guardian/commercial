@@ -1,5 +1,27 @@
 # @guardian/commercial
 
+## 22.1.0
+
+### Minor Changes
+
+- c9dd980: Add new 371x660 size to prebid
+
+## 22.0.0
+
+### Major Changes
+
+- 8730523: Bump source to 8.0.0
+
+### Minor Changes
+
+- d4fabe3: Add prebid sharedId module and test
+
+## 21.0.3
+
+### Patch Changes
+
+- ba5ccd2: Bump Prebid version to resolve vulnerability in dset
+
 ## 21.0.2
 
 ### Patch Changes

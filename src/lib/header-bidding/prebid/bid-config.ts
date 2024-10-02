@@ -498,6 +498,13 @@ const pubmaticBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 		bidParams: (slotId: string): PrebidPubmaticParams => ({
 			publisherId: getPubmaticPublisherId(),
 			adSlot: stripDfpAdPrefixFrom(slotId),
+			placementId:
+				slotId === 'dfp-ad--inline2' &&
+				slotSizes.find(
+					(size) => size.width === 371 && size.height === 660,
+				)
+					? 'seenthis_guardian_371x660'
+					: undefined,
 		}),
 	};
 
