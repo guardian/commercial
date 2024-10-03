@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 22.2.0
+
+### Minor Changes
+
+- e01cf0d: Upgrade Prebid
+
+### Patch Changes
+
+- dccd1f5: remove raven client from commercial for error reporting
+
 ## 22.1.0
 
 ### Minor Changes
