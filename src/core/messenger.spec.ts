@@ -250,7 +250,6 @@ describe('Cross-frame messenger', () => {
 			source: 'saucy',
 		})
 			.then(() => {
-				console.log(postMessage);
 				expect(postMessage).toHaveBeenCalledWith(
 					{
 						error: null,

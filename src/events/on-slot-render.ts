@@ -1,8 +1,8 @@
 import { isString } from '@guardian/libs';
 import type { AdSize } from 'core/ad-sizes';
 import { createAdSize } from 'core/ad-sizes';
-import { reportError } from 'utils/report-error';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
+import { reportError } from '../utils/report-error';
 import { emptyAdvert } from './empty-advert';
 import { renderAdvert } from './render-advert';
 
@@ -20,16 +20,14 @@ const reportEmptyResponse = (
 			? event.slot.getTargeting('k')
 			: [];
 		const adKeywords = adTargetingKValues.join(', ');
-
 		reportError(
 			new Error('dfp returned an empty ad response'),
+			'commercial',
 			{
-				feature: 'commercial',
 				adUnit: adUnitPath,
 				adSlot: adSlotId,
 				adKeywords,
 			},
-			false,
 		);
 	}
 };

@@ -1,71 +1,58 @@
-import { convertError, reportError } from 'utils/report-error';
-import { _, catchErrorsWithContext } from './robust';
+import { reportError } from './report-error';
+import { catchErrorsAndReport } from './robust';
 import type { Modules } from './robust';
 
-const { catchAndLogError } = _;
-
-jest.mock('utils/report-error', () => ({
-	convertError: jest.fn((e: Error) => e),
+jest.mock('./report-error', () => ({
 	reportError: jest.fn(),
 }));
 
-let origConsoleWarn: typeof window.console.warn;
-
 beforeEach(() => {
-	jest.clearAllMocks();
-	origConsoleWarn = window.console.warn;
-	window.console.warn = jest.fn();
+	jest.spyOn(global.console, 'warn');
 });
 
 afterEach(() => {
-	window.console.warn = origConsoleWarn;
+	jest.spyOn(global.console, 'warn').mockRestore();
+	jest.resetAllMocks();
 });
 
 describe('robust', () => {
-	const ERROR = new Error('Something broke.');
-	const META = { module: 'test' };
-
-	const noError = () => true;
+	const ERROR = new Error('Deliberate test error');
+	const tags = { tag: 'test' };
 
 	const throwError = () => {
 		throw ERROR;
 	};
 
-	test('catchAndLogError()', () => {
-		expect(() => {
-			catchAndLogError('test', noError);
-		}).not.toThrowError();
-
-		expect(() => {
-			catchAndLogError('test', throwError);
-		}).not.toThrowError(ERROR);
-
-		expect(convertError).toHaveBeenCalledTimes(1);
-		expect(window.console.warn).toHaveBeenCalledTimes(1);
-	});
-
-	test('catchAndLogError() - default reporter with no error', () => {
-		catchAndLogError('test', noError);
-		expect(convertError).toHaveBeenCalledTimes(0);
-		expect(reportError).not.toHaveBeenCalled();
-	});
-
-	test('catchAndLogError() - default reporter with error', () => {
-		catchAndLogError('test', throwError);
-		expect(convertError).toHaveBeenCalledTimes(1);
-		expect(reportError).toHaveBeenCalledWith(ERROR, META, false);
-	});
-
-	test('catchErrorsWithContext()', () => {
+	test('catchErrorsAndReport with no errors', () => {
 		const runner = jest.fn();
 
-		const MODULES = [
+		const modules = [
 			['test-1', runner],
 			['test-2', runner],
 			['test-3', runner],
 		] as Modules;
 
-		catchErrorsWithContext(MODULES);
-		expect(runner).toHaveBeenCalledTimes(MODULES.length);
+		catchErrorsAndReport(modules);
+		expect(runner).toHaveBeenCalledTimes(modules.length);
+		expect(reportError).not.toHaveBeenCalled();
+	});
+
+	test('catchErrorsAndReport with one error', () => {
+		const runner = jest.fn();
+
+		const modules = [
+			['test-1', runner],
+			['test-2', throwError],
+			['test-3', runner],
+		] as Modules;
+
+		catchErrorsAndReport(modules, tags);
+		expect(runner).toHaveBeenCalledTimes(2);
+		expect(reportError).toHaveBeenCalledTimes(1);
+		expect(window.console.warn).toHaveBeenCalledTimes(1);
+		expect(reportError).toHaveBeenCalledWith(ERROR, 'commercial', {
+			tag: 'test',
+			module: 'test-2',
+		});
 	});
 });
