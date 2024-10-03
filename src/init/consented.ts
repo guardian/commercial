@@ -19,8 +19,8 @@ import { init as setAdTestInLabelsCookie } from 'init/shared/set-adtest-in-label
 import { init as prepareAdVerification } from 'lib/ad-verification/prepare-ad-verification';
 import { commercialFeatures } from 'lib/commercial-features';
 import { adSlotIdPrefix } from 'lib/dfp/dfp-env-globals';
-import { reportError } from 'utils/report-error';
-import { catchErrorsWithContext } from 'utils/robust';
+import { reportError } from '../utils/report-error';
+import { catchErrorsAndReport } from '../utils/robust';
 import { initDfpListeners } from './consented/dfp-listeners';
 import { initDynamicAdSlots } from './consented/dynamic-ad-slots';
 import { init as initMessenger } from './consented/messenger';
@@ -28,10 +28,8 @@ import { init as initMessenger } from './consented/messenger';
 type Modules = Array<[`${string}-${string}`, () => Promise<unknown>]>;
 
 const tags: Record<string, string> = {
-	feature: 'commercial',
 	bundle: 'standalone',
 };
-
 // modules necessary to load the first ads on the page
 const commercialBaseModules: Modules = [];
 
@@ -73,7 +71,7 @@ const loadModules = (modules: Modules, eventName: string) => {
 	modules.forEach((module) => {
 		const [moduleName, moduleInit] = module;
 
-		catchErrorsWithContext(
+		catchErrorsAndReport(
 			[
 				[
 					moduleName,
@@ -121,7 +119,7 @@ const bootCommercial = async (): Promise<void> => {
 	// Init Commercial event timers
 	EventTimer.init();
 
-	catchErrorsWithContext(
+	catchErrorsAndReport(
 		[
 			[
 				'ga-user-timing-commercial-start',
@@ -150,7 +148,7 @@ const bootCommercial = async (): Promise<void> => {
 		await Promise.all(promises).then(recordCommercialMetrics);
 	} catch (error) {
 		// report async errors in bootCommercial to Sentry with the commercial feature tag
-		reportError(error, tags, false);
+		reportError(error, 'commercial', tags);
 	}
 };
 

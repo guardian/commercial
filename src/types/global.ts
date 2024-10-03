@@ -468,6 +468,15 @@ declare global {
 			notificationEventHistory?: HeaderNotification[][];
 			commercialTimer?: EventTimer;
 			offlineCount?: number;
+			modules: {
+				sentry?: {
+					reportError?: (
+						error: unknown,
+						feature: string,
+						tags?: Record<string, string>,
+					) => void;
+				};
+			};
 		};
 		ootag: {
 			queue: Array<() => void>;

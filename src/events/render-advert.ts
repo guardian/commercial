@@ -1,9 +1,9 @@
 import { adSizes } from 'core/ad-sizes';
 import { $$ } from 'utils/$$';
 import fastdom from 'utils/fastdom-promise';
-import { reportError } from 'utils/report-error';
 import type { Advert } from '../define/Advert';
 import { getAdIframe } from '../lib/dfp/get-ad-iframe';
+import { reportError } from '../utils/report-error';
 import { renderAdvertLabel } from './render-advert-label';
 
 /**
@@ -189,7 +189,6 @@ const renderAdvert = (
 	slotRenderEndedEvent: googletag.events.SlotRenderEndedEvent,
 ): Promise<boolean> => {
 	addContentClass(advert.node);
-
 	return getAdIframe(advert.node)
 		.then((isRendered) => {
 			const creativeTemplateId =
@@ -227,14 +226,7 @@ const renderAdvert = (
 				.then(() => isRendered);
 		})
 		.catch((err) => {
-			reportError(
-				err,
-				{
-					feature: 'commercial',
-				},
-				false,
-			);
-
+			reportError(err, 'commercial');
 			return Promise.resolve(false);
 		});
 };
