@@ -29,7 +29,7 @@
         -   TCF: If the user doesn't consent we shouldn't show ads.
         -   TCF: Ads don't render until the user gives consent.
         -   AUS: Check if a user selects "non personalized advertising" that the targeting is different.
-        -   CCPA: Check if a user selects "do not sell my information" that the targeting is different.
+        -   USNAT: Check if a user selects "do not sell my information" that the targeting is different.
 
 -   Lower priorities features:
     -   Commercial metrics

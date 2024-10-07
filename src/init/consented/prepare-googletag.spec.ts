@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
 import type * as AdSizesType from 'core/ad-sizes';
 import { commercialFeatures } from 'lib/commercial-features';
@@ -49,6 +49,16 @@ const getAdverts = (withEmpty: boolean) => {
 const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
 	typeof getCurrentBreakpoint_
 >;
+
+const usnatConsent: USNATConsentState = {
+	doNotSell: false,
+	signalStatus: 'ready',
+};
+
+const usnatNonConsent: USNATConsentState = {
+	doNotSell: true,
+	signalStatus: 'ready',
+};
 
 jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
@@ -213,16 +223,16 @@ const ausRejected: ConsentState = {
 	framework: 'aus',
 };
 
-const ccpaWithConsent: ConsentState = {
-	ccpa: { doNotSell: false },
+const usnatWithConsent: ConsentState = {
+	usnat: usnatConsent,
 	canTarget: true,
-	framework: 'ccpa',
+	framework: 'usnat',
 };
 
-const ccpaWithoutConsent: ConsentState = {
-	ccpa: { doNotSell: true },
+const usnatWithoutConsent: ConsentState = {
+	usnat: usnatNonConsent,
 	canTarget: false,
-	framework: 'ccpa',
+	framework: 'usnat',
 };
 
 describe('DFP', () => {
@@ -582,17 +592,17 @@ describe('DFP', () => {
 			});
 		});
 	});
-	describe('restrictDataProcessing flag in CCPA', () => {
-		it('when CCPA consent is given', async () => {
-			mockOnConsent(ccpaWithConsent);
+	describe('restrictDataProcessing flag in USNAT', () => {
+		it('when USNAT consent is given', async () => {
+			mockOnConsent(usnatWithConsent);
 			mockGetConsentFor(true);
 			await prepareGoogletag();
 			expect(pubAds.setPrivacySettings).toHaveBeenCalledWith({
 				restrictDataProcessing: false,
 			});
 		});
-		it('when CCPA consent is denied', async () => {
-			mockOnConsent(ccpaWithoutConsent);
+		it('when USNAT consent is denied', async () => {
+			mockOnConsent(usnatWithoutConsent);
 			mockGetConsentFor(false);
 			await prepareGoogletag();
 			expect(pubAds.setPrivacySettings).toHaveBeenCalledWith({

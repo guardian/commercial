@@ -44,16 +44,17 @@ const setupComscore = async (): Promise<void> => {
 		/* Rule is that comscore can run:
 		- in Tcfv2: Based on consent for comscore
 		- in Australia: Always
-		- in CCPA: If the user hasn't chosen Do Not Sell
+		- in USNAT: If the user hasn't chosen Do Not Sell
 		TODO move this logic to getConsentFor
 		*/
 		const canRunTcfv2 =
 			(consentState.tcfv2 && getConsentFor('comscore', consentState)) ??
 			false;
 		const canRunAus = !!consentState.aus;
-		const canRunCcpa = !!consentState.ccpa && !consentState.ccpa.doNotSell;
+		const canRunUsnat =
+			!!consentState.usnat && !consentState.usnat.doNotSell;
 
-		if (!(canRunTcfv2 || canRunAus || canRunCcpa)) {
+		if (!(canRunTcfv2 || canRunAus || canRunUsnat)) {
 			throw Error('No consent for comscore');
 		}
 		await initOnConsent();

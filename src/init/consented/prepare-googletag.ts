@@ -51,8 +51,8 @@ export const init = (): Promise<void> => {
 				window.googletag.cmd.push(setCookieDeprecationLabel);
 			}
 
-			if (consentState.ccpa) {
-				// CCPA mode
+			if (consentState.usnat) {
+				// USNAT mode
 				// canRun stays true, set RDP flag
 				window.googletag.cmd.push(() => {
 					window.googletag.pubads().setPrivacySettings({

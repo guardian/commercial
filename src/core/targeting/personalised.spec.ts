@@ -1,10 +1,20 @@
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { storage } from '@guardian/libs';
 import type { PersonalisedTargeting } from './personalised';
 import { getPersonalisedTargeting } from './personalised';
 
 const FREQUENCY_KEY = 'gu.alreadyVisited';
 const AMTGRP_STORAGE_KEY = 'gu.adManagerGroup';
+
+const usnatConsent: USNATConsentState = {
+	doNotSell: false,
+	signalStatus: 'ready',
+};
+
+const usnatNonConsent: USNATConsentState = {
+	doNotSell: true,
+	signalStatus: 'ready',
+};
 
 describe('Personalised targeting', () => {
 	describe('TCFv2', () => {
@@ -72,12 +82,12 @@ describe('Personalised targeting', () => {
 		});
 	});
 
-	describe('CCPA', () => {
+	describe('USNAT', () => {
 		it('Full Consent', () => {
 			const state: ConsentState = {
-				ccpa: { doNotSell: false },
+				usnat: usnatConsent,
 				canTarget: true,
-				framework: 'ccpa',
+				framework: 'usnat',
 			};
 
 			storage.local.setRaw(FREQUENCY_KEY, '4');
@@ -97,9 +107,9 @@ describe('Personalised targeting', () => {
 
 		it('Do Not Sell', () => {
 			const state: ConsentState = {
-				ccpa: { doNotSell: true },
+				usnat: usnatNonConsent,
 				canTarget: false,
-				framework: 'ccpa',
+				framework: 'usnat',
 			};
 
 			storage.local.setRaw(FREQUENCY_KEY, '4');
@@ -191,9 +201,9 @@ describe('Personalised targeting', () => {
 		];
 		test.each(frequencies)('Should get `%s` for %f', (fr, val) => {
 			const state: ConsentState = {
-				ccpa: { doNotSell: false },
+				usnat: usnatConsent,
 				canTarget: true,
-				framework: 'ccpa',
+				framework: 'usnat',
 			};
 
 			storage.local.setRaw(FREQUENCY_KEY, String(val));
@@ -232,9 +242,9 @@ describe('Personalised targeting', () => {
 
 		test.each(groups)('Should get `%s` if it exists', (amtgrp, val) => {
 			const state: ConsentState = {
-				ccpa: { doNotSell: false },
+				usnat: usnatConsent,
 				canTarget: true,
-				framework: 'ccpa',
+				framework: 'usnat',
 			};
 
 			storage.local.remove(AMTGRP_STORAGE_KEY);
@@ -277,11 +287,11 @@ describe('Personalised targeting', () => {
 			expect(storage.local.get(AMTGRP_STORAGE_KEY)).toBeNull();
 		});
 
-		test('Ad manager group IS set if ccpa and consent not given', () => {
+		test('Ad manager group IS set if usnat and consent not given', () => {
 			const state: ConsentState = {
-				ccpa: { doNotSell: true },
+				usnat: usnatNonConsent,
 				canTarget: false,
-				framework: 'ccpa',
+				framework: 'usnat',
 			};
 
 			const targeting = getPersonalisedTargeting({
@@ -311,9 +321,9 @@ describe('Personalised targeting', () => {
 
 		test('Should set `permutive` to correct values if `youtube` is set to false', () => {
 			const state: ConsentState = {
-				ccpa: { doNotSell: false },
+				usnat: usnatConsent,
 				canTarget: true,
-				framework: 'ccpa',
+				framework: 'usnat',
 			};
 
 			storage.local.setRaw(PERMUTIVE_KEY, '[1, 2, 3]');
@@ -328,9 +338,9 @@ describe('Personalised targeting', () => {
 
 		test('Should set `permutive` to correct values if `youtube` is set to true', () => {
 			const state: ConsentState = {
-				ccpa: { doNotSell: false },
+				usnat: usnatConsent,
 				canTarget: true,
-				framework: 'ccpa',
+				framework: 'usnat',
 			};
 
 			storage.local.setRaw(PERMUTIVE_KEY, '[]');
