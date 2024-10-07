@@ -1,4 +1,4 @@
-import { initMessenger } from 'core';
+import { init as initMessenger } from 'core/messenger';
 import { init as background } from 'core/messenger/background';
 import { init as disableRefresh } from 'core/messenger/disable-refresh';
 import { init as fullwidth } from 'core/messenger/full-width';

@@ -1,5 +1,5 @@
 import type { ConsentState } from '@guardian/libs';
-import { initMessenger } from 'core';
+import { init as initMessenger } from 'core/messenger';
 import { init as background } from 'core/messenger/background';
 import { init as resize } from 'core/messenger/resize';
 import { init as type } from 'core/messenger/type';
