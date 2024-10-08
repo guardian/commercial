@@ -1,5 +1,16 @@
 # @guardian/commercial
 
+## 22.3.0
+
+### Minor Changes
+
+- c186404: Remove prebidSharedId test and set live
+- 0941af2: Remove commercial/api/hb endpoint
+
+### Patch Changes
+
+- 486e77b: Removed unused exports
+
 ## 22.2.0
 
 ### Minor Changes
