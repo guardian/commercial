@@ -50,6 +50,9 @@ export const refreshAdvert = (advert: Advert): void => {
 		.then(() => {
 			advert.slot.setTargeting('refreshed', 'true');
 
+			// slots that have refreshed are not eligible for teads
+			advert.slot.setTargeting('teadsEligible', 'false');
+
 			if (advert.id === 'dfp-ad--top-above-nav') {
 				// force the slot sizes to be the same as advert.size (current)
 				// only when advert.size is an array (forget 'fluid' and other specials)

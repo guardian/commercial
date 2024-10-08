@@ -2,6 +2,7 @@ import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { once } from 'lodash-es';
 import { EventTimer } from 'core';
 import type { SizeMapping, SlotName } from 'core/ad-sizes';
+import { isEligibleForTeads } from 'core/targeting/teads-eligibility';
 import { toGoogleTagSize } from 'utils/googletag-ad-size';
 import { getUrlVars } from 'utils/url';
 import { initSlotIas } from './init-slot-ias';
@@ -170,6 +171,14 @@ const defineSlot = (
 	if (slotFabric) {
 		slot.setTargeting('slot-fabric', slotFabric);
 	}
+
+	void isEligibleForTeads(id).then((isEligible) => {
+		if (isEligible) {
+			slot.setTargeting('teadsEligible', 'true');
+		} else {
+			slot.setTargeting('teadsEligible', 'false');
+		}
+	});
 
 	Object.entries(slotTargeting).forEach(([key, value]) => {
 		slot.setTargeting(key, value);
