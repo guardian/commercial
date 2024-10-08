@@ -69,7 +69,7 @@ devDependencies:
     version: 8.0.0(tslib@2.7.0)(typescript@5.5.3)
   '@guardian/browserslist-config':
     specifier: ^6.1.1
-    version: 6.1.1(browserslist@4.23.3)(tslib@2.7.0)
+    version: 6.1.1(browserslist@4.24.0)(tslib@2.7.0)
   '@guardian/core-web-vitals':
     specifier: 7.0.0
     version: 7.0.0(@guardian/libs@18.0.2)(tslib@2.7.0)(typescript@5.5.3)(web-vitals@4.2.3)
@@ -92,8 +92,8 @@ devDependencies:
     specifier: 8.0.0
     version: 8.0.0(tslib@2.7.0)(typescript@5.5.3)
   '@playwright/test':
-    specifier: 1.46.0
-    version: 1.46.0
+    specifier: 1.47.2
+    version: 1.47.2
   '@types/googletag':
     specifier: ~3.1.3
     version: 3.1.3
@@ -1870,13 +1870,13 @@ packages:
       typescript: 5.5.3
     dev: true
 
-  /@guardian/browserslist-config@6.1.1(browserslist@4.23.3)(tslib@2.7.0):
+  /@guardian/browserslist-config@6.1.1(browserslist@4.24.0)(tslib@2.7.0):
     resolution: {integrity: sha512-62fVcqE5opXxN1bgm5lF6ykPrKM2/U8WdGH7gcrFGV6f5VVz+oFloMX+C2Svj19fdmXpfHj6+I1AmJbqSAX5CQ==}
     peerDependencies:
       browserslist: ^4.22.2
       tslib: ^2.6.2
     dependencies:
-      browserslist: 4.23.3
+      browserslist: 4.24.0
       tslib: 2.7.0
     dev: true
 
@@ -2530,12 +2530,12 @@ packages:
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
     dev: true
 
-  /@playwright/test@1.46.0:
-    resolution: {integrity: sha512-/QYft5VArOrGRP5pgkrfKksqsKA6CEFyGQ/gjNe6q0y4tZ1aaPfq4gIjudr1s3D+pXyrPRdsy4opKDrjBabE5w==}
+  /@playwright/test@1.47.2:
+    resolution: {integrity: sha512-jTXRsoSPONAs8Za9QEQdyjFn+0ZQFjCiIztAIF6bi1HqhBzG9Ma7g1WotyiGqFSBRZjIEqMdT8RUlbk1QVhzCQ==}
     engines: {node: '>=18'}
     hasBin: true
     dependencies:
-      playwright: 1.46.0
+      playwright: 1.47.2
     dev: true
 
   /@polka/url@1.0.0-next.25:
@@ -3861,6 +3861,17 @@ packages:
       node-releases: 2.0.18
       update-browserslist-db: 1.1.0(browserslist@4.23.3)
 
+  /browserslist@4.24.0:
+    resolution: {integrity: sha512-Rmb62sR1Zpjql25eSanFGEhAxcFwfA1K0GuQcLoaJBAcENegrQut3hYdhXFF1obQfiDyqIW/cLM5HSJ/9k884A==}
+    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
+    hasBin: true
+    dependencies:
+      caniuse-lite: 1.0.30001667
+      electron-to-chromium: 1.5.33
+      node-releases: 2.0.18
+      update-browserslist-db: 1.1.1(browserslist@4.24.0)
+    dev: true
+
   /bs-logger@0.2.6:
     resolution: {integrity: sha512-pd8DCoxmbgc7hyPKOvxtqNcjYoOsABPQdcCUjGp3d42VR2CX1ORhk2A87oqqu5R1kk+76nsxZupkmyd+MVtCog==}
     engines: {node: '>= 6'}
@@ -3927,6 +3938,10 @@ packages:
 
   /caniuse-lite@1.0.30001660:
     resolution: {integrity: sha512-GacvNTTuATm26qC74pt+ad1fW15mlQ/zuTzzY1ZoIzECTP8HURDfF43kNxPgf7H1jmelCBQTTbBNxdSXOA7Bqg==}
+
+  /caniuse-lite@1.0.30001667:
+    resolution: {integrity: sha512-7LTwJjcRkzKFmtqGsibMeuXmvFDfZq/nzIjnmgCGzKKRVzjD72selLDK1oPF/Oxzmt4fNcPvTDvGqSDG4tCALw==}
+    dev: true
 
   /chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
@@ -4678,6 +4693,10 @@ packages:
 
   /electron-to-chromium@1.5.19:
     resolution: {integrity: sha512-kpLJJi3zxTR1U828P+LIUDZ5ohixyo68/IcYOHLqnbTPr/wdgn4i1ECvmALN9E16JPA6cvCG5UG79gVwVdEK5w==}
+
+  /electron-to-chromium@1.5.33:
+    resolution: {integrity: sha512-+cYTcFB1QqD4j4LegwLfpCNxifb6dDFUAwk6RsLusCwIaZI6or2f+q8rs5tTB2YC53HhOlIbEaqHMAAC8IOIwA==}
+    dev: true
 
   /emittery@0.13.1:
     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
@@ -7772,18 +7791,18 @@ packages:
       find-up: 6.3.0
     dev: true
 
-  /playwright-core@1.46.0:
-    resolution: {integrity: sha512-9Y/d5UIwuJk8t3+lhmMSAJyNP1BUC/DqP3cQJDQQL/oWqAiuPTLgy7Q5dzglmTLwcBRdetzgNM/gni7ckfTr6A==}
+  /playwright-core@1.47.2:
+    resolution: {integrity: sha512-3JvMfF+9LJfe16l7AbSmU555PaTl2tPyQsVInqm3id16pdDfvZ8TTZ/pyzmkbDrZTQefyzU7AIHlZqQnxpqHVQ==}
     engines: {node: '>=18'}
     hasBin: true
     dev: true
 
-  /playwright@1.46.0:
-    resolution: {integrity: sha512-XYJ5WvfefWONh1uPAUAi0H2xXV5S3vrtcnXe6uAOgdGi3aSpqOSXX08IAjXW34xitfuOJsvXU5anXZxPSEQiJw==}
+  /playwright@1.47.2:
+    resolution: {integrity: sha512-nx1cLMmQWqmA3UsnjaaokyoUpdVaaDhJhMoxX2qj3McpjnsqFHs516QAKYhqHAgOP+oCFTEOCOAaD1RgD/RQfA==}
     engines: {node: '>=18'}
     hasBin: true
     dependencies:
-      playwright-core: 1.46.0
+      playwright-core: 1.47.2
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
@@ -9032,6 +9051,17 @@ packages:
       browserslist: 4.23.3
       escalade: 3.2.0
       picocolors: 1.1.0
+
+  /update-browserslist-db@1.1.1(browserslist@4.24.0):
+    resolution: {integrity: sha512-R8UzCaa9Az+38REPiJ1tXlImTJXlVfgHZsglwBD/k6nj76ctsH1E3q4doGrukiLQd3sGQYu56r5+lo5r94l29A==}
+    hasBin: true
+    peerDependencies:
+      browserslist: '>= 4.21.0'
+    dependencies:
+      browserslist: 4.24.0
+      escalade: 3.2.0
+      picocolors: 1.1.0
+    dev: true
 
   /uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
