@@ -3,7 +3,7 @@ import { getUrlKeywords } from './content';
 
 const getBannedKeywords = once(async () => {
 	const bannedKeywords = (await fetch(
-		'https://adops-assets.s3.eu-west-1.amazonaws.com/teads-targeting/banned-keywords.json',
+		'https://adops-assets.s3.eu-west-1.amazonaws.com/teads-targeting/non-brand-safe-teads-keywords.json',
 	).then((res) => res.json())) as string[];
 
 	return bannedKeywords;
