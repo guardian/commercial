@@ -1,5 +1,5 @@
-import type { AdSizeString } from 'core/ad-sizes';
-import { outstreamSizes } from 'core/ad-sizes';
+import type { AdSizeString } from '../../core/ad-sizes';
+import { outstreamSizes } from '../../core/ad-sizes';
 import type { Advert } from '../../define/Advert';
 
 /**

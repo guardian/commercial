@@ -1,9 +1,9 @@
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { once } from 'lodash-es';
 import { EventTimer } from 'core';
-import type { SizeMapping, SlotName } from 'core/ad-sizes';
 import { toGoogleTagSize } from 'utils/googletag-ad-size';
 import { getUrlVars } from 'utils/url';
+import type { SizeMapping, SlotName } from '../core/ad-sizes';
 import { initSlotIas } from './init-slot-ias';
 
 const breakpointViewports: Record<keyof SizeMapping, [number, number]> = {

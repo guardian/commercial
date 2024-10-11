@@ -1,4 +1,4 @@
-import type { RegisterListener } from 'core/messenger';
+import type { RegisterListener } from '../messenger';
 
 /**
  * Register a listener for iframes to request shared ad targeting

@@ -1,5 +1,4 @@
 import type { CountryCode } from '@guardian/libs';
-import { createAdSize } from 'core/ad-sizes';
 import { isUserInVariant as isUserInVariant_ } from 'experiments/ab';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
@@ -8,6 +7,7 @@ import {
 import type { SourceBreakpoint } from 'lib/detect/detect-breakpoint';
 import { _ } from 'utils/geo-utils';
 import { getCountryCode as getCountryCode_ } from 'utils/geolocation';
+import { createAdSize } from '../../core/ad-sizes';
 import {
 	getBreakpointKey,
 	getLargestSize,

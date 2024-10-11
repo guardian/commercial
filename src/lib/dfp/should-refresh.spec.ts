@@ -1,4 +1,4 @@
-import { adSizes, createAdSize } from 'core/ad-sizes';
+import { adSizes, createAdSize } from '../../core/ad-sizes';
 import { Advert } from '../../define/Advert';
 import { shouldRefresh } from './should-refresh';
 

@@ -1,4 +1,4 @@
-import { postMessage } from 'core/messenger/post-message';
+import { postMessage } from '../core/messenger/post-message';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 
 const host = `${window.location.protocol}//${window.location.host}`;

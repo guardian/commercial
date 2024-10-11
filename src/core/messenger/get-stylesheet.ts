@@ -1,5 +1,5 @@
 import { isObject } from '@guardian/libs';
-import type { RegisterListener } from 'core/messenger';
+import type { RegisterListener } from '../messenger';
 
 interface StylesheetSpecs {
 	selector: string;

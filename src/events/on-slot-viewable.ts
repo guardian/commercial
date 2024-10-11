@@ -1,9 +1,9 @@
 import { log } from '@guardian/libs';
 import { EventTimer } from 'core';
-import { outstreamSizes } from 'core/ad-sizes';
-import { AD_LABEL_HEIGHT } from 'core/constants/ad-label-height';
 import fastdom from 'utils/fastdom-promise';
 import { getUrlVars } from 'utils/url';
+import { outstreamSizes } from '../core/ad-sizes';
+import { AD_LABEL_HEIGHT } from '../core/constants/ad-label-height';
 import type { Advert } from '../define/Advert';
 import { isAdSize } from '../define/Advert';
 import { enableLazyLoad } from '../display/lazy-load';

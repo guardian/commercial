@@ -1,7 +1,7 @@
-import type { RegisterPersistentListener, RespondProxy } from 'core/messenger';
 import { getViewport } from 'lib/detect/detect-viewport';
 import type { Viewport } from 'lib/detect/detect-viewport';
 import fastdom from 'utils/fastdom-promise';
+import type { RegisterPersistentListener, RespondProxy } from '../messenger';
 
 type IFrameMapValue = {
 	node: HTMLIFrameElement;

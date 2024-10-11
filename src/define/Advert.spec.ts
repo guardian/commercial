@@ -1,5 +1,5 @@
-import type * as AdSizesType from 'core/ad-sizes';
-import { slotSizeMappings as slotSizeMappings_ } from 'core/ad-sizes';
+import type * as AdSizesType from '../core/ad-sizes';
+import { slotSizeMappings as slotSizeMappings_ } from '../core/ad-sizes';
 import { _, Advert, findSmallestAdHeightForSlot } from './Advert';
 
 const { getSlotSizeMapping } = _;

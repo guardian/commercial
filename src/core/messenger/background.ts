@@ -1,14 +1,14 @@
 import { isObject } from '@guardian/libs';
-import {
-	initVideoProgressReporting,
-	updateVideoProgress,
-} from 'core/lib/video-interscroller-progress';
-import type { RegisterListener } from 'core/messenger';
 import fastdom from 'utils/fastdom-promise';
 import {
 	renderAdvertLabel,
 	renderStickyScrollForMoreLabel,
 } from '../../events/render-advert-label';
+import {
+	initVideoProgressReporting,
+	updateVideoProgress,
+} from '../lib/video-interscroller-progress';
+import type { RegisterListener } from '../messenger';
 
 const isGallery = window.guardian.config.page.contentType === 'Gallery';
 

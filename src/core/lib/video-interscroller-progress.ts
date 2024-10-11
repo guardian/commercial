@@ -1,5 +1,5 @@
 import { once } from 'lodash-es';
-import { checkConsent as checkConsentForReporting } from 'core/send-commercial-metrics';
+import { checkConsent as checkConsentForReporting } from '../send-commercial-metrics';
 
 const endpoint = window.guardian.config.page.isDev
 	? '//logs.code.dev-guardianapis.com/log'

@@ -1,5 +1,4 @@
 import { log } from '@guardian/libs';
-import { EventTimer } from 'core/event-timer';
 import { adFreeSlotRemove } from 'init/consented/ad-free-slot-remove';
 import { init as initComscore } from 'init/consented/comscore';
 import { initFillSlotListener } from 'init/consented/fill-slot-listener';
@@ -19,6 +18,7 @@ import { init as setAdTestInLabelsCookie } from 'init/shared/set-adtest-in-label
 import { init as prepareAdVerification } from 'lib/ad-verification/prepare-ad-verification';
 import { commercialFeatures } from 'lib/commercial-features';
 import { adSlotIdPrefix } from 'lib/dfp/dfp-env-globals';
+import { EventTimer } from '../core/event-timer';
 import { reportError } from '../utils/report-error';
 import { catchErrorsAndReport } from '../utils/robust';
 import { initDfpListeners } from './consented/dfp-listeners';

@@ -1,5 +1,5 @@
 import { log, onConsent } from '@guardian/libs';
-import { initTrackScrollDepth } from 'core/track-scroll-depth';
+import { initTrackScrollDepth } from '../../core/track-scroll-depth';
 
 /**
  * Initialise scroll depth / velocity tracking if user has consented to relevant purposes.
