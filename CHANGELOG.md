@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 22.4.0
+
+### Minor Changes
+
+- 8dd7823: Reinstate commercial/api/hb endpoint
+
+### Patch Changes
+
+- 340d17d: Update pubmatic placement ID for seenthis
+
 ## 22.3.0
 
 ### Minor Changes
