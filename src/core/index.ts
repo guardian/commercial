@@ -13,4 +13,4 @@ export { getPermutivePFPSegments } from './permutive';
 export type { AdsConfigDisabled } from './types';
 export type { AdSize, SizeMapping, SlotName } from './ad-sizes';
 export type { PageTargeting } from './targeting/build-page-targeting';
-export type { AdsConfigCCPAorAus, AdsConfigTCFV2 } from './types';
+export type { AdsConfigUSNATorAus, AdsConfigTCFV2 } from './types';
