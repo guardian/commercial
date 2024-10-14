@@ -503,7 +503,7 @@ const pubmaticBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 				slotSizes.find(
 					(size) => size.width === 371 && size.height === 660,
 				)
-					? 'seenthis_guardian_371x660'
+					? 'seenthis_guardian_371x660_mweb'
 					: undefined,
 		}),
 	};

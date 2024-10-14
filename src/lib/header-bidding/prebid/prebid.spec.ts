@@ -100,7 +100,16 @@ describe('initialise', () => {
 				syncDelay: 3000,
 				syncEnabled: true,
 				syncsPerBidder: 0,
-				userIds: [],
+				userIds: [
+					{
+						name: 'sharedId',
+						storage: {
+							type: 'cookie',
+							name: '_pubcid',
+							expires: 365,
+						},
+					},
+				],
 				auctionDelay: 0,
 				filterSettings: {
 					all: {

@@ -9,8 +9,8 @@ dependencies:
     specifier: ^2.26.2
     version: 2.27.7
   '@guardian/prebid.js':
-    specifier: 8.52.0-4
-    version: 8.52.0-4(babel-core@7.0.0-bridge.0)(tslib@2.7.0)(typescript@5.5.3)
+    specifier: 8.52.0-7
+    version: 8.52.0-7(babel-core@7.0.0-bridge.0)(tslib@2.7.0)(typescript@5.5.3)
   '@octokit/core':
     specifier: ^6.1.2
     version: 6.1.2
@@ -23,9 +23,6 @@ dependencies:
   process:
     specifier: ^0.11.10
     version: 0.11.10
-  raven-js:
-    specifier: ^3.27.2
-    version: 3.27.2
   tslib:
     specifier: ^2.6.2
     version: 2.7.0
@@ -1998,8 +1995,8 @@ packages:
       typescript: 5.5.3
     dev: true
 
-  /@guardian/prebid.js@8.52.0-4(babel-core@7.0.0-bridge.0)(tslib@2.7.0)(typescript@5.5.3):
-    resolution: {integrity: sha512-rshCk2zJKdgCNMiqNy/d50SsZne/CFf8VQqQ3que5Hln5cxufOE5dEHIfmVKjqDeffKX5WEbsa3gVCtNx+sZaQ==}
+  /@guardian/prebid.js@8.52.0-7(babel-core@7.0.0-bridge.0)(tslib@2.7.0)(typescript@5.5.3):
+    resolution: {integrity: sha512-RWg8vyyfZccrqRXu5w+nnghsskYCHkLWQqXdFh1iSadYRU+exuNcynxStKdzUZdPNnh8aUyEuMIoaZXHmEZEYg==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@babel/core': 7.25.2
@@ -7932,11 +7929,6 @@ packages:
   /range-parser@1.2.1:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
     engines: {node: '>= 0.6'}
-
-  /raven-js@3.27.2:
-    resolution: {integrity: sha512-mFWQcXnhRFEQe5HeFroPaEghlnqy7F5E2J3Fsab189ondqUzcjwSVi7el7F36cr6PvQYXoZ1P2F5CSF2/azeMQ==}
-    deprecated: Please upgrade to @sentry/browser. See the migration guide https://bit.ly/3ybOlo7
-    dev: false
 
   /raw-body@2.5.2:
     resolution: {integrity: sha512-8zGqypfENjCIqGhgXToC8aB2r7YrBX+AQAfIPs/Mlk+BtPTztOvTS01NRW/3Eh60J+a48lt8qsCzirQ6loCVfA==}

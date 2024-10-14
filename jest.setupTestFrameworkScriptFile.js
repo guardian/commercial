@@ -32,6 +32,11 @@ window.guardian = {
 		active: undefined,
 		onDetect: [],
 	},
+	modules: {
+		sentry: {
+			reportError: jest.fn(),
+		},
+	},
 };
 
 window.fetch = jest.fn().mockImplementation(() =>

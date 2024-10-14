@@ -1,10 +1,10 @@
-import { reportError } from 'utils/report-error';
+import { reportError } from '../../utils/report-error';
 import {
 	fetchNonRefreshableLineItemIds,
 	memoizedFetchNonRefreshableLineItemIds,
 } from './non-refreshable-line-items';
 
-jest.mock('utils/report-error', () => ({
+jest.mock('../../utils/report-error', () => ({
 	reportError: jest.fn(),
 }));
 
@@ -80,11 +80,8 @@ describe('nonRefreshableLineItems', () => {
 
 		expect(reportError).toHaveBeenCalledWith(
 			new Error('Failed to fetch non-refreshable line items'),
-			{
-				feature: 'commercial',
-				status: '404',
-			},
-			false,
+			'commercial',
+			{ status: '404' },
 		);
 	});
 });

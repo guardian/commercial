@@ -1,5 +1,36 @@
 # @guardian/commercial
 
+## 22.4.0
+
+### Minor Changes
+
+- 8dd7823: Reinstate commercial/api/hb endpoint
+
+### Patch Changes
+
+- 340d17d: Update pubmatic placement ID for seenthis
+
+## 22.3.0
+
+### Minor Changes
+
+- c186404: Remove prebidSharedId test and set live
+- 0941af2: Remove commercial/api/hb endpoint
+
+### Patch Changes
+
+- 486e77b: Removed unused exports
+
+## 22.2.0
+
+### Minor Changes
+
+- e01cf0d: Upgrade Prebid
+
+### Patch Changes
+
+- dccd1f5: remove raven client from commercial for error reporting
+
 ## 22.1.0
 
 ### Minor Changes
