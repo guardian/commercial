@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 23.0.0
+
+### Major Changes
+
+- 9bbd078: Updates @guardian/libs to latest version which migrated frameworks from ccpa to usnat. Therefore, commercial needed to be updated to reflect this.
+
+### Minor Changes
+
+- b197ddc: Temporary downgrade to @guardian/prebid.js@8.52.0-6
+
 ## 22.4.0
 
 ### Minor Changes
