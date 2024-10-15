@@ -1,4 +1,4 @@
-import type { RegisterListener } from 'core/messenger';
+import type { RegisterListener } from '../messenger';
 
 const init = (register: RegisterListener): void => {
 	register(

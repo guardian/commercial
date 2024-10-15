@@ -1,8 +1,8 @@
-import type { RegisterListener } from 'core/messenger';
 import type { Viewport } from 'lib/detect/detect-viewport';
 import { getViewport } from 'lib/detect/detect-viewport';
 import { addEventListener } from 'lib/events';
 import fastdom from 'utils/fastdom-promise';
+import type { RegisterListener } from '../messenger';
 
 type Respond = (...args: unknown[]) => void;
 

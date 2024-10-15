@@ -1,5 +1,5 @@
-import { createAdSlot, wrapSlotInContainer } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
+import { createAdSlot, wrapSlotInContainer } from '../core/create-ad-slot';
 import fastdom from '../utils/fastdom-promise';
 
 /**

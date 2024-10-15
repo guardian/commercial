@@ -1,6 +1,4 @@
 import { log } from '@guardian/libs';
-import { adSizes } from 'core/ad-sizes';
-import { createAdSlot } from 'core/create-ad-slot';
 import { fillDynamicAdSlot } from 'insert/fill-dynamic-advert-slot';
 import { spaceFiller } from 'insert/spacefinder/space-filler';
 import type {
@@ -12,6 +10,8 @@ import type {
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import fastdom from 'utils/fastdom-promise';
+import { adSizes } from '../../core/ad-sizes';
+import { createAdSlot } from '../../core/create-ad-slot';
 
 /**
  * Maximum number of inline ads to display on the page

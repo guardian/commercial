@@ -1,13 +1,13 @@
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
-import type { AdSize, SizeMapping, SlotName } from 'core/ad-sizes';
+import fastdom from 'utils/fastdom-promise';
 import {
 	createAdSize,
 	findAppliedSizesForBreakpoint,
 	slotSizeMappings,
-} from 'core/ad-sizes';
-import { concatSizeMappings } from 'core/create-ad-slot';
-import type { Breakpoint } from 'core/lib/breakpoint';
-import fastdom from 'utils/fastdom-promise';
+} from '../core/ad-sizes';
+import type { AdSize, SizeMapping, SlotName } from '../core/ad-sizes';
+import { concatSizeMappings } from '../core/create-ad-slot';
+import type { Breakpoint } from '../core/lib/breakpoint';
 import { breakpointNameToAttribute } from '../lib/breakpoint-name-to-attribute';
 import type { HeaderBiddingSize } from '../lib/header-bidding/prebid-types';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';

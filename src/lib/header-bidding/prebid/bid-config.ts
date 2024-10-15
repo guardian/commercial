@@ -1,5 +1,4 @@
 import { log } from '@guardian/libs';
-import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import {
 	buildAppNexusTargeting,
 	buildAppNexusTargetingObject,
@@ -14,6 +13,7 @@ import {
 	isInUsOrCa,
 } from 'utils/geo-utils';
 import { pbTestNameMap } from 'utils/url';
+import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
 import type {
 	BidderCode,
 	HeaderBiddingSize,

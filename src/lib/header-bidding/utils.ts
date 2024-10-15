@@ -1,6 +1,5 @@
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { createAdSize } from 'core/ad-sizes';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
@@ -14,6 +13,7 @@ import {
 	isInUsOrCa,
 } from 'utils/geo-utils';
 import { pbTestNameMap } from 'utils/url';
+import { createAdSize } from '../../core/ad-sizes';
 import type { HeaderBiddingSize } from './prebid-types';
 
 type StringManipulation = (a: string, b: string) => string;

@@ -1,6 +1,4 @@
 import { isNonNullable, log } from '@guardian/libs';
-import type { SizeMapping } from 'core/ad-sizes';
-import { adSizes, createAdSize } from 'core/ad-sizes';
 import { isUserInVariant } from 'experiments/ab';
 import { mpuWhenNoEpic } from 'experiments/tests/mpu-when-no-epic';
 import { setupPrebidOnce } from 'init/consented/prepare-prebid';
@@ -8,6 +6,8 @@ import { removeDisabledSlots } from 'init/consented/remove-slots';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import { isInUk, isInUsa } from 'utils/geo-utils';
+import { adSizes, createAdSize } from '../../core/ad-sizes';
+import type { SizeMapping } from '../../core/ad-sizes';
 import { createAdvert } from '../../define/create-advert';
 import { displayAds } from '../../display/display-ads';
 import { displayLazyAds } from '../../display/display-lazy-ads';

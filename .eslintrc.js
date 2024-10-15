@@ -19,6 +19,18 @@ module.exports = {
 		'no-use-before-define': ['error', { functions: true, classes: true }],
 		'import/exports-last': 'error',
 		'no-else-return': 'error',
+		'no-restricted-imports': [
+			'error',
+			{
+				patterns: [
+					{
+						group: ['core/*'],
+						message:
+							'Paths starting with “core”, are forbidden. Please use a relative path instead',
+					},
+				],
+			},
+		],
 	},
 	overrides: [
 		{

@@ -1,6 +1,6 @@
 import { isBoolean } from '@guardian/libs';
 import fastdom from 'fastdom';
-import type { RegisterListener } from 'core/messenger';
+import type { RegisterListener } from '../messenger';
 
 const fullWidth = (fullWidth: boolean, slotContainer: HTMLElement) =>
 	fastdom.mutate(() => {

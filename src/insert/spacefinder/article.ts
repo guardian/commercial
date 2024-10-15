@@ -1,15 +1,15 @@
-import type { AdSize, SizeMapping } from 'core/ad-sizes';
-import { adSizes } from 'core/ad-sizes';
-import type { ContainerOptions } from 'core/create-ad-slot';
-import {
-	adSlotContainerClass,
-	createAdSlot,
-	wrapSlotInContainer,
-} from 'core/create-ad-slot';
 import { spaceFiller } from 'insert/spacefinder/space-filler';
 import type { SpacefinderWriter } from 'insert/spacefinder/spacefinder';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
+import type { AdSize, SizeMapping } from '../../core/ad-sizes';
+import { adSizes } from '../../core/ad-sizes';
+import type { ContainerOptions } from '../../core/create-ad-slot';
+import {
+	adSlotContainerClass,
+	createAdSlot,
+	wrapSlotInContainer,
+} from '../../core/create-ad-slot';
 import fastdom from '../../utils/fastdom-promise';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
 import { initCarrot } from './carrot-traffic-driver';

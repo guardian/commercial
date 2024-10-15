@@ -1,5 +1,3 @@
-import { createAdSize } from 'core/ad-sizes';
-import type { PageTargeting } from 'core/targeting/build-page-targeting';
 import { isUserInVariant as isUserInVariant_ } from 'experiments/ab';
 import config from 'lib/config';
 import {
@@ -9,6 +7,8 @@ import {
 	isInUsa as isInUsa_,
 	isInUsOrCa as isInUsOrCa_,
 } from 'utils/geo-utils';
+import { createAdSize } from '../../../core/ad-sizes';
+import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
 import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
 import {
 	containsBillboard as containsBillboard_,

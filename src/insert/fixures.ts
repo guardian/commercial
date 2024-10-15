@@ -1,8 +1,8 @@
-import { AD_LABEL_HEIGHT } from 'core/constants';
-import { createAdSlot, wrapSlotInContainer } from 'core/create-ad-slot';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getBreakpoint } from 'lib/detect/detect-breakpoint';
 import { getViewport } from 'lib/detect/detect-viewport';
+import { AD_LABEL_HEIGHT } from '../core/constants';
+import { createAdSlot, wrapSlotInContainer } from '../core/create-ad-slot';
 import fastdom from '../utils/fastdom-promise';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 

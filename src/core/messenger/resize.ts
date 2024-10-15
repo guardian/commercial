@@ -1,6 +1,6 @@
 import { isObject, isString } from '@guardian/libs';
-import type { RegisterListener } from 'core/messenger';
 import fastdom from 'utils/fastdom-promise';
+import type { RegisterListener } from '../messenger';
 
 interface Styles {
 	width?: string;

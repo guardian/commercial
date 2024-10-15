@@ -1,4 +1,3 @@
-import { createAdSlot } from 'core/create-ad-slot';
 import { spaceFiller } from 'insert/spacefinder/space-filler';
 import type {
 	SpacefinderRules,
@@ -6,6 +5,7 @@ import type {
 } from 'insert/spacefinder/spacefinder';
 import { commercialFeatures } from 'lib/commercial-features';
 import { getCurrentTweakpoint } from 'lib/detect/detect-breakpoint';
+import { createAdSlot } from '../../core/create-ad-slot';
 import fastdom from '../../utils/fastdom-promise';
 import { fillDynamicAdSlot } from '../fill-dynamic-advert-slot';
 
