@@ -4,6 +4,7 @@ import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
 } from 'lib/detect/detect-breakpoint';
+import { createAdSize } from '../../core/ad-sizes';
 import {
 	isInAuOrNz,
 	isInCanada,
@@ -11,9 +12,8 @@ import {
 	isInUk,
 	isInUsa,
 	isInUsOrCa,
-} from 'utils/geo-utils';
-import { pbTestNameMap } from 'utils/url';
-import { createAdSize } from '../../core/ad-sizes';
+} from '../../utils/geo-utils';
+import { pbTestNameMap } from '../../utils/url';
 import type { HeaderBiddingSize } from './prebid-types';
 
 type StringManipulation = (a: string, b: string) => string;

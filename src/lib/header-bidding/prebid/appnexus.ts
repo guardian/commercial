@@ -1,6 +1,6 @@
 import { buildAppNexusTargetingObject } from 'lib/build-page-targeting';
-import { isInAuOrNz, isInRow } from 'utils/geo-utils';
 import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
+import { isInAuOrNz, isInRow } from '../../../utils/geo-utils';
 import type { HeaderBiddingSize } from '../prebid-types';
 import {
 	containsBillboardNotLeaderboard,

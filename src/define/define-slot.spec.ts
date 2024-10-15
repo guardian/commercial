@@ -1,6 +1,6 @@
-import { toGoogleTagSize } from 'utils/googletag-ad-size';
 import type { SizeMapping } from '../core/ad-sizes';
 import { adSizes, createAdSize } from '../core/ad-sizes';
+import { toGoogleTagSize } from '../utils/googletag-ad-size';
 import {
 	buildGoogletagSizeMapping,
 	collectSizes,

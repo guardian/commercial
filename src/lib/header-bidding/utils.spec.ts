@@ -5,9 +5,9 @@ import {
 	matchesBreakpoints as matchesBreakpoints_,
 } from 'lib/detect/detect-breakpoint';
 import type { SourceBreakpoint } from 'lib/detect/detect-breakpoint';
-import { _ } from 'utils/geo-utils';
-import { getCountryCode as getCountryCode_ } from 'utils/geolocation';
 import { createAdSize } from '../../core/ad-sizes';
+import { _ } from '../../utils/geo-utils';
+import { getCountryCode as getCountryCode_ } from '../../utils/geolocation';
 import {
 	getBreakpointKey,
 	getLargestSize,

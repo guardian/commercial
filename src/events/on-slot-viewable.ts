@@ -1,7 +1,5 @@
 import { log } from '@guardian/libs';
 import { EventTimer } from 'core';
-import fastdom from 'utils/fastdom-promise';
-import { getUrlVars } from 'utils/url';
 import { outstreamSizes } from '../core/ad-sizes';
 import { AD_LABEL_HEIGHT } from '../core/constants/ad-label-height';
 import type { Advert } from '../define/Advert';
@@ -10,6 +8,8 @@ import { enableLazyLoad } from '../display/lazy-load';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { memoizedFetchNonRefreshableLineItemIds } from '../lib/dfp/non-refreshable-line-items';
 import { shouldRefresh } from '../lib/dfp/should-refresh';
+import fastdom from '../utils/fastdom-promise';
+import { getUrlVars } from '../utils/url';
 
 const ADVERT_REFRESH_RATE = 30_000; // 30 seconds. The minimum time allowed by Google.
 

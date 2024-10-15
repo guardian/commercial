@@ -1,10 +1,10 @@
+import { createAdSize } from '../../../core/ad-sizes';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
 	isInUk as isInUk_,
 	isInUsOrCa as isInUsOrCa_,
-} from 'utils/geo-utils';
-import { createAdSize } from '../../../core/ad-sizes';
+} from '../../../utils/geo-utils';
 import { getBreakpointKey as getBreakpointKey_ } from '../utils';
 import {
 	getImprovePlacementId,

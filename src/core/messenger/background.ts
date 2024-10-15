@@ -1,9 +1,9 @@
 import { isObject } from '@guardian/libs';
-import fastdom from 'utils/fastdom-promise';
 import {
 	renderAdvertLabel,
 	renderStickyScrollForMoreLabel,
 } from '../../events/render-advert-label';
+import fastdom from '../../utils/fastdom-promise';
 import {
 	initVideoProgressReporting,
 	updateVideoProgress,
