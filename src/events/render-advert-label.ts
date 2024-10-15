@@ -4,8 +4,8 @@
 -- "Promise returned in function argument where a void return was expected"
 */
 import { getCookie } from '@guardian/libs';
-import fastdom from 'utils/fastdom-promise';
 import crossIcon from '../../static/svg/icon/cross.svg';
+import fastdom from '../utils/fastdom-promise';
 
 const templatesWithoutLabels = [
 	10077207, // CAPI_MULTIPLE_HOSTED

@@ -1,7 +1,7 @@
 import {
 	countryCodeToSupportInternationalisationId,
 	getCountryCode,
-} from 'utils/geolocation';
+} from './geolocation';
 
 const supportUrlRegex = /(support.theguardian.com)\/(contribute|subscribe)/;
 

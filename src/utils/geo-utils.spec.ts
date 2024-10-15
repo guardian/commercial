@@ -9,7 +9,7 @@ import {
 	isInUk,
 	isInUsa,
 	isInUsOrCa,
-} from 'utils/geo-utils';
+} from './geo-utils';
 
 let mockCountryCode: CountryCode;
 jest.mock('utils/geolocation', () => ({
