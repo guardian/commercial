@@ -39,8 +39,8 @@ const defineSlot = (
 			slot.classList.add('ad-slot--native');
 		}
 
-		if (optOutExt.tags.includes('HOSTEDBY')) {
-			slot.classList.add('ad-slot--hostedby');
+		if (optOutExt.tags.includes('NOLABEL')) {
+			slot.classList.add('ad-slot--no-label');
 		}
 
 		void renderConsentlessAdvertLabel(slot);
