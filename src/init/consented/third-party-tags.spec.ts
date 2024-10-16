@@ -1,7 +1,7 @@
 import { getConsentFor, onConsent } from '@guardian/libs';
 import type { ConsentState, USNATConsentState } from '@guardian/libs';
-import { commercialFeatures } from 'lib/commercial-features';
-import type { ThirdPartyTag } from 'types/global';
+import { commercialFeatures } from '../../lib/commercial-features';
+import type { ThirdPartyTag } from '../../types/global';
 import { _, init } from './third-party-tags';
 
 const { insertScripts, loadOther } = _;

@@ -1,11 +1,6 @@
 import { log } from '@guardian/libs';
-import {
-	buildAppNexusTargeting,
-	buildAppNexusTargetingObject,
-} from 'lib/build-page-targeting';
-import { dfpEnv } from 'lib/dfp/dfp-env';
-import type { PrebidIndexSite } from 'types/global';
 import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
+import type { PrebidIndexSite } from '../../../types/global';
 import {
 	isInAuOrNz,
 	isInRow,
@@ -14,6 +9,11 @@ import {
 	isInUsOrCa,
 } from '../../../utils/geo-utils';
 import { pbTestNameMap } from '../../../utils/url';
+import {
+	buildAppNexusTargeting,
+	buildAppNexusTargetingObject,
+} from '../../build-page-targeting';
+import { dfpEnv } from '../../dfp/dfp-env';
 import type {
 	BidderCode,
 	HeaderBiddingSize,

@@ -1,13 +1,10 @@
-import { spaceFiller } from 'insert/spacefinder/space-filler';
-import type {
-	SpacefinderRules,
-	SpacefinderWriter,
-} from 'insert/spacefinder/spacefinder';
-import { commercialFeatures } from 'lib/commercial-features';
-import { getCurrentTweakpoint } from 'lib/detect/detect-breakpoint';
 import { createAdSlot } from '../../core/create-ad-slot';
+import { commercialFeatures } from '../../lib/commercial-features';
+import { getCurrentTweakpoint } from '../../lib/detect/detect-breakpoint';
 import fastdom from '../../utils/fastdom-promise';
 import { fillDynamicAdSlot } from '../fill-dynamic-advert-slot';
+import { spaceFiller } from './space-filler';
+import type { SpacefinderRules, SpacefinderWriter } from './spacefinder';
 
 const bodySelector = '.article-body-commercial-selector';
 

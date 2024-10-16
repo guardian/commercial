@@ -1,6 +1,6 @@
 import { flatten } from 'lodash-es';
-import type { Advert } from 'define/Advert';
-import type { A9AdUnitInterface } from 'types/global';
+import type { Advert } from '../../../define/Advert';
+import type { A9AdUnitInterface } from '../../../types/global';
 import { noop } from '../../../utils/noop';
 import type { HeaderBiddingSlot, SlotFlatMap } from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';

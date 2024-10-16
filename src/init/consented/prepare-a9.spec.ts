@@ -1,4 +1,4 @@
-import { commercialFeatures } from 'lib/commercial-features';
+import { commercialFeatures } from '../../lib/commercial-features';
 import { a9 } from '../../lib/header-bidding/a9/a9';
 import { isInCanada } from '../../utils/geo-utils';
 import { _ } from './prepare-a9';

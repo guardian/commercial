@@ -1,4 +1,4 @@
-import type { Edition } from 'types/global';
+import type { Edition } from '../../types/global';
 import { _ } from './prepare-permutive';
 
 const testPageConfig = {
