@@ -1,5 +1,5 @@
 import { storage } from '@guardian/libs';
-import userPrefs from 'lib/user-prefs';
+import userPrefs from './user-prefs';
 
 describe('userPrefs - Client-side preferences', () => {
 	beforeEach(() => {

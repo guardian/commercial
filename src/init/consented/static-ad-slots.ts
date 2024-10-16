@@ -1,18 +1,18 @@
 import { isNonNullable, log } from '@guardian/libs';
-import { isUserInVariant } from 'experiments/ab';
-import { mpuWhenNoEpic } from 'experiments/tests/mpu-when-no-epic';
-import { setupPrebidOnce } from 'init/consented/prepare-prebid';
-import { removeDisabledSlots } from 'init/consented/remove-slots';
-import { commercialFeatures } from 'lib/commercial-features';
-import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
 import { adSizes, createAdSize } from '../../core/ad-sizes';
 import type { SizeMapping } from '../../core/ad-sizes';
 import { createAdvert } from '../../define/create-advert';
 import { displayAds } from '../../display/display-ads';
 import { displayLazyAds } from '../../display/display-lazy-ads';
+import { isUserInVariant } from '../../experiments/ab';
+import { mpuWhenNoEpic } from '../../experiments/tests/mpu-when-no-epic';
+import { commercialFeatures } from '../../lib/commercial-features';
+import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
 import { queueAdvert } from '../../lib/dfp/queue-advert';
 import { isInUk, isInUsa } from '../../utils/geo-utils';
+import { setupPrebidOnce } from './prepare-prebid';
+import { removeDisabledSlots } from './remove-slots';
 
 const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 	const { contentType } = window.guardian.config.page;

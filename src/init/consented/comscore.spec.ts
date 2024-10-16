@@ -4,7 +4,7 @@ import type {
 	USNATConsentState,
 } from '@guardian/libs';
 import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
-import { commercialFeatures } from 'lib/commercial-features';
+import { commercialFeatures } from '../../lib/commercial-features';
 import { _ } from './comscore';
 
 const { setupComscore } = _;

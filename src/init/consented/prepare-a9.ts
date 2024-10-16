@@ -1,8 +1,8 @@
 import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { commercialFeatures } from 'lib/commercial-features';
-import { isGoogleProxy } from 'lib/detect/detect-google-proxy';
 import { a9Apstag } from '../../core/__vendor/a9-apstag';
+import { commercialFeatures } from '../../lib/commercial-features';
+import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { a9 } from '../../lib/header-bidding/a9/a9';
 import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
 import { isInCanada } from '../../utils/geo-utils';

@@ -1,5 +1,5 @@
-import { adSizes } from 'core';
 import { adSlotContainerClass } from '../../core/create-ad-slot';
+import { adSizes } from '../../core/index';
 import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
 import { isInHighValueSection } from './utils';
 

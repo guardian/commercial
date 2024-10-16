@@ -1,8 +1,8 @@
 import { log } from '@guardian/libs';
 import { breakpoints } from '@guardian/source/foundations';
-import { getCurrentBreakpoint } from 'lib/detect/detect-breakpoint';
-import { getAdvertById } from 'lib/dfp/get-advert-by-id';
+import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
 import { adSlotIdPrefix } from '../../lib/dfp/dfp-env-globals';
+import { getAdvertById } from '../../lib/dfp/get-advert-by-id';
 import fastdom from '../../utils/fastdom-promise';
 import { adSizes } from '../ad-sizes';
 import type { RegisterListener } from '../messenger';

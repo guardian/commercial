@@ -1,5 +1,5 @@
-import { getCurrentBreakpoint as getCurrentBreakpoint_ } from 'lib/detect/detect-breakpoint';
 import { getUrlVars as getUrlVars_ } from '../../utils/url';
+import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../detect/detect-breakpoint';
 import { dfpEnv } from './dfp-env';
 
 const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<

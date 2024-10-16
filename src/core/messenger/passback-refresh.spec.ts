@@ -1,5 +1,5 @@
-import { refreshAdvert } from 'display/load-advert';
-import { getAdvertById } from 'lib/dfp/get-advert-by-id';
+import { refreshAdvert } from '../../display/load-advert';
+import { getAdvertById } from '../../lib/dfp/get-advert-by-id';
 import { _ } from './passback-refresh';
 
 const { passbackRefresh } = _;

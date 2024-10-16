@@ -1,10 +1,10 @@
 import type { ConsentState } from '@guardian/libs';
 import { loadScript, log } from '@guardian/libs';
-import { getVariant } from 'experiments/ab';
-import { optOutFrequencyCap } from 'experiments/tests/opt-out-frequency-cap';
-import { commercialFeatures } from 'lib/commercial-features';
-import { isUserLoggedInOktaRefactor } from 'lib/identity/api';
 import { buildPageTargetingConsentless } from '../../core/targeting/build-page-targeting-consentless';
+import { getVariant } from '../../experiments/ab';
+import { optOutFrequencyCap } from '../../experiments/tests/opt-out-frequency-cap';
+import { commercialFeatures } from '../../lib/commercial-features';
+import { isUserLoggedInOktaRefactor } from '../../lib/identity/api';
 
 const frequencyCapTimeoutFromVariant = (variant: string): number => {
 	if (!variant.startsWith('timeout-')) {

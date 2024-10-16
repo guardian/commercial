@@ -4,7 +4,7 @@ import type {
 	USNATConsentState,
 } from '@guardian/libs';
 import { getConsentFor, log, onConsent } from '@guardian/libs';
-import { commercialFeatures } from 'lib/commercial-features';
+import { commercialFeatures } from '../../lib/commercial-features';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
 import { isInCanada } from '../../utils/geo-utils';
 import { _ } from './prepare-prebid';

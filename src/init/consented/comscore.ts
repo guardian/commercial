@@ -1,7 +1,7 @@
 import { getConsentFor, loadScript, log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { commercialFeatures } from 'lib/commercial-features';
-import type { ComscoreGlobals } from 'types/global';
+import { commercialFeatures } from '../../lib/commercial-features';
+import type { ComscoreGlobals } from '../../types/global';
 
 const comscoreSrc = '//sb.scorecardresearch.com/cs/6035250/beacon.js';
 const comscoreC1 = '2';

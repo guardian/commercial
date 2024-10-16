@@ -1,7 +1,7 @@
 import { log } from '@guardian/libs';
 import fastdom from 'fastdom';
-import { removeSlotFromDom } from 'events/empty-advert';
-import type { OptOutFilledCallback } from 'types/global';
+import { removeSlotFromDom } from '../../events/empty-advert';
+import type { OptOutFilledCallback } from '../../types/global';
 import { renderConsentlessAdvertLabel } from './render-advert-label';
 
 /**

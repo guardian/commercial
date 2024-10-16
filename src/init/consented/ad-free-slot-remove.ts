@@ -1,5 +1,5 @@
 import { once } from 'lodash-es';
-import { commercialFeatures } from 'lib/commercial-features';
+import { commercialFeatures } from '../../lib/commercial-features';
 import { removeSlots } from './remove-slots';
 
 /**
