@@ -1,8 +1,8 @@
-import { $$ } from 'utils/$$';
-import fastdom from 'utils/fastdom-promise';
 import { adSizes } from '../core/ad-sizes';
 import type { Advert } from '../define/Advert';
 import { getAdIframe } from '../lib/dfp/get-ad-iframe';
+import { $$ } from '../utils/$$';
+import fastdom from '../utils/fastdom-promise';
 import { reportError } from '../utils/report-error';
 import { renderAdvertLabel } from './render-advert-label';
 

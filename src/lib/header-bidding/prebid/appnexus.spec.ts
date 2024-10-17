@@ -1,10 +1,10 @@
+import { createAdSize } from '../../../core/ad-sizes';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
 	isInUk as isInUk_,
 	isInUsa as isInUsa_,
-} from 'utils/geo-utils';
-import { createAdSize } from '../../../core/ad-sizes';
+} from '../../../utils/geo-utils';
 import {
 	containsBillboard as containsBillboard_,
 	containsBillboardNotLeaderboard as containsBillboardNotLeaderboard_,

@@ -5,8 +5,8 @@ import type {
 } from '@guardian/libs';
 import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { commercialFeatures } from 'lib/commercial-features';
-import { isInCanada } from 'utils/geo-utils';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
+import { isInCanada } from '../../utils/geo-utils';
 import { _ } from './prepare-prebid';
 
 const { setupPrebid } = _;
