@@ -165,7 +165,7 @@ const runPermutive = (
  * https://permutive.com/audience-platform/publishers/
  * @returns Promise
  */
-export const initPermutive = (): Promise<void> => {
+const initPermutiveSegmentation = () => {
 	/* eslint-disable -- permutive code */
 	// From here until we re-enable eslint is the Permutive code
 	// that we received from them.
@@ -237,7 +237,12 @@ export const initPermutive = (): Promise<void> => {
 		ophan: window.guardian.config.ophan,
 	};
 	runPermutive(permutiveConfig, window.permutive);
+};
 
+export const initPermutive = () => {
+	if (window.guardian.config.switches.permutive) {
+		void initPermutiveSegmentation();
+	}
 	return Promise.resolve();
 };
 
