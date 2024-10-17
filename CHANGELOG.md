@@ -1,5 +1,14 @@
 # @guardian/commercial
 
+## 23.1.0
+
+### Minor Changes
+
+- df13e8c: Respect permutive switch for prepare-permutive
+- cc27145: Don't add labels to opt out ads with the NOLABEL tag
+- 9b36b3e: Bump prebid version to send prebid data to commercial/api/hb endpoint
+- 4c04b4b: Use relative imports when importing from core
+
 ## 23.0.0
 
 ### Major Changes
