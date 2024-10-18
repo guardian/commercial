@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 23.2.0
+
+### Minor Changes
+
+- 53d892b: Use relative imports when importing from utils
+
 ## 23.1.0
 
 ### Minor Changes
