@@ -1,4 +1,9 @@
-import { isInAuOrNz, isInRow, isInUk, isInUsOrCa } from 'utils/geo-utils';
+import {
+	isInAuOrNz,
+	isInRow,
+	isInUk,
+	isInUsOrCa,
+} from '../../../utils/geo-utils';
 import type { HeaderBiddingSize } from '../prebid-types';
 import {
 	containsBillboard,

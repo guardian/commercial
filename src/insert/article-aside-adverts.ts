@@ -1,5 +1,5 @@
-import { $$ } from 'utils/$$';
-import fastdom from 'utils/fastdom-promise';
+import { $$ } from '../utils/$$';
+import fastdom from '../utils/fastdom-promise';
 
 const minArticleHeight = 1300;
 

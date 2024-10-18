@@ -5,15 +5,15 @@ import {
 } from 'lib/build-page-targeting';
 import { dfpEnv } from 'lib/dfp/dfp-env';
 import type { PrebidIndexSite } from 'types/global';
+import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
 import {
 	isInAuOrNz,
 	isInRow,
 	isInUk,
 	isInUsa,
 	isInUsOrCa,
-} from 'utils/geo-utils';
-import { pbTestNameMap } from 'utils/url';
-import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
+} from '../../../utils/geo-utils';
+import { pbTestNameMap } from '../../../utils/url';
 import type {
 	BidderCode,
 	HeaderBiddingSize,

@@ -1,5 +1,4 @@
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
-import fastdom from 'utils/fastdom-promise';
 import {
 	createAdSize,
 	findAppliedSizesForBreakpoint,
@@ -10,6 +9,7 @@ import { concatSizeMappings } from '../core/create-ad-slot';
 import type { Breakpoint } from '../core/lib/breakpoint';
 import { breakpointNameToAttribute } from '../lib/breakpoint-name-to-attribute';
 import type { HeaderBiddingSize } from '../lib/header-bidding/prebid-types';
+import fastdom from '../utils/fastdom-promise';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';
 
 const stringToTuple = (size: string): [number, number] => {

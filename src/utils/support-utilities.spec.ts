@@ -1,5 +1,5 @@
 import { removeCookie, setCookie } from '@guardian/libs';
-import { _ } from 'utils/geolocation';
+import { _ } from './geolocation';
 import { addCountryGroupToSupportLink } from './support-utilities';
 
 const { countryCookieName } = _;

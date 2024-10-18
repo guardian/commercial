@@ -24,7 +24,7 @@ module.exports = {
 			{
 				patterns: [
 					{
-						group: ['core/*'],
+						group: ['core/*', 'utils/*'],
 						message:
 							'Paths starting with “core”, are forbidden. Please use a relative path instead',
 					},

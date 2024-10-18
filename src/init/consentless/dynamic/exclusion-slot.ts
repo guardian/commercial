@@ -1,5 +1,5 @@
-import fastdom from 'utils/fastdom-promise';
 import { createAdSlot } from '../../../core/create-ad-slot';
+import fastdom from '../../../utils/fastdom-promise';
 import { defineSlot } from '../define-slot';
 
 /**
