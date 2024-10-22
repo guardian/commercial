@@ -1,5 +1,5 @@
 import { getConsentFor, onConsent } from '@guardian/libs';
-import { commercialFeatures } from 'lib/commercial-features';
+import { commercialFeatures } from './lib/commercial-features';
 
 const { frontendAssetsFullURL, page } = window.guardian.config;
 

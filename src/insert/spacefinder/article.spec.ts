@@ -1,6 +1,6 @@
-import { spaceFiller } from 'insert/spacefinder/space-filler';
-import { commercialFeatures } from 'lib/commercial-features';
+import { commercialFeatures } from '../../lib/commercial-features';
 import { init } from './article';
+import { spaceFiller } from './space-filler';
 
 jest.mock('lib/header-bidding/prebid/prebid', () => ({
 	requestBids: jest.fn(),

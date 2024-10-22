@@ -1,9 +1,9 @@
 import fastdom from 'fastdom';
-import { commercialFeatures } from 'lib/commercial-features';
+import { commercialFeatures } from '../commercial-features';
 import {
 	hasCrossedBreakpoint,
 	matchesBreakpoints,
-} from 'lib/detect/detect-breakpoint';
+} from '../detect/detect-breakpoint';
 
 const pageSkin = (): void => {
 	const bodyEl = document.body;

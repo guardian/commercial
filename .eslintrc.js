@@ -24,9 +24,20 @@ module.exports = {
 			{
 				patterns: [
 					{
-						group: ['core/*', 'utils/*'],
+						group: [
+							'core/*',
+							'define/*',
+							'display/*',
+							'events/*',
+							'experiments/*',
+							'init/*',
+							'lib/*',
+							'insert/*',
+							'types/*',
+							'utils/*',
+						],
 						message:
-							'Paths starting with “core”, are forbidden. Please use a relative path instead',
+							'Non-relative imports from src are forbidden. Please use a relative path instead',
 					},
 				],
 			},

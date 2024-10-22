@@ -1,4 +1,4 @@
-import { getAdvertById as getAdvertById_ } from 'lib/dfp/get-advert-by-id';
+import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
 import { prebid } from './prebid';
 
 const getAdvertById = getAdvertById_ as jest.Mock;

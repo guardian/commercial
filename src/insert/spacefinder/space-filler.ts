@@ -2,8 +2,8 @@ import type {
 	SpacefinderOptions,
 	SpacefinderRules,
 	SpacefinderWriter,
-} from 'insert/spacefinder/spacefinder';
-import { findSpace, SpaceError } from 'insert/spacefinder/spacefinder';
+} from '../../insert/spacefinder/spacefinder';
+import { findSpace, SpaceError } from '../../insert/spacefinder/spacefinder';
 import { reportError } from '../../utils/report-error';
 
 class SpaceFiller {

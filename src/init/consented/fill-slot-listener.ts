@@ -1,4 +1,4 @@
-import type { SizeMapping } from 'core';
+import type { SizeMapping } from '../../core/index';
 import { fillDynamicAdSlot } from '../../insert/fill-dynamic-advert-slot';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
 
