@@ -85,6 +85,9 @@ const buildImaAdTagUrl = ({
 		impl: 's',
 		vad_type: 'linear',
 		vpos: 'preroll',
+		description_url: encodeURIComponent(
+			`${window.guardian.config.page.host}/${window.guardian.config.page.pageId}`,
+		),
 		/**
 		 * cust_params string is encoded
 		 * cust_params values are also encoded so they will get double encoded
