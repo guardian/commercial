@@ -86,7 +86,7 @@ const buildImaAdTagUrl = ({
 		vad_type: 'linear',
 		vpos: 'preroll',
 		description_url: encodeURIComponent(
-			`https://www.theguardian.com/${window.guardian.config.page.pageId}`,
+			`${window.guardian.config.page.host}/${window.guardian.config.page.pageId}`,
 		),
 		/**
 		 * cust_params string is encoded
