@@ -19,6 +19,7 @@ describe('Builds an IMA ad tag URL', () => {
 	window.guardian = {
 		config: {
 			page: {
+				host: 'https://www.theguardian.com',
 				pageId: 'sport/video/2024/oct/10/tennis-rafael-nadal-announces-retirement',
 			},
 		},
