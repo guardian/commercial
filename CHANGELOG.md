@@ -1,5 +1,13 @@
 # @guardian/commercial
 
+## 23.2.0
+
+### Minor Changes
+
+- 85440f9: Remove remaining non-relative imports
+- fa3c5de: Add description_url to youtube ima requests
+- 53d892b: Use relative imports when importing from utils
+
 ## 23.1.0
 
 ### Minor Changes
