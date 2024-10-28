@@ -331,7 +331,7 @@ const initialise = (
 
 	if (
 		window.guardian.config.switches.permutive &&
-		window.guardian.config.switches.prebidPermutiveAudience
+		window.guardian.config.switches.prebidPermutiveAudience // this switch specifically controls whether or not the Permutive Audience Connector can run with Prebid
 	) {
 		pbjsConfig.realTimeData = {
 			dataProviders: [
