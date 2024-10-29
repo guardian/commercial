@@ -71,8 +71,8 @@ devDependencies:
     specifier: ^6.1.1
     version: 6.1.1(browserslist@4.24.2)(tslib@2.7.0)
   '@guardian/core-web-vitals':
-    specifier: 7.0.0
-    version: 7.0.0(@guardian/libs@19.1.0)(tslib@2.7.0)(typescript@5.5.3)(web-vitals@4.2.3)
+    specifier: 8.0.0
+    version: 8.0.0(@guardian/libs@19.1.0)(tslib@2.7.0)(typescript@5.5.3)(web-vitals@4.2.3)
   '@guardian/eslint-config-typescript':
     specifier: ^12.0.0
     version: 12.0.0(eslint@8.57.0)(tslib@2.7.0)(typescript@5.5.3)
@@ -1880,10 +1880,10 @@ packages:
       tslib: 2.7.0
     dev: true
 
-  /@guardian/core-web-vitals@7.0.0(@guardian/libs@19.1.0)(tslib@2.7.0)(typescript@5.5.3)(web-vitals@4.2.3):
-    resolution: {integrity: sha512-1JLUQjkLY8SXYJqcy0TiE9/9hCcmyIlmMpRoW8Ygn/qGtyNxG+zzwkwsgtJIP+B0ZjtDqfukra2IV9l7wX5A0g==}
+  /@guardian/core-web-vitals@8.0.0(@guardian/libs@19.1.0)(tslib@2.7.0)(typescript@5.5.3)(web-vitals@4.2.3):
+    resolution: {integrity: sha512-TiiHZZuNJQxzEYPLXo5UG14/02aQAP3BIazLPG8DjVtoweUi7IbnkAgYhDmSb135e9WubMP6I8qGxnsg5o4YFA==}
     peerDependencies:
-      '@guardian/libs': ^18.0.0
+      '@guardian/libs': ^19.0.0
       tslib: ^2.6.2
       typescript: ~5.5.2
       web-vitals: ^4.2.1
