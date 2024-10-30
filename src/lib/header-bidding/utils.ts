@@ -42,7 +42,11 @@ const contains = (
 
 const isValidPageForMobileSticky = (): boolean => {
 	const { contentType, pageId } = window.guardian.config.page;
-	return contentType === 'Article' || pageId.startsWith('football/');
+	return (
+		contentType === 'Article' ||
+		contentType === 'Interactive' ||
+		pageId.startsWith('football/')
+	);
 };
 
 /**
