@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 23.2.1
+
+### Patch Changes
+
+- d1ab338: add mobile banner to interactives
+
 ## 23.2.0
 
 ### Minor Changes
