@@ -1,5 +1,13 @@
 # @guardian/commercial
 
+## 23.3.0
+
+### Minor Changes
+
+- 1efa8ca: Re-enable Criteo in Australia and New Zealand
+- e8a8717: Filter out static top-above-nav on consentless mobile
+- 0cd37f5: block GumGum on fronts
+
 ## 23.2.1
 
 ### Patch Changes
