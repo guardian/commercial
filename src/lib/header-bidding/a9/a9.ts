@@ -30,10 +30,16 @@ const bidderTimeout = 1500;
 const initialise = (): void => {
 	if (!initialised && window.apstag) {
 		initialised = true;
+		const blockedBidders = window.guardian.config.page.isFront
+			? [
+					'1lsxjb4', // GumGum, as they have been showing wonky formats on fronts
+				]
+			: [];
 		window.apstag.init({
 			pubID: window.guardian.config.page.a9PublisherId,
 			adServer: 'googletag',
 			bidTimeout: bidderTimeout,
+			blockedBidders,
 		});
 	}
 };

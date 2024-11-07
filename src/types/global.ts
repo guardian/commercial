@@ -251,6 +251,7 @@ type ApstagInitConfig = {
 	pubID: string;
 	adServer?: string;
 	bidTimeout?: number;
+	blockedBidders?: string[];
 };
 
 type FetchBidsBidConfig = {
