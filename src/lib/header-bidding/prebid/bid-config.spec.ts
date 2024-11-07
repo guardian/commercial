@@ -20,7 +20,6 @@ import {
 	containsMpuOrDmpu as containsMpuOrDmpu_,
 	getBreakpointKey as getBreakpointKey_,
 	shouldIncludeAppNexus as shouldIncludeAppNexus_,
-	shouldIncludeCriteo as shouldIncludeCriteo_,
 	shouldIncludeImproveDigital as shouldIncludeImproveDigital_,
 	shouldIncludeOpenx as shouldIncludeOpenx_,
 	shouldIncludeSonobi as shouldIncludeSonobi_,
@@ -70,7 +69,6 @@ const shouldIncludeTrustX = shouldIncludeTrustX_ as jest.Mock;
 const shouldIncludeXaxis = shouldIncludeXaxis_ as jest.Mock;
 const shouldIncludeSonobi = shouldIncludeSonobi_ as jest.Mock;
 const shouldIncludeTripleLift = shouldIncludeTripleLift_ as jest.Mock;
-const shouldIncludeCriteo = shouldIncludeCriteo_ as jest.Mock;
 const stripMobileSuffix = stripMobileSuffix_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
 const isUserInVariant = isUserInVariant_ as jest.Mock;
@@ -259,37 +257,37 @@ describe('bids', () => {
 	test('should only include bidders that are switched on if no bidders being tested', () => {
 		window.guardian.config.switches.prebidXaxis = false;
 		shouldIncludeImproveDigital.mockReturnValueOnce(true);
-		expect(getBidders()).toEqual(['ix', 'improvedigital', 'adyoulike']);
+		expect(getBidders()).toEqual([
+			'ix',
+			'criteo',
+			'improvedigital',
+			'adyoulike',
+		]);
 	});
 
 	test('should not include ix bidders when switched off', () => {
 		window.guardian.config.switches.prebidIndexExchange = false;
-		expect(getBidders()).toEqual(['adyoulike']);
+		expect(getBidders()).toEqual(['criteo', 'adyoulike']);
 	});
 
 	test('should include Sonobi if in target geolocation', () => {
 		shouldIncludeSonobi.mockReturnValue(true);
-		expect(getBidders()).toEqual(['ix', 'sonobi', 'adyoulike']);
+		expect(getBidders()).toEqual(['ix', 'criteo', 'sonobi', 'adyoulike']);
 	});
 
 	test('should include AppNexus directly if in target geolocation', () => {
 		shouldIncludeAppNexus.mockReturnValue(true);
-		expect(getBidders()).toEqual(['ix', 'and', 'adyoulike']);
+		expect(getBidders()).toEqual(['ix', 'criteo', 'and', 'adyoulike']);
 	});
 
 	test('should include OpenX directly if in target geolocation', () => {
 		shouldIncludeOpenx.mockReturnValue(true);
-		expect(getBidders()).toEqual(['ix', 'adyoulike', 'oxd']);
+		expect(getBidders()).toEqual(['ix', 'criteo', 'adyoulike', 'oxd']);
 	});
 
 	test('should include TrustX if in target geolocation', () => {
 		shouldIncludeTrustX.mockReturnValue(true);
-		expect(getBidders()).toEqual(['ix', 'trustx', 'adyoulike']);
-	});
-
-	test('should include Criteo if in target geolocation', () => {
-		shouldIncludeCriteo.mockReturnValue(true);
-		expect(getBidders()).toEqual(['ix', 'criteo', 'adyoulike']);
+		expect(getBidders()).toEqual(['ix', 'criteo', 'trustx', 'adyoulike']);
 	});
 
 	test('should include ix bidder for each size that slot can take', () => {
@@ -299,7 +297,7 @@ describe('bids', () => {
 				[createAdSize(300, 600), createAdSize(300, 250)],
 				mockPageTargeting,
 			).map((bid) => bid.bidder);
-		expect(rightSlotBidders()).toEqual(['ix', 'ix', 'adyoulike']);
+		expect(rightSlotBidders()).toEqual(['ix', 'ix', 'criteo', 'adyoulike']);
 	});
 
 	test('should only include bidder being tested', () => {
@@ -341,7 +339,7 @@ describe('bids', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
-		)[2];
+		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
 			delDomain: 'guardian-d.openx.net',
@@ -356,7 +354,7 @@ describe('bids', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
-		)[2];
+		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
 			delDomain: 'guardian-us-d.openx.net',
@@ -371,7 +369,7 @@ describe('bids', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
-		)[2];
+		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
 			delDomain: 'guardian-aus-d.openx.net',
@@ -386,7 +384,7 @@ describe('bids', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
-		)[2];
+		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
 			delDomain: 'guardian-d.openx.net',
@@ -401,7 +399,7 @@ describe('bids', () => {
 			'dfp-ad--mobile-sticky',
 			[createAdSize(320, 50)],
 			mockPageTargeting,
-		)[2];
+		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
 			delDomain: 'guardian-d.openx.net',
@@ -422,7 +420,12 @@ describe('triplelift adapter', () => {
 	});
 
 	test('should include triplelift adapter if condition is true ', () => {
-		expect(getBidders()).toEqual(['ix', 'triplelift', 'adyoulike']);
+		expect(getBidders()).toEqual([
+			'ix',
+			'criteo',
+			'triplelift',
+			'adyoulike',
+		]);
 	});
 
 	test('should return correct triplelift adapter params for leaderboard, with requests from US or Canada', () => {
@@ -435,7 +438,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
-		)[1]?.params;
+		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_topbanner_728x90_prebid',
 		});
@@ -451,7 +454,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
-		)[1]?.params;
+		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_topbanner_728x90_prebid_AU',
 		});
@@ -468,7 +471,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--inline1',
 			[createAdSize(300, 250)],
 			mockPageTargeting,
-		)[1]?.params;
+		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_sectionfront_300x250_prebid',
 		});
@@ -485,7 +488,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--inline1',
 			[createAdSize(300, 250)],
 			mockPageTargeting,
-		)[1]?.params;
+		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_sectionfront_300x250_prebid_AU',
 		});
@@ -502,7 +505,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(320, 50)],
 			mockPageTargeting,
-		)[1]?.params;
+		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_320x50_HDX',
 		});
@@ -519,7 +522,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(320, 50)],
 			mockPageTargeting,
-		)[1]?.params;
+		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_320x50_HDX_AU',
 		});

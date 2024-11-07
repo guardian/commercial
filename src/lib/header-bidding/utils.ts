@@ -186,11 +186,6 @@ export const shouldIncludeImproveDigitalSkin = (): boolean =>
 	(isInUk() || isInRow()) &&
 	getBreakpointKey() === 'D'; // Desktop only
 
-/**
- * Determine whether to include Criteo as a bidder
- */
-export const shouldIncludeCriteo = (): boolean => !isInAuOrNz();
-
 export const shouldIncludeKargo = (): boolean => isInUsa();
 
 export const shouldIncludeMagnite = (): boolean =>
