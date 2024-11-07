@@ -46,7 +46,6 @@ import {
 	containsWS,
 	getBreakpointKey,
 	shouldIncludeAppNexus,
-	shouldIncludeCriteo,
 	shouldIncludeImproveDigital,
 	shouldIncludeImproveDigitalSkin,
 	shouldIncludeKargo,
@@ -666,7 +665,7 @@ const currentBidders = (
 	pageTargeting: PageTargeting,
 ): PrebidBidder[] => {
 	const biddersToCheck: Array<[boolean, PrebidBidder]> = [
-		[shouldIncludeCriteo(), criteoBidder(slotSizes)],
+		[true, criteoBidder(slotSizes)],
 		[shouldIncludeSonobi(), sonobiBidder(pageTargeting)],
 		[shouldIncludeTrustX(), trustXBidder],
 		[shouldIncludeTripleLift(), tripleLiftBidder],
