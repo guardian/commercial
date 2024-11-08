@@ -168,6 +168,14 @@ class PrebidAdUnit {
 	bids: PrebidBid[] | null | undefined;
 	mediaTypes: PrebidMediaTypes | null | undefined;
 	gpid: string;
+	ortb2Imp: {
+		ext: {
+			gpid: string;
+			data: {
+				pbadslot: string;
+			};
+		};
+	};
 
 	constructor(
 		advert: Advert,
@@ -178,6 +186,14 @@ class PrebidAdUnit {
 		this.bids = bids(advert.id, slot.sizes, pageTargeting);
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
 		this.gpid = this.generateGpid(advert, slot, pageTargeting);
+		this.ortb2Imp = {
+			ext: {
+				gpid: this.gpid,
+				data: {
+					pbadslot: this.gpid,
+				},
+			},
+		};
 		advert.headerBiddingSizes = slot.sizes;
 		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
 	}
