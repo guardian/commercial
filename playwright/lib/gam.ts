@@ -1,6 +1,6 @@
 import type { Page, Request, Response } from '@playwright/test';
 
-const gamUrl = /https:\/\/securepubads.g.doubleclick.net\/gampad\/ads/;
+const gamUrl = /https:\/\/securepubads\.g\.doubleclick\.net\/gampad\/ads/;
 
 const getEncodedParamsFromRequest = (
 	request: Request,
