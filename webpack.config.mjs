@@ -63,6 +63,9 @@ const config = {
 			failOnError: true,
 		}),
 	],
+	externals: {
+		'prebid.js/modules/gptPreAuction': 'gptPreAuction',
+	},
 };
 
 // eslint-disable-next-line import/no-default-export -- webpack config

@@ -354,6 +354,48 @@ const initialise = (
 		};
 	}
 
+	// Custom PreAuction logiccustomPreAuction
+	window.pbjs.setConfig({
+		gptPreAuction: {
+			enabled: true,
+			useDefaultPreAuction: false,
+			customPreAuction: function (adUnit, adServerAdSlot, adUnits) {
+				const sectionName = adUnit.section || 'default-section';
+				const contentType = adUnit.contentType || 'default-content';
+				const slotName = adUnit.slotName || 'default-slot';
+				adUnits.forEach(
+					(adUnit) =>
+						(adUnit.gpid = `/59666047/gu/${sectionName}/${contentType}/${slotName}`),
+				);
+				const gpid = `/59666047/gu/${sectionName}/${contentType}/${slotName}`;
+				adUnit.gpid = gpid;
+				return gpid;
+			},
+			customPbAdSlot: function (adUnitCode, adServerAdSlot) {
+				const matchingAdUnits = window.pbjs.adUnits.filter(
+					(au) => au.code === adUnitCode,
+				);
+				if (matchingAdUnits.length === 0) return;
+
+				if (matchingAdUnits[0].ortb2Imp?.ext?.data?.pbadslot) {
+					return matchingAdUnits[0].ortb2Imp.ext.data.pbadslot;
+				}
+
+				if (!(googletag && googletag.apiReady)) return;
+
+				const gptSlots = googletag
+					.pubads()
+					.getSlots()
+					.filter((slot) => slot.getAdUnitPath() === adServerAdSlot);
+				if (gptSlots.length === 1) {
+					return adServerAdSlot;
+				}
+
+				return `${adServerAdSlot}#${adUnitCode}`;
+			},
+		},
+	});
+
 	if (window.guardian.config.switches.prebidCriteo) {
 		window.pbjs.bidderSettings.criteo = {
 			storageAllowed: true,
