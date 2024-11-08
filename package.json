@@ -1,6 +1,6 @@
 {
 	"name": "@guardian/commercial",
-	"version": "23.2.1",
+	"version": "23.3.0",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial#readme",
 	"bugs": {
