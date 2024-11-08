@@ -70,6 +70,7 @@ describe('getPrebidAdSlots', () => {
 			{
 				key: 'top-above-nav',
 				sizes: [createAdSize(970, 250), createAdSize(728, 90)],
+				name: 'top-above-nav',
 			},
 		]);
 	});
@@ -99,6 +100,7 @@ describe('getPrebidAdSlots', () => {
 			{
 				key: 'top-above-nav',
 				sizes: [createAdSize(728, 90)],
+				name: 'top-above-nav',
 			},
 		]);
 	});
@@ -109,6 +111,7 @@ describe('getPrebidAdSlots', () => {
 			{
 				key: 'top-above-nav',
 				sizes: [createAdSize(300, 250)],
+				name: 'top-above-nav',
 			},
 		]);
 	});
@@ -124,6 +127,7 @@ describe('getPrebidAdSlots', () => {
 			{
 				key: 'mobile-sticky',
 				sizes: [createAdSize(320, 50), createAdSize(300, 50)],
+				name: 'mobile-sticky',
 			},
 		]);
 	});
