@@ -31,11 +31,11 @@ const getHbBreakpoint = () => {
  */
 const filterBySizeMapping =
 	(slotSizes: readonly AdSize[] = []) =>
-	({ key, sizes }: HeaderBiddingSlot): HeaderBiddingSlot => {
+	({ key, sizes, name }: HeaderBiddingSlot): HeaderBiddingSlot => {
 		// For now, only apply filtering to inline header bidding slots
 		// In the future we may want to expand this to all slots
 		if (key !== 'inline') {
-			return { key, sizes };
+			return { key, sizes, name };
 		}
 
 		const filteredSizes = sizes.filter(([hbWidth, hbHeight]) =>
@@ -48,6 +48,7 @@ const filterBySizeMapping =
 		return {
 			key,
 			sizes: filteredSizes,
+			name: name || '',
 		};
 	};
 
@@ -84,6 +85,7 @@ const filterByAdvert = (
 ): HeaderBiddingSlot[] => {
 	const slotNames = getSlotNamesFromSizeMapping(sizeMapping);
 	const key = getHeaderBiddingKey(slotNames, ad.node.dataset.name);
+	const name = ad.node.dataset.name;
 
 	if (!key) {
 		return [];
@@ -99,6 +101,7 @@ const filterByAdvert = (
 		{
 			key,
 			sizes,
+			name: name ?? '',
 		},
 	];
 };

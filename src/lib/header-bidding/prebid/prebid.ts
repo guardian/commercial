@@ -167,6 +167,7 @@ class PrebidAdUnit {
 	code: string | null | undefined;
 	bids: PrebidBid[] | null | undefined;
 	mediaTypes: PrebidMediaTypes | null | undefined;
+	gpid: string;
 
 	constructor(
 		advert: Advert,
@@ -176,12 +177,29 @@ class PrebidAdUnit {
 		this.code = advert.id;
 		this.bids = bids(advert.id, slot.sizes, pageTargeting);
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
+		this.gpid = this.generateGpid(advert, slot, pageTargeting);
 		advert.headerBiddingSizes = slot.sizes;
 		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
 	}
 
 	isEmpty() {
 		return this.code == null;
+	}
+	private generateGpid(
+		advert: Advert,
+		slot: HeaderBiddingSlot,
+		pageTargeting: PageTargeting,
+	): string {
+		const sectionName = Array.isArray(pageTargeting.sectionName)
+			? pageTargeting.sectionName.join(',')
+			: pageTargeting.sectionName;
+		const contentType = Array.isArray(pageTargeting.contentType)
+			? pageTargeting.contentType.join(',')
+			: pageTargeting.contentType;
+		const slotName = Array.isArray(slot.name)
+			? slot.name.join(',')
+			: slot.name;
+		return `/59666047/gu/${sectionName}/${contentType}/${slotName}`;
 	}
 }
 
