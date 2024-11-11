@@ -103,7 +103,7 @@
 	},
 	"dependencies": {
 		"@changesets/cli": "^2.26.2",
-		"@guardian/prebid.js": "8.52.0-7",
+		"@guardian/prebid.js": "8.52.0-8",
 		"@octokit/core": "^6.1.2",
 		"fastdom": "^1.0.11",
 		"lodash-es": "^4.17.21",
