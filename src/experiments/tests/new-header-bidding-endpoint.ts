@@ -9,7 +9,7 @@ export const newHeaderBiddingEndpoint: ABTest = {
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',
 	successMeasure: '',
-	description: 'Test new header bidding (prebid) anlytics endpoint.',
+	description: 'Test new header bidding (prebid) analytics endpoint.',
 	variants: [
 		{
 			id: 'control',
