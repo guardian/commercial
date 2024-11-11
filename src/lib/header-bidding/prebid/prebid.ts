@@ -8,6 +8,8 @@ import { PREBID_TIMEOUT } from '../../../core/constants/prebid-timeout';
 import { EventTimer } from '../../../core/event-timer';
 import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
 import type { Advert } from '../../../define/Advert';
+import { isUserInVariant } from '../../../experiments/ab';
+import { newHeaderBiddingEndpoint } from '../../../experiments/tests/new-header-bidding-endpoint';
 import { getPageTargeting } from '../../build-page-targeting';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedInOktaRefactor } from '../../identity/api';
@@ -124,6 +126,8 @@ type EnableAnalyticsConfig = {
 	options: {
 		ajaxUrl: string;
 		pv: string;
+		enableV2Endpoint: boolean;
+		ajaxUrlV2: string;
 	};
 };
 
@@ -423,6 +427,11 @@ const initialise = (
 				options: {
 					ajaxUrl: window.guardian.config.page.ajaxUrl ?? '',
 					pv: window.guardian.ophan.pageViewId,
+					enableV2Endpoint: isUserInVariant(
+						newHeaderBiddingEndpoint,
+						'variant',
+					),
+					ajaxUrlV2: `//performance-events.code.dev-guardianapis.com/header-bidding`,
 				},
 			},
 		]);
