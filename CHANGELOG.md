@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 23.4.0
+
+### Minor Changes
+
+- 877f516: Setup test for new prebid analytics endpoint
+
 ## 23.3.0
 
 ### Minor Changes
