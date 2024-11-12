@@ -201,20 +201,10 @@ class PrebidAdUnit {
 	isEmpty() {
 		return this.code == null;
 	}
-	private generateGpid(
-		advert: Advert,
-		slot: HeaderBiddingSlot,
-		pageTargeting: PageTargeting,
-	): string {
-		const sectionName = Array.isArray(pageTargeting.sectionName)
-			? pageTargeting.sectionName.join(',')
-			: pageTargeting.sectionName;
-		const contentType = Array.isArray(pageTargeting.contentType)
-			? pageTargeting.contentType.join(',')
-			: pageTargeting.contentType;
-		const slotName = Array.isArray(slot.name)
-			? slot.name.join(',')
-			: slot.name;
+	private generateGpid(advert: Advert, slot: HeaderBiddingSlot): string {
+		const sectionName = window.guardian.config.page.section;
+		const contentType = window.guardian.config.page.contentType;
+		const slotName = slot.name;
 		return `/59666047/gu/${sectionName}/${contentType}/${slotName}`;
 	}
 }
