@@ -1,6 +1,10 @@
 import type { ABTest } from '@guardian/ab-core';
 import { AB } from '@guardian/ab-core';
 import { getCookie, log } from '@guardian/libs';
+import {
+	getParticipationsFromLocalStorage,
+	setParticipationsInLocalStorage,
+} from '../core/lib/ab-localstorage';
 import { concurrentTests } from './ab-tests';
 import { getForcedParticipationsFromUrl } from './ab-url';
 
@@ -71,13 +75,20 @@ const abTestSwitches = Object.entries(window.guardian.config.switches).reduce(
 );
 
 const init = () => {
+	const forcedTestVariants = {
+		...getParticipationsFromLocalStorage(),
+		...getForcedParticipationsFromUrl(),
+	};
+
+	setParticipationsInLocalStorage(forcedTestVariants);
+
 	const ab = new AB({
 		mvtId: mvtId ?? -1,
 		mvtMaxValue,
 		pageIsSensitive: window.guardian.config.page.isSensitive,
 		abTestSwitches,
 		arrayOfTestObjects: concurrentTests,
-		forcedTestVariants: getForcedParticipationsFromUrl(),
+		forcedTestVariants,
 		ophanRecord: getOphan().record,
 		serverSideTests: window.guardian.config.tests ?? {},
 		errorReporter: (error) => {
