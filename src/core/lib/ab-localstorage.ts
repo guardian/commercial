@@ -19,3 +19,9 @@ export const getParticipationsFromLocalStorage = (): Participations => {
 	const participations = storage.local.get(participationsKey);
 	return isParticipations(participations) ? participations : {};
 };
+
+export const setParticipationsInLocalStorage = (
+	participations: Participations,
+): void => {
+	storage.local.set(participationsKey, participations);
+};

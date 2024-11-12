@@ -4,17 +4,17 @@
 
 ### Setup
 
-1. Follow steps 1-6 in [the DCR documentation](https://github.com/guardian/frontend/blob/main/common/app/conf/switches/ABTestSwitches.scala)
-1. Create a test in [src/experiments/tests](https://github.com/guardian/commercial-core/blob/main/src/experiments/tests)
-1. Add the test to [concurrent tests](https://github.com/guardian/commercial-core/blob/main/src/experiments/ab-tests.ts)
+1. Follow steps 1-6 in [the DCR documentation](https://github.com/guardian/dotcom-rendering/blob/main/dotcom-rendering/docs/development/ab-testing-in-dcr.md)
+1. Create a test in [src/experiments/tests](https://github.com/guardian/commercial/blob/main/src/experiments/tests)
+1. Add the test to [concurrent tests](https://github.com/guardian/commercial/blob/main/src/experiments/ab-tests.ts)
 
 ### Example usage
 
 ```ts
-import { isInVariantSynchronous } from 'experiments/ab';
+import { isUserInVariant } from 'experiments/ab';
 import { sectionAdDensity } from 'experiments/tests/section-ad-density';
 
-const isInVariant = isInVariantSynchronous(sectionAdDensity, 'variant');
+const isInVariant = isUserInVariant(sectionAdDensity, 'variant');
 ```
 
 ### How to test
@@ -22,6 +22,8 @@ const isInVariant = isInVariantSynchronous(sectionAdDensity, 'variant');
 Use the URL opt-in link to force yourself into a particular variant, e.g. `http://localhost:3030/Front/https://www.theguardian.com/uk#ab-yourTest=yourVariant`
 
 If you test has multiple variants, you can test each one by updating the `yourVariant` part of the above URL.
+
+To remove yourself from the test unset the varaint e.g. `http://localhost:3030/Front/https://www.theguardian.com/uk#ab-yourTest=`
 
 ## Server-side tests
 
