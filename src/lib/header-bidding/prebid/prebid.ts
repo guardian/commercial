@@ -204,7 +204,7 @@ class PrebidAdUnit {
 	private generateGpid(advert: Advert, slot: HeaderBiddingSlot): string {
 		const sectionName = window.guardian.config.page.section;
 		const contentType = window.guardian.config.page.contentType;
-		const slotName = slot.name;
+		const slotName = slot.key;
 		return `/59666047/gu/${sectionName}/${contentType}/${slotName}`;
 	}
 }

@@ -27,7 +27,6 @@ export type HeaderBiddingSizeKey =
 export type HeaderBiddingSlot = {
 	key: HeaderBiddingSizeKey;
 	sizes: HeaderBiddingSize[];
-	name: string;
 };
 
 export type HeaderBiddingSizeMapping = Record<
