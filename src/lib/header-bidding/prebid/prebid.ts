@@ -185,7 +185,7 @@ class PrebidAdUnit {
 		this.code = advert.id;
 		this.bids = bids(advert.id, slot.sizes, pageTargeting);
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
-		this.gpid = this.generateGpid(advert, slot, pageTargeting);
+		this.gpid = this.generateGpid(advert, slot);
 		this.ortb2Imp = {
 			ext: {
 				gpid: this.gpid,
