@@ -7,16 +7,12 @@ import {
 	defineSlot,
 } from './define-slot';
 
-beforeEach(() => {
-	global.fetch = jest.fn(() =>
-		Promise.resolve({
-			json: () => Promise.resolve([]),
-		}),
-	) as jest.Mock;
-});
-
 jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
+}));
+
+jest.mock('core/targeting/teads-eligibility', () => ({
+	isEligibleForTeads: jest.fn(),
 }));
 
 beforeEach(() => {

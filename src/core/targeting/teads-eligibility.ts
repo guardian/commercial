@@ -1,5 +1,4 @@
 import { once } from 'lodash-es';
-import { getUrlKeywords } from './content';
 
 const getBannedKeywords = once(async () => {
 	const bannedKeywords = (await fetch(
@@ -11,16 +10,13 @@ const getBannedKeywords = once(async () => {
 
 const allowedContentTypes = ['Article', 'LiveBlog'];
 
-const isEligibleForTeads = async (slotId: string) => {
-	const { contentType, pageId, isSensitive } = window.guardian.config.page;
+const isEligibleForTeads = (slotId: string) => {
+	const { contentType, isSensitive } = window.guardian.config.page;
 
-	const urlKeywords = getUrlKeywords(`/${pageId}`);
-
-	const bannedUrlKeywords = await getBannedKeywords();
-
-	const hasBannedKeywords = urlKeywords.some((keyword) =>
-		bannedUrlKeywords.includes(keyword),
-	);
+	const hasBannedKeywords = window.googletag
+		.pubads()
+		.getTargeting('ias-kw')
+		.includes('IAS_16425_KW');
 
 	if (
 		slotId === 'dfp-ad--inline1' &&

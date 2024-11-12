@@ -152,6 +152,15 @@ const defineSlot = (
 	void slotReady.then(() => {
 		EventTimer.get().mark('defineSlotEnd', slotTarget);
 		EventTimer.get().mark('slotReady', slotTarget);
+
+		// wait until IAS has initialised before checking teads eligibility
+		const isTeadsEligible = isEligibleForTeads(id);
+
+		if (isTeadsEligible) {
+			slot.setTargeting('teadsEligible', 'true');
+		} else {
+			slot.setTargeting('teadsEligible', 'false');
+		}
 	});
 
 	const isbn = window.guardian.config.page.isbn;
@@ -171,14 +180,6 @@ const defineSlot = (
 	if (slotFabric) {
 		slot.setTargeting('slot-fabric', slotFabric);
 	}
-
-	void isEligibleForTeads(id).then((isEligible) => {
-		if (isEligible) {
-			slot.setTargeting('teadsEligible', 'true');
-		} else {
-			slot.setTargeting('teadsEligible', 'false');
-		}
-	});
 
 	Object.entries(slotTargeting).forEach(([key, value]) => {
 		slot.setTargeting(key, value);

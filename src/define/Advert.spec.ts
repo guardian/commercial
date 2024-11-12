@@ -38,13 +38,9 @@ jest.mock('core/ad-sizes', () => {
 	};
 });
 
-beforeEach(() => {
-	global.fetch = jest.fn(() =>
-		Promise.resolve({
-			json: () => Promise.resolve(['ukraine']),
-		}),
-	) as jest.Mock;
-});
+jest.mock('core/targeting/teads-eligibility', () => ({
+	isEligibleForTeads: jest.fn(),
+}));
 
 describe('Advert', () => {
 	let googleSlot: googletag.Slot;

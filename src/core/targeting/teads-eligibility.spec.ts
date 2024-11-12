@@ -1,15 +1,19 @@
 import { isEligibleForTeads } from './teads-eligibility';
 
-beforeEach(() => {
-	global.fetch = jest.fn(() =>
-		Promise.resolve({
-			json: () => Promise.resolve(['ukraine']),
-		}),
-	) as jest.Mock;
-});
+// Mocking the IAS keywords
+const pubAds = {
+	getTargeting: jest.fn(() => ['']),
+};
+
+window.googletag = {
+	/* @ts-expect-error -- no way to override types */
+	pubads() {
+		return pubAds;
+	},
+};
 
 describe('Teads Eligibility', () => {
-	it('should be eligible for teads when slot is inline1, on an allowed content type, not sensitive, and there are no banned keywords', async () => {
+	it('should be eligible for teads when slot is inline1, on an allowed content type, not sensitive, and there are no banned keywords', () => {
 		window.guardian = {
 			config: {
 				page: {
@@ -20,10 +24,10 @@ describe('Teads Eligibility', () => {
 			},
 		} as typeof window.guardian;
 
-		expect(await isEligibleForTeads('dfp-ad--inline1')).toBe(true);
+		expect(isEligibleForTeads('dfp-ad--inline1')).toBe(true);
 	});
 
-	it('should not be eligible for teads when slot is not inline1', async () => {
+	it('should not be eligible for teads when slot is not inline1', () => {
 		window.guardian = {
 			config: {
 				page: {
@@ -34,10 +38,10 @@ describe('Teads Eligibility', () => {
 			},
 		} as typeof window.guardian;
 
-		expect(await isEligibleForTeads('dfp-ad--inline2')).toBe(false);
+		expect(isEligibleForTeads('dfp-ad--inline2')).toBe(false);
 	});
 
-	it('should not be eligible for teads when content type is not article or liveblog', async () => {
+	it('should not be eligible for teads when content type is not article or liveblog', () => {
 		window.guardian = {
 			config: {
 				page: {
@@ -48,10 +52,10 @@ describe('Teads Eligibility', () => {
 			},
 		} as typeof window.guardian;
 
-		expect(await isEligibleForTeads('dfp-ad--inline1')).toBe(false);
+		expect(isEligibleForTeads('dfp-ad--inline1')).toBe(false);
 	});
 
-	it('should not be eligible for teads when content is marked as sensitive', async () => {
+	it('should not be eligible for teads when content is marked as sensitive', () => {
 		window.guardian = {
 			config: {
 				page: {
@@ -62,20 +66,32 @@ describe('Teads Eligibility', () => {
 			},
 		} as typeof window.guardian;
 
-		expect(await isEligibleForTeads('dfp-ad--inline1')).toBe(false);
+		expect(isEligibleForTeads('dfp-ad--inline1')).toBe(false);
 	});
 
-	it('should not be eligible for teads when url keywords contain a banned keyword', async () => {
+	it('should not be eligible for teads when IAS indicates that content is not brand safe', () => {
+		// Mocking the IAS keywords - need to mock a non brand safe article
+		const pubAds = {
+			getTargeting: jest.fn(() => ['IAS_16425_KW']),
+		};
+
+		window.googletag = {
+			/* @ts-expect-error -- no way to override types */
+			pubads() {
+				return pubAds;
+			},
+		};
+
 		window.guardian = {
 			config: {
 				page: {
 					contentType: 'Article',
 					isSensitive: false,
-					pageId: 'world/2024/sep/30/mark-rutte-takes-charge-of-nato-at-a-perilous-moment-for-ukraine',
+					pageId: 'us-news/2024/nov/10/trump-putin-ukraine-war',
 				} as unknown as typeof window.guardian.config.page,
 			},
 		} as typeof window.guardian;
 
-		expect(await isEligibleForTeads('dfp-ad--inline1')).toBe(false);
+		expect(isEligibleForTeads('dfp-ad--inline1')).toBe(false);
 	});
 });
