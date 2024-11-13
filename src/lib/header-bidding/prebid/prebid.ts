@@ -9,6 +9,7 @@ import { EventTimer } from '../../../core/event-timer';
 import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
 import type { Advert } from '../../../define/Advert';
 import { isUserInVariant } from '../../../experiments/ab';
+import { gpidPrebid } from '../../../experiments/tests/gpid-prebid';
 import { newHeaderBiddingEndpoint } from '../../../experiments/tests/new-header-bidding-endpoint';
 import { getPageTargeting } from '../../build-page-targeting';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
@@ -163,12 +164,14 @@ type BidderSettings = {
 	magnite?: Partial<BidderSetting>;
 };
 
+const isInGpidPrebidTest = isUserInVariant(gpidPrebid, 'variant');
+
 class PrebidAdUnit {
 	code: string | null | undefined;
 	bids: PrebidBid[] | null | undefined;
 	mediaTypes: PrebidMediaTypes | null | undefined;
-	gpid: string;
-	ortb2Imp: {
+	gpid?: string;
+	ortb2Imp?: {
 		ext: {
 			gpid: string;
 			data: {
@@ -185,15 +188,17 @@ class PrebidAdUnit {
 		this.code = advert.id;
 		this.bids = bids(advert.id, slot.sizes, pageTargeting);
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
-		this.gpid = this.generateGpid(advert, slot);
-		this.ortb2Imp = {
-			ext: {
-				gpid: this.gpid,
-				data: {
-					pbadslot: this.gpid,
+		if (isInGpidPrebidTest) {
+			this.gpid = this.generateGpid(advert, slot);
+			this.ortb2Imp = {
+				ext: {
+					gpid: this.gpid,
+					data: {
+						pbadslot: this.gpid,
+					},
 				},
-			},
-		};
+			};
+		}
 		advert.headerBiddingSizes = slot.sizes;
 		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
 	}
