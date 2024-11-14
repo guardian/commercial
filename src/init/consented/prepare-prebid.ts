@@ -5,7 +5,7 @@ import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
 import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
-import { isInCanada } from '../../utils/geo-utils';
+import { isInAuOrNz, isInCanada, isInUk, isInUsa } from '../../utils/geo-utils';
 
 const shouldLoadPrebid = () =>
 	!isGoogleProxy() &&
@@ -16,11 +16,21 @@ const shouldLoadPrebid = () =>
 	!shouldIncludeOnlyA9 &&
 	!isInCanada();
 
+const prebidVersion = () => {
+	if (isInUk()) {
+		return 'uk';
+	} else if (isInAuOrNz()) {
+		return 'aus-nz';
+	} else if (isInUsa()) {
+		return 'us';
+	}
+	return 'row';
+};
+
 const loadPrebid = async (framework: ConsentFramework): Promise<void> => {
 	if (shouldLoadPrebid()) {
 		await import(
-			// @ts-expect-error -- there’s no types for Prebid.js
-			/* webpackChunkName: "Prebid.js" */ '@guardian/prebid.js/build/dist/prebid'
+			/* webpackChunkName: "Prebid.js" */ `prebid.js/build/dist/${prebidVersion()}/prebid`
 		);
 		prebid.initialise(window, framework);
 	}
