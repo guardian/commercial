@@ -2,6 +2,7 @@ import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { once } from 'lodash-es';
 import type { SizeMapping, SlotName } from '../core/ad-sizes';
 import { EventTimer } from '../core/index';
+import { isEligibleForTeads } from '../core/targeting/teads-eligibility';
 import { toGoogleTagSize } from '../utils/googletag-ad-size';
 import { getUrlVars } from '../utils/url';
 import { initSlotIas } from './init-slot-ias';
@@ -151,6 +152,15 @@ const defineSlot = (
 	void slotReady.then(() => {
 		EventTimer.get().mark('defineSlotEnd', slotTarget);
 		EventTimer.get().mark('slotReady', slotTarget);
+
+		// wait until IAS has initialised before checking teads eligibility
+		const isTeadsEligible = isEligibleForTeads(id);
+
+		if (isTeadsEligible) {
+			slot.setTargeting('teadsEligible', 'true');
+		} else {
+			slot.setTargeting('teadsEligible', 'false');
+		}
 	});
 
 	const isbn = window.guardian.config.page.isbn;

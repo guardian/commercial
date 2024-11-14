@@ -12,6 +12,10 @@ jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 
+jest.mock('core/targeting/teads-eligibility', () => ({
+	isEligibleForTeads: jest.fn(),
+}));
+
 describe('shouldRefresh', () => {
 	let googleSlot: googletag.Slot;
 

@@ -38,6 +38,10 @@ jest.mock('core/ad-sizes', () => {
 	};
 });
 
+jest.mock('core/targeting/teads-eligibility', () => ({
+	isEligibleForTeads: jest.fn(),
+}));
+
 describe('Advert', () => {
 	let googleSlot: googletag.Slot;
 

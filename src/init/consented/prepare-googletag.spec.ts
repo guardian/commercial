@@ -156,6 +156,10 @@ jest.mock('./prepare-prebid', () => ({
 		.mockImplementation(() => Promise.resolve(undefined)),
 }));
 
+jest.mock('core/targeting/teads-eligibility', () => ({
+	isEligibleForTeads: jest.fn(),
+}));
+
 const mockOnConsent = (consentState: ConsentState) =>
 	(onConsent as jest.Mock).mockReturnValueOnce(Promise.resolve(consentState));
 
