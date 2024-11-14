@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 23.5.0
+
+### Minor Changes
+
+- 9c0e78d: Fix persisting of forced ab tests to localstorage
+- e917f96: Add targeting keyword to indicate teads eligibility
+
 ## 23.4.0
 
 ### Minor Changes
