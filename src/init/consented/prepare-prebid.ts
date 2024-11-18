@@ -30,7 +30,8 @@ const prebidVersion = () => {
 const loadPrebid = async (framework: ConsentFramework): Promise<void> => {
 	if (shouldLoadPrebid()) {
 		await import(
-			/* webpackChunkName: "Prebid.js" */ `prebid.js/build/dist/${prebidVersion()}/prebid`
+			/* webpackChunkName: "Prebid.js" */
+			`prebid.js/build/dist/${prebidVersion()}/prebid`
 		);
 		prebid.initialise(window, framework);
 	}
