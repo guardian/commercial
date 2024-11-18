@@ -5,7 +5,7 @@ export const gpidPrebid: ABTest = {
 	author: '@commercial-dev',
 	start: '2024-11-15',
 	expiry: '2024-11-22',
-	audience: 0.02 / 100,
+	audience: 2 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',
 	successMeasure: 'Verify GPID is added to Prebid.js ad units',

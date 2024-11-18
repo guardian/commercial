@@ -164,7 +164,7 @@ type BidderSettings = {
 	magnite?: Partial<BidderSetting>;
 };
 
-const isInGpidPrebidTest = isUserInVariant(gpidPrebid, 'variant');
+const shouldIncludeGpid = isUserInVariant(gpidPrebid, 'variant');
 
 class PrebidAdUnit {
 	code: string | null | undefined;
@@ -188,7 +188,7 @@ class PrebidAdUnit {
 		this.code = advert.id;
 		this.bids = bids(advert.id, slot.sizes, pageTargeting);
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
-		if (isInGpidPrebidTest) {
+		if (shouldIncludeGpid) {
 			this.gpid = this.generateGpid(advert, slot);
 			this.ortb2Imp = {
 				ext: {
@@ -199,6 +199,7 @@ class PrebidAdUnit {
 				},
 			};
 		}
+
 		advert.headerBiddingSizes = slot.sizes;
 		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
 	}
