@@ -47,6 +47,7 @@ export type PrebidSonobiParams = {
 	dom_id: string;
 	appNexusTargeting: string;
 	pageViewId: string;
+	keywords: string[];
 	render?: string;
 };
 
