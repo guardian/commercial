@@ -9,7 +9,7 @@ import { EventTimer } from '../../../core/event-timer';
 import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
 import type { Advert } from '../../../define/Advert';
 import { isUserInVariant } from '../../../experiments/ab';
-import { gpidPrebid } from '../../../experiments/tests/gpid-prebid';
+import { gpidPrebidAdUnits } from '../../../experiments/tests/gpid-prebid';
 import { newHeaderBiddingEndpoint } from '../../../experiments/tests/new-header-bidding-endpoint';
 import { getPageTargeting } from '../../build-page-targeting';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
@@ -164,7 +164,7 @@ type BidderSettings = {
 	magnite?: Partial<BidderSetting>;
 };
 
-const shouldIncludeGpid = isUserInVariant(gpidPrebid, 'variant');
+const shouldIncludeGpid = isUserInVariant(gpidPrebidAdUnits, 'variant');
 
 class PrebidAdUnit {
 	code: string | null | undefined;

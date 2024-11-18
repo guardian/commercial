@@ -1,7 +1,7 @@
 import type { ABTest } from '@guardian/ab-core';
 
-export const gpidPrebid: ABTest = {
-	id: 'gpidPrebid',
+export const gpidPrebidAdUnits: ABTest = {
+	id: 'gpidPrebidAdUnits',
 	author: '@commercial-dev',
 	start: '2024-11-15',
 	expiry: '2024-11-22',
