@@ -50,6 +50,7 @@
 		"@babel/preset-typescript": "^7.17.12",
 		"@babel/register": "^7.11.5",
 		"@babel/runtime": "^7.11.2",
+		"@changesets/cli": "^2.26.2",
 		"@guardian/ab-core": "8.0.0",
 		"@guardian/browserslist-config": "^6.1.1",
 		"@guardian/core-web-vitals": "7.0.0",
@@ -102,7 +103,6 @@
 		"webpack-merge": "^6.0.1"
 	},
 	"dependencies": {
-		"@changesets/cli": "^2.26.2",
 		"@guardian/prebid.js": "8.52.0-8",
 		"@octokit/core": "^6.1.2",
 		"fastdom": "^1.0.11",
