@@ -349,6 +349,9 @@ const sonobiBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 		dom_id: slotId,
 		appNexusTargeting: buildAppNexusTargeting(pageTargeting),
 		pageViewId: window.guardian.ophan.pageViewId,
+		keywords: window.guardian.config.page.keywords
+			? window.guardian.config.page.keywords.split(',')
+			: [],
 	}),
 });
 
