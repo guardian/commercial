@@ -5,7 +5,7 @@ export const newHeaderBiddingEndpoint: ABTest = {
 	author: '@commercial-dev',
 	start: '2024-11-11',
 	expiry: '2024-11-30',
-	audience: 0 / 100,
+	audience: 2 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',
 	successMeasure: '',
