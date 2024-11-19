@@ -493,6 +493,22 @@ const getAdYouLikePlacementId = (sizes: HeaderBiddingSize[]) => {
 	return '';
 };
 
+const getPubmaticPlacementId = (
+	slotId: string,
+	slotSizes: HeaderBiddingSize[],
+): string | undefined => {
+	console.log('slotId=====', slotId);
+	if (
+		slotId === 'dfp-ad--inline2' &&
+		slotSizes.find((size) => size.width === 371 && size.height === 660)
+	) {
+		return isInUsa()
+			? 'seenthis_guardian_mweb_us'
+			: 'seenthis_guardian_371x660_mweb';
+	}
+	return undefined;
+};
+
 const pubmaticBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 	const defaultParams = {
 		name: 'pubmatic' as BidderCode,
@@ -500,13 +516,7 @@ const pubmaticBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 		bidParams: (slotId: string): PrebidPubmaticParams => ({
 			publisherId: getPubmaticPublisherId(),
 			adSlot: stripDfpAdPrefixFrom(slotId),
-			placementId:
-				slotId === 'dfp-ad--inline2' &&
-				slotSizes.find(
-					(size) => size.width === 371 && size.height === 660,
-				)
-					? 'seenthis_guardian_371x660_mweb'
-					: undefined,
+			placementId: getPubmaticPlacementId(slotId, slotSizes),
 		}),
 	};
 
