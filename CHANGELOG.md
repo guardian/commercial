@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 23.6.0
+
+### Minor Changes
+
+- 7a5391e: Add Keywords parameter to Sonobi prebid
+
 ## 23.5.0
 
 ### Minor Changes
