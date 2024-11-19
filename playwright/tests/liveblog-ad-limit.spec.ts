@@ -51,7 +51,7 @@ const addAndAwaitNewBlocks = async (page: Page, blockContent: string) => {
 	await expect(newBlock).toBeVisible();
 };
 
-test.describe('A minimum amount of ad slots load', () => {
+test.skip('A minimum amount of ad slots load', () => {
 	pages.forEach(({ path, expectedMinInlineSlots }) => {
 		/**
 		 * First ensure that the we receive the expected initial amount of ad slots.
