@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 23.7.2
+
+### Patch Changes
+
+- 9fa6e7d: adds gpid for 99% of users to prebid request
+
 ## 23.7.1
 
 ### Patch Changes
