@@ -164,7 +164,7 @@ type BidderSettings = {
 	magnite?: Partial<BidderSetting>;
 };
 
-const shouldIncludeGpid = isUserInVariant(gpidPrebidAdUnits, 'variant');
+const shouldIncludeGpid = !isUserInVariant(gpidPrebidAdUnits, 'control');
 
 class PrebidAdUnit {
 	code: string | null | undefined;
