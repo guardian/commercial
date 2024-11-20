@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 23.7.1
+
+### Patch Changes
+
+- 51fe243: fix header-bidding test id
+
 ## 23.7.0
 
 ### Minor Changes
