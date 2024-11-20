@@ -1,7 +1,7 @@
 import type { ABTest } from '@guardian/ab-core';
 
 export const newHeaderBiddingEndpoint: ABTest = {
-	id: 'newHeaderBiddingEndpoint',
+	id: 'NewHeaderBiddingEndpoint',
 	author: '@commercial-dev',
 	start: '2024-11-11',
 	expiry: '2024-11-30',
