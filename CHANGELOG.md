@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 23.7.0
+
+### Minor Changes
+
+- 76b1a73: increase new header bidding endpoint rollout to 1% of users
+
+### Patch Changes
+
+- 82371b7: Move changesets to dev dependency
+
 ## 23.6.0
 
 ### Minor Changes
