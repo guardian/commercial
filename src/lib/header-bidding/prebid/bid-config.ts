@@ -497,7 +497,6 @@ const getPubmaticPlacementId = (
 	slotId: string,
 	slotSizes: HeaderBiddingSize[],
 ): string | undefined => {
-	console.log('slotId=====', slotId);
 	if (
 		slotId === 'dfp-ad--inline2' &&
 		slotSizes.find((size) => size.width === 371 && size.height === 660)
