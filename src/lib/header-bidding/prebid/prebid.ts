@@ -10,7 +10,6 @@ import type { PageTargeting } from '../../../core/targeting/build-page-targeting
 import type { Advert } from '../../../define/Advert';
 import { isUserInVariant } from '../../../experiments/ab';
 import { gpidPrebidAdUnits } from '../../../experiments/tests/gpid-prebid';
-import { newHeaderBiddingEndpoint } from '../../../experiments/tests/new-header-bidding-endpoint';
 import { getPageTargeting } from '../../build-page-targeting';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedInOktaRefactor } from '../../identity/api';
@@ -457,11 +456,10 @@ const initialise = (
 				options: {
 					ajaxUrl: window.guardian.config.page.ajaxUrl ?? '',
 					pv: window.guardian.ophan.pageViewId,
-					enableV2Endpoint: isUserInVariant(
-						newHeaderBiddingEndpoint,
-						'variant',
-					),
-					ajaxUrlV2: `//performance-events.code.dev-guardianapis.com/header-bidding`,
+					enableV2Endpoint: true,
+					ajaxUrlV2: window.guardian.config.page.isDev
+						? `//performance-events.code.dev-guardianapis.com/header-bidding`
+						: `//performance-events.guardianapis.com/header-bidding`,
 				},
 			},
 		]);
