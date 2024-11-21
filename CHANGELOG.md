@@ -1,5 +1,12 @@
 # @guardian/commercial
 
+## 23.7.3
+
+### Patch Changes
+
+- 6b9efca: Avoid inserting ads next to halfwidth elements
+- c5c0a0a: add US specific placement ID for pubmatic ad partner
+
 ## 23.7.2
 
 ### Patch Changes
