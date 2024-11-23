@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 23.7.4
+
+### Patch Changes
+
+- 3f1431b: Fix for usnat supported api lookup
+
 ## 23.7.3
 
 ### Patch Changes
