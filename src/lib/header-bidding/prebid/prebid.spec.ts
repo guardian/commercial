@@ -1,9 +1,7 @@
-import { isInUk as isInUk_ } from '../../../utils/geo-utils';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
 import { prebid } from './prebid';
 
 const getAdvertById = getAdvertById_ as jest.Mock;
-const isInUk = isInUk_ as jest.Mock;
 
 jest.mock('define/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
@@ -21,15 +19,12 @@ jest.mock('experiments/ab', () => ({
 	isUserInVariant: jest.fn(),
 }));
 
-jest.mock('utils/geo-utils');
-
 const resetPrebid = () => {
 	delete window.pbjs;
 	// @ts-expect-error -- there’s no types for this
 	delete window.pbjsChunk;
-	isInUk.mockReturnValue(true);
 	jest.resetModules();
-	jest.requireActual('prebid.js/build/dist/uk/prebid');
+	jest.requireActual('prebid.js/build/dist/all/prebid');
 };
 
 describe('initialise', () => {
