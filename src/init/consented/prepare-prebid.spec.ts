@@ -18,6 +18,7 @@ jest.mock('utils/geo-utils', () => ({
 jest.mock('experiments/ab', () => ({
 	isInABTestSynchronous: jest.fn().mockReturnValue(false),
 	isInVariantSynchronous: jest.fn().mockReturnValue(false),
+	isUserInVariant: jest.fn().mockReturnValue(false),
 }));
 
 jest.mock('lib/commercial-features', () => ({
@@ -203,7 +204,6 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
-		(isInCanada as jest.Mock).mockReturnValueOnce(false);
 
 		await setupPrebid();
 		expect(prebid.initialise).toBeCalled();
@@ -295,6 +295,7 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
+
 		await setupPrebid();
 		expect(prebid.initialise).toBeCalled();
 	});
@@ -330,6 +331,7 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		mockOnConsent(usnatWithConsent);
 		mockGetConsentFor(true);
+
 		await setupPrebid();
 		expect(prebid.initialise).toBeCalled();
 	});
@@ -365,6 +367,7 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		mockOnConsent(ausWithConsent);
 		mockGetConsentFor(true);
+
 		await setupPrebid();
 		expect(prebid.initialise).toBeCalled();
 	});
