@@ -1,6 +1,8 @@
 import type { ConsentFramework } from '@guardian/libs';
 import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
+import { isUserInVariant } from '../../experiments/ab';
+import { regionSpecificPrebid } from '../../experiments/tests/region-specific-prebid';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
@@ -17,14 +19,17 @@ const shouldLoadPrebid = () =>
 	!isInCanada();
 
 const prebidVersion = () => {
-	if (isInUk()) {
-		return 'uk';
-	} else if (isInAuOrNz()) {
-		return 'aus-nz';
-	} else if (isInUsa()) {
-		return 'us';
+	if (isUserInVariant(regionSpecificPrebid, 'variant')) {
+		if (isInUk()) {
+			return 'uk';
+		} else if (isInAuOrNz()) {
+			return 'aus-nz';
+		} else if (isInUsa()) {
+			return 'us';
+		}
+		return 'row';
 	}
-	return 'row';
+	return 'all';
 };
 
 const loadPrebid = async (framework: ConsentFramework): Promise<void> => {
