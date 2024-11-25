@@ -9,7 +9,7 @@ import { EventTimer } from '../../../core/event-timer';
 import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
 import type { Advert } from '../../../define/Advert';
 import { isUserInVariant } from '../../../experiments/ab';
-import { newHeaderBiddingEndpoint } from '../../../experiments/tests/new-header-bidding-endpoint';
+import { gpidPrebidAdUnits } from '../../../experiments/tests/gpid-prebid';
 import { getPageTargeting } from '../../build-page-targeting';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedInOktaRefactor } from '../../identity/api';
@@ -163,10 +163,21 @@ type BidderSettings = {
 	magnite?: Partial<BidderSetting>;
 };
 
+const shouldIncludeGpid = !isUserInVariant(gpidPrebidAdUnits, 'control');
+
 class PrebidAdUnit {
 	code: string | null | undefined;
 	bids: PrebidBid[] | null | undefined;
 	mediaTypes: PrebidMediaTypes | null | undefined;
+	gpid?: string;
+	ortb2Imp?: {
+		ext: {
+			gpid: string;
+			data: {
+				pbadslot: string;
+			};
+		};
+	};
 
 	constructor(
 		advert: Advert,
@@ -176,12 +187,30 @@ class PrebidAdUnit {
 		this.code = advert.id;
 		this.bids = bids(advert.id, slot.sizes, pageTargeting);
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
+		if (shouldIncludeGpid) {
+			this.gpid = this.generateGpid(advert, slot);
+			this.ortb2Imp = {
+				ext: {
+					gpid: this.gpid,
+					data: {
+						pbadslot: this.gpid,
+					},
+				},
+			};
+		}
+
 		advert.headerBiddingSizes = slot.sizes;
 		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
 	}
 
 	isEmpty() {
 		return this.code == null;
+	}
+	private generateGpid(advert: Advert, slot: HeaderBiddingSlot): string {
+		const sectionName = window.guardian.config.page.section;
+		const contentType = window.guardian.config.page.contentType;
+		const slotName = slot.key;
+		return `/59666047/gu/${sectionName}/${contentType}/${slotName}`;
 	}
 }
 
@@ -427,11 +456,10 @@ const initialise = (
 				options: {
 					ajaxUrl: window.guardian.config.page.ajaxUrl ?? '',
 					pv: window.guardian.ophan.pageViewId,
-					enableV2Endpoint: isUserInVariant(
-						newHeaderBiddingEndpoint,
-						'variant',
-					),
-					ajaxUrlV2: `//performance-events.code.dev-guardianapis.com/header-bidding`,
+					enableV2Endpoint: true,
+					ajaxUrlV2: window.guardian.config.page.isDev
+						? `//performance-events.code.dev-guardianapis.com/header-bidding`
+						: `//performance-events.guardianapis.com/header-bidding`,
 				},
 			},
 		]);

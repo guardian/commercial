@@ -35,7 +35,7 @@ const leftColumnOpponentSelector = ['richLink', 'thumbnail']
 	.join(',');
 const rightColumnOpponentSelector =
 	':scope > [data-spacefinder-role="immersive"]';
-const inlineOpponentSelector = ['inline', 'supporting', 'showcase']
+const inlineOpponentSelector = ['inline', 'supporting', 'showcase', 'halfWidth']
 	.map((role) => `:scope > [data-spacefinder-role="${role}"]`)
 	.join(',');
 

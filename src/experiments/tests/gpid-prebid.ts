@@ -1,15 +1,16 @@
 import type { ABTest } from '@guardian/ab-core';
 
-export const newHeaderBiddingEndpoint: ABTest = {
-	id: 'newHeaderBiddingEndpoint',
+export const gpidPrebidAdUnits: ABTest = {
+	id: 'GpidPrebidAdUnits',
 	author: '@commercial-dev',
-	start: '2024-11-11',
-	expiry: '2024-11-30',
+	start: '2024-11-15',
+	expiry: '2024-12-22',
 	audience: 2 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',
-	successMeasure: '',
-	description: 'Test new header bidding (prebid) analytics endpoint.',
+	successMeasure: 'Verify GPID is added to Prebid.js ad units',
+	description:
+		'Test to verify that GPID is correctly added to Prebid.js ad units.',
 	variants: [
 		{
 			id: 'control',

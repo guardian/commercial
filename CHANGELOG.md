@@ -1,5 +1,40 @@
 # @guardian/commercial
 
+## 23.7.4
+
+### Patch Changes
+
+- 3f1431b: Fix for usnat supported api lookup
+
+## 23.7.3
+
+### Patch Changes
+
+- 6b9efca: Avoid inserting ads next to halfwidth elements
+- c5c0a0a: add US specific placement ID for pubmatic ad partner
+
+## 23.7.2
+
+### Patch Changes
+
+- 9fa6e7d: adds gpid for 99% of users to prebid request
+
+## 23.7.1
+
+### Patch Changes
+
+- 51fe243: fix header-bidding test id
+
+## 23.7.0
+
+### Minor Changes
+
+- 76b1a73: increase new header bidding endpoint rollout to 1% of users
+
+### Patch Changes
+
+- 82371b7: Move changesets to dev dependency
+
 ## 23.6.0
 
 ### Minor Changes
