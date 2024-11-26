@@ -18,6 +18,8 @@ const MAX_AD_SLOTS = 8;
 const addAndAwaitNewBlocks = async (page: Page, blockContent: string) => {
 	// scroll to the top so we get a toast to click on
 	await page.evaluate(() => window.scrollTo(0, 0));
+	// @ts-expect-error -- browser land
+	await page.waitForFunction(() => window.mockLiveUpdate !== undefined);
 	await page.evaluate((blockContent) => {
 		// @ts-expect-error -- browser land
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-call -- browser land
