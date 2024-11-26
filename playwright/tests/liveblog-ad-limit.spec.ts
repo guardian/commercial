@@ -7,10 +7,6 @@ import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 import { countLiveblogInlineSlots } from '../lib/util';
 
-/**
- * TODO serial e2e tests
- * - It would be good to see if these tests could be run in parallel in the future
- */
 const pages = blogs.filter(({ name }) => name === 'under-ad-limit');
 
 const desktopBreakpoint = breakpoints.filter(
@@ -51,7 +47,7 @@ const addAndAwaitNewBlocks = async (page: Page, blockContent: string) => {
 	await expect(newBlock).toBeVisible();
 };
 
-test.skip('A minimum amount of ad slots load', () => {
+test.describe('A minimum amount of ad slots load', () => {
 	pages.forEach(({ path, expectedMinInlineSlots }) => {
 		/**
 		 * First ensure that the we receive the expected initial amount of ad slots.
