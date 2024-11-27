@@ -18,12 +18,8 @@ type Ruleset = {
 const desktopInline1Rules = async (): Promise<SpacefinderRules> => {
 	const rulesetResponse = await fetch('http://localhost:5173/api/rules');
 
-	console.log(`COMMAND DEBUGGING ${String(rulesetResponse)}`);
-
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- it's a bit late to bother fixing this rn
 	const rulesJson = (await rulesetResponse.json()).ruleSets as Ruleset[];
-
-	console.log(rulesJson);
 
 	const desktopRuleset = rulesJson.find(
 		({ viewportId }) => viewportId === 'desktop',
