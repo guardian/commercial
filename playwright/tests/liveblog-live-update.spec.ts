@@ -42,6 +42,10 @@ test.describe.serial('Liveblog live updates', () => {
 					isMobile,
 				);
 
+				await page.waitForFunction(
+					// @ts-expect-error -- browser land
+					() => window.mockLiveUpdate !== undefined,
+				);
 				await page.evaluate(() => {
 					// @ts-expect-error -- browser land
 					// eslint-disable-next-line @typescript-eslint/no-unsafe-call -- browser land
