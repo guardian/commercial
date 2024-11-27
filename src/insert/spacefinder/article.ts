@@ -13,6 +13,7 @@ import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
 import { initCarrot } from './carrot-traffic-driver';
 import { rules } from './rules';
 import { spaceFiller } from './space-filler';
+import { desktopInline1Rules } from './spaceCommandRules';
 import type { SpacefinderWriter } from './spacefinder';
 
 type SlotName = Parameters<typeof createAdSlot>[0];
@@ -99,7 +100,7 @@ const decideAdditionalSizes = async (
 	);
 };
 
-const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
+const addDesktopInline1 = async (fillSlot: FillAdSlot): Promise<boolean> => {
 	// these are added here and not in size mappings because the inline[i] name
 	// is also used on fronts, where we don't want outstream or tall ads
 	const additionalSizes = {
@@ -117,7 +118,9 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 		await Promise.all(slots);
 	};
 
-	return spaceFiller.fillSpace(rules.desktopInline1, insertAd, {
+	const rules = await desktopInline1Rules();
+
+	return spaceFiller.fillSpace(rules, insertAd, {
 		waitForImages: true,
 		waitForInteractives: true,
 		pass: 'inline1',
