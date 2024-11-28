@@ -1,4 +1,5 @@
 import { once } from 'lodash-es';
+import { getMvtId } from '../../experiments/ab';
 import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
 
 type Rule = {
@@ -14,9 +15,69 @@ type Ruleset = {
 	enabled: boolean;
 	viewportId: string;
 	rules: Rule[];
+	abTestId?: string;
+	abTestVariantId?: string;
 };
 
+interface ABTestVariant {
+	id: string;
+	name: string;
+	description: string;
+	weight: number;
+}
+
+interface ABTest {
+	id: string;
+	name: string;
+	description: string;
+	status: 'draft' | 'active' | 'completed';
+	variants: ABTestVariant[];
+	startDate?: string;
+	endDate?: string;
+}
+
 const bodySelector = '.article-body-commercial-selector';
+
+let abTests: ABTest[] = [];
+
+void (async () => {
+	const response = await fetch('http://localhost:5173/api/ab-tests');
+	abTests = ((await response.json()) as { tests: ABTest[] }).tests.filter(
+		(test) => test.status === 'active',
+	);
+})();
+
+const mvtMaxValue = 1_000_000;
+const smallestMvtId = 1;
+const largestMvtId = mvtMaxValue;
+
+const getVariant = (testId: string): ABTestVariant | null => {
+	const test = abTests.find((test) => test.id === testId);
+
+	if (!test) {
+		console.error(`Test ${testId} not found`);
+		return null;
+	}
+
+	const mvtId = getMvtId();
+
+	if (mvtId && mvtId >= smallestMvtId && mvtId <= largestMvtId) {
+		return test.variants[mvtId % test.variants.length] ?? null;
+	}
+
+	return null;
+};
+
+const isInABTestVariant = (testId: string, variantId: string): boolean => {
+	const variant = getVariant(testId);
+	const isInVariant = variant?.id === variantId;
+
+	console.log(
+		`User is in variant ${variantId} of test ${testId}: ${isInVariant}`,
+	);
+
+	return isInVariant;
+};
 
 // only fetch rules once per page view
 const fetchRules = once(async () => {
@@ -28,9 +89,15 @@ const fetchRules = once(async () => {
 
 const desktopInline1Rules = async (): Promise<SpacefinderRules> => {
 	const rulesJson = await fetchRules();
-	const desktopRuleset = rulesJson.find(
-		({ viewportId }) => viewportId === 'desktop',
-	);
+	const desktopRulesets = rulesJson
+		.filter(({ viewportId }) => viewportId === 'desktop')
+		.filter(({ abTestId, abTestVariantId }) => {
+			if (!abTestId || !abTestVariantId) {
+				return true;
+			}
+
+			return isInABTestVariant(abTestId, abTestVariantId);
+		});
 
 	const candidateSelector =
 		':scope > p, [data-spacefinder-role="nested"] > p';
@@ -38,18 +105,23 @@ const desktopInline1Rules = async (): Promise<SpacefinderRules> => {
 
 	let selectorList = {};
 
-	desktopRuleset?.rules.forEach((rule) => {
-		const { selector, minAbove, minBelow } = rule;
+	desktopRulesets
+		.map(({ rules }) => rules)
+		.flat()
+		.forEach((rule) => {
+			const { selector, minAbove, minBelow } = rule;
 
-		const newSelector: OpponentSelectorRules = {
-			[`:scope > [data-spacefinder-role="${selector}"]`]: {
-				marginBottom: minAbove,
-				marginTop: minBelow,
-			},
-		};
+			const newSelector: OpponentSelectorRules = {
+				[`:scope > [data-spacefinder-role="${selector}"]`]: {
+					marginBottom: minAbove,
+					marginTop: minBelow,
+				},
+			};
 
-		selectorList = { ...selectorList, ...newSelector };
-	});
+			selectorList = { ...selectorList, ...newSelector };
+		});
+
+	console.log('desktopInline1 selectorList', selectorList);
 
 	return {
 		bodySelector,
@@ -62,27 +134,38 @@ const desktopInline1Rules = async (): Promise<SpacefinderRules> => {
 
 const mobileAndTabletRules = async (): Promise<SpacefinderRules> => {
 	const rulesJson = await fetchRules();
-	const mobileAndTabletRuleset = rulesJson.find(
-		({ viewportId }) => viewportId === 'mobile',
-	);
+	const mobileAndTabletRulesets = rulesJson
+		.filter(({ viewportId }) => viewportId === 'mobile')
+		.filter(({ abTestId, abTestVariantId }) => {
+			if (!abTestId || !abTestVariantId) {
+				return true;
+			}
+
+			return isInABTestVariant(abTestId, abTestVariantId);
+		});
 
 	const mobileCandidateSelector =
 		':scope > p, :scope > h2, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"], [data-spacefinder-role="nested"] > p';
 
 	let selectorList = {};
 
-	mobileAndTabletRuleset?.rules.forEach((rule) => {
-		const { selector, minAbove, minBelow } = rule;
+	mobileAndTabletRulesets
+		.map(({ rules }) => rules)
+		.flat()
+		.forEach((rule) => {
+			const { selector, minAbove, minBelow } = rule;
 
-		const newSelector: OpponentSelectorRules = {
-			[`:scope > [data-spacefinder-role="${selector}"]`]: {
-				marginBottom: minAbove,
-				marginTop: minBelow,
-			},
-		};
+			const newSelector: OpponentSelectorRules = {
+				[`:scope > [data-spacefinder-role="${selector}"]`]: {
+					marginBottom: minAbove,
+					marginTop: minBelow,
+				},
+			};
 
-		selectorList = { ...selectorList, ...newSelector };
-	});
+			selectorList = { ...selectorList, ...newSelector };
+		});
+
+	console.log('mobileAndTabletRules selectorList', selectorList);
 
 	return {
 		bodySelector,

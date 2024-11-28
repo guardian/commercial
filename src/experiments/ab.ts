@@ -105,7 +105,7 @@ const init = () => {
 	return ab;
 };
 
-export const getParticipations = () => {
+const getParticipations = () => {
 	const ab = init();
 	const runnableTests = ab.allRunnableTests(concurrentTests);
 
@@ -119,13 +119,15 @@ export const getParticipations = () => {
 	return participations;
 };
 
-export const isUserInVariant = (test: ABTest, variantId: string): boolean => {
+const isUserInVariant = (test: ABTest, variantId: string): boolean => {
 	const ab = init();
 	return ab.isUserInVariant(test.id, variantId);
 };
 
-export const getVariant = (test: ABTest): string | undefined => {
+const getVariant = (test: ABTest): string | undefined => {
 	const participations = getParticipations();
 
 	return participations[test.id]?.variant;
 };
+
+export { getParticipations, isUserInVariant, getVariant, getMvtId };
