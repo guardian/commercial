@@ -13,7 +13,7 @@ import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
 import { initCarrot } from './carrot-traffic-driver';
 import { rules } from './rules';
 import { spaceFiller } from './space-filler';
-import { desktopInline1Rules } from './spaceCommandRules';
+import { desktopInline1Rules, mobileAndTabletRules } from './spaceCommandRules';
 import type { SpacefinderWriter } from './spacefinder';
 
 type SlotName = Parameters<typeof createAdSlot>[0];
@@ -210,7 +210,7 @@ const additionalMobileAndTabletInlineSizes = (index: number) => {
 	return undefined;
 };
 
-const addMobileAndTabletInlineAds = (
+const addMobileAndTabletInlineAds = async (
 	fillSlot: FillAdSlot,
 	currentBreakpoint: ReturnType<typeof getCurrentBreakpoint>,
 ): Promise<boolean> => {
@@ -234,7 +234,9 @@ const addMobileAndTabletInlineAds = (
 		await Promise.all(slots);
 	};
 
-	return spaceFiller.fillSpace(rules.mobileAndTabletInlines, insertAds, {
+	const rules = await mobileAndTabletRules();
+
+	return spaceFiller.fillSpace(rules, insertAds, {
 		waitForImages: true,
 		waitForInteractives: true,
 		pass: 'mobile-inlines',
