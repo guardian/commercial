@@ -42,7 +42,7 @@ const desktopInline1Rules = async (): Promise<SpacefinderRules> => {
 		const { selector, minAbove, minBelow } = rule;
 
 		const newSelector: OpponentSelectorRules = {
-			[`:scope > ${selector}`]: {
+			[`:scope > [data-spacefinder-role="${selector}"]`]: {
 				marginBottom: minAbove,
 				marginTop: minBelow,
 			},
@@ -75,7 +75,7 @@ const mobileAndTabletRules = async (): Promise<SpacefinderRules> => {
 		const { selector, minAbove, minBelow } = rule;
 
 		const newSelector: OpponentSelectorRules = {
-			[`:scope > ${selector}`]: {
+			[`:scope > [data-spacefinder-role="${selector}"]`]: {
 				marginBottom: minAbove,
 				marginTop: minBelow,
 			},
