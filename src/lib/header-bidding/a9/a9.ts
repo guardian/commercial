@@ -27,14 +27,32 @@ let requestQueue = Promise.resolve();
 
 const bidderTimeout = 1500;
 
+const displayAd = (adPosition: string): void => {
+	const adSlot = document.getElementById(`dfp-ad--${adPosition}`);
+	if (adSlot) {
+		window.googletag.display(adSlot.id);
+	}
+};
+
 const initialise = (): void => {
 	if (!initialised && window.apstag) {
 		initialised = true;
+		const pageConfig = window.guardian.config.page;
+		let adPosition = '';
+
+		if (pageConfig.isFront) {
+			if (pageConfig.section === 'network') {
+				adPosition = 'inline1';
+			} else {
+				adPosition = 'top-above-nav';
+			}
+		}
 		window.apstag.init({
 			pubID: window.guardian.config.page.a9PublisherId,
 			adServer: 'googletag',
 			bidTimeout: bidderTimeout,
 		});
+		displayAd(adPosition);
 	}
 };
 
