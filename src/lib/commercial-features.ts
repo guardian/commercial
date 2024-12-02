@@ -88,6 +88,7 @@ class CommercialFeatures {
 		const isFootballPage = pageId.startsWith('football/');
 		const isPageWithRightAdSpace =
 			pageId.endsWith('/fixtures') ||
+			pageId.endsWith('/live') ||
 			pageId.endsWith('/results') ||
 			pageId.endsWith('/tables') ||
 			pageId.endsWith('/table');
