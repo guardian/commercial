@@ -66,7 +66,6 @@ jobs:
         run: pnpm build
 
       - name: Save build
-        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
         with:
           name: dist
@@ -139,8 +138,8 @@ jobs:
       - name: Fetch build
         uses: actions/download-artifact@v4
         with:
-          name: prod-bundle
-          path: dist/bundle/prod
+          name: dist
+          path: dist
 
       - name: Riff-Raff Upload
         uses: guardian/actions-riff-raff@v4
