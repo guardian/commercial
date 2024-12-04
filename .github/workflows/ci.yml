@@ -116,3 +116,41 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  riff-raff:
+    name: Upload Riff Raff Artifacts
+    needs: [build, test, lint, types]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: ./.github/actions/setup-node-env
+
+      - name: Fetch build
+        uses: actions/download-artifact@v4
+        with:
+          name: prod-bundle
+          path: dist/bundle/prod
+
+      - name: Riff-Raff Upload
+        uses: guardian/actions-riff-raff@v4
+        with:
+          roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          projectName: dotcom::commercial-bundle
+          configPath: ./riff-raff.yaml
+          contentDirectories: |
+            frontend-static/test_commercial_bundles:
+              - dist/bundle/prod/js
+            commercial-bundle-path:
+              - dist/bundle/prod/cloudformation

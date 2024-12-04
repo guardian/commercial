@@ -1,14 +1,16 @@
 import { getConsentFor, onConsent } from '@guardian/libs';
 import { commercialFeatures } from './lib/commercial-features';
 
-const { frontendAssetsFullURL, page } = window.guardian.config;
+const { page } = window.guardian.config;
 
 const decideAssetsPath = () => {
 	if (process.env.OVERRIDE_BUNDLE_PATH) {
 		return process.env.OVERRIDE_BUNDLE_PATH;
 	}
-	const assetsPath = frontendAssetsFullURL ?? page.assetsPath;
-	return `${assetsPath}javascripts/commercial/`;
+	// TEMP
+	// Adjust the path we use to fetch dynamic imports to match the
+	// bucket key we use to deploy via Riff-Raff
+	return `${page.assetsPath}test_commercial_bundles/`;
 };
 
 __webpack_public_path__ = decideAssetsPath();

@@ -8,6 +8,51 @@ import config from './webpack.config.mjs';
 
 const { DefinePlugin } = webpack;
 
+class GenerateCloudformation {
+	apply = (compiler) => {
+		compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
+			const entry = compilation.entrypoints.get('commercial-standalone');
+
+			const stages = ['code', 'prod'];
+			stages.forEach((stage) => {
+				const cloudformation = {
+					Resources: {
+						BundlePath: {
+							Type: 'AWS::SSM::Parameter',
+							Properties: {
+								Name: `/frontend${stage === 'code' ? '/code' : ''}/commercial.bundlePath`,
+								Type: 'String',
+								Value: entry?.getFiles()[0],
+							},
+						},
+					},
+				};
+
+				const output = JSON.stringify(cloudformation, null, 2);
+				const outputPath = join(
+					import.meta.dirname,
+					'dist',
+					'bundle',
+					'prod',
+					'cloudformation',
+					`${stage}.json`,
+				);
+				compiler.outputFileSystem.mkdirSync(
+					join(
+						import.meta.dirname,
+						'dist',
+						'bundle',
+						'prod',
+						'cloudformation',
+					),
+					{ recursive: true },
+				);
+				compiler.outputFileSystem.writeFileSync(outputPath, output);
+			});
+		});
+	};
+}
+
 const gitCommitSHA = () => {
 	try {
 		const commitSHA = execSync('git rev-parse HEAD').toString().trim();
@@ -25,7 +70,7 @@ export default merge(config, {
 	output: {
 		filename: `${prefix}graun.standalone.commercial.js`,
 		chunkFilename: `${prefix}graun.[name].commercial.js`,
-		path: join(import.meta.dirname, 'dist', 'bundle', 'prod'),
+		path: join(import.meta.dirname, 'dist', 'bundle', 'prod', 'js'),
 		clean: true,
 	},
 	devtool: 'source-map',
@@ -41,6 +86,7 @@ export default merge(config, {
 			'process.env.OVERRIDE_BUNDLE_PATH': JSON.stringify(false),
 			...gitCommitSHA(),
 		}),
+		new GenerateCloudformation(),
 	],
 	optimization: {
 		minimize: true,
