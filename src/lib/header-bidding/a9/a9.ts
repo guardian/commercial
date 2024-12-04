@@ -64,11 +64,23 @@ const requestBids = async (
 		return requestQueue;
 	}
 
+	const section = window.guardian.config.page.section;
+
+	const isNetworkFront =
+		section === 'uk' || section === 'us' || section === 'au';
+
+	const filteredAdUnits = adUnits.filter((adUnit) => {
+		if (isNetworkFront) {
+			return adUnit.slotID === 'dfp-ad--inline1--mobile';
+		}
+		return adUnit.slotID === 'dfp-ad--top-above-nav';
+	});
+
 	requestQueue = requestQueue
 		.then(
 			() =>
 				new Promise<void>((resolve) => {
-					window.apstag?.fetchBids({ slots: adUnits }, () => {
+					window.apstag?.fetchBids({ slots: filteredAdUnits }, () => {
 						window.googletag.cmd.push(() => {
 							window.apstag?.setDisplayBids();
 							resolve();
