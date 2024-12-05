@@ -4,7 +4,7 @@ allowedStages:
   - CODE
   - DEV
 deployments:
-  frontend-static/test_commercial_bundles:
+  frontend-static/commercial:
     type: aws-s3
     parameters:
       bucketSsmKey: /account/services/dotcom-static.bucket
@@ -18,4 +18,4 @@ deployments:
         CODE: code.json
         PROD: prod.json
     dependencies:
-      - frontend-static/test_commercial_bundles
+      - frontend-static/commercial

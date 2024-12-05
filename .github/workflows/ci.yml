@@ -149,7 +149,7 @@ jobs:
           projectName: dotcom::commercial-bundle
           configPath: ./riff-raff.yaml
           contentDirectories: |
-            frontend-static/test_commercial_bundles:
-              - dist/bundle/prod/js
+            frontend-static/commercial:
+              - dist/riff-raff/js/commercial
             commercial-bundle-path:
-              - dist/bundle/prod/cloudformation
+              - dist/riff-raff/cloudformation

@@ -17,9 +17,10 @@
 	"main": "dist/cjs/core/index.js",
 	"module": "dist/esm/core/index.js",
 	"scripts": {
-		"build": "npm-run-all clean --parallel compile:core:* build:prod build:dev",
+		"build": "npm-run-all clean --parallel compile:core:* build:prod build:dev build:riff-raff",
 		"build:dev": "webpack -c webpack.config.dev.mjs",
 		"build:prod": "webpack -c webpack.config.prod.mjs",
+		"build:riff-raff": "webpack -c webpack.config.riff-raff.mjs",
 		"clean": "rm -rf dist",
 		"compile:core:common": "tsc --project ./tsconfig.core.json --outDir ./dist/cjs --module CommonJS",
 		"compile:core:esm": "tsc --project ./tsconfig.core.json --outDir ./dist/esm",
