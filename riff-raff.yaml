@@ -2,7 +2,7 @@ regions: [eu-west-1]
 stacks: [frontend]
 allowedStages:
   - CODE
-  - DEV
+  - PROD
 deployments:
   frontend-static/commercial:
     type: aws-s3
