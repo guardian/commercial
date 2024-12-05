@@ -32,17 +32,25 @@ class GenerateCloudformation {
 						BundlePath: {
 							Type: 'AWS::SSM::Parameter',
 							Properties: {
-								/**
-								 * DEV and PROD will use the same path, changing the DEV path is
-								 * overidden locally if needed
-								 */
-								Name: `/frontend${stage === 'code' ? '/code' : ''}/commercial.bundlePath`,
+								Name: `/frontend/${stage}/commercial.bundlePath`,
 								Type: 'String',
 								Value: hashedFilePath,
 							},
 						},
 					},
 				};
+
+				// If we're in prod, we also want to update the dev bundle path
+				if (stage === 'prod') {
+					cloudformation.Resources.DevBundlePath = {
+						Type: 'AWS::SSM::Parameter',
+						Properties: {
+							Name: '/frontend/dev/commercial.bundlePath',
+							Type: 'String',
+							Value: hashedFilePath,
+						},
+					};
+				}
 
 				const output = JSON.stringify(cloudformation, null, 2);
 				const outputPath = join(
