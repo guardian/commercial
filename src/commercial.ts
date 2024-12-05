@@ -7,14 +7,14 @@ const decideAssetsPath = () => {
 	if (process.env.OVERRIDE_BUNDLE_PATH) {
 		return process.env.OVERRIDE_BUNDLE_PATH;
 	}
-	if (process.env.RIFFRAFF_DEPLOY) {
-		return page.assetsPath;
-	}
+
 	const assetsPath = frontendAssetsFullURL ?? page.assetsPath;
 	return `${assetsPath}javascripts/commercial/`;
 };
 
-__webpack_public_path__ = decideAssetsPath();
+if (!process.env.RIFFRAFF_DEPLOY) {
+	__webpack_public_path__ = decideAssetsPath();
+}
 
 /**
  * Choose whether to launch Googletag or Opt Out tag (ootag) based on consent state

@@ -85,6 +85,7 @@ export default merge(config, {
 		filename: `commercial/${prefix}graun.standalone.commercial.js`,
 		chunkFilename: `commercial/${prefix}graun.[name].commercial.js`,
 		path: join(import.meta.dirname, 'dist', 'riff-raff', 'js'),
+		publicPath: 'auto',
 		clean: true,
 	},
 	devtool: 'source-map',
