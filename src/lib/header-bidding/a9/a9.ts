@@ -66,14 +66,42 @@ const requestBids = async (
 
 	const section = window.guardian.config.page.section;
 
-	const isNetworkFront =
-		section === 'uk' || section === 'us' || section === 'au';
+	const isNetworkFront = [
+		'uk',
+		'us',
+		'au',
+		'europe',
+		'international',
+	].includes(section);
+	const isSectionFront = [
+		'commentisfree',
+		'sport',
+		'culture',
+		'lifeandstyle',
+	].includes(section);
 
+	/**
+	 * Filters the provided ad units based on the current page context.
+	 *
+	 * - If the page is a network front, only the ad unit with the slot ID 'dfp-ad--inline1--mobile' is included.
+	 * - If the page is a section front, only the ad unit with the slot ID 'dfp-ad--top-above-nav' is included.
+	 * - If the page is not a front, all ad units are included.
+	 * - There is a cross over in logic where the page is both an article as well as a network front/section front,
+	 * - in this case we want to identify the page as a non-front page (arrticle) and include all ad units.
+	 *
+	 * @param adUnits - The array of ad units to be filtered.
+	 * @returns The filtered array of ad units based on the page context.
+	 */
 	const filteredAdUnits = adUnits.filter((adUnit) => {
 		if (isNetworkFront) {
 			return adUnit.slotID === 'dfp-ad--inline1--mobile';
 		}
-		return adUnit.slotID === 'dfp-ad--top-above-nav';
+		if (isSectionFront) {
+			return adUnit.slotID === 'dfp-ad--top-above-nav';
+		}
+		if (!window.guardian.config.page.isFront) {
+			return true;
+		}
 	});
 
 	requestQueue = requestQueue
