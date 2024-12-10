@@ -39,6 +39,7 @@ export default merge(config, {
 		new DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify('production'),
 			'process.env.OVERRIDE_BUNDLE_PATH': JSON.stringify(false),
+			'process.env.RIFFRAFF_DEPLOY': JSON.stringify(false),
 			...gitCommitSHA(),
 		}),
 	],
