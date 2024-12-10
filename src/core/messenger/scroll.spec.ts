@@ -1,4 +1,3 @@
-import { noop } from '../../utils/noop';
 import { _ as testExports } from './scroll';
 
 const addScrollListener = testExports.addScrollListener;
@@ -91,8 +90,8 @@ describe.skip('Cross-frame messenger: scroll', () => {
 			constructor(callback: ObsCallback) {
 				onIntersect = callback;
 				return Object.freeze({
-					observe: noop,
-					unobserve: noop,
+					observe: () => {},
+					unobserve: () => {},
 					disconnect: () => {
 						onIntersect = null;
 					},
