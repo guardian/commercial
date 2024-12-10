@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 23.7.5
+
+### Patch Changes
+
+- 95468e7: Add keywords to Magnite
+
 ## 23.7.4
 
 ### Patch Changes
