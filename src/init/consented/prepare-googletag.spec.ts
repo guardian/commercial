@@ -3,38 +3,10 @@ import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
 import type * as AdSizesType from '../../core/ad-sizes';
 import { loadAdvert } from '../../display/load-advert';
 import { commercialFeatures } from '../../lib/commercial-features';
-import _config from '../../lib/config';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
 import { init as prepareGoogletag } from './prepare-googletag';
 import { fillStaticAdvertSlots } from './static-ad-slots';
-
-const config = _config as {
-	get: (k: string) => string;
-	set: (
-		k: string,
-		v:
-			| boolean
-			| string
-			| Record<string, never>
-			| {
-					adUnit: string;
-					contentType: string;
-					edition: string;
-					isFront: boolean;
-					keywordIds: string;
-					pageId: string;
-					section: string;
-					seriesId: string;
-					sharedAdTargeting: {
-						ct: string;
-						edition: string;
-						k: string[];
-						se: string[];
-					};
-			  },
-	) => void;
-};
 
 const getAdverts = (withEmpty: boolean) => {
 	return [...dfpEnv.adverts.values()].map((advert) => {
@@ -270,10 +242,11 @@ describe('DFP', () => {
 	} = {} as const;
 
 	beforeEach(() => {
-		config.set('page', {
+		// @ts-expect-error -- test
+		window.guardian.config.page = {
 			adUnit: '/123456/theguardian.com/front',
 			contentType: 'Article',
-			edition: 'us',
+			edition: 'US',
 			isFront: true,
 			keywordIds: 'world/korea,world/ukraine',
 			pageId: 'world/uk',
@@ -285,7 +258,7 @@ describe('DFP', () => {
 				k: ['korea', 'ukraine'],
 				se: ['happy-times'],
 			},
-		});
+		};
 
 		document.body.innerHTML = domSnippet;
 

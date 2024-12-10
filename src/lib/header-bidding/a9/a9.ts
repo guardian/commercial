@@ -1,7 +1,7 @@
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
 import type { A9AdUnitInterface } from '../../../types/global';
-import { noop } from '../../../utils/noop';
+import { reportError } from '../../../utils/report-error';
 import type { HeaderBiddingSlot, SlotFlatMap } from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';
 
@@ -82,7 +82,9 @@ const requestBids = async (
 					});
 				}),
 		)
-		.catch(noop);
+		.catch(() => {
+			reportError(new Error('a9 header bidding error'), 'commercial');
+		});
 
 	return requestQueue;
 };

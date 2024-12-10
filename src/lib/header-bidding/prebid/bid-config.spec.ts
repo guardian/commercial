@@ -8,7 +8,6 @@ import {
 	isInUsa as isInUsa_,
 	isInUsOrCa as isInUsOrCa_,
 } from '../../../utils/geo-utils';
-import config from '../../config';
 import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
 import {
 	containsBillboard as containsBillboard_,
@@ -84,10 +83,6 @@ jest.mock('experiments/ab', () => ({
 	isUserInVariant: jest.fn(),
 }));
 
-jest.mock('lib/cookies', () => ({
-	getCookie: jest.fn(),
-}));
-
 const resetConfig = () => {
 	window.guardian.ophan = {
 		pageViewId: 'pvid',
@@ -144,11 +139,14 @@ describe('indexExchangeBidders', () => {
 	beforeEach(() => {
 		resetConfig();
 		getBreakpointKey.mockReturnValue('D');
-		config.set('page.pbIndexSites', [
-			{ bp: 'D', id: 123456 },
-			{ bp: 'M', id: 234567 },
-			{ bp: 'T', id: 345678 },
-		]);
+		// @ts-expect-error -- test
+		window.guardian.config.page = {
+			pbIndexSites: [
+				{ bp: 'D', id: 123456 },
+				{ bp: 'M', id: 234567 },
+				{ bp: 'T', id: 345678 },
+			],
+		};
 	});
 
 	afterEach(() => {
@@ -206,11 +204,14 @@ describe('getIndexSiteId', () => {
 	});
 
 	test('should find the correct ID for the breakpoint', () => {
-		config.set('page.pbIndexSites', [
-			{ bp: 'D', id: 123456 },
-			{ bp: 'M', id: 234567 },
-			{ bp: 'T', id: 345678 },
-		]);
+		// @ts-expect-error -- test
+		window.guardian.config.page = {
+			pbIndexSites: [
+				{ bp: 'D', id: 123456 },
+				{ bp: 'M', id: 234567 },
+				{ bp: 'T', id: 345678 },
+			],
+		};
 		const breakpoints = ['M', 'D', 'M', 'T', 'D'];
 		const results = [];
 		for (let i = 0; i < breakpoints.length; i += 1) {
