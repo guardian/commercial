@@ -119,6 +119,7 @@ export type PrebidMagniteParams = {
 	accountId: number;
 	siteId: number;
 	zoneId: number;
+	keywords: string[];
 };
 
 export type BidderCode =

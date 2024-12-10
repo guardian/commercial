@@ -644,6 +644,9 @@ const magniteBidder: PrebidBidder = {
 		accountId: 26644,
 		siteId: getMagniteSiteId(),
 		zoneId: getMagniteZoneId(slotId, sizes),
+		keywords: window.guardian.config.page.keywords
+			? window.guardian.config.page.keywords.split(',')
+			: [],
 	}),
 };
 
