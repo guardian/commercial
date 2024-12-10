@@ -1,9 +1,8 @@
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { once } from 'lodash-es';
-import type { SizeMapping, SlotName } from '../core/ad-sizes';
+import type { AdSize, SizeMapping, SlotName } from '../core/ad-sizes';
 import { EventTimer } from '../core/index';
 import { isEligibleForTeads } from '../core/targeting/teads-eligibility';
-import { toGoogleTagSize } from '../utils/googletag-ad-size';
 import { getUrlVars } from '../utils/url';
 import { initSlotIas } from './init-slot-ias';
 
@@ -28,6 +27,11 @@ const isBreakpoint = (
 	breakpoint: string,
 ): breakpoint is keyof typeof breakpointViewports =>
 	breakpoint in breakpointViewports;
+
+const toGoogleTagSize = (size: AdSize): googletag.SingleSize => {
+	// not using width and height here as to maintain compatibility with plain arrays
+	return size[0] === 0 && size[1] === 0 ? 'fluid' : [size[0], size[1]];
+};
 
 /**
  * Builds a googletag size mapping based on the breakpoints and ad sizes from

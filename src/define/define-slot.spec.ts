@@ -1,6 +1,5 @@
 import type { SizeMapping } from '../core/ad-sizes';
 import { adSizes, createAdSize } from '../core/ad-sizes';
-import { toGoogleTagSize } from '../utils/googletag-ad-size';
 import {
 	buildGoogletagSizeMapping,
 	collectSizes,
@@ -74,21 +73,11 @@ describe('buildGoogletagSizeMapping', () => {
 		expect(result).toEqual([
 			[
 				[980, 0],
-				[
-					toGoogleTagSize(adSizes.mpu),
-					'fluid',
-					toGoogleTagSize(adSizes.googleCard),
-					toGoogleTagSize(adSizes.halfPage),
-				],
+				[adSizes.mpu, 'fluid', adSizes.googleCard, adSizes.halfPage],
 			],
 			[
 				[0, 0],
-				[
-					toGoogleTagSize(adSizes.mpu),
-					'fluid',
-					toGoogleTagSize(adSizes.googleCard),
-					toGoogleTagSize(adSizes.halfPage),
-				],
+				[adSizes.mpu, 'fluid', adSizes.googleCard, adSizes.halfPage],
 			],
 		]);
 	});
