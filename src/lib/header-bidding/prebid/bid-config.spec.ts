@@ -83,10 +83,6 @@ jest.mock('experiments/ab', () => ({
 	isUserInVariant: jest.fn(),
 }));
 
-jest.mock('lib/cookies', () => ({
-	getCookie: jest.fn(),
-}));
-
 const resetConfig = () => {
 	window.guardian.ophan = {
 		pageViewId: 'pvid',
