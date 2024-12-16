@@ -20,10 +20,6 @@ jest.mock('experiments/ab', () => ({
 	),
 }));
 
-jest.mock('lib/cookies', () => ({
-	getCookie: jest.fn(),
-}));
-
 jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));

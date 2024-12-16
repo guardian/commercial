@@ -20,8 +20,6 @@ jest.mock('insert/spacefinder/space-filler', () => ({
 	},
 }));
 
-jest.mock('lib/config', () => ({ page: {}, get: () => false }));
-
 jest.mock('experiments/ab', () => ({
 	isUserInVariant: () => false,
 }));
