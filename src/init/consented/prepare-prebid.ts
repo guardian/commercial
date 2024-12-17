@@ -1,11 +1,13 @@
 import type { ConsentFramework } from '@guardian/libs';
 import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
+import { isUserInVariant } from '../../experiments/ab';
+import { regionSpecificPrebid } from '../../experiments/tests/region-specific-prebid';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
 import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
-import { isInCanada } from '../../utils/geo-utils';
+import { isInAuOrNz, isInCanada, isInUk, isInUsa } from '../../utils/geo-utils';
 
 const shouldLoadPrebid = () =>
 	!isGoogleProxy() &&
@@ -16,11 +18,25 @@ const shouldLoadPrebid = () =>
 	!shouldIncludeOnlyA9 &&
 	!isInCanada();
 
+const prebidVersion = () => {
+	if (isUserInVariant(regionSpecificPrebid, 'variant')) {
+		if (isInUk()) {
+			return 'uk';
+		} else if (isInAuOrNz()) {
+			return 'aus-nz';
+		} else if (isInUsa()) {
+			return 'us';
+		}
+		return 'row';
+	}
+	return 'all';
+};
+
 const loadPrebid = async (framework: ConsentFramework): Promise<void> => {
 	if (shouldLoadPrebid()) {
 		await import(
-			// @ts-expect-error -- there’s no types for Prebid.js
-			/* webpackChunkName: "Prebid.js" */ '@guardian/prebid.js/build/dist/prebid'
+			/* webpackChunkName: "Prebid.js" */
+			`@guardian/prebid.js/build/dist/${prebidVersion()}/prebid`
 		);
 		prebid.initialise(window, framework);
 	}
