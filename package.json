@@ -1,6 +1,6 @@
 {
 	"name": "@guardian/commercial",
-	"version": "23.7.4",
+	"version": "23.7.5",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial#readme",
 	"bugs": {
@@ -104,7 +104,7 @@
 		"webpack-merge": "^6.0.1"
 	},
 	"dependencies": {
-		"@guardian/prebid.js": "8.52.0-8",
+		"@guardian/prebid.js": "8.52.0-9",
 		"@octokit/core": "^6.1.2",
 		"fastdom": "^1.0.11",
 		"lodash-es": "^4.17.21",
