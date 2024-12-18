@@ -126,8 +126,6 @@ type EnableAnalyticsConfig = {
 	options: {
 		ajaxUrl: string;
 		pv: string;
-		enableV2Endpoint: boolean;
-		ajaxUrlV2: string;
 	};
 };
 
@@ -454,12 +452,10 @@ const initialise = (
 			{
 				provider: 'gu',
 				options: {
-					ajaxUrl: window.guardian.config.page.ajaxUrl ?? '',
-					pv: window.guardian.ophan.pageViewId,
-					enableV2Endpoint: true,
-					ajaxUrlV2: window.guardian.config.page.isDev
+					ajaxUrl: window.guardian.config.page.isDev
 						? `//performance-events.code.dev-guardianapis.com/header-bidding`
 						: `//performance-events.guardianapis.com/header-bidding`,
+					pv: window.guardian.ophan.pageViewId,
 				},
 			},
 		]);
