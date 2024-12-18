@@ -1,5 +1,16 @@
 # @guardian/commercial
 
+## 23.8.0
+
+### Minor Changes
+
+- e7260d5: Disable old prebid analytics endpoint
+- f4219a3: Use region specific bundles for Prebid
+
+### Patch Changes
+
+- 7803bb8: show ads in right column of football live pages
+
 ## 23.7.5
 
 ### Patch Changes
