@@ -1,7 +1,6 @@
-import { getCookie, log } from '@guardian/libs';
+import { getCookie, log, storage } from '@guardian/libs';
 import { getCurrentBreakpoint } from './detect/detect-breakpoint';
 import { adFreeDataIsPresent } from './manage-ad-free-cookie';
-import userPrefs from './user-prefs';
 
 /**
  * Log the reason why adverts are disabled
@@ -43,6 +42,9 @@ const isDigitalSubscriber = (): boolean =>
 const isAdFreeUser = (): boolean =>
 	isDigitalSubscriber() || adFreeDataIsPresent();
 
+const isUserPrefsAdsOff = (): boolean =>
+	storage.local.get(`gu.prefs.switch.adverts`) === false;
+
 // Having a constructor means we can easily re-instantiate the object in a test
 class CommercialFeatures {
 	shouldLoadGoogletag: boolean;
@@ -63,7 +65,7 @@ class CommercialFeatures {
 		const noadsUrl = /[#&]noads(&.*)?$/.test(window.location.hash);
 		const forceAdFree = /[#&]noadsaf(&.*)?$/.test(window.location.hash);
 		const forceAds = /[?&]forceads(&.*)?$/.test(window.location.search);
-		const externalAdvertising = !noadsUrl && !userPrefs.isOff('adverts');
+		const externalAdvertising = !noadsUrl && !isUserPrefsAdsOff();
 		const sensitiveContent =
 			window.guardian.config.page.shouldHideAdverts ||
 			window.guardian.config.page.section === 'childrens-books-site';

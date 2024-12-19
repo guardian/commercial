@@ -1,9 +1,9 @@
+import { storage } from '@guardian/libs';
 import { commercialFeatures } from './commercial-features';
 import type { CommercialFeaturesConstructor } from './commercial-features';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from './detect/detect-breakpoint';
 import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from './identity/api';
 import { adFreeDataIsPresent as adFreeDataIsPresent_ } from './manage-ad-free-cookie';
-import userPrefs from './user-prefs';
 
 const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
 	typeof getCurrentBreakpoint_
@@ -77,7 +77,7 @@ describe('Commercial features', () => {
 
 		window.location.hash = '';
 
-		userPrefs.removeSwitch('adverts');
+		storage.local.remove(`gu.prefs.switch.adverts`);
 
 		getCurrentBreakpoint.mockReturnValue('desktop');
 		isUserLoggedInOktaRefactor.mockResolvedValue(true);
