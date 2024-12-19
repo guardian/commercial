@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 23.8.1
+
+### Patch Changes
+
+- a81385c: Update region split prebid test
+
 ## 23.8.0
 
 ### Minor Changes
