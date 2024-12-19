@@ -1,6 +1,5 @@
 import { getCookie, log, storage } from '@guardian/libs';
 import { getCurrentBreakpoint } from './detect/detect-breakpoint';
-import { adFreeDataIsPresent } from './manage-ad-free-cookie';
 
 /**
  * Log the reason why adverts are disabled
@@ -26,6 +25,20 @@ function adsDisabledLogger(
 		if (value) noAdsLog(condition, value);
 	}
 }
+
+/**
+ * Ad free cookie helpers
+ */
+const AD_FREE_USER_COOKIE = 'GU_AF1';
+
+const getAdFreeCookie = (): string | null =>
+	getCookie({ name: AD_FREE_USER_COOKIE });
+
+const adFreeDataIsPresent = (): boolean => {
+	const cookieVal = getAdFreeCookie();
+	if (!cookieVal) return false;
+	return !Number.isNaN(parseInt(cookieVal, 10));
+};
 
 /**
  * Determine whether current browser is a version of Internet Explorer

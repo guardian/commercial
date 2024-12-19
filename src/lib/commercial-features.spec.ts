@@ -1,26 +1,17 @@
-import { storage } from '@guardian/libs';
-import { commercialFeatures } from './commercial-features';
+import { setCookie, storage } from '@guardian/libs';
 import type { CommercialFeaturesConstructor } from './commercial-features';
+import { commercialFeatures } from './commercial-features';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from './detect/detect-breakpoint';
 import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from './identity/api';
-import { adFreeDataIsPresent as adFreeDataIsPresent_ } from './manage-ad-free-cookie';
 
 const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
 	typeof getCurrentBreakpoint_
->;
-
-const adFreeDataIsPresent = adFreeDataIsPresent_ as jest.MockedFunction<
-	typeof adFreeDataIsPresent_
 >;
 
 const isUserLoggedInOktaRefactor =
 	isUserLoggedInOktaRefactor_ as jest.MockedFunction<
 		typeof isUserLoggedInOktaRefactor_
 	>;
-
-jest.mock('./manage-ad-free-cookie', () => ({
-	adFreeDataIsPresent: jest.fn(),
-}));
 
 const CommercialFeatures =
 	commercialFeatures.constructor as CommercialFeaturesConstructor;
@@ -78,6 +69,8 @@ describe('Commercial features', () => {
 		window.location.hash = '';
 
 		storage.local.remove(`gu.prefs.switch.adverts`);
+
+		setCookie({ name: 'GU_AF1', value: '' });
 
 		getCurrentBreakpoint.mockReturnValue('desktop');
 		isUserLoggedInOktaRefactor.mockResolvedValue(true);
@@ -203,9 +196,8 @@ describe('Commercial features', () => {
 	});
 
 	describe('Article body adverts under ad-free', () => {
-		// LOL grammar
 		it('are disabled', () => {
-			adFreeDataIsPresent.mockReturnValue(true);
+			setCookie({ name: 'GU_AF1', value: '10' });
 			const features = new CommercialFeatures();
 			expect(features.articleBodyAdverts).toBe(false);
 		});
@@ -233,7 +225,7 @@ describe('Commercial features', () => {
 
 	describe('High-relevance commercial component under ad-free', () => {
 		beforeEach(() => {
-			adFreeDataIsPresent.mockReturnValue(true);
+			setCookie({ name: 'GU_AF1', value: '10' });
 		});
 
 		it('Does not run on fronts', () => {
@@ -292,7 +284,7 @@ describe('Commercial features', () => {
 
 	describe('Third party tags under ad-free', () => {
 		beforeEach(() => {
-			adFreeDataIsPresent.mockReturnValue(true);
+			setCookie({ name: 'GU_AF1', value: '10' });
 		});
 
 		it('Does not run by default', () => {
@@ -373,7 +365,7 @@ describe('Commercial features', () => {
 	describe('Comment adverts under ad-free', () => {
 		beforeEach(() => {
 			window.guardian.config.page.commentable = true;
-			adFreeDataIsPresent.mockReturnValue(true);
+			setCookie({ name: 'GU_AF1', value: '10' });
 		});
 
 		it('Does not display when page has comments', () => {
