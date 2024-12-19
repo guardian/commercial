@@ -46,12 +46,12 @@ jest.mock('lib/identity/api', () => ({
 	getGoogleTagId: jest.fn().mockResolvedValue('test-id-string'),
 	getUrl: jest.fn(),
 }));
-jest.mock('lib/analytics/beacon', () => void {});
 
 jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 	hasCrossedBreakpoint: jest.fn(),
 }));
+
 jest.mock('display/display-lazy-ads', () => ({
 	displayLazyAds: jest.fn(),
 }));
@@ -109,15 +109,14 @@ jest.mock('@guardian/libs', () => {
 		},
 	};
 });
+
 jest.mock(
 	'lodash-es/once',
 	() =>
 		<T>(fn: (...args: unknown[]) => T) =>
 			fn,
 );
-jest.mock('lib/analytics/beacon', () => ({
-	fire: jest.fn(),
-}));
+
 jest.mock('display/load-advert', () => ({
 	loadAdvert: jest.fn(),
 }));

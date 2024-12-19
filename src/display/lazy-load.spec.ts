@@ -19,10 +19,6 @@ jest.mock('display/request-bids', () => ({
 	requestBidsForAd: jest.fn(),
 }));
 
-jest.mock('config', () => ({
-	get: jest.fn(() => false),
-}));
-
 jest.mock('define/Advert', () => jest.fn(() => ({ advert: jest.fn() })));
 
 jest.mock('lib/dfp/get-advert-by-id');
