@@ -7,7 +7,6 @@ import {
 import type { AdSize, SizeMapping, SlotName } from '../core/ad-sizes';
 import { concatSizeMappings } from '../core/create-ad-slot';
 import type { Breakpoint } from '../core/lib/breakpoint';
-import { breakpointNameToAttribute } from '../lib/breakpoint-name-to-attribute';
 import type { HeaderBiddingSize } from '../lib/header-bidding/prebid-types';
 import fastdom from '../utils/fastdom-promise';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';
@@ -37,6 +36,15 @@ const stringToTuple = (size: string): [number, number] => {
  */
 const createSizeMapping = (attr: string): AdSize[] =>
 	attr.split('|').map((size) => createAdSize(...stringToTuple(size)));
+
+/**
+ * Convert a breakpoint name to a form suitable for use as an attribute
+ * Regex matches a lowercase letter followed by an uppercase letter
+ *
+ * e.g. `mobileLandscape` => `mobile-landscape`
+ */
+const breakpointNameToAttribute = (breakpointName: string): string =>
+	breakpointName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 
 /**
  * Extract the ad sizes from the breakpoint data attributes of an ad slot
