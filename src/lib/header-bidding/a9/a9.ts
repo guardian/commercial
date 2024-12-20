@@ -92,23 +92,26 @@ const requestBids = async (
 	 * @param adUnits - The array of ad units to be filtered.
 	 * @returns The filtered array of ad units based on the page context.
 	 */
-	const filteredAdUnits = adUnits.filter((adUnit) => {
-		if (isNetworkFront) {
-			return adUnit.slotID === 'dfp-ad--inline1--mobile';
+	const updatedAdUnits = adUnits.map((adUnit) => {
+		let blockedBidders: string[] = [];
+
+		if (isNetworkFront && adUnit.slotID === 'dfp-ad--inline1--mobile') {
+			blockedBidders = ['1lsxjb4']; // Block GumGum for network front condition
+		} else if (
+			isSectionFront &&
+			adUnit.slotID === 'dfp-ad--top-above-nav'
+		) {
+			blockedBidders = ['1lsxjb4']; // Block GumGum for section front condition
 		}
-		if (isSectionFront) {
-			return adUnit.slotID === 'dfp-ad--top-above-nav';
-		}
-		if (!window.guardian.config.page.isFront) {
-			return true;
-		}
+
+		return { ...adUnit, params: { blockedBidders } };
 	});
 
 	requestQueue = requestQueue
 		.then(
 			() =>
 				new Promise<void>((resolve) => {
-					window.apstag?.fetchBids({ slots: filteredAdUnits }, () => {
+					window.apstag?.fetchBids({ slots: updatedAdUnits }, () => {
 						window.googletag.cmd.push(() => {
 							window.apstag?.setDisplayBids();
 							resolve();
