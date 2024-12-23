@@ -103,3 +103,11 @@ In order to do this, first run: `pnpm changeset add`, again, This will create a 
 **Note**: Once the beta version is released, the label will be removed from the PR, so you will need to add it again if you want to release subsequent new versions.
 
 On a branch on frontend you can update the version of the bundle to the beta version and deploy to CODE to test.
+
+### Deploying to PROD
+
+Ensure your PR has a chageset and has been merged to main. This will trigger a changesets release PR, which will bump the version of the package, once this is merged the package will be published to NPM.
+
+To get your changes live on the site, you will need to update the `@guardian/commercial` version in the [Frontend](https://github.com/guardian/frontend) repository. You can do this by running the [bump_commercial.sh](./scripts/bump_commercial.sh) script.
+
+We're experimenting with direct deployments via riff-raff, when you merge to main a a riff-raff build will be created but you will need to manually deploy it in the riff-raff GUI, these deployments are currently only available behind a server side test that you'll need to opt in to.
