@@ -65,32 +65,32 @@ devDependencies:
     specifier: ^2.26.2
     version: 2.27.9
   '@guardian/ab-core':
-    specifier: 8.0.0
-    version: 8.0.0(tslib@2.7.0)(typescript@5.6.3)
+    specifier: 8.0.1
+    version: 8.0.1(tslib@2.7.0)(typescript@5.6.3)
   '@guardian/browserslist-config':
     specifier: ^6.1.1
-    version: 6.1.1(browserslist@4.24.2)(tslib@2.7.0)
+    version: 6.1.2(browserslist@4.24.3)(tslib@2.7.0)
   '@guardian/core-web-vitals':
     specifier: 7.0.0
-    version: 7.0.0(@guardian/libs@19.2.1)(tslib@2.7.0)(typescript@5.6.3)(web-vitals@4.2.3)
+    version: 7.0.0(@guardian/libs@19.2.2)(tslib@2.7.0)(typescript@5.6.3)(web-vitals@4.2.3)
   '@guardian/eslint-config-typescript':
     specifier: ^12.0.0
     version: 12.0.0(eslint@8.57.0)(tslib@2.7.0)(typescript@5.6.3)
   '@guardian/identity-auth':
     specifier: ^3.0.0
-    version: 3.0.1(@guardian/libs@19.2.1)(tslib@2.7.0)(typescript@5.6.3)
+    version: 3.0.1(@guardian/libs@19.2.2)(tslib@2.7.0)(typescript@5.6.3)
   '@guardian/identity-auth-frontend':
     specifier: ^5.0.0
-    version: 5.0.0(@guardian/identity-auth@3.0.1)(@guardian/libs@19.2.1)(tslib@2.7.0)(typescript@5.6.3)
+    version: 5.0.0(@guardian/identity-auth@3.0.1)(@guardian/libs@19.2.2)(tslib@2.7.0)(typescript@5.6.3)
   '@guardian/libs':
-    specifier: 19.2.1
-    version: 19.2.1(tslib@2.7.0)(typescript@5.6.3)
+    specifier: 19.2.2
+    version: 19.2.2(tslib@2.7.0)(typescript@5.6.3)
   '@guardian/prettier':
     specifier: 8.0.1
     version: 8.0.1(prettier@3.3.3)(tslib@2.7.0)
   '@guardian/source':
-    specifier: 8.0.0
-    version: 8.0.0(tslib@2.7.0)(typescript@5.6.3)
+    specifier: 8.0.1
+    version: 8.0.1(tslib@2.7.0)(typescript@5.6.3)
   '@playwright/test':
     specifier: 1.48.2
     version: 1.48.2
@@ -1870,8 +1870,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@guardian/ab-core@8.0.0(tslib@2.7.0)(typescript@5.6.3):
-    resolution: {integrity: sha512-I6KV03kROJPnU7FdRbqkmEAzsTDMMK/bgnB7rbL/qht8+hrK9y52ySFSJF5WX0zPX/9MoMRyAgmf+wBWOeogBA==}
+  /@guardian/ab-core@8.0.1(tslib@2.7.0)(typescript@5.6.3):
+    resolution: {integrity: sha512-m4sS68EbYxgNNdLg0NjFVF5BxI4ABTb8RVb3DTlvdygFKoISpgzlDlPL8s9gBILqMhjXu2/6X/Vej3k8SPRAUA==}
     peerDependencies:
       tslib: ^2.6.2
       typescript: ~5.5.2
@@ -1883,17 +1883,17 @@ packages:
       typescript: 5.6.3
     dev: true
 
-  /@guardian/browserslist-config@6.1.1(browserslist@4.24.2)(tslib@2.7.0):
-    resolution: {integrity: sha512-62fVcqE5opXxN1bgm5lF6ykPrKM2/U8WdGH7gcrFGV6f5VVz+oFloMX+C2Svj19fdmXpfHj6+I1AmJbqSAX5CQ==}
+  /@guardian/browserslist-config@6.1.2(browserslist@4.24.3)(tslib@2.7.0):
+    resolution: {integrity: sha512-3SWaa6759XJVyYX3b4NERv7juqzX4Qt5VigxaQAp1gnFOPZMkjKmEZrDW1s3Ty2bSs6MAMrUovIgcDCqfRX71w==}
     peerDependencies:
       browserslist: ^4.22.2
       tslib: ^2.6.2
     dependencies:
-      browserslist: 4.24.2
+      browserslist: 4.24.3
       tslib: 2.7.0
     dev: true
 
-  /@guardian/core-web-vitals@7.0.0(@guardian/libs@19.2.1)(tslib@2.7.0)(typescript@5.6.3)(web-vitals@4.2.3):
+  /@guardian/core-web-vitals@7.0.0(@guardian/libs@19.2.2)(tslib@2.7.0)(typescript@5.6.3)(web-vitals@4.2.3):
     resolution: {integrity: sha512-1JLUQjkLY8SXYJqcy0TiE9/9hCcmyIlmMpRoW8Ygn/qGtyNxG+zzwkwsgtJIP+B0ZjtDqfukra2IV9l7wX5A0g==}
     peerDependencies:
       '@guardian/libs': ^18.0.0
@@ -1904,7 +1904,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@guardian/libs': 19.2.1(tslib@2.7.0)(typescript@5.6.3)
+      '@guardian/libs': 19.2.2(tslib@2.7.0)(typescript@5.6.3)
       tslib: 2.7.0
       typescript: 5.6.3
       web-vitals: 4.2.3
@@ -1950,7 +1950,7 @@ packages:
       - supports-color
     dev: true
 
-  /@guardian/identity-auth-frontend@5.0.0(@guardian/identity-auth@3.0.1)(@guardian/libs@19.2.1)(tslib@2.7.0)(typescript@5.6.3):
+  /@guardian/identity-auth-frontend@5.0.0(@guardian/identity-auth@3.0.1)(@guardian/libs@19.2.2)(tslib@2.7.0)(typescript@5.6.3):
     resolution: {integrity: sha512-Y5wIg8Zo92jl/ChZ4v/Ve3CGQWnoZSfkrhwSOIoZPm88YvijEASxHteVF04QOy/rhVs1O6AQJfl5Ilx244zS6w==}
     peerDependencies:
       '@guardian/identity-auth': ^3.0.0
@@ -1961,13 +1961,13 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@guardian/identity-auth': 3.0.1(@guardian/libs@19.2.1)(tslib@2.7.0)(typescript@5.6.3)
-      '@guardian/libs': 19.2.1(tslib@2.7.0)(typescript@5.6.3)
+      '@guardian/identity-auth': 3.0.1(@guardian/libs@19.2.2)(tslib@2.7.0)(typescript@5.6.3)
+      '@guardian/libs': 19.2.2(tslib@2.7.0)(typescript@5.6.3)
       tslib: 2.7.0
       typescript: 5.6.3
     dev: true
 
-  /@guardian/identity-auth@3.0.1(@guardian/libs@19.2.1)(tslib@2.7.0)(typescript@5.6.3):
+  /@guardian/identity-auth@3.0.1(@guardian/libs@19.2.2)(tslib@2.7.0)(typescript@5.6.3):
     resolution: {integrity: sha512-QwvQY6BmirP9Me2DkVkNCq0VQeNMzko9zG73G9l0XpQKk5+tTPUf31kyj06Uw11pWUfNacscjbfSU4rDqZOxCA==}
     peerDependencies:
       '@guardian/libs': ^18.0.0
@@ -1977,7 +1977,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@guardian/libs': 19.2.1(tslib@2.7.0)(typescript@5.6.3)
+      '@guardian/libs': 19.2.2(tslib@2.7.0)(typescript@5.6.3)
       tslib: 2.7.0
       typescript: 5.6.3
     dev: true
@@ -1995,8 +1995,8 @@ packages:
       typescript: 5.6.3
     dev: false
 
-  /@guardian/libs@19.2.1(tslib@2.7.0)(typescript@5.6.3):
-    resolution: {integrity: sha512-U/JElVPXdy95XnpHQ5OWxMYH4mar4lBvGcKOyZrWPDrhmQr4Z5cFwa07LBh6kUZuXk4m/nasZTGS4Jy136ckMQ==}
+  /@guardian/libs@19.2.2(tslib@2.7.0)(typescript@5.6.3):
+    resolution: {integrity: sha512-xR5tXgwAO1gksbZ5OrtLZvnu1C0az9e90/Eqi48MNtI2FtGQk69s2M5v0M0q+Donbp4wcgZmZ82FHc+W2LBNCQ==}
     peerDependencies:
       tslib: ^2.6.2
       typescript: ~5.5.2
@@ -2099,11 +2099,11 @@ packages:
       tslib: 2.7.0
     dev: true
 
-  /@guardian/source@8.0.0(tslib@2.7.0)(typescript@5.6.3):
-    resolution: {integrity: sha512-P6OTmCWsSWkT20M5uRAPoKonsz3nikOj308mUEiFDO2vpx1oyG2V6KP0YBlDxoSzw7EW6KbM9Ptat6VNd55cEw==}
+  /@guardian/source@8.0.1(tslib@2.7.0)(typescript@5.6.3):
+    resolution: {integrity: sha512-DRty0UUddv+E3U81uDMc83BvMPkfLIj1Gb+jDQdLi6GdU9enpubsqOZfLtzxUVYQziukOCGf4DmkLhPHxzqoKw==}
     peerDependencies:
       '@emotion/react': ^11.11.3
-      '@types/react': ^18.2.11
+      '@types/react': ^18.2.79
       react: ^18.2.0
       tslib: ^2.6.2
       typescript: ~5.5.2
@@ -3911,6 +3911,17 @@ packages:
       node-releases: 2.0.18
       update-browserslist-db: 1.1.1(browserslist@4.24.2)
 
+  /browserslist@4.24.3:
+    resolution: {integrity: sha512-1CPmv8iobE2fyRMV97dAcMVegvvWKxmq94hkLiAkUGwKVTyDLw33K+ZxiFrREKmmps4rIw6grcCFCnTMSZ/YiA==}
+    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
+    hasBin: true
+    dependencies:
+      caniuse-lite: 1.0.30001690
+      electron-to-chromium: 1.5.76
+      node-releases: 2.0.19
+      update-browserslist-db: 1.1.1(browserslist@4.24.3)
+    dev: true
+
   /bs-logger@0.2.6:
     resolution: {integrity: sha512-pd8DCoxmbgc7hyPKOvxtqNcjYoOsABPQdcCUjGp3d42VR2CX1ORhk2A87oqqu5R1kk+76nsxZupkmyd+MVtCog==}
     engines: {node: '>= 6'}
@@ -3977,6 +3988,10 @@ packages:
 
   /caniuse-lite@1.0.30001680:
     resolution: {integrity: sha512-rPQy70G6AGUMnbwS1z6Xg+RkHYPAi18ihs47GH0jcxIG7wArmPgY3XbS2sRdBbxJljp3thdT8BIqv9ccCypiPA==}
+
+  /caniuse-lite@1.0.30001690:
+    resolution: {integrity: sha512-5ExiE3qQN6oF8Clf8ifIDcMRCRE/dMGcETG/XGMD8/XiXm6HXQgQTh1yZYLXXpSOsEUlJm1Xr7kGULZTuGtP/w==}
+    dev: true
 
   /chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
@@ -4742,6 +4757,10 @@ packages:
 
   /electron-to-chromium@1.5.63:
     resolution: {integrity: sha512-ddeXKuY9BHo/mw145axlyWjlJ1UBt4WK3AlvkT7W2AbqfRQoacVoRUCF6wL3uIx/8wT9oLKXzI+rFqHHscByaA==}
+
+  /electron-to-chromium@1.5.76:
+    resolution: {integrity: sha512-CjVQyG7n7Sr+eBXE86HIulnL5N8xZY1sgmOPGuq/F0Rr0FJq63lg0kEtOIDfZBk44FnDLf6FUJ+dsJcuiUDdDQ==}
+    dev: true
 
   /emittery@0.13.1:
     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
@@ -7509,6 +7528,10 @@ packages:
   /node-releases@2.0.18:
     resolution: {integrity: sha512-d9VeXT4SJ7ZeOqGX6R5EM022wpL+eWPooLI+5UpWn2jCT1aosUQEhQP214x33Wkwx3JQMvIm+tIoVOdodFS40g==}
 
+  /node-releases@2.0.19:
+    resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==}
+    dev: true
+
   /node.extend@2.0.2:
     resolution: {integrity: sha512-pDT4Dchl94/+kkgdwyS2PauDFjZG0Hk0IcHIB+LkW27HLDtdoeMxHTxZh39DYbPP8UflWXWj9JcdDozF+YDOpQ==}
     engines: {node: '>=0.4.0'}
@@ -9191,6 +9214,17 @@ packages:
       browserslist: 4.24.2
       escalade: 3.2.0
       picocolors: 1.1.1
+
+  /update-browserslist-db@1.1.1(browserslist@4.24.3):
+    resolution: {integrity: sha512-R8UzCaa9Az+38REPiJ1tXlImTJXlVfgHZsglwBD/k6nj76ctsH1E3q4doGrukiLQd3sGQYu56r5+lo5r94l29A==}
+    hasBin: true
+    peerDependencies:
+      browserslist: '>= 4.21.0'
+    dependencies:
+      browserslist: 4.24.3
+      escalade: 3.2.0
+      picocolors: 1.1.1
+    dev: true
 
   /uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
