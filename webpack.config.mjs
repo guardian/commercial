@@ -31,18 +31,31 @@ const config = {
 		rules: [
 			{
 				test: /\.[jt]sx?|mjs$/,
+				exclude: {
+					and: [/node_modules/],
+					not: [
+						// Include all @guardian modules, except automat-modules
+						/@guardian\/(?!(automat-modules))/,
+						// Include the dynamic-import-polyfill
+						/dynamic-import-polyfill/,
+					],
+				},
 				use: [
 					{
-						loader: 'babel-loader',
-					},
-					{
-						loader: 'ts-loader',
+						loader: 'swc-loader',
 						options: {
-							transpileOnly: true,
-							configFile: join(
-								import.meta.dirname,
-								'tsconfig.json',
-							),
+							$schema: 'http://json.schemastore.org/swcrc',
+							jsc: {
+								parser: {
+									syntax: 'typescript',
+									decorators: false,
+									dynamicImport: true,
+								},
+							},
+							sourceMaps: true,
+							env: {
+								dynamicImport: true,
+							},
 						},
 					},
 				],
