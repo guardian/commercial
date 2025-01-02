@@ -54,10 +54,10 @@
 		"@changesets/cli": "^2.26.2",
 		"@guardian/ab-core": "8.0.1",
 		"@guardian/browserslist-config": "^6.1.1",
-		"@guardian/core-web-vitals": "7.0.0",
+		"@guardian/core-web-vitals": "8.0.1",
 		"@guardian/eslint-config-typescript": "^12.0.0",
-		"@guardian/identity-auth": "^3.0.0",
-		"@guardian/identity-auth-frontend": "^5.0.0",
+		"@guardian/identity-auth": "^4.0.2",
+		"@guardian/identity-auth-frontend": "^6.0.2",
 		"@guardian/libs": "19.2.2",
 		"@guardian/prettier": "8.0.1",
 		"@guardian/source": "8.0.1",
@@ -96,7 +96,7 @@
 		"ts-jest": "^29.0.5",
 		"ts-loader": "^9.4.2",
 		"type-fest": "^4.3.3",
-		"typescript": "5.6.3",
+		"typescript": "5.5.2",
 		"webpack": "^5.94.0",
 		"webpack-bundle-analyzer": "^4.10.0",
 		"webpack-cli": "^5.1.0",
@@ -124,12 +124,12 @@
 	},
 	"peerDependencies": {
 		"@guardian/ab-core": "^8.0.0",
-		"@guardian/core-web-vitals": "^7.0.0",
+		"@guardian/core-web-vitals": "^8.0.1",
 		"@guardian/identity-auth": "^3.0.0",
 		"@guardian/identity-auth-frontend": "^5.0.0",
 		"@guardian/libs": "^19.1.0",
 		"@guardian/source": "^8.0.0",
-		"typescript": "~5.5.3"
+		"typescript": "~5.5.2"
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"
