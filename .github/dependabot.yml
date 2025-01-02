@@ -39,6 +39,12 @@ updates:
         update-types:
           - 'minor'
           - 'patch'
+      typescript:
+        dependency-type: 'development'
+        patterns:
+          - 'typescript'
+        update-types:
+          - 'patch'
       minor-dependencies:
         dependency-type: 'production'
         update-types:
@@ -57,6 +63,7 @@ updates:
           - '*eslint*'
           - '*prettier*'
           - '@playwright/*'
+          - 'typescript'
     # The default is 5 but as we are going to group dependencies we might need to increase it
     open-pull-requests-limit: 10
   - package-ecosystem: 'github-actions'
