@@ -17,7 +17,7 @@ class A9AdUnit implements A9AdUnitInterface {
 
 	constructor(advert: Advert, slot: HeaderBiddingSlot) {
 		this.slotID = advert.id;
-		this.slotName = window.guardian.config.page.adUnit;
+		this.slotName = `${window.guardian.config.page.adUnit}/${this.slotID}`;
 		this.sizes = slot.sizes.map((size) => Array.from(size));
 	}
 }
@@ -30,16 +30,10 @@ const bidderTimeout = 1500;
 const initialise = (): void => {
 	if (!initialised && window.apstag) {
 		initialised = true;
-		const blockedBidders = window.guardian.config.page.isFront
-			? [
-					'1lsxjb4', // GumGum, as they have been showing wonky formats on fronts
-				]
-			: [];
 		window.apstag.init({
 			pubID: window.guardian.config.page.a9PublisherId,
 			adServer: 'googletag',
 			bidTimeout: bidderTimeout,
-			blockedBidders,
 		});
 	}
 };
@@ -70,11 +64,54 @@ const requestBids = async (
 		return requestQueue;
 	}
 
+	const section = window.guardian.config.page.section;
+
+	const isNetworkFront = [
+		'uk',
+		'us',
+		'au',
+		'europe',
+		'international',
+	].includes(section);
+	const isSectionFront = [
+		'commentisfree',
+		'sport',
+		'culture',
+		'lifeandstyle',
+	].includes(section);
+
+	/**
+	 * Filters the provided ad units based on the current page context.
+	 *
+	 * - If the page is a network front, only the ad unit with the slot ID 'dfp-ad--inline1--mobile' is included.
+	 * - If the page is a section front, only the ad unit with the slot ID 'dfp-ad--top-above-nav' is included.
+	 * - If the page is not a front, all ad units are included.
+	 * - There is a cross over in logic where the page is both an article as well as a network front/section front,
+	 * - in this case we want to identify the page as a non-front page (arrticle) and include all ad units.
+	 *
+	 * @param adUnits - The array of ad units to be filtered.
+	 * @returns The filtered array of ad units based on the page context.
+	 */
+	const updatedAdUnits = adUnits.map((adUnit) => {
+		let blockedBidders: string[] = [];
+
+		if (isNetworkFront && adUnit.slotID === 'dfp-ad--inline1--mobile') {
+			blockedBidders = ['1lsxjb4']; // Block GumGum for network front condition
+		} else if (
+			isSectionFront &&
+			adUnit.slotID === 'dfp-ad--top-above-nav'
+		) {
+			blockedBidders = ['1lsxjb4']; // Block GumGum for section front condition
+		}
+
+		return { ...adUnit, params: { blockedBidders } };
+	});
+
 	requestQueue = requestQueue
 		.then(
 			() =>
 				new Promise<void>((resolve) => {
-					window.apstag?.fetchBids({ slots: adUnits }, () => {
+					window.apstag?.fetchBids({ slots: updatedAdUnits }, () => {
 						window.googletag.cmd.push(() => {
 							window.apstag?.setDisplayBids();
 							resolve();
