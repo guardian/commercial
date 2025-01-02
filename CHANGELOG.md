@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 24.0.0
+
+### Major Changes
+
+- 4b82e3a: Major bumps to peer dependencies
+
 ## 23.8.1
 
 ### Patch Changes
