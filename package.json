@@ -125,8 +125,8 @@
 	"peerDependencies": {
 		"@guardian/ab-core": "^8.0.0",
 		"@guardian/core-web-vitals": "^8.0.1",
-		"@guardian/identity-auth": "^3.0.0",
-		"@guardian/identity-auth-frontend": "^5.0.0",
+		"@guardian/identity-auth": "^4.0.0",
+		"@guardian/identity-auth-frontend": "^6.0.0",
 		"@guardian/libs": "^19.1.0",
 		"@guardian/source": "^8.0.0",
 		"typescript": "~5.5.2"
