@@ -24,8 +24,8 @@ dependencies:
     specifier: ^2.7.0
     version: 2.7.0
   web-vitals:
-    specifier: ^4.2.3
-    version: 4.2.3
+    specifier: ^4.2.4
+    version: 4.2.4
 
 devDependencies:
   '@babel/cli':
@@ -72,7 +72,7 @@ devDependencies:
     version: 6.1.1(browserslist@4.24.3)(tslib@2.7.0)
   '@guardian/core-web-vitals':
     specifier: 8.0.1
-    version: 8.0.1(@guardian/libs@19.2.2)(tslib@2.7.0)(typescript@5.5.2)(web-vitals@4.2.3)
+    version: 8.0.1(@guardian/libs@19.2.2)(tslib@2.7.0)(typescript@5.5.2)(web-vitals@4.2.4)
   '@guardian/eslint-config-typescript':
     specifier: ^12.0.0
     version: 12.0.0(eslint@8.57.0)(tslib@2.7.0)(typescript@5.5.2)
@@ -1893,7 +1893,7 @@ packages:
       tslib: 2.7.0
     dev: true
 
-  /@guardian/core-web-vitals@8.0.1(@guardian/libs@19.2.2)(tslib@2.7.0)(typescript@5.5.2)(web-vitals@4.2.3):
+  /@guardian/core-web-vitals@8.0.1(@guardian/libs@19.2.2)(tslib@2.7.0)(typescript@5.5.2)(web-vitals@4.2.4):
     resolution: {integrity: sha512-ZvVed0+JgqRZZVERdbasLWMrOxTx+xJ5oR/8fk8SIXu9KyUlHidob1QRg3ic/qTQI0pDyIweIPvL1orC3pSpIA==}
     peerDependencies:
       '@guardian/libs': ^19.0.0
@@ -1907,7 +1907,7 @@ packages:
       '@guardian/libs': 19.2.2(tslib@2.7.0)(typescript@5.5.2)
       tslib: 2.7.0
       typescript: 5.5.2
-      web-vitals: 4.2.3
+      web-vitals: 4.2.4
     dev: true
 
   /@guardian/eslint-config-typescript@12.0.0(eslint@8.57.0)(tslib@2.7.0)(typescript@5.5.2):
@@ -9489,8 +9489,8 @@ packages:
       minimalistic-assert: 1.0.1
     dev: true
 
-  /web-vitals@4.2.3:
-    resolution: {integrity: sha512-/CFAm1mNxSmOj6i0Co+iGFJ58OS4NRGVP+AWS/l509uIK5a1bSoIVaHz/ZumpHTfHSZBpgrJ+wjfpAOrTHok5Q==}
+  /web-vitals@4.2.4:
+    resolution: {integrity: sha512-r4DIlprAGwJ7YM11VZp4R884m0Vmgr6EAKe3P+kO0PPj3Unqyvv59rczf6UiGcb9Z8QxZVcqKNwv/g0WNdWwsw==}
 
   /webidl-conversions@7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
