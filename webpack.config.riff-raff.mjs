@@ -109,6 +109,6 @@ export default merge(config, {
 			'process.env.RIFFRAFF_DEPLOY': JSON.stringify(true),
 			...gitCommitSHA(),
 		}),
-		new GenerateCloudformation()
+		new GenerateCloudformation(),
 	],
 });
