@@ -79,7 +79,7 @@ const config = {
 	],
 	optimization: {
 		minimize: false, // we use swc-loader to minify
-	}
+	},
 };
 
 // eslint-disable-next-line import/no-default-export -- webpack config
