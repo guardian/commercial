@@ -1,5 +1,6 @@
 import { join } from 'path';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
 
 /**
  * @type {import('webpack').Configuration}
@@ -33,16 +34,20 @@ const config = {
 				test: /\.[jt]sx?|mjs$/,
 				use: [
 					{
-						loader: 'babel-loader',
-					},
-					{
-						loader: 'ts-loader',
+						loader: 'swc-loader',
 						options: {
-							transpileOnly: true,
-							configFile: join(
-								import.meta.dirname,
-								'tsconfig.json',
-							),
+							$schema: 'http://json.schemastore.org/swcrc',
+							jsc: {
+								parser: {
+									syntax: 'typescript',
+									decorators: false,
+									dynamicImport: true,
+								},
+							},
+							sourceMaps: true,
+							env: {
+								dynamicImport: true,
+							},
 						},
 					},
 				],
@@ -63,6 +68,14 @@ const config = {
 			failOnError: true,
 		}),
 	],
+	optimization: {
+		minimize: true, // we use swc-loader to minify
+		minimizer: [
+			new TerserPlugin({
+				minify: TerserPlugin.swcMinify,
+			}),
+		],
+	},
 };
 
 // eslint-disable-next-line import/no-default-export -- webpack config

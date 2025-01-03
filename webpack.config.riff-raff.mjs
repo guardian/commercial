@@ -1,6 +1,5 @@
 import { execSync } from 'child_process';
 import { join } from 'path';
-import TerserPlugin from 'terser-webpack-plugin';
 import webpack from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
@@ -112,8 +111,4 @@ export default merge(config, {
 		}),
 		new GenerateCloudformation(),
 	],
-	optimization: {
-		minimize: true,
-		minimizer: [new TerserPlugin()],
-	},
 });
