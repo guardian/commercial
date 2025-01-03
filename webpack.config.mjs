@@ -1,5 +1,6 @@
 import { join } from 'path';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
 
 /**
  * @type {import('webpack').Configuration}
@@ -31,21 +32,11 @@ const config = {
 		rules: [
 			{
 				test: /\.[jt]sx?|mjs$/,
-				exclude: {
-					and: [/node_modules/],
-					not: [
-						// Include all @guardian modules, except automat-modules and prebid.js
-						/@guardian\/(?!(automat-modules|prebid\.js))/,
-						// Include the dynamic-import-polyfill
-						/dynamic-import-polyfill/,
-					],
-				},
 				use: [
 					{
 						loader: 'swc-loader',
 						options: {
 							$schema: 'http://json.schemastore.org/swcrc',
-							minify: true,
 							jsc: {
 								parser: {
 									syntax: 'typescript',
@@ -78,7 +69,12 @@ const config = {
 		}),
 	],
 	optimization: {
-		minimize: false, // we use swc-loader to minify
+		minimize: true, // we use swc-loader to minify
+		minimizer: [
+			new TerserPlugin({
+				minify: TerserPlugin.swcMinify,
+			}),
+		],
 	},
 };
 
