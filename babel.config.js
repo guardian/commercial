@@ -3,6 +3,7 @@ module.exports = {
 	plugins: [
 		'@babel/plugin-syntax-dynamic-import',
 	],
+	compact: false,
 	env: {
 		production: {
 			presets: [

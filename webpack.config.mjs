@@ -34,8 +34,8 @@ const config = {
 				exclude: {
 					and: [/node_modules/],
 					not: [
-						// Include all @guardian modules, except automat-modules
-						/@guardian\/(?!(automat-modules))/,
+						// Include all @guardian modules, except automat-modules and prebid.js
+						/@guardian\/(?!(automat-modules|prebid\.js))/,
 						// Include the dynamic-import-polyfill
 						/dynamic-import-polyfill/,
 					],
@@ -45,6 +45,7 @@ const config = {
 						loader: 'swc-loader',
 						options: {
 							$schema: 'http://json.schemastore.org/swcrc',
+							minify: true,
 							jsc: {
 								parser: {
 									syntax: 'typescript',
@@ -76,6 +77,9 @@ const config = {
 			failOnError: true,
 		}),
 	],
+	optimization: {
+		minimize: false, // we use swc-loader to minify
+	}
 };
 
 // eslint-disable-next-line import/no-default-export -- webpack config
