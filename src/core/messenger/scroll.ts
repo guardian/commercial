@@ -1,5 +1,3 @@
-import type { Viewport } from '../../lib/detect/detect-viewport';
-import { getViewport } from '../../lib/detect/detect-viewport';
 import fastdom from '../../utils/fastdom-promise';
 import type { RegisterListener } from '../messenger';
 
@@ -9,16 +7,13 @@ type Iframe = { node: HTMLIFrameElement; visible: boolean; respond: Respond };
 
 // An intersection observer will allow us to efficiently send slot
 // coordinates for only those that are in the viewport.
-const w = window;
-let useIO = 'IntersectionObserver' in w;
 let taskQueued = false;
 let iframes: Record<string, Iframe> = {};
 let iframeCounter = 0;
 let observer: IntersectionObserver | null;
 let visibleIframeIds: string[] = [];
 
-const reset = (useIO_: boolean): void => {
-	useIO = useIO_;
+const reset = (): void => {
 	taskQueued = false;
 	iframes = {};
 	iframeCounter = 0;
@@ -45,13 +40,6 @@ const getDimensions = (id: string): [string, DOMRect] => {
 	return [id, node.getBoundingClientRect()];
 };
 
-const isIframeInViewport = function (
-	this: Viewport,
-	item: [string, DOMRect],
-): boolean {
-	return item[1].bottom > 0 && item[1].top < this.height;
-};
-
 const onIntersect: IntersectionObserverCallback = (changes) => {
 	visibleIframeIds = changes
 		.filter((_) => _.intersectionRatio > 0)
@@ -61,26 +49,14 @@ const onIntersect: IntersectionObserverCallback = (changes) => {
 // typescript complains about an async event handler, so wrap it in a non-async function
 const onScroll = () => {
 	if (!taskQueued) {
-		const viewport = getViewport();
 		taskQueued = true;
 
 		void fastdom.measure(() => {
 			taskQueued = false;
 
-			const iframeIds = Object.keys(iframes);
-
-			if (useIO) {
-				visibleIframeIds.map(getDimensions).forEach((data) => {
-					sendCoordinates(data[0], data[1]);
-				});
-			} else {
-				iframeIds
-					.map(getDimensions)
-					.filter(isIframeInViewport, viewport)
-					.forEach((data) => {
-						sendCoordinates(data[0], data[1]);
-					});
-			}
+			visibleIframeIds.map(getDimensions).forEach((data) => {
+				sendCoordinates(data[0], data[1]);
+			});
 		});
 	}
 };
@@ -90,20 +66,15 @@ const addScrollListener = (
 	respond: Respond,
 ): void => {
 	if (iframeCounter === 0) {
-		w.addEventListener('scroll', onScroll, {
+		window.addEventListener('scroll', onScroll, {
 			passive: true,
 		});
-		if (useIO) {
-			observer = new w.IntersectionObserver(onIntersect);
-		}
+		observer = new IntersectionObserver(onIntersect);
 	}
 
 	iframes[iframe.id] = {
 		node: iframe,
-		// When using IOs, a slot is hidden by default. When the IO starts
-		// observing it, the onIntersect callback will be triggered if it
-		// is already in the viewport
-		visible: !useIO,
+		visible: false,
 		respond,
 	};
 	iframeCounter += 1;
@@ -121,7 +92,7 @@ const addScrollListener = (
 
 const removeScrollListener = (iframe: HTMLIFrameElement): void => {
 	if (iframe.id in iframes) {
-		if (useIO && observer) {
+		if (observer) {
 			observer.unobserve(iframe);
 		}
 		delete iframes[iframe.id];
@@ -129,8 +100,8 @@ const removeScrollListener = (iframe: HTMLIFrameElement): void => {
 	}
 
 	if (iframeCounter === 0) {
-		w.removeEventListener('scroll', onScroll);
-		if (useIO && observer) {
+		window.removeEventListener('scroll', onScroll);
+		if (observer) {
 			observer.disconnect();
 			observer = null;
 		}
