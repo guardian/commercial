@@ -56,8 +56,10 @@ jest.mock('display/display-lazy-ads', () => ({
 	displayLazyAds: jest.fn(),
 }));
 
-jest.mock('core/ad-sizes', () => {
-	const adSizes: typeof AdSizesType = jest.requireActual('core/ad-sizes');
+jest.mock('../../core/ad-sizes', () => {
+	const adSizes: typeof AdSizesType = jest.requireActual(
+		'../../core/ad-sizes',
+	);
 	const { createAdSize } = adSizes;
 	return {
 		...adSizes,
