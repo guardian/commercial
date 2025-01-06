@@ -1,6 +1,5 @@
 import type { Viewport } from '../../lib/detect/detect-viewport';
 import { getViewport } from '../../lib/detect/detect-viewport';
-import { addEventListener } from '../../lib/events';
 import fastdom from '../../utils/fastdom-promise';
 import type { RegisterListener } from '../messenger';
 
@@ -91,7 +90,7 @@ const addScrollListener = (
 	respond: Respond,
 ): void => {
 	if (iframeCounter === 0) {
-		addEventListener(w, 'scroll', onScroll, {
+		w.addEventListener('scroll', onScroll, {
 			passive: true,
 		});
 		if (useIO) {
