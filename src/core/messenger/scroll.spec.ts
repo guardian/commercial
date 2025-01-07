@@ -104,7 +104,7 @@ describe.skip('Cross-frame messenger: scroll', () => {
 				value: IntersectionObserver,
 				writable: true,
 			});
-			reset(true);
+			reset();
 			iframe1 && addScrollListener(iframe1, respond1);
 			iframe2 && addScrollListener(iframe2, respond2);
 		});
@@ -145,34 +145,6 @@ describe.skip('Cross-frame messenger: scroll', () => {
 				]);
 			}
 			void onScroll().then(() => {
-				expect(respond1).toHaveBeenCalledTimes(1);
-				expect(respond2).toHaveBeenCalledTimes(2);
-			});
-		});
-	});
-
-	describe('Without IntersectionObserver', () => {
-		beforeEach(() => {
-			reset(false);
-			return Promise.all([
-				iframe1 && addScrollListener(iframe1, respond1),
-				iframe2 && addScrollListener(iframe2, respond2),
-			]);
-		});
-
-		it('should call respond1 but not respond2 at the top of the page', () => {
-			mockIframePosition(iframe1, 8);
-			mockIframePosition(iframe2, 6320);
-			return onScroll().then(() => {
-				expect(respond1).toHaveBeenCalledTimes(2);
-				expect(respond2).toHaveBeenCalledTimes(1);
-			});
-		});
-
-		it('should call respond2 but not respond1 at the bottom of the page', () => {
-			mockIframePosition(iframe1, -6304);
-			mockIframePosition(iframe2, 8);
-			return onScroll().then(() => {
 				expect(respond1).toHaveBeenCalledTimes(1);
 				expect(respond2).toHaveBeenCalledTimes(2);
 			});
