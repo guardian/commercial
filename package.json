@@ -70,6 +70,7 @@
 		"babel-jest": "^29.7.0",
 		"babel-loader": "^9.2.1",
 		"babel-plugin-dynamic-import-node": "^2.3.3",
+		"browserslist": "4.24.3",
 		"circular-dependency-plugin": "^5.2.2",
 		"csstype": "^3.1.3",
 		"eslint": "^8.57.0",

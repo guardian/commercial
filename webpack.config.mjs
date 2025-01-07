@@ -1,7 +1,8 @@
 import { join } from 'path';
+import browserslist from 'browserslist';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
-import TerserPlugin from 'terser-webpack-plugin';
 
+const targets = browserslist('extends @guardian/browserslist-config');
 /**
  * @type {import('webpack').Configuration}
  */
@@ -47,6 +48,7 @@ const config = {
 							sourceMaps: true,
 							env: {
 								dynamicImport: true,
+								targets,
 							},
 						},
 					},
@@ -68,14 +70,6 @@ const config = {
 			failOnError: true,
 		}),
 	],
-	optimization: {
-		minimize: true, // we use swc-loader to minify
-		minimizer: [
-			new TerserPlugin({
-				minify: TerserPlugin.swcMinify,
-			}),
-		],
-	},
 };
 
 // eslint-disable-next-line import/no-default-export -- webpack config
