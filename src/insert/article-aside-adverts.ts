@@ -1,4 +1,3 @@
-import { $$ } from '../utils/$$';
 import fastdom from '../utils/fastdom-promise';
 
 const minArticleHeight = 1300;
@@ -18,10 +17,7 @@ const getAllowedSizesForImmersive = (availableSpace: number) => {
 
 const removeStickyClasses = (adSlots: Element[]) => {
 	adSlots.forEach((ad) => {
-		// IE does not support multiple arguments for classList.remove()
-		ad.classList.remove('right-sticky');
-		ad.classList.remove('js-sticky-mpu');
-		ad.classList.remove('is-sticky');
+		ad.classList.remove('right-sticky', 'js-sticky-mpu', 'is-sticky');
 	});
 };
 
@@ -42,29 +38,33 @@ const getTopOffset = (element: HTMLElement | undefined): number => {
  * @returns Promise
  */
 export const init = (): Promise<void | boolean> => {
-	const col = $$('.js-secondary-column');
+	const col = document.querySelector<HTMLElement>('.js-secondary-column');
 
 	// article aside ads are added server-side if the container doesn't exist then stop.
-	if (!col.get().length || col.get(0).style.display === 'none') {
+	if (!col || col.style.display === 'none') {
 		return Promise.resolve(false);
 	}
 
-	const mainCol = $$('.js-content-main-column');
-	const adSlotDollar = $$('.js-ad-slot', col.get(0));
-	const immersiveElsDollar = $$('.element--immersive', mainCol.get(0));
-	const adSlotsWithinRightCol = adSlotDollar.get();
-	const immersiveEls = immersiveElsDollar.get();
+	const mainCol = document.querySelector<HTMLElement>(
+		'.js-content-main-column',
+	);
+	const adSlotsWithinRightCol = Array.from(
+		col.querySelectorAll<HTMLElement>('.js-ad-slot'),
+	);
+	const immersiveEls = Array.from(
+		mainCol?.querySelectorAll<HTMLElement>('.element--immersive') ?? [],
+	);
 
-	if (!adSlotsWithinRightCol.length || !mainCol.get().length) {
+	if (!adSlotsWithinRightCol.length || !mainCol) {
 		return Promise.resolve(false);
 	}
 
 	return fastdom
 		.measure(() => {
 			const immersiveElementOffset = getTopOffset(immersiveEls[0]);
-			const mainColOffset = getTopOffset(mainCol.get(0));
+			const mainColOffset = getTopOffset(mainCol);
 			return [
-				mainCol.get(0).offsetHeight,
+				mainCol.offsetHeight,
 				immersiveElementOffset - mainColOffset,
 			] as const;
 		})
