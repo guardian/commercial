@@ -1,4 +1,4 @@
-import type { CountryCode } from '@guardian/libs';
+import { setCookie } from '@guardian/libs';
 import {
 	_,
 	isInAuOrNz,
@@ -11,16 +11,10 @@ import {
 	isInUsOrCa,
 } from './geo-utils';
 
-let mockCountryCode: CountryCode;
-jest.mock('utils/geolocation', () => ({
-	getCountryCode: jest.fn(() => mockCountryCode),
-}));
-
 describe('Geolocation Utils', () => {
 	beforeEach(() => {
 		_.resetModule();
 	});
-
 	const testCases = [
 		{
 			fnName: 'isInUk()',
@@ -98,7 +92,10 @@ describe('Geolocation Utils', () => {
 
 	testCases.forEach((testCase) => {
 		it(`Only ${testCase.fnName} return true for geolocation '${testCase.mockCountryCode}'`, () => {
-			mockCountryCode = testCase.mockCountryCode;
+			setCookie({
+				name: 'GU_geo_country',
+				value: testCase.mockCountryCode,
+			});
 			expect(isInUk()).toBe(testCase.expectedUKValue);
 			expect(isInUsa()).toBe(testCase.expectedUsaValue);
 			expect(isInCanada()).toBe(testCase.expectedCaValue);

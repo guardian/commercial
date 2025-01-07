@@ -1,10 +1,26 @@
 import { adSlotContainerClass } from '../../core/create-ad-slot';
 import { adSizes } from '../../core/index';
 import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
-import { isInHighValueSection } from './utils';
 
 const bodySelector = '.article-body-commercial-selector';
 const adSlotContainerSelector = `.${adSlotContainerClass}`;
+
+const highValueSections = [
+	'business',
+	'environment',
+	'music',
+	'money',
+	'artanddesign',
+	'science',
+	'stage',
+	'travel',
+	'wellness',
+	'games',
+];
+
+const isInHighValueSection = highValueSections.includes(
+	window.guardian.config.page.section,
+);
 
 /**
  * As estimation of the height of the most viewed island.

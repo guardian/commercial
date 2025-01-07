@@ -1,6 +1,5 @@
 import { adSizes } from '../core/ad-sizes';
 import type { Advert } from '../define/Advert';
-import { getAdIframe } from '../lib/dfp/get-ad-iframe';
 import fastdom from '../utils/fastdom-promise';
 import { reportError } from '../utils/report-error';
 import { renderAdvertLabel } from './render-advert-label';
@@ -178,6 +177,21 @@ const addContainerClass = (adSlotNode: HTMLElement, isRendered: boolean) => {
 };
 
 /**
+ * Check if the ad slot has a corresponding iframe to indicte the ad has rendered.
+ * @param adSlot
+ * @returns
+ */
+const hasIframe = (adSlot: HTMLElement): Promise<boolean> =>
+	new Promise((resolve) => {
+		// DFP will sometimes return empty iframes, denoted with a '__hidden__' parameter embedded in its ID.
+		// We need to be sure only to select the ad content frame.
+		const iFrame = adSlot.querySelector<HTMLIFrameElement>(
+			'iframe:not([id*="__hidden__"])',
+		);
+		resolve(!!iFrame);
+	});
+
+/**
  * @param advert - as defined in lib/dfp/Advert
  * @param slotRenderEndedEvent - GPT slotRenderEndedEvent
  * @returns {Promise} - resolves once all necessary rendering is queued up
@@ -187,7 +201,7 @@ const renderAdvert = (
 	slotRenderEndedEvent: googletag.events.SlotRenderEndedEvent,
 ): Promise<boolean> => {
 	addContentClass(advert.node);
-	return getAdIframe(advert.node)
+	return hasIframe(advert.node)
 		.then((isRendered) => {
 			const creativeTemplateId =
 				slotRenderEndedEvent.creativeTemplateId ?? undefined;

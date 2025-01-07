@@ -1,8 +1,6 @@
 import type { ConsentState } from '@guardian/libs';
-import * as BuildPageTargeting from './build-page-targeting';
+import { buildPageTargeting } from './build-page-targeting';
 import { buildImaAdTagUrl } from './youtube-ima';
-
-const { buildPageTargeting } = BuildPageTargeting;
 
 jest.mock('./build-page-targeting', () => ({
 	// we want the real filterValues()

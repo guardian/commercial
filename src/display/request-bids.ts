@@ -41,7 +41,7 @@ const retainAdSizeOnRefresh = (
  * passed in that have already had bids requested, this can happen if they're already in
  * the viewport, it will only request bids for adverts that haven't already had bids requested.
  */
-export const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
+const requestBidsForAds = async (adverts: Advert[]): Promise<void> => {
 	const adsToRequestBidsFor = adverts.filter(
 		(advert) => !advert.headerBiddingBidRequest,
 	);
