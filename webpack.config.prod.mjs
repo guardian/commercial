@@ -54,7 +54,6 @@ export default merge(config, {
 					},
 					compress: true,
 				},
-
 			}),
 		],
 	},

@@ -121,7 +121,6 @@ export default merge(config, {
 					mangle: true,
 					compress: true,
 				},
-
 			}),
 		],
 	},
