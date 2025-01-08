@@ -15,16 +15,18 @@ export class PROutPlugin {
 			compiler.outputFileSystem.mkdirSync(
 				join(
 					import.meta.dirname,
-				'dist',
-				'riff-raff',
-				'js',
-				'commercial',
+					'..',
+					'dist',
+					'riff-raff',
+					'js',
+					'commercial',
 				),
 				{ recursive: true },
 			);
 
 			const outputPath = join(
 				import.meta.dirname,
+				'..',
 				'dist',
 				'riff-raff',
 				'js',
@@ -36,7 +38,6 @@ export class PROutPlugin {
 				outputPath,
 				`Commercial bundle commit hash: ${commitSHA}`,
 			);
-
 		});
 	};
 }
