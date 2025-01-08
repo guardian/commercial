@@ -1,5 +1,6 @@
 import { createAdSlot, wrapSlotInContainer } from '../core/create-ad-slot';
 import { commercialFeatures } from '../lib/commercial-features';
+import { amIUsed } from '../utils/am-i-used';
 import fastdom from '../utils/fastdom-promise';
 
 /**
@@ -23,6 +24,7 @@ export const init = (): Promise<void> => {
 		// \Remove this
 		return fastdom.mutate(() => {
 			if (anchor?.parentNode) {
+				amIUsed('high-merch.ts', 'valid anchor');
 				anchor.parentNode.insertBefore(container, anchor);
 			}
 		});

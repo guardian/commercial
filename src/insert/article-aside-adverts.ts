@@ -1,3 +1,4 @@
+import { amIUsed } from '../utils/am-i-used';
 import fastdom from '../utils/fastdom-promise';
 
 const minArticleHeight = 1300;
@@ -59,6 +60,9 @@ export const init = (): Promise<void | boolean> => {
 		return Promise.resolve(false);
 	}
 
+	// logging to see if this code gets used at all
+	amIUsed('article-aside-adverts.ts', 'init');
+
 	return fastdom
 		.measure(() => {
 			const immersiveElementOffset = getTopOffset(immersiveEls[0]);
@@ -80,6 +84,8 @@ export const init = (): Promise<void | boolean> => {
 				window.guardian.config.page.isImmersive &&
 				immersiveEls.length > 0
 			) {
+				// logging to see if this conditional block is being fired
+				amIUsed('article-aside-adverts.ts', 'immersive adjustments');
 				return fastdom.mutate(() => {
 					removeStickyClasses(adSlotsWithinRightCol);
 					adSlotsWithinRightCol[0]?.setAttribute(
@@ -92,6 +98,11 @@ export const init = (): Promise<void | boolean> => {
 			// most articles are long enough to fit a DMPU. However, the occasional shorter article
 			// will need the slot sizes to be adjusted, and the sticky behaviour removed.
 			if (mainColHeight < minArticleHeight) {
+				// logging to see if this conditional block is being fired
+				amIUsed(
+					'article-aside-adverts.ts',
+					'short article adjustments',
+				);
 				return fastdom.mutate(() => {
 					removeStickyClasses(adSlotsWithinRightCol);
 					adSlotsWithinRightCol[0]?.setAttribute(
