@@ -4,7 +4,7 @@ import { getCookie, log } from '@guardian/libs';
 import {
 	getParticipationsFromLocalStorage,
 	setParticipationsInLocalStorage,
-} from '../lib/lib/ab-localstorage';
+} from '../lib/ab-localstorage';
 import { concurrentTests } from './ab-tests';
 import { getForcedParticipationsFromUrl } from './ab-url';
 
