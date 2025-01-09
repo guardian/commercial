@@ -4,7 +4,7 @@ import {
 	memoizedFetchNonRefreshableLineItemIds,
 } from './non-refreshable-line-items';
 
-jest.mock('../../utils/report-error', () => ({
+jest.mock('../../lib/error/report-error', () => ({
 	reportError: jest.fn(),
 }));
 

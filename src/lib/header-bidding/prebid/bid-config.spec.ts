@@ -46,7 +46,7 @@ const {
 	getOzonePlacementId,
 } = _;
 
-jest.mock('lib/build-page-targeting', () => ({
+jest.mock('lib/page-targeting', () => ({
 	buildAppNexusTargeting: () => 'someTestAppNexusTargeting',
 	buildAppNexusTargetingObject: () => 'someAppNexusTargetingObject',
 	getPageTargeting: () => 'bla',
@@ -72,7 +72,7 @@ const stripMobileSuffix = stripMobileSuffix_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
 const isUserInVariant = isUserInVariant_ as jest.Mock;
 
-jest.mock('utils/geo-utils');
+jest.mock('lib/geo/geo-utils');
 const isInAuOrNz = isInAuOrNz_ as jest.Mock;
 const isInRow = isInRow_ as jest.Mock;
 const isInUk = isInUk_ as jest.Mock;

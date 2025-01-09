@@ -14,7 +14,7 @@ jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 }));
 
-jest.mock('utils/url', () => ({
+jest.mock('lib/url', () => ({
 	getUrlVars: jest.fn(),
 }));
 

@@ -17,7 +17,7 @@ const isInUsOrCa = isInUsOrCa_ as jest.Mock;
 jest.mock('experiments/ab', () => ({
 	isUserInVariant: jest.fn(),
 }));
-jest.mock('utils/geo-utils');
+jest.mock('lib/geo/geo-utils');
 
 jest.mock('../utils', () => ({
 	...jest.requireActual('../utils'),

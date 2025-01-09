@@ -39,7 +39,7 @@ const isUserInVariant = isUserInVariant_ as jest.MockedFunction<
 
 jest.mock('lodash-es/once', () => (fn: (...args: unknown[]) => unknown) => fn);
 
-jest.mock('utils/geolocation', () => ({
+jest.mock('lib/geo/country-code', () => ({
 	getCountryCode: jest.fn(() => 'GB'),
 }));
 
