@@ -22,7 +22,7 @@ const cmp = {
 		>,
 };
 
-jest.mock('core/lib/get-locale', () => ({
+jest.mock('lib/lib/get-locale', () => ({
 	getLocale: jest.fn(),
 }));
 

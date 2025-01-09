@@ -1,14 +1,14 @@
 import { log } from '@guardian/libs';
-import { outstreamSizes } from '../core/ad-sizes';
-import { AD_LABEL_HEIGHT } from '../core/constants/ad-label-height';
-import { EventTimer } from '../core/index';
 import type { Advert } from '../define/Advert';
 import { isAdSize } from '../define/Advert';
 import { enableLazyLoad } from '../display/lazy-load';
+import { outstreamSizes } from '../lib/ad-sizes';
+import { AD_LABEL_HEIGHT } from '../lib/constants/ad-label-height';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { memoizedFetchNonRefreshableLineItemIds } from '../lib/dfp/non-refreshable-line-items';
 import { shouldRefresh } from '../lib/dfp/should-refresh';
 import fastdom from '../lib/fastdom-promise';
+import { EventTimer } from '../lib/index';
 import { getUrlVars } from '../lib/url';
 
 const ADVERT_REFRESH_RATE = 30_000; // 30 seconds. The minimum time allowed by Google.
