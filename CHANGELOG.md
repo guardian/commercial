@@ -1,5 +1,15 @@
 # @guardian/commercial
 
+## 24.1.0
+
+### Minor Changes
+
+- 1ed5373: Sample prebid analytics at 10%
+
+### Patch Changes
+
+- dab9c86: Add amIUsed logs for old frontend modules
+
 ## 24.0.0
 
 ### Major Changes
