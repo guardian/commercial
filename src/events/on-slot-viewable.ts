@@ -7,8 +7,8 @@ import { AD_LABEL_HEIGHT } from '../lib/constants/ad-label-height';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { memoizedFetchNonRefreshableLineItemIds } from '../lib/dfp/non-refreshable-line-items';
 import { shouldRefresh } from '../lib/dfp/should-refresh';
+import { EventTimer } from '../lib/event-timer';
 import fastdom from '../lib/fastdom-promise';
-import { EventTimer } from '../lib/index';
 import { getUrlVars } from '../lib/url';
 
 const ADVERT_REFRESH_RATE = 30_000; // 30 seconds. The minimum time allowed by Google.
