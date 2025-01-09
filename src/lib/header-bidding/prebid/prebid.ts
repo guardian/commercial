@@ -1,7 +1,6 @@
 import type { ConsentFramework } from '@guardian/libs';
 import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
-import { pubmatic } from '../../../core/__vendor/pubmatic';
 import type { AdSize } from '../../../core/ad-sizes';
 import { createAdSize } from '../../../core/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../core/constants/prebid-timeout';
@@ -10,6 +9,7 @@ import type { PageTargeting } from '../../../core/targeting/build-page-targeting
 import type { Advert } from '../../../define/Advert';
 import { getParticipations, isUserInVariant } from '../../../experiments/ab';
 import { gpidPrebidAdUnits } from '../../../experiments/tests/gpid-prebid';
+import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedInOktaRefactor } from '../../identity/api';
 import { getPageTargeting } from '../../page-targeting';

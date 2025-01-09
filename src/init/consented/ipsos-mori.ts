@@ -5,7 +5,7 @@ import {
 	log,
 	onConsent,
 } from '@guardian/libs';
-import { ipsosMoriStub } from '../../core/__vendor/ipsos-mori';
+import { ipsosMoriStub } from '../../lib/__vendor/ipsos-mori';
 
 const loadIpsosScript = (locale: 'au' | 'uk') => {
 	ipsosMoriStub();
