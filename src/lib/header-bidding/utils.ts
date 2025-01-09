@@ -8,7 +8,7 @@ import {
 	isInUk,
 	isInUsa,
 	isInUsOrCa,
-} from '../../utils/geo-utils';
+} from '../../lib/geo/geo-utils';
 import { pbTestNameMap } from '../../utils/url';
 import {
 	getCurrentTweakpoint,

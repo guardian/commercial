@@ -4,7 +4,7 @@ import {
 	isInRow as isInRow_,
 	isInUk as isInUk_,
 	isInUsa as isInUsa_,
-} from '../../../utils/geo-utils';
+} from '../../../lib/geo/geo-utils';
 import {
 	containsBillboard as containsBillboard_,
 	containsBillboardNotLeaderboard as containsBillboardNotLeaderboard_,

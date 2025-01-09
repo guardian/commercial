@@ -7,7 +7,7 @@ import {
 	isInUk as isInUk_,
 	isInUsa as isInUsa_,
 	isInUsOrCa as isInUsOrCa_,
-} from '../../../utils/geo-utils';
+} from '../../../lib/geo/geo-utils';
 import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
 import {
 	containsBillboard as containsBillboard_,

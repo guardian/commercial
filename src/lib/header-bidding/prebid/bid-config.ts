@@ -1,13 +1,13 @@
 import { log } from '@guardian/libs';
 import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
-import type { PrebidIndexSite } from '../../../types/global';
 import {
 	isInAuOrNz,
 	isInRow,
 	isInUk,
 	isInUsa,
 	isInUsOrCa,
-} from '../../../utils/geo-utils';
+} from '../../../lib/geo/geo-utils';
+import type { PrebidIndexSite } from '../../../types/global';
 import { pbTestNameMap } from '../../../utils/url';
 import { dfpEnv } from '../../dfp/dfp-env';
 import {

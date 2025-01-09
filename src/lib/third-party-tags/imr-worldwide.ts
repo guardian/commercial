@@ -1,4 +1,4 @@
-import { isInAuOrNz } from '../../utils/geo-utils';
+import { isInAuOrNz } from '../../lib/geo/geo-utils';
 
 // NOLCMB is a global function defined by the IMR worldwide library
 

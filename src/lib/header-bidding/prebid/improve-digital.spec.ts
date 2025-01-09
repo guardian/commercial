@@ -4,7 +4,7 @@ import {
 	isInRow as isInRow_,
 	isInUk as isInUk_,
 	isInUsOrCa as isInUsOrCa_,
-} from '../../../utils/geo-utils';
+} from '../../../lib/geo/geo-utils';
 import { getBreakpointKey as getBreakpointKey_ } from '../utils';
 import {
 	getImprovePlacementId,

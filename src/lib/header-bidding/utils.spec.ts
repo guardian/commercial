@@ -1,13 +1,13 @@
 import type { CountryCode } from '@guardian/libs';
 import { createAdSize } from '../../core/ad-sizes';
 import { isUserInVariant as isUserInVariant_ } from '../../experiments/ab';
-import { getCountryCode as getCountryCode_ } from '../../utils/country-code';
-import { _ } from '../../utils/geo-utils';
+import { _ } from '../../lib/geo/geo-utils';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
 	matchesBreakpoints as matchesBreakpoints_,
 } from '../detect/detect-breakpoint';
+import { getCountryCode as getCountryCode_ } from '../geo/country-code';
 import {
 	getBreakpointKey,
 	getLargestSize,

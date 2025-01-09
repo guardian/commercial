@@ -3,7 +3,7 @@ import {
 	isInRow,
 	isInUk,
 	isInUsOrCa,
-} from '../../../utils/geo-utils';
+} from '../../../lib/geo/geo-utils';
 import type { HeaderBiddingSize } from '../prebid-types';
 import {
 	containsBillboard,
