@@ -1,5 +1,4 @@
 import { log } from '@guardian/libs';
-import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
 import {
 	isInAuOrNz,
 	isInRow,
@@ -7,6 +6,7 @@ import {
 	isInUsa,
 	isInUsOrCa,
 } from '../../../lib/geo/geo-utils';
+import type { PageTargeting } from '../../../lib/targeting/build-page-targeting';
 import { pbTestNameMap } from '../../../lib/url';
 import type { PrebidIndexSite } from '../../../types/global';
 import { dfpEnv } from '../../dfp/dfp-env';

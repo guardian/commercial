@@ -1,5 +1,5 @@
 import type { ConsentState } from '@guardian/libs';
-import { buildPageTargeting as buildPageTargeting_ } from '../core/targeting/build-page-targeting';
+import { buildPageTargeting as buildPageTargeting_ } from '../lib/targeting/build-page-targeting';
 import { isUserLoggedInOktaRefactor } from './identity/api';
 import { getPageTargeting } from './page-targeting';
 
@@ -13,7 +13,7 @@ jest.mock('lib/geo/country-code', () => ({
 jest.mock('experiments/ab', () => ({
 	getParticipations: jest.fn(),
 }));
-jest.mock('core/targeting/build-page-targeting', () => ({
+jest.mock('lib/targeting/build-page-targeting', () => ({
 	buildPageTargeting: jest.fn(),
 }));
 

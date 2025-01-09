@@ -1,11 +1,11 @@
 import { isNonNullable, log } from '@guardian/libs';
-import { adSizes, createAdSize } from '../../core/ad-sizes';
-import type { SizeMapping } from '../../core/ad-sizes';
 import { createAdvert } from '../../define/create-advert';
 import { displayAds } from '../../display/display-ads';
 import { displayLazyAds } from '../../display/display-lazy-ads';
 import { isUserInVariant } from '../../experiments/ab';
 import { mpuWhenNoEpic } from '../../experiments/tests/mpu-when-no-epic';
+import type { SizeMapping } from '../../lib/ad-sizes';
+import { adSizes, createAdSize } from '../../lib/ad-sizes';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';

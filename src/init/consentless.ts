@@ -1,8 +1,8 @@
 import type { ConsentState } from '@guardian/libs';
-import { init as initMessenger } from '../core/messenger';
-import { init as background } from '../core/messenger/background';
-import { init as resize } from '../core/messenger/resize';
-import { init as type } from '../core/messenger/type';
+import { init as initMessenger } from '../lib/messenger';
+import { init as background } from '../lib/messenger/background';
+import { init as resize } from '../lib/messenger/resize';
+import { init as type } from '../lib/messenger/type';
 import { initArticleBodyAdverts } from './consentless/dynamic/article-body-adverts';
 import { initExclusionSlot } from './consentless/dynamic/exclusion-slot';
 import { initFixedSlots } from './consentless/init-fixed-slots';

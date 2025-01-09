@@ -1,6 +1,6 @@
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { createAdSize } from '../../core/ad-sizes';
+import { createAdSize } from '../../lib/ad-sizes';
 import {
 	isInAuOrNz,
 	isInCanada,

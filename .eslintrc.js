@@ -25,7 +25,6 @@ module.exports = {
 				patterns: [
 					{
 						group: [
-							'core/*',
 							'define/*',
 							'display/*',
 							'events/*',

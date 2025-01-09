@@ -1,4 +1,4 @@
-import { createAdSlot, wrapSlotInContainer } from '../core/create-ad-slot';
+import { createAdSlot, wrapSlotInContainer } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 

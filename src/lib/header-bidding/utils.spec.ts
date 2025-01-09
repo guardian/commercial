@@ -1,6 +1,6 @@
 import type { CountryCode } from '@guardian/libs';
-import { createAdSize } from '../../core/ad-sizes';
 import { isUserInVariant as isUserInVariant_ } from '../../experiments/ab';
+import { createAdSize } from '../../lib/ad-sizes';
 import { _ } from '../../lib/geo/geo-utils';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';
 import {
