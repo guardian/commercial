@@ -7,7 +7,7 @@ import { getBreakpoint } from '../lib/detect/detect-breakpoint';
 import { getViewport } from '../lib/detect/detect-viewport';
 import { dfpEnv } from '../lib/dfp/dfp-env';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
-import fastdom from '../utils/fastdom-promise';
+import fastdom from '../lib/fastdom-promise';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 
 const tallestCommentAd = adSizes.mpu.height + AD_LABEL_HEIGHT;

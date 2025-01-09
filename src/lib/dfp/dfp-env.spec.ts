@@ -1,4 +1,4 @@
-import { getUrlVars as getUrlVars_ } from '../../utils/url';
+import { getUrlVars as getUrlVars_ } from '../../lib/url';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../detect/detect-breakpoint';
 import { dfpEnv } from './dfp-env';
 

@@ -7,8 +7,8 @@ import {
 	isInUsa,
 	isInUsOrCa,
 } from '../../../lib/geo/geo-utils';
+import { pbTestNameMap } from '../../../lib/url';
 import type { PrebidIndexSite } from '../../../types/global';
-import { pbTestNameMap } from '../../../utils/url';
 import { dfpEnv } from '../../dfp/dfp-env';
 import {
 	buildAppNexusTargeting,

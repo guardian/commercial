@@ -1,5 +1,5 @@
 import { createAdSlot, wrapSlotInContainer } from '../core/create-ad-slot';
-import fastdom from '../utils/fastdom-promise';
+import fastdom from '../lib/fastdom-promise';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 
 const insertCrosswordsAd = (anchor: HTMLElement) => {

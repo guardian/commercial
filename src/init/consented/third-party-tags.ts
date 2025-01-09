@@ -7,10 +7,10 @@ import { permutive } from '../../core/third-party-tags/permutive';
 import { remarketing } from '../../core/third-party-tags/remarketing';
 import { twitter } from '../../core/third-party-tags/twitter-uwt';
 import { commercialFeatures } from '../../lib/commercial-features';
+import fastdom from '../../lib/fastdom-promise';
 import { imrWorldwide } from '../../lib/third-party-tags/imr-worldwide';
 import { imrWorldwideLegacy } from '../../lib/third-party-tags/imr-worldwide-legacy';
 import type { ThirdPartyTag } from '../../types/global';
-import fastdom from '../../utils/fastdom-promise';
 
 const addScripts = (tags: ThirdPartyTag[]) => {
 	const ref = document.scripts[0];

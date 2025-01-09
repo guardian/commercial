@@ -1,4 +1,4 @@
-import fastdom from '../utils/fastdom-promise';
+import fastdom from '../lib/fastdom-promise';
 
 const minArticleHeight = 1300;
 

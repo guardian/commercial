@@ -9,7 +9,7 @@ import {
 	isInUsa,
 	isInUsOrCa,
 } from '../../lib/geo/geo-utils';
-import { pbTestNameMap } from '../../utils/url';
+import { pbTestNameMap } from '../../lib/url';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
