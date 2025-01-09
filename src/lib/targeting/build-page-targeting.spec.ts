@@ -6,7 +6,7 @@ import type {
 import { cmp as cmp_, setCookie, storage } from '@guardian/libs';
 import { getAuthStatus as getAuthStatus_ } from '../../lib/identity/api';
 import type { AuthStatus } from '../../lib/identity/api';
-import { getLocale as getLocale_ } from '../lib/get-locale';
+import { getLocale as getLocale_ } from '../geo/get-locale';
 import type { Edition } from '../types';
 import { buildPageTargeting } from './build-page-targeting';
 
