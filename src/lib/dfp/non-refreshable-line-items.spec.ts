@@ -1,4 +1,4 @@
-import { reportError } from '../../utils/report-error';
+import { reportError } from '../../lib/error/report-error';
 import {
 	fetchNonRefreshableLineItemIds,
 	memoizedFetchNonRefreshableLineItemIds,
