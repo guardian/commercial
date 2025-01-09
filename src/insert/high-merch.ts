@@ -6,6 +6,8 @@ import fastdom from '../lib/fastdom-promise';
  * Initialise merchandising-high ad slot on Frontend rendered content
  *
  * On DCR, these ad slots are server side rendered
+ *
+ * Revisit whether this code is needed once galleries have been migrated to DCR
  */
 export const init = (): Promise<void> => {
 	if (commercialFeatures.highMerch) {
