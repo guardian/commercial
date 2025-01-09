@@ -9,11 +9,11 @@ import {
 	isInUsOrCa,
 } from '../../../utils/geo-utils';
 import { pbTestNameMap } from '../../../utils/url';
+import { dfpEnv } from '../../dfp/dfp-env';
 import {
 	buildAppNexusTargeting,
 	buildAppNexusTargetingObject,
-} from '../../build-page-targeting';
-import { dfpEnv } from '../../dfp/dfp-env';
+} from '../../page-targeting';
 import type {
 	BidderCode,
 	HeaderBiddingSize,

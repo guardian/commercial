@@ -95,7 +95,6 @@ class CommercialFeatures {
 		const isWidePage = getCurrentBreakpoint() === 'wide';
 		const newRecipeDesign = window.guardian.config.page.showNewRecipeDesign;
 
-		// TODO Convert detect.js to TypeScript
 		const isUnsupportedBrowser: boolean = isInternetExplorer();
 
 		// Detect presence of space for football-right ad slot
