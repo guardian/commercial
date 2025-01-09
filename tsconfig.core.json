@@ -3,7 +3,6 @@
 		"baseUrl": "src",
 		"declaration": true,
 		"noEmit": false,
-		"noUncheckedIndexedAccess": true,
 		"outDir": "dist",
 		"typeRoots": ["./node_modules/@types", "./node_modules/web-vitals/dist"]
 	},

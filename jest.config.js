@@ -13,8 +13,8 @@ module.exports = {
 	moduleNameMapper: {
 		videojs: 'video.js',
 		raven: '<rootDir>/src/lib/__mocks__/raven.ts',
-		'^svgs/(.*)$': '<rootDir>/src/__mocks__/svgMock.js',
-		'^(.*)\\.svg$': '<rootDir>/src/__mocks__/svgMock.js',
+		'^svgs/(.*)$': '<rootDir>/src/lib/__mocks__/svgMock.js',
+		'^(.*)\\.svg$': '<rootDir>/src/lib/__mocks__/svgMock.js',
 		'^(.*)\\.html$': '<rootDir>/src/__mocks__/templateMock.js',
 	},
 	setupFilesAfterEnv: ['<rootDir>/jest.setupTestFrameworkScriptFile.js'],
