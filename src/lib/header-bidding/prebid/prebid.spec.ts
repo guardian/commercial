@@ -33,7 +33,6 @@ describe('initialise', () => {
 		window.guardian.config.switches.consentManagement = true;
 		window.guardian.config.switches.prebidUserSync = true;
 		window.guardian.config.switches.prebidAppNexus = true;
-		window.guardian.config.switches.prebidSonobi = true;
 		window.guardian.config.switches.prebidXaxis = true;
 		getAdvertById.mockReset();
 	});

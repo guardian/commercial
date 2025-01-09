@@ -42,15 +42,6 @@ export type PrebidOzoneParams = {
 	ozoneData?: Record<string, unknown>;
 };
 
-export type PrebidSonobiParams = {
-	ad_unit: string;
-	dom_id: string;
-	appNexusTargeting: string;
-	pageViewId: string;
-	keywords: string[];
-	render?: string;
-};
-
 export type PrebidPubmaticParams = {
 	publisherId: string;
 	adSlot: string;
@@ -134,7 +125,6 @@ export type BidderCode =
 	| 'oxd'
 	| 'ozone'
 	| 'pubmatic'
-	| 'sonobi'
 	| 'triplelift'
 	| 'trustx'
 	| 'xhb';
@@ -150,7 +140,6 @@ export type PrebidParams =
 	| PrebidOpenXParams
 	| PrebidOzoneParams
 	| PrebidPubmaticParams
-	| PrebidSonobiParams
 	| PrebidTripleLiftParams
 	| PrebidTrustXParams
 	| PrebidXaxisParams;

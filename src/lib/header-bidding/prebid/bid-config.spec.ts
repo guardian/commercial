@@ -1,6 +1,5 @@
 import { createAdSize } from '../../../core/ad-sizes';
 import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
-import { isUserInVariant as isUserInVariant_ } from '../../../experiments/ab';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
@@ -21,7 +20,6 @@ import {
 	shouldIncludeAppNexus as shouldIncludeAppNexus_,
 	shouldIncludeImproveDigital as shouldIncludeImproveDigital_,
 	shouldIncludeOpenx as shouldIncludeOpenx_,
-	shouldIncludeSonobi as shouldIncludeSonobi_,
 	shouldIncludeTripleLift as shouldIncludeTripleLift_,
 	shouldIncludeTrustX as shouldIncludeTrustX_,
 	shouldIncludeXaxis as shouldIncludeXaxis_,
@@ -66,11 +64,9 @@ const shouldIncludeImproveDigital = shouldIncludeImproveDigital_ as jest.Mock;
 const shouldIncludeOpenx = shouldIncludeOpenx_ as jest.Mock;
 const shouldIncludeTrustX = shouldIncludeTrustX_ as jest.Mock;
 const shouldIncludeXaxis = shouldIncludeXaxis_ as jest.Mock;
-const shouldIncludeSonobi = shouldIncludeSonobi_ as jest.Mock;
 const shouldIncludeTripleLift = shouldIncludeTripleLift_ as jest.Mock;
 const stripMobileSuffix = stripMobileSuffix_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
-const isUserInVariant = isUserInVariant_ as jest.Mock;
 
 jest.mock('lib/geo/geo-utils');
 const isInAuOrNz = isInAuOrNz_ as jest.Mock;
@@ -98,7 +94,6 @@ const resetConfig = () => {
 		prebidOpenx: true,
 		prebidImproveDigital: true,
 		prebidIndexExchange: true,
-		prebidSonobi: true,
 		prebidTrustx: true,
 		prebidXaxis: true,
 		prebidAdYouLike: true,
@@ -271,11 +266,6 @@ describe('bids', () => {
 		expect(getBidders()).toEqual(['criteo', 'adyoulike']);
 	});
 
-	test('should include Sonobi if in target geolocation', () => {
-		shouldIncludeSonobi.mockReturnValue(true);
-		expect(getBidders()).toEqual(['ix', 'criteo', 'sonobi', 'adyoulike']);
-	});
-
 	test('should include AppNexus directly if in target geolocation', () => {
 		shouldIncludeAppNexus.mockReturnValue(true);
 		expect(getBidders()).toEqual(['ix', 'criteo', 'and', 'adyoulike']);
@@ -316,16 +306,6 @@ describe('bids', () => {
 		setQueryString('pbtest=xhb');
 		shouldIncludeXaxis.mockReturnValue(false);
 		expect(getBidders()).toEqual(['xhb']);
-	});
-
-	test('should only include multiple bidders being tested, even when their switches are off', () => {
-		setQueryString('pbtest=xhb&pbtest=sonobi');
-		isUserInVariant.mockImplementation(
-			(testId, variantId) => variantId === 'variant',
-		);
-		window.guardian.config.switches.prebidXaxis = false;
-		window.guardian.config.switches.prebidSonobi = false;
-		expect(getBidders()).toEqual(['sonobi', 'xhb']);
 	});
 
 	test('should ignore bidder that does not exist', () => {

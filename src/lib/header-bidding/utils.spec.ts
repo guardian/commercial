@@ -16,7 +16,6 @@ import {
 	shouldIncludeImproveDigital,
 	shouldIncludeMobileSticky,
 	shouldIncludeOpenx,
-	shouldIncludeSonobi,
 	shouldIncludeTrustX,
 	shouldIncludeXaxis,
 	stripDfpAdPrefixFrom,
@@ -60,7 +59,6 @@ const resetConfig = () => {
 	window.guardian.config.switches.prebidOpenx = true;
 	window.guardian.config.switches.prebidImproveDigital = true;
 	window.guardian.config.switches.prebidIndexExchange = true;
-	window.guardian.config.switches.prebidSonobi = true;
 	window.guardian.config.switches.prebidTrustx = true;
 	window.guardian.config.switches.prebidXaxis = true;
 	window.guardian.config.switches.prebidAdYouLike = true;
@@ -259,30 +257,6 @@ describe('Utils', () => {
 		for (const testGeo of testGeos) {
 			getCountryCode.mockReturnValue(testGeo);
 			expect(shouldIncludeXaxis()).toBe(false);
-		}
-	});
-
-	test('shouldIncludeSonobi should return true if geolocation is US', () => {
-		const testGeos: CountryCode[] = ['US', 'CA'];
-		for (const testGeo of testGeos) {
-			getCountryCode.mockReturnValueOnce(testGeo);
-			expect(shouldIncludeSonobi()).toBe(true);
-		}
-	});
-
-	test('shouldIncludeSonobi should otherwise return false', () => {
-		const testGeos: CountryCode[] = [
-			'FK',
-			'GI',
-			'GG',
-			'IM',
-			'JE',
-			'SH',
-			'AU',
-		];
-		for (const testGeo of testGeos) {
-			getCountryCode.mockReturnValueOnce(testGeo);
-			expect(shouldIncludeSonobi()).toBe(false);
 		}
 	});
 
