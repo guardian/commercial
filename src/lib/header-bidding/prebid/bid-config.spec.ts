@@ -1,6 +1,5 @@
-import { createAdSize } from '../../../core/ad-sizes';
-import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
 import { isUserInVariant as isUserInVariant_ } from '../../../experiments/ab';
+import { createAdSize } from '../../../lib/ad-sizes';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
@@ -8,6 +7,7 @@ import {
 	isInUsa as isInUsa_,
 	isInUsOrCa as isInUsOrCa_,
 } from '../../../lib/geo/geo-utils';
+import type { PageTargeting } from '../../../lib/targeting/build-page-targeting';
 import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
 import {
 	containsBillboard as containsBillboard_,

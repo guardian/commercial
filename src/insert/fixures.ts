@@ -1,6 +1,6 @@
-import { AD_LABEL_HEIGHT } from '../core/constants';
-import { createAdSlot, wrapSlotInContainer } from '../core/create-ad-slot';
 import { commercialFeatures } from '../lib/commercial-features';
+import { AD_LABEL_HEIGHT } from '../lib/constants';
+import { createAdSlot, wrapSlotInContainer } from '../lib/create-ad-slot';
 import { getBreakpoint } from '../lib/detect/detect-breakpoint';
 import { getViewport } from '../lib/detect/detect-viewport';
 import fastdom from '../lib/fastdom-promise';

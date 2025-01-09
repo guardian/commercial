@@ -1,5 +1,5 @@
-import { adSlotContainerClass } from '../../core/create-ad-slot';
-import { adSizes } from '../../core/index';
+import { adSlotContainerClass } from '../../lib/create-ad-slot';
+import { adSizes } from '../../lib/index';
 import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
 
 const bodySelector = '.article-body-commercial-selector';
