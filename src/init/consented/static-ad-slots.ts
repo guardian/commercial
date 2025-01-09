@@ -10,7 +10,7 @@ import { commercialFeatures } from '../../lib/commercial-features';
 import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
 import { queueAdvert } from '../../lib/dfp/queue-advert';
-import { isInUk, isInUsa } from '../../utils/geo-utils';
+import { isInUk, isInUsa } from '../../lib/geo/geo-utils';
 import { setupPrebidOnce } from './prepare-prebid';
 import { removeDisabledSlots } from './remove-slots';
 

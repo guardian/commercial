@@ -5,13 +5,13 @@ import type {
 } from '@guardian/libs';
 import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { commercialFeatures } from '../../lib/commercial-features';
+import { isInCanada } from '../../lib/geo/geo-utils';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
-import { isInCanada } from '../../utils/geo-utils';
 import { _ } from './prepare-prebid';
 
 const { setupPrebid } = _;
 
-jest.mock('utils/geo-utils', () => ({
+jest.mock('lib/geo/geo-utils', () => ({
 	isInCanada: jest.fn(() => false),
 }));
 
@@ -35,7 +35,7 @@ jest.mock('define/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
 );
 
-jest.mock('lib/build-page-targeting', () => ({
+jest.mock('lib/page-targeting', () => ({
 	getPageTargeting: jest.fn(),
 }));
 

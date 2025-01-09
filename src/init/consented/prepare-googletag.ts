@@ -1,12 +1,12 @@
 import type { ConsentState } from '@guardian/libs';
 import { getConsentFor, loadScript, log, onConsent } from '@guardian/libs';
 import { EventTimer } from '../../core/event-timer';
-import { getPageTargeting } from '../../lib/build-page-targeting';
 import { commercialFeatures } from '../../lib/commercial-features';
 import {
 	getGoogleTagId,
 	isUserLoggedInOktaRefactor,
 } from '../../lib/identity/api';
+import { getPageTargeting } from '../../lib/page-targeting';
 import { removeSlots } from './remove-slots';
 import { fillStaticAdvertSlots } from './static-ad-slots';
 

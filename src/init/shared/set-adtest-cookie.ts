@@ -1,5 +1,5 @@
 import { removeCookie, setCookie } from '@guardian/libs';
-import { getUrlVars } from '../../utils/url';
+import { getUrlVars } from '../../lib/url';
 
 /**
  * Set or remove adtest cookie.

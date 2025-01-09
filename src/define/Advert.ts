@@ -7,8 +7,8 @@ import {
 import type { AdSize, SizeMapping, SlotName } from '../core/ad-sizes';
 import { concatSizeMappings } from '../core/create-ad-slot';
 import type { Breakpoint } from '../core/lib/breakpoint';
+import fastdom from '../lib/fastdom-promise';
 import type { HeaderBiddingSize } from '../lib/header-bidding/prebid-types';
-import fastdom from '../utils/fastdom-promise';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';
 
 const stringToTuple = (size: string): [number, number] => {

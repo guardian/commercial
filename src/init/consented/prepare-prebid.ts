@@ -5,9 +5,14 @@ import { isUserInVariant } from '../../experiments/ab';
 import { regionSpecificPrebid } from '../../experiments/tests/region-specific-prebid';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
+import {
+	isInAuOrNz,
+	isInCanada,
+	isInUk,
+	isInUsa,
+} from '../../lib/geo/geo-utils';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
 import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
-import { isInAuOrNz, isInCanada, isInUk, isInUsa } from '../../utils/geo-utils';
 
 const shouldLoadPrebid = () =>
 	!isGoogleProxy() &&

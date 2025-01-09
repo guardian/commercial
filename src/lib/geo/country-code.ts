@@ -1,15 +1,15 @@
 import { getCookie, isString, storage } from '@guardian/libs';
 import type { CountryCode } from '@guardian/libs';
-import type { Edition } from '../types/global';
+import type { Edition } from '../../types/global';
 
-const editionToGeolocationMap: Record<Edition, CountryCode> = {
+const editionToCountryCodeMap: Record<Edition, CountryCode> = {
 	UK: 'GB',
 	US: 'US',
 	AU: 'AU',
 };
 
-const editionToGeolocation = (editionKey: Edition = 'UK'): CountryCode =>
-	editionToGeolocationMap[editionKey];
+const editionToCountryCode = (editionKey: Edition = 'UK'): CountryCode =>
+	editionToCountryCodeMap[editionKey];
 
 const countryCookieName = 'GU_geo_country';
 const countryOverrideName = 'gu.geo.override';
@@ -37,7 +37,7 @@ const getCountryCode = (): CountryCode => {
 			name: countryCookieName,
 			shouldMemoize: true,
 		}) as CountryCode | null) ??
-		editionToGeolocation(pageEdition)
+		editionToCountryCode(pageEdition)
 	);
 };
 

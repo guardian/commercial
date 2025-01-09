@@ -3,7 +3,7 @@ import {
 	renderAdvertLabel,
 	renderStickyScrollForMoreLabel,
 } from '../../events/render-advert-label';
-import fastdom from '../../utils/fastdom-promise';
+import fastdom from '../../lib/fastdom-promise';
 import {
 	initVideoProgressReporting,
 	updateVideoProgress,

@@ -2,8 +2,8 @@
 
 import { log } from '@guardian/libs';
 import { memoize } from 'lodash-es';
-import fastdom from '../../utils/fastdom-promise';
-import { getUrlVars } from '../../utils/url';
+import fastdom from '../../lib/fastdom-promise';
+import { getUrlVars } from '../../lib/url';
 
 type RuleSpacing = {
 	/**

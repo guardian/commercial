@@ -1,6 +1,6 @@
 import { once } from 'lodash-es';
+import { getUrlVars } from '../lib/url';
 import type { IasPETSlot, IasTargeting } from '../types/ias';
-import { getUrlVars } from '../utils/url';
 
 const adUnit = once((): string => {
 	const urlVars = getUrlVars();

@@ -1,19 +1,19 @@
 import { log } from '@guardian/libs';
 import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
-import type { PrebidIndexSite } from '../../../types/global';
 import {
 	isInAuOrNz,
 	isInRow,
 	isInUk,
 	isInUsa,
 	isInUsOrCa,
-} from '../../../utils/geo-utils';
-import { pbTestNameMap } from '../../../utils/url';
+} from '../../../lib/geo/geo-utils';
+import { pbTestNameMap } from '../../../lib/url';
+import type { PrebidIndexSite } from '../../../types/global';
+import { dfpEnv } from '../../dfp/dfp-env';
 import {
 	buildAppNexusTargeting,
 	buildAppNexusTargetingObject,
-} from '../../build-page-targeting';
-import { dfpEnv } from '../../dfp/dfp-env';
+} from '../../page-targeting';
 import type {
 	BidderCode,
 	HeaderBiddingSize,

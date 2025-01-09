@@ -1,4 +1,4 @@
-import fastdom from '../../utils/fastdom-promise';
+import fastdom from '../../lib/fastdom-promise';
 import type { RegisterListener } from '../messenger';
 
 type Respond = (...args: unknown[]) => void;

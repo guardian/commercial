@@ -5,7 +5,7 @@
 */
 import { getCookie } from '@guardian/libs';
 import crossIcon from '../../static/svg/icon/cross.svg';
-import fastdom from '../utils/fastdom-promise';
+import fastdom from '../lib/fastdom-promise';
 
 const templatesWithoutLabels = [
 	10077207, // CAPI_MULTIPLE_HOSTED

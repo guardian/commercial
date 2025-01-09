@@ -10,9 +10,9 @@ import type { PageTargeting } from '../../../core/targeting/build-page-targeting
 import type { Advert } from '../../../define/Advert';
 import { getParticipations, isUserInVariant } from '../../../experiments/ab';
 import { gpidPrebidAdUnits } from '../../../experiments/tests/gpid-prebid';
-import { getPageTargeting } from '../../build-page-targeting';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedInOktaRefactor } from '../../identity/api';
+import { getPageTargeting } from '../../page-targeting';
 import type {
 	BidderCode,
 	HeaderBiddingSlot,

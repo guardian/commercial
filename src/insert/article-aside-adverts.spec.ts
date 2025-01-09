@@ -1,4 +1,4 @@
-import fastdom from '../utils/fastdom-promise';
+import fastdom from '../lib/fastdom-promise';
 import { init } from './article-aside-adverts';
 
 // This module removes sticky behaviour from ads in immersive article. Example below:
