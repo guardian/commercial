@@ -5,10 +5,10 @@ import {
 	findAppliedSizesForBreakpoint,
 	slotSizeMappings,
 } from '../lib/ad-sizes';
+import type { Breakpoint } from '../lib/breakpoint';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import type { HeaderBiddingSize } from '../lib/header-bidding/prebid-types';
-import type { Breakpoint } from '../lib/lib/breakpoint';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';
 
 const stringToTuple = (size: string): [number, number] => {

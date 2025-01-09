@@ -4,11 +4,11 @@ import {
 	renderStickyScrollForMoreLabel,
 } from '../../events/render-advert-label';
 import fastdom from '../../lib/fastdom-promise';
+import type { RegisterListener } from '../messenger';
 import {
 	initVideoProgressReporting,
 	updateVideoProgress,
-} from '../lib/video-interscroller-progress';
-import type { RegisterListener } from '../messenger';
+} from '../video-interscroller-progress';
 
 const isGallery = window.guardian.config.page.contentType === 'Gallery';
 
