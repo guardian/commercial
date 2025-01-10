@@ -3,7 +3,7 @@ import { createAdSlot, wrapSlotInContainer } from '../core/create-ad-slot';
 import { commercialFeatures } from '../lib/commercial-features';
 import { getBreakpoint } from '../lib/detect/detect-breakpoint';
 import { getViewport } from '../lib/detect/detect-viewport';
-import fastdom from '../utils/fastdom-promise';
+import fastdom from '../lib/fastdom-promise';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 
 const LARGEST_AD_SIZE = 600; // px, double mpu

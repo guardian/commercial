@@ -53,6 +53,8 @@ jobs:
       # This makes the commercial dev server available from inside the container
       # Note that GHA provides a service container feature, but it does not support this argument
       - name: Start DCR in a container
+        id: start-dcr-container
+        continue-on-error: true
         run: |
           /usr/bin/docker run -d \
             --network host \
@@ -60,6 +62,11 @@ jobs:
             -e "PORT=3030" \
             -e "COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js" \
             ghcr.io/guardian/dotcom-rendering:main
+          echo "exitcode=$?" >> $GITHUB_OUTPUT
+
+      - name: Start DCR in a container step failed
+        if: ${{ failure() && steps.start-dcr-container.conclusion == 'failure' && steps.start-dcr-container.outputs.exitcode == 125 }}
+        run: echo "Unable to fetch a DCR container image from the registry. Run the DCR main build in order to create a new container image." && exit 1
 
       - name: Install Playwright Browsers
         run: pnpm playwright install --with-deps chromium

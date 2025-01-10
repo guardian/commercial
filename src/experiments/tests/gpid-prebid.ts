@@ -4,7 +4,7 @@ export const gpidPrebidAdUnits: ABTest = {
 	id: 'GpidPrebidAdUnits',
 	author: '@commercial-dev',
 	start: '2024-11-15',
-	expiry: '2024-12-22',
+	expiry: '2024-1-31',
 	audience: 2 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',

@@ -1,11 +1,11 @@
 import { commercialFeatures } from '../../lib/commercial-features';
+import { isInCanada } from '../../lib/geo/geo-utils';
 import { a9 } from '../../lib/header-bidding/a9/a9';
-import { isInCanada } from '../../utils/geo-utils';
 import { _ } from './prepare-a9';
 
 const { setupA9 } = _;
 
-jest.mock('utils/geo-utils', () => ({
+jest.mock('lib/geo/geo-utils', () => ({
 	isInCanada: jest.fn(() => false),
 }));
 
@@ -26,7 +26,7 @@ jest.mock('core/__vendor/a9-apstag', () => ({
 	a9Apstag: jest.fn(),
 }));
 
-jest.mock('lib/build-page-targeting');
+jest.mock('lib/page-targeting');
 
 jest.mock('lib/header-bidding/prebid/bid-config');
 

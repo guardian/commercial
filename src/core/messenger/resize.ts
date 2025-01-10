@@ -1,5 +1,5 @@
 import { isObject, isString } from '@guardian/libs';
-import fastdom from '../../utils/fastdom-promise';
+import fastdom from '../../lib/fastdom-promise';
 import type { RegisterListener } from '../messenger';
 
 interface Styles {

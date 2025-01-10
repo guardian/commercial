@@ -1,5 +1,25 @@
 # @guardian/commercial
 
+## 24.1.0
+
+### Minor Changes
+
+- 1ed5373: Sample prebid analytics at 10%
+
+### Patch Changes
+
+- dab9c86: Add amIUsed logs for old frontend modules
+
+## 24.0.0
+
+### Major Changes
+
+- 4b82e3a: Major bumps to peer dependencies
+
+### Minor Changes
+
+- 936ef14: Add `plcmt` targeting to Youtube IMA targeting
+
 ## 23.8.1
 
 ### Patch Changes

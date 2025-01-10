@@ -1,8 +1,7 @@
 import { adSizes } from '../core/ad-sizes';
 import type { Advert } from '../define/Advert';
-import { $$ } from '../utils/$$';
-import fastdom from '../utils/fastdom-promise';
-import { reportError } from '../utils/report-error';
+import { reportError } from '../lib/error/report-error';
+import fastdom from '../lib/fastdom-promise';
 import { renderAdvertLabel } from './render-advert-label';
 
 /**
@@ -138,14 +137,13 @@ sizeCallbacks[adSizes.merchandising.toString()] = addFluid250([
 ]);
 
 const addContentClass = (adSlotNode: HTMLElement) => {
-	const adSlotContent = $$(
+	const adSlotContent = adSlotNode.querySelector(
 		`#${adSlotNode.id} > div:not(.ad-slot__label)`,
-		adSlotNode,
-	).get();
+	);
 
-	if (adSlotContent.length) {
+	if (adSlotContent) {
 		void fastdom.mutate(() => {
-			adSlotContent[0]?.classList.add('ad-slot__content');
+			adSlotContent.classList.add('ad-slot__content');
 		});
 	}
 };

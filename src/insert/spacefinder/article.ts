@@ -8,7 +8,7 @@ import {
 } from '../../core/create-ad-slot';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
-import fastdom from '../../utils/fastdom-promise';
+import fastdom from '../../lib/fastdom-promise';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
 import { initCarrot } from './carrot-traffic-driver';
 import { rules } from './rules';

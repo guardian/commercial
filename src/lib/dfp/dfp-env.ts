@@ -1,5 +1,5 @@
 import type { Advert } from '../../define/Advert';
-import { getUrlVars as _getUrlVars } from '../../utils/url';
+import { getUrlVars as _getUrlVars } from '../../lib/url';
 import { getCurrentBreakpoint } from '../detect/detect-breakpoint';
 
 const getUrlVars = _getUrlVars as (arg?: string) => Record<string, string>;

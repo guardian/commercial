@@ -34,7 +34,6 @@ module.exports = {
 							'lib/*',
 							'insert/*',
 							'types/*',
-							'utils/*',
 						],
 						message:
 							'Non-relative imports from src are forbidden. Please use a relative path instead',

@@ -3,7 +3,7 @@ import { once } from 'lodash-es';
 import type { AdSize, SizeMapping, SlotName } from '../core/ad-sizes';
 import { EventTimer } from '../core/index';
 import { isEligibleForTeads } from '../core/targeting/teads-eligibility';
-import { getUrlVars } from '../utils/url';
+import { getUrlVars } from '../lib/url';
 import { initSlotIas } from './init-slot-ias';
 
 const breakpointViewports: Record<keyof SizeMapping, [number, number]> = {

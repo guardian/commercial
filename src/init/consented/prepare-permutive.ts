@@ -1,11 +1,11 @@
 import type { Edition } from '../../core/types';
+import { reportError } from '../../lib/error/report-error';
 import type {
 	Config,
 	PageConfig,
 	Permutive,
 	UserConfig,
 } from '../../types/global';
-import { reportError } from '../../utils/report-error';
 
 interface PermutivePageConfig {
 	page: Pick<

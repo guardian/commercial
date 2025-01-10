@@ -4,7 +4,7 @@ import {
 	isInRow as isInRow_,
 	isInUk as isInUk_,
 	isInUsOrCa as isInUsOrCa_,
-} from '../../../utils/geo-utils';
+} from '../../../lib/geo/geo-utils';
 import { getBreakpointKey as getBreakpointKey_ } from '../utils';
 import {
 	getImprovePlacementId,
@@ -20,7 +20,7 @@ const isInUsOrCa = isInUsOrCa_ as jest.Mock;
 jest.mock('experiments/ab', () => ({
 	isInVariantSynchronous: jest.fn(),
 }));
-jest.mock('utils/geo-utils');
+jest.mock('lib/geo/geo-utils');
 
 jest.mock('../utils', () => ({
 	...jest.requireActual('../utils'),

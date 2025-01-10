@@ -8,11 +8,11 @@ import { PREBID_TIMEOUT } from '../../../core/constants/prebid-timeout';
 import { EventTimer } from '../../../core/event-timer';
 import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
 import type { Advert } from '../../../define/Advert';
-import { isUserInVariant } from '../../../experiments/ab';
+import { getParticipations, isUserInVariant } from '../../../experiments/ab';
 import { gpidPrebidAdUnits } from '../../../experiments/tests/gpid-prebid';
-import { getPageTargeting } from '../../build-page-targeting';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedInOktaRefactor } from '../../identity/api';
+import { getPageTargeting } from '../../page-targeting';
 import type {
 	BidderCode,
 	HeaderBiddingSlot,
@@ -266,6 +266,16 @@ declare global {
 	}
 }
 
+const shouldEnableAnalytics = (): boolean => {
+	const analyticsSampleRate = 10 / 100;
+	const isInSample = Math.random() < analyticsSampleRate;
+
+	const isInServerSideTest =
+		Object.keys(window.guardian.config.tests ?? {}).length > 0;
+	const isInClientSideTest = Object.keys(getParticipations()).length > 0;
+	return isInServerSideTest || isInClientSideTest || isInSample;
+};
+
 /**
  * Prebid supports an additional timeout buffer to account for noisiness in
  * timing JavaScript on the page. This value is passed to the Prebid config
@@ -447,7 +457,10 @@ const initialise = (
 		});
 	}
 
-	if (window.guardian.config.switches.prebidAnalytics) {
+	if (
+		window.guardian.config.switches.prebidAnalytics &&
+		shouldEnableAnalytics()
+	) {
 		window.pbjs.enableAnalytics([
 			{
 				provider: 'gu',

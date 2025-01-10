@@ -8,8 +8,8 @@ import { enableLazyLoad } from '../display/lazy-load';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { memoizedFetchNonRefreshableLineItemIds } from '../lib/dfp/non-refreshable-line-items';
 import { shouldRefresh } from '../lib/dfp/should-refresh';
-import fastdom from '../utils/fastdom-promise';
-import { getUrlVars } from '../utils/url';
+import fastdom from '../lib/fastdom-promise';
+import { getUrlVars } from '../lib/url';
 
 const ADVERT_REFRESH_RATE = 30_000; // 30 seconds. The minimum time allowed by Google.
 
