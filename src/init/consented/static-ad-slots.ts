@@ -54,7 +54,6 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
  * Static ad slots that were rendered on the page by the server are collected here.
  *
  * For dynamic ad slots that are created at runtime, see:
- *  - article-aside-adverts
  *  - article-body-adverts
  *  - high-merch
  */
