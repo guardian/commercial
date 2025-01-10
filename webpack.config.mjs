@@ -34,7 +34,6 @@ const config = {
 		rules: [
 			{
 				test: /\.[jt]s|mjs$/,
-				exclude: /(node_modules)/,
 				use: [
 					{
 						loader: 'swc-loader',
