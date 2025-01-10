@@ -3,6 +3,7 @@ import browserslist from 'browserslist';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
 
 const targets = browserslist('extends @guardian/browserslist-config');
+
 /**
  * @type {import('webpack').Configuration}
  */
@@ -27,12 +28,13 @@ const config = {
 			svgs: join(import.meta.dirname, 'static', 'svg'),
 			lodash: 'lodash-es',
 		},
-		extensions: ['.js', '.ts', '.tsx', '.jsx'],
+		extensions: ['.js', '.ts'],
 	},
 	module: {
 		rules: [
 			{
-				test: /\.[jt]sx?|mjs$/,
+				test: /\.[jt]s|mjs$/,
+				exclude: /(node_modules)/,
 				use: [
 					{
 						loader: 'swc-loader',
@@ -41,7 +43,6 @@ const config = {
 							jsc: {
 								parser: {
 									syntax: 'typescript',
-									decorators: false,
 									dynamicImport: true,
 								},
 							},

@@ -49,9 +49,7 @@ export default merge(config, {
 			new TerserPlugin({
 				minify: TerserPlugin.swcMinify,
 				terserOptions: {
-					mangle: {
-						toplevel: true,
-					},
+					mangle: true,
 					compress: true,
 				},
 			}),
