@@ -9,27 +9,11 @@ export class PROutPlugin {
 	 * @param {import('webpack').Compiler} compiler
 	 */
 	apply = (compiler) => {
-		compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {
+		compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
 			const commitSHA = execSync('git rev-parse HEAD').toString().trim();
 
-			compiler.outputFileSystem.mkdirSync(
-				join(
-					import.meta.dirname,
-					'..',
-					'dist',
-					'riff-raff',
-					'js',
-					'commercial',
-				),
-				{ recursive: true },
-			);
-
 			const outputPath = join(
-				import.meta.dirname,
-				'..',
-				'dist',
-				'riff-raff',
-				'js',
+				compilation.outputOptions.path,
 				'commercial',
 				`prout`,
 			);

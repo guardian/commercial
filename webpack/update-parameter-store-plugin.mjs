@@ -49,20 +49,16 @@ export class UpdateParameterStorePlugin {
 
 				const output = JSON.stringify(cloudformation, null, 2);
 				const outputPath = join(
-					import.meta.dirname,
+					compilation.outputOptions.path,
 					'..',
-					'dist',
-					'riff-raff',
 					'cloudformation',
 					`${stage}.json`,
 				);
 
 				compiler.outputFileSystem.mkdirSync(
 					join(
-						import.meta.dirname,
+						compilation.outputOptions.path,
 						'..',
-						'dist',
-						'riff-raff',
 						'cloudformation',
 					),
 					{ recursive: true },

@@ -27,7 +27,7 @@ export default merge(config, {
 	output: {
 		filename: `commercial/${prefix}graun.standalone.commercial.js`,
 		chunkFilename: `commercial/${prefix}graun.[name].commercial.js`,
-		path: join(import.meta.dirname, 'dist', 'riff-raff', 'js'),
+		path: join(import.meta.dirname, 'dist', 'prod', 'artifacts'),
 		publicPath: 'auto',
 		clean: true,
 	},
