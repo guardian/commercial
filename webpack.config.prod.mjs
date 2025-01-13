@@ -4,6 +4,8 @@ import TerserPlugin from 'terser-webpack-plugin';
 import webpack from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
+import { PROutPlugin } from './webpack/prout-plugin.mjs';
+import { UpdateParameterStorePlugin } from './webpack/update-parameter-store-plugin.mjs';
 import config from './webpack.config.mjs';
 
 const { DefinePlugin } = webpack;
@@ -23,9 +25,10 @@ const prefix = process.env.BUNDLE_PREFIX ?? '[chunkhash]/';
 export default merge(config, {
 	mode: 'production',
 	output: {
-		filename: `${prefix}graun.standalone.commercial.js`,
-		chunkFilename: `${prefix}graun.[name].commercial.js`,
-		path: join(import.meta.dirname, 'dist', 'bundle', 'prod'),
+		filename: `commercial/${prefix}graun.standalone.commercial.js`,
+		chunkFilename: `commercial/${prefix}graun.[name].commercial.js`,
+		path: join(import.meta.dirname, 'dist', 'riff-raff', 'js'),
+		publicPath: 'auto',
 		clean: true,
 	},
 	devtool: 'source-map',
@@ -39,9 +42,11 @@ export default merge(config, {
 		new DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify('production'),
 			'process.env.OVERRIDE_BUNDLE_PATH': JSON.stringify(false),
-			'process.env.RIFFRAFF_DEPLOY': JSON.stringify(false),
+			'process.env.RIFFRAFF_DEPLOY': JSON.stringify(true),
 			...gitCommitSHA(),
 		}),
+		new UpdateParameterStorePlugin(),
+		new PROutPlugin(),
 	],
 	optimization: {
 		minimize: true,
