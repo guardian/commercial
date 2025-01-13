@@ -4,7 +4,7 @@ This package contains the code for the commercial bundle that is loaded on all p
 
 There are 2 main parts to this repo:
 - The commercial bundle itself, which is a set of javascript files that is loaded on all pages on theguardian.com.
-- Some modules that are imported used by other parts of the Guardian codebase, such as DCR. This is published as a package to npm, `@guardian/commercial`.
+- Some modules that are used by other parts of the Guardian codebase, such as DCR. This is published as a package to npm, `@guardian/commercial`.
 
 The exported modules are in `src/core`, everything else is part of the commercial bundle.
 
@@ -87,12 +87,12 @@ Frontend will then use the local bundle instead of the one from PROD/CODE.
 
 To test the bundle on CODE, create a PR, wait for github actions to run and a riff-raff comment should appear. Click the link in the comment to confirm the CODE deployment.
 
-Although technically we don't need to "take" Frontend or DCR CODE environments anymore, it may be a good idea to claim it any way if your change may break things and cause an issue for another developer testing their changes.
+Although you can deploy CODE changes without deploying Frontend or DCR, it's a good idea to flag any CODE deployments on the dotcom semaphore chat in case it has an effect on anything anyone else is testing.
 
 #### Testing changes to the `@guardian/commercial` npm package
 You can add the [beta] @guardian/commercial label to your pull request, this will release a beta version of the bundle to NPM, the exact version will be commented on your PR.
 
-In order to do this, first run: pnpm changeset add, again, This will create a new changeset file in the .changeset directory. Commit this file with your PR.
+In order to do this, run `pnpm changeset`. This will create a new changeset file in the .changeset directory. Commit this file with your PR.
 
 Note: Once the beta version is released, the label will be removed from the PR, so you will need to add it again if you want to release subsequent new versions.
 

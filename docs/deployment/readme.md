@@ -8,4 +8,4 @@ This is neccessary as the production bundle files have a hash in their paths for
 As part of the CI process a build is created in riff-raff with the javascripts and cloudformation. When deployment is initiated in riff-raff (automatically on prod, or manually for PRs on CODE) the javascripts are uploaded to the dotcom static S3 bucket, and the cloudformation updating the bundlepath is executed.
 
 ## Frontend
-[Frontend](https://github.com/guardian/frontend/blob/main/common/app/common/CommercialBundle.scala) perioducally checks the parameter store for the path to the commercial bundle, caching it for 1 minute. This is to avoid hitting the parameter store on every request.
+[Frontend](https://github.com/guardian/frontend/blob/ad634eed65451a5994413da1039665a4c3cea574/common/app/common/CommercialBundle.scala) perioducally checks the parameter store for the path to the commercial bundle, caching it for 1 minute. This is to avoid hitting the parameter store on every request.
