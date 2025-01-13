@@ -10,10 +10,7 @@ import {
 import { pbTestNameMap } from '../../../lib/url';
 import type { PrebidIndexSite } from '../../../types/global';
 import { dfpEnv } from '../../dfp/dfp-env';
-import {
-	buildAppNexusTargeting,
-	buildAppNexusTargetingObject,
-} from '../../page-targeting';
+import { buildAppNexusTargetingObject } from '../../page-targeting';
 import type {
 	BidderCode,
 	HeaderBiddingSize,
@@ -28,7 +25,6 @@ import type {
 	PrebidOpenXParams,
 	PrebidOzoneParams,
 	PrebidPubmaticParams,
-	PrebidSonobiParams,
 	PrebidTripleLiftParams,
 	PrebidTrustXParams,
 	PrebidXaxisParams,
@@ -51,7 +47,6 @@ import {
 	shouldIncludeKargo,
 	shouldIncludeMagnite,
 	shouldIncludeOpenx,
-	shouldIncludeSonobi,
 	shouldIncludeTripleLift,
 	shouldIncludeTrustX,
 	shouldIncludeXaxis,
@@ -337,22 +332,6 @@ const ozoneClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 			ozoneData: {}, // TODO: confirm if we need to send any
 		};
 	},
-});
-
-const sonobiBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
-	pageTargeting: PageTargeting,
-) => ({
-	name: 'sonobi',
-	switchName: 'prebidSonobi',
-	bidParams: (slotId: string): PrebidSonobiParams => ({
-		ad_unit: window.guardian.config.page.adUnit,
-		dom_id: slotId,
-		appNexusTargeting: buildAppNexusTargeting(pageTargeting),
-		pageViewId: window.guardian.ophan.pageViewId,
-		keywords: window.guardian.config.page.keywords
-			? window.guardian.config.page.keywords.split(',')
-			: [],
-	}),
 });
 
 const getPubmaticPublisherId = (): string => {
@@ -681,7 +660,6 @@ const currentBidders = (
 ): PrebidBidder[] => {
 	const biddersToCheck: Array<[boolean, PrebidBidder]> = [
 		[true, criteoBidder(slotSizes)],
-		[shouldIncludeSonobi(), sonobiBidder(pageTargeting)],
 		[shouldIncludeTrustX(), trustXBidder],
 		[shouldIncludeTripleLift(), tripleLiftBidder],
 		[shouldIncludeAppNexus(), appNexusBidder(pageTargeting)],

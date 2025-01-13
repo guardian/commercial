@@ -21,7 +21,6 @@ import {
 	shouldIncludeAppNexus as shouldIncludeAppNexus_,
 	shouldIncludeImproveDigital as shouldIncludeImproveDigital_,
 	shouldIncludeOpenx as shouldIncludeOpenx_,
-	shouldIncludeSonobi as shouldIncludeSonobi_,
 	shouldIncludeTripleLift as shouldIncludeTripleLift_,
 	shouldIncludeTrustX as shouldIncludeTrustX_,
 	shouldIncludeXaxis as shouldIncludeXaxis_,
@@ -66,7 +65,6 @@ const shouldIncludeImproveDigital = shouldIncludeImproveDigital_ as jest.Mock;
 const shouldIncludeOpenx = shouldIncludeOpenx_ as jest.Mock;
 const shouldIncludeTrustX = shouldIncludeTrustX_ as jest.Mock;
 const shouldIncludeXaxis = shouldIncludeXaxis_ as jest.Mock;
-const shouldIncludeSonobi = shouldIncludeSonobi_ as jest.Mock;
 const shouldIncludeTripleLift = shouldIncludeTripleLift_ as jest.Mock;
 const stripMobileSuffix = stripMobileSuffix_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
@@ -98,7 +96,6 @@ const resetConfig = () => {
 		prebidOpenx: true,
 		prebidImproveDigital: true,
 		prebidIndexExchange: true,
-		prebidSonobi: true,
 		prebidTrustx: true,
 		prebidXaxis: true,
 		prebidAdYouLike: true,
@@ -271,11 +268,6 @@ describe('bids', () => {
 		expect(getBidders()).toEqual(['criteo', 'adyoulike']);
 	});
 
-	test('should include Sonobi if in target geolocation', () => {
-		shouldIncludeSonobi.mockReturnValue(true);
-		expect(getBidders()).toEqual(['ix', 'criteo', 'sonobi', 'adyoulike']);
-	});
-
 	test('should include AppNexus directly if in target geolocation', () => {
 		shouldIncludeAppNexus.mockReturnValue(true);
 		expect(getBidders()).toEqual(['ix', 'criteo', 'and', 'adyoulike']);
@@ -319,13 +311,13 @@ describe('bids', () => {
 	});
 
 	test('should only include multiple bidders being tested, even when their switches are off', () => {
-		setQueryString('pbtest=xhb&pbtest=sonobi');
+		setQueryString('pbtest=xhb&pbtest=adyoulike');
 		isUserInVariant.mockImplementation(
 			(testId, variantId) => variantId === 'variant',
 		);
 		window.guardian.config.switches.prebidXaxis = false;
-		window.guardian.config.switches.prebidSonobi = false;
-		expect(getBidders()).toEqual(['sonobi', 'xhb']);
+		window.guardian.config.switches.prebidAdYouLike = false;
+		expect(getBidders()).toEqual(['xhb', 'adyoulike']); // Ensure 'xhb' and 'and' are the correct codes for prebidXaxis and prebidAppnexus
 	});
 
 	test('should ignore bidder that does not exist', () => {

@@ -157,8 +157,6 @@ export const getRandomIntInclusive = (
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const shouldIncludeSonobi = (): boolean => isInUsOrCa();
-
 export const shouldIncludeOpenx = (): boolean => !isInUsOrCa();
 
 export const shouldIncludeTrustX = (): boolean => isInUsOrCa();
