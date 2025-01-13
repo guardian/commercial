@@ -1,5 +1,6 @@
 import { createAdSize } from '../../../core/ad-sizes';
 import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
+import { isUserInVariant as isUserInVariant_ } from '../../../experiments/ab';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
@@ -67,6 +68,7 @@ const shouldIncludeXaxis = shouldIncludeXaxis_ as jest.Mock;
 const shouldIncludeTripleLift = shouldIncludeTripleLift_ as jest.Mock;
 const stripMobileSuffix = stripMobileSuffix_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
+const isUserInVariant = isUserInVariant_ as jest.Mock;
 
 jest.mock('lib/geo/geo-utils');
 const isInAuOrNz = isInAuOrNz_ as jest.Mock;
@@ -306,6 +308,16 @@ describe('bids', () => {
 		setQueryString('pbtest=xhb');
 		shouldIncludeXaxis.mockReturnValue(false);
 		expect(getBidders()).toEqual(['xhb']);
+	});
+
+	test('should only include multiple bidders being tested, even when their switches are off', () => {
+		setQueryString('pbtest=xhb&pbtest=adyoulike');
+		isUserInVariant.mockImplementation(
+			(testId, variantId) => variantId === 'variant',
+		);
+		window.guardian.config.switches.prebidXaxis = false;
+		window.guardian.config.switches.prebidAdYouLike = false;
+		expect(getBidders()).toEqual(['xhb', 'adyoulike']); // Ensure 'xhb' and 'and' are the correct codes for prebidXaxis and prebidAppnexus
 	});
 
 	test('should ignore bidder that does not exist', () => {
