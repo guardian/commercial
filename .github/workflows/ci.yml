@@ -150,6 +150,6 @@ jobs:
           configPath: ./riff-raff.yaml
           contentDirectories: |
             frontend-static/commercial:
-              - dist/riff-raff/js/commercial
+              - dist/prod/artifacts/commercial
             commercial-bundle-path:
-              - dist/riff-raff/cloudformation
+              - dist/prod/cloudformation
