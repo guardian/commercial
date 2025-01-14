@@ -1,15 +1,15 @@
 /* A regionalised container for all the commercial tags. */
 
 import { getConsentFor, onConsent } from '@guardian/libs';
-import { ias } from '../../core/third-party-tags/ias';
-import { inizio } from '../../core/third-party-tags/inizio';
-import { permutive } from '../../core/third-party-tags/permutive';
-import { remarketing } from '../../core/third-party-tags/remarketing';
-import { twitter } from '../../core/third-party-tags/twitter-uwt';
 import { commercialFeatures } from '../../lib/commercial-features';
 import fastdom from '../../lib/fastdom-promise';
+import { ias } from '../../lib/third-party-tags/ias';
 import { imrWorldwide } from '../../lib/third-party-tags/imr-worldwide';
 import { imrWorldwideLegacy } from '../../lib/third-party-tags/imr-worldwide-legacy';
+import { inizio } from '../../lib/third-party-tags/inizio';
+import { permutive } from '../../lib/third-party-tags/permutive';
+import { remarketing } from '../../lib/third-party-tags/remarketing';
+import { twitter } from '../../lib/third-party-tags/twitter-uwt';
 import type { ThirdPartyTag } from '../../types/global';
 
 const addScripts = (tags: ThirdPartyTag[]) => {

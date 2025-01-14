@@ -1,5 +1,5 @@
-import { adSizes } from '../core/ad-sizes';
 import type { Advert } from '../define/Advert';
+import { adSizes } from '../lib/ad-sizes';
 import { reportError } from '../lib/error/report-error';
 import fastdom from '../lib/fastdom-promise';
 import { renderAdvertLabel } from './render-advert-label';

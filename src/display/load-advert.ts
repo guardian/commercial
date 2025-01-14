@@ -1,6 +1,6 @@
 import fastdom from 'fastdom';
-import { EventTimer } from '../core/event-timer';
 import type { Advert } from '../define/Advert';
+import { EventTimer } from '../lib/event-timer';
 import { stripDfpAdPrefixFrom } from '../lib/header-bidding/utils';
 import { refreshBidsForAd, requestBidsForAd } from './request-bids';
 
