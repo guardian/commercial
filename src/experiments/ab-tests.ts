@@ -2,6 +2,7 @@ import type { ABTest } from '@guardian/ab-core';
 import { gpidPrebidAdUnits } from './tests/gpid-prebid';
 import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
 import { optOutFrequencyCap } from './tests/opt-out-frequency-cap';
+import { prebidKeywords } from './tests/prebid-keywords';
 import { regionSpecificPrebid } from './tests/region-specific-prebid';
 
 /**
@@ -15,4 +16,5 @@ export const concurrentTests: ABTest[] = [
 	optOutFrequencyCap,
 	gpidPrebidAdUnits,
 	regionSpecificPrebid,
+	prebidKeywords,
 ];
