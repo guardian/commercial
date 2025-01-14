@@ -8,6 +8,6 @@
 	},
 	"extends": "./tsconfig.json",
 	"rootDir": "src",
-	"include": ["src/lib/export.ts", "src/types"],
+	"include": ["src/export.ts", "src/types"],
 	"exclude": ["**/*.spec.*", "**/*.test.*"]
 }
