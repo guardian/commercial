@@ -1,0 +1,14 @@
+import '@guardian/prebid.js/modules/adyoulikeBidAdapter';
+import '@guardian/prebid.js/modules/appnexusBidAdapter';
+import '@guardian/prebid.js/modules/consentManagement';
+import '@guardian/prebid.js/modules/consentManagementUsp';
+import '@guardian/prebid.js/modules/criteoBidAdapter';
+import '@guardian/prebid.js/modules/guAnalyticsAdapter';
+import '@guardian/prebid.js/modules/ixBidAdapter';
+import '@guardian/prebid.js/modules/openxBidAdapter';
+import '@guardian/prebid.js/modules/permutiveRtdProvider';
+import '@guardian/prebid.js/modules/prebidServerBidAdapter';
+import '@guardian/prebid.js/modules/pubmaticBidAdapter';
+import '@guardian/prebid.js/modules/sharedIdSystem';
+import '@guardian/prebid.js/modules/tripleliftBidAdapter';
+import '@guardian/prebid.js/modules/rubiconBidAdapter';

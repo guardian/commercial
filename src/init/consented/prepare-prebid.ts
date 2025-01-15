@@ -1,16 +1,9 @@
 import type { ConsentFramework } from '@guardian/libs';
 import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { isUserInVariant } from '../../experiments/ab';
-import { regionSpecificPrebid } from '../../experiments/tests/region-specific-prebid';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
-import {
-	isInAuOrNz,
-	isInCanada,
-	isInUk,
-	isInUsa,
-} from '../../lib/geo/geo-utils';
+import { isInCanada } from '../../lib/geo/geo-utils';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
 import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
 
@@ -23,26 +16,9 @@ const shouldLoadPrebid = () =>
 	!shouldIncludeOnlyA9 &&
 	!isInCanada();
 
-const prebidVersion = () => {
-	if (isUserInVariant(regionSpecificPrebid, 'variant')) {
-		if (isInUk()) {
-			return 'uk';
-		} else if (isInAuOrNz()) {
-			return 'aus-nz';
-		} else if (isInUsa()) {
-			return 'us';
-		}
-		return 'row';
-	}
-	return 'all';
-};
-
 const loadPrebid = async (framework: ConsentFramework): Promise<void> => {
 	if (shouldLoadPrebid()) {
-		await import(
-			/* webpackChunkName: "Prebid.js" */
-			`@guardian/prebid.js/build/dist/${prebidVersion()}/prebid`
-		);
+		await import(`./prebid`);
 		prebid.initialise(window, framework);
 	}
 };
