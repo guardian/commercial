@@ -10,6 +10,7 @@ import type { PageTargeting } from '../../../core/targeting/build-page-targeting
 import type { Advert } from '../../../define/Advert';
 import { getParticipations, isUserInVariant } from '../../../experiments/ab';
 import { gpidPrebidAdUnits } from '../../../experiments/tests/gpid-prebid';
+import { prebidKeywords } from '../../../experiments/tests/prebid-keywords';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedInOktaRefactor } from '../../identity/api';
 import { getPageTargeting } from '../../page-targeting';
@@ -88,6 +89,11 @@ type PbjsConfig = {
 	timeoutBuffer?: number;
 	priceGranularity: PrebidPriceGranularity;
 	userSync: UserSync;
+	ortb2?: {
+		site: {
+			keywords: string;
+		};
+	};
 	consentManagement?: ConsentManagement;
 	realTimeData?: unknown;
 	criteo?: {
@@ -363,6 +369,17 @@ const initialise = (
 			userSync,
 		},
 	);
+
+	const shouldIncludeKeywords = isUserInVariant(prebidKeywords, 'variant');
+	const keywords = window.guardian.config.page.keywords;
+
+	if (shouldIncludeKeywords) {
+		pbjsConfig.ortb2 = {
+			site: {
+				keywords,
+			},
+		};
+	}
 
 	window.pbjs.bidderSettings = {};
 
