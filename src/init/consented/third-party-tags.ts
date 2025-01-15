@@ -5,7 +5,6 @@ import { ias } from '../../core/third-party-tags/ias';
 import { inizio } from '../../core/third-party-tags/inizio';
 import { permutive } from '../../core/third-party-tags/permutive';
 import { remarketing } from '../../core/third-party-tags/remarketing';
-import { twitter } from '../../core/third-party-tags/twitter-uwt';
 import { commercialFeatures } from '../../lib/commercial-features';
 import fastdom from '../../lib/fastdom-promise';
 import { imrWorldwide } from '../../lib/third-party-tags/imr-worldwide';
@@ -87,9 +86,6 @@ const loadOther = (): Promise<void> => {
 		}),
 		ias,
 		inizio({ shouldRun: window.guardian.config.switches.inizio ?? false }),
-		twitter({
-			shouldRun: window.guardian.config.switches.twitterUwt ?? false,
-		}),
 	].filter((_) => _.shouldRun);
 
 	const performanceServices: ThirdPartyTag[] = [
