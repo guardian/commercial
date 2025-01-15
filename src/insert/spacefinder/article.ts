@@ -1,12 +1,12 @@
-import type { AdSize, SizeMapping } from '../../core/ad-sizes';
-import { adSizes } from '../../core/ad-sizes';
-import type { ContainerOptions } from '../../core/create-ad-slot';
+import type { AdSize, SizeMapping } from '../../lib/ad-sizes';
+import { adSizes } from '../../lib/ad-sizes';
+import { commercialFeatures } from '../../lib/commercial-features';
+import type { ContainerOptions } from '../../lib/create-ad-slot';
 import {
 	adSlotContainerClass,
 	createAdSlot,
 	wrapSlotInContainer,
-} from '../../core/create-ad-slot';
-import { commercialFeatures } from '../../lib/commercial-features';
+} from '../../lib/create-ad-slot';
 import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
 import fastdom from '../../lib/fastdom-promise';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';

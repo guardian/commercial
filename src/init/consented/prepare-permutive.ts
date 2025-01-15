@@ -1,5 +1,5 @@
-import type { Edition } from '../../core/types';
 import { reportError } from '../../lib/error/report-error';
+import type { Edition } from '../../lib/types';
 import type {
 	Config,
 	PageConfig,
