@@ -377,9 +377,7 @@ const initialise = (
 
 	const shouldIncludeKeywords = isUserInVariant(prebidKeywords, 'variant');
 	const keywordsString = window.guardian.config.page.keywords;
-	const keywordsArray = keywordsString
-		? keywordsString.split(',')
-		: [];
+	const keywordsArray = keywordsString ? keywordsString.split(',') : [];
 
 	if (shouldIncludeKeywords) {
 		pbjsConfig.ortb2 = {
