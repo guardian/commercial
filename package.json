@@ -14,7 +14,7 @@
 	"files": [
 		"dist"
 	],
-	"main": "dist/core/esm/export.js",
+	"main": "dist/core/cjs/export.js",
 	"module": "dist/core/esm/export.js",
 	"scripts": {
 		"build": "npm-run-all clean --parallel compile:core:* build:prod build:dev build:riff-raff",
