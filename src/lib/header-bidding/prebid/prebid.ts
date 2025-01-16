@@ -92,6 +92,11 @@ type PbjsConfig = {
 	ortb2?: {
 		site: {
 			keywords: string;
+			ext: {
+				data: {
+					keywords: string[];
+				};
+			};
 		};
 	};
 	consentManagement?: ConsentManagement;
@@ -371,12 +376,18 @@ const initialise = (
 	);
 
 	const shouldIncludeKeywords = isUserInVariant(prebidKeywords, 'variant');
-	const keywords = window.guardian.config.page.keywords;
+	const keywordsString = window.guardian.config.page.keywords;
+	const keywordsArray = keywordsString ? keywordsString.split(',') : [];
 
 	if (shouldIncludeKeywords) {
 		pbjsConfig.ortb2 = {
 			site: {
-				keywords,
+				keywords: keywordsString,
+				ext: {
+					data: {
+						keywords: keywordsArray,
+					},
+				},
 			},
 		};
 	}
