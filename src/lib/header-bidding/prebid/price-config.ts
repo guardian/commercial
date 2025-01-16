@@ -1,4 +1,4 @@
-import { adSizes } from '../../../core/ad-sizes';
+import { adSizes } from '../../../lib/ad-sizes';
 
 export type PrebidPriceGranularity = {
 	buckets: Array<{

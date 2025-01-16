@@ -1,4 +1,4 @@
-import { createAdSlot } from '../core/create-ad-slot';
+import { createAdSlot } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import { shouldIncludeMobileSticky } from '../lib/header-bidding/utils';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
