@@ -3,12 +3,11 @@
 		"baseUrl": "src",
 		"declaration": true,
 		"noEmit": false,
-		"noUncheckedIndexedAccess": true,
 		"outDir": "dist",
 		"typeRoots": ["./node_modules/@types", "./node_modules/web-vitals/dist"]
 	},
 	"extends": "./tsconfig.json",
 	"rootDir": "src",
-	"include": ["src/core", "src/types"],
+	"include": ["src/export.ts", "src/types"],
 	"exclude": ["**/*.spec.*", "**/*.test.*"]
 }

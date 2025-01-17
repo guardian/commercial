@@ -1,5 +1,5 @@
-import { createAdSlot } from '../../core/create-ad-slot';
 import { commercialFeatures } from '../../lib/commercial-features';
+import { createAdSlot } from '../../lib/create-ad-slot';
 import { getCurrentTweakpoint } from '../../lib/detect/detect-breakpoint';
 import fastdom from '../../lib/fastdom-promise';
 import { fillDynamicAdSlot } from '../fill-dynamic-advert-slot';

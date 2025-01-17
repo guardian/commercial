@@ -1,5 +1,5 @@
-import type { SizeMapping } from '../core/ad-sizes';
-import { adSizes, createAdSize } from '../core/ad-sizes';
+import type { SizeMapping } from '../lib/ad-sizes';
+import { adSizes, createAdSize } from '../lib/ad-sizes';
 import {
 	buildGoogletagSizeMapping,
 	collectSizes,
@@ -10,7 +10,7 @@ jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock('core/targeting/teads-eligibility', () => ({
+jest.mock('lib/targeting/teads-eligibility', () => ({
 	isEligibleForTeads: jest.fn(),
 }));
 

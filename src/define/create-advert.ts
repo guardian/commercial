@@ -1,5 +1,5 @@
 import { log } from '@guardian/libs';
-import type { SizeMapping } from '../core/ad-sizes';
+import type { SizeMapping } from '../lib/ad-sizes';
 import { reportError } from '../lib/error/report-error';
 import { Advert } from './Advert';
 

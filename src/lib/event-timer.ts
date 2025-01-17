@@ -120,7 +120,7 @@ class EventTimer {
 	 * to window.guardian.commercialTimer. If it's been previously
 	 * initialised and bound it returns the original instance
 	 * Note: We save to window.guardian.commercialTimer because
-	 * different bundles (DCR / DCP) can use commercial core, and we want
+	 * different bundles (DCR / DCP) can use commercial, and we want
 	 * all timer events saved to a single instance per-page
 	 * @returns {EventTimer} Instance of EventTimer
 	 */
