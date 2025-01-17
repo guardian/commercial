@@ -171,7 +171,7 @@ describe('third party tags', () => {
 			shouldRun: true,
 			url: '//fakeThirdPartyPerformanceTag.js',
 			onLoad: jest.fn(),
-			name: 'twitter',
+			name: 'nielsen',
 		};
 
 		beforeEach(() => {
