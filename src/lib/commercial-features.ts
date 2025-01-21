@@ -147,6 +147,7 @@ class CommercialFeatures {
 
 		const articleBodyAdvertsTrueConditions = {
 			isArticle,
+			isInteractive,
 		};
 
 		const articleBodyAdvertsFalseConditions = {
@@ -159,7 +160,7 @@ class CommercialFeatures {
 		this.articleBodyAdverts =
 			this.shouldLoadGoogletag &&
 			!this.adFree &&
-			Object.values(articleBodyAdvertsTrueConditions).every(Boolean) &&
+			Object.values(articleBodyAdvertsTrueConditions).some(Boolean) &&
 			!Object.values(articleBodyAdvertsFalseConditions).some(Boolean);
 
 		if (isArticle && !this.articleBodyAdverts) {
