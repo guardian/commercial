@@ -28,7 +28,7 @@
 		"lint": "eslint .",
 		"lint-staged": "lint-staged",
 		"precommit:lint": "npm-run-all lint-staged",
-		"prepare": "husky install",
+		"prepare": "husky",
 		"prepush:test": "jest --verbose --runInBand --onlyChanged",
 		"prettier:check": "prettier . --check --cache",
 		"prettier:fix": "prettier . --write --cache",
