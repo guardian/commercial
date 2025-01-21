@@ -1,9 +1,6 @@
 module.exports = {
 	presets: ['@babel/preset-react', '@babel/preset-env'],
-	plugins: [
-		'@babel/plugin-proposal-object-rest-spread',
-		'@babel/plugin-syntax-dynamic-import',
-	],
+	plugins: ['@babel/plugin-syntax-dynamic-import'],
 	env: {
 		production: {
 			presets: [
@@ -14,10 +11,7 @@ module.exports = {
 					},
 				],
 			],
-			plugins: [
-				'@babel/plugin-transform-runtime',
-				'@babel/plugin-proposal-class-properties',
-			],
+			plugins: ['@babel/plugin-transform-runtime'],
 		},
 		test: {
 			presets: [
@@ -30,11 +24,7 @@ module.exports = {
 					},
 				],
 			],
-			plugins: [
-				'@babel/plugin-transform-runtime',
-				'@babel/plugin-proposal-class-properties',
-				'dynamic-import-node',
-			],
+			plugins: ['@babel/plugin-transform-runtime', 'dynamic-import-node'],
 		},
 	},
 	ignore: ['eslintrc.js'],
