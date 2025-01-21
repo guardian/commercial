@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { isDefined } from '../../src/core/types';
+import { isDefined } from '../../src/lib/types';
 import { breakpoints } from '../fixtures/breakpoints';
 import { articles, blogs } from '../fixtures/pages';
 import type { GuPage } from '../fixtures/pages/Page';

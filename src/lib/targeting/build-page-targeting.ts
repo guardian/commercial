@@ -2,7 +2,7 @@ import type { Participations } from '@guardian/ab-core';
 import type { ConsentState, CountryCode } from '@guardian/libs';
 import { cmp, getCookie, isString } from '@guardian/libs';
 import { supportsPerformanceAPI } from '../event-timer';
-import { getLocale } from '../lib/get-locale';
+import { getLocale } from '../geo/get-locale';
 import type { False, True } from '../types';
 import type { ContentTargeting } from './content';
 import { getContentTargeting } from './content';

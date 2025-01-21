@@ -1,7 +1,7 @@
 import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
-import type * as AdSizesType from '../../core/ad-sizes';
 import { loadAdvert } from '../../display/load-advert';
+import type * as AdSizesType from '../../lib/ad-sizes';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
@@ -56,10 +56,9 @@ jest.mock('display/display-lazy-ads', () => ({
 	displayLazyAds: jest.fn(),
 }));
 
-jest.mock('../../core/ad-sizes', () => {
-	const adSizes: typeof AdSizesType = jest.requireActual(
-		'../../core/ad-sizes',
-	);
+jest.mock('../../lib/ad-sizes', () => {
+	const adSizes: typeof AdSizesType =
+		jest.requireActual('../../lib/ad-sizes');
 	const { createAdSize } = adSizes;
 	return {
 		...adSizes,
@@ -129,7 +128,7 @@ jest.mock('./prepare-prebid', () => ({
 		.mockImplementation(() => Promise.resolve(undefined)),
 }));
 
-jest.mock('core/targeting/teads-eligibility', () => ({
+jest.mock('lib/targeting/teads-eligibility', () => ({
 	isEligibleForTeads: jest.fn(),
 }));
 
