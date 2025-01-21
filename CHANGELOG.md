@@ -1,5 +1,20 @@
 # @guardian/commercial
 
+## 25.0.0
+
+### Major Changes
+
+- 9a5d826: Merge core into lib
+
+### Minor Changes
+
+- 627e730: Delete article-aside-adverts as it's no longer used
+
+### Patch Changes
+
+- 3285a0b: Remove amIUsed calls
+- fda5154: removes sonobi ssr from prebid configuaration
+
 ## 24.1.0
 
 ### Minor Changes
