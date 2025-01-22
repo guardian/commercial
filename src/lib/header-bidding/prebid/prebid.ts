@@ -32,7 +32,7 @@ import {
 } from './price-config';
 
 type CmpApi = 'iab' | 'static';
-// https://docs.prebid.org/dev-docs/modules/consentManagement.html
+/** @see https://docs.prebid.org/dev-docs/modules/consentManagementTcf.html */
 type GDPRConfig = {
 	cmpApi: CmpApi;
 	timeout: number;
@@ -40,7 +40,8 @@ type GDPRConfig = {
 	allowAuctionWithoutConsent?: never;
 	consentData?: Record<string, unknown>;
 };
-// https://docs.prebid.org/dev-docs/modules/consentManagementUsp.html
+
+/** @see https://docs.prebid.org/dev-docs/modules/consentManagementUsp.html */
 type USPConfig = {
 	cmpApi: CmpApi;
 	timeout: number;
@@ -109,7 +110,7 @@ type PbjsConfig = {
 };
 
 type PbjsEvent = 'bidWon';
-// from https://docs.prebid.org/dev-docs/publisher-api-reference/getBidResponses.html
+/** @see https://docs.prebid.org/dev-docs/publisher-api-reference/getBidResponses.html */
 type PbjsEventData = {
 	width: number;
 	height: number;
@@ -152,7 +153,7 @@ type BuyerTargeting<T> = {
 	val: (bidResponse: DeepPartial<T>) => string | null | undefined;
 };
 
-// https://docs.prebid.org/dev-docs/publisher-api-reference/bidderSettings.html
+/** @see https://docs.prebid.org/dev-docs/publisher-api-reference/bidderSettings.html */
 type BidderSetting<T = Record<string, unknown>> = {
 	adserverTargeting: Array<BuyerTargeting<T>>;
 	bidCpmAdjustment: (n: number) => number;
@@ -226,7 +227,7 @@ declare global {
 				push: (cb: () => void) => void;
 			};
 			addAdUnits: (adUnits: PrebidAdUnit[]) => void;
-			// https://docs.prebid.org/dev-docs/publisher-api-reference/requestBids.html
+			/** @see https://docs.prebid.org/dev-docs/publisher-api-reference/requestBids.html */
 			requestBids(requestObj?: {
 				adUnitCodes?: string[];
 				adUnits?: PrebidAdUnit[];
@@ -350,7 +351,7 @@ const initialise = (
 				};
 			case 'tcfv2':
 			default:
-				// https://docs.prebid.org/dev-docs/modules/consentManagement.html
+				// https://docs.prebid.org/dev-docs/modules/consentManagementTcf.html
 				return {
 					gdpr: {
 						cmpApi: 'iab',
