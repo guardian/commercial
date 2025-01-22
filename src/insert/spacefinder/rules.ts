@@ -102,7 +102,7 @@ const desktopRightRailMinAbove = (isConsentless: boolean) => {
 	}
 
 	if (hasShowcaseMainElement || (!hasImages && hasVideo)) {
-		return base + 100;
+		return base + 250;
 	}
 	return base;
 };
