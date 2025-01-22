@@ -90,7 +90,7 @@ describe('Advert', () => {
 		slot.setAttribute('data-name', 'top-above-nav');
 		const ad = new Advert(slot);
 		expect(ad).toBeDefined();
-		expect(googleSlot.setSafeFrameConfig).toBeCalledWith({
+		expect(googleSlot.setSafeFrameConfig).toHaveBeenCalledWith({
 			allowOverlayExpansion: false,
 			allowPushExpansion: true,
 			sandbox: true,
@@ -102,7 +102,7 @@ describe('Advert', () => {
 		slot.setAttribute('data-name', 'inline1');
 		const ad = new Advert(slot);
 		expect(ad).toBeDefined();
-		expect(googleSlot.setSafeFrameConfig).toBeCalledWith({
+		expect(googleSlot.setSafeFrameConfig).toHaveBeenCalledWith({
 			allowOverlayExpansion: false,
 			allowPushExpansion: true,
 			sandbox: true,
@@ -114,7 +114,7 @@ describe('Advert', () => {
 		slot.setAttribute('data-name', 'inline2');
 		const ad = new Advert(slot);
 		expect(ad).toBeDefined();
-		expect(googleSlot.setSafeFrameConfig).not.toBeCalled();
+		expect(googleSlot.setSafeFrameConfig).not.toHaveBeenCalled();
 	});
 
 	it('should throw an error if no size mappings are found or passed in', () => {
