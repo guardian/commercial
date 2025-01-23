@@ -7,6 +7,7 @@ import fastdom from '../../lib/fastdom-promise';
 const selectors: string[] = [
 	dfpEnv.adSlotSelector,
 	'.top-banner-ad-container',
+	'.top-fronts-banner-ad-container',
 	'.ad-slot-container',
 ];
 
