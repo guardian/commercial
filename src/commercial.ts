@@ -18,13 +18,18 @@ void (async () => {
 		!commercialFeatures.adFree
 	) {
 		void import(
-			/* webpackChunkName: "consentless" */
-			'./init/consentless'
+			/* webpackChunkName: "consentless-advertising" */
+			'./init/consentless-advertising'
 		).then(({ bootConsentless }) => bootConsentless(consentState));
+	} else if (commercialFeatures.adFree) {
+		void import(
+			/* webpackChunkName: "ad-free" */
+			'./init/ad-free'
+		).then(({ bootCommercialWhenReady }) => bootCommercialWhenReady());
 	} else {
 		void import(
-			/* webpackChunkName: "consented" */
-			'./init/consented'
+			/* webpackChunkName: "consented-advertising" */
+			'./init/consented-advertising'
 		).then(({ bootCommercialWhenReady }) => bootCommercialWhenReady());
 	}
 })();
