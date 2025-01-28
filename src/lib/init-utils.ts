@@ -47,11 +47,7 @@ const bootCommercial = async (
 	};
 
 	try {
-		return Promise.allSettled(modules)
-			.then(() => {
-				EventTimer.get().mark('commercialModulesLoaded');
-			})
-			.then(recordCommercialMetrics);
+		return Promise.allSettled(modules).then(recordCommercialMetrics);
 	} catch (error) {
 		// report async errors in bootCommercial to Sentry with the commercial feature tag
 		reportError(error, 'commercial', tags);
