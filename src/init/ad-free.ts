@@ -1,4 +1,4 @@
-import { bootCommercial, type Modules } from '../lib/init-utils';
+import { bootCommercial } from '../lib/init-utils';
 import { adFreeSlotRemove } from './consented/ad-free-slot-remove';
 import { init as initComscore } from './consented/comscore';
 import { init as initIpsosMori } from './consented/ipsos-mori';
@@ -8,14 +8,14 @@ import { init as initTrackGpcSignal } from './consented/track-gpc-signal';
 import { init as initTrackScrollDepth } from './consented/track-scroll-depth';
 
 // modules not related to ad loading
-const commercialModules: Modules = [
-	['cm-adFreeSlotRemoveFronts', adFreeSlotRemove],
-	['cm-closeDisabledSlots', closeDisabledSlots],
-	['cm-comscore', initComscore],
-	['cm-ipsosmori', initIpsosMori],
-	['cm-teadsCookieless', initTeadsCookieless],
-	['cm-trackScrollDepth', initTrackScrollDepth],
-	['cm-trackGpcSignal', initTrackGpcSignal],
+const commercialModules = [
+	adFreeSlotRemove(),
+	closeDisabledSlots(),
+	initComscore(),
+	initIpsosMori(),
+	initTeadsCookieless(),
+	initTrackScrollDepth(),
+	initTrackGpcSignal(),
 ];
 
 const bootCommercialWhenReady = () => {

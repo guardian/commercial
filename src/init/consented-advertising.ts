@@ -1,5 +1,5 @@
 import { init as prepareAdVerification } from '../lib/ad-verification/prepare-ad-verification';
-import { bootCommercial, type Modules } from '../lib/init-utils';
+import { bootCommercial } from '../lib/init-utils';
 import { adFreeSlotRemove } from './consented/ad-free-slot-remove';
 import { init as initComscore } from './consented/comscore';
 import { initDfpListeners } from './consented/dfp-listeners';
@@ -21,28 +21,28 @@ import { init as setAdTestCookie } from './shared/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from './shared/set-adtest-in-labels-cookie';
 
 // all modules needed for commercial code and ads to run
-const commercialModules: Modules = [
-	['cm-adFreeSlotRemoveFronts', adFreeSlotRemove],
-	['cm-closeDisabledSlots', closeDisabledSlots],
-	['cm-comscore', initComscore],
-	['cm-ipsosmori', initIpsosMori],
-	['cm-teadsCookieless', initTeadsCookieless],
-	['cm-trackScrollDepth', initTrackScrollDepth],
-	['cm-trackGpcSignal', initTrackGpcSignal],
-	['cm-messenger', initMessenger],
-	['cm-setAdTestCookie', setAdTestCookie],
-	['cm-setAdTestInLabelsCookie', setAdTestInLabelsCookie],
-	['cm-reloadPageOnConsentChange', reloadPageOnConsentChange],
-	['cm-prepare-prebid', preparePrebid],
-	['cm-dfp-listeners', initDfpListeners],
+const commercialModules = [
+	adFreeSlotRemove(),
+	closeDisabledSlots(),
+	initComscore(),
+	initIpsosMori(),
+	initTeadsCookieless(),
+	initTrackScrollDepth(),
+	initTrackGpcSignal(),
+	initMessenger(),
+	setAdTestCookie(),
+	setAdTestInLabelsCookie(),
+	reloadPageOnConsentChange(),
+	preparePrebid(),
+	initDfpListeners(),
 	// Permutive init code must run before google tag enableServices()
 	// The permutive lib however is loaded async with the third party tags
-	['cm-prepare-googletag', () => initPermutive().then(prepareGoogletag)],
-	['cm-dynamic-a-slots', initDynamicAdSlots],
-	['cm-prepare-a9', prepareA9],
-	['cm-prepare-fill-slot-listener', initFillSlotListener],
-	['cm-prepare-adverification', prepareAdVerification],
-	['cm-thirdPartyTags', initThirdPartyTags],
+	initPermutive().then(prepareGoogletag),
+	initDynamicAdSlots(),
+	prepareA9(),
+	initFillSlotListener(),
+	prepareAdVerification(),
+	initThirdPartyTags(),
 ];
 
 const bootCommercialWhenReady = () => {
