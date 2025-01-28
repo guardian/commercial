@@ -62,7 +62,7 @@ const insertScripts = async (
 	advertisingServices: ThirdPartyTag[],
 	performanceServices: ThirdPartyTag[], // performanceServices always run
 ): Promise<void> => {
-	await addScripts(performanceServices);
+	void addScripts(performanceServices);
 	const consentState = await onConsent();
 	const consentedAdvertisingServices = advertisingServices.filter(
 		(script) => {
@@ -72,7 +72,7 @@ const insertScripts = async (
 	);
 
 	if (consentedAdvertisingServices.length > 0) {
-		await addScripts(consentedAdvertisingServices);
+		void addScripts(consentedAdvertisingServices);
 	}
 };
 
@@ -102,7 +102,7 @@ const init = async (): Promise<boolean> => {
 	if (!commercialFeatures.thirdPartyTags) {
 		return Promise.resolve(false);
 	}
-	await loadOther();
+	void loadOther();
 	return Promise.resolve(true);
 };
 
