@@ -34,9 +34,9 @@ const commercialModules: Modules = [
 	['cm-setAdTestInLabelsCookie', setAdTestInLabelsCookie],
 	['cm-reloadPageOnConsentChange', reloadPageOnConsentChange],
 	['cm-prepare-prebid', preparePrebid],
+	['cm-dfp-listeners', initDfpListeners],
 	// Permutive init code must run before google tag enableServices()
 	// The permutive lib however is loaded async with the third party tags
-	['cm-dfp-listeners', initDfpListeners],
 	['cm-prepare-googletag', () => initPermutive().then(prepareGoogletag)],
 	['cm-dynamic-a-slots', initDynamicAdSlots],
 	['cm-prepare-a9', prepareA9],
