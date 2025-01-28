@@ -25,7 +25,7 @@ const recordCommercialMetrics = () => {
 };
 
 const bootCommercial = async (
-	modules: Array<Promise<boolean | void>>,
+	modules: Array<() => Promise<boolean | void>>,
 ): Promise<void> => {
 	log('commercial', '📦 standalone.commercial.ts', __webpack_public_path__);
 	if (process.env.COMMIT_SHA) {
@@ -47,7 +47,9 @@ const bootCommercial = async (
 	};
 
 	try {
-		return Promise.allSettled(modules).then(recordCommercialMetrics);
+		return Promise.allSettled(modules.map((module) => module())).then(
+			recordCommercialMetrics,
+		);
 	} catch (error) {
 		// report async errors in bootCommercial to Sentry with the commercial feature tag
 		reportError(error, 'commercial', tags);

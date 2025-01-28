@@ -9,13 +9,13 @@ import { init as initTrackScrollDepth } from './consented/track-scroll-depth';
 
 // modules not related to ad loading
 const commercialModules = [
-	adFreeSlotRemove(),
-	closeDisabledSlots(),
-	initComscore(),
-	initIpsosMori(),
-	initTeadsCookieless(),
-	initTrackScrollDepth(),
-	initTrackGpcSignal(),
+	adFreeSlotRemove,
+	closeDisabledSlots,
+	initComscore,
+	initIpsosMori,
+	initTeadsCookieless,
+	initTrackScrollDepth,
+	initTrackGpcSignal,
 ];
 
 const bootCommercialWhenReady = () => {

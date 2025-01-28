@@ -22,27 +22,27 @@ import { init as setAdTestInLabelsCookie } from './shared/set-adtest-in-labels-c
 
 // all modules needed for commercial code and ads to run
 const commercialModules = [
-	adFreeSlotRemove(),
-	closeDisabledSlots(),
-	initComscore(),
-	initIpsosMori(),
-	initTeadsCookieless(),
-	initTrackScrollDepth(),
-	initTrackGpcSignal(),
-	initMessenger(),
-	setAdTestCookie(),
-	setAdTestInLabelsCookie(),
-	reloadPageOnConsentChange(),
-	preparePrebid(),
-	initDfpListeners(),
+	adFreeSlotRemove,
+	closeDisabledSlots,
+	initComscore,
+	initIpsosMori,
+	initTeadsCookieless,
+	initTrackScrollDepth,
+	initTrackGpcSignal,
+	initMessenger,
+	setAdTestCookie,
+	setAdTestInLabelsCookie,
+	reloadPageOnConsentChange,
+	preparePrebid,
+	initDfpListeners,
 	// Permutive init code must run before google tag enableServices()
 	// The permutive lib however is loaded async with the third party tags
-	initPermutive().then(prepareGoogletag),
-	initDynamicAdSlots(),
-	prepareA9(),
-	initFillSlotListener(),
-	prepareAdVerification(),
-	initThirdPartyTags(),
+	() => initPermutive().then(prepareGoogletag),
+	initDynamicAdSlots,
+	prepareA9,
+	initFillSlotListener,
+	prepareAdVerification,
+	initThirdPartyTags,
 ];
 
 const bootCommercialWhenReady = () => {
