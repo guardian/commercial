@@ -15,16 +15,12 @@ jest.mock('lib/dfp/get-advert-by-id', () => ({
 	getAdvertById: jest.fn(),
 }));
 
-jest.mock('experiments/ab', () => ({
-	isUserInVariant: jest.fn(),
-}));
-
 const resetPrebid = () => {
 	delete window.pbjs;
 	// @ts-expect-error -- there’s no types for this
 	delete window.pbjsChunk;
 	jest.resetModules();
-	jest.requireActual('@guardian/prebid.js/build/dist/all/prebid');
+	jest.requireActual('@guardian/prebid.js/build/dist/prebid');
 };
 
 describe('initialise', () => {
