@@ -99,11 +99,11 @@ const loadOther = (): Promise<void> => {
 };
 
 const init = async (): Promise<boolean> => {
-	if (!commercialFeatures.thirdPartyTags) {
-		return Promise.resolve(false);
+	if (commercialFeatures.thirdPartyTags) {
+		void loadOther();
+		return Promise.resolve(true);
 	}
-	void loadOther();
-	return Promise.resolve(true);
+	return Promise.resolve(false);
 };
 
 export { init };
