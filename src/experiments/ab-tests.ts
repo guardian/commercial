@@ -1,5 +1,4 @@
 import type { ABTest } from '@guardian/ab-core';
-import { gpidPrebidAdUnits } from './tests/gpid-prebid';
 import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
 import { optOutFrequencyCap } from './tests/opt-out-frequency-cap';
 import { prebidKeywords } from './tests/prebid-keywords';
@@ -13,6 +12,5 @@ export const concurrentTests: ABTest[] = [
 	// one test per line
 	mpuWhenNoEpic,
 	optOutFrequencyCap,
-	gpidPrebidAdUnits,
 	prebidKeywords,
 ];
