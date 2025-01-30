@@ -1,6 +1,6 @@
 import { log } from '@guardian/libs';
-import { adSlotIdPrefix } from '../lib/dfp/dfp-env-globals';
-import { reportError } from '../lib/error/report-error';
+import { adSlotIdPrefix } from './dfp/dfp-env-globals';
+import { reportError } from './error/report-error';
 import { EventTimer } from './event-timer';
 
 const tags: Record<string, string> = {

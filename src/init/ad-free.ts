@@ -1,4 +1,4 @@
-import { bootCommercial } from '../lib/init-utils';
+import { bootCommercial } from '../lib/commercial-boot-utils';
 import { adFreeSlotRemove } from './consented/ad-free-slot-remove';
 import { init as initComscore } from './consented/comscore';
 import { init as initIpsosMori } from './consented/ipsos-mori';
