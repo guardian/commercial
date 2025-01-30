@@ -4,7 +4,7 @@ export const prebidKeywords: ABTest = {
 	id: 'PrebidKeywords',
 	author: '@commercial-dev',
 	start: '2025-01-14',
-	expiry: '2025-01-31',
+	expiry: '2025-02-28',
 	audience: 50 / 100,
 	audienceOffset: 20 / 100,
 	audienceCriteria: '',
