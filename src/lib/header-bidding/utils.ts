@@ -1,5 +1,7 @@
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
+import { isUserInVariant } from '../../experiments/ab';
+import { ttdPrebidBidder } from '../../experiments/tests/ttd-prebid';
 import { createAdSize } from '../../lib/ad-sizes';
 import {
 	isInAuOrNz,
@@ -188,6 +190,10 @@ export const shouldIncludeKargo = (): boolean => isInUsa();
 
 export const shouldIncludeMagnite = (): boolean =>
 	!!window.guardian.config.switches.prebidMagnite;
+
+export const shouldIncludeTheTradeDesk = (): boolean =>
+	!!window.guardian.config.switches.prebidTtd &&
+	isUserInVariant(ttdPrebidBidder, 'variant');
 
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>
