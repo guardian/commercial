@@ -14,7 +14,6 @@ import { init as initIpsosMori } from './consented/ipsos-mori';
 import { init as initMessenger } from './consented/messenger';
 import { init as prepareA9 } from './consented/prepare-a9';
 import { init as prepareGoogletag } from './consented/prepare-googletag';
-import { initPermutive } from './consented/prepare-permutive';
 import { init as preparePrebid } from './consented/prepare-prebid';
 import { removeDisabledSlots as closeDisabledSlots } from './consented/remove-slots';
 import { initTeadsCookieless } from './consented/teads-cookieless';
@@ -51,10 +50,8 @@ if (!commercialFeatures.adFree) {
 		['cm-setAdTestInLabelsCookie', setAdTestInLabelsCookie],
 		['cm-reloadPageOnConsentChange', reloadPageOnConsentChange],
 		['cm-prepare-prebid', preparePrebid],
-		// Permutive init code must run before google tag enableServices()
-		// The permutive lib however is loaded async with the third party tags
 		['cm-dfp-listeners', initDfpListeners],
-		['cm-prepare-googletag', () => initPermutive().then(prepareGoogletag)],
+		['cm-prepare-googletag', prepareGoogletag],
 		['cm-dynamic-a-slots', initDynamicAdSlots],
 		['cm-prepare-a9', prepareA9],
 		['cm-prepare-fill-slot-listener', initFillSlotListener],
