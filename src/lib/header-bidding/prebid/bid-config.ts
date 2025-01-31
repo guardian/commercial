@@ -631,7 +631,7 @@ const magniteBidder: PrebidBidder = {
 };
 
 const theTradeDeskBidder = (gpid: string): PrebidBidder => ({
-	name: 'tdd',
+	name: 'ttd',
 	switchName: 'prebidTheTradeDesk',
 	bidParams: () => ({
 		supplySourceId: 'theguardian',
