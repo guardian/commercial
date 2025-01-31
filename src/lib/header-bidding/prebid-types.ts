@@ -113,6 +113,12 @@ export type PrebidMagniteParams = {
 	keywords: string[];
 };
 
+export type PrebidTheTradeDeskParams = {
+	supplySourceId: number;
+	publisherId: number;
+	placementId: string;
+};
+
 export type BidderCode =
 	| 'adyoulike'
 	| 'and'
@@ -127,7 +133,8 @@ export type BidderCode =
 	| 'pubmatic'
 	| 'triplelift'
 	| 'trustx'
-	| 'xhb';
+	| 'xhb'
+	| 'ttd';
 
 export type PrebidParams =
 	| PrebidAdYouLikeParams
@@ -142,7 +149,8 @@ export type PrebidParams =
 	| PrebidPubmaticParams
 	| PrebidTripleLiftParams
 	| PrebidTrustXParams
-	| PrebidXaxisParams;
+	| PrebidXaxisParams
+	| PrebidTheTradeDeskParams;
 
 export type PrebidBidder = {
 	name: BidderCode;

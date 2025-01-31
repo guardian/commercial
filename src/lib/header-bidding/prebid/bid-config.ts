@@ -47,6 +47,7 @@ import {
 	shouldIncludeKargo,
 	shouldIncludeMagnite,
 	shouldIncludeOpenx,
+	shouldIncludeTheTradeDesk,
 	shouldIncludeTripleLift,
 	shouldIncludeTrustX,
 	shouldIncludeXaxis,
@@ -629,6 +630,16 @@ const magniteBidder: PrebidBidder = {
 	}),
 };
 
+const theTradeDeskBidder = (gpid: string): PrebidBidder => ({
+	name: 'ttd',
+	switchName: 'prebidTheTradeDesk',
+	bidParams: () => ({
+		supplySourceId: 'theguardian',
+		publisherId: '1',
+		placementId: gpid,
+	}),
+});
+
 // There's an IX bidder for every size that the slot can take
 const indexExchangeBidders = (
 	slotSizes: HeaderBiddingSize[],
@@ -657,6 +668,7 @@ const biddersSwitchedOn = (allBidders: PrebidBidder[]): PrebidBidder[] => {
 const currentBidders = (
 	slotSizes: HeaderBiddingSize[],
 	pageTargeting: PageTargeting,
+	gpid: string,
 ): PrebidBidder[] => {
 	const biddersToCheck: Array<[boolean, PrebidBidder]> = [
 		[true, criteoBidder(slotSizes)],
@@ -672,6 +684,7 @@ const currentBidders = (
 		[shouldIncludeOpenx(), openxClientSideBidder(pageTargeting)],
 		[shouldIncludeKargo(), kargoBidder],
 		[shouldIncludeMagnite(), magniteBidder],
+		[shouldIncludeTheTradeDesk(), theTradeDeskBidder(gpid)],
 	];
 
 	const otherBidders = biddersToCheck
@@ -688,11 +701,14 @@ export const bids = (
 	slotId: string,
 	slotSizes: HeaderBiddingSize[],
 	pageTargeting: PageTargeting,
+	gpid: string,
 ): PrebidBid[] =>
-	currentBidders(slotSizes, pageTargeting).map((bidder: PrebidBidder) => ({
-		bidder: bidder.name,
-		params: bidder.bidParams(slotId, slotSizes),
-	}));
+	currentBidders(slotSizes, pageTargeting, gpid).map(
+		(bidder: PrebidBidder) => ({
+			bidder: bidder.name,
+			params: bidder.bidParams(slotId, slotSizes),
+		}),
+	);
 
 export const _ = {
 	getIndexSiteIdFromConfig,

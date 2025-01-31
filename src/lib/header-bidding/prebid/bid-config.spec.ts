@@ -35,6 +35,7 @@ const getBidders = () =>
 		'dfp-ad--top-above-nav',
 		[createAdSize(728, 90)],
 		mockPageTargeting,
+		'gpid',
 	).map((bid) => bid.bidder);
 
 const {
@@ -289,6 +290,7 @@ describe('bids', () => {
 				'dfp-right',
 				[createAdSize(300, 600), createAdSize(300, 250)],
 				mockPageTargeting,
+				'gpid',
 			).map((bid) => bid.bidder);
 		expect(rightSlotBidders()).toEqual(['ix', 'ix', 'criteo', 'adyoulike']);
 	});
@@ -332,6 +334,7 @@ describe('bids', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
+			'gpid',
 		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
@@ -347,6 +350,7 @@ describe('bids', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
+			'gpid',
 		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
@@ -362,6 +366,7 @@ describe('bids', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
+			'gpid',
 		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
@@ -377,6 +382,7 @@ describe('bids', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
+			'gpid',
 		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
@@ -392,6 +398,7 @@ describe('bids', () => {
 			'dfp-ad--mobile-sticky',
 			[createAdSize(320, 50)],
 			mockPageTargeting,
+			'gpid',
 		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
@@ -431,6 +438,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
+			'gpid',
 		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_topbanner_728x90_prebid',
@@ -447,6 +455,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
+			'gpid',
 		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_topbanner_728x90_prebid_AU',
@@ -464,6 +473,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--inline1',
 			[createAdSize(300, 250)],
 			mockPageTargeting,
+			'gpid',
 		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_sectionfront_300x250_prebid',
@@ -481,6 +491,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--inline1',
 			[createAdSize(300, 250)],
 			mockPageTargeting,
+			'gpid',
 		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_sectionfront_300x250_prebid_AU',
@@ -498,6 +509,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(320, 50)],
 			mockPageTargeting,
+			'gpid',
 		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_320x50_HDX',
@@ -515,6 +527,7 @@ describe('triplelift adapter', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(320, 50)],
 			mockPageTargeting,
+			'gpid',
 		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_320x50_HDX_AU',
