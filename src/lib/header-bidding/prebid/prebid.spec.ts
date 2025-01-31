@@ -70,13 +70,13 @@ describe('initialise', () => {
 			maxNestedIframes: 10,
 			mediaTypePriceGranularity: {},
 			priceGranularity: 'custom',
-			publisherDomain: undefined,
 			s2sConfig: {
 				adapter: 'prebidServer',
 				adapterOptions: {},
 				allowUnknownBidderCodes: false,
 				bidders: [],
 				maxBids: 1,
+				maxTimeout: 1500,
 				ortbNative: {
 					eventtrackers: [
 						{
@@ -87,7 +87,6 @@ describe('initialise', () => {
 				},
 				syncTimeout: 1000,
 				syncUrlModifier: {},
-				timeout: 1000,
 			},
 			timeoutBuffer: 400,
 			useBidCache: false,
@@ -105,7 +104,7 @@ describe('initialise', () => {
 						},
 					},
 				],
-				auctionDelay: 0,
+				auctionDelay: 500,
 				filterSettings: {
 					all: {
 						bidders: '*',

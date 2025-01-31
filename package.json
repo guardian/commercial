@@ -101,7 +101,7 @@
 		"webpack-merge": "^6.0.1"
 	},
 	"dependencies": {
-		"@guardian/prebid.js": "8.52.0-13",
+		"@guardian/prebid.js": "git://github.com/guardian/prebid.js.git#91bf9a0b5c450224434d885798a2fc223afdebec",
 		"fastdom": "^1.0.12",
 		"lodash-es": "^4.17.21",
 		"process": "^0.11.10",
