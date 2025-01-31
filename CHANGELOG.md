@@ -1,5 +1,18 @@
 # @guardian/commercial
 
+## 25.1.0
+
+### Minor Changes
+
+- 9bc278c: Use a single version of prebid instead of splitting by region
+- 1a0af2b: Bumps dependency @guardian/Prebid.js to version without setting hb_ttr targeting
+- ef12548: Add The Trade Desk behind 0% test
+
+### Patch Changes
+
+- eee424f: Removes octokit dependency
+- 2520253: Increase the margin for inline2 to avoid most viewed by for showcase articles or articles with a video at the top
+
 ## 25.0.0
 
 ### Major Changes
