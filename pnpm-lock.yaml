@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@guardian/prebid.js':
-        specifier: git://github.com/guardian/prebid.js.git#a5a7db9e0afb32630aa2269825ad62ce85fa735e
-        version: https://codeload.github.com/guardian/prebid.js/tar.gz/a5a7db9e0afb32630aa2269825ad62ce85fa735e(babel-core@7.0.0-bridge.0(@babel/core@7.26.0))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)
+        specifier: git://github.com/guardian/prebid.js.git#91bf9a0b5c450224434d885798a2fc223afdebec
+        version: https://codeload.github.com/guardian/prebid.js/tar.gz/91bf9a0b5c450224434d885798a2fc223afdebec(babel-core@7.0.0-bridge.0(@babel/core@7.26.0))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)
       fastdom:
         specifier: ^1.0.12
         version: 1.0.12
@@ -1022,8 +1022,8 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/prebid.js@https://codeload.github.com/guardian/prebid.js/tar.gz/a5a7db9e0afb32630aa2269825ad62ce85fa735e':
-    resolution: {tarball: https://codeload.github.com/guardian/prebid.js/tar.gz/a5a7db9e0afb32630aa2269825ad62ce85fa735e}
+  '@guardian/prebid.js@https://codeload.github.com/guardian/prebid.js/tar.gz/91bf9a0b5c450224434d885798a2fc223afdebec':
+    resolution: {tarball: https://codeload.github.com/guardian/prebid.js/tar.gz/91bf9a0b5c450224434d885798a2fc223afdebec}
     version: 9.27.0
     engines: {node: '>=20.0.0'}
 
@@ -6181,7 +6181,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.5.4
 
-  '@guardian/prebid.js@https://codeload.github.com/guardian/prebid.js/tar.gz/a5a7db9e0afb32630aa2269825ad62ce85fa735e(babel-core@7.0.0-bridge.0(@babel/core@7.26.0))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)':
+  '@guardian/prebid.js@https://codeload.github.com/guardian/prebid.js/tar.gz/91bf9a0b5c450224434d885798a2fc223afdebec(babel-core@7.0.0-bridge.0(@babel/core@7.26.0))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
       '@babel/core': 7.26.0
       '@babel/plugin-transform-runtime': 7.25.9(@babel/core@7.26.0)
