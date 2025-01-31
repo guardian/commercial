@@ -192,7 +192,6 @@ export const shouldIncludeMagnite = (): boolean =>
 	!!window.guardian.config.switches.prebidMagnite;
 
 export const shouldIncludeTheTradeDesk = (): boolean =>
-	!!window.guardian.config.switches.prebidTtd &&
 	isUserInVariant(ttdPrebidBidder, 'variant');
 
 export const shouldIncludeMobileSticky = once(

@@ -1,10 +1,10 @@
 import type { ABTest } from '@guardian/ab-core';
 
 export const ttdPrebidBidder: ABTest = {
-	id: 'TtdPrebidBidder',
+	id: 'TheTradeDesk',
 	author: '@commercial-dev',
 	start: '2025-01-30',
-	expiry: '2025-2-31',
+	expiry: '2025-2-28',
 	audience: 0 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',
