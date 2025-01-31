@@ -113,7 +113,7 @@ export type PrebidMagniteParams = {
 	keywords: string[];
 };
 
-export type PrebidTtdParams = {
+export type PrebidTheTradeDeskParams = {
 	supplySourceId: number;
 	publisherId: number;
 	placementId: string;
@@ -150,7 +150,7 @@ export type PrebidParams =
 	| PrebidTripleLiftParams
 	| PrebidTrustXParams
 	| PrebidXaxisParams
-	| PrebidTtdParams;
+	| PrebidTheTradeDeskParams;
 
 export type PrebidBidder = {
 	name: BidderCode;
