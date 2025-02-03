@@ -34,6 +34,10 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Temporarily force newer version of corepack
+      # See https://github.com/guardian/support-service-lambdas/pull/2666
+      - run: npm install --global corepack@0.31.0
+
       - name: Set up Node
         uses: ./.github/actions/setup-node-env
 
