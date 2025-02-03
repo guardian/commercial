@@ -3,7 +3,6 @@ import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
 import { getParticipations, isUserInVariant } from '../../../experiments/ab';
-import { gpidPrebidAdUnits } from '../../../experiments/tests/gpid-prebid';
 import { prebidKeywords } from '../../../experiments/tests/prebid-keywords';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
@@ -172,8 +171,6 @@ type BidderSettings = {
 	magnite?: Partial<BidderSetting>;
 };
 
-const shouldIncludeGpid = !isUserInVariant(gpidPrebidAdUnits, 'control');
-
 class PrebidAdUnit {
 	code: string | null | undefined;
 	bids: PrebidBid[] | null | undefined;
@@ -194,19 +191,18 @@ class PrebidAdUnit {
 		pageTargeting: PageTargeting,
 	) {
 		this.code = advert.id;
-		this.bids = bids(advert.id, slot.sizes, pageTargeting);
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
-		if (shouldIncludeGpid) {
-			this.gpid = this.generateGpid(advert, slot);
-			this.ortb2Imp = {
-				ext: {
-					gpid: this.gpid,
-					data: {
-						pbadslot: this.gpid,
-					},
+		this.gpid = this.generateGpid(advert, slot);
+		this.ortb2Imp = {
+			ext: {
+				gpid: this.gpid,
+				data: {
+					pbadslot: this.gpid,
 				},
-			};
-		}
+			},
+		};
+
+		this.bids = bids(advert.id, slot.sizes, pageTargeting, this.gpid);
 
 		advert.headerBiddingSizes = slot.sizes;
 		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
