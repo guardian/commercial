@@ -101,9 +101,6 @@ type PbjsConfig = {
 	};
 	consentManagement?: ConsentManagement;
 	realTimeData?: unknown;
-	criteo?: {
-		fastBidVersion: 'latest' | 'none' | `${number}`;
-	};
 	improvedigital?: {
 		usePrebidSizes?: boolean;
 	};
@@ -423,10 +420,6 @@ const initialise = (
 	if (window.guardian.config.switches.prebidCriteo) {
 		window.pbjs.bidderSettings.criteo = {
 			storageAllowed: true,
-		};
-
-		pbjsConfig.criteo = {
-			fastBidVersion: 'latest',
 		};
 
 		// Use a custom price granularity for Criteo
