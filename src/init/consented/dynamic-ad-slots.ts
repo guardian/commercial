@@ -19,8 +19,8 @@ const dynamicAdSlotModules: Modules = [
 	['cm-footballRight', initFootballRightAds],
 ];
 
-export const initDynamicAdSlots = async (): Promise<void> => {
-	await Promise.all(
+export const initDynamicAdSlots = async (): Promise<void[]> => {
+	return Promise.all(
 		dynamicAdSlotModules.map(async ([name, init]) => {
 			try {
 				await init();
