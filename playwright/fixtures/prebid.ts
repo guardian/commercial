@@ -4,41 +4,47 @@ export const bidderURLs = {
 	pubmatic: 'https://hbopenbid.pubmatic.com/translator?source=prebid-client',
 	openx: 'https://rtb.openx.net/sync/prebid**',
 	ozone: 'https://elb.the-ozone-project.com/openrtb2/auction',
-	criteo: 'https://grid-bidder.criteo.com/openrtb_2_5/pbjs/auction/request**',
+	criteo: 'https://grid-bidder.criteo.com/openrtb_2_5/pbjs/auction/request',
 	adsafeprotected: 'https://pixel.adsafeprotected.com/services/pub**',
 	yield: 'https://ad.360yield.com/pb',
 };
 
-export const wins = {
-	criteo: {
-		url: 'https://grid-bidder.criteo.com/openrtb_2_5/pbjs/auction/request',
-		response: {
-			cur: 'USD',
-			seatbid: [
+export const criteoMockBidResponse = (impId: string) => ({
+	cur: 'USD',
+	seatbid: [
+		{
+			bid: [
 				{
-					bid: [
-						{
-							impid: 'aa828aaaeb0341b391df49b390e8a10c',
-							price: 45,
-							adomain: ['criteo.com'],
-							crid: '11096744',
-							w: 970,
-							h: 250,
-							adm: '<h1 data-cy="test-creative">Hello</h1>',
+					impid: impId ? impId : '',
+					price: 45,
+					adomain: ['criteo.com'],
+					crid: '11096744',
+					w: 970,
+					h: 250,
+					adm: '<h1 data-cy="test-creative">Hello</h1>',
+					ext: {
+						dsa: {
+							adrender: 1,
 						},
-					],
+						cur: 'USD',
+						mediatype: 'banner',
+						meta: {
+							networkName: 'Criteo',
+						},
+					},
 				},
 			],
 		},
-		targeting: {
-			hb_format_criteo: 'banner',
-			hb_size_criteo: '970x250',
-			hb_pb_criteo: '45.00',
-			hb_bidder_criteo: 'criteo',
-			hb_format: 'banner',
-			hb_size: '970x250',
-			hb_pb: '45.00',
-			hb_bidder: 'criteo',
-		},
-	},
+	],
+});
+
+export const criteoWinningBidTargeting = {
+	hb_format_criteo: 'banner',
+	hb_size_criteo: '970x250',
+	hb_pb_criteo: '45.00',
+	hb_bidder_criteo: 'criteo',
+	hb_format: 'banner',
+	hb_size: '970x250',
+	hb_pb: '45.00',
+	hb_bidder: 'criteo',
 };
