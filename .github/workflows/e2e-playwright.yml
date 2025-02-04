@@ -39,7 +39,6 @@ jobs:
         with:
           node-version-file: './commercial/.nvmrc'
           cache: 'pnpm'
-          cache-dependency-path: './commercial/pnpm-lock.yaml'
 
       - name: Install dependencies
         working-directory: ./commercial
