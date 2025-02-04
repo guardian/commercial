@@ -10,7 +10,7 @@ runs:
     - run: corepack prepare pnpm@9.15.2 --activate
       shell: bash
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v4.2.0
       with:
         node-version-file: '.nvmrc'
         cache: 'pnpm'
