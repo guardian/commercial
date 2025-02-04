@@ -88,7 +88,7 @@ export const init = (): Promise<void> => {
 		handleLocalePermissions(consentState);
 
 		// Prebid will already be loaded, and window.googletag is stubbed in `commercial.js`.
-		// Just load googletagg- it's already added to the window by Prebid.
+		// Just load googletag - it's already added to the window by Prebid.
 		if (canRun) {
 			const isSignedIn = await isUserLoggedInOktaRefactor();
 			window.googletag.cmd.push(
