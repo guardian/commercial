@@ -72,16 +72,23 @@ test.describe('GAM targeting', () => {
 	});
 });
 
+type CriteoRequestPostBody = {
+	imp: Array<{
+		id: string;
+	}>;
+};
 test.describe('Prebid targeting', () => {
 	test.beforeEach(async ({ page }) => {
 		return page.route(`${bidderURLs.criteo}**`, (route) => {
 			const url = route.request().url();
 			if (url.includes(bidderURLs.criteo)) {
 				// The mock bid reponse impid must match that sent in the request
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- see above
-				const impId =
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- we need the id from the request object
-					JSON.parse(String(route.request().postData())).imp[0].id;
+				const postData = route.request().postData();
+				const json = JSON.parse(
+					postData?.toString() ?? '',
+				) as CriteoRequestPostBody;
+				const impId = json.imp[0]?.id as string;
+
 				void route.fulfill({
 					body: JSON.stringify(criteoMockBidResponse(impId)),
 				});
