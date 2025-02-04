@@ -11,6 +11,7 @@ import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
 import { queueAdvert } from '../../lib/dfp/queue-advert';
 import { isInUk, isInUsa } from '../../lib/geo/geo-utils';
+import { initPermutive } from './prepare-permutive';
 import { setupPrebidOnce } from './prepare-prebid';
 import { removeDisabledSlots } from './remove-slots';
 
@@ -61,7 +62,11 @@ const fillStaticAdvertSlots = async (): Promise<void> => {
 	// This module has the following strict dependencies. These dependencies must be
 	// fulfilled before this function can execute reliably. The bootstrap
 	// initiates these dependencies, to speed up the init process. Bootstrap also captures the module performance.
-	const dependencies: Array<Promise<void>> = [removeDisabledSlots()];
+	const dependencies: Array<Promise<void>> = [
+		removeDisabledSlots(),
+		// Permutive segmentation init code must run before google tag enableServices()
+		initPermutive(),
+	];
 
 	await Promise.all(dependencies);
 

@@ -9,7 +9,6 @@ import { init as initIpsosMori } from './consented/ipsos-mori';
 import { init as initMessenger } from './consented/messenger';
 import { init as prepareA9 } from './consented/prepare-a9';
 import { init as prepareGoogletag } from './consented/prepare-googletag';
-import { initPermutive } from './consented/prepare-permutive';
 import { init as preparePrebid } from './consented/prepare-prebid';
 import { removeDisabledSlots as closeDisabledSlots } from './consented/remove-slots';
 import { initTeadsCookieless } from './consented/teads-cookieless';
@@ -35,9 +34,7 @@ const commercialModules = [
 	reloadPageOnConsentChange,
 	preparePrebid,
 	initDfpListeners,
-	// Permutive init code must run before google tag enableServices()
-	// The permutive lib however is loaded async with the third party tags
-	() => initPermutive().then(prepareGoogletag),
+	prepareGoogletag,
 	initDynamicAdSlots,
 	prepareA9,
 	initFillSlotListener,
