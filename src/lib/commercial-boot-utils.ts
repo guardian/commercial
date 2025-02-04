@@ -25,7 +25,7 @@ const recordCommercialMetrics = () => {
 };
 
 const bootCommercial = async (
-	modules: Array<() => Promise<boolean | void>>,
+	modules: Array<() => Promise<unknown>>,
 ): Promise<void> => {
 	log('commercial', '📦 standalone.commercial.ts', __webpack_public_path__);
 	if (process.env.COMMIT_SHA) {

@@ -11,6 +11,24 @@ import { permutive } from '../../lib/third-party-tags/permutive';
 import { remarketing } from '../../lib/third-party-tags/remarketing';
 import type { ThirdPartyTag } from '../../types/global';
 
+const createTagScript = (tag: ThirdPartyTag) => {
+	const script = document.createElement('script');
+	if (typeof tag.url !== 'undefined') {
+		script.src = tag.url;
+	}
+	// script.onload cannot be undefined
+	script.onload = tag.onLoad ?? null;
+	if (tag.async === true) {
+		script.setAttribute('async', '');
+	}
+	if (tag.attrs) {
+		tag.attrs.forEach((attr) => {
+			script.setAttribute(attr.name, attr.value);
+		});
+	}
+	return script;
+};
+
 const addScripts = (tags: ThirdPartyTag[]) => {
 	const ref = document.scripts[0];
 	const frag = document.createDocumentFragment();
@@ -19,7 +37,7 @@ const addScripts = (tags: ThirdPartyTag[]) => {
 	tags.forEach((tag) => {
 		if (tag.loaded === true) return;
 
-		if (tag.beforeLoad) tag.beforeLoad();
+		tag.beforeLoad?.();
 
 		// Tag is either an image, a snippet or a script.
 		if (tag.useImage === true && typeof tag.url !== 'undefined') {
@@ -28,20 +46,7 @@ const addScripts = (tags: ThirdPartyTag[]) => {
 			tag.insertSnippet();
 		} else {
 			hasScriptsToInsert = true;
-			const script = document.createElement('script');
-			if (typeof tag.url !== 'undefined') {
-				script.src = tag.url;
-			}
-			// script.onload cannot be undefined
-			script.onload = tag.onLoad ?? null;
-			if (tag.async === true) {
-				script.setAttribute('async', '');
-			}
-			if (tag.attrs) {
-				tag.attrs.forEach((attr) => {
-					script.setAttribute(attr.name, attr.value);
-				});
-			}
+			const script = createTagScript(tag);
 			frag.appendChild(script);
 		}
 		tag.loaded = true;
