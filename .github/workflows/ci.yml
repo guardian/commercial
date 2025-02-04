@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       # Temporarily force newer version of corepack
       # See https://github.com/guardian/support-service-lambdas/pull/2666
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       # Temporarily force newer version of corepack
       # See https://github.com/guardian/support-service-lambdas/pull/2666
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       # Temporarily force newer version of corepack
       # See https://github.com/guardian/support-service-lambdas/pull/2666
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       # Temporarily force newer version of corepack
       # See https://github.com/guardian/support-service-lambdas/pull/2666
@@ -82,7 +82,7 @@ jobs:
         run: pnpm build
 
       - name: Save build
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.0
         with:
           name: dist
           path: dist
@@ -94,7 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -107,7 +107,7 @@ jobs:
         uses: ./.github/actions/setup-node-env
 
       - name: Fetch build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v4.1.8
         with:
           name: dist
           path: dist
@@ -126,7 +126,7 @@ jobs:
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
-        uses: changesets/action@v1
+        uses: changesets/action@v1.4.9
         with:
           publish: pnpm changeset publish
           title: '🦋 Release package updates'
@@ -147,7 +147,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -160,13 +160,13 @@ jobs:
         uses: ./.github/actions/setup-node-env
 
       - name: Fetch build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v4.1.8
         with:
           name: dist
           path: dist
 
       - name: Riff-Raff Upload
-        uses: guardian/actions-riff-raff@v4
+        uses: guardian/actions-riff-raff@v4.1.7
         with:
           roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}

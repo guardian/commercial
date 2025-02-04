@@ -30,7 +30,7 @@ jobs:
     if: github.event.label.name == '[beta] @guardian/commercial'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
 
@@ -48,7 +48,7 @@ jobs:
         run: pnpm changeset version --snapshot beta
 
       - name: Create Release
-        uses: changesets/action@v1
+        uses: changesets/action@v1.4.9
         id: changeset
         with:
           publish: pnpm changeset publish --tag beta
@@ -57,7 +57,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Comment on PR
-        uses: actions/github-script@v7
+        uses: actions/github-script@v7.0.1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -85,7 +85,7 @@ jobs:
             })
 
       - name: Remove label
-        uses: actions/github-script@v7
+        uses: actions/github-script@v7.0.1
         if: always()
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}

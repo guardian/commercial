@@ -16,7 +16,7 @@ jobs:
     steps:
       # Commercial
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       # Temporarily force newer version of corepack
       # See https://github.com/guardian/support-service-lambdas/pull/2666
@@ -36,7 +36,7 @@ jobs:
       - name: Run Playwright
         run: pnpm benchmark
 
-      - uses: actions/github-script@v7
+      - uses: actions/github-script@v7.0.1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
