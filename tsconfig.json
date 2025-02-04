@@ -32,7 +32,6 @@
 		"node_modules",
 		"dist",
 		"coverage",
-		".eslintrc.js",
 		"playwright-report"
 	]
 }
