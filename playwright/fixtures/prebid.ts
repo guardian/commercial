@@ -15,7 +15,7 @@ export const criteoMockBidResponse = (impId: string) => ({
 		{
 			bid: [
 				{
-					impid: impId ? impId : '',
+					impid: impId,
 					price: 45,
 					adomain: ['criteo.com'],
 					crid: '11096744',
