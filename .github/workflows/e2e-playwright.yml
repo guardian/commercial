@@ -32,7 +32,9 @@ jobs:
 
       - run: corepack enable
         working-directory: ./commercial
-        shell: bash
+
+      - run: corepack prepare pnpm@9.15.2 --activate
+        working-directory: ./commercial
 
       - name: Setup node
         uses: actions/setup-node@v4
