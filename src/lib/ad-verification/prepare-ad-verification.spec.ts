@@ -12,7 +12,9 @@ jest.mock('@guardian/libs', () => ({
 		},
 	},
 	loadScript: async (...args: unknown[]): Promise<unknown> => {
-		if (scriptLoadShouldFail) return Promise.reject(new Error('Loading failed'));
+		if (scriptLoadShouldFail) {
+			return Promise.reject(new Error('Loading failed'));
+		}
 		window.confiant = {
 			settings: {
 				callback: () => {
