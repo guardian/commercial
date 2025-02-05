@@ -47,7 +47,6 @@ import {
 	shouldIncludeKargo,
 	shouldIncludeMagnite,
 	shouldIncludeOpenx,
-	shouldIncludeTheTradeDesk,
 	shouldIncludeTripleLift,
 	shouldIncludeTrustX,
 	shouldIncludeXaxis,
@@ -684,7 +683,7 @@ const currentBidders = (
 		[shouldIncludeOpenx(), openxClientSideBidder(pageTargeting)],
 		[shouldIncludeKargo(), kargoBidder],
 		[shouldIncludeMagnite(), magniteBidder],
-		[shouldIncludeTheTradeDesk(), theTradeDeskBidder(gpid)],
+		[true, theTradeDeskBidder(gpid)],
 	];
 
 	const otherBidders = biddersToCheck

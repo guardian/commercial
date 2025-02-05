@@ -2,7 +2,6 @@ import type { ABTest } from '@guardian/ab-core';
 import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
 import { optOutFrequencyCap } from './tests/opt-out-frequency-cap';
 import { prebidKeywords } from './tests/prebid-keywords';
-import { ttdPrebidBidder } from './tests/ttd-prebid';
 
 /**
  * You only need to add tests to this file if the code you are testing is here in
@@ -14,5 +13,4 @@ export const concurrentTests: ABTest[] = [
 	mpuWhenNoEpic,
 	optOutFrequencyCap,
 	prebidKeywords,
-	ttdPrebidBidder,
 ];
