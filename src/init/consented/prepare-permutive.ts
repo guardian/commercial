@@ -222,20 +222,21 @@ const initPermutiveSegmentation = () => {
 		'359ba275-5edd-4756-84f8-21a24369ce0b',
 		{},
 	);
+
+	// This is our code, but not re-enabling ESLint because we'd have to disable it for both following lines anyway
+	window.googletag = window.googletag || {};
+	// @ts-expect-error -- this is a stub
+	window.googletag.cmd = window.googletag.cmd || [];
+
 	/* eslint-enable */
-	(window.googletag = window.googletag || {}), // eslint-disable-line @typescript-eslint/no-unnecessary-condition -- this is a stub
-		// @ts-expect-error -- this is a stub
-		(window.googletag.cmd = window.googletag.cmd || []), // eslint-disable-line @typescript-eslint/no-unnecessary-condition -- this is a stub
-		window.googletag.cmd.push(() => {
-			if (
-				window.googletag.pubads().getTargeting('permutive').length === 0
-			) {
-				const g = window.localStorage.getItem('_pdfps');
-				window.googletag
-					.pubads()
-					.setTargeting('permutive', g ? JSON.parse(g) : []);
-			}
-		});
+	window.googletag.cmd.push(() => {
+		if (window.googletag.pubads().getTargeting('permutive').length === 0) {
+			const g = window.localStorage.getItem('_pdfps');
+			window.googletag
+				.pubads()
+				.setTargeting('permutive', g ? JSON.parse(g) : []);
+		}
+	});
 	const permutiveConfig: PermutivePageConfig = {
 		user: window.guardian.config.user,
 		page: window.guardian.config.page,
