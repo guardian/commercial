@@ -28,10 +28,5 @@
 		"target": "ESNEXT",
 		"noUncheckedIndexedAccess": true
 	},
-	"exclude": [
-		"node_modules",
-		"dist",
-		"coverage",
-		"playwright-report"
-	]
+	"exclude": ["node_modules", "dist", "coverage", "playwright-report"]
 }

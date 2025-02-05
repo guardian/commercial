@@ -5,7 +5,6 @@ import config from './webpack.config.mjs';
 
 const port = 3031;
 
-// eslint-disable-next-line import/no-default-export -- webpack config
 export default merge(config, {
 	devtool: 'inline-source-map',
 	mode: 'development',

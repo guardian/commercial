@@ -8,7 +8,6 @@ import config from './webpack.config.mjs';
 
 const prefix = process.env.BUNDLE_PREFIX ?? '[chunkhash]/';
 
-// eslint-disable-next-line import/no-default-export -- webpack config
 export default merge(config, {
 	mode: 'production',
 	output: {
