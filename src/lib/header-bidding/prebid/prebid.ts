@@ -4,6 +4,7 @@ import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
 import { getParticipations, isUserInVariant } from '../../../experiments/ab';
 import { prebidKeywords } from '../../../experiments/tests/prebid-keywords';
+import { prebidV9 } from '../../../experiments/tests/prebid-v9';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
@@ -424,9 +425,13 @@ const initialise = (
 			storageAllowed: true,
 		};
 
-		pbjsConfig.criteo = {
-			fastBidVersion: 'latest',
-		};
+		// fastBidVersion is deprecated in v9 of prebid
+		// This is only here to avoid unnecessary console errors whilst testing
+		if (!isUserInVariant(prebidV9, 'variant')) {
+			pbjsConfig.criteo = {
+				fastBidVersion: 'latest',
+			};
+		}
 
 		// Use a custom price granularity for Criteo
 		// Criteo has a different line item structure and so bids should be rounded to match these
