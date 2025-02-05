@@ -64,7 +64,8 @@ const fillStaticAdvertSlots = async (): Promise<void> => {
 	// initiates these dependencies, to speed up the init process. Bootstrap also captures the module performance.
 	const dependencies: Array<Promise<void>> = [
 		removeDisabledSlots(),
-		// Permutive segmentation init code must run before google tag enableServices()
+		// Permutive segmentation init code must run before googletag.enableServices() is called
+		/** @see https://support.permutive.com/hc/en-us/articles/360011779239-Deploying-the-Permutive-JavaScript-Tag */
 		initPermutive(),
 	];
 
