@@ -11,6 +11,9 @@ importers:
       '@guardian/prebid.js':
         specifier: 8.52.0-13
         version: 8.52.0-13(babel-core@7.0.0-bridge.0(@babel/core@7.26.7))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)
+      '@guardian/prebid9.js':
+        specifier: npm:@guardian/prebid.js@9.27.0
+        version: '@guardian/prebid.js@9.27.0(babel-core@7.0.0-bridge.0(@babel/core@7.26.7))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)'
       fastdom:
         specifier: ^1.0.12
         version: 1.0.12
@@ -1031,6 +1034,10 @@ packages:
   '@guardian/prebid.js@8.52.0-13':
     resolution: {integrity: sha512-2FilF6ZV1iO/AtI8+xuKhsA+dJXe/BnR2iukfQezr4TM4D/tkkUInKXAEs46oI2H+6K7jRZjvIkt49tzWkIpaA==}
     engines: {node: '>=12.0.0'}
+
+  '@guardian/prebid.js@9.27.0':
+    resolution: {integrity: sha512-69ojJJII8YVp4sxf227J7GEHGNCv1H+QHs3ZzqYY/yKpwxzOKB7qeY4tT9gEQK2Yw54UV8UJ3CBoHS7/SyAuxg==}
+    engines: {node: '>=20.0.0'}
 
   '@guardian/prettier@8.0.1':
     resolution: {integrity: sha512-mELIji0FezEj5YTyHkylB6VNeCN1+/jsHW/iZ0RItDMn/GjU6gbaPP5D2m+BZwrTYNrxYhCoFqCE/ObkEghtdg==}
@@ -3678,9 +3685,17 @@ packages:
     resolution: {integrity: sha512-NK5HH0b/6bQX6hZQttlDfqrpDiP+iYtYYGO47LfM9YVwT1OZITgYZUJ0oG4IVynwdpas/VGvXv5hN0UcVK97oQ==}
     engines: {node: '>=18'}
 
+  live-connect-common@4.1.0:
+    resolution: {integrity: sha512-sRklgbe13377aR+G0qCBiZPayQw5oZZozkuxKEoyipxscLbVzwe9gtA7CPpbmo6UcOdQxdCE6A7J1tI0wTSmqw==}
+    engines: {node: '>=20'}
+
   live-connect-js@6.7.3:
     resolution: {integrity: sha512-K2/GGhyhJ7/bFJfjiNw41W5xLRER9Smc49a8A6PImCcgit/sp2UsYz/F+sQwoj8IkJ3PufHvBnIGBbeQ31VsBg==}
     engines: {node: '>=18'}
+
+  live-connect-js@7.2.0:
+    resolution: {integrity: sha512-oZY4KqwrG1C+CDKApcsdDdMG4j2d44lhmvbNy4ZE6sPFr+W8R3m0+V+JxXB8p6tgSePJ8X/uhzAGos0lDg/MAg==}
+    engines: {node: '>=20'}
 
   load-json-file@4.0.0:
     resolution: {integrity: sha512-Kx8hMakjX03tiGTLAIdJ+lL0htKnXjEZN6hk/tozf/WOuYGdZBJrZ+rCJRbVCugsjB3jMLn9746NsQIf5VjBMw==}
@@ -6238,6 +6253,83 @@ snapshots:
       gulp-wrap: 0.15.0(babel-core@7.0.0-bridge.0(@babel/core@7.26.7))(ejs@3.1.10)
       klona: 2.0.6
       live-connect-js: 6.7.3
+    optionalDependencies:
+      fsevents: 2.3.3
+    transitivePeerDependencies:
+      - arc-templates
+      - atpl
+      - babel-core
+      - bracket-template
+      - coffee-script
+      - dot
+      - dust
+      - dustjs-helpers
+      - dustjs-linkedin
+      - eco
+      - ect
+      - ejs
+      - haml-coffee
+      - hamlet
+      - hamljs
+      - handlebars
+      - hogan.js
+      - htmling
+      - jade
+      - jazz
+      - jqtpl
+      - just
+      - liquid-node
+      - liquor
+      - marko
+      - mote
+      - mustache
+      - nunjucks
+      - plates
+      - pug
+      - qejs
+      - ractive
+      - razor-tmpl
+      - react
+      - react-dom
+      - slm
+      - squirrelly
+      - supports-color
+      - swig
+      - swig-templates
+      - teacup
+      - templayed
+      - then-jade
+      - then-pug
+      - tinyliquid
+      - toffee
+      - tslib
+      - twig
+      - twing
+      - typescript
+      - underscore
+      - vash
+      - velocityjs
+      - walrus
+      - whiskers
+
+  '@guardian/prebid.js@9.27.0(babel-core@7.0.0-bridge.0(@babel/core@7.26.7))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)':
+    dependencies:
+      '@babel/core': 7.26.7
+      '@babel/plugin-transform-runtime': 7.25.9(@babel/core@7.26.7)
+      '@babel/preset-env': 7.26.7(@babel/core@7.26.7)
+      '@babel/register': 7.25.9(@babel/core@7.26.7)
+      '@babel/runtime': 7.26.7
+      '@guardian/libs': 18.0.2(tslib@2.8.1)(typescript@5.5.4)
+      core-js: 3.36.1
+      core-js-pure: 3.36.1
+      crypto-js: 4.2.0
+      dlv: 1.1.3
+      dset: 3.1.4
+      express: 4.21.2
+      fun-hooks: 0.9.10
+      gulp-wrap: 0.15.0(babel-core@7.0.0-bridge.0(@babel/core@7.26.7))(ejs@3.1.10)
+      klona: 2.0.6
+      live-connect-js: 7.2.0
     optionalDependencies:
       fsevents: 2.3.3
     transitivePeerDependencies:
@@ -9398,9 +9490,16 @@ snapshots:
 
   live-connect-common@3.1.4: {}
 
+  live-connect-common@4.1.0: {}
+
   live-connect-js@6.7.3:
     dependencies:
       live-connect-common: 3.1.4
+      tiny-hashes: 1.0.1
+
+  live-connect-js@7.2.0:
+    dependencies:
+      live-connect-common: 4.1.0
       tiny-hashes: 1.0.1
 
   load-json-file@4.0.0:
