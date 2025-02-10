@@ -4,56 +4,47 @@ export const bidderURLs = {
 	pubmatic: 'https://hbopenbid.pubmatic.com/translator?source=prebid-client',
 	openx: 'https://rtb.openx.net/sync/prebid**',
 	ozone: 'https://elb.the-ozone-project.com/openrtb2/auction',
-	criteo: 'https://bidder.criteo.com/cdb**',
+	criteo: 'https://grid-bidder.criteo.com/openrtb_2_5/pbjs/auction/request',
 	adsafeprotected: 'https://pixel.adsafeprotected.com/services/pub**',
 	yield: 'https://ad.360yield.com/pb',
 };
 
-export const wins = {
-	criteo: {
-		url: 'https://bidder.criteo.com/cdb',
-		response: {
-			slots: [
+export const criteoMockBidResponse = (impId: string) => ({
+	cur: 'USD',
+	seatbid: [
+		{
+			bid: [
 				{
-					slotid: 'aa828aaaeb0341b391df49b390e8a10c',
-					impid: 'dfp-ad--top-above-nav',
-					arbitrageid: '62cd3b90efd188239809bc56ec098900',
-					zoneid: 1171150,
-					cpm: 45,
-					currency: 'USD',
-					width: 970,
-					height: 250,
-					creative: '<h1 data-cy="test-creative">Hello</h1>',
-					video: false,
-					deal: '',
-					creativecode: '11096744',
-					is_rewarded: false,
-					paf_extension: { content_id: '' },
+					impid: impId,
+					price: 45,
+					adomain: ['criteo.com'],
+					crid: '11096744',
+					w: 970,
+					h: 250,
+					adm: '<h1 data-cy="test-creative">Hello</h1>',
+					ext: {
+						dsa: {
+							adrender: 1,
+						},
+						cur: 'USD',
+						mediatype: 'banner',
+						meta: {
+							networkName: 'Criteo',
+						},
+					},
 				},
 			],
-			exd: {
-				slots: [
-					{
-						imp_id: 'aa828aaaeb0341b391df49b390e8a10c',
-						ad_unit_id: 'dfp-ad--top-above-nav',
-						zone_id: 1171150,
-						is_dsc: true,
-						enable_safeframe: false,
-					},
-				],
-			},
-			country_code: 'GB',
-			ext: {},
 		},
-		targeting: {
-			hb_format_criteo: 'banner',
-			hb_size_criteo: '970x250',
-			hb_pb_criteo: '45.00',
-			hb_bidder_criteo: 'criteo',
-			hb_format: 'banner',
-			hb_size: '970x250',
-			hb_pb: '45.00',
-			hb_bidder: 'criteo',
-		},
-	},
+	],
+});
+
+export const criteoWinningBidTargeting = {
+	hb_format_criteo: 'banner',
+	hb_size_criteo: '970x250',
+	hb_pb_criteo: '45.00',
+	hb_bidder_criteo: 'criteo',
+	hb_format: 'banner',
+	hb_size: '970x250',
+	hb_pb: '45.00',
+	hb_bidder: 'criteo',
 };

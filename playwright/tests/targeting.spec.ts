@@ -2,7 +2,11 @@ import type { Request } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 import { allPages, articles } from '../fixtures/pages';
 import type { GuPage } from '../fixtures/pages/Page';
-import { bidderURLs, wins } from '../fixtures/prebid';
+import {
+	bidderURLs,
+	criteoMockBidResponse,
+	criteoWinningBidTargeting,
+} from '../fixtures/prebid';
 import { cmpAcceptAll } from '../lib/cmp';
 import {
 	assertRequestParameter,
@@ -68,13 +72,25 @@ test.describe('GAM targeting', () => {
 	});
 });
 
+type CriteoRequestPostBody = {
+	imp: Array<{
+		id: string;
+	}>;
+};
 test.describe('Prebid targeting', () => {
 	test.beforeEach(async ({ page }) => {
-		return page.route(bidderURLs.criteo, (route) => {
+		return page.route(`${bidderURLs.criteo}**`, (route) => {
 			const url = route.request().url();
-			if (url.includes(wins.criteo.url)) {
+			if (url.includes(bidderURLs.criteo)) {
+				// The mock bid reponse impid must match that sent in the request
+				const postData = route.request().postData();
+				const json = JSON.parse(
+					postData?.toString() ?? '',
+				) as CriteoRequestPostBody;
+				const impId = json.imp[0]?.id as string;
+
 				void route.fulfill({
-					body: JSON.stringify(wins.criteo.response),
+					body: JSON.stringify(criteoMockBidResponse(impId)),
 				});
 			}
 		});
@@ -83,7 +99,7 @@ test.describe('Prebid targeting', () => {
 	const assertGamCriteoRequest = (request: Request) => {
 		const prevScpParams = getEncodedParamsFromRequest(request, 'prev_scp');
 		if (!prevScpParams) return false;
-		const allMatched = Object.entries(wins.criteo.targeting).every(
+		const allMatched = Object.entries(criteoWinningBidTargeting).every(
 			([key, value]) => {
 				if (prevScpParams.get(key) !== value) return false;
 				return true;
