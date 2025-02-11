@@ -255,6 +255,11 @@ const getAlreadyVisitedCount = (): number => {
 
 export const initPermutive = () => {
 	const visitedCount = getAlreadyVisitedCount();
+	document.addEventListener('top-above-nav-rendered', () => {
+		if (visitedCount <= 1) {
+			void initPermutiveSegmentation();
+		}
+	});
 	if (window.guardian.config.switches.permutive && visitedCount > 1) {
 		void initPermutiveSegmentation();
 	}
