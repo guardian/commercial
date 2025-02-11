@@ -248,7 +248,7 @@ const initPermutiveSegmentation = () => {
 const getAlreadyVisitedCount = (): number => {
 	const alreadyVisitedCount =
 		localStorage.getItem('gu.alreadyVisited') ?? '0';
-	return parseInt(alreadyVisitedCount, 10);
+	return parseInt(alreadyVisitedCount);
 };
 
 export const initPermutive = () => {
