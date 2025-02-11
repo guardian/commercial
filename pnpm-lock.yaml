@@ -80,7 +80,7 @@ importers:
         version: 19.2.2(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/prettier':
         specifier: 8.0.1
-        version: 8.0.1(prettier@3.4.2)(tslib@2.8.1)
+        version: 8.0.1(prettier@3.5.0)(tslib@2.8.1)
       '@guardian/source':
         specifier: 8.0.1
         version: 8.0.1(tslib@2.8.1)(typescript@5.5.4)
@@ -149,7 +149,7 @@ importers:
         version: 28.11.0(@typescript-eslint/eslint-plugin@7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)(jest@29.7.0(@types/node@20.17.17))(typescript@5.5.4)
       eslint-plugin-prettier:
         specifier: ^5.2.1
-        version: 5.2.3(@types/eslint@9.6.1)(eslint-config-prettier@10.0.1(eslint@8.57.0))(eslint@8.57.0)(prettier@3.4.2)
+        version: 5.2.3(@types/eslint@9.6.1)(eslint-config-prettier@10.0.1(eslint@8.57.0))(eslint@8.57.0)(prettier@3.5.0)
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -173,7 +173,7 @@ importers:
         version: 4.1.5
       prettier:
         specifier: ^3.4.2
-        version: 3.4.2
+        version: 3.5.0
       raw-loader:
         specifier: ^4.0.2
         version: 4.0.2(webpack@5.97.1)
@@ -4163,8 +4163,8 @@ packages:
     engines: {node: '>=10.13.0'}
     hasBin: true
 
-  prettier@3.4.2:
-    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
+  prettier@3.5.0:
+    resolution: {integrity: sha512-quyMrVt6svPS7CjQ9gKb3GLEX/rl3BCL2oa/QkNcXv4YNVBC9olt3s+H7ukto06q7B1Qz46PbrKLO34PR6vXcA==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -6289,9 +6289,9 @@ snapshots:
       - walrus
       - whiskers
 
-  '@guardian/prettier@8.0.1(prettier@3.4.2)(tslib@2.8.1)':
+  '@guardian/prettier@8.0.1(prettier@3.5.0)(tslib@2.8.1)':
     dependencies:
-      prettier: 3.4.2
+      prettier: 3.5.0
       tslib: 2.8.1
 
   '@guardian/source@8.0.1(tslib@2.8.1)(typescript@5.5.4)':
@@ -8076,10 +8076,10 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-prettier@5.2.3(@types/eslint@9.6.1)(eslint-config-prettier@10.0.1(eslint@8.57.0))(eslint@8.57.0)(prettier@3.4.2):
+  eslint-plugin-prettier@5.2.3(@types/eslint@9.6.1)(eslint-config-prettier@10.0.1(eslint@8.57.0))(eslint@8.57.0)(prettier@3.5.0):
     dependencies:
       eslint: 8.57.0
-      prettier: 3.4.2
+      prettier: 3.5.0
       prettier-linter-helpers: 1.0.0
       synckit: 0.9.2
     optionalDependencies:
@@ -9814,7 +9814,7 @@ snapshots:
 
   prettier@2.8.8: {}
 
-  prettier@3.4.2: {}
+  prettier@3.5.0: {}
 
   pretty-format@29.7.0:
     dependencies:
