@@ -3,6 +3,7 @@ import { createAdvert } from '../../define/create-advert';
 import { displayAds } from '../../display/display-ads';
 import { displayLazyAds } from '../../display/display-lazy-ads';
 import { isUserInVariant } from '../../experiments/ab';
+import { movePermutiveSegmentation } from '../../experiments/tests/move-permutive-segmentation';
 import { mpuWhenNoEpic } from '../../experiments/tests/mpu-when-no-epic';
 import type { SizeMapping } from '../../lib/ad-sizes';
 import { adSizes, createAdSize } from '../../lib/ad-sizes';
@@ -62,12 +63,14 @@ const fillStaticAdvertSlots = async (): Promise<void> => {
 	// This module has the following strict dependencies. These dependencies must be
 	// fulfilled before this function can execute reliably. The bootstrap
 	// initiates these dependencies, to speed up the init process. Bootstrap also captures the module performance.
-	const dependencies: Array<Promise<void>> = [
-		removeDisabledSlots(),
+	const dependencies: Array<Promise<void>> = [removeDisabledSlots()];
+
+	// add test to determine impact of moving initPermutive
+	if (isUserInVariant(movePermutiveSegmentation, 'variant')) {
 		// Permutive segmentation init code must run before googletag.enableServices() is called
 		/** @see https://support.permutive.com/hc/en-us/articles/360011779239-Deploying-the-Permutive-JavaScript-Tag */
-		initPermutive(),
-	];
+		dependencies.push(initPermutive());
+	}
 
 	await Promise.all(dependencies);
 

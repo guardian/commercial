@@ -1,3 +1,5 @@
+import { isUserInVariant } from '../experiments/ab';
+import { movePermutiveSegmentation } from '../experiments/tests/move-permutive-segmentation';
 import { init as prepareAdVerification } from '../lib/ad-verification/prepare-ad-verification';
 import { bootCommercial } from '../lib/commercial-boot-utils';
 import { adFreeSlotRemove } from './consented/ad-free-slot-remove';
@@ -9,6 +11,7 @@ import { init as initIpsosMori } from './consented/ipsos-mori';
 import { init as initMessenger } from './consented/messenger';
 import { init as prepareA9 } from './consented/prepare-a9';
 import { init as prepareGoogletag } from './consented/prepare-googletag';
+import { initPermutive } from './consented/prepare-permutive';
 import { init as preparePrebid } from './consented/prepare-prebid';
 import { removeDisabledSlots as closeDisabledSlots } from './consented/remove-slots';
 import { initTeadsCookieless } from './consented/teads-cookieless';
@@ -34,7 +37,10 @@ const commercialModules = [
 	reloadPageOnConsentChange,
 	preparePrebid,
 	initDfpListeners,
-	prepareGoogletag,
+	// add test to determine impact of moving initPermutive
+	isUserInVariant(movePermutiveSegmentation, 'variant')
+		? prepareGoogletag
+		: () => initPermutive().then(prepareGoogletag),
 	initDynamicAdSlots,
 	prepareA9,
 	initFillSlotListener,
