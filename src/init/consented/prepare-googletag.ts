@@ -43,10 +43,41 @@ const setCookieDeprecationLabel = (): void => {
 	}
 };
 
+interface TPCTestPayload {
+	tpcTest: boolean;
+	hasStorageAccess?: boolean;
+	accessibleCookie: boolean;
+}
+
+const isTPCTestPayload = (payload: unknown): payload is TPCTestPayload =>
+	typeof payload === 'object' &&
+	payload !== null &&
+	'tpcTest' in payload &&
+	typeof payload.tpcTest === 'boolean';
+
+/**
+ * Check if third party cookies are enabled
+ * This is done by creating an iframe on another domain and checking if it can access cookies
+ **/
+const checkThirdPartyCookiesEnabled = (): void => {
+	const crossSiteIrame = document.createElement('iframe');
+	crossSiteIrame.src =
+		'https://adops-assets.global.ssl.fastly.net/tpc-test/index.html';
+
+	window.addEventListener('message', ({ data }) => {
+		if (isTPCTestPayload(data)) {
+			console.log('Third party cookies test result:', data);
+		}
+	});
+
+	document.body.appendChild(crossSiteIrame);
+};
+
 const enableTargeting = (consentState: ConsentState) => {
 	if (consentState.canTarget) {
 		window.googletag.cmd.push(setPublisherProvidedId);
 		window.googletag.cmd.push(setCookieDeprecationLabel);
+		window.googletag.cmd.push(checkThirdPartyCookiesEnabled);
 	}
 };
 
