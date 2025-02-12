@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises
--- Fastdom measure and mutate signatures are Promise<void>
--- Nested fastdom measure-mutate promises throw the error:
--- "Promise returned in function argument where a void return was expected"
-*/
 import { getCookie } from '@guardian/libs';
 import crossIcon from '../../static/svg/icon/cross.svg';
 import fastdom from '../lib/fastdom-promise';

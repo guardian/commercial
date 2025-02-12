@@ -16,7 +16,7 @@ const handleQuerySurveyDone = (
 };
 
 const onLoad = (): void => {
-	window._brandmetrics ||= [];
+	window._brandmetrics ??= [];
 	window._brandmetrics.push({
 		cmd: '_querySurvey',
 		val: {

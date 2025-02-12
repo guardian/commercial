@@ -266,10 +266,14 @@ const setupBackground = async (
 				const observer = new IntersectionObserver(
 					(entries) => {
 						entries.forEach((entry) => {
-							if (entry.isIntersecting && !played) {
-								video.paused && void video.play();
+							if (
+								entry.isIntersecting &&
+								!played &&
+								video.paused
+							) {
+								void video.play();
 							} else {
-								!video.paused && video.pause();
+								video.pause();
 							}
 						});
 					},

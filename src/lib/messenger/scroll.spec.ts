@@ -69,8 +69,8 @@ describe.skip('Cross-frame messenger: scroll', () => {
 	});
 
 	afterEach(() => {
-		iframe1 && removeScrollListener(iframe1);
-		iframe2 && removeScrollListener(iframe2);
+		if (iframe1) removeScrollListener(iframe1);
+		if (iframe2) removeScrollListener(iframe2);
 		iframe1 = null;
 		iframe2 = null;
 		jest.resetModules();
@@ -105,8 +105,8 @@ describe.skip('Cross-frame messenger: scroll', () => {
 				writable: true,
 			});
 			reset();
-			iframe1 && addScrollListener(iframe1, respond1);
-			iframe2 && addScrollListener(iframe2, respond2);
+			if (iframe1) addScrollListener(iframe1, respond1);
+			if (iframe2) addScrollListener(iframe2, respond2);
 		});
 
 		afterEach(() => {

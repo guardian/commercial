@@ -18,10 +18,10 @@ const getStyles = (
 
 		if (
 			ownerNode instanceof HTMLStyleElement &&
-			ownerNode.matches(specs.selector)
+			ownerNode.matches(specs.selector) &&
+			ownerNode.textContent !== null
 		) {
-			ownerNode.textContent !== null &&
-				result.push(ownerNode.textContent);
+			result.push(ownerNode.textContent);
 		}
 		/*
 			There could be link elements here too, but we don't care about them as we cannot access the CSS

@@ -80,5 +80,4 @@ const config = {
 	],
 };
 
-// eslint-disable-next-line import/no-default-export -- webpack config
 export default config;

@@ -125,7 +125,7 @@ class EventTimer {
 	 * @returns {EventTimer} Instance of EventTimer
 	 */
 	static init(): EventTimer {
-		return (window.guardian.commercialTimer ||= new EventTimer());
+		return (window.guardian.commercialTimer ??= new EventTimer());
 	}
 
 	/**
