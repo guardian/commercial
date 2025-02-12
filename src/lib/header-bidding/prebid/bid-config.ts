@@ -640,7 +640,7 @@ const currentBidders = (
 	gpid: string,
 ): PrebidBidder[] => {
 	const biddersToCheck: Array<[boolean, PrebidBidder]> = [
-		[true, criteoBidder(slotSizes)],
+		[true, criteoBidder(slotSizes)], // in lib check already
 		[shouldIncludeTrustX(), trustXBidder],
 		[shouldIncludeTripleLift(), tripleLiftBidder],
 		[shouldIncludeAppNexus(), appNexusBidder(pageTargeting)],
@@ -650,8 +650,9 @@ const currentBidders = (
 		[shouldUseOzoneAdaptor(), ozoneClientSideBidder(pageTargeting)],
 		[shouldIncludeOpenx(), openxClientSideBidder(pageTargeting)],
 		[shouldIncludeKargo(), kargoBidder],
-		[shouldIncludeMagnite(), magniteBidder],
+		[shouldIncludeMagnite(), magniteBidder], // in lib check already
 		[true, theTradeDeskBidder(gpid)],
+		// Not included here: adyoulike, ix (ix is in indexExchange bidders)
 	];
 
 	const otherBidders = biddersToCheck
