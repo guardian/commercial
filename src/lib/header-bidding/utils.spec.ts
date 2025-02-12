@@ -13,7 +13,6 @@ import {
 	getLargestSize,
 	removeFalsyValues,
 	shouldIncludeAppNexus,
-	shouldIncludeImproveDigital,
 	shouldIncludeMobileSticky,
 	shouldIncludeOpenx,
 	shouldIncludeTrustX,
@@ -57,7 +56,6 @@ const resetConfig = () => {
 	window.guardian.config.switches.prebidAppnexus = true;
 	window.guardian.config.switches.prebidAppnexusInvcode = false;
 	window.guardian.config.switches.prebidOpenx = true;
-	window.guardian.config.switches.prebidImproveDigital = true;
 	window.guardian.config.switches.prebidIndexExchange = true;
 	window.guardian.config.switches.prebidTrustx = true;
 	window.guardian.config.switches.prebidXaxis = true;
@@ -209,26 +207,6 @@ describe('Utils', () => {
 			getCountryCode.mockReturnValueOnce(testGeo);
 			expect(shouldIncludeTrustX()).toBe(false);
 		}
-	});
-
-	test('shouldIncludeImproveDigital should return true if geolocation is GB', () => {
-		getCountryCode.mockReturnValue('GB');
-		expect(shouldIncludeImproveDigital()).toBe(true);
-	});
-
-	test('shouldIncludeImproveDigital should return true if geolocation is ROW', () => {
-		getCountryCode.mockReturnValue('FR');
-		expect(shouldIncludeImproveDigital()).toBe(true);
-	});
-
-	test('shouldIncludeImproveDigital should return false if geolocation is AU', () => {
-		getCountryCode.mockReturnValue('AU');
-		expect(shouldIncludeImproveDigital()).toBe(false);
-	});
-
-	test('shouldIncludeImproveDigital should return false if geolocation is US', () => {
-		getCountryCode.mockReturnValue('US');
-		expect(shouldIncludeImproveDigital()).toBe(false);
 	});
 
 	test('shouldIncludeXaxis should be true if geolocation is GB and opted in AB test variant', () => {

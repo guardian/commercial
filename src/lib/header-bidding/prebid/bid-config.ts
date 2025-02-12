@@ -18,7 +18,6 @@ import type {
 	PrebidAppNexusParams,
 	PrebidBid,
 	PrebidBidder,
-	PrebidImproveParams,
 	PrebidIndexExchangeParams,
 	PrebidKargoParams,
 	PrebidMagniteParams,
@@ -42,8 +41,6 @@ import {
 	containsWS,
 	getBreakpointKey,
 	shouldIncludeAppNexus,
-	shouldIncludeImproveDigital,
-	shouldIncludeImproveDigitalSkin,
 	shouldIncludeKargo,
 	shouldIncludeMagnite,
 	shouldIncludeOpenx,
@@ -55,11 +52,6 @@ import {
 	stripMobileSuffix,
 } from '../utils';
 import { getAppNexusDirectBidParams } from './appnexus';
-import {
-	getImprovePlacementId,
-	getImproveSizeParam,
-	getImproveSkinPlacementId,
-} from './improve-digital';
 import { getMagniteSiteId, getMagniteZoneId } from './magnite';
 
 const isArticle = window.guardian.config.page.contentType === 'Article';
@@ -532,28 +524,6 @@ const tripleLiftBidder: PrebidBidder = {
 	}),
 };
 
-const improveDigitalBidder: PrebidBidder = {
-	name: 'improvedigital',
-	switchName: 'prebidImproveDigital',
-	bidParams: (
-		slotId: string,
-		sizes: HeaderBiddingSize[],
-	): PrebidImproveParams => ({
-		publisherId: 995,
-		placementId: getImprovePlacementId(sizes),
-		size: getImproveSizeParam(slotId, isDesktopAndArticle),
-	}),
-};
-
-const improveDigitalSkinBidder: PrebidBidder = {
-	name: 'improvedigital',
-	switchName: 'prebidImproveDigitalSkins',
-	bidParams: (): PrebidImproveParams => ({
-		placementId: getImproveSkinPlacementId(),
-		size: {},
-	}),
-};
-
 const xaxisBidder: PrebidBidder = {
 	name: 'xhb',
 	switchName: 'prebidXaxis',
@@ -674,8 +644,6 @@ const currentBidders = (
 		[shouldIncludeTrustX(), trustXBidder],
 		[shouldIncludeTripleLift(), tripleLiftBidder],
 		[shouldIncludeAppNexus(), appNexusBidder(pageTargeting)],
-		[shouldIncludeImproveDigital(), improveDigitalBidder],
-		[shouldIncludeImproveDigitalSkin(), improveDigitalSkinBidder],
 		[shouldIncludeXaxis(), xaxisBidder],
 		[true, pubmaticBidder(slotSizes)],
 		[true, adYouLikeBidder],

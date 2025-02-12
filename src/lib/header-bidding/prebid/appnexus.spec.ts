@@ -54,7 +54,6 @@ const resetConfig = () => {
 		prebidAppnexus: true,
 		prebidAppnexusInvcode: true,
 		prebidOpenx: true,
-		prebidImproveDigital: true,
 		prebidIndexExchange: true,
 		prebidTrustx: true,
 		prebidXaxis: true,
