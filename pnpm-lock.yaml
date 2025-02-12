@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@guardian/prebid.js':
-        specifier: 9.27.0
-        version: 9.27.0(babel-core@7.0.0-bridge.0(@babel/core@7.26.7))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)
+        specifier: 9.27.0-1
+        version: 9.27.0-1(babel-core@7.0.0-bridge.0(@babel/core@7.26.7))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)
       fastdom:
         specifier: ^1.0.12
         version: 1.0.12
@@ -1028,8 +1028,8 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/prebid.js@9.27.0':
-    resolution: {integrity: sha512-69ojJJII8YVp4sxf227J7GEHGNCv1H+QHs3ZzqYY/yKpwxzOKB7qeY4tT9gEQK2Yw54UV8UJ3CBoHS7/SyAuxg==}
+  '@guardian/prebid.js@9.27.0-1':
+    resolution: {integrity: sha512-aaW4PoNQKT2X/qQ07l/h3p6+Uov2BsEE4M1admknkbZa0fEa5+DD4iNfQEs1fSWoIA6Dgd4j+WfCTD1z27EE2Q==}
     engines: {node: '>=20.0.0'}
 
   '@guardian/prettier@8.0.1':
@@ -6212,7 +6212,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.5.4
 
-  '@guardian/prebid.js@9.27.0(babel-core@7.0.0-bridge.0(@babel/core@7.26.7))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)':
+  '@guardian/prebid.js@9.27.0-1(babel-core@7.0.0-bridge.0(@babel/core@7.26.7))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
       '@babel/core': 7.26.7
       '@babel/plugin-transform-runtime': 7.25.9(@babel/core@7.26.7)
