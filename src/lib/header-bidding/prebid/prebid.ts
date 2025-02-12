@@ -1,5 +1,5 @@
-import type { ConsentFramework } from '@guardian/libs';
-import { isString, log, onConsent } from '@guardian/libs';
+import type { ConsentFramework, ConsentState } from '@guardian/libs';
+import { getConsentFor, isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
 import { getParticipations, isUserInVariant } from '../../../experiments/ab';
@@ -296,10 +296,7 @@ const bidderTimeout = PREBID_TIMEOUT;
 let requestQueue: Promise<void> = Promise.resolve();
 let initialised = false;
 
-const initialise = (
-	window: Window,
-	framework: ConsentFramework = 'tcfv2',
-): void => {
+const initialise = (window: Window, consentState: ConsentState): void => {
 	if (!window.pbjs) {
 		log('commercial', 'window.pbjs not found on window');
 		return; // We couldn’t initialise
@@ -329,26 +326,26 @@ const initialise = (
 		: { syncEnabled: false };
 
 	const consentManagement = (): ConsentManagement => {
-		switch (framework) {
+		switch (consentState.framework) {
+			/** @see https://docs.prebid.org/dev-docs/modules/consentManagementUsp.html */
 			case 'aus':
-				// https://docs.prebid.org/dev-docs/modules/consentManagementUsp.html
 				return {
 					usp: {
 						cmpApi: 'iab',
 						timeout: 1500,
 					},
 				};
+			/** @see https://docs.prebid.org/dev-docs/modules/consentManagementGpp.html */
 			case 'usnat':
-				// https://docs.prebid.org/dev-docs/modules/consentManagementGpp.html
 				return {
 					gpp: {
 						cmpApi: 'iab',
 						timeout: 1500,
 					},
 				};
+			/** @see https://docs.prebid.org/dev-docs/modules/consentManagementTcf.html */
 			case 'tcfv2':
 			default:
-				// https://docs.prebid.org/dev-docs/modules/consentManagementTcf.html
 				return {
 					gdpr: {
 						cmpApi: 'iab',
@@ -394,7 +391,8 @@ const initialise = (
 
 	if (
 		window.guardian.config.switches.permutive &&
-		window.guardian.config.switches.prebidPermutiveAudience // this switch specifically controls whether or not the Permutive Audience Connector can run with Prebid
+		window.guardian.config.switches.prebidPermutiveAudience && // this switch specifically controls whether or not the Permutive Audience Connector can run with Prebid
+		getConsentFor('permutive', consentState)
 	) {
 		pbjsConfig.realTimeData = {
 			dataProviders: [
@@ -417,7 +415,10 @@ const initialise = (
 		};
 	}
 
-	if (window.guardian.config.switches.prebidCriteo) {
+	if (
+		window.guardian.config.switches.prebidCriteo &&
+		getConsentFor('criteo', consentState)
+	) {
 		window.pbjs.bidderSettings.criteo = {
 			storageAllowed: true,
 		};
@@ -432,7 +433,10 @@ const initialise = (
 		});
 	}
 
-	if (window.guardian.config.switches.prebidOzone) {
+	if (
+		window.guardian.config.switches.prebidOzone &&
+		getConsentFor('ozone', consentState)
+	) {
 		// Use a custom price granularity, which is based upon the size of the slot being auctioned
 		window.pbjs.setBidderConfig({
 			bidders: ['ozone'],
@@ -454,7 +458,10 @@ const initialise = (
 		});
 	}
 
-	if (window.guardian.config.switches.prebidIndexExchange) {
+	if (
+		window.guardian.config.switches.prebidIndexExchange &&
+		getConsentFor('ix', consentState)
+	) {
 		window.pbjs.setBidderConfig({
 			bidders: ['ix'],
 			config: {

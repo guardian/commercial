@@ -247,6 +247,17 @@ const initPermutiveSegmentation = () => {
 
 export const initPermutive = () => {
 	if (window.guardian.config.switches.permutive) {
+		if (isInDeferPermutiveLoadTest && visitedCount > 1) {
+
+				void initPermutiveSegmentation();
+			}
+
+		document.addEventListener('top-above-nav-rendered', () => {
+				if (visitedCount <= 1) {
+					void initPermutiveSegmentation();
+				}
+			});
+		}
 		void initPermutiveSegmentation();
 	}
 	return Promise.resolve();
