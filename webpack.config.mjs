@@ -3,7 +3,6 @@ import { join } from 'path';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack from 'webpack';
-import { InjectHashPlugin } from './webpack/inject-hash-plugin.mjs';
 
 const gitCommitSHA = () => {
 	try {
@@ -87,10 +86,8 @@ const config = {
 				minifyJS: true,
 			},
 		}),
-		new InjectHashPlugin(),
 		new DefinePlugin({
 			'process.env.COMMIT_SHA': JSON.stringify(gitCommitSHA()),
-			'process.env.IS_DEV': JSON.stringify(false),
 		}),
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-call -- circular-dependency-plugin is not typed
 		new CircularDependencyPlugin({
