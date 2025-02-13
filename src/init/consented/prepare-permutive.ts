@@ -257,19 +257,17 @@ const isInDeferPermutiveLoadTest = isUserInVariant(
 	deferPermutiveLoad,
 	'variant',
 );
+
 export const initPermutive = () => {
-	const visitedCount = getAlreadyVisitedCount();
-	if (isInDeferPermutiveLoadTest) {
-		if (window.guardian.config.switches.permutive && visitedCount > 1) {
+	if (window.guardian.config.switches.permutive) {
+		const visitedCount = getAlreadyVisitedCount();
+		if (isInDeferPermutiveLoadTest && visitedCount <= 1) {
+			document.addEventListener('top-above-nav-rendered', () => {
+				void initPermutiveSegmentation();
+			});
+		} else {
 			void initPermutiveSegmentation();
 		}
-		document.addEventListener('top-above-nav-rendered', () => {
-			if (visitedCount <= 1) {
-				void initPermutiveSegmentation();
-			}
-		});
-	} else if (window.guardian.config.switches.permutive) {
-		void initPermutiveSegmentation();
 	}
 	return Promise.resolve();
 };
