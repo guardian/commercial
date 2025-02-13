@@ -1,0 +1,19 @@
+<html>
+	<head>
+		<title>TPC Test</title>
+
+		<script type="text/javascript">
+			const storageAccessPromise = document.hasStorageAccess
+				? document.hasStorageAccess()
+				: Promise.resolve();
+
+			storageAccessPromise.then((hasStorageAccess) => {
+				const payload = {
+					tpcTest: true,
+					hasStorageAccess,
+				};
+				window.top?.postMessage(payload, '*');
+			});
+		</script>
+	</head>
+</html>

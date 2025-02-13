@@ -1,4 +1,5 @@
 import { join } from 'path';
+import { DefinePlugin } from 'webpack';
 import { merge } from 'webpack-merge';
 import { setupFixturesServer } from './scripts/fixtures/fixtures-server.js';
 import config from './webpack.config.mjs';
@@ -27,4 +28,9 @@ export default merge(config, {
 			return middlewares;
 		},
 	},
+	plugins: [
+		new DefinePlugin({
+			'process.env.IS_DEV': JSON.stringify(true),
+		}),
+	],
 });

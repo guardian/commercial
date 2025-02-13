@@ -46,7 +46,6 @@ const setCookieDeprecationLabel = (): void => {
 interface TPCTestPayload {
 	tpcTest: boolean;
 	hasStorageAccess?: boolean;
-	accessibleCookie: boolean;
 }
 
 const isTPCTestPayload = (payload: unknown): payload is TPCTestPayload =>
@@ -61,12 +60,15 @@ const isTPCTestPayload = (payload: unknown): payload is TPCTestPayload =>
  **/
 const checkThirdPartyCookiesEnabled = (): void => {
 	const crossSiteIrame = document.createElement('iframe');
-	crossSiteIrame.src =
-		'https://adops-assets.global.ssl.fastly.net/tpc-test/index.html';
+	crossSiteIrame.src = `${window.guardian.config.frontendAssetsFullURL}commercial/tpc-test/index.html`;
 
 	window.addEventListener('message', ({ data }) => {
 		if (isTPCTestPayload(data)) {
-			console.log('Third party cookies test result:', data);
+			const { hasStorageAccess } = data;
+
+			window.googletag
+				.pubads()
+				.setTargeting('3pc', [hasStorageAccess ? 't' : 'f']);
 		}
 	});
 

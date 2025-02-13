@@ -1,7 +1,9 @@
 import { execSync } from 'child_process';
 import { join } from 'path';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack from 'webpack';
+import { InjectHashPlugin } from './webpack/inject-hash-plugin.mjs';
 
 const gitCommitSHA = () => {
 	try {
@@ -67,8 +69,28 @@ const config = {
 		],
 	},
 	plugins: [
+		new HtmlWebpackPlugin({
+			template: join(
+				import.meta.dirname,
+				'static',
+				'tpc-test-iframe',
+				'index.html',
+			),
+			filename: `commercial/tpc-test/index.html`,
+			minify: {
+				collapseWhitespace: true,
+				removeComments: true,
+				removeRedundantAttributes: true,
+				removeScriptTypeAttributes: true,
+				removeStyleLinkTypeAttributes: true,
+				useShortDoctype: true,
+				minifyJS: true,
+			},
+		}),
+		new InjectHashPlugin(),
 		new DefinePlugin({
 			'process.env.COMMIT_SHA': JSON.stringify(gitCommitSHA()),
+			'process.env.IS_DEV': JSON.stringify(false),
 		}),
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-call -- circular-dependency-plugin is not typed
 		new CircularDependencyPlugin({
