@@ -4,7 +4,6 @@ import { createAdSize } from '../../lib/ad-sizes';
 import {
 	isInAuOrNz,
 	isInCanada,
-	isInRow,
 	isInUk,
 	isInUsa,
 	isInUsOrCa,
@@ -176,13 +175,6 @@ export const shouldIncludeAppNexus = (): boolean =>
 	!!pbTestNameMap().and;
 
 export const shouldIncludeXaxis = (): boolean => isInUk();
-
-export const shouldIncludeImproveDigital = (): boolean => isInUk() || isInRow();
-export const shouldIncludeImproveDigitalSkin = (): boolean =>
-	!!window.guardian.config.switches.prebidImproveDigitalSkins &&
-	window.guardian.config.page.isFront &&
-	(isInUk() || isInRow()) &&
-	getBreakpointKey() === 'D'; // Desktop only
 
 export const shouldIncludeKargo = (): boolean => isInUsa();
 
