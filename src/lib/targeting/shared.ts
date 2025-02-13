@@ -2,13 +2,13 @@ import { pickTargetingValues } from './pick-targeting-values';
 
 /* -- Types -- */
 
-const brands = {
-	Foundation: 'f',
-	Paid: 'p',
-	Sponsored: 's',
-} as const;
+type Brands = {
+	Foundation: 'f';
+	Paid: 'p';
+	Sponsored: 's';
+};
 
-const contentTypes = [
+type ContentTypes = [
 	'article',
 	'audio',
 	'crossword',
@@ -19,21 +19,21 @@ const contentTypes = [
 	'section',
 	'tag',
 	'video',
-] as const;
+];
 
-const editions = {
-	UnitedKingdom: 'uk',
-	UnitedStates: 'us',
-	Australia: 'au',
-	International: 'int',
-} as const;
+type Editions = {
+	UnitedKingdom: 'uk';
+	UnitedStates: 'us';
+	Australia: 'au';
+	International: 'int';
+};
 
-const platforms = {
-	R2: 'r2',
-	NextGen: 'ng',
-	MobileApp: 'app',
-	AcceleratedMobilePages: 'amp',
-} as const;
+type Platforms = {
+	R2: 'r2';
+	NextGen: 'ng';
+	MobileApp: 'app';
+	AcceleratedMobilePages: 'amp';
+};
 
 const surges = {
 	0: '0',
@@ -71,7 +71,7 @@ type SharedTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=259767
 	 */
-	br: (typeof brands)[keyof typeof brands];
+	br: Brands[keyof Brands];
 
 	/**
 	 * **Co**ntributors and Authors - [see on Ad Manager][gam]
@@ -91,7 +91,7 @@ type SharedTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=177807
 	 */
-	ct: (typeof contentTypes)[number];
+	ct: ContentTypes[number];
 
 	/**
 	 * **Edition** - [see on Ad Manager][gam]
@@ -100,7 +100,7 @@ type SharedTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=174207
 	 */
-	edition: (typeof editions)[keyof typeof editions];
+	edition: Editions[keyof Editions];
 
 	/**
 	 * **K**eywords - [see on Ad Manager][gam]
@@ -123,7 +123,7 @@ type SharedTargeting = {
 	 *
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=180207
 	 */
-	p: (typeof platforms)[keyof typeof platforms];
+	p: Platforms[keyof Platforms];
 
 	/**
 	 * **Se**ries - [see on Ad Manager][gam]

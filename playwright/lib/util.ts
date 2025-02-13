@@ -24,7 +24,7 @@ const hostnames = {
 	dev: 'http://localhost:3030',
 } as const;
 
-const getHost = (stage?: Stage | undefined) => {
+const getHost = (stage?: Stage) => {
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- defensive runtime
 	return hostnames[stage ?? getStage()] ?? hostnames.dev;
 };
