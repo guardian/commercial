@@ -1,5 +1,5 @@
 import type { ConsentFramework } from '@guardian/libs';
-import { getConsentFor, log, onConsent } from '@guardian/libs';
+import { log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
@@ -26,6 +26,16 @@ const loadPrebid = async (framework: ConsentFramework): Promise<void> => {
 	}
 };
 
+const handleRegionConsent = (hasConsentForPrebid: boolean): void => {
+	log('commercial', 'Prebid consent:', {
+		hasConsentForPrebid,
+	});
+
+	if (!hasConsentForPrebid) {
+		throw new Error('No consent for prebid');
+	}
+};
+
 const setupPrebid = async (): Promise<void> => {
 	try {
 		const consentState = await onConsent();
@@ -33,24 +43,17 @@ const setupPrebid = async (): Promise<void> => {
 		if (!consentState.framework) {
 			throw new Error('Unknown framework');
 		}
-		const hasConsentForGlobalPrebidVendor = getConsentFor(
-			'prebid',
-			consentState,
-		);
-		const hasConsentForCustomPrebidVendor = getConsentFor(
-			'prebidCustom',
-			consentState,
-		);
-		log('commercial', 'Prebid consent:', {
-			hasConsentForGlobalPrebidVendor,
-			hasConsentForCustomPrebidVendor,
-		});
-		if (
-			// Check if we do NOT have consent to BOTH the old global and custom prebid vendor
-			!hasConsentForGlobalPrebidVendor &&
-			!hasConsentForCustomPrebidVendor
-		) {
-			throw new Error('No consent for prebid');
+
+		switch (consentState.framework) {
+			case 'aus':
+				handleRegionConsent(!!consentState.aus?.personalisedAdvertising);
+				break;
+			case 'usnat':
+				handleRegionConsent(!consentState.usnat?.doNotSell);
+				break;
+			case 'tcfv2':
+				// We do per-vendor checks for this framework, no requirement for a top-level check for Prebid
+				break;
 		}
 		return loadPrebid(consentState.framework);
 	} catch (err: unknown) {
