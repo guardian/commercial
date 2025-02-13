@@ -66,9 +66,12 @@ const checkThirdPartyCookiesEnabled = (): void => {
 		if (isTPCTestPayload(data)) {
 			const { hasStorageAccess } = data;
 
-			window.googletag
-				.pubads()
-				.setTargeting('3pc', [hasStorageAccess ? 't' : 'f']);
+			// only set targeting if the value is defined
+			if (hasStorageAccess !== undefined) {
+				window.googletag
+					.pubads()
+					.setTargeting('3pc', [hasStorageAccess ? 't' : 'f']);
+			}
 		}
 	});
 
