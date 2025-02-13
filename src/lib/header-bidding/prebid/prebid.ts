@@ -183,6 +183,7 @@ class PrebidAdUnit {
 		advert: Advert,
 		slot: HeaderBiddingSlot,
 		pageTargeting: PageTargeting,
+		consentState: ConsentState,
 	) {
 		this.code = advert.id;
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
@@ -196,7 +197,13 @@ class PrebidAdUnit {
 			},
 		};
 
-		this.bids = bids(advert.id, slot.sizes, pageTargeting, this.gpid);
+		this.bids = bids(
+			advert.id,
+			slot.sizes,
+			pageTargeting,
+			this.gpid,
+			consentState,
+		);
 
 		advert.headerBiddingSizes = slot.sizes;
 		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
@@ -387,7 +394,8 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 
 	if (
 		window.guardian.config.switches.permutive &&
-		window.guardian.config.switches.prebidPermutiveAudience && // this switch specifically controls whether or not the Permutive Audience Connector can run with Prebid
+		// this switch specifically controls whether or not the Permutive Audience Connector can run with Prebid
+		window.guardian.config.switches.prebidPermutiveAudience &&
 		getConsentFor('permutive', consentState)
 	) {
 		pbjsConfig.realTimeData = {
@@ -456,7 +464,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 
 	if (
 		window.guardian.config.switches.prebidIndexExchange &&
-		getConsentFor('ix', consentState)
+		getConsentFor('indexExchange', consentState)
 	) {
 		window.pbjs.setBidderConfig({
 			bidders: ['ix'],
@@ -592,7 +600,12 @@ const requestBids = async (
 					getHeaderBiddingAdSlots(advert, slotFlatMap)
 						.map(
 							(slot) =>
-								new PrebidAdUnit(advert, slot, pageTargeting),
+								new PrebidAdUnit(
+									advert,
+									slot,
+									pageTargeting,
+									consentState,
+								),
 						)
 						.filter((adUnit) => !adUnit.isEmpty()),
 				),

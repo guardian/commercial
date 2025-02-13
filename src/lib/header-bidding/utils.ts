@@ -1,4 +1,5 @@
-import { isString } from '@guardian/libs';
+import type { ConsentState } from '@guardian/libs';
+import { getConsentFor, isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { createAdSize } from '../../lib/ad-sizes';
 import {
@@ -156,7 +157,8 @@ export const getRandomIntInclusive = (
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const shouldIncludeOpenx = (): boolean => !isInUsOrCa();
+export const shouldIncludeOpenx = (consentState: ConsentState): boolean =>
+	getConsentFor('openX', consentState) && !isInUsOrCa();
 
 export const shouldIncludeTrustX = (): boolean => isInUsOrCa();
 
@@ -164,22 +166,37 @@ export const shouldIncludeTripleLift = (): boolean =>
 	isInUsOrCa() || isInAuOrNz();
 
 // TODO: Check is we want regional restrictions on where we load the ozoneBidAdapter
-export const shouldUseOzoneAdaptor = (): boolean =>
+export const shouldUseOzoneAdaptor = (consentState: ConsentState): boolean =>
+	getConsentFor('ozone', consentState) &&
 	!isInCanada() &&
 	!isInAuOrNz() &&
 	(window.guardian.config.switches.prebidOzone ?? false);
 
-export const shouldIncludeAppNexus = (): boolean =>
+export const shouldIncludeAppNexus = (consentState: ConsentState): boolean =>
 	isInAuOrNz() ||
-	(!!window.guardian.config.switches.prebidAppnexusUkRow && !isInUsOrCa()) ||
+	(!!window.guardian.config.switches.prebidAppnexusUkRow &&
+		getConsentFor('xandr', consentState) &&
+		!isInUsOrCa()) ||
 	!!pbTestNameMap().and;
 
-export const shouldIncludeXaxis = (): boolean => isInUk();
+export const shouldIncludeXaxis = (consentState: ConsentState): boolean =>
+	getConsentFor('xandr', consentState) && isInUk();
 
 export const shouldIncludeKargo = (): boolean => isInUsa();
 
-export const shouldIncludeMagnite = (): boolean =>
+export const shouldIncludeMagnite = (consentState: ConsentState): boolean =>
+	getConsentFor('magnite', consentState) &&
 	!!window.guardian.config.switches.prebidMagnite;
+
+export const shouldIncludeCriteo = (consentState: ConsentState): boolean =>
+	getConsentFor('criteo', consentState);
+export const shouldIncludePubmatic = (consentState: ConsentState): boolean =>
+	getConsentFor('pubmatic', consentState);
+export const shouldIncludeAdYouLike = (consentState: ConsentState): boolean =>
+	getConsentFor('adyoulike', consentState);
+export const shouldIncludeTheTradeDesk = (
+	consentState: ConsentState,
+): boolean => getConsentFor('theTradeDesk', consentState);
 
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>
