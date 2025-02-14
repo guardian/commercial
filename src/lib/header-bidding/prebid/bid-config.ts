@@ -1,3 +1,4 @@
+import type { ConsentState } from '@guardian/libs';
 import { log } from '@guardian/libs';
 import {
 	isInAuOrNz,
@@ -40,10 +41,14 @@ import {
 	containsPortraitInterstitial,
 	containsWS,
 	getBreakpointKey,
+	shouldIncludeAdYouLike,
 	shouldIncludeAppNexus,
+	shouldIncludeCriteo,
 	shouldIncludeKargo,
 	shouldIncludeMagnite,
 	shouldIncludeOpenx,
+	shouldIncludePubmatic,
+	shouldIncludeTheTradeDesk,
 	shouldIncludeTripleLift,
 	shouldIncludeTrustX,
 	shouldIncludeXaxis,
@@ -638,20 +643,27 @@ const currentBidders = (
 	slotSizes: HeaderBiddingSize[],
 	pageTargeting: PageTargeting,
 	gpid: string,
+	consentState: ConsentState,
 ): PrebidBidder[] => {
 	const biddersToCheck: Array<[boolean, PrebidBidder]> = [
-		[true, criteoBidder(slotSizes)],
+		[shouldIncludeCriteo(consentState), criteoBidder(slotSizes)],
 		[shouldIncludeTrustX(), trustXBidder],
 		[shouldIncludeTripleLift(), tripleLiftBidder],
-		[shouldIncludeAppNexus(), appNexusBidder(pageTargeting)],
-		[shouldIncludeXaxis(), xaxisBidder],
-		[true, pubmaticBidder(slotSizes)],
-		[true, adYouLikeBidder],
-		[shouldUseOzoneAdaptor(), ozoneClientSideBidder(pageTargeting)],
-		[shouldIncludeOpenx(), openxClientSideBidder(pageTargeting)],
+		[shouldIncludeAppNexus(consentState), appNexusBidder(pageTargeting)],
+		[shouldIncludeXaxis(consentState), xaxisBidder],
+		[shouldIncludePubmatic(consentState), pubmaticBidder(slotSizes)],
+		[shouldIncludeAdYouLike(consentState), adYouLikeBidder],
+		[
+			shouldUseOzoneAdaptor(consentState),
+			ozoneClientSideBidder(pageTargeting),
+		],
+		[
+			shouldIncludeOpenx(consentState),
+			openxClientSideBidder(pageTargeting),
+		],
 		[shouldIncludeKargo(), kargoBidder],
-		[shouldIncludeMagnite(), magniteBidder],
-		[true, theTradeDeskBidder(gpid)],
+		[shouldIncludeMagnite(consentState), magniteBidder],
+		[shouldIncludeTheTradeDesk(consentState), theTradeDeskBidder(gpid)],
 	];
 
 	const otherBidders = biddersToCheck
@@ -669,8 +681,9 @@ export const bids = (
 	slotSizes: HeaderBiddingSize[],
 	pageTargeting: PageTargeting,
 	gpid: string,
+	consentState: ConsentState,
 ): PrebidBid[] =>
-	currentBidders(slotSizes, pageTargeting, gpid).map(
+	currentBidders(slotSizes, pageTargeting, gpid, consentState).map(
 		(bidder: PrebidBidder) => ({
 			bidder: bidder.name,
 			params: bidder.bidParams(slotId, slotSizes),
