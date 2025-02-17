@@ -1,7 +1,5 @@
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
-import { isUserInVariant } from '../../../experiments/ab';
-import { gumgumInterscrollerFronts } from '../../../experiments/tests/gumgum-interscroller-fronts';
 import { reportError } from '../../../lib/error/report-error';
 import type { A9AdUnitInterface } from '../../../types/global';
 import type { HeaderBiddingSlot, SlotFlatMap } from '../prebid-types';
@@ -10,7 +8,6 @@ import { getHeaderBiddingAdSlots } from '../slot-config';
  * Amazon's header bidding javascript library
  * https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/javascript-guide/display.html
  */
-isUserInVariant(gumgumInterscrollerFronts, 'variant');
 class A9AdUnit implements A9AdUnitInterface {
 	slotID: string;
 	slotName?: string;
@@ -101,18 +98,11 @@ const requestBids = async (
 	 */
 
 	const shouldUnblockBidders = (adUnit: A9AdUnit): string[] => {
-		const isInGumgumVariant = isUserInVariant(
-			gumgumInterscrollerFronts,
-			'variant',
-		);
-		if (isInGumgumVariant) {
-			return (isNetworkFront &&
-				adUnit.slotID === 'dfp-ad--inline1--mobile') ||
-				(isSectionFront && adUnit.slotID === 'dfp-ad--top-above-nav')
-				? []
-				: ['1lsxjb4'];
-		}
-		return ['1lsxjb4'];
+		return (isNetworkFront &&
+			adUnit.slotID === 'dfp-ad--inline1--mobile') ||
+			(isSectionFront && adUnit.slotID === 'dfp-ad--top-above-nav')
+			? []
+			: ['1lsxjb4'];
 	};
 
 	const updatedAdUnits = adUnits.map((adUnit) => {
