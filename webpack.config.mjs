@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
 import { join } from 'path';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack from 'webpack';
 
 const gitCommitSHA = () => {
@@ -67,6 +68,24 @@ const config = {
 		],
 	},
 	plugins: [
+		new HtmlWebpackPlugin({
+			template: join(
+				import.meta.dirname,
+				'static',
+				'tpc-test-iframe',
+				'index.html',
+			),
+			filename: `commercial/tpc-test/index.html`,
+			minify: {
+				collapseWhitespace: true,
+				removeComments: true,
+				removeRedundantAttributes: true,
+				removeScriptTypeAttributes: true,
+				removeStyleLinkTypeAttributes: true,
+				useShortDoctype: true,
+				minifyJS: true,
+			},
+		}),
 		new DefinePlugin({
 			'process.env.COMMIT_SHA': JSON.stringify(gitCommitSHA()),
 		}),
