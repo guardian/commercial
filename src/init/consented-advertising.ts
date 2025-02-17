@@ -1,3 +1,5 @@
+import { isUserInVariant } from '../experiments/ab';
+import { movePermutiveSegmentation } from '../experiments/tests/move-permutive-segmentation';
 import { init as prepareAdVerification } from '../lib/ad-verification/prepare-ad-verification';
 import { bootCommercial } from '../lib/commercial-boot-utils';
 import { adFreeSlotRemove } from './consented/ad-free-slot-remove';
@@ -35,9 +37,10 @@ const commercialModules = [
 	reloadPageOnConsentChange,
 	preparePrebid,
 	initDfpListeners,
-	// Permutive init code must run before google tag enableServices()
-	// The permutive lib however is loaded async with the third party tags
-	() => initPermutive().then(prepareGoogletag),
+	// add test to determine impact of moving initPermutive
+	isUserInVariant(movePermutiveSegmentation, 'variant')
+		? prepareGoogletag
+		: () => initPermutive().then(prepareGoogletag),
 	initDynamicAdSlots,
 	prepareA9,
 	initFillSlotListener,

@@ -1,3 +1,4 @@
+import { log } from '@guardian/libs';
 import { isUserInVariant } from '../../experiments/ab';
 import { deferPermutiveLoad } from '../../experiments/tests/defer-permutive-load';
 import { reportError } from '../../lib/error/report-error';
@@ -173,6 +174,7 @@ const runPermutive = (
  * @returns Promise
  */
 const initPermutiveSegmentation = () => {
+	log('commercial', 'Initialising Permutive segmentation');
 	/* eslint-disable -- permutive code */
 	// From here until we re-enable eslint is the Permutive code
 	// that we received from them.
