@@ -91,18 +91,17 @@ const requestBids = async (
 	 * @returns The filtered array of ad units based on the page context.
 	 */
 
-	const shouldUnblockBidders = (adUnit: A9AdUnit): string[] => {
-		return (isNetworkFront &&
-			adUnit.slotID === 'dfp-ad--inline1--mobile') ||
-			(isSectionFront && adUnit.slotID === 'dfp-ad--top-above-nav')
-			? []
-			: ['1lsxjb4'];
+	const getBlockBidders = (adUnit: A9AdUnit): string[] => {
+		const allowGumgum =
+			(isNetworkFront && adUnit.slotID === 'dfp-ad--inline1--mobile') ||
+			(isSectionFront && adUnit.slotID === 'dfp-ad--top-above-nav');
+		return !allowGumgum ? ['1lsxjb4'] : [];
 	};
 
 	const updatedAdUnits = adUnits.map((adUnit) => {
 		return {
 			...adUnit,
-			blockedBidders: shouldUnblockBidders(adUnit),
+			blockedBidders: getBlockBidders(adUnit),
 		};
 	});
 
