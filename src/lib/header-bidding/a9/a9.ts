@@ -69,21 +69,15 @@ const requestBids = async (
 	// so that we can block the bidders that we want to block based on the slotID
 
 	const section = window.guardian.config.page.section;
+	const isFront = window.guardian.config.page.isFront;
 
-	const isNetworkFront = [
-		'uk',
-		'us',
-		'au',
-		'europe',
-		'international',
-	].includes(section);
+	const isNetworkFront =
+		isFront &&
+		['uk', 'us', 'au', 'europe', 'international'].includes(section);
 
-	const isSectionFront = [
-		'commentisfree',
-		'sport',
-		'culture',
-		'lifeandstyle',
-	].includes(section);
+	const isSectionFront =
+		isFront &&
+		['commentisfree', 'sport', 'culture', 'lifeandstyle'].includes(section);
 
 	/**
 	 * Filters the provided ad units based on the current page context.
