@@ -15,7 +15,7 @@ const isTPCTestPayload = (payload: unknown): payload is TPCTestPayload =>
  **/
 const checkThirdPartyCookiesEnabled = (): void => {
 	const crossSiteIrame = document.createElement('iframe');
-	crossSiteIrame.src = `${window.guardian.config.frontendAssetsFullURL}commercial/tpc-test/index.html`;
+	crossSiteIrame.src = `${window.guardian.config.frontendAssetsFullURL}commercial/tpc-test/v1/index.html`;
 
 	window.addEventListener('message', ({ data }) => {
 		if (isTPCTestPayload(data)) {
