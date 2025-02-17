@@ -91,7 +91,7 @@ const requestBids = async (
 	 * - If the page is a section front, only the ad unit with the slot ID 'dfp-ad--top-above-nav' is included.
 	 * - If the page is not a front, all ad units are included.
 	 * - There is a cross over in logic where the page is both an article as well as a network front/section front,
-	 * - in this case we want to identify the page as a non-front page (arrticle) and include all ad units.
+	 * - in this case we want to identify the page as a non-front page (article) and include all ad units.
 	 *
 	 * @param adUnits - The array of ad units to be filtered.
 	 * @returns The filtered array of ad units based on the page context.
