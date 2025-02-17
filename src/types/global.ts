@@ -245,23 +245,25 @@ interface A9AdUnitInterface {
 	slotID: string;
 	slotName?: string;
 	sizes: number[][];
+	blockedBidders: string[];
 }
 
 type ApstagInitConfig = {
 	pubID: string;
 	adServer?: string;
 	bidTimeout?: number;
-	blockedBidders?: string[];
 };
 
 type FetchBidsBidConfig = {
 	slots: A9AdUnitInterface[];
+	blockedBidders?: string[];
 };
 
 type Apstag = {
 	init: (arg0: ApstagInitConfig) => void;
 	fetchBids: (arg0: FetchBidsBidConfig, callback: () => void) => void;
 	setDisplayBids: () => void;
+	blockedBidders: string[];
 };
 
 type ComscoreGlobals = {
