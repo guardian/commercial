@@ -46,7 +46,9 @@ const setupPrebid = async (): Promise<void> => {
 
 		switch (consentState.framework) {
 			case 'aus':
-				handleRegionConsent(!!consentState.aus?.personalisedAdvertising);
+				handleRegionConsent(
+					!!consentState.aus?.personalisedAdvertising,
+				);
 				break;
 			case 'usnat':
 				handleRegionConsent(!consentState.usnat?.doNotSell);
