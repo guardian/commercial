@@ -80,6 +80,7 @@ beforeEach(() => {
 		init: jest.fn(),
 		fetchBids: jest.fn().mockImplementation(() => Promise.resolve([])),
 		setDisplayBids: jest.fn(),
+		blockedBidders: [],
 	};
 });
 
