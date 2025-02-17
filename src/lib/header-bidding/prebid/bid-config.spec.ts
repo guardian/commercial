@@ -19,7 +19,6 @@ import {
 	containsMpuOrDmpu as containsMpuOrDmpu_,
 	getBreakpointKey as getBreakpointKey_,
 	shouldIncludeAppNexus as shouldIncludeAppNexus_,
-	shouldIncludeImproveDigital as shouldIncludeImproveDigital_,
 	shouldIncludeOpenx as shouldIncludeOpenx_,
 	shouldIncludeTripleLift as shouldIncludeTripleLift_,
 	shouldIncludeTrustX as shouldIncludeTrustX_,
@@ -62,7 +61,6 @@ const containsMobileSticky = containsMobileSticky_ as jest.Mock;
 const containsMpu = containsMpu_ as jest.Mock;
 const containsMpuOrDmpu = containsMpuOrDmpu_ as jest.Mock;
 const shouldIncludeAppNexus = shouldIncludeAppNexus_ as jest.Mock;
-const shouldIncludeImproveDigital = shouldIncludeImproveDigital_ as jest.Mock;
 const shouldIncludeOpenx = shouldIncludeOpenx_ as jest.Mock;
 const shouldIncludeTrustX = shouldIncludeTrustX_ as jest.Mock;
 const shouldIncludeXaxis = shouldIncludeXaxis_ as jest.Mock;
@@ -95,7 +93,6 @@ const resetConfig = () => {
 		prebidAppnexus: true,
 		prebidAppnexusInvcode: true,
 		prebidOpenx: true,
-		prebidImproveDigital: true,
 		prebidIndexExchange: true,
 		prebidTrustx: true,
 		prebidXaxis: true,
@@ -255,12 +252,13 @@ describe('bids', () => {
 
 	test('should only include bidders that are switched on if no bidders being tested', () => {
 		window.guardian.config.switches.prebidXaxis = false;
-		shouldIncludeImproveDigital.mockReturnValueOnce(true);
+		shouldIncludeOpenx.mockReturnValueOnce(true);
 		expect(getBidders()).toEqual([
 			'ix',
 			'criteo',
-			'improvedigital',
 			'adyoulike',
+			/** oxd = Open X */
+			'oxd',
 		]);
 	});
 

@@ -101,9 +101,6 @@ type PbjsConfig = {
 	};
 	consentManagement?: ConsentManagement;
 	realTimeData?: unknown;
-	improvedigital?: {
-		usePrebidSizes?: boolean;
-	};
 };
 
 type PbjsEvent = 'bidWon';
@@ -162,7 +159,6 @@ type BidderSetting<T = Record<string, unknown>> = {
 type BidderSettings = {
 	standard?: never; // prevent overriding the default settings
 	xhb?: Partial<BidderSetting<XaxisBidResponse>>;
-	improvedigital?: Partial<BidderSetting>;
 	ozone?: Partial<BidderSetting>;
 	criteo?: Partial<BidderSetting>;
 	kargo?: Partial<BidderSetting>;
@@ -506,30 +502,6 @@ const initialise = (
 			bidCpmAdjustment: (bidCpm: number) => {
 				return bidCpm * 1.05;
 			},
-		};
-	}
-
-	if (window.guardian.config.switches.prebidImproveDigital) {
-		// Add placement ID for Improve Digital, reading from the bid response
-		const REGEX_PID = new RegExp(/placement_id=\\?"(\d+)\\?"/);
-		window.pbjs.bidderSettings.improvedigital = {
-			adserverTargeting: [
-				{
-					key: 'hb_pid',
-					val(bidResponse) {
-						if (!isString(bidResponse.ad)) return undefined;
-
-						const matches = REGEX_PID.exec(bidResponse.ad);
-						const pid = matches?.[1];
-						return pid;
-					},
-				},
-			],
-			suppressEmptyKeys: true,
-		};
-
-		pbjsConfig.improvedigital = {
-			usePrebidSizes: true,
 		};
 	}
 

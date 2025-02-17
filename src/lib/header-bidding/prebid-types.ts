@@ -61,15 +61,6 @@ export type PrebidTripleLiftParams = {
 	inventoryCode: string;
 };
 
-export type PrebidImproveParams = {
-	publisherId?: number;
-	placementId: number;
-	size: {
-		w?: number;
-		h?: number;
-	};
-};
-
 export type PrebidXaxisParams = {
 	placementId: number;
 };
@@ -124,7 +115,6 @@ export type BidderCode =
 	| 'and'
 	| 'appnexus'
 	| 'criteo'
-	| 'improvedigital'
 	| 'ix'
 	| 'kargo'
 	| 'rubicon'
@@ -140,7 +130,6 @@ export type PrebidParams =
 	| PrebidAdYouLikeParams
 	| PrebidAppNexusParams
 	| PrebidCriteoParams
-	| PrebidImproveParams
 	| PrebidIndexExchangeParams
 	| PrebidKargoParams
 	| PrebidMagniteParams

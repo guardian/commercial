@@ -1,3 +1,5 @@
+import { isUserInVariant } from '../../experiments/ab';
+import { deferPermutiveLoad } from '../../experiments/tests/defer-permutive-load';
 import { reportError } from '../../lib/error/report-error';
 import type { Edition } from '../../lib/types';
 import type {
@@ -223,12 +225,12 @@ const initPermutiveSegmentation = () => {
 		{},
 	);
 
-	/* eslint-enable */
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- this is a stub
+	// This is our code, but not re-enabling ESLint because we'd have to disable it for both following lines anyway
 	window.googletag = window.googletag || {};
 	// @ts-expect-error -- this is a stub
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- this is a stub
 	window.googletag.cmd = window.googletag.cmd || [];
+
+	/* eslint-enable */
 	window.googletag.cmd.push(() => {
 		if (window.googletag.pubads().getTargeting('permutive').length === 0) {
 			const g = window.localStorage.getItem('_pdfps');
@@ -245,9 +247,27 @@ const initPermutiveSegmentation = () => {
 	runPermutive(permutiveConfig, window.permutive);
 };
 
+const getAlreadyVisitedCount = (): number => {
+	const alreadyVisitedCount =
+		localStorage.getItem('gu.alreadyVisited') ?? '0';
+	return parseInt(alreadyVisitedCount);
+};
+
+const isInDeferPermutiveLoadTest = isUserInVariant(
+	deferPermutiveLoad,
+	'variant',
+);
+
 export const initPermutive = () => {
 	if (window.guardian.config.switches.permutive) {
-		void initPermutiveSegmentation();
+		const visitedCount = getAlreadyVisitedCount();
+		if (isInDeferPermutiveLoadTest && visitedCount <= 1) {
+			document.addEventListener('top-above-nav-rendered', () => {
+				void initPermutiveSegmentation();
+			});
+		} else {
+			void initPermutiveSegmentation();
+		}
 	}
 	return Promise.resolve();
 };

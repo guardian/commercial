@@ -151,7 +151,6 @@ describe('initialise', () => {
 	describe('bidderSettings', () => {
 		beforeEach(() => {
 			window.guardian.config.switches.prebidXaxis = false;
-			window.guardian.config.switches.prebidImproveDigital = false;
 		});
 
 		test('should generate correct bidder settings when bidder switches are off', () => {
@@ -163,14 +162,6 @@ describe('initialise', () => {
 			window.guardian.config.switches.prebidXaxis = true;
 			prebid.initialise(window);
 			expect(window.pbjs?.bidderSettings).toHaveProperty('xhb');
-		});
-
-		test('should generate correct bidder settings when Improve Digital is on', () => {
-			window.guardian.config.switches.prebidImproveDigital = true;
-			prebid.initialise(window);
-			expect(window.pbjs?.bidderSettings).toHaveProperty(
-				'improvedigital',
-			);
 		});
 	});
 
