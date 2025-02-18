@@ -39,7 +39,7 @@ const isUserInVariant = isUserInVariant_ as jest.MockedFunction<
 	typeof isUserInVariant_
 >;
 
-const mockConsentState: ConsentState = {
+const mockConsentState = {
 	tcfv2: {
 		consents: { '': true },
 		eventStatus: 'useractioncomplete',
@@ -51,12 +51,10 @@ const mockConsentState: ConsentState = {
 	gpcSignal: true,
 	canTarget: true,
 	framework: 'tcfv2',
-};
+} satisfies ConsentState;
 
 const mockGetConsentFor = (hasConsent: boolean) =>
-	(getConsentFor as jest.Mock)
-		.mockReturnValueOnce(hasConsent)
-		.mockReturnValueOnce(hasConsent);
+	(getConsentFor as jest.Mock).mockReturnValue(hasConsent);
 
 jest.mock('lodash-es/once', () => (fn: (...args: unknown[]) => unknown) => fn);
 

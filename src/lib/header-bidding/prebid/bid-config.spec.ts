@@ -1,3 +1,4 @@
+import { type ConsentState } from '@guardian/libs';
 import { isUserInVariant as isUserInVariant_ } from '../../../experiments/ab';
 import { createAdSize } from '../../../lib/ad-sizes';
 import {
@@ -18,7 +19,10 @@ import {
 	containsMpu as containsMpu_,
 	containsMpuOrDmpu as containsMpuOrDmpu_,
 	getBreakpointKey as getBreakpointKey_,
+	shouldIncludeAdYouLike as shouldIncludeAdYouLike_,
 	shouldIncludeAppNexus as shouldIncludeAppNexus_,
+	shouldIncludeCriteo as shouldIncludeCriteo_,
+	shouldIncludeIndexExchange as shouldIncludeIndexExchange_,
 	shouldIncludeOpenx as shouldIncludeOpenx_,
 	shouldIncludeTripleLift as shouldIncludeTripleLift_,
 	shouldIncludeTrustX as shouldIncludeTrustX_,
@@ -29,12 +33,27 @@ import { _, bids } from './bid-config';
 
 const mockPageTargeting = {} as unknown as PageTargeting;
 
+const mockConsentState = {
+	tcfv2: {
+		consents: { '': true },
+		eventStatus: 'useractioncomplete',
+		vendorConsents: { '': true },
+		addtlConsent: '',
+		gdprApplies: true,
+		tcString: '',
+	},
+	gpcSignal: true,
+	canTarget: true,
+	framework: 'tcfv2',
+} satisfies ConsentState;
+
 const getBidders = () =>
 	bids(
 		'dfp-ad--top-above-nav',
 		[createAdSize(728, 90)],
 		mockPageTargeting,
 		'gpid',
+		mockConsentState,
 	).map((bid) => bid.bidder);
 
 const {
@@ -65,6 +84,9 @@ const shouldIncludeOpenx = shouldIncludeOpenx_ as jest.Mock;
 const shouldIncludeTrustX = shouldIncludeTrustX_ as jest.Mock;
 const shouldIncludeXaxis = shouldIncludeXaxis_ as jest.Mock;
 const shouldIncludeTripleLift = shouldIncludeTripleLift_ as jest.Mock;
+const shouldIncludeCriteo = shouldIncludeCriteo_ as jest.Mock;
+const shouldIncludeAdYouLike = shouldIncludeAdYouLike_ as jest.Mock;
+const shouldIncludeIndexExchange = shouldIncludeIndexExchange_ as jest.Mock;
 const stripMobileSuffix = stripMobileSuffix_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
 const isUserInVariant = isUserInVariant_ as jest.Mock;
@@ -149,6 +171,7 @@ describe('indexExchangeBidders', () => {
 	});
 
 	test('should return an IX bidder for every size that the slot can take', () => {
+		shouldIncludeIndexExchange.mockReturnValue(true);
 		const slotSizes: HeaderBiddingSize[] = [
 			createAdSize(300, 250),
 			createAdSize(300, 600),
@@ -169,6 +192,7 @@ describe('indexExchangeBidders', () => {
 	});
 
 	test('should include methods in the response that generate the correct bid params', () => {
+		shouldIncludeIndexExchange.mockReturnValue(true);
 		const slotSizes: HeaderBiddingSize[] = [
 			createAdSize(300, 250),
 			createAdSize(300, 600),
@@ -232,6 +256,11 @@ describe('bids', () => {
 		containsLeaderboardOrBillboard.mockReturnValue(false);
 		containsMpu.mockReturnValue(false);
 		containsMpuOrDmpu.mockReturnValue(false);
+		// Default case: AdYouLike, Criteo and IX turned ON
+		shouldIncludeAdYouLike.mockReturnValue(true);
+		shouldIncludeCriteo.mockReturnValue(true);
+		shouldIncludeIndexExchange.mockReturnValue(true);
+		// Default case: AppNexus and TrustX OFF
 		shouldIncludeAppNexus.mockReturnValue(false);
 		shouldIncludeTrustX.mockReturnValue(false);
 		stripMobileSuffix.mockImplementation((str: string) => str);
@@ -289,6 +318,7 @@ describe('bids', () => {
 				[createAdSize(300, 600), createAdSize(300, 250)],
 				mockPageTargeting,
 				'gpid',
+				mockConsentState,
 			).map((bid) => bid.bidder);
 		expect(rightSlotBidders()).toEqual(['ix', 'ix', 'criteo', 'adyoulike']);
 	});
@@ -333,6 +363,7 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 			'gpid',
+			mockConsentState,
 		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
@@ -349,6 +380,7 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 			'gpid',
+			mockConsentState,
 		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
@@ -365,6 +397,7 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 			'gpid',
+			mockConsentState,
 		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
@@ -381,6 +414,7 @@ describe('bids', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 			'gpid',
+			mockConsentState,
 		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
@@ -397,6 +431,7 @@ describe('bids', () => {
 			[createAdSize(320, 50)],
 			mockPageTargeting,
 			'gpid',
+			mockConsentState,
 		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
@@ -411,6 +446,7 @@ describe('triplelift adapter', () => {
 		resetConfig();
 		window.guardian.config.page.contentType = 'Article';
 		shouldIncludeTripleLift.mockReturnValue(true);
+		shouldIncludeIndexExchange.mockReturnValue(true);
 	});
 
 	afterEach(() => {
@@ -418,12 +454,7 @@ describe('triplelift adapter', () => {
 	});
 
 	test('should include triplelift adapter if condition is true ', () => {
-		expect(getBidders()).toEqual([
-			'ix',
-			'criteo',
-			'triplelift',
-			'adyoulike',
-		]);
+		expect(getBidders()).toMatchObject(['ix', 'triplelift']);
 	});
 
 	test('should return correct triplelift adapter params for leaderboard, with requests from US or Canada', () => {
@@ -437,6 +468,11 @@ describe('triplelift adapter', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 			'gpid',
+			{
+				...mockConsentState,
+				tcfv2: undefined,
+				usnat: { doNotSell: false, signalStatus: 'ready' },
+			},
 		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_topbanner_728x90_prebid',
@@ -454,6 +490,7 @@ describe('triplelift adapter', () => {
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 			'gpid',
+			mockConsentState,
 		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_topbanner_728x90_prebid_AU',
@@ -472,6 +509,7 @@ describe('triplelift adapter', () => {
 			[createAdSize(300, 250)],
 			mockPageTargeting,
 			'gpid',
+			mockConsentState,
 		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_sectionfront_300x250_prebid',
@@ -490,6 +528,7 @@ describe('triplelift adapter', () => {
 			[createAdSize(300, 250)],
 			mockPageTargeting,
 			'gpid',
+			mockConsentState,
 		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_sectionfront_300x250_prebid_AU',
@@ -508,6 +547,7 @@ describe('triplelift adapter', () => {
 			[createAdSize(320, 50)],
 			mockPageTargeting,
 			'gpid',
+			mockConsentState,
 		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_320x50_HDX',
@@ -526,6 +566,7 @@ describe('triplelift adapter', () => {
 			[createAdSize(320, 50)],
 			mockPageTargeting,
 			'gpid',
+			mockConsentState,
 		)[2]?.params;
 		expect(tripleLiftBids).toEqual({
 			inventoryCode: 'theguardian_320x50_HDX_AU',

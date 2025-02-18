@@ -44,6 +44,7 @@ import {
 	shouldIncludeAdYouLike,
 	shouldIncludeAppNexus,
 	shouldIncludeCriteo,
+	shouldIncludeIndexExchange,
 	shouldIncludeKargo,
 	shouldIncludeMagnite,
 	shouldIncludeOpenx,
@@ -670,7 +671,11 @@ const currentBidders = (
 		.filter(([shouldInclude]) => inPbTestOr(shouldInclude))
 		.map(([, bidder]) => bidder);
 
-	const allBidders = indexExchangeBidders(slotSizes).concat(otherBidders);
+	const ixBidders = shouldIncludeIndexExchange(consentState)
+		? indexExchangeBidders(slotSizes)
+		: [];
+
+	const allBidders = ixBidders.concat(otherBidders);
 	return isPbTestOn()
 		? biddersBeingTested(allBidders)
 		: biddersSwitchedOn(allBidders);

@@ -198,6 +198,10 @@ export const shouldIncludeTheTradeDesk = (
 	consentState: ConsentState,
 ): boolean => getConsentFor('theTradeDesk', consentState);
 
+export const shouldIncludeIndexExchange = (
+	consentState: ConsentState,
+): boolean => getConsentFor('indexExchange', consentState);
+
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>
 		window.location.hash.includes('#mobile-sticky') ||
