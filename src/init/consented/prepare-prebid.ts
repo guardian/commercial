@@ -26,7 +26,7 @@ const loadPrebid = async (framework: ConsentFramework): Promise<void> => {
 	}
 };
 
-const handleRegionConsent = (hasConsentForPrebid: boolean): void => {
+const throwIfUnconsented = (hasConsentForPrebid: boolean): void => {
 	log('commercial', 'Prebid consent:', {
 		hasConsentForPrebid,
 	});
@@ -46,12 +46,10 @@ const setupPrebid = async (): Promise<void> => {
 
 		switch (consentState.framework) {
 			case 'aus':
-				handleRegionConsent(
-					!!consentState.aus?.personalisedAdvertising,
-				);
+				throwIfUnconsented(!!consentState.aus?.personalisedAdvertising);
 				break;
 			case 'usnat':
-				handleRegionConsent(!consentState.usnat?.doNotSell);
+				throwIfUnconsented(!consentState.usnat?.doNotSell);
 				break;
 			case 'tcfv2':
 				// We do per-vendor checks for this framework, no requirement for a top-level check for Prebid
