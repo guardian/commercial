@@ -306,8 +306,6 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	}
 	initialised = true;
 
-	console.log('consent')
-
 	const userSync: UserSync = window.guardian.config.switches.prebidUserSync
 		? {
 				syncsPerBidder: 0, // allow all syncs

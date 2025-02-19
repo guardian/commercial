@@ -140,7 +140,7 @@ describe.skip('initialise', () => {
 	});
 
 	test('should generate correct Prebid config consent management in USNAT', () => {
-		prebid.initialise(window, 'usnat');
+		prebid.initialise(window, { ...mockConsentState, framework: 'usnat' });
 		expect(window.pbjs?.getConfig('consentManagement')).toEqual({
 			gpp: {
 				cmpApi: 'iab',
@@ -150,7 +150,7 @@ describe.skip('initialise', () => {
 	});
 
 	test('should generate correct Prebid config consent management in AUS', () => {
-		prebid.initialise(window, 'aus');
+		prebid.initialise(window, { ...mockConsentState, framework: 'aus' });
 		expect(window.pbjs?.getConfig('consentManagement')).toEqual({
 			usp: {
 				cmpApi: 'iab',
@@ -161,12 +161,12 @@ describe.skip('initialise', () => {
 
 	test('should generate correct Prebid config when consent management off', () => {
 		window.guardian.config.switches.consentManagement = false;
-		prebid.initialise(window);
+		prebid.initialise(window, mockConsentState);
 		expect(window.pbjs?.getConfig('consentManagement')).toBeUndefined();
 	});
 
 	test('should generate correct bidder settings', () => {
-		prebid.initialise(window);
+		prebid.initialise(window, mockConsentState);
 		expect(window.pbjs?.bidderSettings.xhb).toHaveProperty(
 			'adserverTargeting',
 		);
@@ -178,20 +178,20 @@ describe.skip('initialise', () => {
 		});
 
 		test('should generate correct bidder settings when bidder switches are off', () => {
-			prebid.initialise(window);
+			prebid.initialise(window, mockConsentState);
 			expect(window.pbjs?.bidderSettings).toEqual({});
 		});
 
 		test('should generate correct bidder settings when Xaxis is on', () => {
 			window.guardian.config.switches.prebidXaxis = true;
-			prebid.initialise(window);
+			prebid.initialise(window, mockConsentState);
 			expect(window.pbjs?.bidderSettings).toHaveProperty('xhb');
 		});
 	});
 
 	test('should generate correct Prebid config when user-sync off', () => {
 		window.guardian.config.switches.prebidUserSync = false;
-		prebid.initialise(window);
+		prebid.initialise(window, mockConsentState);
 		// @ts-expect-error -- it works with the alternative type
 		expect(window.pbjs?.getConfig().userSync.syncEnabled).toEqual(false);
 	});
@@ -199,7 +199,7 @@ describe.skip('initialise', () => {
 	test('should generate correct Prebid config when both Permutive and prebidPermutiveAudience are true', () => {
 		window.guardian.config.switches.permutive = true;
 		window.guardian.config.switches.prebidPermutiveAudience = true;
-		prebid.initialise(window);
+		prebid.initialise(window, mockConsentState);
 		const rtcData = window.pbjs?.getConfig('realTimeData').dataProviders[0];
 		expect(rtcData?.name).toEqual('permutive');
 		expect(rtcData?.params.acBidders).toEqual([
@@ -220,7 +220,7 @@ describe.skip('initialise', () => {
 		(p, a) => {
 			window.guardian.config.switches.permutive = p;
 			window.guardian.config.switches.prebidPermutiveAudience = a;
-			prebid.initialise(window);
+			prebid.initialise(window, mockConsentState);
 			const rtcData = window.pbjs?.getConfig('realTimeData');
 			expect(rtcData).toBeUndefined();
 		},
@@ -249,7 +249,7 @@ describe.skip('initialise', () => {
 
 			getAdvertById.mockImplementation(() => dummyAdvert);
 
-			prebid.initialise(window);
+			prebid.initialise(window, mockConsentState);
 
 			expect(bidWonEventName).toBe('bidWon');
 			expect(window.pbjs.onEvent).toHaveBeenCalledTimes(1);
@@ -304,7 +304,7 @@ describe.skip('initialise', () => {
 					bidWonEventHandler = eventHandler;
 				});
 
-				prebid.initialise(window);
+				prebid.initialise(window, mockConsentState);
 
 				expect(bidWonEventName).toBe('bidWon');
 				expect(window.pbjs.onEvent).toHaveBeenCalledTimes(1);
