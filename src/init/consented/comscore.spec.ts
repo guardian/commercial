@@ -116,6 +116,7 @@ describe('setupComscore', () => {
 	describe('Framework consent: running on consent', () => {
 		beforeEach(() => {
 			jest.resetAllMocks();
+			window.guardian.config.page.keywords = 'Culture';
 		});
 
 		it('TCFv2 with consent: runs', async () => {
