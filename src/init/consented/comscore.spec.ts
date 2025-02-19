@@ -175,9 +175,10 @@ describe('comscore getGlobals', () => {
 
 	it('returns an object with the correct comscorekw variable set when called with "Network Front" as keywords', () => {
 		const keywords = 'These are the best keywords. The greatest!';
+		const comscoreKeywords = 'These_are_the_best_keywords._The_greatest!';
 
 		expect(_.getGlobals(keywords)).toMatchObject({
-			comscorekw: keywords,
+			comscorekw: comscoreKeywords,
 		});
 	});
 
