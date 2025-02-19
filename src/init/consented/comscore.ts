@@ -18,7 +18,7 @@ const getGlobals = (keywords: string): ComscoreGlobals => {
 	};
 
 	if (keywords !== 'Network Front') {
-		globals.comscorekw = keywords;
+		globals.comscorekw = keywords.replace(/ /g, '_');
 	}
 
 	return globals;
