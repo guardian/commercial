@@ -7,7 +7,6 @@ import {
 	isUserLoggedInOktaRefactor,
 } from '../../lib/identity/api';
 import { getPageTargeting } from '../../lib/page-targeting';
-import { checkThirdPartyCookiesEnabled } from '../../lib/third-party-cookies';
 import { removeSlots } from './remove-slots';
 import { fillStaticAdvertSlots } from './static-ad-slots';
 
@@ -48,7 +47,6 @@ const enableTargeting = (consentState: ConsentState) => {
 	if (consentState.canTarget) {
 		window.googletag.cmd.push(setPublisherProvidedId);
 		window.googletag.cmd.push(setCookieDeprecationLabel);
-		window.googletag.cmd.push(checkThirdPartyCookiesEnabled);
 	}
 };
 
