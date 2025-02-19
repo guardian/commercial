@@ -73,9 +73,10 @@ const config = {
 				import.meta.dirname,
 				'static',
 				'tpc-test-iframe',
+				'v1',
 				'index.html',
 			),
-			filename: `commercial/tpc-test/index.html`,
+			filename: `commercial/tpc-test/v1/index.html`,
 			minify: {
 				collapseWhitespace: true,
 				removeComments: true,
