@@ -463,18 +463,15 @@ describe('triplelift adapter', () => {
 		containsDmpu.mockReturnValueOnce(false);
 		containsMobileSticky.mockReturnValue(false);
 		isInUsOrCa.mockReturnValue(true);
+		shouldIncludeTripleLift.mockReturnValue(true);
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 			'gpid',
-			{
-				...mockConsentState,
-				tcfv2: undefined,
-				usnat: { doNotSell: false, signalStatus: 'ready' },
-			},
-		)[2]?.params;
-		expect(tripleLiftBids).toEqual({
+			mockConsentState,
+		).find((bid) => bid.bidder === 'triplelift');
+		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_topbanner_728x90_prebid',
 		});
 	});
@@ -491,8 +488,8 @@ describe('triplelift adapter', () => {
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
-		)[2]?.params;
-		expect(tripleLiftBids).toEqual({
+		).find((bid) => bid.bidder === 'triplelift');
+		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_topbanner_728x90_prebid_AU',
 		});
 	});
@@ -510,8 +507,8 @@ describe('triplelift adapter', () => {
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
-		)[2]?.params;
-		expect(tripleLiftBids).toEqual({
+		).find((bid) => bid.bidder === 'triplelift');
+		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_sectionfront_300x250_prebid',
 		});
 	});
@@ -529,8 +526,8 @@ describe('triplelift adapter', () => {
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
-		)[2]?.params;
-		expect(tripleLiftBids).toEqual({
+		).find((bid) => bid.bidder === 'triplelift');
+		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_sectionfront_300x250_prebid_AU',
 		});
 	});
@@ -548,8 +545,8 @@ describe('triplelift adapter', () => {
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
-		)[2]?.params;
-		expect(tripleLiftBids).toEqual({
+		).find((bid) => bid.bidder === 'triplelift');
+		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_320x50_HDX',
 		});
 	});
@@ -567,8 +564,8 @@ describe('triplelift adapter', () => {
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
-		)[2]?.params;
-		expect(tripleLiftBids).toEqual({
+		).find((bid) => bid.bidder === 'triplelift');
+		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_320x50_HDX_AU',
 		});
 	});

@@ -675,7 +675,7 @@ const currentBidders = (
 		? indexExchangeBidders(slotSizes)
 		: [];
 
-	const allBidders = ixBidders.concat(otherBidders);
+	const allBidders = [...ixBidders, ...otherBidders];
 	return isPbTestOn()
 		? biddersBeingTested(allBidders)
 		: biddersSwitchedOn(allBidders);
