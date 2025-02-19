@@ -192,7 +192,7 @@ export const shouldIncludeCriteo = (consentState: ConsentState): boolean =>
 export const shouldIncludePubmatic = (consentState: ConsentState): boolean =>
 	getConsentFor('pubmatic', consentState);
 export const shouldIncludeAdYouLike = (consentState: ConsentState): boolean =>
-	getConsentFor('adyoulike', consentState);
+	getConsentFor('adYouLike', consentState);
 export const shouldIncludeTheTradeDesk = (
 	consentState: ConsentState,
 ): boolean => getConsentFor('theTradeDesk', consentState);
