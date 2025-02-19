@@ -1,7 +1,7 @@
 import {
 	type ConsentState,
 	type CountryCode,
-	getConsentFor,
+	getConsentFor as getConsentFor_,
 } from '@guardian/libs';
 import { isUserInVariant as isUserInVariant_ } from '../../experiments/ab';
 import { createAdSize } from '../../lib/ad-sizes';
@@ -39,6 +39,10 @@ const isUserInVariant = isUserInVariant_ as jest.MockedFunction<
 	typeof isUserInVariant_
 >;
 
+const getConsentFor = getConsentFor_ as jest.MockedFunction<
+	typeof getConsentFor_
+>;
+
 const mockConsentState = {
 	tcfv2: {
 		consents: { '': true },
@@ -53,8 +57,12 @@ const mockConsentState = {
 	framework: 'tcfv2',
 } satisfies ConsentState;
 
-const mockGetConsentFor = (hasConsent: boolean) =>
-	(getConsentFor as jest.Mock).mockReturnValue(hasConsent);
+jest.mock('@guardian/libs', () => {
+	return {
+		...jest.requireActual('@guardian/libs'),
+		getConsentFor: jest.fn(),
+	};
+});
 
 jest.mock('lodash-es/once', () => (fn: (...args: unknown[]) => unknown) => fn);
 
@@ -180,7 +188,7 @@ describe('Utils', () => {
 				window.guardian.config.switches.prebidAppnexusUkRow =
 					switchState === 'on';
 				getCountryCode.mockReturnValue(region);
-				mockGetConsentFor(true);
+				getConsentFor.mockReturnValue(true);
 				expect(shouldIncludeAppNexus(mockConsentState)).toBe(expected);
 			},
 		);
@@ -188,7 +196,7 @@ describe('Utils', () => {
 		test('If consent denied should not load in GB region', () => {
 			window.guardian.config.switches.prebidAppnexusUkRow = true;
 			getCountryCode.mockReturnValue('GB');
-			mockGetConsentFor(false);
+			getConsentFor.mockReturnValue(false);
 			expect(shouldIncludeAppNexus(mockConsentState)).toBe(false);
 		});
 	});
@@ -196,13 +204,13 @@ describe('Utils', () => {
 	describe('shouldIncludeOpenX', () => {
 		test('should return true if geolocation is GB', () => {
 			getCountryCode.mockReturnValueOnce('GB');
-			mockGetConsentFor(true);
+			getConsentFor.mockReturnValue(true);
 			expect(shouldIncludeOpenx(mockConsentState)).toBe(true);
 		});
 
 		test('should return false if consent not given', () => {
 			getCountryCode.mockReturnValueOnce('GB');
-			mockGetConsentFor(false);
+			getConsentFor.mockReturnValue(false);
 			expect(shouldIncludeOpenx(mockConsentState)).toBe(false);
 		});
 
@@ -218,7 +226,7 @@ describe('Utils', () => {
 			];
 			for (const testGeo of testGeos) {
 				getCountryCode.mockReturnValueOnce(testGeo);
-				mockGetConsentFor(true);
+				getConsentFor.mockReturnValue(true);
 				expect(shouldIncludeOpenx(mockConsentState)).toBe(true);
 			}
 		});
@@ -227,7 +235,7 @@ describe('Utils', () => {
 			const testGeos: CountryCode[] = ['CA', 'US'];
 			for (const testGeo of testGeos) {
 				getCountryCode.mockReturnValue(testGeo);
-				mockGetConsentFor(true);
+				getConsentFor.mockReturnValue(true);
 				expect(shouldIncludeOpenx(mockConsentState)).toBe(false);
 			}
 		});
@@ -236,7 +244,7 @@ describe('Utils', () => {
 			const testGeos: CountryCode[] = ['NZ', 'AU'];
 			for (const testGeo of testGeos) {
 				getCountryCode.mockReturnValue(testGeo);
-				mockGetConsentFor(true);
+				getConsentFor.mockReturnValue(true);
 				expect(shouldIncludeOpenx(mockConsentState)).toBe(true);
 			}
 		});
@@ -277,7 +285,7 @@ describe('Utils', () => {
 			);
 			window.guardian.config.page.isDev = true;
 			getCountryCode.mockReturnValue('GB');
-			mockGetConsentFor(true);
+			getConsentFor.mockReturnValue(true);
 			expect(shouldIncludeXaxis(mockConsentState)).toBe(true);
 		});
 
@@ -297,7 +305,7 @@ describe('Utils', () => {
 			];
 			for (const testGeo of testGeos) {
 				getCountryCode.mockReturnValue(testGeo);
-				mockGetConsentFor(true);
+				getConsentFor.mockReturnValue(true);
 				expect(shouldIncludeXaxis(mockConsentState)).toBe(false);
 			}
 		});
