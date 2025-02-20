@@ -4,21 +4,21 @@ import { articles } from '../fixtures/pages';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 
-const pages = articles.filter(({ name }) => name === 'inlineSlots');
+const pages = articles.filter((article) => 'name' in article && article.name === 'inlineSlots');
 
 test.describe('Slots and iframes load on article pages', () => {
 	pages.forEach(
-		({ path, expectedMinInlineSlots, expectedSlotPositions }, index) => {
+		(article, index) => {
 			breakpoints.forEach(({ breakpoint, width, height }) => {
 				const expectedMinSlotsOnPage =
-					expectedMinInlineSlots?.[
-						breakpoint as keyof typeof expectedMinInlineSlots
-					];
+					'expectedMinInlineSlots' in article && breakpoint in article.expectedMinInlineSlots ? article.expectedMinInlineSlots[
+						breakpoint as keyof typeof article.expectedMinInlineSlots
+					] : undefined;
 
 				const expectedSlotPositionsForBreakpoint =
-					expectedSlotPositions?.[
-						breakpoint as keyof typeof expectedSlotPositions
-					];
+					'expectedSlotPositions' in article && breakpoint in article.expectedSlotPositions ? article.expectedSlotPositions[
+						breakpoint as keyof typeof article.expectedSlotPositions
+					] : undefined;
 
 				if (expectedMinSlotsOnPage) {
 					test(`Test article ${index} has at least ${expectedMinSlotsOnPage} inline total slots at breakpoint ${breakpoint}`, async ({
@@ -29,7 +29,7 @@ test.describe('Slots and iframes load on article pages', () => {
 							height,
 						});
 
-						await loadPage(page, path);
+						await loadPage(page, article.path);
 						await cmpAcceptAll(page);
 
 						// wait for Spacefinder to place the first inline slot into the DOM
@@ -59,7 +59,7 @@ test.describe('Slots and iframes load on article pages', () => {
 							height,
 						});
 
-						await loadPage(page, path);
+						await loadPage(page, article.path);
 						await cmpAcceptAll(page);
 
 						await page

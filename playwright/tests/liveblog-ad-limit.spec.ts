@@ -7,7 +7,9 @@ import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 import { countLiveblogInlineSlots } from '../lib/util';
 
-const pages = blogs.filter(({ name }) => name === 'under-ad-limit');
+const pages = blogs.filter(
+	(blog) => 'name' in blog && blog.name === 'under-ad-limit',
+);
 
 const desktopBreakpoint = breakpoints.filter(
 	({ breakpoint }) => breakpoint === 'desktop',
@@ -76,11 +78,7 @@ test.describe('A minimum amount of ad slots load', () => {
 				false,
 			);
 
-			if (expectedMinInlineSlots) {
-				expect(initialSlotCount).toEqual(
-					expectedMinInlineSlots.desktop,
-				);
-			}
+			expect(initialSlotCount).toEqual(expectedMinInlineSlots.desktop);
 
 			await addAndAwaitNewBlocks(page, 'First batch of inserted blocks');
 			const slotCountAfterFirstInsert = await countLiveblogInlineSlots(
