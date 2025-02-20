@@ -16,7 +16,9 @@ import { getPageTargeting } from '../../page-targeting';
 import type {
 	BidderCode,
 	HeaderBiddingSlot,
+	PrebidAuctionInitEvent,
 	PrebidBid,
+	PrebidBidReqestedEvent,
 	PrebidMediaTypes,
 	SlotFlatMap,
 } from '../prebid-types';
@@ -263,6 +265,9 @@ declare global {
 				codeArr?: string[],
 				customSlotMatching?: (slot: unknown) => unknown,
 			) => void;
+			getEvents: () => Array<
+				PrebidAuctionInitEvent | PrebidBidReqestedEvent
+			>;
 		};
 	}
 }

@@ -152,6 +152,24 @@ export type PrebidBid = {
 	params: PrebidParams;
 };
 
+export type PrebidBidderRequest = {
+	bidderCode: string;
+};
+
+export type PrebidBidReqestedEvent = {
+	eventType: 'bidRequested';
+	args: {
+		bids: PrebidBid[];
+	};
+};
+
+export type PrebidAuctionInitEvent = {
+	eventType: 'auctionInit';
+	args: {
+		adUnitCodes: string[];
+		bidderRequests: PrebidBidderRequest[];
+	};
+};
 export type PrebidMediaTypes = {
 	banner: {
 		sizes: HeaderBiddingSize[];
