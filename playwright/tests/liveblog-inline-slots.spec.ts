@@ -15,7 +15,7 @@ test.describe.serial('A minimum number of ad slots load', () => {
 				const expectedMinSlotsOnPage =
 					expectedMinInlineSlots[breakpoint];
 
-				test(`There are at least ${expectedMinSlotsOnPage} inline total slots at breakpoint ${breakpoint} on `, async ({
+				test(`There are at least ${expectedMinSlotsOnPage} inline total slots at breakpoint ${breakpoint} on ${path}`, async ({
 					page,
 				}) => {
 					await page.setViewportSize({
@@ -52,7 +52,7 @@ test.describe.serial('Correct set of slots are displayed', () => {
 		breakpoints
 			.filter(({ breakpoint }) => breakpoint === 'mobile')
 			.forEach(({ width, height }) => {
-				test('on mobile, the mobile ad slots are displayed and desktop ad slots are hidden', async ({
+				test(`on mobile, the mobile ad slots are displayed and desktop ad slots are hidden on ${path}`, async ({
 					page,
 				}) => {
 					await page.setViewportSize({

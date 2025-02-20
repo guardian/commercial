@@ -21,7 +21,7 @@ test.describe('Slots and iframes load on article pages', () => {
 					article.expectedSlotPositions[breakpoint];
 
 				if (expectedMinSlotsOnPage) {
-					test(`Test article ${index} has at least ${expectedMinSlotsOnPage} inline total slots at breakpoint ${breakpoint}`, async ({
+					test(`Test article ${index} has at least ${expectedMinSlotsOnPage} inline total slots at breakpoint ${breakpoint} on ${article.path}`, async ({
 						page,
 					}) => {
 						await page.setViewportSize({
@@ -53,7 +53,7 @@ test.describe('Slots and iframes load on article pages', () => {
 				} else if (expectedSlotPositionsForBreakpoint) {
 					test(`Test article ${index} has slots at positions ${expectedSlotPositionsForBreakpoint.join(
 						',',
-					)} at breakpoint ${breakpoint}`, async ({ page }) => {
+					)} at breakpoint ${breakpoint} on ${article.path}`, async ({ page }) => {
 						await page.setViewportSize({
 							width,
 							height,
