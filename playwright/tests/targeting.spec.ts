@@ -1,7 +1,6 @@
 import type { Request } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 import { allPages, articles } from '../fixtures/pages';
-import type { GuPage } from '../fixtures/pages/Page';
 import {
 	bidderURLs,
 	criteoMockBidResponse,
@@ -16,7 +15,7 @@ import {
 } from '../lib/gam';
 import { loadPage } from '../lib/load-page';
 
-const article = articles[0] as unknown as GuPage;
+const article = articles[0];
 
 test.describe('GAM targeting', () => {
 	test('checks that a request is made', async ({ page }) => {

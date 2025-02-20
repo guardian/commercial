@@ -3,7 +3,7 @@ import type { GuPage } from './Page';
 
 const stage = getStage();
 
-const blogs: GuPage[] = [
+const blogs = [
 	{
 		path: getTestUrl({
 			stage,
@@ -37,6 +37,6 @@ const blogs: GuPage[] = [
 			mobile: 7,
 		},
 	},
-];
+] as const satisfies GuPage[];
 
 export { blogs };
