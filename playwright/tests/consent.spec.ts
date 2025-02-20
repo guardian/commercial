@@ -54,7 +54,7 @@ const visitArticleNoOkta = async (page: Page) => {
 };
 
 const waitForOptOut = (page: Page) =>
-	page.waitForRequest(/cdn.optoutadvertising.com/);
+	page.waitForRequest(/cdn\.optoutadvertising\.com/);
 
 test.describe('tcfv2 consent', () => {
 	test(`Accept all, ad slots are fulfilled`, async ({ page }) => {
