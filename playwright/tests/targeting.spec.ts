@@ -52,7 +52,7 @@ test.describe('GAM targeting', () => {
 			'top-above-nav',
 		);
 		const sensitivePage = allPages.find(
-			(page) => page.name === 'sensitive-content',
+			(page) => 'name' in page && page.name === 'sensitive-content',
 		);
 		if (!sensitivePage) {
 			throw new Error('No sensitive articles found to run test.');
