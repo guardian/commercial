@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@@v4.2.2
+        uses: actions/checkout@v4.2.2
 
       # Temporarily force newer version of corepack
       # See https://github.com/guardian/support-service-lambdas/pull/2666
