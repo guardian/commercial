@@ -1,43 +1,46 @@
-import { breakpoints } from '@guardian/source/foundations';
+import {
+	type Breakpoint,
+	breakpoints as BREAKPOINTS,
+} from '@guardian/source/foundations';
 
-type BreakpointKeys = Pick<
-	typeof breakpoints,
+type TestingBreakpoint = Extract<
+	Breakpoint,
 	'mobile' | 'tablet' | 'desktop' | 'wide'
 >;
 
-type BreakpointSizes = {
-	breakpoint: keyof BreakpointKeys;
-	width: (typeof breakpoints)[keyof BreakpointKeys];
-	height: number;
-};
-
-const allBreakpoints: Array<keyof BreakpointKeys> = [
-	'mobile',
-	'tablet',
-	'desktop',
-	'wide',
-];
-
-const heights = {
+const HEIGHTS = {
 	mobile: 600,
 	tablet: 1024,
 	desktop: 1100,
 	wide: 1100,
 } as const;
 
-const testAtBreakpoints = <T extends Array<keyof BreakpointKeys>>(
-	breakpointsToTest: T,
-) =>
-	breakpointsToTest.map((b) => ({
-		breakpoint: b as T[number],
-		width: breakpoints[b],
-		height: heights[b],
-	}));
+type BreakpointSize<T extends TestingBreakpoint> = {
+	breakpoint: T;
+	width: (typeof BREAKPOINTS)[T];
+	height: (typeof HEIGHTS)[T];
+};
 
-const breakpointSizes: BreakpointSizes[] = testAtBreakpoints(allBreakpoints);
+const allBreakpoints = [
+	'mobile',
+	'tablet',
+	'desktop',
+	'wide',
+] satisfies TestingBreakpoint[];
+
+const getBreakpointSize = <T extends TestingBreakpoint>(
+	breakpoint: T,
+): BreakpointSize<T> => ({
+	breakpoint,
+	width: BREAKPOINTS[breakpoint],
+	height: HEIGHTS[breakpoint],
+});
+
+const allBreakpointSizes = allBreakpoints.map(getBreakpointSize);
 
 export {
-	breakpointSizes as breakpoints,
-	testAtBreakpoints,
-	type BreakpointSizes,
+	allBreakpointSizes as breakpoints,
+	getBreakpointSize,
+	type BreakpointSize,
+	type TestingBreakpoint,
 };

@@ -1,5 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { breakpoints, testAtBreakpoints } from '../fixtures/breakpoints';
+import {
+	breakpoints,
+	getBreakpointSize,
+	type TestingBreakpoint,
+} from '../fixtures/breakpoints';
 import { blogs } from '../fixtures/pages';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
@@ -9,8 +13,15 @@ const blogPages = blogs.filter((page) => 'expectedMinInlineSlots' in page);
 
 test.describe.serial('A minimum number of ad slots load', () => {
 	blogPages.forEach(({ path, expectedMinInlineSlots }) => {
-		testAtBreakpoints(['mobile', 'tablet', 'desktop']).forEach(
-			({ breakpoint, width, height }) => {
+		const testingBreakpoints = [
+			'mobile',
+			'tablet',
+			'desktop',
+		] satisfies TestingBreakpoint[];
+
+		testingBreakpoints
+			.map(getBreakpointSize)
+			.forEach(({ breakpoint, width, height }) => {
 				const isMobile = breakpoint === 'mobile';
 				const expectedMinSlotsOnPage =
 					expectedMinInlineSlots[breakpoint];
@@ -35,8 +46,7 @@ test.describe.serial('A minimum number of ad slots load', () => {
 						expectedMinSlotsOnPage,
 					);
 				});
-			},
-		);
+			});
 	});
 });
 

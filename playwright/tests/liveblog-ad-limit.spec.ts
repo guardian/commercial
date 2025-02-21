@@ -1,7 +1,6 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
-import type { BreakpointSizes } from '../fixtures/breakpoints';
-import { breakpoints } from '../fixtures/breakpoints';
+import { getBreakpointSize } from '../fixtures/breakpoints';
 import { blogs } from '../fixtures/pages';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
@@ -11,9 +10,7 @@ const pages = blogs.filter(
 	(blog) => 'name' in blog && blog.name === 'under-ad-limit',
 );
 
-const desktopBreakpoint = breakpoints.filter(
-	({ breakpoint }) => breakpoint === 'desktop',
-)[0] as unknown as BreakpointSizes;
+const desktopBreakpoint = getBreakpointSize('desktop');
 
 const MAX_AD_SLOTS = 8;
 
