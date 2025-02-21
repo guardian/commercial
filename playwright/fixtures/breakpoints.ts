@@ -25,9 +25,11 @@ const heights = {
 	wide: 1100,
 } as const;
 
-const testAtBreakpoints = (breakpointsToTest: Array<keyof BreakpointKeys>) =>
+const testAtBreakpoints = <T extends Array<keyof BreakpointKeys>>(
+	breakpointsToTest: T,
+) =>
 	breakpointsToTest.map((b) => ({
-		breakpoint: b,
+		breakpoint: b as T[number],
 		width: breakpoints[b],
 		height: heights[b],
 	}));
