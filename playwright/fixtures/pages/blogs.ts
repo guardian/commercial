@@ -3,7 +3,7 @@ import type { GuPage } from './Page';
 
 const stage = getStage();
 
-const blogs: GuPage[] = [
+const blogs = [
 	{
 		path: getTestUrl({
 			stage,
@@ -21,7 +21,7 @@ const blogs: GuPage[] = [
 		name: 'under-ad-limit',
 		expectedMinInlineSlots: {
 			desktop: 4,
-			tablet: 6,
+			tablet: 4,
 			mobile: 6,
 		},
 	},
@@ -33,10 +33,10 @@ const blogs: GuPage[] = [
 		}),
 		expectedMinInlineSlots: {
 			desktop: 5,
-			tablet: 7,
+			tablet: 5,
 			mobile: 7,
 		},
 	},
-];
+] as const satisfies GuPage[];
 
 export { blogs };

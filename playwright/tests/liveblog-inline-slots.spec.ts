@@ -1,27 +1,21 @@
 import { expect, test } from '@playwright/test';
-import { breakpoints } from '../fixtures/breakpoints';
+import { breakpoints, testAtBreakpoints } from '../fixtures/breakpoints';
 import { blogs } from '../fixtures/pages';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 import { countLiveblogInlineSlots } from '../lib/util';
 
-const blogPages = blogs.filter(
-	(page) =>
-		'expectedMinInlineSlotsOnDesktop' in page &&
-		'expectedMinInlineSlotsOnMobile' in page,
-);
+const blogPages = blogs.filter((page) => 'expectedMinInlineSlots' in page);
 
 test.describe.serial('A minimum number of ad slots load', () => {
 	blogPages.forEach(({ path, expectedMinInlineSlots }) => {
-		breakpoints.forEach(({ breakpoint, width, height }) => {
-			const isMobile = breakpoint === 'mobile';
-			const expectedMinSlotsOnPage =
-				expectedMinInlineSlots?.[
-					breakpoint as keyof typeof expectedMinInlineSlots
-				];
+		testAtBreakpoints(['mobile', 'tablet', 'desktop']).forEach(
+			({ breakpoint, width, height }) => {
+				const isMobile = breakpoint === 'mobile';
+				const expectedMinSlotsOnPage =
+					expectedMinInlineSlots[breakpoint];
 
-			if (expectedMinSlotsOnPage) {
-				test(`There are at least ${expectedMinSlotsOnPage} inline total slots at breakpoint ${breakpoint}`, async ({
+				test(`There are at least ${expectedMinSlotsOnPage} inline total slots at breakpoint ${breakpoint} on ${path}`, async ({
 					page,
 				}) => {
 					await page.setViewportSize({
@@ -41,13 +35,15 @@ test.describe.serial('A minimum number of ad slots load', () => {
 						expectedMinSlotsOnPage,
 					);
 				});
-			}
-		});
+			},
+		);
 	});
 });
 
 test.describe.serial('Correct set of slots are displayed', () => {
-	const testBlogs = blogs.filter(({ name }) => name === 'under-ad-limit');
+	const testBlogs = blogs.filter(
+		(blog) => 'name' in blog && blog.name === 'under-ad-limit',
+	);
 
 	const firstAdSlotSelectorDesktop = 'liveblog-inline--inline1';
 	const firstAdSlotSelectorMobile = 'liveblog-inline-mobile--top-above-nav';
@@ -56,7 +52,7 @@ test.describe.serial('Correct set of slots are displayed', () => {
 		breakpoints
 			.filter(({ breakpoint }) => breakpoint === 'mobile')
 			.forEach(({ width, height }) => {
-				test('on mobile, the mobile ad slots are displayed and desktop ad slots are hidden', async ({
+				test(`on mobile, the mobile ad slots are displayed and desktop ad slots are hidden on ${path}`, async ({
 					page,
 				}) => {
 					await page.setViewportSize({
