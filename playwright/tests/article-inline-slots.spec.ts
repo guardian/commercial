@@ -53,7 +53,9 @@ test.describe('Slots and iframes load on article pages', () => {
 				} else if (expectedSlotPositionsForBreakpoint) {
 					test(`Test article ${index} has slots at positions ${expectedSlotPositionsForBreakpoint.join(
 						',',
-					)} at breakpoint ${breakpoint} on ${article.path}`, async ({ page }) => {
+					)} at breakpoint ${breakpoint} on ${article.path}`, async ({
+						page,
+					}) => {
 						await page.setViewportSize({
 							width,
 							height,
