@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { allBreakpointSizes } from '../fixtures/breakpoints';
+import { breakpointSizes } from '../fixtures/breakpoints';
 import { blogs } from '../fixtures/pages';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
@@ -16,7 +16,7 @@ const pages = blogs.filter(
 
 test.describe.serial('Liveblog live updates', () => {
 	pages.forEach(({ path }, i) => {
-		allBreakpointSizes.forEach(({ breakpoint, width, height }) => {
+		breakpointSizes.forEach(({ breakpoint, width, height }) => {
 			test(`Test liveblog ${i} that ads are inserted when live updated, breakpoint: ${breakpoint}`, async ({
 				page,
 			}) => {
