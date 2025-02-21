@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  compressed_size:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,3 +20,6 @@ jobs:
 
       - name: Compressed Size
         uses: preactjs/compressed-size-action@v2
+        with:
+          repo-token: ${{secrets.GITHUB_TOKEN}}
+          build-script: build:prod
