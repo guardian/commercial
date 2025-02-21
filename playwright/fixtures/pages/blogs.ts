@@ -21,7 +21,7 @@ const blogs = [
 		name: 'under-ad-limit',
 		expectedMinInlineSlots: {
 			desktop: 4,
-			tablet: 6,
+			tablet: 4,
 			mobile: 6,
 		},
 	},
@@ -33,7 +33,7 @@ const blogs = [
 		}),
 		expectedMinInlineSlots: {
 			desktop: 5,
-			tablet: 7,
+			tablet: 5,
 			mobile: 7,
 		},
 	},
