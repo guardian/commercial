@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 import { isDefined } from '../../src/lib/types';
-import { breakpoints } from '../fixtures/breakpoints';
+import { allBreakpointSizes } from '../fixtures/breakpoints';
 import { articles, blogs } from '../fixtures/pages';
 import type { GuPage } from '../fixtures/pages/Page';
 import { cmpAcceptAll } from '../lib/cmp';
@@ -11,7 +11,7 @@ const pages = [articles[0], blogs[0]].filter<GuPage>(isDefined);
 
 test.describe('merchandising slot', () => {
 	pages.forEach(({ path }, index) => {
-		breakpoints.forEach(({ breakpoint, width, height }) => {
+		allBreakpointSizes.forEach(({ breakpoint, width, height }) => {
 			test(`Test page ${index} has slot and iframe at breakpoint ${breakpoint}`, async ({
 				page,
 			}) => {

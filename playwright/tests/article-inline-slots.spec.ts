@@ -13,13 +13,7 @@ const pages = articles.filter(
 
 test.describe('Slots and iframes load on article pages', () => {
 	pages.forEach((article, index) => {
-		const testingBreakpoints = [
-			'mobile',
-			'tablet',
-			'desktop',
-		] satisfies TestingBreakpoint[];
-
-		testingBreakpoints
+		(['mobile', 'tablet', 'desktop'] satisfies TestingBreakpoint[])
 			.map(getBreakpointSize)
 			.forEach(({ breakpoint, width, height }) => {
 				const expectedMinSlotsOnPage =

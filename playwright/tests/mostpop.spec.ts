@@ -1,7 +1,9 @@
 import { test } from '@playwright/test';
 import { isDefined } from '../../src/lib/types';
-import type { TestingBreakpoint } from '../fixtures/breakpoints';
-import { getBreakpointSize } from '../fixtures/breakpoints';
+import {
+	getBreakpointSize,
+	type TestingBreakpoint,
+} from '../fixtures/breakpoints';
 import { articles, blogs } from '../fixtures/pages';
 import type { GuPage } from '../fixtures/pages/Page';
 import { cmpAcceptAll } from '../lib/cmp';
@@ -16,13 +18,7 @@ test.describe('mostpop slot', () => {
 		 * Since the introduction of non-house advertising in the merchandising slot,
 		 * we now hide the most pop slot until the tablet breakpoint
 		 */
-		const testingBreakpoints = [
-			'tablet',
-			'desktop',
-			'wide',
-		] satisfies TestingBreakpoint[];
-
-		testingBreakpoints
+		(['tablet', 'desktop', 'wide'] satisfies TestingBreakpoint[])
 			.map(getBreakpointSize)
 			.forEach(({ breakpoint, width, height }) => {
 				test(`Test page ${index} has slot and iframe at breakpoint ${breakpoint}`, async ({

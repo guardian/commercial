@@ -39,7 +39,7 @@ const getBreakpointSize = <T extends TestingBreakpoint>(
 const allBreakpointSizes = allBreakpoints.map(getBreakpointSize);
 
 export {
-	allBreakpointSizes as breakpoints,
+	allBreakpointSizes,
 	getBreakpointSize,
 	type BreakpointSize,
 	type TestingBreakpoint,
