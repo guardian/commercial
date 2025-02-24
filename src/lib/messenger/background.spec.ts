@@ -54,8 +54,8 @@ describe('Cross-frame messenger: setupBackground', () => {
 			const parent = document.querySelector(
 				'.creative__background-parent',
 			);
-			expect(creative?.toString()).toEqual('[object HTMLDivElement]');
-			expect(parent?.toString()).toEqual('[object HTMLDivElement]');
+			expect(creative?.nodeName.toLowerCase()).toEqual('div');
+			expect(parent?.nodeName.toLowerCase()).toEqual('div');
 			expect(creative?.className).toMatch(/background--fixed/);
 		});
 	});
