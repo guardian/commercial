@@ -9,7 +9,7 @@ const testPage = articles[0];
 test.describe('Prebid', () => {
 	test('should load the prebid script', async ({ page }) => {
 		const scriptRequestPromise = page.waitForRequest(
-			/.*\\graun\.Prebid\.js\.commercial\.js$/,
+			/graun\.Prebid\.js\.commercial\.js$/,
 		);
 		await loadPage(page, testPage.path);
 		await cmpAcceptAll(page);
