@@ -72,4 +72,32 @@ test.describe('Prebid', () => {
 			expect(bidders).toContain(bidder);
 		});
 	});
+
+	test('should not find bidderErrors (excluding timeouts)', async ({
+		page,
+	}) => {
+		await loadPage(page, testPage.path);
+
+		await cmpAcceptAll(page);
+
+		await page.waitForFunction(
+			() => {
+				const events = window.pbjs?.getEvents() ?? [];
+				return events.find((event) => event.eventType === 'auctionEnd');
+			},
+			{ timeout: 10000 },
+		);
+
+		const bidderErrors = await page.evaluate(() => {
+			return window.pbjs
+				?.getEvents()
+				.filter(
+					(event) =>
+						event.eventType === 'bidderError' &&
+						event.args.error.timedOut !== true,
+				);
+		});
+
+		expect(bidderErrors).toHaveLength(0);
+	});
 });

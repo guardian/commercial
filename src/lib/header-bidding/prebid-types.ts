@@ -163,6 +163,16 @@ export type PrebidBidReqestedEvent = {
 	};
 };
 
+export type PrebidBidderErrorEvent = {
+	eventType: 'bidderError';
+	args: {
+		bidderRequest: PrebidBidderRequest;
+		error: {
+			timedOut?: boolean;
+		};
+	};
+};
+
 export type PrebidAuctionInitEvent = {
 	eventType: 'auctionInit';
 	args: {
@@ -170,6 +180,21 @@ export type PrebidAuctionInitEvent = {
 		bidderRequests: PrebidBidderRequest[];
 	};
 };
+
+export type PrebidAuctionEndEvent = {
+	eventType: 'auctionEnd';
+	args: {
+		adUnitCodes: string[];
+		bidsReceived: PrebidBid[];
+	};
+};
+
+export type PrebidEvent =
+	| PrebidBidReqestedEvent
+	| PrebidBidderErrorEvent
+	| PrebidAuctionInitEvent
+	| PrebidAuctionEndEvent;
+
 export type PrebidMediaTypes = {
 	banner: {
 		sizes: HeaderBiddingSize[];
