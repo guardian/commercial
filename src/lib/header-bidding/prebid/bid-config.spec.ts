@@ -79,11 +79,14 @@ const containsLeaderboardOrBillboard =
 const containsMobileSticky = containsMobileSticky_ as jest.Mock;
 const containsMpu = containsMpu_ as jest.Mock;
 const containsMpuOrDmpu = containsMpuOrDmpu_ as jest.Mock;
+
+// Non TCF bidders
+const shouldIncludeTrustX = shouldIncludeTrustX_ as jest.Mock;
+const shouldIncludeTripleLift = shouldIncludeTripleLift_ as jest.Mock;
+// TCF bidders
 const shouldIncludeAppNexus = shouldIncludeAppNexus_ as jest.Mock;
 const shouldIncludeOpenx = shouldIncludeOpenx_ as jest.Mock;
-const shouldIncludeTrustX = shouldIncludeTrustX_ as jest.Mock;
 const shouldIncludeXaxis = shouldIncludeXaxis_ as jest.Mock;
-const shouldIncludeTripleLift = shouldIncludeTripleLift_ as jest.Mock;
 const shouldIncludeCriteo = shouldIncludeCriteo_ as jest.Mock;
 const shouldIncludeAdYouLike = shouldIncludeAdYouLike_ as jest.Mock;
 const shouldIncludeIndexExchange = shouldIncludeIndexExchange_ as jest.Mock;
@@ -454,7 +457,15 @@ describe('triplelift adapter', () => {
 	});
 
 	test('should include triplelift adapter if condition is true ', () => {
-		expect(getBidders()).toMatchObject(['ix', 'triplelift']);
+		shouldIncludeIndexExchange.mockReturnValue(true);
+		shouldIncludeCriteo.mockReturnValue(true);
+		shouldIncludeAdYouLike.mockReturnValue(true);
+		expect(getBidders()).toEqual([
+			'ix',
+			'criteo',
+			'triplelift',
+			'adyoulike',
+		]);
 	});
 
 	test('should return correct triplelift adapter params for leaderboard, with requests from US or Canada', () => {

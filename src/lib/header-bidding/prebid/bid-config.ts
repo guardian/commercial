@@ -48,12 +48,12 @@ import {
 	shouldIncludeKargo,
 	shouldIncludeMagnite,
 	shouldIncludeOpenx,
+	shouldIncludeOzone,
 	shouldIncludePubmatic,
 	shouldIncludeTheTradeDesk,
 	shouldIncludeTripleLift,
 	shouldIncludeTrustX,
 	shouldIncludeXaxis,
-	shouldUseOzoneAdaptor,
 	stripDfpAdPrefixFrom,
 	stripMobileSuffix,
 } from '../utils';
@@ -234,7 +234,7 @@ const appNexusBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 		),
 });
 
-const openxClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
+const openxBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	pageTargeting: PageTargeting,
 ) => ({
 	name: 'oxd',
@@ -299,7 +299,7 @@ const getOzonePlacementId = (sizes: HeaderBiddingSize[]) => {
 	return '0420420500';
 };
 
-const ozoneClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
+const ozoneBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	pageTargeting: PageTargeting,
 ) => ({
 	name: 'ozone',
@@ -648,21 +648,15 @@ const currentBidders = (
 ): PrebidBidder[] => {
 	const biddersToCheck: Array<[boolean, PrebidBidder]> = [
 		[shouldIncludeCriteo(consentState), criteoBidder(slotSizes)],
-		[shouldIncludeTrustX(), trustXBidder],
-		[shouldIncludeTripleLift(), tripleLiftBidder],
+		[shouldIncludeTrustX(), trustXBidder], // Non-TCF (no consentState check)
+		[shouldIncludeTripleLift(), tripleLiftBidder], // Non-TCF (no consentState check)
 		[shouldIncludeAppNexus(consentState), appNexusBidder(pageTargeting)],
 		[shouldIncludeXaxis(consentState), xaxisBidder],
 		[shouldIncludePubmatic(consentState), pubmaticBidder(slotSizes)],
 		[shouldIncludeAdYouLike(consentState), adYouLikeBidder],
-		[
-			shouldUseOzoneAdaptor(consentState),
-			ozoneClientSideBidder(pageTargeting),
-		],
-		[
-			shouldIncludeOpenx(consentState),
-			openxClientSideBidder(pageTargeting),
-		],
-		[shouldIncludeKargo(), kargoBidder],
+		[shouldIncludeOzone(consentState), ozoneBidder(pageTargeting)],
+		[shouldIncludeOpenx(consentState), openxBidder(pageTargeting)],
+		[shouldIncludeKargo(), kargoBidder], // Non-TCF (no consentState check)
 		[shouldIncludeMagnite(consentState), magniteBidder],
 		[shouldIncludeTheTradeDesk(consentState), theTradeDeskBidder(gpid)],
 	];

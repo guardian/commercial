@@ -1,5 +1,5 @@
 import type { ConsentState } from '@guardian/libs';
-import { getConsentFor, isString, log, onConsent } from '@guardian/libs';
+import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
 import { getParticipations, isUserInVariant } from '../../../experiments/ab';
@@ -21,7 +21,16 @@ import type {
 	SlotFlatMap,
 } from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';
-import { stripDfpAdPrefixFrom } from '../utils';
+import {
+	shouldIncludeCriteo,
+	shouldIncludeIndexExchange,
+	shouldIncludeKargo,
+	shouldIncludeMagnite,
+	shouldIncludeOzone,
+	shouldIncludePermutive,
+	shouldIncludeXaxis,
+	stripDfpAdPrefixFrom,
+} from '../utils';
 import { bids } from './bid-config';
 import type { PrebidPriceGranularity } from './price-config';
 import {
@@ -275,6 +284,10 @@ declare global {
 }
 
 const shouldEnableAnalytics = (): boolean => {
+	if (!window.guardian.config.switches.prebidAnalytics) {
+		return false;
+	}
+
 	const analyticsSampleRate = 10 / 100;
 	const isInSample = Math.random() < analyticsSampleRate;
 
@@ -392,12 +405,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		pbjsConfig.consentManagement = consentManagement();
 	}
 
-	if (
-		window.guardian.config.switches.permutive &&
-		// this switch specifically controls whether or not the Permutive Audience Connector can run with Prebid
-		window.guardian.config.switches.prebidPermutiveAudience &&
-		getConsentFor('permutive', consentState)
-	) {
+	if (shouldIncludePermutive(consentState)) {
 		pbjsConfig.realTimeData = {
 			dataProviders: [
 				{
@@ -419,10 +427,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		};
 	}
 
-	if (
-		window.guardian.config.switches.prebidCriteo &&
-		getConsentFor('criteo', consentState)
-	) {
+	if (shouldIncludeCriteo(consentState)) {
 		window.pbjs.bidderSettings.criteo = {
 			storageAllowed: true,
 		};
@@ -437,10 +442,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		});
 	}
 
-	if (
-		window.guardian.config.switches.prebidOzone &&
-		getConsentFor('ozone', consentState)
-	) {
+	if (shouldIncludeOzone(consentState)) {
 		// Use a custom price granularity, which is based upon the size of the slot being auctioned
 		window.pbjs.setBidderConfig({
 			bidders: ['ozone'],
@@ -462,10 +464,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		});
 	}
 
-	if (
-		window.guardian.config.switches.prebidIndexExchange &&
-		getConsentFor('indexExchange', consentState)
-	) {
+	if (shouldIncludeIndexExchange(consentState)) {
 		window.pbjs.setBidderConfig({
 			bidders: ['ix'],
 			config: {
@@ -486,10 +485,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		});
 	}
 
-	if (
-		window.guardian.config.switches.prebidAnalytics &&
-		shouldEnableAnalytics()
-	) {
+	if (shouldEnableAnalytics()) {
 		window.pbjs.enableAnalytics([
 			{
 				provider: 'gu',
@@ -503,7 +499,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		]);
 	}
 
-	if (window.guardian.config.switches.prebidXaxis) {
+	if (shouldIncludeXaxis(consentState)) {
 		window.pbjs.bidderSettings.xhb = {
 			adserverTargeting: [
 				{
@@ -520,13 +516,13 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		};
 	}
 
-	if (window.guardian.config.switches.prebidKargo) {
+	if (shouldIncludeKargo()) {
 		window.pbjs.bidderSettings.kargo = {
 			storageAllowed: true,
 		};
 	}
 
-	if (window.guardian.config.switches.prebidMagnite) {
+	if (shouldIncludeMagnite(consentState)) {
 		window.pbjs.bidderSettings.magnite = {
 			storageAllowed: true,
 		};
