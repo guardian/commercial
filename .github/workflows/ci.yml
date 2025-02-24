@@ -166,7 +166,7 @@ jobs:
           path: dist
 
       - name: Riff-Raff Upload
-        uses: guardian/actions-riff-raff@v4.1.7
+        uses: guardian/actions-riff-raff@v4.1.8
         with:
           roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
