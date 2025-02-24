@@ -2,12 +2,18 @@ import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
 import { removeDisabledSlots } from '../consented/remove-slots';
 import { defineSlot } from './define-slot';
 
+const isTabletOrMobile = () => {
+	const breakpoint = getCurrentBreakpoint();
+	return breakpoint === 'mobile' || breakpoint === 'tablet';
+};
+
 const initFixedSlots = async (): Promise<void> => {
 	await removeDisabledSlots();
 
-	const isDCRMobile =
-		window.guardian.config.isDotcomRendering &&
-		getCurrentBreakpoint() === 'mobile';
+	// We remove top-above-nav on both tablet and mobile for consentless
+	// due to issues with ad sizing in OptOut at the tablet breakpoint
+	const shouldHideTopAboveNav =
+		window.guardian.config.isDotcomRendering && isTabletOrMobile();
 
 	const adverts = [
 		...document.querySelectorAll<HTMLElement>(
@@ -17,7 +23,11 @@ const initFixedSlots = async (): Promise<void> => {
 		// we need to not init top-above-nav on mobile view in DCR
 		// as the DOM element needs to be removed and replaced to be inline
 		.filter(
-			(adSlot) => !(isDCRMobile && adSlot.id === 'dfp-ad--top-above-nav'),
+			(adSlot) =>
+				!(
+					shouldHideTopAboveNav &&
+					adSlot.id === 'dfp-ad--top-above-nav'
+				),
 		);
 
 	// define slots
