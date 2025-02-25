@@ -30,6 +30,12 @@ const initFixedSlots = async (): Promise<void> => {
 				),
 		);
 
+	if (getCurrentBreakpoint() === 'tablet') {
+		// We need to explicitly remove the element as there are no styles to hide it on tablet
+		const topAboveNav = document.querySelector('.top-banner-ad-container');
+		topAboveNav?.remove();
+	}
+
 	// define slots
 	adverts.forEach((slotElement) => {
 		const slotName = slotElement.dataset.name;
