@@ -17,6 +17,7 @@ import type {
 	BidderCode,
 	HeaderBiddingSlot,
 	PrebidBid,
+	PrebidEvent,
 	PrebidMediaTypes,
 	SlotFlatMap,
 } from '../prebid-types';
@@ -263,6 +264,7 @@ declare global {
 				codeArr?: string[],
 				customSlotMatching?: (slot: unknown) => unknown,
 			) => void;
+			getEvents: () => PrebidEvent[];
 		};
 	}
 }
