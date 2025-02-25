@@ -18,8 +18,8 @@ const getGlobals = (keywords: string): ComscoreGlobals => {
 	};
 
 	if (keywords !== 'Network Front') {
-		// comscore keywords shouldn't contain spaces
-		globals.comscorekw = keywords.replace(/ /g, '_');
+		// comscore keywords shouldn't contain spaces or ampersands
+		globals.comscorekw = keywords.replace(/ /g, '_').replace(/&/g, 'and');
 	}
 
 	return globals;
