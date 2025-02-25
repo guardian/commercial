@@ -22,13 +22,8 @@ import type {
 } from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';
 import {
-	shouldIncludeCriteo,
-	shouldIncludeIndexExchange,
-	shouldIncludeKargo,
-	shouldIncludeMagnite,
-	shouldIncludeOzone,
+	isSwitchedOn,
 	shouldIncludePermutive,
-	shouldIncludeXaxis,
 	stripDfpAdPrefixFrom,
 } from '../utils';
 import { bids } from './bid-config';
@@ -427,7 +422,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		};
 	}
 
-	if (shouldIncludeCriteo(consentState)) {
+	if (isSwitchedOn('prebidCriteo')) {
 		window.pbjs.bidderSettings.criteo = {
 			storageAllowed: true,
 		};
@@ -442,7 +437,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		});
 	}
 
-	if (shouldIncludeOzone(consentState)) {
+	if (isSwitchedOn('prebidOzone')) {
 		// Use a custom price granularity, which is based upon the size of the slot being auctioned
 		window.pbjs.setBidderConfig({
 			bidders: ['ozone'],
@@ -464,7 +459,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		});
 	}
 
-	if (shouldIncludeIndexExchange(consentState)) {
+	if (isSwitchedOn('prebidIndexExchange')) {
 		window.pbjs.setBidderConfig({
 			bidders: ['ix'],
 			config: {
@@ -499,7 +494,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		]);
 	}
 
-	if (shouldIncludeXaxis(consentState)) {
+	if (isSwitchedOn('prebidXaxis')) {
 		window.pbjs.bidderSettings.xhb = {
 			adserverTargeting: [
 				{
@@ -516,13 +511,13 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		};
 	}
 
-	if (shouldIncludeKargo()) {
+	if (isSwitchedOn('prebidKargo')) {
 		window.pbjs.bidderSettings.kargo = {
 			storageAllowed: true,
 		};
 	}
 
-	if (shouldIncludeMagnite(consentState)) {
+	if (isSwitchedOn('prebidMagnite')) {
 		window.pbjs.bidderSettings.magnite = {
 			storageAllowed: true,
 		};
