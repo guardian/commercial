@@ -633,13 +633,6 @@ const indexExchangeBidders = (
 const biddersBeingTested = (allBidders: PrebidBidder[]): PrebidBidder[] =>
 	allBidders.filter((bidder) => pbTestNameMap()[bidder.name]);
 
-const biddersSwitchedOn = (allBidders: PrebidBidder[]): PrebidBidder[] => {
-	const isSwitchedOn = (bidder: PrebidBidder): boolean =>
-		window.guardian.config.switches[bidder.switchName] ?? false;
-
-	return allBidders.filter((bidder) => isSwitchedOn(bidder));
-};
-
 const currentBidders = (
 	slotSizes: HeaderBiddingSize[],
 	pageTargeting: PageTargeting,
@@ -670,9 +663,8 @@ const currentBidders = (
 		: [];
 
 	const allBidders = [...ixBidders, ...otherBidders];
-	return isPbTestOn()
-		? biddersBeingTested(allBidders)
-		: biddersSwitchedOn(allBidders);
+
+	return isPbTestOn() ? biddersBeingTested(allBidders) : allBidders;
 };
 
 export const bids = (

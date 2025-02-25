@@ -23,7 +23,12 @@ import {
 	shouldIncludeAppNexus as shouldIncludeAppNexus_,
 	shouldIncludeCriteo as shouldIncludeCriteo_,
 	shouldIncludeIndexExchange as shouldIncludeIndexExchange_,
+	shouldIncludeKargo as shouldIncludeKargo_,
+	shouldIncludeMagnite as shouldIncludeMagnite_,
 	shouldIncludeOpenx as shouldIncludeOpenx_,
+	shouldIncludeOzone as shouldIncludeOzone_,
+	shouldIncludePubmatic as shouldIncludePubmatic_,
+	shouldIncludeTheTradeDesk as shouldIncludeTheTradeDesk_,
 	shouldIncludeTripleLift as shouldIncludeTripleLift_,
 	shouldIncludeTrustX as shouldIncludeTrustX_,
 	shouldIncludeXaxis as shouldIncludeXaxis_,
@@ -80,16 +85,20 @@ const containsMobileSticky = containsMobileSticky_ as jest.Mock;
 const containsMpu = containsMpu_ as jest.Mock;
 const containsMpuOrDmpu = containsMpuOrDmpu_ as jest.Mock;
 
-// Non TCF bidders
-const shouldIncludeTrustX = shouldIncludeTrustX_ as jest.Mock;
-const shouldIncludeTripleLift = shouldIncludeTripleLift_ as jest.Mock;
-// TCF bidders
-const shouldIncludeAppNexus = shouldIncludeAppNexus_ as jest.Mock;
-const shouldIncludeOpenx = shouldIncludeOpenx_ as jest.Mock;
-const shouldIncludeXaxis = shouldIncludeXaxis_ as jest.Mock;
-const shouldIncludeCriteo = shouldIncludeCriteo_ as jest.Mock;
 const shouldIncludeAdYouLike = shouldIncludeAdYouLike_ as jest.Mock;
+const shouldIncludeAppNexus = shouldIncludeAppNexus_ as jest.Mock;
+const shouldIncludeCriteo = shouldIncludeCriteo_ as jest.Mock;
 const shouldIncludeIndexExchange = shouldIncludeIndexExchange_ as jest.Mock;
+const shouldIncludeKargo = shouldIncludeKargo_ as jest.Mock;
+const shouldIncludeMagnite = shouldIncludeMagnite_ as jest.Mock;
+const shouldIncludeOpenx = shouldIncludeOpenx_ as jest.Mock;
+const shouldIncludeOzone = shouldIncludeOzone_ as jest.Mock;
+const shouldIncludePubmatic = shouldIncludePubmatic_ as jest.Mock;
+const shouldIncludeTheTradeDesk = shouldIncludeTheTradeDesk_ as jest.Mock;
+const shouldIncludeTripleLift = shouldIncludeTripleLift_ as jest.Mock;
+const shouldIncludeTrustX = shouldIncludeTrustX_ as jest.Mock;
+const shouldIncludeXaxis = shouldIncludeXaxis_ as jest.Mock;
+
 const stripMobileSuffix = stripMobileSuffix_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
 const isUserInVariant = isUserInVariant_ as jest.Mock;
@@ -259,14 +268,20 @@ describe('bids', () => {
 		containsLeaderboardOrBillboard.mockReturnValue(false);
 		containsMpu.mockReturnValue(false);
 		containsMpuOrDmpu.mockReturnValue(false);
-		// Default case: AdYouLike, Criteo and IX turned ON
+		stripMobileSuffix.mockImplementation((str: string) => str);
+		// Default case is TRUE:
 		shouldIncludeAdYouLike.mockReturnValue(true);
 		shouldIncludeCriteo.mockReturnValue(true);
 		shouldIncludeIndexExchange.mockReturnValue(true);
-		// Default case: AppNexus and TrustX OFF
+		// Default case is FALSE:
+		shouldIncludeOpenx.mockReturnValue(false);
 		shouldIncludeAppNexus.mockReturnValue(false);
 		shouldIncludeTrustX.mockReturnValue(false);
-		stripMobileSuffix.mockImplementation((str: string) => str);
+		shouldIncludeKargo.mockReturnValue(false);
+		shouldIncludeMagnite.mockReturnValue(false);
+		shouldIncludeOzone.mockReturnValue(false);
+		shouldIncludePubmatic.mockReturnValue(false);
+		shouldIncludeTheTradeDesk.mockReturnValue(false);
 	});
 
 	afterEach(() => {
@@ -283,35 +298,36 @@ describe('bids', () => {
 	};
 
 	test('should only include bidders that are switched on if no bidders being tested', () => {
-		window.guardian.config.switches.prebidXaxis = false;
-		shouldIncludeOpenx.mockReturnValueOnce(true);
-		expect(getBidders()).toEqual([
-			'ix',
-			'criteo',
-			'adyoulike',
-			/** oxd = Open X */
-			'oxd',
-		]);
+		expect(getBidders()).toEqual(['ix', 'criteo', 'adyoulike']);
 	});
 
 	test('should not include ix bidders when switched off', () => {
-		window.guardian.config.switches.prebidIndexExchange = false;
+		shouldIncludeIndexExchange.mockReturnValueOnce(false);
 		expect(getBidders()).toEqual(['criteo', 'adyoulike']);
 	});
 
-	test('should include AppNexus directly if in target geolocation', () => {
-		shouldIncludeAppNexus.mockReturnValue(true);
-		expect(getBidders()).toEqual(['ix', 'criteo', 'and', 'adyoulike']);
-	});
-
-	test('should include OpenX directly if in target geolocation', () => {
-		shouldIncludeOpenx.mockReturnValue(true);
-		expect(getBidders()).toEqual(['ix', 'criteo', 'adyoulike', 'oxd']);
-	});
-
-	test('should include TrustX if in target geolocation', () => {
-		shouldIncludeTrustX.mockReturnValue(true);
-		expect(getBidders()).toEqual(['ix', 'criteo', 'trustx', 'adyoulike']);
+	const mockFns: Record<string, jest.Mock> = {
+		oxd: shouldIncludeOpenx,
+		and: shouldIncludeAppNexus,
+		trustx: shouldIncludeTrustX,
+		kargo: shouldIncludeKargo,
+		rubicon: shouldIncludeMagnite,
+		ozone: shouldIncludeOzone,
+		pubmatic: shouldIncludePubmatic,
+		ttd: shouldIncludeTheTradeDesk,
+	};
+	test.each([
+		'oxd',
+		'and',
+		'trustx',
+		'kargo',
+		'rubicon',
+		'ozone',
+		'pubmatic',
+		'ttd',
+	])('bidder list should contain %s if it should be included', (bidder) => {
+		(mockFns[bidder] as jest.Mock).mockReturnValueOnce(true);
+		expect(getBidders()).toContain(bidder);
 	});
 
 	test('should include ix bidder for each size that slot can take', () => {
