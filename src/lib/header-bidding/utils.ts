@@ -156,72 +156,71 @@ export const getRandomIntInclusive = (
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+export const isSwitchedOn = (switchName: string): boolean =>
+	window.guardian.config.switches[switchName] ?? false;
+
 export const shouldIncludeOpenx = (consentState: ConsentState): boolean =>
-	!!window.guardian.config.switches.prebidOpenx &&
+	isSwitchedOn('prebidOpenx') &&
 	getConsentFor('openX', consentState) &&
 	!isInUsOrCa();
 
 export const shouldIncludeTrustX = (): boolean =>
-	!!window.guardian.config.switches.prebidTrustx && isInUsOrCa();
+	isSwitchedOn('prebidTrustx') && isInUsOrCa();
 
 export const shouldIncludeTripleLift = (): boolean =>
-	!!window.guardian.config.switches.prebidTriplelift &&
-	(isInUsOrCa() || isInAuOrNz());
+	isSwitchedOn('prebidTriplelift') && (isInUsOrCa() || isInAuOrNz());
 
 // TODO: Check is we want regional restrictions on where we load the ozoneBidAdapter
 export const shouldIncludeOzone = (consentState: ConsentState): boolean =>
-	!!window.guardian.config.switches.prebidOzone &&
+	isSwitchedOn('prebidOzone') &&
 	getConsentFor('ozone', consentState) &&
 	!isInCanada() &&
 	!isInAuOrNz();
 
 export const shouldIncludeAppNexus = (consentState: ConsentState): boolean =>
-	isInAuOrNz() ||
-	(!!window.guardian.config.switches.prebidAppnexusUkRow &&
-		getConsentFor('xandr', consentState) &&
-		!isInUsOrCa()) ||
-	!!pbTestNameMap().and;
+	isSwitchedOn('prebidAppnexus') &&
+	(isInAuOrNz() ||
+		(isSwitchedOn('prebidAppnexusUkRow') &&
+			getConsentFor('xandr', consentState) &&
+			!isInUsOrCa()) ||
+		!!pbTestNameMap().and);
 
 export const shouldIncludeXaxis = (consentState: ConsentState): boolean =>
-	!!window.guardian.config.switches.prebidXaxis &&
+	isSwitchedOn('prebidXaxis') &&
 	getConsentFor('xandr', consentState) &&
 	isInUk();
 
 export const shouldIncludeKargo = (): boolean =>
-	!!window.guardian.config.switches.prebidKargo && isInUsa();
+	isSwitchedOn('prebidKargo') && isInUsa();
 
 export const shouldIncludeMagnite = (consentState: ConsentState): boolean =>
-	!!window.guardian.config.switches.prebidMagnite &&
-	getConsentFor('magnite', consentState);
+	isSwitchedOn('prebidMagnite') && getConsentFor('magnite', consentState);
 
 export const shouldIncludeCriteo = (consentState: ConsentState): boolean =>
-	!!window.guardian.config.switches.prebidCriteo &&
-	getConsentFor('criteo', consentState);
+	isSwitchedOn('prebidCriteo') && getConsentFor('criteo', consentState);
 
 export const shouldIncludePubmatic = (consentState: ConsentState): boolean =>
-	!!window.guardian.config.switches.prebidPubmatic &&
-	getConsentFor('pubmatic', consentState);
+	isSwitchedOn('prebidPubmatic') && getConsentFor('pubmatic', consentState);
 
 export const shouldIncludeAdYouLike = (consentState: ConsentState): boolean =>
-	!!window.guardian.config.switches.prebidAdYouLike &&
-	getConsentFor('adYouLike', consentState);
+	isSwitchedOn('prebidAdYouLike') && getConsentFor('adYouLike', consentState);
 
 export const shouldIncludeTheTradeDesk = (
 	consentState: ConsentState,
 ): boolean =>
-	!!window.guardian.config.switches.prebidTheTradeDesk &&
+	isSwitchedOn('prebidTheTradeDesk') &&
 	getConsentFor('theTradeDesk', consentState);
 
 export const shouldIncludeIndexExchange = (
 	consentState: ConsentState,
 ): boolean =>
-	!!window.guardian.config.switches.prebidIndexExchange &&
+	isSwitchedOn('prebidIndexExchange') &&
 	getConsentFor('indexExchange', consentState);
 
 export const shouldIncludePermutive = (consentState: ConsentState): boolean =>
-	!!window.guardian.config.switches.permutive &&
+	isSwitchedOn('permutive') &&
 	/** this switch specifically controls whether or not the Permutive Audience Connector can run with Prebid */
-	!!window.guardian.config.switches.prebidPermutiveAudience &&
+	isSwitchedOn('prebidPermutiveAudience') &&
 	getConsentFor('permutive', consentState);
 
 export const shouldIncludeMobileSticky = once(
