@@ -22,6 +22,10 @@ class A9AdUnit implements A9AdUnitInterface {
 	}
 }
 
+type A9AdUnitExtended = A9AdUnit & {
+	blockedBidders: string[];
+};
+
 let initialised = false;
 let requestQueue = Promise.resolve();
 
@@ -37,6 +41,36 @@ const initialise = (): void => {
 			bidTimeout: bidderTimeout,
 		});
 	}
+};
+
+/**
+ * Filters the provided ad units based on the current page context.
+ * - If the page is a network front, only the ad unit with the slot ID 'dfp-ad--inline1--mobile' is included.
+ * - If the page is a section front, only the ad unit with the slot ID 'dfp-ad--top-above-nav' is included.
+ * - If the page is not a front, all ad units are included.
+ * - There is a cross over in logic where the page is both an article as well as a network front/section front,
+ * - in this case we want to identify the page as a non-front page (article) and include all ad units.
+ *
+ * @param adUnits - The array of ad units to be filtered.
+ * @returns The filtered array of ad units based on the page context.
+ */
+
+const getBlockBidders = (adUnit: A9AdUnit): string[] => {
+	const section = window.guardian.config.page.section;
+	const isFront = window.guardian.config.page.isFront;
+
+	const isNetworkFront =
+		isFront &&
+		['uk', 'us', 'au', 'europe', 'international'].includes(section);
+
+	const isSectionFront =
+		isFront &&
+		['commentisfree', 'sport', 'culture', 'lifeandstyle'].includes(section);
+
+	const blockGumgum =
+		!(isNetworkFront && adUnit.slotID === 'dfp-ad--inline1--mobile') &&
+		!(isSectionFront && adUnit.slotID === 'dfp-ad--top-above-nav');
+	return blockGumgum ? ['1lsxjb4'] : [];
 };
 
 // slotFlatMap allows you to dynamically interfere with the PrebidSlot definition
@@ -65,39 +99,6 @@ const requestBids = async (
 		return requestQueue;
 	}
 
-	// so now we need to look over the `adunits` and check their slotID
-	// so that we can block the bidders that we want to block based on the slotID
-
-	const section = window.guardian.config.page.section;
-	const isFront = window.guardian.config.page.isFront;
-
-	const isNetworkFront =
-		isFront &&
-		['uk', 'us', 'au', 'europe', 'international'].includes(section);
-
-	const isSectionFront =
-		isFront &&
-		['commentisfree', 'sport', 'culture', 'lifeandstyle'].includes(section);
-
-	/**
-	 * Filters the provided ad units based on the current page context.
-	 * - If the page is a network front, only the ad unit with the slot ID 'dfp-ad--inline1--mobile' is included.
-	 * - If the page is a section front, only the ad unit with the slot ID 'dfp-ad--top-above-nav' is included.
-	 * - If the page is not a front, all ad units are included.
-	 * - There is a cross over in logic where the page is both an article as well as a network front/section front,
-	 * - in this case we want to identify the page as a non-front page (article) and include all ad units.
-	 *
-	 * @param adUnits - The array of ad units to be filtered.
-	 * @returns The filtered array of ad units based on the page context.
-	 */
-
-	const getBlockBidders = (adUnit: A9AdUnit): string[] => {
-		const allowGumgum =
-			(isNetworkFront && adUnit.slotID === 'dfp-ad--inline1--mobile') ||
-			(isSectionFront && adUnit.slotID === 'dfp-ad--top-above-nav');
-		return !allowGumgum ? ['1lsxjb4'] : [];
-	};
-
 	const updatedAdUnits = adUnits.map((adUnit) => {
 		return {
 			...adUnit,
@@ -105,7 +106,28 @@ const requestBids = async (
 		};
 	});
 
-	updatedAdUnits.forEach((adUnit) => {
+	const { blockedBidderAdUnits, nonBlockedBidderAdUnits } =
+		updatedAdUnits.reduce<{
+			blockedBidderAdUnits: A9AdUnitExtended[];
+			nonBlockedBidderAdUnits: A9AdUnitExtended[];
+		}>(
+			(result, adUnit) => {
+				const hasBlockedBidders = adUnit.blockedBidders.length > 0;
+
+				if (hasBlockedBidders) {
+					result.blockedBidderAdUnits.push(adUnit);
+				} else {
+					result.nonBlockedBidderAdUnits.push(adUnit);
+				}
+
+				return result;
+			},
+			{ blockedBidderAdUnits: [], nonBlockedBidderAdUnits: [] },
+		);
+
+	const allAdUnits = [...blockedBidderAdUnits, ...nonBlockedBidderAdUnits];
+
+	allAdUnits.forEach((adUnit) => {
 		requestQueue = requestQueue
 			.then(
 				() =>
@@ -135,6 +157,8 @@ const requestBids = async (
 export const a9 = {
 	initialise,
 	requestBids,
+	A9AdUnit,
+	getBlockBidders,
 };
 
 export const _ = {
