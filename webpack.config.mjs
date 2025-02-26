@@ -73,10 +73,10 @@ const config = {
 				import.meta.dirname,
 				'static',
 				'tpc-test-iframe',
-				'v1',
+				'v2',
 				'index.html',
 			),
-			filename: `commercial/tpc-test/v1/index.html`,
+			filename: `commercial/tpc-test/v2/index.html`,
 			minify: {
 				collapseWhitespace: true,
 				removeComments: true,
@@ -86,6 +86,7 @@ const config = {
 				useShortDoctype: true,
 				minifyJS: true,
 			},
+			inject: false,
 		}),
 		new DefinePlugin({
 			'process.env.COMMIT_SHA': JSON.stringify(gitCommitSHA()),
