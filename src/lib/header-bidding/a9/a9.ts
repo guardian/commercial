@@ -124,17 +124,20 @@ const requestBids = async (
 			{ blockedBidderAdUnits: [], nonBlockedBidderAdUnits: [] },
 		);
 
-	const allAdUnits = [...blockedBidderAdUnits, ...nonBlockedBidderAdUnits];
+	const groupedAdUnits = [
+		{ adUnits: blockedBidderAdUnits, blockedBidders: ['1lsxjb4'] },
+		{ adUnits: nonBlockedBidderAdUnits, blockedBidders: [] },
+	];
 
-	allAdUnits.forEach((adUnit) => {
+	groupedAdUnits.forEach(({ adUnits, blockedBidders }) => {
 		requestQueue = requestQueue
 			.then(
 				() =>
 					new Promise<void>((resolve) => {
 						window.apstag?.fetchBids(
 							{
-								slots: [adUnit],
-								blockedBidders: adUnit.blockedBidders,
+								slots: adUnits,
+								blockedBidders: blockedBidders,
 							},
 							() => {
 								window.googletag.cmd.push(() => {
