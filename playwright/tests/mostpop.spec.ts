@@ -1,6 +1,9 @@
 import { test } from '@playwright/test';
 import { isDefined } from '../../src/lib/types';
-import { testAtBreakpoints } from '../fixtures/breakpoints';
+import {
+	getBreakpointSize,
+	type TestingBreakpoint,
+} from '../fixtures/breakpoints';
 import { articles, blogs } from '../fixtures/pages';
 import type { GuPage } from '../fixtures/pages/Page';
 import { cmpAcceptAll } from '../lib/cmp';
@@ -15,8 +18,9 @@ test.describe('mostpop slot', () => {
 		 * Since the introduction of non-house advertising in the merchandising slot,
 		 * we now hide the most pop slot until the tablet breakpoint
 		 */
-		testAtBreakpoints(['tablet', 'desktop', 'wide']).forEach(
-			({ breakpoint, width, height }) => {
+		(['tablet', 'desktop', 'wide'] satisfies TestingBreakpoint[])
+			.map(getBreakpointSize)
+			.forEach(({ breakpoint, width, height }) => {
 				test(`Test page ${index} has slot and iframe at breakpoint ${breakpoint}`, async ({
 					page,
 				}) => {
@@ -30,7 +34,6 @@ test.describe('mostpop slot', () => {
 
 					await waitForSlot(page, 'mostpop');
 				});
-			},
-		);
+			});
 	});
 });
