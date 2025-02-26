@@ -5,16 +5,34 @@ import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { isInCanada } from '../../lib/geo/geo-utils';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
-import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
+import {
+	allTcfPrebidVendorsConsented,
+	shouldIncludeOnlyA9,
+} from '../../lib/header-bidding/utils';
 
-const shouldLoadPrebid = () =>
-	!isGoogleProxy() &&
-	window.guardian.config.switches.prebidHeaderBidding &&
-	commercialFeatures.shouldLoadGoogletag &&
-	!commercialFeatures.adFree &&
-	!window.guardian.config.page.hasPageSkin &&
-	!shouldIncludeOnlyA9 &&
-	!isInCanada();
+const shouldLoadPrebid = () => {
+	// console.dir(
+	// 	{
+	// 		notGoogle: !isGoogleProxy(),
+	// 		prebidSwitchOn: window.guardian.config.switches.prebidHeaderBidding,
+	// 		shouldLoadGoogleTag: commercialFeatures.shouldLoadGoogletag,
+	// 		notAdFree: !commercialFeatures.adFree,
+	// 		noPageSkin: !window.guardian.config.page.hasPageSkin,
+	// 		notOnlyA9: !shouldIncludeOnlyA9,
+	// 		notInCanada: !isInCanada(),
+	// 	},
+	// 	{ depth: null },
+	// );
+	return (
+		!isGoogleProxy() &&
+		window.guardian.config.switches.prebidHeaderBidding &&
+		commercialFeatures.shouldLoadGoogletag &&
+		!commercialFeatures.adFree &&
+		!window.guardian.config.page.hasPageSkin &&
+		!shouldIncludeOnlyA9 &&
+		!isInCanada()
+	);
+};
 
 const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 	if (shouldLoadPrebid()) {
@@ -41,14 +59,24 @@ const setupPrebid = async (): Promise<void> => {
 			'prebidCustom',
 			consentState,
 		);
+
 		log('commercial', 'Prebid consent:', {
 			hasConsentForGlobalPrebidVendor,
 			hasConsentForCustomPrebidVendor,
+			...(consentState.framework === 'tcfv2'
+				? {
+						hasConsentForAllTcfVendors:
+							allTcfPrebidVendorsConsented(consentState),
+					}
+				: {}),
 		});
+
 		if (
+			(consentState.framework === 'tcfv2' &&
+				!allTcfPrebidVendorsConsented(consentState)) ||
 			// Check if we do NOT have consent to BOTH the old global and custom prebid vendor
-			!hasConsentForGlobalPrebidVendor &&
-			!hasConsentForCustomPrebidVendor
+			(!hasConsentForGlobalPrebidVendor &&
+				!hasConsentForCustomPrebidVendor)
 		) {
 			throw new Error('No consent for prebid');
 		}

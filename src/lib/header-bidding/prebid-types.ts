@@ -126,6 +126,19 @@ export type BidderCode =
 	| 'xhb'
 	| 'ttd';
 
+export type TcfBidderCode =
+	| 'adyoulike'
+	| 'and'
+	| 'appnexus'
+	| 'criteo'
+	| 'ix'
+	| 'rubicon'
+	| 'oxd'
+	| 'ozone'
+	| 'pubmatic'
+	| 'xhb'
+	| 'ttd';
+
 export type PrebidParams =
 	| PrebidAdYouLikeParams
 	| PrebidAppNexusParams
