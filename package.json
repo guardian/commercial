@@ -55,7 +55,7 @@
 		"@guardian/eslint-config": "^10.0.0",
 		"@guardian/identity-auth": "^4.0.2",
 		"@guardian/identity-auth-frontend": "^6.0.2",
-		"@guardian/libs": "19.2.2",
+		"@guardian/libs": "21.2.0",
 		"@guardian/prettier": "8.0.1",
 		"@guardian/source": "8.0.2",
 		"@playwright/test": "1.50.1",
@@ -125,7 +125,7 @@
 		"@guardian/core-web-vitals": "^8.0.1",
 		"@guardian/identity-auth": "^4.0.0",
 		"@guardian/identity-auth-frontend": "^6.0.0",
-		"@guardian/libs": "^19.1.0",
+		"@guardian/libs": "^21.2.0",
 		"@guardian/source": "^8.0.0",
 		"typescript": "~5.5.2"
 	},
