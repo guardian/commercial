@@ -22,10 +22,6 @@ class A9AdUnit implements A9AdUnitInterface {
 	}
 }
 
-type A9AdUnitExtended = A9AdUnit & {
-	blockedBidders: string[];
-};
-
 let initialised = false;
 let requestQueue = Promise.resolve();
 
@@ -54,7 +50,7 @@ const initialise = (): void => {
  * @param adUnits - The array of ad units to be filtered.
  * @returns The filtered array of ad units based on the page context.
  */
-const getBlockBidders = (adUnit: A9AdUnit): string[] => {
+const shouldBlockGumGum = (adUnit: A9AdUnit): boolean => {
 	const section = window.guardian.config.page.section;
 	const isFront = window.guardian.config.page.isFront;
 
@@ -66,10 +62,10 @@ const getBlockBidders = (adUnit: A9AdUnit): string[] => {
 		isFront &&
 		['commentisfree', 'sport', 'culture', 'lifeandstyle'].includes(section);
 
-	const blockGumgum =
+	const blockGumGum =
 		!(isNetworkFront && adUnit.slotID === 'dfp-ad--inline1--mobile') &&
 		!(isSectionFront && adUnit.slotID === 'dfp-ad--top-above-nav');
-	return blockGumgum ? ['1lsxjb4'] : [];
+	return blockGumGum;
 };
 
 // slotFlatMap allows you to dynamically interfere with the PrebidSlot definition
@@ -98,35 +94,16 @@ const requestBids = async (
 		return requestQueue;
 	}
 
-	const updatedAdUnits = adUnits.map((adUnit) => {
-		return {
-			...adUnit,
-			blockedBidders: getBlockBidders(adUnit),
-		};
-	});
-
-	const { blockedBidderAdUnits, nonBlockedBidderAdUnits } =
-		updatedAdUnits.reduce<{
-			blockedBidderAdUnits: A9AdUnitExtended[];
-			nonBlockedBidderAdUnits: A9AdUnitExtended[];
-		}>(
-			(result, adUnit) => {
-				const hasBlockedBidders = adUnit.blockedBidders.length > 0;
-
-				if (hasBlockedBidders) {
-					result.blockedBidderAdUnits.push(adUnit);
-				} else {
-					result.nonBlockedBidderAdUnits.push(adUnit);
-				}
-
-				return result;
-			},
-			{ blockedBidderAdUnits: [], nonBlockedBidderAdUnits: [] },
-		);
+	const blockedGumGumUnits = adUnits.filter((adUnit) =>
+		shouldBlockGumGum(adUnit),
+	);
+	const allowGumGumUnits = adUnits.filter(
+		(adUnit) => !shouldBlockGumGum(adUnit),
+	);
 
 	const groupedAdUnits = [
-		{ adUnits: blockedBidderAdUnits, blockedBidders: ['1lsxjb4'] },
-		{ adUnits: nonBlockedBidderAdUnits, blockedBidders: [] },
+		{ adUnits: blockedGumGumUnits, blockedBidders: ['1lsxjb4'] },
+		{ adUnits: allowGumGumUnits, blockedBidders: [] },
 	];
 
 	groupedAdUnits.forEach(({ adUnits, blockedBidders }) => {
@@ -159,7 +136,7 @@ const requestBids = async (
 export const a9 = {
 	initialise,
 	requestBids,
-	getBlockBidders,
+	shouldBlockGumGum,
 };
 
 export const _ = {

@@ -48,7 +48,7 @@ jest.mock('define/Advert', () =>
 );
 
 jest.mock('../slot-config', () => ({
-	slots: jest.fn().mockImplementation(() => [
+	getHeaderBiddingAdSlots: jest.fn().mockImplementation(() => [
 		{
 			key: 'top-above-nav',
 			sizes: [
@@ -107,7 +107,7 @@ describe('initialise', () => {
 	});
 });
 
-describe('getBlockBidders', () => {
+describe('shouldBlockGumGum', () => {
 	beforeEach(() => {
 		window.guardian.config.page.section = '';
 		window.guardian.config.page.isFront = false;
@@ -122,8 +122,8 @@ describe('getBlockBidders', () => {
 			sizes: [],
 			blockedBidders: [],
 		};
-		const result = a9.getBlockBidders(mockAdUnit);
-		expect(result).toEqual([]);
+		const result = a9.shouldBlockGumGum(mockAdUnit);
+		expect(result).toBe(false);
 	});
 	it('should NOT block GumGum for "dfp-ad--top-above-nav" on a section front', () => {
 		window.guardian.config.page.section = 'sport';
@@ -134,8 +134,8 @@ describe('getBlockBidders', () => {
 			sizes: [],
 			blockedBidders: [],
 		};
-		const result = a9.getBlockBidders(mockAdUnit);
-		expect(result).toEqual([]);
+		const result = a9.shouldBlockGumGum(mockAdUnit);
+		expect(result).toBe(false);
 	});
 	it('should block GumGum for an unrecognized slot on a network front', () => {
 		window.guardian.config.page.section = 'uk';
@@ -146,8 +146,8 @@ describe('getBlockBidders', () => {
 			sizes: [],
 			blockedBidders: [],
 		};
-		const result = a9.getBlockBidders(mockAdUnit);
-		expect(result).toEqual(['1lsxjb4']);
+		const result = a9.shouldBlockGumGum(mockAdUnit);
+		expect(result).toBe(true);
 	});
 	it('should block GumGum for an unrecognized slot on a section front', () => {
 		window.guardian.config.page.section = 'culture';
@@ -158,8 +158,8 @@ describe('getBlockBidders', () => {
 			sizes: [],
 			blockedBidders: [],
 		};
-		const result = a9.getBlockBidders(mockAdUnit);
-		expect(result).toEqual(['1lsxjb4']);
+		const result = a9.shouldBlockGumGum(mockAdUnit);
+		expect(result).toBe(true);
 	});
 	it('should block GumGum for any slot when not on a front page', () => {
 		window.guardian.config.page.section = 'lifeandstyle';
@@ -170,7 +170,7 @@ describe('getBlockBidders', () => {
 			sizes: [],
 			blockedBidders: [],
 		};
-		const result = a9.getBlockBidders(mockAdUnit);
-		expect(result).toEqual(['1lsxjb4']);
+		const result = a9.shouldBlockGumGum(mockAdUnit);
+		expect(result).toBe(true);
 	});
 });
