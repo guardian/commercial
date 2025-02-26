@@ -12,7 +12,7 @@ const initFixedSlots = async (): Promise<void> => {
 
 	// We remove top-above-nav on both tablet and mobile for consentless
 	// due to issues with ad sizing in OptOut at the tablet breakpoint
-	const shouldHideTopAboveNav =
+	const isDCRMobileOrTablet =
 		window.guardian.config.isDotcomRendering && isTabletOrMobile();
 
 	const adverts = [
@@ -20,14 +20,11 @@ const initFixedSlots = async (): Promise<void> => {
 			'.js-ad-slot:not(.ad-slot--survey)',
 		),
 	]
-		// we need to not init top-above-nav on mobile view in DCR
+		// we need to not init top-above-nav on mobile and tablet view in DCR
 		// as the DOM element needs to be removed and replaced to be inline
 		.filter(
 			(adSlot) =>
-				!(
-					shouldHideTopAboveNav &&
-					adSlot.id === 'dfp-ad--top-above-nav'
-				),
+				!(isDCRMobileOrTablet && adSlot.id === 'dfp-ad--top-above-nav'),
 		);
 
 	if (getCurrentBreakpoint() === 'tablet') {
