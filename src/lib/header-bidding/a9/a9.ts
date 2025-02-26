@@ -54,7 +54,6 @@ const initialise = (): void => {
  * @param adUnits - The array of ad units to be filtered.
  * @returns The filtered array of ad units based on the page context.
  */
-
 const getBlockBidders = (adUnit: A9AdUnit): string[] => {
 	const section = window.guardian.config.page.section;
 	const isFront = window.guardian.config.page.isFront;
@@ -157,7 +156,6 @@ const requestBids = async (
 export const a9 = {
 	initialise,
 	requestBids,
-	A9AdUnit,
 	getBlockBidders,
 };
 
