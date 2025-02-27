@@ -35,8 +35,6 @@ const mockGetConsentFor = (hasConsent: boolean) =>
 		.mockReturnValueOnce(hasConsent)
 		.mockReturnValueOnce(hasConsent);
 
-// const mockGetConsentFor2 = jest.mock('@guardian', () => {});
-
 const resetPrebid = () => {
 	delete window.pbjs;
 	// @ts-expect-error -- there’s no types for this

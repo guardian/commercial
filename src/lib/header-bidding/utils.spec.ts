@@ -1,10 +1,7 @@
-import {
-	type ConsentState,
-	type CountryCode,
-	getConsentFor as getConsentFor_,
-} from '@guardian/libs';
+import { type ConsentState, type CountryCode } from '@guardian/libs';
 import { isUserInVariant as isUserInVariant_ } from '../../experiments/ab';
 import { createAdSize } from '../../lib/ad-sizes';
+import { hasConsentFor } from '../../lib/consent';
 import { _ } from '../../lib/geo/geo-utils';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';
 import {
@@ -39,10 +36,6 @@ const isUserInVariant = isUserInVariant_ as jest.MockedFunction<
 	typeof isUserInVariant_
 >;
 
-const getConsentFor = getConsentFor_ as jest.MockedFunction<
-	typeof getConsentFor_
->;
-
 const mockConsentState = {
 	tcfv2: {
 		consents: { '': true },
@@ -56,13 +49,6 @@ const mockConsentState = {
 	canTarget: true,
 	framework: 'tcfv2',
 } satisfies ConsentState;
-
-jest.mock('@guardian/libs', () => {
-	return {
-		...jest.requireActual('@guardian/libs'),
-		getConsentFor: jest.fn(),
-	};
-});
 
 jest.mock('lodash-es/once', () => (fn: (...args: unknown[]) => unknown) => fn);
 
@@ -80,6 +66,10 @@ jest.mock('lib/detect/detect-breakpoint', () => ({
 }));
 
 jest.mock('experiments/ab-tests');
+
+jest.mock('lib/consent', () => ({
+	hasConsentFor: jest.fn().mockReturnValue(true),
+}));
 
 const resetConfig = () => {
 	window.guardian.config.switches.prebidAppnexus = true;
@@ -188,7 +178,7 @@ describe('Utils', () => {
 				window.guardian.config.switches.prebidAppnexusUkRow =
 					switchState === 'on';
 				getCountryCode.mockReturnValue(region);
-				getConsentFor.mockReturnValue(true);
+				(hasConsentFor as jest.Mock).mockReturnValue(true);
 				expect(shouldIncludeAppNexus(mockConsentState)).toBe(expected);
 			},
 		);
@@ -196,7 +186,7 @@ describe('Utils', () => {
 		test('If consent denied should not load in GB region', () => {
 			window.guardian.config.switches.prebidAppnexusUkRow = true;
 			getCountryCode.mockReturnValue('GB');
-			getConsentFor.mockReturnValue(false);
+			(hasConsentFor as jest.Mock).mockReturnValue(false);
 			expect(shouldIncludeAppNexus(mockConsentState)).toBe(false);
 		});
 	});
@@ -204,13 +194,13 @@ describe('Utils', () => {
 	describe('shouldIncludeOpenX', () => {
 		test('should return true if geolocation is GB', () => {
 			getCountryCode.mockReturnValueOnce('GB');
-			getConsentFor.mockReturnValue(true);
+			(hasConsentFor as jest.Mock).mockReturnValue(true);
 			expect(shouldIncludeOpenx(mockConsentState)).toBe(true);
 		});
 
 		test('should return false if consent not given', () => {
 			getCountryCode.mockReturnValueOnce('GB');
-			getConsentFor.mockReturnValue(false);
+			(hasConsentFor as jest.Mock).mockReturnValue(false);
 			expect(shouldIncludeOpenx(mockConsentState)).toBe(false);
 		});
 
@@ -226,7 +216,7 @@ describe('Utils', () => {
 			];
 			for (const testGeo of testGeos) {
 				getCountryCode.mockReturnValueOnce(testGeo);
-				getConsentFor.mockReturnValue(true);
+				(hasConsentFor as jest.Mock).mockReturnValue(true);
 				expect(shouldIncludeOpenx(mockConsentState)).toBe(true);
 			}
 		});
@@ -235,7 +225,7 @@ describe('Utils', () => {
 			const testGeos: CountryCode[] = ['CA', 'US'];
 			for (const testGeo of testGeos) {
 				getCountryCode.mockReturnValue(testGeo);
-				getConsentFor.mockReturnValue(true);
+				(hasConsentFor as jest.Mock).mockReturnValue(true);
 				expect(shouldIncludeOpenx(mockConsentState)).toBe(false);
 			}
 		});
@@ -244,7 +234,7 @@ describe('Utils', () => {
 			const testGeos: CountryCode[] = ['NZ', 'AU'];
 			for (const testGeo of testGeos) {
 				getCountryCode.mockReturnValue(testGeo);
-				getConsentFor.mockReturnValue(true);
+				(hasConsentFor as jest.Mock).mockReturnValue(true);
 				expect(shouldIncludeOpenx(mockConsentState)).toBe(true);
 			}
 		});
@@ -285,7 +275,7 @@ describe('Utils', () => {
 			);
 			window.guardian.config.page.isDev = true;
 			getCountryCode.mockReturnValue('GB');
-			getConsentFor.mockReturnValue(true);
+			(hasConsentFor as jest.Mock).mockReturnValue(true);
 			expect(shouldIncludeXaxis(mockConsentState)).toBe(true);
 		});
 
@@ -305,7 +295,7 @@ describe('Utils', () => {
 			];
 			for (const testGeo of testGeos) {
 				getCountryCode.mockReturnValue(testGeo);
-				getConsentFor.mockReturnValue(true);
+				(hasConsentFor as jest.Mock).mockReturnValue(true);
 				expect(shouldIncludeXaxis(mockConsentState)).toBe(false);
 			}
 		});

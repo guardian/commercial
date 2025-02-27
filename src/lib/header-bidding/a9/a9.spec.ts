@@ -1,46 +1,4 @@
-import { getConsentFor, onConsentChange } from '@guardian/libs';
-import type {
-	OnConsentChangeCallback,
-	USNATConsentState,
-} from '@guardian/libs';
 import { _, a9 } from './a9';
-
-const tcfv2WithConsentMock = (callback: OnConsentChangeCallback) =>
-	callback({
-		tcfv2: {
-			consents: {
-				1: true,
-				2: true,
-				3: true,
-				4: true,
-				5: true,
-				6: true,
-				7: true,
-				8: true,
-				9: true,
-				10: true,
-			},
-			vendorConsents: { '5edf9a821dc4e95986b66df4': true },
-			eventStatus: 'tcloaded',
-			addtlConsent: '',
-			gdprApplies: true,
-			tcString: 'blablabla',
-		},
-		canTarget: true,
-		framework: 'tcfv2',
-	});
-
-const usnatConsent: USNATConsentState = {
-	doNotSell: false,
-	signalStatus: 'ready',
-};
-
-const usnatWithConsentMock = (callback: OnConsentChangeCallback) =>
-	callback({
-		usnat: usnatConsent,
-		canTarget: true,
-		framework: 'usnat',
-	});
 
 jest.mock('define/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
@@ -66,13 +24,6 @@ jest.mock('@guardian/libs', () => ({
 	onConsentChange: jest.fn(),
 }));
 
-const mockOnConsentChange = (
-	mfn: (callback: OnConsentChangeCallback) => void,
-) => (onConsentChange as jest.Mock).mockImplementation(mfn);
-
-const mockGetConsentFor = (hasConsent: boolean) =>
-	(getConsentFor as jest.Mock).mockReturnValueOnce(hasConsent);
-
 beforeEach(() => {
 	jest.resetModules();
 	_.resetModule();
@@ -89,16 +40,12 @@ afterAll(() => {
 
 describe('initialise', () => {
 	it('should generate initialise A9 library when TCFv2 consent has been given', () => {
-		mockOnConsentChange(tcfv2WithConsentMock);
-		mockGetConsentFor(true);
 		a9.initialise();
 		expect(window.apstag).toBeDefined();
 		expect(window.apstag?.init).toHaveBeenCalled();
 	});
 
 	it('should generate initialise A9 library when USNAT consent has been given', () => {
-		mockOnConsentChange(usnatWithConsentMock);
-		mockGetConsentFor(true);
 		a9.initialise();
 		expect(window.apstag).toBeDefined();
 		expect(window.apstag?.init).toHaveBeenCalled();

@@ -1,4 +1,4 @@
-import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
+import { type ConsentState, isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { createAdSize } from '../../lib/ad-sizes';
 import {
@@ -9,6 +9,7 @@ import {
 	isInUsOrCa,
 } from '../../lib/geo/geo-utils';
 import { pbTestNameMap } from '../../lib/url';
+import { hasConsentFor } from '../consent';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
@@ -161,7 +162,7 @@ export const isSwitchedOn = (switchName: string): boolean =>
 
 export const shouldIncludeOpenx = (consentState: ConsentState): boolean =>
 	isSwitchedOn('prebidOpenx') &&
-	getConsentFor('openX', consentState) &&
+	hasConsentFor('openX', consentState) &&
 	!isInUsOrCa();
 
 export const shouldIncludeTrustX = (): boolean =>
@@ -173,7 +174,7 @@ export const shouldIncludeTripleLift = (): boolean =>
 // TODO: Check is we want regional restrictions on where we load the ozoneBidAdapter
 export const shouldIncludeOzone = (consentState: ConsentState): boolean =>
 	isSwitchedOn('prebidOzone') &&
-	getConsentFor('ozone', consentState) &&
+	hasConsentFor('ozone', consentState) &&
 	!isInCanada() &&
 	!isInAuOrNz();
 
@@ -181,47 +182,47 @@ export const shouldIncludeAppNexus = (consentState: ConsentState): boolean =>
 	isSwitchedOn('prebidAppnexus') &&
 	(isInAuOrNz() ||
 		(isSwitchedOn('prebidAppnexusUkRow') &&
-			getConsentFor('xandr', consentState) &&
+			hasConsentFor('xandr', consentState) &&
 			!isInUsOrCa()) ||
 		!!pbTestNameMap().and);
 
 export const shouldIncludeXaxis = (consentState: ConsentState): boolean =>
 	isSwitchedOn('prebidXaxis') &&
-	getConsentFor('xandr', consentState) &&
+	hasConsentFor('xandr', consentState) &&
 	isInUk();
 
 export const shouldIncludeKargo = (): boolean =>
 	isSwitchedOn('prebidKargo') && isInUsa();
 
 export const shouldIncludeMagnite = (consentState: ConsentState): boolean =>
-	isSwitchedOn('prebidMagnite') && getConsentFor('magnite', consentState);
+	isSwitchedOn('prebidMagnite') && hasConsentFor('magnite', consentState);
 
 export const shouldIncludeCriteo = (consentState: ConsentState): boolean =>
-	isSwitchedOn('prebidCriteo') && getConsentFor('criteo', consentState);
+	isSwitchedOn('prebidCriteo') && hasConsentFor('criteo', consentState);
 
 export const shouldIncludePubmatic = (consentState: ConsentState): boolean =>
-	isSwitchedOn('prebidPubmatic') && getConsentFor('pubmatic', consentState);
+	isSwitchedOn('prebidPubmatic') && hasConsentFor('pubmatic', consentState);
 
 export const shouldIncludeAdYouLike = (consentState: ConsentState): boolean =>
-	isSwitchedOn('prebidAdYouLike') && getConsentFor('adYouLike', consentState);
+	isSwitchedOn('prebidAdYouLike') && hasConsentFor('adYouLike', consentState);
 
 export const shouldIncludeTheTradeDesk = (
 	consentState: ConsentState,
 ): boolean =>
 	isSwitchedOn('prebidTheTradeDesk') &&
-	getConsentFor('theTradeDesk', consentState);
+	hasConsentFor('theTradeDesk', consentState);
 
 export const shouldIncludeIndexExchange = (
 	consentState: ConsentState,
 ): boolean =>
 	isSwitchedOn('prebidIndexExchange') &&
-	getConsentFor('indexExchange', consentState);
+	hasConsentFor('indexExchange', consentState);
 
 export const shouldIncludePermutive = (consentState: ConsentState): boolean =>
 	isSwitchedOn('permutive') &&
 	/** this switch specifically controls whether or not the Permutive Audience Connector can run with Prebid */
 	isSwitchedOn('prebidPermutiveAudience') &&
-	getConsentFor('permutive', consentState);
+	hasConsentFor('permutive', consentState);
 
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>
