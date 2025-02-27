@@ -2,8 +2,7 @@ import type { ConsentState } from '@guardian/libs';
 import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
-import { getParticipations, isUserInVariant } from '../../../experiments/ab';
-import { prebidKeywords } from '../../../experiments/tests/prebid-keywords';
+import { getParticipations } from '../../../experiments/ab';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
@@ -94,16 +93,6 @@ type PbjsConfig = {
 	timeoutBuffer?: number;
 	priceGranularity: PrebidPriceGranularity;
 	userSync: UserSync;
-	ortb2?: {
-		site: {
-			keywords: string;
-			ext: {
-				data: {
-					keywords: string[];
-				};
-			};
-		};
-	};
 	consentManagement?: ConsentManagement;
 	realTimeData?: unknown;
 };
@@ -378,23 +367,6 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			userSync,
 		},
 	);
-
-	const shouldIncludeKeywords = isUserInVariant(prebidKeywords, 'variant');
-	const keywordsString = window.guardian.config.page.keywords;
-	const keywordsArray = keywordsString ? keywordsString.split(',') : [];
-
-	if (shouldIncludeKeywords) {
-		pbjsConfig.ortb2 = {
-			site: {
-				keywords: keywordsString,
-				ext: {
-					data: {
-						keywords: keywordsArray,
-					},
-				},
-			},
-		};
-	}
 
 	window.pbjs.bidderSettings = {};
 
