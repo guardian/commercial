@@ -126,7 +126,8 @@ export type BidderCode =
 	| 'xhb'
 	| 'ttd';
 
-export type TcfBidderCode =
+export type TcfBidderCode = Extract<
+	BidderCode,
 	| 'adyoulike'
 	| 'and'
 	| 'appnexus'
@@ -137,7 +138,8 @@ export type TcfBidderCode =
 	| 'ozone'
 	| 'pubmatic'
 	| 'xhb'
-	| 'ttd';
+	| 'ttd'
+>;
 
 export type PrebidParams =
 	| PrebidAdYouLikeParams

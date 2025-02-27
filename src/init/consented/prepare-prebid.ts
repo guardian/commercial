@@ -10,29 +10,14 @@ import {
 	shouldIncludeOnlyA9,
 } from '../../lib/header-bidding/utils';
 
-const shouldLoadPrebid = () => {
-	// console.dir(
-	// 	{
-	// 		notGoogle: !isGoogleProxy(),
-	// 		prebidSwitchOn: window.guardian.config.switches.prebidHeaderBidding,
-	// 		shouldLoadGoogleTag: commercialFeatures.shouldLoadGoogletag,
-	// 		notAdFree: !commercialFeatures.adFree,
-	// 		noPageSkin: !window.guardian.config.page.hasPageSkin,
-	// 		notOnlyA9: !shouldIncludeOnlyA9,
-	// 		notInCanada: !isInCanada(),
-	// 	},
-	// 	{ depth: null },
-	// );
-	return (
-		!isGoogleProxy() &&
-		window.guardian.config.switches.prebidHeaderBidding &&
-		commercialFeatures.shouldLoadGoogletag &&
-		!commercialFeatures.adFree &&
-		!window.guardian.config.page.hasPageSkin &&
-		!shouldIncludeOnlyA9 &&
-		!isInCanada()
-	);
-};
+const shouldLoadPrebid = () =>
+	!isGoogleProxy() &&
+	window.guardian.config.switches.prebidHeaderBidding &&
+	commercialFeatures.shouldLoadGoogletag &&
+	!commercialFeatures.adFree &&
+	!window.guardian.config.page.hasPageSkin &&
+	!shouldIncludeOnlyA9 &&
+	!isInCanada();
 
 const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 	if (shouldLoadPrebid()) {

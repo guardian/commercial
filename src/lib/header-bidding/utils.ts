@@ -249,9 +249,14 @@ export const allTcfPrebidVendorsConsented = (
 		Object.values(tcfVendorConsent).every(Boolean);
 
 	if (!hasConsentForAllVendors) {
-		log('commercial', 'Prebid TCF vendor consent', tcfVendorConsent);
+		log(
+			'commercial',
+			'Some Prebid bidders do not have consent to run',
+			Object.entries(tcfVendorConsent)
+				.filter(([, hasConsent]) => !hasConsent)
+				.map(([bidder]) => bidder),
+		);
 	}
-
 	return hasConsentForAllVendors;
 };
 
