@@ -1,5 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { breakpoints, testAtBreakpoints } from '../fixtures/breakpoints';
+import {
+	breakpointSizes,
+	getBreakpointSize,
+	type TestingBreakpoint,
+} from '../fixtures/breakpoints';
 import { blogs } from '../fixtures/pages';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
@@ -9,8 +13,9 @@ const blogPages = blogs.filter((page) => 'expectedMinInlineSlots' in page);
 
 test.describe.serial('A minimum number of ad slots load', () => {
 	blogPages.forEach(({ path, expectedMinInlineSlots }) => {
-		testAtBreakpoints(['mobile', 'tablet', 'desktop']).forEach(
-			({ breakpoint, width, height }) => {
+		(['mobile', 'tablet', 'desktop'] satisfies TestingBreakpoint[])
+			.map(getBreakpointSize)
+			.forEach(({ breakpoint, width, height }) => {
 				const isMobile = breakpoint === 'mobile';
 				const expectedMinSlotsOnPage =
 					expectedMinInlineSlots[breakpoint];
@@ -35,8 +40,7 @@ test.describe.serial('A minimum number of ad slots load', () => {
 						expectedMinSlotsOnPage,
 					);
 				});
-			},
-		);
+			});
 	});
 });
 
@@ -49,7 +53,7 @@ test.describe.serial('Correct set of slots are displayed', () => {
 	const firstAdSlotSelectorMobile = 'liveblog-inline-mobile--top-above-nav';
 
 	testBlogs.forEach(({ path }) => {
-		breakpoints
+		breakpointSizes
 			.filter(({ breakpoint }) => breakpoint === 'mobile')
 			.forEach(({ width, height }) => {
 				test(`on mobile, the mobile ad slots are displayed and desktop ad slots are hidden on ${path}`, async ({
@@ -80,7 +84,7 @@ test.describe.serial('Correct set of slots are displayed', () => {
 	});
 
 	testBlogs.forEach(({ path }) => {
-		breakpoints
+		breakpointSizes
 			.filter(({ breakpoint }) => breakpoint !== 'mobile')
 			.forEach(({ breakpoint, width, height }) => {
 				test(`on ${breakpoint}, the desktop ad slots are displayed and the mobile ad slots are hidden on ${path}`, async ({
