@@ -106,15 +106,15 @@ const requestBids = async (
 		{ adUnits: allowGumGumUnits, blockedBidders: [] },
 	];
 
-	groupedAdUnits.forEach(({ adUnits, blockedBidders }) => {
+	groupedAdUnits.forEach((requestGroup) => {
 		requestQueue = requestQueue
 			.then(
 				() =>
 					new Promise<void>((resolve) => {
 						window.apstag?.fetchBids(
 							{
-								slots: adUnits,
-								blockedBidders: blockedBidders,
+								slots: requestGroup.adUnits,
+								blockedBidders: requestGroup.blockedBidders,
 							},
 							() => {
 								window.googletag.cmd.push(() => {
