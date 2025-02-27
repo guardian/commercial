@@ -52,7 +52,7 @@
 		"@guardian/ab-core": "8.0.1",
 		"@guardian/browserslist-config": "^6.1.1",
 		"@guardian/core-web-vitals": "8.0.1",
-		"@guardian/eslint-config": "^10.0.0",
+		"@guardian/eslint-config": "^11.0.0",
 		"@guardian/identity-auth": "^4.0.2",
 		"@guardian/identity-auth-frontend": "^6.0.2",
 		"@guardian/libs": "21.2.0",
