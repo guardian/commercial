@@ -3,6 +3,7 @@ import type {
 	OnConsentChangeCallback,
 	USNATConsentState,
 } from '@guardian/libs';
+import type { A9AdUnitInterface } from '../../../types/global';
 import { _, a9 } from './a9';
 
 const tcfv2WithConsentMock = (callback: OnConsentChangeCallback) =>
@@ -47,7 +48,7 @@ jest.mock('define/Advert', () =>
 );
 
 jest.mock('../slot-config', () => ({
-	slots: jest.fn().mockImplementation(() => [
+	getHeaderBiddingAdSlots: jest.fn().mockImplementation(() => [
 		{
 			key: 'top-above-nav',
 			sizes: [
@@ -80,6 +81,7 @@ beforeEach(() => {
 		init: jest.fn(),
 		fetchBids: jest.fn().mockImplementation(() => Promise.resolve([])),
 		setDisplayBids: jest.fn(),
+		blockedBidders: [],
 	};
 });
 
@@ -102,5 +104,73 @@ describe('initialise', () => {
 		a9.initialise();
 		expect(window.apstag).toBeDefined();
 		expect(window.apstag?.init).toHaveBeenCalled();
+	});
+});
+
+describe('shouldBlockGumGum', () => {
+	beforeEach(() => {
+		window.guardian.config.page.section = '';
+		window.guardian.config.page.isFront = false;
+	});
+
+	it('should NOT block GumGum for "dfp-ad--inline1--mobile" on a network front', () => {
+		window.guardian.config.page.section = 'us';
+		window.guardian.config.page.isFront = true;
+
+		const mockAdUnit: A9AdUnitInterface = {
+			slotID: 'dfp-ad--inline1--mobile',
+			sizes: [],
+			blockedBidders: [],
+		};
+		const result = a9.shouldBlockGumGum(mockAdUnit);
+		expect(result).toBe(false);
+	});
+	it('should NOT block GumGum for "dfp-ad--top-above-nav" on a section front', () => {
+		window.guardian.config.page.section = 'sport';
+		window.guardian.config.page.isFront = true;
+
+		const mockAdUnit: A9AdUnitInterface = {
+			slotID: 'dfp-ad--top-above-nav',
+			sizes: [],
+			blockedBidders: [],
+		};
+		const result = a9.shouldBlockGumGum(mockAdUnit);
+		expect(result).toBe(false);
+	});
+	it('should block GumGum for an unrecognized slot on a network front', () => {
+		window.guardian.config.page.section = 'uk';
+		window.guardian.config.page.isFront = true;
+
+		const mockAdUnit: A9AdUnitInterface = {
+			slotID: 'dfp-ad--inline4--mobile',
+			sizes: [],
+			blockedBidders: [],
+		};
+		const result = a9.shouldBlockGumGum(mockAdUnit);
+		expect(result).toBe(true);
+	});
+	it('should block GumGum for an unrecognized slot on a section front', () => {
+		window.guardian.config.page.section = 'culture';
+		window.guardian.config.page.isFront = true;
+
+		const mockAdUnit: A9AdUnitInterface = {
+			slotID: 'dfp-ad--mostpop',
+			sizes: [],
+			blockedBidders: [],
+		};
+		const result = a9.shouldBlockGumGum(mockAdUnit);
+		expect(result).toBe(true);
+	});
+	it('should block GumGum for any slot when not on a front page', () => {
+		window.guardian.config.page.section = 'lifeandstyle';
+		window.guardian.config.page.isFront = false;
+
+		const mockAdUnit: A9AdUnitInterface = {
+			slotID: 'dfp-ad--inline1--mobile',
+			sizes: [],
+			blockedBidders: [],
+		};
+		const result = a9.shouldBlockGumGum(mockAdUnit);
+		expect(result).toBe(true);
 	});
 });
