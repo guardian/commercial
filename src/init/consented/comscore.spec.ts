@@ -116,6 +116,7 @@ describe('setupComscore', () => {
 	describe('Framework consent: running on consent', () => {
 		beforeEach(() => {
 			jest.resetAllMocks();
+			window.guardian.config.page.keywords = 'Culture';
 		});
 
 		it('TCFv2 with consent: runs', async () => {
@@ -174,10 +175,11 @@ describe('comscore getGlobals', () => {
 	});
 
 	it('returns an object with the correct comscorekw variable set when called with "Network Front" as keywords', () => {
-		const keywords = 'These are the best keywords. The greatest!';
+		const keywords = 'These are the best & greatest keywords!';
+		const comscoreKeywords = 'These_are_the_best_and_greatest_keywords!';
 
 		expect(_.getGlobals(keywords)).toMatchObject({
-			comscorekw: keywords,
+			comscorekw: comscoreKeywords,
 		});
 	});
 
