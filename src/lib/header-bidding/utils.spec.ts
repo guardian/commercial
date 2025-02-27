@@ -13,6 +13,7 @@ import {
 } from '../detect/detect-breakpoint';
 import { getCountryCode as getCountryCode_ } from '../geo/country-code';
 import {
+	allTcfPrebidVendorsConsented,
 	getBreakpointKey,
 	getLargestSize,
 	removeFalsyValues,
@@ -308,6 +309,24 @@ describe('Utils', () => {
 				getConsentFor.mockReturnValue(true);
 				expect(shouldIncludeXaxis(mockConsentState)).toBe(false);
 			}
+		});
+	});
+
+	describe('allTcfPrebidVendorsConsented', () => {
+		it('returns true if all of the vendors have consented', () => {
+			getConsentFor.mockReturnValue(true);
+			expect(allTcfPrebidVendorsConsented(mockConsentState)).toBe(true);
+		});
+
+		it('returns false if one of the vendors has not consented', () => {
+			getConsentFor.mockReturnValue(true);
+			getConsentFor.mockReturnValueOnce(false);
+			expect(allTcfPrebidVendorsConsented(mockConsentState)).toBe(false);
+		});
+
+		it('returns false if all of the vendors have not consented', () => {
+			getConsentFor.mockReturnValue(false);
+			expect(allTcfPrebidVendorsConsented(mockConsentState)).toBe(false);
 		});
 	});
 
