@@ -1,5 +1,6 @@
 import type { ABTest } from '@guardian/ab-core';
 import { deferPermutiveLoad } from './tests/defer-permutive-load';
+import { movePermutiveSegmentation } from './tests/move-permutive-segmentation';
 import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
 import { optOutFrequencyCap } from './tests/opt-out-frequency-cap';
 
@@ -13,4 +14,5 @@ export const concurrentTests: ABTest[] = [
 	mpuWhenNoEpic,
 	optOutFrequencyCap,
 	deferPermutiveLoad,
+	movePermutiveSegmentation,
 ];
