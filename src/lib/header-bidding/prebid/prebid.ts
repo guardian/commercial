@@ -95,6 +95,7 @@ type PbjsConfig = {
 	userSync: UserSync;
 	consentManagement?: ConsentManagement;
 	realTimeData?: unknown;
+	useBidCache?: boolean;
 };
 
 type PbjsEvent = 'bidWon';
@@ -295,6 +296,11 @@ const timeoutBuffer = 400;
  */
 const bidderTimeout = PREBID_TIMEOUT;
 
+/**
+ * Set initial value to false as we are not using bid cache unless switch is on and in test
+ */
+const useBidCache = false;
+
 let requestQueue: Promise<void> = Promise.resolve();
 let initialised = false;
 
@@ -365,6 +371,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			timeoutBuffer,
 			priceGranularity,
 			userSync,
+			useBidCache,
 		},
 	);
 
@@ -394,6 +401,11 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 				},
 			],
 		};
+	}
+
+	//Add test condition in here.
+	if (isSwitchedOn('prebidBidCache')) {
+		pbjsConfig.useBidCache = true;
 	}
 
 	if (isSwitchedOn('prebidCriteo')) {
