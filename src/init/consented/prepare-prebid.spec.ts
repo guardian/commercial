@@ -7,7 +7,6 @@ import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isInCanada } from '../../lib/geo/geo-utils';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
-import { allTcfPrebidVendorsConsented } from '../../lib/header-bidding/utils';
 import { _ } from './prepare-prebid';
 
 const { setupPrebid } = _;
@@ -45,8 +44,6 @@ jest.mock('lib/header-bidding/prebid/bid-config', () => ({
 }));
 
 jest.mock('lib/header-bidding/utils', () => ({
-	...jest.requireActual('lib/header-bidding/utils'),
-	allTcfPrebidVendorsConsented: jest.fn().mockReturnValue(true),
 	shouldIncludeOnlyA9: false,
 }));
 
@@ -162,7 +159,6 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
-		(allTcfPrebidVendorsConsented as jest.Mock).mockReturnValue(true);
 
 		await setupPrebid();
 		expect(prebid.initialise).toHaveBeenCalled();
@@ -178,7 +174,6 @@ describe('init', () => {
 		fakeUserAgent('Google Web Preview');
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
-		(allTcfPrebidVendorsConsented as jest.Mock).mockReturnValue(true);
 
 		await setupPrebid();
 		expect(prebid.initialise).not.toHaveBeenCalled();
@@ -194,7 +189,6 @@ describe('init', () => {
 		};
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
-		(allTcfPrebidVendorsConsented as jest.Mock).mockReturnValue(true);
 
 		await setupPrebid();
 		expect(prebid.initialise).not.toHaveBeenCalled();
@@ -210,7 +204,6 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
-		(allTcfPrebidVendorsConsented as jest.Mock).mockReturnValue(true);
 
 		await setupPrebid();
 		expect(prebid.initialise).toHaveBeenCalled();
@@ -262,38 +255,6 @@ describe('init', () => {
 		expect(prebid.initialise).not.toHaveBeenCalled();
 	});
 
-	it('should not initialise Prebid if shouldIncludeOnlyA9 is true', async () => {
-		jest.mock('lib/header-bidding/utils', () => ({
-			...jest.requireActual('lib/header-bidding/utils'),
-			allTcfPrebidVendorsConsented: jest.fn().mockReturnValue(true),
-			shouldIncludeOnlyA9: true,
-		}));
-
-		window.guardian.config.switches = {
-			prebidHeaderBidding: true,
-		};
-		commercialFeatures.shouldLoadGoogletag = true;
-		commercialFeatures.adFree = false;
-
-		mockOnConsent(tcfv2WithConsent);
-		mockGetConsentFor(true);
-
-		await setupPrebid();
-		expect(prebid.initialise).not.toHaveBeenCalled();
-	});
-
-	it('should not initialise Prebid if allTcfPrebidVendorsConsented is false', async () => {
-		window.guardian.config.switches = {
-			prebidHeaderBidding: true,
-		};
-		commercialFeatures.shouldLoadGoogletag = true;
-		commercialFeatures.adFree = false;
-		(allTcfPrebidVendorsConsented as jest.Mock).mockReturnValue(false);
-
-		await setupPrebid();
-		expect(prebid.initialise).not.toHaveBeenCalled();
-	});
-
 	it('should not initialise Prebid when the page has a pageskin', async () => {
 		expect.hasAssertions();
 
@@ -305,7 +266,6 @@ describe('init', () => {
 		window.guardian.config.page.hasPageSkin = true;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
-		(allTcfPrebidVendorsConsented as jest.Mock).mockReturnValue(true);
 
 		await setupPrebid();
 		expect(prebid.initialise).not.toHaveBeenCalled();
@@ -320,13 +280,12 @@ describe('init', () => {
 		window.guardian.config.page.hasPageSkin = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
-		(allTcfPrebidVendorsConsented as jest.Mock).mockReturnValue(true);
 
 		await setupPrebid();
 		expect(prebid.initialise).toHaveBeenCalled();
 	});
 
-	it('should initialise Prebid if TCFv2 consent with correct Sourcepoint Id is true', async () => {
+	it('should initialise Prebid if TCFv2 consent with correct Sourcepoint Id is true ', async () => {
 		expect.hasAssertions();
 
 		window.guardian.config.switches = {
@@ -336,7 +295,6 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
-		(allTcfPrebidVendorsConsented as jest.Mock).mockReturnValue(true);
 
 		await setupPrebid();
 		expect(prebid.initialise).toHaveBeenCalled();
@@ -352,7 +310,6 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithoutConsent);
 		mockGetConsentFor(false);
-		(allTcfPrebidVendorsConsented as jest.Mock).mockReturnValue(true);
 
 		await setupPrebid();
 		expect(log).toHaveBeenCalledWith(
@@ -467,7 +424,6 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentForWithCustom(true, false);
-		(allTcfPrebidVendorsConsented as jest.Mock).mockReturnValue(true);
 
 		await setupPrebid();
 		expect(prebid.initialise).toHaveBeenCalled();
@@ -483,7 +439,6 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentForWithCustom(false, true);
-		(allTcfPrebidVendorsConsented as jest.Mock).mockReturnValue(true);
 
 		await setupPrebid();
 		expect(prebid.initialise).toHaveBeenCalled();
@@ -499,7 +454,6 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentForWithCustom(false, false);
-		(allTcfPrebidVendorsConsented as jest.Mock).mockReturnValue(true);
 
 		await setupPrebid();
 		expect(log).toHaveBeenCalledWith(

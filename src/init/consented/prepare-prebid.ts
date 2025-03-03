@@ -5,10 +5,7 @@ import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { isInCanada } from '../../lib/geo/geo-utils';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
-import {
-	allTcfPrebidVendorsConsented,
-	shouldIncludeOnlyA9,
-} from '../../lib/header-bidding/utils';
+import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
 
 const shouldLoadPrebid = () =>
 	!isGoogleProxy() &&
@@ -44,24 +41,14 @@ const setupPrebid = async (): Promise<void> => {
 			'prebidCustom',
 			consentState,
 		);
-
 		log('commercial', 'Prebid consent:', {
 			hasConsentForGlobalPrebidVendor,
 			hasConsentForCustomPrebidVendor,
-			...(consentState.framework === 'tcfv2'
-				? {
-						hasConsentForAllTcfVendors:
-							allTcfPrebidVendorsConsented(consentState),
-					}
-				: {}),
 		});
-
 		if (
-			(consentState.framework === 'tcfv2' &&
-				!allTcfPrebidVendorsConsented(consentState)) ||
 			// Check if we do NOT have consent to BOTH the old global and custom prebid vendor
-			(!hasConsentForGlobalPrebidVendor &&
-				!hasConsentForCustomPrebidVendor)
+			!hasConsentForGlobalPrebidVendor &&
+			!hasConsentForCustomPrebidVendor
 		) {
 			throw new Error('No consent for prebid');
 		}
