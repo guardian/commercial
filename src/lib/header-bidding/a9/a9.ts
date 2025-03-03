@@ -4,21 +4,21 @@ import { reportError } from '../../../lib/error/report-error';
 import type { A9AdUnitInterface } from '../../../types/global';
 import type { HeaderBiddingSlot, SlotFlatMap } from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';
+
 /*
  * Amazon's header bidding javascript library
  * https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/javascript-guide/display.html
  */
+
 class A9AdUnit implements A9AdUnitInterface {
 	slotID: string;
 	slotName?: string;
 	sizes: number[][];
-	blockedBidders: string[];
 
 	constructor(advert: Advert, slot: HeaderBiddingSlot) {
 		this.slotID = advert.id;
 		this.slotName = window.guardian.config.page.adUnit;
 		this.sizes = slot.sizes.map((size) => Array.from(size));
-		this.blockedBidders = [];
 	}
 }
 
@@ -30,42 +30,18 @@ const bidderTimeout = 1500;
 const initialise = (): void => {
 	if (!initialised && window.apstag) {
 		initialised = true;
-
+		const blockedBidders = window.guardian.config.page.isFront
+			? [
+					'1lsxjb4', // GumGum, as they have been showing wonky formats on fronts
+				]
+			: [];
 		window.apstag.init({
 			pubID: window.guardian.config.page.a9PublisherId,
 			adServer: 'googletag',
 			bidTimeout: bidderTimeout,
+			blockedBidders,
 		});
 	}
-};
-
-/**
- * Filters the provided ad units based on the current page context.
- * - If the page is a network front, only the ad unit with the slot ID 'dfp-ad--inline1--mobile' is included.
- * - If the page is a section front, only the ad unit with the slot ID 'dfp-ad--top-above-nav' is included.
- * - If the page is not a front, all ad units are included.
- * - There is a cross over in logic where the page is both an article as well as a network front/section front,
- * - in this case we want to identify the page as a non-front page (article) and include all ad units.
- *
- * @param adUnits - The array of ad units to be filtered.
- * @returns The filtered array of ad units based on the page context.
- */
-const shouldBlockGumGum = (adUnit: A9AdUnit): boolean => {
-	const section = window.guardian.config.page.section;
-	const isFront = window.guardian.config.page.isFront;
-
-	const isNetworkFront =
-		isFront &&
-		['uk', 'us', 'au', 'europe', 'international'].includes(section);
-
-	const isSectionFront =
-		isFront &&
-		['commentisfree', 'sport', 'culture', 'lifeandstyle'].includes(section);
-
-	const blockGumGum =
-		!(isNetworkFront && adUnit.slotID === 'dfp-ad--inline1--mobile') &&
-		!(isSectionFront && adUnit.slotID === 'dfp-ad--top-above-nav');
-	return blockGumGum;
 };
 
 // slotFlatMap allows you to dynamically interfere with the PrebidSlot definition
@@ -94,41 +70,21 @@ const requestBids = async (
 		return requestQueue;
 	}
 
-	const blockedGumGumUnits = adUnits.filter((adUnit) =>
-		shouldBlockGumGum(adUnit),
-	);
-	const allowGumGumUnits = adUnits.filter(
-		(adUnit) => !shouldBlockGumGum(adUnit),
-	);
-
-	const groupedAdUnits = [
-		{ adUnits: blockedGumGumUnits, blockedBidders: ['1lsxjb4'] },
-		{ adUnits: allowGumGumUnits, blockedBidders: [] },
-	];
-
-	groupedAdUnits.forEach((requestGroup) => {
-		requestQueue = requestQueue
-			.then(
-				() =>
-					new Promise<void>((resolve) => {
-						window.apstag?.fetchBids(
-							{
-								slots: requestGroup.adUnits,
-								blockedBidders: requestGroup.blockedBidders,
-							},
-							() => {
-								window.googletag.cmd.push(() => {
-									window.apstag?.setDisplayBids();
-									resolve();
-								});
-							},
-						);
-					}),
-			)
-			.catch(() => {
-				reportError(new Error('a9 header bidding error'), 'commercial');
-			});
-	});
+	requestQueue = requestQueue
+		.then(
+			() =>
+				new Promise<void>((resolve) => {
+					window.apstag?.fetchBids({ slots: adUnits }, () => {
+						window.googletag.cmd.push(() => {
+							window.apstag?.setDisplayBids();
+							resolve();
+						});
+					});
+				}),
+		)
+		.catch(() => {
+			reportError(new Error('a9 header bidding error'), 'commercial');
+		});
 
 	return requestQueue;
 };
@@ -136,7 +92,6 @@ const requestBids = async (
 export const a9 = {
 	initialise,
 	requestBids,
-	shouldBlockGumGum,
 };
 
 export const _ = {
