@@ -171,6 +171,6 @@ describe('shouldBlockGumGum', () => {
 			blockedBidders: [],
 		};
 		const result = a9.shouldBlockGumGum(mockAdUnit);
-		expect(result).toBe(true);
+		expect(result).toBe(false);
 	});
 });

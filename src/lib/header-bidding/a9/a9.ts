@@ -64,7 +64,8 @@ const shouldBlockGumGum = (adUnit: A9AdUnit): boolean => {
 
 	const blockGumGum =
 		!(isNetworkFront && adUnit.slotID === 'dfp-ad--inline1--mobile') &&
-		!(isSectionFront && adUnit.slotID === 'dfp-ad--top-above-nav');
+		!(isSectionFront && adUnit.slotID === 'dfp-ad--top-above-nav') &&
+		!!isFront;
 	return blockGumGum;
 };
 
