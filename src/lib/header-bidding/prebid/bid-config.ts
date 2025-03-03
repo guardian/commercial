@@ -41,19 +41,7 @@ import {
 	containsPortraitInterstitial,
 	containsWS,
 	getBreakpointKey,
-	shouldIncludeAdYouLike,
-	shouldIncludeAppNexus,
-	shouldIncludeCriteo,
-	shouldIncludeIndexExchange,
-	shouldIncludeKargo,
-	shouldIncludeMagnite,
-	shouldIncludeOpenx,
-	shouldIncludeOzone,
-	shouldIncludePubmatic,
-	shouldIncludeTheTradeDesk,
-	shouldIncludeTripleLift,
-	shouldIncludeTrustX,
-	shouldIncludeXaxis,
+	shouldIncludeBidder,
 	stripDfpAdPrefixFrom,
 	stripMobileSuffix,
 } from '../utils';
@@ -639,26 +627,27 @@ const currentBidders = (
 	gpid: string,
 	consentState: ConsentState,
 ): PrebidBidder[] => {
+	const shouldInclude = shouldIncludeBidder(consentState);
 	const biddersToCheck: Array<[boolean, PrebidBidder]> = [
-		[shouldIncludeCriteo(consentState), criteoBidder(slotSizes)],
-		[shouldIncludeTrustX(), trustXBidder], // Non-TCF (no consentState check)
-		[shouldIncludeTripleLift(), tripleLiftBidder], // Non-TCF (no consentState check)
-		[shouldIncludeAppNexus(consentState), appNexusBidder(pageTargeting)],
-		[shouldIncludeXaxis(consentState), xaxisBidder],
-		[shouldIncludePubmatic(consentState), pubmaticBidder(slotSizes)],
-		[shouldIncludeAdYouLike(consentState), adYouLikeBidder],
-		[shouldIncludeOzone(consentState), ozoneBidder(pageTargeting)],
-		[shouldIncludeOpenx(consentState), openxBidder(pageTargeting)],
-		[shouldIncludeKargo(), kargoBidder], // Non-TCF (no consentState check)
-		[shouldIncludeMagnite(consentState), magniteBidder],
-		[shouldIncludeTheTradeDesk(consentState), theTradeDeskBidder(gpid)],
+		[shouldInclude('criteo'), criteoBidder(slotSizes)],
+		[shouldInclude('trustx'), trustXBidder],
+		[shouldInclude('triplelift'), tripleLiftBidder],
+		[shouldInclude('appnexus'), appNexusBidder(pageTargeting)],
+		[shouldInclude('xhb'), xaxisBidder],
+		[shouldInclude('pubmatic'), pubmaticBidder(slotSizes)],
+		[shouldInclude('adyoulike'), adYouLikeBidder],
+		[shouldInclude('ozone'), ozoneBidder(pageTargeting)],
+		[shouldInclude('oxd'), openxBidder(pageTargeting)],
+		[shouldInclude('kargo'), kargoBidder],
+		[shouldInclude('rubicon'), magniteBidder],
+		[shouldInclude('ttd'), theTradeDeskBidder(gpid)],
 	];
 
 	const otherBidders = biddersToCheck
 		.filter(([shouldInclude]) => inPbTestOr(shouldInclude))
 		.map(([, bidder]) => bidder);
 
-	const ixBidders = shouldIncludeIndexExchange(consentState)
+	const ixBidders = shouldInclude('ix')
 		? indexExchangeBidders(slotSizes)
 		: [];
 
