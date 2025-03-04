@@ -2,7 +2,8 @@ import type { ConsentState } from '@guardian/libs';
 import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
-import { getParticipations } from '../../../experiments/ab';
+import { getParticipations, isUserInVariant } from '../../../experiments/ab';
+import { prebidBidCache } from '../../../experiments/tests/prebid-bid-cache';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
@@ -424,8 +425,10 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		};
 	}
 
-	//Add test condition in here.
-	if (isSwitchedOn('prebidBidCache')) {
+	if (
+		isSwitchedOn('prebidBidCache') &&
+		isUserInVariant(prebidBidCache, 'variant')
+	) {
 		pbjsConfig.useBidCache = true;
 	}
 
