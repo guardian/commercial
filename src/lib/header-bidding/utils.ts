@@ -1,9 +1,4 @@
-import {
-	type ConsentState,
-	getConsentFor,
-	isString,
-	log,
-} from '@guardian/libs';
+import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { createAdSize } from '../../lib/ad-sizes';
 import {
@@ -18,7 +13,7 @@ import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
 } from '../detect/detect-breakpoint';
-import type { HeaderBiddingSize, TcfBidderCode } from './prebid-types';
+import type { HeaderBiddingSize } from './prebid-types';
 
 type StringManipulation = (a: string, b: string) => string;
 type RegExpRecords = Record<string, RegExp | undefined>;
@@ -227,38 +222,6 @@ export const shouldIncludePermutive = (consentState: ConsentState): boolean =>
 	/** this switch specifically controls whether or not the Permutive Audience Connector can run with Prebid */
 	isSwitchedOn('prebidPermutiveAudience') &&
 	getConsentFor('permutive', consentState);
-
-export const allTcfPrebidVendorsConsented = (
-	consentState: ConsentState,
-): boolean => {
-	const tcfVendorConsent: Record<TcfBidderCode, boolean> = {
-		adyoulike: getConsentFor('adYouLike', consentState),
-		appnexus: getConsentFor('xandr', consentState),
-		and: getConsentFor('xandr', consentState),
-		criteo: getConsentFor('criteo', consentState),
-		ix: getConsentFor('indexExchange', consentState),
-		rubicon: getConsentFor('magnite', consentState),
-		oxd: getConsentFor('openX', consentState),
-		ozone: getConsentFor('ozone', consentState),
-		pubmatic: getConsentFor('pubmatic', consentState),
-		xhb: getConsentFor('groupM', consentState),
-		ttd: getConsentFor('theTradeDesk', consentState),
-	};
-
-	const hasConsentForAllVendors =
-		Object.values(tcfVendorConsent).every(Boolean);
-
-	if (!hasConsentForAllVendors) {
-		log(
-			'commercial',
-			'Some Prebid bidders do not have consent to run',
-			Object.entries(tcfVendorConsent)
-				.filter(([, hasConsent]) => !hasConsent)
-				.map(([bidder]) => bidder),
-		);
-	}
-	return hasConsentForAllVendors;
-};
 
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>
