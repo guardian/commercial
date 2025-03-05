@@ -27,9 +27,7 @@
 		"playwright:open": "playwright test --ui",
 		"lint": "eslint .",
 		"lint-staged": "lint-staged",
-		"precommit:lint": "lint-staged",
 		"prepare": "husky",
-		"prepush:test": "jest --verbose --runInBand --onlyChanged",
 		"prettier:check": "prettier . --check --cache",
 		"prettier:fix": "prettier . --write --cache",
 		"serve": "OVERRIDE_BUNDLE=true pnpm webpack-dev-server -c ./webpack.config.dev.mjs",
@@ -119,7 +117,6 @@
 	"prettier": "@guardian/prettier",
 	"lint-staged": {
 		"src/**/*.(js|ts)": [
-			"pnpm eslint --fix",
 			"pnpm prettier:fix"
 		]
 	},

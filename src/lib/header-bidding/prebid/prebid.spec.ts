@@ -1,5 +1,7 @@
-import { type ConsentState, getConsentFor } from '@guardian/libs';
+import { type ConsentState } from '@guardian/libs';
+import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
+import { shouldIncludePermutive } from '../utils';
 import { prebid } from './prebid';
 
 const getAdvertById = getAdvertById_ as jest.Mock;
@@ -16,6 +18,11 @@ jest.mock('lib/dfp/get-advert-by-id', () => ({
 	getAdvertById: jest.fn(),
 }));
 
+jest.mock('../utils', () => ({
+	...jest.requireActual('../utils.ts'),
+	shouldIncludePermutive: jest.fn().mockReturnValue(true),
+}));
+
 const mockConsentState = {
 	tcfv2: {
 		consents: { '': true },
@@ -30,13 +37,6 @@ const mockConsentState = {
 	framework: 'tcfv2',
 } satisfies ConsentState;
 
-const mockGetConsentFor = (hasConsent: boolean) =>
-	(getConsentFor as jest.Mock)
-		.mockReturnValueOnce(hasConsent)
-		.mockReturnValueOnce(hasConsent);
-
-// const mockGetConsentFor2 = jest.mock('@guardian', () => {});
-
 const resetPrebid = () => {
 	delete window.pbjs;
 	// @ts-expect-error -- there’s no types for this
@@ -45,7 +45,7 @@ const resetPrebid = () => {
 	jest.requireActual('@guardian/prebid.js/build/dist/prebid');
 };
 
-describe.skip('initialise', () => {
+describe('initialise', () => {
 	beforeEach(() => {
 		resetPrebid();
 		window.guardian.config.switches.consentManagement = true;
@@ -57,8 +57,6 @@ describe.skip('initialise', () => {
 
 	test('should generate correct Prebid config when all switches on', () => {
 		prebid.initialise(window, mockConsentState);
-		// All consent granted here
-		mockGetConsentFor(true);
 		expect(window.pbjs?.getConfig()).toEqual({
 			auctionOptions: {},
 			bidderSequence: 'random',
@@ -136,6 +134,25 @@ describe.skip('initialise', () => {
 					},
 				},
 			},
+			realTimeData: {
+				dataProviders: [
+					{
+						name: 'permutive',
+						params: {
+							acBidders: [
+								'appnexus',
+								'ix',
+								'ozone',
+								'pubmatic',
+								'trustx',
+							],
+							overwrites: {
+								pubmatic,
+							},
+						},
+					},
+				],
+			},
 		});
 	});
 
@@ -196,9 +213,8 @@ describe.skip('initialise', () => {
 		expect(window.pbjs?.getConfig().userSync.syncEnabled).toEqual(false);
 	});
 
-	test('should generate correct Prebid config when both Permutive and prebidPermutiveAudience are true', () => {
-		window.guardian.config.switches.permutive = true;
-		window.guardian.config.switches.prebidPermutiveAudience = true;
+	test('should generate correct Prebid config when shouldIncludePermutive is true', () => {
+		(shouldIncludePermutive as jest.Mock).mockReturnValue(true);
 		prebid.initialise(window, mockConsentState);
 		const rtcData = window.pbjs?.getConfig('realTimeData').dataProviders[0];
 		expect(rtcData?.name).toEqual('permutive');
@@ -211,20 +227,12 @@ describe.skip('initialise', () => {
 		]);
 	});
 
-	test.each([
-		[true, false],
-		[false, true],
-		[false, false],
-	])(
-		'should not generate RTD when Permutive is %s and prebidPermutiveAudience is %s',
-		(p, a) => {
-			window.guardian.config.switches.permutive = p;
-			window.guardian.config.switches.prebidPermutiveAudience = a;
-			prebid.initialise(window, mockConsentState);
-			const rtcData = window.pbjs?.getConfig('realTimeData');
-			expect(rtcData).toBeUndefined();
-		},
-	);
+	test('should NOT generate correct Prebid config when shouldIncludePermutive is true', () => {
+		(shouldIncludePermutive as jest.Mock).mockReturnValue(false);
+		prebid.initialise(window, mockConsentState);
+		const rtcData = window.pbjs?.getConfig('realTimeData');
+		expect(rtcData).toBeUndefined();
+	});
 
 	type BidWonHandler = (arg0: {
 		height: number;
