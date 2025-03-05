@@ -21,7 +21,11 @@ import type {
 	SlotFlatMap,
 } from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';
-import { isSwitchedOn, stripDfpAdPrefixFrom } from '../utils';
+import {
+	isSwitchedOn,
+	shouldIncludePermutive,
+	stripDfpAdPrefixFrom,
+} from '../utils';
 import { bids } from './bid-config';
 import type { PrebidPriceGranularity } from './price-config';
 import {
@@ -266,7 +270,7 @@ declare global {
 }
 
 const shouldEnableAnalytics = (): boolean => {
-	if (!isSwitchedOn('prebidAnalytics')) {
+	if (!window.guardian.config.switches.prebidAnalytics) {
 		return false;
 	}
 
@@ -301,7 +305,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	}
 	initialised = true;
 
-	const userSync: UserSync = isSwitchedOn('prebidUserSync')
+	const userSync: UserSync = window.guardian.config.switches.prebidUserSync
 		? {
 				syncsPerBidder: 0, // allow all syncs
 				filterSettings: {
@@ -366,15 +370,11 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 
 	window.pbjs.bidderSettings = {};
 
-	if (isSwitchedOn('consentManagement')) {
+	if (window.guardian.config.switches.consentManagement) {
 		pbjsConfig.consentManagement = consentManagement();
 	}
 
-	if (
-		isSwitchedOn('permutive') &&
-		// this switch specifically controls whether or not the Permutive Audience Connector can run with Prebid
-		isSwitchedOn('prebidPermutiveAudience')
-	) {
+	if (shouldIncludePermutive(consentState)) {
 		pbjsConfig.realTimeData = {
 			dataProviders: [
 				{
@@ -551,7 +551,7 @@ const requestBids = async (
 		return requestQueue;
 	}
 
-	if (!isSwitchedOn('prebidHeaderBidding')) {
+	if (!window.guardian.config.switches.prebidHeaderBidding) {
 		return requestQueue;
 	}
 
