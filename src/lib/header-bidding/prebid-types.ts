@@ -143,7 +143,6 @@ export type PrebidParams =
 
 export type PrebidBidder = {
 	name: BidderCode;
-	switchName: string;
 	bidParams: (slotId: string, sizes: HeaderBiddingSize[]) => PrebidParams;
 };
 

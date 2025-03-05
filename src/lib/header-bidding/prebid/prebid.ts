@@ -22,6 +22,7 @@ import type {
 } from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';
 import {
+	isSwitchedOn,
 	shouldIncludeBidder,
 	shouldIncludePermutive,
 	stripDfpAdPrefixFrom,
@@ -279,7 +280,7 @@ declare global {
 }
 
 const shouldEnableAnalytics = (): boolean => {
-	if (!window.guardian.config.switches.prebidAnalytics) {
+	if (!isSwitchedOn('prebidAnalytics')) {
 		return false;
 	}
 
@@ -314,7 +315,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	}
 	initialised = true;
 
-	const userSync: UserSync = window.guardian.config.switches.prebidUserSync
+	const userSync: UserSync = isSwitchedOn('prebidUserSync')
 		? {
 				syncsPerBidder: 0, // allow all syncs
 				filterSettings: {
@@ -367,6 +368,10 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		}
 	};
 
+	/** Helper function to decide if a bidder should be included.
+	 * It is a curried function prepared with the consent state
+	 * at the time of initialisation to avoid unnecessary repetition
+	 * of consent state throughout */
 	const shouldInclude = shouldIncludeBidder(consentState);
 
 	const pbjsConfig: PbjsConfig = Object.assign(
@@ -393,26 +398,30 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 
 	window.pbjs.bidderSettings = {};
 
-	if (window.guardian.config.switches.consentManagement) {
+	if (isSwitchedOn('consentManagement')) {
 		pbjsConfig.consentManagement = consentManagement();
 	}
 
 	if (shouldIncludePermutive(consentState)) {
+		const includedAcBidders = (
+			[
+				'appnexus',
+				'ix',
+				'ozone',
+				'pubmatic',
+				'trustx',
+			] satisfies BidderCode[]
+		).filter(shouldInclude);
+
 		pbjsConfig.realTimeData = {
 			dataProviders: [
 				{
 					name: 'permutive',
 					params: {
-						acBidders: [
-							'appnexus',
-							'ix',
-							'ozone',
-							'pubmatic',
-							'trustx',
-						],
-						overwrites: {
-							pubmatic,
-						},
+						acBidders: includedAcBidders,
+						...(shouldInclude('pubmatic')
+							? { overrides: { pubmatic } }
+							: {}),
 					},
 				},
 			],
