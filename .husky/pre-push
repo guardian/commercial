@@ -4,4 +4,4 @@ then
 	exit 1
 fi
 
-pnpm npm-run-all 'prepush:*'
+jest --verbose --runInBand --onlyChanged
