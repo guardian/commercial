@@ -307,9 +307,13 @@ const timeoutBuffer = 400;
 const bidderTimeout = PREBID_TIMEOUT;
 
 /**
- * Set initial value to false as we are not using bid cache unless switch is on and in test
+ * useBidCache is false by default then we will set it to true when switch in on and user is in variant
  */
 const useBidCache = false;
+
+const shouldIncludePrebidBidCache =
+	isSwitchedOn('prebidBidCache') &&
+	isUserInVariant(prebidBidCache, 'variant');
 
 let requestQueue: Promise<void> = Promise.resolve();
 let initialised = false;
@@ -425,10 +429,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		};
 	}
 
-	if (
-		isSwitchedOn('prebidBidCache') &&
-		isUserInVariant(prebidBidCache, 'variant')
-	) {
+	if (shouldIncludePrebidBidCache) {
 		pbjsConfig.useBidCache = true;
 	}
 
