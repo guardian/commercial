@@ -38,6 +38,29 @@
 		"tsc": "tsc --noEmit",
 		"validate": "npm-run-all tsc lint test build"
 	},
+	"peerDependencies": {
+		"@guardian/ab-core": "^8.0.0",
+		"@guardian/core-web-vitals": "^8.0.1",
+		"@guardian/identity-auth": "^4.0.0",
+		"@guardian/identity-auth-frontend": "^6.0.0",
+		"@guardian/libs": "^21.2.0",
+		"@guardian/source": "^8.0.0",
+		"typescript": "~5.5.2"
+	},
+	"dependencies": {
+		"@guardian/ab-core": "8.0.1",
+		"@guardian/core-web-vitals": "8.0.1",
+		"@guardian/identity-auth": "^4.0.2",
+		"@guardian/identity-auth-frontend": "^6.0.2",
+		"@guardian/libs": "21.2.0",
+		"@guardian/prebid.js": "9.27.0-1",
+		"@guardian/source": "8.0.2",
+		"fastdom": "^1.0.12",
+		"lodash-es": "^4.17.21",
+		"process": "^0.11.10",
+		"tslib": "^2.7.0",
+		"web-vitals": "^4.2.4"
+	},
 	"devDependencies": {
 		"@babel/cli": "^7.26.4",
 		"@babel/core": "^7.26.0",
@@ -49,15 +72,9 @@
 		"@babel/register": "^7.25.9",
 		"@babel/runtime": "^7.26.0",
 		"@changesets/cli": "^2.27.9",
-		"@guardian/ab-core": "8.0.1",
 		"@guardian/browserslist-config": "^6.1.1",
-		"@guardian/core-web-vitals": "8.0.1",
 		"@guardian/eslint-config": "^11.0.0",
-		"@guardian/identity-auth": "^4.0.2",
-		"@guardian/identity-auth-frontend": "^6.0.2",
-		"@guardian/libs": "21.2.0",
 		"@guardian/prettier": "8.0.1",
-		"@guardian/source": "8.0.2",
 		"@playwright/test": "1.50.1",
 		"@types/googletag": "~3.3.0",
 		"@types/jest": "^29.5.14",
@@ -102,14 +119,6 @@
 		"webpack-dev-server": "^5.2.0",
 		"webpack-merge": "^6.0.1"
 	},
-	"dependencies": {
-		"@guardian/prebid.js": "9.27.0-1",
-		"fastdom": "^1.0.12",
-		"lodash-es": "^4.17.21",
-		"process": "^0.11.10",
-		"tslib": "^2.7.0",
-		"web-vitals": "^4.2.4"
-	},
 	"prettier": "@guardian/prettier",
 	"lint-staged": {
 		"src/**/*.(js|ts)": [
@@ -119,15 +128,6 @@
 	},
 	"publishConfig": {
 		"access": "public"
-	},
-	"peerDependencies": {
-		"@guardian/ab-core": "^8.0.0",
-		"@guardian/core-web-vitals": "^8.0.1",
-		"@guardian/identity-auth": "^4.0.0",
-		"@guardian/identity-auth-frontend": "^6.0.0",
-		"@guardian/libs": "^21.2.0",
-		"@guardian/source": "^8.0.0",
-		"typescript": "~5.5.2"
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"
