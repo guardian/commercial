@@ -52,6 +52,7 @@ describe('initialise', () => {
 		window.guardian.config.switches.prebidUserSync = true;
 		window.guardian.config.switches.prebidAppNexus = true;
 		window.guardian.config.switches.prebidXaxis = true;
+		window.guardian.config.page.keywords = 'Key,Words';
 		getAdvertById.mockReset();
 	});
 
@@ -91,6 +92,15 @@ describe('initialise', () => {
 			maxBid: 5000,
 			maxNestedIframes: 10,
 			mediaTypePriceGranularity: {},
+			ortb2: {
+				site: {
+					ext: {
+						data: {
+							keywords: ['Key', 'Words'],
+						},
+					},
+				},
+			},
 			priceGranularity: 'custom',
 			s2sConfig: {
 				adapter: 'prebidServer',
