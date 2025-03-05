@@ -4,4 +4,4 @@ then
 	exit 1
 fi
 
-jest --verbose --runInBand --onlyChanged
+pnpm jest --verbose --runInBand --onlyChanged
