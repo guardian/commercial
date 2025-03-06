@@ -105,8 +105,8 @@ export type PrebidMagniteParams = {
 };
 
 export type PrebidTheTradeDeskParams = {
-	supplySourceId: number;
-	publisherId: number;
+	supplySourceId: string;
+	publisherId: string;
 	placementId: string;
 };
 
@@ -141,9 +141,14 @@ export type PrebidParams =
 	| PrebidXaxisParams
 	| PrebidTheTradeDeskParams;
 
+export type BidParamsFn = (
+	slotId: string,
+	sizes: HeaderBiddingSize[],
+) => PrebidParams;
+
 export type PrebidBidder = {
 	name: BidderCode;
-	bidParams: (slotId: string, sizes: HeaderBiddingSize[]) => PrebidParams;
+	bidParams: BidParamsFn;
 };
 
 export type PrebidBid = {

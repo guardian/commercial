@@ -1,5 +1,5 @@
 import type { ConsentState } from '@guardian/libs';
-import { log } from '@guardian/libs';
+import { isUndefined, log } from '@guardian/libs';
 import {
 	isInAuOrNz,
 	isInRow,
@@ -14,7 +14,9 @@ import { dfpEnv } from '../../dfp/dfp-env';
 import { buildAppNexusTargetingObject } from '../../page-targeting';
 import type {
 	BidderCode,
+	BidParamsFn,
 	HeaderBiddingSize,
+	IxBidParamsFn,
 	PrebidAdYouLikeParams,
 	PrebidAppNexusParams,
 	PrebidBid,
@@ -25,6 +27,7 @@ import type {
 	PrebidOpenXParams,
 	PrebidOzoneParams,
 	PrebidPubmaticParams,
+	PrebidTheTradeDeskParams,
 	PrebidTripleLiftParams,
 	PrebidTrustXParams,
 	PrebidXaxisParams,
@@ -206,9 +209,7 @@ const isPbTestOn = () => Object.keys(pbTestNameMap()).length > 0;
 const inPbTestOr = (liveClause: boolean) => isPbTestOn() || liveClause;
 
 /* Bidders */
-const appNexusBidderParams: (
-	pageTargeting: PageTargeting,
-) => PrebidBidder['bidParams'] =
+const appNexusBidderParams: (pageTargeting: PageTargeting) => BidParamsFn =
 	(pageTargeting: PageTargeting) =>
 	(slotId: string, sizes: HeaderBiddingSize[]): PrebidAppNexusParams =>
 		getAppNexusDirectBidParams(
@@ -217,9 +218,7 @@ const appNexusBidderParams: (
 			stripDfpAdPrefixFrom(slotId),
 		);
 
-const openxBidderParams: (
-	pageTargeting: PageTargeting,
-) => PrebidBidder['bidParams'] =
+const openxBidderParams: (pageTargeting: PageTargeting) => BidParamsFn =
 	(pageTargeting: PageTargeting) =>
 	(slotId, sizes): PrebidOpenXParams => {
 		const customParams = buildAppNexusTargetingObject(pageTargeting);
@@ -280,9 +279,7 @@ const getOzonePlacementId = (sizes: HeaderBiddingSize[]) => {
 	return '0420420500';
 };
 
-const ozoneBidderParams: (
-	pageTargeting: PageTargeting,
-) => PrebidBidder['bidParams'] =
+const ozoneBidderParams: (pageTargeting: PageTargeting) => BidParamsFn =
 	(pageTargeting: PageTargeting) =>
 	(_slotId: string, sizes: HeaderBiddingSize[]): PrebidOzoneParams => {
 		const advert = dfpEnv.adverts.get(_slotId);
@@ -461,60 +458,49 @@ const getPubmaticPlacementId = (
 	return undefined;
 };
 
-const pubmaticBidderParams = (
-	slotSizes: HeaderBiddingSize[],
-): PrebidBidder['bidParams'] => {
-	const defaultParams = (slotId: string): PrebidPubmaticParams => ({
+const pubmaticBidderParams = (slotSizes: HeaderBiddingSize[]): BidParamsFn => {
+	return (slotId: string): PrebidPubmaticParams => ({
 		publisherId: getPubmaticPublisherId(),
 		adSlot: stripDfpAdPrefixFrom(slotId),
-		placementId: getPubmaticPlacementId(slotId, slotSizes),
+		// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
+		// This check is to distinguish from the top-above-nav which, includes a leaderboard
+		placementId: containsBillboardNotLeaderboard(slotSizes)
+			? 'theguardian_970x250_only'
+			: getPubmaticPlacementId(slotId, slotSizes),
 	});
-
-	// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
-	// This check is to distinguish from the top-above-nav which, includes a leaderboard
-	if (containsBillboardNotLeaderboard(slotSizes)) {
-		return (slotId: string): PrebidPubmaticParams => ({
-			...defaultParams(slotId),
-			placementId: 'theguardian_970x250_only',
-		});
-	}
-
-	return defaultParams;
 };
 
-const trustXBidderParams: PrebidBidder['bidParams'] = (
+const trustXBidderParams: BidParamsFn = (
 	slotId: string,
 ): PrebidTrustXParams => ({
 	uid: getTrustXAdUnitId(slotId, isDesktopAndArticle),
 });
 
-const tripleLiftBidderParams: PrebidBidder['bidParams'] = (
+const tripleLiftBidderParams: BidParamsFn = (
 	slotId: string,
 	sizes: HeaderBiddingSize[],
 ): PrebidTripleLiftParams => ({
 	inventoryCode: getTripleLiftInventoryCode(slotId, sizes),
 });
 
-const xaxisBidderParams: PrebidBidder['bidParams'] = (
+const xaxisBidderParams: BidParamsFn = (
 	slotId: string,
 	sizes: HeaderBiddingSize[],
 ): PrebidXaxisParams => ({
 	placementId: getXaxisPlacementId(sizes),
 });
 
-const adYouLikeBiddeParams: PrebidBidder['bidParams'] = (
+const adYouLikeBidderParams: BidParamsFn = (
 	slotId: string,
 	sizes: HeaderBiddingSize[],
 ): PrebidAdYouLikeParams => ({
 	placement: getAdYouLikePlacementId(sizes),
 });
 
-const criteoBidderParams = (
-	slotSizes: HeaderBiddingSize[],
-): PrebidBidder['bidParams'] => {
+const criteoBidderParams = (sizes: HeaderBiddingSize[]): BidParamsFn => {
 	// The only prebid compatible size for fronts-banner-ads and the merchandising-high is the billboard (970x250)
 	// This check is to distinguish from the top-above-nav slot, which includes a leaderboard
-	if (containsBillboardNotLeaderboard(slotSizes)) {
+	if (containsBillboardNotLeaderboard(sizes)) {
 		return () => ({
 			zoneId: 1759354,
 		});
@@ -525,14 +511,14 @@ const criteoBidderParams = (
 	});
 };
 
-const kargoBidderParams = (
+const kargoBidderParams: BidParamsFn = (
 	_slotId: string,
 	sizes: HeaderBiddingSize[],
 ): PrebidKargoParams => ({
 	placementId: getKargoPlacementId(sizes),
 });
 
-const magniteBidderParams = (
+const magniteBidderParams: BidParamsFn = (
 	slotId: string,
 	sizes: HeaderBiddingSize[],
 ): PrebidMagniteParams => ({
@@ -545,8 +531,8 @@ const magniteBidderParams = (
 });
 
 const theTradeDeskBidderParams =
-	(gpid: string): PrebidBidder['bidParams'] =>
-	() => ({
+	(gpid: string): BidParamsFn =>
+	(): PrebidTheTradeDeskParams => ({
 		supplySourceId: 'theguardian',
 		publisherId: '1',
 		placementId: gpid,
@@ -567,26 +553,51 @@ const indexExchangeBidders = (
 	}));
 };
 
-const biddersBeingTested = (allBidders: PrebidBidder['bidParams'][]): PrebidBidder[] =>
+const biddersBeingTested = (allBidders: PrebidBidder[]): PrebidBidder[] =>
 	allBidders.filter((bidder) => pbTestNameMap()[bidder.name]);
 
-const prebidBidders: Record<BidderCode, {shouldIncludeFn: (consentState: ConsentState) => boolean; bidParams: PrebidBidder['bidParams']}> = 	{'criteo': {
-			shouldIncludeFn: (consentState:ConsentState) => shouldIncludeBidder(consentState)('criteo'),
-			bidParams: (slotSizes: HeaderBiddingSize[]) => criteoBidderParams(slotSizes)},
-		'trustx': {
-			shouldInclude('trustx'), trustXBidderParams},
-		'triplelift': {(consentState) => shouldIncludeBidder(consentState)('triplelift'), tripleLiftBidderParams},
-		'appnexus': {(consentState) => shouldIncludeBidder(consentState)('appnexus'), appNexusBidderParams(pageTargeting)},
-		'xhb': {(consentState) => shouldIncludeBidder(consentState)('xhb'), xaxisBidderParams},
-		'pubmatic': {(consentState) => shouldIncludeBidder(consentState)('pubmatic'), pubmaticBidderParams(slotSizes)},
-		'adyoulike': {(consentState) => shouldIncludeBidder(consentState)('adyoulike'), adYouLikeBidderParams},
-		'ozone': {(consentState) => shouldIncludeBidder(consentState)('ozone'), ozoneBidderParams(pageTargeting)},
-		'oxd': {(consentState) => shouldIncludeBidder(consentState)('oxd'), openxBidderParams(pageTargeting)},
-		'kargo': {(consentState) => shouldIncludeBidder(consentState)('kargo'), kargoBidderParams},
-		'rubicon': {(consentState) => shouldIncludeBidder(consentState)('rubicon'), magniteBidderParams},
-		'ttd': {(consentState) => shouldIncludeBidder(consentState)('ttd'), theTradeDeskBidderParams(gpid)},}
-
-
+const getBidParams = ({
+	bidder,
+	slotSizes,
+	pageTargeting,
+	gpid,
+}: {
+	bidder: BidderCode;
+	slotSizes: HeaderBiddingSize[];
+	pageTargeting: PageTargeting;
+	gpid: string;
+}): BidParamsFn | undefined => {
+	switch (bidder) {
+		case 'criteo':
+			return criteoBidderParams(slotSizes);
+		case 'trustx':
+			return trustXBidderParams;
+		case 'triplelift':
+			return tripleLiftBidderParams;
+		case 'and':
+		case 'appnexus':
+			return appNexusBidderParams(pageTargeting);
+		case 'xhb':
+			return xaxisBidderParams;
+		case 'pubmatic':
+			return pubmaticBidderParams(slotSizes);
+		case 'adyoulike':
+			return adYouLikeBidderParams;
+		case 'ozone':
+			return ozoneBidderParams(pageTargeting);
+		case 'oxd':
+			return openxBidderParams(pageTargeting);
+		case 'kargo':
+			return kargoBidderParams;
+		case 'rubicon':
+			return magniteBidderParams;
+		case 'ttd':
+			return theTradeDeskBidderParams(gpid);
+		// Index exchange bidders are different
+		case 'ix':
+			return undefined;
+	}
+};
 
 const currentBidders = (
 	slotSizes: HeaderBiddingSize[],
@@ -595,24 +606,28 @@ const currentBidders = (
 	consentState: ConsentState,
 ): PrebidBidder[] => {
 	const shouldInclude = shouldIncludeBidder(consentState);
-	const biddersToCheck: Array<[boolean, PrebidBidder['bidParams']]> = [
-		[shouldInclude('criteo'), criteoBidderParams(slotSizes)],
-		[shouldInclude('trustx'), trustXBidderParams],
-		[shouldInclude('triplelift'), tripleLiftBidderParams],
-		[shouldInclude('appnexus'), appNexusBidderParams(pageTargeting)],
-		[shouldInclude('xhb'), xaxisBidderParams],
-		[shouldInclude('pubmatic'), pubmaticBidderParams(slotSizes)],
-		[shouldInclude('adyoulike'), adYouLikeBidderParams],
-		[shouldInclude('ozone'), ozoneBidderParams(pageTargeting)],
-		[shouldInclude('oxd'), openxBidderParams(pageTargeting)],
-		[shouldInclude('kargo'), kargoBidderParams],
-		[shouldInclude('rubicon'), magniteBidderParams],
-		[shouldInclude('ttd'), theTradeDeskBidderParams(gpid)],
-	];
+	const biddersToCheck = [
+		'criteo',
+		'trustx',
+		'triplelift',
+		'and',
+		'xhb',
+		'pubmatic',
+		'adyoulike',
+		'ozone',
+		'oxd',
+		'kargo',
+		'rubicon',
+		'ttd',
+	] satisfies Array<Partial<BidderCode>>;
 
-	const otherBidders = biddersToCheck
-		.filter(([shouldInclude]) => inPbTestOr(shouldInclude))
-		.map(([, bidder]) => bidder);
+	const otherBidders: PrebidBidder[] = biddersToCheck
+		.filter((bidder) => inPbTestOr(shouldInclude(bidder)))
+		.map((bidder) => ({
+			name: bidder,
+			bidParams: getBidParams({ bidder, slotSizes, pageTargeting, gpid }),
+		}))
+		.filter((bidder): bidder is PrebidBidder => !!bidder.bidParams);
 
 	const ixBidders = shouldInclude('ix')
 		? indexExchangeBidders(slotSizes)
@@ -644,6 +659,3 @@ export const _ = {
 	indexExchangeBidders,
 	getOzonePlacementId,
 };
-function tripleLiftBidder(slotId: string, sizes: AdSize[]): PrebidParams {
-	throw new Error('Function not implemented.');
-}
