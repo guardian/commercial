@@ -93,6 +93,15 @@ type PbjsConfig = {
 	timeoutBuffer?: number;
 	priceGranularity: PrebidPriceGranularity;
 	userSync: UserSync;
+	ortb2?: {
+		site: {
+			ext: {
+				data: {
+					keywords: string[];
+				};
+			};
+		};
+	};
 	consentManagement?: ConsentManagement;
 	realTimeData?: unknown;
 };
@@ -367,6 +376,18 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			userSync,
 		},
 	);
+
+	const keywordsArray = window.guardian.config.page.keywords.split(',');
+
+	pbjsConfig.ortb2 = {
+		site: {
+			ext: {
+				data: {
+					keywords: keywordsArray,
+				},
+			},
+		},
+	};
 
 	window.pbjs.bidderSettings = {};
 
