@@ -3,8 +3,8 @@ import type { ABTest } from '@guardian/ab-core';
 export const prebidBidCache: ABTest = {
 	id: 'PrebidBidCache',
 	author: '@commercial-dev',
-	start: '2025-03-07',
-	expiry: '2024-03-21',
+	start: '2025-03-10',
+	expiry: '2024-03-24',
 	audience: 10 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',

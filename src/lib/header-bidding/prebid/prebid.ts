@@ -2,8 +2,7 @@ import type { ConsentState } from '@guardian/libs';
 import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
-import { getParticipations, isUserInVariant } from '../../../experiments/ab';
-import { prebidBidCache } from '../../../experiments/tests/prebid-bid-cache';
+import { getParticipations } from '../../../experiments/ab';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
@@ -25,6 +24,7 @@ import { getHeaderBiddingAdSlots } from '../slot-config';
 import {
 	isSwitchedOn,
 	shouldIncludePermutive,
+	shouldIncludePrebidBidCache,
 	stripDfpAdPrefixFrom,
 } from '../utils';
 import { bids } from './bid-config';
@@ -311,10 +311,6 @@ const bidderTimeout = PREBID_TIMEOUT;
  */
 const useBidCache = false;
 
-const shouldIncludePrebidBidCache =
-	isSwitchedOn('prebidBidCache') &&
-	isUserInVariant(prebidBidCache, 'variant');
-
 let requestQueue: Promise<void> = Promise.resolve();
 let initialised = false;
 
@@ -429,7 +425,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		};
 	}
 
-	if (shouldIncludePrebidBidCache) {
+	if (shouldIncludePrebidBidCache()) {
 		pbjsConfig.useBidCache = true;
 	}
 
