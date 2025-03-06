@@ -3,6 +3,7 @@ import { join } from 'path';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack from 'webpack';
+import prebidBabelOptions from 'prebid.js/.babelrc.js';
 
 const gitCommitSHA = () => {
 	try {
@@ -59,6 +60,14 @@ const config = {
 						},
 					},
 				],
+			},
+			{
+				test: /.js$/,
+				include: new RegExp(`/prebid\.js`),
+				use: {
+					loader: 'babel-loader',
+					options: prebidBabelOptions,
+				},
 			},
 			{
 				test: /\.svg$/,
