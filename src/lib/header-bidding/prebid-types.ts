@@ -113,7 +113,6 @@ export type PrebidTheTradeDeskParams = {
 export type BidderCode =
 	| 'adyoulike'
 	| 'and'
-	| 'appnexus'
 	| 'criteo'
 	| 'ix'
 	| 'kargo'
