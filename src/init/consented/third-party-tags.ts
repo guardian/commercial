@@ -1,16 +1,33 @@
 /* A regionalised container for all the commercial tags. */
 
 import { getConsentFor, onConsent } from '@guardian/libs';
-import { ias } from '../../core/third-party-tags/ias';
-import { inizio } from '../../core/third-party-tags/inizio';
-import { permutive } from '../../core/third-party-tags/permutive';
-import { remarketing } from '../../core/third-party-tags/remarketing';
-import { twitter } from '../../core/third-party-tags/twitter-uwt';
 import { commercialFeatures } from '../../lib/commercial-features';
 import fastdom from '../../lib/fastdom-promise';
+import { ias } from '../../lib/third-party-tags/ias';
 import { imrWorldwide } from '../../lib/third-party-tags/imr-worldwide';
 import { imrWorldwideLegacy } from '../../lib/third-party-tags/imr-worldwide-legacy';
+import { inizio } from '../../lib/third-party-tags/inizio';
+import { permutive } from '../../lib/third-party-tags/permutive';
+import { remarketing } from '../../lib/third-party-tags/remarketing';
 import type { ThirdPartyTag } from '../../types/global';
+
+const createTagScript = (tag: ThirdPartyTag) => {
+	const script = document.createElement('script');
+	if (typeof tag.url !== 'undefined') {
+		script.src = tag.url;
+	}
+	// script.onload cannot be undefined
+	script.onload = tag.onLoad ?? null;
+	if (tag.async === true) {
+		script.setAttribute('async', '');
+	}
+	if (tag.attrs) {
+		tag.attrs.forEach((attr) => {
+			script.setAttribute(attr.name, attr.value);
+		});
+	}
+	return script;
+};
 
 const addScripts = (tags: ThirdPartyTag[]) => {
 	const ref = document.scripts[0];
@@ -20,7 +37,7 @@ const addScripts = (tags: ThirdPartyTag[]) => {
 	tags.forEach((tag) => {
 		if (tag.loaded === true) return;
 
-		if (tag.beforeLoad) tag.beforeLoad();
+		tag.beforeLoad?.();
 
 		// Tag is either an image, a snippet or a script.
 		if (tag.useImage === true && typeof tag.url !== 'undefined') {
@@ -29,20 +46,7 @@ const addScripts = (tags: ThirdPartyTag[]) => {
 			tag.insertSnippet();
 		} else {
 			hasScriptsToInsert = true;
-			const script = document.createElement('script');
-			if (typeof tag.url !== 'undefined') {
-				script.src = tag.url;
-			}
-			// script.onload cannot be undefined
-			script.onload = tag.onLoad ?? null;
-			if (tag.async === true) {
-				script.setAttribute('async', '');
-			}
-			if (tag.attrs) {
-				tag.attrs.forEach((attr) => {
-					script.setAttribute(attr.name, attr.value);
-				});
-			}
+			const script = createTagScript(tag);
 			frag.appendChild(script);
 		}
 		tag.loaded = true;
@@ -63,7 +67,7 @@ const insertScripts = async (
 	advertisingServices: ThirdPartyTag[],
 	performanceServices: ThirdPartyTag[], // performanceServices always run
 ): Promise<void> => {
-	await addScripts(performanceServices);
+	void addScripts(performanceServices);
 	const consentState = await onConsent();
 	const consentedAdvertisingServices = advertisingServices.filter(
 		(script) => {
@@ -73,7 +77,7 @@ const insertScripts = async (
 	);
 
 	if (consentedAdvertisingServices.length > 0) {
-		await addScripts(consentedAdvertisingServices);
+		void addScripts(consentedAdvertisingServices);
 	}
 };
 
@@ -87,9 +91,6 @@ const loadOther = (): Promise<void> => {
 		}),
 		ias,
 		inizio({ shouldRun: window.guardian.config.switches.inizio ?? false }),
-		twitter({
-			shouldRun: window.guardian.config.switches.twitterUwt ?? false,
-		}),
 	].filter((_) => _.shouldRun);
 
 	const performanceServices: ThirdPartyTag[] = [
@@ -103,11 +104,11 @@ const loadOther = (): Promise<void> => {
 };
 
 const init = async (): Promise<boolean> => {
-	if (!commercialFeatures.thirdPartyTags) {
-		return Promise.resolve(false);
+	if (commercialFeatures.thirdPartyTags) {
+		void loadOther();
+		return Promise.resolve(true);
 	}
-	await loadOther();
-	return Promise.resolve(true);
+	return Promise.resolve(false);
 };
 
 export { init };

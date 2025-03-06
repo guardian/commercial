@@ -24,7 +24,7 @@ const hostnames = {
 	dev: 'http://localhost:3030',
 } as const;
 
-const getHost = (stage?: Stage | undefined) => {
+const getHost = (stage?: Stage) => {
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- defensive runtime
 	return hostnames[stage ?? getStage()] ?? hostnames.dev;
 };
@@ -232,8 +232,8 @@ const logUnfilledSlots = (page: Page) => {
 // Log commercial logs to playwight console
 const logCommercial = (page: Page) => {
 	page.on('console', (msg) => {
-		const label = msg.args()[0]?.toString();
-		if (label?.includes('commercial')) {
+		const label = JSON.stringify(msg.args()[0]);
+		if (label.includes('commercial')) {
 			console.log(msg.args().slice(4).map(String).join(' '));
 		}
 	});

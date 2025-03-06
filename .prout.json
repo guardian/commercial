@@ -1,0 +1,8 @@
+{
+	"checkpoints": {
+		"PROD": {
+			"url": "https://assets.guim.co.uk/commercial/prout",
+			"overdue": "30M"
+		}
+	}
+}

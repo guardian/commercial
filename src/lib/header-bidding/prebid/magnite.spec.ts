@@ -1,4 +1,4 @@
-import { createAdSize } from '../../../core/ad-sizes';
+import { createAdSize } from '../../../lib/ad-sizes';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,

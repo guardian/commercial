@@ -103,14 +103,14 @@ describe('setupComscore', () => {
 	it('should do nothing if the comscore is disabled in commercial features', async () => {
 		commercialFeatures.comscore = false;
 		await setupComscore();
-		expect(onConsent).not.toBeCalled();
+		expect(onConsent).not.toHaveBeenCalled();
 	});
 
 	it('should register a callback with onConsentChange if enabled in commercial features', async () => {
 		mockOnConsent(tcfv2WithConsent);
 		commercialFeatures.comscore = true;
 		await setupComscore();
-		expect(onConsent).toBeCalled();
+		expect(onConsent).toHaveBeenCalled();
 	});
 
 	describe('Framework consent: running on consent', () => {
@@ -122,37 +122,37 @@ describe('setupComscore', () => {
 			mockOnConsent(tcfv2WithConsent);
 			mockGetConsentFor(true);
 			await setupComscore();
-			expect(loadScript).toBeCalled();
+			expect(loadScript).toHaveBeenCalled();
 		});
 
 		it('TCFv2 without consent: does not run', async () => {
 			mockOnConsent(tcfv2WithoutConsent);
 			mockGetConsentFor(false);
 			await setupComscore();
-			expect(loadScript).not.toBeCalled();
+			expect(loadScript).not.toHaveBeenCalled();
 		});
 		it('USNAT with consent: runs', async () => {
 			mockOnConsent(usnatWithConsent);
 			await setupComscore();
-			expect(loadScript).toBeCalled();
+			expect(loadScript).toHaveBeenCalled();
 		});
 
 		it('USNAT without consent: does not run', async () => {
 			mockOnConsent(usnatWithoutConsent);
 			await setupComscore();
-			expect(loadScript).not.toBeCalled();
+			expect(loadScript).not.toHaveBeenCalled();
 		});
 
 		it('Aus without consent: runs', async () => {
 			mockOnConsent(AusWithoutConsent);
 			await setupComscore();
-			expect(loadScript).toBeCalled();
+			expect(loadScript).toHaveBeenCalled();
 		});
 
 		it('Aus with consent: runs', async () => {
 			mockOnConsent(AusWithConsent);
 			await setupComscore();
-			expect(loadScript).toBeCalled();
+			expect(loadScript).toHaveBeenCalled();
 		});
 	});
 });

@@ -1,5 +1,5 @@
+import type { ConsentState } from '@guardian/libs';
 import { log } from '@guardian/libs';
-import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
 import {
 	isInAuOrNz,
 	isInRow,
@@ -7,13 +7,11 @@ import {
 	isInUsa,
 	isInUsOrCa,
 } from '../../../lib/geo/geo-utils';
+import type { PageTargeting } from '../../../lib/targeting/build-page-targeting';
 import { pbTestNameMap } from '../../../lib/url';
 import type { PrebidIndexSite } from '../../../types/global';
 import { dfpEnv } from '../../dfp/dfp-env';
-import {
-	buildAppNexusTargeting,
-	buildAppNexusTargetingObject,
-} from '../../page-targeting';
+import { buildAppNexusTargetingObject } from '../../page-targeting';
 import type {
 	BidderCode,
 	HeaderBiddingSize,
@@ -21,14 +19,12 @@ import type {
 	PrebidAppNexusParams,
 	PrebidBid,
 	PrebidBidder,
-	PrebidImproveParams,
 	PrebidIndexExchangeParams,
 	PrebidKargoParams,
 	PrebidMagniteParams,
 	PrebidOpenXParams,
 	PrebidOzoneParams,
 	PrebidPubmaticParams,
-	PrebidSonobiParams,
 	PrebidTripleLiftParams,
 	PrebidTrustXParams,
 	PrebidXaxisParams,
@@ -45,26 +41,23 @@ import {
 	containsPortraitInterstitial,
 	containsWS,
 	getBreakpointKey,
+	shouldIncludeAdYouLike,
 	shouldIncludeAppNexus,
-	shouldIncludeImproveDigital,
-	shouldIncludeImproveDigitalSkin,
+	shouldIncludeCriteo,
+	shouldIncludeIndexExchange,
 	shouldIncludeKargo,
 	shouldIncludeMagnite,
 	shouldIncludeOpenx,
-	shouldIncludeSonobi,
+	shouldIncludeOzone,
+	shouldIncludePubmatic,
+	shouldIncludeTheTradeDesk,
 	shouldIncludeTripleLift,
 	shouldIncludeTrustX,
 	shouldIncludeXaxis,
-	shouldUseOzoneAdaptor,
 	stripDfpAdPrefixFrom,
 	stripMobileSuffix,
 } from '../utils';
 import { getAppNexusDirectBidParams } from './appnexus';
-import {
-	getImprovePlacementId,
-	getImproveSizeParam,
-	getImproveSkinPlacementId,
-} from './improve-digital';
 import { getMagniteSiteId, getMagniteZoneId } from './magnite';
 
 const isArticle = window.guardian.config.page.contentType === 'Article';
@@ -241,7 +234,7 @@ const appNexusBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 		),
 });
 
-const openxClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
+const openxBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	pageTargeting: PageTargeting,
 ) => ({
 	name: 'oxd',
@@ -306,7 +299,7 @@ const getOzonePlacementId = (sizes: HeaderBiddingSize[]) => {
 	return '0420420500';
 };
 
-const ozoneClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
+const ozoneBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	pageTargeting: PageTargeting,
 ) => ({
 	name: 'ozone',
@@ -337,22 +330,6 @@ const ozoneClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 			ozoneData: {}, // TODO: confirm if we need to send any
 		};
 	},
-});
-
-const sonobiBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
-	pageTargeting: PageTargeting,
-) => ({
-	name: 'sonobi',
-	switchName: 'prebidSonobi',
-	bidParams: (slotId: string): PrebidSonobiParams => ({
-		ad_unit: window.guardian.config.page.adUnit,
-		dom_id: slotId,
-		appNexusTargeting: buildAppNexusTargeting(pageTargeting),
-		pageViewId: window.guardian.ophan.pageViewId,
-		keywords: window.guardian.config.page.keywords
-			? window.guardian.config.page.keywords.split(',')
-			: [],
-	}),
 });
 
 const getPubmaticPublisherId = (): string => {
@@ -553,28 +530,6 @@ const tripleLiftBidder: PrebidBidder = {
 	}),
 };
 
-const improveDigitalBidder: PrebidBidder = {
-	name: 'improvedigital',
-	switchName: 'prebidImproveDigital',
-	bidParams: (
-		slotId: string,
-		sizes: HeaderBiddingSize[],
-	): PrebidImproveParams => ({
-		publisherId: 995,
-		placementId: getImprovePlacementId(sizes),
-		size: getImproveSizeParam(slotId, isDesktopAndArticle),
-	}),
-};
-
-const improveDigitalSkinBidder: PrebidBidder = {
-	name: 'improvedigital',
-	switchName: 'prebidImproveDigitalSkins',
-	bidParams: (): PrebidImproveParams => ({
-		placementId: getImproveSkinPlacementId(),
-		size: {},
-	}),
-};
-
 const xaxisBidder: PrebidBidder = {
 	name: 'xhb',
 	switchName: 'prebidXaxis',
@@ -650,6 +605,16 @@ const magniteBidder: PrebidBidder = {
 	}),
 };
 
+const theTradeDeskBidder = (gpid: string): PrebidBidder => ({
+	name: 'ttd',
+	switchName: 'prebidTheTradeDesk',
+	bidParams: () => ({
+		supplySourceId: 'theguardian',
+		publisherId: '1',
+		placementId: gpid,
+	}),
+});
+
 // There's an IX bidder for every size that the slot can take
 const indexExchangeBidders = (
 	slotSizes: HeaderBiddingSize[],
@@ -668,53 +633,53 @@ const indexExchangeBidders = (
 const biddersBeingTested = (allBidders: PrebidBidder[]): PrebidBidder[] =>
 	allBidders.filter((bidder) => pbTestNameMap()[bidder.name]);
 
-const biddersSwitchedOn = (allBidders: PrebidBidder[]): PrebidBidder[] => {
-	const isSwitchedOn = (bidder: PrebidBidder): boolean =>
-		window.guardian.config.switches[bidder.switchName] ?? false;
-
-	return allBidders.filter((bidder) => isSwitchedOn(bidder));
-};
-
 const currentBidders = (
 	slotSizes: HeaderBiddingSize[],
 	pageTargeting: PageTargeting,
+	gpid: string,
+	consentState: ConsentState,
 ): PrebidBidder[] => {
 	const biddersToCheck: Array<[boolean, PrebidBidder]> = [
-		[true, criteoBidder(slotSizes)],
-		[shouldIncludeSonobi(), sonobiBidder(pageTargeting)],
-		[shouldIncludeTrustX(), trustXBidder],
-		[shouldIncludeTripleLift(), tripleLiftBidder],
-		[shouldIncludeAppNexus(), appNexusBidder(pageTargeting)],
-		[shouldIncludeImproveDigital(), improveDigitalBidder],
-		[shouldIncludeImproveDigitalSkin(), improveDigitalSkinBidder],
-		[shouldIncludeXaxis(), xaxisBidder],
-		[true, pubmaticBidder(slotSizes)],
-		[true, adYouLikeBidder],
-		[shouldUseOzoneAdaptor(), ozoneClientSideBidder(pageTargeting)],
-		[shouldIncludeOpenx(), openxClientSideBidder(pageTargeting)],
-		[shouldIncludeKargo(), kargoBidder],
-		[shouldIncludeMagnite(), magniteBidder],
+		[shouldIncludeCriteo(consentState), criteoBidder(slotSizes)],
+		[shouldIncludeTrustX(), trustXBidder], // Non-TCF (no consentState check)
+		[shouldIncludeTripleLift(), tripleLiftBidder], // Non-TCF (no consentState check)
+		[shouldIncludeAppNexus(consentState), appNexusBidder(pageTargeting)],
+		[shouldIncludeXaxis(consentState), xaxisBidder],
+		[shouldIncludePubmatic(consentState), pubmaticBidder(slotSizes)],
+		[shouldIncludeAdYouLike(consentState), adYouLikeBidder],
+		[shouldIncludeOzone(consentState), ozoneBidder(pageTargeting)],
+		[shouldIncludeOpenx(consentState), openxBidder(pageTargeting)],
+		[shouldIncludeKargo(), kargoBidder], // Non-TCF (no consentState check)
+		[shouldIncludeMagnite(consentState), magniteBidder],
+		[shouldIncludeTheTradeDesk(consentState), theTradeDeskBidder(gpid)],
 	];
 
 	const otherBidders = biddersToCheck
 		.filter(([shouldInclude]) => inPbTestOr(shouldInclude))
 		.map(([, bidder]) => bidder);
 
-	const allBidders = indexExchangeBidders(slotSizes).concat(otherBidders);
-	return isPbTestOn()
-		? biddersBeingTested(allBidders)
-		: biddersSwitchedOn(allBidders);
+	const ixBidders = shouldIncludeIndexExchange(consentState)
+		? indexExchangeBidders(slotSizes)
+		: [];
+
+	const allBidders = [...ixBidders, ...otherBidders];
+
+	return isPbTestOn() ? biddersBeingTested(allBidders) : allBidders;
 };
 
 export const bids = (
 	slotId: string,
 	slotSizes: HeaderBiddingSize[],
 	pageTargeting: PageTargeting,
+	gpid: string,
+	consentState: ConsentState,
 ): PrebidBid[] =>
-	currentBidders(slotSizes, pageTargeting).map((bidder: PrebidBidder) => ({
-		bidder: bidder.name,
-		params: bidder.bidParams(slotId, slotSizes),
-	}));
+	currentBidders(slotSizes, pageTargeting, gpid, consentState).map(
+		(bidder: PrebidBidder) => ({
+			bidder: bidder.name,
+			params: bidder.bidParams(slotId, slotSizes),
+		}),
+	);
 
 export const _ = {
 	getIndexSiteIdFromConfig,

@@ -22,7 +22,7 @@ jest.mock('lib/header-bidding/a9/a9');
 
 jest.mock('define/Advert');
 
-jest.mock('core/__vendor/a9-apstag', () => ({
+jest.mock('lib/__vendor/a9-apstag', () => ({
 	a9Apstag: jest.fn(),
 }));
 
@@ -64,7 +64,7 @@ describe('init', () => {
 
 		await setupA9();
 
-		expect(a9.initialise).toBeCalled();
+		expect(a9.initialise).toHaveBeenCalled();
 	});
 
 	it('should NOT initialise A9 when in Canada', async () => {
@@ -77,7 +77,7 @@ describe('init', () => {
 
 		await setupA9();
 
-		expect(a9.initialise).not.toBeCalled();
+		expect(a9.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should initialise A9 when both prebid and a9 switches are ON and advertising is on and ad-free is off', async () => {
@@ -87,13 +87,13 @@ describe('init', () => {
 		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		await setupA9();
-		expect(a9.initialise).toBeCalled();
+		expect(a9.initialise).toHaveBeenCalled();
 	});
 
 	it('should not initialise A9 when useragent is Google Web Preview', async () => {
 		fakeUserAgent('Google Web Preview');
 		await setupA9();
-		expect(a9.initialise).not.toBeCalled();
+		expect(a9.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should not initialise A9 when no external demand', async () => {
@@ -101,7 +101,7 @@ describe('init', () => {
 			a9HeaderBidding: false,
 		};
 		await setupA9();
-		expect(a9.initialise).not.toBeCalled();
+		expect(a9.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should not initialise a9 when advertising is switched off', async () => {
@@ -111,7 +111,7 @@ describe('init', () => {
 		commercialFeatures.shouldLoadGoogletag = false;
 		commercialFeatures.adFree = false;
 		await setupA9();
-		expect(a9.initialise).not.toBeCalled();
+		expect(a9.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should not initialise a9 when ad-free is on', async () => {
@@ -121,7 +121,7 @@ describe('init', () => {
 		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = true;
 		await setupA9();
-		expect(a9.initialise).not.toBeCalled();
+		expect(a9.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should not initialise a9 when the page has a pageskin', async () => {
@@ -132,7 +132,7 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		window.guardian.config.page.hasPageSkin = true;
 		await setupA9();
-		expect(a9.initialise).not.toBeCalled();
+		expect(a9.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should initialise a9 when the page has no pageskin', async () => {
@@ -143,7 +143,7 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		window.guardian.config.page.hasPageSkin = false;
 		await setupA9();
-		expect(a9.initialise).toBeCalled();
+		expect(a9.initialise).toHaveBeenCalled();
 	});
 
 	it('should not initialise a9 on the secure contact pages', async () => {
@@ -154,6 +154,6 @@ describe('init', () => {
 		commercialFeatures.adFree = false;
 		commercialFeatures.isSecureContact = true;
 		await setupA9();
-		expect(a9.initialise).not.toBeCalled();
+		expect(a9.initialise).not.toHaveBeenCalled();
 	});
 });

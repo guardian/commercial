@@ -1,6 +1,6 @@
-import { createAdSize } from '../../../core/ad-sizes';
-import type { PageTargeting } from '../../../core/targeting/build-page-targeting';
+import { type ConsentState } from '@guardian/libs';
 import { isUserInVariant as isUserInVariant_ } from '../../../experiments/ab';
+import { createAdSize } from '../../../lib/ad-sizes';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
@@ -8,6 +8,7 @@ import {
 	isInUsa as isInUsa_,
 	isInUsOrCa as isInUsOrCa_,
 } from '../../../lib/geo/geo-utils';
+import type { PageTargeting } from '../../../lib/targeting/build-page-targeting';
 import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
 import {
 	containsBillboard as containsBillboard_,
@@ -18,10 +19,16 @@ import {
 	containsMpu as containsMpu_,
 	containsMpuOrDmpu as containsMpuOrDmpu_,
 	getBreakpointKey as getBreakpointKey_,
+	shouldIncludeAdYouLike as shouldIncludeAdYouLike_,
 	shouldIncludeAppNexus as shouldIncludeAppNexus_,
-	shouldIncludeImproveDigital as shouldIncludeImproveDigital_,
+	shouldIncludeCriteo as shouldIncludeCriteo_,
+	shouldIncludeIndexExchange as shouldIncludeIndexExchange_,
+	shouldIncludeKargo as shouldIncludeKargo_,
+	shouldIncludeMagnite as shouldIncludeMagnite_,
 	shouldIncludeOpenx as shouldIncludeOpenx_,
-	shouldIncludeSonobi as shouldIncludeSonobi_,
+	shouldIncludeOzone as shouldIncludeOzone_,
+	shouldIncludePubmatic as shouldIncludePubmatic_,
+	shouldIncludeTheTradeDesk as shouldIncludeTheTradeDesk_,
 	shouldIncludeTripleLift as shouldIncludeTripleLift_,
 	shouldIncludeTrustX as shouldIncludeTrustX_,
 	shouldIncludeXaxis as shouldIncludeXaxis_,
@@ -31,11 +38,27 @@ import { _, bids } from './bid-config';
 
 const mockPageTargeting = {} as unknown as PageTargeting;
 
+const mockConsentState = {
+	tcfv2: {
+		consents: { '': true },
+		eventStatus: 'useractioncomplete',
+		vendorConsents: { '': true },
+		addtlConsent: '',
+		gdprApplies: true,
+		tcString: '',
+	},
+	gpcSignal: true,
+	canTarget: true,
+	framework: 'tcfv2',
+} satisfies ConsentState;
+
 const getBidders = () =>
 	bids(
 		'dfp-ad--top-above-nav',
 		[createAdSize(728, 90)],
 		mockPageTargeting,
+		'gpid',
+		mockConsentState,
 	).map((bid) => bid.bidder);
 
 const {
@@ -61,13 +84,21 @@ const containsLeaderboardOrBillboard =
 const containsMobileSticky = containsMobileSticky_ as jest.Mock;
 const containsMpu = containsMpu_ as jest.Mock;
 const containsMpuOrDmpu = containsMpuOrDmpu_ as jest.Mock;
+
+const shouldIncludeAdYouLike = shouldIncludeAdYouLike_ as jest.Mock;
 const shouldIncludeAppNexus = shouldIncludeAppNexus_ as jest.Mock;
-const shouldIncludeImproveDigital = shouldIncludeImproveDigital_ as jest.Mock;
+const shouldIncludeCriteo = shouldIncludeCriteo_ as jest.Mock;
+const shouldIncludeIndexExchange = shouldIncludeIndexExchange_ as jest.Mock;
+const shouldIncludeKargo = shouldIncludeKargo_ as jest.Mock;
+const shouldIncludeMagnite = shouldIncludeMagnite_ as jest.Mock;
 const shouldIncludeOpenx = shouldIncludeOpenx_ as jest.Mock;
+const shouldIncludeOzone = shouldIncludeOzone_ as jest.Mock;
+const shouldIncludePubmatic = shouldIncludePubmatic_ as jest.Mock;
+const shouldIncludeTheTradeDesk = shouldIncludeTheTradeDesk_ as jest.Mock;
+const shouldIncludeTripleLift = shouldIncludeTripleLift_ as jest.Mock;
 const shouldIncludeTrustX = shouldIncludeTrustX_ as jest.Mock;
 const shouldIncludeXaxis = shouldIncludeXaxis_ as jest.Mock;
-const shouldIncludeSonobi = shouldIncludeSonobi_ as jest.Mock;
-const shouldIncludeTripleLift = shouldIncludeTripleLift_ as jest.Mock;
+
 const stripMobileSuffix = stripMobileSuffix_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
 const isUserInVariant = isUserInVariant_ as jest.Mock;
@@ -96,9 +127,7 @@ const resetConfig = () => {
 		prebidAppnexus: true,
 		prebidAppnexusInvcode: true,
 		prebidOpenx: true,
-		prebidImproveDigital: true,
 		prebidIndexExchange: true,
-		prebidSonobi: true,
 		prebidTrustx: true,
 		prebidXaxis: true,
 		prebidAdYouLike: true,
@@ -154,6 +183,7 @@ describe('indexExchangeBidders', () => {
 	});
 
 	test('should return an IX bidder for every size that the slot can take', () => {
+		shouldIncludeIndexExchange.mockReturnValue(true);
 		const slotSizes: HeaderBiddingSize[] = [
 			createAdSize(300, 250),
 			createAdSize(300, 600),
@@ -174,6 +204,7 @@ describe('indexExchangeBidders', () => {
 	});
 
 	test('should include methods in the response that generate the correct bid params', () => {
+		shouldIncludeIndexExchange.mockReturnValue(true);
 		const slotSizes: HeaderBiddingSize[] = [
 			createAdSize(300, 250),
 			createAdSize(300, 600),
@@ -237,9 +268,20 @@ describe('bids', () => {
 		containsLeaderboardOrBillboard.mockReturnValue(false);
 		containsMpu.mockReturnValue(false);
 		containsMpuOrDmpu.mockReturnValue(false);
+		stripMobileSuffix.mockImplementation((str: string) => str);
+		// Default case is TRUE:
+		shouldIncludeAdYouLike.mockReturnValue(true);
+		shouldIncludeCriteo.mockReturnValue(true);
+		shouldIncludeIndexExchange.mockReturnValue(true);
+		// Default case is FALSE:
+		shouldIncludeOpenx.mockReturnValue(false);
 		shouldIncludeAppNexus.mockReturnValue(false);
 		shouldIncludeTrustX.mockReturnValue(false);
-		stripMobileSuffix.mockImplementation((str: string) => str);
+		shouldIncludeKargo.mockReturnValue(false);
+		shouldIncludeMagnite.mockReturnValue(false);
+		shouldIncludeOzone.mockReturnValue(false);
+		shouldIncludePubmatic.mockReturnValue(false);
+		shouldIncludeTheTradeDesk.mockReturnValue(false);
 	});
 
 	afterEach(() => {
@@ -256,39 +298,36 @@ describe('bids', () => {
 	};
 
 	test('should only include bidders that are switched on if no bidders being tested', () => {
-		window.guardian.config.switches.prebidXaxis = false;
-		shouldIncludeImproveDigital.mockReturnValueOnce(true);
-		expect(getBidders()).toEqual([
-			'ix',
-			'criteo',
-			'improvedigital',
-			'adyoulike',
-		]);
+		expect(getBidders()).toEqual(['ix', 'criteo', 'adyoulike']);
 	});
 
 	test('should not include ix bidders when switched off', () => {
-		window.guardian.config.switches.prebidIndexExchange = false;
+		shouldIncludeIndexExchange.mockReturnValueOnce(false);
 		expect(getBidders()).toEqual(['criteo', 'adyoulike']);
 	});
 
-	test('should include Sonobi if in target geolocation', () => {
-		shouldIncludeSonobi.mockReturnValue(true);
-		expect(getBidders()).toEqual(['ix', 'criteo', 'sonobi', 'adyoulike']);
-	});
-
-	test('should include AppNexus directly if in target geolocation', () => {
-		shouldIncludeAppNexus.mockReturnValue(true);
-		expect(getBidders()).toEqual(['ix', 'criteo', 'and', 'adyoulike']);
-	});
-
-	test('should include OpenX directly if in target geolocation', () => {
-		shouldIncludeOpenx.mockReturnValue(true);
-		expect(getBidders()).toEqual(['ix', 'criteo', 'adyoulike', 'oxd']);
-	});
-
-	test('should include TrustX if in target geolocation', () => {
-		shouldIncludeTrustX.mockReturnValue(true);
-		expect(getBidders()).toEqual(['ix', 'criteo', 'trustx', 'adyoulike']);
+	const mockFns: Record<string, jest.Mock> = {
+		oxd: shouldIncludeOpenx,
+		and: shouldIncludeAppNexus,
+		trustx: shouldIncludeTrustX,
+		kargo: shouldIncludeKargo,
+		rubicon: shouldIncludeMagnite,
+		ozone: shouldIncludeOzone,
+		pubmatic: shouldIncludePubmatic,
+		ttd: shouldIncludeTheTradeDesk,
+	};
+	test.each([
+		'oxd',
+		'and',
+		'trustx',
+		'kargo',
+		'rubicon',
+		'ozone',
+		'pubmatic',
+		'ttd',
+	])('bidder list should contain %s if it should be included', (bidder) => {
+		(mockFns[bidder] as jest.Mock).mockReturnValueOnce(true);
+		expect(getBidders()).toContain(bidder);
 	});
 
 	test('should include ix bidder for each size that slot can take', () => {
@@ -297,6 +336,8 @@ describe('bids', () => {
 				'dfp-right',
 				[createAdSize(300, 600), createAdSize(300, 250)],
 				mockPageTargeting,
+				'gpid',
+				mockConsentState,
 			).map((bid) => bid.bidder);
 		expect(rightSlotBidders()).toEqual(['ix', 'ix', 'criteo', 'adyoulike']);
 	});
@@ -319,13 +360,13 @@ describe('bids', () => {
 	});
 
 	test('should only include multiple bidders being tested, even when their switches are off', () => {
-		setQueryString('pbtest=xhb&pbtest=sonobi');
+		setQueryString('pbtest=xhb&pbtest=adyoulike');
 		isUserInVariant.mockImplementation(
 			(testId, variantId) => variantId === 'variant',
 		);
 		window.guardian.config.switches.prebidXaxis = false;
-		window.guardian.config.switches.prebidSonobi = false;
-		expect(getBidders()).toEqual(['sonobi', 'xhb']);
+		window.guardian.config.switches.prebidAdYouLike = false;
+		expect(getBidders()).toEqual(['xhb', 'adyoulike']); // Ensure 'xhb' and 'and' are the correct codes for prebidXaxis and prebidAppnexus
 	});
 
 	test('should ignore bidder that does not exist', () => {
@@ -340,6 +381,8 @@ describe('bids', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
+			'gpid',
+			mockConsentState,
 		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
@@ -355,6 +398,8 @@ describe('bids', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
+			'gpid',
+			mockConsentState,
 		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
@@ -370,6 +415,8 @@ describe('bids', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
+			'gpid',
+			mockConsentState,
 		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
@@ -385,6 +432,8 @@ describe('bids', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
+			'gpid',
+			mockConsentState,
 		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
@@ -400,6 +449,8 @@ describe('bids', () => {
 			'dfp-ad--mobile-sticky',
 			[createAdSize(320, 50)],
 			mockPageTargeting,
+			'gpid',
+			mockConsentState,
 		)[3];
 		expect(openXBid?.params).toEqual({
 			customParams: 'someAppNexusTargetingObject',
@@ -414,6 +465,7 @@ describe('triplelift adapter', () => {
 		resetConfig();
 		window.guardian.config.page.contentType = 'Article';
 		shouldIncludeTripleLift.mockReturnValue(true);
+		shouldIncludeIndexExchange.mockReturnValue(true);
 	});
 
 	afterEach(() => {
@@ -421,6 +473,9 @@ describe('triplelift adapter', () => {
 	});
 
 	test('should include triplelift adapter if condition is true ', () => {
+		shouldIncludeIndexExchange.mockReturnValue(true);
+		shouldIncludeCriteo.mockReturnValue(true);
+		shouldIncludeAdYouLike.mockReturnValue(true);
 		expect(getBidders()).toEqual([
 			'ix',
 			'criteo',
@@ -435,12 +490,15 @@ describe('triplelift adapter', () => {
 		containsDmpu.mockReturnValueOnce(false);
 		containsMobileSticky.mockReturnValue(false);
 		isInUsOrCa.mockReturnValue(true);
+		shouldIncludeTripleLift.mockReturnValue(true);
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
-		)[2]?.params;
-		expect(tripleLiftBids).toEqual({
+			'gpid',
+			mockConsentState,
+		).find((bid) => bid.bidder === 'triplelift');
+		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_topbanner_728x90_prebid',
 		});
 	});
@@ -455,8 +513,10 @@ describe('triplelift adapter', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
-		)[2]?.params;
-		expect(tripleLiftBids).toEqual({
+			'gpid',
+			mockConsentState,
+		).find((bid) => bid.bidder === 'triplelift');
+		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_topbanner_728x90_prebid_AU',
 		});
 	});
@@ -472,8 +532,10 @@ describe('triplelift adapter', () => {
 			'dfp-ad--inline1',
 			[createAdSize(300, 250)],
 			mockPageTargeting,
-		)[2]?.params;
-		expect(tripleLiftBids).toEqual({
+			'gpid',
+			mockConsentState,
+		).find((bid) => bid.bidder === 'triplelift');
+		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_sectionfront_300x250_prebid',
 		});
 	});
@@ -489,8 +551,10 @@ describe('triplelift adapter', () => {
 			'dfp-ad--inline1',
 			[createAdSize(300, 250)],
 			mockPageTargeting,
-		)[2]?.params;
-		expect(tripleLiftBids).toEqual({
+			'gpid',
+			mockConsentState,
+		).find((bid) => bid.bidder === 'triplelift');
+		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_sectionfront_300x250_prebid_AU',
 		});
 	});
@@ -506,8 +570,10 @@ describe('triplelift adapter', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(320, 50)],
 			mockPageTargeting,
-		)[2]?.params;
-		expect(tripleLiftBids).toEqual({
+			'gpid',
+			mockConsentState,
+		).find((bid) => bid.bidder === 'triplelift');
+		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_320x50_HDX',
 		});
 	});
@@ -523,8 +589,10 @@ describe('triplelift adapter', () => {
 			'dfp-ad--top-above-nav',
 			[createAdSize(320, 50)],
 			mockPageTargeting,
-		)[2]?.params;
-		expect(tripleLiftBids).toEqual({
+			'gpid',
+			mockConsentState,
+		).find((bid) => bid.bidder === 'triplelift');
+		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_320x50_HDX_AU',
 		});
 	});

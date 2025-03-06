@@ -161,7 +161,7 @@ describe('init', () => {
 		mockGetConsentFor(true);
 
 		await setupPrebid();
-		expect(prebid.initialise).toBeCalled();
+		expect(prebid.initialise).toHaveBeenCalled();
 	});
 
 	it('should not initialise Prebid when useragent is Google Web Preview', async () => {
@@ -176,7 +176,7 @@ describe('init', () => {
 		mockGetConsentFor(true);
 
 		await setupPrebid();
-		expect(prebid.initialise).not.toBeCalled();
+		expect(prebid.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should not initialise Prebid when no header bidding switches are on', async () => {
@@ -191,7 +191,7 @@ describe('init', () => {
 		mockGetConsentFor(true);
 
 		await setupPrebid();
-		expect(prebid.initialise).not.toBeCalled();
+		expect(prebid.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should initialise Prebid when NOT in Canada', async () => {
@@ -206,7 +206,7 @@ describe('init', () => {
 		mockGetConsentFor(true);
 
 		await setupPrebid();
-		expect(prebid.initialise).toBeCalled();
+		expect(prebid.initialise).toHaveBeenCalled();
 	});
 
 	it('should NOT initialise Prebid when in Canada', async () => {
@@ -222,7 +222,7 @@ describe('init', () => {
 		(isInCanada as jest.Mock).mockReturnValueOnce(true);
 
 		await setupPrebid();
-		expect(prebid.initialise).not.toBeCalled();
+		expect(prebid.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should not initialise Prebid when advertising is switched off', async () => {
@@ -237,7 +237,7 @@ describe('init', () => {
 		mockGetConsentFor(true);
 
 		await setupPrebid();
-		expect(prebid.initialise).not.toBeCalled();
+		expect(prebid.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should not initialise Prebid when ad-free is on', async () => {
@@ -252,7 +252,7 @@ describe('init', () => {
 		mockGetConsentFor(true);
 
 		await setupPrebid();
-		expect(prebid.initialise).not.toBeCalled();
+		expect(prebid.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should not initialise Prebid when the page has a pageskin', async () => {
@@ -268,7 +268,7 @@ describe('init', () => {
 		mockGetConsentFor(true);
 
 		await setupPrebid();
-		expect(prebid.initialise).not.toBeCalled();
+		expect(prebid.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should initialise Prebid when the page has no pageskin', async () => {
@@ -282,7 +282,7 @@ describe('init', () => {
 		mockGetConsentFor(true);
 
 		await setupPrebid();
-		expect(prebid.initialise).toBeCalled();
+		expect(prebid.initialise).toHaveBeenCalled();
 	});
 
 	it('should initialise Prebid if TCFv2 consent with correct Sourcepoint Id is true ', async () => {
@@ -297,7 +297,7 @@ describe('init', () => {
 		mockGetConsentFor(true);
 
 		await setupPrebid();
-		expect(prebid.initialise).toBeCalled();
+		expect(prebid.initialise).toHaveBeenCalled();
 	});
 
 	it('should not initialise Prebid if TCFv2 consent with correct Sourcepoint Id is false', async () => {
@@ -318,7 +318,7 @@ describe('init', () => {
 			expect.stringContaining('No consent for prebid'),
 		);
 
-		expect(prebid.initialise).not.toBeCalled();
+		expect(prebid.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should initialise Prebid in USNAT if doNotSell is false', async () => {
@@ -333,7 +333,7 @@ describe('init', () => {
 		mockGetConsentFor(true);
 
 		await setupPrebid();
-		expect(prebid.initialise).toBeCalled();
+		expect(prebid.initialise).toHaveBeenCalled();
 	});
 
 	it('should not initialise Prebid in USNAT if doNotSell is true', async () => {
@@ -354,7 +354,7 @@ describe('init', () => {
 			expect.stringContaining('No consent for prebid'),
 		);
 
-		expect(prebid.initialise).not.toBeCalled();
+		expect(prebid.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should initialise Prebid in AUS if Advertising is not rejected', async () => {
@@ -369,7 +369,7 @@ describe('init', () => {
 		mockGetConsentFor(true);
 
 		await setupPrebid();
-		expect(prebid.initialise).toBeCalled();
+		expect(prebid.initialise).toHaveBeenCalled();
 	});
 
 	it('should not initialise Prebid in AUS if Advertising is rejected', async () => {
@@ -390,7 +390,7 @@ describe('init', () => {
 			expect.stringContaining('No consent for prebid'),
 		);
 
-		expect(prebid.initialise).not.toBeCalled();
+		expect(prebid.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should not initialise Prebid if the framework is invalid', async () => {
@@ -411,7 +411,7 @@ describe('init', () => {
 			expect.stringContaining('Unknown framework'),
 		);
 
-		expect(prebid.initialise).not.toBeCalled();
+		expect(prebid.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should initialise Prebid in TCF when global vendor has consent and custom vendor does not', async () => {
@@ -426,7 +426,7 @@ describe('init', () => {
 		mockGetConsentForWithCustom(true, false);
 
 		await setupPrebid();
-		expect(prebid.initialise).toBeCalled();
+		expect(prebid.initialise).toHaveBeenCalled();
 	});
 
 	it('should initialise Prebid in TCF when global vendor does not have consent but the custom vendor does', async () => {
@@ -441,7 +441,7 @@ describe('init', () => {
 		mockGetConsentForWithCustom(false, true);
 
 		await setupPrebid();
-		expect(prebid.initialise).toBeCalled();
+		expect(prebid.initialise).toHaveBeenCalled();
 	});
 
 	it('should NOT initialise Prebid in TCF when BOTH the global vendor AND custom vendor do NOT have consent', async () => {
@@ -462,6 +462,6 @@ describe('init', () => {
 			expect.stringContaining('No consent for prebid'),
 		);
 
-		expect(prebid.initialise).not.toBeCalled();
+		expect(prebid.initialise).not.toHaveBeenCalled();
 	});
 });

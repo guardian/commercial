@@ -1,4 +1,4 @@
-import type { AdSize } from '../../core/ad-sizes';
+import type { AdSize } from '../../lib/ad-sizes';
 
 export type HeaderBiddingSize = AdSize;
 
@@ -42,15 +42,6 @@ export type PrebidOzoneParams = {
 	ozoneData?: Record<string, unknown>;
 };
 
-export type PrebidSonobiParams = {
-	ad_unit: string;
-	dom_id: string;
-	appNexusTargeting: string;
-	pageViewId: string;
-	keywords: string[];
-	render?: string;
-};
-
 export type PrebidPubmaticParams = {
 	publisherId: string;
 	adSlot: string;
@@ -68,15 +59,6 @@ export type PrebidTrustXParams = {
 
 export type PrebidTripleLiftParams = {
 	inventoryCode: string;
-};
-
-export type PrebidImproveParams = {
-	publisherId?: number;
-	placementId: number;
-	size: {
-		w?: number;
-		h?: number;
-	};
 };
 
 export type PrebidXaxisParams = {
@@ -122,38 +104,42 @@ export type PrebidMagniteParams = {
 	keywords: string[];
 };
 
+export type PrebidTheTradeDeskParams = {
+	supplySourceId: number;
+	publisherId: number;
+	placementId: string;
+};
+
 export type BidderCode =
 	| 'adyoulike'
 	| 'and'
 	| 'appnexus'
 	| 'criteo'
-	| 'improvedigital'
 	| 'ix'
 	| 'kargo'
 	| 'rubicon'
 	| 'oxd'
 	| 'ozone'
 	| 'pubmatic'
-	| 'sonobi'
 	| 'triplelift'
 	| 'trustx'
-	| 'xhb';
+	| 'xhb'
+	| 'ttd';
 
 export type PrebidParams =
 	| PrebidAdYouLikeParams
 	| PrebidAppNexusParams
 	| PrebidCriteoParams
-	| PrebidImproveParams
 	| PrebidIndexExchangeParams
 	| PrebidKargoParams
 	| PrebidMagniteParams
 	| PrebidOpenXParams
 	| PrebidOzoneParams
 	| PrebidPubmaticParams
-	| PrebidSonobiParams
 	| PrebidTripleLiftParams
 	| PrebidTrustXParams
-	| PrebidXaxisParams;
+	| PrebidXaxisParams
+	| PrebidTheTradeDeskParams;
 
 export type PrebidBidder = {
 	name: BidderCode;
@@ -165,6 +151,49 @@ export type PrebidBid = {
 	bidder: string;
 	params: PrebidParams;
 };
+
+export type PrebidBidderRequest = {
+	bidderCode: string;
+};
+
+export type PrebidBidReqestedEvent = {
+	eventType: 'bidRequested';
+	args: {
+		bids: PrebidBid[];
+	};
+};
+
+export type PrebidBidderErrorEvent = {
+	eventType: 'bidderError';
+	args: {
+		bidderRequest: PrebidBidderRequest;
+		error: {
+			timedOut?: boolean;
+		};
+	};
+};
+
+export type PrebidAuctionInitEvent = {
+	eventType: 'auctionInit';
+	args: {
+		adUnitCodes: string[];
+		bidderRequests: PrebidBidderRequest[];
+	};
+};
+
+export type PrebidAuctionEndEvent = {
+	eventType: 'auctionEnd';
+	args: {
+		adUnitCodes: string[];
+		bidsReceived: PrebidBid[];
+	};
+};
+
+export type PrebidEvent =
+	| PrebidBidReqestedEvent
+	| PrebidBidderErrorEvent
+	| PrebidAuctionInitEvent
+	| PrebidAuctionEndEvent;
 
 export type PrebidMediaTypes = {
 	banner: {

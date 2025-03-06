@@ -1,4 +1,4 @@
-import { createAdSize } from '../../../core/ad-sizes';
+import { createAdSize } from '../../../lib/ad-sizes';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
@@ -54,9 +54,7 @@ const resetConfig = () => {
 		prebidAppnexus: true,
 		prebidAppnexusInvcode: true,
 		prebidOpenx: true,
-		prebidImproveDigital: true,
 		prebidIndexExchange: true,
-		prebidSonobi: true,
 		prebidTrustx: true,
 		prebidXaxis: true,
 		prebidAdYouLike: true,

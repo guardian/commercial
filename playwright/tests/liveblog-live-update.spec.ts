@@ -10,12 +10,14 @@ import { countLiveblogInlineSlots } from '../lib/util';
  * - It would be good to see if these tests could be run in parallel in the future
  */
 
-const pages = blogs.filter(({ name }) => name === 'live-update');
+const pages = blogs.filter(
+	(blog) => 'name' in blog && blog.name === 'live-update',
+);
 
 test.describe.serial('Liveblog live updates', () => {
-	pages.forEach(({ path }) => {
+	pages.forEach(({ path }, i) => {
 		breakpoints.forEach(({ breakpoint, width, height }) => {
-			test(`Test ads are inserted when liveblogs update, breakpoint: ${breakpoint}`, async ({
+			test(`Test liveblog ${i} that ads are inserted when live updated, breakpoint: ${breakpoint}`, async ({
 				page,
 			}) => {
 				await page.setViewportSize({

@@ -103,7 +103,7 @@ const fetchGoogleTagIdFromApi = (): Promise<string | null> =>
 			if (resp.status === 200) {
 				return resp.json() as Promise<{ googleTagId: string }>;
 			}
-			throw resp.status;
+			throw new Error(resp.status.toString());
 		})
 		.then((json) => json.googleTagId)
 		.catch((e) => {

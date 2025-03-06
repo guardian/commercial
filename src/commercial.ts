@@ -1,20 +1,15 @@
+import type { ConsentState } from '@guardian/libs';
 import { getConsentFor, onConsent } from '@guardian/libs';
 import { commercialFeatures } from './lib/commercial-features';
 
-const { frontendAssetsFullURL, page } = window.guardian.config;
-
-const decideAssetsPath = () => {
-	if (process.env.OVERRIDE_BUNDLE_PATH) {
-		return process.env.OVERRIDE_BUNDLE_PATH;
-	}
-
-	const assetsPath = frontendAssetsFullURL ?? page.assetsPath;
-	return `${assetsPath}javascripts/commercial/`;
+const shouldBootConsentless = (consentState: ConsentState) => {
+	return (
+		window.guardian.config.switches.optOutAdvertising &&
+		consentState.tcfv2 &&
+		!getConsentFor('googletag', consentState) &&
+		!commercialFeatures.adFree
+	);
 };
-
-if (!process.env.RIFFRAFF_DEPLOY) {
-	__webpack_public_path__ = decideAssetsPath();
-}
 
 /**
  * Choose whether to launch Googletag or Opt Out tag (ootag) based on consent state
@@ -26,20 +21,20 @@ void (async () => {
 	// - in TCF region
 	// - no consent for Googletag
 	// - the user is not a subscriber
-	if (
-		window.guardian.config.switches.optOutAdvertising &&
-		consentState.tcfv2 &&
-		!getConsentFor('googletag', consentState) &&
-		!commercialFeatures.adFree
-	) {
+	if (shouldBootConsentless(consentState)) {
 		void import(
-			/* webpackChunkName: "consentless" */
-			'./init/consentless'
+			/* webpackChunkName: "consentless-advertising" */
+			'./init/consentless-advertising'
 		).then(({ bootConsentless }) => bootConsentless(consentState));
+	} else if (commercialFeatures.adFree) {
+		void import(
+			/* webpackChunkName: "ad-free" */
+			'./init/ad-free'
+		).then(({ bootCommercialWhenReady }) => bootCommercialWhenReady());
 	} else {
 		void import(
-			/* webpackChunkName: "consented" */
-			'./init/consented'
+			/* webpackChunkName: "consented-advertising" */
+			'./init/consented-advertising'
 		).then(({ bootCommercialWhenReady }) => bootCommercialWhenReady());
 	}
 })();

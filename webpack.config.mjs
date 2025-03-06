@@ -1,5 +1,18 @@
+import { execSync } from 'child_process';
 import { join } from 'path';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import webpack from 'webpack';
+
+const gitCommitSHA = () => {
+	try {
+		return execSync('git rev-parse HEAD').toString().trim();
+	} catch (_) {
+		return;
+	}
+};
+
+const { DefinePlugin } = webpack;
 
 /**
  * @type {import('webpack').Configuration}
@@ -55,6 +68,29 @@ const config = {
 		],
 	},
 	plugins: [
+		new HtmlWebpackPlugin({
+			template: join(
+				import.meta.dirname,
+				'static',
+				'tpc-test-iframe',
+				'v2',
+				'index.html',
+			),
+			filename: `commercial/tpc-test/v2/index.html`,
+			minify: {
+				collapseWhitespace: true,
+				removeComments: true,
+				removeRedundantAttributes: true,
+				removeScriptTypeAttributes: true,
+				removeStyleLinkTypeAttributes: true,
+				useShortDoctype: true,
+				minifyJS: true,
+			},
+			inject: false,
+		}),
+		new DefinePlugin({
+			'process.env.COMMIT_SHA': JSON.stringify(gitCommitSHA()),
+		}),
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-call -- circular-dependency-plugin is not typed
 		new CircularDependencyPlugin({
 			// exclude detection of files based on a RegExp
@@ -65,5 +101,4 @@ const config = {
 	],
 };
 
-// eslint-disable-next-line import/no-default-export -- webpack config
 export default config;

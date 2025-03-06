@@ -1,12 +1,12 @@
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
+import type { AdSize, SizeMapping, SlotName } from '../lib/ad-sizes';
 import {
 	createAdSize,
 	findAppliedSizesForBreakpoint,
 	slotSizeMappings,
-} from '../core/ad-sizes';
-import type { AdSize, SizeMapping, SlotName } from '../core/ad-sizes';
-import { concatSizeMappings } from '../core/create-ad-slot';
-import type { Breakpoint } from '../core/lib/breakpoint';
+} from '../lib/ad-sizes';
+import type { Breakpoint } from '../lib/breakpoint';
+import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import type { HeaderBiddingSize } from '../lib/header-bidding/prebid-types';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';
@@ -191,7 +191,7 @@ class Advert {
 	}
 
 	/**
-	 * Combine the size mapping from the mappings in commercial-core with
+	 * Combine the size mapping from the mappings in commercial with
 	 * any additional size mappings, if none are found check data-attributes, if still
 	 * none are found throws an error
 	 *
@@ -199,7 +199,7 @@ class Advert {
 	 * @returns A mapping of breakpoints to ad sizes
 	 */
 	generateSizeMapping(additionalSizeMapping: SizeMapping): SizeMapping {
-		// Try to use size mappings defined in core if available
+		// Try to use defined size mappings if available
 		const defaultSizeMappingForSlot = this.node.dataset.name
 			? getSlotSizeMapping(this.node.dataset.name)
 			: {};

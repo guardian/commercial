@@ -1,6 +1,6 @@
 import { isString } from '@guardian/libs';
-import type { AdSize } from '../core/ad-sizes';
-import { createAdSize } from '../core/ad-sizes';
+import type { AdSize } from '../lib/ad-sizes';
+import { createAdSize } from '../lib/ad-sizes';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { reportError } from '../lib/error/report-error';
 import { emptyAdvert } from './empty-advert';
@@ -67,6 +67,10 @@ export const onSlotRender = (
 
 		void renderAdvert(advert, event).then((isRendered) => {
 			advert.finishedRendering(isRendered);
+			//Emit only if the top-above-nav ad is rendered
+			if (advert.id === 'dfp-ad--top-above-nav') {
+				document.dispatchEvent(new Event('top-above-nav-rendered'));
+			}
 		});
 	}
 };

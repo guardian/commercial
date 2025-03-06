@@ -8,7 +8,7 @@ deployments:
     type: aws-s3
     parameters:
       bucketSsmKey: /account/services/dotcom-static.bucket
-      cacheControl: public, max-age=315360000, immutable
+      cacheControl: [{ "pattern": "/commercial/prout$", "value": "max-age=0" },{ "pattern": ".*", "value": "public, max-age=315360000, immutable"}]
       prefixStack: false
       publicReadAcl: false
   commercial-bundle-path:

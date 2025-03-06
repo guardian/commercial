@@ -9,7 +9,7 @@ type TagPage = GuPage;
 
 const stage = getStage();
 
-const fronts: Front[] = [
+const fronts = [
 	{
 		path: getTestUrl({
 			stage,
@@ -37,9 +37,9 @@ const fronts: Front[] = [
 		}),
 		section: 'sport',
 	},
-];
+] as const satisfies Front[];
 
-const tagPages: TagPage[] = [
+const tagPages = [
 	{
 		path: getTestUrl({
 			stage,
@@ -48,9 +48,9 @@ const tagPages: TagPage[] = [
 			adtest: 'fixed-puppies',
 		}),
 	},
-];
+] as const satisfies TagPage[];
 
-const frontWithPageSkin: Front = {
+const frontWithPageSkin = {
 	path: getTestUrl({
 		stage,
 		path: '/uk',
@@ -58,9 +58,9 @@ const frontWithPageSkin: Front = {
 		adtest: 'puppies-pageskin',
 	}),
 	section: 'uk',
-};
+} as const satisfies Front;
 
-const frontWithExclusion: Front = {
+const frontWithExclusion = {
 	path: getTestUrl({
 		stage,
 		path: '/us-news/baltimore-bridge-collapse',
@@ -68,6 +68,6 @@ const frontWithExclusion: Front = {
 		adtest: 'clear',
 	}),
 	section: 'us-news',
-};
+} as const satisfies Front;
 
 export { frontWithPageSkin, fronts, tagPages, frontWithExclusion };

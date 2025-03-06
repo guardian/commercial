@@ -26,7 +26,7 @@ const interceptCommercial = (page: Page) =>
 			});
 		}
 		const body = await readFile(
-			resolve(`dist/bundle/prod/${path}`),
+			resolve(`dist/prod/artifacts/commercial/${path}`),
 			'utf-8',
 		);
 		await route.fulfill({

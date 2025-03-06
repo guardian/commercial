@@ -9,7 +9,7 @@ const stage = getStage();
  *
  * Make sure that you are on the same viewport size as the test you are trying to update.
  **/
-const articles: GuPage[] = [
+const articles = [
 	{
 		path: getTestUrl({
 			stage,
@@ -65,6 +65,6 @@ const articles: GuPage[] = [
 			desktop: [6, 13, 20, 30, 37, 44, 51, 58, 65],
 		},
 	},
-];
+] as const satisfies GuPage[];
 
 export { articles };

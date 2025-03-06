@@ -1,1 +1,1 @@
-pnpm npm-run-all 'precommit:*'
+pnpm run lint-staged

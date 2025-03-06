@@ -1,5 +1,5 @@
-import type * as AdSizesType from '../core/ad-sizes';
-import { slotSizeMappings as slotSizeMappings_ } from '../core/ad-sizes';
+import type * as AdSizesType from '../lib/ad-sizes';
+import { slotSizeMappings as slotSizeMappings_ } from '../lib/ad-sizes';
 import { _, Advert, findSmallestAdHeightForSlot } from './Advert';
 
 const { getSlotSizeMapping } = _;
@@ -8,8 +8,8 @@ jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock('core/ad-sizes', () => {
-	const adSizes: typeof AdSizesType = jest.requireActual('core/ad-sizes');
+jest.mock('lib/ad-sizes', () => {
+	const adSizes: typeof AdSizesType = jest.requireActual('lib/ad-sizes');
 	const slotSizeMappings = adSizes.slotSizeMappings;
 	const slots = {
 		'mobile-only-slot': {
@@ -38,7 +38,7 @@ jest.mock('core/ad-sizes', () => {
 	};
 });
 
-jest.mock('core/targeting/teads-eligibility', () => ({
+jest.mock('lib/targeting/teads-eligibility', () => ({
 	isEligibleForTeads: jest.fn(),
 }));
 
@@ -90,7 +90,7 @@ describe('Advert', () => {
 		slot.setAttribute('data-name', 'top-above-nav');
 		const ad = new Advert(slot);
 		expect(ad).toBeDefined();
-		expect(googleSlot.setSafeFrameConfig).toBeCalledWith({
+		expect(googleSlot.setSafeFrameConfig).toHaveBeenCalledWith({
 			allowOverlayExpansion: false,
 			allowPushExpansion: true,
 			sandbox: true,
@@ -102,7 +102,7 @@ describe('Advert', () => {
 		slot.setAttribute('data-name', 'inline1');
 		const ad = new Advert(slot);
 		expect(ad).toBeDefined();
-		expect(googleSlot.setSafeFrameConfig).toBeCalledWith({
+		expect(googleSlot.setSafeFrameConfig).toHaveBeenCalledWith({
 			allowOverlayExpansion: false,
 			allowPushExpansion: true,
 			sandbox: true,
@@ -114,7 +114,7 @@ describe('Advert', () => {
 		slot.setAttribute('data-name', 'inline2');
 		const ad = new Advert(slot);
 		expect(ad).toBeDefined();
-		expect(googleSlot.setSafeFrameConfig).not.toBeCalled();
+		expect(googleSlot.setSafeFrameConfig).not.toHaveBeenCalled();
 	});
 
 	it('should throw an error if no size mappings are found or passed in', () => {

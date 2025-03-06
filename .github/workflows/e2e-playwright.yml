@@ -22,16 +22,22 @@ jobs:
     steps:
       # Commercial
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.2.2
         with:
           path: ./commercial
 
+      # Temporarily force newer version of corepack
+      # See https://github.com/guardian/support-service-lambdas/pull/2666
+      - run: npm install --global corepack@0.31.0
+
       - run: corepack enable
         working-directory: ./commercial
-        shell: bash
+
+      - run: corepack prepare pnpm@9.15.2 --activate
+        working-directory: ./commercial
 
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v4.2.0
         with:
           node-version-file: './commercial/.nvmrc'
           cache: 'pnpm'
@@ -80,7 +86,7 @@ jobs:
         run: pnpm playwright test --shard=${{ matrix.group }}/5
         working-directory: ./commercial
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4.6.1
         if: always()
         with:
           name: playwright-report-${{ matrix.group }}
