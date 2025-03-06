@@ -306,11 +306,6 @@ const timeoutBuffer = 400;
  */
 const bidderTimeout = PREBID_TIMEOUT;
 
-/**
- * useBidCache is false by default then we will set it to true when switch in on and user is in variant
- */
-const useBidCache = false;
-
 let requestQueue: Promise<void> = Promise.resolve();
 let initialised = false;
 
@@ -374,6 +369,11 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		}
 	};
 
+	/**
+	 * useBidCache is a feature that allows Prebid to cache bids
+	 */
+	const useBidCache = shouldIncludePrebidBidCache();
+
 	const pbjsConfig: PbjsConfig = Object.assign(
 		{},
 		{
@@ -423,10 +423,6 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 				},
 			],
 		};
-	}
-
-	if (shouldIncludePrebidBidCache()) {
-		pbjsConfig.useBidCache = true;
 	}
 
 	if (isSwitchedOn('prebidCriteo')) {
