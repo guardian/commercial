@@ -63,7 +63,7 @@ const config = {
 			},
 			{
 				test: /.js$/,
-				include: new RegExp(`/prebid\.js`),
+				include: /prebid\.js/,
 				use: {
 					loader: 'babel-loader',
 					options: prebidBabelOptions,

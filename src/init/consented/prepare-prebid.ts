@@ -18,7 +18,10 @@ const shouldLoadPrebid = () =>
 
 const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 	if (shouldLoadPrebid()) {
-		await import(`./prebid`);
+		await import(
+			/* webpackChunkName: "Prebid.js" */
+			`./prebid`
+		);
 		prebid.initialise(window, consentState);
 	}
 };

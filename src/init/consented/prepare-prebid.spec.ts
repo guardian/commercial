@@ -25,10 +25,10 @@ jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));
 
+jest.mock('init/consented/prebid');
+
 jest.mock('lib/header-bidding/prebid/prebid', () => ({
-	prebid: {
-		initialise: jest.fn(),
-	},
+	processQueue: jest.fn(),
 }));
 
 jest.mock('define/Advert', () =>
