@@ -24,8 +24,8 @@ importers:
         specifier: 21.2.0
         version: 21.2.0(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/prebid.js':
-        specifier: 9.27.0-1
-        version: 9.27.0-1(babel-core@7.0.0-bridge.0(@babel/core@7.26.9))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)
+        specifier: github:guardian/prebid.js#jlk/include-all-files
+        version: https://codeload.github.com/guardian/prebid.js/tar.gz/b836d08c0b233d959b07f20a47480a04b043c96f(babel-core@7.0.0-bridge.0(@babel/core@7.26.9))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/source':
         specifier: 8.0.2
         version: 8.0.2(tslib@2.8.1)(typescript@5.5.4)
@@ -35,6 +35,9 @@ importers:
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
+      prebid.js:
+        specifier: 9.27.0
+        version: 9.27.0(babel-core@7.0.0-bridge.0(@babel/core@7.26.9))(ejs@3.1.10)
       process:
         specifier: ^0.11.10
         version: 0.11.10
@@ -1039,8 +1042,9 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/prebid.js@9.27.0-1':
-    resolution: {integrity: sha512-aaW4PoNQKT2X/qQ07l/h3p6+Uov2BsEE4M1admknkbZa0fEa5+DD4iNfQEs1fSWoIA6Dgd4j+WfCTD1z27EE2Q==}
+  '@guardian/prebid.js@https://codeload.github.com/guardian/prebid.js/tar.gz/b836d08c0b233d959b07f20a47480a04b043c96f':
+    resolution: {tarball: https://codeload.github.com/guardian/prebid.js/tar.gz/b836d08c0b233d959b07f20a47480a04b043c96f}
+    version: 9.27.0-1
     engines: {node: '>=20.0.0'}
 
   '@guardian/prettier@8.0.1':
@@ -4480,6 +4484,10 @@ packages:
     resolution: {integrity: sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg==}
     engines: {node: '>= 0.4'}
 
+  prebid.js@9.27.0:
+    resolution: {integrity: sha512-gUIX7AhIEWj+aYcycadci/KfxMh1DUHe3l3kTY09EBF/xvBOpjS8+rHdELememdV5Z2C9BdwOZJtw3kfQPsB+Q==}
+    engines: {node: '>=20.0.0'}
+
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -6670,7 +6678,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.5.4
 
-  '@guardian/prebid.js@9.27.0-1(babel-core@7.0.0-bridge.0(@babel/core@7.26.9))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)':
+  '@guardian/prebid.js@https://codeload.github.com/guardian/prebid.js/tar.gz/b836d08c0b233d959b07f20a47480a04b043c96f(babel-core@7.0.0-bridge.0(@babel/core@7.26.9))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
       '@babel/core': 7.26.9
       '@babel/plugin-transform-runtime': 7.26.9(@babel/core@7.26.9)
@@ -10733,6 +10741,79 @@ snapshots:
   possible-typed-array-names@1.0.0: {}
 
   possible-typed-array-names@1.1.0: {}
+
+  prebid.js@9.27.0(babel-core@7.0.0-bridge.0(@babel/core@7.26.9))(ejs@3.1.10):
+    dependencies:
+      '@babel/core': 7.26.9
+      '@babel/plugin-transform-runtime': 7.26.9(@babel/core@7.26.9)
+      '@babel/preset-env': 7.26.9(@babel/core@7.26.9)
+      '@babel/runtime': 7.26.9
+      core-js: 3.36.1
+      core-js-pure: 3.36.1
+      crypto-js: 4.2.0
+      dlv: 1.1.3
+      dset: 3.1.4
+      express: 4.21.2
+      fun-hooks: 0.9.10
+      gulp-wrap: 0.15.0(babel-core@7.0.0-bridge.0(@babel/core@7.26.9))(ejs@3.1.10)
+      klona: 2.0.6
+      live-connect-js: 7.2.0
+    optionalDependencies:
+      fsevents: 2.3.3
+    transitivePeerDependencies:
+      - arc-templates
+      - atpl
+      - babel-core
+      - bracket-template
+      - coffee-script
+      - dot
+      - dust
+      - dustjs-helpers
+      - dustjs-linkedin
+      - eco
+      - ect
+      - ejs
+      - haml-coffee
+      - hamlet
+      - hamljs
+      - handlebars
+      - hogan.js
+      - htmling
+      - jade
+      - jazz
+      - jqtpl
+      - just
+      - liquid-node
+      - liquor
+      - marko
+      - mote
+      - mustache
+      - nunjucks
+      - plates
+      - pug
+      - qejs
+      - ractive
+      - razor-tmpl
+      - react
+      - react-dom
+      - slm
+      - squirrelly
+      - supports-color
+      - swig
+      - swig-templates
+      - teacup
+      - templayed
+      - then-jade
+      - then-pug
+      - tinyliquid
+      - toffee
+      - twig
+      - twing
+      - underscore
+      - vash
+      - velocityjs
+      - walrus
+      - whiskers
 
   prelude-ls@1.2.1: {}
 
