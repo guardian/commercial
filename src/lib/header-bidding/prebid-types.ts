@@ -105,8 +105,8 @@ export type PrebidMagniteParams = {
 };
 
 export type PrebidTheTradeDeskParams = {
-	supplySourceId: number;
-	publisherId: number;
+	supplySourceId: string;
+	publisherId: string;
 	placementId: string;
 };
 
