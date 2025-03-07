@@ -20,21 +20,25 @@ const cmpAcceptAll = async (page: Page) => {
 const cmpRejectAll = async (page: Page) => {
 	// set reject all cookie
 	const sevenDaysLater = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+	// let cookieNames = ['gu_allow_reject_all', 'gu_hide_support_messaging', 'gu_user_benefits_expiry'];
 	await page.context().addCookies([
 		{
 			name: 'gu_allow_reject_all',
 			value: sevenDaysLater.toUTCString(),
-			domain: 'theguardian.com',
+			domain: '.theguardian.com',
+			path: '/',
 		},
 		{
 			name: 'gu_hide_support_messaging',
 			value: sevenDaysLater.toUTCString(),
-			domain: 'theguardian.com',
+			domain: '.theguardian.com',
+			path: '/',
 		},
 		{
 			name: 'gu_user_benefits_expiry',
 			value: sevenDaysLater.toUTCString(),
-			domain: 'theguardian.com',
+			domain: '.theguardian.com',
+			path: '/',
 		},
 	]);
 	const manageMyCookiesButton = page
