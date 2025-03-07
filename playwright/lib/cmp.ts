@@ -17,8 +17,7 @@ const cmpAcceptAll = async (page: Page) => {
 	await new Promise((r) => setTimeout(r, 2000));
 };
 
-const cmpRejectAll = async (page: Page) => {
-	// set reject all cookie
+export const dropCookiesForNonAdvertisingBanner = async (page: Page) => {
 	const sevenDaysLater = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 	// let cookieNames = ['gu_allow_reject_all', 'gu_hide_support_messaging', 'gu_user_benefits_expiry'];
 	await page.context().addCookies([
@@ -41,6 +40,11 @@ const cmpRejectAll = async (page: Page) => {
 			path: '/',
 		},
 	]);
+};
+
+const cmpRejectAll = async (page: Page) => {
+	// let cookieNames = ['gu_allow_reject_all', 'gu_hide_support_messaging', 'gu_user_benefits_expiry'];
+	await dropCookiesForNonAdvertisingBanner(page);
 	const manageMyCookiesButton = page
 		.frameLocator(SP_LAYER1_IFRAME)
 		.locator(SP_LAYER2_MANAGE_MY_COOKIES_BUTTON);
