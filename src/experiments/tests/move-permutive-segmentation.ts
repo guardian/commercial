@@ -5,7 +5,7 @@ export const movePermutiveSegmentation: ABTest = {
 	author: '@commercial-dev',
 	start: '2025-02-12',
 	expiry: '2025-03-21',
-	audience: 0 / 100,
+	audience: 10 / 100,
 	audienceOffset: 20 / 100,
 	audienceCriteria: '',
 	successMeasure: '',
