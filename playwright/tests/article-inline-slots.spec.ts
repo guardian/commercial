@@ -1,5 +1,8 @@
 import { expect, test } from '@playwright/test';
-import { testAtBreakpoints } from '../fixtures/breakpoints';
+import {
+	getBreakpointSize,
+	type TestingBreakpoint,
+} from '../fixtures/breakpoints';
 import { articles } from '../fixtures/pages';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
@@ -10,8 +13,9 @@ const pages = articles.filter(
 
 test.describe('Slots and iframes load on article pages', () => {
 	pages.forEach((article, index) => {
-		testAtBreakpoints(['mobile', 'tablet', 'desktop']).forEach(
-			({ breakpoint, width, height }) => {
+		(['mobile', 'tablet', 'desktop'] satisfies TestingBreakpoint[])
+			.map(getBreakpointSize)
+			.forEach(({ breakpoint, width, height }) => {
 				const expectedMinSlotsOnPage =
 					'expectedMinInlineSlots' in article &&
 					article.expectedMinInlineSlots[breakpoint];
@@ -87,7 +91,6 @@ test.describe('Slots and iframes load on article pages', () => {
 						);
 					});
 				}
-			},
-		);
+			});
 	});
 });
