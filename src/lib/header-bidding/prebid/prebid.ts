@@ -24,6 +24,7 @@ import { getHeaderBiddingAdSlots } from '../slot-config';
 import {
 	isSwitchedOn,
 	shouldIncludePermutive,
+	shouldIncludePrebidBidCache,
 	stripDfpAdPrefixFrom,
 } from '../utils';
 import { bids } from './bid-config';
@@ -104,6 +105,7 @@ type PbjsConfig = {
 	};
 	consentManagement?: ConsentManagement;
 	realTimeData?: unknown;
+	useBidCache?: boolean;
 };
 
 type PbjsEvent = 'bidWon';
@@ -367,6 +369,11 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		}
 	};
 
+	/**
+	 * useBidCache is a feature that allows Prebid to cache bids
+	 */
+	const useBidCache = shouldIncludePrebidBidCache();
+
 	const pbjsConfig: PbjsConfig = Object.assign(
 		{},
 		{
@@ -374,6 +381,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			timeoutBuffer,
 			priceGranularity,
 			userSync,
+			useBidCache,
 		},
 	);
 
