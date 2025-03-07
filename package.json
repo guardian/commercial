@@ -41,7 +41,7 @@
 		"@guardian/core-web-vitals": "^8.0.1",
 		"@guardian/identity-auth": "^4.0.0",
 		"@guardian/identity-auth-frontend": "^6.0.0",
-		"@guardian/libs": "^22.0.00",
+		"@guardian/libs": "^22.0.0",
 		"@guardian/source": "^8.0.0",
 		"typescript": "~5.5.2"
 	},
