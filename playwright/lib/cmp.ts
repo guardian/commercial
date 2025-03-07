@@ -18,6 +18,25 @@ const cmpAcceptAll = async (page: Page) => {
 };
 
 const cmpRejectAll = async (page: Page) => {
+	// set reject all cookie
+	const sevenDaysLater = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+	await page.context().addCookies([
+		{
+			name: 'gu_allow_reject_all',
+			value: sevenDaysLater.toUTCString(),
+			domain: 'theguardian.com',
+		},
+		{
+			name: 'gu_hide_support_messaging',
+			value: sevenDaysLater.toUTCString(),
+			domain: 'theguardian.com',
+		},
+		{
+			name: 'gu_user_benefits_expiry',
+			value: sevenDaysLater.toUTCString(),
+			domain: 'theguardian.com',
+		},
+	]);
 	const manageMyCookiesButton = page
 		.frameLocator(SP_LAYER1_IFRAME)
 		.locator(SP_LAYER2_MANAGE_MY_COOKIES_BUTTON);
