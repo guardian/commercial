@@ -9,17 +9,9 @@ const SP_LAYER2_IFRAME = 'iframe[title="SP Consent Message"]';
 const SP_LAYER2_ACCEPT_ALL_BUTTON = 'button.sp_choice_type_ACCEPT_ALL';
 const SP_LAYER2_REJECT_ALL_BUTTON = 'button.sp_choice_type_REJECT_ALL';
 
-const cmpAcceptAll = async (page: Page) => {
-	const acceptAllButton = page
-		.frameLocator(SP_LAYER1_IFRAME)
-		.locator(SP_LAYER1_ACCEPT_ALL_BUTTON);
-	await acceptAllButton.click();
-	await new Promise((r) => setTimeout(r, 2000));
-};
 
-export const dropCookiesForNonAdvertisingBanner = async (page: Page) => {
+const dropCookiesForNonAdvertisingBanner = async (page: Page) => {
 	const sevenDaysLater = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-	// let cookieNames = ['gu_allow_reject_all', 'gu_hide_support_messaging', 'gu_user_benefits_expiry'];
 	await page.context().addCookies([
 		{
 			name: 'gu_allow_reject_all',
@@ -41,6 +33,16 @@ export const dropCookiesForNonAdvertisingBanner = async (page: Page) => {
 		},
 	]);
 };
+
+
+const cmpAcceptAll = async (page: Page) => {
+	const acceptAllButton = page
+		.frameLocator(SP_LAYER1_IFRAME)
+		.locator(SP_LAYER1_ACCEPT_ALL_BUTTON);
+	await acceptAllButton.click();
+	await new Promise((r) => setTimeout(r, 2000));
+};
+
 
 const cmpRejectAll = async (page: Page) => {
 	// let cookieNames = ['gu_allow_reject_all', 'gu_hide_support_messaging', 'gu_user_benefits_expiry'];
@@ -68,4 +70,5 @@ const cmpReconsent = async (page: Page) => {
 	await new Promise((r) => setTimeout(r, 2000));
 };
 
-export { cmpAcceptAll, cmpReconsent, cmpRejectAll };
+
+export { cmpAcceptAll, cmpReconsent, cmpRejectAll, dropCookiesForNonAdvertisingBanner };
