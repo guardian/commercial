@@ -152,7 +152,7 @@ const setupFakeLogin = async (
 		{
 			name: 'gu_hide_support_messaging',
 			value: sevenDaysLater.toUTCString(),
-			domain: '.theguardian.com',
+			domain: 'localhost',
 			path: '/',
 		},
 		{
