@@ -16,9 +16,9 @@ import 'prebid.js/modules/rubiconBidAdapter';
 import 'prebid.js/modules/ttdBidAdapter';
 
 // Guardian specific adapters that we have modified or created
-import '@guardian/prebid.js/modules/appnexusBidAdapter';
-import '@guardian/prebid.js/modules/openxBidAdapter';
-import '@guardian/prebid.js/modules/guAnalyticsAdapter';
+import '../../lib/header-bidding/prebid/custom-modules/appnexusBidAdapter';
+import '../../lib/header-bidding/prebid/custom-modules/openxBidAdapter';
+import '../../lib/header-bidding/prebid/custom-modules/guAnalyticsAdapter';
 
 pbjs.processQueue();
 

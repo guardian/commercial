@@ -38,6 +38,20 @@ const config = {
 		alias: {
 			svgs: join(import.meta.dirname, 'static', 'svg'),
 			lodash: 'lodash-es',
+			// prebid doesn't export these directories, so we need to alias them,
+			// we use them for our custom modules located in src/lib/header-bidding/prebid/custom-modules
+			'prebid.js/src': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebid.js',
+				'src',
+			),
+			'prebid.js/libraries': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebid.js',
+				'libraries',
+			),
 		},
 		extensions: ['.js', '.ts', '.tsx', '.jsx'],
 	},

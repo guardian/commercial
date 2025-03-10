@@ -23,9 +23,6 @@ importers:
       '@guardian/libs':
         specifier: 21.2.0
         version: 21.2.0(tslib@2.8.1)(typescript@5.5.4)
-      '@guardian/prebid.js':
-        specifier: github:guardian/prebid.js#jlk/include-all-files
-        version: https://codeload.github.com/guardian/prebid.js/tar.gz/b836d08c0b233d959b07f20a47480a04b043c96f(babel-core@7.0.0-bridge.0(@babel/core@7.26.9))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/source':
         specifier: 8.0.2
         version: 8.0.2(tslib@2.8.1)(typescript@5.5.4)
@@ -1024,15 +1021,6 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/libs@18.0.2':
-    resolution: {integrity: sha512-MX7mo/ZADgJJ9uMBHw9SoJBW1AJXB8Vg3NFUkpfJ7uwkN0LKHHxi8w2YkZDMPUDcMx5I3dpIf1LuqQQLR6RAVA==}
-    peerDependencies:
-      tslib: ^2.6.2
-      typescript: ~5.5.2
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
   '@guardian/libs@21.2.0':
     resolution: {integrity: sha512-i2IMeVqj7le3B9JLXXwBaKOMGfBHVe9nQ83CKj4MU0POOUIQktcV9lsol89X9Hx80EmBg2Ao5cwDtPkKvGf7WQ==}
     peerDependencies:
@@ -1041,11 +1029,6 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
-
-  '@guardian/prebid.js@https://codeload.github.com/guardian/prebid.js/tar.gz/b836d08c0b233d959b07f20a47480a04b043c96f':
-    resolution: {tarball: https://codeload.github.com/guardian/prebid.js/tar.gz/b836d08c0b233d959b07f20a47480a04b043c96f}
-    version: 9.27.0-1
-    engines: {node: '>=20.0.0'}
 
   '@guardian/prettier@8.0.1':
     resolution: {integrity: sha512-mELIji0FezEj5YTyHkylB6VNeCN1+/jsHW/iZ0RItDMn/GjU6gbaPP5D2m+BZwrTYNrxYhCoFqCE/ObkEghtdg==}
@@ -6666,94 +6649,11 @@ snapshots:
     optionalDependencies:
       typescript: 5.5.4
 
-  '@guardian/libs@18.0.2(tslib@2.8.1)(typescript@5.5.4)':
-    dependencies:
-      tslib: 2.8.1
-    optionalDependencies:
-      typescript: 5.5.4
-
   '@guardian/libs@21.2.0(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
       tslib: 2.8.1
     optionalDependencies:
       typescript: 5.5.4
-
-  '@guardian/prebid.js@https://codeload.github.com/guardian/prebid.js/tar.gz/b836d08c0b233d959b07f20a47480a04b043c96f(babel-core@7.0.0-bridge.0(@babel/core@7.26.9))(ejs@3.1.10)(tslib@2.8.1)(typescript@5.5.4)':
-    dependencies:
-      '@babel/core': 7.26.9
-      '@babel/plugin-transform-runtime': 7.26.9(@babel/core@7.26.9)
-      '@babel/preset-env': 7.26.9(@babel/core@7.26.9)
-      '@babel/register': 7.25.9(@babel/core@7.26.9)
-      '@babel/runtime': 7.26.9
-      '@guardian/libs': 18.0.2(tslib@2.8.1)(typescript@5.5.4)
-      core-js: 3.36.1
-      core-js-pure: 3.36.1
-      crypto-js: 4.2.0
-      dlv: 1.1.3
-      dset: 3.1.4
-      express: 4.21.2
-      fun-hooks: 0.9.10
-      gulp-wrap: 0.15.0(babel-core@7.0.0-bridge.0(@babel/core@7.26.9))(ejs@3.1.10)
-      klona: 2.0.6
-      live-connect-js: 7.2.0
-    optionalDependencies:
-      fsevents: 2.3.3
-    transitivePeerDependencies:
-      - arc-templates
-      - atpl
-      - babel-core
-      - bracket-template
-      - coffee-script
-      - dot
-      - dust
-      - dustjs-helpers
-      - dustjs-linkedin
-      - eco
-      - ect
-      - ejs
-      - haml-coffee
-      - hamlet
-      - hamljs
-      - handlebars
-      - hogan.js
-      - htmling
-      - jade
-      - jazz
-      - jqtpl
-      - just
-      - liquid-node
-      - liquor
-      - marko
-      - mote
-      - mustache
-      - nunjucks
-      - plates
-      - pug
-      - qejs
-      - ractive
-      - razor-tmpl
-      - react
-      - react-dom
-      - slm
-      - squirrelly
-      - supports-color
-      - swig
-      - swig-templates
-      - teacup
-      - templayed
-      - then-jade
-      - then-pug
-      - tinyliquid
-      - toffee
-      - tslib
-      - twig
-      - twing
-      - typescript
-      - underscore
-      - vash
-      - velocityjs
-      - walrus
-      - whiskers
 
   '@guardian/prettier@8.0.1(prettier@3.5.2)(tslib@2.8.1)':
     dependencies:
