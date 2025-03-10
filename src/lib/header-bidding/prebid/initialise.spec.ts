@@ -2,7 +2,7 @@ import { type ConsentState } from '@guardian/libs';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
 import { shouldIncludePermutive } from '../utils';
-import { prebid } from './prebid';
+import { prebid } from './initialise';
 
 const getAdvertById = getAdvertById_ as jest.Mock;
 
@@ -42,7 +42,7 @@ const resetPrebid = () => {
 	// @ts-expect-error -- there’s no types for this
 	delete window.pbjsChunk;
 	jest.resetModules();
-	jest.requireActual('@guardian/prebid.js/build/dist/prebid');
+	jest.requireActual('lib/header-bidding/prebid/prebid');
 };
 
 describe('initialise', () => {
