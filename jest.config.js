@@ -16,9 +16,9 @@ module.exports = {
 		'^svgs/(.*)$': '<rootDir>/src/lib/__mocks__/svgMock.js',
 		'^(.*)\\.svg$': '<rootDir>/src/lib/__mocks__/svgMock.js',
 		'^(.*)\\.html$': '<rootDir>/src/__mocks__/templateMock.js',
-		'^prebid.js/src/(.*)$': '<rootDir>/node_modules/prebid.js/src/$1',
-		'^prebid.js/libraries/(.*)$':
-			'<rootDir>/node_modules/prebid.js/libraries/$1',
+		'^prebid.js/adapters/(.*)$':
+			'<rootDir>/node_modules/prebid.js/src/adapters/$1',
+		'^prebid.js/(.*)$': '<rootDir>/node_modules/prebid.js/$1',
 	},
 	setupFilesAfterEnv: ['<rootDir>/jest.setupTestFrameworkScriptFile.js'],
 	testEnvironment: 'jest-environment-jsdom-global',

@@ -1,4 +1,5 @@
 import pbjs from 'prebid.js';
+
 import 'prebid.js/modules/adyoulikeBidAdapter';
 import 'prebid.js/modules/consentManagementTcf';
 import 'prebid.js/modules/consentManagementUsp';
@@ -16,9 +17,9 @@ import 'prebid.js/modules/rubiconBidAdapter';
 import 'prebid.js/modules/ttdBidAdapter';
 
 // Guardian specific adapters that we have modified or created
-import './custom-modules/appnexusBidAdapter';
-import './custom-modules/openxBidAdapter';
-import './custom-modules/guAnalyticsAdapter';
+import './modules/appnexusBidAdapter';
+import './modules/openxBidAdapter';
+import './modules/analyticsAdapter';
 
 pbjs.processQueue();
 

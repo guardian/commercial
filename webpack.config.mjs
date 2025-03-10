@@ -52,6 +52,13 @@ const config = {
 				'prebid.js',
 				'libraries',
 			),
+			'prebid.js/adapters': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebid.js',
+				'src',
+				'adapters',
+			),
 		},
 		extensions: ['.js', '.ts', '.tsx', '.jsx'],
 	},
