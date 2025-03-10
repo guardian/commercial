@@ -1,10 +1,14 @@
 import { type ConsentState } from '@guardian/libs';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
-import { shouldIncludePermutive } from '../utils';
+import {
+	shouldIncludePermutive,
+	shouldIncludePrebidBidCache as shouldIncludePrebidBidCache_,
+} from '../utils';
 import { prebid } from './prebid';
 
 const getAdvertById = getAdvertById_ as jest.Mock;
+const shouldIncludePrebidBidCache = shouldIncludePrebidBidCache_ as jest.Mock;
 
 jest.mock('define/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
@@ -21,6 +25,7 @@ jest.mock('lib/dfp/get-advert-by-id', () => ({
 jest.mock('../utils', () => ({
 	...jest.requireActual('../utils.ts'),
 	shouldIncludePermutive: jest.fn().mockReturnValue(true),
+	shouldIncludePrebidBidCache: jest.fn().mockReturnValue(false),
 }));
 
 const mockConsentState = {
@@ -190,6 +195,18 @@ describe('initialise', () => {
 		window.guardian.config.switches.consentManagement = false;
 		prebid.initialise(window, mockConsentState);
 		expect(window.pbjs?.getConfig('consentManagement')).toBeUndefined();
+	});
+
+	test('should generate correct Prebid config when shouldIncludePrebidBidCache is true', () => {
+		shouldIncludePrebidBidCache.mockReturnValue(true);
+		prebid.initialise(window, mockConsentState);
+		expect(window.pbjs?.getConfig('useBidCache')).toBe(true);
+	});
+
+	test('should generate correct Prebid config when shouldIncludePrebidBidCache is false', () => {
+		shouldIncludePrebidBidCache.mockReturnValue(false);
+		prebid.initialise(window, mockConsentState);
+		expect(window.pbjs?.getConfig('useBidCache')).toBe(false);
 	});
 
 	test('should generate correct bidder settings', () => {
