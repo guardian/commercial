@@ -115,7 +115,8 @@ const setupFakeLogin = async (
 	const bodyOverride: UserFeaturesResponse = {
 		userId: '107421393',
 		digitalSubscriptionExpiryDate: '2999-01-01',
-		showSupportMessaging: false,
+		guardianAdLiteExpiryDate: '2999-01-01',
+		showSupportMessaging: true,
 		contentAccess: {
 			member: false,
 			paidMember: false,
@@ -123,18 +124,40 @@ const setupFakeLogin = async (
 			digitalPack: true,
 			paperSubscriber: false,
 			guardianWeeklySubscriber: false,
+			guardianAdLite: true,
 		},
 	};
 
 	if (!subscriber) {
 		bodyOverride.contentAccess.digitalPack = false;
+		bodyOverride.showSupportMessaging = false;
 		delete bodyOverride.digitalSubscriptionExpiryDate;
 	}
+
+	const sevenDaysLater = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
 	await context.addCookies([
 		{
 			name: 'GU_U',
 			value: 'WyIzMjc5Nzk0IiwiIiwiSmFrZTkiLCIiLDE2NjA4MzM3NTEyMjcsMCwxMjEyNjgzMTQ3MDAwLHRydWVd.MC0CFQCIbpFtd0J5IqK946U1vagzLgCBkwIUUN3UOkNfNN8jwNE3scKfrcvoRSg',
+			domain: 'localhost',
+			path: '/',
+		},
+		{
+			name: 'gu_allow_reject_all',
+			value: sevenDaysLater.toUTCString(),
+			domain: 'localhost',
+			path: '/',
+		},
+		{
+			name: 'gu_hide_support_messaging',
+			value: sevenDaysLater.toUTCString(),
+			domain: '.theguardian.com',
+			path: '/',
+		},
+		{
+			name: 'gu_user_benefits_expiry',
+			value: sevenDaysLater.toUTCString(),
 			domain: 'localhost',
 			path: '/',
 		},

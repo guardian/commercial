@@ -14,22 +14,6 @@ const loadPage = async (page: Page, path: string, region = 'GB') => {
 			`{"value":"${new Date().toISOString()}"}`,
 		);
 
-		// set reject all cookie
-		const sevenDaysLater = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-
-		window.localStorage.setItem(
-			'gu_allow_reject_all',
-			sevenDaysLater.toUTCString(),
-		);
-		window.localStorage.setItem(
-			'gu_hide_support_messaging',
-			sevenDaysLater.toUTCString(),
-		);
-		window.localStorage.setItem(
-			'gu_user_benefits_expiry',
-			sevenDaysLater.toUTCString(),
-		);
-
 		// subscribe to commercial logger
 		window.localStorage.setItem('gu.logger', '{"value":"commercial"}');
 	}, region);
