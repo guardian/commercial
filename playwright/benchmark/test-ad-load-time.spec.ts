@@ -4,7 +4,7 @@ import { resolve } from 'path';
 import type { Page } from '@playwright/test';
 import { test } from '@playwright/test';
 import { loadTimePages } from '../fixtures/pages/load-time-pages';
-import { loadPage } from '../lib/load-page';
+import { visitArticleNoOkta } from '../lib/load-page';
 import { waitForSlot } from '../lib/util';
 
 const networkConditions = {
@@ -54,7 +54,7 @@ test.describe('Test how long top-above-nav takes to load', () => {
 
 			await page.setViewportSize(viewport);
 
-			await loadPage(page, article.path);
+			await visitArticleNoOkta(page, article.path);
 
 			const startRenderingTime = Date.now();
 
