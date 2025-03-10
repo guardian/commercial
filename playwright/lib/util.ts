@@ -135,6 +135,7 @@ const setupFakeLogin = async (
 		delete bodyOverride.digitalSubscriptionExpiryDate;
 	}
 
+	// following the launch of consent or pay, an account is required to be able to reject all
 	if (allowRejectAll) {
 		const sevenDaysLater = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
