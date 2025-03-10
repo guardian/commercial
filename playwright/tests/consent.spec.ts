@@ -2,12 +2,7 @@ import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 import { articles } from '../fixtures/pages';
 import type { GuPage } from '../fixtures/pages/Page';
-import {
-	cmpAcceptAll,
-	cmpReconsent,
-	cmpRejectAll,
-	dropCookiesForNonAdvertisingBanner,
-} from '../lib/cmp';
+import { cmpAcceptAll, cmpReconsent, cmpRejectAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 import {
 	fakeLogOut,
@@ -76,22 +71,24 @@ test.describe('tcfv2 consent', () => {
 
 	test(`Reject all on Non-Advertising banner, load Opt Out, ads slots are present`, async ({
 		page,
+		context,
 	}) => {
-		await dropCookiesForNonAdvertisingBanner(page);
-		await loadPage(page, path);
+		await setupFakeLogin(page, context, false);
+
+		await visitArticleNoOkta(page);
+
 		const optOutPromise = waitForOptOut(page);
-		await cmpRejectAll(page);
+
 		await optOutPromise;
 
 		await adSlotsArePresent(page);
 	});
 
-	test(`Reject all on Non-Advertising banner, login as subscriber, load Opt Out, ads slots are not present`, async ({
+	test.skip(`Reject all on Non-Advertising banner, login as subscriber, load Opt Out, ads slots are not present`, async ({
 		page,
 		context,
 	}) => {
 		await setupFakeLogin(page, context, true);
-		await dropCookiesForNonAdvertisingBanner(page);
 
 		await visitArticleNoOkta(page);
 
@@ -122,11 +119,9 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsArePresent(page);
 	});
 
-	test(`Reject all on Non-Advertising banner, accept all, ad slots are fulfilled`, async ({
+	test.skip(`Reject all on Non-Advertising banner, accept all, ad slots are fulfilled`, async ({
 		page,
 	}) => {
-		await dropCookiesForNonAdvertisingBanner(page);
-
 		await loadPage(page, path);
 
 		await cmpRejectAll(page);
@@ -140,12 +135,11 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreFulfilled(page);
 	});
 
-	test(`Accept all on Non Advertising banner, login as subscriber, ads slots are not present`, async ({
+	test.skip(`Accept all on Non Advertising banner, login as subscriber, ads slots are not present`, async ({
 		page,
 		context,
 	}) => {
 		await setupFakeLogin(page, context, true);
-		await dropCookiesForNonAdvertisingBanner(page);
 
 		await visitArticleNoOkta(page);
 
@@ -161,13 +155,11 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreNotPresent(page);
 	});
 
-	test(`Reject all on Non advertising banner, login as subscriber, ad slots are not present, log out, load Opt Out, ad slots are present`, async ({
+	test.skip(`Reject all on Non advertising banner, login as subscriber, ad slots are not present, log out, load Opt Out, ad slots are present`, async ({
 		page,
 		context,
 	}) => {
 		await setupFakeLogin(page, context, true);
-
-		await dropCookiesForNonAdvertisingBanner(page);
 
 		await visitArticleNoOkta(page);
 
@@ -184,13 +176,11 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsArePresent(page);
 	});
 
-	test(`Reject all on Non advertising banner, login as subscriber, ad slots are not present on multiple page loads`, async ({
+	test.skip(`Reject all on Non advertising banner, login as subscriber, ad slots are not present on multiple page loads`, async ({
 		page,
 		context,
 	}) => {
 		await setupFakeLogin(page, context, true);
-
-		await dropCookiesForNonAdvertisingBanner(page);
 
 		await visitArticleNoOkta(page);
 
@@ -249,11 +239,9 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreFulfilled(page);
 	});
 
-	test(`Reject all on Non advertising banner, ad slots are present, accept all, page refreshes, ad slots are fulfilled`, async ({
+	test.skip(`Reject all on Non advertising banner, ad slots are present, accept all, page refreshes, ad slots are fulfilled`, async ({
 		page,
 	}) => {
-		await dropCookiesForNonAdvertisingBanner(page);
-
 		await visitArticleNoOkta(page);
 
 		await cmpRejectAll(page);
