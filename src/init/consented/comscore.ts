@@ -7,7 +7,7 @@ const comscoreSrc = '//sb.scorecardresearch.com/cs/6035250/beacon.js';
 const comscoreC1 = '2';
 const comscoreC2 = '6035250';
 
-const getGlobals = (keywords: string): ComscoreGlobals => {
+const getGlobals = (keywords: string, section: string): ComscoreGlobals => {
 	const globals: ComscoreGlobals = {
 		c1: comscoreC1,
 		c2: comscoreC2,
@@ -18,7 +18,7 @@ const getGlobals = (keywords: string): ComscoreGlobals => {
 	};
 
 	if (keywords !== 'Network Front') {
-		globals.comscorekw = keywords;
+		globals.comscorekw = section;
 	}
 
 	return globals;
@@ -26,7 +26,12 @@ const getGlobals = (keywords: string): ComscoreGlobals => {
 
 const initOnConsent = () => {
 	window._comscore = window._comscore ?? [];
-	window._comscore.push(getGlobals(window.guardian.config.page.keywords));
+	window._comscore.push(
+		getGlobals(
+			window.guardian.config.page.keywords,
+			window.guardian.config.page.section,
+		),
+	);
 
 	return loadScript(comscoreSrc, { id: 'comscore', async: true });
 };
