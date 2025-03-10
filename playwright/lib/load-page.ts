@@ -27,7 +27,10 @@ const loadPage = async (page: Page, path: string, region = 'GB') => {
 	await page.goto(path, { waitUntil: 'domcontentloaded' });
 };
 
-const visitArticleNoOkta = async (page: Page) => {
+const visitArticleNoOkta = async (
+	page: Page,
+	path = '/politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',
+) => {
 	const fixture = {
 		config: {
 			switches: {
@@ -38,7 +41,7 @@ const visitArticleNoOkta = async (page: Page) => {
 	};
 	const url = getTestUrl({
 		stage: getStage(),
-		path: 'politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',
+		path,
 		type: 'article',
 		adtest: undefined,
 		fixture,
