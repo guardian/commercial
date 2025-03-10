@@ -116,7 +116,7 @@ describe('setupComscore', () => {
 	describe('Framework consent: running on consent', () => {
 		beforeEach(() => {
 			jest.resetAllMocks();
-			window.guardian.config.page.keywords = 'Culture';
+			window.guardian.config.page.section = 'tv-and-radio';
 		});
 
 		it('TCFv2 with consent: runs', async () => {
@@ -161,30 +161,31 @@ describe('setupComscore', () => {
 describe('comscore getGlobals', () => {
 	it('return an object with the c1 and c2 properties correctly set when called with "Network Front" as keywords', () => {
 		const expectedGlobals = { c1: _.comscoreC1, c2: _.comscoreC2 };
-		expect(_.getGlobals('Network Front')).toMatchObject(expectedGlobals);
+		expect(_.getGlobals('Network Front', 'uk')).toMatchObject(
+			expectedGlobals,
+		);
 	});
 
 	it('return an object with the c1 and c2 properties correctly set when called with non-"Network Front" as keywords', () => {
 		const expectedGlobals = { c1: _.comscoreC1, c2: _.comscoreC2 };
-		expect(_.getGlobals('')).toMatchObject(expectedGlobals);
+		expect(_.getGlobals('', '')).toMatchObject(expectedGlobals);
 	});
 
 	it('returns an object with no comscorekw variable set when called with "Network Front" as keywords', () => {
-		const comscoreGlobals = Object.keys(_.getGlobals('Network Front'));
+		const comscoreGlobals = Object.keys(
+			_.getGlobals('Network Front', 'tv-and-radio'),
+		);
 		expect(comscoreGlobals).not.toContain('comscorekw');
 	});
 
-	it('returns an object with the correct comscorekw variable set when called with "Network Front" as keywords', () => {
-		const keywords = 'These are the best & greatest keywords!';
-		const comscoreKeywords = 'These_are_the_best_and_greatest_keywords!';
-
-		expect(_.getGlobals(keywords)).toMatchObject({
-			comscorekw: comscoreKeywords,
+	it('returns an object with the correct comscorekw variable set when called with non-"Network Front" as keywords', () => {
+		expect(_.getGlobals('', 'tv-and-radio')).toMatchObject({
+			comscorekw: 'tv-and-radio',
 		});
 	});
 
-	it('returns an object with the correct cs_ucfr variable set when calleed with consent sate as true', () => {
-		expect(_.getGlobals('')).toMatchObject({
+	it('returns an object with the correct cs_ucfr variable set when called with consent sate as true', () => {
+		expect(_.getGlobals('', '')).toMatchObject({
 			cs_ucfr: '1',
 		});
 	});
