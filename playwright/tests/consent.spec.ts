@@ -3,14 +3,8 @@ import { expect, test } from '@playwright/test';
 import { articles } from '../fixtures/pages';
 import type { GuPage } from '../fixtures/pages/Page';
 import { cmpAcceptAll, cmpReconsent, cmpRejectAll } from '../lib/cmp';
-import { loadPage } from '../lib/load-page';
-import {
-	fakeLogOut,
-	getStage,
-	getTestUrl,
-	setupFakeLogin,
-	waitForSlot,
-} from '../lib/util';
+import { loadPage, visitArticleNoOkta } from '../lib/load-page';
+import { fakeLogOut, setupFakeLogin, waitForSlot } from '../lib/util';
 
 const { path } = articles[0] as unknown as GuPage;
 
@@ -33,25 +27,6 @@ const adSlotsArePresent = async (page: Page) =>
  */
 const adSlotsAreNotPresent = async (page: Page) =>
 	expect(await adSlotsArePresent(page)).toBeFalsy();
-
-const visitArticleNoOkta = async (page: Page) => {
-	const fixture = {
-		config: {
-			switches: {
-				okta: false,
-				idCookieRefresh: false,
-			},
-		},
-	};
-	const url = getTestUrl({
-		stage: getStage(),
-		path: 'politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',
-		type: 'article',
-		adtest: undefined,
-		fixture,
-	});
-	await loadPage(page, url);
-};
 
 const waitForOptOut = (page: Page) =>
 	page.waitForRequest(/cdn\.optoutadvertising\.com/);
