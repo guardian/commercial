@@ -6,7 +6,7 @@ export const prebidBidCache: ABTest = {
 	start: '2025-03-10',
 	expiry: '2024-03-24',
 	audience: 10 / 100,
-	audienceOffset: 0 / 100,
+	audienceOffset: 30 / 100,
 	audienceCriteria: '',
 	successMeasure: '',
 	description: 'Test enabled Prebid bid cache feature',
