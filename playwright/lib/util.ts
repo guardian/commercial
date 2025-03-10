@@ -176,6 +176,15 @@ const setupFakeLogin = async (
 		},
 		{ times: 1 },
 	);
+
+	await page.route(
+		'https://user-benefits.guardianapis.com/benefits/me**',
+		(route) => {
+			return route.fulfill({
+				body: JSON.stringify(['allowRejectAll']),
+			});
+		},
+	);
 };
 
 // Playwright does not currently have a useful method for removing a cookie, so this workaround is needed.
