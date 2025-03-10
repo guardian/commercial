@@ -23,6 +23,7 @@ import type {
 import { getHeaderBiddingAdSlots } from '../slot-config';
 import {
 	isSwitchedOn,
+	shouldIncludeBidder,
 	shouldIncludePermutive,
 	stripDfpAdPrefixFrom,
 } from '../utils';
@@ -314,7 +315,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	}
 	initialised = true;
 
-	const userSync: UserSync = window.guardian.config.switches.prebidUserSync
+	const userSync: UserSync = isSwitchedOn('prebidUserSync')
 		? {
 				syncsPerBidder: 0, // allow all syncs
 				filterSettings: {
@@ -367,15 +368,18 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		}
 	};
 
-	const pbjsConfig: PbjsConfig = Object.assign(
-		{},
-		{
-			bidderTimeout,
-			timeoutBuffer,
-			priceGranularity,
-			userSync,
-		},
-	);
+	/** Helper function to decide if a bidder should be included.
+	 * It is a curried function prepared with the consent state
+	 * at the time of initialisation to avoid unnecessary repetition
+	 * of consent state throughout */
+	const shouldInclude = shouldIncludeBidder(consentState);
+
+	const pbjsConfig: PbjsConfig = {
+		bidderTimeout,
+		timeoutBuffer,
+		priceGranularity,
+		userSync,
+	};
 
 	const keywordsArray = window.guardian.config.page.keywords.split(',');
 
@@ -391,33 +395,34 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 
 	window.pbjs.bidderSettings = {};
 
-	if (window.guardian.config.switches.consentManagement) {
+	if (isSwitchedOn('consentManagement')) {
 		pbjsConfig.consentManagement = consentManagement();
 	}
 
 	if (shouldIncludePermutive(consentState)) {
+		const includedAcBidders = (
+			['and', 'ix', 'ozone', 'pubmatic', 'trustx'] satisfies BidderCode[]
+		)
+			.filter(shouldInclude)
+			// "and" is the alias for the custom Guardian "appnexus" direct bidder
+			.map((bidder) => (bidder === 'and' ? 'appnexus' : bidder));
+
 		pbjsConfig.realTimeData = {
 			dataProviders: [
 				{
 					name: 'permutive',
 					params: {
-						acBidders: [
-							'appnexus',
-							'ix',
-							'ozone',
-							'pubmatic',
-							'trustx',
-						],
-						overwrites: {
-							pubmatic,
-						},
+						acBidders: includedAcBidders,
+						...(includedAcBidders.includes('pubmatic')
+							? { overwrites: { pubmatic } }
+							: {}),
 					},
 				},
 			],
 		};
 	}
 
-	if (isSwitchedOn('prebidCriteo')) {
+	if (shouldInclude('criteo')) {
 		window.pbjs.bidderSettings.criteo = {
 			storageAllowed: true,
 		};
@@ -432,7 +437,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		});
 	}
 
-	if (isSwitchedOn('prebidOzone')) {
+	if (shouldInclude('ozone')) {
 		// Use a custom price granularity, which is based upon the size of the slot being auctioned
 		window.pbjs.setBidderConfig({
 			bidders: ['ozone'],
@@ -454,7 +459,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		});
 	}
 
-	if (isSwitchedOn('prebidIndexExchange')) {
+	if (shouldInclude('ix')) {
 		window.pbjs.setBidderConfig({
 			bidders: ['ix'],
 			config: {
@@ -489,7 +494,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		]);
 	}
 
-	if (isSwitchedOn('prebidXaxis')) {
+	if (shouldInclude('xhb')) {
 		window.pbjs.bidderSettings.xhb = {
 			adserverTargeting: [
 				{
@@ -506,13 +511,13 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		};
 	}
 
-	if (isSwitchedOn('prebidKargo')) {
+	if (shouldInclude('kargo')) {
 		window.pbjs.bidderSettings.kargo = {
 			storageAllowed: true,
 		};
 	}
 
-	if (isSwitchedOn('prebidMagnite')) {
+	if (shouldInclude('rubicon')) {
 		window.pbjs.bidderSettings.magnite = {
 			storageAllowed: true,
 		};
