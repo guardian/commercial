@@ -67,7 +67,7 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreFulfilled(page);
 	});
 
-	test(`Reject all, load Opt Out, ads slots are present`, async ({
+	test(`Reject all, load Opt Out, ad slots are present`, async ({
 		page,
 		context,
 	}) => {
@@ -85,11 +85,11 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsArePresent(page);
 	});
 
-	test(`Reject all on Non-Advertising banner, login as subscriber, load Opt Out, ads slots are not present`, async ({
+	test(`Login as subscriber, reject all, load Opt Out, ad slots are not present on multiple page loads`, async ({
 		page,
 		context,
 	}) => {
-		await setupFakeLogin(page, context, true);
+		await setupFakeLogin(page, context, true, true);
 
 		await visitArticleNoOkta(page);
 
@@ -100,29 +100,43 @@ test.describe('tcfv2 consent', () => {
 		await visitArticleNoOkta(page);
 
 		await adSlotsAreNotPresent(page);
+
+		await visitArticleNoOkta(page);
+
+		await adSlotsAreNotPresent(page);
+
+		await visitArticleNoOkta(page);
+
+		await adSlotsAreNotPresent(page);
 	});
 
-	test.skip(`Reject all on Non-Advertising banner, accept all, ad slots are fulfilled`, async ({
+	test(`Reject all, ad slots are fulfilled, then accept all, ad slots are fulfilled`, async ({
 		page,
+		context,
 	}) => {
-		await loadPage(page, path);
+		// After consent or pay, we need to be logged in and mock an ad-lite subscription to be able to reject all
+		await setupFakeLogin(page, context, false, true);
+
+		await visitArticleNoOkta(page);
+
+		const optOutPromise = waitForOptOut(page);
 
 		await cmpRejectAll(page);
 
-		await loadPage(page, path);
+		await optOutPromise;
+
+		await adSlotsArePresent(page);
 
 		await cmpReconsent(page);
-
-		await loadPage(page, path);
 
 		await adSlotsAreFulfilled(page);
 	});
 
-	test.skip(`Accept all on Non Advertising banner, login as subscriber, ads slots are not present`, async ({
+	test(`Login as subscriber, accept all, ad slots are not present`, async ({
 		page,
 		context,
 	}) => {
-		await setupFakeLogin(page, context, true);
+		await setupFakeLogin(page, context, true, false);
 
 		await visitArticleNoOkta(page);
 
@@ -138,11 +152,11 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreNotPresent(page);
 	});
 
-	test.skip(`Reject all on Non advertising banner, login as subscriber, ad slots are not present, log out, load Opt Out, ad slots are present`, async ({
+	test(`Login as subscriber, reject all, ad slots are not present. Log out, load Opt Out, ad slots are present`, async ({
 		page,
 		context,
 	}) => {
-		await setupFakeLogin(page, context, true);
+		await setupFakeLogin(page, context, true, true);
 
 		await visitArticleNoOkta(page);
 
@@ -159,72 +173,13 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsArePresent(page);
 	});
 
-	test.skip(`Reject all on Non advertising banner, login as subscriber, ad slots are not present on multiple page loads`, async ({
+	test(`Reject all, ad slots are present, accept all, page refreshes, ad slots are fulfilled`, async ({
 		page,
 		context,
 	}) => {
-		await setupFakeLogin(page, context, true);
+		// After consent or pay, we need to be logged in and mock an ad-lite subscription to be able to reject all
+		await setupFakeLogin(page, context, false, true);
 
-		await visitArticleNoOkta(page);
-
-		await cmpRejectAll(page);
-
-		await visitArticleNoOkta(page);
-
-		await adSlotsAreNotPresent(page);
-
-		await visitArticleNoOkta(page);
-
-		await adSlotsAreNotPresent(page);
-	});
-
-	// Can't reject all as non subscriber as they are redirected to support page
-	test.skip(`Reject all, login as non-subscriber, ad slots are present, log out, ad slots are present`, async ({
-		page,
-		context,
-	}) => {
-		await setupFakeLogin(page, context, false);
-
-		await visitArticleNoOkta(page);
-
-		await cmpRejectAll(page);
-
-		await visitArticleNoOkta(page);
-
-		await adSlotsArePresent(page);
-
-		await fakeLogOut(context);
-
-		await visitArticleNoOkta(page);
-
-		await adSlotsArePresent(page);
-	});
-
-	// Can't reject all as non subscriber as they are redirected to support page
-	test.skip(`Reject all, login as non-subscriber, ad slots are present, accept all, ad slots are fulfilled`, async ({
-		page,
-		context,
-	}) => {
-		await setupFakeLogin(page, context, false);
-
-		await visitArticleNoOkta(page);
-
-		await cmpRejectAll(page);
-
-		await visitArticleNoOkta(page);
-
-		await adSlotsArePresent(page);
-
-		await cmpReconsent(page);
-
-		await visitArticleNoOkta(page);
-
-		await adSlotsAreFulfilled(page);
-	});
-
-	test.skip(`Reject all on Non advertising banner, ad slots are present, accept all, page refreshes, ad slots are fulfilled`, async ({
-		page,
-	}) => {
 		await visitArticleNoOkta(page);
 
 		await cmpRejectAll(page);
