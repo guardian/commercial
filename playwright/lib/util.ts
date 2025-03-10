@@ -111,6 +111,7 @@ const setupFakeLogin = async (
 	page: Page,
 	context: BrowserContext,
 	subscriber = true,
+	allowRejectAll = true,
 ) => {
 	const bodyOverride: UserFeaturesResponse = {
 		userId: '107421393',
@@ -134,34 +135,36 @@ const setupFakeLogin = async (
 		delete bodyOverride.digitalSubscriptionExpiryDate;
 	}
 
-	const sevenDaysLater = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+	if (allowRejectAll) {
+		const sevenDaysLater = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
-	await context.addCookies([
-		{
-			name: 'GU_U',
-			value: 'WyIzMjc5Nzk0IiwiIiwiSmFrZTkiLCIiLDE2NjA4MzM3NTEyMjcsMCwxMjEyNjgzMTQ3MDAwLHRydWVd.MC0CFQCIbpFtd0J5IqK946U1vagzLgCBkwIUUN3UOkNfNN8jwNE3scKfrcvoRSg',
-			domain: 'localhost',
-			path: '/',
-		},
-		{
-			name: 'gu_allow_reject_all',
-			value: sevenDaysLater.toUTCString(),
-			domain: 'localhost',
-			path: '/',
-		},
-		{
-			name: 'gu_hide_support_messaging',
-			value: sevenDaysLater.toUTCString(),
-			domain: 'localhost',
-			path: '/',
-		},
-		{
-			name: 'gu_user_benefits_expiry',
-			value: sevenDaysLater.toUTCString(),
-			domain: 'localhost',
-			path: '/',
-		},
-	]);
+		await context.addCookies([
+			{
+				name: 'GU_U',
+				value: 'WyIzMjc5Nzk0IiwiIiwiSmFrZTkiLCIiLDE2NjA4MzM3NTEyMjcsMCwxMjEyNjgzMTQ3MDAwLHRydWVd.MC0CFQCIbpFtd0J5IqK946U1vagzLgCBkwIUUN3UOkNfNN8jwNE3scKfrcvoRSg',
+				domain: 'localhost',
+				path: '/',
+			},
+			{
+				name: 'gu_allow_reject_all',
+				value: sevenDaysLater.getTime().toString(),
+				domain: 'localhost',
+				path: '/',
+			},
+			{
+				name: 'gu_hide_support_messaging',
+				value: sevenDaysLater.getTime().toString(),
+				domain: 'localhost',
+				path: '/',
+			},
+			{
+				name: 'gu_user_benefits_expiry',
+				value: sevenDaysLater.getTime().toString(),
+				domain: 'localhost',
+				path: '/',
+			},
+		]);
+	}
 
 	await page.route(
 		'https://members-data-api.theguardian.com/user-attributes/me**',
