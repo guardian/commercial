@@ -57,9 +57,7 @@ const waitForOptOut = (page: Page) =>
 	page.waitForRequest(/cdn\.optoutadvertising\.com/);
 
 test.describe('tcfv2 consent', () => {
-	test(`Accept all for Consent or Pay banner, ad slots are fulfilled`, async ({
-		page,
-	}) => {
+	test(`Accept all, ad slots are fulfilled`, async ({ page }) => {
 		await loadPage(page, path);
 
 		await cmpAcceptAll(page);
@@ -69,15 +67,18 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreFulfilled(page);
 	});
 
-	test(`Reject all on Non-Advertising banner, load Opt Out, ads slots are present`, async ({
+	test(`Reject all, load Opt Out, ads slots are present`, async ({
 		page,
 		context,
 	}) => {
-		await setupFakeLogin(page, context, false);
+		// After consent or pay, we need to be logged in and mock an ad-lite subscription to be able to reject all
+		await setupFakeLogin(page, context, false, true);
 
 		await visitArticleNoOkta(page);
 
 		const optOutPromise = waitForOptOut(page);
+
+		await cmpRejectAll(page);
 
 		await optOutPromise;
 
