@@ -6,7 +6,7 @@ import type {
 import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isInCanada } from '../../lib/geo/geo-utils';
-import { prebid } from '../../lib/header-bidding/prebid/prebid';
+import { prebid } from '../../lib/header-bidding/prebid/initialise';
 import { _ } from './prepare-prebid';
 
 const { setupPrebid } = _;
@@ -25,10 +25,17 @@ jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));
 
-jest.mock('init/consented/prebid');
+// Then properly mock the prebid module
+jest.mock('../../lib/header-bidding/prebid/prebid', () => ({
+	pbjs: {
+		processQueue: jest.fn(),
+	},
+}));
 
-jest.mock('lib/header-bidding/prebid/prebid', () => ({
-	processQueue: jest.fn(),
+jest.mock('lib/header-bidding/prebid/initialise', () => ({
+	prebid: {
+		initialise: jest.fn(),
+	},
 }));
 
 jest.mock('define/Advert', () =>

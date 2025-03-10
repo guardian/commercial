@@ -4,7 +4,7 @@ import { once } from 'lodash-es';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { isInCanada } from '../../lib/geo/geo-utils';
-import { prebid } from '../../lib/header-bidding/prebid/prebid';
+import { prebid } from '../../lib/header-bidding/prebid/initialise';
 import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
 
 const shouldLoadPrebid = () =>
@@ -20,7 +20,7 @@ const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 	if (shouldLoadPrebid()) {
 		await import(
 			/* webpackChunkName: "Prebid.js" */
-			`./prebid`
+			`../../lib/header-bidding/prebid/prebid`
 		);
 		prebid.initialise(window, consentState);
 	}
