@@ -85,7 +85,7 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsArePresent(page);
 	});
 
-	test.skip(`Reject all on Non-Advertising banner, login as subscriber, load Opt Out, ads slots are not present`, async ({
+	test(`Reject all on Non-Advertising banner, login as subscriber, load Opt Out, ads slots are not present`, async ({
 		page,
 		context,
 	}) => {
@@ -100,24 +100,6 @@ test.describe('tcfv2 consent', () => {
 		await visitArticleNoOkta(page);
 
 		await adSlotsAreNotPresent(page);
-	});
-
-	// Can't reject all as non subscriber as they are redirected to support page
-	test.skip(`Reject all, login as non-subscriber, load Opt Out, ads slots are present`, async ({
-		page,
-		context,
-	}) => {
-		await setupFakeLogin(page, context, false);
-
-		await visitArticleNoOkta(page);
-
-		const optOutPromise = waitForOptOut(page);
-		await cmpRejectAll(page);
-		await optOutPromise;
-
-		await visitArticleNoOkta(page);
-
-		await adSlotsArePresent(page);
 	});
 
 	test.skip(`Reject all on Non-Advertising banner, accept all, ad slots are fulfilled`, async ({
