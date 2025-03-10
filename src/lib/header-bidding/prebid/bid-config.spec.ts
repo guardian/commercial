@@ -19,7 +19,7 @@ import {
 	containsMpu as containsMpu_,
 	containsMpuOrDmpu as containsMpuOrDmpu_,
 	getBreakpointKey as getBreakpointKey_,
-	shouldIncludeBidder as shouldIncludeBidder_,
+	shouldIncludeBidder,
 	stripMobileSuffix as stripMobileSuffix_,
 } from '../utils';
 import { _, bids } from './bid-config';
@@ -76,7 +76,6 @@ jest.mock('../utils', () => ({
 	getBreakpointKey: jest.fn(),
 	stripMobileSuffix: jest.fn(),
 }));
-const shouldIncludeBidder = shouldIncludeBidder_ as jest.Mock;
 const containsBillboard = containsBillboard_ as jest.Mock;
 const containsDmpu = containsDmpu_ as jest.Mock;
 const containsLeaderboard = containsLeaderboard_ as jest.Mock;
@@ -85,8 +84,8 @@ const containsLeaderboardOrBillboard =
 const containsMobileSticky = containsMobileSticky_ as jest.Mock;
 const containsMpu = containsMpu_ as jest.Mock;
 const containsMpuOrDmpu = containsMpuOrDmpu_ as jest.Mock;
-const getBreakpointKey = getBreakpointKey_ as jest.Mock;
 const stripMobileSuffix = stripMobileSuffix_ as jest.Mock;
+const getBreakpointKey = getBreakpointKey_ as jest.Mock;
 const isUserInVariant = isUserInVariant_ as jest.Mock;
 
 jest.mock('lib/geo/geo-utils');
@@ -123,6 +122,11 @@ const resetConfig = () => {
 	window.guardian.config.page.contentType = 'Article';
 	window.guardian.config.page.section = 'Magic';
 	window.guardian.config.page.isDev = false;
+	window.guardian.config.page.pbIndexSites = [
+		{ bp: 'D', id: 123456 },
+		{ bp: 'M', id: 234567 },
+		{ bp: 'T', id: 345678 },
+	];
 };
 
 describe('getTrustXAdUnitId', () => {
@@ -154,14 +158,6 @@ describe('indexExchangeBidders', () => {
 	beforeEach(() => {
 		resetConfig();
 		getBreakpointKey.mockReturnValue('D');
-		// @ts-expect-error -- test
-		window.guardian.config.page = {
-			pbIndexSites: [
-				{ bp: 'D', id: 123456 },
-				{ bp: 'M', id: 234567 },
-				{ bp: 'T', id: 345678 },
-			],
-		};
 	});
 
 	afterEach(() => {
@@ -169,7 +165,9 @@ describe('indexExchangeBidders', () => {
 	});
 
 	test('should return an IX bidder for every size that the slot can take', () => {
-		shouldIncludeBidder.mockImplementation(() => () => true);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(
+			jest.fn().mockReturnValueOnce(() => false),
+		);
 		const slotSizes: HeaderBiddingSize[] = [
 			createAdSize(300, 250),
 			createAdSize(300, 600),
@@ -190,7 +188,9 @@ describe('indexExchangeBidders', () => {
 	});
 
 	test('should include methods in the response that generate the correct bid params', () => {
-		shouldIncludeBidder.mockImplementation(() => () => true);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(
+			jest.fn().mockReturnValueOnce(() => true),
+		);
 		const slotSizes: HeaderBiddingSize[] = [
 			createAdSize(300, 250),
 			createAdSize(300, 600),
@@ -221,14 +221,6 @@ describe('getIndexSiteId', () => {
 	});
 
 	test('should find the correct ID for the breakpoint', () => {
-		// @ts-expect-error -- test
-		window.guardian.config.page = {
-			pbIndexSites: [
-				{ bp: 'D', id: 123456 },
-				{ bp: 'M', id: 234567 },
-				{ bp: 'T', id: 345678 },
-			],
-		};
 		const breakpoints = ['M', 'D', 'M', 'T', 'D'];
 		const results = [];
 		for (let i = 0; i < breakpoints.length; i += 1) {
@@ -255,7 +247,6 @@ describe('bids', () => {
 		containsMpu.mockReturnValue(false);
 		containsMpuOrDmpu.mockReturnValue(false);
 		stripMobileSuffix.mockImplementation((str: string) => str);
-		shouldIncludeBidder.mockImplementation(() => () => false);
 	});
 
 	afterEach(() => {
@@ -271,29 +262,57 @@ describe('bids', () => {
 		});
 	};
 
-	test('should only include bidders that are switched on if no bidders being tested', () => {
-		shouldIncludeBidder.mockImplementationOnce(() => () => true); // ix
-		shouldIncludeBidder.mockImplementationOnce(() => () => true); // ix
-		shouldIncludeBidder.mockImplementationOnce(() => () => false); // triplelift
+	test('should only include bidders that are meant to be included if no bidders being tested', () => {
+		const shouldIncludeFn = jest
+			.fn()
+			.mockReturnValueOnce(true) // ix
+			.mockReturnValueOnce(false) // criteo
+			.mockReturnValueOnce(true) // trustx
+			.mockReturnValueOnce(false) // triplelift
+			.mockReturnValueOnce(true) // and
+			.mockReturnValueOnce(false) // xhb
+			.mockReturnValueOnce(true); // pubmatic
+		jest.mocked(shouldIncludeBidder).mockReturnValue(shouldIncludeFn);
+
 		const bidders = getBidders();
 		expect(bidders).toContain('ix');
-		expect(bidders).toContain('criteo');
+		expect(bidders).not.toContain('criteo');
+		expect(bidders).toContain('trustx');
 		expect(bidders).not.toContain('triplelift');
+		expect(bidders).toContain('and');
+		expect(bidders).not.toContain('xhb');
+		expect(bidders).toContain('pubmatic');
 	});
 
-	test('should not include ix bidders when switched off', () => {
-		shouldIncludeBidder.mockImplementationOnce(() => () => false); // ix
-		shouldIncludeBidder.mockImplementationOnce(() => () => true); // ix
-		shouldIncludeBidder.mockImplementationOnce(() => () => true); // criteo
-		shouldIncludeBidder.mockImplementation(() => () => false); // all other bidders
-		expect(getBidders()).toEqual(['criteo']);
+	test('should not include ix bidders when shouldInclude returns false', () => {
+		const shouldIncludeFn = jest
+			.fn()
+			.mockReturnValueOnce(false) // ix
+			.mockReturnValueOnce(true) // criteo
+			.mockReturnValueOnce(true) // trustx
+			.mockReturnValueOnce(true) // triplelift
+			.mockReturnValueOnce(true) // and
+			.mockReturnValueOnce(true) // xhb
+			.mockReturnValueOnce(true); // pubmatic
+		jest.mocked(shouldIncludeBidder).mockReturnValue(shouldIncludeFn);
+
+		const bidders = getBidders();
+		expect(bidders).not.toContain('ix');
+		expect(bidders).toContain('criteo');
+		expect(bidders).toContain('trustx');
+		expect(bidders).toContain('triplelift');
+		expect(bidders).toContain('and');
+		expect(bidders).toContain('xhb');
+		expect(bidders).toContain('pubmatic');
 	});
 
 	test('should include ix bidder for each size that slot can take', () => {
-		shouldIncludeBidder.mockImplementationOnce(() => () => true); // ix
-		shouldIncludeBidder.mockImplementationOnce(() => () => true); // ix
-		shouldIncludeBidder.mockImplementationOnce(() => () => true); // criteo
-		shouldIncludeBidder.mockImplementation(() => () => false); // all other bidders
+		const shouldIncludeFn = jest
+			.fn()
+			.mockReturnValueOnce(true) // ix
+			.mockReturnValueOnce(true); // criteo
+		jest.mocked(shouldIncludeBidder).mockReturnValue(shouldIncludeFn);
+
 		const rightSlotBidders = () =>
 			bids(
 				'dfp-right',
@@ -306,33 +325,51 @@ describe('bids', () => {
 	});
 
 	test('should only include bidder being tested', () => {
-		shouldIncludeBidder.mockImplementation(() => () => true);
+		const shouldIncludeFn = jest
+			.fn()
+			.mockReturnValueOnce(false) // ix
+			.mockReturnValueOnce(false) // criteo
+			.mockReturnValueOnce(false) // trustx
+			.mockReturnValueOnce(false) // triplelift
+			.mockReturnValueOnce(false) // and
+			.mockReturnValueOnce(true); // xhb
+		jest.mocked(shouldIncludeBidder).mockReturnValue(shouldIncludeFn);
+
 		expect(getBidders()).toEqual(['xhb']);
 	});
 
 	test('should only include bidder being tested, even when it should not be included', () => {
 		setQueryString('pbtest=xhb');
-		shouldIncludeBidder.mockImplementation(() => () => false);
+		const shouldIncludeFn = jest.fn().mockReturnValue(false);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(shouldIncludeFn);
+
 		expect(getBidders()).toEqual(['xhb']);
 	});
 
 	test('should only include multiple bidders being tested, even when their switches are off', () => {
 		setQueryString('pbtest=xhb&pbtest=adyoulike');
+		const shouldIncludeFn = jest.fn().mockReturnValue(false);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(shouldIncludeFn);
 		isUserInVariant.mockImplementation(
 			(testId, variantId) => variantId === 'variant',
 		);
 
-		expect(getBidders()).toEqual(['xhb', 'adyoulike']); // Ensure 'xhb' and 'and' are the correct codes for prebidXaxis and prebidAppnexus
+		expect(getBidders()).toEqual(['xhb', 'adyoulike']);
 	});
 
 	test('should ignore bidder that does not exist', () => {
 		setQueryString('pbtest=nonexistentbidder&pbtest=xhb');
+		const shouldIncludeFn = jest.fn().mockReturnValue(false);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(shouldIncludeFn);
+
 		expect(getBidders()).toEqual(['xhb']);
 	});
 
 	test('should use correct parameters in OpenX bids geolocated in UK', () => {
-		shouldIncludeBidder.mockImplementation(() => () => true);
+		const shouldIncludeFn = jest.fn().mockReturnValue(true);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(shouldIncludeFn);
 		isInUk.mockReturnValue(true);
+
 		const openXBid = bids(
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
@@ -348,8 +385,10 @@ describe('bids', () => {
 	});
 
 	test('should use correct parameters in OpenX bids geolocated in US', () => {
-		shouldIncludeBidder.mockImplementation(() => () => true);
+		const shouldIncludeFn = jest.fn().mockReturnValue(true);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(shouldIncludeFn);
 		isInUsOrCa.mockReturnValue(true);
+
 		const openXBid = bids(
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
@@ -365,8 +404,10 @@ describe('bids', () => {
 	});
 
 	test('should use correct parameters in OpenX bids geolocated in AU', () => {
-		shouldIncludeBidder.mockImplementation(() => () => true);
+		const shouldIncludeFn = jest.fn().mockReturnValue(true);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(shouldIncludeFn);
 		isInAuOrNz.mockReturnValue(true);
+
 		const openXBid = bids(
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
@@ -382,8 +423,10 @@ describe('bids', () => {
 	});
 
 	test('should use correct parameters in OpenX bids geolocated in FR for top-above-nav', () => {
-		shouldIncludeBidder.mockImplementation(() => () => true);
+		const shouldIncludeFn = jest.fn().mockReturnValue(true);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(shouldIncludeFn);
 		isInRow.mockReturnValue(true);
+
 		const openXBid = bids(
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
@@ -398,9 +441,11 @@ describe('bids', () => {
 		});
 	});
 	test('should use correct parameters in OpenX bids geolocated in FR for mobile-sticky', () => {
-		shouldIncludeBidder.mockImplementation(() => () => true);
+		const shouldIncludeFn = jest.fn().mockReturnValue(true);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(shouldIncludeFn);
 		isInRow.mockReturnValue(true);
 		containsMobileSticky.mockReturnValue(true);
+
 		const openXBid = bids(
 			'dfp-ad--mobile-sticky',
 			[createAdSize(320, 50)],
@@ -420,6 +465,13 @@ describe('triplelift adapter', () => {
 	beforeEach(() => {
 		resetConfig();
 		window.guardian.config.page.contentType = 'Article';
+		const shouldIncludeFn = jest
+			.fn()
+			.mockReturnValueOnce(false) // ix
+			.mockReturnValueOnce(false) // criteo
+			.mockReturnValueOnce(false) // trustx
+			.mockReturnValueOnce(true); // triplelift
+		jest.mocked(shouldIncludeBidder).mockReturnValue(shouldIncludeFn);
 	});
 
 	afterEach(() => {
@@ -427,8 +479,7 @@ describe('triplelift adapter', () => {
 	});
 
 	test('should include triplelift adapter if condition is true ', () => {
-		shouldIncludeBidder.mockImplementation(() => () => true);
-		expect(getBidders()).toContain('triplelift');
+		expect(getBidders()).toEqual(['triplelift']);
 	});
 
 	test('should return correct triplelift adapter params for leaderboard, with requests from US or Canada', () => {
@@ -437,7 +488,6 @@ describe('triplelift adapter', () => {
 		containsDmpu.mockReturnValueOnce(false);
 		containsMobileSticky.mockReturnValue(false);
 		isInUsOrCa.mockReturnValue(true);
-		shouldIncludeBidder.mockImplementation(() => () => true);
 
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
@@ -457,7 +507,6 @@ describe('triplelift adapter', () => {
 		containsDmpu.mockReturnValueOnce(false);
 		containsMobileSticky.mockReturnValue(false);
 		isInAuOrNz.mockReturnValue(true);
-		shouldIncludeBidder.mockImplementation(() => () => true);
 
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
@@ -477,7 +526,6 @@ describe('triplelift adapter', () => {
 		containsDmpu.mockReturnValueOnce(false);
 		containsMobileSticky.mockReturnValue(false);
 		isInUsOrCa.mockReturnValue(true);
-		shouldIncludeBidder.mockImplementation(() => () => true);
 
 		const tripleLiftBids = bids(
 			'dfp-ad--inline1',
@@ -497,7 +545,6 @@ describe('triplelift adapter', () => {
 		containsDmpu.mockReturnValueOnce(false);
 		containsMobileSticky.mockReturnValue(false);
 		isInAuOrNz.mockReturnValue(true);
-		shouldIncludeBidder.mockImplementation(() => () => true);
 
 		const tripleLiftBids = bids(
 			'dfp-ad--inline1',
@@ -517,7 +564,6 @@ describe('triplelift adapter', () => {
 		containsDmpu.mockReturnValueOnce(false);
 		containsMobileSticky.mockReturnValue(true);
 		isInUsOrCa.mockReturnValue(true);
-		shouldIncludeBidder.mockImplementation(() => () => true);
 
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
@@ -537,7 +583,6 @@ describe('triplelift adapter', () => {
 		containsDmpu.mockReturnValueOnce(false);
 		containsMobileSticky.mockReturnValue(true);
 		isInAuOrNz.mockReturnValue(true);
-		shouldIncludeBidder.mockImplementation(() => () => true);
 
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
