@@ -198,7 +198,6 @@ export const shouldIncludeBidder =
 					!isInUsOrCa()
 				);
 			case 'ozone':
-				// TODO: Check is we want regional restrictions on where we load the ozoneBidAdapter
 				return (
 					isSwitchedOn('prebidOzone') &&
 					getConsentFor('ozone', consentState) &&
