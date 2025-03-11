@@ -3,15 +3,15 @@ import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
 import { getParticipations } from '../../../experiments/ab';
+import type { AdSize } from '../../../lib/ad-sizes';
+import { createAdSize } from '../../../lib/ad-sizes';
+import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
+import { EventTimer } from '../../../lib/event-timer';
+import type { PageTargeting } from '../../../lib/targeting/build-page-targeting';
 import { pubmatic } from '../../__vendor/pubmatic';
-import type { AdSize } from '../../ad-sizes';
-import { createAdSize } from '../../ad-sizes';
-import { PREBID_TIMEOUT } from '../../constants/prebid-timeout';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
-import { EventTimer } from '../../event-timer';
 import { isUserLoggedInOktaRefactor } from '../../identity/api';
 import { getPageTargeting } from '../../page-targeting';
-import type { PageTargeting } from '../../targeting/build-page-targeting';
 import type {
 	BidderCode,
 	HeaderBiddingSlot,
@@ -24,6 +24,7 @@ import { getHeaderBiddingAdSlots } from '../slot-config';
 import {
 	isSwitchedOn,
 	shouldIncludePermutive,
+	shouldIncludePrebidBidCache,
 	stripDfpAdPrefixFrom,
 } from '../utils';
 import { bids } from './bid-config';
@@ -104,6 +105,7 @@ type PbjsConfig = {
 	};
 	consentManagement?: ConsentManagement;
 	realTimeData?: unknown;
+	useBidCache?: boolean;
 };
 
 type PbjsEvent = 'bidWon';
@@ -367,6 +369,11 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		}
 	};
 
+	/**
+	 * useBidCache is a feature that allows Prebid to cache bids
+	 */
+	const useBidCache = shouldIncludePrebidBidCache();
+
 	const pbjsConfig: PbjsConfig = Object.assign(
 		{},
 		{
@@ -374,6 +381,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			timeoutBuffer,
 			priceGranularity,
 			userSync,
+			useBidCache,
 		},
 	);
 

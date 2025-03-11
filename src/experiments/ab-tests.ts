@@ -2,6 +2,7 @@ import type { ABTest } from '@guardian/ab-core';
 import { deferPermutiveLoad } from './tests/defer-permutive-load';
 import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
 import { optOutFrequencyCap } from './tests/opt-out-frequency-cap';
+import { prebidBidCache } from './tests/prebid-bid-cache';
 import { prebidBundling } from './tests/prebid-bundling';
 
 /**
@@ -15,4 +16,5 @@ export const concurrentTests: ABTest[] = [
 	optOutFrequencyCap,
 	deferPermutiveLoad,
 	prebidBundling,
+	prebidBidCache,
 ];
