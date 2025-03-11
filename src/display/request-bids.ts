@@ -1,7 +1,7 @@
 import type { Advert } from '../define/Advert';
 import type { AdSize } from '../lib/ad-sizes';
 import { a9 } from '../lib/header-bidding/a9/a9';
-import { prebid } from '../lib/header-bidding/prebid/initialise';
+import { prebid } from '../lib/header-bidding/prebid/prebid';
 import type { HeaderBiddingSlot } from '../lib/header-bidding/prebid-types';
 
 const retainAdSizeOnRefresh = (

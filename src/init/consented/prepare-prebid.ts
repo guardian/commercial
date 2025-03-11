@@ -6,7 +6,7 @@ import { prebidBundling } from '../../experiments/tests/prebid-bundling';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { isInCanada } from '../../lib/geo/geo-utils';
-import { prebid } from '../../lib/header-bidding/prebid/initialise';
+import { prebid } from '../../lib/header-bidding/prebid/prebid';
 import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
 
 const shouldLoadPrebid = () =>
@@ -23,7 +23,7 @@ const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 		if (isUserInVariant(prebidBundling, 'variant')) {
 			await import(
 				/* webpackChunkName: "Prebid.js" */
-				`../../lib/header-bidding/prebid/prebid`
+				`../../lib/header-bidding/prebid/pbjs`
 			);
 		} else {
 			await import(

@@ -6,7 +6,7 @@ import type {
 import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isInCanada } from '../../lib/geo/geo-utils';
-import { prebid } from '../../lib/header-bidding/prebid/initialise';
+import { prebid } from '../../lib/header-bidding/prebid/prebid';
 import { _ } from './prepare-prebid';
 
 const { setupPrebid } = _;
@@ -25,7 +25,7 @@ jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));
 
-jest.mock('lib/header-bidding/prebid/initialise', () => ({
+jest.mock('lib/header-bidding/prebid/prebid', () => ({
 	prebid: {
 		initialise: jest.fn(),
 	},

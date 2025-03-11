@@ -5,7 +5,7 @@ import {
 	shouldIncludePermutive,
 	shouldIncludePrebidBidCache as shouldIncludePrebidBidCache_,
 } from '../utils';
-import { prebid } from './initialise';
+import { prebid } from './prebid';
 
 const getAdvertById = getAdvertById_ as jest.Mock;
 const shouldIncludePrebidBidCache = shouldIncludePrebidBidCache_ as jest.Mock;
@@ -47,7 +47,7 @@ const resetPrebid = () => {
 	// @ts-expect-error -- there’s no types for this
 	delete window.pbjsChunk;
 	jest.resetModules();
-	jest.requireActual('lib/header-bidding/prebid/prebid');
+	jest.requireActual('lib/header-bidding/prebid/pbjs');
 };
 
 describe('initialise', () => {
