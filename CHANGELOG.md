@@ -1,5 +1,30 @@
 # @guardian/commercial
 
+## 25.1.0
+
+### Minor Changes
+
+- d390102: Upgrade to prebid v9.27.0
+- 84e8bfb: Refactor boot logic for readability
+- 9bc278c: Use a single version of prebid instead of splitting by region
+- cac500b: Remove 0% test for The Trade Desk and set live
+- 65a7ffc: Bump Prebid version so that we're no longer including Sonobi and Improve Digital adapters
+- 890ca37: Detect third party cookies and set `3pc` as targeting
+- 1a0af2b: Bumps dependency @guardian/Prebid.js to version without setting hb_ttr targeting
+- a2cd4df: Bumping @guardian/libs to 22.0.0
+  Updating tests to reflect new Consent or Pay banner/Non advertising banner
+- c51982e: Set some Guardian packages as direct dependencies rather than dev dependencies
+- ef12548: Add The Trade Desk behind 0% test
+- 6f4fe3a: Move the initPermutive call so that the googletag script can be loaded a little earlier
+- b582081: Removes improve digital Prebid adaptor and related code
+
+### Patch Changes
+
+- eee424f: Removes octokit dependency
+- d33f6d2: Remove unused dev dependencies from package.json
+- 6d25577: Hide the third party cookie iframe
+- 2520253: Increase the margin for inline2 to avoid most viewed by for showcase articles or articles with a video at the top
+
 ## 25.0.0
 
 ### Major Changes
