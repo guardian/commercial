@@ -51,6 +51,7 @@
 		"@guardian/identity-auth": "^4.0.2",
 		"@guardian/identity-auth-frontend": "^6.0.2",
 		"@guardian/libs": "22.0.0",
+		"@guardian/prebid.js": "9.27.0-1",
 		"@guardian/source": "8.0.2",
 		"fastdom": "^1.0.12",
 		"lodash-es": "^4.17.21",

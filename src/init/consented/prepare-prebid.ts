@@ -1,6 +1,8 @@
 import type { ConsentState } from '@guardian/libs';
 import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
+import { isUserInVariant } from '../../experiments/ab';
+import { prebidBundling } from '../../experiments/tests/prebid-bundling';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { isInCanada } from '../../lib/geo/geo-utils';
@@ -18,10 +20,17 @@ const shouldLoadPrebid = () =>
 
 const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 	if (shouldLoadPrebid()) {
-		await import(
-			/* webpackChunkName: "Prebid.js" */
-			`../../lib/header-bidding/prebid/prebid`
-		);
+		if (isUserInVariant(prebidBundling, 'variant')) {
+			await import(
+				/* webpackChunkName: "Prebid.js" */
+				`../../lib/header-bidding/prebid/prebid`
+			);
+		} else {
+			await import(
+				// @ts-expect-error -- there’s no types for Prebid.js
+				/* webpackChunkName: "Prebid.js" */ '@guardian/prebid.js/build/dist/prebid'
+			);
+		}
 		prebid.initialise(window, consentState);
 	}
 };
