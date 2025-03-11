@@ -1,3 +1,4 @@
+import { log } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
 import { reportError } from '../../../lib/error/report-error';
@@ -74,12 +75,16 @@ const requestBids = async (
 		.then(
 			() =>
 				new Promise<void>((resolve) => {
-					window.apstag?.fetchBids({ slots: adUnits }, () => {
-						window.googletag.cmd.push(() => {
-							window.apstag?.setDisplayBids();
-							resolve();
-						});
-					});
+					window.apstag?.fetchBids(
+						{ slots: adUnits },
+						(a9resp): void => {
+							log('commercial', 'Amazon a9 Bid response', a9resp);
+							window.googletag.cmd.push(() => {
+								window.apstag?.setDisplayBids();
+								resolve();
+							});
+						},
+					);
 				}),
 		)
 		.catch(() => {

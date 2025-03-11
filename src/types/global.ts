@@ -254,13 +254,27 @@ type ApstagInitConfig = {
 	blockedBidders?: string[];
 };
 
-type FetchBidsBidConfig = {
+type A9FetchBidsBidConfig = {
 	slots: A9AdUnitInterface[];
 };
 
+type A9BidResponse = {
+	amznbid: string;
+	amzniid: string;
+	amznp: string;
+	amznsz: `${number}x${number}`;
+	size: `${number}x${number}`;
+	slotID: string;
+};
+
+type A9FetchBidsCallbackFn = (bidsResp: A9BidResponse[]) => void;
+
 type Apstag = {
 	init: (arg0: ApstagInitConfig) => void;
-	fetchBids: (arg0: FetchBidsBidConfig, callback: () => void) => void;
+	fetchBids: (
+		arg0: A9FetchBidsBidConfig,
+		callback: A9FetchBidsCallbackFn,
+	) => void;
 	setDisplayBids: () => void;
 };
 
