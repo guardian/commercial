@@ -25,13 +25,6 @@ jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));
 
-// Then properly mock the prebid module
-jest.mock('../../lib/header-bidding/prebid/prebid', () => ({
-	pbjs: {
-		processQueue: jest.fn(),
-	},
-}));
-
 jest.mock('lib/header-bidding/prebid/initialise', () => ({
 	prebid: {
 		initialise: jest.fn(),
