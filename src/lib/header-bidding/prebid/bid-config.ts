@@ -25,6 +25,7 @@ import type {
 	PrebidOpenXParams,
 	PrebidOzoneParams,
 	PrebidPubmaticParams,
+	PrebidTheTradeDeskParams,
 	PrebidTripleLiftParams,
 	PrebidTrustXParams,
 	PrebidXaxisParams,
@@ -608,7 +609,7 @@ const magniteBidder: PrebidBidder = {
 const theTradeDeskBidder = (gpid: string): PrebidBidder => ({
 	name: 'ttd',
 	switchName: 'prebidTheTradeDesk',
-	bidParams: () => ({
+	bidParams: (): PrebidTheTradeDeskParams => ({
 		supplySourceId: 'theguardian',
 		publisherId: '1',
 		placementId: gpid,
