@@ -1,16 +1,15 @@
 import type { ABTest } from '@guardian/ab-core';
 
-export const prebidKeywords: ABTest = {
-	id: 'PrebidKeywords',
+export const prebidBidCache: ABTest = {
+	id: 'PrebidBidCache',
 	author: '@commercial-dev',
-	start: '2025-01-14',
-	expiry: '2025-02-28',
-	audience: 50 / 100,
-	audienceOffset: 20 / 100,
+	start: '2025-03-10',
+	expiry: '2024-03-24',
+	audience: 10 / 100,
+	audienceOffset: 30 / 100,
 	audienceCriteria: '',
 	successMeasure: '',
-	description:
-		'Test if adding keywords to our Prebid config affects revenue.',
+	description: 'Test enabled Prebid bid cache feature',
 	variants: [
 		{
 			id: 'control',

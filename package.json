@@ -1,6 +1,6 @@
 {
 	"name": "@guardian/commercial",
-	"version": "25.0.0",
+	"version": "25.1.0",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial#readme",
 	"bugs": {
@@ -27,16 +27,35 @@
 		"playwright:open": "playwright test --ui",
 		"lint": "eslint .",
 		"lint-staged": "lint-staged",
-		"precommit:lint": "npm-run-all lint-staged",
 		"prepare": "husky",
-		"prepush:test": "jest --verbose --runInBand --onlyChanged",
 		"prettier:check": "prettier . --check --cache",
 		"prettier:fix": "prettier . --write --cache",
 		"serve": "OVERRIDE_BUNDLE=true pnpm webpack-dev-server -c ./webpack.config.dev.mjs",
-		"benchmark": "STAGE=prod playwright test -c playwright.benchmark.config.ts --project=consented-average --project=consentless-average",
 		"test": "jest",
 		"tsc": "tsc --noEmit",
 		"validate": "npm-run-all tsc lint test build"
+	},
+	"peerDependencies": {
+		"@guardian/ab-core": "^8.0.0",
+		"@guardian/core-web-vitals": "^8.0.1",
+		"@guardian/identity-auth": "^4.0.0",
+		"@guardian/identity-auth-frontend": "^6.0.0",
+		"@guardian/libs": "^22.0.0",
+		"@guardian/source": "^8.0.0",
+		"typescript": "~5.5.2"
+	},
+	"dependencies": {
+		"@guardian/ab-core": "8.0.1",
+		"@guardian/core-web-vitals": "8.0.1",
+		"@guardian/identity-auth": "^4.0.2",
+		"@guardian/identity-auth-frontend": "^6.0.2",
+		"@guardian/libs": "22.0.0",
+		"@guardian/prebid.js": "9.27.0-1",
+		"@guardian/source": "8.0.2",
+		"fastdom": "^1.0.12",
+		"lodash-es": "^4.17.21",
+		"process": "^0.11.10",
+		"web-vitals": "^4.2.4"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.26.4",
@@ -49,29 +68,22 @@
 		"@babel/register": "^7.25.9",
 		"@babel/runtime": "^7.26.0",
 		"@changesets/cli": "^2.27.9",
-		"@guardian/ab-core": "8.0.1",
 		"@guardian/browserslist-config": "^6.1.1",
-		"@guardian/core-web-vitals": "8.0.1",
-		"@guardian/eslint-config": "^10.0.0",
-		"@guardian/identity-auth": "^4.0.2",
-		"@guardian/identity-auth-frontend": "^6.0.2",
-		"@guardian/libs": "21.2.0",
+		"@guardian/eslint-config": "^11.0.0",
 		"@guardian/prettier": "8.0.1",
-		"@guardian/source": "8.0.2",
-		"@playwright/test": "1.50.1",
-		"@types/googletag": "~3.2.0",
+		"@playwright/test": "1.51.0",
+		"@types/googletag": "~3.3.0",
 		"@types/jest": "^29.5.14",
 		"@types/lodash-es": "^4.17.12",
 		"@types/node": "20.17.19",
 		"@types/webpack-env": "^1.18.5",
-		"@typescript-eslint/eslint-plugin": "8.24.0",
-		"@typescript-eslint/parser": "8.24.0",
+		"@typescript-eslint/eslint-plugin": "8.26.1",
+		"@typescript-eslint/parser": "8.26.1",
 		"babel-core": "7.0.0-bridge.0",
 		"babel-jest": "^29.7.0",
 		"babel-loader": "^9.2.1",
 		"babel-plugin-dynamic-import-node": "^2.3.3",
 		"circular-dependency-plugin": "^5.2.2",
-		"csstype": "^3.1.3",
 		"eslint": "^9.19.0",
 		"eslint-config-prettier": "^10.0.1",
 		"eslint-import-resolver-alias": "^1.1.2",
@@ -87,7 +99,6 @@
 		"jest-environment-jsdom": "~29.7.0",
 		"jest-environment-jsdom-global": "~4.0.0",
 		"lint-staged": "^15.3.0",
-		"mockdate": "^3.0.5",
 		"npm-run-all": "^4.1.5",
 		"prettier": "^3.4.2",
 		"raw-loader": "^4.0.2",
@@ -102,32 +113,14 @@
 		"webpack-dev-server": "^5.2.0",
 		"webpack-merge": "^6.0.1"
 	},
-	"dependencies": {
-		"@guardian/prebid.js": "9.27.0-1",
-		"fastdom": "^1.0.12",
-		"lodash-es": "^4.17.21",
-		"process": "^0.11.10",
-		"tslib": "^2.7.0",
-		"web-vitals": "^4.2.4"
-	},
 	"prettier": "@guardian/prettier",
 	"lint-staged": {
 		"src/**/*.(js|ts)": [
-			"pnpm eslint --fix",
 			"pnpm prettier:fix"
 		]
 	},
 	"publishConfig": {
 		"access": "public"
-	},
-	"peerDependencies": {
-		"@guardian/ab-core": "^8.0.0",
-		"@guardian/core-web-vitals": "^8.0.1",
-		"@guardian/identity-auth": "^4.0.0",
-		"@guardian/identity-auth-frontend": "^6.0.0",
-		"@guardian/libs": "^21.2.0",
-		"@guardian/source": "^8.0.0",
-		"typescript": "~5.5.2"
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"

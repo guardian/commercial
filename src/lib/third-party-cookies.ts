@@ -17,7 +17,7 @@ const checkThirdPartyCookiesEnabled = (): void => {
 	const crossSiteIrame = document.createElement('iframe');
 
 	crossSiteIrame.style.display = 'none';
-	crossSiteIrame.src = `${window.guardian.config.frontendAssetsFullURL}commercial/tpc-test/v1/index.html`;
+	crossSiteIrame.src = `${window.guardian.config.frontendAssetsFullURL}commercial/tpc-test/v2/index.html`;
 
 	window.addEventListener('message', ({ data }) => {
 		if (isTPCTestPayload(data)) {
