@@ -164,6 +164,12 @@ const setupFakeLogin = async (
 				domain: 'localhost',
 				path: '/',
 			},
+			{
+				name: 'GU_geo_country',
+				value: 'GB',
+				domain: 'localhost',
+				path: '/',
+			},
 		]);
 	}
 

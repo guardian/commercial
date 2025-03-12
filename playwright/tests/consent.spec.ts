@@ -42,7 +42,7 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreFulfilled(page);
 	});
 
-	test.skip(`Reject all, load Opt Out, ad slots are present`, async ({
+	test(`Reject all, load Opt Out, ad slots are present`, async ({
 		page,
 		context,
 	}) => {
