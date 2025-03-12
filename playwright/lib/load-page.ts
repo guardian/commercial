@@ -30,6 +30,7 @@ const loadPage = async (page: Page, path: string, region = 'GB') => {
 const visitArticleNoOkta = async (
 	page: Page,
 	path = '/politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',
+	region = 'GB',
 ) => {
 	const fixture = {
 		config: {
@@ -46,7 +47,7 @@ const visitArticleNoOkta = async (
 		adtest: undefined,
 		fixture,
 	});
-	await loadPage(page, url);
+	await loadPage(page, url, region);
 };
 
 export { loadPage, visitArticleNoOkta };
