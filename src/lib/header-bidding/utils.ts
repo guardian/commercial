@@ -15,7 +15,7 @@ import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
 } from '../detect/detect-breakpoint';
-import type { HeaderBiddingSize } from './prebid-types';
+import type { BidderCode, HeaderBiddingSize } from './prebid-types';
 
 type StringManipulation = (a: string, b: string) => string;
 type RegExpRecords = Record<string, RegExp | undefined>;
@@ -161,63 +161,79 @@ export const getRandomIntInclusive = (
 export const isSwitchedOn = (switchName: string): boolean =>
 	window.guardian.config.switches[switchName] ?? false;
 
-export const shouldIncludeOpenx = (consentState: ConsentState): boolean =>
-	isSwitchedOn('prebidOpenx') &&
-	getConsentFor('openX', consentState) &&
-	!isInUsOrCa();
-
-export const shouldIncludeTrustX = (): boolean =>
-	isSwitchedOn('prebidTrustx') && isInUsOrCa();
-
-export const shouldIncludeTripleLift = (): boolean =>
-	isSwitchedOn('prebidTriplelift') && (isInUsOrCa() || isInAuOrNz());
-
-// TODO: Check is we want regional restrictions on where we load the ozoneBidAdapter
-export const shouldIncludeOzone = (consentState: ConsentState): boolean =>
-	isSwitchedOn('prebidOzone') &&
-	getConsentFor('ozone', consentState) &&
-	!isInCanada() &&
-	!isInAuOrNz();
-
-export const shouldIncludeAppNexus = (consentState: ConsentState): boolean =>
-	isSwitchedOn('prebidAppnexus') &&
-	(isInAuOrNz() ||
-		(isSwitchedOn('prebidAppnexusUkRow') &&
-			getConsentFor('xandr', consentState) &&
-			!isInUsOrCa()) ||
-		!!pbTestNameMap().and);
-
-export const shouldIncludeXaxis = (consentState: ConsentState): boolean =>
-	isSwitchedOn('prebidXaxis') &&
-	getConsentFor('xandr', consentState) &&
-	isInUk();
-
-export const shouldIncludeKargo = (): boolean =>
-	isSwitchedOn('prebidKargo') && isInUsa();
-
-export const shouldIncludeMagnite = (consentState: ConsentState): boolean =>
-	isSwitchedOn('prebidMagnite') && getConsentFor('magnite', consentState);
-
-export const shouldIncludeCriteo = (consentState: ConsentState): boolean =>
-	isSwitchedOn('prebidCriteo') && getConsentFor('criteo', consentState);
-
-export const shouldIncludePubmatic = (consentState: ConsentState): boolean =>
-	isSwitchedOn('prebidPubmatic') && getConsentFor('pubmatic', consentState);
-
-export const shouldIncludeAdYouLike = (consentState: ConsentState): boolean =>
-	isSwitchedOn('prebidAdYouLike') && getConsentFor('adYouLike', consentState);
-
-export const shouldIncludeTheTradeDesk = (
-	consentState: ConsentState,
-): boolean =>
-	isSwitchedOn('prebidTheTradeDesk') &&
-	getConsentFor('theTradeDesk', consentState);
-
-export const shouldIncludeIndexExchange = (
-	consentState: ConsentState,
-): boolean =>
-	isSwitchedOn('prebidIndexExchange') &&
-	getConsentFor('indexExchange', consentState);
+export const shouldIncludeBidder =
+	(consentState: ConsentState) =>
+	(bidder: BidderCode): boolean => {
+		switch (bidder) {
+			case 'adyoulike':
+				return (
+					isSwitchedOn('prebidAdYouLike') &&
+					getConsentFor('adYouLike', consentState)
+				);
+			case 'and':
+				return (
+					isSwitchedOn('prebidAppnexus') &&
+					(isInAuOrNz() ||
+						(isSwitchedOn('prebidAppnexusUkRow') &&
+							getConsentFor('xandr', consentState) &&
+							!isInUsOrCa()) ||
+						!!pbTestNameMap().and)
+				);
+			case 'criteo':
+				return (
+					isSwitchedOn('prebidCriteo') &&
+					getConsentFor('criteo', consentState)
+				);
+			case 'ix':
+				return (
+					isSwitchedOn('prebidIndexExchange') &&
+					getConsentFor('indexExchange', consentState)
+				);
+			case 'kargo':
+				return isSwitchedOn('prebidKargo') && isInUsa();
+			case 'oxd':
+				return (
+					isSwitchedOn('prebidOpenx') &&
+					getConsentFor('openX', consentState) &&
+					!isInUsOrCa()
+				);
+			case 'ozone':
+				return (
+					isSwitchedOn('prebidOzone') &&
+					getConsentFor('ozone', consentState) &&
+					!isInCanada() &&
+					!isInAuOrNz()
+				);
+			case 'pubmatic':
+				return (
+					isSwitchedOn('prebidPubmatic') &&
+					getConsentFor('pubmatic', consentState)
+				);
+			case 'rubicon':
+				return (
+					isSwitchedOn('prebidMagnite') &&
+					getConsentFor('magnite', consentState)
+				);
+			case 'triplelift':
+				return (
+					isSwitchedOn('prebidTriplelift') &&
+					(isInUsOrCa() || isInAuOrNz())
+				);
+			case 'trustx':
+				return isSwitchedOn('prebidTrustx') && isInUsOrCa();
+			case 'ttd':
+				return (
+					isSwitchedOn('prebidTheTradeDesk') &&
+					getConsentFor('theTradeDesk', consentState)
+				);
+			case 'xhb':
+				return (
+					isSwitchedOn('prebidXaxis') &&
+					getConsentFor('xandr', consentState) &&
+					isInUk()
+				);
+		}
+	};
 
 export const shouldIncludePermutive = (consentState: ConsentState): boolean =>
 	isSwitchedOn('permutive') &&

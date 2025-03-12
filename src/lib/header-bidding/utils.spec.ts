@@ -16,11 +16,8 @@ import {
 	getBreakpointKey,
 	getLargestSize,
 	removeFalsyValues,
-	shouldIncludeAppNexus,
+	shouldIncludeBidder,
 	shouldIncludeMobileSticky,
-	shouldIncludeOpenx,
-	shouldIncludeTrustX,
-	shouldIncludeXaxis,
 	stripDfpAdPrefixFrom,
 	stripMobileSuffix,
 	stripTrailingNumbersAbove1,
@@ -160,154 +157,158 @@ describe('Utils', () => {
 		expect(results).toEqual(['M', 'T', 'T', 'D', 'D']);
 	});
 
-	describe('shouldIncludeAppNexus', () => {
-		test.each<[CountryCode, 'on' | 'off', boolean]>([
-			['AU', 'on', true],
-			['AU', 'off', true],
-			['NZ', 'on', true],
-			['NZ', 'off', true],
-			['GB', 'on', true],
-			['GB', 'off', false],
-			['US', 'on', false],
-			['CA', 'on', false],
-			['FK', 'on', true],
-			['GI', 'on', true],
-			['GG', 'on', true],
-			['IM', 'on', true],
-			['JE', 'on', true],
-			['SH', 'on', true],
-			['FK', 'off', false],
-			['GI', 'off', false],
-			['GG', 'off', false],
-			['IM', 'off', false],
-			['JE', 'off', false],
-			['SH', 'off', false],
-		])(
-			`In %s, if switch is %s, shouldIncludeAppNexus should return %s`,
-			(region, switchState, expected) => {
-				window.guardian.config.switches.prebidAppnexusUkRow =
-					switchState === 'on';
-				getCountryCode.mockReturnValue(region);
-				getConsentFor.mockReturnValue(true);
-				expect(shouldIncludeAppNexus(mockConsentState)).toBe(expected);
-			},
-		);
+	describe('shouldIncludeBidder', () => {
+		const shouldInclude = shouldIncludeBidder(mockConsentState);
 
-		test('If consent denied should not load in GB region', () => {
-			window.guardian.config.switches.prebidAppnexusUkRow = true;
-			getCountryCode.mockReturnValue('GB');
-			getConsentFor.mockReturnValue(false);
-			expect(shouldIncludeAppNexus(mockConsentState)).toBe(false);
-		});
-	});
-
-	describe('shouldIncludeOpenX', () => {
-		test('should return true if geolocation is GB', () => {
-			getCountryCode.mockReturnValueOnce('GB');
-			getConsentFor.mockReturnValue(true);
-			expect(shouldIncludeOpenx(mockConsentState)).toBe(true);
-		});
-
-		test('should return false if consent not given', () => {
-			getCountryCode.mockReturnValueOnce('GB');
-			getConsentFor.mockReturnValue(false);
-			expect(shouldIncludeOpenx(mockConsentState)).toBe(false);
-		});
-
-		test('should return true if within ROW region', () => {
-			const testGeos: CountryCode[] = [
-				'FK',
-				'GI',
-				'GG',
-				'IM',
-				'JE',
-				'SH',
-				'IE',
-			];
-			for (const testGeo of testGeos) {
-				getCountryCode.mockReturnValueOnce(testGeo);
-				getConsentFor.mockReturnValue(true);
-				expect(shouldIncludeOpenx(mockConsentState)).toBe(true);
-			}
-		});
-
-		test('should return false if within US region', () => {
-			const testGeos: CountryCode[] = ['CA', 'US'];
-			for (const testGeo of testGeos) {
-				getCountryCode.mockReturnValue(testGeo);
-				getConsentFor.mockReturnValue(true);
-				expect(shouldIncludeOpenx(mockConsentState)).toBe(false);
-			}
-		});
-
-		test('should return true if within AU region', () => {
-			const testGeos: CountryCode[] = ['NZ', 'AU'];
-			for (const testGeo of testGeos) {
-				getCountryCode.mockReturnValue(testGeo);
-				getConsentFor.mockReturnValue(true);
-				expect(shouldIncludeOpenx(mockConsentState)).toBe(true);
-			}
-		});
-	});
-
-	describe('shouldIncludeTrustX', () => {
-		test('should return true if geolocation is US', () => {
-			getCountryCode.mockReturnValueOnce('US');
-			expect(shouldIncludeTrustX()).toBe(true);
-		});
-
-		test('should return true if geolocation is US', () => {
-			getCountryCode.mockReturnValueOnce('US');
-			expect(shouldIncludeTrustX()).toBe(true);
-		});
-
-		test('should otherwise return false', () => {
-			const testGeos: CountryCode[] = [
-				'FK',
-				'GI',
-				'GG',
-				'IM',
-				'JE',
-				'SH',
-				'AU',
-			];
-			for (const testGeo of testGeos) {
-				getCountryCode.mockReturnValueOnce(testGeo);
-				expect(shouldIncludeTrustX()).toBe(false);
-			}
-		});
-	});
-
-	describe('shouldIncludeXaxis', () => {
-		test('should be true if geolocation is GB and opted in AB test variant', () => {
-			isUserInVariant.mockImplementationOnce(
-				(testId, variantId) => variantId === 'variant',
+		describe('shouldIncludeAppNexus', () => {
+			test.each<[CountryCode, 'on' | 'off', boolean]>([
+				['AU', 'on', true],
+				['AU', 'off', true],
+				['NZ', 'on', true],
+				['NZ', 'off', true],
+				['GB', 'on', true],
+				['GB', 'off', false],
+				['US', 'on', false],
+				['CA', 'on', false],
+				['FK', 'on', true],
+				['GI', 'on', true],
+				['GG', 'on', true],
+				['IM', 'on', true],
+				['JE', 'on', true],
+				['SH', 'on', true],
+				['FK', 'off', false],
+				['GI', 'off', false],
+				['GG', 'off', false],
+				['IM', 'off', false],
+				['JE', 'off', false],
+				['SH', 'off', false],
+			])(
+				`In %s, if switch is %s, shouldIncludeAppNexus should return %s`,
+				(region, switchState, expected) => {
+					window.guardian.config.switches.prebidAppnexusUkRow =
+						switchState === 'on';
+					getCountryCode.mockReturnValue(region);
+					getConsentFor.mockReturnValue(true);
+					expect(shouldInclude('and')).toBe(expected);
+				},
 			);
-			window.guardian.config.page.isDev = true;
-			getCountryCode.mockReturnValue('GB');
-			getConsentFor.mockReturnValue(true);
-			expect(shouldIncludeXaxis(mockConsentState)).toBe(true);
+
+			test('If consent denied should not load in GB region', () => {
+				window.guardian.config.switches.prebidAppnexusUkRow = true;
+				getCountryCode.mockReturnValue('GB');
+				getConsentFor.mockReturnValue(false);
+				expect(shouldInclude('and')).toBe(false);
+			});
 		});
 
-		test('should be false if geolocation is not GB', () => {
-			window.guardian.config.page.isDev = true;
-			const testGeos: CountryCode[] = [
-				'FK',
-				'GI',
-				'GG',
-				'IM',
-				'JE',
-				'SH',
-				'AU',
-				'US',
-				'CA',
-				'NZ',
-			];
-			for (const testGeo of testGeos) {
-				getCountryCode.mockReturnValue(testGeo);
+		describe('shouldIncludeOpenX', () => {
+			test('should return true if geolocation is GB', () => {
+				getCountryCode.mockReturnValueOnce('GB');
 				getConsentFor.mockReturnValue(true);
-				expect(shouldIncludeXaxis(mockConsentState)).toBe(false);
-			}
+				expect(shouldInclude('oxd')).toBe(true);
+			});
+
+			test('should return false if consent not given', () => {
+				getCountryCode.mockReturnValueOnce('GB');
+				getConsentFor.mockReturnValue(false);
+				expect(shouldInclude('oxd')).toBe(false);
+			});
+
+			test('should return true if within ROW region', () => {
+				const testGeos: CountryCode[] = [
+					'FK',
+					'GI',
+					'GG',
+					'IM',
+					'JE',
+					'SH',
+					'IE',
+				];
+				for (const testGeo of testGeos) {
+					getCountryCode.mockReturnValueOnce(testGeo);
+					getConsentFor.mockReturnValue(true);
+					expect(shouldInclude('oxd')).toBe(true);
+				}
+			});
+
+			test('should return false if within US region', () => {
+				const testGeos: CountryCode[] = ['CA', 'US'];
+				for (const testGeo of testGeos) {
+					getCountryCode.mockReturnValue(testGeo);
+					getConsentFor.mockReturnValue(true);
+					expect(shouldInclude('oxd')).toBe(false);
+				}
+			});
+
+			test('should return true if within AU region', () => {
+				const testGeos: CountryCode[] = ['NZ', 'AU'];
+				for (const testGeo of testGeos) {
+					getCountryCode.mockReturnValue(testGeo);
+					getConsentFor.mockReturnValue(true);
+					expect(shouldInclude('oxd')).toBe(true);
+				}
+			});
+		});
+
+		describe('shouldIncludeTrustX', () => {
+			test('should return true if geolocation is US', () => {
+				getCountryCode.mockReturnValueOnce('US');
+				expect(shouldInclude('trustx')).toBe(true);
+			});
+
+			test('should return true if geolocation is US', () => {
+				getCountryCode.mockReturnValueOnce('US');
+				expect(shouldInclude('trustx')).toBe(true);
+			});
+
+			test('should otherwise return false', () => {
+				const testGeos: CountryCode[] = [
+					'FK',
+					'GI',
+					'GG',
+					'IM',
+					'JE',
+					'SH',
+					'AU',
+				];
+				for (const testGeo of testGeos) {
+					getCountryCode.mockReturnValueOnce(testGeo);
+					expect(shouldInclude('trustx')).toBe(false);
+				}
+			});
+		});
+
+		describe('shouldIncludeXaxis', () => {
+			test('should be true if geolocation is GB and opted in AB test variant', () => {
+				isUserInVariant.mockImplementationOnce(
+					(testId, variantId) => variantId === 'variant',
+				);
+				window.guardian.config.page.isDev = true;
+				getCountryCode.mockReturnValue('GB');
+				getConsentFor.mockReturnValue(true);
+				expect(shouldInclude('xhb')).toBe(true);
+			});
+
+			test('should be false if geolocation is not GB', () => {
+				window.guardian.config.page.isDev = true;
+				const testGeos: CountryCode[] = [
+					'FK',
+					'GI',
+					'GG',
+					'IM',
+					'JE',
+					'SH',
+					'AU',
+					'US',
+					'CA',
+					'NZ',
+				];
+				for (const testGeo of testGeos) {
+					getCountryCode.mockReturnValue(testGeo);
+					getConsentFor.mockReturnValue(true);
+					expect(shouldInclude('xhb')).toBe(false);
+				}
+			});
 		});
 	});
 
