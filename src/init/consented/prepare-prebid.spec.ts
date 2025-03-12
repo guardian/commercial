@@ -61,14 +61,6 @@ const mockGetConsentFor = (hasConsent: boolean) =>
 		.mockReturnValueOnce(hasConsent)
 		.mockReturnValueOnce(hasConsent);
 
-const mockGetConsentForWithCustom = (
-	hasGlobalVendorConsent: boolean,
-	hasCustomVendorConsent: boolean,
-) =>
-	(getConsentFor as jest.Mock)
-		.mockReturnValueOnce(hasGlobalVendorConsent)
-		.mockReturnValueOnce(hasCustomVendorConsent);
-
 const defaultTCFv2State: TCFv2ConsentState = {
 	consents: { 1: false },
 	eventStatus: 'tcloaded',
@@ -81,18 +73,8 @@ const defaultTCFv2State: TCFv2ConsentState = {
 const tcfv2WithConsent = {
 	tcfv2: {
 		...defaultTCFv2State,
-		vendorConsents: { '5f92a62aa22863685f4daa4c': true },
 	},
 	canTarget: true,
-	framework: 'tcfv2',
-} as ConsentState;
-
-const tcfv2WithoutConsent = {
-	tcfv2: {
-		...defaultTCFv2State,
-		vendorConsents: { '5f92a62aa22863685f4daa4c': false },
-	},
-	canTarget: false,
 	framework: 'tcfv2',
 } as ConsentState;
 
@@ -285,7 +267,7 @@ describe('init', () => {
 		expect(prebid.initialise).toHaveBeenCalled();
 	});
 
-	it('should initialise Prebid if TCFv2 consent with correct Sourcepoint Id is true ', async () => {
+	it('should initialise Prebid if the framework is TCFv2 ', async () => {
 		expect.hasAssertions();
 
 		window.guardian.config.switches = {
@@ -298,27 +280,6 @@ describe('init', () => {
 
 		await setupPrebid();
 		expect(prebid.initialise).toHaveBeenCalled();
-	});
-
-	it('should not initialise Prebid if TCFv2 consent with correct Sourcepoint Id is false', async () => {
-		expect.assertions(2);
-
-		window.guardian.config.switches = {
-			prebidHeaderBidding: true,
-		};
-		commercialFeatures.shouldLoadGoogletag = true;
-		commercialFeatures.adFree = false;
-		mockOnConsent(tcfv2WithoutConsent);
-		mockGetConsentFor(false);
-
-		await setupPrebid();
-		expect(log).toHaveBeenCalledWith(
-			'commercial',
-			expect.stringContaining('Failed to execute prebid'),
-			expect.stringContaining('No consent for prebid'),
-		);
-
-		expect(prebid.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should initialise Prebid in USNAT if doNotSell is false', async () => {
@@ -409,57 +370,6 @@ describe('init', () => {
 			'commercial',
 			expect.stringContaining('Failed to execute prebid'),
 			expect.stringContaining('Unknown framework'),
-		);
-
-		expect(prebid.initialise).not.toHaveBeenCalled();
-	});
-
-	it('should initialise Prebid in TCF when global vendor has consent and custom vendor does not', async () => {
-		expect.hasAssertions();
-
-		window.guardian.config.switches = {
-			prebidHeaderBidding: true,
-		};
-		commercialFeatures.shouldLoadGoogletag = true;
-		commercialFeatures.adFree = false;
-		mockOnConsent(tcfv2WithConsent);
-		mockGetConsentForWithCustom(true, false);
-
-		await setupPrebid();
-		expect(prebid.initialise).toHaveBeenCalled();
-	});
-
-	it('should initialise Prebid in TCF when global vendor does not have consent but the custom vendor does', async () => {
-		expect.hasAssertions();
-
-		window.guardian.config.switches = {
-			prebidHeaderBidding: true,
-		};
-		commercialFeatures.shouldLoadGoogletag = true;
-		commercialFeatures.adFree = false;
-		mockOnConsent(tcfv2WithConsent);
-		mockGetConsentForWithCustom(false, true);
-
-		await setupPrebid();
-		expect(prebid.initialise).toHaveBeenCalled();
-	});
-
-	it('should NOT initialise Prebid in TCF when BOTH the global vendor AND custom vendor do NOT have consent', async () => {
-		expect.hasAssertions();
-
-		window.guardian.config.switches = {
-			prebidHeaderBidding: true,
-		};
-		commercialFeatures.shouldLoadGoogletag = true;
-		commercialFeatures.adFree = false;
-		mockOnConsent(tcfv2WithConsent);
-		mockGetConsentForWithCustom(false, false);
-
-		await setupPrebid();
-		expect(log).toHaveBeenCalledWith(
-			'commercial',
-			expect.stringContaining('Failed to execute prebid'),
-			expect.stringContaining('No consent for prebid'),
 		);
 
 		expect(prebid.initialise).not.toHaveBeenCalled();
