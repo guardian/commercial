@@ -105,15 +105,14 @@ export type PrebidMagniteParams = {
 };
 
 export type PrebidTheTradeDeskParams = {
-	supplySourceId: number;
-	publisherId: number;
+	supplySourceId: string;
+	publisherId: string;
 	placementId: string;
 };
 
 export type BidderCode =
 	| 'adyoulike'
 	| 'and'
-	| 'appnexus'
 	| 'criteo'
 	| 'ix'
 	| 'kargo'
@@ -151,6 +150,49 @@ export type PrebidBid = {
 	bidder: string;
 	params: PrebidParams;
 };
+
+export type PrebidBidderRequest = {
+	bidderCode: string;
+};
+
+export type PrebidBidReqestedEvent = {
+	eventType: 'bidRequested';
+	args: {
+		bids: PrebidBid[];
+	};
+};
+
+export type PrebidBidderErrorEvent = {
+	eventType: 'bidderError';
+	args: {
+		bidderRequest: PrebidBidderRequest;
+		error: {
+			timedOut?: boolean;
+		};
+	};
+};
+
+export type PrebidAuctionInitEvent = {
+	eventType: 'auctionInit';
+	args: {
+		adUnitCodes: string[];
+		bidderRequests: PrebidBidderRequest[];
+	};
+};
+
+export type PrebidAuctionEndEvent = {
+	eventType: 'auctionEnd';
+	args: {
+		adUnitCodes: string[];
+		bidsReceived: PrebidBid[];
+	};
+};
+
+export type PrebidEvent =
+	| PrebidBidReqestedEvent
+	| PrebidBidderErrorEvent
+	| PrebidAuctionInitEvent
+	| PrebidAuctionEndEvent;
 
 export type PrebidMediaTypes = {
 	banner: {

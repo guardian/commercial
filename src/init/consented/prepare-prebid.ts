@@ -1,6 +1,8 @@
-import type { ConsentFramework } from '@guardian/libs';
+import type { ConsentState } from '@guardian/libs';
 import { log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
+import { isUserInVariant } from '../../experiments/ab';
+import { prebidBundling } from '../../experiments/tests/prebid-bundling';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { isInCanada } from '../../lib/geo/geo-utils';
@@ -16,13 +18,20 @@ const shouldLoadPrebid = () =>
 	!shouldIncludeOnlyA9 &&
 	!isInCanada();
 
-const loadPrebid = async (framework: ConsentFramework): Promise<void> => {
+const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 	if (shouldLoadPrebid()) {
-		await import(
-			// @ts-expect-error -- there’s no types for Prebid.js
-			/* webpackChunkName: "Prebid.js" */ '@guardian/prebid.js/build/dist/prebid'
-		);
-		prebid.initialise(window, framework);
+		if (isUserInVariant(prebidBundling, 'variant')) {
+			await import(
+				/* webpackChunkName: "Prebid.js" */
+				`../../lib/header-bidding/prebid/pbjs`
+			);
+		} else {
+			await import(
+				// @ts-expect-error -- there’s no types for Prebid.js
+				/* webpackChunkName: "Prebid.js" */ '@guardian/prebid.js/build/dist/prebid'
+			);
+		}
+		prebid.initialise(window, consentState);
 	}
 };
 
@@ -55,7 +64,7 @@ const setupPrebid = async (): Promise<void> => {
 				// We do per-vendor checks for this framework, no requirement for a top-level check for Prebid
 				break;
 		}
-		return loadPrebid(consentState.framework);
+		return loadPrebid(consentState);
 	} catch (err: unknown) {
 		const error = err as Error;
 		log('commercial', '⚠️ Failed to execute prebid', error.message);

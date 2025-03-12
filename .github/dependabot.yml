@@ -22,7 +22,6 @@ updates:
         patterns:
           - '@types/*'
           - 'type-fest'
-          - 'tslib'
         update-types:
           - 'minor'
           - 'patch'
@@ -59,7 +58,6 @@ updates:
           - '@guardian/*'
           - '@types/*'
           - 'type-fest'
-          - 'tslib'
           - '*eslint*'
           - '*prettier*'
           - '@playwright/*'

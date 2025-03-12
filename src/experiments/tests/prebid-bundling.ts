@@ -1,16 +1,15 @@
 import type { ABTest } from '@guardian/ab-core';
 
-export const prebidKeywords: ABTest = {
-	id: 'PrebidKeywords',
+export const prebidBundling: ABTest = {
+	id: 'PrebidBundling',
 	author: '@commercial-dev',
-	start: '2025-01-14',
-	expiry: '2025-02-28',
-	audience: 50 / 100,
-	audienceOffset: 20 / 100,
+	start: '2025-03-11',
+	expiry: '2025-03-30',
+	audience: 0 / 100,
+	audienceOffset: 0 / 100,
 	audienceCriteria: '',
 	successMeasure: '',
-	description:
-		'Test if adding keywords to our Prebid config affects revenue.',
+	description: 'Test bundling prebid in the commerical repo.',
 	variants: [
 		{
 			id: 'control',

@@ -1,7 +1,7 @@
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
 
-const esModules = ['@guardian/', 'lodash-es'].join('|');
+const esModules = ['@guardian/', 'lodash-es', 'prebid.js', 'dlv'].join('|');
 
 module.exports = {
 	clearMocks: true,
@@ -16,6 +16,9 @@ module.exports = {
 		'^svgs/(.*)$': '<rootDir>/src/lib/__mocks__/svgMock.js',
 		'^(.*)\\.svg$': '<rootDir>/src/lib/__mocks__/svgMock.js',
 		'^(.*)\\.html$': '<rootDir>/src/__mocks__/templateMock.js',
+		'^prebid.js/adapters/(.*)$':
+			'<rootDir>/node_modules/prebid.js/src/adapters/$1',
+		'^prebid.js/(.*)$': '<rootDir>/node_modules/prebid.js/$1',
 	},
 	setupFilesAfterEnv: ['<rootDir>/jest.setupTestFrameworkScriptFile.js'],
 	testEnvironment: 'jest-environment-jsdom-global',
@@ -24,6 +27,10 @@ module.exports = {
 	},
 	transformIgnorePatterns: [`/node_modules/.pnpm/(?!${esModules})`],
 	transform: {
+		'node_modules/.pnpm/prebid(.*)?\\.js$': [
+			'babel-jest',
+			{ configFile: 'prebid.js/.babelrc.js' },
+		],
 		'^.+\\.(ts|tsx)$': 'ts-jest',
 	},
 };

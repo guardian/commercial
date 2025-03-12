@@ -111,11 +111,13 @@ const setupFakeLogin = async (
 	page: Page,
 	context: BrowserContext,
 	subscriber = true,
+	allowRejectAll = true,
 ) => {
 	const bodyOverride: UserFeaturesResponse = {
 		userId: '107421393',
 		digitalSubscriptionExpiryDate: '2999-01-01',
-		showSupportMessaging: false,
+		guardianAdLiteExpiryDate: '2999-01-01',
+		showSupportMessaging: true,
 		contentAccess: {
 			member: false,
 			paidMember: false,
@@ -123,22 +125,47 @@ const setupFakeLogin = async (
 			digitalPack: true,
 			paperSubscriber: false,
 			guardianWeeklySubscriber: false,
+			guardianAdLite: true,
 		},
 	};
 
 	if (!subscriber) {
 		bodyOverride.contentAccess.digitalPack = false;
+		bodyOverride.showSupportMessaging = false;
 		delete bodyOverride.digitalSubscriptionExpiryDate;
 	}
 
-	await context.addCookies([
-		{
-			name: 'GU_U',
-			value: 'WyIzMjc5Nzk0IiwiIiwiSmFrZTkiLCIiLDE2NjA4MzM3NTEyMjcsMCwxMjEyNjgzMTQ3MDAwLHRydWVd.MC0CFQCIbpFtd0J5IqK946U1vagzLgCBkwIUUN3UOkNfNN8jwNE3scKfrcvoRSg',
-			domain: 'localhost',
-			path: '/',
-		},
-	]);
+	// following the launch of consent or pay, an account is required to be able to reject all
+	if (allowRejectAll) {
+		const sevenDaysLater = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
+		await context.addCookies([
+			{
+				name: 'GU_U',
+				value: 'WyIzMjc5Nzk0IiwiIiwiSmFrZTkiLCIiLDE2NjA4MzM3NTEyMjcsMCwxMjEyNjgzMTQ3MDAwLHRydWVd.MC0CFQCIbpFtd0J5IqK946U1vagzLgCBkwIUUN3UOkNfNN8jwNE3scKfrcvoRSg',
+				domain: 'localhost',
+				path: '/',
+			},
+			{
+				name: 'gu_allow_reject_all',
+				value: sevenDaysLater.getTime().toString(),
+				domain: 'localhost',
+				path: '/',
+			},
+			{
+				name: 'gu_hide_support_messaging',
+				value: sevenDaysLater.getTime().toString(),
+				domain: 'localhost',
+				path: '/',
+			},
+			{
+				name: 'gu_user_benefits_expiry',
+				value: sevenDaysLater.getTime().toString(),
+				domain: 'localhost',
+				path: '/',
+			},
+		]);
+	}
 
 	await page.route(
 		'https://members-data-api.theguardian.com/user-attributes/me**',
@@ -148,6 +175,15 @@ const setupFakeLogin = async (
 			});
 		},
 		{ times: 1 },
+	);
+
+	await page.route(
+		'https://user-benefits.guardianapis.com/benefits/me**',
+		(route) => {
+			return route.fulfill({
+				body: JSON.stringify(['allowRejectAll']),
+			});
+		},
 	);
 };
 
@@ -232,8 +268,8 @@ const logUnfilledSlots = (page: Page) => {
 // Log commercial logs to playwight console
 const logCommercial = (page: Page) => {
 	page.on('console', (msg) => {
-		const label = msg.args()[0]?.toString();
-		if (label?.includes('commercial')) {
+		const label = JSON.stringify(msg.args()[0]);
+		if (label.includes('commercial')) {
 			console.log(msg.args().slice(4).map(String).join(' '));
 		}
 	});

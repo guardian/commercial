@@ -1,9 +1,8 @@
-import type { ConsentFramework } from '@guardian/libs';
+import type { ConsentState } from '@guardian/libs';
 import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
-import { getParticipations, isUserInVariant } from '../../../experiments/ab';
-import { prebidKeywords } from '../../../experiments/tests/prebid-keywords';
+import { getParticipations } from '../../../experiments/ab';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
@@ -17,11 +16,18 @@ import type {
 	BidderCode,
 	HeaderBiddingSlot,
 	PrebidBid,
+	PrebidEvent,
 	PrebidMediaTypes,
 	SlotFlatMap,
 } from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';
-import { stripDfpAdPrefixFrom } from '../utils';
+import {
+	isSwitchedOn,
+	shouldIncludeBidder,
+	shouldIncludePermutive,
+	shouldIncludePrebidBidCache,
+	stripDfpAdPrefixFrom,
+} from '../utils';
 import { bids } from './bid-config';
 import type { PrebidPriceGranularity } from './price-config';
 import {
@@ -91,7 +97,6 @@ type PbjsConfig = {
 	userSync: UserSync;
 	ortb2?: {
 		site: {
-			keywords: string;
 			ext: {
 				data: {
 					keywords: string[];
@@ -101,6 +106,7 @@ type PbjsConfig = {
 	};
 	consentManagement?: ConsentManagement;
 	realTimeData?: unknown;
+	useBidCache?: boolean;
 };
 
 type PbjsEvent = 'bidWon';
@@ -183,6 +189,7 @@ class PrebidAdUnit {
 		advert: Advert,
 		slot: HeaderBiddingSlot,
 		pageTargeting: PageTargeting,
+		consentState: ConsentState,
 	) {
 		this.code = advert.id;
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
@@ -196,7 +203,13 @@ class PrebidAdUnit {
 			},
 		};
 
-		this.bids = bids(advert.id, slot.sizes, pageTargeting, this.gpid);
+		this.bids = bids(
+			advert.id,
+			slot.sizes,
+			pageTargeting,
+			this.gpid,
+			consentState,
+		);
 
 		advert.headerBiddingSizes = slot.sizes;
 		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
@@ -263,11 +276,16 @@ declare global {
 				codeArr?: string[],
 				customSlotMatching?: (slot: unknown) => unknown,
 			) => void;
+			getEvents: () => PrebidEvent[];
 		};
 	}
 }
 
 const shouldEnableAnalytics = (): boolean => {
+	if (!window.guardian.config.switches.prebidAnalytics) {
+		return false;
+	}
+
 	const analyticsSampleRate = 10 / 100;
 	const isInSample = Math.random() < analyticsSampleRate;
 
@@ -292,17 +310,14 @@ const bidderTimeout = PREBID_TIMEOUT;
 let requestQueue: Promise<void> = Promise.resolve();
 let initialised = false;
 
-const initialise = (
-	window: Window,
-	framework: ConsentFramework = 'tcfv2',
-): void => {
+const initialise = (window: Window, consentState: ConsentState): void => {
 	if (!window.pbjs) {
 		log('commercial', 'window.pbjs not found on window');
 		return; // We couldn’t initialise
 	}
 	initialised = true;
 
-	const userSync: UserSync = window.guardian.config.switches.prebidUserSync
+	const userSync: UserSync = isSwitchedOn('prebidUserSync')
 		? {
 				syncsPerBidder: 0, // allow all syncs
 				filterSettings: {
@@ -325,26 +340,26 @@ const initialise = (
 		: { syncEnabled: false };
 
 	const consentManagement = (): ConsentManagement => {
-		switch (framework) {
+		switch (consentState.framework) {
+			/** @see https://docs.prebid.org/dev-docs/modules/consentManagementUsp.html */
 			case 'aus':
-				// https://docs.prebid.org/dev-docs/modules/consentManagementUsp.html
 				return {
 					usp: {
 						cmpApi: 'iab',
 						timeout: 1500,
 					},
 				};
+			/** @see https://docs.prebid.org/dev-docs/modules/consentManagementGpp.html */
 			case 'usnat':
-				// https://docs.prebid.org/dev-docs/modules/consentManagementGpp.html
 				return {
 					gpp: {
 						cmpApi: 'iab',
 						timeout: 1500,
 					},
 				};
+			/** @see https://docs.prebid.org/dev-docs/modules/consentManagementTcf.html */
 			case 'tcfv2':
 			default:
-				// https://docs.prebid.org/dev-docs/modules/consentManagementTcf.html
 				return {
 					gdpr: {
 						cmpApi: 'iab',
@@ -355,6 +370,17 @@ const initialise = (
 		}
 	};
 
+	/**
+	 * useBidCache is a feature that allows Prebid to cache bids
+	 */
+	const useBidCache = shouldIncludePrebidBidCache();
+
+	/** Helper function to decide if a bidder should be included.
+	 * It is a curried function prepared with the consent state
+	 * at the time of initialisation to avoid unnecessary repetition
+	 * of consent state throughout */
+	const shouldInclude = shouldIncludeBidder(consentState);
+
 	const pbjsConfig: PbjsConfig = Object.assign(
 		{},
 		{
@@ -362,58 +388,52 @@ const initialise = (
 			timeoutBuffer,
 			priceGranularity,
 			userSync,
+			useBidCache,
 		},
 	);
 
-	const shouldIncludeKeywords = isUserInVariant(prebidKeywords, 'variant');
-	const keywordsString = window.guardian.config.page.keywords;
-	const keywordsArray = keywordsString ? keywordsString.split(',') : [];
+	const keywordsArray = window.guardian.config.page.keywords.split(',');
 
-	if (shouldIncludeKeywords) {
-		pbjsConfig.ortb2 = {
-			site: {
-				keywords: keywordsString,
-				ext: {
-					data: {
-						keywords: keywordsArray,
-					},
+	pbjsConfig.ortb2 = {
+		site: {
+			ext: {
+				data: {
+					keywords: keywordsArray,
 				},
 			},
-		};
-	}
+		},
+	};
 
 	window.pbjs.bidderSettings = {};
 
-	if (window.guardian.config.switches.consentManagement) {
+	if (isSwitchedOn('consentManagement')) {
 		pbjsConfig.consentManagement = consentManagement();
 	}
 
-	if (
-		window.guardian.config.switches.permutive &&
-		window.guardian.config.switches.prebidPermutiveAudience // this switch specifically controls whether or not the Permutive Audience Connector can run with Prebid
-	) {
+	if (shouldIncludePermutive(consentState)) {
+		const includedAcBidders = (
+			['and', 'ix', 'ozone', 'pubmatic', 'trustx'] satisfies BidderCode[]
+		)
+			.filter(shouldInclude)
+			// "and" is the alias for the custom Guardian "appnexus" direct bidder
+			.map((bidder) => (bidder === 'and' ? 'appnexus' : bidder));
+
 		pbjsConfig.realTimeData = {
 			dataProviders: [
 				{
 					name: 'permutive',
 					params: {
-						acBidders: [
-							'appnexus',
-							'ix',
-							'ozone',
-							'pubmatic',
-							'trustx',
-						],
-						overwrites: {
-							pubmatic,
-						},
+						acBidders: includedAcBidders,
+						...(includedAcBidders.includes('pubmatic')
+							? { overwrites: { pubmatic } }
+							: {}),
 					},
 				},
 			],
 		};
 	}
 
-	if (window.guardian.config.switches.prebidCriteo) {
+	if (shouldInclude('criteo')) {
 		window.pbjs.bidderSettings.criteo = {
 			storageAllowed: true,
 		};
@@ -428,7 +448,7 @@ const initialise = (
 		});
 	}
 
-	if (window.guardian.config.switches.prebidOzone) {
+	if (shouldInclude('ozone')) {
 		// Use a custom price granularity, which is based upon the size of the slot being auctioned
 		window.pbjs.setBidderConfig({
 			bidders: ['ozone'],
@@ -450,7 +470,7 @@ const initialise = (
 		});
 	}
 
-	if (window.guardian.config.switches.prebidIndexExchange) {
+	if (shouldInclude('ix')) {
 		window.pbjs.setBidderConfig({
 			bidders: ['ix'],
 			config: {
@@ -471,10 +491,7 @@ const initialise = (
 		});
 	}
 
-	if (
-		window.guardian.config.switches.prebidAnalytics &&
-		shouldEnableAnalytics()
-	) {
+	if (shouldEnableAnalytics()) {
 		window.pbjs.enableAnalytics([
 			{
 				provider: 'gu',
@@ -488,7 +505,7 @@ const initialise = (
 		]);
 	}
 
-	if (window.guardian.config.switches.prebidXaxis) {
+	if (shouldInclude('xhb')) {
 		window.pbjs.bidderSettings.xhb = {
 			adserverTargeting: [
 				{
@@ -505,13 +522,13 @@ const initialise = (
 		};
 	}
 
-	if (window.guardian.config.switches.prebidKargo) {
+	if (shouldInclude('kargo')) {
 		window.pbjs.bidderSettings.kargo = {
 			storageAllowed: true,
 		};
 	}
 
-	if (window.guardian.config.switches.prebidMagnite) {
+	if (shouldInclude('rubicon')) {
 		window.pbjs.bidderSettings.magnite = {
 			storageAllowed: true,
 		};
@@ -585,7 +602,12 @@ const requestBids = async (
 					getHeaderBiddingAdSlots(advert, slotFlatMap)
 						.map(
 							(slot) =>
-								new PrebidAdUnit(advert, slot, pageTargeting),
+								new PrebidAdUnit(
+									advert,
+									slot,
+									pageTargeting,
+									consentState,
+								),
 						)
 						.filter((adUnit) => !adUnit.isEmpty()),
 				),

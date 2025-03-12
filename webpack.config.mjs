@@ -1,7 +1,9 @@
 import { execSync } from 'child_process';
 import { join } from 'path';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack from 'webpack';
+import prebidBabelOptions from 'prebid.js/.babelrc.js';
 
 const gitCommitSHA = () => {
 	try {
@@ -36,6 +38,27 @@ const config = {
 		alias: {
 			svgs: join(import.meta.dirname, 'static', 'svg'),
 			lodash: 'lodash-es',
+			// prebid doesn't export these directories, so we need to alias them,
+			// we use them for our custom modules located in src/lib/header-bidding/prebid/custom-modules
+			'prebid.js/src': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebid.js',
+				'src',
+			),
+			'prebid.js/libraries': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebid.js',
+				'libraries',
+			),
+			'prebid.js/adapters': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebid.js',
+				'src',
+				'adapters',
+			),
 		},
 		extensions: ['.js', '.ts', '.tsx', '.jsx'],
 	},
@@ -60,6 +83,14 @@ const config = {
 				],
 			},
 			{
+				test: /.js$/,
+				include: /prebid\.js/,
+				use: {
+					loader: 'babel-loader',
+					options: prebidBabelOptions,
+				},
+			},
+			{
 				test: /\.svg$/,
 				exclude: /(node_modules)/,
 				loader: 'raw-loader',
@@ -67,6 +98,26 @@ const config = {
 		],
 	},
 	plugins: [
+		new HtmlWebpackPlugin({
+			template: join(
+				import.meta.dirname,
+				'static',
+				'tpc-test-iframe',
+				'v2',
+				'index.html',
+			),
+			filename: `commercial/tpc-test/v2/index.html`,
+			minify: {
+				collapseWhitespace: true,
+				removeComments: true,
+				removeRedundantAttributes: true,
+				removeScriptTypeAttributes: true,
+				removeStyleLinkTypeAttributes: true,
+				useShortDoctype: true,
+				minifyJS: true,
+			},
+			inject: false,
+		}),
 		new DefinePlugin({
 			'process.env.COMMIT_SHA': JSON.stringify(gitCommitSHA()),
 		}),

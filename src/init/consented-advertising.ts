@@ -35,8 +35,7 @@ const commercialModules = [
 	reloadPageOnConsentChange,
 	preparePrebid,
 	initDfpListeners,
-	// Permutive init code must run before google tag enableServices()
-	// The permutive lib however is loaded async with the third party tags
+	// Permutive init code must run before googletag.enableServices() is called
 	() => initPermutive().then(prepareGoogletag),
 	initDynamicAdSlots,
 	prepareA9,

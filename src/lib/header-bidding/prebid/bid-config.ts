@@ -1,3 +1,4 @@
+import type { ConsentState } from '@guardian/libs';
 import { log } from '@guardian/libs';
 import {
 	isInAuOrNz,
@@ -24,6 +25,7 @@ import type {
 	PrebidOpenXParams,
 	PrebidOzoneParams,
 	PrebidPubmaticParams,
+	PrebidTheTradeDeskParams,
 	PrebidTripleLiftParams,
 	PrebidTrustXParams,
 	PrebidXaxisParams,
@@ -40,14 +42,7 @@ import {
 	containsPortraitInterstitial,
 	containsWS,
 	getBreakpointKey,
-	shouldIncludeAppNexus,
-	shouldIncludeKargo,
-	shouldIncludeMagnite,
-	shouldIncludeOpenx,
-	shouldIncludeTripleLift,
-	shouldIncludeTrustX,
-	shouldIncludeXaxis,
-	shouldUseOzoneAdaptor,
+	shouldIncludeBidder,
 	stripDfpAdPrefixFrom,
 	stripMobileSuffix,
 } from '../utils';
@@ -228,7 +223,7 @@ const appNexusBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 		),
 });
 
-const openxClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
+const openxBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	pageTargeting: PageTargeting,
 ) => ({
 	name: 'oxd',
@@ -293,7 +288,7 @@ const getOzonePlacementId = (sizes: HeaderBiddingSize[]) => {
 	return '0420420500';
 };
 
-const ozoneClientSideBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
+const ozoneBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	pageTargeting: PageTargeting,
 ) => ({
 	name: 'ozone',
@@ -602,7 +597,7 @@ const magniteBidder: PrebidBidder = {
 const theTradeDeskBidder = (gpid: string): PrebidBidder => ({
 	name: 'ttd',
 	switchName: 'prebidTheTradeDesk',
-	bidParams: () => ({
+	bidParams: (): PrebidTheTradeDeskParams => ({
 		supplySourceId: 'theguardian',
 		publisherId: '1',
 		placementId: gpid,
@@ -627,41 +622,40 @@ const indexExchangeBidders = (
 const biddersBeingTested = (allBidders: PrebidBidder[]): PrebidBidder[] =>
 	allBidders.filter((bidder) => pbTestNameMap()[bidder.name]);
 
-const biddersSwitchedOn = (allBidders: PrebidBidder[]): PrebidBidder[] => {
-	const isSwitchedOn = (bidder: PrebidBidder): boolean =>
-		window.guardian.config.switches[bidder.switchName] ?? false;
-
-	return allBidders.filter((bidder) => isSwitchedOn(bidder));
-};
-
 const currentBidders = (
 	slotSizes: HeaderBiddingSize[],
 	pageTargeting: PageTargeting,
 	gpid: string,
+	consentState: ConsentState,
 ): PrebidBidder[] => {
+	const shouldInclude = shouldIncludeBidder(consentState);
+
+	const ixBidders = shouldInclude('ix')
+		? indexExchangeBidders(slotSizes)
+		: [];
+
 	const biddersToCheck: Array<[boolean, PrebidBidder]> = [
-		[true, criteoBidder(slotSizes)],
-		[shouldIncludeTrustX(), trustXBidder],
-		[shouldIncludeTripleLift(), tripleLiftBidder],
-		[shouldIncludeAppNexus(), appNexusBidder(pageTargeting)],
-		[shouldIncludeXaxis(), xaxisBidder],
-		[true, pubmaticBidder(slotSizes)],
-		[true, adYouLikeBidder],
-		[shouldUseOzoneAdaptor(), ozoneClientSideBidder(pageTargeting)],
-		[shouldIncludeOpenx(), openxClientSideBidder(pageTargeting)],
-		[shouldIncludeKargo(), kargoBidder],
-		[shouldIncludeMagnite(), magniteBidder],
-		[true, theTradeDeskBidder(gpid)],
+		[shouldInclude('criteo'), criteoBidder(slotSizes)],
+		[shouldInclude('trustx'), trustXBidder],
+		[shouldInclude('triplelift'), tripleLiftBidder],
+		[shouldInclude('and'), appNexusBidder(pageTargeting)],
+		[shouldInclude('xhb'), xaxisBidder],
+		[shouldInclude('pubmatic'), pubmaticBidder(slotSizes)],
+		[shouldInclude('adyoulike'), adYouLikeBidder],
+		[shouldInclude('ozone'), ozoneBidder(pageTargeting)],
+		[shouldInclude('oxd'), openxBidder(pageTargeting)],
+		[shouldInclude('kargo'), kargoBidder],
+		[shouldInclude('rubicon'), magniteBidder],
+		[shouldInclude('ttd'), theTradeDeskBidder(gpid)],
 	];
 
 	const otherBidders = biddersToCheck
 		.filter(([shouldInclude]) => inPbTestOr(shouldInclude))
 		.map(([, bidder]) => bidder);
 
-	const allBidders = indexExchangeBidders(slotSizes).concat(otherBidders);
-	return isPbTestOn()
-		? biddersBeingTested(allBidders)
-		: biddersSwitchedOn(allBidders);
+	const allBidders = [...ixBidders, ...otherBidders];
+
+	return isPbTestOn() ? biddersBeingTested(allBidders) : allBidders;
 };
 
 export const bids = (
@@ -669,8 +663,9 @@ export const bids = (
 	slotSizes: HeaderBiddingSize[],
 	pageTargeting: PageTargeting,
 	gpid: string,
+	consentState: ConsentState,
 ): PrebidBid[] =>
-	currentBidders(slotSizes, pageTargeting, gpid).map(
+	currentBidders(slotSizes, pageTargeting, gpid, consentState).map(
 		(bidder: PrebidBidder) => ({
 			bidder: bidder.name,
 			params: bidder.bidParams(slotId, slotSizes),

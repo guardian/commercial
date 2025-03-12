@@ -7,6 +7,7 @@ import {
 	isUserLoggedInOktaRefactor,
 } from '../../lib/identity/api';
 import { getPageTargeting } from '../../lib/page-targeting';
+import { checkThirdPartyCookiesEnabled } from '../../lib/third-party-cookies';
 import { removeSlots } from './remove-slots';
 import { fillStaticAdvertSlots } from './static-ad-slots';
 
@@ -47,6 +48,7 @@ const enableTargeting = (consentState: ConsentState) => {
 	if (consentState.canTarget) {
 		window.googletag.cmd.push(setPublisherProvidedId);
 		window.googletag.cmd.push(setCookieDeprecationLabel);
+		window.googletag.cmd.push(checkThirdPartyCookiesEnabled);
 	}
 };
 
@@ -100,14 +102,18 @@ export const init = (): Promise<void> => {
 				() => void fillStaticAdvertSlots(),
 			);
 
-			//DuckDuckGo blocks googletag request by default, creating a lot of noise in Sentry
-			//This flow allows us to handle errors originating from DuckDuckGo without spamming Sentry
+			// The DuckDuckGo browser blocks ads from loading by default, so it causes a lot of noise in Sentry.
+			// We filter these errors out here - DuckDuckGo is in the user agent string if someone is using the
+			// desktop browser, and Ddg is present for those using the mobile browser, so we filter out both.
 			loadScript(
 				window.guardian.config.page.libs?.googletag ??
 					'//securepubads.g.doubleclick.net/tag/js/gpt.js',
 				{ async: false },
 			).catch((error: Error) => {
-				if (navigator.userAgent.includes('DuckDuckGo')) {
+				if (
+					navigator.userAgent.includes('DuckDuckGo') ||
+					navigator.userAgent.includes('Ddg')
+				) {
 					log(
 						'commercial',
 						'🦆 Caught loadScript error on DuckDuckGo',

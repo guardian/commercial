@@ -1,5 +1,7 @@
-import { isString } from '@guardian/libs';
+import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
 import { once } from 'lodash-es';
+import { isUserInVariant } from '../../experiments/ab';
+import { prebidBidCache } from '../../experiments/tests/prebid-bid-cache';
 import { createAdSize } from '../../lib/ad-sizes';
 import {
 	isInAuOrNz,
@@ -13,7 +15,7 @@ import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
 } from '../detect/detect-breakpoint';
-import type { HeaderBiddingSize } from './prebid-types';
+import type { BidderCode, HeaderBiddingSize } from './prebid-types';
 
 type StringManipulation = (a: string, b: string) => string;
 type RegExpRecords = Record<string, RegExp | undefined>;
@@ -156,30 +158,88 @@ export const getRandomIntInclusive = (
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const shouldIncludeOpenx = (): boolean => !isInUsOrCa();
+export const isSwitchedOn = (switchName: string): boolean =>
+	window.guardian.config.switches[switchName] ?? false;
 
-export const shouldIncludeTrustX = (): boolean => isInUsOrCa();
+export const shouldIncludeBidder =
+	(consentState: ConsentState) =>
+	(bidder: BidderCode): boolean => {
+		switch (bidder) {
+			case 'adyoulike':
+				return (
+					isSwitchedOn('prebidAdYouLike') &&
+					getConsentFor('adYouLike', consentState)
+				);
+			case 'and':
+				return (
+					isSwitchedOn('prebidAppnexus') &&
+					(isInAuOrNz() ||
+						(isSwitchedOn('prebidAppnexusUkRow') &&
+							getConsentFor('xandr', consentState) &&
+							!isInUsOrCa()) ||
+						!!pbTestNameMap().and)
+				);
+			case 'criteo':
+				return (
+					isSwitchedOn('prebidCriteo') &&
+					getConsentFor('criteo', consentState)
+				);
+			case 'ix':
+				return (
+					isSwitchedOn('prebidIndexExchange') &&
+					getConsentFor('indexExchange', consentState)
+				);
+			case 'kargo':
+				return isSwitchedOn('prebidKargo') && isInUsa();
+			case 'oxd':
+				return (
+					isSwitchedOn('prebidOpenx') &&
+					getConsentFor('openX', consentState) &&
+					!isInUsOrCa()
+				);
+			case 'ozone':
+				return (
+					isSwitchedOn('prebidOzone') &&
+					getConsentFor('ozone', consentState) &&
+					!isInCanada() &&
+					!isInAuOrNz()
+				);
+			case 'pubmatic':
+				return (
+					isSwitchedOn('prebidPubmatic') &&
+					getConsentFor('pubmatic', consentState)
+				);
+			case 'rubicon':
+				return (
+					isSwitchedOn('prebidMagnite') &&
+					getConsentFor('magnite', consentState)
+				);
+			case 'triplelift':
+				return (
+					isSwitchedOn('prebidTriplelift') &&
+					(isInUsOrCa() || isInAuOrNz())
+				);
+			case 'trustx':
+				return isSwitchedOn('prebidTrustx') && isInUsOrCa();
+			case 'ttd':
+				return (
+					isSwitchedOn('prebidTheTradeDesk') &&
+					getConsentFor('theTradeDesk', consentState)
+				);
+			case 'xhb':
+				return (
+					isSwitchedOn('prebidXaxis') &&
+					getConsentFor('xandr', consentState) &&
+					isInUk()
+				);
+		}
+	};
 
-export const shouldIncludeTripleLift = (): boolean =>
-	isInUsOrCa() || isInAuOrNz();
-
-// TODO: Check is we want regional restrictions on where we load the ozoneBidAdapter
-export const shouldUseOzoneAdaptor = (): boolean =>
-	!isInCanada() &&
-	!isInAuOrNz() &&
-	(window.guardian.config.switches.prebidOzone ?? false);
-
-export const shouldIncludeAppNexus = (): boolean =>
-	isInAuOrNz() ||
-	(!!window.guardian.config.switches.prebidAppnexusUkRow && !isInUsOrCa()) ||
-	!!pbTestNameMap().and;
-
-export const shouldIncludeXaxis = (): boolean => isInUk();
-
-export const shouldIncludeKargo = (): boolean => isInUsa();
-
-export const shouldIncludeMagnite = (): boolean =>
-	!!window.guardian.config.switches.prebidMagnite;
+export const shouldIncludePermutive = (consentState: ConsentState): boolean =>
+	isSwitchedOn('permutive') &&
+	/** this switch specifically controls whether or not the Permutive Audience Connector can run with Prebid */
+	isSwitchedOn('prebidPermutiveAudience') &&
+	getConsentFor('permutive', consentState);
 
 export const shouldIncludeMobileSticky = once(
 	(): boolean =>
@@ -203,3 +263,7 @@ export const containsWS = (sizes: HeaderBiddingSize[]): boolean =>
 	contains(sizes, createAdSize(160, 600));
 
 export const shouldIncludeOnlyA9 = window.location.hash.includes('#only-a9');
+
+export const shouldIncludePrebidBidCache = (): boolean =>
+	isSwitchedOn('prebidBidCache') &&
+	isUserInVariant(prebidBidCache, 'variant');
