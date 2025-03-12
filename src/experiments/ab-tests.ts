@@ -3,6 +3,7 @@ import { deferPermutiveLoad } from './tests/defer-permutive-load';
 import { mpuWhenNoEpic } from './tests/mpu-when-no-epic';
 import { optOutFrequencyCap } from './tests/opt-out-frequency-cap';
 import { prebidBidCache } from './tests/prebid-bid-cache';
+import { prebidBundling } from './tests/prebid-bundling';
 
 /**
  * You only need to add tests to this file if the code you are testing is here in
@@ -14,5 +15,6 @@ export const concurrentTests: ABTest[] = [
 	mpuWhenNoEpic,
 	optOutFrequencyCap,
 	deferPermutiveLoad,
+	prebidBundling,
 	prebidBidCache,
 ];
