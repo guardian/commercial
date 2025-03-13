@@ -2,6 +2,7 @@ import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { isUserInVariant } from '../../experiments/ab';
 import { prebidBidCache } from '../../experiments/tests/prebid-bid-cache';
+import { theTradeDesk } from '../../experiments/tests/the-trade-desk';
 import { createAdSize } from '../../lib/ad-sizes';
 import {
 	isInAuOrNz,
@@ -224,7 +225,8 @@ export const shouldIncludeBidder =
 			case 'ttd':
 				return (
 					isSwitchedOn('prebidTheTradeDesk') &&
-					getConsentFor('theTradeDesk', consentState)
+					getConsentFor('theTradeDesk', consentState) &&
+					!isUserInVariant(theTradeDesk, 'variant')
 				);
 			case 'xhb':
 				return (
