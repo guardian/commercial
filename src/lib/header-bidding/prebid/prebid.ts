@@ -7,6 +7,7 @@ import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
 import { EventTimer } from '../../../lib/event-timer';
+import { getPermutiveSegments } from '../../../lib/permutive';
 import type { PageTargeting } from '../../../lib/targeting/build-page-targeting';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
@@ -96,10 +97,17 @@ type PbjsConfig = {
 	priceGranularity: PrebidPriceGranularity;
 	userSync: UserSync;
 	ortb2?: {
-		site: {
+		site?: {
 			ext: {
 				data: {
 					keywords: string[];
+				};
+			};
+		};
+		user?: {
+			ext: {
+				data: {
+					permutive?: string[];
 				};
 			};
 		};
@@ -107,7 +115,21 @@ type PbjsConfig = {
 	consentManagement?: ConsentManagement;
 	realTimeData?: unknown;
 	useBidCache?: boolean;
+	customPriceBucket?: PrebidPriceGranularity;
+	/**
+	 * This is a custom property that has been added to our fork of prebid.js
+	 * to select a price bucket based on the width and height of the slot.
+	 */
+	guCustomPriceBucket?: (bid: {
+		width: number;
+		height: number;
+	}) => PrebidPriceGranularity | undefined;
 };
+
+type PbjsBidderConfig = Pick<
+	PbjsConfig,
+	'customPriceBucket' | 'guCustomPriceBucket' | 'ortb2'
+>;
 
 type PbjsEvent = 'bidWon';
 /** @see https://docs.prebid.org/dev-docs/publisher-api-reference/getBidResponses.html */
@@ -249,17 +271,7 @@ declare global {
 			setConfig: (config: PbjsConfig) => void;
 			setBidderConfig: (bidderConfig: {
 				bidders: BidderCode[];
-				config: {
-					customPriceBucket?: PrebidPriceGranularity;
-					/**
-					 * This is a custom property that has been added to our fork of prebid.js
-					 * to select a price bucket based on the width and height of the slot.
-					 */
-					guCustomPriceBucket?: (bid: {
-						width: number;
-						height: number;
-					}) => PrebidPriceGranularity | undefined;
-				};
+				config: PbjsBidderConfig;
 			}) => void;
 			getConfig: (item?: string) => PbjsConfig & {
 				dataProviders: Array<{
@@ -532,6 +544,21 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		window.pbjs.bidderSettings.magnite = {
 			storageAllowed: true,
 		};
+
+		window.pbjs.setBidderConfig({
+			bidders: ['rubicon'],
+			config: {
+				ortb2: {
+					user: {
+						ext: {
+							data: {
+								permutive: getPermutiveSegments(),
+							},
+						},
+					},
+				},
+			},
+		});
 	}
 
 	window.pbjs.setConfig(pbjsConfig);
