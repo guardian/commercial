@@ -115,8 +115,7 @@ const setupFakeLogin = async (
 	const bodyOverride: UserFeaturesResponse = {
 		userId: '107421393',
 		digitalSubscriptionExpiryDate: '2999-01-01',
-		guardianAdLiteExpiryDate: '2999-01-01',
-		showSupportMessaging: true,
+		showSupportMessaging: false,
 		contentAccess: {
 			member: false,
 			paidMember: false,
@@ -124,13 +123,11 @@ const setupFakeLogin = async (
 			digitalPack: true,
 			paperSubscriber: false,
 			guardianWeeklySubscriber: false,
-			guardianAdLite: true,
 		},
 	};
 
 	if (!subscriber) {
 		bodyOverride.contentAccess.digitalPack = false;
-		bodyOverride.showSupportMessaging = false;
 		delete bodyOverride.digitalSubscriptionExpiryDate;
 	}
 

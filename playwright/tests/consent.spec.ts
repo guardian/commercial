@@ -62,7 +62,7 @@ test.describe('tcfv2 consent', () => {
 	}) => {
 		await setupFakeLogin(page, context, true);
 
-		await visitArticleNoOkta(page, path, 'IE');
+		await visitArticleNoOkta(page);
 
 		const optOutPromise = waitForOptOut(page);
 
@@ -70,15 +70,15 @@ test.describe('tcfv2 consent', () => {
 
 		await optOutPromise;
 
-		await visitArticleNoOkta(page, path, 'IE');
+		await visitArticleNoOkta(page);
 
 		await adSlotsAreNotPresent(page);
 
-		await visitArticleNoOkta(page, path, 'IE');
+		await visitArticleNoOkta(page);
 
 		await adSlotsAreNotPresent(page);
 
-		await visitArticleNoOkta(page, path, 'IE');
+		await visitArticleNoOkta(page);
 
 		await adSlotsAreNotPresent(page);
 	});

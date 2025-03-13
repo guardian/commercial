@@ -14,7 +14,6 @@ export type UserFeaturesResponse = {
 	paperSubscriptionExpiryDate?: LocalDate;
 	guardianWeeklyExpiryDate?: LocalDate;
 	liveAppSubscriptionExpiryDate?: LocalDate;
-	guardianAdLiteExpiryDate?: LocalDate;
 	alertAvailableFor?: string;
 
 	showSupportMessaging: boolean;
@@ -26,6 +25,5 @@ export type UserFeaturesResponse = {
 		digitalPack: boolean;
 		paperSubscriber: boolean;
 		guardianWeeklySubscriber: boolean;
-		guardianAdLite: boolean;
 	};
 };
