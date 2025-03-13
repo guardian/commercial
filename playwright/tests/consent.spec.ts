@@ -42,14 +42,10 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreFulfilled(page);
 	});
 
-	test.skip(`Reject all, load Opt Out, ad slots are present`, async ({
-		page,
-		context,
-	}) => {
-		// After consent or pay, we need to be logged in and mock an ad-lite subscription to be able to reject all
-		await setupFakeLogin(page, context, false, true);
-
-		await visitArticleNoOkta(page);
+	test(`Reject all, load Opt Out, ad slots are present`, async ({ page }) => {
+		// if we pretend to be in Ireland, we can reject all and see opt out ads
+		// without needing to fake logging into an ad-lite account
+		await loadPage(page, path, 'IE');
 
 		const optOutPromise = waitForOptOut(page);
 
@@ -60,16 +56,18 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsArePresent(page);
 	});
 
-	test.skip(`Login as subscriber, reject all, load Opt Out, ad slots are not present on multiple page loads`, async ({
+	test(`Login as subscriber, reject all, load Opt Out, ad slots are not present on multiple page loads`, async ({
 		page,
 		context,
 	}) => {
-		await setupFakeLogin(page, context, true, true);
+		await setupFakeLogin(page, context, true);
 
 		await visitArticleNoOkta(page);
 
 		const optOutPromise = waitForOptOut(page);
+
 		await cmpRejectAll(page);
+
 		await optOutPromise;
 
 		await visitArticleNoOkta(page);
@@ -85,14 +83,12 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreNotPresent(page);
 	});
 
-	test.skip(`Reject all, ad slots are fulfilled, then accept all, ad slots are fulfilled`, async ({
+	test(`Reject all, ad slots are fulfilled, then accept all, ad slots are fulfilled`, async ({
 		page,
-		context,
 	}) => {
-		// After consent or pay, we need to be logged in and mock an ad-lite subscription to be able to reject all
-		await setupFakeLogin(page, context, false, true);
-
-		await visitArticleNoOkta(page);
+		// if we pretend to be in Ireland, we can reject all and see opt out ads
+		// without needing to fake logging into an ad-lite account
+		await loadPage(page, path, 'IE');
 
 		const optOutPromise = waitForOptOut(page);
 
@@ -111,7 +107,7 @@ test.describe('tcfv2 consent', () => {
 		page,
 		context,
 	}) => {
-		await setupFakeLogin(page, context, true, false);
+		await setupFakeLogin(page, context, true);
 
 		await visitArticleNoOkta(page);
 
@@ -131,7 +127,7 @@ test.describe('tcfv2 consent', () => {
 		page,
 		context,
 	}) => {
-		await setupFakeLogin(page, context, true, true);
+		await setupFakeLogin(page, context, true);
 
 		await visitArticleNoOkta(page);
 
@@ -148,18 +144,16 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsArePresent(page);
 	});
 
-	test.skip(`Reject all, ad slots are present, accept all, page refreshes, ad slots are fulfilled`, async ({
+	test(`Reject all, ad slots are present, accept all, page refreshes, ad slots are fulfilled`, async ({
 		page,
-		context,
 	}) => {
-		// After consent or pay, we need to be logged in and mock an ad-lite subscription to be able to reject all
-		await setupFakeLogin(page, context, false, true);
-
-		await visitArticleNoOkta(page);
+		// if we pretend to be in Ireland, we can reject all and see opt out ads
+		// without needing to fake logging into an ad-lite account
+		await loadPage(page, path, 'IE');
 
 		await cmpRejectAll(page);
 
-		await visitArticleNoOkta(page);
+		await loadPage(page, path, 'IE');
 
 		await adSlotsArePresent(page);
 
