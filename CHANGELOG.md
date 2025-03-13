@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 26.0.0
+
+### Major Changes
+
+- 995a57c: Updates peer dependency ranges for @guardian/core-web-vitals and @guardian/identity-auth
+
 ## 25.1.0
 
 ### Minor Changes
