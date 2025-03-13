@@ -46,7 +46,7 @@
 	},
 	"dependencies": {
 		"@guardian/ab-core": "8.0.1",
-		"@guardian/core-web-vitals": "8.0.1",
+		"@guardian/core-web-vitals": "11.0.0",
 		"@guardian/identity-auth": "^4.0.2",
 		"@guardian/identity-auth-frontend": "^6.0.2",
 		"@guardian/libs": "22.0.0",
