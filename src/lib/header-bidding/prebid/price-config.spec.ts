@@ -44,6 +44,45 @@ describe('price granularity', () => {
 		});
 	});
 
+	describe('price bucket override compared to default granularity', () => {
+		test.each([
+			// Cases where Criteo billboard differs from default
+			// Different max in first bucket (12 vs 10)
+			[[970, 250], 10.5, '10.50', '10.50'], // Default: 10.50 (0.1 increment), Criteo: 10.50 (0.01 increment)
+			[[970, 250], 11.23, '11.20', '11.23'], // Default: 11.20 (0.1 increment), Criteo: 11.23 (0.01 increment)
+
+			// Different max in second bucket (20 vs 15)
+			[[970, 250], 15.5, '15.00', '15.50'], // Default: 15.00 (1 increment), Criteo: 15.50 (0.1 increment)
+			[[970, 250], 19.7, '19.00', '19.70'], // Default: 19.00 (1 increment), Criteo: 19.70 (0.1 increment)
+
+			// Different max in third bucket (500 vs 100)
+			[[970, 250], 160, '100.00', '160.00'], // Default: 60.00 (1 increment), Criteo: 50.00 (max value)
+			[[970, 250], 199, '100.00', '199.00'], // Default: 99.00 (1 increment), Criteo: 50.00 (max value)
+
+			// Cases where Criteo halfpage is different from default
+			// Same max in first bucket (10) but then different behavior
+			[[300, 600], 10.55, '10.50', '10.55'], // Default: 10.50 (0.1 increment), Criteo halfpage: 10.50 (0.1 increment)
+		] as const)(
+			'Criteo slot with size %s and cpm %s should have default price bucket %s but returns %s',
+			(
+				[width, height],
+				cpm,
+				defaultPriceBucket,
+				expectedCriteoBucket,
+			) => {
+				expect(
+					overridePriceBucket(
+						'criteo',
+						width,
+						height,
+						cpm,
+						defaultPriceBucket,
+					),
+				).toEqual(expectedCriteoBucket);
+			},
+		);
+	});
+
 	describe('ozone', () => {
 		const ozoneGranularityOption1 = {
 			buckets: [
@@ -117,10 +156,10 @@ describe('price granularity', () => {
 				[[970, 250], 99, '99.00', '50.00'], // Default: 99.00 (1 increment), Ozone: 50.00 (max value)
 
 				// Cases where Ozone halfpage is different from default
-				// Same max in first bucket (10) but then different behavior
-				[[300, 600], 10.5, '10.50', '10.50'], // Default: 10.50 (0.1 increment), Ozone halfpage: 10.50 (0.1 increment)
+				// Same max in first bucket (10)
+				[[300, 600], 10.55, '10.50', '10.50'], // Default: 10.50 (0.1 increment), Ozone halfpage: 10.50 (0.1 increment)
 
-				// Same max in second bucket (15) but then different behavior
+				// Same max in second bucket (15)
 				[[300, 600], 15.5, '15.00', '15.00'], // Default: 15.00 (1 increment), Ozone halfpage: 15.00 (1 increment)
 
 				// Different max in third bucket (50 vs 100)

@@ -30,11 +30,7 @@ import {
 } from '../utils';
 import { bids } from './bid-config';
 import type { PrebidPriceGranularity } from './price-config';
-import {
-	criteoPriceGranularity,
-	overridePriceBucket,
-	priceGranularity,
-} from './price-config';
+import { overridePriceBucket, priceGranularity } from './price-config';
 
 type CmpApi = 'iab' | 'static';
 /** @see https://docs.prebid.org/dev-docs/modules/consentManagementTcf.html */
@@ -439,16 +435,22 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	if (shouldInclude('criteo')) {
 		window.pbjs.bidderSettings.criteo = {
 			storageAllowed: true,
+			// Use a custom price granularity, which is based upon the size of the slot being auctioned
+			adserverTargeting: [
+				{
+					key: 'hb_pb',
+					val({ width, height, cpm, pbCg }) {
+						return overridePriceBucket(
+							'criteo',
+							width,
+							height,
+							cpm,
+							pbCg,
+						);
+					},
+				},
+			],
 		};
-
-		// Use a custom price granularity for Criteo
-		// Criteo has a different line item structure and so bids should be rounded to match these
-		window.pbjs.setBidderConfig({
-			bidders: ['criteo'],
-			config: {
-				customPriceBucket: criteoPriceGranularity,
-			},
-		});
 	}
 
 	if (shouldInclude('ozone')) {

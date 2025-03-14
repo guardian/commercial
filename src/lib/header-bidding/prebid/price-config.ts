@@ -166,13 +166,16 @@ export const getPriceGranularityForSize = (
 };
 
 export const overridePriceBucket = (
-	bidder: 'ozone' | 'ix',
+	bidder: 'ozone' | 'ix' | 'criteo',
 	width: number,
 	height: number,
 	cpm: number,
 	defaultPriceBucket: string,
 ): string | undefined => {
-	const priceGranularity = getPriceGranularityForSize(bidder, width, height);
+	const priceGranularity =
+		bidder === 'criteo'
+			? criteoPriceGranularity
+			: getPriceGranularityForSize(bidder, width, height);
 	const priceBucket = getPriceBucketString(cpm, priceGranularity).custom;
 	if (priceBucket !== defaultPriceBucket) {
 		log(
