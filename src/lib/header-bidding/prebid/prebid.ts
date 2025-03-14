@@ -262,14 +262,6 @@ declare global {
 				bidders: BidderCode[];
 				config: {
 					customPriceBucket?: PrebidPriceGranularity;
-					/**
-					 * This is a custom property that has been added to our fork of prebid.js
-					 * to select a price bucket based on the width and height of the slot.
-					 */
-					guCustomPriceBucket?: (bid: {
-						width: number;
-						height: number;
-					}) => PrebidPriceGranularity | undefined;
 				};
 			}) => void;
 			getConfig: (item?: string) => PbjsConfig & {
@@ -465,17 +457,14 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			adserverTargeting: [
 				{
 					key: 'hb_pb',
-					val({ bidder, width, height, cpm, pbCg }) {
-						if (bidder === 'ozone') {
-							return overridePriceBucket(
-								'ozone',
-								width,
-								height,
-								cpm,
-								pbCg,
-							);
-						}
-						return pbCg;
+					val({ width, height, cpm, pbCg }) {
+						return overridePriceBucket(
+							'ozone',
+							width,
+							height,
+							cpm,
+							pbCg,
+						);
 					},
 				},
 			],
@@ -488,17 +477,14 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			adserverTargeting: [
 				{
 					key: 'hb_pb',
-					val({ bidder, width, height, cpm, pbCg }) {
-						if (bidder === 'ix') {
-							return overridePriceBucket(
-								'ix',
-								width,
-								height,
-								cpm,
-								pbCg,
-							);
-						}
-						return pbCg;
+					val({ width, height, cpm, pbCg }) {
+						return overridePriceBucket(
+							'ix',
+							width,
+							height,
+							cpm,
+							pbCg,
+						);
 					},
 				},
 			],
