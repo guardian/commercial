@@ -32,3 +32,16 @@ declare module 'prebid.js/adapters/bidderFactory' {
 
 	export { registerBidder };
 }
+
+declare module 'prebid.js/src/cpmBucketManager' {
+	import type { PrebidPriceGranularity } from '../lib/header-bidding/prebid/price-config';
+
+	const getPriceBucketString: (
+		cpm: number,
+		priceBuckets: PrebidPriceGranularity,
+	) => {
+		custom: string;
+	};
+
+	export { getPriceBucketString };
+}
