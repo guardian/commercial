@@ -32,8 +32,7 @@ import { bids } from './bid-config';
 import type { PrebidPriceGranularity } from './price-config';
 import {
 	criteoPriceGranularity,
-	indexPriceGranularity,
-	ozonePriceGranularity,
+	overridePriceBucket,
 	priceGranularity,
 } from './price-config';
 
@@ -140,21 +139,35 @@ type EnableAnalyticsConfig = {
 	};
 };
 
+type BidResponse = {
+	bidder: BidderCode;
+	width: number;
+	height: number;
+	pbCg: string;
+	cpm: number;
+	adId: string;
+	source: string;
+	mediaType: string;
+	size: string;
+	bidderCode: string;
+	[x: string]: unknown;
+};
+
 // bidResponse expected types. Check with advertisers
 type XaxisBidResponse = {
-	appnexus: {
-		buyerMemberId: string;
+	appnexus?: {
+		buyerMemberId?: string;
 	};
 	[x: string]: unknown;
 };
 
 type BuyerTargeting<T> = {
 	key: string;
-	val: (bidResponse: DeepPartial<T>) => string | null | undefined;
+	val: (bidResponse: T) => string | null | undefined;
 };
 
 /** @see https://docs.prebid.org/dev-docs/publisher-api-reference/bidderSettings.html */
-type BidderSetting<T = Record<string, unknown>> = {
+type BidderSetting<T = BidResponse> = {
 	adserverTargeting: Array<BuyerTargeting<T>>;
 	bidCpmAdjustment: (n: number) => number;
 	suppressEmptyKeys: boolean;
@@ -162,13 +175,11 @@ type BidderSetting<T = Record<string, unknown>> = {
 	storageAllowed: boolean;
 };
 
-type BidderSettings = {
+type BidderSettings = Partial<
+	Record<Exclude<BidderCode, 'xhb'> | 'magnite', Partial<BidderSetting>>
+> & {
 	standard?: never; // prevent overriding the default settings
 	xhb?: Partial<BidderSetting<XaxisBidResponse>>;
-	ozone?: Partial<BidderSetting>;
-	criteo?: Partial<BidderSetting>;
-	kargo?: Partial<BidderSetting>;
-	magnite?: Partial<BidderSetting>;
 };
 
 class PrebidAdUnit {
@@ -450,45 +461,48 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 
 	if (shouldInclude('ozone')) {
 		// Use a custom price granularity, which is based upon the size of the slot being auctioned
-		window.pbjs.setBidderConfig({
-			bidders: ['ozone'],
-			config: {
-				// Select the ozone granularity, use default if not defined for the size
-				guCustomPriceBucket: ({ width, height }) => {
-					const ozoneGranularity = ozonePriceGranularity(
-						width,
-						height,
-					);
-					log(
-						'commercial',
-						`Custom Prebid - Ozone price bucket for size (${width},${height}):`,
-						ozoneGranularity,
-					);
-					return ozoneGranularity;
+		window.pbjs.bidderSettings.ozone = {
+			adserverTargeting: [
+				{
+					key: 'hb_pb',
+					val({ bidder, width, height, cpm, pbCg }) {
+						if (bidder === 'ozone') {
+							return overridePriceBucket(
+								'ozone',
+								width,
+								height,
+								cpm,
+								pbCg,
+							);
+						}
+						return pbCg;
+					},
 				},
-			},
-		});
+			],
+		};
 	}
 
 	if (shouldInclude('ix')) {
-		window.pbjs.setBidderConfig({
-			bidders: ['ix'],
-			config: {
-				guCustomPriceBucket: ({ width, height }) => {
-					const indexGranularity = indexPriceGranularity(
-						width,
-						height,
-					);
-					log(
-						'commercial',
-						`Custom Prebid - Index price bucket for size (${width},${height}):`,
-						indexGranularity,
-					);
-
-					return indexGranularity;
+		// Use a custom price granularity, which is based upon the size of the slot being auctioned
+		window.pbjs.bidderSettings.ix = {
+			adserverTargeting: [
+				{
+					key: 'hb_pb',
+					val({ bidder, width, height, cpm, pbCg }) {
+						if (bidder === 'ix') {
+							return overridePriceBucket(
+								'ix',
+								width,
+								height,
+								cpm,
+								pbCg,
+							);
+						}
+						return pbCg;
+					},
 				},
-			},
-		});
+			],
+		};
 	}
 
 	if (shouldEnableAnalytics()) {
