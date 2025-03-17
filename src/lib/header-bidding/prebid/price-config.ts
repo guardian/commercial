@@ -1,3 +1,5 @@
+import { log } from '@guardian/libs';
+import { getPriceBucketString } from 'prebid.js/src/cpmBucketManager';
 import { adSizes } from '../../../lib/ad-sizes';
 
 export type PrebidPriceGranularity = {
@@ -150,4 +152,41 @@ export const indexPriceGranularity = (
 	}
 
 	return undefined;
+};
+
+export const getPriceGranularityForSize = (
+	bidder: 'ozone' | 'ix',
+	width: number,
+	height: number,
+): PrebidPriceGranularity | undefined => {
+	if (bidder === 'ozone') {
+		return ozonePriceGranularity(width, height);
+	}
+	return indexPriceGranularity(width, height);
+};
+
+export const overridePriceBucket = (
+	bidder: 'ozone' | 'ix' | 'criteo',
+	width: number,
+	height: number,
+	cpm: number,
+	defaultPriceBucket: string,
+): string | undefined => {
+	const priceGranularity =
+		bidder === 'criteo'
+			? criteoPriceGranularity
+			: getPriceGranularityForSize(bidder, width, height);
+	const priceBucket = getPriceBucketString(cpm, priceGranularity).custom;
+	if (priceBucket !== defaultPriceBucket) {
+		log(
+			'commercial',
+			`${bidder} price bucket for size (${width}x${height}) with cpm ${cpm} overriden from ${defaultPriceBucket} to ${priceBucket}`,
+		);
+	} else {
+		log(
+			'commercial',
+			`${bidder} price bucket for size (${width}x${height}) with cpm ${cpm} not overriden (${priceBucket})`,
+		);
+	}
+	return priceBucket;
 };
