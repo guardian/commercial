@@ -4,7 +4,7 @@ export const theTradeDesk: ABTest = {
 	id: 'TheTradeDesk',
 	author: '@commercial-dev',
 	start: '2025-03-12',
-	expiry: '2024-04-30',
+	expiry: '2025-04-30',
 	audience: 10 / 100,
 	audienceOffset: 40 / 100,
 	audienceCriteria: '',
