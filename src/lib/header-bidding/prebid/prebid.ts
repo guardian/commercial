@@ -479,7 +479,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			adserverTargeting: [
 				{
 					key: 'hb_pb',
-					val({ width, height, cpm, pbCg }) {
+					val: ({ width, height, cpm, pbCg }) => {
 						return overridePriceBucket(
 							'ozone',
 							width,
