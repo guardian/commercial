@@ -1,5 +1,6 @@
 import type { ABTest } from '@guardian/ab-core';
 import { AB } from '@guardian/ab-core';
+import type { OphanRecordFunction } from '@guardian/ab-core/dist/@types';
 import { getCookie, log } from '@guardian/libs';
 import {
 	getParticipationsFromLocalStorage,
@@ -29,45 +30,6 @@ const getMvtId = (): number | undefined =>
 		}),
 	);
 
-type OphanRecordFunction = (
-	event: Record<string, unknown> & {
-		/**
-		 * the experiences key will override previously set values.
-		 * Use `recordExperiences` instead.
-		 */
-		experiences?: never;
-	},
-	callback?: () => void,
-) => void;
-/**
- * Store a reference to Ophan so that we don't need to load/enhance it more than once.
- */
-let cachedOphan: typeof window.guardian.ophan;
-
-const getOphan = () => {
-	const { ophan } = window.guardian;
-
-	const record: OphanRecordFunction = (event, callback) => {
-		ophan.record(event, callback);
-		log('commercial', '🧿 Ophan event recorded:', event);
-	};
-
-	const trackComponentAttention: typeof ophan.trackComponentAttention = (
-		name,
-		el,
-		visibilityThreshold,
-	) => {
-		ophan.trackComponentAttention(name, el, visibilityThreshold);
-		log('commercial', '🧿 Ophan tracking component attention:', name, {
-			el,
-			visibilityThreshold,
-		});
-	};
-
-	cachedOphan = { ...ophan, record, trackComponentAttention };
-	return cachedOphan;
-};
-
 const mvtId = getMvtId();
 const abTestSwitches = Object.entries(window.guardian.config.switches).reduce(
 	(prev, [key, val]) => ({ ...prev, [key]: val }),
@@ -82,6 +44,16 @@ const init = () => {
 
 	setParticipationsInLocalStorage(forcedTestVariants);
 
+	const ophanEvents: Array<Parameters<OphanRecordFunction>[0]> = [];
+
+	// If ophan is not available, store the events in an array and replay them when ophan is available
+	const ophanRecord = (event: Parameters<OphanRecordFunction>[0]) => {
+		ophanEvents.push(event);
+		if (window.guardian.ophan) {
+			ophanEvents.forEach((e) => window.guardian.ophan?.record(e));
+		}
+	};
+
 	const ab = new AB({
 		mvtId: mvtId ?? -1,
 		mvtMaxValue,
@@ -89,7 +61,7 @@ const init = () => {
 		abTestSwitches,
 		arrayOfTestObjects: concurrentTests,
 		forcedTestVariants,
-		ophanRecord: getOphan().record,
+		ophanRecord,
 		serverSideTests: window.guardian.config.tests ?? {},
 		errorReporter: (error) => {
 			console.log('AB tests error:', error);

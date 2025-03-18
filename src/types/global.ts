@@ -454,7 +454,7 @@ declare global {
 	}
 	interface Window {
 		guardian: {
-			ophan: Ophan;
+			ophan?: Ophan;
 			config: Config;
 			queue: Array<() => Promise<void>>;
 			mustardCut?: boolean;
@@ -472,7 +472,7 @@ declare global {
 			modules: {
 				sentry?: {
 					reportError?: (
-						error: unknown,
+						error: Error,
 						feature: string,
 						tags?: Record<string, string>,
 					) => void;
