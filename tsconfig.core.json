@@ -1,13 +1,13 @@
 {
 	"compilerOptions": {
-		"baseUrl": "src",
+		"baseUrl": ".",
 		"declaration": true,
 		"noEmit": false,
 		"outDir": "dist",
 		"typeRoots": ["./node_modules/@types", "./node_modules/web-vitals/dist"]
 	},
 	"extends": "./tsconfig.json",
-	"rootDir": "src",
-	"include": ["src/export.ts", "src/types"],
+	"rootDir": "@guardian/commercial",
+	"include": ["@guardian/commercial/export.ts", "src/types"],
 	"exclude": ["**/*.spec.*", "**/*.test.*"]
 }
