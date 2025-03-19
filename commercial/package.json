@@ -1,7 +1,7 @@
 {
-	"name": "commercial",
-	"version": "26.0.0",
-	"description": "Guardian advertising business logic",
+	"name": "@guardian/commercial-bundle",
+	"version": "1.0.0",
+	"description": "Guardian advertising business logic running on the website",
 	"homepage": "https://github.com/guardian/commercial#readme",
 	"bugs": {
 		"url": "https://github.com/guardian/commercial/issues"
@@ -14,13 +14,12 @@
 	"files": [
 		"dist"
 	],
-	"workspaces": ["commercial", "commercial-core"],
 	"main": "dist/core/cjs/export.js",
 	"module": "dist/core/esm/export.js",
 	"scripts": {
 		"build": "npm-run-all clean --parallel compile:core:* build:prod build:dev",
-		"build:dev": "webpack -c commercial/webpack.config.dev.mjs",
-		"build:prod": "webpack -c commercial/webpack.config.prod.mjs",
+		"build:dev": "webpack -c webpack.config.dev.mjs",
+		"build:prod": "webpack -c webpack.config.prod.mjs",
 		"clean": "rm -rf dist",
 		"compile:core:common": "tsc --project ./tsconfig.core.json --outDir ./dist/core/cjs --module CommonJS",
 		"compile:core:esm": "tsc --project ./tsconfig.core.json --outDir ./dist/core/esm",
@@ -31,16 +30,40 @@
 		"prepare": "husky",
 		"prettier:check": "prettier . --check --cache",
 		"prettier:fix": "prettier . --write --cache",
-		"serve": "OVERRIDE_BUNDLE=true pnpm commercial/webpack-dev-server -c ./commercial/webpack.config.dev.mjs",
+		"serve": "OVERRIDE_BUNDLE=true pnpm webpack-dev-server -c ./webpack.config.dev.mjs",
 		"test": "jest",
 		"tsc": "tsc --noEmit",
 		"validate": "npm-run-all tsc lint test build"
 	},
+	"dependencies": {
+		"@guardian/ab-core": "8.0.1",
+		"@guardian/core-web-vitals": "11.0.0",
+		"@guardian/identity-auth": "^7.0.0",
+		"@guardian/identity-auth-frontend": "^6.0.2",
+		"@guardian/libs": "22.0.0",
+		"@guardian/source": "8.0.2",
+		"fastdom": "^1.0.12",
+		"lodash-es": "^4.17.21",
+		"prebid.js": "9.27.0",
+		"process": "^0.11.10",
+		"web-vitals": "^4.2.4"
+	},
 	"devDependencies": {
+		"@babel/cli": "^7.26.4",
+		"@babel/core": "^7.26.0",
+		"@babel/plugin-syntax-dynamic-import": "^7.8.3",
+		"@babel/plugin-transform-runtime": "^7.25.9",
+		"@babel/preset-env": "^7.26.0",
+		"@babel/preset-react": "^7.26.3",
+		"@babel/preset-typescript": "^7.26.0",
+		"@babel/register": "^7.25.9",
+		"@babel/runtime": "^7.26.0",
 		"@changesets/cli": "^2.27.9",
+		"@guardian/browserslist-config": "^6.1.1",
 		"@guardian/eslint-config": "^11.0.0",
 		"@guardian/prettier": "8.0.1",
 		"@playwright/test": "1.51.0",
+		"@types/googletag": "~3.3.0",
 		"@types/jest": "^29.5.14",
 		"@types/lodash-es": "^4.17.12",
 		"@types/node": "20.17.24",
