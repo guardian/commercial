@@ -1,6 +1,6 @@
 {
-	"name": "@guardian/commercial",
-	"version": "26.0.0",
+	"name": "commercial",
+	"version": "1.0.0",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial#readme",
 	"bugs": {
@@ -17,12 +17,13 @@
 	"main": "dist/core/cjs/export.js",
 	"module": "dist/core/esm/export.js",
 	"scripts": {
-		"build": "npm-run-all clean --parallel compile:core:* build:prod build:dev",
+		"build": "npm-run-all --parallel compile build:*",
 		"build:dev": "webpack -c webpack.config.dev.mjs",
 		"build:prod": "webpack -c webpack.config.prod.mjs",
 		"clean": "rm -rf dist",
 		"compile:core:common": "tsc --project ./tsconfig.core.json --outDir ./dist/core/cjs --module CommonJS",
 		"compile:core:esm": "tsc --project ./tsconfig.core.json --outDir ./dist/core/esm",
+		"compile": "npm-run-all clean --parallel compile:core:*",
 		"playwright:run": "playwright test",
 		"playwright:open": "playwright test --ui",
 		"lint": "eslint .",
@@ -118,9 +119,6 @@
 		"src/**/*.(js|ts)": [
 			"pnpm prettier:fix"
 		]
-	},
-	"publishConfig": {
-		"access": "public"
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"
