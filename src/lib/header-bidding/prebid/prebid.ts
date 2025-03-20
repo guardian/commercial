@@ -153,7 +153,7 @@ type EnableAnalyticsConfig = {
 	provider: string;
 	options: {
 		ajaxUrl: string;
-		pv: string;
+		pv?: string;
 	};
 };
 
@@ -521,7 +521,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 					ajaxUrl: window.guardian.config.page.isDev
 						? `//performance-events.code.dev-guardianapis.com/header-bidding`
 						: `//performance-events.guardianapis.com/header-bidding`,
-					pv: window.guardian.ophan.pageViewId,
+					pv: window.guardian.ophan?.pageViewId,
 				},
 			},
 		]);
