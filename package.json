@@ -39,7 +39,7 @@
 		"@guardian/ab-core": "^8.0.0",
 		"@guardian/core-web-vitals": "^11.0.0",
 		"@guardian/identity-auth": "^7.0.0",
-		"@guardian/identity-auth-frontend": "^6.0.2",
+		"@guardian/identity-auth-frontend": "^9.0.0",
 		"@guardian/libs": "^22.0.0",
 		"@guardian/source": "^8.0.2",
 		"typescript": "~5.5.4"
@@ -48,7 +48,7 @@
 		"@guardian/ab-core": "8.0.1",
 		"@guardian/core-web-vitals": "11.0.0",
 		"@guardian/identity-auth": "^7.0.0",
-		"@guardian/identity-auth-frontend": "^6.0.2",
+		"@guardian/identity-auth-frontend": "^9.0.0",
 		"@guardian/libs": "22.0.1",
 		"@guardian/source": "8.0.2",
 		"fastdom": "^1.0.12",
