@@ -1,2 +1,3 @@
 packages:
-  - '@guardian/commercial'
+  - 'packages/commercial'
+  - 'src/**'
