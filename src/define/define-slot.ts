@@ -1,6 +1,7 @@
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { once } from 'lodash-es';
 import type { AdSize, SizeMapping, SlotName } from '../lib/ad-sizes';
+import { reportError } from '../lib/error/report-error';
 import { EventTimer } from '../lib/event-timer';
 import { isEligibleForTeads } from '../lib/targeting/teads-eligibility';
 import { getUrlVars } from '../lib/url';
@@ -126,9 +127,19 @@ const defineSlot = (
 
 	const googletagSizeMapping = buildGoogletagSizeMapping(sizeMapping);
 	if (!googletagSizeMapping) {
-		throw new Error(
-			`Could not define slot for ${id}. A googletag size mapping could not be created from size mapping '${JSON.stringify(sizeMapping)}'.`,
+		const error = new Error(
+			'Could not define slot. A googletag size mapping could not be created.',
 		);
+		reportError(
+			error,
+			'commercial',
+			{},
+			{
+				slot: id,
+				sizeMapping: sizeMapping,
+			},
+		);
+		throw error;
 	}
 
 	const sizes = collectSizes(googletagSizeMapping);

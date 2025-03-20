@@ -475,6 +475,7 @@ declare global {
 						error: unknown,
 						feature: string,
 						tags?: Record<string, string>,
+						extras?: Record<string, unknown>,
 					) => void;
 				};
 			};
