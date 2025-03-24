@@ -201,6 +201,9 @@ const renderAdvert = (
 	slotRenderEndedEvent: googletag.events.SlotRenderEndedEvent,
 ): Promise<boolean> => {
 	addContentClass(advert.node);
+	console.log(
+		`Here is the advert: ${JSON.stringify(advert)} and slotRenderEndedEvent: ${JSON.stringify(slotRenderEndedEvent)}`,
+	);
 	return hasIframe(advert.node)
 		.then((isRendered) => {
 			const creativeTemplateId =
