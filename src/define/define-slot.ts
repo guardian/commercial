@@ -35,6 +35,18 @@ const toGoogleTagSize = (size: AdSize): googletag.SingleSize => {
 };
 
 /**
+ *  Test a known good size mapping, if this fails we can't define slots!
+ *  This can happen if googletag has been shimmed by an adblocker
+ */
+const canDefineSlot = once(() => {
+	const testMapping = window.googletag
+		.sizeMapping()
+		.addSize([0, 0], [[300, 250]])
+		.build();
+	return !!testMapping;
+});
+
+/**
  * Builds a googletag size mapping based on the breakpoints and ad sizes from
  * the defined size mapping and the viewport sizes from source-foundations.
  */
@@ -127,19 +139,25 @@ const defineSlot = (
 
 	const googletagSizeMapping = buildGoogletagSizeMapping(sizeMapping);
 	if (!googletagSizeMapping) {
-		const error = new Error(
-			'Could not define slot. A googletag size mapping could not be created.',
-		);
-		reportError(
-			error,
-			'commercial',
-			{},
-			{
-				slot: id,
-				sizeMapping: JSON.stringify(sizeMapping),
-			},
-		);
-		throw error;
+		if (!canDefineSlot()) {
+			throw new Error(
+				'Could not define slot. googletag.sizeMapping has been shimmed.',
+			);
+		} else {
+			const error = new Error(
+				'Could not define slot. A googletag size mapping could not be created.',
+			);
+			reportError(
+				error,
+				'commercial',
+				{},
+				{
+					slot: id,
+					sizeMapping: JSON.stringify(sizeMapping),
+				},
+			);
+			throw error;
+		}
 	}
 
 	const sizes = collectSizes(googletagSizeMapping);
@@ -210,4 +228,4 @@ const defineSlot = (
 	};
 };
 
-export { buildGoogletagSizeMapping, collectSizes, defineSlot };
+export { buildGoogletagSizeMapping, collectSizes, defineSlot, canDefineSlot };
