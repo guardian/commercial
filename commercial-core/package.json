@@ -14,13 +14,14 @@
 	"files": [
 		"dist"
 	],
-	"main": "dist/core/cjs/export.js",
-	"module": "dist/core/esm/export.js",
+	"main": "dist/cjs/commercial-core/export.js",
+	"module": "dist/esm/commercial-core/export.js",
 	"scripts": {
 		"build": "npm-run-all clean --parallel compile:core:*",
 		"clean": "rm -rf dist",
-		"compile:core:common": "tsc --project ./tsconfig.core.json --outDir ./dist/core/cjs --module CommonJS",
-		"compile:core:esm": "tsc --project ./tsconfig.core.json --outDir ./dist/core/esm",
+		"compile:core:common": "tsc  --outDir ./dist/cjs --module CommonJS",
+		"compile:core:esm": "tsc --outDir ./dist/esm",
+		"compile": "npm-run-all clean --parallel compile:core:*",
 		"tsc": "tsc --noEmit"
 	},
 	"peerDependencies": {
