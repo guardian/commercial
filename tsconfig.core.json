@@ -5,7 +5,8 @@
 		"noEmit": false,
 		"outDir": "dist",
 	},
+	// "rootDir": "commercial-core",
 	"extends": "./tsconfig.json",
-	"include": ["packages/commercial/export.ts", "src/types"],
+	"include": ["commercial-core/export.ts", "src/types"],
 	"exclude": ["**/*.spec.*", "**/*.test.*"]
 }
