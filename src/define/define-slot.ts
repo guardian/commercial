@@ -136,7 +136,7 @@ const defineSlot = (
 			{},
 			{
 				slot: id,
-				sizeMapping: sizeMapping,
+				sizeMapping: JSON.stringify(sizeMapping),
 			},
 		);
 		throw error;
