@@ -38,4 +38,4 @@ AB test modules
 
 Library modules
 
-Exported library utilties are specified in [export.ts](./init/consented/export.ts)
+Exported library utilties are specified in [commercial-core/export.ts](../commercial-core/export.ts)
