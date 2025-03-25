@@ -38,7 +38,6 @@ jest.mock('@guardian/libs', () => ({
 jest.mock('lib/identity/api', () => ({
 	isUserLoggedInOktaRefactor: () => true,
 	getAuthStatus: jest.fn(),
-	getOptionsHeadersWithOkta: jest.fn(),
 }));
 
 const getAuthStatus = getAuthStatus_ as jest.MockedFunction<
