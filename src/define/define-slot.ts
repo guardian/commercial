@@ -1,7 +1,6 @@
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { once } from 'lodash-es';
 import type { AdSize, SizeMapping, SlotName } from '../lib/ad-sizes';
-import { reportError } from '../lib/error/report-error';
 import { EventTimer } from '../lib/event-timer';
 import { isEligibleForTeads } from '../lib/targeting/teads-eligibility';
 import { getUrlVars } from '../lib/url';
@@ -127,6 +126,18 @@ const allowSafeFrameToExpand = (slot: googletag.Slot) => {
 	return slot;
 };
 
+class DefineSlotError extends Error {
+	sizeMapping: string;
+	report: boolean;
+
+	constructor(message: string, sizeMapping: SizeMapping, report = true) {
+		super(message);
+		this.name = 'DefineSlotError';
+		this.sizeMapping = JSON.stringify(sizeMapping);
+		this.report = report;
+	}
+}
+
 const defineSlot = (
 	adSlotNode: HTMLElement,
 	sizeMapping: SizeMapping,
@@ -139,24 +150,17 @@ const defineSlot = (
 
 	const googletagSizeMapping = buildGoogletagSizeMapping(sizeMapping);
 	if (!googletagSizeMapping) {
-		if (!canDefineSlot()) {
-			throw new Error(
-				'Could not define slot. googletag.sizeMapping has been shimmed.',
+		if (canDefineSlot()) {
+			throw new DefineSlotError(
+				'googletag.sizeMapping did not return a size mapping',
+				sizeMapping,
 			);
 		} else {
-			const error = new Error(
-				'A googletag size mapping could not be created.',
+			throw new DefineSlotError(
+				'Could not define slot. googletag.sizeMapping has been shimmed.',
+				sizeMapping,
+				false,
 			);
-			reportError(
-				error,
-				'commercial',
-				{},
-				{
-					slot: id,
-					sizeMapping: JSON.stringify(sizeMapping),
-				},
-			);
-			throw error;
 		}
 	}
 
@@ -177,7 +181,10 @@ const defineSlot = (
 	}
 
 	if (!slot) {
-		throw new Error(`Could not define slot for ${id}`);
+		throw new DefineSlotError(
+			`googletag.defineSlot did not return a slot`,
+			sizeMapping,
+		);
 	}
 
 	const slotReady = initSlotIas(id, slot);
@@ -228,4 +235,10 @@ const defineSlot = (
 	};
 };
 
-export { buildGoogletagSizeMapping, collectSizes, defineSlot, canDefineSlot };
+export {
+	buildGoogletagSizeMapping,
+	collectSizes,
+	defineSlot,
+	canDefineSlot,
+	DefineSlotError,
+};
