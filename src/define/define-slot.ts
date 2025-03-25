@@ -145,7 +145,7 @@ const defineSlot = (
 			);
 		} else {
 			const error = new Error(
-				'Could not define slot. A googletag size mapping could not be created.',
+				'A googletag size mapping could not be created.',
 			);
 			reportError(
 				error,
