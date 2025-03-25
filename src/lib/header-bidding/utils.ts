@@ -1,7 +1,6 @@
 import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { isUserInVariant } from '../../experiments/ab';
-import { prebidBidCache } from '../../experiments/tests/prebid-bid-cache';
 import { theTradeDesk } from '../../experiments/tests/the-trade-desk';
 import { createAdSize } from '../../lib/ad-sizes';
 import {
@@ -267,5 +266,4 @@ export const containsWS = (sizes: HeaderBiddingSize[]): boolean =>
 export const shouldIncludeOnlyA9 = window.location.hash.includes('#only-a9');
 
 export const shouldIncludePrebidBidCache = (): boolean =>
-	isSwitchedOn('prebidBidCache') &&
-	isUserInVariant(prebidBidCache, 'variant');
+	isSwitchedOn('prebidBidCache');
