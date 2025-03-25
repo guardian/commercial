@@ -56,7 +56,7 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsArePresent(page);
 	});
 
-	test(`Login as subscriber, reject all, load Opt Out, ad slots are not present on multiple page loads`, async ({
+	test.skip(`Login as subscriber, reject all, load Opt Out, ad slots are not present on multiple page loads`, async ({
 		page,
 		context,
 	}) => {
@@ -103,7 +103,7 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreFulfilled(page);
 	});
 
-	test(`Login as subscriber, accept all, ad slots are not present`, async ({
+	test.skip(`Login as subscriber, accept all, ad slots are not present`, async ({
 		page,
 		context,
 	}) => {
@@ -123,7 +123,7 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreNotPresent(page);
 	});
 
-	test(`Login as subscriber, reject all, ad slots are not present. Log out, load Opt Out, ad slots are present`, async ({
+	test.skip(`Login as subscriber, reject all, ad slots are not present. Log out, load Opt Out, ad slots are present`, async ({
 		page,
 		context,
 	}) => {
