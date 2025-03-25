@@ -17,11 +17,9 @@ type SignedIn = {
 
 type AuthStatus = SignedOut | SignedIn;
 
-const identityAuth = getIdentityAuth();
-
 const getAuthStatus = async (): Promise<AuthStatus> => {
 	const { isAuthenticated, accessToken, idToken } =
-		await identityAuth.isSignedInWithAuthState();
+		await getIdentityAuth().isSignedInWithAuthState();
 	if (isAuthenticated) {
 		return {
 			kind: 'SignedIn',
