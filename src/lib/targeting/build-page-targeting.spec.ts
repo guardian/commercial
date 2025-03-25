@@ -184,7 +184,7 @@ describe('Build Page Targeting', () => {
 		getLocale.mockReturnValue('US');
 
 		getAuthStatus.mockReturnValue(
-			Promise.resolve({ kind: 'SignedInWithOkta' } as AuthStatus),
+			Promise.resolve({ kind: 'SignedIn' } as AuthStatus),
 		);
 
 		jest.spyOn(global.Math, 'random').mockReturnValue(0.5);

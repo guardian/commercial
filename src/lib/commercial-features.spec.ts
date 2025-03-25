@@ -2,16 +2,11 @@ import { setCookie, storage } from '@guardian/libs';
 import type { CommercialFeaturesConstructor } from './commercial-features';
 import { commercialFeatures } from './commercial-features';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from './detect/detect-breakpoint';
-import { isUserLoggedInOktaRefactor as isUserLoggedInOktaRefactor_ } from './identity/api';
+import { isUserLoggedIn } from './identity/api';
 
 const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
 	typeof getCurrentBreakpoint_
 >;
-
-const isUserLoggedInOktaRefactor =
-	isUserLoggedInOktaRefactor_ as jest.MockedFunction<
-		typeof isUserLoggedInOktaRefactor_
-	>;
 
 const CommercialFeatures =
 	commercialFeatures.constructor as CommercialFeaturesConstructor;
@@ -20,9 +15,7 @@ jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 }));
 
-jest.mock('lib/identity/api', () => ({
-	isUserLoggedInOktaRefactor: jest.fn(),
-}));
+jest.mock('lib/identity/api');
 
 const originalUserAgent = navigator.userAgent;
 
@@ -73,7 +66,7 @@ describe('Commercial features', () => {
 		setCookie({ name: 'GU_AF1', value: '' });
 
 		getCurrentBreakpoint.mockReturnValue('desktop');
-		isUserLoggedInOktaRefactor.mockResolvedValue(true);
+		jest.mocked(isUserLoggedIn).mockResolvedValue(true);
 
 		expect.hasAssertions();
 	});
@@ -317,7 +310,7 @@ describe('Commercial features', () => {
 	describe('Comment adverts', () => {
 		beforeEach(() => {
 			window.guardian.config.page.commentable = true;
-			isUserLoggedInOktaRefactor.mockResolvedValue(true);
+			jest.mocked(isUserLoggedIn).mockResolvedValue(true);
 		});
 
 		it('Displays when page has comments', () => {
@@ -326,7 +319,7 @@ describe('Commercial features', () => {
 		});
 
 		it('Will also display when the user is not logged in', () => {
-			isUserLoggedInOktaRefactor.mockResolvedValue(false);
+			jest.mocked(isUserLoggedIn).mockResolvedValue(false);
 			const features = new CommercialFeatures();
 			expect(features.commentAdverts).toBe(true);
 		});
@@ -380,7 +373,7 @@ describe('Commercial features', () => {
 		});
 
 		it('Does not appear when user signed out', () => {
-			isUserLoggedInOktaRefactor.mockResolvedValue(false);
+			jest.mocked(isUserLoggedIn).mockResolvedValue(false);
 			const features = new CommercialFeatures();
 			expect(features.commentAdverts).toBe(false);
 		});

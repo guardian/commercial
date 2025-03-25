@@ -3,8 +3,8 @@ import { expect, test } from '@playwright/test';
 import { articles } from '../fixtures/pages';
 import type { GuPage } from '../fixtures/pages/Page';
 import { cmpAcceptAll, cmpReconsent, cmpRejectAll } from '../lib/cmp';
-import { loadPage, visitArticleNoOkta } from '../lib/load-page';
-import { fakeLogOut, setupFakeLogin, waitForSlot } from '../lib/util';
+import { loadPage } from '../lib/load-page';
+import { waitForSlot } from '../lib/util';
 
 const { path } = articles[0] as unknown as GuPage;
 
@@ -58,11 +58,11 @@ test.describe('tcfv2 consent', () => {
 
 	test.skip(`Login as subscriber, reject all, load Opt Out, ad slots are not present on multiple page loads`, async ({
 		page,
-		context,
+		// context,
 	}) => {
-		await setupFakeLogin(page, context, true);
+		// await setupFakeLogin(page, context, true);
 
-		await visitArticleNoOkta(page);
+		// await visitArticleNoOkta(page);
 
 		const optOutPromise = waitForOptOut(page);
 
@@ -70,15 +70,15 @@ test.describe('tcfv2 consent', () => {
 
 		await optOutPromise;
 
-		await visitArticleNoOkta(page);
+		// await visitArticleNoOkta(page);
 
 		await adSlotsAreNotPresent(page);
 
-		await visitArticleNoOkta(page);
+		// await visitArticleNoOkta(page);
 
 		await adSlotsAreNotPresent(page);
 
-		await visitArticleNoOkta(page);
+		// await visitArticleNoOkta(page);
 
 		await adSlotsAreNotPresent(page);
 	});
@@ -105,11 +105,11 @@ test.describe('tcfv2 consent', () => {
 
 	test.skip(`Login as subscriber, accept all, ad slots are not present`, async ({
 		page,
-		context,
+		// context,
 	}) => {
-		await setupFakeLogin(page, context, true);
+		// await setupFakeLogin(page, context, true);
 
-		await visitArticleNoOkta(page);
+		// await visitArticleNoOkta(page);
 
 		await cmpAcceptAll(page);
 
@@ -118,28 +118,28 @@ test.describe('tcfv2 consent', () => {
 		// So when we accept all, ads will load despite being ad free as
 		// the ad free cookie has not yet been set.
 
-		await visitArticleNoOkta(page);
+		// await visitArticleNoOkta(page);
 
 		await adSlotsAreNotPresent(page);
 	});
 
 	test.skip(`Login as subscriber, reject all, ad slots are not present. Log out, load Opt Out, ad slots are present`, async ({
 		page,
-		context,
+		// context,
 	}) => {
-		await setupFakeLogin(page, context, true);
+		// await setupFakeLogin(page, context, true);
 
-		await visitArticleNoOkta(page);
+		// await visitArticleNoOkta(page);
 
 		await cmpRejectAll(page);
 
-		await visitArticleNoOkta(page);
+		// await visitArticleNoOkta(page);
 
 		await adSlotsAreNotPresent(page);
 
-		await fakeLogOut(context);
+		// await fakeLogOut(context);
 
-		await visitArticleNoOkta(page);
+		// await visitArticleNoOkta(page);
 
 		await adSlotsArePresent(page);
 	});
