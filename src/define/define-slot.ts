@@ -150,14 +150,18 @@ const defineSlot = (
 
 	const googletagSizeMapping = buildGoogletagSizeMapping(sizeMapping);
 	if (!googletagSizeMapping) {
-		const errorMessage = canDefineSlot()
-			? 'googletag.sizeMapping did not return a size mapping'
-			: 'Could not define slot. googletag.sizeMapping has been shimmed.';
-		throw new DefineSlotError(
-			errorMessage,
-			sizeMapping,
-			canDefineSlot() ? false : true,
-		);
+		if (canDefineSlot()) {
+			throw new DefineSlotError(
+				'googletag.sizeMapping did not return a size mapping',
+				sizeMapping,
+			);
+		} else {
+			throw new DefineSlotError(
+				'Could not define slot. googletag.sizeMapping has been shimmed.',
+				sizeMapping,
+				false,
+			);
+		}
 	}
 
 	const sizes = collectSizes(googletagSizeMapping);
