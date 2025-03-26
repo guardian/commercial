@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"declaration": true,
-		"noEmit": false,
+		"noEmit": false
 	},
 	"extends": "../tsconfig.json",
 	"include": ["export.ts", "../src/types"],
