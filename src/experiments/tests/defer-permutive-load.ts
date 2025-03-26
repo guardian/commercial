@@ -4,7 +4,7 @@ export const deferPermutiveLoad: ABTest = {
 	id: 'DeferPermutiveLoad',
 	author: '@commercial-dev',
 	start: '2025-03-10',
-	expiry: '2025-03-31',
+	expiry: '2025-04-18',
 	audience: 20 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',
