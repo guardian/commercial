@@ -1,6 +1,6 @@
 import type { ConsentState } from '@guardian/libs';
 import { buildPageTargeting as buildPageTargeting_ } from '../lib/targeting/build-page-targeting';
-import { isUserLoggedInOktaRefactor } from './identity/api';
+import { isUserLoggedIn } from './identity/api';
 import { getPageTargeting } from './page-targeting';
 
 const buildPageTargeting = buildPageTargeting_ as jest.MockedFunction<
@@ -70,7 +70,7 @@ describe('Build Page Targeting', () => {
 			});
 
 			mockViewport(1024, 0);
-			const isSignedIn = await isUserLoggedInOktaRefactor();
+			const isSignedIn = await isUserLoggedIn();
 			getPageTargeting(emptyConsent, isSignedIn);
 			expect(window.guardian.config.page.appNexusPageTargeting).toEqual(
 				'sens=f,pt1=/football/series/footballweekly,pt2=us,pt3=video,pt4=ng,pt5=prince-charles-letters,pt5=uk/uk,pt5=prince-charles,pt6=5,pt7=desktop,pt9=presetOphanPageViewId|gabrielle-chan|news',

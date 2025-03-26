@@ -38,7 +38,6 @@ jest.mock('@guardian/libs', () => ({
 jest.mock('lib/identity/api', () => ({
 	isUserLoggedInOktaRefactor: () => true,
 	getAuthStatus: jest.fn(),
-	getOptionsHeadersWithOkta: jest.fn(),
 }));
 
 const getAuthStatus = getAuthStatus_ as jest.MockedFunction<
@@ -184,7 +183,7 @@ describe('Build Page Targeting', () => {
 		getLocale.mockReturnValue('US');
 
 		getAuthStatus.mockReturnValue(
-			Promise.resolve({ kind: 'SignedInWithOkta' } as AuthStatus),
+			Promise.resolve({ kind: 'SignedIn' } as AuthStatus),
 		);
 
 		jest.spyOn(global.Math, 'random').mockReturnValue(0.5);

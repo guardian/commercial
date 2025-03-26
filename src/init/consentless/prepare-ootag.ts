@@ -1,7 +1,7 @@
 import type { ConsentState } from '@guardian/libs';
 import { loadScript, log } from '@guardian/libs';
 import { commercialFeatures } from '../../lib/commercial-features';
-import { isUserLoggedInOktaRefactor } from '../../lib/identity/api';
+import { isUserLoggedIn } from '../../lib/identity/api';
 import { buildPageTargetingConsentless } from '../../lib/targeting/build-page-targeting-consentless';
 
 function initConsentless(consentState: ConsentState): Promise<void> {
@@ -26,7 +26,7 @@ function initConsentless(consentState: ConsentState): Promise<void> {
 				noRequestsOnPageLoad: 1,
 			});
 
-			void isUserLoggedInOktaRefactor().then((isSignedIn) => {
+			void isUserLoggedIn().then((isSignedIn) => {
 				Object.entries(
 					buildPageTargetingConsentless(
 						consentState,

@@ -1,5 +1,5 @@
 import { type Page } from '@playwright/test';
-import { getStage, getTestUrl, logUnfilledSlots } from './util';
+import { logUnfilledSlots } from './util';
 
 const loadPage = async (page: Page, path: string, region = 'GB') => {
 	await page.addInitScript((region) => {
@@ -23,31 +23,7 @@ const loadPage = async (page: Page, path: string, region = 'GB') => {
 	// Uncomment to log commercial logs
 	// logCommercial(page);
 
-	// console.log('Loading page', path);
 	await page.goto(path, { waitUntil: 'domcontentloaded' });
 };
 
-const visitArticleNoOkta = async (
-	page: Page,
-	path = '/politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',
-	region = 'IE',
-) => {
-	const fixture = {
-		config: {
-			switches: {
-				okta: false,
-				idCookieRefresh: false,
-			},
-		},
-	};
-	const url = getTestUrl({
-		stage: getStage(),
-		path,
-		type: 'article',
-		adtest: undefined,
-		fixture,
-	});
-	await loadPage(page, url, region);
-};
-
-export { loadPage, visitArticleNoOkta };
+export { loadPage };

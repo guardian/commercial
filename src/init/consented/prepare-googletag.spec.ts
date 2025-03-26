@@ -41,7 +41,7 @@ jest.mock('lib/header-bidding/prebid/prebid', () => ({
 }));
 
 jest.mock('lib/identity/api', () => ({
-	isUserLoggedInOktaRefactor: () => true,
+	isUserLoggedIn: () => true,
 	getUserFromCookie: jest.fn(),
 	getGoogleTagId: jest.fn().mockResolvedValue('test-id-string'),
 	getUrl: jest.fn(),

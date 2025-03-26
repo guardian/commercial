@@ -1,5 +1,4 @@
 import type { BrowserContext, Cookie, Page } from '@playwright/test';
-import type { UserFeaturesResponse } from '../../src/types/membership';
 
 type Stage = 'code' | 'prod' | 'dev';
 
@@ -107,50 +106,6 @@ const getTestUrl = ({
 	return url.toString();
 };
 
-const setupFakeLogin = async (
-	page: Page,
-	context: BrowserContext,
-	subscriber = true,
-) => {
-	const bodyOverride: UserFeaturesResponse = {
-		userId: '107421393',
-		digitalSubscriptionExpiryDate: '2999-01-01',
-		showSupportMessaging: false,
-		contentAccess: {
-			member: false,
-			paidMember: false,
-			recurringContributor: false,
-			digitalPack: true,
-			paperSubscriber: false,
-			guardianWeeklySubscriber: false,
-		},
-	};
-
-	if (!subscriber) {
-		bodyOverride.contentAccess.digitalPack = false;
-		delete bodyOverride.digitalSubscriptionExpiryDate;
-	}
-
-	await context.addCookies([
-		{
-			name: 'GU_U',
-			value: 'WyIzMjc5Nzk0IiwiIiwiSmFrZTkiLCIiLDE2NjA4MzM3NTEyMjcsMCwxMjEyNjgzMTQ3MDAwLHRydWVd.MC0CFQCIbpFtd0J5IqK946U1vagzLgCBkwIUUN3UOkNfNN8jwNE3scKfrcvoRSg',
-			domain: 'localhost',
-			path: '/',
-		},
-	]);
-
-	await page.route(
-		'https://members-data-api.theguardian.com/user-attributes/me**',
-		(route) => {
-			return route.fulfill({
-				body: JSON.stringify(bodyOverride),
-			});
-		},
-		{ times: 1 },
-	);
-};
-
 // Playwright does not currently have a useful method for removing a cookie, so this workaround is needed.
 const clearCookie = async (context: BrowserContext, cookieName: string) => {
 	const cookies = await context.cookies();
@@ -160,9 +115,6 @@ const clearCookie = async (context: BrowserContext, cookieName: string) => {
 	await context.clearCookies();
 	await context.addCookies(filteredCookies);
 };
-
-const fakeLogOut = async (context: BrowserContext) =>
-	await clearCookie(context, 'GU_U');
 
 const waitForSlot = async (page: Page, slot: string, waitForIframe = true) => {
 	const slotId = `#dfp-ad--${slot}`;
@@ -241,10 +193,9 @@ const logCommercial = (page: Page) => {
 
 export {
 	countLiveblogInlineSlots,
-	fakeLogOut,
+	clearCookie,
 	getStage,
 	getTestUrl,
-	setupFakeLogin,
 	waitForIsland,
 	waitForSlot,
 	logUnfilledSlots,

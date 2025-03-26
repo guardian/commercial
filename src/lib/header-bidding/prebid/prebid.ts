@@ -11,7 +11,7 @@ import { getPermutiveSegments } from '../../../lib/permutive';
 import type { PageTargeting } from '../../../lib/targeting/build-page-targeting';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
-import { isUserLoggedInOktaRefactor } from '../../identity/api';
+import { isUserLoggedIn } from '../../identity/api';
 import { getPageTargeting } from '../../page-targeting';
 import type {
 	BidderCode,
@@ -632,7 +632,7 @@ const requestBids = async (
 	const adUnits = await onConsent()
 		.then(async (consentState) => {
 			// calculate this once before mapping over
-			const isSignedIn = await isUserLoggedInOktaRefactor();
+			const isSignedIn = await isUserLoggedIn();
 			const pageTargeting = getPageTargeting(consentState, isSignedIn);
 			return flatten(
 				adverts.map((advert) =>
