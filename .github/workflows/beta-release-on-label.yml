@@ -42,7 +42,7 @@ jobs:
         uses: ./.github/actions/setup-node-env
 
       - name: Build package
-        run: pnpm build
+        run: pnpm compile
 
       - name: Version
         run: pnpm changeset version --snapshot beta
