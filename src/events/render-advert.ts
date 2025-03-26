@@ -2,6 +2,7 @@ import type { Advert } from '../define/Advert';
 import { adSizes } from '../lib/ad-sizes';
 import { reportError } from '../lib/error/report-error';
 import fastdom from '../lib/fastdom-promise';
+import { logGumGumWinningBid } from '../lib/gumgum-winning-bid';
 import { renderAdvertLabel } from './render-advert-label';
 
 /**
@@ -200,6 +201,26 @@ const renderAdvert = (
 	advert: Advert,
 	slotRenderEndedEvent: googletag.events.SlotRenderEndedEvent,
 ): Promise<boolean> => {
+	const isA9GumGum =
+		(window.guardian.a9WinningBids?.[0]?.['amznp'] ?? '') === '1lsxjb4';
+
+	if (
+		slotRenderEndedEvent.advertiserId != null &&
+		slotRenderEndedEvent.advertiserId === 4751525411 &&
+		isA9GumGum
+	) {
+		const adSlotId = advert.node.id;
+		logGumGumWinningBid(
+			adSlotId,
+			slotRenderEndedEvent.advertiserId.toString(),
+		);
+	}
+
+	window.addEventListener('beforeunload', () => {
+		console.log(`User is clearing data in the browser`);
+		window.guardian.a9WinningBids = [];
+	});
+
 	addContentClass(advert.node);
 	return hasIframe(advert.node)
 		.then((isRendered) => {
