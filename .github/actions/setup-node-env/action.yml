@@ -4,10 +4,12 @@ description: 'Sets up Node.js environment and installs dependencies'
 runs:
   using: 'composite'
   steps:
-    - run: corepack enable
+    # Temporarily force newer version of corepack
+    # See https://github.com/guardian/support-service-lambdas/pull/2666
+    - run: npm install --global corepack@0.31.0
       shell: bash
 
-    - run: corepack prepare pnpm@9.15.2 --activate
+    - run: corepack enable
       shell: bash
 
     - uses: actions/setup-node@v4.2.0

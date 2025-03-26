@@ -10,33 +10,12 @@ on:
 permissions: write-all
 
 jobs:
-  test:
-    name: Test
+  test_and_build:
+    name: Test and Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
-
-      # Temporarily force newer version of corepack
-      # See https://github.com/guardian/support-service-lambdas/pull/2666
-      - run: npm install --global corepack@0.31.0
-
-      - name: Set up Node
-        uses: ./.github/actions/setup-node-env
-
-      - name: Run unit tests
-        run: pnpm test -- --ci
-
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4.2.2
-
-      # Temporarily force newer version of corepack
-      # See https://github.com/guardian/support-service-lambdas/pull/2666
-      - run: npm install --global corepack@0.31.0
 
       - name: Set up Node
         uses: ./.github/actions/setup-node-env
@@ -47,36 +26,11 @@ jobs:
       - name: Check formatting
         run: pnpm prettier:check
 
-  types:
-    name: Type check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4.2.2
-
-      # Temporarily force newer version of corepack
-      # See https://github.com/guardian/support-service-lambdas/pull/2666
-      - run: npm install --global corepack@0.31.0
-
-      - name: Set up Node
-        uses: ./.github/actions/setup-node-env
-
       - name: Check types
         run: pnpm tsc
 
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4.2.2
-
-      # Temporarily force newer version of corepack
-      # See https://github.com/guardian/support-service-lambdas/pull/2666
-      - run: npm install --global corepack@0.31.0
-
-      - name: Set up Node
-        uses: ./.github/actions/setup-node-env
+      - name: Run unit tests
+        run: pnpm test -- --ci
 
       - name: Build package
         run: pnpm build
@@ -89,19 +43,12 @@ jobs:
 
   release:
     name: Release
-    needs: [build, test, lint, types]
+    needs: [test_and_build]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v4.2.2
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-
-      # Temporarily force newer version of corepack
-      # See https://github.com/guardian/support-service-lambdas/pull/2666
-      - run: npm install --global corepack@0.31.0
 
       - name: Set up Node
         uses: ./.github/actions/setup-node-env
@@ -138,7 +85,7 @@ jobs:
 
   riff-raff:
     name: Upload Riff Raff Artifacts
-    needs: [build, test, lint, types]
+    needs: [test_and_build]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -146,15 +93,8 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v4.2.2
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-
-      # Temporarily force newer version of corepack
-      # See https://github.com/guardian/support-service-lambdas/pull/2666
-      - run: npm install --global corepack@0.31.0
 
       - name: Set up Node
         uses: ./.github/actions/setup-node-env
