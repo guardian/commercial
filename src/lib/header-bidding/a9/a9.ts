@@ -74,7 +74,9 @@ const requestBids = async (
 		.then(
 			() =>
 				new Promise<void>((resolve) => {
-					window.apstag?.fetchBids({ slots: adUnits }, () => {
+					window.apstag?.fetchBids({ slots: adUnits }, (res) => {
+						console.log('Bids Response:', res);
+						window.guardian.a9WinningBids = res;
 						window.googletag.cmd.push(() => {
 							window.apstag?.setDisplayBids();
 							resolve();
