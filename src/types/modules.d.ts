@@ -104,19 +104,6 @@ declare module 'prebid.js/src/utils.js' {
 }
 
 declare module 'prebid.js/src/ajax.js' {
-	interface AjaxOptions {
-		method?: string;
-		contentType?: string;
-		keepalive?: boolean;
-		[key: string]: unknown;
-	}
-
-	function ajax(
-		url: string,
-		callback: (data: string) => void,
-		data: string,
-		options?: AjaxOptions,
-	): void;
-
-	export { ajax };
+	const prebidFetch: typeof fetch;
+	export { prebidFetch as fetch };
 }
