@@ -4,7 +4,7 @@ import adapter from 'prebid.js/libraries/analyticsAdapter/AnalyticsAdapter.js';
 import adapterManager from 'prebid.js/src/adapterManager.js';
 import { fetch } from 'prebid.js/src/ajax.js';
 import { EVENTS } from 'prebid.js/src/constants.js';
-import { utils } from 'prebid.js/src/utils.js';
+import { reportError } from '../../../../lib/error/report-error';
 import type {
 	AnalyticsConfig,
 	BidArgs,
@@ -188,31 +188,25 @@ const analyticsAdapter = Object.assign(adapter({ analyticsType: 'endpoint' }), {
 					'Content-Type': 'application/json',
 				},
 			})
-				.then(async (response) => {
+				.then((response) => {
 					if (!response.ok) {
 						throw new Error(
-							`Failed to send analytics payload: ${response.status}`,
+							`Failed to send analytics payload: ${
+								response.statusText
+							} (${response.status})`,
 						);
 					}
-					try {
-						const data = (await response.json()) as unknown;
-						if (
-							data &&
-							typeof data === 'object' &&
-							'hb_ev' in data &&
-							Array.isArray(data.hb_ev)
-						) {
-							logEvents(data.hb_ev);
-						}
-					} catch (e) {
-						log(
-							'commercial',
-							'Failed to parse analytics payload',
-							e,
-						);
-					}
+					logEvents(events);
 				})
 				.catch((e) => {
+					reportError(
+						e,
+						'commercial',
+						{},
+						{
+							request: req,
+						},
+					);
 					log('commercial', 'Failed to send analytics payload', e);
 				});
 		}
@@ -242,11 +236,11 @@ const originEnableAnalytics = analyticsAdapter.enableAnalytics;
 
 analyticsAdapter.enableAnalytics = (config: AnalyticsConfig): void => {
 	if (!config.options.ajaxUrl) {
-		utils.logError("ajaxUrl is not defined. Analytics won't work");
+		log('commercial', "ajaxUrl is not defined. Analytics won't work");
 		return;
 	}
 	if (!config.options.pv) {
-		utils.logError("pv is not defined. Analytics won't work");
+		log('commercial', "pv is not defined. Analytics won't work");
 		return;
 	}
 	analyticsAdapter.context = {
