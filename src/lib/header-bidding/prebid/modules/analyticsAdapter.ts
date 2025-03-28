@@ -78,16 +78,17 @@ function logEvents(events: EventData[]): void {
 	log('commercial', `Prebid.js events: ${logMsg}`, events);
 }
 
-// Protect against setting undefined or null values
-function setSafely<T extends Record<string, unknown>, K extends string>(
-	obj: T,
-	key: K,
-	value: unknown,
-): void {
-	if (value === undefined || value === null) {
-		return;
+// Remove any properties that are undefined or null
+function createEvent(event: EventData): EventData {
+	const cleanedEvent: EventData = {
+		ev: event.ev,
+	};
+	for (const key in event) {
+		if (event[key] !== undefined && event[key] !== null) {
+			cleanedEvent[key] = event[key];
+		}
 	}
-	obj = { ...obj, [key]: value };
+	return cleanedEvent;
 }
 
 const handlers: Record<string, Handler> = {
@@ -98,19 +99,25 @@ const handlers: Record<string, Handler> = {
 		if (adapter.context) {
 			adapter.context.auctionTimeStart = Date.now();
 		}
-		const event: EventData = { ev: 'init' };
-		setSafely(event, 'aid', args.auctionId);
-		setSafely(event, 'st', adapter.context?.auctionTimeStart);
+		const event: EventData = {
+			ev: 'init',
+			aid: args.auctionId,
+			st: adapter.context?.auctionTimeStart,
+		};
+
 		return [event];
 	},
 	[EVENTS.BID_REQUESTED]: (_, args) => {
 		if (args.bids) {
 			return args.bids.map((bid) => {
-				const event: EventData = { ev: 'request' };
-				setSafely(event, 'n', args.bidderCode);
-				setSafely(event, 'sid', bid.adUnitCode);
-				setSafely(event, 'bid', bid.bidId);
-				setSafely(event, 'st', args.start);
+				const event: EventData = createEvent({
+					ev: 'request',
+					n: args.bidderCode,
+					sid: bid.adUnitCode,
+					bid: bid.bidId,
+					st: args.start,
+				});
+
 				return event;
 			});
 		}
@@ -118,27 +125,26 @@ const handlers: Record<string, Handler> = {
 	},
 	[EVENTS.BID_RESPONSE]: (_, args) => {
 		if (args.statusMessage === 'Bid available') {
-			const event: EventData = { ev: 'response' };
-			setSafely(event, 'n', getBidderCode(args));
-			setSafely(event, 'bid', args.requestId);
-			setSafely(event, 'sid', args.adUnitCode);
-			setSafely(event, 'cpm', args.cpm);
-			setSafely(event, 'pb', args.pbCg);
-			setSafely(event, 'cry', args.currency);
-			setSafely(event, 'net', args.netRevenue);
-			setSafely(event, 'did', args.adId);
-			setSafely(event, 'cid', args.creativeId);
-			setSafely(event, 'sz', args.size);
-			setSafely(event, 'ttr', args.timeToRespond);
-			setSafely(event, 'lid', args.dealId);
-
-			if (args.meta) {
-				setSafely(event, 'dsp', args.meta.networkId);
-				setSafely(event, 'adv', args.meta.buyerId);
-				setSafely(event, 'bri', args.meta.brandId);
-				setSafely(event, 'brn', args.meta.brandName);
-				setSafely(event, 'add', args.meta.clickUrl);
-			}
+			const event: EventData = createEvent({
+				ev: 'response',
+				n: getBidderCode(args),
+				bid: args.requestId,
+				sid: args.adUnitCode,
+				cpm: args.cpm,
+				pb: args.pbCg,
+				cry: args.currency,
+				net: args.netRevenue,
+				did: args.adId,
+				cid: args.creativeId,
+				sz: args.size,
+				ttr: args.timeToRespond,
+				lid: args.dealId,
+				dsp: args.meta?.networkId,
+				adv: args.meta?.buyerId,
+				bri: args.meta?.brandId,
+				brn: args.meta?.brandName,
+				add: args.meta?.clickUrl,
+			});
 
 			return [event];
 		}
@@ -146,25 +152,33 @@ const handlers: Record<string, Handler> = {
 	},
 	[EVENTS.NO_BID]: (adapter, args) => {
 		const duration = Date.now() - (adapter.context?.auctionTimeStart ?? 0);
-		const event: EventData = { ev: 'nobid' };
-		setSafely(event, 'n', args.bidder ?? args.bidderCode);
-		setSafely(event, 'bid', args.bidId ?? args.requestId);
-		setSafely(event, 'sid', args.adUnitCode);
-		setSafely(event, 'aid', args.auctionId);
-		setSafely(event, 'ttr', duration);
+		const event: EventData = createEvent({
+			ev: 'nobid',
+			n: args.bidder ?? args.bidderCode,
+			bid: args.bidId ?? args.requestId,
+			sid: args.adUnitCode,
+			aid: args.auctionId,
+			ttr: duration,
+		});
+
 		return [event];
 	},
 	[EVENTS.AUCTION_END]: (adapter, args) => {
 		const duration = Date.now() - (adapter.context?.auctionTimeStart ?? 0);
-		const event: EventData = { ev: 'end' };
-		setSafely(event, 'aid', args.auctionId);
-		setSafely(event, 'ttr', duration);
+		const event: EventData = createEvent({
+			ev: 'end',
+			aid: args.auctionId,
+			ttr: duration,
+		});
+
 		return [event];
 	},
 	[EVENTS.BID_WON]: (_, args: BidArgs) => {
-		const event: EventData = { ev: 'bidwon' };
-		setSafely(event, 'aid', args.auctionId);
-		setSafely(event, 'bid', args.requestId);
+		const event: EventData = createEvent({
+			ev: 'bidwon',
+			aid: args.auctionId,
+			bid: args.requestId,
+		});
 		return [event];
 	},
 };
@@ -237,7 +251,7 @@ const analyticsAdapter = Object.assign(adapter({ analyticsType: 'endpoint' }), {
 	},
 });
 
-const originEnableAnalytics = analyticsAdapter.enableAnalytics;
+analyticsAdapter.originEnableAnalytics = analyticsAdapter.enableAnalytics;
 
 analyticsAdapter.enableAnalytics = (config: AnalyticsConfig): void => {
 	if (!config.options.ajaxUrl) {
@@ -253,7 +267,9 @@ analyticsAdapter.enableAnalytics = (config: AnalyticsConfig): void => {
 		pv: config.options.pv,
 	};
 
-	originEnableAnalytics(config);
+	if (analyticsAdapter.originEnableAnalytics) {
+		analyticsAdapter.originEnableAnalytics(config);
+	}
 };
 
 adapterManager.registerAnalyticsAdapter({
