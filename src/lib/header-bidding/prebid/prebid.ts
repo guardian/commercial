@@ -1,6 +1,7 @@
 import type { ConsentState } from '@guardian/libs';
 import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
+import type { PrebidPriceGranularity } from 'prebid.js/src/cpmBucketManager';
 import type { Advert } from '../../../define/Advert';
 import { getParticipations } from '../../../experiments/ab';
 import type { AdSize } from '../../../lib/ad-sizes';
@@ -30,7 +31,6 @@ import {
 	stripDfpAdPrefixFrom,
 } from '../utils';
 import { bids } from './bid-config';
-import type { PrebidPriceGranularity } from './price-config';
 import { overridePriceBucket, priceGranularity } from './price-config';
 
 type CmpApi = 'iab' | 'static';
