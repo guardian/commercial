@@ -4,7 +4,6 @@ import adapter from 'prebid.js/libraries/analyticsAdapter/AnalyticsAdapter.js';
 import adapterManager from 'prebid.js/src/adapterManager.js';
 import { ajax } from 'prebid.js/src/ajax.js';
 import { EVENTS } from 'prebid.js/src/constants.js';
-import { utils } from 'prebid.js/src/utils.js';
 import type {
 	AnalyticsAdapter,
 	AnalyticsConfig,
@@ -265,11 +264,11 @@ analyticsAdapter.originEnableAnalytics = analyticsAdapter.enableAnalytics;
 
 analyticsAdapter.enableAnalytics = (config: AnalyticsConfig): void => {
 	if (!config.options.ajaxUrl) {
-		utils.logError("ajaxUrl is not defined. Analytics won't work");
+		log('commercial', "ajaxUrl is not defined. Analytics won't work");
 		return;
 	}
 	if (!config.options.pv) {
-		utils.logError("pv is not defined. Analytics won't work");
+		log('commercial', "pv is not defined. Analytics won't work");
 		return;
 	}
 	analyticsAdapter.context = {
