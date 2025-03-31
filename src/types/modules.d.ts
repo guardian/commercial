@@ -33,6 +33,26 @@ declare module 'prebid.js/adapters/bidderFactory' {
 	export { registerBidder };
 }
 
+declare module 'prebid.js/src/cpmBucketManager' {
+	type PrebidPriceGranularity = {
+		buckets: Array<{
+			precision?: number;
+			max: number;
+			increment: number;
+		}>;
+	};
+
+	const getPriceBucketString: (
+		cpm: number,
+		priceBuckets: PrebidPriceGranularity,
+	) => {
+		custom: string;
+	};
+
+	export { getPriceBucketString };
+	export type { PrebidPriceGranularity };
+}
+
 // Added type definitions for prebid.js analytics modules
 declare module 'prebid.js/libraries/analyticsAdapter/AnalyticsAdapter.js' {
 	// eslint-disable-next-line no-restricted-imports -- can't use relative imports in ambient declarations
