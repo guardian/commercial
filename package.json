@@ -1,6 +1,6 @@
 {
-	"name": "@guardian/commercial",
-	"version": "26.0.0",
+	"name": "@guardian/commercial-monorepo",
+	"version": "1.0.0",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial#readme",
 	"bugs": {
@@ -14,15 +14,16 @@
 	"files": [
 		"dist"
 	],
-	"main": "dist/core/cjs/export.js",
-	"module": "dist/core/esm/export.js",
+	"main": "commercial-core/dist/cjs/commercial-core/export.js",
+	"module": "commercial-core/dist/esm/commercial-core/export.js",
 	"scripts": {
 		"build": "npm-run-all clean --parallel compile:core:* build:prod build:dev",
 		"build:dev": "webpack -c webpack.config.dev.mjs",
 		"build:prod": "webpack -c webpack.config.prod.mjs",
-		"clean": "rm -rf dist",
-		"compile:core:common": "tsc --project ./tsconfig.core.json --outDir ./dist/core/cjs --module CommonJS",
-		"compile:core:esm": "tsc --project ./tsconfig.core.json --outDir ./dist/core/esm",
+		"clean": "rm -rf dist commercial-core/dist",
+		"compile:core:common": "cd commercial-core && tsc --outDir dist/cjs --module CommonJS",
+		"compile:core:esm": "cd commercial-core && tsc --outDir dist/esm",
+		"compile": "npm-run-all clean --parallel compile:core:*",
 		"playwright:run": "playwright test",
 		"playwright:open": "playwright test --ui",
 		"lint": "eslint .",
@@ -118,9 +119,6 @@
 		"src/**/*.(js|ts)": [
 			"pnpm prettier:fix"
 		]
-	},
-	"publishConfig": {
-		"access": "public"
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"
