@@ -42,7 +42,7 @@ describe('analyticsAdapter', () => {
 		jest.clearAllMocks();
 		// Reset adapter context
 		analyticsAdapter.context = {
-			ajaxUrl: 'http://test-url.com',
+			url: 'http://test-url.com',
 			pv: 'test-pv',
 			auctionTimeStart: Date.now(),
 		};
@@ -303,10 +303,15 @@ describe('analyticsAdapter', () => {
 			expect(errorReporting.reportError).toHaveBeenCalledWith(
 				expect.any(Error),
 				'commercial',
+				{},
+				{
+					eventType: EVENTS.AUCTION_INIT,
+					args: { auctionId: 'test-auction' },
+				},
 			);
 			expect(guardianLibs.log).toHaveBeenCalledWith(
 				'commercial',
-				"ajaxUrl or pv is not defined. Analytics won't work",
+				'context is not defined, prebid event not be logged',
 			);
 		});
 
@@ -406,41 +411,15 @@ describe('analyticsAdapter', () => {
 			analyticsAdapter.context = undefined;
 			analyticsAdapter.enableAnalytics({
 				options: {
-					ajaxUrl: 'http://test-url.com',
+					url: 'http://test-url.com',
 					pv: 'test-pv',
 				},
 			});
 
 			expect(analyticsAdapter.context).toEqual({
-				ajaxUrl: 'http://test-url.com',
+				url: 'http://test-url.com',
 				pv: 'test-pv',
 			});
-		});
-
-		test('logs error and returns when ajaxUrl is missing', () => {
-			analyticsAdapter.enableAnalytics({
-				options: {
-					pv: 'test-pv',
-				},
-			});
-
-			expect(guardianLibs.log).toHaveBeenCalledWith(
-				'commercial',
-				"ajaxUrl is not defined. Analytics won't work",
-			);
-		});
-
-		test('logs error and returns when pv is missing', () => {
-			analyticsAdapter.enableAnalytics({
-				options: {
-					ajaxUrl: 'http://test-url.com',
-				},
-			});
-
-			expect(guardianLibs.log).toHaveBeenCalledWith(
-				'commercial',
-				"pv is not defined. Analytics won't work",
-			);
 		});
 	});
 });

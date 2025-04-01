@@ -4,6 +4,7 @@ import adapter from 'prebid.js/libraries/analyticsAdapter/AnalyticsAdapter.js';
 import adapterManager from 'prebid.js/src/adapterManager.js';
 import { fetch } from 'prebid.js/src/ajax.js';
 import { EVENTS } from 'prebid.js/src/constants.js';
+import { reportError } from '../../../../lib/error/report-error';
 import type {
 	AnalyticsConfig,
 	BidArgs,
@@ -16,11 +17,6 @@ import type {
  * This is useful when some browsers are using old code and some new, for example.
  */
 const VERSION = 9;
-
-const SENDALL_ON: Record<string, boolean> = {
-	[EVENTS.AUCTION_END]: true,
-	[EVENTS.BID_WON]: true,
-};
 
 let queue: EventData[] = [];
 
@@ -57,13 +53,6 @@ function getBidderCode(args: BidArgs): string {
 	return `ozone-unknown`;
 }
 
-function isPayloadValid(events: EventData[]): boolean {
-	return (
-		(events[0] && (events[0].ev === 'init' || events[0].ev === 'bidwon')) ??
-		false
-	);
-}
-
 function logEvents(events: EventData[]): void {
 	const isBid = events[0]?.ev === 'init';
 	const isBidWon = events[0]?.ev === 'bidwon';
@@ -91,7 +80,8 @@ function createEvent(event: EventData): EventData {
 	return cleanedEvent;
 }
 
-const handlers: Record<string, Handler> = {
+// Handlers for each event type, these create a loggable event from prebid event
+const handlers = {
 	[EVENTS.AUCTION_INIT]: (adapter, args) => {
 		if (adapter.context?.queue) {
 			adapter.context.queue.init();
@@ -181,59 +171,96 @@ const handlers: Record<string, Handler> = {
 		});
 		return [event];
 	},
+} as const satisfies Record<string, Handler>;
+
+type AnalyticsPayload = {
+	v: number;
+	pv: string;
+	hb_ev: EventData[];
+};
+
+// Check if the payload is valid
+function isPayloadValid(events: EventData[]): boolean {
+	return (
+		(events[0] && (events[0].ev === 'init' || events[0].ev === 'bidwon')) ??
+		false
+	);
+}
+
+const createPayload = (events: EventData[], pv: string): AnalyticsPayload => {
+	const payload = {
+		v: VERSION,
+		pv,
+		hb_ev: events,
+	};
+	if (!isPayloadValid(events)) {
+		reportError(
+			new Error('Invalid analytics payload'),
+			'commercial',
+			{},
+			{
+				payload,
+			},
+		);
+	}
+	return payload;
 };
 
 const analyticsAdapter = Object.assign(adapter({ analyticsType: 'endpoint' }), {
-	sendPayload(): void {
+	sendPayload: async (
+		url: string,
+		payload: AnalyticsPayload,
+	): Promise<void> => {
 		const events = [...queue];
 		queue = [];
-		if (isPayloadValid(events) && analyticsAdapter.context?.ajaxUrl) {
-			const req = {
-				v: VERSION,
-				pv: analyticsAdapter.context.pv,
-				hb_ev: events,
-			};
-			fetch(analyticsAdapter.context.ajaxUrl, {
+		try {
+			const response = await fetch(url, {
 				method: 'POST',
-				body: JSON.stringify(req),
+				body: JSON.stringify(payload),
 				keepalive: true,
 				headers: {
 					'Content-Type': 'application/json',
 				},
-			})
-				.then(async (response) => {
-					if (!response.ok) {
-						throw new Error(
-							`Failed to send analytics payload: ${response.status}`,
-						);
-					}
-					try {
-						const data = (await response.json()) as unknown;
-						if (
-							data &&
-							typeof data === 'object' &&
-							'hb_ev' in data &&
-							Array.isArray(data.hb_ev)
-						) {
-							logEvents(data.hb_ev);
-						}
-					} catch (e) {
-						log(
-							'commercial',
-							'Failed to parse analytics payload',
-							e,
-						);
-					}
-				})
-				.catch((e) => {
-					log('commercial', 'Failed to send analytics payload', e);
-				});
+			});
+
+			if (!response.ok) {
+				throw new Error(
+					`Failed to send analytics payload: ${
+						response.statusText
+					} (${response.status})`,
+				);
+			}
+			logEvents(events);
+		} catch (error) {
+			reportError(
+				error,
+				'commercial',
+				{},
+				{
+					events,
+				},
+			);
 		}
 	},
 	track({ eventType, args }: { eventType: string; args: BidArgs }): void {
 		if (!analyticsAdapter.context) {
+			// this should never happen
+			reportError(
+				new Error('context is not defined, prebid event not be logged'),
+				'commercial',
+				{},
+				{
+					eventType,
+					args,
+				},
+			);
+			log(
+				'commercial',
+				'context is not defined, prebid event not be logged',
+			);
 			return;
 		}
+
 		const handler = handlers[eventType];
 		if (handler) {
 			const events = handler(analyticsAdapter, args);
@@ -244,8 +271,14 @@ const analyticsAdapter = Object.assign(adapter({ analyticsType: 'endpoint' }), {
 				}
 				queue.push(...events);
 			}
-			if (SENDALL_ON[eventType]) {
-				analyticsAdapter.sendPayload();
+			console.log(EVENTS);
+
+			if ([EVENTS.AUCTION_END, EVENTS.BID_WON].includes(eventType)) {
+				const { pv, url } = analyticsAdapter.context;
+				const events = [...queue];
+				queue = [];
+				const payload = createPayload(events, pv);
+				void analyticsAdapter.sendPayload(url, payload);
 			}
 		}
 	},
@@ -254,16 +287,8 @@ const analyticsAdapter = Object.assign(adapter({ analyticsType: 'endpoint' }), {
 analyticsAdapter.originEnableAnalytics = analyticsAdapter.enableAnalytics;
 
 analyticsAdapter.enableAnalytics = (config: AnalyticsConfig): void => {
-	if (!config.options.ajaxUrl) {
-		log('commercial', "ajaxUrl is not defined. Analytics won't work");
-		return;
-	}
-	if (!config.options.pv) {
-		log('commercial', "pv is not defined. Analytics won't work");
-		return;
-	}
 	analyticsAdapter.context = {
-		ajaxUrl: config.options.ajaxUrl,
+		url: config.options.url,
 		pv: config.options.pv,
 	};
 
@@ -281,4 +306,7 @@ export default analyticsAdapter;
 
 export const _ = {
 	getBidderCode,
+	createEvent,
+	isPayloadValid,
+	handlers,
 };
