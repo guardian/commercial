@@ -176,6 +176,14 @@ export const overridePriceBucket = (
 		bidder === 'criteo'
 			? criteoPriceGranularity
 			: getPriceGranularityForSize(bidder, width, height);
+
+	if (!priceGranularity) {
+		log(
+			'commercial',
+			`${bidder} price granularity for size (${width}x${height}) not found`,
+		);
+		return defaultPriceBucket;
+	}
 	const priceBucket = getPriceBucketString(cpm, priceGranularity).custom;
 	if (priceBucket !== defaultPriceBucket) {
 		log(

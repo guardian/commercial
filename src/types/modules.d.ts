@@ -34,7 +34,13 @@ declare module 'prebid.js/adapters/bidderFactory' {
 }
 
 declare module 'prebid.js/src/cpmBucketManager' {
-	import type { PrebidPriceGranularity } from '../lib/header-bidding/prebid/price-config';
+	type PrebidPriceGranularity = {
+		buckets: Array<{
+			precision?: number;
+			max: number;
+			increment: number;
+		}>;
+	};
 
 	const getPriceBucketString: (
 		cpm: number,
@@ -44,4 +50,73 @@ declare module 'prebid.js/src/cpmBucketManager' {
 	};
 
 	export { getPriceBucketString };
+	export type { PrebidPriceGranularity };
+}
+
+// Added type definitions for prebid.js analytics modules
+declare module 'prebid.js/libraries/analyticsAdapter/AnalyticsAdapter.js' {
+	// eslint-disable-next-line no-restricted-imports -- can't use relative imports in ambient declarations
+	import type {
+		AnalyticsAdapter,
+		AnalyticsAdapterConfig,
+	} from 'types/prebid';
+
+	function adapter(config: AnalyticsAdapterConfig): AnalyticsAdapter;
+	export default adapter;
+}
+
+declare module 'prebid.js/src/adapterManager.js' {
+	interface AnalyticsAdapterRegistration {
+		adapter: unknown;
+		code: string;
+	}
+
+	const adapterManager: {
+		registerAnalyticsAdapter: (
+			registration: AnalyticsAdapterRegistration,
+		) => void;
+	};
+
+	export default adapterManager;
+}
+
+declare module 'prebid.js/src/constants.js' {
+	const EVENTS: {
+		AUCTION_INIT: string;
+		BID_REQUESTED: string;
+		BID_RESPONSE: string;
+		NO_BID: string;
+		AUCTION_END: string;
+		BID_WON: string;
+		[key: string]: string;
+	};
+
+	export { EVENTS };
+}
+
+declare module 'prebid.js/src/utils.js' {
+	const utils: {
+		logError: (message: string) => void;
+		[key: string]: unknown;
+	};
+
+	export { utils };
+}
+
+declare module 'prebid.js/src/ajax.js' {
+	interface AjaxOptions {
+		method?: string;
+		contentType?: string;
+		keepalive?: boolean;
+		[key: string]: unknown;
+	}
+
+	function ajax(
+		url: string,
+		callback: (data: string) => void,
+		data: string,
+		options?: AjaxOptions,
+	): void;
+
+	export { ajax };
 }
