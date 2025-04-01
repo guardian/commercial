@@ -1,6 +1,5 @@
 import type { ABTest } from '@guardian/ab-core';
 import { deferPermutiveLoad } from './tests/defer-permutive-load';
-import { theTradeDesk } from './tests/the-trade-desk';
 
 /**
  * You only need to add tests to this file if the code you are testing is here in
@@ -10,5 +9,4 @@ import { theTradeDesk } from './tests/the-trade-desk';
 export const concurrentTests: ABTest[] = [
 	// one test per line
 	deferPermutiveLoad,
-	theTradeDesk,
 ];
