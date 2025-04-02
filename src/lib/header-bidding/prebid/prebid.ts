@@ -15,6 +15,7 @@ import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedIn } from '../../identity/api';
 import { getPageTargeting } from '../../page-targeting';
 import type {
+	AnalyticsConfig,
 	BidderCode,
 	HeaderBiddingSlot,
 	PrebidBid,
@@ -149,14 +150,6 @@ type PbjsEventData = {
 };
 type PbjsEventHandler = (data: PbjsEventData) => void;
 
-type EnableAnalyticsConfig = {
-	provider: string;
-	options: {
-		ajaxUrl: string;
-		pv?: string;
-	};
-};
-
 type BidResponse = {
 	bidder: BidderCode;
 	width: number;
@@ -289,7 +282,7 @@ declare global {
 				}>;
 			};
 			bidderSettings: BidderSettings;
-			enableAnalytics: (arg0: [EnableAnalyticsConfig]) => void;
+			enableAnalytics: (arg0: [AnalyticsConfig]) => void;
 			onEvent: (event: PbjsEvent, handler: PbjsEventHandler) => void;
 			setTargetingForGPTAsync: (
 				codeArr?: string[],
@@ -519,15 +512,17 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		};
 	}
 
-	if (shouldEnableAnalytics()) {
+	if (shouldEnableAnalytics() && window.guardian.ophan?.pageViewId) {
 		window.pbjs.enableAnalytics([
 			{
 				provider: 'gu',
 				options: {
-					ajaxUrl: window.guardian.config.page.isDev
-						? `//performance-events.code.dev-guardianapis.com/header-bidding`
-						: `//performance-events.guardianapis.com/header-bidding`,
-					pv: window.guardian.ophan?.pageViewId,
+					url:
+						window.guardian.config.page.isDev ||
+						window.location.hostname.includes('localhost')
+							? `//performance-events.code.dev-guardianapis.com/header-bidding`
+							: `//performance-events.guardianapis.com/header-bidding`,
+					pv: window.guardian.ophan.pageViewId,
 				},
 			},
 		]);

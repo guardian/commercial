@@ -6,7 +6,6 @@ import { fetch } from 'prebid.js/src/ajax.js';
 import { EVENTS } from 'prebid.js/src/constants.js';
 import { reportError } from '../../../../lib/error/report-error';
 import {
-	type AnalyticsConfig,
 	type BidArgs,
 	type EventData,
 	eventKeys,
@@ -297,7 +296,7 @@ const analyticsAdapter = Object.assign(adapter({ analyticsType: 'endpoint' }), {
 
 analyticsAdapter.originEnableAnalytics = analyticsAdapter.enableAnalytics;
 
-analyticsAdapter.enableAnalytics = (config: AnalyticsConfig): void => {
+analyticsAdapter.enableAnalytics = (config): void => {
 	analyticsAdapter.context = {
 		url: config.options.url,
 		pv: config.options.pv,

@@ -294,6 +294,7 @@ interface AnalyticsAdapter {
 }
 
 interface AnalyticsConfig {
+	provider: 'gu';
 	options: AnalyticsOptions;
 }
 

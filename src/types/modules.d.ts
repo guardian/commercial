@@ -59,7 +59,7 @@ declare module 'prebid.js/libraries/analyticsAdapter/AnalyticsAdapter.js' {
 	import type {
 		AnalyticsAdapter,
 		AnalyticsAdapterConfig,
-	} from 'types/prebid';
+	} from 'lib/header-bidding/prebid-types';
 
 	function adapter(config: AnalyticsAdapterConfig): AnalyticsAdapter;
 	export default adapter;
