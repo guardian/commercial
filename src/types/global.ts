@@ -480,6 +480,7 @@ declare global {
 			articleCounts?: ArticleCounts;
 			commercial?: {
 				dfpEnv?: DfpEnv;
+				a9WinningBids?: FetchBidResponse[];
 			};
 			notificationEventHistory?: HeaderNotification[][];
 			commercialTimer?: EventTimer;
