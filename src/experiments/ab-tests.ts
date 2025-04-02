@@ -1,4 +1,5 @@
 import type { ABTest } from '@guardian/ab-core';
+import { a9BidResponseWinner } from './tests/a9-bid-response-winner';
 import { deferPermutiveLoad } from './tests/defer-permutive-load';
 
 /**
@@ -9,4 +10,5 @@ import { deferPermutiveLoad } from './tests/defer-permutive-load';
 export const concurrentTests: ABTest[] = [
 	// one test per line
 	deferPermutiveLoad,
+	a9BidResponseWinner,
 ];
