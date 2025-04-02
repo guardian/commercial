@@ -1,7 +1,7 @@
 import * as guardianLibs from '@guardian/libs';
 import { EVENTS } from 'prebid.js/src/constants.js';
 import * as errorReporting from '../../../../lib/error/report-error';
-import type { EventData } from '../../../../types/prebid';
+import type { EventData } from '../../prebid-types';
 import analyticsAdapter, { _ } from './analyticsAdapter';
 
 const { createEvent, isPayloadValid, handlers } = _;

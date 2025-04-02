@@ -311,7 +311,13 @@ const shouldEnableAnalytics = (): boolean => {
 	const isInServerSideTest =
 		Object.keys(window.guardian.config.tests ?? {}).length > 0;
 	const isInClientSideTest = Object.keys(getParticipations()).length > 0;
-	return isInServerSideTest || isInClientSideTest || isInSample;
+
+	const hasQueryParam = window.location.search.includes(
+		'pbjs-analytics=true',
+	);
+	return (
+		isInServerSideTest || isInClientSideTest || isInSample || hasQueryParam
+	);
 };
 
 /**

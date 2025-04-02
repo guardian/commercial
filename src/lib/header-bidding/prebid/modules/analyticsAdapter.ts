@@ -12,7 +12,7 @@ import {
 	eventKeys,
 	type Handler,
 	type RawEventData,
-} from '../../../../types/prebid';
+} from '../../prebid-types';
 
 /*
  * Update whenever you want to make sure you're sending the right version of analytics.
