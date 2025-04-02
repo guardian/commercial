@@ -495,7 +495,6 @@ declare global {
 					) => void;
 				};
 			};
-			a9WinningBids?: FetchBidResponse[];
 		};
 		ootag: {
 			queue: Array<() => void>;
