@@ -74,14 +74,19 @@ const requestBids = async (
 		.then(
 			() =>
 				new Promise<void>((resolve) => {
-					window.apstag?.fetchBids({ slots: adUnits }, (res) => {
-						console.log('Bids Response:', res);
-						window.guardian.a9WinningBids = res;
-						window.googletag.cmd.push(() => {
-							window.apstag?.setDisplayBids();
-							resolve();
-						});
-					});
+					window.apstag?.fetchBids(
+						{ slots: adUnits },
+						(bidResponse) => {
+							window.guardian.commercial =
+								window.guardian.commercial ?? {};
+							window.guardian.commercial.a9WinningBids =
+								bidResponse;
+							window.googletag.cmd.push(() => {
+								window.apstag?.setDisplayBids();
+								resolve();
+							});
+						},
+					);
 				}),
 		)
 		.catch(() => {
