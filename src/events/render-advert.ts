@@ -219,11 +219,6 @@ const renderAdvert = (
 		);
 	}
 
-	window.addEventListener('beforeunload', () => {
-		console.log(`User is clearing data in the browser`);
-		window.guardian.a9WinningBids = [];
-	});
-
 	addContentClass(advert.node);
 	return hasIframe(advert.node)
 		.then((isRendered) => {
