@@ -95,10 +95,11 @@ describe('analyticsAdapter', () => {
 	});
 
 	describe('createEvent', () => {
-		test('removes undefined and null values', () => {
+		test('removes unknown keys, undefined and null values', () => {
 			const event = {
 				ev: 'init',
 				sid: 'slotId',
+				aid: null,
 				value1: undefined,
 				value2: null,
 				value3: 'test',
@@ -107,7 +108,6 @@ describe('analyticsAdapter', () => {
 			expect(createEvent(event)).toEqual({
 				ev: 'init',
 				sid: 'slotId',
-				value3: 'test',
 			});
 		});
 	});

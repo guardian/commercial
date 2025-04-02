@@ -39,48 +39,49 @@ type TrackParams = {
 	args: BidArgs;
 };
 
-interface EventData {
-	ev: string;
-	aid?: string;
-	bid?: string;
-	st?: number;
-	n?: string;
-	sid?: string;
-	cpm?: number;
-	pb?: number;
-	cry?: string;
-	net?: boolean;
-	did?: string;
-	cid?: string;
-	sz?: string;
-	ttr?: number;
-	lid?: string;
-	dsp?: string;
-	adv?: string;
-	bri?: string;
-	brn?: string;
-	add?: string;
-	[key: string]: unknown;
-}
+const eventKeys = [
+	'ev',
+	'aid',
+	'bid',
+	'st',
+	'n',
+	'sid',
+	'cpm',
+	'pb',
+	'cry',
+	'net',
+	'did',
+	'cid',
+	'sz',
+	'ttr',
+	'lid',
+	'dsp',
+	'adv',
+	'bri',
+	'brn',
+	'add',
+] as const;
+
+type EventData = Partial<
+	Record<(typeof eventKeys)[number], string | number | boolean>
+>;
+
+type RawEventData = Partial<
+	Record<
+		(typeof eventKeys)[number],
+		string | number | boolean | undefined | null
+	>
+>;
 
 interface AnalyticsAdapterContext {
-	ajaxUrl?: string;
-	pv?: string;
+	url: string;
+	pv: string;
 	auctionTimeStart?: number;
-	requestTemplate?: Record<string, unknown>;
-	queue?: {
-		init: () => void;
-		push: (events: EventData[]) => void;
-		popAll: () => EventData[];
-		peekAll: () => EventData[];
-	};
-	[key: string]: unknown;
 }
 
 interface AnalyticsOptions {
-	ajaxUrl?: string;
-	pv?: string;
-	[key: string]: unknown;
+	url: string;
+	pv: string;
 }
 
 interface AnalyticsAdapter {
@@ -91,22 +92,18 @@ interface AnalyticsAdapter {
 	ajaxCall: (data: string) => void;
 }
 
-interface RequestTemplate {
-	v: number;
-	pv: string;
-	[key: string]: unknown;
-}
-
 interface AnalyticsConfig {
 	options: AnalyticsOptions;
 }
 
 type Handler = (adapter: AnalyticsAdapter, args: BidArgs) => EventData[] | null;
 
+export { eventKeys };
+
 export type {
 	BidArgs,
 	EventData,
-	RequestTemplate,
+	RawEventData,
 	AnalyticsOptions,
 	AnalyticsConfig,
 	AnalyticsAdapter,

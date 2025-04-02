@@ -5,11 +5,13 @@ import adapterManager from 'prebid.js/src/adapterManager.js';
 import { fetch } from 'prebid.js/src/ajax.js';
 import { EVENTS } from 'prebid.js/src/constants.js';
 import { reportError } from '../../../../lib/error/report-error';
-import type {
-	AnalyticsConfig,
-	BidArgs,
-	EventData,
-	Handler,
+import {
+	type AnalyticsConfig,
+	type BidArgs,
+	type EventData,
+	eventKeys,
+	type Handler,
+	type RawEventData,
 } from '../../../../types/prebid';
 
 /*
@@ -67,40 +69,51 @@ function logEvents(events: EventData[]): void {
 	log('commercial', `Prebid.js events: ${logMsg}`, events);
 }
 
+function isEventKey(key: string): key is keyof EventData {
+	return eventKeys.includes(key as keyof EventData);
+}
+
 // Remove any properties that are undefined or null
-function createEvent(event: EventData): EventData {
-	const cleanedEvent: EventData = {
+function createEvent(event: RawEventData): EventData {
+	if (!event.ev) {
+		throw new Error('Event must have an "ev" property');
+	}
+	const cleanedEvent: Partial<EventData> = {
 		ev: event.ev,
 	};
 	for (const key in event) {
-		if (event[key] !== undefined && event[key] !== null) {
+		if (
+			isEventKey(key) &&
+			event[key] !== undefined &&
+			event[key] !== null
+		) {
 			cleanedEvent[key] = event[key];
 		}
 	}
-	return cleanedEvent;
+
+	return cleanedEvent as EventData;
 }
 
 // Handlers for each event type, these create a loggable event from prebid event
 const handlers = {
 	[EVENTS.AUCTION_INIT]: (adapter, args) => {
-		if (adapter.context?.queue) {
-			adapter.context.queue.init();
-		}
+		queue = [];
+
 		if (adapter.context) {
 			adapter.context.auctionTimeStart = Date.now();
 		}
-		const event: EventData = {
+		const event = createEvent({
 			ev: 'init',
 			aid: args.auctionId,
 			st: adapter.context?.auctionTimeStart,
-		};
+		});
 
 		return [event];
 	},
 	[EVENTS.BID_REQUESTED]: (_, args) => {
 		if (args.bids) {
 			return args.bids.map((bid) => {
-				const event: EventData = createEvent({
+				const event = createEvent({
 					ev: 'request',
 					n: args.bidderCode,
 					sid: bid.adUnitCode,
@@ -115,7 +128,7 @@ const handlers = {
 	},
 	[EVENTS.BID_RESPONSE]: (_, args) => {
 		if (args.statusMessage === 'Bid available') {
-			const event: EventData = createEvent({
+			const event = createEvent({
 				ev: 'response',
 				n: getBidderCode(args),
 				bid: args.requestId,
@@ -142,7 +155,7 @@ const handlers = {
 	},
 	[EVENTS.NO_BID]: (adapter, args) => {
 		const duration = Date.now() - (adapter.context?.auctionTimeStart ?? 0);
-		const event: EventData = createEvent({
+		const event = createEvent({
 			ev: 'nobid',
 			n: args.bidder ?? args.bidderCode,
 			bid: args.bidId ?? args.requestId,
@@ -155,7 +168,7 @@ const handlers = {
 	},
 	[EVENTS.AUCTION_END]: (adapter, args) => {
 		const duration = Date.now() - (adapter.context?.auctionTimeStart ?? 0);
-		const event: EventData = createEvent({
+		const event = createEvent({
 			ev: 'end',
 			aid: args.auctionId,
 			ttr: duration,
@@ -164,7 +177,7 @@ const handlers = {
 		return [event];
 	},
 	[EVENTS.BID_WON]: (_, args: BidArgs) => {
-		const event: EventData = createEvent({
+		const event = createEvent({
 			ev: 'bidwon',
 			aid: args.auctionId,
 			bid: args.requestId,
@@ -271,8 +284,6 @@ const analyticsAdapter = Object.assign(adapter({ analyticsType: 'endpoint' }), {
 				}
 				queue.push(...events);
 			}
-			console.log(EVENTS);
-
 			if ([EVENTS.AUCTION_END, EVENTS.BID_WON].includes(eventType)) {
 				const { pv, url } = analyticsAdapter.context;
 				const events = [...queue];
