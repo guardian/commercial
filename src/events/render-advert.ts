@@ -201,8 +201,11 @@ const renderAdvert = (
 	advert: Advert,
 	slotRenderEndedEvent: googletag.events.SlotRenderEndedEvent,
 ): Promise<boolean> => {
-	const isA9GumGum =
-		(window.guardian.a9WinningBids?.[0]?.['amznp'] ?? '') === '1lsxjb4';
+	const matchingAd = window.guardian.a9WinningBids?.find(
+		(bidResponse) => bidResponse.slotID == advert.id,
+	);
+
+	const isA9GumGum = matchingAd?.amznp === '1lsxjb4';
 
 	if (
 		slotRenderEndedEvent.advertiserId != null &&
