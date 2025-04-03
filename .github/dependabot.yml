@@ -18,6 +18,12 @@ updates:
         update-types:
           - 'minor'
           - 'patch'
+      prebid:
+        patterns:
+          - 'prebid.js'
+        update-types:
+          - 'minor'
+          - 'patch'
       types:
         patterns:
           - '@types/*'
