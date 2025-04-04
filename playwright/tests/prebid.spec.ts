@@ -3,6 +3,7 @@ import type { PrebidAuctionInitEvent } from '../../src/lib/header-bidding/prebid
 import { articles } from '../fixtures/pages';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
+import { getStage, headerBiddingAnalyticsUrl } from '../lib/util';
 
 const testPage = articles[0];
 
@@ -99,5 +100,29 @@ test.describe('Prebid', () => {
 		});
 
 		expect(bidderErrors).toHaveLength(0);
+	});
+
+	test('analytics should be called', async ({ page }) => {
+		const stage = getStage();
+
+		const analyticsEndpoint = headerBiddingAnalyticsUrl[stage];
+
+		const analyticsRequestPromise = page.waitForRequest(analyticsEndpoint);
+
+		await loadPage(page, testPage.path + '&pbjs-analytics=true');
+		await cmpAcceptAll(page);
+
+		// trigger pagehide event
+		await page.evaluate(() => {
+			const event = new Event('pagehide');
+			window.dispatchEvent(event);
+		});
+
+		const analyticsRequest = await analyticsRequestPromise;
+
+		expect(analyticsRequest).toBeTruthy();
+		expect(analyticsRequest.postData()).toContain('"ev":"end"');
+		expect(analyticsRequest.postData()).toContain('"ev":"nobid"');
+		expect(analyticsRequest.postData()).toContain('"ev":"request"');
 	});
 });
