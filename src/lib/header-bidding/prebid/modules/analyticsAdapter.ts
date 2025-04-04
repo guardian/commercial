@@ -258,7 +258,7 @@ const analyticsAdapter = Object.assign(adapter({ analyticsType: 'endpoint' }), {
 		if (!analyticsAdapter.context) {
 			// this should never happen
 			reportError(
-				new Error('context is not defined, prebid event not be logged'),
+				new Error('context is not defined, prebid event not being logged'),
 				'commercial',
 				{},
 				{
