@@ -311,7 +311,7 @@ describe('analyticsAdapter', () => {
 			);
 			expect(guardianLibs.log).toHaveBeenCalledWith(
 				'commercial',
-				'context is not defined, prebid event not be logged',
+				'context is not defined, prebid event not being logged',
 			);
 		});
 
