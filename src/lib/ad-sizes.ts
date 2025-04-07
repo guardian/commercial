@@ -99,7 +99,6 @@ type SlotName =
 	| 'carrot'
 	| 'comments-expanded'
 	| 'comments'
-	| 'crossword-banner'
 	| 'crossword-banner-mobile'
 	| 'exclusion'
 	| 'external'
@@ -390,9 +389,6 @@ const slotSizeMappings = {
 	},
 	'crossword-banner-mobile': {
 		mobile: [adSizes.mobilesticky],
-	},
-	'crossword-banner': {
-		phablet: [adSizes.outOfPage, adSizes.empty, adSizes.leaderboard],
 	},
 	'football-right': {
 		desktop: [
