@@ -218,11 +218,7 @@ const renderAdvert = (
 
 		const isA9GumGum = matchingAd?.amznp === '1lsxjb4';
 
-		if (
-			slotRenderEndedEvent.advertiserId != null &&
-			slotRenderEndedEvent.advertiserId === 4751525411 &&
-			isA9GumGum
-		) {
+		if (slotRenderEndedEvent.advertiserId === 4751525411 && isA9GumGum) {
 			const adSlotId = advert.node.id;
 			logGumGumWinningBid(
 				adSlotId,
