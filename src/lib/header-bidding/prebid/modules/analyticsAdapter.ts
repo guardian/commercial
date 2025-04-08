@@ -2,17 +2,16 @@
 import { log } from '@guardian/libs';
 import adapter from 'prebid.js/libraries/analyticsAdapter/AnalyticsAdapter.js';
 import adapterManager from 'prebid.js/src/adapterManager.js';
-import { ajax } from 'prebid.js/src/ajax.js';
+import { fetch } from 'prebid.js/src/ajax.js';
 import { EVENTS } from 'prebid.js/src/constants.js';
-import type {
-	AnalyticsAdapter,
-	AnalyticsConfig,
-	AnalyticsOptions,
-	BidArgs,
-	EventData,
-	Handler,
-	RequestTemplate,
-} from '../../../../types/prebid';
+import { reportError } from '../../../../lib/error/report-error';
+import {
+	type BidArgs,
+	type EventData,
+	eventKeys,
+	type Handler,
+	type RawEventData,
+} from '../../prebid-types';
 
 /*
  * Update whenever you want to make sure you're sending the right version of analytics.
@@ -20,10 +19,7 @@ import type {
  */
 const VERSION = 9;
 
-const SENDALL_ON: Record<string, boolean> = {
-	[EVENTS.AUCTION_END]: true,
-	[EVENTS.BID_WON]: true,
-};
+let queue: EventData[] = [];
 
 function getBidderCode(args: BidArgs): string {
 	if (args.bidderCode !== 'ozone') return args.bidderCode ?? '';
@@ -58,25 +54,6 @@ function getBidderCode(args: BidArgs): string {
 	return `ozone-unknown`;
 }
 
-function isValid(events: EventData[]): boolean {
-	return (
-		(events[0] && (events[0].ev === 'init' || events[0].ev === 'bidwon')) ??
-		false
-	);
-}
-
-function sendAll(adapter: AnalyticsAdapter): void {
-	const events = adapter.context?.queue?.popAll() ?? [];
-	if (isValid(events)) {
-		const req = {
-			v: VERSION,
-			pv: adapter.context?.pv,
-			hb_ev: events,
-		};
-		adapter.ajaxCall(JSON.stringify(req));
-	}
-}
-
 function logEvents(events: EventData[]): void {
 	const isBid = events[0]?.ev === 'init';
 	const isBidWon = events[0]?.ev === 'bidwon';
@@ -91,218 +68,245 @@ function logEvents(events: EventData[]): void {
 	log('commercial', `Prebid.js events: ${logMsg}`, events);
 }
 
-// Protect against setting undefined or null values
-function setSafely<T extends Record<string, unknown>, K extends string>(
-	obj: T,
-	key: K,
-	value: unknown,
-): void {
-	if (value === undefined || value === null) {
-		return;
-	}
-	obj = { ...obj, [key]: value };
+function isEventKey(key: string): key is keyof EventData {
+	return eventKeys.includes(key as keyof EventData);
 }
 
-const trackBidWon: Handler = (_, args: BidArgs) => {
-	const event: EventData = { ev: 'bidwon' };
-	setSafely(event, 'aid', args.auctionId);
-	setSafely(event, 'bid', args.requestId);
-	return [event];
-};
-
-const trackAuctionInit: Handler = (adapter, args) => {
-	if (adapter.context) {
-		adapter.context.auctionTimeStart = Date.now();
+// Remove any properties that are undefined or null
+function createEvent(event: RawEventData): EventData {
+	if (!event.ev) {
+		throw new Error('Event must have an "ev" property');
 	}
-	const event: EventData = { ev: 'init' };
-	setSafely(event, 'aid', args.auctionId);
-	setSafely(event, 'st', adapter.context?.auctionTimeStart);
-	return [event];
-};
-
-const trackBidRequest: Handler = (_, args) => {
-	if (args.bids) {
-		return args.bids.map((bid) => {
-			const event: EventData = { ev: 'request' };
-			setSafely(event, 'n', args.bidderCode);
-			setSafely(event, 'sid', bid.adUnitCode);
-			setSafely(event, 'bid', bid.bidId);
-			setSafely(event, 'st', args.start);
-			return event;
-		});
-	}
-	return null;
-};
-
-const trackBidResponse: Handler = (_, args) => {
-	if (args.statusMessage === 'Bid available') {
-		const event: EventData = { ev: 'response' };
-		setSafely(event, 'n', getBidderCode(args));
-		setSafely(event, 'bid', args.requestId);
-		setSafely(event, 'sid', args.adUnitCode);
-		setSafely(event, 'cpm', args.cpm);
-		setSafely(event, 'pb', args.pbCg);
-		setSafely(event, 'cry', args.currency);
-		setSafely(event, 'net', args.netRevenue);
-		setSafely(event, 'did', args.adId);
-		setSafely(event, 'cid', args.creativeId);
-		setSafely(event, 'sz', args.size);
-		setSafely(event, 'ttr', args.timeToRespond);
-		setSafely(event, 'lid', args.dealId);
-
-		if (args.meta) {
-			setSafely(event, 'dsp', args.meta.networkId);
-			setSafely(event, 'adv', args.meta.buyerId);
-			setSafely(event, 'bri', args.meta.brandId);
-			setSafely(event, 'brn', args.meta.brandName);
-			setSafely(event, 'add', args.meta.clickUrl);
+	const cleanedEvent: Partial<EventData> = {
+		ev: event.ev,
+	};
+	for (const key in event) {
+		if (
+			isEventKey(key) &&
+			event[key] !== undefined &&
+			event[key] !== null
+		) {
+			cleanedEvent[key] = event[key];
 		}
+	}
+
+	return cleanedEvent as EventData;
+}
+
+// Handlers for each event type, these create a loggable event from prebid event
+const handlers = {
+	[EVENTS.AUCTION_INIT]: (adapter, args) => {
+		queue = [];
+
+		if (adapter.context) {
+			adapter.context.auctionTimeStart = Date.now();
+		}
+		const event = createEvent({
+			ev: 'init',
+			aid: args.auctionId,
+			st: adapter.context?.auctionTimeStart,
+		});
 
 		return [event];
-	}
-	return null;
-};
+	},
+	[EVENTS.BID_REQUESTED]: (_, args) => {
+		if (args.bids) {
+			return args.bids.map((bid) => {
+				const event = createEvent({
+					ev: 'request',
+					n: args.bidderCode,
+					sid: bid.adUnitCode,
+					bid: bid.bidId,
+					st: args.start,
+				});
 
-const trackNoBid: Handler = (adapter, args) => {
-	const duration = Date.now() - (adapter.context?.auctionTimeStart ?? 0);
-	const event: EventData = { ev: 'nobid' };
-	setSafely(event, 'n', args.bidder ?? args.bidderCode);
-	setSafely(event, 'bid', args.bidId ?? args.requestId);
-	setSafely(event, 'sid', args.adUnitCode);
-	setSafely(event, 'aid', args.auctionId);
-	setSafely(event, 'ttr', duration);
-	return [event];
-};
-
-const trackAuctionEnd: Handler = (adapter, args) => {
-	const duration = Date.now() - (adapter.context?.auctionTimeStart ?? 0);
-	const event: EventData = { ev: 'end' };
-	setSafely(event, 'aid', args.auctionId);
-	setSafely(event, 'ttr', duration);
-	return [event];
-};
-
-class AnalyticsQueue {
-	private queue: EventData[] = [];
-
-	push(event: EventData | EventData[]): void {
-		if (Array.isArray(event)) {
-			this.queue.push(...event);
-		} else {
-			this.queue.push(event);
+				return event;
+			});
 		}
-	}
+		return null;
+	},
+	[EVENTS.BID_RESPONSE]: (_, args) => {
+		if (args.statusMessage === 'Bid available') {
+			const event = createEvent({
+				ev: 'response',
+				n: getBidderCode(args),
+				bid: args.requestId,
+				sid: args.adUnitCode,
+				cpm: args.cpm,
+				pb: args.pbCg,
+				cry: args.currency,
+				net: args.netRevenue,
+				did: args.adId,
+				cid: args.creativeId,
+				sz: args.size,
+				ttr: args.timeToRespond,
+				lid: args.dealId,
+				dsp: args.meta?.networkId,
+				adv: args.meta?.buyerId,
+				bri: args.meta?.brandId,
+				brn: args.meta?.brandName,
+				add: args.meta?.clickUrl,
+			});
 
-	popAll(): EventData[] {
-		const result = this.queue;
-		this.queue = [];
-		return result;
-	}
+			return [event];
+		}
+		return null;
+	},
+	[EVENTS.NO_BID]: (adapter, args) => {
+		const duration = Date.now() - (adapter.context?.auctionTimeStart ?? 0);
+		const event = createEvent({
+			ev: 'nobid',
+			n: args.bidder ?? args.bidderCode,
+			bid: args.bidId ?? args.requestId,
+			sid: args.adUnitCode,
+			aid: args.auctionId,
+			ttr: duration,
+		});
 
-	/**
-	 * For test/debug purposes only
-	 */
-	peekAll(): EventData[] {
-		return this.queue;
-	}
+		return [event];
+	},
+	[EVENTS.AUCTION_END]: (adapter, args) => {
+		const duration = Date.now() - (adapter.context?.auctionTimeStart ?? 0);
+		const event = createEvent({
+			ev: 'end',
+			aid: args.auctionId,
+			ttr: duration,
+		});
 
-	init(): void {
-		this.queue = [];
-	}
+		return [event];
+	},
+	[EVENTS.BID_WON]: (_, args: BidArgs) => {
+		const event = createEvent({
+			ev: 'bidwon',
+			aid: args.auctionId,
+			bid: args.requestId,
+		});
+		return [event];
+	},
+} as const satisfies Record<string, Handler>;
+
+type AnalyticsPayload = {
+	v: number;
+	pv: string;
+	hb_ev: EventData[];
+};
+
+// Check if the payload is valid
+function isPayloadValid(events: EventData[]): boolean {
+	return (
+		(events[0] && (events[0].ev === 'init' || events[0].ev === 'bidwon')) ??
+		false
+	);
 }
 
+const createPayload = (events: EventData[], pv: string): AnalyticsPayload => {
+	const payload = {
+		v: VERSION,
+		pv,
+		hb_ev: events,
+	};
+	if (!isPayloadValid(events)) {
+		reportError(
+			new Error('Invalid analytics payload'),
+			'commercial',
+			{},
+			{
+				payload,
+			},
+		);
+	}
+	return payload;
+};
+
 const analyticsAdapter = Object.assign(adapter({ analyticsType: 'endpoint' }), {
+	sendPayload: async (
+		url: string,
+		payload: AnalyticsPayload,
+	): Promise<void> => {
+		const events = [...queue];
+		queue = [];
+		try {
+			const response = await fetch(url, {
+				method: 'POST',
+				body: JSON.stringify(payload),
+				keepalive: true,
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (!response.ok) {
+				throw new Error(
+					`Failed to send analytics payload: ${
+						response.statusText
+					} (${response.status})`,
+				);
+			}
+			logEvents(events);
+		} catch (error) {
+			reportError(
+				error,
+				'commercial',
+				{},
+				{
+					events,
+				},
+			);
+		}
+	},
 	track({ eventType, args }: { eventType: string; args: BidArgs }): void {
 		if (!analyticsAdapter.context) {
+			// this should never happen
+			reportError(
+				new Error(
+					'context is not defined, prebid event not being logged',
+				),
+				'commercial',
+				{},
+				{
+					eventType,
+					args,
+				},
+			);
+			log(
+				'commercial',
+				'context is not defined, prebid event not being logged',
+			);
 			return;
 		}
-		let handler:
-			| ((adapter: AnalyticsAdapter, args: BidArgs) => EventData[] | null)
-			| null = null;
-		switch (eventType) {
-			case EVENTS.AUCTION_INIT:
-				if (analyticsAdapter.context.queue) {
-					analyticsAdapter.context.queue.init();
-				}
-				handler = trackAuctionInit;
-				break;
-			case EVENTS.BID_REQUESTED:
-				handler = trackBidRequest;
-				break;
-			case EVENTS.BID_RESPONSE:
-				handler = trackBidResponse;
-				break;
-			case EVENTS.NO_BID:
-				handler = trackNoBid;
-				break;
-			case EVENTS.AUCTION_END:
-				handler = trackAuctionEnd;
-				break;
-			case EVENTS.BID_WON:
-				handler = trackBidWon;
-				break;
-		}
+
+		const handler = handlers[eventType];
 		if (handler) {
 			const events = handler(analyticsAdapter, args);
-			if (events && analyticsAdapter.context.queue) {
+			if (events) {
 				if (eventType === EVENTS.BID_WON) {
 					// clear queue to avoid sending late bids with bidWon event
-					analyticsAdapter.context.queue.init();
+					queue = [];
 				}
-				analyticsAdapter.context.queue.push(events);
+				queue.push(...events);
 			}
-			if (SENDALL_ON[eventType]) {
-				sendAll(analyticsAdapter);
+			if ([EVENTS.AUCTION_END, EVENTS.BID_WON].includes(eventType)) {
+				const { pv, url } = analyticsAdapter.context;
+				const events = [...queue];
+				queue = [];
+				const payload = createPayload(events, pv);
+				void analyticsAdapter.sendPayload(url, payload);
 			}
 		}
 	},
 });
 
-analyticsAdapter.context = {};
-
 analyticsAdapter.originEnableAnalytics = analyticsAdapter.enableAnalytics;
 
-analyticsAdapter.enableAnalytics = (config: AnalyticsConfig): void => {
-	if (!config.options.ajaxUrl) {
-		log('commercial', "ajaxUrl is not defined. Analytics won't work");
-		return;
-	}
-	if (!config.options.pv) {
-		log('commercial', "pv is not defined. Analytics won't work");
-		return;
-	}
+analyticsAdapter.enableAnalytics = (config): void => {
 	analyticsAdapter.context = {
-		ajaxUrl: config.options.ajaxUrl,
+		url: config.options.url,
 		pv: config.options.pv,
-		queue: new AnalyticsQueue(),
 	};
+
 	if (analyticsAdapter.originEnableAnalytics) {
 		analyticsAdapter.originEnableAnalytics(config);
 	}
-};
-
-analyticsAdapter.ajaxCall = function ajaxCall(data: string): void {
-	const url = analyticsAdapter.context?.ajaxUrl;
-	if (!url) {
-		return;
-	}
-	const callback = (data: string) => {
-		const dataObj = JSON.parse(data) as unknown;
-		if (
-			dataObj &&
-			typeof dataObj === 'object' &&
-			'hb_ev' in dataObj &&
-			Array.isArray(dataObj.hb_ev)
-		) {
-			logEvents(dataObj.hb_ev);
-		}
-	};
-	const options = {
-		method: 'POST',
-		contentType: 'text/plain; charset=utf-8',
-		keepalive: true,
-	};
-	ajax(url, () => callback(data), data, options);
 };
 
 adapterManager.registerAnalyticsAdapter({
@@ -312,14 +316,9 @@ adapterManager.registerAnalyticsAdapter({
 
 export default analyticsAdapter;
 
-export type {
-	BidArgs,
-	EventData,
-	RequestTemplate,
-	AnalyticsOptions,
-	AnalyticsQueue,
-};
-
 export const _ = {
 	getBidderCode,
+	createEvent,
+	isPayloadValid,
+	handlers,
 };

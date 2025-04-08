@@ -1,8 +1,8 @@
 import type { AdSize } from '../../lib/ad-sizes';
 
-export type HeaderBiddingSize = AdSize;
+type HeaderBiddingSize = AdSize;
 
-export type HeaderBiddingSlotName =
+type HeaderBiddingSlotName =
 	| 'banner'
 	| 'comments'
 	| 'comments-expanded'
@@ -18,22 +18,19 @@ export type HeaderBiddingSlotName =
 	| `fronts-banner-${number}`
 	| `inline${number}`;
 
-export type HeaderBiddingSizeKey =
-	| HeaderBiddingSlotName
-	| 'inline'
-	| 'fronts-banner';
+type HeaderBiddingSizeKey = HeaderBiddingSlotName | 'inline' | 'fronts-banner';
 
-export type HeaderBiddingSlot = {
+type HeaderBiddingSlot = {
 	key: HeaderBiddingSizeKey;
 	sizes: HeaderBiddingSize[];
 };
 
-export type HeaderBiddingSizeMapping = Record<
+type HeaderBiddingSizeMapping = Record<
 	HeaderBiddingSizeKey,
 	Partial<Record<'desktop' | 'tablet' | 'mobile', AdSize[]>>
 >;
 
-export type PrebidOzoneParams = {
+type PrebidOzoneParams = {
 	publisherId: string;
 	siteId: string;
 	placementId: string;
@@ -41,30 +38,30 @@ export type PrebidOzoneParams = {
 	ozoneData?: Record<string, unknown>;
 };
 
-export type PrebidPubmaticParams = {
+type PrebidPubmaticParams = {
 	publisherId: string;
 	adSlot: string;
 	placementId?: string;
 };
 
-export type PrebidIndexExchangeParams = {
+type PrebidIndexExchangeParams = {
 	siteId: string;
 	size: HeaderBiddingSize;
 };
 
-export type PrebidTrustXParams = {
+type PrebidTrustXParams = {
 	uid: string;
 };
 
-export type PrebidTripleLiftParams = {
+type PrebidTripleLiftParams = {
 	inventoryCode: string;
 };
 
-export type PrebidXaxisParams = {
+type PrebidXaxisParams = {
 	placementId: number;
 };
 
-export type PrebidAppNexusParams = {
+type PrebidAppNexusParams = {
 	invCode?: string;
 	member?: string;
 	placementId?: string;
@@ -72,18 +69,18 @@ export type PrebidAppNexusParams = {
 	lotame?: unknown;
 };
 
-export type PrebidOpenXParams = {
+type PrebidOpenXParams = {
 	delDomain: string;
 	unit: string;
 	customParams: unknown;
 	lotame?: unknown;
 };
 
-export type PrebidAdYouLikeParams = {
+type PrebidAdYouLikeParams = {
 	placement: string;
 };
 
-export type PrebidCriteoParams =
+type PrebidCriteoParams =
 	| {
 			networkId: number;
 	  }
@@ -91,25 +88,25 @@ export type PrebidCriteoParams =
 			zoneId: number;
 	  };
 
-export type PrebidKargoParams = {
+type PrebidKargoParams = {
 	placementId: string;
 };
 
 //This is used to be called Rubicon but now it's called Magnite. You can find it in the Prebid.js codebase as Rubicon
-export type PrebidMagniteParams = {
+type PrebidMagniteParams = {
 	accountId: number;
 	siteId: number;
 	zoneId: number;
 	keywords: string[];
 };
 
-export type PrebidTheTradeDeskParams = {
+type PrebidTheTradeDeskParams = {
 	supplySourceId: string;
 	publisherId: string;
 	placementId: string;
 };
 
-export type BidderCode =
+type BidderCode =
 	| 'adyoulike'
 	| 'and'
 	| 'criteo'
@@ -124,7 +121,7 @@ export type BidderCode =
 	| 'xhb'
 	| 'ttd';
 
-export type PrebidParams =
+type PrebidParams =
 	| PrebidAdYouLikeParams
 	| PrebidAppNexusParams
 	| PrebidCriteoParams
@@ -139,29 +136,29 @@ export type PrebidParams =
 	| PrebidXaxisParams
 	| PrebidTheTradeDeskParams;
 
-export type PrebidBidder = {
+type PrebidBidder = {
 	name: BidderCode;
 	switchName: string;
 	bidParams: (slotId: string, sizes: HeaderBiddingSize[]) => PrebidParams;
 };
 
-export type PrebidBid = {
+type PrebidBid = {
 	bidder: string;
 	params: PrebidParams;
 };
 
-export type PrebidBidderRequest = {
+type PrebidBidderRequest = {
 	bidderCode: string;
 };
 
-export type PrebidBidReqestedEvent = {
+type PrebidBidReqestedEvent = {
 	eventType: 'bidRequested';
 	args: {
 		bids: PrebidBid[];
 	};
 };
 
-export type PrebidBidderErrorEvent = {
+type PrebidBidderErrorEvent = {
 	eventType: 'bidderError';
 	args: {
 		bidderRequest: PrebidBidderRequest;
@@ -171,7 +168,7 @@ export type PrebidBidderErrorEvent = {
 	};
 };
 
-export type PrebidAuctionInitEvent = {
+type PrebidAuctionInitEvent = {
 	eventType: 'auctionInit';
 	args: {
 		adUnitCodes: string[];
@@ -179,7 +176,7 @@ export type PrebidAuctionInitEvent = {
 	};
 };
 
-export type PrebidAuctionEndEvent = {
+type PrebidAuctionEndEvent = {
 	eventType: 'auctionEnd';
 	args: {
 		adUnitCodes: string[];
@@ -187,16 +184,160 @@ export type PrebidAuctionEndEvent = {
 	};
 };
 
-export type PrebidEvent =
+type PrebidEvent =
 	| PrebidBidReqestedEvent
 	| PrebidBidderErrorEvent
 	| PrebidAuctionInitEvent
 	| PrebidAuctionEndEvent;
 
-export type PrebidMediaTypes = {
+type PrebidMediaTypes = {
 	banner: {
 		sizes: HeaderBiddingSize[];
 	};
 };
 
-export type SlotFlatMap = (slot: HeaderBiddingSlot) => HeaderBiddingSlot[];
+type SlotFlatMap = (slot: HeaderBiddingSlot) => HeaderBiddingSlot[];
+
+interface AnalyticsAdapterConfig {
+	analyticsType: string;
+}
+
+interface BidArgs {
+	bidderCode?: string;
+	adserverTargeting?: Record<string, string>;
+	adId?: string;
+	requestId?: string;
+	auctionId?: string;
+	bidder?: string;
+	bidId?: string;
+	bids?: Array<{
+		adUnitCode?: string;
+		bidId?: string;
+	}>;
+	adUnitCode?: string;
+	cpm?: number;
+	pbCg?: number;
+	currency?: string;
+	netRevenue?: boolean;
+	creativeId?: string;
+	size?: string;
+	timeToRespond?: number;
+	dealId?: string;
+	statusMessage?: string;
+	start?: number;
+	meta?: {
+		networkId?: string;
+		buyerId?: string;
+		brandId?: string;
+		brandName?: string;
+		clickUrl?: string;
+	};
+}
+
+type TrackParams = {
+	eventType: string;
+	args: BidArgs;
+};
+
+const eventKeys = [
+	'ev',
+	'aid',
+	'bid',
+	'st',
+	'n',
+	'sid',
+	'cpm',
+	'pb',
+	'cry',
+	'net',
+	'did',
+	'cid',
+	'sz',
+	'ttr',
+	'lid',
+	'dsp',
+	'adv',
+	'bri',
+	'brn',
+	'add',
+] as const;
+
+type EventData = Partial<
+	Record<(typeof eventKeys)[number], string | number | boolean>
+>;
+
+type RawEventData = Partial<
+	Record<
+		(typeof eventKeys)[number],
+		string | number | boolean | undefined | null
+	>
+>;
+
+interface AnalyticsAdapterContext {
+	url: string;
+	pv: string;
+	auctionTimeStart?: number;
+}
+
+interface AnalyticsOptions {
+	url: string;
+	pv: string;
+}
+
+interface AnalyticsAdapter {
+	track: (params: TrackParams) => void;
+	enableAnalytics: (config: { options: AnalyticsOptions }) => void;
+	originEnableAnalytics?: (config: { options: AnalyticsOptions }) => void;
+	context?: AnalyticsAdapterContext;
+	ajaxCall: (data: string) => void;
+}
+
+interface AnalyticsConfig {
+	provider: 'gu';
+	options: AnalyticsOptions;
+}
+
+type Handler = (adapter: AnalyticsAdapter, args: BidArgs) => EventData[] | null;
+
+export { eventKeys };
+
+export type {
+	HeaderBiddingSize,
+	HeaderBiddingSlotName,
+	HeaderBiddingSizeKey,
+	HeaderBiddingSlot,
+	HeaderBiddingSizeMapping,
+	PrebidOzoneParams,
+	PrebidPubmaticParams,
+	PrebidIndexExchangeParams,
+	PrebidTrustXParams,
+	PrebidTripleLiftParams,
+	PrebidXaxisParams,
+	PrebidAppNexusParams,
+	PrebidOpenXParams,
+	PrebidAdYouLikeParams,
+	PrebidCriteoParams,
+	PrebidKargoParams,
+	PrebidMagniteParams,
+	PrebidTheTradeDeskParams,
+	BidderCode,
+	PrebidParams,
+	PrebidBidder,
+	PrebidBid,
+	PrebidBidderRequest,
+	PrebidBidReqestedEvent,
+	PrebidBidderErrorEvent,
+	PrebidAuctionInitEvent,
+	PrebidAuctionEndEvent,
+	PrebidEvent,
+	PrebidMediaTypes,
+	SlotFlatMap,
+	BidArgs,
+	EventData,
+	RawEventData,
+	AnalyticsOptions,
+	AnalyticsConfig,
+	AnalyticsAdapter,
+	AnalyticsAdapterConfig,
+	Handler,
+};

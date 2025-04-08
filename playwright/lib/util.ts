@@ -23,6 +23,12 @@ const hostnames = {
 	dev: 'http://localhost:3030',
 } as const;
 
+const headerBiddingAnalyticsUrl = {
+	dev: 'http://performance-events.code.dev-guardianapis.com/header-bidding',
+	code: 'https://performance-events.code.dev-guardianapis.com/header-bidding',
+	prod: 'http://performance-events.guardianapis.com/header-bidding',
+} as const;
+
 const getHost = (stage?: Stage) => {
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- defensive runtime
 	return hostnames[stage ?? getStage()] ?? hostnames.dev;
@@ -200,4 +206,5 @@ export {
 	waitForSlot,
 	logUnfilledSlots,
 	logCommercial,
+	headerBiddingAnalyticsUrl,
 };
