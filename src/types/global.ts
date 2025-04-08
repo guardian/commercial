@@ -258,9 +258,24 @@ type FetchBidsBidConfig = {
 	slots: A9AdUnitInterface[];
 };
 
+type FetchBidSizes = {
+	adSizes: `${number}x${number}`;
+};
+type FetchBidResponse = {
+	amznbid: string;
+	amzniid: string;
+	amznp: string;
+	amznsz: FetchBidSizes;
+	size: FetchBidSizes;
+	slotID: string;
+};
+
 type Apstag = {
 	init: (arg0: ApstagInitConfig) => void;
-	fetchBids: (arg0: FetchBidsBidConfig, callback: () => void) => void;
+	fetchBids: (
+		arg0: FetchBidsBidConfig,
+		callback: (res: FetchBidResponse[]) => void,
+	) => void;
 	setDisplayBids: () => void;
 };
 
@@ -465,6 +480,7 @@ declare global {
 			articleCounts?: ArticleCounts;
 			commercial?: {
 				dfpEnv?: DfpEnv;
+				a9WinningBids?: FetchBidResponse[];
 			};
 			notificationEventHistory?: HeaderNotification[][];
 			commercialTimer?: EventTimer;

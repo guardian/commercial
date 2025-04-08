@@ -1,5 +1,7 @@
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
+import { isUserInVariant } from '../../../experiments/ab';
+import { a9BidResponseWinner } from '../../../experiments/tests/a9-bid-response-winner';
 import { reportError } from '../../../lib/error/report-error';
 import type { A9AdUnitInterface } from '../../../types/global';
 import type { HeaderBiddingSlot, SlotFlatMap } from '../prebid-types';
@@ -74,12 +76,28 @@ const requestBids = async (
 		.then(
 			() =>
 				new Promise<void>((resolve) => {
-					window.apstag?.fetchBids({ slots: adUnits }, () => {
-						window.googletag.cmd.push(() => {
-							window.apstag?.setDisplayBids();
-							resolve();
-						});
-					});
+					window.apstag?.fetchBids(
+						{ slots: adUnits },
+						(bidResponse) => {
+							const isInA9BidResponseWinnerTest = isUserInVariant(
+								a9BidResponseWinner,
+								'variant',
+							);
+							if (
+								isInA9BidResponseWinnerTest &&
+								window.guardian.config.switches
+									.a9BidResponseWinner
+							) {
+								window.guardian.commercial ??= {};
+								window.guardian.commercial.a9WinningBids =
+									bidResponse;
+							}
+							window.googletag.cmd.push(() => {
+								window.apstag?.setDisplayBids();
+								resolve();
+							});
+						},
+					);
 				}),
 		)
 		.catch(() => {
