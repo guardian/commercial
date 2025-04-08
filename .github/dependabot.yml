@@ -55,6 +55,8 @@ updates:
         update-types:
           - 'minor'
           - 'patch'
+        exclude-patterns:
+          - 'prebid.js'
       minor-devDependencies:
         dependency-type: 'development'
         update-types:
@@ -68,6 +70,7 @@ updates:
           - '*prettier*'
           - '@playwright/*'
           - 'typescript'
+          - 'prebid.js'
     # The default is 5 but as we are going to group dependencies we might need to increase it
     open-pull-requests-limit: 10
   - package-ecosystem: 'github-actions'
