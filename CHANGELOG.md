@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 26.0.1
+
+### Patch Changes
+
+- 652095d: Bump @guardian/libs version to 22.2.0
+
 ## 26.0.0
 
 ### Major Changes
