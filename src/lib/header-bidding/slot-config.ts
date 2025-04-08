@@ -106,7 +106,6 @@ const filterByAdvert = (
 const getSlots = (): HeaderBiddingSizeMapping => {
 	const { contentType, hasShowcaseMainElement } = window.guardian.config.page;
 	const isArticle = contentType === 'Article';
-	const isCrossword = contentType === 'Crossword';
 	const hasExtendedMostPop =
 		isArticle && window.guardian.config.switches.extendedMostPopular;
 
@@ -195,10 +194,6 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 			mobile: shouldIncludeMobileSticky()
 				? [adSizes.mobilesticky, createAdSize(300, 50)]
 				: [],
-		},
-		'crossword-banner': {
-			desktop: isCrossword ? [adSizes.leaderboard] : [],
-			tablet: isCrossword ? [adSizes.leaderboard] : [],
 		},
 		'crossword-banner-mobile': {
 			mobile: [adSizes.mobilesticky],

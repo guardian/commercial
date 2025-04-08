@@ -6,7 +6,6 @@ type HeaderBiddingSlotName =
 	| 'banner'
 	| 'comments'
 	| 'comments-expanded'
-	| 'crossword-banner'
 	| 'crossword-banner-mobile'
 	| 'football-right'
 	| 'mobile-sticky'
