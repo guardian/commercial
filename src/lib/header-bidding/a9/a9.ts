@@ -88,9 +88,7 @@ const requestBids = async (
 								window.guardian.config.switches
 									.a9BidResponseWinner
 							) {
-								console.log(`So we are in CONTROL`);
-								window.guardian.commercial =
-									window.guardian.commercial ?? {};
+								window.guardian.commercial ??= {};
 								window.guardian.commercial.a9WinningBids =
 									bidResponse;
 							}
