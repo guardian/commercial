@@ -81,13 +81,14 @@ const requestBids = async (
 						(bidResponse) => {
 							const isInA9BidResponseWinnerTest = isUserInVariant(
 								a9BidResponseWinner,
-								'control',
+								'variant',
 							);
 							if (
 								isInA9BidResponseWinnerTest &&
 								window.guardian.config.switches
 									.a9BidResponseWinner
 							) {
+								console.log(`So we are in CONTROL`);
 								window.guardian.commercial =
 									window.guardian.commercial ?? {};
 								window.guardian.commercial.a9WinningBids =

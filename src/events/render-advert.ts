@@ -205,7 +205,7 @@ const renderAdvert = (
 ): Promise<boolean> => {
 	const isInA9BidResponseWinnerTest = isUserInVariant(
 		a9BidResponseWinner,
-		'control',
+		'variant',
 	);
 
 	if (
