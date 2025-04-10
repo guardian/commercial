@@ -67,4 +67,12 @@ const articles = [
 	},
 ] as const satisfies GuPage[];
 
-export { articles };
+const articleWithCollapsedSlots = {
+	path: getTestUrl({
+		stage,
+		path: '/politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',
+		adtest: 'collapse-slot',
+	}),
+} as const satisfies GuPage;
+
+export { articles, articleWithCollapsedSlots };
