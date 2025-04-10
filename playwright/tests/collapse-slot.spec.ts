@@ -7,9 +7,7 @@ import { loadPage } from '../lib/load-page';
 const { path } = articleWithCollapsedSlots;
 
 test.describe('Ad slot removal', () => {
-	test(`Empty ad slots should be removed from the DOM`, async ({
-		page,
-	}) => {
+	test(`Empty ad slots should be removed from the DOM`, async ({ page }) => {
 		const gamResponse = waitForGAMResponseForSlot(page, 'top-above-nav');
 
 		await loadPage(page, path);
