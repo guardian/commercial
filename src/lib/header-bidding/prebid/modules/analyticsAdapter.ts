@@ -211,7 +211,7 @@ const createPayload = (events: EventData[], pv: string): AnalyticsPayload => {
 			'commercial',
 			{},
 			{
-				payload,
+				firstEventType: events[0]?.ev,
 			},
 		);
 	}
