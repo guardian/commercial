@@ -280,7 +280,7 @@ interface AnalyticsAdapterContext {
 }
 
 interface AnalyticsOptions {
-	url: string;
+	ajaxUrl: string;
 	pv: string;
 }
 

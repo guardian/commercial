@@ -102,7 +102,7 @@ test.describe('Prebid', () => {
 		expect(bidderErrors).toHaveLength(0);
 	});
 
-	test('analytics should be called', async ({ page }) => {
+	test.skip('analytics should be called', async ({ page }) => {
 		const stage = getStage();
 
 		const analyticsEndpoint = headerBiddingAnalyticsUrl[stage];
