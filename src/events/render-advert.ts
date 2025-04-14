@@ -208,10 +208,7 @@ const renderAdvert = (
 		'variant',
 	);
 
-	if (
-		isInA9BidResponseWinnerTest &&
-		window.guardian.config.switches.a9BidResponseWinner
-	) {
+	if (isInA9BidResponseWinnerTest) {
 		const matchingAd = window.guardian.commercial?.a9WinningBids?.find(
 			(bidResponse) => bidResponse.slotID == advert.id,
 		);

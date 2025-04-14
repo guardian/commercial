@@ -83,11 +83,7 @@ const requestBids = async (
 								a9BidResponseWinner,
 								'variant',
 							);
-							if (
-								isInA9BidResponseWinnerTest &&
-								window.guardian.config.switches
-									.a9BidResponseWinner
-							) {
+							if (isInA9BidResponseWinnerTest) {
 								window.guardian.commercial ??= {};
 								window.guardian.commercial.a9WinningBids =
 									bidResponse;
