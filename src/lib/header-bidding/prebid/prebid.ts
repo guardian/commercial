@@ -517,9 +517,11 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			{
 				provider: 'gu',
 				options: {
-					ajaxUrl: window.guardian.config.page.isDev
-						? `//performance-events.code.dev-guardianapis.com/header-bidding`
-						: `//performance-events.guardianapis.com/header-bidding`,
+					url:
+						window.guardian.config.page.isDev ||
+						window.location.hostname.includes('localhost')
+							? `//performance-events.code.dev-guardianapis.com/header-bidding`
+							: `//performance-events.guardianapis.com/header-bidding`,
 					pv: window.guardian.ophan.pageViewId,
 				},
 			},
