@@ -244,6 +244,10 @@ const analyticsAdapter = Object.assign(adapter({ analyticsType: 'endpoint' }), {
 			}
 			logEvents(events);
 		} catch (error) {
+			if (error instanceof Error && error.name === 'AbortError') {
+				// Ignore abort errors, they are expected when the fetch times out
+				return;
+			}
 			reportError(
 				error,
 				'commercial',
