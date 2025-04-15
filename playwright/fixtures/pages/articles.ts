@@ -70,7 +70,7 @@ const articles = [
 const articleWithCollapsedSlots = {
 	path: getTestUrl({
 		stage,
-		path: '/politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',
+		path: '/technology/2020/jan/20/jabra-elite-75t-review-small-and-long-lasting-airpod-beaters',
 		adtest: 'collapse-slot',
 	}),
 } as const satisfies GuPage;
