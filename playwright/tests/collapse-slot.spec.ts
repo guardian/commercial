@@ -7,7 +7,9 @@ import { loadPage } from '../lib/load-page';
 const { path } = articleWithCollapsedSlots;
 
 test.describe('Ad slot removal', () => {
-	test(`Empty ad slots should be removed from the DOM`, async ({ page }) => {
+	test(`Empty ad slots should be removed from the DOM`, async ({
+		page,
+	}) => {
 		const gamResponse = waitForGAMResponseForSlot(page, 'top-above-nav');
 
 		await loadPage(page, path);
@@ -30,16 +32,27 @@ test.describe('Ad slot removal', () => {
 			}),
 		).toBeFalsy();
 
+		// The '..' selector selects the parent, in this case the <aside> tag wrapping the ad
+		const topBannerBox = await page.locator('.top-banner-ad-container').locator('..').boundingBox({
+			timeout: 3000,
+		});
+
 		expect(
-			await page.locator('.ad-slot-right').isVisible({
+			topBannerBox?.height
+		).toEqual(0);
+
+		expect(
+			await page.locator('.ad-slot--right').isVisible({
 				timeout: 3000,
 			}),
 		).toBeFalsy();
 
+		const rightSlotBox = await page.locator('.ad-slot--right').locator('..').boundingBox({
+			timeout: 3000,
+		});
+
 		expect(
-			await page.locator('.ad-slot-merchandising').isVisible({
-				timeout: 3000,
-			}),
-		).toBeFalsy();
+			rightSlotBox?.height
+		).toEqual(0);
 	});
 });
