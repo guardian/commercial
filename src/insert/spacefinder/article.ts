@@ -216,7 +216,9 @@ const addMobileAndTabletInlineAds = (
 			const name =
 				currentBreakpoint === 'mobile' && i === 0
 					? 'top-above-nav'
-					: `inline${i}`;
+					: currentBreakpoint === 'tablet'
+						? `inline${i + 1}`
+						: `inline${i}`;
 			const type =
 				currentBreakpoint === 'mobile' && i === 0
 					? 'top-above-nav'
