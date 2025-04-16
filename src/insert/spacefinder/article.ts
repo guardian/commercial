@@ -213,10 +213,15 @@ const addMobileAndTabletInlineAds = (
 ): Promise<boolean> => {
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const slots = paras.map(async (para, i) => {
+			//Mobile top-above-nav is the first ad in the body and the inline1 is the second ad in the body.
+			//Tablet top-above-nav is above the website's navigation and the inline1 is the first ad in the body.
 			const name =
 				currentBreakpoint === 'mobile' && i === 0
 					? 'top-above-nav'
-					: `inline${i}`;
+					: currentBreakpoint === 'tablet'
+						? `inline${i + 1}`
+						: `inline${i}`;
+
 			const type =
 				currentBreakpoint === 'mobile' && i === 0
 					? 'top-above-nav'
