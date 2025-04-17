@@ -1,6 +1,4 @@
 import { log } from '@guardian/libs';
-import { isUserInVariant } from '../../experiments/ab';
-import { deferPermutiveLoad } from '../../experiments/tests/defer-permutive-load';
 import { reportError } from '../../lib/error/report-error';
 import type { Edition } from '../../lib/types';
 import type {
@@ -249,27 +247,9 @@ const initPermutiveSegmentation = () => {
 	runPermutive(permutiveConfig, window.permutive);
 };
 
-const getAlreadyVisitedCount = (): number => {
-	const alreadyVisitedCount =
-		localStorage.getItem('gu.alreadyVisited') ?? '0';
-	return parseInt(alreadyVisitedCount);
-};
-
-const isInDeferPermutiveLoadTest = isUserInVariant(
-	deferPermutiveLoad,
-	'variant',
-);
-
 export const initPermutive = () => {
 	if (window.guardian.config.switches.permutive) {
-		const visitedCount = getAlreadyVisitedCount();
-		if (isInDeferPermutiveLoadTest && visitedCount <= 1) {
-			document.addEventListener('top-above-nav-rendered', () => {
-				void initPermutiveSegmentation();
-			});
-		} else {
-			void initPermutiveSegmentation();
-		}
+		void initPermutiveSegmentation();
 	}
 	return Promise.resolve();
 };

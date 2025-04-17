@@ -67,10 +67,6 @@ export const onSlotRender = (
 
 		void renderAdvert(advert, event).then((isRendered) => {
 			advert.finishedRendering(isRendered);
-			//Emit only if the top-above-nav ad is rendered
-			if (advert.id === 'dfp-ad--top-above-nav') {
-				document.dispatchEvent(new Event('top-above-nav-rendered'));
-			}
 		});
 	}
 };
