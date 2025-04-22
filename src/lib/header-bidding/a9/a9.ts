@@ -85,8 +85,9 @@ const requestBids = async (
 							);
 							if (isInA9BidResponseWinnerTest) {
 								window.guardian.commercial ??= {};
-								window.guardian.commercial.a9WinningBids =
-									bidResponse;
+								window.guardian.commercial.a9WinningBids?.push(
+									...bidResponse,
+								);
 							}
 							window.googletag.cmd.push(() => {
 								window.apstag?.setDisplayBids();
