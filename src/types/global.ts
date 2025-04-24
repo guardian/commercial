@@ -570,4 +570,5 @@ export type {
 	TagAttribute,
 	ThirdPartyTag,
 	CustomIdTokenClaims,
+	FetchBidResponse,
 };

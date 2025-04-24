@@ -3,6 +3,7 @@ import type {
 	OnConsentChangeCallback,
 	USNATConsentState,
 } from '@guardian/libs';
+import { isUserInVariant } from '../../../experiments/ab';
 import { _, a9 } from './a9';
 
 const tcfv2WithConsentMock = (callback: OnConsentChangeCallback) =>
@@ -66,6 +67,10 @@ jest.mock('@guardian/libs', () => ({
 	onConsentChange: jest.fn(),
 }));
 
+jest.mock('experiments/ab', () => ({
+	isUserInVariant: jest.fn(),
+}));
+
 const mockOnConsentChange = (
 	mfn: (callback: OnConsentChangeCallback) => void,
 ) => (onConsentChange as jest.Mock).mockImplementation(mfn);
@@ -102,5 +107,112 @@ describe('initialise', () => {
 		a9.initialise();
 		expect(window.apstag).toBeDefined();
 		expect(window.apstag?.init).toHaveBeenCalled();
+	});
+});
+
+describe('Logging a9 bid response', () => {
+	it('should add a9WinningBids if window.commercial is undefined', () => {
+		mockOnConsentChange(tcfv2WithConsentMock);
+		mockGetConsentFor(true);
+		jest.mocked(isUserInVariant).mockReturnValueOnce(true);
+
+		const adSizesArray = [300, 250];
+		const adSizesString =
+			`${adSizesArray[0]}x${adSizesArray[1]}` as `${number}x${number}`;
+
+		const mockBidresponse = [
+			{
+				amznbid: 'string',
+				amzniid: 'string',
+				amznp: 'string',
+				amznsz: {
+					adSizes: adSizesString,
+				},
+				size: {
+					adSizes: adSizesString,
+				},
+				slotID: 'string',
+			},
+		];
+
+		window.guardian.commercial =
+			undefined as typeof window.guardian.commercial;
+
+		a9.logA9BidResponse(mockBidresponse);
+		expect(window.guardian.commercial?.a9WinningBids).toEqual(
+			mockBidresponse,
+		);
+	});
+	it('should add a9WinningBids the window.commercial object on first bidResponse', () => {
+		mockOnConsentChange(tcfv2WithConsentMock);
+		mockGetConsentFor(true);
+		jest.mocked(isUserInVariant).mockReturnValueOnce(true);
+
+		const adSizesArray = [300, 250];
+		const adSizesString =
+			`${adSizesArray[0]}x${adSizesArray[1]}` as `${number}x${number}`;
+
+		const mockBidresponse = [
+			{
+				amznbid: 'string',
+				amzniid: 'string',
+				amznp: 'string',
+				amznsz: {
+					adSizes: adSizesString,
+				},
+				size: {
+					adSizes: adSizesString,
+				},
+				slotID: 'string',
+			},
+		];
+
+		window.guardian.commercial = {
+			a9WinningBids: [],
+		} as typeof window.guardian.commercial;
+
+		a9.logA9BidResponse(mockBidresponse);
+		expect(window.guardian.commercial?.a9WinningBids).toEqual(
+			mockBidresponse,
+		);
+	});
+	it('should add another bidResponse object to the a9WinningBids array, retaining previous item', () => {
+		mockOnConsentChange(tcfv2WithConsentMock);
+		mockGetConsentFor(true);
+		jest.mocked(isUserInVariant).mockReturnValueOnce(true);
+
+		const adSizesArray = [300, 250];
+		const adSizesString =
+			`${adSizesArray[0]}x${adSizesArray[1]}` as `${number}x${number}`;
+
+		const mockBidresponse = [
+			{
+				amznbid: 'string',
+				amzniid: 'string',
+				amznp: 'string',
+				amznsz: {
+					adSizes: adSizesString,
+				},
+				size: {
+					adSizes: adSizesString,
+				},
+				slotID: 'string',
+			},
+		];
+		window.guardian.commercial = {
+			a9WinningBids: [...mockBidresponse],
+		} as typeof window.guardian.commercial;
+
+		a9.logA9BidResponse(mockBidresponse);
+		expect(window.guardian.commercial?.a9WinningBids?.length).toEqual(2);
+		expect(window.guardian.commercial?.a9WinningBids).toMatchObject(
+			expect.arrayContaining([...mockBidresponse, ...mockBidresponse]),
+		);
+	});
+	it('should not add a9WinningBids to the window.commercial object if no bidResponse', () => {
+		mockOnConsentChange(tcfv2WithConsentMock);
+		mockGetConsentFor(true);
+		const result = a9.logA9BidResponse([]);
+		expect(result).toEqual(undefined);
 	});
 });

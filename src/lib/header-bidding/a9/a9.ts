@@ -3,7 +3,10 @@ import type { Advert } from '../../../define/Advert';
 import { isUserInVariant } from '../../../experiments/ab';
 import { a9BidResponseWinner } from '../../../experiments/tests/a9-bid-response-winner';
 import { reportError } from '../../../lib/error/report-error';
-import type { A9AdUnitInterface } from '../../../types/global';
+import type {
+	A9AdUnitInterface,
+	FetchBidResponse,
+} from '../../../types/global';
 import type { HeaderBiddingSlot, SlotFlatMap } from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';
 
@@ -46,6 +49,18 @@ const initialise = (): void => {
 	}
 };
 
+const logA9BidResponse = (bidResponse: FetchBidResponse[]): void => {
+	const isInA9BidResponseWinnerTest = isUserInVariant(
+		a9BidResponseWinner,
+		'variant',
+	);
+	if (isInA9BidResponseWinnerTest) {
+		window.guardian.commercial ??= {};
+		window.guardian.commercial.a9WinningBids ??= [];
+		window.guardian.commercial.a9WinningBids.push(...bidResponse);
+	}
+};
+
 // slotFlatMap allows you to dynamically interfere with the PrebidSlot definition
 // for this given request for bids.
 const requestBids = async (
@@ -79,17 +94,7 @@ const requestBids = async (
 					window.apstag?.fetchBids(
 						{ slots: adUnits },
 						(bidResponse) => {
-							const isInA9BidResponseWinnerTest = isUserInVariant(
-								a9BidResponseWinner,
-								'variant',
-							);
-							if (isInA9BidResponseWinnerTest) {
-								window.guardian.commercial ??= {};
-								window.guardian.commercial.a9WinningBids ??= [];
-								window.guardian.commercial.a9WinningBids.push(
-									...bidResponse,
-								);
-							}
+							logA9BidResponse(bidResponse);
 							window.googletag.cmd.push(() => {
 								window.apstag?.setDisplayBids();
 								resolve();
@@ -108,6 +113,7 @@ const requestBids = async (
 export const a9 = {
 	initialise,
 	requestBids,
+	logA9BidResponse,
 };
 
 export const _ = {
