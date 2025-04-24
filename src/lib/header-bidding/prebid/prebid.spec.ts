@@ -227,23 +227,21 @@ describe('initialise', () => {
 		expect(window.pbjs?.getConfig()).toMatchObject({
 			multibid: [
 				{
-					bidders: [
-						'adyoulike',
-						'and',
-						'criteo',
-						'ix',
-						'kargo',
-						'rubicon',
-						'oxd',
-						'ozone',
-						'pubmatic',
-						'triplelift',
-						'trustx',
-						'xhb',
-						'ttd',
-					],
+					bidder: 'adyoulike',
 					maxBids: 9,
 				},
+				{ bidder: 'and', maxBids: 9 },
+				{ bidder: 'criteo', maxBids: 9 },
+				{ bidder: 'ix', maxBids: 9 },
+				{ bidder: 'kargo', maxBids: 9 },
+				{ bidder: 'rubicon', maxBids: 9 },
+				{ bidder: 'oxd', maxBids: 9 },
+				{ bidder: 'ozone', maxBids: 9 },
+				{ bidder: 'pubmatic', maxBids: 9 },
+				{ bidder: 'triplelift', maxBids: 9 },
+				{ bidder: 'trustx', maxBids: 9 },
+				{ bidder: 'xhb', maxBids: 9 },
+				{ bidder: 'ttd', maxBids: 9 },
 			],
 		});
 	});

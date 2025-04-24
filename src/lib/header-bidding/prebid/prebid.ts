@@ -88,12 +88,10 @@ type UserSync =
 			syncEnabled: false;
 	  };
 
-type Multibid = [
-	{
-		bidders: BidderCode[];
-		maxBids: number;
-	},
-];
+type Multibid = {
+	bidder: BidderCode;
+	maxBids: number;
+};
 
 type PbjsConfig = {
 	bidderTimeout: number;
@@ -119,7 +117,7 @@ type PbjsConfig = {
 	consentManagement?: ConsentManagement;
 	realTimeData?: unknown;
 	useBidCache?: boolean;
-	multibid?: Multibid;
+	multibid?: Multibid[];
 	customPriceBucket?: PrebidPriceGranularity;
 	/**
 	 * This is a custom property that has been added to our fork of prebid.js
@@ -406,28 +404,27 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	 * multibid is a feature that allows Prebid to request multiple bids
 	 * from the same bidder
 	 */
-	const multibid = (): Multibid => {
-		const multibidBidders = [
-			'adyoulike',
-			'and',
-			'criteo',
-			'ix',
-			'kargo',
-			'rubicon',
-			'oxd',
-			'ozone',
-			'pubmatic',
-			'triplelift',
-			'trustx',
-			'xhb',
-			'ttd',
-		] satisfies BidderCode[];
-
+	const multibid = (): Multibid[] => {
+		if (!useBidCache || !isUserInVariant(prebidMultibid, 'variant')) {
+			return [];
+		}
 		return [
 			{
-				bidders: multibidBidders,
+				bidder: 'adyoulike',
 				maxBids: 9,
 			},
+			{ bidder: 'and', maxBids: 9 },
+			{ bidder: 'criteo', maxBids: 9 },
+			{ bidder: 'ix', maxBids: 9 },
+			{ bidder: 'kargo', maxBids: 9 },
+			{ bidder: 'rubicon', maxBids: 9 },
+			{ bidder: 'oxd', maxBids: 9 },
+			{ bidder: 'ozone', maxBids: 9 },
+			{ bidder: 'pubmatic', maxBids: 9 },
+			{ bidder: 'triplelift', maxBids: 9 },
+			{ bidder: 'trustx', maxBids: 9 },
+			{ bidder: 'xhb', maxBids: 9 },
+			{ bidder: 'ttd', maxBids: 9 },
 		];
 	};
 
