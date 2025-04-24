@@ -111,6 +111,9 @@ describe('initialise', () => {
 });
 
 describe('Logging a9 bid response', () => {
+	beforeEach(() => {
+		jest.mocked(isUserInVariant).mockReset();
+	});
 	it('should add a9WinningBids if window.commercial is undefined', () => {
 		mockOnConsentChange(tcfv2WithConsentMock);
 		mockGetConsentFor(true);
