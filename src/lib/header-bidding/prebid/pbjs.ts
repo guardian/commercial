@@ -15,7 +15,7 @@ import 'prebid.js/modules/tripleliftBidAdapter';
 import 'prebid.js/modules/kargoBidAdapter';
 import 'prebid.js/modules/rubiconBidAdapter';
 import 'prebid.js/modules/ttdBidAdapter';
-// import 'prebid.js/modules/multibid/index';
+import 'prebid.js/modules/multibid';
 
 // Guardian specific adapters that we have modified or created
 import './modules/appnexusBidAdapter';
