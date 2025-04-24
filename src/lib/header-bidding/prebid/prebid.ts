@@ -88,10 +88,16 @@ type UserSync =
 			syncEnabled: false;
 	  };
 
-type Multibid = {
-	bidder: BidderCode;
-	maxBids: number;
-};
+type Multibid =
+	| {
+			bidders: BidderCode[];
+			maxBids: number;
+	  }
+	| {
+			bidder: BidderCode;
+			maxBids: number;
+			targetBiddercodePrefix?: string;
+	  };
 
 type PbjsConfig = {
 	bidderTimeout: number;
@@ -395,6 +401,12 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		}
 	};
 
+	/** Helper function to decide if a bidder should be included.
+	 * It is a curried function prepared with the consent state
+	 * at the time of initialisation to avoid unnecessary repetition
+	 * of consent state throughout */
+	const shouldInclude = shouldIncludeBidder(consentState);
+
 	/**
 	 * useBidCache is a feature that allows Prebid to cache bids
 	 */
@@ -405,34 +417,24 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	 * from the same bidder
 	 */
 	const multibid = (): Multibid[] => {
-		if (!useBidCache || !isUserInVariant(prebidMultibid, 'variant')) {
-			return [];
-		}
-		return [
-			{
-				bidder: 'adyoulike',
-				maxBids: 9,
-			},
-			{ bidder: 'and', maxBids: 9 },
-			{ bidder: 'criteo', maxBids: 9 },
-			{ bidder: 'ix', maxBids: 9 },
-			{ bidder: 'kargo', maxBids: 9 },
-			{ bidder: 'rubicon', maxBids: 9 },
-			{ bidder: 'oxd', maxBids: 9 },
-			{ bidder: 'ozone', maxBids: 9 },
-			{ bidder: 'pubmatic', maxBids: 9 },
-			{ bidder: 'triplelift', maxBids: 9 },
-			{ bidder: 'trustx', maxBids: 9 },
-			{ bidder: 'xhb', maxBids: 9 },
-			{ bidder: 'ttd', maxBids: 9 },
-		];
-	};
+		const allBidders = [
+			'adyoulike',
+			'and',
+			'criteo',
+			'ix',
+			'kargo',
+			'rubicon',
+			'oxd',
+			'ozone',
+			'pubmatic',
+			'triplelift',
+			'trustx',
+			'xhb',
+			'ttd',
+		] satisfies BidderCode[];
 
-	/** Helper function to decide if a bidder should be included.
-	 * It is a curried function prepared with the consent state
-	 * at the time of initialisation to avoid unnecessary repetition
-	 * of consent state throughout */
-	const shouldInclude = shouldIncludeBidder(consentState);
+		return [{ bidders: allBidders.filter(shouldInclude), maxBids: 9 }];
+	};
 
 	const pbjsConfig: PbjsConfig = Object.assign(
 		{},

@@ -26,7 +26,7 @@ jest.mock('lib/dfp/get-advert-by-id', () => ({
 jest.mock('../utils', () => ({
 	...jest.requireActual('../utils.ts'),
 	shouldIncludePermutive: jest.fn().mockReturnValue(true),
-	shouldIncludePrebidBidCache: jest.fn().mockReturnValue(false),
+	shouldIncludePrebidBidCache: jest.fn().mockReturnValue(true),
 	shouldIncludeBidder: jest
 		.fn()
 		.mockReturnValue(jest.fn().mockReturnValue(true)),
@@ -71,6 +71,7 @@ describe('initialise', () => {
 		jest.mocked(shouldIncludeBidder).mockReturnValue(
 			jest.fn().mockReturnValue(true),
 		);
+		jest.mocked(isUserInVariant).mockReturnValue(false);
 		prebid.initialise(window, mockConsentState);
 
 		expect(window.pbjs?.getConfig()).toEqual({
@@ -136,7 +137,7 @@ describe('initialise', () => {
 				syncUrlModifier: {},
 			},
 			timeoutBuffer: 400,
-			useBidCache: false,
+			useBidCache: true,
 			multibid: undefined,
 			userSync: {
 				syncDelay: 3000,
@@ -223,25 +224,30 @@ describe('initialise', () => {
 	test('should generate correct Prebid config when shouldIncludePrebidBidCache and prebidMultibid is variant', () => {
 		jest.mocked(shouldIncludePrebidBidCache).mockReturnValue(true);
 		jest.mocked(isUserInVariant).mockReturnValue(true);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(
+			jest.fn().mockReturnValue(true),
+		);
 		prebid.initialise(window, mockConsentState);
 		expect(window.pbjs?.getConfig()).toMatchObject({
 			multibid: [
 				{
-					bidder: 'adyoulike',
+					bidders: [
+						'adyoulike',
+						'and',
+						'criteo',
+						'ix',
+						'kargo',
+						'rubicon',
+						'oxd',
+						'ozone',
+						'pubmatic',
+						'triplelift',
+						'trustx',
+						'xhb',
+						'ttd',
+					],
 					maxBids: 9,
 				},
-				{ bidder: 'and', maxBids: 9 },
-				{ bidder: 'criteo', maxBids: 9 },
-				{ bidder: 'ix', maxBids: 9 },
-				{ bidder: 'kargo', maxBids: 9 },
-				{ bidder: 'rubicon', maxBids: 9 },
-				{ bidder: 'oxd', maxBids: 9 },
-				{ bidder: 'ozone', maxBids: 9 },
-				{ bidder: 'pubmatic', maxBids: 9 },
-				{ bidder: 'triplelift', maxBids: 9 },
-				{ bidder: 'trustx', maxBids: 9 },
-				{ bidder: 'xhb', maxBids: 9 },
-				{ bidder: 'ttd', maxBids: 9 },
 			],
 		});
 	});
