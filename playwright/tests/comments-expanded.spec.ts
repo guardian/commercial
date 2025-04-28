@@ -25,7 +25,7 @@ test.describe('desktop comments-expanded slot', () => {
 		await expect(
 			page.locator('[data-testid=comment-counts]').nth(0),
 		).toBeVisible({
-			timeout: 10000,
+			timeout: 10_000, // 10s
 		});
 
 		// Click the comment count to expand the comments
@@ -53,7 +53,7 @@ test.describe('mobile comments-expanded slot', () => {
 		await expect(
 			page.locator('[data-testid=comment-counts]').nth(0),
 		).toBeVisible({
-			timeout: 10000,
+			timeout: 10_000, // 10s
 		});
 
 		// Click the comment count to expand the comments

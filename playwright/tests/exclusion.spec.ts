@@ -28,7 +28,7 @@ test.describe('Exclusion targeting', () => {
 
 		expect(
 			await page.locator('.top-banner-ad-container').isVisible({
-				timeout: 3000,
+				timeout: 3_000, // 3s
 			}),
 		).toBeFalsy();
 	});

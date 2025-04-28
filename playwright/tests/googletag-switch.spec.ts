@@ -49,6 +49,6 @@ test.describe('shouldLoadGoogletagSwitch', () => {
 		// by the commercial runtime
 		await page
 			.locator('#dfp-ad--top-above-nav')
-			.waitFor({ state: 'detached', timeout: 30000 });
+			.waitFor({ state: 'detached' });
 	});
 });
