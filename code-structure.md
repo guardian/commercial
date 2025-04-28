@@ -1,6 +1,6 @@
 # Commercial codebase structure
 
-The entry point of the commercial runtime is [commercial.ts](./commercial.ts)
+The entry point of the commercial runtime is [bundle/src/commercial.ts](./bundle/src/commercial.ts)
 
 The codebase is structured to align with the [lifecycle](https://github.com/guardian/commercial-playground/blob/main/simple-ad-example/render-ad.html) of displaying an advert
 
@@ -10,7 +10,7 @@ The high level sequence is as follows:
 
 Initialise commercial, decide if we are running consented, consentless (i.e. opt out) and initialise respective modules
 
-In particular initialises Google Publisher Tag (GPT) in [prepare-googletag](./init/consented/prepare-googletag.ts)
+In particular initialises Google Publisher Tag (GPT) in [prepare-googletag](./bundle/src/init/consented/prepare-googletag.ts)
 
 ## define
 

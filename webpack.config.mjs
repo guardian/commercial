@@ -22,6 +22,7 @@ const config = {
 	entry: {
 		'commercial-standalone': join(
 			import.meta.dirname,
+			'bundle',
 			'src',
 			'commercial.ts',
 		),
@@ -101,12 +102,13 @@ const config = {
 		new HtmlWebpackPlugin({
 			template: join(
 				import.meta.dirname,
+				'core',
 				'static',
 				'tpc-test-iframe',
 				'v2',
 				'index.html',
 			),
-			filename: `commercial/tpc-test/v2/index.html`,
+			filename: 'commercial/tpc-test/v2/index.html',
 			minify: {
 				collapseWhitespace: true,
 				removeComments: true,

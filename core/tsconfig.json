@@ -6,7 +6,7 @@
 		"outDir": "dist",
 		"typeRoots": ["./node_modules/@types", "./node_modules/web-vitals/dist"]
 	},
-	"extends": "./tsconfig.json",
+	"extends": "../tsconfig.json",
 	"rootDir": "src",
 	"include": ["src/export.ts", "src/types"],
 	"exclude": ["**/*.spec.*", "**/*.test.*"]

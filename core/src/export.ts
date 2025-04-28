@@ -10,6 +10,7 @@ export { buildPageTargeting } from './lib/targeting/build-page-targeting';
 export { postMessage } from './lib/messenger/post-message';
 export { buildImaAdTagUrl } from './lib/targeting/youtube-ima';
 export { getPermutivePFPSegments } from './lib/permutive';
+export { commercialFeatures } from './lib/commercial-features';
 export type { AdsConfigDisabled } from './lib/types';
 export type { AdSize, SizeMapping, SlotName } from './lib/ad-sizes';
 export type { PageTargeting } from './lib/targeting/build-page-targeting';

@@ -7,7 +7,7 @@ export default [
 			'**/*.js',
 			'**/*.mjs',
 			'**/dist',
-			'src/lib/__mocks__/ad-sizes.ts',
+			'**/src/lib/__mocks__/ad-sizes.ts',
 		],
 	},
 	...guardian.configs.recommended,
