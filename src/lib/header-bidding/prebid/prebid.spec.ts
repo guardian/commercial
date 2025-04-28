@@ -1,4 +1,5 @@
 import { type ConsentState } from '@guardian/libs';
+import { isUserInVariant } from '../../../experiments/ab';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
 import {
@@ -25,10 +26,14 @@ jest.mock('lib/dfp/get-advert-by-id', () => ({
 jest.mock('../utils', () => ({
 	...jest.requireActual('../utils.ts'),
 	shouldIncludePermutive: jest.fn().mockReturnValue(true),
-	shouldIncludePrebidBidCache: jest.fn().mockReturnValue(false),
+	shouldIncludePrebidBidCache: jest.fn().mockReturnValue(true),
 	shouldIncludeBidder: jest
 		.fn()
 		.mockReturnValue(jest.fn().mockReturnValue(true)),
+}));
+
+jest.mock('experiments/ab', () => ({
+	isUserInVariant: jest.fn(),
 }));
 
 const mockConsentState = {
@@ -66,6 +71,7 @@ describe('initialise', () => {
 		jest.mocked(shouldIncludeBidder).mockReturnValue(
 			jest.fn().mockReturnValue(true),
 		);
+		jest.mocked(isUserInVariant).mockReturnValue(false);
 		prebid.initialise(window, mockConsentState);
 
 		expect(window.pbjs?.getConfig()).toEqual({
@@ -131,7 +137,8 @@ describe('initialise', () => {
 				syncUrlModifier: {},
 			},
 			timeoutBuffer: 400,
-			useBidCache: false,
+			useBidCache: true,
+			multibid: undefined,
 			userSync: {
 				syncDelay: 3000,
 				syncEnabled: true,
@@ -212,6 +219,50 @@ describe('initialise', () => {
 		jest.mocked(shouldIncludePrebidBidCache).mockReturnValue(false);
 		prebid.initialise(window, mockConsentState);
 		expect(window.pbjs?.getConfig('useBidCache')).toBe(false);
+	});
+
+	test('should generate correct Prebid config when shouldIncludePrebidBidCache and prebidMultibid is variant', () => {
+		jest.mocked(shouldIncludePrebidBidCache).mockReturnValue(true);
+		jest.mocked(isUserInVariant).mockReturnValue(true);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(
+			jest.fn().mockReturnValue(true),
+		);
+		prebid.initialise(window, mockConsentState);
+		expect(window.pbjs?.getConfig()).toMatchObject({
+			multibid: [
+				{
+					bidders: [
+						'adyoulike',
+						'and',
+						'criteo',
+						'ix',
+						'kargo',
+						'rubicon',
+						'oxd',
+						'ozone',
+						'pubmatic',
+						'triplelift',
+						'trustx',
+						'xhb',
+						'ttd',
+					],
+					maxBids: 9,
+				},
+			],
+		});
+	});
+
+	test('should generate correct Prebid config when shouldIncludePrebidBidCache is true and prebidMultibid is control', () => {
+		jest.mocked(shouldIncludePrebidBidCache).mockReturnValue(true);
+		jest.mocked(isUserInVariant).mockReturnValue(false);
+		prebid.initialise(window, mockConsentState);
+		expect(window.pbjs?.getConfig('multibid')).toBeUndefined();
+	});
+
+	test('should generate correct Prebid config for multibid when shouldIncludePrebidBidCache is false', () => {
+		jest.mocked(shouldIncludePrebidBidCache).mockReturnValue(false);
+		prebid.initialise(window, mockConsentState);
+		expect(window.pbjs?.getConfig('multibid')).toBeUndefined();
 	});
 
 	test('should not include realTimeData object if permutive should not be included', () => {

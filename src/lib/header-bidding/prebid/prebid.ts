@@ -3,7 +3,8 @@ import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { PrebidPriceGranularity } from 'prebid.js/src/cpmBucketManager';
 import type { Advert } from '../../../define/Advert';
-import { getParticipations } from '../../../experiments/ab';
+import { getParticipations, isUserInVariant } from '../../../experiments/ab';
+import { prebidMultibid } from '../../../experiments/tests/prebid-multibid';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
@@ -87,6 +88,17 @@ type UserSync =
 			syncEnabled: false;
 	  };
 
+type Multibid =
+	| {
+			bidders: BidderCode[];
+			maxBids: number;
+	  }
+	| {
+			bidder: BidderCode;
+			maxBids: number;
+			targetBiddercodePrefix?: string;
+	  };
+
 type PbjsConfig = {
 	bidderTimeout: number;
 	timeoutBuffer?: number;
@@ -111,6 +123,7 @@ type PbjsConfig = {
 	consentManagement?: ConsentManagement;
 	realTimeData?: unknown;
 	useBidCache?: boolean;
+	multibid?: Multibid[];
 	customPriceBucket?: PrebidPriceGranularity;
 	/**
 	 * This is a custom property that has been added to our fork of prebid.js
@@ -388,16 +401,40 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		}
 	};
 
-	/**
-	 * useBidCache is a feature that allows Prebid to cache bids
-	 */
-	const useBidCache = shouldIncludePrebidBidCache();
-
 	/** Helper function to decide if a bidder should be included.
 	 * It is a curried function prepared with the consent state
 	 * at the time of initialisation to avoid unnecessary repetition
 	 * of consent state throughout */
 	const shouldInclude = shouldIncludeBidder(consentState);
+
+	/**
+	 * useBidCache is a feature that allows Prebid to cache bids
+	 */
+	const useBidCache = shouldIncludePrebidBidCache();
+
+	/**
+	 * multibid is a feature that allows Prebid to request multiple bids
+	 * from the same bidder
+	 */
+	const multibid = (): Multibid[] => {
+		const allBidders = [
+			'adyoulike',
+			'and',
+			'criteo',
+			'ix',
+			'kargo',
+			'rubicon',
+			'oxd',
+			'ozone',
+			'pubmatic',
+			'triplelift',
+			'trustx',
+			'xhb',
+			'ttd',
+		] satisfies BidderCode[];
+
+		return [{ bidders: allBidders.filter(shouldInclude), maxBids: 9 }];
+	};
 
 	const pbjsConfig: PbjsConfig = Object.assign(
 		{},
@@ -426,6 +463,10 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 
 	if (isSwitchedOn('consentManagement')) {
 		pbjsConfig.consentManagement = consentManagement();
+	}
+
+	if (useBidCache && isUserInVariant(prebidMultibid, 'variant')) {
+		pbjsConfig.multibid = multibid();
 	}
 
 	if (shouldIncludePermutive(consentState)) {
