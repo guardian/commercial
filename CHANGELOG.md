@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 26.0.2
+
+### Patch Changes
+
+- 3337aa8: revert to libs 22.0.1
+
 ## 26.0.1
 
 ### Patch Changes
