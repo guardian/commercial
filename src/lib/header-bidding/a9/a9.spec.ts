@@ -212,7 +212,14 @@ describe('Logging a9 bid response', () => {
 			expect.arrayContaining([...mockBidresponse, ...mockBidresponse]),
 		);
 	});
-	it('should not add a9WinningBids to the window.commercial object if no bidResponse', () => {
+	it('should not add a9WinningBids to the window.commercial object if no bidResponse and in variant', () => {
+		mockOnConsentChange(tcfv2WithConsentMock);
+		mockGetConsentFor(true);
+		jest.mocked(isUserInVariant).mockReturnValueOnce(true);
+		const result = a9.logA9BidResponse([]);
+		expect(result).toEqual(undefined);
+	});
+	it('should not add a9WinningBids to the window.commercial object if no bidResponse and not in variant', () => {
 		mockOnConsentChange(tcfv2WithConsentMock);
 		mockGetConsentFor(true);
 		const result = a9.logA9BidResponse([]);
