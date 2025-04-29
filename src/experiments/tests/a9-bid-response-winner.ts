@@ -4,7 +4,7 @@ export const a9BidResponseWinner: ABTest = {
 	id: 'A9BidResponseWinner',
 	author: '@commercial-dev',
 	start: '2025-04-2',
-	expiry: '2025-04-18',
+	expiry: '2025-05-30',
 	audience: 0 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',
