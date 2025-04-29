@@ -35,7 +35,9 @@ test.describe('Prebid', () => {
 						),
 				);
 			},
-			{ timeout: 10000 },
+			{
+				timeout: 10_000, // 10s
+			},
 		);
 
 		const topAboveNavBidderRequests = await page.evaluate(() => {
@@ -86,7 +88,9 @@ test.describe('Prebid', () => {
 				const events = window.pbjs?.getEvents() ?? [];
 				return events.find((event) => event.eventType === 'auctionEnd');
 			},
-			{ timeout: 10000 },
+			{
+				timeout: 10_000, // 10s
+			},
 		);
 
 		const bidderErrors = await page.evaluate(() => {

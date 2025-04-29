@@ -134,8 +134,8 @@ const waitForSlot = async (page: Page, slot: string, waitForIframe = true) => {
 	if (waitForIframe) {
 		// iframe locator
 		const iframe = page.locator(`${slotId} iframe:first-child`);
-		// wait for the iframe
-		await iframe.waitFor({ state: 'visible', timeout: 120000 });
+		// wait for the iframe to be visible
+		await iframe.waitFor();
 	}
 };
 
@@ -150,7 +150,7 @@ const waitForIsland = async (page: Page, island: string) => {
 	// wait for it to be hydrated
 	const hyrdatedIslandSelector = `gu-island[name="${island}"][data-island-status="hydrated"]`;
 	const hyrdatedIslandLocator = page.locator(hyrdatedIslandSelector);
-	await hyrdatedIslandLocator.waitFor({ state: 'visible', timeout: 120000 });
+	await hyrdatedIslandLocator.waitFor();
 };
 
 const countLiveblogInlineSlots = async (page: Page, isMobile: boolean) => {

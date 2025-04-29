@@ -13,7 +13,12 @@ const cmpAcceptAll = async (page: Page) => {
 		.frameLocator(SP_LAYER1_IFRAME)
 		.locator(SP_LAYER1_ACCEPT_ALL_BUTTON);
 	await acceptAllButton.click();
-	await new Promise((r) => setTimeout(r, 2000));
+	await new Promise((r) =>
+		setTimeout(
+			r,
+			2_000, // 2s
+		),
+	);
 };
 
 const cmpRejectAll = async (page: Page) => {
@@ -21,7 +26,12 @@ const cmpRejectAll = async (page: Page) => {
 		.frameLocator(SP_LAYER1_IFRAME)
 		.locator(SP_LAYER1_REJECT_ALL_BUTTON);
 	await rejectAllButton.click();
-	await new Promise((r) => setTimeout(r, 2000));
+	await new Promise((r) =>
+		setTimeout(
+			r,
+			2_000, // 2s
+		),
+	);
 };
 
 const cmpReconsent = async (page: Page) => {
@@ -33,7 +43,12 @@ const cmpReconsent = async (page: Page) => {
 		.frameLocator(SP_LAYER2_IFRAME)
 		.locator(SP_LAYER2_ACCEPT_ALL_BUTTON);
 	await acceptAllButton.click();
-	await new Promise((r) => setTimeout(r, 2000));
+	await new Promise((r) =>
+		setTimeout(
+			r,
+			2_000, // 2s
+		),
+	);
 };
 
 export { cmpAcceptAll, cmpReconsent, cmpRejectAll };
