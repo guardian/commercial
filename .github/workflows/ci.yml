@@ -17,10 +17,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
 
-      # Temporarily force newer version of corepack
-      # See https://github.com/guardian/support-service-lambdas/pull/2666
-      - run: npm install --global corepack@0.31.0
-
       - name: Set up Node
         uses: ./.github/actions/setup-node-env
 
@@ -33,10 +29,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
-
-      # Temporarily force newer version of corepack
-      # See https://github.com/guardian/support-service-lambdas/pull/2666
-      - run: npm install --global corepack@0.31.0
 
       - name: Set up Node
         uses: ./.github/actions/setup-node-env
@@ -54,10 +46,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
 
-      # Temporarily force newer version of corepack
-      # See https://github.com/guardian/support-service-lambdas/pull/2666
-      - run: npm install --global corepack@0.31.0
-
       - name: Set up Node
         uses: ./.github/actions/setup-node-env
 
@@ -70,10 +58,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
-
-      # Temporarily force newer version of corepack
-      # See https://github.com/guardian/support-service-lambdas/pull/2666
-      - run: npm install --global corepack@0.31.0
 
       - name: Set up Node
         uses: ./.github/actions/setup-node-env
@@ -98,10 +82,6 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-
-      # Temporarily force newer version of corepack
-      # See https://github.com/guardian/support-service-lambdas/pull/2666
-      - run: npm install --global corepack@0.31.0
 
       - name: Set up Node
         uses: ./.github/actions/setup-node-env
@@ -151,10 +131,6 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-
-      # Temporarily force newer version of corepack
-      # See https://github.com/guardian/support-service-lambdas/pull/2666
-      - run: npm install --global corepack@0.31.0
 
       - name: Set up Node
         uses: ./.github/actions/setup-node-env
