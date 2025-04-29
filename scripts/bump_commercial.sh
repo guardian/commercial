@@ -21,8 +21,6 @@ git pull origin main
 git checkout -b "$BRANCH_NAME"
 pnpm upgrade "$REPO@$VERSION"
 
-# fix the flip flopping Prebid
-pnpm cache clean @guardian/prebid.js
 pnpm install --force
 
 git add package.json pnpm-lock.yaml
