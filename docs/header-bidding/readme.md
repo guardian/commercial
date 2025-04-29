@@ -201,19 +201,19 @@ Here is an example header bidding creative script which includes a parameter for
 
 You may have noticed that there are separate line items for each bid price.
 
-Each of these line items are programatically created by scripts in the following repository:
+Each of these line items are programatically created by scripts in the following Scala repository:
 
 https://github.com/guardian/commercial-tools/tree/main/dfp-line-item-creator
 
-### prebid.js version
+This code has been more recently re-written in Typescript in https://github.com/guardian/ad-manager-tools
 
-The version of prebid.js used by commercial is a forked custom version:
+### Prebid.js version
 
-https://github.com/guardian/Prebid.js#681fbb
+We tend to use a version of [Prebid.js](https://github.com/prebid/Prebid.js) that is slightly behind the bleeding edge version
 
-The reasons for the custom verion is detailed here:
+Our Prebid.js set up is defined in [src/lib/header-bidding/prebid/pbjs.ts](https://github.com/guardian/commercial/blob/1e920009b61342687611056daed7714fe1cfead3/src/lib/header-bidding/prebid/pbjs.ts)
 
-https://github.com/guardian/Prebid.js/blob/master/GUARDIAN_modifications.md
+The Guardian-specific Prebid modules are in [src/lib/header-bidding/prebid/modules](https://github.com/guardian/commercial/tree/1e920009b61342687611056daed7714fe1cfead3/src/lib/header-bidding/prebid/modules).
 
 #### Debugging prebid.js
 
