@@ -1,11 +1,11 @@
 import { log } from '@guardian/libs';
+import { emptyAdvert } from '../events/empty-advert';
 import { adSizes } from '../lib/ad-sizes';
 import { commercialFeatures } from '../lib/commercial-features';
 import { AD_LABEL_HEIGHT } from '../lib/constants/ad-label-height';
 import { createAdSlot } from '../lib/create-ad-slot';
 import { getBreakpoint } from '../lib/detect/detect-breakpoint';
 import { getViewport } from '../lib/detect/detect-viewport';
-import { dfpEnv } from '../lib/dfp/dfp-env';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import fastdom from '../lib/fastdom-promise';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
@@ -121,13 +121,8 @@ const removeMobileCommentsExpandedAds = (): Promise<void> => {
 			log('commercial', `Removing ad slot: ${node.id}`);
 			const advert = getAdvertById(node.id);
 			if (advert) {
-				window.googletag.destroySlots([advert.slot]);
+				emptyAdvert(advert);
 			}
-			node.remove();
-			dfpEnv.adverts.delete(node.id);
-			dfpEnv.advertsToLoad = dfpEnv.advertsToLoad.filter(
-				(_) => _ !== advert,
-			);
 		}),
 	);
 };
