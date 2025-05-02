@@ -45,5 +45,11 @@ test.describe('Ad slot removal', () => {
 				timeout: 3000,
 			}),
 		).toBeFalsy();
+
+		expect(
+			await page.locator('.ad-slot--merchandising').isVisible({
+				timeout: 3000,
+			}),
+		).toBeFalsy();
 	});
 });
