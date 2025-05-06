@@ -5,6 +5,7 @@ import { adSizes } from '../lib/ad-sizes';
 import { reportError } from '../lib/error/report-error';
 import fastdom from '../lib/fastdom-promise';
 import { logGumGumWinningBid } from '../lib/gumgum-winning-bid';
+import { emptyAdvert } from './empty-advert';
 import { renderAdvertLabel } from './render-advert-label';
 
 /**
@@ -130,7 +131,8 @@ const outOfPageCallback = (advert: Advert) => {
 	});
 };
 sizeCallbacks[adSizes.outOfPage.toString()] = outOfPageCallback;
-sizeCallbacks[adSizes.empty.toString()] = outOfPageCallback;
+sizeCallbacks[adSizes.empty.toString()] = (ad: Advert) =>
+	Promise.resolve(emptyAdvert(ad));
 
 /**
  * Commercial components with merch sizing get fluid-250 styling
