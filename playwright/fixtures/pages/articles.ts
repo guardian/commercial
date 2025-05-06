@@ -67,4 +67,12 @@ const articles = [
 	},
 ] as const satisfies GuPage[];
 
-export { articles };
+const articleWithCollapsedSlots = {
+	path: getTestUrl({
+		stage,
+		path: '/technology/2020/jan/20/jabra-elite-75t-review-small-and-long-lasting-airpod-beaters',
+		adtest: 'collapse-slot',
+	}),
+} as const satisfies GuPage;
+
+export { articles, articleWithCollapsedSlots };

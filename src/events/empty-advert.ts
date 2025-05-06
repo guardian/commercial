@@ -37,7 +37,7 @@ const findElementToRemove = (advertNode: HTMLElement): HTMLElement => {
 
 const removeSlotFromDom = (slotElement: HTMLElement) => {
 	const elementToRemove = findElementToRemove(slotElement);
-	elementToRemove.remove();
+	elementToRemove.style.display = 'none';
 };
 
 const emptyAdvert = (advert: Advert): void => {
