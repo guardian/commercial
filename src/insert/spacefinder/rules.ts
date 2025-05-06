@@ -52,7 +52,10 @@ const leftColumnOpponentSelector = ['richLink', 'thumbnail']
 const rightColumnOpponentSelector =
 	':scope > [data-spacefinder-role="immersive"]';
 const inlineOpponentSelector = ['inline', 'supporting', 'showcase', 'halfWidth']
-	.map((role) => `:scope > [data-spacefinder-role="${role}"]`)
+	.map(
+		(role) =>
+			`:scope > [data-spacefinder-role="${role}"], [data-spacefinder-role="nested"] > [data-spacefinder-role="${role}"]`,
+	)
 	.join(',');
 
 const headingSelector = `:scope > h2, [data-spacefinder-role="nested"] > h2, :scope > h3, [data-spacefinder-role="nested"] > h3`;
