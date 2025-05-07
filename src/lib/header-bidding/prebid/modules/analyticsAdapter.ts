@@ -1,4 +1,4 @@
-// see http://prebid.org/dev-docs/integrate-with-the-prebid-analytics-api.html
+// see http://docs.prebid.org/dev-docs/integrate-with-the-prebid-analytics-api.html
 import { log } from '@guardian/libs';
 import adapter from 'prebid.js/libraries/analyticsAdapter/AnalyticsAdapter.js';
 import adapterManager from 'prebid.js/src/adapterManager.js';
@@ -211,7 +211,7 @@ const createPayload = (events: EventData[], pv: string): AnalyticsPayload => {
 			'commercial',
 			{},
 			{
-				firstEventType: events[0]?.ev,
+				invalidEventsList: JSON.stringify(events),
 			},
 		);
 	}
