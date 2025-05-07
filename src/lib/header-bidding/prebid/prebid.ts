@@ -3,7 +3,8 @@ import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { PrebidPriceGranularity } from 'prebid.js/src/cpmBucketManager';
 import type { Advert } from '../../../define/Advert';
-import { getParticipations } from '../../../experiments/ab';
+import { getParticipations, isUserInVariant } from '../../../experiments/ab';
+import { prebidId5 } from '../../../experiments/tests/prebid-id5';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
@@ -64,11 +65,12 @@ type ConsentManagement =
 
 type UserId = {
 	name: string;
-	params?: Record<string, string>;
+	params?: Record<string, string | number>;
 	storage: {
-		type: 'cookie';
+		type: 'cookie' | 'html5';
 		name: string;
 		expires: number;
+		refreshInSeconds?: number;
 	};
 };
 
@@ -347,6 +349,32 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	}
 	initialised = true;
 
+	const userIds: UserId[] = [
+		{
+			name: 'sharedId',
+			storage: {
+				type: 'cookie',
+				name: '_pubcid',
+				expires: 365,
+			},
+		},
+	];
+
+	if (!isUserInVariant(prebidId5, 'control')) {
+		userIds.push({
+			name: 'id5Id',
+			params: {
+				partner: 182,
+			},
+			storage: {
+				type: 'html5',
+				name: 'id5id',
+				expires: 90,
+				refreshInSeconds: 7200,
+			},
+		});
+	}
+
 	const userSync: UserSync = isSwitchedOn('prebidUserSync')
 		? {
 				syncsPerBidder: 0, // allow all syncs
@@ -356,16 +384,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 						filter: 'include',
 					},
 				},
-				userIds: [
-					{
-						name: 'sharedId',
-						storage: {
-							type: 'cookie',
-							name: '_pubcid',
-							expires: 365,
-						},
-					},
-				],
+				userIds,
 			}
 		: { syncEnabled: false };
 
