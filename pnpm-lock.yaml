@@ -13,16 +13,16 @@ importers:
         version: 8.0.1(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/core-web-vitals':
         specifier: 11.0.0
-        version: 11.0.0(@guardian/libs@22.0.1(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)
+        version: 11.0.0(@guardian/libs@22.4.0(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)
       '@guardian/identity-auth':
         specifier: ^7.0.0
-        version: 7.0.0(@guardian/libs@22.0.1(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)
+        version: 7.0.0(@guardian/libs@22.4.0(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/identity-auth-frontend':
         specifier: 9.0.0
-        version: 9.0.0(@guardian/identity-auth@7.0.0(@guardian/libs@22.0.1(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4))(@guardian/libs@22.0.1(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)
+        version: 9.0.0(@guardian/identity-auth@7.0.0(@guardian/libs@22.4.0(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4))(@guardian/libs@22.4.0(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/libs':
-        specifier: 22.0.1
-        version: 22.0.1(tslib@2.8.1)(typescript@5.5.4)
+        specifier: 22.4.0
+        version: 22.4.0(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/source':
         specifier: 10.0.0
         version: 10.0.0(tslib@2.8.1)(typescript@5.5.4)
@@ -1014,8 +1014,8 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/libs@22.0.1':
-    resolution: {integrity: sha512-id/Z9mPb1zkW5G5EnTfuJrVWlgEobdlMbIty5htV1kklh/12N+74KTcFqdYheRqZRTZHb0xXjDNIaEc/zBBlbQ==}
+  '@guardian/libs@22.4.0':
+    resolution: {integrity: sha512-IvEvXJSmsSAS2XGMhGZGdJUVdsNorhXPsCnDVHc5/2cQ/YtreTl8w2+Psloaqi/AmnqMSfdRuZg2CjOFIzkJLA==}
     peerDependencies:
       tslib: ^2.6.2
       typescript: ~5.5.2
@@ -6731,9 +6731,9 @@ snapshots:
       browserslist: 4.24.5
       tslib: 2.8.1
 
-  '@guardian/core-web-vitals@11.0.0(@guardian/libs@22.0.1(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)':
+  '@guardian/core-web-vitals@11.0.0(@guardian/libs@22.4.0(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)':
     dependencies:
-      '@guardian/libs': 22.0.1(tslib@2.8.1)(typescript@5.5.4)
+      '@guardian/libs': 22.4.0(tslib@2.8.1)(typescript@5.5.4)
       tslib: 2.8.1
       web-vitals: 4.2.4
     optionalDependencies:
@@ -6760,22 +6760,22 @@ snapshots:
       - supports-color
       - typescript
 
-  '@guardian/identity-auth-frontend@9.0.0(@guardian/identity-auth@7.0.0(@guardian/libs@22.0.1(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4))(@guardian/libs@22.0.1(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)':
+  '@guardian/identity-auth-frontend@9.0.0(@guardian/identity-auth@7.0.0(@guardian/libs@22.4.0(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4))(@guardian/libs@22.4.0(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
-      '@guardian/identity-auth': 7.0.0(@guardian/libs@22.0.1(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)
-      '@guardian/libs': 22.0.1(tslib@2.8.1)(typescript@5.5.4)
+      '@guardian/identity-auth': 7.0.0(@guardian/libs@22.4.0(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)
+      '@guardian/libs': 22.4.0(tslib@2.8.1)(typescript@5.5.4)
       tslib: 2.8.1
     optionalDependencies:
       typescript: 5.5.4
 
-  '@guardian/identity-auth@7.0.0(@guardian/libs@22.0.1(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)':
+  '@guardian/identity-auth@7.0.0(@guardian/libs@22.4.0(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
-      '@guardian/libs': 22.0.1(tslib@2.8.1)(typescript@5.5.4)
+      '@guardian/libs': 22.4.0(tslib@2.8.1)(typescript@5.5.4)
       tslib: 2.8.1
     optionalDependencies:
       typescript: 5.5.4
 
-  '@guardian/libs@22.0.1(tslib@2.8.1)(typescript@5.5.4)':
+  '@guardian/libs@22.4.0(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
       tslib: 2.8.1
     optionalDependencies:
