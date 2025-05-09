@@ -1,0 +1,47 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"allowSyntheticDefaultImports": true,
+		"baseUrl": "src",
+		"declaration": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"isolatedModules": true,
+		"jsx": "react",
+		"lib": [
+			"DOM",
+			"DOM.Iterable",
+			"ES2015",
+			"ES2016",
+			"ES2017",
+			"ES2018",
+			"ES2019",
+			"ES2020",
+			"ESNext"
+		],
+		"module": "ESNEXT",
+		"moduleResolution": "node",
+		"noEmit": false,
+		"noUnusedLocals": true,
+		"outDir": "../dist",
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"target": "ESNEXT",
+		"typeRoots": [
+			"./node_modules/@types",
+			"./node_modules/web-vitals/dist"
+		],
+		"noUncheckedIndexedAccess": true
+	},
+	"rootDir": "src",
+	"include": ["src/export.ts", "src/types"],
+	"exclude": [
+		"**/*.spec.*",
+		"**/*.test.*",
+		"node_modules",
+		"dist",
+		"coverage",
+		"playwright-report"
+	]
+}

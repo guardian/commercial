@@ -1,8 +1,8 @@
 import { once } from 'lodash-es';
+import type { IasPETSlot, IasTargeting } from '../../core/src/types/ias';
 import { getUrlVars } from '../lib/url';
-import type { IasPETSlot, IasTargeting } from '../types/ias';
 
-const adUnit = once((): string => {
+const adUnit = once(() => {
 	const urlVars = getUrlVars();
 	return urlVars['ad-unit']
 		? `/${window.guardian.config.page.dfpAccountId}/${String(

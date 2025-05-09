@@ -1,6 +1,6 @@
 {
-	"name": "commercial",
-	"version": "1.0.0",
+	"name": "@guardian/commercial",
+	"version": "26.0.2",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial#readme",
 	"bugs": {
@@ -12,31 +12,33 @@
 	},
 	"license": "Apache-2.0",
 	"files": [
-		"dist"
+		"../dist"
 	],
-	"main": "src/commercial.ts",
+	"main": "../dist/core/cjs/export.js",
+	"module": "../dist/core/esm/export.js",
 	"scripts": {
-		"build": "npm-run-all clean --parallel compile:core:* build:prod build:dev",
-		"build:dev": "webpack -c webpack.config.dev.mjs",
-		"build:prod": "webpack -c webpack.config.prod.mjs",
+		"build": "npm-run-all clean --parallel compile:core:*",
 		"clean": "rm -rf dist",
-		"compile:core:common": "tsc --project ./core/tsconfig.json --outDir ./dist/core/cjs --module CommonJS",
-		"compile:core:esm": "tsc --project ./core/tsconfig.json --outDir ./dist/core/esm",
-		"playwright:run": "playwright test",
-		"playwright:open": "playwright test --ui",
+		"compile:core:common": "tsc --project tsconfig.json --outDir ../dist/core/cjs --module CommonJS",
+		"compile:core:esm": "tsc --project tsconfig.json --outDir ../dist/core/esm",
 		"lint": "eslint .",
-		"lint-staged": "lint-staged",
-		"prepare": "husky",
 		"prettier:check": "prettier . --check --cache",
 		"prettier:fix": "prettier . --write --cache",
-		"serve": "OVERRIDE_BUNDLE=true pnpm webpack-dev-server -c ./webpack.config.dev.mjs",
 		"test": "jest",
 		"tsc": "tsc --noEmit",
 		"validate": "npm-run-all tsc lint test build"
 	},
+	"peerDependencies": {
+		"@guardian/ab-core": "^8.0.0",
+		"@guardian/core-web-vitals": "^11.0.0",
+		"@guardian/identity-auth": "^7.0.0",
+		"@guardian/identity-auth-frontend": "^9.0.0",
+		"@guardian/libs": "^22.0.1",
+		"@guardian/source": "^8.0.2",
+		"typescript": "~5.5.4"
+	},
 	"dependencies": {
 		"@guardian/ab-core": "8.0.1",
-		"@guardian/commercial": "workspace:*",
 		"@guardian/core-web-vitals": "11.0.0",
 		"@guardian/identity-auth": "^7.0.0",
 		"@guardian/identity-auth-frontend": "9.0.0",
@@ -109,6 +111,9 @@
 		"src/**/*.(js|ts)": [
 			"pnpm prettier:fix"
 		]
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"
