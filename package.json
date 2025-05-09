@@ -40,7 +40,7 @@
 		"@guardian/core-web-vitals": "^11.0.0",
 		"@guardian/identity-auth": "^7.0.0",
 		"@guardian/identity-auth-frontend": "^9.0.0",
-		"@guardian/libs": "^22.0.1",
+		"@guardian/libs": "0.0.0-canary-20250509081553",
 		"@guardian/source": "^8.0.2",
 		"typescript": "~5.5.4"
 	},
@@ -49,7 +49,7 @@
 		"@guardian/core-web-vitals": "11.0.0",
 		"@guardian/identity-auth": "^7.0.0",
 		"@guardian/identity-auth-frontend": "9.0.0",
-		"@guardian/libs": "22.0.1",
+		"@guardian/libs": "0.0.0-canary-20250509081553",
 		"@guardian/source": "10.0.0",
 		"fastdom": "^1.0.12",
 		"lodash-es": "^4.17.21",
