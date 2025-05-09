@@ -267,7 +267,7 @@
 
 - a0283db: Remove YouTube targeting as no longer used
 
-  Update IMA pubads domain to securepubads
+    Update IMA pubads domain to securepubads
 
 ### Minor Changes
 
@@ -1105,13 +1105,13 @@
 
 - 120b23b: Fix instances of no unchecked indexed access errors in:
 
-  - src/lib/consentless/dynamic/liveblog-inline.ts
-  - src/lib/dfp/init-slot-ias.spec.ts
-  - src/lib/dfp/prepare-permutive.spec.ts
-  - src/lib/spacefinder/article-aside-adverts.ts
-  - src/lib/spacefinder/liveblog-adverts.ts
-  - src/lib/third-party-tags.ts
-  - src/lib/utils/geolocation.ts
+    - src/lib/consentless/dynamic/liveblog-inline.ts
+    - src/lib/dfp/init-slot-ias.spec.ts
+    - src/lib/dfp/prepare-permutive.spec.ts
+    - src/lib/spacefinder/article-aside-adverts.ts
+    - src/lib/spacefinder/liveblog-adverts.ts
+    - src/lib/third-party-tags.ts
+    - src/lib/utils/geolocation.ts
 
 - e8de2d4: Unify the two different methods of filling advert slots
 
@@ -1321,14 +1321,14 @@
   up adverts for refreshing when the breakpoint of the page
   changes.
 
-  Since the Commercial bundle no longer supports Mediator,
-  and DCR also doesn't, this is currently dead code.
+    Since the Commercial bundle no longer supports Mediator,
+    and DCR also doesn't, this is currently dead code.
 
-  Removing it will result in some simplification.
+    Removing it will result in some simplification.
 
-  In the process, we can also fix a bug where the
-  data-refresh="false" attribute on slots was being
-  ignored.
+    In the process, we can also fix a bug where the
+    data-refresh="false" attribute on slots was being
+    ignored.
 
 ## 10.8.0
 

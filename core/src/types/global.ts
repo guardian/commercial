@@ -1,13 +1,13 @@
 import type { CustomClaims } from '@guardian/identity-auth';
 import type { VendorName } from '@guardian/libs';
-import type { DfpEnv } from '../lib/dfp/dfp-env';
-import type { EventTimer } from '../lib/event-timer';
-import type { PageTargeting } from '../lib/targeting/build-page-targeting';
+import type { DfpEnv } from '../../../src/lib/dfp/dfp-env';
+import type { EventTimer } from '../../../src/lib/event-timer';
+import type { PageTargeting } from '../../../src/lib/targeting/build-page-targeting';
 import type {
 	GoogleTagParams,
 	GoogleTrackConversionObject,
 	NetworkInformation,
-} from '../lib/types';
+} from '../../../src/lib/types';
 import type { IasPETSlot } from './ias';
 
 type ServerSideABTest = `${string}${'Variant' | 'Control'}`;
