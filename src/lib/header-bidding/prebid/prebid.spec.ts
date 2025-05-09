@@ -138,7 +138,26 @@ describe('initialise', () => {
 			},
 			timeoutBuffer: 400,
 			useBidCache: true,
-			multibid: undefined,
+			multibid: [
+				{
+					bidders: [
+						'adyoulike',
+						'and',
+						'criteo',
+						'ix',
+						'kargo',
+						'rubicon',
+						'oxd',
+						'ozone',
+						'pubmatic',
+						'triplelift',
+						'trustx',
+						'xhb',
+						'ttd',
+					],
+					maxBids: 9,
+				},
+			],
 			userSync: {
 				syncDelay: 3000,
 				syncEnabled: true,
@@ -221,9 +240,8 @@ describe('initialise', () => {
 		expect(window.pbjs?.getConfig('useBidCache')).toBe(false);
 	});
 
-	test('should generate correct Prebid config when shouldIncludePrebidBidCache and prebidMultibid is variant', () => {
+	test('should generate correct Prebid config for multibid when shouldIncludePrebidBidCache is true', () => {
 		jest.mocked(shouldIncludePrebidBidCache).mockReturnValue(true);
-		jest.mocked(isUserInVariant).mockReturnValue(true);
 		jest.mocked(shouldIncludeBidder).mockReturnValue(
 			jest.fn().mockReturnValue(true),
 		);
@@ -250,13 +268,6 @@ describe('initialise', () => {
 				},
 			],
 		});
-	});
-
-	test('should generate correct Prebid config when shouldIncludePrebidBidCache is true and prebidMultibid is control', () => {
-		jest.mocked(shouldIncludePrebidBidCache).mockReturnValue(true);
-		jest.mocked(isUserInVariant).mockReturnValue(false);
-		prebid.initialise(window, mockConsentState);
-		expect(window.pbjs?.getConfig('multibid')).toBeUndefined();
 	});
 
 	test('should generate correct Prebid config for multibid when shouldIncludePrebidBidCache is false', () => {

@@ -3,8 +3,7 @@ import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { PrebidPriceGranularity } from 'prebid.js/src/cpmBucketManager';
 import type { Advert } from '../../../define/Advert';
-import { getParticipations, isUserInVariant } from '../../../experiments/ab';
-import { prebidMultibid } from '../../../experiments/tests/prebid-multibid';
+import { getParticipations } from '../../../experiments/ab';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
@@ -465,7 +464,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		pbjsConfig.consentManagement = consentManagement();
 	}
 
-	if (useBidCache && isUserInVariant(prebidMultibid, 'variant')) {
+	if (useBidCache) {
 		pbjsConfig.multibid = multibid();
 	}
 
