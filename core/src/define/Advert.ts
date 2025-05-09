@@ -1,10 +1,10 @@
-import type { AdSize, SizeMapping, SlotName } from '@guardian/commercial';
+import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
+import type { AdSize, SizeMapping, SlotName } from '../lib/ad-sizes';
 import {
 	createAdSize,
 	findAppliedSizesForBreakpoint,
 	slotSizeMappings,
-} from '@guardian/commercial';
-import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
+} from '../lib/ad-sizes';
 import type { Breakpoint } from '../lib/breakpoint';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';

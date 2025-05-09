@@ -1,5 +1,5 @@
-import { breakpoints, isBreakpoint } from '../../../src/lib/breakpoint';
-import type { Breakpoint } from '../../../src/lib/breakpoint';
+import { breakpoints, isBreakpoint } from './breakpoint';
+import type { Breakpoint } from './breakpoint';
 import type { Indices } from './types';
 
 type AdSizeString = 'fluid' | `${number},${number}`;

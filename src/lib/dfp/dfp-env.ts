@@ -1,18 +1,9 @@
 import { getCurrentBreakpoint } from '@guardian/commercial';
+import type { DfpEnv } from '@guardian/commercial';
 import type { Advert } from '../../define/Advert';
 import { getUrlVars as _getUrlVars } from '../../lib/url';
 
 const getUrlVars = _getUrlVars as (arg?: string) => Record<string, string>;
-
-interface DfpEnv {
-	renderStartTime: number;
-	adSlotSelector: string;
-	lazyLoadEnabled: boolean;
-	lazyLoadObserve: boolean;
-	advertsToLoad: Advert[];
-	adverts: Map<Advert['id'], Advert>;
-	shouldLazyLoad: () => boolean;
-}
 
 const dfpEnv: DfpEnv = {
 	/* renderStartTime: integer. Point in time when DFP kicks in */
