@@ -1,4 +1,4 @@
-import type { GetThirdPartyTag } from '../types';
+import type { GetThirdPartyTag } from '../../../core/src/lib/types';
 
 /**
  * IAS script filters bad ads

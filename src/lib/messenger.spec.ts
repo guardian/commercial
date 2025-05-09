@@ -3,7 +3,7 @@ import {
 	_ as testExports,
 	unregister as unregister_,
 } from './messenger';
-import { postMessage } from './messenger/post-message';
+import { postMessage } from '../../core/src/lib/messenger/post-message';
 
 const onMessage = testExports.onMessage;
 const register = register_;

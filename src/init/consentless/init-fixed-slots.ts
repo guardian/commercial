@@ -1,4 +1,4 @@
-import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
+import { getCurrentBreakpoint } from '../../../core/src/detect/detect-breakpoint';
 import { removeDisabledSlots } from '../consented/remove-slots';
 import { defineSlot } from './define-slot';
 

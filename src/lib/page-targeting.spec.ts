@@ -1,5 +1,5 @@
 import type { ConsentState } from '@guardian/libs';
-import { buildPageTargeting as buildPageTargeting_ } from '../lib/targeting/build-page-targeting';
+import { buildPageTargeting as buildPageTargeting_ } from '../../core/src/lib/targeting/build-page-targeting';
 import { isUserLoggedIn } from './identity/api';
 import { getPageTargeting } from './page-targeting';
 

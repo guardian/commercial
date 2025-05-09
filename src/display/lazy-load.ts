@@ -2,7 +2,7 @@ import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import type { Advert } from '../define/Advert';
 import { requestBidsForAd } from '../display/request-bids';
-import { getCurrentBreakpoint } from '../lib/detect/detect-breakpoint';
+import { getCurrentBreakpoint } from '../../core/src/detect/detect-breakpoint';
 import { dfpEnv } from '../lib/dfp/dfp-env';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { loadAdvert, refreshAdvert } from './load-advert';

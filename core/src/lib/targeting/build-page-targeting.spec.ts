@@ -4,9 +4,9 @@ import type {
 	USNATConsentState,
 } from '@guardian/libs';
 import { cmp as cmp_, setCookie, storage } from '@guardian/libs';
-import { getAuthStatus as getAuthStatus_ } from '../../lib/identity/api';
-import type { AuthStatus } from '../../lib/identity/api';
-import { getLocale as getLocale_ } from '../geo/get-locale';
+import { getAuthStatus as getAuthStatus_ } from '../../../../src/lib/identity/api';
+import type { AuthStatus } from '../../../../src/lib/identity/api';
+import { getLocale as getLocale_ } from '../../../../src/lib/geo/get-locale';
 import type { Edition } from '../types';
 import { buildPageTargeting } from './build-page-targeting';
 

@@ -1,4 +1,4 @@
-import type { AdSize } from '../../lib/ad-sizes';
+import type { AdSize } from '../../../core/src/lib/ad-sizes';
 
 type HeaderBiddingSize = AdSize;
 

@@ -1,7 +1,7 @@
 import { setCookie, storage } from '@guardian/libs';
 import type { CommercialFeaturesConstructor } from './commercial-features';
 import { commercialFeatures } from './commercial-features';
-import { getCurrentBreakpoint as getCurrentBreakpoint_ } from './detect/detect-breakpoint';
+import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../core/src/detect/detect-breakpoint';
 import { isUserLoggedIn } from './identity/api';
 
 const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<

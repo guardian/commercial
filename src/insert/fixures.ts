@@ -1,8 +1,8 @@
 import { commercialFeatures } from '../lib/commercial-features';
-import { AD_LABEL_HEIGHT } from '../lib/constants';
+import { AD_LABEL_HEIGHT } from '../../core/src/lib/constants';
 import { createAdSlot, wrapSlotInContainer } from '../lib/create-ad-slot';
-import { getBreakpoint } from '../lib/detect/detect-breakpoint';
-import { getViewport } from '../lib/detect/detect-viewport';
+import { getBreakpoint } from '../../core/src/detect/detect-breakpoint';
+import { getViewport } from '../../core/src/detect/detect-viewport';
 import fastdom from '../lib/fastdom-promise';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 

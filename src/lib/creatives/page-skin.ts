@@ -3,7 +3,7 @@ import { commercialFeatures } from '../commercial-features';
 import {
 	hasCrossedBreakpoint,
 	matchesBreakpoints,
-} from '../detect/detect-breakpoint';
+} from '../../../core/src/detect/detect-breakpoint';
 
 const pageSkin = (): void => {
 	const bodyEl = document.body;

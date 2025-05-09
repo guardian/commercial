@@ -1,5 +1,5 @@
 import type { Advert } from '../define/Advert';
-import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../lib/detect/detect-breakpoint';
+import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../core/src/detect/detect-breakpoint';
 import { dfpEnv } from '../lib/dfp/dfp-env';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { enableLazyLoad } from './lazy-load';

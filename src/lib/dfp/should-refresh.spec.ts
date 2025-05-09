@@ -1,5 +1,5 @@
 import { Advert } from '../../define/Advert';
-import { adSizes, createAdSize } from '../../lib/ad-sizes';
+import { adSizes, createAdSize } from '../../../core/src/lib/ad-sizes';
 import { shouldRefresh } from './should-refresh';
 
 const outstreamSizes = [

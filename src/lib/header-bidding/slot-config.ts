@@ -1,6 +1,6 @@
 import type { Advert } from '../../define/Advert';
-import type { AdSize } from '../../lib/ad-sizes';
-import { adSizes, createAdSize } from '../../lib/ad-sizes';
+import type { AdSize } from '../../../core/src/lib/ad-sizes';
+import { adSizes, createAdSize } from '../../../core/src/lib/ad-sizes';
 import { isInUk } from '../../lib/geo/geo-utils';
 import type {
 	HeaderBiddingSizeKey,

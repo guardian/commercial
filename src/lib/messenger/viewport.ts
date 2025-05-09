@@ -1,5 +1,5 @@
-import { getViewport } from '../../lib/detect/detect-viewport';
-import type { Viewport } from '../../lib/detect/detect-viewport';
+import { getViewport } from '../../../core/src/detect/detect-viewport';
+import type { Viewport } from '../../../core/src/detect/detect-viewport';
 import fastdom from '../../lib/fastdom-promise';
 import type { RegisterPersistentListener, RespondProxy } from '../messenger';
 

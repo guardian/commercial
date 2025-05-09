@@ -1,6 +1,6 @@
 import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { createAdSize } from '../../lib/ad-sizes';
+import { createAdSize } from '../../../core/src/lib/ad-sizes';
 import {
 	isInAuOrNz,
 	isInCanada,
@@ -12,7 +12,7 @@ import { pbTestNameMap } from '../../lib/url';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
-} from '../detect/detect-breakpoint';
+} from '../../../core/src/detect/detect-breakpoint';
 import type { BidderCode, HeaderBiddingSize } from './prebid-types';
 
 type StringManipulation = (a: string, b: string) => string;

@@ -4,13 +4,13 @@ import {
 	getConsentFor as getConsentFor_,
 } from '@guardian/libs';
 import { isUserInVariant as isUserInVariant_ } from '../../experiments/ab';
-import { createAdSize } from '../../lib/ad-sizes';
+import { createAdSize } from '../../../core/src/lib/ad-sizes';
 import { _ } from '../../lib/geo/geo-utils';
-import type { SourceBreakpoint } from '../detect/detect-breakpoint';
+import type { SourceBreakpoint } from '../../../core/src/detect/detect-breakpoint';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
 	matchesBreakpoints as matchesBreakpoints_,
-} from '../detect/detect-breakpoint';
+} from '../../../core/src/detect/detect-breakpoint';
 import { getCountryCode as getCountryCode_ } from '../geo/country-code';
 import {
 	getBreakpointKey,

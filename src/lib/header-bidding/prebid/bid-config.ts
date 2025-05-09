@@ -7,7 +7,7 @@ import {
 	isInUsa,
 	isInUsOrCa,
 } from '../../../lib/geo/geo-utils';
-import type { PageTargeting } from '../../../lib/targeting/build-page-targeting';
+import type { PageTargeting } from '../../../../core/src/lib/targeting/build-page-targeting';
 import { pbTestNameMap } from '../../../lib/url';
 import type { PrebidIndexSite } from '../../../types/global';
 import { dfpEnv } from '../../dfp/dfp-env';

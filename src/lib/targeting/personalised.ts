@@ -4,8 +4,8 @@ import {
 	clearPermutiveSegments,
 	getPermutivePFPSegments,
 	getPermutiveSegments,
-} from '../permutive';
-import type { False, NotApplicable, True } from '../types';
+} from '../../../core/src/lib/permutive';
+import type { False, NotApplicable, True } from '../../../core/src/lib/types';
 
 /* -- Types -- */
 

@@ -1,4 +1,4 @@
-import { AdSize as RealAdSize } from '../ad-sizes';
+import { AdSize as RealAdSize } from '../../../core/src/lib/ad-sizes';
 
 class AdSize extends RealAdSize {
 	constructor(arraySize: number);

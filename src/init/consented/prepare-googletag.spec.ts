@@ -1,9 +1,9 @@
 import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
 import { loadAdvert } from '../../display/load-advert';
-import type * as AdSizesType from '../../lib/ad-sizes';
+import type * as AdSizesType from '../../../core/src/lib/ad-sizes';
 import { commercialFeatures } from '../../lib/commercial-features';
-import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../lib/detect/detect-breakpoint';
+import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../../core/src/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
 import { init as prepareGoogletag } from './prepare-googletag';
 import { fillStaticAdvertSlots } from './static-ad-slots';

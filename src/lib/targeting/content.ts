@@ -1,5 +1,5 @@
+import type { False, True } from '@guardian/commercial';
 import { isString } from '@guardian/libs';
-import type { False, True } from '../types';
 import type { SharedTargeting } from './shared';
 
 /* -- Types -- */

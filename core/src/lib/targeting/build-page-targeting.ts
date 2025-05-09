@@ -2,18 +2,21 @@ import type { Participations } from '@guardian/ab-core';
 import type { ConsentState, CountryCode } from '@guardian/libs';
 import { cmp, getConsentFor, getCookie, isString } from '@guardian/libs';
 import { supportsPerformanceAPI } from '../event-timer';
-import { getLocale } from '../geo/get-locale';
+import { getLocale } from '../../../../src/lib/geo/get-locale';
 import type { False, True } from '../types';
-import type { ContentTargeting } from './content';
-import { getContentTargeting } from './content';
-import type { AdManagerGroup, Frequency } from './personalised';
-import { getPersonalisedTargeting } from './personalised';
-import type { SessionTargeting } from './session';
-import { getSessionTargeting } from './session';
-import type { SharedTargeting } from './shared';
-import { getSharedTargeting } from './shared';
-import type { ViewportTargeting } from './viewport';
-import { getViewportTargeting } from './viewport';
+import type { ContentTargeting } from '../../../../src/lib/targeting/content';
+import { getContentTargeting } from '../../../../src/lib/targeting/content';
+import type {
+	AdManagerGroup,
+	Frequency,
+} from '../../../../src/lib/targeting/personalised';
+import { getPersonalisedTargeting } from '../../../../src/lib/targeting/personalised';
+import type { SessionTargeting } from '../../../../src/lib/targeting/session';
+import { getSessionTargeting } from '../../../../src/lib/targeting/session';
+import type { SharedTargeting } from '../../../../src/lib/targeting/shared';
+import { getSharedTargeting } from '../../../../src/lib/targeting/shared';
+import type { ViewportTargeting } from '../../../../src/lib/targeting/viewport';
+import { getViewportTargeting } from '../../../../src/lib/targeting/viewport';
 
 type PartialWithNulls<T> = { [P in keyof T]?: T[P] | null };
 

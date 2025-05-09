@@ -1,6 +1,6 @@
 import { log } from '@guardian/libs';
 import { reportError } from '../../lib/error/report-error';
-import type { Edition } from '../../lib/types';
+import type { Edition } from '../../../core/src/lib/types';
 import type {
 	Config,
 	PageConfig,

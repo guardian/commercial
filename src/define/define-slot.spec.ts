@@ -1,5 +1,5 @@
-import type { SizeMapping } from '../lib/ad-sizes';
-import { adSizes, createAdSize } from '../lib/ad-sizes';
+import type { SizeMapping } from '../../core/src/lib/ad-sizes';
+import { adSizes, createAdSize } from '../../core/src/lib/ad-sizes';
 import {
 	buildGoogletagSizeMapping,
 	collectSizes,

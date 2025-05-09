@@ -1,4 +1,4 @@
-import { EventTimer } from './event-timer';
+import { EventTimer } from '../../core/src/lib/event-timer';
 import { initTrackScrollDepth } from './track-scroll-depth';
 
 describe('initTrackScrollDepth', () => {
