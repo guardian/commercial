@@ -1,5 +1,5 @@
+import { adSizes, createAdSize } from '@guardian/commercial';
 import { Advert } from '../../define/Advert';
-import { adSizes, createAdSize } from '../../../core/src/lib/ad-sizes';
 import { shouldRefresh } from './should-refresh';
 
 const outstreamSizes = [

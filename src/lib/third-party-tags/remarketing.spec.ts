@@ -1,4 +1,4 @@
-import type { ThirdPartyTag } from '../../../core/src/lib/types';
+import type { ThirdPartyTag } from '@guardian/commercial';
 import { remarketing } from './remarketing';
 
 describe('remarketing', () => {

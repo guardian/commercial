@@ -1,6 +1,6 @@
+import { EventTimer } from '@guardian/commercial';
 import type { ConsentState } from '@guardian/libs';
 import { log } from '@guardian/libs';
-import { EventTimer } from '../../core/src/lib/event-timer';
 
 /**
  * Collect metrics on gpcSignal presence and value

@@ -1,8 +1,7 @@
+import { AD_LABEL_HEIGHT } from '@guardian/commercial';
+import { getBreakpoint, getViewport } from '@guardian/commercial';
 import { commercialFeatures } from '../lib/commercial-features';
-import { AD_LABEL_HEIGHT } from '../../core/src/lib/constants';
 import { createAdSlot, wrapSlotInContainer } from '../lib/create-ad-slot';
-import { getBreakpoint } from '../../core/src/detect/detect-breakpoint';
-import { getViewport } from '../../core/src/detect/detect-viewport';
 import fastdom from '../lib/fastdom-promise';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 

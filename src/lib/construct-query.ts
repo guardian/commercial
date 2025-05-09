@@ -1,4 +1,4 @@
-import type { MaybeArray } from '../../core/src/lib/types';
+import type { MaybeArray } from '@guardian/commercial';
 
 const constructQuery = (
 	query: Record<string, MaybeArray<string | number | boolean>>,

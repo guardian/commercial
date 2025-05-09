@@ -1,4 +1,4 @@
-import type { GetThirdPartyTag } from '../../../core/src/lib/types';
+import type { GetThirdPartyTag } from '@guardian/commercial';
 
 const handleQuerySurveyDone = (
 	surveyAvailable: boolean,

@@ -1,13 +1,11 @@
+import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '@guardian/commercial';
 import type { Advert } from '../define/Advert';
-import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../core/src/detect/detect-breakpoint';
 import { dfpEnv } from '../lib/dfp/dfp-env';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { enableLazyLoad } from './lazy-load';
 import { loadAdvert } from './load-advert';
 
-const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
-	typeof getCurrentBreakpoint_
->;
+const getCurrentBreakpoint = getCurrentBreakpoint_;
 jest.mock('lodash-es', () => ({
 	...jest.requireActual('lodash-es'),
 	// Mock `once` as the identity function so we can re-run `enableLazyLoad`

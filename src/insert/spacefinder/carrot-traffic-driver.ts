@@ -1,6 +1,6 @@
+import { getCurrentTweakpoint } from '@guardian/commercial';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { createAdSlot } from '../../lib/create-ad-slot';
-import { getCurrentTweakpoint } from '../../../core/src/detect/detect-breakpoint';
 import fastdom from '../../lib/fastdom-promise';
 import { fillDynamicAdSlot } from '../fill-dynamic-advert-slot';
 import { spaceFiller } from './space-filler';

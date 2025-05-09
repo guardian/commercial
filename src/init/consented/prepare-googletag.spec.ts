@@ -1,9 +1,9 @@
+import type * as AdSizesType from '@guardian/commercial';
+import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '@guardian/commercial';
 import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
 import { loadAdvert } from '../../display/load-advert';
-import type * as AdSizesType from '../../../core/src/lib/ad-sizes';
 import { commercialFeatures } from '../../lib/commercial-features';
-import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../../core/src/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
 import { init as prepareGoogletag } from './prepare-googletag';
 import { fillStaticAdvertSlots } from './static-ad-slots';
@@ -18,9 +18,7 @@ const getAdverts = (withEmpty: boolean) => {
 	});
 };
 
-const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
-	typeof getCurrentBreakpoint_
->;
+const getCurrentBreakpoint = getCurrentBreakpoint_;
 
 const usnatConsent: USNATConsentState = {
 	doNotSell: false,

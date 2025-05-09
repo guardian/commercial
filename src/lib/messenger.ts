@@ -1,5 +1,5 @@
+import { postMessage } from '@guardian/commercial';
 import { reportError } from '../lib/error/report-error'; // Keep this import relative otherwise Frontend will not be able to import this module. TODO: move all imports to relative imports
-import { postMessage } from '../../core/src/lib/messenger/post-message';
 
 /**
  * The type of iframe messages we accept

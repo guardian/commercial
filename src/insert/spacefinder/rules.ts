@@ -1,4 +1,4 @@
-import { adSizes } from '../../../core/src/lib/ad-sizes';
+import { adSizes } from '@guardian/commercial';
 import { adSlotContainerClass } from '../../lib/create-ad-slot';
 import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
 

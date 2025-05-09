@@ -1,5 +1,5 @@
+import { buildPageTargeting } from '@guardian/commercial';
 import type { ConsentState } from '@guardian/libs';
-import { buildPageTargeting } from '../../../core/src/lib/targeting/build-page-targeting';
 import { buildImaAdTagUrl } from './youtube-ima';
 
 jest.mock('./build-page-targeting', () => ({

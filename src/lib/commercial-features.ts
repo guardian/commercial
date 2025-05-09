@@ -1,5 +1,5 @@
+import { getCurrentBreakpoint } from '@guardian/commercial';
 import { getCookie, log, storage } from '@guardian/libs';
-import { getCurrentBreakpoint } from '../../core/src/detect/detect-breakpoint';
 
 /**
  * Log the reason why adverts are disabled

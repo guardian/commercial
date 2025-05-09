@@ -1,6 +1,7 @@
+import { createAdSize } from '@guardian/commercial';
+import { getCurrentTweakpoint, matchesBreakpoints } from '@guardian/commercial';
 import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { createAdSize } from '../../../core/src/lib/ad-sizes';
 import {
 	isInAuOrNz,
 	isInCanada,
@@ -9,10 +10,6 @@ import {
 	isInUsOrCa,
 } from '../../lib/geo/geo-utils';
 import { pbTestNameMap } from '../../lib/url';
-import {
-	getCurrentTweakpoint,
-	matchesBreakpoints,
-} from '../../../core/src/detect/detect-breakpoint';
 import type { BidderCode, HeaderBiddingSize } from './prebid-types';
 
 type StringManipulation = (a: string, b: string) => string;

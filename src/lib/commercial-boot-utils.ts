@@ -1,7 +1,7 @@
+import { EventTimer } from '@guardian/commercial';
 import { log } from '@guardian/libs';
 import { adSlotIdPrefix } from './dfp/dfp-env-globals';
 import { reportError } from './error/report-error';
-import { EventTimer } from '../../core/src/lib/event-timer';
 
 const tags: Record<string, string> = {
 	bundle: 'standalone',

@@ -1,5 +1,5 @@
-import type { SizeMapping } from '../../core/src/lib/ad-sizes';
-import { adSizes, createAdSize } from '../../core/src/lib/ad-sizes';
+import type { SizeMapping } from '@guardian/commercial';
+import { adSizes, createAdSize } from '@guardian/commercial';
 import {
 	buildGoogletagSizeMapping,
 	collectSizes,

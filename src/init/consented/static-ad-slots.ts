@@ -1,11 +1,14 @@
+import type { SizeMapping } from '@guardian/commercial';
+import {
+	adSizes,
+	createAdSize,
+	getCurrentBreakpoint,
+} from '@guardian/commercial';
 import { isNonNullable, log } from '@guardian/libs';
 import { createAdvert } from '../../define/create-advert';
 import { displayAds } from '../../display/display-ads';
 import { displayLazyAds } from '../../display/display-lazy-ads';
-import type { SizeMapping } from '../../../core/src/lib/ad-sizes';
-import { adSizes, createAdSize } from '../../../core/src/lib/ad-sizes';
 import { commercialFeatures } from '../../lib/commercial-features';
-import { getCurrentBreakpoint } from '../../../core/src/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
 import { queueAdvert } from '../../lib/dfp/queue-advert';
 import { isInUk, isInUsa } from '../../lib/geo/geo-utils';

@@ -1,5 +1,5 @@
+import { EventTimer } from '@guardian/commercial';
 import { log } from '@guardian/libs';
-import { EventTimer } from '../../core/src/lib/event-timer';
 
 /**
  * Collect commercial metrics on scroll depth

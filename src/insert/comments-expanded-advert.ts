@@ -1,11 +1,13 @@
+import {
+	AD_LABEL_HEIGHT,
+	adSizes,
+	getBreakpoint,
+	getViewport,
+} from '@guardian/commercial';
 import { log } from '@guardian/libs';
 import { emptyAdvert } from '../events/empty-advert';
-import { adSizes } from '../../core/src/lib/ad-sizes';
 import { commercialFeatures } from '../lib/commercial-features';
-import { AD_LABEL_HEIGHT } from '../../core/src/lib/constants/ad-label-height';
 import { createAdSlot } from '../lib/create-ad-slot';
-import { getBreakpoint } from '../../core/src/detect/detect-breakpoint';
-import { getViewport } from '../../core/src/detect/detect-viewport';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import fastdom from '../lib/fastdom-promise';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';

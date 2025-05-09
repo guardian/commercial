@@ -1,8 +1,8 @@
+import { getCurrentBreakpoint } from '@guardian/commercial';
+import { adSizes } from '@guardian/commercial';
 import { log } from '@guardian/libs';
-import { adSizes } from '../../../core/src/lib/ad-sizes';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { createAdSlot } from '../../lib/create-ad-slot';
-import { getCurrentBreakpoint } from '../../../core/src/detect/detect-breakpoint';
 import fastdom from '../../lib/fastdom-promise';
 import { fillDynamicAdSlot } from '../fill-dynamic-advert-slot';
 import { spaceFiller } from './space-filler';

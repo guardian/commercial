@@ -1,13 +1,13 @@
-import type {
-	EventTimer,
-	GoogleTagParams,
-	GoogleTrackConversionObject,
-	NetworkInformation,
-	PageTargeting,
-} from '@guardian/commercial';
 import type { CustomClaims } from '@guardian/identity-auth';
 import type { VendorName } from '@guardian/libs';
 import type { DfpEnv } from '../lib/dfp/dfp-env';
+import type { EventTimer } from '../lib/event-timer';
+import type { PageTargeting } from '../lib/targeting/build-page-targeting';
+import type {
+	GoogleTagParams,
+	GoogleTrackConversionObject,
+	NetworkInformation,
+} from '../lib/types';
 import type { IasPETSlot } from './ias';
 
 type ServerSideABTest = `${string}${'Variant' | 'Control'}`;

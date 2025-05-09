@@ -1,9 +1,6 @@
+import { hasCrossedBreakpoint, matchesBreakpoints } from '@guardian/commercial';
 import fastdom from 'fastdom';
 import { commercialFeatures } from '../commercial-features';
-import {
-	hasCrossedBreakpoint,
-	matchesBreakpoints,
-} from '../../../core/src/detect/detect-breakpoint';
 
 const pageSkin = (): void => {
 	const bodyEl = document.body;
@@ -27,7 +24,6 @@ const pageSkin = (): void => {
 	const togglePageSkin = (): void => {
 		if (
 			hasPageSkin &&
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- needs to be investigated
 			hasCrossedBreakpoint(true) &&
 			!commercialFeatures.adFree
 		) {

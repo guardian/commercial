@@ -1,12 +1,12 @@
-import { log } from '@guardian/libs';
-import { reportError } from '../../lib/error/report-error';
-import type { Edition } from '../../../core/src/lib/types';
+import type { Edition } from '@guardian/commercial';
 import type {
 	Config,
 	PageConfig,
 	Permutive,
 	UserConfig,
-} from '../../types/global';
+} from '@guardian/commercial';
+import { log } from '@guardian/libs';
+import { reportError } from '../../lib/error/report-error';
 
 interface PermutivePageConfig {
 	page: Pick<

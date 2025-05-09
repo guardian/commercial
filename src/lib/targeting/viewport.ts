@@ -1,4 +1,4 @@
-import type { False, True } from '../../../core/src/lib/types';
+import type { False, True } from '@guardian/commercial';
 
 /* -- Types -- */
 

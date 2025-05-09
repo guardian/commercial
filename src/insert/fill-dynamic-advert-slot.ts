@@ -1,9 +1,9 @@
+import type { SizeMapping } from '@guardian/commercial';
 import { log } from '@guardian/libs';
 import type { Advert } from '../define/Advert';
 import { createAdvert } from '../define/create-advert';
 import { enableLazyLoad } from '../display/lazy-load';
 import { loadAdvert } from '../display/load-advert';
-import type { SizeMapping } from '../../core/src/lib/ad-sizes';
 import { dfpEnv } from '../lib/dfp/dfp-env';
 import { queueAdvert } from '../lib/dfp/queue-advert';
 import { reportError } from '../lib/error/report-error';

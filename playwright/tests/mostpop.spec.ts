@@ -1,5 +1,5 @@
+import { isDefined } from '@guardian/commercial';
 import { test } from '@playwright/test';
-import { isDefined } from '../../core/src/lib/types';
 import { testAtBreakpoints } from '../fixtures/breakpoints';
 import { articles, blogs } from '../fixtures/pages';
 import type { GuPage } from '../fixtures/pages/Page';

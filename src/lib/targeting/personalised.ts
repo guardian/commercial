@@ -1,11 +1,11 @@
-import type { ConsentState, TCEventStatusCode } from '@guardian/libs';
-import { storage } from '@guardian/libs';
+import type { False, NotApplicable, True } from '@guardian/commercial';
 import {
 	clearPermutiveSegments,
 	getPermutivePFPSegments,
 	getPermutiveSegments,
-} from '../../../core/src/lib/permutive';
-import type { False, NotApplicable, True } from '../../../core/src/lib/types';
+} from '@guardian/commercial';
+import type { ConsentState, TCEventStatusCode } from '@guardian/libs';
+import { storage } from '@guardian/libs';
 
 /* -- Types -- */
 

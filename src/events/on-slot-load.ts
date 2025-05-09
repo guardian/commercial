@@ -1,5 +1,5 @@
+import { postMessage } from '@guardian/commercial';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
-import { postMessage } from '../../core/src/lib/messenger/post-message';
 
 const host = `${window.location.protocol}//${window.location.host}`;
 

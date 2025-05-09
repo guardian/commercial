@@ -1,7 +1,7 @@
+import { adSizes } from '@guardian/commercial';
 import type { Advert } from '../define/Advert';
 import { isUserInVariant } from '../experiments/ab';
 import { a9BidResponseWinner } from '../experiments/tests/a9-bid-response-winner';
-import { adSizes } from '../../core/src/lib/ad-sizes';
 import { reportError } from '../lib/error/report-error';
 import fastdom from '../lib/fastdom-promise';
 import { logGumGumWinningBid } from '../lib/gumgum-winning-bid';

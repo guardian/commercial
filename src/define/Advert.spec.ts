@@ -1,5 +1,5 @@
-import type * as AdSizesType from '../../core/src/lib/ad-sizes';
-import { slotSizeMappings as slotSizeMappings_ } from '../../core/src/lib/ad-sizes';
+import type * as AdSizesType from '@guardian/commercial';
+import { slotSizeMappings as slotSizeMappings_ } from '@guardian/commercial';
 import { _, Advert, findSmallestAdHeightForSlot } from './Advert';
 
 const { getSlotSizeMapping } = _;

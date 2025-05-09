@@ -1,16 +1,16 @@
+import type { SourceBreakpoint } from '@guardian/commercial';
+import { createAdSize } from '@guardian/commercial';
+import {
+	getCurrentTweakpoint as getCurrentTweakpoint_,
+	matchesBreakpoints as matchesBreakpoints_,
+} from '@guardian/commercial';
 import {
 	type ConsentState,
 	type CountryCode,
 	getConsentFor as getConsentFor_,
 } from '@guardian/libs';
 import { isUserInVariant as isUserInVariant_ } from '../../experiments/ab';
-import { createAdSize } from '../../../core/src/lib/ad-sizes';
 import { _ } from '../../lib/geo/geo-utils';
-import type { SourceBreakpoint } from '../../../core/src/detect/detect-breakpoint';
-import {
-	getCurrentTweakpoint as getCurrentTweakpoint_,
-	matchesBreakpoints as matchesBreakpoints_,
-} from '../../../core/src/detect/detect-breakpoint';
 import { getCountryCode as getCountryCode_ } from '../geo/country-code';
 import {
 	getBreakpointKey,
@@ -26,12 +26,8 @@ import {
 const getCountryCode = getCountryCode_ as jest.MockedFunction<
 	typeof getCountryCode_
 >;
-const getCurrentTweakpoint = getCurrentTweakpoint_ as jest.MockedFunction<
-	typeof getCurrentTweakpoint_
->;
-const matchesBreakpoints = matchesBreakpoints_ as jest.MockedFunction<
-	typeof matchesBreakpoints_
->;
+const getCurrentTweakpoint = getCurrentTweakpoint_;
+const matchesBreakpoints = matchesBreakpoints_;
 const isUserInVariant = isUserInVariant_ as jest.MockedFunction<
 	typeof isUserInVariant_
 >;

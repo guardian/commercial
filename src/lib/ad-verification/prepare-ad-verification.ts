@@ -1,8 +1,10 @@
+import {
+	bypassCommercialMetricsSampling,
+	EventTimer,
+} from '@guardian/commercial';
+import type { ConfiantCallback } from '@guardian/commercial';
 import { loadScript, log } from '@guardian/libs';
 import { refreshAdvert } from '../../display/load-advert';
-import { EventTimer } from '../../../core/src/lib/event-timer';
-import { bypassCommercialMetricsSampling } from '../../lib/send-commercial-metrics';
-import type { ConfiantCallback } from '../../types/global';
 import { getAdvertById } from '../dfp/get-advert-by-id';
 import { stripDfpAdPrefixFrom } from '../header-bidding/utils';
 
