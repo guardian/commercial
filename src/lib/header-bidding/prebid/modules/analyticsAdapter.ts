@@ -191,31 +191,12 @@ type AnalyticsPayload = {
 	hb_ev: EventData[];
 };
 
-// Check if the payload is valid
-function isPayloadValid(events: EventData[]): boolean {
-	return (
-		(events[0] && (events[0].ev === 'init' || events[0].ev === 'bidwon')) ??
-		false
-	);
-}
-
 const createPayload = (events: EventData[], pv: string): AnalyticsPayload => {
-	const payload = {
+	return {
 		v: VERSION,
 		pv,
 		hb_ev: events,
 	};
-	if (!isPayloadValid(events)) {
-		reportError(
-			new Error('Invalid analytics payload'),
-			'commercial',
-			{},
-			{
-				invalidEventsList: JSON.stringify(events),
-			},
-		);
-	}
-	return payload;
 };
 
 const analyticsAdapter = Object.assign(adapter({ analyticsType: 'endpoint' }), {
@@ -323,6 +304,5 @@ export default analyticsAdapter;
 export const _ = {
 	getBidderCode,
 	createEvent,
-	isPayloadValid,
 	handlers,
 };

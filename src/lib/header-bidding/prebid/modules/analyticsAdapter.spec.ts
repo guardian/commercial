@@ -1,10 +1,9 @@
 import * as guardianLibs from '@guardian/libs';
 import { EVENTS } from 'prebid.js/src/constants.js';
 import * as errorReporting from '../../../../lib/error/report-error';
-import type { EventData } from '../../prebid-types';
 import analyticsAdapter, { _ } from './analyticsAdapter';
 
-const { createEvent, isPayloadValid, handlers } = _;
+const { createEvent, handlers } = _;
 
 // Mock dependencies
 jest.mock('prebid.js/libraries/analyticsAdapter/AnalyticsAdapter.js', () => ({
@@ -109,29 +108,6 @@ describe('analyticsAdapter', () => {
 				ev: 'init',
 				sid: 'slotId',
 			});
-		});
-	});
-
-	describe('isPayloadValid', () => {
-		test('returns true for valid init event', () => {
-			const events = [{ ev: 'init' }];
-			expect(isPayloadValid(events)).toBe(true);
-		});
-
-		test('returns true for valid bidwon event', () => {
-			const events = [{ ev: 'bidwon' }];
-			expect(isPayloadValid(events)).toBe(true);
-		});
-
-		test('returns false for empty events', () => {
-			const events: EventData[] = [];
-
-			expect(isPayloadValid(events)).toBe(false);
-		});
-
-		test('returns false for invalid event type', () => {
-			const events = [{ ev: 'unknown' }];
-			expect(isPayloadValid(events)).toBe(false);
 		});
 	});
 
