@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 26.1.0
+
+### Minor Changes
+
+- 9d81b27: Bump node version to v22
+
 ## 26.0.2
 
 ### Patch Changes
