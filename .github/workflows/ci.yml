@@ -106,7 +106,7 @@ jobs:
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
-        uses: changesets/action@v1.5.2
+        uses: changesets/action@v1.5.3
         with:
           publish: pnpm changeset publish
           title: '🦋 Release package updates'
