@@ -3,6 +3,7 @@ import type {
 	OnConsentChangeCallback,
 	USNATConsentState,
 } from '@guardian/libs';
+import { isUserInVariant } from '../../../experiments/ab';
 import { _, a9 } from './a9';
 
 const tcfv2WithConsentMock = (callback: OnConsentChangeCallback) =>
@@ -66,6 +67,10 @@ jest.mock('@guardian/libs', () => ({
 	onConsentChange: jest.fn(),
 }));
 
+jest.mock('experiments/ab', () => ({
+	isUserInVariant: jest.fn(),
+}));
+
 const mockOnConsentChange = (
 	mfn: (callback: OnConsentChangeCallback) => void,
 ) => (onConsentChange as jest.Mock).mockImplementation(mfn);
@@ -106,9 +111,13 @@ describe('initialise', () => {
 });
 
 describe('Logging a9 bid response', () => {
+	beforeEach(() => {
+		jest.mocked(isUserInVariant).mockReset();
+	});
 	it('should add a9WinningBids if window.commercial is undefined', () => {
 		mockOnConsentChange(tcfv2WithConsentMock);
 		mockGetConsentFor(true);
+		jest.mocked(isUserInVariant).mockReturnValueOnce(true);
 
 		const adSizesArray = [300, 250];
 		const adSizesString =
@@ -140,6 +149,7 @@ describe('Logging a9 bid response', () => {
 	it('should add a9WinningBids the window.commercial object on first bidResponse', () => {
 		mockOnConsentChange(tcfv2WithConsentMock);
 		mockGetConsentFor(true);
+		jest.mocked(isUserInVariant).mockReturnValueOnce(true);
 
 		const adSizesArray = [300, 250];
 		const adSizesString =
@@ -172,6 +182,7 @@ describe('Logging a9 bid response', () => {
 	it('should add another bidResponse object to the a9WinningBids array, retaining previous item', () => {
 		mockOnConsentChange(tcfv2WithConsentMock);
 		mockGetConsentFor(true);
+		jest.mocked(isUserInVariant).mockReturnValueOnce(true);
 
 		const adSizesArray = [300, 250];
 		const adSizesString =
@@ -204,6 +215,7 @@ describe('Logging a9 bid response', () => {
 	it('should not add a9WinningBids to the window.commercial object if no bidResponse and in variant', () => {
 		mockOnConsentChange(tcfv2WithConsentMock);
 		mockGetConsentFor(true);
+		jest.mocked(isUserInVariant).mockReturnValueOnce(true);
 		const result = a9.logA9BidResponse([]);
 		expect(result).toEqual(undefined);
 	});
