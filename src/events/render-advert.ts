@@ -1,6 +1,4 @@
 import type { Advert } from '../define/Advert';
-import { isUserInVariant } from '../experiments/ab';
-import { a9BidResponseWinner } from '../experiments/tests/a9-bid-response-winner';
 import { adSizes } from '../lib/ad-sizes';
 import { reportError } from '../lib/error/report-error';
 import fastdom from '../lib/fastdom-promise';
@@ -205,25 +203,18 @@ const renderAdvert = (
 	advert: Advert,
 	slotRenderEndedEvent: googletag.events.SlotRenderEndedEvent,
 ): Promise<boolean> => {
-	const isInA9BidResponseWinnerTest = isUserInVariant(
-		a9BidResponseWinner,
-		'variant',
+	const matchingAd = window.guardian.commercial?.a9WinningBids?.find(
+		(bidResponse) => bidResponse.slotID == advert.id,
 	);
 
-	if (isInA9BidResponseWinnerTest) {
-		const matchingAd = window.guardian.commercial?.a9WinningBids?.find(
-			(bidResponse) => bidResponse.slotID == advert.id,
+	const isA9GumGum = matchingAd?.amznp === '1lsxjb4';
+
+	if (slotRenderEndedEvent.advertiserId === 4751525411 && isA9GumGum) {
+		const adSlotId = advert.node.id;
+		logGumGumWinningBid(
+			adSlotId,
+			slotRenderEndedEvent.advertiserId.toString(),
 		);
-
-		const isA9GumGum = matchingAd?.amznp === '1lsxjb4';
-
-		if (slotRenderEndedEvent.advertiserId === 4751525411 && isA9GumGum) {
-			const adSlotId = advert.node.id;
-			logGumGumWinningBid(
-				adSlotId,
-				slotRenderEndedEvent.advertiserId.toString(),
-			);
-		}
 	}
 
 	addContentClass(advert.node);
