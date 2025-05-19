@@ -36,11 +36,13 @@ jest.mock('experiments/ab', () => ({
 	isUserInVariant: jest.fn(),
 }));
 
+const id5SourcePointId = '5ee15bc7b8e05c16366599cb';
+
 const mockConsentState = {
 	tcfv2: {
 		consents: { '': true },
 		eventStatus: 'useractioncomplete',
-		vendorConsents: { '': true },
+		vendorConsents: { '': true, [id5SourcePointId]: true },
 		addtlConsent: '',
 		gdprApplies: true,
 		tcString: '',
