@@ -1,5 +1,5 @@
 import type { ConsentState } from '@guardian/libs';
-import { isString, log, onConsent } from '@guardian/libs';
+import { getConsentFor, isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { PrebidPriceGranularity } from 'prebid.js/src/cpmBucketManager';
 import type { Advert } from '../../../define/Advert';
@@ -360,7 +360,10 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		},
 	];
 
-	if (!isUserInVariant(prebidId5, 'control')) {
+	if (
+		getConsentFor('id5', consentState) &&
+		!isUserInVariant(prebidId5, 'control')
+	) {
 		userIds.push({
 			name: 'id5Id',
 			params: {
