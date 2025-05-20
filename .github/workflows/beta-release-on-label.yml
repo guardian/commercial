@@ -44,7 +44,7 @@ jobs:
         run: pnpm changeset version --snapshot beta
 
       - name: Create Release
-        uses: changesets/action@v1.5.2
+        uses: changesets/action@v1.5.3
         id: changeset
         with:
           publish: pnpm changeset publish --tag beta
