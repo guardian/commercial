@@ -362,7 +362,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 
 	if (
 		getConsentFor('id5', consentState) &&
-		!isUserInVariant(prebidId5, 'control')
+		isUserInVariant(prebidId5, 'variant')
 	) {
 		userIds.push({
 			name: 'id5Id',
