@@ -1,5 +1,11 @@
 # @guardian/commercial
 
+## 26.1.2
+
+### Patch Changes
+
+- d7044c7: bump libs
+
 ## 26.1.1
 
 ### Patch Changes
