@@ -1,4 +1,5 @@
 import { type ConsentState } from '@guardian/libs';
+import { getConsentFor } from '@guardian/libs';
 import { isUserInVariant } from '../../../experiments/ab';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
@@ -36,6 +37,16 @@ jest.mock('experiments/ab', () => ({
 	isUserInVariant: jest.fn(),
 }));
 
+jest.mock('@guardian/libs', () => ({
+	...jest.requireActual('@guardian/libs'),
+	getConsentFor: jest.fn(),
+}));
+
+const mockGetConsentForID5 = (hasConsent: boolean) =>
+	(getConsentFor as jest.Mock).mockImplementation((vendor: string) =>
+		vendor === 'id5' ? hasConsent : undefined,
+	);
+
 const mockConsentState = {
 	tcfv2: {
 		consents: { '': true },
@@ -72,6 +83,8 @@ describe('initialise', () => {
 			jest.fn().mockReturnValue(true),
 		);
 		jest.mocked(isUserInVariant).mockReturnValue(false);
+
+		mockGetConsentForID5(true);
 		prebid.initialise(window, mockConsentState);
 
 		expect(window.pbjs?.getConfig()).toEqual({
@@ -198,6 +211,39 @@ describe('initialise', () => {
 						},
 					},
 				],
+			},
+		});
+	});
+
+	test('should generate correct Prebid config when no consent for ID5', () => {
+		jest.mocked(shouldIncludeBidder).mockReturnValue(
+			jest.fn().mockReturnValue(true),
+		);
+		jest.mocked(isUserInVariant).mockReturnValue(false);
+
+		mockGetConsentForID5(false);
+		prebid.initialise(window, mockConsentState);
+
+		expect(window.pbjs?.getConfig('userSync')).toEqual({
+			syncDelay: 3000,
+			syncEnabled: true,
+			syncsPerBidder: 0,
+			userIds: [
+				{
+					name: 'sharedId',
+					storage: {
+						type: 'cookie',
+						name: '_pubcid',
+						expires: 365,
+					},
+				},
+			],
+			auctionDelay: 500,
+			filterSettings: {
+				all: {
+					bidders: '*',
+					filter: 'include',
+				},
 			},
 		});
 	});
