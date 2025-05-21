@@ -1,4 +1,5 @@
-if [[ $currentBranch == "main" ]]
+CURRENT_BRANCH="$(git branch --show-current)"
+if [[ $CURRENT_BRANCH == "main" ]]
 then
 	echo "⚠️ You should not push to the \`main\` branch"
 	exit 1
