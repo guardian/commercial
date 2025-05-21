@@ -1,7 +1,5 @@
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
-import { isUserInVariant } from '../../../experiments/ab';
-import { a9BidResponseWinner } from '../../../experiments/tests/a9-bid-response-winner';
 import { reportError } from '../../../lib/error/report-error';
 import type {
 	A9AdUnitInterface,
@@ -50,15 +48,9 @@ const initialise = (): void => {
 };
 
 const logA9BidResponse = (bidResponse: FetchBidResponse[]): void => {
-	const isInA9BidResponseWinnerTest = isUserInVariant(
-		a9BidResponseWinner,
-		'variant',
-	);
-	if (isInA9BidResponseWinnerTest) {
-		window.guardian.commercial ??= {};
-		window.guardian.commercial.a9WinningBids ??= [];
-		window.guardian.commercial.a9WinningBids.push(...bidResponse);
-	}
+	window.guardian.commercial ??= {};
+	window.guardian.commercial.a9WinningBids ??= [];
+	window.guardian.commercial.a9WinningBids.push(...bidResponse);
 };
 
 // slotFlatMap allows you to dynamically interfere with the PrebidSlot definition
