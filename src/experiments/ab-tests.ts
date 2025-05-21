@@ -1,5 +1,4 @@
 import type { ABTest } from '@guardian/ab-core';
-import { a9BidResponseWinner } from './tests/a9-bid-response-winner';
 import { prebidId5 } from './tests/prebid-id5';
 
 /**
@@ -9,6 +8,5 @@ import { prebidId5 } from './tests/prebid-id5';
  */
 export const concurrentTests: ABTest[] = [
 	// one test per line
-	a9BidResponseWinner,
 	prebidId5,
 ];
