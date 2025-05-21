@@ -49,7 +49,7 @@
 		"@guardian/core-web-vitals": "11.0.0",
 		"@guardian/identity-auth": "^7.0.0",
 		"@guardian/identity-auth-frontend": "9.0.0",
-		"@guardian/libs": "22.4.0",
+		"@guardian/libs": "22.5.0",
 		"@guardian/source": "10.2.0",
 		"fastdom": "^1.0.12",
 		"lodash-es": "^4.17.21",
