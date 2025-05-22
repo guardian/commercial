@@ -1,40 +1,47 @@
 import { once } from 'lodash-es';
+import { getAdvertById } from './dfp/get-advert-by-id';
 import { checkConsent as checkConsentForReporting } from './send-commercial-metrics';
 
 const endpoint = window.guardian.config.page.isDev
 	? '//logs.code.dev-guardianapis.com/log'
 	: '//logs.guardianapis.com/log';
 
-let creativeId: number;
-let lineItemId: number;
-let progress: number = 0;
+// This is a map of video progress for each slotId.
+const videoProgress: Record<string, number | null> = {};
 
 const sendProgress = once(() => {
-	if (!creativeId || !progress) {
-		return;
-	}
+	Object.entries(videoProgress).forEach(([key, value]) => {
+		const advert = getAdvertById(key);
 
-	void fetch(endpoint, {
-		method: 'POST',
-		body: JSON.stringify({
-			label: 'commercial.interscroller.videoProgress',
-			properties: [
-				{ name: 'creativeId', value: creativeId },
-				{ name: 'lineItemId', value: lineItemId },
-				{ name: 'progress', value: progress },
-				{
-					name: 'pageviewId',
-					value: window.guardian.config.ophan.pageViewId,
-				},
-			],
-		}),
-		keepalive: true,
-		cache: 'no-store',
-		mode: 'no-cors',
+		if (!advert?.creativeId || !advert.lineItemId) {
+			return;
+		}
+		const { creativeId, lineItemId } = advert;
+
+		const progress = value ?? 0;
+
+		void fetch(endpoint, {
+			method: 'POST',
+			body: JSON.stringify({
+				label: 'commercial.interscroller.videoProgress',
+				properties: [
+					{ name: 'creativeId', value: creativeId },
+					{ name: 'lineItemId', value: lineItemId },
+					{ name: 'progress', value: progress },
+					{
+						name: 'pageviewId',
+						value: window.guardian.config.ophan.pageViewId,
+					},
+				],
+			}),
+			keepalive: true,
+			cache: 'no-store',
+			mode: 'no-cors',
+		});
 	});
 });
 
-const sendProgressOnUnloadViaLogs = async () => {
+const sendProgressOnUnloadOnce = once(async () => {
 	if (await checkConsentForReporting()) {
 		window.addEventListener('visibilitychange', sendProgress, {
 			once: true,
@@ -42,20 +49,10 @@ const sendProgressOnUnloadViaLogs = async () => {
 		// Safari does not reliably fire the `visibilitychange` on page unload.
 		window.addEventListener('pagehide', sendProgress, { once: true });
 	}
+});
+
+const updateVideoProgress = (slotId: string, updatedProgress: number) => {
+	videoProgress[slotId] = updatedProgress;
 };
 
-const initVideoProgressReporting = (
-	gamCreativeId: number,
-	gamLineItemId: number,
-) => {
-	creativeId = gamCreativeId;
-	lineItemId = gamLineItemId;
-
-	void sendProgressOnUnloadViaLogs();
-};
-
-const updateVideoProgress = (updatedProgress: number) => {
-	progress = updatedProgress;
-};
-
-export { initVideoProgressReporting, updateVideoProgress };
+export { sendProgressOnUnloadOnce, updateVideoProgress };
