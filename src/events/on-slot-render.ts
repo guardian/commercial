@@ -64,6 +64,8 @@ export const onSlotRender = (
 		// We'll need it later when the slot becomes viewable
 		// in order to determine whether we can refresh the slot
 		advert.lineItemId = event.lineItemId;
+		advert.creativeId = event.creativeId;
+		advert.creativeTemplateId = event.creativeTemplateId;
 
 		void renderAdvert(advert, event).then((isRendered) => {
 			advert.finishedRendering(isRendered);

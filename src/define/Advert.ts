@@ -138,6 +138,8 @@ class Advert {
 	hasPrebidSize = false;
 	headerBiddingBidRequest: Promise<unknown> | null = null;
 	lineItemId: number | null = null;
+	creativeId: number | null = null;
+	creativeTemplateId: number | null = null;
 	testgroup: string | undefined; //Ozone testgroup property
 
 	constructor(

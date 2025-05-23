@@ -3,14 +3,17 @@ import {
 	renderAdvertLabel,
 	renderStickyScrollForMoreLabel,
 } from '../../events/render-advert-label';
+import { getAdvertById } from '../../lib/dfp/get-advert-by-id';
 import fastdom from '../../lib/fastdom-promise';
 import type { RegisterListener } from '../messenger';
 import {
-	initVideoProgressReporting,
+	sendProgressOnUnloadOnce,
 	updateVideoProgress,
-} from '../video-interscroller-progress';
+} from '../video-progress-reporting';
 
 const isGallery = window.guardian.config.page.contentType === 'Gallery';
+
+const INTERSCROLLER_TEMPLATE_ID = 11885667;
 
 interface BackgroundSpecs {
 	backgroundImage: string;
@@ -236,30 +239,6 @@ const setupBackground = async (
 				video.style.transform = 'translate(-50%, -50%)';
 				background.appendChild(video);
 
-				const getCreativeId = () => {
-					if (typeof googletag !== 'undefined') {
-						const slots = googletag.pubads().getSlots();
-
-						for (const slot of slots) {
-							const creativeTemplateId =
-								slot.getResponseInformation()
-									?.creativeTemplateId;
-							if (creativeTemplateId === 11885667) {
-								const creativeId =
-									slot.getResponseInformation()?.creativeId;
-								const lineItemId =
-									slot.getResponseInformation()?.lineItemId;
-
-								if (creativeId && lineItemId) {
-									return { creativeId, lineItemId };
-								}
-							}
-						}
-					}
-
-					return undefined;
-				};
-
 				let played = false;
 				video.onended = () => (played = true);
 
@@ -282,21 +261,21 @@ const setupBackground = async (
 
 				observer.observe(backgroundParent);
 
-				const creativeInfo = getCreativeId();
+				const advert = getAdvertById(adSlot.id);
 
-				if (creativeInfo) {
-					initVideoProgressReporting(
-						creativeInfo.creativeId,
-						creativeInfo.lineItemId,
-					);
+				const shouldReportVideoProgress =
+					advert?.creativeTemplateId === INTERSCROLLER_TEMPLATE_ID;
+
+				if (shouldReportVideoProgress) {
+					void sendProgressOnUnloadOnce();
+
+					video.ontimeupdate = function () {
+						const percent = Math.round(
+							100 * (video.currentTime / video.duration),
+						);
+						updateVideoProgress(adSlot.id, percent);
+					};
 				}
-
-				video.ontimeupdate = function () {
-					const percent = Math.round(
-						100 * (video.currentTime / video.duration),
-					);
-					updateVideoProgress(percent);
-				};
 			}
 		} else {
 			adSlot.insertBefore(backgroundParent, adSlot.firstChild);
