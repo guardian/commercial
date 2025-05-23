@@ -13,6 +13,8 @@ import {
 
 const isGallery = window.guardian.config.page.contentType === 'Gallery';
 
+const INTERSCROLLER_TEMPLATE_ID = 11885667;
+
 interface BackgroundSpecs {
 	backgroundImage: string;
 	backgroundRepeat?: string;
@@ -262,7 +264,7 @@ const setupBackground = async (
 				const advert = getAdvertById(adSlot.id);
 
 				const shouldReportVideoProgress =
-					advert?.creativeTemplateId === 11885667;
+					advert?.creativeTemplateId === INTERSCROLLER_TEMPLATE_ID;
 
 				if (shouldReportVideoProgress) {
 					void sendProgressOnUnloadOnce();
