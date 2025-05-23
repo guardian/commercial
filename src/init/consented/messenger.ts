@@ -11,6 +11,7 @@ import { init as passbackRefresh } from '../../lib/messenger/passback-refresh';
 import { init as resize } from '../../lib/messenger/resize';
 import { init as scroll } from '../../lib/messenger/scroll';
 import { init as type } from '../../lib/messenger/type';
+import { initMessengerVideoProgressReporting } from '../../lib/messenger/video';
 import { init as viewport } from '../../lib/messenger/viewport';
 
 /**
@@ -29,6 +30,7 @@ initMessenger(
 		background,
 		disableRefresh,
 		passback,
+		initMessengerVideoProgressReporting,
 	],
 	[scroll, viewport],
 );
