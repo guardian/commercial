@@ -19,7 +19,8 @@ type MessageType =
 	| 'scroll'
 	| 'type'
 	| 'viewport'
-	| 'passback-refresh';
+	| 'passback-refresh'
+	| 'video-progress';
 
 /**
  * A message that is sent from an iframe following a standard format
