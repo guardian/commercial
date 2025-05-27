@@ -34,7 +34,7 @@ importers:
         version: 4.17.21
       prebid.js:
         specifier: 9.27.0
-        version: 9.27.0(babel-core@7.0.0-bridge.0(@babel/core@7.27.1))(ejs@3.1.10)
+        version: 9.27.0(ejs@3.1.10)
       process:
         specifier: ^0.11.10
         version: 0.11.10
@@ -96,18 +96,12 @@ importers:
       '@typescript-eslint/parser':
         specifier: 8.32.1
         version: 8.32.1(eslint@9.27.0)(typescript@5.5.4)
-      babel-core:
-        specifier: 7.0.0-bridge.0
-        version: 7.0.0-bridge.0(@babel/core@7.27.1)
       babel-jest:
         specifier: ^29.7.0
         version: 29.7.0(@babel/core@7.27.1)
       babel-loader:
         specifier: ^10.0.0
         version: 10.0.0(@babel/core@7.27.1)(webpack@5.99.8)
-      babel-plugin-dynamic-import-node:
-        specifier: ^2.3.3
-        version: 2.3.3
       circular-dependency-plugin:
         specifier: ^5.2.2
         version: 5.2.2(webpack@5.99.8)
@@ -1855,11 +1849,6 @@ packages:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
     engines: {node: '>= 0.4'}
 
-  babel-core@7.0.0-bridge.0:
-    resolution: {integrity: sha512-poPX9mZH/5CSanm50Q+1toVci6pv5KSRv/5TWCwtzQS5XEwn40BcCrgIeMFWP9CKKIniKXNxoIOnOq4VVlGXhg==}
-    peerDependencies:
-      '@babel/core': ^7.0.0-0
-
   babel-jest@29.7.0:
     resolution: {integrity: sha512-BrvGY3xZSwEcCzKvKsCi2GgHqDqsYkOP4/by5xCgIwGXQxIEh+8ew3gmrE1y7XRR6LHZIj6yLYnUi/mm2KXKBg==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -1872,9 +1861,6 @@ packages:
     peerDependencies:
       '@babel/core': ^7.12.0
       webpack: '>=5.61.0'
-
-  babel-plugin-dynamic-import-node@2.3.3:
-    resolution: {integrity: sha512-jZVI+s9Zg3IqA/kdi0i6UDCybUI3aSBLnglhYbSSjKlV7yF1F/5LWv8MakQmvYpnbJDS6fcBL2KzHSxNCMtWSQ==}
 
   babel-plugin-istanbul@6.1.1:
     resolution: {integrity: sha512-Y1IQok9821cC9onCx5otgFfRm7Lm+I+wwxOx738M/WLPZ9Q42m4IG5W0FNX8WLL2gYMZo3JkuXIH2DOpWM+qwA==}
@@ -7626,10 +7612,6 @@ snapshots:
 
   axobject-query@4.1.0: {}
 
-  babel-core@7.0.0-bridge.0(@babel/core@7.27.1):
-    dependencies:
-      '@babel/core': 7.27.1
-
   babel-jest@29.7.0(@babel/core@7.27.1):
     dependencies:
       '@babel/core': 7.27.1
@@ -7648,10 +7630,6 @@ snapshots:
       '@babel/core': 7.27.1
       find-up: 5.0.0
       webpack: 5.99.8(webpack-cli@6.0.1)
-
-  babel-plugin-dynamic-import-node@2.3.3:
-    dependencies:
-      object.assign: 4.1.7
 
   babel-plugin-istanbul@6.1.1:
     dependencies:
@@ -7955,11 +7933,10 @@ snapshots:
 
   connect-history-api-fallback@2.0.0: {}
 
-  consolidate@0.15.1(babel-core@7.0.0-bridge.0(@babel/core@7.27.1))(ejs@3.1.10)(lodash@4.17.21):
+  consolidate@0.15.1(ejs@3.1.10)(lodash@4.17.21):
     dependencies:
       bluebird: 3.7.2
     optionalDependencies:
-      babel-core: 7.0.0-bridge.0(@babel/core@7.27.1)
       ejs: 3.1.10
       lodash: 4.17.21
 
@@ -9057,9 +9034,9 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  gulp-wrap@0.15.0(babel-core@7.0.0-bridge.0(@babel/core@7.27.1))(ejs@3.1.10):
+  gulp-wrap@0.15.0(ejs@3.1.10):
     dependencies:
-      consolidate: 0.15.1(babel-core@7.0.0-bridge.0(@babel/core@7.27.1))(ejs@3.1.10)(lodash@4.17.21)
+      consolidate: 0.15.1(ejs@3.1.10)(lodash@4.17.21)
       es6-promise: 4.2.8
       fs-readfile-promise: 3.0.1
       js-yaml: 3.14.1
@@ -10522,7 +10499,7 @@ snapshots:
 
   possible-typed-array-names@1.1.0: {}
 
-  prebid.js@9.27.0(babel-core@7.0.0-bridge.0(@babel/core@7.27.1))(ejs@3.1.10):
+  prebid.js@9.27.0(ejs@3.1.10):
     dependencies:
       '@babel/core': 7.27.1
       '@babel/plugin-transform-runtime': 7.27.1(@babel/core@7.27.1)
@@ -10535,7 +10512,7 @@ snapshots:
       dset: 3.1.4
       express: 4.21.2
       fun-hooks: 0.9.10
-      gulp-wrap: 0.15.0(babel-core@7.0.0-bridge.0(@babel/core@7.27.1))(ejs@3.1.10)
+      gulp-wrap: 0.15.0(ejs@3.1.10)
       klona: 2.0.6
       live-connect-js: 7.2.0
     optionalDependencies:
