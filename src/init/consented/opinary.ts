@@ -35,9 +35,13 @@ const isOpinaryEvent = (
 	return data.type === 'opinary.vote' && data.poll.dmpIntegration;
 };
 
-export const opinary = () => {
+const opinaryPollListener = (): void => {
 	window.addEventListener('message', (event) => {
-		if (isUndefined(window.permutive) || !isOpinaryEvent(event)) {
+		if (
+			isUndefined(window.permutive) ||
+			isUndefined(window.permutive.track) ||
+			!isOpinaryEvent(event)
+		) {
 			return;
 		}
 
@@ -64,3 +68,8 @@ export const opinary = () => {
 		});
 	});
 };
+
+const initOpinaryPollListener = (): Promise<void> =>
+	Promise.resolve(opinaryPollListener());
+
+export { initOpinaryPollListener };

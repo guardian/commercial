@@ -235,19 +235,9 @@ interface Permutive {
 		environment?: string;
 	};
 	q?: Array<{ functionName: string; arguments: unknown[] }>;
-	addon: (name: string, props: Record<string, unknown>) => void;
-	identify: (user: Array<{ id: string; tag: string }>) => void;
-	track: (name: string, props: Record<string, unknown>) => void;
-	// Functions available to Permutive, not currently used
-	trigger: (...args: [unknown]) => unknown;
-	query: (...args: [unknown]) => unknown;
-	segment: (...args: [unknown]) => unknown;
-	segments: (...args: [unknown]) => unknown;
-	ready: (...args: [unknown]) => unknown;
-	on: (...args: [unknown]) => unknown;
-	once: (...args: [unknown]) => unknown;
-	user: (...args: [unknown]) => unknown;
-	consent: (...args: [unknown]) => unknown;
+	addon?: (name: string, props: Record<string, unknown>) => void;
+	identify?: (user: Array<{ id: string; tag: string }>) => void;
+	track?: (name: string, props: Record<string, unknown>) => void;
 }
 
 // https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/javascript-guide/api-reference.html#apstaginit
