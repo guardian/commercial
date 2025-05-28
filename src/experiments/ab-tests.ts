@@ -1,5 +1,6 @@
 import type { ABTest } from '@guardian/ab-core';
 import { prebidId5 } from './tests/prebid-id5';
+import { prebidMultibid } from './tests/prebid-multibid';
 
 /**
  * You only need to add tests to this file if the code you are testing is here in
@@ -9,4 +10,5 @@ import { prebidId5 } from './tests/prebid-id5';
 export const concurrentTests: ABTest[] = [
 	// one test per line
 	prebidId5,
+	prebidMultibid,
 ];

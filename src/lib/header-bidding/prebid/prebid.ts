@@ -5,6 +5,7 @@ import type { PrebidPriceGranularity } from 'prebid.js/src/cpmBucketManager';
 import type { Advert } from '../../../define/Advert';
 import { getParticipations, isUserInVariant } from '../../../experiments/ab';
 import { prebidId5 } from '../../../experiments/tests/prebid-id5';
+import { prebidMultibid } from '../../../experiments/tests/prebid-multibid';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
@@ -491,7 +492,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		pbjsConfig.consentManagement = consentManagement();
 	}
 
-	if (useBidCache) {
+	if (useBidCache && isUserInVariant(prebidMultibid, 'variant')) {
 		pbjsConfig.multibid = getMultibidConfig();
 	}
 
