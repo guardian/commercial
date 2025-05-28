@@ -35,41 +35,44 @@ const isOpinaryEvent = (
 	return data.type === 'opinary.vote' && data.poll.dmpIntegration;
 };
 
-const opinaryPollListener = (): void => {
-	window.addEventListener('message', (event) => {
-		if (
-			isUndefined(window.permutive) ||
-			isUndefined(window.permutive.track) ||
-			!isOpinaryEvent(event)
-		) {
-			return;
-		}
+const opinaryPollListener = (event: MessageEvent) => {
+	if (
+		isUndefined(window.permutive) ||
+		isUndefined(window.permutive.track) ||
+		!isOpinaryEvent(event)
+	) {
+		return;
+	}
 
-		const { poll, vote } = event.data;
+	const { poll, vote } = event.data;
 
-		window.permutive.track('SurveyResponse', {
-			survey: {
-				id: poll.pollId,
-				type: poll.type,
-				solution: 'Opinary',
-			},
-			question: {
-				text: poll.header,
-			},
-			answer: {
-				text: vote.label,
-				posX: vote.x || 0.0,
-				posY: vote.y || 0.0,
-				optionIdentifier: vote.optionID || '',
-				optionPosition: vote.position || 0,
-				rawValue: vote.value || 0.0,
-				unit: vote.unit || '',
-			},
-		});
+	window.permutive.track('SurveyResponse', {
+		survey: {
+			id: poll.pollId,
+			type: poll.type,
+			solution: 'Opinary',
+		},
+		question: {
+			text: poll.header,
+		},
+		answer: {
+			text: vote.label,
+			posX: vote.x || 0.0,
+			posY: vote.y || 0.0,
+			optionIdentifier: vote.optionID || '',
+			optionPosition: vote.position || 0,
+			rawValue: vote.value || 0.0,
+			unit: vote.unit || '',
+		},
 	});
 };
 
 const initOpinaryPollListener = (): Promise<void> =>
-	Promise.resolve(opinaryPollListener());
+	Promise.resolve(window.addEventListener('message', opinaryPollListener));
+
+// Exports for testing only
+export const _ = {
+	isOpinaryEvent,
+};
 
 export { initOpinaryPollListener };
