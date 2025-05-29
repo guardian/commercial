@@ -1,4 +1,4 @@
-import { isUndefined } from '@guardian/libs';
+import { isUndefined, log } from '@guardian/libs';
 
 type OpinaryPollEventData = {
 	poll: {
@@ -46,7 +46,7 @@ const opinaryPollListener = (event: MessageEvent) => {
 
 	const { poll, vote } = event.data;
 
-	window.permutive.track('SurveyResponse', {
+	const surveyResponse = {
 		survey: {
 			id: poll.pollId,
 			type: poll.type,
@@ -64,7 +64,12 @@ const opinaryPollListener = (event: MessageEvent) => {
 			rawValue: vote.value || 0.0,
 			unit: vote.unit || '',
 		},
-	});
+	};
+
+	log('commercial', surveyResponse);
+
+	window.permutive.track('SurveyResponse', surveyResponse);
+	log('commercial', 'Sent Opinary poll response to Permutive');
 };
 
 const initOpinaryPollListener = (): Promise<void> =>
