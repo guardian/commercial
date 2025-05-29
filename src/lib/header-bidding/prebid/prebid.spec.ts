@@ -3,11 +3,7 @@ import { getConsentFor } from '@guardian/libs';
 import { isUserInVariant } from '../../../experiments/ab';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
-import {
-	shouldIncludeBidder,
-	shouldIncludePermutive,
-	shouldIncludePrebidBidCache,
-} from '../utils';
+import { shouldIncludeBidder, shouldIncludePermutive } from '../utils';
 import { prebid } from './prebid';
 
 const getAdvertById = getAdvertById_ as jest.Mock;
@@ -27,7 +23,6 @@ jest.mock('lib/dfp/get-advert-by-id', () => ({
 jest.mock('../utils', () => ({
 	...jest.requireActual('../utils.ts'),
 	shouldIncludePermutive: jest.fn().mockReturnValue(true),
-	shouldIncludePrebidBidCache: jest.fn().mockReturnValue(true),
 	shouldIncludeBidder: jest
 		.fn()
 		.mockReturnValue(jest.fn().mockReturnValue(true)),
@@ -83,8 +78,9 @@ describe('initialise', () => {
 			jest.fn().mockReturnValue(true),
 		);
 		jest.mocked(isUserInVariant).mockReturnValue(false);
-
+		window.guardian.config.switches.prebidBidCache = true;
 		mockGetConsentForID5(true);
+
 		prebid.initialise(window, mockConsentState);
 
 		expect(window.pbjs?.getConfig()).toEqual({
@@ -153,24 +149,52 @@ describe('initialise', () => {
 			useBidCache: true,
 			multibid: [
 				{
-					bidders: [
-						'adyoulike',
-						'and',
-						'criteo',
-						'ix',
-						'kargo',
-						'rubicon',
-						'oxd',
-						'ozone',
-						'pubmatic',
-						'triplelift',
-						'trustx',
-						'xhb',
-						'ttd',
-					],
+					bidder: 'adyoulike',
 					maxBids: 9,
+					targetBiddercodePrefix: 'adyoulike_m',
 				},
+				{ bidder: 'and', maxBids: 9, targetBiddercodePrefix: 'and_m' },
+				{
+					bidder: 'criteo',
+					maxBids: 9,
+					targetBiddercodePrefix: 'criteo_m',
+				},
+				{ bidder: 'ix', maxBids: 9, targetBiddercodePrefix: 'ix_m' },
+				{
+					bidder: 'kargo',
+					maxBids: 9,
+					targetBiddercodePrefix: 'kargo_m',
+				},
+				{
+					bidder: 'rubicon',
+					maxBids: 9,
+					targetBiddercodePrefix: 'rubicon_m',
+				},
+				{ bidder: 'oxd', maxBids: 9, targetBiddercodePrefix: 'oxd_m' },
+				{
+					bidder: 'ozone',
+					maxBids: 9,
+					targetBiddercodePrefix: 'ozone_m',
+				},
+				{
+					bidder: 'pubmatic',
+					maxBids: 9,
+					targetBiddercodePrefix: 'pubmatic_m',
+				},
+				{
+					bidder: 'triplelift',
+					maxBids: 9,
+					targetBiddercodePrefix: 'triplelift_m',
+				},
+				{
+					bidder: 'trustx',
+					maxBids: 9,
+					targetBiddercodePrefix: 'trustx_m',
+				},
+				{ bidder: 'xhb', maxBids: 9, targetBiddercodePrefix: 'xhb_m' },
+				{ bidder: 'ttd', maxBids: 9, targetBiddercodePrefix: 'ttd_m' },
 			],
+
 			userSync: {
 				syncDelay: 3000,
 				syncEnabled: true,
@@ -274,20 +298,20 @@ describe('initialise', () => {
 		expect(window.pbjs?.getConfig('consentManagement')).toBeUndefined();
 	});
 
-	test('should generate correct Prebid config when shouldIncludePrebidBidCache is true', () => {
-		jest.mocked(shouldIncludePrebidBidCache).mockReturnValue(true);
+	test('should set value of useBidCache correctly in Prebid config when the switch is on', () => {
+		window.guardian.config.switches.prebidBidCache = true;
 		prebid.initialise(window, mockConsentState);
 		expect(window.pbjs?.getConfig('useBidCache')).toBe(true);
 	});
 
-	test('should generate correct Prebid config when shouldIncludePrebidBidCache is false', () => {
-		jest.mocked(shouldIncludePrebidBidCache).mockReturnValue(false);
+	test('should set value of useBidCache correctly in Prebid config when the switch is off', () => {
+		window.guardian.config.switches.prebidBidCache = false;
 		prebid.initialise(window, mockConsentState);
 		expect(window.pbjs?.getConfig('useBidCache')).toBe(false);
 	});
 
-	test('should generate correct Prebid config for multibid when shouldIncludePrebidBidCache is true', () => {
-		jest.mocked(shouldIncludePrebidBidCache).mockReturnValue(true);
+	test('should generate correct Prebid config for multibid when the prebidBidCache switch is on', () => {
+		window.guardian.config.switches.prebidBidCache = true;
 		jest.mocked(shouldIncludeBidder).mockReturnValue(
 			jest.fn().mockReturnValue(true),
 		);
@@ -295,29 +319,56 @@ describe('initialise', () => {
 		expect(window.pbjs?.getConfig()).toMatchObject({
 			multibid: [
 				{
-					bidders: [
-						'adyoulike',
-						'and',
-						'criteo',
-						'ix',
-						'kargo',
-						'rubicon',
-						'oxd',
-						'ozone',
-						'pubmatic',
-						'triplelift',
-						'trustx',
-						'xhb',
-						'ttd',
-					],
+					bidder: 'adyoulike',
 					maxBids: 9,
+					targetBiddercodePrefix: 'adyoulike_m',
 				},
+				{ bidder: 'and', maxBids: 9, targetBiddercodePrefix: 'and_m' },
+				{
+					bidder: 'criteo',
+					maxBids: 9,
+					targetBiddercodePrefix: 'criteo_m',
+				},
+				{ bidder: 'ix', maxBids: 9, targetBiddercodePrefix: 'ix_m' },
+				{
+					bidder: 'kargo',
+					maxBids: 9,
+					targetBiddercodePrefix: 'kargo_m',
+				},
+				{
+					bidder: 'rubicon',
+					maxBids: 9,
+					targetBiddercodePrefix: 'rubicon_m',
+				},
+				{ bidder: 'oxd', maxBids: 9, targetBiddercodePrefix: 'oxd_m' },
+				{
+					bidder: 'ozone',
+					maxBids: 9,
+					targetBiddercodePrefix: 'ozone_m',
+				},
+				{
+					bidder: 'pubmatic',
+					maxBids: 9,
+					targetBiddercodePrefix: 'pubmatic_m',
+				},
+				{
+					bidder: 'triplelift',
+					maxBids: 9,
+					targetBiddercodePrefix: 'triplelift_m',
+				},
+				{
+					bidder: 'trustx',
+					maxBids: 9,
+					targetBiddercodePrefix: 'trustx_m',
+				},
+				{ bidder: 'xhb', maxBids: 9, targetBiddercodePrefix: 'xhb_m' },
+				{ bidder: 'ttd', maxBids: 9, targetBiddercodePrefix: 'ttd_m' },
 			],
 		});
 	});
 
-	test('should generate correct Prebid config for multibid when shouldIncludePrebidBidCache is false', () => {
-		jest.mocked(shouldIncludePrebidBidCache).mockReturnValue(false);
+	test('should generate correct Prebid config for multibid when the prebidBidCache switch is off', () => {
+		window.guardian.config.switches.prebidBidCache = false;
 		prebid.initialise(window, mockConsentState);
 		expect(window.pbjs?.getConfig('multibid')).toBeUndefined();
 	});

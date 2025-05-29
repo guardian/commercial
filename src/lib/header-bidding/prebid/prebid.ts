@@ -29,7 +29,6 @@ import {
 	isSwitchedOn,
 	shouldIncludeBidder,
 	shouldIncludePermutive,
-	shouldIncludePrebidBidCache,
 	stripDfpAdPrefixFrom,
 } from '../utils';
 import { bids } from './bid-config';
@@ -89,7 +88,7 @@ type UserSync =
 			syncEnabled: false;
 	  };
 
-type Multibid =
+type MultibidConfig =
 	| {
 			bidders: BidderCode[];
 			maxBids: number;
@@ -124,7 +123,7 @@ type PbjsConfig = {
 	consentManagement?: ConsentManagement;
 	realTimeData?: unknown;
 	useBidCache?: boolean;
-	multibid?: Multibid[];
+	multibid?: MultibidConfig[];
 	customPriceBucket?: PrebidPriceGranularity;
 	/**
 	 * This is a custom property that has been added to our fork of prebid.js
@@ -431,13 +430,13 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	/**
 	 * useBidCache is a feature that allows Prebid to cache bids
 	 */
-	const useBidCache = shouldIncludePrebidBidCache();
+	const useBidCache = isSwitchedOn('prebidBidCache');
 
 	/**
-	 * multibid is a feature that allows Prebid to request multiple bids
-	 * from the same bidder
+	 * Multibid is a feature that allows Prebid to request multiple bids from the same bidder
+	 * @see https://docs.prebid.org/dev-docs/modules/multibid.html
 	 */
-	const multibid = (): Multibid[] => {
+	const getMultibidConfig = (): MultibidConfig[] => {
 		const allBidders = [
 			'adyoulike',
 			'and',
@@ -454,7 +453,13 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			'ttd',
 		] satisfies BidderCode[];
 
-		return [{ bidders: allBidders.filter(shouldInclude), maxBids: 9 }];
+		return allBidders.filter(shouldInclude).map((bidderCode) => {
+			return {
+				bidder: bidderCode,
+				maxBids: 9,
+				targetBiddercodePrefix: `${bidderCode}_m`,
+			};
+		});
 	};
 
 	const pbjsConfig: PbjsConfig = Object.assign(
@@ -464,7 +469,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			timeoutBuffer,
 			priceGranularity,
 			userSync,
-			useBidCache,
+			useBidCache: isSwitchedOn('prebidBidCache'),
 		},
 	);
 
@@ -487,7 +492,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	}
 
 	if (useBidCache) {
-		pbjsConfig.multibid = multibid();
+		pbjsConfig.multibid = getMultibidConfig();
 	}
 
 	if (shouldIncludePermutive(consentState)) {
