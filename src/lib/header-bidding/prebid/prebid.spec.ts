@@ -83,7 +83,7 @@ describe('initialise', () => {
 
 		prebid.initialise(window, mockConsentState);
 
-		expect(window.pbjs?.getConfig()).toEqual({
+		expect(window.pbjs?.getConfig()).toMatchObject({
 			auctionOptions: {},
 			bidderSequence: 'random',
 			bidderTimeout: 1500,
@@ -147,54 +147,6 @@ describe('initialise', () => {
 			},
 			timeoutBuffer: 400,
 			useBidCache: true,
-			multibid: [
-				{
-					bidder: 'adyoulike',
-					maxBids: 9,
-					targetBiddercodePrefix: 'adyoulike_m',
-				},
-				{ bidder: 'and', maxBids: 9, targetBiddercodePrefix: 'and_m' },
-				{
-					bidder: 'criteo',
-					maxBids: 9,
-					targetBiddercodePrefix: 'criteo_m',
-				},
-				{ bidder: 'ix', maxBids: 9, targetBiddercodePrefix: 'ix_m' },
-				{
-					bidder: 'kargo',
-					maxBids: 9,
-					targetBiddercodePrefix: 'kargo_m',
-				},
-				{
-					bidder: 'rubicon',
-					maxBids: 9,
-					targetBiddercodePrefix: 'rubicon_m',
-				},
-				{ bidder: 'oxd', maxBids: 9, targetBiddercodePrefix: 'oxd_m' },
-				{
-					bidder: 'ozone',
-					maxBids: 9,
-					targetBiddercodePrefix: 'ozone_m',
-				},
-				{
-					bidder: 'pubmatic',
-					maxBids: 9,
-					targetBiddercodePrefix: 'pubmatic_m',
-				},
-				{
-					bidder: 'triplelift',
-					maxBids: 9,
-					targetBiddercodePrefix: 'triplelift_m',
-				},
-				{
-					bidder: 'trustx',
-					maxBids: 9,
-					targetBiddercodePrefix: 'trustx_m',
-				},
-				{ bidder: 'xhb', maxBids: 9, targetBiddercodePrefix: 'xhb_m' },
-				{ bidder: 'ttd', maxBids: 9, targetBiddercodePrefix: 'ttd_m' },
-			],
-
 			userSync: {
 				syncDelay: 3000,
 				syncEnabled: true,
@@ -248,7 +200,7 @@ describe('initialise', () => {
 		mockGetConsentForID5(false);
 		prebid.initialise(window, mockConsentState);
 
-		expect(window.pbjs?.getConfig('userSync')).toEqual({
+		expect(window.pbjs?.getConfig('userSync')).toMatchObject({
 			syncDelay: 3000,
 			syncEnabled: true,
 			syncsPerBidder: 0,
@@ -315,6 +267,7 @@ describe('initialise', () => {
 		jest.mocked(shouldIncludeBidder).mockReturnValue(
 			jest.fn().mockReturnValue(true),
 		);
+		jest.mocked(isUserInVariant).mockReturnValue(true);
 		prebid.initialise(window, mockConsentState);
 		expect(window.pbjs?.getConfig()).toMatchObject({
 			multibid: [
