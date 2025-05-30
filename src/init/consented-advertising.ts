@@ -7,6 +7,7 @@ import { initDynamicAdSlots } from './consented/dynamic-ad-slots';
 import { initFillSlotListener } from './consented/fill-slot-listener';
 import { init as initIpsosMori } from './consented/ipsos-mori';
 import { init as initMessenger } from './consented/messenger';
+import { initOpinaryPollListener } from './consented/opinary';
 import { init as prepareA9 } from './consented/prepare-a9';
 import { init as prepareGoogletag } from './consented/prepare-googletag';
 import { initPermutive } from './consented/prepare-permutive';
@@ -42,6 +43,7 @@ const commercialModules = [
 	initFillSlotListener,
 	prepareAdVerification,
 	initThirdPartyTags,
+	initOpinaryPollListener,
 ];
 
 const bootCommercialWhenReady = () => {

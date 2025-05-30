@@ -228,7 +228,6 @@ interface Confiant extends Record<string, unknown> {
 		[key: string]: unknown;
 	};
 }
-
 interface Permutive {
 	config?: {
 		projectId?: string;
@@ -238,6 +237,7 @@ interface Permutive {
 	q?: Array<{ functionName: string; arguments: unknown[] }>;
 	addon?: (name: string, props: Record<string, unknown>) => void;
 	identify?: (user: Array<{ id: string; tag: string }>) => void;
+	track?: (name: string, props: Record<string, unknown>) => void;
 }
 
 // https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/javascript-guide/api-reference.html#apstaginit
