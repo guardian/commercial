@@ -1,4 +1,4 @@
-import { isUndefined } from '@guardian/libs';
+import { isUndefined, log } from '@guardian/libs';
 
 type OpinaryPollEventData = {
 	poll: {
@@ -65,6 +65,11 @@ const opinaryPollListener = (event: MessageEvent) => {
 			unit: vote.unit || '',
 		},
 	});
+
+	log(
+		'commercial',
+		`Sent survey response to Permutive for poll ID ${poll.pollId}`,
+	);
 };
 
 const initOpinaryPollListener = (): Promise<void> =>
