@@ -429,11 +429,6 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	const shouldInclude = shouldIncludeBidder(consentState);
 
 	/**
-	 * useBidCache is a feature that allows Prebid to cache bids
-	 */
-	const useBidCache = isSwitchedOn('prebidBidCache');
-
-	/**
 	 * Multibid is a feature that allows Prebid to request multiple bids from the same bidder
 	 * @see https://docs.prebid.org/dev-docs/modules/multibid.html
 	 */
@@ -463,40 +458,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		});
 	};
 
-	const pbjsConfig: PbjsConfig = Object.assign(
-		{},
-		{
-			bidderTimeout,
-			timeoutBuffer,
-			priceGranularity,
-			userSync,
-			useBidCache: isSwitchedOn('prebidBidCache'),
-		},
-	);
-
-	const keywordsArray = window.guardian.config.page.keywords.split(',');
-
-	pbjsConfig.ortb2 = {
-		site: {
-			ext: {
-				data: {
-					keywords: keywordsArray,
-				},
-			},
-		},
-	};
-
-	window.pbjs.bidderSettings = {};
-
-	if (isSwitchedOn('consentManagement')) {
-		pbjsConfig.consentManagement = consentManagement();
-	}
-
-	if (useBidCache && isUserInVariant(prebidMultibid, 'variant')) {
-		pbjsConfig.multibid = getMultibidConfig();
-	}
-
-	if (shouldIncludePermutive(consentState)) {
+	const getRealTimeDataConfig = () => {
 		const includedAcBidders = (
 			['and', 'ix', 'ozone', 'pubmatic', 'trustx'] satisfies BidderCode[]
 		)
@@ -504,7 +466,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			// "and" is the alias for the custom Guardian "appnexus" direct bidder
 			.map((bidder) => (bidder === 'and' ? 'appnexus' : bidder));
 
-		pbjsConfig.realTimeData = {
+		return {
 			dataProviders: [
 				{
 					name: 'permutive',
@@ -517,68 +479,145 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 				},
 			],
 		};
-	}
+	};
 
-	if (shouldInclude('criteo')) {
-		window.pbjs.bidderSettings.criteo = {
-			storageAllowed: true,
-			// Use a custom price granularity, which is based upon the size of the slot being auctioned
-			adserverTargeting: [
-				{
-					key: 'hb_pb',
-					val({ width, height, cpm, pbCg }) {
-						return overridePriceBucket(
-							'criteo',
-							width,
-							height,
-							cpm,
-							pbCg,
-						);
+	const pbjsConfig: PbjsConfig = Object.assign(
+		{},
+		{
+			bidderTimeout,
+			timeoutBuffer,
+			priceGranularity,
+			userSync,
+			useBidCache: isSwitchedOn('prebidBidCache'),
+			ortb2: {
+				site: {
+					ext: {
+						data: {
+							keywords:
+								window.guardian.config.page.keywords.split(','),
+						},
 					},
 				},
-			],
-		};
-	}
+			},
 
-	if (shouldInclude('ozone')) {
-		// Use a custom price granularity, which is based upon the size of the slot being auctioned
-		window.pbjs.bidderSettings.ozone = {
-			adserverTargeting: [
-				{
-					key: 'hb_pb',
-					val: ({ width, height, cpm, pbCg }) => {
-						return overridePriceBucket(
-							'ozone',
-							width,
-							height,
-							cpm,
-							pbCg,
-						);
-					},
-				},
-			],
-		};
-	}
+			...(isSwitchedOn('consentManagement')
+				? { consentManagement: consentManagement() }
+				: {}),
 
-	if (shouldInclude('ix')) {
-		// Use a custom price granularity, which is based upon the size of the slot being auctioned
-		window.pbjs.bidderSettings.ix = {
-			adserverTargeting: [
-				{
-					key: 'hb_pb',
-					val({ width, height, cpm, pbCg }) {
-						return overridePriceBucket(
-							'ix',
-							width,
-							height,
-							cpm,
-							pbCg,
-						);
+			...(isSwitchedOn('prebidBidCache') &&
+			isUserInVariant(prebidMultibid, 'variant')
+				? { multibid: getMultibidConfig() }
+				: {}),
+
+			...(shouldIncludePermutive(consentState)
+				? { realTimeData: getRealTimeDataConfig() }
+				: {}),
+		},
+	);
+
+	window.pbjs.bidderSettings = {
+		...(shouldInclude('criteo')
+			? {
+					criteo: {
+						storageAllowed: true,
+						adserverTargeting: [
+							{
+								key: 'hb_pb',
+								val({ width, height, cpm, pbCg }) {
+									return overridePriceBucket(
+										'criteo',
+										width,
+										height,
+										cpm,
+										pbCg,
+									);
+								},
+							},
+						],
 					},
-				},
-			],
-		};
-	}
+				}
+			: {}),
+
+		...(shouldInclude('ozone')
+			? {
+					ozone: {
+						adserverTargeting: [
+							{
+								key: 'hb_pb',
+								val: ({ width, height, cpm, pbCg }) => {
+									return overridePriceBucket(
+										'ozone',
+										width,
+										height,
+										cpm,
+										pbCg,
+									);
+								},
+							},
+						],
+					},
+				}
+			: {}),
+
+		...(shouldInclude('ix')
+			? {
+					ix: {
+						adserverTargeting: [
+							{
+								key: 'hb_pb',
+								val({ width, height, cpm, pbCg }) {
+									return overridePriceBucket(
+										'ix',
+										width,
+										height,
+										cpm,
+										pbCg,
+									);
+								},
+							},
+						],
+					},
+				}
+			: {}),
+
+		...(shouldInclude('xhb')
+			? {
+					xhb: {
+						adserverTargeting: [
+							{
+								key: 'hb_buyer_id',
+								val(bidResponse) {
+									// TODO: should we return null or an empty string?
+									return (
+										bidResponse.appnexus?.buyerMemberId ??
+										''
+									);
+								},
+							},
+						],
+						bidCpmAdjustment: (bidCpm: number) => {
+							return bidCpm * 1.05;
+						},
+					},
+				}
+			: {}),
+
+		...(shouldInclude('kargo')
+			? {
+					kargo: {
+						storageAllowed: true,
+					},
+				}
+			: {}),
+
+		...(shouldInclude('rubicon')
+			? {
+					magnite: {
+						storageAllowed: true,
+					},
+				}
+			: {}),
+	};
 
 	if (shouldEnableAnalytics() && window.guardian.ophan?.pageViewId) {
 		window.pbjs.enableAnalytics([
@@ -596,44 +635,13 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		]);
 	}
 
-	if (shouldInclude('xhb')) {
-		window.pbjs.bidderSettings.xhb = {
-			adserverTargeting: [
-				{
-					key: 'hb_buyer_id',
-					val(bidResponse) {
-						// TODO: should we return null or an empty string?
-						return bidResponse.appnexus?.buyerMemberId ?? '';
-					},
-				},
-			],
-			bidCpmAdjustment: (bidCpm: number) => {
-				return bidCpm * 1.05;
-			},
-		};
-	}
-
-	if (shouldInclude('kargo')) {
-		window.pbjs.bidderSettings.kargo = {
-			storageAllowed: true,
-		};
-	}
-
 	if (shouldInclude('rubicon')) {
-		window.pbjs.bidderSettings.magnite = {
-			storageAllowed: true,
-		};
-
 		window.pbjs.setBidderConfig({
 			bidders: ['rubicon'],
 			config: {
 				ortb2: {
 					user: {
-						ext: {
-							data: {
-								permutive: getPermutiveSegments(),
-							},
-						},
+						ext: { data: { permutive: getPermutiveSegments() } },
 					},
 				},
 			},
