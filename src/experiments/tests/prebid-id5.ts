@@ -3,8 +3,8 @@ import type { ABTest } from '@guardian/ab-core';
 export const prebidId5: ABTest = {
 	id: 'PrebidId5',
 	author: '@commercial-dev',
-	start: '2025-05-07',
-	expiry: '2025-05-30',
+	start: '2025-06-02',
+	expiry: '2025-06-24',
 	audience: 2 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',
