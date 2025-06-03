@@ -46,7 +46,7 @@ const opinaryPollListener = (event: MessageEvent) => {
 
 	const { poll, vote } = event.data;
 
-	window.permutive.track('SurveyResponse', {
+	window.permutive.track('OpinarySurveyResponse', {
 		survey: {
 			id: poll.pollId,
 			type: poll.type,
@@ -72,8 +72,14 @@ const opinaryPollListener = (event: MessageEvent) => {
 	);
 };
 
-const initOpinaryPollListener = (): Promise<void> =>
-	Promise.resolve(window.addEventListener('message', opinaryPollListener));
+const initOpinaryPollListener = (): Promise<void> => {
+	if (window.permutive?.track) {
+		return Promise.resolve(
+			window.addEventListener('message', opinaryPollListener),
+		);
+	}
+	return Promise.resolve();
+};
 
 // Exports for testing only
 export const _ = {
