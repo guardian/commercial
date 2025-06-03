@@ -66,6 +66,12 @@ const opinaryPollListener = (event: MessageEvent) => {
 
 	const { poll, vote } = event.data;
 
+	/**
+	 * IMPORTANT: Do not change the shape of this data before checking with Permutive!
+	 * This is a Permutive custom event and is documented and specified manually in a schema
+	 * @see https://support.permutive.com/hc/en-us/articles/10211335253660-Schema-Updates-for-the-Pageview-Event-Custom-Events
+	 * for more information
+	 */
 	const surveyResponse: SurveyResponse = {
 		survey: {
 			id: poll.pollId,
