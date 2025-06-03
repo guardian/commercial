@@ -375,7 +375,6 @@ interface OptOutAdSlot {
 	adSlot: string;
 	targetId: string;
 	id: string;
-	// eslint-disable-next-line no-use-before-define -- circular reference
 	filledCallback?: OptOutFilledCallback;
 	emptyCallback?: (adSlot: OptOutAdSlot) => void;
 	adShownCallback?: (adSlot: OptOutAdSlot, response: OptOutResponse) => void;
