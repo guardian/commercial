@@ -9,11 +9,31 @@ type OpinaryPollEventData = {
 	};
 	vote: {
 		label: string;
-		x: string;
-		y: string;
+		x: number;
+		y: number;
 		optionID: string;
-		position: string;
-		value: string;
+		position: number;
+		value: number;
+		unit: string;
+	};
+};
+
+type SurveyResponse = {
+	survey: {
+		id: string;
+		type: string;
+		solution: string;
+	};
+	question: {
+		text: string;
+	};
+	answer: {
+		text: string;
+		posX: number;
+		posY: number;
+		optionIdentifier: string;
+		optionPosition: number;
+		rawValue: number;
 		unit: string;
 	};
 };
@@ -46,7 +66,7 @@ const opinaryPollListener = (event: MessageEvent) => {
 
 	const { poll, vote } = event.data;
 
-	window.permutive.track('OpinarySurveyResponse', {
+	const surveyResponse: SurveyResponse = {
 		survey: {
 			id: poll.pollId,
 			type: poll.type,
@@ -64,12 +84,15 @@ const opinaryPollListener = (event: MessageEvent) => {
 			rawValue: vote.value || 0.0,
 			unit: vote.unit || '',
 		},
-	});
+	};
+
+	window.permutive.track('SurveyResponse', surveyResponse);
 
 	log(
 		'commercial',
 		`Sent survey response to Permutive for poll ID ${poll.pollId}`,
 	);
+	log('commercial', surveyResponse);
 };
 
 const initOpinaryPollListener = (): Promise<void> => {
