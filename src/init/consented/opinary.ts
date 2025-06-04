@@ -9,11 +9,31 @@ type OpinaryPollEventData = {
 	};
 	vote: {
 		label: string;
-		x: string;
-		y: string;
+		x: number;
+		y: number;
 		optionID: string;
-		position: string;
-		value: string;
+		position: number;
+		value: number;
+		unit: string;
+	};
+};
+
+type SurveyResponse = {
+	survey: {
+		id: string;
+		type: string;
+		solution: string;
+	};
+	question: {
+		text: string;
+	};
+	answer: {
+		text: string;
+		posX: number;
+		posY: number;
+		optionIdentifier: string;
+		optionPosition: number;
+		rawValue: number;
 		unit: string;
 	};
 };
@@ -46,7 +66,13 @@ const opinaryPollListener = (event: MessageEvent) => {
 
 	const { poll, vote } = event.data;
 
-	window.permutive.track('SurveyResponse', {
+	/**
+	 * IMPORTANT: Do not change the shape of this data before checking with Permutive!
+	 * This is a Permutive custom event and is documented and specified manually in a schema
+	 * @see https://support.permutive.com/hc/en-us/articles/10211335253660-Schema-Updates-for-the-Pageview-Event-Custom-Events
+	 * for more information
+	 */
+	const surveyResponse: SurveyResponse = {
 		survey: {
 			id: poll.pollId,
 			type: poll.type,
@@ -64,16 +90,25 @@ const opinaryPollListener = (event: MessageEvent) => {
 			rawValue: vote.value || 0.0,
 			unit: vote.unit || '',
 		},
-	});
+	};
+
+	window.permutive.track('SurveyResponse', surveyResponse);
 
 	log(
 		'commercial',
 		`Sent survey response to Permutive for poll ID ${poll.pollId}`,
 	);
+	log('commercial', surveyResponse);
 };
 
-const initOpinaryPollListener = (): Promise<void> =>
-	Promise.resolve(window.addEventListener('message', opinaryPollListener));
+const initOpinaryPollListener = (): Promise<void> => {
+	if (window.permutive?.track) {
+		return Promise.resolve(
+			window.addEventListener('message', opinaryPollListener),
+		);
+	}
+	return Promise.resolve();
+};
 
 // Exports for testing only
 export const _ = {
