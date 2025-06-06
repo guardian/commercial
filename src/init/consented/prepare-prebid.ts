@@ -6,6 +6,8 @@ import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { isInCanada } from '../../lib/geo/geo-utils';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
 import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
+import { isUserInVariant } from '../../experiments/ab';
+import { prebidV946 } from '../../experiments/tests/prebid-v946';
 
 const shouldLoadPrebid = () =>
 	!isGoogleProxy() &&
@@ -16,12 +18,20 @@ const shouldLoadPrebid = () =>
 	!shouldIncludeOnlyA9 &&
 	!isInCanada();
 
+const shouldLoadPrebid946 = isUserInVariant(prebidV946, 'variant');
+
+console.log('shouldLoadPrebid946 --->', shouldLoadPrebid946);
+
 const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 	if (shouldLoadPrebid()) {
 		await import(
 			/* webpackChunkName: "Prebid.js" */
 			`../../lib/header-bidding/prebid/pbjs`
 		);
+		// await import(
+		// 	/* webpackChunkName: "Prebid.js" */
+		// 	`@guardian/prebid${shouldLoadPrebid946 ? '9' : ''}.js/build/dist/prebid`
+		// );
 		prebid.initialise(window, consentState);
 	}
 };
