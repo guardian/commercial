@@ -62,7 +62,7 @@ const config = {
 			/**
 			 * The aliases below for prebid946.js
 			 * can be deleted once we've tested this dependency
-			**/
+			 **/
 			'prebid946.js/src': join(
 				import.meta.dirname,
 				'node_modules',
@@ -116,7 +116,7 @@ const config = {
 			/**
 			 * The rule below for prebid946.js
 			 * can be deleted once we've tested this dependency
-			**/
+			 **/
 			{
 				test: /.js$/,
 				include: /prebid946\.js/,
