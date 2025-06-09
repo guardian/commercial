@@ -35,7 +35,7 @@ importers:
       prebid.js:
         specifier: 9.27.0
         version: 9.27.0(ejs@3.1.10)
-      prebid.js-v946:
+      prebid946.js:
         specifier: npm:prebid.js@9.46.0
         version: prebid.js@9.46.0(ejs@3.1.10)
       process:

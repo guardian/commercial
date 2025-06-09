@@ -1,7 +1,7 @@
 import type { ABTest } from '@guardian/ab-core';
 
-export const prebidV946: ABTest = {
-	id: 'PrebidV946',
+export const prebid946: ABTest = {
+	id: 'Prebid946',
 	author: '@commercial-dev',
 	start: '2025-06-09',
 	expiry: '2025-06-16',

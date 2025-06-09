@@ -59,6 +59,29 @@ const config = {
 				'src',
 				'adapters',
 			),
+			/**
+			 * The aliases below for prebid946.js
+			 * can be deleted once we've tested this dependency
+			**/
+			'prebid946.js/src': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebid946.js',
+				'src',
+			),
+			'prebid946.js/libraries': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebid946.js',
+				'libraries',
+			),
+			'prebid946.js/adapters': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebid946.js',
+				'src',
+				'adapters',
+			),
 		},
 		extensions: ['.js', '.ts', '.tsx', '.jsx'],
 	},
@@ -85,6 +108,18 @@ const config = {
 			{
 				test: /.js$/,
 				include: /prebid\.js/,
+				use: {
+					loader: 'babel-loader',
+					options: prebidBabelOptions,
+				},
+			},
+			/**
+			 * The rule below for prebid946.js
+			 * can be deleted once we've tested this dependency
+			**/
+			{
+				test: /.js$/,
+				include: /prebid946\.js/,
 				use: {
 					loader: 'babel-loader',
 					options: prebidBabelOptions,
