@@ -43,22 +43,24 @@ const config = {
 			'prebid.js/src': join(
 				import.meta.dirname,
 				'node_modules',
-				'prebid.js',
+				'prebid946.js',
 				'src',
 			),
 			'prebid.js/libraries': join(
 				import.meta.dirname,
 				'node_modules',
-				'prebid.js',
+				'prebid946.js',
 				'libraries',
 			),
 			'prebid.js/adapters': join(
 				import.meta.dirname,
 				'node_modules',
-				'prebid.js',
+				'prebid946.js',
 				'src',
 				'adapters',
 			),
+			'prebid.js': 'prebid946.js',
+
 		},
 		extensions: ['.js', '.ts', '.tsx', '.jsx'],
 	},
