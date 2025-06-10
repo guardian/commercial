@@ -240,7 +240,7 @@ class PrebidAdUnit {
 		};
 
 		this.bids = bids(
-			advert.id,
+			advert.slotGrouping,
 			slot.sizes,
 			pageTargeting,
 			this.gpid,
