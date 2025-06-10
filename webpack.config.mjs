@@ -38,28 +38,48 @@ const config = {
 		alias: {
 			svgs: join(import.meta.dirname, 'static', 'svg'),
 			lodash: 'lodash-es',
+			'prebid.js': 'prebid946.js',
 			// prebid doesn't export these directories, so we need to alias them,
 			// we use them for our custom modules located in src/lib/header-bidding/prebid/custom-modules
-			'prebid.js/src': join(
+			'prebid946.js/src': join(
 				import.meta.dirname,
 				'node_modules',
 				'prebid946.js',
 				'src',
 			),
-			'prebid.js/libraries': join(
+			'prebid946.js/libraries': join(
 				import.meta.dirname,
 				'node_modules',
 				'prebid946.js',
 				'libraries',
 			),
-			'prebid.js/adapters': join(
+			'prebid946.js/adapters': join(
 				import.meta.dirname,
 				'node_modules',
 				'prebid946.js',
 				'src',
 				'adapters',
 			),
-			'prebid.js': 'prebid946.js',
+			// 'prebid.js': 'prebid946.js',
+			// 'prebid.js/src': join(
+			// 	import.meta.dirname,
+			// 	'node_modules',
+			// 	'prebid.js',
+			// 	'src',
+			// ),
+			// 'prebid.js/libraries': join(
+			// 	import.meta.dirname,
+			// 	'node_modules',
+			// 	'prebid.js',
+			// 	'libraries',
+			// ),
+			// 'prebid.js/adapters': join(
+			// 	import.meta.dirname,
+			// 	'node_modules',
+			// 	'prebid.js',
+			// 	'src',
+			// 	'adapters',
+			// ),
 
 		},
 		extensions: ['.js', '.ts', '.tsx', '.jsx'],
