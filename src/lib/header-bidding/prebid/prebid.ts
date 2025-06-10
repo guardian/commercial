@@ -213,7 +213,7 @@ class PrebidAdUnit {
 		pageTargeting: PageTargeting,
 		consentState: ConsentState,
 	) {
-		this.code = advert.id;
+		this.code = advert.groupedSlot;
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
 		this.gpid = this.generateGpid(advert, slot);
 		this.ortb2Imp = {
@@ -226,7 +226,7 @@ class PrebidAdUnit {
 		};
 
 		this.bids = bids(
-			advert.slotGrouping,
+			advert.groupedSlot,
 			slot.sizes,
 			pageTargeting,
 			this.gpid,
@@ -234,7 +234,11 @@ class PrebidAdUnit {
 		);
 
 		advert.headerBiddingSizes = slot.sizes;
-		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
+		log(
+			'commercial',
+			`PrebidAdUnit ${advert.id} | bid cache groupedSlot '${this.code}'`,
+			this.bids,
+		);
 	}
 
 	isEmpty() {
