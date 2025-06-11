@@ -3,7 +3,8 @@ import { join } from 'path';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack from 'webpack';
-import prebidBabelOptions from 'prebid.js/.babelrc.js';
+// import prebidBabelOptions from 'prebid.js/.babelrc.js';
+import prebid946BabelOptions from 'prebid946.js/.babelrc.js';
 
 const gitCommitSHA = () => {
 	try {
@@ -60,7 +61,6 @@ const config = {
 				'src',
 				'adapters',
 			),
-			// 'prebid.js': 'prebid946.js',
 			// 'prebid.js/src': join(
 			// 	import.meta.dirname,
 			// 	'node_modules',
@@ -109,7 +109,8 @@ const config = {
 				include: /prebid\.js/,
 				use: {
 					loader: 'babel-loader',
-					options: prebidBabelOptions,
+					// options: prebidBabelOptions,
+					options: prebid946BabelOptions,
 				},
 			},
 			{
