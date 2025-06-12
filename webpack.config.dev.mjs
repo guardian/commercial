@@ -6,30 +6,23 @@ import prebid946Config from './webpack.config.prebid946.mjs';
 
 const port = 3031;
 
-// export default merge(config, {
-// 	devtool: 'inline-source-map',
-// 	mode: 'development',
-// 	output: {
-// 		filename: `graun.[name].commercial.js`,
-// 		chunkFilename: `graun.[name].commercial.js`,
-// 		path: join(import.meta.dirname, 'dist', 'bundle', 'dev'),
-// 		clean: true,
-// 	},
-// 	/** @type {import('webpack-dev-server').Configuration} */
-// 	devServer: {
-// 		port,
-// 		compress: true,
-// 		hot: false,
-// 		liveReload: true,
-// 		setupMiddlewares: (middlewares, devServer) => {
-// 			setupFixturesServer(devServer);
+/** @type {import('webpack-dev-server').Configuration} */
+const devServerConfig = {
+	port,
+	compress: true,
+	hot: false,
+	liveReload: true,
+	setupMiddlewares: (middlewares, devServer) => {
+		setupFixturesServer(devServer);
 
-// 			return middlewares;
-// 		},
-// 	},
-// });
+		return middlewares;
+	},
+};
 
-export default [merge(config, {
+const servePrebid946 = process.env.SERVE_PREBID946 === 'true';
+
+export default [
+	merge(config, {
 	devtool: 'inline-source-map',
 	mode: 'development',
 	output: {
@@ -38,19 +31,9 @@ export default [merge(config, {
 		path: join(import.meta.dirname, 'dist', 'bundle', 'dev'),
 		clean: true,
 	},
-	/** @type {import('webpack-dev-server').Configuration} */
-	devServer: {
-		port,
-		compress: true,
-		hot: false,
-		liveReload: true,
-		setupMiddlewares: (middlewares, devServer) => {
-			setupFixturesServer(devServer);
-
-			return middlewares;
-		},
-	},
-}), merge(prebid946Config, {
+	...(!servePrebid946 && { devServer: devServerConfig }),
+}),
+merge(prebid946Config, {
 	devtool: 'inline-source-map',
 	mode: 'development',
 	output: {
@@ -59,4 +42,5 @@ export default [merge(config, {
 		path: join(import.meta.dirname, 'dist', 'bundle', 'dev'),
 		clean: true,
 	},
+	...(servePrebid946 && { devServer: devServerConfig }),
 })]
