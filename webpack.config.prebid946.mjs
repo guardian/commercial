@@ -3,7 +3,7 @@ import { join } from 'path';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack from 'webpack';
-import prebidBabelOptions from 'prebid.js/.babelrc.js';
+import prebid946BabelOptions from 'prebid946.js/.babelrc.js';
 
 const gitCommitSHA = () => {
 	try {
@@ -38,24 +38,26 @@ const config = {
 		alias: {
 			svgs: join(import.meta.dirname, 'static', 'svg'),
 			lodash: 'lodash-es',
+			// alias all prebid.js imports to prebid946.js for testing
+			'prebid.js': 'prebid946.js',
 			// prebid doesn't export these directories, so we need to alias them,
 			// we use them for our custom modules located in src/lib/header-bidding/prebid/custom-modules
-			'prebid.js/src': join(
+			'prebid946.js/src': join(
 				import.meta.dirname,
 				'node_modules',
-				'prebid.js',
+				'prebid946.js',
 				'src',
 			),
-			'prebid.js/libraries': join(
+			'prebid946.js/libraries': join(
 				import.meta.dirname,
 				'node_modules',
-				'prebid.js',
+				'prebid946.js',
 				'libraries',
 			),
-			'prebid.js/adapters': join(
+			'prebid946.js/adapters': join(
 				import.meta.dirname,
 				'node_modules',
-				'prebid.js',
+				'prebid946.js',
 				'src',
 				'adapters',
 			),
@@ -87,7 +89,7 @@ const config = {
 				include: /prebid\.js/,
 				use: {
 					loader: 'babel-loader',
-					options: prebidBabelOptions,
+					options: prebid946BabelOptions,
 				},
 			},
 			{
