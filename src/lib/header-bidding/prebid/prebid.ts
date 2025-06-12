@@ -100,6 +100,15 @@ type MultibidConfig =
 			targetBiddercodePrefix?: string;
 	  };
 
+type TargetingControls = {
+	auctionKeyMaxChars?: number;
+	alwaysIncludeDeals?: boolean;
+	allowTargetingKeys?: string[];
+	addTargetingKeys?: string[];
+	allowSendAllBidsTargetingKeys?: string[];
+	allBidsCustomTargeting?: boolean;
+};
+
 type PbjsConfig = {
 	bidderTimeout: number;
 	timeoutBuffer?: number;
@@ -134,6 +143,8 @@ type PbjsConfig = {
 		width: number;
 		height: number;
 	}) => PrebidPriceGranularity | undefined;
+	targetingControls?: TargetingControls;
+	enableSendAllBids?: boolean;
 };
 
 type PbjsBidderConfig = Pick<
@@ -303,6 +314,7 @@ declare global {
 				customSlotMatching?: (slot: unknown) => unknown,
 			) => void;
 			getEvents: () => PrebidEvent[];
+			getAllTargeting: () => unknown[];
 		};
 	}
 }
@@ -428,6 +440,23 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	 * of consent state throughout */
 	const shouldInclude = shouldIncludeBidder(consentState);
 
+	const allBidders = [
+		'adyoulike',
+		'and',
+		'criteo',
+		'ix',
+		'kargo',
+		'rubicon',
+		'oxd',
+		'ozone',
+		'pubmatic',
+		'triplelift',
+		'trustx',
+		'xhb',
+		'ttd',
+	] satisfies BidderCode[];
+	const includedBidders = allBidders.filter(shouldInclude);
+
 	/**
 	 * useBidCache is a feature that allows Prebid to cache bids
 	 */
@@ -437,30 +466,15 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	 * Multibid is a feature that allows Prebid to request multiple bids from the same bidder
 	 * @see https://docs.prebid.org/dev-docs/modules/multibid.html
 	 */
-	const getMultibidConfig = (): MultibidConfig[] => {
-		const allBidders = [
-			'adyoulike',
-			'and',
-			'criteo',
-			'ix',
-			'kargo',
-			'rubicon',
-			'oxd',
-			'ozone',
-			'pubmatic',
-			'triplelift',
-			'trustx',
-			'xhb',
-			'ttd',
-		] satisfies BidderCode[];
-
-		return allBidders.filter(shouldInclude).map((bidderCode) => {
-			return {
-				bidder: bidderCode,
-				maxBids: 9,
-				targetBiddercodePrefix: `${bidderCode}_m`,
-			};
-		});
+	const getMultibidConfig = (
+		bidders: BidderCode[],
+		maxBids: number = 9,
+	): MultibidConfig[] => {
+		return bidders.map((bidder) => ({
+			bidder,
+			maxBids,
+			targetBiddercodePrefix: `${bidder}_m`,
+		}));
 	};
 
 	const pbjsConfig: PbjsConfig = Object.assign(
@@ -471,6 +485,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			priceGranularity,
 			userSync,
 			useBidCache: isSwitchedOn('prebidBidCache'),
+			enableSendAllBids: true,
 		},
 	);
 
@@ -493,7 +508,29 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	}
 
 	if (useBidCache && isUserInVariant(prebidMultibid, 'variant')) {
-		pbjsConfig.multibid = getMultibidConfig();
+		const maxBids = 9;
+		pbjsConfig.multibid = getMultibidConfig(includedBidders, maxBids);
+
+		pbjsConfig.targetingControls = {
+			addTargetingKeys: includedBidders.flatMap((bidderCode) => {
+				const targetingValues = [
+					'hb_bidder',
+					'hb_adid',
+					'hb_pb',
+					'hb_size',
+					'hb_deal',
+					'hb_format',
+					'hb_uuid',
+				];
+				return Array.from({ length: maxBids }, (_, i) =>
+					targetingValues.map((v) =>
+						i === 0
+							? `${v}_${bidderCode}`
+							: `${v}_${bidderCode}_m${i + 1}`,
+					),
+				).flat();
+			}),
+		};
 	}
 
 	if (shouldIncludePermutive(consentState)) {
@@ -671,6 +708,12 @@ const bidsBackHandler = (
 	eventTimer: EventTimer,
 ): Promise<void> =>
 	new Promise((resolve) => {
+		window.pbjs
+			?.getAllTargeting()
+			.forEach((adUnitCode, targeting) =>
+				console.log(adUnitCode, targeting),
+			);
+
 		window.pbjs?.setTargetingForGPTAsync(
 			adUnits.map((u) => u.code).filter(isString),
 		);

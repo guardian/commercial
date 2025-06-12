@@ -3,6 +3,7 @@ import { getConsentFor } from '@guardian/libs';
 import { isUserInVariant } from '../../../experiments/ab';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
+import type { BidderCode } from '../prebid-types';
 import { shouldIncludeBidder, shouldIncludePermutive } from '../utils';
 import { prebid } from './prebid';
 
@@ -335,16 +336,13 @@ describe('initialise', () => {
 
 	describe('permutive realTimeData', () => {
 		test('should filter out non included bidders from permutive acBidders array', () => {
+			const mockShouldInclude = jest
+				.fn()
+				.mockImplementation((bidder: BidderCode) =>
+					Boolean(['and', 'ozone', 'pubmatic'].includes(bidder)),
+				);
+			jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
 			jest.mocked(shouldIncludePermutive).mockReturnValue(true);
-			jest.mocked(shouldIncludeBidder).mockReturnValue(
-				jest
-					.fn()
-					.mockReturnValueOnce(true) // and (appnexus)
-					.mockReturnValueOnce(false) // ix
-					.mockReturnValueOnce(true) // ozone
-					.mockReturnValueOnce(true) // pubmatic
-					.mockReturnValueOnce(false), // trustx
-			);
 
 			prebid.initialise(window, mockConsentState);
 			expect(window.pbjs?.getConfig()).toMatchObject({
@@ -365,16 +363,13 @@ describe('initialise', () => {
 		});
 
 		test('should filter out pubmatic from the overwrites field and the acBidders array if shouldInclude is false', () => {
+			const mockShouldInclude = jest
+				.fn()
+				.mockImplementation((bidder: BidderCode) =>
+					Boolean(['and', 'ix', 'ozone', 'trustx'].includes(bidder)),
+				);
+			jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
 			jest.mocked(shouldIncludePermutive).mockReturnValue(true);
-			jest.mocked(shouldIncludeBidder).mockReturnValue(
-				jest
-					.fn()
-					.mockReturnValueOnce(true) // and (appnexus)
-					.mockReturnValueOnce(true) // ix
-					.mockReturnValueOnce(true) // ozone
-					.mockReturnValueOnce(false) // pubmatic
-					.mockReturnValueOnce(true), // trustx
-			);
 
 			prebid.initialise(window, mockConsentState);
 			expect(window.pbjs?.getConfig()).toMatchObject({
