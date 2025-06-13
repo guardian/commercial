@@ -123,9 +123,19 @@ const isSizeMappingEmpty = (sizeMapping: SizeMapping): boolean => {
 	);
 };
 
+const getGroupedSlot = (advertId: string): string => {
+	if (advertId.includes('fronts-banner')) {
+		return 'banner';
+	} else if (advertId.includes('inline')) {
+		return 'inline';
+	}
+	return advertId;
+};
+
 class Advert {
 	id: string;
 	node: HTMLElement;
+	groupedSlot: string;
 	sizes: SizeMapping;
 	headerBiddingSizes: HeaderBiddingSize[] | null = null;
 	size: AdSize | 'fluid' | null = null;
@@ -149,6 +159,7 @@ class Advert {
 	) {
 		this.id = adSlotNode.id;
 		this.node = adSlotNode;
+		this.groupedSlot = getGroupedSlot(adSlotNode.id);
 		this.sizes = this.generateSizeMapping(additionalSizeMapping);
 
 		const slotDefinition = defineSlot(
