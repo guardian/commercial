@@ -123,13 +123,13 @@ const isSizeMappingEmpty = (sizeMapping: SizeMapping): boolean => {
 	);
 };
 
-const getgroupedSlot = (advertId: string): string => {
-	if (advertId.match(/inline|top-above-nav|merchandising/)) {
-		return 'inlines';
-	} else if (advertId.match(/fronts-banner|mostpop/)) {
-		return 'banners';
+const getGroupedSlot = (advertId: string): string => {
+	if (advertId.includes('fronts-banner')) {
+		return 'banner';
+	} else if (advertId.includes('inline')) {
+		return 'inline';
 	}
-	return 'others';
+	return advertId;
 };
 
 class Advert {
@@ -159,7 +159,7 @@ class Advert {
 	) {
 		this.id = adSlotNode.id;
 		this.node = adSlotNode;
-		this.groupedSlot = getgroupedSlot(adSlotNode.id);
+		this.groupedSlot = getGroupedSlot(adSlotNode.id);
 		this.sizes = this.generateSizeMapping(additionalSizeMapping);
 
 		const slotDefinition = defineSlot(
