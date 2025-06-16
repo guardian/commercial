@@ -1,6 +1,14 @@
 import { join } from 'path';
 
 export class UpdateParameterStorePlugin {
+	static defaultOptions = {
+		prebid946: false,
+	};
+
+	constructor(options = {}) {
+		this.options = { ...UpdateParameterStorePlugin.defaultOptions, ...options };
+	}
+
 	/**
 	 * @param {import('webpack').Compiler} compiler
 	 */
@@ -9,6 +17,8 @@ export class UpdateParameterStorePlugin {
 			const entry = compilation.entrypoints.get('commercial-standalone');
 
 			const hashedFilePath = entry?.getFiles()[0];
+
+			const { prebid946 } = this.options;
 
 			if (!hashedFilePath) {
 				throw new Error(
@@ -22,12 +32,12 @@ export class UpdateParameterStorePlugin {
 				 * This small bit of cloudformation will update the SSM parameter that frontend
 				 * reads to get the bundle path.
 				 */
-				const cloudformation = {
+				const newCloudFormationData = {
 					Resources: {
-						BundlePath: {
+						[prebid946 ? 'Prebid946BundlePath' : 'BundlePath']: {
 							Type: 'AWS::SSM::Parameter',
 							Properties: {
-								Name: `/frontend/${stage}/commercial.bundlePath`,
+								Name: `/frontend/${stage}/commercial${prebid946 ? '-prebid946' : ''}.bundlePath`,
 								Type: 'String',
 								Value: hashedFilePath,
 							},
@@ -37,23 +47,42 @@ export class UpdateParameterStorePlugin {
 
 				// If we're in prod, we also want to update the dev bundle path
 				if (stage === 'prod') {
-					cloudformation.Resources.DevBundlePath = {
+					newCloudFormationData.Resources[prebid946 ? 'Prebid946DevBundlePath' : 'DevBundlePath'] = {
 						Type: 'AWS::SSM::Parameter',
 						Properties: {
-							Name: '/frontend/dev/commercial.bundlePath',
+							Name: `/frontend/dev/commercial${prebid946 ? '-prebid946' : ''}.bundlePath`,
 							Type: 'String',
 							Value: hashedFilePath,
 						},
 					};
 				}
 
-				const output = JSON.stringify(cloudformation, null, 2);
 				const outputPath = join(
 					compilation.outputOptions.path,
 					'..',
 					'cloudformation',
 					`${stage}.json`,
 				);
+
+				let existingCloudFormationData = {};
+
+				try {
+					if (compiler.outputFileSystem.existsSync(outputPath)) {
+						const existingContent = compiler.outputFileSystem.readFileSync(outputPath, 'utf-8');
+						existingCloudFormationData = JSON.parse(existingContent);
+					}
+				} catch (error) {
+					compilation.warnings.push(new Error(`Failed to read existing file: ${outputPath}: ${error.message}`));
+				}
+
+				const newContent = {
+					Resources: {
+						...existingCloudFormationData.Resources,
+						...newCloudFormationData.Resources
+					}
+				};
+
+				const output = JSON.stringify(newContent, null, 2);
 
 				compiler.outputFileSystem.mkdirSync(
 					join(
@@ -63,6 +92,7 @@ export class UpdateParameterStorePlugin {
 					),
 					{ recursive: true },
 				);
+
 				compiler.outputFileSystem.writeFileSync(outputPath, output);
 			});
 		});
