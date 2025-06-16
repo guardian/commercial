@@ -4,7 +4,6 @@ import { flatten } from 'lodash-es';
 import type { PrebidPriceGranularity } from 'prebid.js/src/cpmBucketManager';
 import type { Advert } from '../../../define/Advert';
 import { getParticipations, isUserInVariant } from '../../../experiments/ab';
-import { prebidId5 } from '../../../experiments/tests/prebid-id5';
 import { prebidMultibid } from '../../../experiments/tests/prebid-multibid';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
@@ -360,10 +359,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		},
 	];
 
-	if (
-		getConsentFor('id5', consentState) &&
-		isUserInVariant(prebidId5, 'variant')
-	) {
+	if (getConsentFor('id5', consentState)) {
 		userIds.push({
 			name: 'id5Id',
 			params: {
