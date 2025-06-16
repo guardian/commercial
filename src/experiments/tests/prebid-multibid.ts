@@ -4,7 +4,7 @@ export const prebidMultibid: ABTest = {
 	id: 'PrebidMultibid',
 	author: '@commercial-dev',
 	start: '2025-05-29',
-	expiry: '2025-06-17',
+	expiry: '2025-07-15',
 	audience: 0 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',
