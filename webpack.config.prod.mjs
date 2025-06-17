@@ -9,7 +9,7 @@ import prebid946Config from './webpack.config.prebid946.mjs';
 
 const prefix = process.env.BUNDLE_PREFIX ?? '[chunkhash]/';
 
-const buildPrebid946 = process.env.BUILD_PREBID946 === 'true';
+// const buildPrebid946 = process.env.BUILD_PREBID946 === 'true';
 
 const config = [merge(defaultConfig, {
 	mode: 'production',
@@ -28,7 +28,7 @@ const config = [merge(defaultConfig, {
 			analyzerMode: 'static',
 			openAnalyzer: false,
 		}),
-		new UpdateParameterStorePlugin({ prebid946 : false }),
+		// new UpdateParameterStorePlugin({ prebid946 : false }),
 		// new PROutPlugin(),
 	],
 	optimization: {
@@ -37,7 +37,7 @@ const config = [merge(defaultConfig, {
 	},
 })];
 
-if (buildPrebid946) {
+// if (buildPrebid946) {
 	config.push(merge(prebid946Config, {
 		mode: 'production',
 		output: {
@@ -55,15 +55,13 @@ if (buildPrebid946) {
 				analyzerMode: 'static',
 				openAnalyzer: false,
 			}),
-			new UpdateParameterStorePlugin({ prebid946 : true }),
+			// new UpdateParameterStorePlugin({ prebid946 : true }),
 		],
 		optimization: {
 			minimize: true,
 			minimizer: [new TerserPlugin()],
 		},
 	}))
-};
-
-console.log('config --->', config);
+// };
 
 export default config;
