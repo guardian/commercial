@@ -660,6 +660,7 @@ const currentBidders = (
 
 export const bids = (
 	slotId: string,
+	slotOriginalId: string,
 	slotSizes: HeaderBiddingSize[],
 	pageTargeting: PageTargeting,
 	gpid: string,
@@ -669,6 +670,7 @@ export const bids = (
 		(bidder: PrebidBidder) => ({
 			bidder: bidder.name,
 			params: bidder.bidParams(slotId, slotSizes),
+			slotId: slotOriginalId,
 		}),
 	);
 

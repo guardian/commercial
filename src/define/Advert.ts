@@ -127,7 +127,8 @@ const isSizeMappingEmpty = (sizeMapping: SizeMapping): boolean => {
 const getGroupedSlot = (advertId: string): string => {
 	if (advertId.includes('fronts-banner')) {
 		return 'banner';
-	} else if (advertId.match(/inline[2-9]/)) {
+	} else if (advertId.match(/inline(?:[2-9]|1[0-9])/)) {
+		// Matches inline2 to inline19
 		return 'inline';
 	}
 	return advertId;

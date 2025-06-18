@@ -7,7 +7,7 @@ import { getParticipations } from '../../../experiments/ab';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
-import { getViewport } from '../../../lib/detect/detect-viewport';
+// import { getViewport } from '../../../lib/detect/detect-viewport';
 import { EventTimer } from '../../../lib/event-timer';
 import { getPermutiveSegments } from '../../../lib/permutive';
 import type { PageTargeting } from '../../../lib/targeting/build-page-targeting';
@@ -228,6 +228,7 @@ class PrebidAdUnit {
 
 		this.bids = bids(
 			advert.groupedSlot,
+			advert.id,
 			slot.sizes,
 			pageTargeting,
 			this.gpid,
@@ -235,31 +236,26 @@ class PrebidAdUnit {
 		);
 
 		advert.headerBiddingSizes = slot.sizes;
-		// Update this to show the whole message in case of having a groupedSlot inline or fronts-banner otherwise it will only show the advert id
-		log(
-			'commercial',
-			`PrebidAdUnit ${advert.id} | bid cache groupedSlot '${this.code}'`,
-			this.bids,
-		);
+		log('commercial', `PrebidAdUnit ${advert.id}`, this.bids);
 	}
 
 	isEmpty() {
 		return this.code == null;
 	}
 
-	checkDivInView(advert: Advert): boolean {
-		const element = document.querySelector(`#${advert.id}`);
-		if (!element) {
-			return false;
-		}
-		const rect = element.getBoundingClientRect();
-		log(
-			'commercial',
-			`Checking if advert ${advert.id} is in view`,
-			rect.top < getViewport().height && rect.bottom > 0,
-		);
-		return rect.top < getViewport().height && rect.bottom > 0;
-	}
+	// checkDivInView(advert: Advert): boolean {
+	// 	const element = document.querySelector(`#${advert.id}`);
+	// 	if (!element) {
+	// 		return false;
+	// 	}
+	// 	const rect = element.getBoundingClientRect();
+	// 	log(
+	// 		'commercial',
+	// 		`Checking if advert ${advert.id} is in view`,
+	// 		rect.top < getViewport().height && rect.bottom > 0,
+	// 	);
+	// 	return rect.top < getViewport().height && rect.bottom > 0;
+	// }
 
 	private generateGpid(advert: Advert, slot: HeaderBiddingSlot): string {
 		const sectionName = window.guardian.config.page.section;
@@ -632,28 +628,29 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 };
 
 // Check if the div in view includes fronts-banner or inline adUnit code then return that advert id
-const divInView = (advertId: string, adUnit: PrebidAdUnit) => {
-	const isFrontsBannerOrInline =
-		isString(adUnit.code) && advertId.includes(adUnit.code);
+// const divInView = (advertId: string, adUnit: PrebidAdUnit) => {
+// 	const isFrontsBannerOrInline =
+// 		isString(adUnit.code) && advertId.includes(adUnit.code);
 
-	if (isFrontsBannerOrInline) {
-		const element = document.querySelector(`#${advertId}`);
-		if (!element) {
-			return false;
-		}
-		const rect = element.getBoundingClientRect();
-		return rect.top < getViewport().height && rect.bottom > 0;
-	}
+// 	if (isFrontsBannerOrInline) {
+// 		const element = document.querySelector(`#${advertId}`);
+// 		if (!element) {
+// 			return false;
+// 		}
+// 		const rect = element.getBoundingClientRect();
+// 		return rect.top < getViewport().height && rect.bottom > 0;
+// 	}
 
-	return false;
-};
+// 	return false;
+// };
 
 const customSlotMatching = (slot: googletag.Slot) => {
 	return function (adUnit: PrebidAdUnit) {
 		const advert = getAdvertById(slot.getSlotElementId());
 		return (
 			advert !== null &&
-			(advert.id === adUnit.code || divInView(advert.id, adUnit))
+			(advert.id === adUnit.code ||
+				advert.id === adUnit.bids?.[0]?.slotId)
 		);
 	};
 };
@@ -708,11 +705,7 @@ const requestBids = async (
 									consentState,
 								),
 						)
-						.filter(
-							(adUnit) =>
-								!adUnit.isEmpty() &&
-								adUnit.checkDivInView(advert),
-						),
+						.filter((adUnit) => !adUnit.isEmpty()),
 				),
 			);
 		})

@@ -145,6 +145,7 @@ type PrebidBidder = {
 type PrebidBid = {
 	bidder: string;
 	params: PrebidParams;
+	slotId: string;
 };
 
 type PrebidBidderRequest = {
