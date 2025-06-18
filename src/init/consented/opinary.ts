@@ -101,14 +101,8 @@ const opinaryPollListener = (event: MessageEvent) => {
 	log('commercial', surveyResponse);
 };
 
-const initOpinaryPollListener = (): Promise<void> => {
-	if (window.permutive?.track) {
-		return Promise.resolve(
-			window.addEventListener('message', opinaryPollListener),
-		);
-	}
-	return Promise.resolve();
-};
+const initOpinaryPollListener = (): Promise<void> =>
+	Promise.resolve(window.addEventListener('message', opinaryPollListener));
 
 // Exports for testing only
 export const _ = {
