@@ -43,6 +43,7 @@ const mockConsentState = {
 const getBidders = () =>
 	bids(
 		'dfp-ad--top-above-nav',
+		'dfp-ad--top-above-nav',
 		[createAdSize(728, 90)],
 		mockPageTargeting,
 		'gpid',
@@ -316,6 +317,7 @@ describe('bids', () => {
 		const rightSlotBidders = () =>
 			bids(
 				'dfp-right',
+				'dfp-right',
 				[createAdSize(300, 600), createAdSize(300, 250)],
 				mockPageTargeting,
 				'gpid',
@@ -372,6 +374,7 @@ describe('bids', () => {
 
 		const openXBid = bids(
 			'dfp-ad--top-above-nav',
+			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 			'gpid',
@@ -390,6 +393,7 @@ describe('bids', () => {
 		isInUsOrCa.mockReturnValue(true);
 
 		const openXBid = bids(
+			'dfp-ad--top-above-nav',
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
@@ -410,6 +414,7 @@ describe('bids', () => {
 
 		const openXBid = bids(
 			'dfp-ad--top-above-nav',
+			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 			'gpid',
@@ -429,6 +434,7 @@ describe('bids', () => {
 
 		const openXBid = bids(
 			'dfp-ad--top-above-nav',
+			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 			'gpid',
@@ -447,6 +453,7 @@ describe('bids', () => {
 		containsMobileSticky.mockReturnValue(true);
 
 		const openXBid = bids(
+			'dfp-ad--mobile-sticky',
 			'dfp-ad--mobile-sticky',
 			[createAdSize(320, 50)],
 			mockPageTargeting,
@@ -491,6 +498,7 @@ describe('triplelift adapter', () => {
 
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
+			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
 			'gpid',
@@ -509,6 +517,7 @@ describe('triplelift adapter', () => {
 		isInAuOrNz.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
+			'dfp-ad--top-above-nav',
 			'dfp-ad--top-above-nav',
 			[createAdSize(728, 90)],
 			mockPageTargeting,
@@ -529,6 +538,7 @@ describe('triplelift adapter', () => {
 
 		const tripleLiftBids = bids(
 			'dfp-ad--inline1',
+			'dfp-ad--inline1',
 			[createAdSize(300, 250)],
 			mockPageTargeting,
 			'gpid',
@@ -547,6 +557,7 @@ describe('triplelift adapter', () => {
 		isInAuOrNz.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
+			'dfp-ad--inline1',
 			'dfp-ad--inline1',
 			[createAdSize(300, 250)],
 			mockPageTargeting,
@@ -567,6 +578,7 @@ describe('triplelift adapter', () => {
 
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
+			'dfp-ad--top-above-nav',
 			[createAdSize(320, 50)],
 			mockPageTargeting,
 			'gpid',
@@ -585,6 +597,7 @@ describe('triplelift adapter', () => {
 		isInAuOrNz.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
+			'dfp-ad--top-above-nav',
 			'dfp-ad--top-above-nav',
 			[createAdSize(320, 50)],
 			mockPageTargeting,
