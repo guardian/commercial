@@ -123,10 +123,11 @@ const isSizeMappingEmpty = (sizeMapping: SizeMapping): boolean => {
 	);
 };
 
+//We are grouping all fronts-banner slots and subsequent inline slots except inline1 to get the most use of prebid bid caching
 const getGroupedSlot = (advertId: string): string => {
 	if (advertId.includes('fronts-banner')) {
 		return 'banner';
-	} else if (advertId.includes('inline')) {
+	} else if (advertId.match(/inline[2-9]/)) {
 		return 'inline';
 	}
 	return advertId;
