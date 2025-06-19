@@ -160,6 +160,18 @@ describe('initialise', () => {
 							expires: 365,
 						},
 					},
+					{
+						name: 'id5Id',
+						params: {
+							partner: 182,
+						},
+						storage: {
+							type: 'html5',
+							name: 'id5id',
+							expires: 90,
+							refreshInSeconds: 7200,
+						},
+					},
 				],
 				auctionDelay: 500,
 				filterSettings: {
