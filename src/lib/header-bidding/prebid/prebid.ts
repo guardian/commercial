@@ -303,7 +303,9 @@ declare global {
 			onEvent: (event: PbjsEvent, handler: PbjsEventHandler) => void;
 			setTargetingForGPTAsync: (
 				codeArr?: string[],
-				customSlotMatching?: (slot: googletag.Slot) => unknown,
+				customSlotMatching?: (
+					slot: googletag.Slot,
+				) => (adUnit: PrebidAdUnit) => string[],
 			) => void;
 			getEvents: () => PrebidEvent[];
 		};
@@ -644,14 +646,33 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 // 	return false;
 // };
 
+// const customSlotMatching = (slot: googletag.Slot) => {
+// 	return function (adUnit: PrebidAdUnit) {
+// 		const advert = getAdvertById(slot.getSlotElementId());
+// 		return (
+// 			advert !== null &&
+// 			(advert.id === adUnit.code ||
+// 				advert.id === adUnit.bids?.[0]?.slotId)
+// 		);
+// 	};
+// };
+
 const customSlotMatching = (slot: googletag.Slot) => {
 	return function (adUnit: PrebidAdUnit) {
 		const advert = getAdvertById(slot.getSlotElementId());
-		return (
-			advert !== null &&
-			(advert.id === adUnit.code ||
-				advert.id === adUnit.bids?.[0]?.slotId)
-		);
+		const matchingCodes: string[] = [];
+
+		if (!advert) {
+			return matchingCodes;
+		}
+
+		if (
+			advert.id === adUnit.code ||
+			advert.id === adUnit.bids?.[0]?.slotId
+		) {
+			matchingCodes.push(advert.id);
+		}
+		return matchingCodes;
 	};
 };
 
