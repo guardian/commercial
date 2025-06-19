@@ -1,5 +1,5 @@
 import webpack from 'webpack';
-import config from './webpack.config.prod.mjs';
+import prodConfig from './webpack.config.prod.mjs';
 import { join } from 'path';
 import { mkdirSync, writeFileSync } from 'fs';
 
@@ -60,7 +60,7 @@ const updateParameterStore = (stats) => {
 	});
 };
 
-webpack(config, (err, stats) => {
+webpack(prodConfig, (err, stats) => {
 	if (err) {
 		console.error('Webpack build failed:', err);
 		process.exit(1);
