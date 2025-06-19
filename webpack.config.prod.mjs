@@ -50,7 +50,4 @@ const prebidTestProdConfig = merge(defaultProdConfig, {
 
 const config = [merge(defaultConfig, defaultProdConfig), merge(defaultConfig, prebidTestProdConfig)];
 
-// console.log('*** 1',  JSON.stringify(config[1]));
-// console.log('*** 1', config[1]);
-
 export default config;

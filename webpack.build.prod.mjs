@@ -2,20 +2,9 @@ import webpack from 'webpack';
 import prodConfig from './webpack.config.prod.mjs';
 import { join } from 'path';
 import { mkdirSync, writeFileSync } from 'fs';
+import { execSync } from 'child_process';
 
-const updateParameterStore = (stats) => {
-	/**
-	 * Each child in the generated compilation stats represents a
-	 * config in our multi config prodConfig export.
-	**/
-	const { children } = stats.toJson({ entrypoints: true });
-	/**
-	 * outputPath is used when saving the cloudformation.json, it
-	 * goes in the same directory as the generated artificats.
-	 * As we use the same outputPath for all artificats we can
-	 * pull this from the first child.
-	**/
-	const { outputPath } = children[0];
+const updateParameterStore = (children) => {
 	const cloudformation = {
 		Resources: {}
 	};
@@ -70,6 +59,21 @@ const updateParameterStore = (stats) => {
 	});
 };
 
+const prout = (outputPath) => {
+	const commitSHA = execSync('git rev-parse HEAD').toString().trim();
+
+	const proutOutputPath = join(
+		outputPath,
+		'commercial',
+		`prout`,
+	);
+
+	writeFileSync(
+		proutOutputPath,
+		`Commercial bundle commit hash: ${commitSHA}`,
+	);
+}
+
 webpack(prodConfig, (err, stats) => {
 	if (err) {
 		console.error('Webpack build failed:', err);
@@ -81,5 +85,19 @@ webpack(prodConfig, (err, stats) => {
 		process.exit(1);
 	}
 
-	updateParameterStore(stats);
+	/**
+	 * Each child in the generated compilation stats represents a
+	 * config in our multi config prodConfig export.
+	**/
+	const { children } = stats.toJson({ entrypoints: true });
+	/**
+	 * outputPath is used when saving the cloudformation.json, it
+	 * goes in the same directory as the generated artificats.
+	 * As we use the same outputPath for all artificats we can
+	 * pull this from the first child.
+	**/
+	const { outputPath } = children[0];
+
+	updateParameterStore(children, outputPath);
+	prout(outputPath);
 });
