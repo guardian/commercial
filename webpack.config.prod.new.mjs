@@ -15,8 +15,8 @@ const updateParameterStore = (stats) => {
 		children.forEach((child) => {
 			const { entrypoints } = child;
 			const hashedFilePath = entrypoints['commercial-standalone'].assets[0].name;
-			const isPrebid946 = entrypoints['commercial-standalone'].assets[0].name.includes('commercial-prebid946');
-			const resourceKey = `${isPrebid946 ? 'Prebid946' : ''}BundlePath`;
+			const isPrebidTest = entrypoints['commercial-standalone'].assets[0].name.includes('commercial-prebidTest');
+			const resourceKey = `${isPrebidTest ? 'PrebidTest' : ''}BundlePath`;
 
 			/**
 			 * This small bit of cloudformation will update the SSM parameter that frontend
