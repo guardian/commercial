@@ -4,7 +4,17 @@ import { join } from 'path';
 import { mkdirSync, writeFileSync } from 'fs';
 
 const updateParameterStore = (stats) => {
-	const { children } = stats.toJson({ all: true });
+	/**
+	 * Each child in the generated compilation stats represents a
+	 * config in our multi config prodConfig export.
+	**/
+	const { children } = stats.toJson({ entrypoints: true });
+	/**
+	 * outputPath is used when saving the cloudformation.json, it
+	 * goes in the same directory as the generated artificats.
+	 * As we use the same outputPath for all artificats we can
+	 * pull this from the first child.
+	**/
 	const { outputPath } = children[0];
 	const cloudformation = {
 		Resources: {}
@@ -15,7 +25,7 @@ const updateParameterStore = (stats) => {
 		children.forEach((child) => {
 			const { entrypoints } = child;
 			const hashedFilePath = entrypoints['commercial-standalone'].assets[0].name;
-			const isPrebidTest = entrypoints['commercial-standalone'].assets[0].name.includes('commercial-prebidTest');
+			const isPrebidTest = entrypoints['commercial-standalone'].assets[0].name.includes('prebidTest');
 			const resourceKey = `${isPrebidTest ? 'PrebidTest' : ''}BundlePath`;
 
 			/**
@@ -25,7 +35,7 @@ const updateParameterStore = (stats) => {
 			cloudformation.Resources[resourceKey] = {
 				Type: 'AWS::SSM::Parameter',
 				Properties: {
-					Name: `/frontend/${stage}/commercial.bundlePath`,
+					Name: `/frontend/${stage}/commercial${isPrebidTest ? '.prebidTest' : ''}.bundlePath`,
 					Type: 'String',
 					Value: hashedFilePath,
 				}
@@ -36,7 +46,7 @@ const updateParameterStore = (stats) => {
 				cloudformation.Resources[`Dev${resourceKey}`] = {
 					Type: 'AWS::SSM::Parameter',
 					Properties: {
-						Name: '/frontend/dev/commercial.bundlePath',
+						Name: `/frontend/dev/commercial${isPrebidTest ? '.prebidTest' : ''}.bundlePath`,
 						Type: 'String',
 						Value: hashedFilePath,
 					},

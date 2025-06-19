@@ -5,9 +5,7 @@ import defaultConfig from './webpack.config.mjs';
 import prebidTestConfig from './webpack.config.prebidTest.mjs';
 
 const port = 3031;
-
-const buildPrebidTest = process.env.BUILD_PREBID946 === 'true';
-
+const buildPrebidTest = process.env.BUILD_PREBID_TEST === 'true';
 const config = buildPrebidTest ? prebidTestConfig : defaultConfig;
 
 export default merge(config, {
