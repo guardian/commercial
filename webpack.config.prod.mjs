@@ -2,13 +2,12 @@ import { join } from 'path';
 import TerserPlugin from 'terser-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
-import { PROutPlugin } from './webpack/prout-plugin.mjs';
-import { UpdateParameterStorePlugin } from './webpack/update-parameter-store-plugin.mjs';
-import config from './webpack.config.mjs';
+import defaultConfig from './webpack.config.mjs';
+import prebidTestConfig from './webpack.config.prebidTest.mjs';
 
 const prefix = process.env.BUNDLE_PREFIX ?? '[chunkhash]/';
 
-export default merge(config, {
+const defaultProdConfig = {
 	mode: 'production',
 	output: {
 		filename: `commercial/${prefix}graun.standalone.commercial.js`,
@@ -25,11 +24,32 @@ export default merge(config, {
 			analyzerMode: 'static',
 			openAnalyzer: false,
 		}),
-		new UpdateParameterStorePlugin(),
-		new PROutPlugin(),
 	],
 	optimization: {
 		minimize: true,
 		minimizer: [new TerserPlugin()],
 	},
+};
+
+const prebidTestProdConfig = merge(defaultProdConfig, {
+	output: {
+		filename: `commercial-prebidTest/${prefix}graun.standalone.commercial.js`,
+		chunkFilename: `commercial-prebidTest/${prefix}graun.[name].commercial.js`,
+		clean: false,
+	},
+	plugins: [
+		new BundleAnalyzerPlugin({
+			reportFilename:
+				'./commercial-prebidTest-bundle-analyzer-report.html',
+			analyzerMode: 'static',
+			openAnalyzer: false,
+		}),
+	],
 });
+
+const config = [
+	merge(defaultConfig, defaultProdConfig),
+	merge(defaultConfig, prebidTestProdConfig),
+];
+
+export default config;

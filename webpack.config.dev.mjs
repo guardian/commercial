@@ -1,16 +1,19 @@
 import { join } from 'path';
 import { merge } from 'webpack-merge';
 import { setupFixturesServer } from './scripts/fixtures/fixtures-server.js';
-import config from './webpack.config.mjs';
+import defaultConfig from './webpack.config.mjs';
+import prebidTestConfig from './webpack.config.prebidTest.mjs';
 
 const port = 3031;
+const buildPrebidTest = process.env.BUILD_PREBID_TEST === 'true';
+const config = buildPrebidTest ? prebidTestConfig : defaultConfig;
 
 export default merge(config, {
 	devtool: 'inline-source-map',
 	mode: 'development',
 	output: {
-		filename: `graun.standalone.commercial.js`,
-		chunkFilename: `graun.[name].commercial.js`,
+		filename: `graun.${buildPrebidTest ? 'prebidTest.' : ''}standalone.commercial.js`,
+		chunkFilename: `graun.${buildPrebidTest ? 'prebidTest.' : ''}[name].commercial.js`,
 		path: join(import.meta.dirname, 'dist', 'bundle', 'dev'),
 		clean: true,
 	},
