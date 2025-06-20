@@ -1,78 +1,7 @@
 import webpack from 'webpack';
 import prodConfig from './webpack.config.prod.mjs';
-import { join } from 'path';
-import { mkdirSync, writeFileSync } from 'fs';
-import { execSync } from 'child_process';
-
-const updateParameterStore = (children) => {
-	const cloudformation = {
-		Resources: {}
-	};
-	const stages = ['code', 'prod'];
-
-	stages.forEach((stage) => {
-		children.forEach((child) => {
-			const { entrypoints } = child;
-			const hashedFilePath = entrypoints['commercial-standalone'].assets[0].name;
-			const isPrebidTest = entrypoints['commercial-standalone'].assets[0].name.includes('prebidTest');
-			const resourceKey = `${isPrebidTest ? 'PrebidTest' : ''}BundlePath`;
-
-			/**
-			 * This small bit of cloudformation will update the SSM parameter that frontend
-			 * reads to get the bundle path.
-			 */
-			cloudformation.Resources[resourceKey] = {
-				Type: 'AWS::SSM::Parameter',
-				Properties: {
-					Name: `/frontend/${stage}/commercial${isPrebidTest ? '.prebidTest' : ''}.bundlePath`,
-					Type: 'String',
-					Value: hashedFilePath,
-				}
-			};
-
-			// If we're in prod, we also want to update the dev bundle path
-			if (stage === 'prod') {
-				cloudformation.Resources[`Dev${resourceKey}`] = {
-					Type: 'AWS::SSM::Parameter',
-					Properties: {
-						Name: `/frontend/dev/commercial${isPrebidTest ? '.prebidTest' : ''}.bundlePath`,
-						Type: 'String',
-						Value: hashedFilePath,
-					},
-				};
-			}
-		});
-
-		const cloudformationOutput = JSON.stringify(cloudformation, null, 2);
-		const cloudformationOutputDir = join(
-			outputPath,
-			'..',
-			'cloudformation',
-		);
-		const cloudformationOutputFile = join(
-			cloudformationOutputDir,
-			`${stage}.json`,
-		);
-
-		mkdirSync(cloudformationOutputDir, { recursive: true });
-		writeFileSync(cloudformationOutputFile, cloudformationOutput, 'utf-8');
-	});
-};
-
-const prout = (outputPath) => {
-	const commitSHA = execSync('git rev-parse HEAD').toString().trim();
-
-	const proutOutputPath = join(
-		outputPath,
-		'commercial',
-		`prout`,
-	);
-
-	writeFileSync(
-		proutOutputPath,
-		`Commercial bundle commit hash: ${commitSHA}`,
-	);
-}
+import { updateParameterStore } from './webpack/updateParameterStore.mjs'
+import { prout } from './webpack/prout.mjs'
 
 webpack(prodConfig, (err, stats) => {
 	if (err) {
@@ -81,15 +10,22 @@ webpack(prodConfig, (err, stats) => {
 	}
 
 	if (stats.hasErrors()) {
-		console.error('Webpack compilation errors:\n', stats.toString({ colors: true }));
+		console.error('Webpack compilation error:\n', stats.toString({ colors: true }));
 		process.exit(1);
 	}
 
 	/**
-	 * Each child in the generated compilation stats represents a
-	 * config in our multi config prodConfig export.
+	 * Each child compilation in the compilation stats represents a
+	 * config in a multi-compiler/config setup. We can access data
+	 * on assets emitted in that child compilation using this.
 	**/
 	const { children } = stats.toJson({ entrypoints: true });
+
+	if (!children) {
+		console.error('Webpack compilation error, no child compilations:\n', stats.toString({ colors: true }));
+		process.exit(1);
+	}
+
 	/**
 	 * outputPath is used when saving the cloudformation.json, it
 	 * goes in the same directory as the generated artificats.

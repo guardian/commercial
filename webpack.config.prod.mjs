@@ -2,8 +2,6 @@ import { join } from 'path';
 import TerserPlugin from 'terser-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
-import { PROutPlugin } from './webpack/prout-plugin.mjs';
-import { UpdateParameterStorePlugin } from './webpack/update-parameter-store-plugin.mjs';
 import defaultConfig from './webpack.config.mjs';
 import prebidTestConfig from './webpack.config.prebidTest.mjs';
 
