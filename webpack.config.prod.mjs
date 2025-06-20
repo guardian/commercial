@@ -39,13 +39,17 @@ const prebidTestProdConfig = merge(defaultProdConfig, {
 	},
 	plugins: [
 		new BundleAnalyzerPlugin({
-			reportFilename: './commercial-prebidTest-bundle-analyzer-report.html',
+			reportFilename:
+				'./commercial-prebidTest-bundle-analyzer-report.html',
 			analyzerMode: 'static',
 			openAnalyzer: false,
 		}),
 	],
 });
 
-const config = [merge(defaultConfig, defaultProdConfig), merge(defaultConfig, prebidTestProdConfig)];
+const config = [
+	merge(defaultConfig, defaultProdConfig),
+	merge(defaultConfig, prebidTestProdConfig),
+];
 
 export default config;

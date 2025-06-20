@@ -29,4 +29,4 @@ export default merge(config, {
 			return middlewares;
 		},
 	},
-})
+});

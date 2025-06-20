@@ -3,15 +3,19 @@ import { mkdirSync, writeFileSync } from 'fs';
 
 export const updateParameterStore = (children, outputPath) => {
 	const cloudformation = {
-		Resources: {}
+		Resources: {},
 	};
 	const stages = ['code', 'prod'];
 
 	stages.forEach((stage) => {
 		children.forEach((child) => {
 			const { entrypoints } = child;
-			const hashedFilePath = entrypoints['commercial-standalone'].assets[0].name;
-			const isPrebidTest = entrypoints['commercial-standalone'].assets[0].name.includes('prebidTest');
+			const hashedFilePath =
+				entrypoints['commercial-standalone'].assets[0].name;
+			const isPrebidTest =
+				entrypoints['commercial-standalone'].assets[0].name.includes(
+					'prebidTest',
+				);
 			const resourceKey = `${isPrebidTest ? 'PrebidTest' : ''}BundlePath`;
 
 			/**
@@ -24,7 +28,7 @@ export const updateParameterStore = (children, outputPath) => {
 					Name: `/frontend/${stage}/commercial${isPrebidTest ? '.prebidTest' : ''}.bundlePath`,
 					Type: 'String',
 					Value: hashedFilePath,
-				}
+				},
 			};
 
 			// If we're in prod, we also want to update the dev bundle path
