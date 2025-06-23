@@ -7,7 +7,6 @@
 - As much as possible we want to test from a user's visual point of view, rather than trying to assert on some internal functionality. There will be some exceptions to this (e.g. Prebid).
 
 - The high priority features we'd like to have some confidence about:
-
     - For some of the fixed ad slots (top-above-nav, mostpop, comments, right, etc...):
         - Ad slot div is present on the page
         - An iframe is placed inside the div that comes from GAM. Can we visually compare the contents of the iframe against a fixed snapshot?

@@ -180,13 +180,13 @@ const initPermutiveSegmentation = () => {
 	// and confirmed the change is safe.
 	(function (n, e, o, r, i) {
 		if (!e) {
-			(e = e || {}),
+			((e = e || {}),
 				(window.permutive = e),
 				(e.q = []),
 				(e.config = i || {}),
 				(e.config.projectId = o),
 				(e.config.apiKey = r),
-				(e.config.environment = e.config.environment || 'production');
+				(e.config.environment = e.config.environment || 'production'));
 			for (
 				let t = [
 						'addon',
