@@ -115,7 +115,7 @@ const config = {
 				},
 			},
 			/**
-			 * The rule below for prebid946.js
+			 * The rule below for prebid-v9.46.0.js
 			 * can be deleted once we've tested this dependency
 			 **/
 			{

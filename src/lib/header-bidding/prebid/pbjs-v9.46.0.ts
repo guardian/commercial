@@ -26,6 +26,4 @@ import './modules/analyticsAdapter';
 
 pbjs.processQueue();
 
-console.log('*** Prebid v9.46.0 loaded ***');
-
 export { pbjs };
