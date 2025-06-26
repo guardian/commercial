@@ -8,6 +8,7 @@ import { prebidMultibid } from '../../../experiments/tests/prebid-multibid';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
+// import { getViewport } from '../../../lib/detect/detect-viewport';
 import { EventTimer } from '../../../lib/event-timer';
 import { getPermutiveSegments } from '../../../lib/permutive';
 import type { PageTargeting } from '../../../lib/targeting/build-page-targeting';
@@ -226,7 +227,7 @@ class PrebidAdUnit {
 		pageTargeting: PageTargeting,
 		consentState: ConsentState,
 	) {
-		this.code = advert.id;
+		this.code = advert.groupedSlot;
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
 		this.gpid = this.generateGpid(advert, slot);
 		this.ortb2Imp = {
@@ -239,6 +240,7 @@ class PrebidAdUnit {
 		};
 
 		this.bids = bids(
+			advert.groupedSlot,
 			advert.id,
 			slot.sizes,
 			pageTargeting,
@@ -247,12 +249,27 @@ class PrebidAdUnit {
 		);
 
 		advert.headerBiddingSizes = slot.sizes;
-		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
+		log('commercial', `PrebidAdUnit ${advert.id}`, this.bids);
 	}
 
 	isEmpty() {
 		return this.code == null;
 	}
+
+	// checkDivInView(advert: Advert): boolean {
+	// 	const element = document.querySelector(`#${advert.id}`);
+	// 	if (!element) {
+	// 		return false;
+	// 	}
+	// 	const rect = element.getBoundingClientRect();
+	// 	log(
+	// 		'commercial',
+	// 		`Checking if advert ${advert.id} is in view`,
+	// 		rect.top < getViewport().height && rect.bottom > 0,
+	// 	);
+	// 	return rect.top < getViewport().height && rect.bottom > 0;
+	// }
+
 	private generateGpid(advert: Advert, slot: HeaderBiddingSlot): string {
 		const sectionName = window.guardian.config.page.section;
 		const contentType = window.guardian.config.page.contentType;
@@ -299,7 +316,9 @@ declare global {
 			onEvent: (event: PbjsEvent, handler: PbjsEventHandler) => void;
 			setTargetingForGPTAsync: (
 				codeArr?: string[],
-				customSlotMatching?: (slot: unknown) => unknown,
+				customSlotMatching?: (
+					slot: googletag.Slot,
+				) => (adUnit: PrebidAdUnit) => string[],
 			) => void;
 			getEvents: () => PrebidEvent[];
 		};
@@ -662,6 +681,53 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	});
 };
 
+// Check if the div in view includes fronts-banner or inline adUnit code then return that advert id
+// const divInView = (advertId: string, adUnit: PrebidAdUnit) => {
+// 	const isFrontsBannerOrInline =
+// 		isString(adUnit.code) && advertId.includes(adUnit.code);
+
+// 	if (isFrontsBannerOrInline) {
+// 		const element = document.querySelector(`#${advertId}`);
+// 		if (!element) {
+// 			return false;
+// 		}
+// 		const rect = element.getBoundingClientRect();
+// 		return rect.top < getViewport().height && rect.bottom > 0;
+// 	}
+
+// 	return false;
+// };
+
+// const customSlotMatching = (slot: googletag.Slot) => {
+// 	return function (adUnit: PrebidAdUnit) {
+// 		const advert = getAdvertById(slot.getSlotElementId());
+// 		return (
+// 			advert !== null &&
+// 			(advert.id === adUnit.code ||
+// 				advert.id === adUnit.bids?.[0]?.slotId)
+// 		);
+// 	};
+// };
+
+const customSlotMatching = (slot: googletag.Slot) => {
+	return function (adUnit: PrebidAdUnit) {
+		const advert = getAdvertById(slot.getSlotElementId());
+		const matchingCodes: string[] = [];
+
+		if (!advert) {
+			return matchingCodes;
+		}
+
+		if (
+			advert.id === adUnit.code ||
+			advert.id === adUnit.bids?.[0]?.slotId
+		) {
+			matchingCodes.push(advert.id);
+		}
+		return matchingCodes;
+	};
+};
+
 const bidsBackHandler = (
 	adUnits: PrebidAdUnit[],
 	eventTimer: EventTimer,
@@ -669,6 +735,7 @@ const bidsBackHandler = (
 	new Promise((resolve) => {
 		window.pbjs?.setTargetingForGPTAsync(
 			adUnits.map((u) => u.code).filter(isString),
+			customSlotMatching,
 		);
 
 		resolve();
