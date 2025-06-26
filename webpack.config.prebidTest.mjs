@@ -1,0 +1,136 @@
+import { execSync } from 'child_process';
+import { join } from 'path';
+import CircularDependencyPlugin from 'circular-dependency-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import webpack from 'webpack';
+import prebidTestBabelOptions from 'prebidTest.js/.babelrc.js';
+
+const gitCommitSHA = () => {
+	try {
+		return execSync('git rev-parse HEAD').toString().trim();
+	} catch (_) {
+		return;
+	}
+};
+
+const { DefinePlugin } = webpack;
+
+/**
+ * @type {import('webpack').Configuration}
+ */
+const config = {
+	entry: {
+		'commercial-standalone': join(
+			import.meta.dirname,
+			'src',
+			'commercial.ts',
+		),
+	},
+	output: {
+		path: join(import.meta.dirname, 'dist', 'bundle'),
+		clean: true,
+	},
+	resolve: {
+		modules: [
+			join(import.meta.dirname, 'src'),
+			'node_modules', // default location, but we're overiding above, so it needs to be explicit
+		],
+		alias: {
+			svgs: join(import.meta.dirname, 'static', 'svg'),
+			lodash: 'lodash-es',
+			// alias all prebid.js imports to prebidTest.js for testing
+			'prebid.js': 'prebidTest.js',
+			// prebid doesn't export these directories, so we need to alias them,
+			// we use them for our custom modules located in src/lib/header-bidding/prebid/custom-modules
+			'prebidTest.js/src': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebidTest.js',
+				'src',
+			),
+			'prebidTest.js/libraries': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebidTest.js',
+				'libraries',
+			),
+			'prebidTest.js/adapters': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebidTest.js',
+				'src',
+				'adapters',
+			),
+		},
+		extensions: ['.js', '.ts', '.tsx', '.jsx'],
+	},
+	module: {
+		rules: [
+			{
+				test: /\.[jt]sx?|mjs$/,
+				use: [
+					{
+						loader: 'babel-loader',
+					},
+					{
+						loader: 'ts-loader',
+						options: {
+							transpileOnly: true,
+							configFile: join(
+								import.meta.dirname,
+								'tsconfig.json',
+							),
+						},
+					},
+				],
+			},
+			{
+				test: /.js$/,
+				include: /prebid\.js/,
+				use: {
+					loader: 'babel-loader',
+					options: prebidTestBabelOptions,
+				},
+			},
+			{
+				test: /\.svg$/,
+				exclude: /(node_modules)/,
+				loader: 'raw-loader',
+			},
+		],
+	},
+	plugins: [
+		new HtmlWebpackPlugin({
+			template: join(
+				import.meta.dirname,
+				'static',
+				'tpc-test-iframe',
+				'v2',
+				'index.html',
+			),
+			filename: `commercial/tpc-test/v2/index.html`,
+			minify: {
+				collapseWhitespace: true,
+				removeComments: true,
+				removeRedundantAttributes: true,
+				removeScriptTypeAttributes: true,
+				removeStyleLinkTypeAttributes: true,
+				useShortDoctype: true,
+				minifyJS: true,
+			},
+			inject: false,
+		}),
+		new DefinePlugin({
+			'process.env.COMMIT_SHA': JSON.stringify(gitCommitSHA()),
+		}),
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-call -- circular-dependency-plugin is not typed
+		new CircularDependencyPlugin({
+			// exclude detection of files based on a RegExp
+			exclude: /node_modules/,
+			// add errors to webpack instead of warnings
+			failOnError: true,
+		}),
+	],
+};
+
+export default config;
