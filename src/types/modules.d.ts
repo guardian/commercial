@@ -109,11 +109,11 @@ declare module 'prebid.js/src/ajax.js' {
 }
 
 /**
- * The declarations below for prebid946.js
+ * The declarations below for prebid-v9.46.0.js
  * can be deleted once we've tested this dependency
  **/
 
-declare module 'prebid946.js' {
+declare module 'prebid-v9.46.0.js' {
 	const pbjs: {
 		processQueue: () => void;
 	};
@@ -121,7 +121,7 @@ declare module 'prebid946.js' {
 	export default pbjs;
 }
 
-declare module 'prebid946.js/modules/openxBidAdapter' {
+declare module 'prebid-v9.46.0.js/modules/openxBidAdapter' {
 	const spec: {
 		aliases: string[];
 	};
@@ -129,7 +129,7 @@ declare module 'prebid946.js/modules/openxBidAdapter' {
 	export { spec };
 }
 
-declare module 'prebid946.js/modules/appnexusBidAdapter' {
+declare module 'prebid-v9.46.0.js/modules/appnexusBidAdapter' {
 	const spec: {
 		aliases: Array<{ code: string }>;
 	};
@@ -137,13 +137,13 @@ declare module 'prebid946.js/modules/appnexusBidAdapter' {
 	export { spec };
 }
 
-declare module 'prebid946.js/adapters/bidderFactory' {
+declare module 'prebid-v9.46.0.js/adapters/bidderFactory' {
 	const registerBidder: (spec: unknown) => void;
 
 	export { registerBidder };
 }
 
-declare module 'prebid946.js/src/cpmBucketManager' {
+declare module 'prebid-v9.46.0.js/src/cpmBucketManager' {
 	type PrebidPriceGranularity = {
 		buckets: Array<{
 			precision?: number;
@@ -163,8 +163,8 @@ declare module 'prebid946.js/src/cpmBucketManager' {
 	export type { PrebidPriceGranularity };
 }
 
-// Added type definitions for prebid946.js analytics modules
-declare module 'prebid946.js/libraries/analyticsAdapter/AnalyticsAdapter.js' {
+// Added type definitions for prebid-v9.46.0.js analytics modules
+declare module 'prebid-v9.46.0.js/libraries/analyticsAdapter/AnalyticsAdapter.js' {
 	// eslint-disable-next-line no-restricted-imports -- can't use relative imports in ambient declarations
 	import type {
 		AnalyticsAdapter,
@@ -175,7 +175,7 @@ declare module 'prebid946.js/libraries/analyticsAdapter/AnalyticsAdapter.js' {
 	export default adapter;
 }
 
-declare module 'prebid946.js/src/adapterManager.js' {
+declare module 'prebid-v9.46.0.js/src/adapterManager.js' {
 	interface AnalyticsAdapterRegistration {
 		adapter: unknown;
 		code: string;
@@ -190,7 +190,7 @@ declare module 'prebid946.js/src/adapterManager.js' {
 	export default adapterManager;
 }
 
-declare module 'prebid946.js/src/constants.js' {
+declare module 'prebid-v9.46.0.js/src/constants.js' {
 	const EVENTS: {
 		AUCTION_INIT: string;
 		BID_REQUESTED: string;
@@ -204,7 +204,7 @@ declare module 'prebid946.js/src/constants.js' {
 	export { EVENTS };
 }
 
-declare module 'prebid946.js/src/utils.js' {
+declare module 'prebid-v9.46.0.js/src/utils.js' {
 	const utils: {
 		logError: (message: string) => void;
 		[key: string]: unknown;
@@ -213,7 +213,7 @@ declare module 'prebid946.js/src/utils.js' {
 	export { utils };
 }
 
-declare module 'prebid946.js/src/ajax.js' {
+declare module 'prebid-v9.46.0.js/src/ajax.js' {
 	const prebidFetch: typeof fetch;
 	export { prebidFetch as fetch };
 }

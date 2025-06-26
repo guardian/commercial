@@ -25,13 +25,13 @@ console.log('*** shouldLoadPrebid946 ***', shouldLoadPrebid946);
 const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 	if (shouldLoadPrebid()) {
 		if (shouldLoadPrebid946) {
-			console.log('*** load Prebid 946 ***');
+			console.log('*** load Prebid 9.46.0 ***');
 			await import(
-				/* webpackChunkName: "Prebid946.js" */
-				`../../lib/header-bidding/prebid/pbjs946`
+				/* webpackChunkName: "Prebid@9.46.0.js" */
+				`../../lib/header-bidding/prebid/pbjs-v9.46.0`
 			);
 		} else {
-			console.log('*** load Prebid 927 ***');
+			console.log('*** load Prebid 9.27.0 ***');
 			await import(
 				/* webpackChunkName: "Prebid.js" */
 				`../../lib/header-bidding/prebid/pbjs`

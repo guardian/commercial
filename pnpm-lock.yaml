@@ -32,12 +32,12 @@ importers:
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
+      prebid-v9.46.0.js:
+        specifier: npm:prebid.js@9.46.0
+        version: prebid.js@9.46.0(ejs@3.1.10)
       prebid.js:
         specifier: 9.27.0
         version: 9.27.0(ejs@3.1.10)
-      prebid946.js:
-        specifier: npm:prebid.js@9.46.0
-        version: prebid.js@9.46.0(ejs@3.1.10)
       process:
         specifier: ^0.11.10
         version: 0.11.10
