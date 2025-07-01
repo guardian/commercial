@@ -305,7 +305,7 @@ declare global {
 				codeArr?: string[],
 				customSlotMatching?: (
 					slot: googletag.Slot,
-				) => (adUnit: PrebidAdUnit) => string[],
+				) => (adUnitCode: string) => boolean,
 			) => void;
 			getEvents: () => PrebidEvent[];
 		};
@@ -438,6 +438,23 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			priceGranularity,
 			userSync,
 			useBidCache: isSwitchedOn('prebidBidCache'),
+			debugging: {
+				enabled: true,
+				intercept: [
+					{
+						when: {
+							// intercept bids from bidderA that have adUnitCode === 'test-div'
+							adUnitCode: 'inline',
+							bidder: 'criteo',
+						},
+						then: {
+							// mock their response with sane defaults and `cpm: 10`
+							cpm: 10,
+							currency: 'USD',
+						},
+					},
+				],
+			},
 		},
 	);
 
@@ -629,50 +646,10 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	});
 };
 
-// Check if the div in view includes fronts-banner or inline adUnit code then return that advert id
-// const divInView = (advertId: string, adUnit: PrebidAdUnit) => {
-// 	const isFrontsBannerOrInline =
-// 		isString(adUnit.code) && advertId.includes(adUnit.code);
-
-// 	if (isFrontsBannerOrInline) {
-// 		const element = document.querySelector(`#${advertId}`);
-// 		if (!element) {
-// 			return false;
-// 		}
-// 		const rect = element.getBoundingClientRect();
-// 		return rect.top < getViewport().height && rect.bottom > 0;
-// 	}
-
-// 	return false;
-// };
-
-// const customSlotMatching = (slot: googletag.Slot) => {
-// 	return function (adUnit: PrebidAdUnit) {
-// 		const advert = getAdvertById(slot.getSlotElementId());
-// 		return (
-// 			advert !== null &&
-// 			(advert.id === adUnit.code ||
-// 				advert.id === adUnit.bids?.[0]?.slotId)
-// 		);
-// 	};
-// };
-
 const customSlotMatching = (slot: googletag.Slot) => {
-	return function (adUnit: PrebidAdUnit) {
+	return function (adUnitCode: string) {
 		const advert = getAdvertById(slot.getSlotElementId());
-		const matchingCodes: string[] = [];
-
-		if (!advert) {
-			return matchingCodes;
-		}
-
-		if (
-			advert.id === adUnit.code ||
-			advert.id === adUnit.bids?.[0]?.slotId
-		) {
-			matchingCodes.push(advert.id);
-		}
-		return matchingCodes;
+		return advert?.groupedSlot === adUnitCode;
 	};
 };
 
