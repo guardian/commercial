@@ -411,11 +411,6 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	 * of consent state throughout */
 	const shouldInclude = shouldIncludeBidder(consentState);
 
-	/**
-	 * useBidCache is a feature that allows Prebid to cache bids
-	 */
-	const useBidCache = isSwitchedOn('prebidBidCache');
-
 	const pbjsConfig: PbjsConfig = Object.assign(
 		{},
 		{
