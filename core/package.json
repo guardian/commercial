@@ -1,0 +1,59 @@
+{
+	"name": "@guardian/commercial",
+	"version": "26.0.0",
+	"description": "Guardian advertising business logic",
+	"homepage": "https://github.com/guardian/commercial#readme",
+	"bugs": {
+		"url": "https://github.com/guardian/commercial/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/guardian/commercial.git"
+	},
+	"license": "Apache-2.0",
+	"files": [
+		"dist"
+	],
+	"main": "dist/cjs/export.js",
+	"module": "dist/esm/export.js",
+	"exports": {
+		".": {
+			"require": "./dist/cjs/export.js",
+			"import": "./dist/esm/export.js",
+			"development": "./src/export.js"
+		},
+		"./*": {
+			"require": "./dist/cjs/*.js",
+			"import": "./dist/esm/*.js",
+			"development": "./src/*.ts"
+		},
+		"./package.json": "./package.json"
+	},
+	"scripts": {
+		"build": "npm-run-all clean --parallel compile:core:*",
+		"clean": "rm -rf dist",
+		"compile:core:common": "tsc  --outDir ./dist/cjs --module CommonJS",
+		"compile:core:esm": "tsc --outDir ./dist/esm",
+		"compile": "npm-run-all clean --parallel compile:core:*",
+		"tsc": "tsc --noEmit"
+	},
+	"peerDependencies": {
+		"@guardian/ab-core": "^8.0.0",
+		"@guardian/libs": "^22.0.0"
+	},
+	"dependencies": {
+		"@guardian/ab-core": "8.0.1",
+		"@guardian/libs": "22.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "20.17.24",
+		"typescript": "5.5.4"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"browserslist": [
+		"extends @guardian/browserslist-config"
+	],
+	"packageManager": "pnpm@9.15.2"
+}

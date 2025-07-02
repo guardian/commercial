@@ -1,3 +1,4 @@
+import { EventTimer } from '@guardian/commercial/event-timer';
 import { log } from '@guardian/libs';
 import type { Advert } from '../define/Advert';
 import { isAdSize } from '../define/Advert';
@@ -7,7 +8,6 @@ import { AD_LABEL_HEIGHT } from '../lib/constants/ad-label-height';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { memoizedFetchNonRefreshableLineItemIds } from '../lib/dfp/non-refreshable-line-items';
 import { shouldRefresh } from '../lib/dfp/should-refresh';
-import { EventTimer } from '../lib/event-timer';
 import fastdom from '../lib/fastdom-promise';
 import { getUrlVars } from '../lib/url';
 

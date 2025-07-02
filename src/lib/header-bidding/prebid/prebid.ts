@@ -1,3 +1,4 @@
+import { EventTimer } from '@guardian/commercial/event-timer';
 import type { ConsentState } from '@guardian/libs';
 import { getConsentFor, isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
@@ -7,7 +8,6 @@ import { getParticipations } from '../../../experiments/ab';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
-import { EventTimer } from '../../../lib/event-timer';
 import { getPermutiveSegments } from '../../../lib/permutive';
 import type { PageTargeting } from '../../../lib/targeting/build-page-targeting';
 import { pubmatic } from '../../__vendor/pubmatic';

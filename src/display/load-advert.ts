@@ -1,6 +1,6 @@
+import { EventTimer } from '@guardian/commercial/event-timer';
 import fastdom from 'fastdom';
 import type { Advert } from '../define/Advert';
-import { EventTimer } from '../lib/event-timer';
 import { stripDfpAdPrefixFrom } from '../lib/header-bidding/utils';
 import { refreshBidsForAd, requestBidsForAd } from './request-bids';
 

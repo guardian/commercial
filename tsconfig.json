@@ -19,14 +19,16 @@
 			"ESNext"
 		],
 		"module": "ESNEXT",
-		"moduleResolution": "node",
+		"moduleResolution": "bundler",
 		"noEmit": true,
 		"noUnusedLocals": true,
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"strict": true,
 		"target": "ESNEXT",
-		"noUncheckedIndexedAccess": true
+		"noUncheckedIndexedAccess": true,
+		"customConditions": ["development"]
+		// "typeRoots": ["./node_modules/@types", "./node_modules/web-vitals/dist"]
 	},
 	"exclude": ["node_modules", "dist", "coverage", "playwright-report"]
 }
