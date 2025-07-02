@@ -37,22 +37,19 @@
 		"tsc": "tsc --noEmit"
 	},
 	"peerDependencies": {
-		"@guardian/ab-core": "^8.0.0",
-		"@guardian/libs": "^22.0.0"
+		"@guardian/ab-core": "catalog:",
+		"@guardian/libs": "catalog:"
 	},
 	"dependencies": {
-		"@guardian/ab-core": "8.0.1",
-		"@guardian/libs": "22.0.0"
+		"@guardian/ab-core": "catalog:",
+		"@guardian/libs": "catalog:"
 	},
 	"devDependencies": {
-		"@types/node": "20.17.24",
-		"typescript": "5.5.4"
+		"@types/node": "catalog:",
+		"typescript": "catalog:"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
-	"browserslist": [
-		"extends @guardian/browserslist-config"
-	],
 	"packageManager": "pnpm@9.15.2"
 }

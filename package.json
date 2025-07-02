@@ -10,6 +10,7 @@
 		"type": "git",
 		"url": "git+https://github.com/guardian/commercial.git"
 	},
+	"private": true,
 	"license": "Apache-2.0",
 	"files": [
 		"dist"
@@ -34,21 +35,21 @@
 		"validate": "npm-run-all tsc lint test build"
 	},
 	"peerDependencies": {
-		"@guardian/ab-core": "^8.0.0",
+		"@guardian/ab-core": "catalog:",
 		"@guardian/core-web-vitals": "^11.0.0",
 		"@guardian/identity-auth": "^7.0.0",
 		"@guardian/identity-auth-frontend": "^9.0.0",
-		"@guardian/libs": "^22.5.0",
+		"@guardian/libs": "catalog:",
 		"@guardian/source": "^8.0.2",
-		"typescript": "~5.5.4"
+		"typescript": "catalog:"
 	},
 	"dependencies": {
-		"@guardian/ab-core": "8.0.1",
+		"@guardian/ab-core": "catalog:",
 		"@guardian/core-web-vitals": "11.0.0",
 		"@guardian/commercial": "workspace:*",
 		"@guardian/identity-auth": "^7.0.0",
 		"@guardian/identity-auth-frontend": "9.0.0",
-		"@guardian/libs": "22.5.0",
+		"@guardian/libs": "catalog:",
 		"@guardian/source": "10.2.0",
 		"fastdom": "^1.0.12",
 		"lodash-es": "^4.17.21",
@@ -71,7 +72,7 @@
 		"@types/googletag": "~3.3.0",
 		"@types/jest": "^30.0.0",
 		"@types/lodash-es": "^4.17.12",
-		"@types/node": "24.0.7",
+		"@types/node": "catalog:",
 		"@types/webpack-env": "^1.18.5",
 		"@typescript-eslint/eslint-plugin": "8.35.0",
 		"@typescript-eslint/parser": "8.35.0",
@@ -94,7 +95,7 @@
 		"ts-jest": "^29.2.5",
 		"ts-loader": "^9.5.1",
 		"type-fest": "^4.31.0",
-		"typescript": "5.5.4",
+		"typescript": "catalog:",
 		"webpack": "^5.97.1",
 		"webpack-bundle-analyzer": "^4.10.2",
 		"webpack-cli": "^6.0.1",
