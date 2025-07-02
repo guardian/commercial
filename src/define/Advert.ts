@@ -9,7 +9,7 @@ import type {
 	SizeMapping,
 	SlotName,
 } from '@guardian/commercial/ad-sizes';
-import { Breakpoint } from '@guardian/commercial/breakpoint';
+import type { Breakpoint } from '@guardian/commercial/breakpoint';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import type { HeaderBiddingSize } from '../lib/header-bidding/prebid-types';

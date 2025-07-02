@@ -1,5 +1,5 @@
-import { EventTimer } from '@guardian/commercial/event-timer';
 import { log } from '@guardian/libs';
+import { EventTimer } from '@guardian/commercial/event-timer';
 import { adSlotIdPrefix } from './dfp/dfp-env-globals';
 import { reportError } from './error/report-error';
 

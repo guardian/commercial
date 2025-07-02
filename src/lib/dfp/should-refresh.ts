@@ -1,6 +1,6 @@
-import type { Advert } from '../../define/Advert';
 import type { AdSizeString } from '@guardian/commercial/ad-sizes';
 import { outstreamSizes } from '@guardian/commercial/ad-sizes';
+import type { Advert } from '../../define/Advert';
 
 /**
  * Determine whether an advert should refresh, taking into account

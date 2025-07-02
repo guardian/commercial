@@ -1,14 +1,15 @@
-import { EventTimer } from '@guardian/commercial/event-timer';
 import type { ConsentState } from '@guardian/libs';
 import { getConsentFor, isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { PrebidPriceGranularity } from 'prebid.js/src/cpmBucketManager';
-import type { Advert } from '../../../define/Advert';
-import { getParticipations } from '../../../experiments/ab';
 import type { AdSize } from '@guardian/commercial/ad-sizes';
 import { createAdSize } from '@guardian/commercial/ad-sizes';
 import { PREBID_TIMEOUT } from '@guardian/commercial/constants/prebid-timeout';
+import { EventTimer } from '@guardian/commercial/event-timer';
 import { getPermutiveSegments } from '@guardian/commercial/permutive';
+import type { PageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
+import type { Advert } from '../../../define/Advert';
+import { getParticipations } from '../../../experiments/ab';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedIn } from '../../identity/api';
@@ -31,7 +32,6 @@ import {
 } from '../utils';
 import { bids } from './bid-config';
 import { overridePriceBucket, priceGranularity } from './price-config';
-import { PageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
 
 type CmpApi = 'iab' | 'static';
 /** @see https://docs.prebid.org/dev-docs/modules/consentManagementTcf.html */

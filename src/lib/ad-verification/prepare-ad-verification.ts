@@ -1,10 +1,10 @@
-import { EventTimer } from '@guardian/commercial/event-timer';
 import { loadScript, log } from '@guardian/libs';
+import { bypassCommercialMetricsSampling } from '@guardian/commercial';
+import { EventTimer } from '@guardian/commercial/event-timer';
 import { refreshAdvert } from '../../display/load-advert';
 import type { ConfiantCallback } from '../../types/global';
 import { getAdvertById } from '../dfp/get-advert-by-id';
 import { stripDfpAdPrefixFrom } from '../header-bidding/utils';
-import { bypassCommercialMetricsSampling } from '@guardian/commercial';
 
 const errorHandler = (error: Error) => {
 	// Looks like some plugins block ad-verification

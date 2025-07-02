@@ -22,11 +22,6 @@
 			"import": "./dist/esm/export.js",
 			"development": "./src/export.js"
 		},
-		"./targeting/*": {
-			"require": "./dist/cjs/targeting/*.js",
-			"import": "./dist/esm/targeting/*.js",
-			"development": "./src/targeting/*.ts"
-		},
 		"./*": {
 			"require": "./dist/cjs/*.js",
 			"import": "./dist/esm/*.js",

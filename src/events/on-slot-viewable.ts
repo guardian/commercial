@@ -1,10 +1,10 @@
-import { EventTimer } from '@guardian/commercial/event-timer';
 import { log } from '@guardian/libs';
+import { outstreamSizes } from '@guardian/commercial/ad-sizes';
+import { AD_LABEL_HEIGHT } from '@guardian/commercial/constants/ad-label-height';
+import { EventTimer } from '@guardian/commercial/event-timer';
 import type { Advert } from '../define/Advert';
 import { isAdSize } from '../define/Advert';
 import { enableLazyLoad } from '../display/lazy-load';
-import { outstreamSizes } from '@guardian/commercial/ad-sizes';
-import { AD_LABEL_HEIGHT } from '@guardian/commercial/constants/ad-label-height';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { memoizedFetchNonRefreshableLineItemIds } from '../lib/dfp/non-refreshable-line-items';
 import { shouldRefresh } from '../lib/dfp/should-refresh';

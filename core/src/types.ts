@@ -1,6 +1,6 @@
 import type { PageTargeting } from './targeting/build-page-targeting';
 
-export type ConnectionType =
+type ConnectionType =
 	| 'bluetooth'
 	| 'cellular'
 	| 'ethernet'
@@ -10,13 +10,13 @@ export type ConnectionType =
 	| 'unknown'
 	| 'wifi';
 
-export interface NetworkInformation extends EventTarget {
+interface NetworkInformation extends EventTarget {
 	readonly type?: ConnectionType;
 	readonly downlink?: number;
 	readonly effectiveType?: string;
 }
 
-export type OphanRecordFunction = (
+type OphanRecordFunction = (
 	event: Record<string, unknown> & {
 		/**
 		 * the experiences key will override previously set values.
@@ -34,29 +34,29 @@ export type OphanRecordFunction = (
  * const list = ['foo', 'bar', 'baz'] as const;
  * type Test = Indices<typeof list>
  */
-export type Indices<T extends readonly unknown[]> = Exclude<
+type Indices<T extends readonly unknown[]> = Exclude<
 	Partial<T>['length'],
 	T['length']
 >;
 
-export type Edition = 'UK' | 'AU' | 'US'; // https://github.com/guardian/frontend/blob/b952f6b9/common/app/views/support/JavaScriptPage.scala#L79
+type Edition = 'UK' | 'AU' | 'US'; // https://github.com/guardian/frontend/blob/b952f6b9/common/app/views/support/JavaScriptPage.scala#L79
 
-export type AdsConfigDisabled = {
+type AdsConfigDisabled = {
 	disableAds: true;
 };
 
-export type AdsConfigBasic = {
+type AdsConfigBasic = {
 	adTagParameters: {
 		iu: string;
 		cust_params: string;
 	};
 };
 
-export type AdsConfigUSNATorAus = AdsConfigBasic & {
+type AdsConfigUSNATorAus = AdsConfigBasic & {
 	restrictedDataProcessor: boolean;
 };
 
-export type AdsConfigTCFV2 = AdsConfigBasic & {
+type AdsConfigTCFV2 = AdsConfigBasic & {
 	adTagParameters: {
 		cmpGdpr: number;
 		cmpVcd: string;
@@ -65,7 +65,7 @@ export type AdsConfigTCFV2 = AdsConfigBasic & {
 	nonPersonalizedAd: boolean;
 };
 
-export interface Ophan {
+interface Ophan {
 	trackComponentAttention: (
 		name: string,
 		el: Element,
@@ -163,7 +163,7 @@ interface UserConfig {
 	rawResponse: string;
 }
 
-export interface Config {
+interface Config {
 	commercialMetricsInitialised?: boolean;
 	frontendAssetsFullURL?: string;
 	isDotcomRendering: boolean;
@@ -183,7 +183,7 @@ export interface Config {
 	user?: UserConfig;
 }
 
-export type AdBlockers = {
+type AdBlockers = {
 	active: boolean | undefined;
 	onDetect: Array<(value: boolean | PromiseLike<boolean>) => void>;
 };
@@ -204,7 +204,7 @@ interface DailyArticleCount {
 
 type DailyArticleHistory = DailyArticleCount[];
 
-export interface ArticleCounts {
+interface ArticleCounts {
 	weeklyArticleHistory: WeeklyArticleHistory;
 	dailyArticleHistory: DailyArticleHistory;
 }
@@ -212,7 +212,7 @@ export interface ArticleCounts {
 type FetchBidSizes = {
 	adSizes: `${number}x${number}`;
 };
-export type FetchBidResponse = {
+type FetchBidResponse = {
 	amznbid: string;
 	amzniid: string;
 	amznp: string;
@@ -221,7 +221,7 @@ export type FetchBidResponse = {
 	slotID: string;
 };
 
-export interface HeaderNotification {
+interface HeaderNotification {
 	id: string;
 	target: string;
 	message: string;
@@ -229,7 +229,7 @@ export interface HeaderNotification {
 	logImpression: () => void;
 }
 
-export interface OptOutInitializeOptions {
+interface OptOutInitializeOptions {
 	publisher: number;
 	onlyNoConsent?: 0 | 1;
 	alwaysNoConsent?: 0 | 1;
@@ -268,7 +268,7 @@ type OptOutFilledCallback = (
 	response: OptOutResponse,
 ) => void;
 
-export interface OptOutAdSlot {
+interface OptOutAdSlot {
 	adSlot: string;
 	targetId: string;
 	id: string;
@@ -314,13 +314,13 @@ type ConfiantCallback = (
 	},
 ) => void;
 
-export interface Confiant extends Record<string, unknown> {
+interface Confiant extends Record<string, unknown> {
 	settings: {
 		callback: ConfiantCallback;
 		[key: string]: unknown;
 	};
 }
-export interface Permutive {
+interface Permutive {
 	config?: {
 		projectId?: string;
 		apiKey?: string;
@@ -350,7 +350,7 @@ type FetchBidsBidConfig = {
 	slots: A9AdUnitInterface[];
 };
 
-export type Apstag = {
+type Apstag = {
 	init: (arg0: ApstagInitConfig) => void;
 	fetchBids: (
 		arg0: FetchBidsBidConfig,
@@ -359,7 +359,7 @@ export type Apstag = {
 	setDisplayBids: () => void;
 };
 
-export type ComscoreGlobals = {
+type ComscoreGlobals = {
 	c1: string;
 	c2: string;
 	cs_ucfr: string;
@@ -375,7 +375,7 @@ interface IasPETSlot {
 	adUnitPath: string;
 }
 
-export interface IasPET {
+interface IasPET {
 	queue?: Array<{
 		adSlots: IasPETSlot[];
 		dataHandler: (targetingJSON: string) => void;
@@ -383,7 +383,7 @@ export interface IasPET {
 	pubId?: string;
 }
 
-export interface TeadsAnalytics {
+interface TeadsAnalytics {
 	analytics_tag_id?: string;
 	share?: () => void;
 	shared_data?: unknown[];
@@ -395,7 +395,7 @@ export interface TeadsAnalytics {
  * Note this type definition is incomplete.
  * These types can be refined as/when they are required
  */
-export interface SafeFrameAPI {
+interface SafeFrameAPI {
 	ver: string;
 	specVersion: string;
 	lib: {
@@ -427,7 +427,7 @@ export interface SafeFrameAPI {
 /**
  * Types for IMR Worldwide
  */
-export interface NSdkInstance {
+interface NSdkInstance {
 	ggPM: (
 		type: string,
 		dcrStaticMetadata: {
@@ -443,14 +443,45 @@ export interface NSdkInstance {
 	}) => void;
 }
 
-export interface Trac {
+interface Trac {
 	record: () => this;
 	post: () => this;
 }
 
-export type GoogleTagParams = unknown;
-export type GoogleTrackConversionObject = {
+type GoogleTagParams = unknown;
+type GoogleTrackConversionObject = {
 	google_conversion_id: number;
 	google_custom_params: GoogleTagParams;
 	google_remarketing_only: boolean;
+};
+
+export type {
+	ConnectionType,
+	NetworkInformation,
+	OphanRecordFunction,
+	Indices,
+	Edition,
+	AdsConfigDisabled,
+	AdsConfigBasic,
+	AdsConfigUSNATorAus,
+	AdsConfigTCFV2,
+	Ophan,
+	Config,
+	AdBlockers,
+	ArticleCounts,
+	FetchBidResponse,
+	HeaderNotification,
+	OptOutInitializeOptions,
+	OptOutAdSlot,
+	Confiant,
+	Permutive,
+	Apstag,
+	ComscoreGlobals,
+	IasPET,
+	TeadsAnalytics,
+	SafeFrameAPI,
+	NSdkInstance,
+	Trac,
+	GoogleTagParams,
+	GoogleTrackConversionObject,
 };
