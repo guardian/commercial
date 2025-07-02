@@ -1,5 +1,5 @@
 import { commercialFeatures } from '../lib/commercial-features';
-import { AD_LABEL_HEIGHT } from '../lib/constants';
+import { AD_LABEL_HEIGHT } from '@guardian/commercial/constants/index';
 import { createAdSlot, wrapSlotInContainer } from '../lib/create-ad-slot';
 import { getBreakpoint } from '../lib/detect/detect-breakpoint';
 import { getViewport } from '../lib/detect/detect-viewport';

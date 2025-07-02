@@ -100,16 +100,4 @@ export type False = 'f';
 
 export type NotApplicable = 'na';
 
-/**
- * Generates a type which represents possible indices of this array
- *
- * Example usage:
- * const list = ['foo', 'bar', 'baz'] as const;
- * type Test = Indices<typeof list>
- */
-export type Indices<T extends readonly unknown[]> = Exclude<
-	Partial<T>['length'],
-	T['length']
->;
-
 export const isDefined = <T>(x: T | undefined): x is T => x !== undefined;

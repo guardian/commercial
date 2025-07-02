@@ -1,6 +1,6 @@
 import { type ConsentState } from '@guardian/libs';
 import { isUserInVariant as isUserInVariant_ } from '../../../experiments/ab';
-import { createAdSize } from '../../../lib/ad-sizes';
+import { createAdSize } from '@guardian/commercial/ad-sizes';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,

@@ -1,5 +1,6 @@
 import type { EventTimer } from '@guardian/commercial/event-timer';
 import type { NetworkInformation } from '@guardian/commercial/types';
+import type { OphanRecordFunction } from '@guardian/commercial/types';
 import type { CustomClaims } from '@guardian/identity-auth';
 import type { VendorName } from '@guardian/libs';
 import type { DfpEnv } from '../lib/dfp/dfp-env';
@@ -164,16 +165,6 @@ interface Config {
 	user?: UserConfig;
 }
 
-type OphanRecordFunction = (
-	event: Record<string, unknown> & {
-		/**
-		 * the experiences key will override previously set values.
-		 * Use `recordExperiences` instead.
-		 */
-		experiences?: never;
-	},
-	callback?: () => void,
-) => void;
 interface Ophan {
 	trackComponentAttention: (
 		name: string,

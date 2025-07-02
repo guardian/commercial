@@ -4,7 +4,7 @@ import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
 import { adSlotIdPrefix } from '../../lib/dfp/dfp-env-globals';
 import { getAdvertById } from '../../lib/dfp/get-advert-by-id';
 import fastdom from '../../lib/fastdom-promise';
-import { adSizes } from '../ad-sizes';
+import { adSizes } from '@guardian/commercial/ad-sizes';
 import type { RegisterListener } from '../messenger';
 
 type PassbackMessagePayload = { source: string };

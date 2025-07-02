@@ -1,7 +1,7 @@
 import { fillDynamicAdSlot } from '../../insert/fill-dynamic-advert-slot';
 import type { FillAdSlot } from '../../insert/spacefinder/article';
 import { init as initSpacefinder } from '../../insert/spacefinder/article';
-import type { SizeMapping } from '../../lib/ad-sizes';
+import type { SizeMapping } from '@guardian/commercial/ad-sizes';
 
 /**
  * Fill an ad slot with a googletag advert

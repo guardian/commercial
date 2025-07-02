@@ -18,7 +18,7 @@
 			"ES2020",
 			"ESNext"
 		],
-		"module": "ESNEXT",
+		"module": "preserve",
 		"moduleResolution": "bundler",
 		"noEmit": true,
 		"noUnusedLocals": true,

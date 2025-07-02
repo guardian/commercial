@@ -1,13 +1,11 @@
 {
 	"compilerOptions": {
-		"baseUrl": "src",
+		"rootDir": "src",
 		"declaration": true,
-		"noEmit": false,
 		"outDir": "dist",
-		"typeRoots": ["./node_modules/@types", "./node_modules/web-vitals/dist"]
+		"noEmit": false
 	},
 	"extends": "../tsconfig.json",
-	"rootDir": "./src",
-	"include": ["src/export.ts", "src/types"],
-	"exclude": ["**/*.spec.*", "**/*.test.*"]
+	"exclude": ["node_modules", "dist"]
+	// "include": ["./src/*", "./src/types.ts"],
 }

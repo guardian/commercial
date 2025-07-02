@@ -4,7 +4,7 @@ import {
 	getConsentFor as getConsentFor_,
 } from '@guardian/libs';
 import { isUserInVariant as isUserInVariant_ } from '../../experiments/ab';
-import { createAdSize } from '../../lib/ad-sizes';
+import { createAdSize } from '@guardian/commercial/ad-sizes';
 import { _ } from '../../lib/geo/geo-utils';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';
 import {

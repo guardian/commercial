@@ -1,6 +1,6 @@
 import { Advert } from '../../define/Advert';
-import type { SizeMapping } from '../../lib/ad-sizes';
-import { adSizes, createAdSize } from '../../lib/ad-sizes';
+import type { SizeMapping } from '@guardian/commercial/ad-sizes';
+import { adSizes, createAdSize } from '@guardian/commercial/ad-sizes';
 import { getHeaderBiddingAdSlots } from './slot-config';
 import { getBreakpointKey, shouldIncludeMobileSticky } from './utils';
 import type * as Utils from './utils';
