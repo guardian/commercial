@@ -6,6 +6,7 @@ import type {
 	ComscoreGlobals,
 	Confiant,
 	Config,
+	DfpEnv,
 	FetchBidResponse,
 	GoogleTagParams,
 	GoogleTrackConversionObject,
@@ -41,7 +42,7 @@ declare global {
 			css: { onLoad: () => void; loaded: boolean };
 			articleCounts?: ArticleCounts;
 			commercial?: {
-				dfpEnv?: unknown;
+				dfpEnv?: DfpEnv;
 				a9WinningBids?: FetchBidResponse[];
 			};
 			notificationEventHistory?: HeaderNotification[][];

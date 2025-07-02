@@ -1,5 +1,3 @@
-import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
-import { once } from 'lodash-es';
 import type {
 	AdSize,
 	SizeMapping,
@@ -7,6 +5,8 @@ import type {
 } from '@guardian/commercial/ad-sizes';
 import { EventTimer } from '@guardian/commercial/event-timer';
 import { isEligibleForTeads } from '@guardian/commercial/targeting/teads-eligibility';
+import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
+import { once } from 'lodash-es';
 import { getUrlVars } from '../lib/url';
 import { initSlotIas } from './init-slot-ias';
 

@@ -1,9 +1,9 @@
+import { createAdSize } from '@guardian/commercial/ad-sizes';
 import {
 	type ConsentState,
 	type CountryCode,
 	getConsentFor as getConsentFor_,
 } from '@guardian/libs';
-import { createAdSize } from '@guardian/commercial/ad-sizes';
 import { isUserInVariant as isUserInVariant_ } from '../../experiments/ab';
 import { _ } from '../../lib/geo/geo-utils';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';

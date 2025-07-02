@@ -1,5 +1,5 @@
-import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { EventTimer } from '@guardian/commercial/event-timer';
+import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { initTrackGpcSignal } from './track-gpc-signal';
 
 describe('initTrackGpcSignal', () => {

@@ -1,6 +1,6 @@
+import { createAdSize } from '@guardian/commercial/ad-sizes';
 import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { createAdSize } from '@guardian/commercial/ad-sizes';
 import {
 	isInAuOrNz,
 	isInCanada,

@@ -1,6 +1,6 @@
-import { type ConsentState } from '@guardian/libs';
 import type { PageTargeting } from '@guardian/commercial';
 import { createAdSize } from '@guardian/commercial/ad-sizes';
+import { type ConsentState } from '@guardian/libs';
 import { isUserInVariant as isUserInVariant_ } from '../../../experiments/ab';
 import {
 	isInAuOrNz as isInAuOrNz_,

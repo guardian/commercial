@@ -1,6 +1,6 @@
+import type * as AdSizesType from '@guardian/commercial/ad-sizes';
 import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
-import type * as AdSizesType from '@guardian/commercial/ad-sizes';
 import { loadAdvert } from '../../display/load-advert';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../lib/detect/detect-breakpoint';

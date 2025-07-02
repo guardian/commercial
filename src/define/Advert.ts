@@ -1,4 +1,3 @@
-import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import {
 	createAdSize,
 	findAppliedSizesForBreakpoint,
@@ -10,6 +9,8 @@ import type {
 	SlotName,
 } from '@guardian/commercial/ad-sizes';
 import type { Breakpoint } from '@guardian/commercial/breakpoint';
+import type { Advert as IAdvert } from '@guardian/commercial/types';
+import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import type { HeaderBiddingSize } from '../lib/header-bidding/prebid-types';
@@ -127,7 +128,7 @@ const isSizeMappingEmpty = (sizeMapping: SizeMapping): boolean => {
 	);
 };
 
-class Advert {
+class Advert implements IAdvert {
 	id: string;
 	node: HTMLElement;
 	sizes: SizeMapping;
