@@ -8,8 +8,10 @@ jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock('lib/ad-sizes', () => {
-	const adSizes: typeof AdSizesType = jest.requireActual('lib/ad-sizes');
+jest.mock('@guardian/commercial/ad-sizes', () => {
+	const adSizes: typeof AdSizesType = jest.requireActual(
+		'@guardian/commercial/ad-sizes',
+	);
 	const slotSizeMappings = adSizes.slotSizeMappings;
 	const slots = {
 		'mobile-only-slot': {
@@ -38,7 +40,7 @@ jest.mock('lib/ad-sizes', () => {
 	};
 });
 
-jest.mock('lib/targeting/teads-eligibility', () => ({
+jest.mock('@guardian/commercial/targeting/teads-eligibility', () => ({
 	isEligibleForTeads: jest.fn(),
 }));
 

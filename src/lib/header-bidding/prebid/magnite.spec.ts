@@ -4,7 +4,7 @@ import {
 	isInRow as isInRow_,
 	isInUk as isInUk_,
 	isInUsOrCa as isInUsOrCa_,
-} from '../../../lib/geo/geo-utils';
+} from '@guardian/commercial/geo/geo-utils';
 import { getBreakpointKey as getBreakpointKey_ } from '../utils';
 import { getMagniteSiteId, getMagniteZoneId } from './magnite';
 
@@ -17,7 +17,7 @@ const isInUsOrCa = isInUsOrCa_ as jest.Mock;
 jest.mock('experiments/ab', () => ({
 	isUserInVariant: jest.fn(),
 }));
-jest.mock('lib/geo/geo-utils');
+jest.mock('@guardian/commercial/geo/geo-utils');
 
 jest.mock('../utils', () => ({
 	...jest.requireActual('../utils'),

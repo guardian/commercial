@@ -5,7 +5,7 @@ import {
 	getConsentFor as getConsentFor_,
 } from '@guardian/libs';
 import { isUserInVariant as isUserInVariant_ } from '../../experiments/ab';
-import { _ } from '../../lib/geo/geo-utils';
+import { _ } from '@guardian/commercial/geo/geo-utils';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,

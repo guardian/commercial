@@ -7,7 +7,7 @@ import {
 	isInUk,
 	isInUsa,
 	isInUsOrCa,
-} from '../../lib/geo/geo-utils';
+} from '@guardian/commercial/geo/geo-utils';
 import { pbTestNameMap } from '../../lib/url';
 import {
 	getCurrentTweakpoint,

@@ -1,3 +1,4 @@
+import type { PageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
 import type { ConsentState } from '@guardian/libs';
 import { log } from '@guardian/libs';
 import {
@@ -6,8 +7,7 @@ import {
 	isInUk,
 	isInUsa,
 	isInUsOrCa,
-} from '../../../lib/geo/geo-utils';
-import type { PageTargeting } from '../../../lib/targeting/build-page-targeting';
+} from '@guardian/commercial/geo/geo-utils';
 import { pbTestNameMap } from '../../../lib/url';
 import type { PrebidIndexSite } from '../../../types/global';
 import { dfpEnv } from '../../dfp/dfp-env';

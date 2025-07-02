@@ -2,7 +2,7 @@ import { buildPageTargeting } from '@guardian/commercial';
 import type { ConsentState } from '@guardian/libs';
 import { buildPageTargetingConsentless } from './build-page-targeting-consentless';
 
-jest.mock('./build-page-targeting');
+jest.mock('@guardian/commercial/targeting/build-page-targeting');
 
 const emptyConsent: ConsentState = {
 	canTarget: false,

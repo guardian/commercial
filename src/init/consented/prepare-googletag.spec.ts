@@ -56,9 +56,10 @@ jest.mock('display/display-lazy-ads', () => ({
 	displayLazyAds: jest.fn(),
 }));
 
-jest.mock('../../lib/ad-sizes', () => {
-	const adSizes: typeof AdSizesType =
-		jest.requireActual('../../lib/ad-sizes');
+jest.mock('@guardian/commercial/ad-sizes', () => {
+	const adSizes: typeof AdSizesType = jest.requireActual(
+		'@guardian/commercial/ad-sizes',
+	);
 	const { createAdSize } = adSizes;
 	return {
 		...adSizes,
@@ -128,7 +129,7 @@ jest.mock('./prepare-prebid', () => ({
 		.mockImplementation(() => Promise.resolve(undefined)),
 }));
 
-jest.mock('lib/targeting/teads-eligibility', () => ({
+jest.mock('@guardian/commercial/targeting/teads-eligibility', () => ({
 	isEligibleForTeads: jest.fn(),
 }));
 

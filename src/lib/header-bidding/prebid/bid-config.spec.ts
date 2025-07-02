@@ -8,7 +8,7 @@ import {
 	isInUk as isInUk_,
 	isInUsa as isInUsa_,
 	isInUsOrCa as isInUsOrCa_,
-} from '../../../lib/geo/geo-utils';
+} from '@guardian/commercial/geo/geo-utils';
 import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
 import {
 	containsBillboard as containsBillboard_,
@@ -88,7 +88,7 @@ const stripMobileSuffix = stripMobileSuffix_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
 const isUserInVariant = isUserInVariant_ as jest.Mock;
 
-jest.mock('lib/geo/geo-utils');
+jest.mock('@guardian/commercial/geo/geo-utils');
 const isInAuOrNz = isInAuOrNz_ as jest.Mock;
 const isInRow = isInRow_ as jest.Mock;
 const isInUk = isInUk_ as jest.Mock;

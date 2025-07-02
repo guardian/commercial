@@ -13,7 +13,7 @@ jest.mock('lib/geo/country-code', () => ({
 jest.mock('experiments/ab', () => ({
 	getParticipations: jest.fn(),
 }));
-jest.mock('lib/targeting/build-page-targeting', () => ({
+jest.mock('@guardian/commercial/targeting/build-page-targeting', () => ({
 	buildPageTargeting: jest.fn(),
 }));
 
