@@ -1,5 +1,7 @@
 import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
 import { once } from 'lodash-es';
+import { isUserInVariant } from '../../experiments/ab';
+import { prebidGroupedSlots } from '../../experiments/tests/prebid-grouped-slots';
 import { createAdSize } from '../../lib/ad-sizes';
 import {
 	isInAuOrNz,
@@ -261,3 +263,7 @@ export const containsWS = (sizes: HeaderBiddingSize[]): boolean =>
 	contains(sizes, createAdSize(160, 600));
 
 export const shouldIncludeOnlyA9 = window.location.hash.includes('#only-a9');
+
+export const shouldIncludeGroupedSlots =
+	isSwitchedOn('prebidBidCache') &&
+	isUserInVariant(prebidGroupedSlots, 'variant');

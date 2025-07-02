@@ -28,6 +28,7 @@ import { getHeaderBiddingAdSlots } from '../slot-config';
 import {
 	isSwitchedOn,
 	shouldIncludeBidder,
+	shouldIncludeGroupedSlots,
 	shouldIncludePermutive,
 	stripDfpAdPrefixFrom,
 } from '../utils';
@@ -214,7 +215,7 @@ class PrebidAdUnit {
 		pageTargeting: PageTargeting,
 		consentState: ConsentState,
 	) {
-		this.code = advert.groupedSlot;
+		this.code = shouldIncludeGroupedSlots ? advert.groupedSlot : advert.id;
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
 		this.gpid = this.generateGpid(advert, slot);
 		this.ortb2Imp = {
@@ -226,14 +227,21 @@ class PrebidAdUnit {
 			},
 		};
 
-		this.bids = bids(
-			advert.groupedSlot,
-			advert.id,
-			slot.sizes,
-			pageTargeting,
-			this.gpid,
-			consentState,
-		);
+		this.bids = this.bids = shouldIncludeGroupedSlots
+			? bids(
+					advert.groupedSlot,
+					slot.sizes,
+					pageTargeting,
+					this.gpid,
+					consentState,
+				)
+			: bids(
+					advert.id,
+					slot.sizes,
+					pageTargeting,
+					this.gpid,
+					consentState,
+				);
 
 		advert.headerBiddingSizes = slot.sizes;
 		log('commercial', `PrebidAdUnit ${advert.id}`, this.bids);
@@ -242,20 +250,6 @@ class PrebidAdUnit {
 	isEmpty() {
 		return this.code == null;
 	}
-
-	// checkDivInView(advert: Advert): boolean {
-	// 	const element = document.querySelector(`#${advert.id}`);
-	// 	if (!element) {
-	// 		return false;
-	// 	}
-	// 	const rect = element.getBoundingClientRect();
-	// 	log(
-	// 		'commercial',
-	// 		`Checking if advert ${advert.id} is in view`,
-	// 		rect.top < getViewport().height && rect.bottom > 0,
-	// 	);
-	// 	return rect.top < getViewport().height && rect.bottom > 0;
-	// }
 
 	private generateGpid(advert: Advert, slot: HeaderBiddingSlot): string {
 		const sectionName = window.guardian.config.page.section;
@@ -438,23 +432,6 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			priceGranularity,
 			userSync,
 			useBidCache: isSwitchedOn('prebidBidCache'),
-			debugging: {
-				enabled: true,
-				intercept: [
-					{
-						when: {
-							// intercept bids from bidderA that have adUnitCode === 'test-div'
-							adUnitCode: 'inline',
-							bidder: 'criteo',
-						},
-						then: {
-							// mock their response with sane defaults and `cpm: 10`
-							cpm: 10,
-							currency: 'USD',
-						},
-					},
-				],
-			},
 		},
 	);
 
@@ -646,6 +623,12 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	});
 };
 
+/**
+ * Creates a slot matching function for Prebid to match GPT slots with their corresponding ad units
+ * @param slot The googletag slot to find a matching advert for
+ * @returns A function that takes an adUnitCode and returns true if the slot's corresponding advert has a matching groupedSlot
+ * @see https://docs.prebid.org/dev-docs/publisher-api-reference/setTargetingForGPTAsync.html#custom-slot-matching
+ */
 const customSlotMatching = (slot: googletag.Slot) => {
 	return function (adUnitCode: string) {
 		const advert = getAdvertById(slot.getSlotElementId());
@@ -658,10 +641,16 @@ const bidsBackHandler = (
 	eventTimer: EventTimer,
 ): Promise<void> =>
 	new Promise((resolve) => {
-		window.pbjs?.setTargetingForGPTAsync(
-			adUnits.map((u) => u.code).filter(isString),
-			customSlotMatching,
-		);
+		if (shouldIncludeGroupedSlots) {
+			window.pbjs?.setTargetingForGPTAsync(
+				adUnits.map((u) => u.code).filter(isString),
+				customSlotMatching,
+			);
+		} else {
+			window.pbjs?.setTargetingForGPTAsync(
+				adUnits.map((u) => u.code).filter(isString),
+			);
+		}
 
 		resolve();
 
