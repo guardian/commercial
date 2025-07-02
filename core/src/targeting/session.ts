@@ -1,7 +1,7 @@
 import type { Participations } from '@guardian/ab-core';
 import type { CountryCode } from '@guardian/libs';
 import { isString } from '@guardian/libs';
-import type { False, True } from '../types';
+import type { False, True } from './types';
 
 /* -- Types -- */
 

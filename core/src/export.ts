@@ -5,8 +5,8 @@ export * as constants from './constants';
 export {
 	bypassCommercialMetricsSampling,
 	initCommercialMetrics,
-} from '../../src/lib/send-commercial-metrics';
-// export { buildPageTargeting } from '../../src/lib/targeting/build-page-targeting';
+} from './send-commercial-metrics';
+export { buildPageTargeting } from './targeting/build-page-targeting';
 // export { postMessage } from '../../src/lib/messenger/post-message';
 // export { buildImaAdTagUrl } from '../../src/lib/targeting/youtube-ima';
 // export { getPermutivePFPSegments } from '../../src/lib/permutive';

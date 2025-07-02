@@ -37,6 +37,8 @@ export type Indices<T extends readonly unknown[]> = Exclude<
 	T['length']
 >;
 
+export type Edition = 'UK' | 'AU' | 'US'; // https://github.com/guardian/frontend/blob/b952f6b9/common/app/views/support/JavaScriptPage.scala#L79
+
 // export interface IAdvert {
 // 	id: string;
 // 	node: HTMLElement;

@@ -8,8 +8,7 @@ import { getParticipations } from '../../../experiments/ab';
 import type { AdSize } from '@guardian/commercial/ad-sizes';
 import { createAdSize } from '@guardian/commercial/ad-sizes';
 import { PREBID_TIMEOUT } from '@guardian/commercial/constants/prebid-timeout';
-import { getPermutiveSegments } from '../../../lib/permutive';
-import type { PageTargeting } from '../../../lib/targeting/build-page-targeting';
+import { getPermutiveSegments } from '@guardian/commercial/permutive';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedIn } from '../../identity/api';
@@ -32,6 +31,7 @@ import {
 } from '../utils';
 import { bids } from './bid-config';
 import { overridePriceBucket, priceGranularity } from './price-config';
+import { PageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
 
 type CmpApi = 'iab' | 'static';
 /** @see https://docs.prebid.org/dev-docs/modules/consentManagementTcf.html */

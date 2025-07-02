@@ -1,6 +1,6 @@
 import { log } from '@guardian/libs';
 import type { SizeMapping } from '@guardian/commercial/ad-sizes';
-import { isBreakpoint } from './breakpoint';
+import { isBreakpoint } from '@guardian/commercial/breakpoint';
 
 const adSlotIdPrefix = 'dfp-ad--';
 

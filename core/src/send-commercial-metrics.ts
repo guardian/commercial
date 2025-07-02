@@ -1,7 +1,7 @@
-import { EventTimer } from '@guardian/commercial/event-timer';
-import type { ConnectionType } from '@guardian/commercial/types';
 import type { ConsentState, TeamName } from '@guardian/libs';
 import { getMeasures, isNonNullable, log, onConsent } from '@guardian/libs';
+import { EventTimer } from '@guardian/commercial/event-timer';
+import type { ConnectionType } from '@guardian/commercial/types';
 
 type Metric = {
 	name: string;
@@ -185,7 +185,7 @@ function gatherMetricsOnPageUnload(): void {
 }
 
 const listener = (e: Event): void => {
-	if (window.guardian.config.shouldSendCommercialMetrics === true) {
+	if (window.guardian.config.shouldSendCommercialMetrics) {
 		switch (e.type) {
 			case 'visibilitychange':
 				if (document.visibilityState === 'hidden') {

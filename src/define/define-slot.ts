@@ -1,4 +1,4 @@
-import { EventTimer } from '@guardian/commercial/event-timer';
+import { isEligibleForTeads } from '@guardian/commercial/targeting/teads-eligibility';
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { once } from 'lodash-es';
 import type {
@@ -6,7 +6,7 @@ import type {
 	SizeMapping,
 	SlotName,
 } from '@guardian/commercial/ad-sizes';
-import { isEligibleForTeads } from '../lib/targeting/teads-eligibility';
+import { EventTimer } from '@guardian/commercial/event-timer';
 import { getUrlVars } from '../lib/url';
 import { initSlotIas } from './init-slot-ias';
 

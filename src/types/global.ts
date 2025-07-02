@@ -1,10 +1,10 @@
+import type { PageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
+import type { CustomClaims } from '@guardian/identity-auth';
+import type { VendorName } from '@guardian/libs';
 import type { EventTimer } from '@guardian/commercial/event-timer';
 import type { NetworkInformation } from '@guardian/commercial/types';
 import type { OphanRecordFunction } from '@guardian/commercial/types';
-import type { CustomClaims } from '@guardian/identity-auth';
-import type { VendorName } from '@guardian/libs';
 import type { DfpEnv } from '../lib/dfp/dfp-env';
-import type { PageTargeting } from '../lib/targeting/build-page-targeting';
 import type {
 	GoogleTagParams,
 	GoogleTrackConversionObject,
