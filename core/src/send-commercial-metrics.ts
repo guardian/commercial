@@ -1,7 +1,7 @@
 import type { ConsentState, TeamName } from '@guardian/libs';
 import { getMeasures, isNonNullable, log, onConsent } from '@guardian/libs';
-import { EventTimer } from '@guardian/commercial/event-timer';
-import type { ConnectionType } from '@guardian/commercial/types';
+import { EventTimer } from './event-timer';
+import type { ConnectionType } from './types';
 
 type Metric = {
 	name: string;

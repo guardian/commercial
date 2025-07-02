@@ -1,9 +1,11 @@
+import type { EventTimer } from '@guardian/commercial/event-timer';
 import type { PageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
+import type {
+	NetworkInformation,
+	OphanRecordFunction,
+} from '@guardian/commercial/types';
 import type { CustomClaims } from '@guardian/identity-auth';
 import type { VendorName } from '@guardian/libs';
-import type { EventTimer } from '@guardian/commercial/event-timer';
-import type { NetworkInformation } from '@guardian/commercial/types';
-import type { OphanRecordFunction } from '@guardian/commercial/types';
 import type { DfpEnv } from '../lib/dfp/dfp-env';
 import type {
 	GoogleTagParams,
@@ -450,96 +452,96 @@ interface HeaderNotification {
 	logImpression: () => void;
 }
 
-declare global {
-	interface Navigator {
-		readonly connection?: NetworkInformation;
-		readonly cookieDeprecationLabel?: {
-			getValue: () => Promise<string>;
-		};
-	}
-	interface Window {
-		guardian: {
-			ophan?: Ophan;
-			config: Config;
-			queue: Array<() => Promise<void>>;
-			mustardCut?: boolean;
-			polyfilled?: boolean;
-			adBlockers: AdBlockers;
-			// /frontend/common/app/templates/inlineJS/blocking/enableStylesheets.scala.js
-			css: { onLoad: () => void; loaded: boolean };
-			articleCounts?: ArticleCounts;
-			commercial?: {
-				dfpEnv?: DfpEnv;
-				a9WinningBids?: FetchBidResponse[];
-			};
-			notificationEventHistory?: HeaderNotification[][];
-			commercialTimer?: EventTimer;
-			offlineCount?: number;
-			modules: {
-				sentry?: {
-					reportError?: (
-						error: Error,
-						feature: string,
-						tags?: Record<string, string>,
-						extras?: Record<string, unknown>,
-					) => void;
-				};
-			};
-		};
-		ootag: {
-			queue: Array<() => void>;
-			initializeOo: (o: OptOutInitializeOptions) => void;
-			addParameter: (key: string, value: string | string[]) => void;
-			addParameterForSlot: (
-				slotId: string,
-				key: string,
-				value: string | string[],
-			) => void;
-			defineSlot: (o: OptOutAdSlot) => void;
-			makeRequests: () => void;
-			refreshSlot: (slotId: string) => void;
-			refreshAllSlots: () => void;
-			logger: (...args: unknown[]) => void;
-		};
+// declare global {
+// 	interface Navigator {
+// 		readonly connection?: NetworkInformation;
+// 		readonly cookieDeprecationLabel?: {
+// 			getValue: () => Promise<string>;
+// 		};
+// 	}
+// 	interface Window {
+// 		guardian: {
+// 			ophan?: Ophan;
+// 			config: Config;
+// 			queue: Array<() => Promise<void>>;
+// 			mustardCut?: boolean;
+// 			polyfilled?: boolean;
+// 			adBlockers: AdBlockers;
+// 			// /frontend/common/app/templates/inlineJS/blocking/enableStylesheets.scala.js
+// 			css: { onLoad: () => void; loaded: boolean };
+// 			articleCounts?: ArticleCounts;
+// 			commercial?: {
+// 				dfpEnv?: DfpEnv;
+// 				a9WinningBids?: FetchBidResponse[];
+// 			};
+// 			notificationEventHistory?: HeaderNotification[][];
+// 			commercialTimer?: EventTimer;
+// 			offlineCount?: number;
+// 			modules: {
+// 				sentry?: {
+// 					reportError?: (
+// 						error: Error,
+// 						feature: string,
+// 						tags?: Record<string, string>,
+// 						extras?: Record<string, unknown>,
+// 					) => void;
+// 				};
+// 			};
+// 		};
+// 		ootag: {
+// 			queue: Array<() => void>;
+// 			initializeOo: (o: OptOutInitializeOptions) => void;
+// 			addParameter: (key: string, value: string | string[]) => void;
+// 			addParameterForSlot: (
+// 				slotId: string,
+// 				key: string,
+// 				value: string | string[],
+// 			) => void;
+// 			defineSlot: (o: OptOutAdSlot) => void;
+// 			makeRequests: () => void;
+// 			refreshSlot: (slotId: string) => void;
+// 			refreshAllSlots: () => void;
+// 			logger: (...args: unknown[]) => void;
+// 		};
 
-		readonly navigator: Navigator;
+// 		readonly navigator: Navigator;
 
-		// Third parties
+// 		// Third parties
 
-		confiant?: Confiant;
+// 		confiant?: Confiant;
 
-		apstag?: Apstag;
+// 		apstag?: Apstag;
 
-		permutive?: Permutive;
+// 		permutive?: Permutive;
 
-		_comscore?: ComscoreGlobals[];
+// 		_comscore?: ComscoreGlobals[];
 
-		__iasPET?: IasPET;
+// 		__iasPET?: IasPET;
 
-		teads_analytics?: TeadsAnalytics;
+// 		teads_analytics?: TeadsAnalytics;
 
-		// https://www.iab.com/wp-content/uploads/2014/08/SafeFrames_v1.1_final.pdf
-		$sf: SafeFrameAPI;
-		// Safeframe API host config required by Opt Out tag
-		conf: SafeFrameAPIHostConfig;
+// 		// https://www.iab.com/wp-content/uploads/2014/08/SafeFrames_v1.1_final.pdf
+// 		$sf: SafeFrameAPI;
+// 		// Safeframe API host config required by Opt Out tag
+// 		conf: SafeFrameAPIHostConfig;
 
-		// IMR Worldwide
-		NOLCMB: {
-			getInstance: (apid: string) => NSdkInstance;
-		};
-		nol_t: (pvar: { cid: string; content: string; server: string }) => Trac;
+// 		// IMR Worldwide
+// 		NOLCMB: {
+// 			getInstance: (apid: string) => NSdkInstance;
+// 		};
+// 		nol_t: (pvar: { cid: string; content: string; server: string }) => Trac;
 
-		// Google
-		google_trackConversion?: (arg0: GoogleTrackConversionObject) => void;
-		google_tag_params?: GoogleTagParams;
+// 		// Google
+// 		google_trackConversion?: (arg0: GoogleTrackConversionObject) => void;
+// 		google_tag_params?: GoogleTagParams;
 
-		// Brand metrics
-		_brandmetrics?: Array<{
-			cmd: string;
-			val: Record<string, unknown>;
-		}>;
-	}
-}
+// 		// Brand metrics
+// 		_brandmetrics?: Array<{
+// 			cmd: string;
+// 			val: Record<string, unknown>;
+// 		}>;
+// 	}
+// }
 
 export type {
 	A9AdUnitInterface,

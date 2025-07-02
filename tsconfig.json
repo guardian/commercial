@@ -28,7 +28,12 @@
 		"target": "ESNEXT",
 		"noUncheckedIndexedAccess": true,
 		"customConditions": ["development"]
-		// "typeRoots": ["./node_modules/@types", "./node_modules/web-vitals/dist"]
 	},
-	"exclude": ["node_modules", "dist", "coverage", "playwright-report"]
+	"exclude": [
+		"node_modules",
+		"dist",
+		"coverage",
+		"playwright-report",
+		"../core/dist"
+	]
 }

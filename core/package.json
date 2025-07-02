@@ -22,6 +22,11 @@
 			"import": "./dist/esm/export.js",
 			"development": "./src/export.js"
 		},
+		"./targeting/*": {
+			"require": "./dist/cjs/targeting/*.js",
+			"import": "./dist/esm/targeting/*.js",
+			"development": "./src/targeting/*.ts"
+		},
 		"./*": {
 			"require": "./dist/cjs/*.js",
 			"import": "./dist/esm/*.js",
@@ -30,11 +35,10 @@
 		"./package.json": "./package.json"
 	},
 	"scripts": {
-		"build": "npm-run-all clean --parallel compile:core:*",
+		"build": "npm-run-all clean --parallel build:core:*",
 		"clean": "rm -rf dist",
-		"compile:core:common": "tsc  --outDir ./dist/cjs --module CommonJS",
-		"compile:core:esm": "tsc --outDir ./dist/esm",
-		"compile": "npm-run-all clean --parallel compile:core:*",
+		"build:core:esm": "tsc --outDir ./dist/esm --project ./tsconfig.esm.json",
+		"build:core:cjs": "tsc --outDir ./dist/cjs --project ./tsconfig.cjs.json",
 		"tsc": "tsc --noEmit"
 	},
 	"peerDependencies": {

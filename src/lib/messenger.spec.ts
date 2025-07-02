@@ -1,9 +1,9 @@
+import { postMessage } from '@guardian/commercial/messenger/post-message';
 import {
 	register as register_,
 	_ as testExports,
 	unregister as unregister_,
 } from './messenger';
-import { postMessage } from './messenger/post-message';
 
 const onMessage = testExports.onMessage;
 const register = register_;

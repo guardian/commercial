@@ -1,7 +1,7 @@
 import type { Participations } from '@guardian/ab-core';
 import type { ConsentState, CountryCode } from '@guardian/libs';
 import { cmp, getConsentFor, getCookie, isString } from '@guardian/libs';
-import { supportsPerformanceAPI } from '@guardian/commercial/event-timer';
+import { supportsPerformanceAPI } from '../event-timer';
 import { getLocale } from '../geo/get-locale';
 import type { ContentTargeting } from './content';
 import { getContentTargeting } from './content';

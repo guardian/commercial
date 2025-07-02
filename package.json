@@ -15,9 +15,11 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "npm-run-all clean --parallel build:*",
-		"build:dev": "webpack -c webpack.config.dev.mjs",
-		"build:prod": "webpack -c webpack.config.prod.mjs",
+		"build": "npm-run-all clean build:core build:bundle:*",
+		"build:core": "pnpm --filter @guardian/commercial build",
+		"build:bundle": "npm-run-all clean --parallel build:bundle:*",
+		"build:bundle:dev": "webpack -c webpack.config.dev.mjs",
+		"build:bundle:prod": "webpack -c webpack.config.prod.mjs",
 		"clean": "rm -rf dist",
 		"playwright:run": "playwright test",
 		"playwright:open": "playwright test --ui",

@@ -7,10 +7,14 @@ export {
 	initCommercialMetrics,
 } from './send-commercial-metrics';
 export { buildPageTargeting } from './targeting/build-page-targeting';
-// export { postMessage } from '../../src/lib/messenger/post-message';
-// export { buildImaAdTagUrl } from '../../src/lib/targeting/youtube-ima';
-// export { getPermutivePFPSegments } from '../../src/lib/permutive';
-// export type { AdsConfigDisabled } from '../../src/lib/types';
+export { postMessage } from './messenger/post-message';
+export { buildImaAdTagUrl } from './targeting/youtube-ima';
+export { getPermutivePFPSegments } from './permutive';
+export { isEligibleForTeads } from './targeting/teads-eligibility';
 export type { AdSize, SizeMapping, SlotName } from './ad-sizes';
-// export type { PageTargeting } from '../../src/lib/targeting/build-page-targeting';
-// export type { AdsConfigUSNATorAus, AdsConfigTCFV2 } from '../../src/lib/types';
+export type { PageTargeting } from './targeting/build-page-targeting';
+export type {
+	AdsConfigDisabled,
+	AdsConfigUSNATorAus,
+	AdsConfigTCFV2,
+} from './types';

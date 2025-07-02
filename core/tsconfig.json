@@ -2,10 +2,8 @@
 	"compilerOptions": {
 		"rootDir": "src",
 		"declaration": true,
-		"outDir": "dist",
-		"noEmit": false
+		"outDir": "dist"
 	},
 	"extends": "../tsconfig.json",
 	"exclude": ["node_modules", "dist"]
-	// "include": ["./src/*", "./src/types.ts"],
 }
