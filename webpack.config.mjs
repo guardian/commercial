@@ -61,6 +61,7 @@ const config = {
 			),
 		},
 		extensions: ['.js', '.ts', '.tsx', '.jsx'],
+		conditionNames: ['development', 'import', 'default'],
 	},
 	module: {
 		rules: [
