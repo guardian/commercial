@@ -50,7 +50,7 @@
 		"@guardian/identity-auth": "^7.0.0",
 		"@guardian/identity-auth-frontend": "9.0.0",
 		"@guardian/libs": "catalog:",
-		"@guardian/source": "10.2.0",
+		"@guardian/source": "11.0.0",
 		"fastdom": "^1.0.12",
 		"lodash-es": "^4.17.21",
 		"prebid.js": "9.27.0",
