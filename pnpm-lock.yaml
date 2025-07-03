@@ -24,8 +24,8 @@ importers:
         specifier: 22.5.0
         version: 22.5.0(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/source':
-        specifier: 10.2.0
-        version: 10.2.0(tslib@2.8.1)(typescript@5.5.4)
+        specifier: 11.0.0
+        version: 11.0.0(tslib@2.8.1)(typescript@5.5.4)
       fastdom:
         specifier: ^1.0.12
         version: 1.0.12
@@ -1011,8 +1011,8 @@ packages:
       prettier: ^3.2.2
       tslib: ^2.6.2
 
-  '@guardian/source@10.2.0':
-    resolution: {integrity: sha512-mPozNtjGe0ykOjyFPuMS76CAPqafV9oJpHaX1ptx+h5wAMnu6csqKLwkALd6plDM9Y5vfWM8S/UERRlFg/rnzw==}
+  '@guardian/source@11.0.0':
+    resolution: {integrity: sha512-nr1LBmiLu0LcBwOUM2CQkvn/Pv3uGnSSmMK3k4A7x2jlXKxS38J+Cp4Njb2xDjRaJvhSXC/PNI6EDH/KhV//Fg==}
     peerDependencies:
       '@emotion/react': ^11.11.4
       '@types/react': ^18.2.79
@@ -6631,7 +6631,7 @@ snapshots:
       prettier: 3.6.1
       tslib: 2.8.1
 
-  '@guardian/source@10.2.0(tslib@2.8.1)(typescript@5.5.4)':
+  '@guardian/source@11.0.0(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
       mini-svg-data-uri: 1.4.4
       tslib: 2.8.1
