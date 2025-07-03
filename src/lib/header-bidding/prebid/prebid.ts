@@ -7,7 +7,6 @@ import { getParticipations } from '../../../experiments/ab';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
-// import { getViewport } from '../../../lib/detect/detect-viewport';
 import { EventTimer } from '../../../lib/event-timer';
 import { getPermutiveSegments } from '../../../lib/permutive';
 import type { PageTargeting } from '../../../lib/targeting/build-page-targeting';
@@ -28,8 +27,8 @@ import { getHeaderBiddingAdSlots } from '../slot-config';
 import {
 	isSwitchedOn,
 	shouldIncludeBidder,
-	shouldIncludeGroupedSlots,
 	shouldIncludePermutive,
+	shouldIncludePrebidAdUnit,
 	stripDfpAdPrefixFrom,
 } from '../utils';
 import { bids } from './bid-config';
@@ -215,7 +214,7 @@ class PrebidAdUnit {
 		pageTargeting: PageTargeting,
 		consentState: ConsentState,
 	) {
-		this.code = shouldIncludeGroupedSlots ? advert.groupedSlot : advert.id;
+		this.code = shouldIncludePrebidAdUnit ? advert.prebidAdUnit : advert.id;
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
 		this.gpid = this.generateGpid(advert, slot);
 		this.ortb2Imp = {
@@ -227,9 +226,9 @@ class PrebidAdUnit {
 			},
 		};
 
-		this.bids = this.bids = shouldIncludeGroupedSlots
+		this.bids = this.bids = shouldIncludePrebidAdUnit
 			? bids(
-					advert.groupedSlot,
+					advert.prebidAdUnit,
 					slot.sizes,
 					pageTargeting,
 					this.gpid,
@@ -626,13 +625,13 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 /**
  * Creates a slot matching function for Prebid to match GPT slots with their corresponding ad units
  * @param slot The googletag slot to find a matching advert for
- * @returns A function that takes an adUnitCode and returns true if the slot's corresponding advert has a matching groupedSlot
+ * @returns A function that takes an adUnitCode and returns true if the slot's corresponding advert has a matching prebidAdUnit
  * @see https://docs.prebid.org/dev-docs/publisher-api-reference/setTargetingForGPTAsync.html#custom-slot-matching
  */
 const customSlotMatching = (slot: googletag.Slot) => {
 	return function (adUnitCode: string) {
 		const advert = getAdvertById(slot.getSlotElementId());
-		return advert?.groupedSlot === adUnitCode;
+		return advert?.prebidAdUnit === adUnitCode;
 	};
 };
 
@@ -641,7 +640,7 @@ const bidsBackHandler = (
 	eventTimer: EventTimer,
 ): Promise<void> =>
 	new Promise((resolve) => {
-		if (shouldIncludeGroupedSlots) {
+		if (shouldIncludePrebidAdUnit) {
 			window.pbjs?.setTargetingForGPTAsync(
 				adUnits.map((u) => u.code).filter(isString),
 				customSlotMatching,

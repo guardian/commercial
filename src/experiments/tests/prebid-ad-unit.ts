@@ -1,7 +1,7 @@
 import type { ABTest } from '@guardian/ab-core';
 
-export const prebidGroupedSlots: ABTest = {
-	id: 'PrebidGroupedSlots',
+export const prebidAdUnit: ABTest = {
+	id: 'PrebidAdUnit',
 	author: '@commercial-dev',
 	start: '2025-07-03',
 	expiry: '2025-07-23',
@@ -10,7 +10,7 @@ export const prebidGroupedSlots: ABTest = {
 	audienceCriteria: '',
 	successMeasure: '',
 	description:
-		'Test grouped slots to allow full benefits of bidCache in Prebid',
+		'Test grouping slots to be used by PrebidAdUnit to allow full benefits of bidCache in Prebid',
 	variants: [
 		{
 			id: 'control',

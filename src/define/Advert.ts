@@ -124,8 +124,8 @@ const isSizeMappingEmpty = (sizeMapping: SizeMapping): boolean => {
 };
 
 //We are grouping all fronts-banner slots and subsequent inline slots except inline1 to get the most use of prebid bid caching
-const getGroupedSlot = (advertId: string): string => {
-	if (advertId.match(/fronts-banner/)) {
+const getPrebidAdUnit = (advertId: string): string => {
+	if (advertId.includes('fronts-banner')) {
 		return 'banner';
 	} else if (advertId.match(/inline(?:[2-9]|1[0-9])/)) {
 		// Matches inline2 to inline19
@@ -137,7 +137,7 @@ const getGroupedSlot = (advertId: string): string => {
 class Advert {
 	id: string;
 	node: HTMLElement;
-	groupedSlot: string;
+	prebidAdUnit: string;
 	sizes: SizeMapping;
 	headerBiddingSizes: HeaderBiddingSize[] | null = null;
 	size: AdSize | 'fluid' | null = null;
@@ -161,7 +161,7 @@ class Advert {
 	) {
 		this.id = adSlotNode.id;
 		this.node = adSlotNode;
-		this.groupedSlot = getGroupedSlot(adSlotNode.id);
+		this.prebidAdUnit = getPrebidAdUnit(adSlotNode.id);
 		this.sizes = this.generateSizeMapping(additionalSizeMapping);
 
 		const slotDefinition = defineSlot(
