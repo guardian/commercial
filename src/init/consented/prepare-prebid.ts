@@ -1,6 +1,8 @@
 import type { ConsentState } from '@guardian/libs';
 import { log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
+import { isUserInVariant } from '../../experiments/ab';
+import { prebid946 } from '../../experiments/tests/prebid946';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { isInCanada } from '../../lib/geo/geo-utils';
@@ -16,12 +18,21 @@ const shouldLoadPrebid = () =>
 	!shouldIncludeOnlyA9 &&
 	!isInCanada();
 
+const shouldLoadPrebid946 = isUserInVariant(prebid946, 'variant');
+
 const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 	if (shouldLoadPrebid()) {
-		await import(
-			/* webpackChunkName: "Prebid.js" */
-			`../../lib/header-bidding/prebid/pbjs`
-		);
+		if (shouldLoadPrebid946) {
+			await import(
+				/* webpackChunkName: "Prebid@9.46.0.js" */
+				`../../lib/header-bidding/prebid/pbjs-v9.46.0`
+			);
+		} else {
+			await import(
+				/* webpackChunkName: "Prebid.js" */
+				`../../lib/header-bidding/prebid/pbjs`
+			);
+		}
 		prebid.initialise(window, consentState);
 	}
 };
