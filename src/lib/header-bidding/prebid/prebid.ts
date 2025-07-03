@@ -3,9 +3,7 @@ import { getConsentFor, isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { PrebidPriceGranularity } from 'prebid.js/src/cpmBucketManager';
 import type { Advert } from '../../../define/Advert';
-import { getParticipations, isUserInVariant } from '../../../experiments/ab';
-import { prebidId5 } from '../../../experiments/tests/prebid-id5';
-import { prebidMultibid } from '../../../experiments/tests/prebid-multibid';
+import { getParticipations } from '../../../experiments/ab';
 import type { AdSize } from '../../../lib/ad-sizes';
 import { createAdSize } from '../../../lib/ad-sizes';
 import { PREBID_TIMEOUT } from '../../../lib/constants/prebid-timeout';
@@ -89,17 +87,6 @@ type UserSync =
 			syncEnabled: false;
 	  };
 
-type MultibidConfig =
-	| {
-			bidders: BidderCode[];
-			maxBids: number;
-	  }
-	| {
-			bidder: BidderCode;
-			maxBids: number;
-			targetBiddercodePrefix?: string;
-	  };
-
 type PbjsConfig = {
 	bidderTimeout: number;
 	timeoutBuffer?: number;
@@ -124,7 +111,6 @@ type PbjsConfig = {
 	consentManagement?: ConsentManagement;
 	realTimeData?: unknown;
 	useBidCache?: boolean;
-	multibid?: MultibidConfig[];
 	customPriceBucket?: PrebidPriceGranularity;
 	/**
 	 * This is a custom property that has been added to our fork of prebid.js
@@ -360,10 +346,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 		},
 	];
 
-	if (
-		getConsentFor('id5', consentState) &&
-		isUserInVariant(prebidId5, 'variant')
-	) {
+	if (getConsentFor('id5', consentState)) {
 		userIds.push({
 			name: 'id5Id',
 			params: {
@@ -428,41 +411,6 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	 * of consent state throughout */
 	const shouldInclude = shouldIncludeBidder(consentState);
 
-	/**
-	 * useBidCache is a feature that allows Prebid to cache bids
-	 */
-	const useBidCache = isSwitchedOn('prebidBidCache');
-
-	/**
-	 * Multibid is a feature that allows Prebid to request multiple bids from the same bidder
-	 * @see https://docs.prebid.org/dev-docs/modules/multibid.html
-	 */
-	const getMultibidConfig = (): MultibidConfig[] => {
-		const allBidders = [
-			'adyoulike',
-			'and',
-			'criteo',
-			'ix',
-			'kargo',
-			'rubicon',
-			'oxd',
-			'ozone',
-			'pubmatic',
-			'triplelift',
-			'trustx',
-			'xhb',
-			'ttd',
-		] satisfies BidderCode[];
-
-		return allBidders.filter(shouldInclude).map((bidderCode) => {
-			return {
-				bidder: bidderCode,
-				maxBids: 9,
-				targetBiddercodePrefix: `${bidderCode}_m`,
-			};
-		});
-	};
-
 	const pbjsConfig: PbjsConfig = Object.assign(
 		{},
 		{
@@ -490,10 +438,6 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 
 	if (isSwitchedOn('consentManagement')) {
 		pbjsConfig.consentManagement = consentManagement();
-	}
-
-	if (useBidCache && isUserInVariant(prebidMultibid, 'variant')) {
-		pbjsConfig.multibid = getMultibidConfig();
 	}
 
 	if (shouldIncludePermutive(consentState)) {

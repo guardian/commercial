@@ -160,6 +160,18 @@ describe('initialise', () => {
 							expires: 365,
 						},
 					},
+					{
+						name: 'id5Id',
+						params: {
+							partner: 182,
+						},
+						storage: {
+							type: 'html5',
+							name: 'id5id',
+							expires: 90,
+							refreshInSeconds: 7200,
+						},
+					},
 				],
 				auctionDelay: 500,
 				filterSettings: {
@@ -260,70 +272,6 @@ describe('initialise', () => {
 		window.guardian.config.switches.prebidBidCache = false;
 		prebid.initialise(window, mockConsentState);
 		expect(window.pbjs?.getConfig('useBidCache')).toBe(false);
-	});
-
-	test('should generate correct Prebid config for multibid when the prebidBidCache switch is on', () => {
-		window.guardian.config.switches.prebidBidCache = true;
-		jest.mocked(shouldIncludeBidder).mockReturnValue(
-			jest.fn().mockReturnValue(true),
-		);
-		jest.mocked(isUserInVariant).mockReturnValue(true);
-		prebid.initialise(window, mockConsentState);
-		expect(window.pbjs?.getConfig()).toMatchObject({
-			multibid: [
-				{
-					bidder: 'adyoulike',
-					maxBids: 9,
-					targetBiddercodePrefix: 'adyoulike_m',
-				},
-				{ bidder: 'and', maxBids: 9, targetBiddercodePrefix: 'and_m' },
-				{
-					bidder: 'criteo',
-					maxBids: 9,
-					targetBiddercodePrefix: 'criteo_m',
-				},
-				{ bidder: 'ix', maxBids: 9, targetBiddercodePrefix: 'ix_m' },
-				{
-					bidder: 'kargo',
-					maxBids: 9,
-					targetBiddercodePrefix: 'kargo_m',
-				},
-				{
-					bidder: 'rubicon',
-					maxBids: 9,
-					targetBiddercodePrefix: 'rubicon_m',
-				},
-				{ bidder: 'oxd', maxBids: 9, targetBiddercodePrefix: 'oxd_m' },
-				{
-					bidder: 'ozone',
-					maxBids: 9,
-					targetBiddercodePrefix: 'ozone_m',
-				},
-				{
-					bidder: 'pubmatic',
-					maxBids: 9,
-					targetBiddercodePrefix: 'pubmatic_m',
-				},
-				{
-					bidder: 'triplelift',
-					maxBids: 9,
-					targetBiddercodePrefix: 'triplelift_m',
-				},
-				{
-					bidder: 'trustx',
-					maxBids: 9,
-					targetBiddercodePrefix: 'trustx_m',
-				},
-				{ bidder: 'xhb', maxBids: 9, targetBiddercodePrefix: 'xhb_m' },
-				{ bidder: 'ttd', maxBids: 9, targetBiddercodePrefix: 'ttd_m' },
-			],
-		});
-	});
-
-	test('should generate correct Prebid config for multibid when the prebidBidCache switch is off', () => {
-		window.guardian.config.switches.prebidBidCache = false;
-		prebid.initialise(window, mockConsentState);
-		expect(window.pbjs?.getConfig('multibid')).toBeUndefined();
 	});
 
 	test('should not include realTimeData object if permutive should not be included', () => {
