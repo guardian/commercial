@@ -127,8 +127,7 @@ const isSizeMappingEmpty = (sizeMapping: SizeMapping): boolean => {
 const getPrebidAdUnit = (advertId: string): string => {
 	if (advertId.includes('fronts-banner')) {
 		return 'banner';
-	} else if (advertId.match(/inline(?:[2-9]|1[0-9])/)) {
-		// Matches inline2 to inline19
+	} else if (advertId.includes('inline') && !advertId.includes('inline1')) {
 		return 'inline';
 	}
 	return advertId;
