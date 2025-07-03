@@ -38,16 +38,16 @@ jobs:
         uses: ./.github/actions/setup-node-env
 
       - name: Build package
-        run: pnpm build
+        run: pnpm build:core
 
       - name: Version
-        run: pnpm changeset version --snapshot beta
+        run: pnpm --filter @guardian/commercial changeset version --snapshot beta
 
       - name: Create Release
         uses: changesets/action@v1.5.3
         id: changeset
         with:
-          publish: pnpm changeset publish --tag beta
+          publish: pnpm --filter @guardian/commercial changeset publish --tag beta
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

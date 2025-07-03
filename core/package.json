@@ -41,6 +41,7 @@
 		"@guardian/libs": "catalog:"
 	},
 	"dependencies": {
+		"@changesets/cli": "^2.27.9",
 		"@guardian/ab-core": "catalog:",
 		"@guardian/libs": "catalog:"
 	},

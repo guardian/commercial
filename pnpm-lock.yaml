@@ -192,6 +192,9 @@ importers:
 
   core:
     dependencies:
+      '@changesets/cli':
+        specifier: ^2.27.9
+        version: 2.29.5
       '@guardian/ab-core':
         specifier: 'catalog:'
         version: 8.0.1(tslib@2.8.1)(typescript@5.5.4)
