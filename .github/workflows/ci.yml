@@ -68,11 +68,11 @@ jobs:
       - name: Save build
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: dist
+          name: bundle-dist
           path: dist
 
   build-core:
-    name: Build Bundle
+    name: Build Core
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -87,11 +87,11 @@ jobs:
       - name: Save build
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: core/dist
-          path: core/dist
+          name: core-dist
+          path: dist
 
-  release:
-    name: Release Core
+  changesets:
+    name: Core Changesets
     needs: [build-core, test, lint, types]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -108,7 +108,7 @@ jobs:
       - name: Fetch build
         uses: actions/download-artifact@v4.3.0
         with:
-          name: core/dist
+          name: core-dist
           path: core/dist
 
       - name: Use GitHub App Token
@@ -136,7 +136,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   riff-raff:
-    name: Upload Riff Raff Artifacts
+    name: Upload Bundle Riff Raff Artifacts
     needs: [build-bundle, test, lint, types]
     runs-on: ubuntu-latest
     permissions:
