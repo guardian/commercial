@@ -63,7 +63,7 @@ jest.mock('@guardian/libs', () => {
 
 jest.mock('lodash-es/once', () => (fn: (...args: unknown[]) => unknown) => fn);
 
-jest.mock('lib/geo/country-code', () => ({
+jest.mock('@guardian/commercial//geo/country-code', () => ({
 	getCountryCode: jest.fn(() => 'GB'),
 }));
 
