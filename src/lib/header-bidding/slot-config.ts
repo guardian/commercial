@@ -1,7 +1,7 @@
+import { isInUk } from '@guardian/commercial/geo/geo-utils';
 import type { AdSize } from '@guardian/commercial/ad-sizes';
 import { adSizes, createAdSize } from '@guardian/commercial/ad-sizes';
 import type { Advert } from '../../define/Advert';
-import { isInUk } from '@guardian/commercial/geo/geo-utils';
 import type {
 	HeaderBiddingSizeKey,
 	HeaderBiddingSizeMapping,

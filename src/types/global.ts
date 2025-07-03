@@ -1,7 +1,7 @@
-import type { PageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
-import type { OphanRecordFunction } from '@guardian/commercial/types';
 import type { CustomClaims } from '@guardian/identity-auth';
 import type { VendorName } from '@guardian/libs';
+import type { PageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
+import type { OphanRecordFunction } from '@guardian/commercial/types';
 
 type ServerSideABTest = `${string}${'Variant' | 'Control'}`;
 

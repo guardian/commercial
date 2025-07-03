@@ -1,5 +1,5 @@
-import { commercialFeatures } from '../../lib/commercial-features';
 import { isInCanada } from '@guardian/commercial/geo/geo-utils';
+import { commercialFeatures } from '../../lib/commercial-features';
 import { a9 } from '../../lib/header-bidding/a9/a9';
 import { _ } from './prepare-a9';
 

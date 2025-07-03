@@ -1,7 +1,3 @@
-import type { PageTargeting } from '@guardian/commercial';
-import { createAdSize } from '@guardian/commercial/ad-sizes';
-import { type ConsentState } from '@guardian/libs';
-import { isUserInVariant as isUserInVariant_ } from '../../../experiments/ab';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
@@ -9,6 +5,10 @@ import {
 	isInUsa as isInUsa_,
 	isInUsOrCa as isInUsOrCa_,
 } from '@guardian/commercial/geo/geo-utils';
+import { type ConsentState } from '@guardian/libs';
+import type { PageTargeting } from '@guardian/commercial';
+import { createAdSize } from '@guardian/commercial/ad-sizes';
+import { isUserInVariant as isUserInVariant_ } from '../../../experiments/ab';
 import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
 import {
 	containsBillboard as containsBillboard_,

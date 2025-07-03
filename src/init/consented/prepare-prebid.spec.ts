@@ -1,3 +1,4 @@
+import { isInCanada } from '@guardian/commercial/geo/geo-utils';
 import type {
 	ConsentState,
 	TCFv2ConsentState,
@@ -5,7 +6,6 @@ import type {
 } from '@guardian/libs';
 import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { commercialFeatures } from '../../lib/commercial-features';
-import { isInCanada } from '@guardian/commercial/geo/geo-utils';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
 import { _ } from './prepare-prebid';
 

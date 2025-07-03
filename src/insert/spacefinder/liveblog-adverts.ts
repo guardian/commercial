@@ -1,5 +1,5 @@
-import { adSizes } from '@guardian/commercial/ad-sizes';
 import { log } from '@guardian/libs';
+import { adSizes } from '@guardian/commercial/ad-sizes';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { createAdSlot } from '../../lib/create-ad-slot';
 import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';

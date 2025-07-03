@@ -1,6 +1,3 @@
-import type { PageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
-import type { ConsentState } from '@guardian/libs';
-import { log } from '@guardian/libs';
 import {
 	isInAuOrNz,
 	isInRow,
@@ -8,6 +5,9 @@ import {
 	isInUsa,
 	isInUsOrCa,
 } from '@guardian/commercial/geo/geo-utils';
+import type { ConsentState } from '@guardian/libs';
+import { log } from '@guardian/libs';
+import type { PageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
 import { pbTestNameMap } from '../../../lib/url';
 import type { PrebidIndexSite } from '../../../types/global';
 import { dfpEnv } from '../../dfp/dfp-env';

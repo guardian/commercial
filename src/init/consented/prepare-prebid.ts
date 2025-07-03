@@ -1,9 +1,9 @@
+import { isInCanada } from '@guardian/commercial/geo/geo-utils';
 import type { ConsentState } from '@guardian/libs';
 import { log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
-import { isInCanada } from '@guardian/commercial/geo/geo-utils';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
 import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
 

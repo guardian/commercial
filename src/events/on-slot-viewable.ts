@@ -1,7 +1,7 @@
+import { log } from '@guardian/libs';
 import { outstreamSizes } from '@guardian/commercial/ad-sizes';
 import { AD_LABEL_HEIGHT } from '@guardian/commercial/constants/ad-label-height';
 import { EventTimer } from '@guardian/commercial/event-timer';
-import { log } from '@guardian/libs';
 import type { Advert } from '../define/Advert';
 import { isAdSize } from '../define/Advert';
 import { enableLazyLoad } from '../display/lazy-load';

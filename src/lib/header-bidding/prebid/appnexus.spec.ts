@@ -1,10 +1,10 @@
-import { createAdSize } from '@guardian/commercial/ad-sizes';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
 	isInUk as isInUk_,
 	isInUsa as isInUsa_,
 } from '@guardian/commercial/geo/geo-utils';
+import { createAdSize } from '@guardian/commercial/ad-sizes';
 import {
 	containsBillboard as containsBillboard_,
 	containsBillboardNotLeaderboard as containsBillboardNotLeaderboard_,

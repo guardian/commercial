@@ -1,6 +1,6 @@
+import { log } from '@guardian/libs';
 import { adSizes } from '@guardian/commercial/ad-sizes';
 import { AD_LABEL_HEIGHT } from '@guardian/commercial/constants/ad-label-height';
-import { log } from '@guardian/libs';
 import { emptyAdvert } from '../events/empty-advert';
 import { commercialFeatures } from '../lib/commercial-features';
 import { createAdSlot } from '../lib/create-ad-slot';
