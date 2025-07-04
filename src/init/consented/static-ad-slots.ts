@@ -1,7 +1,7 @@
-import { isInUk, isInUsa } from '@guardian/commercial/geo/geo-utils';
 import { isNonNullable, log } from '@guardian/libs';
 import type { SizeMapping } from '@guardian/commercial/ad-sizes';
 import { adSizes, createAdSize } from '@guardian/commercial/ad-sizes';
+import { isInUk, isInUsa } from '@guardian/commercial/geo/geo-utils';
 import { createAdvert } from '../../define/create-advert';
 import { displayAds } from '../../display/display-ads';
 import { displayLazyAds } from '../../display/display-lazy-ads';

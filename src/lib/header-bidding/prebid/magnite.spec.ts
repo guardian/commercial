@@ -1,10 +1,10 @@
+import { createAdSize } from '@guardian/commercial/ad-sizes';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
 	isInUk as isInUk_,
 	isInUsOrCa as isInUsOrCa_,
 } from '@guardian/commercial/geo/geo-utils';
-import { createAdSize } from '@guardian/commercial/ad-sizes';
 import { getBreakpointKey as getBreakpointKey_ } from '../utils';
 import { getMagniteSiteId, getMagniteZoneId } from './magnite';
 

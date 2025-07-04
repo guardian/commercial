@@ -1,3 +1,6 @@
+import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
+import { once } from 'lodash-es';
+import { createAdSize } from '@guardian/commercial/ad-sizes';
 import {
 	isInAuOrNz,
 	isInCanada,
@@ -5,9 +8,6 @@ import {
 	isInUsa,
 	isInUsOrCa,
 } from '@guardian/commercial/geo/geo-utils';
-import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
-import { once } from 'lodash-es';
-import { createAdSize } from '@guardian/commercial/ad-sizes';
 import { pbTestNameMap } from '../../lib/url';
 import {
 	getCurrentTweakpoint,
