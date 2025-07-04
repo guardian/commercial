@@ -227,14 +227,12 @@ class PrebidAdUnit {
 		};
 
 		this.bids = bids(
-					shouldIncludePrebidAdUnit
-						? advert.prebidAdUnit
-						: advert.id,
-					slot.sizes,
-					pageTargeting,
-					this.gpid,
-					consentState,
-				);
+			shouldIncludePrebidAdUnit ? advert.prebidAdUnit : advert.id,
+			slot.sizes,
+			pageTargeting,
+			this.gpid,
+			consentState,
+		);
 
 		advert.headerBiddingSizes = slot.sizes;
 		log('commercial', `PrebidAdUnit ${advert.id}`, this.bids);
