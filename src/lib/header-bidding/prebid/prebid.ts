@@ -28,6 +28,7 @@ import {
 	isSwitchedOn,
 	shouldIncludeBidder,
 	shouldIncludePermutive,
+	shouldIncludePrebidAdUnit,
 	stripDfpAdPrefixFrom,
 } from '../utils';
 import { bids } from './bid-config';
@@ -213,7 +214,7 @@ class PrebidAdUnit {
 		pageTargeting: PageTargeting,
 		consentState: ConsentState,
 	) {
-		this.code = advert.id;
+		this.code = shouldIncludePrebidAdUnit ? advert.prebidAdUnit : advert.id;
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
 		this.gpid = this.generateGpid(advert, slot);
 		this.ortb2Imp = {
@@ -226,7 +227,7 @@ class PrebidAdUnit {
 		};
 
 		this.bids = bids(
-			advert.id,
+			shouldIncludePrebidAdUnit ? advert.prebidAdUnit : advert.id,
 			slot.sizes,
 			pageTargeting,
 			this.gpid,
@@ -234,12 +235,13 @@ class PrebidAdUnit {
 		);
 
 		advert.headerBiddingSizes = slot.sizes;
-		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
+		log('commercial', `PrebidAdUnit ${advert.id}`, this.bids);
 	}
 
 	isEmpty() {
 		return this.code == null;
 	}
+
 	private generateGpid(advert: Advert, slot: HeaderBiddingSlot): string {
 		const sectionName = window.guardian.config.page.section;
 		const contentType = window.guardian.config.page.contentType;
@@ -286,7 +288,9 @@ declare global {
 			onEvent: (event: PbjsEvent, handler: PbjsEventHandler) => void;
 			setTargetingForGPTAsync: (
 				codeArr?: string[],
-				customSlotMatching?: (slot: unknown) => unknown,
+				customSlotMatching?: (
+					slot: googletag.Slot,
+				) => (adUnitCode: string) => boolean,
 			) => void;
 			getEvents: () => PrebidEvent[];
 		};
@@ -610,14 +614,34 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	});
 };
 
+/**
+ * Creates a slot matching function for Prebid to match GPT slots with their corresponding ad units
+ * @param slot The googletag slot to find a matching advert for
+ * @returns A function that takes an adUnitCode and returns true if the slot's corresponding advert has a matching prebidAdUnit
+ * @see https://docs.prebid.org/dev-docs/publisher-api-reference/setTargetingForGPTAsync.html#custom-slot-matching
+ */
+const customSlotMatching = (slot: googletag.Slot) => {
+	return function (adUnitCode: string) {
+		const advert = getAdvertById(slot.getSlotElementId());
+		return advert?.prebidAdUnit === adUnitCode;
+	};
+};
+
 const bidsBackHandler = (
 	adUnits: PrebidAdUnit[],
 	eventTimer: EventTimer,
 ): Promise<void> =>
 	new Promise((resolve) => {
-		window.pbjs?.setTargetingForGPTAsync(
-			adUnits.map((u) => u.code).filter(isString),
-		);
+		if (shouldIncludePrebidAdUnit) {
+			window.pbjs?.setTargetingForGPTAsync(
+				adUnits.map((u) => u.code).filter(isString),
+				customSlotMatching,
+			);
+		} else {
+			window.pbjs?.setTargetingForGPTAsync(
+				adUnits.map((u) => u.code).filter(isString),
+			);
+		}
 
 		resolve();
 

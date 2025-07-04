@@ -123,9 +123,20 @@ const isSizeMappingEmpty = (sizeMapping: SizeMapping): boolean => {
 	);
 };
 
+//We are grouping all fronts-banner slots and subsequent inline slots except inline1 to get the most use of prebid bid caching
+const getPrebidAdUnit = (advertId: string): string => {
+	if (advertId.includes('fronts-banner')) {
+		return 'banner';
+	} else if (advertId.includes('inline') && !advertId.includes('inline1')) {
+		return 'inline';
+	}
+	return advertId;
+};
+
 class Advert {
 	id: string;
 	node: HTMLElement;
+	prebidAdUnit: string;
 	sizes: SizeMapping;
 	headerBiddingSizes: HeaderBiddingSize[] | null = null;
 	size: AdSize | 'fluid' | null = null;
@@ -149,6 +160,7 @@ class Advert {
 	) {
 		this.id = adSlotNode.id;
 		this.node = adSlotNode;
+		this.prebidAdUnit = getPrebidAdUnit(adSlotNode.id);
 		this.sizes = this.generateSizeMapping(additionalSizeMapping);
 
 		const slotDefinition = defineSlot(
