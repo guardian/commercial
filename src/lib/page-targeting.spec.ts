@@ -1,5 +1,5 @@
 import type { ConsentState } from '@guardian/libs';
-import { buildPageTargeting as buildPageTargeting_ } from '../lib/targeting/build-page-targeting';
+import { buildPageTargeting as buildPageTargeting_ } from '@guardian/commercial/targeting/build-page-targeting';
 import { isUserLoggedIn } from './identity/api';
 import { getPageTargeting } from './page-targeting';
 
@@ -7,13 +7,13 @@ const buildPageTargeting = buildPageTargeting_ as jest.MockedFunction<
 	typeof buildPageTargeting_
 >;
 
-jest.mock('lib/geo/country-code', () => ({
+jest.mock('@guardian/commercial/geo/country-code', () => ({
 	getCountryCode: jest.fn(),
 }));
 jest.mock('experiments/ab', () => ({
 	getParticipations: jest.fn(),
 }));
-jest.mock('lib/targeting/build-page-targeting', () => ({
+jest.mock('@guardian/commercial/targeting/build-page-targeting', () => ({
 	buildPageTargeting: jest.fn(),
 }));
 

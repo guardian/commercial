@@ -1,5 +1,5 @@
-import type { AdSize, SizeMapping } from '../../lib/ad-sizes';
-import { adSizes } from '../../lib/ad-sizes';
+import type { AdSize, SizeMapping } from '@guardian/commercial/ad-sizes';
+import { adSizes } from '@guardian/commercial/ad-sizes';
 import { commercialFeatures } from '../../lib/commercial-features';
 import type { ContainerOptions } from '../../lib/create-ad-slot';
 import {

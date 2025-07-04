@@ -1,8 +1,8 @@
 import { log } from '@guardian/libs';
+import { adSizes } from '@guardian/commercial/ad-sizes';
+import { AD_LABEL_HEIGHT } from '@guardian/commercial/constants/ad-label-height';
 import { emptyAdvert } from '../events/empty-advert';
-import { adSizes } from '../lib/ad-sizes';
 import { commercialFeatures } from '../lib/commercial-features';
-import { AD_LABEL_HEIGHT } from '../lib/constants/ad-label-height';
 import { createAdSlot } from '../lib/create-ad-slot';
 import { getBreakpoint } from '../lib/detect/detect-breakpoint';
 import { getViewport } from '../lib/detect/detect-viewport';

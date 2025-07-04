@@ -1,13 +1,13 @@
 import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { createAdSize } from '../../lib/ad-sizes';
+import { createAdSize } from '@guardian/commercial/ad-sizes';
 import {
 	isInAuOrNz,
 	isInCanada,
 	isInUk,
 	isInUsa,
 	isInUsOrCa,
-} from '../../lib/geo/geo-utils';
+} from '@guardian/commercial/geo/geo-utils';
 import { pbTestNameMap } from '../../lib/url';
 import {
 	getCurrentTweakpoint,

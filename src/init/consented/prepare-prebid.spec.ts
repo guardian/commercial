@@ -4,14 +4,14 @@ import type {
 	USNATConsentState,
 } from '@guardian/libs';
 import { getConsentFor, log, onConsent } from '@guardian/libs';
+import { isInCanada } from '@guardian/commercial/geo/geo-utils';
 import { commercialFeatures } from '../../lib/commercial-features';
-import { isInCanada } from '../../lib/geo/geo-utils';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
 import { _ } from './prepare-prebid';
 
 const { setupPrebid } = _;
 
-jest.mock('lib/geo/geo-utils', () => ({
+jest.mock('@guardian/commercial/geo/geo-utils', () => ({
 	isInCanada: jest.fn(() => false),
 }));
 

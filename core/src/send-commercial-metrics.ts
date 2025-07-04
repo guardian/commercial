@@ -185,7 +185,7 @@ function gatherMetricsOnPageUnload(): void {
 }
 
 const listener = (e: Event): void => {
-	if (window.guardian.config.shouldSendCommercialMetrics === true) {
+	if (window.guardian.config.shouldSendCommercialMetrics) {
 		switch (e.type) {
 			case 'visibilitychange':
 				if (document.visibilityState === 'hidden') {

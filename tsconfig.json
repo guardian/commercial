@@ -18,15 +18,22 @@
 			"ES2020",
 			"ESNext"
 		],
-		"module": "ESNEXT",
-		"moduleResolution": "node",
+		"module": "preserve",
+		"moduleResolution": "bundler",
 		"noEmit": true,
 		"noUnusedLocals": true,
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"strict": true,
 		"target": "ESNEXT",
-		"noUncheckedIndexedAccess": true
+		"noUncheckedIndexedAccess": true,
+		"customConditions": ["development"]
 	},
-	"exclude": ["node_modules", "dist", "coverage", "playwright-report"]
+	"exclude": [
+		"node_modules",
+		"dist",
+		"coverage",
+		"playwright-report",
+		"core/dist"
+	]
 }
