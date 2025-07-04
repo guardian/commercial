@@ -41,7 +41,7 @@ jobs:
         run: pnpm build:core
 
       - name: Version
-        run: changeset version --snapshot beta
+        run: pnpm changeset version --snapshot beta
         working-directory: core
 
       - name: Create Release
