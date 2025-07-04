@@ -1,4 +1,4 @@
-import globals from 'globals';
+import globalConfigs from 'globals';
 import guardian from '@guardian/eslint-config';
 
 const rules = {
@@ -40,9 +40,9 @@ const rules = {
 };
 
 const globals = {
-	...globals.jest,
-	...globals.browser,
-	...globals.node,
+	...globalConfigs.jest,
+	...globalConfigs.browser,
+	...globalConfigs.node,
 	googletag: 'readonly',
 };
 
