@@ -4,6 +4,7 @@ import CircularDependencyPlugin from 'circular-dependency-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack from 'webpack';
 import prebidBabelOptions from 'prebid.js/.babelrc.js';
+import prebid946BabelOptions from 'prebid-v9.46.0.js/.babelrc.js';
 
 const gitCommitSHA = () => {
 	try {
@@ -59,6 +60,29 @@ const config = {
 				'src',
 				'adapters',
 			),
+			/**
+			 * The aliases below for prebid-v9.46.0.js
+			 * can be deleted once we've tested this dependency
+			 **/
+			'prebid-v9.46.0.js/src': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebid-v9.46.0.js',
+				'src',
+			),
+			'prebid-v9.46.0.js/libraries': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebid-v9.46.0.js',
+				'libraries',
+			),
+			'prebid-v9.46.0.js/adapters': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebid-v9.46.0.js',
+				'src',
+				'adapters',
+			),
 		},
 		extensions: ['.js', '.ts', '.tsx', '.jsx'],
 		conditionNames: ['development', 'import', 'default'],
@@ -89,6 +113,18 @@ const config = {
 				use: {
 					loader: 'babel-loader',
 					options: prebidBabelOptions,
+				},
+			},
+			/**
+			 * The rule below for prebid-v9.46.0.js
+			 * can be deleted once we've tested this dependency
+			 **/
+			{
+				test: /.js$/,
+				include: /prebid\.js@9\.46\.0/,
+				use: {
+					loader: 'babel-loader',
+					options: prebid946BabelOptions,
 				},
 			},
 			{
