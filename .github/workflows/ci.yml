@@ -157,7 +157,7 @@ jobs:
       - name: Fetch build
         uses: actions/download-artifact@v4.3.0
         with:
-          name: dist
+          name: bundle-dist
           path: dist
 
       - name: Riff-Raff Upload
