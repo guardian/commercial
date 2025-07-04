@@ -226,16 +226,10 @@ class PrebidAdUnit {
 			},
 		};
 
-		this.bids = this.bids = shouldIncludePrebidAdUnit
-			? bids(
-					advert.prebidAdUnit,
-					slot.sizes,
-					pageTargeting,
-					this.gpid,
-					consentState,
-				)
-			: bids(
-					advert.id,
+		this.bids = bids(
+					shouldIncludePrebidAdUnit
+						? advert.prebidAdUnit
+						: advert.id,
 					slot.sizes,
 					pageTargeting,
 					this.gpid,
