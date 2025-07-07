@@ -42,14 +42,12 @@ jobs:
 
       - name: Version
         run: pnpm changeset version --snapshot beta
-        working-directory: core
 
       - name: Create Release
-        uses: changesets/action@v1.5.1
+        uses: changesets/action@v1.5.3
         id: changeset
         with:
           publish: pnpm changeset publish --tag beta
-          cwd: core
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
