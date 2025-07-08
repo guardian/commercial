@@ -64,9 +64,7 @@ export default [
 			'import-x/resolver': {
 				typescript: {
 					project: ['./tsconfig.json'],
-					conditionNames: [
-						'workspace',
-					],
+					conditionNames: ['workspace'],
 				},
 			},
 		},
