@@ -1,6 +1,6 @@
 {
 	"extends": "./tsconfig.json",
-	"include": ["./src/export.ts", "./src/types.ts", "./src/global.ts"],
+	"include": ["./src/index.ts", "./src/types.ts", "./src/global.ts"],
 	"compilerOptions": {
 		"noEmit": false,
 		"module": "commonjs",
