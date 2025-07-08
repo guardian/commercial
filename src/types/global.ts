@@ -1,14 +1,7 @@
 import type { CustomClaims } from '@guardian/identity-auth';
 import type { VendorName } from '@guardian/libs';
-import type { DfpEnv } from '../lib/dfp/dfp-env';
-import type { EventTimer } from '../lib/event-timer';
-import type { PageTargeting } from '../lib/targeting/build-page-targeting';
-import type {
-	GoogleTagParams,
-	GoogleTrackConversionObject,
-	NetworkInformation,
-} from '../lib/types';
-import type { IasPETSlot } from './ias';
+import type { PageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
+import type { OphanRecordFunction } from '@guardian/commercial/types';
 
 type ServerSideABTest = `${string}${'Variant' | 'Control'}`;
 
@@ -164,16 +157,6 @@ interface Config {
 	user?: UserConfig;
 }
 
-type OphanRecordFunction = (
-	event: Record<string, unknown> & {
-		/**
-		 * the experiences key will override previously set values.
-		 * Use `recordExperiences` instead.
-		 */
-		experiences?: never;
-	},
-	callback?: () => void,
-) => void;
 interface Ophan {
 	trackComponentAttention: (
 		name: string,
@@ -222,12 +205,6 @@ type ConfiantCallback = (
 	},
 ) => void;
 
-interface Confiant extends Record<string, unknown> {
-	settings: {
-		callback: ConfiantCallback;
-		[key: string]: unknown;
-	};
-}
 interface Permutive {
 	config?: {
 		projectId?: string;
@@ -247,17 +224,6 @@ interface A9AdUnitInterface {
 	sizes: number[][];
 }
 
-type ApstagInitConfig = {
-	pubID: string;
-	adServer?: string;
-	bidTimeout?: number;
-	blockedBidders?: string[];
-};
-
-type FetchBidsBidConfig = {
-	slots: A9AdUnitInterface[];
-};
-
 type FetchBidSizes = {
 	adSizes: `${number}x${number}`;
 };
@@ -268,15 +234,6 @@ type FetchBidResponse = {
 	amznsz: FetchBidSizes;
 	size: FetchBidSizes;
 	slotID: string;
-};
-
-type Apstag = {
-	init: (arg0: ApstagInitConfig) => void;
-	fetchBids: (
-		arg0: FetchBidsBidConfig,
-		callback: (res: FetchBidResponse[]) => void,
-	) => void;
-	setDisplayBids: () => void;
 };
 
 type ComscoreGlobals = {
@@ -293,62 +250,6 @@ type CustomIdTokenClaims = CustomClaims & {
 	email: string;
 	google_tag_id: string;
 };
-
-type AdBlockers = {
-	active: boolean | undefined;
-	onDetect: Array<(value: boolean | PromiseLike<boolean>) => void>;
-};
-
-/**
- *  All article history types here are duplicated from elsewhere.
- *  This is because adding imports to this file causes typechecking to break for every use of window.guardian in the codebase.
- */
-type TagCounts = Record<string, number>;
-type WeeklyArticleLog = {
-	week: number;
-	count: number;
-	tags?: TagCounts;
-};
-type WeeklyArticleHistory = WeeklyArticleLog[];
-
-interface DailyArticleCount {
-	day: number;
-	count: number;
-}
-
-type DailyArticleHistory = DailyArticleCount[];
-
-interface ArticleCounts {
-	weeklyArticleHistory: WeeklyArticleHistory;
-	dailyArticleHistory: DailyArticleHistory;
-}
-
-interface IasPET {
-	queue?: Array<{
-		adSlots: IasPETSlot[];
-		dataHandler: (targetingJSON: string) => void;
-	}>;
-	pubId?: string;
-}
-
-interface TeadsAnalytics {
-	analytics_tag_id?: string;
-	share?: () => void;
-	shared_data?: unknown[];
-}
-
-interface OptOutInitializeOptions {
-	publisher: number;
-	onlyNoConsent?: 0 | 1;
-	alwaysNoConsent?: 0 | 1;
-	consentTimeOutMS?: 5000;
-	noLogging?: 0 | 1;
-	lazyLoading?: { fractionInView?: number; viewPortMargin?: string };
-	noRequestsOnPageLoad?: 0 | 1;
-	frequencyScript?: string;
-	timeoutFrequencyCappingMS?: number;
-	debug_forceCap?: number;
-}
 
 interface OptOutResponse {
 	adSlot: string;
@@ -384,171 +285,6 @@ type OptOutFilledCallback = (
 	adSlot: OptOutAdSlot,
 	response: OptOutResponse,
 ) => void;
-
-/**
- * Describes the configuration options for the Safeframe host API
- *
- * Currently typed as `unknown` since we do not consume it ourselves
- */
-type SafeFrameAPIHostConfig = unknown;
-
-/**
- * Types for the IAB Safeframe API
- *
- * Note this type definition is incomplete.
- * These types can be refined as/when they are required
- */
-interface SafeFrameAPI {
-	ver: string;
-	specVersion: string;
-	lib: {
-		lang: Record<string, unknown>;
-		dom: {
-			iframes: Record<string, unknown>;
-			msghost: Record<string, unknown>;
-		};
-		logger: Record<string, unknown>;
-	};
-	env: {
-		isIE: boolean;
-		ua: Record<string, unknown>;
-	};
-	info: {
-		errs: unknown[];
-		list: unknown[];
-	};
-	host: {
-		Config: {
-			new (o: {
-				renderFile: string;
-				positions: Record<string, unknown>;
-			}): SafeFrameAPIHostConfig;
-		};
-	};
-}
-
-/**
- * Types for IMR Worldwide
- */
-interface NSdkInstance {
-	ggPM: (
-		type: string,
-		dcrStaticMetadata: {
-			type: string;
-			assetid: unknown;
-			section: string;
-		},
-	) => void;
-	ggInitialize: (nolggGlobalParams: {
-		sfcode: string;
-		apid: string;
-		apn: string;
-	}) => void;
-}
-
-interface Trac {
-	record: () => this;
-	post: () => this;
-}
-
-interface HeaderNotification {
-	id: string;
-	target: string;
-	message: string;
-	ophanLabel: string;
-	logImpression: () => void;
-}
-
-declare global {
-	interface Navigator {
-		readonly connection?: NetworkInformation;
-		readonly cookieDeprecationLabel?: {
-			getValue: () => Promise<string>;
-		};
-	}
-	interface Window {
-		guardian: {
-			ophan?: Ophan;
-			config: Config;
-			queue: Array<() => Promise<void>>;
-			mustardCut?: boolean;
-			polyfilled?: boolean;
-			adBlockers: AdBlockers;
-			// /frontend/common/app/templates/inlineJS/blocking/enableStylesheets.scala.js
-			css: { onLoad: () => void; loaded: boolean };
-			articleCounts?: ArticleCounts;
-			commercial?: {
-				dfpEnv?: DfpEnv;
-				a9WinningBids?: FetchBidResponse[];
-			};
-			notificationEventHistory?: HeaderNotification[][];
-			commercialTimer?: EventTimer;
-			offlineCount?: number;
-			modules: {
-				sentry?: {
-					reportError?: (
-						error: Error,
-						feature: string,
-						tags?: Record<string, string>,
-						extras?: Record<string, unknown>,
-					) => void;
-				};
-			};
-		};
-		ootag: {
-			queue: Array<() => void>;
-			initializeOo: (o: OptOutInitializeOptions) => void;
-			addParameter: (key: string, value: string | string[]) => void;
-			addParameterForSlot: (
-				slotId: string,
-				key: string,
-				value: string | string[],
-			) => void;
-			defineSlot: (o: OptOutAdSlot) => void;
-			makeRequests: () => void;
-			refreshSlot: (slotId: string) => void;
-			refreshAllSlots: () => void;
-			logger: (...args: unknown[]) => void;
-		};
-
-		readonly navigator: Navigator;
-
-		// Third parties
-
-		confiant?: Confiant;
-
-		apstag?: Apstag;
-
-		permutive?: Permutive;
-
-		_comscore?: ComscoreGlobals[];
-
-		__iasPET?: IasPET;
-
-		teads_analytics?: TeadsAnalytics;
-
-		// https://www.iab.com/wp-content/uploads/2014/08/SafeFrames_v1.1_final.pdf
-		$sf: SafeFrameAPI;
-		// Safeframe API host config required by Opt Out tag
-		conf: SafeFrameAPIHostConfig;
-
-		// IMR Worldwide
-		NOLCMB: {
-			getInstance: (apid: string) => NSdkInstance;
-		};
-		nol_t: (pvar: { cid: string; content: string; server: string }) => Trac;
-
-		// Google
-		google_trackConversion?: (arg0: GoogleTrackConversionObject) => void;
-		google_tag_params?: GoogleTagParams;
-
-		// Brand metrics
-		_brandmetrics?: Array<{
-			cmd: string;
-			val: Record<string, unknown>;
-		}>;
-	}
-}
 
 export type {
 	A9AdUnitInterface,

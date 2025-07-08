@@ -20,6 +20,12 @@ const { DefinePlugin } = webpack;
  * @type {import('webpack').Configuration}
  */
 const config = {
+	stats: {
+		modules: true,
+		moduleTrace: true,
+		reasons: true,
+		errorErrors: true,
+	},
 	entry: {
 		'commercial-standalone': join(
 			import.meta.dirname,
@@ -39,6 +45,7 @@ const config = {
 		alias: {
 			svgs: join(import.meta.dirname, 'static', 'svg'),
 			lodash: 'lodash-es',
+			'@guardian/commercial': join(import.meta.dirname, 'core', 'src'),
 			// prebid doesn't export these directories, so we need to alias them,
 			// we use them for our custom modules located in src/lib/header-bidding/prebid/custom-modules
 			'prebid.js/src': join(
@@ -84,7 +91,7 @@ const config = {
 				'adapters',
 			),
 		},
-		extensions: ['.js', '.ts', '.tsx', '.jsx'],
+		extensions: ['.ts', '.tsx', '.js', '.jsx'],
 	},
 	module: {
 		rules: [

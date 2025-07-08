@@ -6,8 +6,8 @@ import {
 	isInUk,
 	isInUsa,
 	isInUsOrCa,
-} from '../../../lib/geo/geo-utils';
-import type { PageTargeting } from '../../../lib/targeting/build-page-targeting';
+} from '@guardian/commercial/geo/geo-utils';
+import type { PageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
 import { pbTestNameMap } from '../../../lib/url';
 import type { PrebidIndexSite } from '../../../types/global';
 import { dfpEnv } from '../../dfp/dfp-env';

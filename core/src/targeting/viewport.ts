@@ -1,4 +1,4 @@
-import type { False, True } from '../types';
+import type { False, True } from './types';
 
 /* -- Types -- */
 
