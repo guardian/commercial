@@ -20,12 +20,6 @@ const { DefinePlugin } = webpack;
  * @type {import('webpack').Configuration}
  */
 const config = {
-	stats: {
-		modules: true,
-		moduleTrace: true,
-		reasons: true,
-		errorErrors: true,
-	},
 	entry: {
 		'commercial-standalone': join(
 			import.meta.dirname,
@@ -91,7 +85,7 @@ const config = {
 				'adapters',
 			),
 		},
-		extensions: ['.ts', '.tsx', '.js', '.jsx'],
+		extensions: ['.js', '.ts', '.tsx', '.jsx'],
 	},
 	module: {
 		rules: [
