@@ -65,10 +65,7 @@ export default [
 				typescript: {
 					project: ['./tsconfig.json'],
 					conditionNames: [
-						'development',
-						'import',
-						'require',
-						'default',
+						'workspace',
 					],
 				},
 			},

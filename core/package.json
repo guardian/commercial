@@ -18,14 +18,14 @@
 	"module": "dist/esm/index.js",
 	"exports": {
 		".": {
-			"development": "./src/index.ts",
 			"import": "./dist/esm/index.js",
-			"require": "./dist/cjs/index.js"
+			"require": "./dist/cjs/index.js",
+			"workspace": "./src/index.ts"
 		},
 		"./*": {
-			"development": "./src/*.ts",
 			"import": "./dist/esm/*.js",
-			"require": "./dist/cjs/*.js"
+			"require": "./dist/cjs/*.js",
+			"workspace": "./src/*.ts"
 		},
 		"./package.json": "./package.json"
 	},

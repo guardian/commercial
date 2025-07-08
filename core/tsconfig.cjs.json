@@ -1,6 +1,6 @@
 {
 	"extends": "./tsconfig.json",
-	"include": ["./src/index.ts", "./src/types.ts", "./src/global.ts"],
+	"exclude":  ["./src/**/*.test.ts", "./src/**/*.spec.ts"],
 	"compilerOptions": {
 		"noEmit": false,
 		"module": "commonjs",
