@@ -5,7 +5,7 @@ import {
 	getPermutivePFPSegments,
 	getPermutiveSegments,
 } from '../permutive';
-import type { False, NotApplicable, True } from '../types';
+import type { False, NotApplicable, True } from './types';
 
 /* -- Types -- */
 

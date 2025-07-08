@@ -1,9 +1,9 @@
+import { postMessage } from '@guardian/commercial/messenger/post-message';
 import {
 	register as register_,
 	_ as testExports,
 	unregister as unregister_,
 } from './messenger';
-import { postMessage } from './messenger/post-message';
 
 const onMessage = testExports.onMessage;
 const register = register_;
@@ -18,7 +18,7 @@ window.removeEventListener = jest.fn().mockImplementationOnce(noop);
 
 const mockOrigin = 'someorigin.com';
 
-jest.mock('./messenger/post-message', () => ({
+jest.mock('@guardian/commercial/messenger/post-message', () => ({
 	postMessage: jest.fn(),
 }));
 

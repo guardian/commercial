@@ -3,15 +3,15 @@ import {
 	type CountryCode,
 	getConsentFor as getConsentFor_,
 } from '@guardian/libs';
+import { createAdSize } from '@guardian/commercial/ad-sizes';
+import { getCountryCode as getCountryCode_ } from '@guardian/commercial/geo/country-code';
+import { _ } from '@guardian/commercial/geo/geo-utils';
 import { isUserInVariant as isUserInVariant_ } from '../../experiments/ab';
-import { createAdSize } from '../../lib/ad-sizes';
-import { _ } from '../../lib/geo/geo-utils';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
 	matchesBreakpoints as matchesBreakpoints_,
 } from '../detect/detect-breakpoint';
-import { getCountryCode as getCountryCode_ } from '../geo/country-code';
 import {
 	getBreakpointKey,
 	getLargestSize,
@@ -63,7 +63,7 @@ jest.mock('@guardian/libs', () => {
 
 jest.mock('lodash-es/once', () => (fn: (...args: unknown[]) => unknown) => fn);
 
-jest.mock('lib/geo/country-code', () => ({
+jest.mock('@guardian/commercial//geo/country-code', () => ({
 	getCountryCode: jest.fn(() => 'GB'),
 }));
 

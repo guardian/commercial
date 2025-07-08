@@ -1,5 +1,5 @@
+import type { SizeMapping } from '@guardian/commercial/ad-sizes';
 import { fillDynamicAdSlot } from '../../insert/fill-dynamic-advert-slot';
-import type { SizeMapping } from '../../lib/ad-sizes';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
 
 type ExternalSlotCustomEvent = CustomEvent<{

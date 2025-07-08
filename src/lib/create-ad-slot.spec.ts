@@ -1,4 +1,4 @@
-import { createAdSize } from './ad-sizes';
+import { createAdSize } from '@guardian/commercial/ad-sizes';
 import { concatSizeMappings, createAdSlot } from './create-ad-slot';
 
 const inline1Html = `
