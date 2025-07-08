@@ -21,7 +21,7 @@ jobs:
         uses: preactjs/compressed-size-action@v2
         with:
           repo-token: ${{secrets.GITHUB_TOKEN}}
-          build-script: build:bundle
+          build-script: build
           # having a higher change threshold makes the reporting a little less sensitive and more reliable
           minimum-change-threshold: 50
           # filenames are hashed so we need to strip that, or it thinks we've created new files every build
