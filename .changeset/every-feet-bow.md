@@ -2,4 +2,4 @@
 '@guardian/commercial': minor
 ---
 
-Test changeset
+Export all modules in the package
