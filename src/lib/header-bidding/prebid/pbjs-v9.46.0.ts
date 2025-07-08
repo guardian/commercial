@@ -2,7 +2,7 @@ import pbjs from 'prebid-v9.46.0.js';
 
 import 'prebid-v9.46.0.js/modules/adyoulikeBidAdapter';
 import 'prebid-v9.46.0.js/modules/consentManagementTcf';
-import 'prebid-v9.46.0.js/modules/consentManagementUsp';
+import 'prebid-v9.46.0.js/modules/consentManagementGpp';
 import 'prebid-v9.46.0.js/modules/criteoBidAdapter';
 import 'prebid-v9.46.0.js/modules/gridBidAdapter';
 import 'prebid-v9.46.0.js/modules/ixBidAdapter';
