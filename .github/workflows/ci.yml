@@ -52,8 +52,8 @@ jobs:
       - name: Check types
         run: pnpm tsc
 
-  build:
-    name: Build
+  build-bundle:
+    name: Build Bundle
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -63,17 +63,36 @@ jobs:
         uses: ./.github/actions/setup-node-env
 
       - name: Build package
-        run: pnpm build
+        run: pnpm build:bundle
 
       - name: Save build
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: dist
+          name: bundle-dist
           path: dist
 
-  release:
-    name: Release
-    needs: [build, test, lint, types]
+  build-core:
+    name: Build Core
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Node
+        uses: ./.github/actions/setup-node-env
+
+      - name: Build package
+        run: pnpm build:core
+
+      - name: Save build
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: core-dist
+          path: dist
+
+  changesets:
+    name: Core Changesets
+    needs: [build-core, test, lint, types]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -89,8 +108,8 @@ jobs:
       - name: Fetch build
         uses: actions/download-artifact@v4.3.0
         with:
-          name: dist
-          path: dist
+          name: core-dist
+          path: core/dist
 
       - name: Use GitHub App Token
         uses: actions/create-github-app-token@v2
@@ -108,7 +127,7 @@ jobs:
         id: changesets
         uses: changesets/action@v1.5.3
         with:
-          publish: pnpm changeset publish
+          publish: pnpm --filter @guardian/commercial changeset publish
           title: '🦋 Release package updates'
           commit: 'Bump package versions'
           setupGitUser: false
@@ -117,8 +136,8 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   riff-raff:
-    name: Upload Riff Raff Artifacts
-    needs: [build, test, lint, types]
+    name: Upload Bundle Riff Raff Artifacts
+    needs: [build-bundle, test, lint, types]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -138,7 +157,7 @@ jobs:
       - name: Fetch build
         uses: actions/download-artifact@v4.3.0
         with:
-          name: dist
+          name: bundle-dist
           path: dist
 
       - name: Riff-Raff Upload

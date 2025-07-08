@@ -1,4 +1,4 @@
-import { AdSize as RealAdSize } from '../ad-sizes';
+import { AdSize as RealAdSize } from '@guardian/commercial/ad-sizes';
 
 class AdSize extends RealAdSize {
 	constructor(arraySize: number);

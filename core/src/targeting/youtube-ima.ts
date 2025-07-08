@@ -1,8 +1,8 @@
 import type { Participations } from '@guardian/ab-core';
 import type { ConsentState } from '@guardian/libs';
 import { log } from '@guardian/libs';
-import type { CustomParams, MaybeArray } from '../types';
 import { buildPageTargeting, filterValues } from './build-page-targeting';
+import type { CustomParams, MaybeArray } from './types';
 
 /**
  * @param  {Record<string, MaybeArray<string|number|boolean>>

@@ -1,7 +1,7 @@
 import type { ConsentState } from '@guardian/libs';
 import { getConsentFor, loadScript, log, onConsent } from '@guardian/libs';
+import { EventTimer } from '@guardian/commercial/event-timer';
 import { commercialFeatures } from '../../lib/commercial-features';
-import { EventTimer } from '../../lib/event-timer';
 import { getGoogleTagId, isUserLoggedIn } from '../../lib/identity/api';
 import { getPageTargeting } from '../../lib/page-targeting';
 import { checkThirdPartyCookiesEnabled } from '../../lib/third-party-cookies';

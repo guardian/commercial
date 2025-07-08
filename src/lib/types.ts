@@ -1,21 +1,5 @@
 import type { VendorName } from '@guardian/libs';
 
-export type ConnectionType =
-	| 'bluetooth'
-	| 'cellular'
-	| 'ethernet'
-	| 'mixed'
-	| 'none'
-	| 'other'
-	| 'unknown'
-	| 'wifi';
-
-export interface NetworkInformation extends EventTarget {
-	readonly type?: ConnectionType;
-	readonly downlink?: number;
-	readonly effectiveType?: string;
-}
-
 export type TagAttribute = {
 	name: string;
 	value: string;
@@ -115,17 +99,5 @@ export type True = 't';
 export type False = 'f';
 
 export type NotApplicable = 'na';
-
-/**
- * Generates a type which represents possible indices of this array
- *
- * Example usage:
- * const list = ['foo', 'bar', 'baz'] as const;
- * type Test = Indices<typeof list>
- */
-export type Indices<T extends readonly unknown[]> = Exclude<
-	Partial<T>['length'],
-	T['length']
->;
 
 export const isDefined = <T>(x: T | undefined): x is T => x !== undefined;

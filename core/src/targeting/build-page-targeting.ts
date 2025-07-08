@@ -3,7 +3,6 @@ import type { ConsentState, CountryCode } from '@guardian/libs';
 import { cmp, getConsentFor, getCookie, isString } from '@guardian/libs';
 import { supportsPerformanceAPI } from '../event-timer';
 import { getLocale } from '../geo/get-locale';
-import type { False, True } from '../types';
 import type { ContentTargeting } from './content';
 import { getContentTargeting } from './content';
 import type { AdManagerGroup, Frequency } from './personalised';
@@ -12,12 +11,11 @@ import type { SessionTargeting } from './session';
 import { getSessionTargeting } from './session';
 import type { SharedTargeting } from './shared';
 import { getSharedTargeting } from './shared';
+import type { TrueOrFalse } from './types';
 import type { ViewportTargeting } from './viewport';
 import { getViewportTargeting } from './viewport';
 
 type PartialWithNulls<T> = { [P in keyof T]?: T[P] | null };
-
-type TrueOrFalse = True | False;
 
 type PageTargeting = PartialWithNulls<
 	{
@@ -113,7 +111,7 @@ const buildPageTargeting = ({
 }: BuildPageTargetingParams): Record<string, string | string[]> => {
 	const { page, isDotcomRendering } = window.guardian.config;
 
-	const adFreeTargeting: { af?: True } = adFree ? { af: 't' } : {};
+	const adFreeTargeting: { af?: 't' } = adFree ? { af: 't' } : {};
 
 	const sharedAdTargeting = page.sharedAdTargeting
 		? getSharedTargeting(page.sharedAdTargeting)
