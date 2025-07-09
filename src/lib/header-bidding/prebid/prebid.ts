@@ -51,6 +51,13 @@ type USPConfig = {
 	consentData?: Record<string, unknown>;
 };
 
+/** @see https://docs.prebid.org/dev-docs/modules/consentManagementGpp.html */
+type GPPConfig = {
+	cmpApi: CmpApi;
+	timeout: number;
+	consentData?: Record<string, unknown>;
+};
+
 type ConsentManagement =
 	| {
 			gdpr: GDPRConfig;
@@ -59,7 +66,7 @@ type ConsentManagement =
 			usp: USPConfig;
 	  }
 	| {
-			gpp: USPConfig;
+			gpp: GPPConfig;
 	  };
 
 type UserId = {
