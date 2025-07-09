@@ -55,6 +55,7 @@ type USPConfig = {
 type GPPConfig = {
 	cmpApi: CmpApi;
 	timeout: number;
+	actionTimeout?: number;
 	consentData?: Record<string, unknown>;
 };
 
