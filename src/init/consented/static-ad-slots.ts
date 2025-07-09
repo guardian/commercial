@@ -8,7 +8,7 @@ import { commercialFeatures } from '../../lib/commercial-features';
 import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
 import { queueAdvert } from '../../lib/dfp/queue-advert';
-import { isInUk, isInUsa } from '../../lib/geo/geo-utils';
+import { isInUsa } from '../../lib/geo/geo-utils';
 import { setupPrebidOnce } from './prepare-prebid';
 import { removeDisabledSlots } from './remove-slots';
 
@@ -32,12 +32,6 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 	if (name === 'article-end' && isInUsa()) {
 		return {
 			mobile: [adSizes.fluid],
-		};
-	}
-
-	if (name === 'article-end' && isInUk()) {
-		return {
-			desktop: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
 		};
 	}
 
