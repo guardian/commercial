@@ -11,7 +11,7 @@ import type { SessionTargeting } from './session';
 import { getSessionTargeting } from './session';
 import type { SharedTargeting } from './shared';
 import { getSharedTargeting } from './shared';
-import type { TrueOrFalse } from './types';
+import type { True, TrueOrFalse } from './types';
 import type { ViewportTargeting } from './viewport';
 import { getViewportTargeting } from './viewport';
 
@@ -111,7 +111,7 @@ const buildPageTargeting = ({
 }: BuildPageTargetingParams): Record<string, string | string[]> => {
 	const { page, isDotcomRendering } = window.guardian.config;
 
-	const adFreeTargeting: { af?: 't' } = adFree ? { af: 't' } : {};
+	const adFreeTargeting: { af?: True } = adFree ? { af: 't' } : {};
 
 	const sharedAdTargeting = page.sharedAdTargeting
 		? getSharedTargeting(page.sharedAdTargeting)
