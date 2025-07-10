@@ -1,7 +1,7 @@
-import { isNonNullable, log } from '@guardian/libs';
 import type { SizeMapping } from '@guardian/commercial/ad-sizes';
 import { adSizes, createAdSize } from '@guardian/commercial/ad-sizes';
-import { isInUk, isInUsa } from '@guardian/commercial/geo/geo-utils';
+import { isInUsa } from '@guardian/commercial/geo/geo-utils';
+import { isNonNullable, log } from '@guardian/libs';
 import { createAdvert } from '../../define/create-advert';
 import { displayAds } from '../../display/display-ads';
 import { displayLazyAds } from '../../display/display-lazy-ads';
@@ -32,12 +32,6 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 	if (name === 'article-end' && isInUsa()) {
 		return {
 			mobile: [adSizes.fluid],
-		};
-	}
-
-	if (name === 'article-end' && isInUk()) {
-		return {
-			desktop: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
 		};
 	}
 
