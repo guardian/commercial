@@ -1,9 +1,9 @@
 import type { ConsentState } from '@guardian/libs';
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
+import type { PageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
+import { buildPageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
 import { getParticipations } from '../experiments/ab';
-import type { PageTargeting } from '../lib/targeting/build-page-targeting';
-import { buildPageTargeting } from '../lib/targeting/build-page-targeting';
 import { commercialFeatures } from './commercial-features';
 import { removeFalsyValues } from './header-bidding/utils';
 

@@ -1,4 +1,4 @@
-# @guardian/commercial
+# Commercial Monorepo
 
 This package contains the code for the commercial bundle that is loaded on all pages on theguardian.com.
 
@@ -6,13 +6,11 @@ There are 2 main parts to this repo:
 - The commercial bundle itself, which is a set of javascript files that is loaded on all pages on theguardian.com.
 - Some modules that are used by other parts of the Guardian codebase, such as DCR. This is published as a package to npm, `@guardian/commercial`.
 
-The exported modules are in `src/core`, everything else is part of the commercial bundle.
-
-## Installation
-
-To install the npm package, run `pnpm i @guardian/commercial`.
+The `@guardian/commercial` modules are in `core/src`, everything else is only part of the commercial bundle and not the `@guardian/commercial` package.
 
 ## Development
+
+**For working on the commercial bundle, see below. For working on the `@guardian/commercial` npm package, see [core/README.md](core/README.md).**
 
 ### Requirements
 
@@ -25,15 +23,7 @@ To install the npm package, run `pnpm i @guardian/commercial`.
 
 To install dependencies, run `pnpm`.
 
-To develop locally on the bundle, run `pnpm serve` to start a local server. This will watch for changes and rebuild the bundle. Serving it at `http://localhost:3031`.
-
-### Releasing to NPM
-
-This repository uses [changesets](https://github.com/changesets/changesets) for version management
-
-To release a new version with your changes, run `pnpm changeset add` and follow the prompts. This will create a new changeset file in the `.changeset` directory. Commit this file with your PR.
-
-When your PR is merged, changeset will analyse the changes and create a PR to release the new version.
+To develop the bundle locally on the bundle, run `pnpm serve` to start a local server. This will watch for changes and rebuild the bundle. Serving it at `http://localhost:3031`.
 
 ### Pull requests
 
@@ -89,12 +79,6 @@ To test the bundle on CODE, create a PR, wait for github actions to run and a ri
 
 Although you can deploy CODE changes without deploying Frontend or DCR, it's a good idea to flag any CODE deployments on the dotcom semaphore chat in case it has an effect on anything anyone else is testing.
 
-#### Testing changes to the `@guardian/commercial` npm package
-You can add the [beta] @guardian/commercial label to your pull request, this will release a beta version of the bundle to NPM, the exact version will be commented on your PR.
-
-In order to do this, run `pnpm changeset`. This will create a new changeset file in the .changeset directory. Commit this file with your PR.
-
-Note: Once the beta version is released, the label will be removed from the PR, so you will need to add it again if you want to release subsequent new versions.
 
 ### Deploying to PROD
 

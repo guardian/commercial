@@ -1,5 +1,5 @@
+import { adSizes, createAdSize } from '@guardian/commercial/ad-sizes';
 import { Advert } from '../../define/Advert';
-import { adSizes, createAdSize } from '../../lib/ad-sizes';
 import { shouldRefresh } from './should-refresh';
 
 const outstreamSizes = [
@@ -12,7 +12,7 @@ jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock('lib/targeting/teads-eligibility', () => ({
+jest.mock('@guardian/commercial/targeting/teads-eligibility', () => ({
 	isEligibleForTeads: jest.fn(),
 }));
 

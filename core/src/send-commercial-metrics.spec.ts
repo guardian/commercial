@@ -1,6 +1,6 @@
 import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { onConsent } from '@guardian/libs';
-import { EventTimer } from './event-timer';
+import { EventTimer } from '@guardian/commercial/event-timer';
 import {
 	_,
 	bypassCommercialMetricsSampling,

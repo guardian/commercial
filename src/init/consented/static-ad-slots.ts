@@ -1,14 +1,14 @@
 import { isNonNullable, log } from '@guardian/libs';
+import type { SizeMapping } from '@guardian/commercial/ad-sizes';
+import { adSizes, createAdSize } from '@guardian/commercial/ad-sizes';
+import { isInUsa } from '@guardian/commercial/geo/geo-utils';
 import { createAdvert } from '../../define/create-advert';
 import { displayAds } from '../../display/display-ads';
 import { displayLazyAds } from '../../display/display-lazy-ads';
-import type { SizeMapping } from '../../lib/ad-sizes';
-import { adSizes, createAdSize } from '../../lib/ad-sizes';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
 import { queueAdvert } from '../../lib/dfp/queue-advert';
-import { isInUsa } from '../../lib/geo/geo-utils';
 import { setupPrebidOnce } from './prepare-prebid';
 import { removeDisabledSlots } from './remove-slots';
 

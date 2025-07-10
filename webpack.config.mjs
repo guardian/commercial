@@ -39,6 +39,7 @@ const config = {
 		alias: {
 			svgs: join(import.meta.dirname, 'static', 'svg'),
 			lodash: 'lodash-es',
+			'@guardian/commercial': join(import.meta.dirname, 'core', 'src'),
 			// prebid doesn't export these directories, so we need to alias them,
 			// we use them for our custom modules located in src/lib/header-bidding/prebid/custom-modules
 			'prebid.js/src': join(
