@@ -16,7 +16,6 @@ import 'prebid-v9.46.0.js/modules/tripleliftBidAdapter';
 import 'prebid-v9.46.0.js/modules/kargoBidAdapter';
 import 'prebid-v9.46.0.js/modules/rubiconBidAdapter';
 import 'prebid-v9.46.0.js/modules/ttdBidAdapter';
-import 'prebid-v9.46.0.js/modules/multibid';
 import 'prebid-v9.46.0.js/modules/id5IdSystem';
 import 'prebid-v9.46.0.js/modules/userId';
 
