@@ -1,13 +1,13 @@
 import { type ConsentState } from '@guardian/libs';
-import type { PageTargeting } from '@guardian/commercial';
-import { createAdSize } from '@guardian/commercial/ad-sizes';
+import type { PageTargeting } from '@guardian/commercial-core';
+import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
 	isInUk as isInUk_,
 	isInUsa as isInUsa_,
 	isInUsOrCa as isInUsOrCa_,
-} from '@guardian/commercial/geo/geo-utils';
+} from '@guardian/commercial-core/geo/geo-utils';
 import { isUserInVariant as isUserInVariant_ } from '../../../experiments/ab';
 import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
 import {
@@ -88,7 +88,7 @@ const stripMobileSuffix = stripMobileSuffix_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
 const isUserInVariant = isUserInVariant_ as jest.Mock;
 
-jest.mock('@guardian/commercial/geo/geo-utils');
+jest.mock('@guardian/commercial-core/geo/geo-utils');
 const isInAuOrNz = isInAuOrNz_ as jest.Mock;
 const isInRow = isInRow_ as jest.Mock;
 const isInUk = isInUk_ as jest.Mock;

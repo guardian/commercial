@@ -1,4 +1,4 @@
-import type { DfpEnv } from '@guardian/commercial/types';
+import type { DfpEnv } from '@guardian/commercial-core/types';
 import { getUrlVars as _getUrlVars } from '../url';
 import { getCurrentBreakpoint } from '../detect/detect-breakpoint';
 

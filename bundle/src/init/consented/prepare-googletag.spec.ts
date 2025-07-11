@@ -1,6 +1,6 @@
 import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
-import type * as AdSizesType from '@guardian/commercial/ad-sizes';
+import type * as AdSizesType from '@guardian/commercial-core/ad-sizes';
 import { loadAdvert } from '../../display/load-advert';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../lib/detect/detect-breakpoint';
@@ -56,9 +56,9 @@ jest.mock('display/display-lazy-ads', () => ({
 	displayLazyAds: jest.fn(),
 }));
 
-jest.mock('@guardian/commercial/ad-sizes', () => {
+jest.mock('@guardian/commercial-core/ad-sizes', () => {
 	const adSizes: typeof AdSizesType = jest.requireActual(
-		'@guardian/commercial/ad-sizes',
+		'@guardian/commercial-core/ad-sizes',
 	);
 	const { createAdSize } = adSizes;
 	return {
@@ -129,7 +129,7 @@ jest.mock('./prepare-prebid', () => ({
 		.mockImplementation(() => Promise.resolve(undefined)),
 }));
 
-jest.mock('@guardian/commercial/targeting/teads-eligibility', () => ({
+jest.mock('@guardian/commercial-core/targeting/teads-eligibility', () => ({
 	isEligibleForTeads: jest.fn(),
 }));
 

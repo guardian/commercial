@@ -4,9 +4,9 @@ import type {
 	AdSize,
 	SizeMapping,
 	SlotName,
-} from '@guardian/commercial/ad-sizes';
-import { EventTimer } from '@guardian/commercial/event-timer';
-import { isEligibleForTeads } from '@guardian/commercial/targeting/teads-eligibility';
+} from '@guardian/commercial-core/ad-sizes';
+import { EventTimer } from '@guardian/commercial-core/event-timer';
+import { isEligibleForTeads } from '@guardian/commercial-core/targeting/teads-eligibility';
 import { getUrlVars } from '../lib/url';
 import { initSlotIas } from './init-slot-ias';
 

@@ -1,7 +1,7 @@
 import type { ConsentState } from '@guardian/libs';
 import { log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { isInCanada } from '@guardian/commercial/geo/geo-utils';
+import { isInCanada } from '@guardian/commercial-core/geo/geo-utils';
 import { isUserInVariant } from '../../experiments/ab';
 import { prebid946 } from '../../experiments/tests/prebid946';
 import { commercialFeatures } from '../../lib/commercial-features';

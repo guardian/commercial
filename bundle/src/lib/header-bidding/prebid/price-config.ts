@@ -3,7 +3,7 @@ import {
 	getPriceBucketString,
 	type PrebidPriceGranularity,
 } from 'prebid.js/src/cpmBucketManager';
-import { adSizes } from '@guardian/commercial/ad-sizes';
+import { adSizes } from '@guardian/commercial-core/ad-sizes';
 
 export const priceGranularity: PrebidPriceGranularity = {
 	buckets: [

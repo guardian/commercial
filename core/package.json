@@ -1,5 +1,5 @@
 {
-	"name": "@guardian/commercial",
+	"name": "@guardian/commercial-core",
 	"version": "26.0.0",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial#readme",

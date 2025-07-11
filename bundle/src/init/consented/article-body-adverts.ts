@@ -1,4 +1,4 @@
-import type { SizeMapping } from '@guardian/commercial/ad-sizes';
+import type { SizeMapping } from '@guardian/commercial-core/ad-sizes';
 import { fillDynamicAdSlot } from '../../insert/fill-dynamic-advert-slot';
 import type { FillAdSlot } from '../../insert/spacefinder/article';
 import { init as initSpacefinder } from '../../insert/spacefinder/article';

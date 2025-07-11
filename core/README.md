@@ -1,15 +1,15 @@
-# @guardian/commercial
+# @guardian/commercial-core
 
-This directory contains the modules that are published as the `@guardian/commercial` npm package.
+This directory contains the modules that are published as the `@guardian/commercial-core` npm package.
 
 ## Installation
 
 To install the npm package, install with your favourite package manager:
 
 ```bash
-pnpm i @guardian/commercial
-yarn add @guardian/commercial
-npm i @guardian/commercial
+pnpm i @guardian/commercial-core
+yarn add @guardian/commercial-core
+npm i @guardian/commercial-core
 ```
 
 ## Development
@@ -22,8 +22,8 @@ pnpm build
 
 This will build the package into the `dist` directory, which is what is published to npm.
 
-#### Testing changes to the `@guardian/commercial` npm package
-You can add the [beta] @guardian/commercial label to your pull request, this will release a beta version of the bundle to NPM, the exact version will be commented on your PR.
+#### Testing changes to the `@guardian/commercial-core` npm package
+You can add the [beta] @guardian/commercial-core label to your pull request, this will release a beta version of the bundle to NPM, the exact version will be commented on your PR.
 
 In order to do this, run `pnpm changeset`. This will create a new changeset file in the .changeset directory. Commit this file with your PR.
 

@@ -3,14 +3,14 @@ import {
 	createAdSize,
 	findAppliedSizesForBreakpoint,
 	slotSizeMappings,
-} from '@guardian/commercial/ad-sizes';
+} from '@guardian/commercial-core/ad-sizes';
 import type {
 	AdSize,
 	SizeMapping,
 	SlotName,
-} from '@guardian/commercial/ad-sizes';
-import type { Breakpoint } from '@guardian/commercial/breakpoint';
-import type { Advert as IAdvert } from '@guardian/commercial/types';
+} from '@guardian/commercial-core/ad-sizes';
+import type { Breakpoint } from '@guardian/commercial-core/breakpoint';
+import type { Advert as IAdvert } from '@guardian/commercial-core/types';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import type { HeaderBiddingSize } from '../lib/header-bidding/prebid-types';
