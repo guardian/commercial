@@ -1,13 +1,13 @@
-import { getConsentFor, isString, log, onConsent } from '@guardian/libs';
-import type { ConsentState } from '@guardian/libs';
-import { flatten } from 'lodash-es';
-import type { PrebidPriceGranularity } from 'prebid.js/src/cpmBucketManager';
 import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import { PREBID_TIMEOUT } from '@guardian/commercial-core/constants/prebid-timeout';
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import { getPermutiveSegments } from '@guardian/commercial-core/permutive';
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
+import type { ConsentState } from '@guardian/libs';
+import { getConsentFor, isString, log, onConsent } from '@guardian/libs';
+import { flatten } from 'lodash-es';
+import type { PrebidPriceGranularity } from 'prebid.js/src/cpmBucketManager';
 import type { Advert } from '../../../define/Advert';
 import { getParticipations } from '../../../experiments/ab';
 import { pubmatic } from '../../__vendor/pubmatic';

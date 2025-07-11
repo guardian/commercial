@@ -1,5 +1,3 @@
-import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
-import { once } from 'lodash-es';
 import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import {
 	isInAuOrNz,
@@ -8,13 +6,15 @@ import {
 	isInUsa,
 	isInUsOrCa,
 } from '@guardian/commercial-core/geo/geo-utils';
+import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
+import { once } from 'lodash-es';
 import { isUserInVariant } from '../../experiments/ab';
 import { prebidAdUnit } from '../../experiments/tests/prebid-ad-unit';
-import { pbTestNameMap } from '../url';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
 } from '../detect/detect-breakpoint';
+import { pbTestNameMap } from '../url';
 import type { BidderCode, HeaderBiddingSize } from './prebid-types';
 
 type StringManipulation = (a: string, b: string) => string;

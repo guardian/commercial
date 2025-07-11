@@ -59,7 +59,6 @@ jest.mock('../slot-config', () => ({
 }));
 
 jest.mock('@guardian/libs', () => ({
-	// eslint-disable-next-line -- ESLint doesn't understand jest.requireActual
 	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
 	log: jest.fn(),
 	getConsentFor: jest.fn(),

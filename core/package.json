@@ -30,7 +30,7 @@
 		"./package.json": "./package.json"
 	},
 	"scripts": {
-		"build": "pnpm run -p /^build:.*/",
+		"build": "pnpm run --parallel /^build:.*/",
 		"clean": "rm -rf dist",
 		"build:esm": "tsc --outDir ./dist/esm --project ./tsconfig.esm.json",
 		"build:cjs": "tsc --outDir ./dist/cjs --project ./tsconfig.cjs.json",

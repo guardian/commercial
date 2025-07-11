@@ -1,5 +1,3 @@
-import type { ConsentState } from '@guardian/libs';
-import { log } from '@guardian/libs';
 import {
 	isInAuOrNz,
 	isInRow,
@@ -8,10 +6,12 @@ import {
 	isInUsOrCa,
 } from '@guardian/commercial-core/geo/geo-utils';
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
-import { pbTestNameMap } from '../../url';
+import { log } from '@guardian/libs';
+import type { ConsentState } from '@guardian/libs';
 import type { PrebidIndexSite } from '../../../types/global';
 import { dfpEnv } from '../../dfp/dfp-env';
 import { buildAppNexusTargetingObject } from '../../page-targeting';
+import { pbTestNameMap } from '../../url';
 import type {
 	BidderCode,
 	HeaderBiddingSize,

@@ -3,6 +3,11 @@ declare module '*.svg' {
 	export default content;
 }
 
+type AnalyticsAdapter =
+	import('../lib/header-bidding/prebid-types').AnalyticsAdapter;
+type AnalyticsAdapterConfig =
+	import('../lib/header-bidding/prebid-types').AnalyticsAdapterConfig;
+
 declare module 'prebid.js' {
 	const pbjs: {
 		processQueue: () => void;
@@ -55,12 +60,6 @@ declare module 'prebid.js/src/cpmBucketManager' {
 
 // Added type definitions for prebid.js analytics modules
 declare module 'prebid.js/libraries/analyticsAdapter/AnalyticsAdapter.js' {
-	// eslint-disable-next-line no-restricted-imports -- can't use relative imports in ambient declarations
-	import type {
-		AnalyticsAdapter,
-		AnalyticsAdapterConfig,
-	} from '../lib/header-bidding/prebid-types';
-
 	function adapter(config: AnalyticsAdapterConfig): AnalyticsAdapter;
 	export default adapter;
 }
@@ -165,12 +164,6 @@ declare module 'prebid-v9.46.0.js/src/cpmBucketManager' {
 
 // Added type definitions for prebid-v9.46.0.js analytics modules
 declare module 'prebid-v9.46.0.js/libraries/analyticsAdapter/AnalyticsAdapter.js' {
-	// eslint-disable-next-line no-restricted-imports -- can't use relative imports in ambient declarations
-	import type {
-		AnalyticsAdapter,
-		AnalyticsAdapterConfig,
-	} from '../lib/header-bidding/prebid-types';
-
 	function adapter(config: AnalyticsAdapterConfig): AnalyticsAdapter;
 	export default adapter;
 }

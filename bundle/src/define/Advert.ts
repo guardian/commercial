@@ -1,4 +1,3 @@
-import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import {
 	createAdSize,
 	findAppliedSizesForBreakpoint,
@@ -11,6 +10,7 @@ import type {
 } from '@guardian/commercial-core/ad-sizes';
 import type { Breakpoint } from '@guardian/commercial-core/breakpoint';
 import type { Advert as IAdvert } from '@guardian/commercial-core/types';
+import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import type { HeaderBiddingSize } from '../lib/header-bidding/prebid-types';

@@ -1,5 +1,5 @@
-import { once } from 'lodash-es';
 import { checkConsent as checkConsentForReporting } from '@guardian/commercial-core/send-commercial-metrics';
+import { once } from 'lodash-es';
 import { getAdvertById } from './dfp/get-advert-by-id';
 
 const endpoint = window.guardian.config.page.isDev

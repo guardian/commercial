@@ -13,18 +13,18 @@
 	"private": true,
 	"license": "Apache-2.0",
 	"scripts": {
-		"build": "pnpm -r build",
+		"build": "pnpm -r --parallel build",
 		"build:core": "pnpm --filter @guardian/commercial-core build",
 		"build:bundle": "pnpm --filter @guardian/commercial-bundle build",
-		"lint": "pnpm -r lint",
+		"lint": "pnpm -r --parallel lint",
 		"lint-staged": "lint-staged",
 		"prepare": "husky",
 		"prettier:check": "prettier . --check --cache",
 		"prettier:fix": "prettier . --write --cache",
 		"serve": "pnpm --filter @guardian/commercial-bundle serve",
-		"test": "pnpm -r test",
-		"test:ci": "pnpm -r test -- --ci",
-		"tsc": "pnpm -r tsc"
+		"test": "pnpm -r --parallel test",
+		"test:ci": "pnpm -r --parallel test -- --ci",
+		"tsc": "pnpm -r --parallel tsc"
 	},
 	"devDependencies": {
 		"@changesets/cli": "^2.27.9",

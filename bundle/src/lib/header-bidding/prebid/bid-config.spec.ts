@@ -1,4 +1,3 @@
-import { type ConsentState } from '@guardian/libs';
 import type { PageTargeting } from '@guardian/commercial-core';
 import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import {
@@ -8,6 +7,7 @@ import {
 	isInUsa as isInUsa_,
 	isInUsOrCa as isInUsOrCa_,
 } from '@guardian/commercial-core/geo/geo-utils';
+import { type ConsentState } from '@guardian/libs';
 import { isUserInVariant as isUserInVariant_ } from '../../../experiments/ab';
 import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
 import {

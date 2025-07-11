@@ -1,8 +1,8 @@
-import type { ConsentState } from '@guardian/libs';
 import {
 	buildPageTargeting,
 	type PageTargeting,
 } from '@guardian/commercial-core/targeting/build-page-targeting';
+import type { ConsentState } from '@guardian/libs';
 
 const consentlessTargetingKeys = [
 	'ab',

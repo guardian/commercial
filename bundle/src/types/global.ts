@@ -1,7 +1,7 @@
-import type { CustomClaims } from '@guardian/identity-auth';
-import type { VendorName } from '@guardian/libs';
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
 import type { OphanRecordFunction } from '@guardian/commercial-core/types';
+import type { CustomClaims } from '@guardian/identity-auth';
+import type { VendorName } from '@guardian/libs';
 
 // for window types
 import '@guardian/commercial-core/global';

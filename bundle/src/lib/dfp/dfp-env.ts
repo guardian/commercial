@@ -1,6 +1,6 @@
 import type { DfpEnv } from '@guardian/commercial-core/types';
-import { getUrlVars as _getUrlVars } from '../url';
 import { getCurrentBreakpoint } from '../detect/detect-breakpoint';
+import { getUrlVars as _getUrlVars } from '../url';
 
 const getUrlVars = _getUrlVars as (arg?: string) => Record<string, string>;
 

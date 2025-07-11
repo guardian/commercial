@@ -1,6 +1,6 @@
+import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { log } from '@guardian/libs';
 import { breakpoints } from '@guardian/source/foundations';
-import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { getCurrentBreakpoint } from '../detect/detect-breakpoint';
 import { adSlotIdPrefix } from '../dfp/dfp-env-globals';
 import { getAdvertById } from '../dfp/get-advert-by-id';

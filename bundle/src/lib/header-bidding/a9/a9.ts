@@ -1,10 +1,10 @@
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
-import { reportError } from '../../error/report-error';
 import type {
 	A9AdUnitInterface,
 	FetchBidResponse,
 } from '../../../types/global';
+import { reportError } from '../../error/report-error';
 import type { HeaderBiddingSlot, SlotFlatMap } from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';
 

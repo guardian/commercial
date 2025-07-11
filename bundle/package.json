@@ -16,7 +16,7 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "pnpm run /^build:.*/",
+		"build": "pnpm run --parallel /^build:.*/",
 		"build:dev": "webpack -c webpack.config.dev.mjs",
 		"build:prod": "webpack -c webpack.config.prod.mjs",
 		"clean": "rm -rf dist",

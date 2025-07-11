@@ -16,25 +16,10 @@ const rules = {
 	],
 	'import/exports-last': 'error',
 	'no-else-return': 'error',
-	'no-restricted-imports': [
+	"@typescript-eslint/consistent-type-imports": [
 		'error',
 		{
-			patterns: [
-				{
-					group: [
-						'define/*',
-						'display/*',
-						'events/*',
-						'experiments/*',
-						'init/*',
-						'lib/*',
-						'insert/*',
-						'types/*',
-					],
-					message:
-						'Non-relative imports from src are forbidden. Please use a relative path instead',
-				},
-			],
+			disallowTypeAnnotations: false
 		},
 	],
 };
@@ -49,19 +34,13 @@ const globals = {
 /** @type { import("eslint").Linter.Config[] } */
 export default [
 	{
-		ignores: [
-			'**/*.js',
-			'**/*.mjs',
-			'**/dist',
-			'playwright/**',
-			'src/lib/__mocks__/ad-sizes.ts',
-		],
+		ignores: ['**/*.js', '**/*.mjs', '**/dist', '**/playwright', 'bundle/playwright.config.ts'],
 	},
 	...guardian.configs.recommended,
 	...guardian.configs.jest,
 	{},
 	{
-		files: ['bundle/**/*.ts'],
+		files: ['bundle/src/**/*.ts'],
 		ignores: ['core/src/**/*.ts'],
 		languageOptions: {
 			globals,
@@ -82,7 +61,30 @@ export default [
 		languageOptions: {
 			globals,
 		},
-		rules,
+		rules: {
+			...rules,
+			'no-restricted-imports': [
+				'error',
+				{
+					patterns: [
+						{
+							group: [
+								'define/*',
+								'display/*',
+								'events/*',
+								'experiments/*',
+								'init/*',
+								'lib/*',
+								'insert/*',
+								'types/*',
+							],
+							message:
+								'Non-relative imports from src are forbidden. Please use a relative path instead',
+						},
+					],
+				},
+			],
+		},
 		settings: {
 			'import-x/resolver': {
 				typescript: {

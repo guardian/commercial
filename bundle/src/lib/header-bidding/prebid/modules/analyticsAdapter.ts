@@ -283,12 +283,7 @@ const analyticsAdapter = Object.assign(adapter({ analyticsType: 'endpoint' }), {
 
 analyticsAdapter.originEnableAnalytics = analyticsAdapter.enableAnalytics;
 
-analyticsAdapter.enableAnalytics = (config: {
-	options: {
-		url: string;
-		pv: string;
-	};
-}): void => {
+analyticsAdapter.enableAnalytics = (config): void => {
 	analyticsAdapter.context = {
 		url: config.options.url,
 		pv: config.options.pv,

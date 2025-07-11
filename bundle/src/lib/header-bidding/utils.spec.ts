@@ -1,11 +1,11 @@
+import { createAdSize } from '@guardian/commercial-core/ad-sizes';
+import { getCountryCode as getCountryCode_ } from '@guardian/commercial-core/geo/country-code';
+import { _ } from '@guardian/commercial-core/geo/geo-utils';
 import {
 	type ConsentState,
 	type CountryCode,
 	getConsentFor as getConsentFor_,
 } from '@guardian/libs';
-import { createAdSize } from '@guardian/commercial-core/ad-sizes';
-import { getCountryCode as getCountryCode_ } from '@guardian/commercial-core/geo/country-code';
-import { _ } from '@guardian/commercial-core/geo/geo-utils';
 import { isUserInVariant as isUserInVariant_ } from '../../experiments/ab';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';
 import {
