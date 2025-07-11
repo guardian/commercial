@@ -50,7 +50,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "catalog:",
-		"@types/googletag": "~3.3.0",
+		"@types/googletag": "catalog:",
 		"typescript": "catalog:",
 		"@types/jest": "catalog:",
 		"jest": "catalog:",

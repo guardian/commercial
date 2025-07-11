@@ -8,6 +8,7 @@ catalog:
     'typescript': '5.5.4'
     '@types/node': '24.0.12'
     '@types/jest': '30.0.0'
+    '@types/googletag': '~3.3.0'
     'jest': '^30.0.1'
     'jest-environment-jsdom': '~29.7.0'
     'jest-environment-jsdom-global': '~4.0.0'

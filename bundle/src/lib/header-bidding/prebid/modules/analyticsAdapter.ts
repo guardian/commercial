@@ -4,7 +4,7 @@ import adapter from 'prebid.js/libraries/analyticsAdapter/AnalyticsAdapter.js';
 import adapterManager from 'prebid.js/src/adapterManager.js';
 import { fetch } from 'prebid.js/src/ajax.js';
 import { EVENTS } from 'prebid.js/src/constants.js';
-import { reportError } from '../../../error/report-error';
+import { reportError } from '../../../../lib/error/report-error';
 import {
 	type BidArgs,
 	type EventData,
@@ -283,7 +283,12 @@ const analyticsAdapter = Object.assign(adapter({ analyticsType: 'endpoint' }), {
 
 analyticsAdapter.originEnableAnalytics = analyticsAdapter.enableAnalytics;
 
-analyticsAdapter.enableAnalytics = (config): void => {
+analyticsAdapter.enableAnalytics = (config: {
+	options: {
+		url: string;
+		pv: string;
+	};
+}): void => {
 	analyticsAdapter.context = {
 		url: config.options.url,
 		pv: config.options.pv,
