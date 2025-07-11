@@ -127,24 +127,6 @@ describe('initialise', () => {
 				},
 			},
 			priceGranularity: 'custom',
-			s2sConfig: {
-				adapter: 'prebidServer',
-				adapterOptions: {},
-				allowUnknownBidderCodes: false,
-				bidders: [],
-				maxBids: 1,
-				maxTimeout: 1500,
-				ortbNative: {
-					eventtrackers: [
-						{
-							event: 1,
-							methods: [1, 2],
-						},
-					],
-				},
-				syncTimeout: 1000,
-				syncUrlModifier: {},
-			},
 			timeoutBuffer: 400,
 			useBidCache: true,
 			userSync: {
