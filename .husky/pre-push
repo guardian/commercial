@@ -5,4 +5,4 @@ then
 	exit 1
 fi
 
-pnpm jest --verbose --runInBand --onlyChanged
+pnpm -r test -- --verbose --runInBand --onlyChanged
