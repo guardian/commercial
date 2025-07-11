@@ -23,25 +23,9 @@ jobs:
       # Commercial
       - name: Checkout
         uses: actions/checkout@v4.2.2
-        with:
-          path: ./commercial
 
-      - run: corepack enable
-        working-directory: ./commercial
-
-      - run: corepack prepare pnpm@9.15.2 --activate
-        working-directory: ./commercial
-
-      - name: Setup node
-        uses: actions/setup-node@v4.4.0
-        with:
-          node-version-file: './commercial/.nvmrc'
-          cache: 'pnpm'
-          cache-dependency-path: './commercial/pnpm-lock.yaml'
-
-      - name: Install dependencies
-        working-directory: ./commercial
-        run: pnpm install --frozen-lockfile
+      - name: Set up Node
+        uses: ./.github/actions/setup-node-env
 
       # We always run our commercial code against the latest main of DCR
       # This does make our tests sensitive to changes in DCR
@@ -72,19 +56,19 @@ jobs:
 
       - name: Install Playwright Browsers
         run: pnpm playwright install --with-deps chromium
-        working-directory: ./commercial
+        working-directory: ./bundle
 
       - name: Start Commercial server
         run: pnpm serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
-        working-directory: ./commercial
+        working-directory: ./bundle
 
       - name: Run Playwright
         run: pnpm playwright test --shard=${{ matrix.group }}/5
-        working-directory: ./commercial
+        working-directory: ./bundle
 
       - uses: actions/upload-artifact@v4.6.2
         if: always()
         with:
           name: playwright-report-${{ matrix.group }}
-          path: ./commercial/playwright-report
+          path: ./bundle/playwright-report
           retention-days: 5

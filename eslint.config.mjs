@@ -16,10 +16,10 @@ const rules = {
 	],
 	'import/exports-last': 'error',
 	'no-else-return': 'error',
-	"@typescript-eslint/consistent-type-imports": [
+	'@typescript-eslint/consistent-type-imports': [
 		'error',
 		{
-			disallowTypeAnnotations: false
+			disallowTypeAnnotations: false,
 		},
 	],
 };
@@ -34,7 +34,13 @@ const globals = {
 /** @type { import("eslint").Linter.Config[] } */
 export default [
 	{
-		ignores: ['**/*.js', '**/*.mjs', '**/dist', '**/playwright', 'bundle/playwright.config.ts'],
+		ignores: [
+			'**/*.js',
+			'**/*.mjs',
+			'**/dist',
+			'**/playwright',
+			'bundle/playwright.config.ts',
+		],
 	},
 	...guardian.configs.recommended,
 	...guardian.configs.jest,
