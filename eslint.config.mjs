@@ -59,31 +59,38 @@ export default [
 	},
 	...guardian.configs.recommended,
 	...guardian.configs.jest,
+	{},
 	{
+		files: ['bundle/**/*.ts'],
+		ignores: ['core/src/**/*.ts'],
+		languageOptions: {
+			globals,
+		},
+		rules,
 		settings: {
 			'import-x/resolver': {
 				typescript: {
-					project: ['./tsconfig.json'],
+					project: ['bundle/tsconfig.json'],
 					conditionNames: ['workspace'],
 				},
 			},
 		},
 	},
 	{
-		files: ['src/**/*.ts'],
-		ignores: ['core/src/**/*.ts'],
-		languageOptions: {
-			globals,
-		},
-		rules,
-	},
-	{
 		files: ['core/src/**/*.ts'],
-		ignores: ['src/**/*.ts'],
+		ignores: ['bundle/src/**/*.ts'],
 		languageOptions: {
 			globals,
 		},
 		rules,
+		settings: {
+			'import-x/resolver': {
+				typescript: {
+					project: ['core/tsconfig.json'],
+					conditionNames: ['workspace'],
+				},
+			},
+		},
 	},
 	{
 		files: ['**/*.spec.ts'],

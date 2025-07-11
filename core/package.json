@@ -30,10 +30,14 @@
 		"./package.json": "./package.json"
 	},
 	"scripts": {
-		"build": "npm-run-all clean --parallel build:core:*",
+		"build": "pnpm run -p /^build:.*/",
 		"clean": "rm -rf dist",
-		"build:core:esm": "tsc --outDir ./dist/esm --project ./tsconfig.esm.json",
-		"build:core:cjs": "tsc --outDir ./dist/cjs --project ./tsconfig.cjs.json",
+		"build:esm": "tsc --outDir ./dist/esm --project ./tsconfig.esm.json",
+		"build:cjs": "tsc --outDir ./dist/cjs --project ./tsconfig.cjs.json",
+		"lint": "eslint .",
+		"prettier:check": "prettier . --check --cache",
+		"prettier:fix": "prettier . --write --cache",
+		"test": "jest",
 		"tsc": "tsc --noEmit"
 	},
 	"peerDependencies": {
@@ -46,7 +50,14 @@
 	},
 	"devDependencies": {
 		"@types/node": "catalog:",
-		"typescript": "catalog:"
+		"@types/googletag": "~3.3.0",
+		"typescript": "catalog:",
+		"@types/jest": "catalog:",
+		"jest": "catalog:",
+		"jest-environment-jsdom": "catalog:",
+		"jest-environment-jsdom-global": "catalog:",
+		"ts-jest": "catalog:",
+		"type-fest": "catalog:"
 	},
 	"publishConfig": {
 		"access": "public"

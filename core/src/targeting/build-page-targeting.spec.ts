@@ -33,11 +33,6 @@ jest.mock('@guardian/libs', () => ({
 	},
 }));
 
-jest.mock('lib/identity/api', () => ({
-	isUserLoggedInOktaRefactor: () => true,
-	getAuthStatus: jest.fn(),
-}));
-
 const mockViewport = (width: number, height: number): void => {
 	Object.defineProperties(window, {
 		innerWidth: {
