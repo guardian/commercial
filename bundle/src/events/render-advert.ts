@@ -1,4 +1,4 @@
-import { adSizes } from '@guardian/commercial-core/ad-sizes';
+import { adSizes } from '@guardian/commercial/ad-sizes';
 import type { Advert } from '../define/Advert';
 import { reportError } from '../lib/error/report-error';
 import fastdom from '../lib/fastdom-promise';

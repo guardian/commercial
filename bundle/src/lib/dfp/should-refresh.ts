@@ -1,5 +1,5 @@
-import type { AdSizeString } from '@guardian/commercial-core/ad-sizes';
-import { outstreamSizes } from '@guardian/commercial-core/ad-sizes';
+import type { AdSizeString } from '@guardian/commercial/ad-sizes';
+import { outstreamSizes } from '@guardian/commercial/ad-sizes';
 import type { Advert } from '../../define/Advert';
 
 /**

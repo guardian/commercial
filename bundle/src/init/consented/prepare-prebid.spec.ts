@@ -1,4 +1,4 @@
-import { isInCanada } from '@guardian/commercial-core/geo/geo-utils';
+import { isInCanada } from '@guardian/commercial/geo/geo-utils';
 import type {
 	ConsentState,
 	TCFv2ConsentState,
@@ -11,7 +11,7 @@ import { _ } from './prepare-prebid';
 
 const { setupPrebid } = _;
 
-jest.mock('@guardian/commercial-core/geo/geo-utils', () => ({
+jest.mock('@guardian/commercial/geo/geo-utils', () => ({
 	isInCanada: jest.fn(() => false),
 }));
 

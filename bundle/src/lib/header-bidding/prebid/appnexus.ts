@@ -1,5 +1,5 @@
-import type { PageTargeting } from '@guardian/commercial-core';
-import { isInAuOrNz, isInRow } from '@guardian/commercial-core/geo/geo-utils';
+import type { PageTargeting } from '@guardian/commercial';
+import { isInAuOrNz, isInRow } from '@guardian/commercial/geo/geo-utils';
 import { buildAppNexusTargetingObject } from '../../page-targeting';
 import type { HeaderBiddingSize } from '../prebid-types';
 import {

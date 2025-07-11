@@ -39,7 +39,7 @@ const config = {
 		alias: {
 			svgs: join(import.meta.dirname, 'static', 'svg'),
 			lodash: 'lodash-es',
-			'@guardian/commercial-core': join(
+			'@guardian/commercial': join(
 				import.meta.dirname,
 				'..',
 				'core',

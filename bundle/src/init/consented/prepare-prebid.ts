@@ -1,4 +1,4 @@
-import { isInCanada } from '@guardian/commercial-core/geo/geo-utils';
+import { isInCanada } from '@guardian/commercial/geo/geo-utils';
 import type { ConsentState } from '@guardian/libs';
 import { log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';

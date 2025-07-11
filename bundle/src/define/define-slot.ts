@@ -2,9 +2,9 @@ import type {
 	AdSize,
 	SizeMapping,
 	SlotName,
-} from '@guardian/commercial-core/ad-sizes';
-import { EventTimer } from '@guardian/commercial-core/event-timer';
-import { isEligibleForTeads } from '@guardian/commercial-core/targeting/teads-eligibility';
+} from '@guardian/commercial/ad-sizes';
+import { EventTimer } from '@guardian/commercial/event-timer';
+import { isEligibleForTeads } from '@guardian/commercial/targeting/teads-eligibility';
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { once } from 'lodash-es';
 import { getUrlVars } from '../lib/url';

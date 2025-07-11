@@ -1,11 +1,11 @@
-import { isInCanada } from '@guardian/commercial-core/geo/geo-utils';
+import { isInCanada } from '@guardian/commercial/geo/geo-utils';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { a9 } from '../../lib/header-bidding/a9/a9';
 import { _ } from './prepare-a9';
 
 const { setupA9 } = _;
 
-jest.mock('@guardian/commercial-core/geo/geo-utils', () => ({
+jest.mock('@guardian/commercial/geo/geo-utils', () => ({
 	isInCanada: jest.fn(() => false),
 }));
 

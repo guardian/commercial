@@ -1,4 +1,4 @@
-import { EventTimer } from '@guardian/commercial-core/event-timer';
+import { EventTimer } from '@guardian/commercial/event-timer';
 import { initTrackScrollDepth } from './track-scroll-depth';
 
 describe('initTrackScrollDepth', () => {

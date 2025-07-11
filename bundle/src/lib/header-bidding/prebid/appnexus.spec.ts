@@ -1,10 +1,10 @@
-import { createAdSize } from '@guardian/commercial-core/ad-sizes';
+import { createAdSize } from '@guardian/commercial/ad-sizes';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
 	isInUk as isInUk_,
 	isInUsa as isInUsa_,
-} from '@guardian/commercial-core/geo/geo-utils';
+} from '@guardian/commercial/geo/geo-utils';
 import {
 	containsBillboard as containsBillboard_,
 	containsBillboardNotLeaderboard as containsBillboardNotLeaderboard_,
@@ -31,7 +31,7 @@ const containsMpu = containsMpu_ as jest.Mock;
 const containsMpuOrDmpu = containsMpuOrDmpu_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
 
-jest.mock('@guardian/commercial-core/geo/geo-utils');
+jest.mock('@guardian/commercial/geo/geo-utils');
 const isInAuOrNz = isInAuOrNz_ as jest.Mock;
 const isInRow = isInRow_ as jest.Mock;
 const isInUk = isInUk_ as jest.Mock;

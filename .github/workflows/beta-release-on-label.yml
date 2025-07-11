@@ -13,7 +13,7 @@ jobs:
   has-permission:
     name: Check permissions
     runs-on: ubuntu-latest
-    if: github.event.label.name == '[beta] @guardian/commercial-core'
+    if: github.event.label.name == '[beta] @guardian/commercial'
     steps:
       - name: Check if organization member
         id: is_organization_member
@@ -24,10 +24,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
   release:
-    name: '@guardian/commercial-core'
+    name: '@guardian/commercial'
     runs-on: ubuntu-latest
     needs: has-permission
-    if: github.event.label.name == '[beta] @guardian/commercial-core'
+    if: github.event.label.name == '[beta] @guardian/commercial'
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
@@ -73,9 +73,9 @@ jobs:
 
             To install the beta version, run one of the following commands in your project directory:
             \`\`\`
-            npm install @guardian/commercial-core@${version}
-            pnpm add @guardian/commercial-core@${version}
-            yarn add @guardian/commercial-core@${version}
+            npm install @guardian/commercial@${version}
+            pnpm add @guardian/commercial@${version}
+            yarn add @guardian/commercial@${version}
             \`\`\`
             `
             })
@@ -90,5 +90,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              name: '[beta] @guardian/commercial-core'
+              name: '[beta] @guardian/commercial'
             })

@@ -1,10 +1,10 @@
-import { createAdSize } from '@guardian/commercial-core/ad-sizes';
+import { createAdSize } from '@guardian/commercial/ad-sizes';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
 	isInUk as isInUk_,
 	isInUsOrCa as isInUsOrCa_,
-} from '@guardian/commercial-core/geo/geo-utils';
+} from '@guardian/commercial/geo/geo-utils';
 import { getBreakpointKey as getBreakpointKey_ } from '../utils';
 import { getMagniteSiteId, getMagniteZoneId } from './magnite';
 
@@ -17,7 +17,7 @@ const isInUsOrCa = isInUsOrCa_ as jest.Mock;
 jest.mock('experiments/ab', () => ({
 	isUserInVariant: jest.fn(),
 }));
-jest.mock('@guardian/commercial-core/geo/geo-utils');
+jest.mock('@guardian/commercial/geo/geo-utils');
 
 jest.mock('../utils', () => ({
 	...jest.requireActual('../utils'),

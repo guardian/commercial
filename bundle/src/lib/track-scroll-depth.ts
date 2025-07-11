@@ -1,4 +1,4 @@
-import { EventTimer } from '@guardian/commercial-core/event-timer';
+import { EventTimer } from '@guardian/commercial/event-timer';
 import { log } from '@guardian/libs';
 
 /**

@@ -1,4 +1,4 @@
-import { postMessage } from '@guardian/commercial-core/messenger/post-message';
+import { postMessage } from '@guardian/commercial/messenger/post-message';
 import { reportError } from './error/report-error'; // Keep this import relative otherwise Frontend will not be able to import this module. TODO: move all imports to relative imports
 
 /**

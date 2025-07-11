@@ -4,13 +4,13 @@ This package contains the code for the commercial bundle that is loaded on all p
 
 There are 2 main parts to this repo:
 - The commercial bundle itself, which is a set of javascript files that is loaded on all pages on theguardian.com.
-- Some modules that are used by other parts of the Guardian codebase, such as DCR. This is published as a package to npm, `@guardian/commercial-core`.
+- Some modules that are used by other parts of the Guardian codebase, such as DCR. This is published as a package to npm, `@guardian/commercial`.
 
-The `@guardian/commercial-core` modules are in `core/src`, everything else is only part of the commercial bundle and not the `@guardian/commercial-core` package.
+The `@guardian/commercial` modules are in `core/src`, everything else is only part of the commercial bundle and not the `@guardian/commercial` package.
 
 ## Development
 
-**For working on the commercial bundle, see below. For working on the `@guardian/commercial-core` npm package, see [core/README.md](core/README.md).**
+**For working on the commercial bundle, see below. For working on the `@guardian/commercial` npm package, see [core/README.md](core/README.md).**
 
 ### Requirements
 
@@ -69,7 +69,7 @@ Frontend will then use the local bundle instead of the one from PROD/CODE. Front
 
 ### Linking
 
-To use the production bundle locally with Frontend, run `pnpm link` in the bundle directory. Then run `yarn link @guardian/commercial-core` in the frontend directory. Finally, start the frontend server as usual.
+To use the production bundle locally with Frontend, run `pnpm link` in the bundle directory. Then run `yarn link @guardian/commercial` in the frontend directory. Finally, start the frontend server as usual.
 
 Frontend will then use the local bundle instead of the one from PROD/CODE.
 

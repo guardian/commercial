@@ -127,7 +127,7 @@ jobs:
         id: changesets
         uses: changesets/action@v1.5.3
         with:
-          publish: pnpm --filter @guardian/commercial-core changeset publish
+          publish: pnpm --filter @guardian/commercial changeset publish
           title: '🦋 Release package updates'
           commit: 'Bump package versions'
           setupGitUser: false

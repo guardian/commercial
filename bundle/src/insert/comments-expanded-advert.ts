@@ -1,5 +1,5 @@
-import { adSizes } from '@guardian/commercial-core/ad-sizes';
-import { AD_LABEL_HEIGHT } from '@guardian/commercial-core/constants/ad-label-height';
+import { adSizes } from '@guardian/commercial/ad-sizes';
+import { AD_LABEL_HEIGHT } from '@guardian/commercial/constants/ad-label-height';
 import { log } from '@guardian/libs';
 import { emptyAdvert } from '../events/empty-advert';
 import { commercialFeatures } from '../lib/commercial-features';

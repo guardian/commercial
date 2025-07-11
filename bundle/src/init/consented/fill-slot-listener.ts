@@ -1,4 +1,4 @@
-import type { SizeMapping } from '@guardian/commercial-core/ad-sizes';
+import type { SizeMapping } from '@guardian/commercial/ad-sizes';
 import { fillDynamicAdSlot } from '../../insert/fill-dynamic-advert-slot';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
 

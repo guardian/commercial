@@ -1,5 +1,5 @@
-import type { SizeMapping } from '@guardian/commercial-core/ad-sizes';
-import { adSizes, createAdSize } from '@guardian/commercial-core/ad-sizes';
+import type { SizeMapping } from '@guardian/commercial/ad-sizes';
+import { adSizes, createAdSize } from '@guardian/commercial/ad-sizes';
 import {
 	buildGoogletagSizeMapping,
 	collectSizes,
@@ -10,7 +10,7 @@ jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock('@guardian/commercial-core/targeting/teads-eligibility', () => ({
+jest.mock('@guardian/commercial/targeting/teads-eligibility', () => ({
 	isEligibleForTeads: jest.fn(),
 }));
 

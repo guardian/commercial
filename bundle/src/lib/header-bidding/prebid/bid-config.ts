@@ -4,8 +4,8 @@ import {
 	isInUk,
 	isInUsa,
 	isInUsOrCa,
-} from '@guardian/commercial-core/geo/geo-utils';
-import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
+} from '@guardian/commercial/geo/geo-utils';
+import type { PageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
 import { log } from '@guardian/libs';
 import type { ConsentState } from '@guardian/libs';
 import type { PrebidIndexSite } from '../../../types/global';
