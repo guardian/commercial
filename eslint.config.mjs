@@ -16,25 +16,10 @@ const rules = {
 	],
 	'import/exports-last': 'error',
 	'no-else-return': 'error',
-	'no-restricted-imports': [
+	'@typescript-eslint/consistent-type-imports': [
 		'error',
 		{
-			patterns: [
-				{
-					group: [
-						'define/*',
-						'display/*',
-						'events/*',
-						'experiments/*',
-						'init/*',
-						'lib/*',
-						'insert/*',
-						'types/*',
-					],
-					message:
-						'Non-relative imports from src are forbidden. Please use a relative path instead',
-				},
-			],
+			disallowTypeAnnotations: false,
 		},
 	],
 };
@@ -53,37 +38,67 @@ export default [
 			'**/*.js',
 			'**/*.mjs',
 			'**/dist',
-			'playwright/**',
-			'src/lib/__mocks__/ad-sizes.ts',
+			'**/playwright',
+			'bundle/playwright.config.ts',
 		],
 	},
 	...guardian.configs.recommended,
 	...guardian.configs.jest,
+	{},
 	{
+		files: ['bundle/src/**/*.ts'],
+		ignores: ['core/src/**/*.ts'],
+		languageOptions: {
+			globals,
+		},
+		rules,
 		settings: {
 			'import-x/resolver': {
 				typescript: {
-					project: ['./tsconfig.json'],
+					project: ['bundle/tsconfig.json'],
 					conditionNames: ['workspace'],
 				},
 			},
 		},
 	},
 	{
-		files: ['src/**/*.ts'],
-		ignores: ['core/src/**/*.ts'],
-		languageOptions: {
-			globals,
-		},
-		rules,
-	},
-	{
 		files: ['core/src/**/*.ts'],
-		ignores: ['src/**/*.ts'],
+		ignores: ['bundle/src/**/*.ts'],
 		languageOptions: {
 			globals,
 		},
-		rules,
+		rules: {
+			...rules,
+			'no-restricted-imports': [
+				'error',
+				{
+					patterns: [
+						{
+							group: [
+								'define/*',
+								'display/*',
+								'events/*',
+								'experiments/*',
+								'init/*',
+								'lib/*',
+								'insert/*',
+								'types/*',
+							],
+							message:
+								'Non-relative imports from src are forbidden. Please use a relative path instead',
+						},
+					],
+				},
+			],
+		},
+		settings: {
+			'import-x/resolver': {
+				typescript: {
+					project: ['core/tsconfig.json'],
+					conditionNames: ['workspace'],
+				},
+			},
+		},
 	},
 	{
 		files: ['**/*.spec.ts'],
