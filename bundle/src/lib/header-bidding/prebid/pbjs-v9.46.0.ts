@@ -11,7 +11,6 @@ import 'prebid-v9.46.0.js/modules/criteoBidAdapter';
 import 'prebid-v9.46.0.js/modules/gridBidAdapter';
 import 'prebid-v9.46.0.js/modules/ixBidAdapter';
 import 'prebid-v9.46.0.js/modules/ozoneBidAdapter';
-import 'prebid-v9.46.0.js/modules/prebidServerBidAdapter';
 import 'prebid-v9.46.0.js/modules/pubmaticBidAdapter';
 import 'prebid-v9.46.0.js/modules/tripleliftBidAdapter';
 import 'prebid-v9.46.0.js/modules/kargoBidAdapter';
