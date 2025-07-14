@@ -5,4 +5,4 @@ catalog:
     '@guardian/ab-core': '8.0.1'
     '@guardian/libs': '22.5.0'
     typescript: '5.5.4'
-    '@types/node': '24.0.12'
+    '@types/node': '24.0.13'
