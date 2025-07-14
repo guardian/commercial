@@ -7,7 +7,8 @@ on:
     branches-ignore:
       - 'gh-pages'
 
-permissions: write-all
+permissions:
+  contents: read # Required for actions/checkout
 
 jobs:
   test:
@@ -140,9 +141,9 @@ jobs:
     needs: [build-bundle, test, lint, types]
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
-      contents: read
-      pull-requests: write
+      id-token: write # Allows Github to request an OIDC JWT ID token
+      contents: read # Required by actions/checkout
+      pull-requests: write # Required by actions-riff-raff (to comment on a PR)
 
     steps:
       - name: Checkout
