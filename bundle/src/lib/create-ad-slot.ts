@@ -152,6 +152,7 @@ const wrapSlotInContainer = (
 ) => {
 	const container = document.createElement('div');
 	container.className = `${adSlotContainerClass} ${options.className ?? ''}`;
+	container.dataset.adSlot = 'true';
 	container.appendChild(adSlot);
 
 	return container;
