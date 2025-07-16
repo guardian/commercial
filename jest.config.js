@@ -13,8 +13,8 @@ module.exports = {
 	moduleNameMapper: {
 		videojs: 'video.js',
 		raven: '<rootDir>/src/lib/__mocks__/raven.ts',
-		'^@guardian/commercial$': '<rootDir>/../core/src/index.ts',
-		'^@guardian/commercial/(.*)$': '<rootDir>/../core/src/$1.ts',
+		'^@guardian/commercial-core$': '<rootDir>/../core/src/index.ts',
+		'^@guardian/commercial-core/(.*)$': '<rootDir>/../core/src/$1.ts',
 		'^svgs/(.*)$': '<rootDir>/src/lib/__mocks__/svgMock.js',
 		'^(.*)\\.svg$': '<rootDir>/src/lib/__mocks__/svgMock.js',
 		'^(.*)\\.html$': '<rootDir>/src/__mocks__/templateMock.js',

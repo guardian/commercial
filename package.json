@@ -14,7 +14,7 @@
 	"license": "Apache-2.0",
 	"scripts": {
 		"build": "pnpm -r --parallel --aggregate-output build",
-		"build:core": "pnpm --filter @guardian/commercial build",
+		"build:core": "pnpm --filter @guardian/commercial-core build",
 		"build:bundle": "pnpm --filter @guardian/commercial-bundle build",
 		"lint": "pnpm -r --parallel --aggregate-output lint",
 		"lint-staged": "lint-staged",

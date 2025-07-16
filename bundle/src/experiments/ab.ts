@@ -1,6 +1,6 @@
 import { AB } from '@guardian/ab-core';
 import type { ABTest } from '@guardian/ab-core';
-import type { OphanRecordFunction } from '@guardian/commercial/types';
+import type { OphanRecordFunction } from '@guardian/commercial-core/types';
 import { getCookie, log } from '@guardian/libs';
 import {
 	getParticipationsFromLocalStorage,

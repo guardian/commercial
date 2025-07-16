@@ -83,7 +83,7 @@ importers:
       '@guardian/ab-core':
         specifier: 'catalog:'
         version: 8.0.1(tslib@2.8.1)(typescript@5.5.4)
-      '@guardian/commercial':
+      '@guardian/commercial-core':
         specifier: workspace:*
         version: link:../core
       '@guardian/core-web-vitals':
