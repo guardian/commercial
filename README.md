@@ -6,7 +6,6 @@ There are 2 packages in this repo:
 - [`@guardian/commercial-bundle`](./bundle/) The commercial bundle, which is an independent set of javascript files that is loaded on all pages on theguardian.com.
 - [`@guardian/commercial-core`](./core/) An npm package used by other parts of the Guardian codebase, such as DCR.
 
-
 ## Development
 
 ### Requirements
@@ -19,7 +18,3 @@ There are 2 packages in this repo:
 ### Setup
 
 To install dependencies, run `pnpm`.
-
-### Pull requests
-
-Try to write PR titles in the conventional commit format, and squash and merge when merging. That way your PR will trigger a release when you merge it (if necessary).
