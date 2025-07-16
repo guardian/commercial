@@ -1,5 +1,6 @@
 import type { AdSize, SizeMapping } from './ad-sizes';
 import type { PageTargeting } from './targeting/build-page-targeting';
+import 'googletag';
 
 type HeaderBiddingSize = AdSize;
 
