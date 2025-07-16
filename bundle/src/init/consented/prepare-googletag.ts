@@ -1,4 +1,4 @@
-import { EventTimer } from '@guardian/commercial/event-timer';
+import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/libs';
 import { getConsentFor, loadScript, log, onConsent } from '@guardian/libs';
 import { commercialFeatures } from '../../lib/commercial-features';

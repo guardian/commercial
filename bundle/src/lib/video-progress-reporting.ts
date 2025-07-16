@@ -1,4 +1,4 @@
-import { checkConsent as checkConsentForReporting } from '@guardian/commercial/send-commercial-metrics';
+import { checkConsent as checkConsentForReporting } from '@guardian/commercial-core/send-commercial-metrics';
 import { once } from 'lodash-es';
 import { getAdvertById } from './dfp/get-advert-by-id';
 

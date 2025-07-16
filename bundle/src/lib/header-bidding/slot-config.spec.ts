@@ -1,5 +1,5 @@
-import type { SizeMapping } from '@guardian/commercial/ad-sizes';
-import { adSizes, createAdSize } from '@guardian/commercial/ad-sizes';
+import type { SizeMapping } from '@guardian/commercial-core/ad-sizes';
+import { adSizes, createAdSize } from '@guardian/commercial-core/ad-sizes';
 import { Advert } from '../../define/Advert';
 import { getHeaderBiddingAdSlots } from './slot-config';
 import { getBreakpointKey, shouldIncludeMobileSticky } from './utils';
@@ -24,7 +24,7 @@ jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock('@guardian/commercial/targeting/teads-eligibility', () => ({
+jest.mock('@guardian/commercial-core/targeting/teads-eligibility', () => ({
 	isEligibleForTeads: jest.fn(),
 }));
 

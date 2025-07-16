@@ -1,9 +1,9 @@
-import type { AdSize } from '@guardian/commercial/ad-sizes';
-import { createAdSize } from '@guardian/commercial/ad-sizes';
-import { PREBID_TIMEOUT } from '@guardian/commercial/constants/prebid-timeout';
-import { EventTimer } from '@guardian/commercial/event-timer';
-import { getPermutiveSegments } from '@guardian/commercial/permutive';
-import type { PageTargeting } from '@guardian/commercial/targeting/build-page-targeting';
+import type { AdSize } from '@guardian/commercial-core/ad-sizes';
+import { createAdSize } from '@guardian/commercial-core/ad-sizes';
+import { PREBID_TIMEOUT } from '@guardian/commercial-core/constants/prebid-timeout';
+import { EventTimer } from '@guardian/commercial-core/event-timer';
+import { getPermutiveSegments } from '@guardian/commercial-core/permutive';
+import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
 import type { ConsentState } from '@guardian/libs';
 import { getConsentFor, isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';

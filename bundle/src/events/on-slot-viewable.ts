@@ -1,6 +1,6 @@
-import { outstreamSizes } from '@guardian/commercial/ad-sizes';
-import { AD_LABEL_HEIGHT } from '@guardian/commercial/constants/ad-label-height';
-import { EventTimer } from '@guardian/commercial/event-timer';
+import { outstreamSizes } from '@guardian/commercial-core/ad-sizes';
+import { AD_LABEL_HEIGHT } from '@guardian/commercial-core/constants/ad-label-height';
+import { EventTimer } from '@guardian/commercial-core/event-timer';
 import { log } from '@guardian/libs';
 import type { Advert } from '../define/Advert';
 import { isAdSize } from '../define/Advert';

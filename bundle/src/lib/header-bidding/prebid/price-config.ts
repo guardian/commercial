@@ -1,4 +1,4 @@
-import { adSizes } from '@guardian/commercial/ad-sizes';
+import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { log } from '@guardian/libs';
 import {
 	getPriceBucketString,

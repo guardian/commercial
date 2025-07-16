@@ -1,6 +1,6 @@
-import { createAdSize } from '@guardian/commercial/ad-sizes';
-import { getCountryCode as getCountryCode_ } from '@guardian/commercial/geo/country-code';
-import { _ } from '@guardian/commercial/geo/geo-utils';
+import { createAdSize } from '@guardian/commercial-core/ad-sizes';
+import { getCountryCode as getCountryCode_ } from '@guardian/commercial-core/geo/country-code';
+import { _ } from '@guardian/commercial-core/geo/geo-utils';
 import {
 	type ConsentState,
 	type CountryCode,
@@ -63,7 +63,7 @@ jest.mock('@guardian/libs', () => {
 
 jest.mock('lodash-es/once', () => (fn: (...args: unknown[]) => unknown) => fn);
 
-jest.mock('@guardian/commercial//geo/country-code', () => ({
+jest.mock('@guardian/commercial-core//geo/country-code', () => ({
 	getCountryCode: jest.fn(() => 'GB'),
 }));
 

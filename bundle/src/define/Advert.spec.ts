@@ -1,5 +1,5 @@
-import type * as AdSizesType from '@guardian/commercial/ad-sizes';
-import { slotSizeMappings as slotSizeMappings_ } from '@guardian/commercial/ad-sizes';
+import type * as AdSizesType from '@guardian/commercial-core/ad-sizes';
+import { slotSizeMappings as slotSizeMappings_ } from '@guardian/commercial-core/ad-sizes';
 import { _, Advert, findSmallestAdHeightForSlot } from './Advert';
 
 const { getSlotSizeMapping } = _;
@@ -8,9 +8,9 @@ jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock('@guardian/commercial/ad-sizes', () => {
+jest.mock('@guardian/commercial-core/ad-sizes', () => {
 	const adSizes: typeof AdSizesType = jest.requireActual(
-		'@guardian/commercial/ad-sizes',
+		'@guardian/commercial-core/ad-sizes',
 	);
 	const slotSizeMappings = adSizes.slotSizeMappings;
 	const slots = {
@@ -40,7 +40,7 @@ jest.mock('@guardian/commercial/ad-sizes', () => {
 	};
 });
 
-jest.mock('@guardian/commercial/targeting/teads-eligibility', () => ({
+jest.mock('@guardian/commercial-core/targeting/teads-eligibility', () => ({
 	isEligibleForTeads: jest.fn(),
 }));
 

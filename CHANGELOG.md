@@ -1,4 +1,4 @@
-# @guardian/commercial
+# @guardian/commercial-core
 
 ## 26.1.2
 

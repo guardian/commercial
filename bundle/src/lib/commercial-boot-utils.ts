@@ -1,4 +1,4 @@
-import { EventTimer } from '@guardian/commercial/event-timer';
+import { EventTimer } from '@guardian/commercial-core/event-timer';
 import { log } from '@guardian/libs';
 import { adSlotIdPrefix } from './dfp/dfp-env-globals';
 import { reportError } from './error/report-error';
@@ -31,7 +31,7 @@ const bootCommercial = async (
 	if (process.env.COMMIT_SHA) {
 		log(
 			'commercial',
-			`@guardian/commercial commit https://github.com/guardian/commercial/blob/${process.env.COMMIT_SHA}`,
+			`@guardian/commercial-core commit https://github.com/guardian/commercial/blob/${process.env.COMMIT_SHA}`,
 		);
 	}
 

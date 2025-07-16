@@ -10,7 +10,7 @@ VERSION=$1
 # Just to de-dupe branch names
 RAND=$(openssl rand -hex 6)
 BRANCH_NAME="$RAND/bump-commercial-$VERSION"
-REPO="@guardian/commercial"
+REPO="@guardian/commercial-core"
 
 cd ~/code/frontend
 fnm use

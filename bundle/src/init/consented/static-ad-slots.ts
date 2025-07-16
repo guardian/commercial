@@ -1,6 +1,6 @@
-import type { SizeMapping } from '@guardian/commercial/ad-sizes';
-import { adSizes, createAdSize } from '@guardian/commercial/ad-sizes';
-import { isInUsa } from '@guardian/commercial/geo/geo-utils';
+import type { SizeMapping } from '@guardian/commercial-core/ad-sizes';
+import { adSizes, createAdSize } from '@guardian/commercial-core/ad-sizes';
+import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { isNonNullable, log } from '@guardian/libs';
 import { createAdvert } from '../../define/create-advert';
 import { displayAds } from '../../display/display-ads';
