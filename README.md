@@ -18,3 +18,12 @@ There are 2 packages in this repo:
 ### Setup
 
 To install dependencies, run `pnpm`.
+
+### A Note on Deployments
+[`@guardian/commercial-bundle`](./bundle/) and [`@guardian/commercial-core`](./core/) are deployed separately.
+
+`@guardian/commercial-bundle` is deployed to PROD automatically when merged to main. It does not use changesets.
+
+`@guardian/commercial-core` is published as an npm package and uses changesets, if you've made changes to this package, you will need to ensure you have added a changeset before merging your PR.
+
+A `commercial-dev` team member will then need to merge the changeset PR to release the new version.
