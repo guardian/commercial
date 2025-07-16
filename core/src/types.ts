@@ -1,5 +1,6 @@
 import type { AdSize, SizeMapping } from './ad-sizes';
 import type { PageTargeting } from './targeting/build-page-targeting';
+import 'googletag';
 
 type HeaderBiddingSize = AdSize;
 
@@ -103,6 +104,12 @@ type AdsConfigTCFV2 = AdsConfigBasic & {
 	};
 	nonPersonalizedAd: boolean;
 };
+
+type AdsConfigEnabled = AdsConfigBasic | AdsConfigUSNATorAus | AdsConfigTCFV2;
+
+type AdsConfig = AdsConfigEnabled | AdsConfigDisabled;
+
+type AdTargetingBuilder = () => Promise<AdsConfig>;
 
 interface Ophan {
 	trackComponentAttention: (
@@ -503,9 +510,12 @@ export type {
 	Indices,
 	Edition,
 	AdsConfigDisabled,
+	AdsConfigEnabled,
 	AdsConfigBasic,
 	AdsConfigUSNATorAus,
 	AdsConfigTCFV2,
+	AdsConfig,
+	AdTargetingBuilder,
 	Ophan,
 	Config,
 	AdBlockers,
