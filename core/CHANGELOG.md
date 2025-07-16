@@ -1,5 +1,16 @@
 # @guardian/commercial-core
 
+## 27.0.0
+
+### Major Changes
+
+- 156ed81: Package renamed
+
+### Minor Changes
+
+- 1b2b36f: Export all modules in the package
+- b5c8c1d: More isolation from the commercial bundle
+
 ## 26.1.2
 
 ### Patch Changes
@@ -1122,7 +1133,6 @@
 ### Patch Changes
 
 - 120b23b: Fix instances of no unchecked indexed access errors in:
-
   - src/lib/consentless/dynamic/liveblog-inline.ts
   - src/lib/dfp/init-slot-ias.spec.ts
   - src/lib/dfp/prepare-permutive.spec.ts
