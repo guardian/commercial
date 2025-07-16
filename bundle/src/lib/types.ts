@@ -85,15 +85,6 @@ export type AdsConfigTCFV2 = AdsConfigBasic & {
 	nonPersonalizedAd: boolean;
 };
 
-export type AdsConfigEnabled =
-	| AdsConfigBasic
-	| AdsConfigUSNATorAus
-	| AdsConfigTCFV2;
-
-export type AdsConfig = AdsConfigEnabled | AdsConfigDisabled;
-
-export type AdTargetingBuilder = () => Promise<AdsConfig>;
-
 export type True = 't';
 
 export type False = 'f';
