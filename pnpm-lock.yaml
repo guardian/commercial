@@ -240,10 +240,10 @@ importers:
       '@guardian/libs':
         specifier: 'catalog:'
         version: 22.5.0(tslib@2.8.1)(typescript@5.5.4)
-    devDependencies:
       '@types/googletag':
         specifier: 'catalog:'
         version: 3.3.0
+    devDependencies:
       '@types/jest':
         specifier: 'catalog:'
         version: 30.0.0
