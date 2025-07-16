@@ -104,6 +104,12 @@ type AdsConfigTCFV2 = AdsConfigBasic & {
 	nonPersonalizedAd: boolean;
 };
 
+type AdsConfigEnabled = AdsConfigBasic | AdsConfigUSNATorAus | AdsConfigTCFV2;
+
+type AdsConfig = AdsConfigEnabled | AdsConfigDisabled;
+
+type AdTargetingBuilder = () => Promise<AdsConfig>;
+
 interface Ophan {
 	trackComponentAttention: (
 		name: string,
@@ -503,9 +509,12 @@ export type {
 	Indices,
 	Edition,
 	AdsConfigDisabled,
+	AdsConfigEnabled,
 	AdsConfigBasic,
 	AdsConfigUSNATorAus,
 	AdsConfigTCFV2,
+	AdsConfig,
+	AdTargetingBuilder,
 	Ophan,
 	Config,
 	AdBlockers,

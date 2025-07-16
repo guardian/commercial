@@ -46,11 +46,11 @@
 	},
 	"dependencies": {
 		"@guardian/ab-core": "catalog:",
-		"@guardian/libs": "catalog:"
+		"@guardian/libs": "catalog:",
+		"@types/googletag": "catalog:"
 	},
 	"devDependencies": {
 		"@types/node": "catalog:",
-		"@types/googletag": "catalog:",
 		"typescript": "catalog:",
 		"@types/jest": "catalog:",
 		"jest": "catalog:",
