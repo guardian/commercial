@@ -110,5 +110,8 @@ declare global {
 			cmd: string;
 			val: Record<string, unknown>;
 		}>;
+
+		// Admiral ad blocker detection
+		admiral?: () => void;
 	}
 }

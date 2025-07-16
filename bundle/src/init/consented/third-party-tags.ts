@@ -1,8 +1,10 @@
 /* A regionalised container for all the commercial tags. */
 
+import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { getConsentFor, onConsent } from '@guardian/libs';
 import { commercialFeatures } from '../../lib/commercial-features';
 import fastdom from '../../lib/fastdom-promise';
+import { admiralTag as admiral } from '../../lib/third-party-tags/admiral-adblocker';
 import { ias } from '../../lib/third-party-tags/ias';
 import { imrWorldwide } from '../../lib/third-party-tags/imr-worldwide';
 import { imrWorldwideLegacy } from '../../lib/third-party-tags/imr-worldwide-legacy';
@@ -91,6 +93,20 @@ const loadOther = (): Promise<void> => {
 		}),
 		ias,
 		inizio({ shouldRun: window.guardian.config.switches.inizio ?? false }),
+		/** Admiral should only run:
+		 * - in the US
+		 * - if user has consented (ie not "do not sell")
+		 * - if the feature switch is turned on
+		 * - if user is opted into the client-side test
+		 */
+		admiral({
+			shouldRun:
+				(isInUsa() &&
+					window.guardian.config.switches.admiralAdBlockerRecovery &&
+					window.guardian.config.tests
+						?.AdmiralAdBlockerRecoveryVariant === 'variant') ??
+				false,
+		}),
 	].filter((_) => _.shouldRun);
 
 	const performanceServices: ThirdPartyTag[] = [
