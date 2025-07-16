@@ -21,7 +21,7 @@ jobs:
         uses: ./.github/actions/setup-node-env
 
       - name: Run unit tests
-        run: pnpm test -- --ci
+        run: pnpm test:ci
 
   lint:
     name: Lint
@@ -69,7 +69,7 @@ jobs:
         uses: actions/upload-artifact@v4.6.2
         with:
           name: bundle-dist
-          path: dist
+          path: bundle/dist
 
   build-core:
     name: Build Core
@@ -158,7 +158,7 @@ jobs:
         uses: actions/download-artifact@v4.3.0
         with:
           name: bundle-dist
-          path: dist
+          path: bundle/dist
 
       - name: Riff-Raff Upload
         uses: guardian/actions-riff-raff@v4.2.1
@@ -169,6 +169,6 @@ jobs:
           configPath: ./riff-raff.yaml
           contentDirectories: |
             frontend-static/commercial:
-              - dist/prod/artifacts/commercial
+              - bundle/dist/prod/artifacts/commercial
             commercial-bundle-path:
-              - dist/prod/cloudformation
+              - bundle/dist/prod/cloudformation

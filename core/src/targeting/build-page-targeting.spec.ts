@@ -25,17 +25,11 @@ jest.mock('../geo/get-locale', () => ({
 }));
 
 jest.mock('@guardian/libs', () => ({
-	// eslint-disable-next-line -- ESLint doesn't understand jest.requireActual
 	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
 	cmp: {
 		hasInitialised: jest.fn(),
 		willShowPrivacyMessageSync: jest.fn(),
 	},
-}));
-
-jest.mock('lib/identity/api', () => ({
-	isUserLoggedInOktaRefactor: () => true,
-	getAuthStatus: jest.fn(),
 }));
 
 const mockViewport = (width: number, height: number): void => {
