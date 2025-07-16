@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 27.1.0
+
+### Minor Changes
+
+- 67e539c: Add AdsConfig types to core
+
 ## 27.0.0
 
 ### Major Changes
