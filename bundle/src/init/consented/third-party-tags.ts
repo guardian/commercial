@@ -86,16 +86,6 @@ const insertScripts = async (
 };
 
 const loadOther = (): Promise<void> => {
-	const shouldLoadAdmiral =
-		isInUsa() && isUserInVariant(admiralAdblockRecovery, 'variant');
-
-	console.log('=====> checking admiral status');
-	console.log({
-		shouldLoadAdmiral,
-		isInUs: isInUsa(),
-		isInABTest: isUserInVariant(admiralAdblockRecovery, 'variant'),
-	});
-
 	const advertisingServices: ThirdPartyTag[] = [
 		remarketing({
 			shouldRun: window.guardian.config.switches.remarketing ?? false,

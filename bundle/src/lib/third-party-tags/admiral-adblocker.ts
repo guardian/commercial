@@ -9,6 +9,8 @@ type MeasureDetectedEvent = {
 };
 
 const onLoad = () => {
+	log('commercial', 'Admiral Adblock Recovery loaded on page');
+
 	/* eslint-disable -- This is a stub provided by Admiral */
 	window.admiral =
 		window.admiral ||
