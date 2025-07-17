@@ -112,6 +112,10 @@ declare global {
 		}>;
 
 		// Admiral ad blocker detection
-		admiral?: () => void;
+		admiral?: (
+			action?: string,
+			eventName?: string,
+			callback?: (eventData: unknown) => void,
+		) => void;
 	}
 }

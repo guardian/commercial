@@ -9,13 +9,14 @@ type MeasureDetectedEvent = {
 };
 
 const onLoad = () => {
-	// eslint-disable-next-line -- Stub provided by Admiral
+	/* eslint-disable -- This is a stub provided by Admiral */
 	window.admiral =
 		window.admiral ||
 		function () {
-			// eslint-disable-next-line -- Stub provided by Admiral
+			// @ts-expect-error
 			(admiral.q = admiral.q || []).push(arguments);
 		};
+	/* eslint-enable */
 
 	window.admiral(
 		'after',
