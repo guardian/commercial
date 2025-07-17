@@ -1,7 +1,7 @@
 import type { ABTest } from '@guardian/ab-core';
 
-export const admiralAdBlockerRecovery: ABTest = {
-	id: 'AdmiralAdBlockerRecovery',
+export const admiralAdblockRecovery: ABTest = {
+	id: 'AdmiralAdblockRecovery',
 	author: '@commercial-dev',
 	start: '2025-07-17',
 	expiry: '2025-08-29',

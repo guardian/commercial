@@ -3,7 +3,7 @@
 import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { getConsentFor, onConsent } from '@guardian/libs';
 import { isUserInVariant } from '../../experiments/ab';
-import { admiralAdBlockerRecovery } from '../../experiments/tests/admiral-adblocker-recovery';
+import { admiralAdblockRecovery } from '../../experiments/tests/admiral-adblocker-recovery';
 import { commercialFeatures } from '../../lib/commercial-features';
 import fastdom from '../../lib/fastdom-promise';
 import { admiralTag as admiral } from '../../lib/third-party-tags/admiral-adblocker';
@@ -87,13 +87,13 @@ const insertScripts = async (
 
 const loadOther = (): Promise<void> => {
 	const shouldLoadAdmiral =
-		isInUsa() && isUserInVariant(admiralAdBlockerRecovery, 'variant');
+		isInUsa() && isUserInVariant(admiralAdblockRecovery, 'variant');
 
 	console.log('=====> checking admiral status');
 	console.log({
 		shouldLoadAdmiral,
 		isInUs: isInUsa(),
-		isInABTest: isUserInVariant(admiralAdBlockerRecovery, 'variant'),
+		isInABTest: isUserInVariant(admiralAdblockRecovery, 'variant'),
 	});
 
 	const advertisingServices: ThirdPartyTag[] = [
@@ -114,10 +114,7 @@ const loadOther = (): Promise<void> => {
 		 */
 		admiral({
 			shouldRun:
-				isInUsa() &&
-				(window.guardian.config.switches.admiralAdBlockerRecovery ??
-					false) &&
-				isUserInVariant(admiralAdBlockerRecovery, 'variant'),
+				isInUsa() && isUserInVariant(admiralAdblockRecovery, 'variant'),
 		}),
 	].filter((_) => _.shouldRun);
 
