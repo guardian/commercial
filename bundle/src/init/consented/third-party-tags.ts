@@ -2,6 +2,8 @@
 
 import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { getConsentFor, onConsent } from '@guardian/libs';
+import { isUserInVariant } from '../../experiments/ab';
+import { admiralAdBlockerRecovery } from '../../experiments/tests/admiral-adblocker-recovery';
 import { commercialFeatures } from '../../lib/commercial-features';
 import fastdom from '../../lib/fastdom-promise';
 import { admiralTag as admiral } from '../../lib/third-party-tags/admiral-adblocker';
@@ -84,6 +86,16 @@ const insertScripts = async (
 };
 
 const loadOther = (): Promise<void> => {
+	const shouldLoadAdmiral =
+		isInUsa() && isUserInVariant(admiralAdBlockerRecovery, 'variant');
+
+	console.log('=====> checking admiral status');
+	console.log({
+		shouldLoadAdmiral,
+		isInUs: isInUsa(),
+		isInABTest: isUserInVariant(admiralAdBlockerRecovery, 'variant'),
+	});
+
 	const advertisingServices: ThirdPartyTag[] = [
 		remarketing({
 			shouldRun: window.guardian.config.switches.remarketing ?? false,
@@ -93,19 +105,19 @@ const loadOther = (): Promise<void> => {
 		}),
 		ias,
 		inizio({ shouldRun: window.guardian.config.switches.inizio ?? false }),
-		/** Admiral should only run:
-		 * - in the US
+		/**
+		 * Admiral should only run:
 		 * - if user has consented (ie not "do not sell")
+		 * - in the US
 		 * - if the feature switch is turned on
-		 * - if user is opted into the client-side test
+		 * - if user is opted into the client-side AB test
 		 */
 		admiral({
 			shouldRun:
-				(isInUsa() &&
-					window.guardian.config.switches.admiralAdBlockerRecovery &&
-					window.guardian.config.tests
-						?.AdmiralAdBlockerRecoveryVariant === 'variant') ??
-				false,
+				isInUsa() &&
+				(window.guardian.config.switches.admiralAdBlockerRecovery ??
+					false) &&
+				isUserInVariant(admiralAdBlockerRecovery, 'variant'),
 		}),
 	].filter((_) => _.shouldRun);
 
