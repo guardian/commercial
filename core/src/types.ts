@@ -501,6 +501,12 @@ type GoogleTrackConversionObject = {
 	google_remarketing_only: boolean;
 };
 
+type Admiral = (
+	action?: string,
+	eventName?: string,
+	callback?: (eventData: Record<string, unknown>) => void,
+) => void;
+
 export type {
 	Advert,
 	DfpEnv,
@@ -535,4 +541,5 @@ export type {
 	Trac,
 	GoogleTagParams,
 	GoogleTrackConversionObject,
+	Admiral,
 };

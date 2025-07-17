@@ -2,10 +2,24 @@ import { log } from '@guardian/libs';
 import { admiralScript } from '../__vendor/admiral';
 import type { GetThirdPartyTag } from '../types';
 
-type MeasureDetectedEvent = {
+type AdmiralMeasureDetectedEvent = {
 	adblocking: boolean;
 	whitelisted: boolean;
 	subscribed: boolean;
+};
+
+const isAdmiralMeasureDetectedEvent = (
+	e: Record<string, unknown>,
+): e is AdmiralMeasureDetectedEvent => {
+	if (
+		typeof e === 'object' &&
+		'adblocking' in e &&
+		'whitelisted' in e &&
+		'subscribed' in e
+	) {
+		return true;
+	}
+	return false;
 };
 
 const onLoad = () => {
@@ -20,30 +34,28 @@ const onLoad = () => {
 		};
 	/* eslint-enable */
 
-	window.admiral(
-		'after',
-		'measure.detected',
-		function (measureDetectedEvent: MeasureDetectedEvent) {
-			if (measureDetectedEvent.adblocking) {
+	window.admiral('after', 'measure.detected', function (event) {
+		if (isAdmiralMeasureDetectedEvent(event)) {
+			if (event.adblocking) {
 				log(
 					'commercial',
 					'❗️ Admiral detection: user has an adblocker and it is enabled',
 				);
 			}
-			if (measureDetectedEvent.whitelisted) {
+			if (event.whitelisted) {
 				log(
 					'commercial',
 					'⚪️ Admiral detection: user has seen Engage and subsequently disabled their adblocker',
 				);
 			}
-			if (measureDetectedEvent.subscribed) {
+			if (event.subscribed) {
 				log(
 					'commercial',
 					'🆗 Admiral detection: user has an active subscription to a transact plan',
 				);
 			}
-		},
-	);
+		}
+	});
 };
 
 /**
