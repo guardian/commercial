@@ -1,6 +1,7 @@
 import type { EventTimer } from './event-timer';
 import type {
 	AdBlockers,
+	Admiral,
 	Apstag,
 	ArticleCounts,
 	ComscoreGlobals,
@@ -112,10 +113,6 @@ declare global {
 		}>;
 
 		// Admiral ad blocker detection
-		admiral?: (
-			action?: string,
-			eventName?: string,
-			callback?: (eventData: unknown) => void,
-		) => void;
+		admiral?: Admiral;
 	}
 }
