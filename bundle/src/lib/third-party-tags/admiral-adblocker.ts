@@ -1,4 +1,3 @@
-import { log } from '@guardian/libs';
 import { admiralScript } from '../__vendor/admiral';
 import type { GetThirdPartyTag } from '../types';
 
@@ -24,9 +23,44 @@ const isAdmiralMeasureDetectedEvent = (
 	return false;
 };
 
-const onLoad = () => {
-	console.log(`${admiralLogPrefix} script loaded on page`);
+const logAdmiralMeasureDetectedEvent = (): void => {
+	if (window.admiral) {
+		window.admiral('after', 'measure.detected', function (event) {
+			console.log(`${admiralLogPrefix}: handling measure.detected event`);
 
+			if (isAdmiralMeasureDetectedEvent(event)) {
+				if (event.adblocking) {
+					console.log(
+						'commercial',
+						`${admiralLogPrefix}: user has an adblocker and it is enabled`,
+					);
+				}
+				if (event.whitelisted) {
+					console.log(
+						'commercial',
+						`${admiralLogPrefix}: user has seen Engage and subsequently disabled their adblocker`,
+					);
+				}
+				if (event.subscribed) {
+					console.log(
+						'commercial',
+						`${admiralLogPrefix}: user has an active subscription to a transact plan`,
+					);
+				}
+			} else {
+				console.log(
+					'commercial',
+					`${admiralLogPrefix}: Event is not of expected format of measure.detected ${JSON.stringify(event)}`,
+				);
+			}
+		});
+	}
+};
+
+const onLoad = (): void => {
+	console.log(`🛡️ Admiral script loaded on page`);
+
+	// Set up window.admiral
 	/* eslint-disable -- This is a stub provided by Admiral */
 	window.admiral =
 		window.admiral ||
@@ -36,49 +70,7 @@ const onLoad = () => {
 		};
 	/* eslint-enable */
 
-	window.admiral('after', 'measure.detected', function (event) {
-		if (isAdmiralMeasureDetectedEvent(event)) {
-			if (event.adblocking) {
-				log(
-					'commercial',
-					`${admiralLogPrefix}: user has an adblocker and it is enabled`,
-				);
-				console.log(
-					'commercial',
-					`${admiralLogPrefix}: user has an adblocker and it is enabled`,
-				);
-			}
-			if (event.whitelisted) {
-				log(
-					'commercial',
-					`${admiralLogPrefix}: user has seen Engage and subsequently disabled their adblocker`,
-				);
-				console.log(
-					'commercial',
-					`${admiralLogPrefix}: user has seen Engage and subsequently disabled their adblocker`,
-				);
-			}
-			if (event.subscribed) {
-				log(
-					'commercial',
-					`${admiralLogPrefix}: user has an active subscription to a transact plan`,
-				);
-				console.log(
-					'commercial',
-					`${admiralLogPrefix}: user has an active subscription to a transact plan`,
-				);
-			}
-		} else {
-			log(
-				'commercial',
-				`${admiralLogPrefix}: Event is not of expected format of measure.detected ${JSON.stringify(event)}`,
-			);
-			console.log(
-				'commercial',
-				`${admiralLogPrefix}: Event is not of expected format of measure.detected ${JSON.stringify(event)}`,
-			);
-		}
-	});
+	logAdmiralMeasureDetectedEvent();
 };
 
 /**
