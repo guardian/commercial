@@ -8,6 +8,8 @@ type AdmiralMeasureDetectedEvent = {
 	subscribed: boolean;
 };
 
+const admiralLogPrefix = '🛡️ Admiral';
+
 const isAdmiralMeasureDetectedEvent = (
 	e: Record<string, unknown>,
 ): e is AdmiralMeasureDetectedEvent => {
@@ -23,7 +25,7 @@ const isAdmiralMeasureDetectedEvent = (
 };
 
 const onLoad = () => {
-	log('commercial', 'Admiral Adblock Recovery loaded on page');
+	log('commercial', `${admiralLogPrefix} loaded on page`);
 
 	/* eslint-disable -- This is a stub provided by Admiral */
 	window.admiral =
@@ -34,32 +36,38 @@ const onLoad = () => {
 		};
 	/* eslint-enable */
 
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-call -- window.admiral should be available by now
 	window.admiral('after', 'measure.detected', function (event) {
 		if (isAdmiralMeasureDetectedEvent(event)) {
 			if (event.adblocking) {
 				log(
 					'commercial',
-					'❗️ Admiral detection: user has an adblocker and it is enabled',
+					`${admiralLogPrefix}: user has an adblocker and it is enabled`,
 				);
 			}
 			if (event.whitelisted) {
 				log(
 					'commercial',
-					'⚪️ Admiral detection: user has seen Engage and subsequently disabled their adblocker',
+					`${admiralLogPrefix}: user has seen Engage and subsequently disabled their adblocker`,
 				);
 			}
 			if (event.subscribed) {
 				log(
 					'commercial',
-					'🆗 Admiral detection: user has an active subscription to a transact plan',
+					`${admiralLogPrefix}: user has an active subscription to a transact plan`,
 				);
 			}
+		} else {
+			log(
+				'commercial',
+				`${admiralLogPrefix}: Event is not of expected format of measure.detected`,
+			);
 		}
 	});
 };
 
 /**
- * Admiral adblocker recovery tag
+ * Admiral adblock recovery tag
  */
 const admiralTag: GetThirdPartyTag = ({ shouldRun }) => ({
 	shouldRun,
