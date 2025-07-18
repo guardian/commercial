@@ -1,7 +1,7 @@
 /* A regionalised container for all the commercial tags. */
 
 import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
-import { getConsentFor, onConsent } from '@guardian/libs';
+import { cmp, getConsentFor, onConsent } from '@guardian/libs';
 import { isUserInVariant } from '../../experiments/ab';
 import { admiralAdblockRecovery } from '../../experiments/tests/admiral-adblocker-recovery';
 import { commercialFeatures } from '../../lib/commercial-features';
@@ -85,7 +85,11 @@ const insertScripts = async (
 	}
 };
 
-const loadOther = (): Promise<void> => {
+const loadOther = async (): Promise<void> => {
+	const isCmpOnPage = await cmp
+		.willShowPrivacyMessage()
+		.then((result) => !!result);
+
 	const advertisingServices: ThirdPartyTag[] = [
 		remarketing({
 			shouldRun: window.guardian.config.switches.remarketing ?? false,
@@ -104,7 +108,9 @@ const loadOther = (): Promise<void> => {
 		 */
 		admiral({
 			shouldRun:
-				isInUsa() && isUserInVariant(admiralAdblockRecovery, 'variant'),
+				!isCmpOnPage &&
+				isInUsa() &&
+				isUserInVariant(admiralAdblockRecovery, 'variant'),
 		}),
 	].filter((_) => _.shouldRun);
 
