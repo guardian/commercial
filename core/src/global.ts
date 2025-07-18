@@ -1,6 +1,7 @@
 import type { EventTimer } from './event-timer';
 import type {
 	AdBlockers,
+	Admiral,
 	Apstag,
 	ArticleCounts,
 	ComscoreGlobals,
@@ -110,5 +111,8 @@ declare global {
 			cmd: string;
 			val: Record<string, unknown>;
 		}>;
+
+		// Admiral ad blocker detection
+		admiral?: Admiral;
 	}
 }

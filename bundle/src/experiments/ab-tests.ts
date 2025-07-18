@@ -1,4 +1,5 @@
 import type { ABTest } from '@guardian/ab-core';
+import { admiralAdblockRecovery } from './tests/admiral-adblocker-recovery';
 import { prebidAdUnit } from './tests/prebid-ad-unit';
 import { prebid946 } from './tests/prebid946';
 
@@ -11,4 +12,5 @@ export const concurrentTests: ABTest[] = [
 	// one test per line
 	prebid946,
 	prebidAdUnit,
+	admiralAdblockRecovery,
 ];

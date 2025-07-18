@@ -41,8 +41,7 @@
 		"tsc": "tsc --noEmit"
 	},
 	"peerDependencies": {
-		"@guardian/ab-core": "catalog:",
-		"@guardian/libs": "catalog:"
+		"@guardian/ab-core": "catalog:"
 	},
 	"dependencies": {
 		"@guardian/ab-core": "catalog:",
