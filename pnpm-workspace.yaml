@@ -10,7 +10,7 @@ catalog:
     '@types/jest': '30.0.0'
     '@types/googletag': '~3.3.0'
     'jest': '^30.0.1'
-    'jest-environment-jsdom': '~29.7.0'
+    'jest-environment-jsdom': '~30.0.4'
     'jest-environment-jsdom-global': '~4.0.0'
     'ts-jest': '^29.2.5'
     'type-fest': '^4.31.0'
