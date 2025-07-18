@@ -59,7 +59,7 @@ const onLoad = () => {
 		} else {
 			log(
 				'commercial',
-				`${admiralLogPrefix}: Event is not of expected format of measure.detected`,
+				`${admiralLogPrefix}: Event is not of expected format of measure.detected ${JSON.stringify(event)}`,
 			);
 		}
 	});
