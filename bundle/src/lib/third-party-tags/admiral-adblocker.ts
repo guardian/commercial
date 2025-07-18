@@ -36,7 +36,6 @@ const onLoad = () => {
 		};
 	/* eslint-enable */
 
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-call -- window.admiral should be available by now
 	window.admiral('after', 'measure.detected', function (event) {
 		if (isAdmiralMeasureDetectedEvent(event)) {
 			if (event.adblocking) {

@@ -4,7 +4,7 @@ packages:
 
 catalog:
     '@guardian/ab-core': '8.0.1'
-    '@guardian/libs': '25.1.0'
+    '@guardian/libs': '25.2.0'
     'typescript': '5.5.4'
     '@types/node': '24.0.12'
     '@types/jest': '30.0.0'
