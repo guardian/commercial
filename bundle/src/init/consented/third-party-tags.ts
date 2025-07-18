@@ -86,10 +86,7 @@ const insertScripts = async (
 };
 
 const loadOther = async (): Promise<void> => {
-	const isCmpOnPage = await cmp
-		.willShowPrivacyMessage()
-		.then((result) => !!result);
-
+	const isCmpOnPage = await cmp.willShowPrivacyMessage();
 	log(
 		'commercial',
 		`Can Admiral run? ${!isCmpOnPage && isInUsa() && isUserInVariant(admiralAdblockRecovery, 'variant')} ${JSON.stringify(

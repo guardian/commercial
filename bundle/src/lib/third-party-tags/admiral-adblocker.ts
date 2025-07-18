@@ -25,7 +25,7 @@ const isAdmiralMeasureDetectedEvent = (
 };
 
 const onLoad = () => {
-	log('commercial', `${admiralLogPrefix} loaded on page`);
+	console.log(`${admiralLogPrefix} script loaded on page`);
 
 	/* eslint-disable -- This is a stub provided by Admiral */
 	window.admiral =
@@ -43,9 +43,17 @@ const onLoad = () => {
 					'commercial',
 					`${admiralLogPrefix}: user has an adblocker and it is enabled`,
 				);
+				console.log(
+					'commercial',
+					`${admiralLogPrefix}: user has an adblocker and it is enabled`,
+				);
 			}
 			if (event.whitelisted) {
 				log(
+					'commercial',
+					`${admiralLogPrefix}: user has seen Engage and subsequently disabled their adblocker`,
+				);
+				console.log(
 					'commercial',
 					`${admiralLogPrefix}: user has seen Engage and subsequently disabled their adblocker`,
 				);
@@ -55,9 +63,17 @@ const onLoad = () => {
 					'commercial',
 					`${admiralLogPrefix}: user has an active subscription to a transact plan`,
 				);
+				console.log(
+					'commercial',
+					`${admiralLogPrefix}: user has an active subscription to a transact plan`,
+				);
 			}
 		} else {
 			log(
+				'commercial',
+				`${admiralLogPrefix}: Event is not of expected format of measure.detected ${JSON.stringify(event)}`,
+			);
+			console.log(
 				'commercial',
 				`${admiralLogPrefix}: Event is not of expected format of measure.detected ${JSON.stringify(event)}`,
 			);
