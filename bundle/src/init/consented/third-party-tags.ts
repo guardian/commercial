@@ -1,7 +1,7 @@
 /* A regionalised container for all the commercial tags. */
 
 import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
-import { cmp, getConsentFor, log, onConsent } from '@guardian/libs';
+import { cmp, getConsentFor, onConsent } from '@guardian/libs';
 import { isUserInVariant } from '../../experiments/ab';
 import { admiralAdblockRecovery } from '../../experiments/tests/admiral-adblocker-recovery';
 import { commercialFeatures } from '../../lib/commercial-features';
@@ -87,19 +87,6 @@ const insertScripts = async (
 
 const loadOther = async (): Promise<void> => {
 	const isCmpOnPage = await cmp.willShowPrivacyMessage();
-	log(
-		'commercial',
-		`Can Admiral run? ${!isCmpOnPage && isInUsa() && isUserInVariant(admiralAdblockRecovery, 'variant')} ${JSON.stringify(
-			{
-				isCmpOnPage,
-				isInUsa: isInUsa(),
-				isUserInVariant: isUserInVariant(
-					admiralAdblockRecovery,
-					'variant',
-				),
-			},
-		)}`,
-	);
 
 	const advertisingServices: ThirdPartyTag[] = [
 		remarketing({

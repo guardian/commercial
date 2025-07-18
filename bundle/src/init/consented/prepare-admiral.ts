@@ -1,7 +1,4 @@
-import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { log } from '@guardian/libs';
-import { isUserInVariant } from '../../experiments/ab';
-import { admiralAdblockRecovery } from '../../experiments/tests/admiral-adblocker-recovery';
 
 type AdmiralMeasureDetectedEvent = {
 	adblocking: boolean;
@@ -27,29 +24,27 @@ const isAdmiralMeasureDetectedEvent = (
 
 const setUpAdmiralEventLogger = (): void => {
 	window.admiral?.('after', 'measure.detected', function (event) {
-		console.log(`${admiralLogPrefix}: handling measure.detected event`);
-
 		if (isAdmiralMeasureDetectedEvent(event)) {
 			if (event.adblocking) {
-				console.log(
+				log(
 					'commercial',
 					`${admiralLogPrefix}: user has an adblocker and it is enabled`,
 				);
 			}
 			if (event.whitelisted) {
-				console.log(
+				log(
 					'commercial',
 					`${admiralLogPrefix}: user has seen Engage and subsequently disabled their adblocker`,
 				);
 			}
 			if (event.subscribed) {
-				console.log(
+				log(
 					'commercial',
 					`${admiralLogPrefix}: user has an active subscription to a transact plan`,
 				);
 			}
 		} else {
-			console.log(
+			log(
 				'commercial',
 				`${admiralLogPrefix}: Event is not of expected format of measure.detected ${JSON.stringify(event)}`,
 			);
@@ -58,16 +53,15 @@ const setUpAdmiralEventLogger = (): void => {
 };
 
 /**
- * Admiral Adblock Recovery
+ * Admiral Adblock Recovery Init
  *
- * The script is only run under certain conditions
+ * The script is loaded conditionally as a third-party-tag
+ * @see /bundle/src/init/consented/third-party-tags.ts
+ *
+ * This function ensures admiral is available on the window object
+ * and adds an event handler callback for measure.detected events
  */
 const initAdmiralAdblockRecovery = (): Promise<void> => {
-	if (!isInUsa() || !isUserInVariant(admiralAdblockRecovery, 'variant')) {
-		return Promise.resolve();
-	}
-	log('commercial', '🛡️ Admiral: setting up window object and event logger');
-
 	// Set up window.admiral
 	/* eslint-disable -- This is a stub provided by Admiral */
 	window.admiral =
