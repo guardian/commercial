@@ -34,7 +34,7 @@
 	},
 	"dependencies": {
 		"@guardian/ab-core": "catalog:",
-		"@guardian/core-web-vitals": "11.0.0",
+		"@guardian/core-web-vitals": "14.0.0",
 		"@guardian/commercial-core": "workspace:*",
 		"@guardian/identity-auth": "^7.0.0",
 		"@guardian/identity-auth-frontend": "9.0.0",
