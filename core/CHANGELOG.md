@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 27.2.0
+
+### Minor Changes
+
+- b5aa8da: Add type for Admiral ad block recovery integration and include on global window object
+
 ## 27.1.0
 
 ### Minor Changes
