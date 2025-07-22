@@ -62,7 +62,7 @@
 		"@types/node": "catalog:",
 		"@types/webpack-env": "^1.18.5",
 		"@types/googletag": "catalog:",
-		"babel-jest": "^30.0.1",
+		"babel-jest": "^30.0.5",
 		"babel-loader": "^10.0.0",
 		"babel-plugin-dynamic-import-node": "^2.3.3",
 		"circular-dependency-plugin": "^5.2.2",
