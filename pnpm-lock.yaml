@@ -40,6 +40,11 @@ catalogs:
       specifier: 5.5.4
       version: 5.5.4
 
+patchedDependencies:
+  jsdom:
+    hash: bld754pt2rccrfojs6tbcgt5kq
+    path: patches/jsdom.patch
+
 importers:
 
   .:
@@ -6767,7 +6772,7 @@ snapshots:
 
   '@jest/diff-sequences@30.0.1': {}
 
-  '@jest/environment-jsdom-abstract@30.0.5(jsdom@26.1.0)':
+  '@jest/environment-jsdom-abstract@30.0.5(jsdom@26.1.0(patch_hash=bld754pt2rccrfojs6tbcgt5kq))':
     dependencies:
       '@jest/environment': 30.0.5
       '@jest/fake-timers': 30.0.5
@@ -6776,7 +6781,7 @@ snapshots:
       '@types/node': 24.0.15
       jest-mock: 30.0.5
       jest-util: 30.0.5
-      jsdom: 26.1.0
+      jsdom: 26.1.0(patch_hash=bld754pt2rccrfojs6tbcgt5kq)
 
   '@jest/environment@30.0.4':
     dependencies:
@@ -9806,10 +9811,10 @@ snapshots:
   jest-environment-jsdom@30.0.5:
     dependencies:
       '@jest/environment': 30.0.5
-      '@jest/environment-jsdom-abstract': 30.0.5(jsdom@26.1.0)
+      '@jest/environment-jsdom-abstract': 30.0.5(jsdom@26.1.0(patch_hash=bld754pt2rccrfojs6tbcgt5kq))
       '@types/jsdom': 21.1.7
       '@types/node': 24.0.15
-      jsdom: 26.1.0
+      jsdom: 26.1.0(patch_hash=bld754pt2rccrfojs6tbcgt5kq)
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -10068,7 +10073,7 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  jsdom@26.1.0:
+  jsdom@26.1.0(patch_hash=bld754pt2rccrfojs6tbcgt5kq):
     dependencies:
       cssstyle: 4.6.0
       data-urls: 5.0.0
