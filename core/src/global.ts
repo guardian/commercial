@@ -59,6 +59,9 @@ declare global {
 					) => void;
 				};
 			};
+			readerRevenue: {
+				bannerToShow: string | null;
+			};
 		};
 
 		ootag: {
