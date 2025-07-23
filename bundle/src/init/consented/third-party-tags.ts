@@ -1,7 +1,7 @@
 /* A regionalised container for all the commercial tags. */
 
 import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
-import { cmp, getConsentFor, onConsent } from '@guardian/libs';
+import { cmp, getConsentFor, isUndefined, onConsent } from '@guardian/libs';
 import { isUserInVariant } from '../../experiments/ab';
 import { admiralAdblockRecovery } from '../../experiments/tests/admiral-adblocker-recovery';
 import { commercialFeatures } from '../../lib/commercial-features';
@@ -85,8 +85,9 @@ const insertScripts = async (
 	}
 };
 
-const loadOther = async (): Promise<void> => {
-	const isCmpOnPage = await cmp.willShowPrivacyMessage();
+const loadOther = (): Promise<void> => {
+	const isCmpOnPage =
+		!cmp.hasInitialised() || cmp.willShowPrivacyMessageSync();
 
 	const advertisingServices: ThirdPartyTag[] = [
 		remarketing({
@@ -100,6 +101,7 @@ const loadOther = async (): Promise<void> => {
 		/**
 		 * Admiral should only run:
 		 * - if user has consented (ie not "do not sell")
+		 * - if neither the CMP nor supporter revenue banners are going to show
 		 * - in the US
 		 * - if the feature switch is turned on
 		 * - if user is opted into the client-side AB test
@@ -107,6 +109,7 @@ const loadOther = async (): Promise<void> => {
 		admiral({
 			shouldRun:
 				!isCmpOnPage &&
+				isUndefined(window.guardian.readerRevenue.bannerToShow) &&
 				isInUsa() &&
 				isUserInVariant(admiralAdblockRecovery, 'variant'),
 		}),
@@ -121,7 +124,6 @@ const loadOther = async (): Promise<void> => {
 
 	return insertScripts(advertisingServices, performanceServices);
 };
-
 const init = async (): Promise<boolean> => {
 	if (commercialFeatures.thirdPartyTags) {
 		void loadOther();
