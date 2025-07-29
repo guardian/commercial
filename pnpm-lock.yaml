@@ -92,8 +92,8 @@ importers:
         specifier: workspace:*
         version: link:../core
       '@guardian/core-web-vitals':
-        specifier: 11.0.0
-        version: 11.0.0(@guardian/libs@25.2.0(@guardian/ophan-tracker-js@2.3.1)(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)
+        specifier: 14.0.0
+        version: 14.0.0(@guardian/libs@25.2.0(@guardian/ophan-tracker-js@2.3.1)(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)
       '@guardian/identity-auth':
         specifier: ^7.0.0
         version: 7.0.0(@guardian/libs@25.2.0(@guardian/ophan-tracker-js@2.3.1)(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)
@@ -1081,10 +1081,10 @@ packages:
       browserslist: ^4.22.2
       tslib: ^2.6.2
 
-  '@guardian/core-web-vitals@11.0.0':
-    resolution: {integrity: sha512-GVbEl4V+xqvQbisy/N95zrCeZiiKrxKeEQ7MjXVxjuA98enS1huOXvfLOOpCgjbvekT6tGqxYlSUyj75qr/ApQ==}
+  '@guardian/core-web-vitals@14.0.0':
+    resolution: {integrity: sha512-l75b/c4yprZPSSzGIIydPkV/s6bxwOC5OED8PqKGB9Q/xhM7mDfP1slL+Oh/AFMhc2Y8EOhZ8spTXcI17nZswA==}
     peerDependencies:
-      '@guardian/libs': ^22.0.0
+      '@guardian/libs': ^25.0.0
       tslib: ^2.6.2
       typescript: ~5.5.2
       web-vitals: ^4.2.1
@@ -6642,7 +6642,7 @@ snapshots:
       browserslist: 4.25.1
       tslib: 2.8.1
 
-  '@guardian/core-web-vitals@11.0.0(@guardian/libs@25.2.0(@guardian/ophan-tracker-js@2.3.1)(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)':
+  '@guardian/core-web-vitals@14.0.0(@guardian/libs@25.2.0(@guardian/ophan-tracker-js@2.3.1)(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)':
     dependencies:
       '@guardian/libs': 25.2.0(@guardian/ophan-tracker-js@2.3.1)(tslib@2.8.1)(typescript@5.5.4)
       tslib: 2.8.1
