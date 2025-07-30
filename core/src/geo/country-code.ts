@@ -14,8 +14,6 @@ const editionToCountryCode = (editionKey: Edition = 'UK'): CountryCode =>
 const countryCookieName = 'GU_geo_country';
 const countryOverrideName = 'gu.geo.override';
 
-let locale: CountryCode | null;
-
 /*
    This method can be used as a non async way of getting the country code
    after init has been called. Returning locale should cover all/most
@@ -31,7 +29,6 @@ const getCountryCode = (): CountryCode => {
 		: null;
 
 	return (
-		locale ??
 		countryOverride ??
 		(getCookie({
 			name: countryCookieName,

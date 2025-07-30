@@ -80,7 +80,7 @@ describe.skip('Cross-frame messenger: scroll', () => {
 
 	type ObsCallback = (
 		entries: Array<
-			Pick<IntersectionObserverEntryInit, 'intersectionRatio' | 'target'>
+			Pick<IntersectionObserverEntry, 'intersectionRatio' | 'target'>
 		>,
 	) => void;
 
