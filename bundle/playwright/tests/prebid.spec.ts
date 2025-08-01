@@ -59,13 +59,12 @@ test.describe('Prebid', () => {
 		);
 
 		expect(bidders).toBeTruthy();
-		expect(bidders).toHaveLength(10);
+		expect(bidders).toHaveLength(9);
 		[
 			'oxd',
 			'and',
 			'pubmatic',
 			'ix',
-			'adyoulike',
 			'ozone',
 			'xhb',
 			'criteo',
