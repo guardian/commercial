@@ -65,7 +65,6 @@ test.describe('Prebid', () => {
 			'and',
 			'pubmatic',
 			'ix',
-			'adyoulike',
 			'ozone',
 			'xhb',
 			'criteo',
