@@ -8,14 +8,12 @@ type MeasureDetectedEvent = {
 };
 type CandidateShownEvent = {
 	candidateID: string;
-	variantID?: string; // Should exist according to documentation but does not in practice
+	variantID?: string;
 	candidateGroups: string[];
-	groups?: string[]; // Not documented but appears
 };
 type CandidateDismissedEvent = {
 	candidateID: string;
 	candidateGroups: string[];
-	groups?: string[]; // Not documented but appears
 };
 
 const admiralLogPrefix = '🛡️ Admiral';
