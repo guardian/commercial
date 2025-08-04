@@ -8,30 +8,30 @@ type MeasureDetectedEvent = {
 };
 type CandidateShownEvent = {
 	candidateID: string;
-	variantID: string;
+	variantID?: string; // Should exist according to documentation but does not in practice
 	candidateGroups: string[];
+	groups?: string[]; // Not documented but appears
 };
 type CandidateDismissedEvent = {
 	candidateID: string;
 	candidateGroups: string[];
+	groups?: string[]; // Not documented but appears
 };
 
 const admiralLogPrefix = '🛡️ Admiral';
 
 const handleMeasureDetectedEvent = (event: AdmiralEvent): void => {
+	console.log(
+		`${admiralLogPrefix} Handling measure.detected event: ${JSON.stringify(event)}`,
+	);
+
 	const isMeasureDetectedEvent = (
 		e: AdmiralEvent,
-	): e is MeasureDetectedEvent => {
-		if (
-			typeof e === 'object' &&
-			'adblocking' in e &&
-			'whitelisted' in e &&
-			'subscribed' in e
-		) {
-			return true;
-		}
-		return false;
-	};
+	): e is MeasureDetectedEvent =>
+		typeof e === 'object' &&
+		'adblocking' in e &&
+		'whitelisted' in e &&
+		'subscribed' in e;
 
 	if (isMeasureDetectedEvent(event)) {
 		if (event.adblocking) {
@@ -61,19 +61,15 @@ const handleMeasureDetectedEvent = (event: AdmiralEvent): void => {
 };
 
 const handleCandidateShownEvent = (event: AdmiralEvent): void => {
-	const isCandidateShownEvent = (
-		e: AdmiralEvent,
-	): e is CandidateShownEvent => {
-		if (
-			typeof e === 'object' &&
-			'candidateID' in e &&
-			'variantID' in e &&
-			'candidateGroups' in e
-		) {
-			return true;
-		}
-		return false;
-	};
+	console.log(
+		`${admiralLogPrefix} Handling candidate.shown event: ${JSON.stringify(event)}`,
+	);
+
+	const isCandidateShownEvent = (e: AdmiralEvent): e is CandidateShownEvent =>
+		typeof e === 'object' &&
+		'candidateID' in e &&
+		'variantID' in e &&
+		'candidateGroups' in e;
 
 	if (isCandidateShownEvent(event)) {
 		log(
@@ -89,18 +85,14 @@ const handleCandidateShownEvent = (event: AdmiralEvent): void => {
 };
 
 const handleCandidateDismissedEvent = (event: AdmiralEvent): void => {
+	console.log(
+		`${admiralLogPrefix} Handling candidate.dismissed event: ${JSON.stringify(event)}`,
+	);
+
 	const isCandidateDismissedEvent = (
 		e: AdmiralEvent,
-	): e is CandidateDismissedEvent => {
-		if (
-			typeof e === 'object' &&
-			'candidateID' in e &&
-			'candidateGroups' in e
-		) {
-			return true;
-		}
-		return false;
-	};
+	): e is CandidateDismissedEvent =>
+		typeof e === 'object' && 'candidateID' in e && 'candidateGroups' in e;
 
 	if (isCandidateDismissedEvent(event)) {
 		log(
@@ -117,15 +109,15 @@ const handleCandidateDismissedEvent = (event: AdmiralEvent): void => {
 
 const setUpAdmiralEventLogger = (): void => {
 	window.admiral?.('after', 'measure.detected', function (event) {
-		void handleMeasureDetectedEvent(event);
+		handleMeasureDetectedEvent(event);
 	});
 
 	window.admiral?.('after', 'candidate.shown', function (event) {
-		void handleCandidateShownEvent(event);
+		handleCandidateShownEvent(event);
 	});
 
 	window.admiral?.('after', 'candidate.dismissed', function (event) {
-		void handleCandidateDismissedEvent(event);
+		handleCandidateDismissedEvent(event);
 	});
 };
 
