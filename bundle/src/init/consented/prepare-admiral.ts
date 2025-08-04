@@ -21,10 +21,6 @@ type CandidateDismissedEvent = {
 const admiralLogPrefix = '🛡️ Admiral';
 
 const handleMeasureDetectedEvent = (event: AdmiralEvent): void => {
-	console.log(
-		`${admiralLogPrefix} Handling measure.detected event: ${JSON.stringify(event)}`,
-	);
-
 	const isMeasureDetectedEvent = (
 		e: AdmiralEvent,
 	): e is MeasureDetectedEvent =>
@@ -61,10 +57,6 @@ const handleMeasureDetectedEvent = (event: AdmiralEvent): void => {
 };
 
 const handleCandidateShownEvent = (event: AdmiralEvent): void => {
-	console.log(
-		`${admiralLogPrefix} Handling candidate.shown event: ${JSON.stringify(event)}`,
-	);
-
 	const isCandidateShownEvent = (e: AdmiralEvent): e is CandidateShownEvent =>
 		typeof e === 'object' &&
 		'candidateID' in e &&
@@ -85,10 +77,6 @@ const handleCandidateShownEvent = (event: AdmiralEvent): void => {
 };
 
 const handleCandidateDismissedEvent = (event: AdmiralEvent): void => {
-	console.log(
-		`${admiralLogPrefix} Handling candidate.dismissed event: ${JSON.stringify(event)}`,
-	);
-
 	const isCandidateDismissedEvent = (
 		e: AdmiralEvent,
 	): e is CandidateDismissedEvent =>
