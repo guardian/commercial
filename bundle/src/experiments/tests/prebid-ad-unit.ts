@@ -4,7 +4,7 @@ export const prebidAdUnit: ABTest = {
 	id: 'PrebidAdUnit',
 	author: '@commercial-dev',
 	start: '2025-07-22',
-	expiry: '2025-08-12',
+	expiry: '2025-08-21',
 	audience: 2 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',
