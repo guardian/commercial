@@ -1,9 +1,6 @@
 /* A regionalised container for all the commercial tags. */
 
-import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
-import { cmp, getConsentFor, onConsent } from '@guardian/libs';
-import { isUserInVariant } from '../../experiments/ab';
-import { admiralAdblockRecovery } from '../../experiments/tests/admiral-adblocker-recovery';
+import { getConsentFor, onConsent } from '@guardian/libs';
 import { commercialFeatures } from '../../lib/commercial-features';
 import fastdom from '../../lib/fastdom-promise';
 import { admiralTag as admiral } from '../../lib/third-party-tags/admiral-adblocker';
@@ -85,9 +82,7 @@ const insertScripts = async (
 	}
 };
 
-const loadOther = async (): Promise<void> => {
-	const isCmpOnPage = await cmp.willShowPrivacyMessage();
-
+const loadOther = (): Promise<void> => {
 	const advertisingServices: ThirdPartyTag[] = [
 		remarketing({
 			shouldRun: window.guardian.config.switches.remarketing ?? false,
@@ -97,19 +92,7 @@ const loadOther = async (): Promise<void> => {
 		}),
 		ias,
 		inizio({ shouldRun: window.guardian.config.switches.inizio ?? false }),
-		/**
-		 * Admiral should only run:
-		 * - if user has consented (ie not "do not sell")
-		 * - in the US
-		 * - if the feature switch is turned on
-		 * - if user is opted into the client-side AB test
-		 */
-		admiral({
-			shouldRun:
-				!isCmpOnPage &&
-				isInUsa() &&
-				isUserInVariant(admiralAdblockRecovery, 'variant'),
-		}),
+		admiral,
 	].filter((_) => _.shouldRun);
 
 	const performanceServices: ThirdPartyTag[] = [
