@@ -6,7 +6,6 @@ import 'prebid.js/modules/consentManagementUsp';
 import 'prebid.js/modules/consentManagementGpp';
 
 // Bid adapters
-import 'prebid.js/modules/adyoulikeBidAdapter';
 import 'prebid.js/modules/criteoBidAdapter';
 import 'prebid.js/modules/gridBidAdapter';
 import 'prebid.js/modules/ixBidAdapter';

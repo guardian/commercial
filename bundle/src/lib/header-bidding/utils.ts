@@ -165,11 +165,6 @@ export const shouldIncludeBidder =
 	(consentState: ConsentState) =>
 	(bidder: BidderCode): boolean => {
 		switch (bidder) {
-			case 'adyoulike':
-				return (
-					isSwitchedOn('prebidAdYouLike') &&
-					getConsentFor('adYouLike', consentState)
-				);
 			case 'and':
 				return (
 					isSwitchedOn('prebidAppnexus') &&
