@@ -20,6 +20,7 @@ const baseAjaxUrl =
  * - Should not run for certain sections
  */
 const shouldRun =
+	cmp.hasInitialised() &&
 	!cmp.willShowPrivacyMessageSync() &&
 	isInUsa() &&
 	isUserInVariant(admiralAdblockRecovery, 'variant') &&
