@@ -1,3 +1,4 @@
+import type { Admiral } from '@guardian/commercial-core/types';
 import { log } from '@guardian/libs';
 
 type AdmiralEvent = Record<string, unknown>;
@@ -93,16 +94,16 @@ const handleCandidateDismissedEvent = (event: AdmiralEvent): void => {
 	}
 };
 
-const setUpAdmiralEventLogger = (): void => {
-	window.admiral?.('after', 'measure.detected', function (event) {
+const setUpAdmiralEventLogger = (admiral: Admiral): void => {
+	admiral('after', 'measure.detected', function (event) {
 		handleMeasureDetectedEvent(event);
 	});
 
-	window.admiral?.('after', 'candidate.shown', function (event) {
+	admiral('after', 'candidate.shown', function (event) {
 		handleCandidateShownEvent(event);
 	});
 
-	window.admiral?.('after', 'candidate.dismissed', function (event) {
+	admiral('after', 'candidate.dismissed', function (event) {
 		handleCandidateDismissedEvent(event);
 	});
 };
@@ -127,7 +128,7 @@ const initAdmiralAdblockRecovery = (): Promise<void> => {
 		};
 	/* eslint-enable */
 
-	void setUpAdmiralEventLogger();
+	void setUpAdmiralEventLogger(window.admiral);
 	return Promise.resolve();
 };
 
