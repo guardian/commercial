@@ -43,10 +43,9 @@ const commercialModules = [
 	prepareA9,
 	initFillSlotListener,
 	prepareAdVerification,
-	// Admiral init runs _before_ third party tags so that we can set targeting before the script runs
-	initAdmiralAdblockRecovery,
 	initThirdPartyTags,
 	initOpinaryPollListener,
+	initAdmiralAdblockRecovery,
 ];
 
 const bootCommercialWhenReady = () => {
