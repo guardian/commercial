@@ -23,7 +23,8 @@ const shouldRun =
 	cmp.hasInitialised() &&
 	!cmp.willShowPrivacyMessageSync() &&
 	isInUsa() &&
-	isUserInVariant(admiralAdblockRecovery, 'variant') &&
+	(isUserInVariant(admiralAdblockRecovery, 'variant-detect') ||
+		isUserInVariant(admiralAdblockRecovery, 'variant-recover')) &&
 	!window.guardian.config.page.shouldHideAdverts &&
 	!window.guardian.config.page.shouldHideReaderRevenue &&
 	!window.guardian.config.page.isSensitive &&

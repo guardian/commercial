@@ -1,7 +1,8 @@
-import type { Admiral } from '@guardian/commercial-core/types';
+import type { Admiral, AdmiralEvent } from '@guardian/commercial-core/types';
 import { log } from '@guardian/libs';
+import { getVariant } from '../../experiments/ab';
+import { admiralAdblockRecovery } from '../../experiments/tests/admiral-adblocker-recovery';
 
-type AdmiralEvent = Record<string, unknown>;
 type MeasureDetectedEvent = {
 	adblocking: boolean;
 	whitelisted: boolean;
@@ -127,6 +128,12 @@ const initAdmiralAdblockRecovery = (): Promise<void> => {
 			(admiral.q = admiral.q || []).push(arguments);
 		};
 	/* eslint-enable */
+
+	/** Send targeting to Admiral for AB test variants */
+	const abTestVariant = getVariant(admiralAdblockRecovery);
+	if (abTestVariant) {
+		window.admiral('targeting', 'set', 'abTestGroup', abTestVariant);
+	}
 
 	void setUpAdmiralEventLogger(window.admiral);
 	return Promise.resolve();
