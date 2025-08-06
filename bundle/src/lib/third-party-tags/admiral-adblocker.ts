@@ -24,6 +24,7 @@ const getAbTestVariant = (): string | undefined => {
 };
 
 const abTestVariant = getAbTestVariant();
+const isInVariant = abTestVariant?.startsWith('variant') ?? false;
 
 /**
  * The Admiral bootstrap script should only run under the following conditions:
@@ -39,7 +40,7 @@ const shouldRun =
 	cmp.hasInitialised() &&
 	!cmp.willShowPrivacyMessageSync() &&
 	isInUsa() &&
-	['variant-detect', 'variant-recover'].includes(abTestVariant ?? '') &&
+	isInVariant &&
 	!window.guardian.config.page.shouldHideAdverts &&
 	!window.guardian.config.page.shouldHideReaderRevenue &&
 	!window.guardian.config.page.isSensitive &&
@@ -67,7 +68,7 @@ export const admiralTag: ReturnType<GetThirdPartyTag> = {
 		log('commercial', '🛡️ Loading Admiral script on the page');
 
 		/** Send targeting to Admiral for AB test variants */
-		if (abTestVariant && abTestVariant !== 'control') {
+		if (isInVariant && abTestVariant) {
 			window.admiral?.('targeting', 'set', 'guAbTest', abTestVariant);
 			log(
 				'commercial',
