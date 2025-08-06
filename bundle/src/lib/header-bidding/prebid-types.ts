@@ -76,10 +76,6 @@ type PrebidOpenXParams = {
 	lotame?: unknown;
 };
 
-type PrebidAdYouLikeParams = {
-	placement: string;
-};
-
 type PrebidCriteoParams =
 	| {
 			networkId: number;
@@ -107,7 +103,6 @@ type PrebidTheTradeDeskParams = {
 };
 
 type BidderCode =
-	| 'adyoulike'
 	| 'and'
 	| 'criteo'
 	| 'ix'
@@ -122,7 +117,6 @@ type BidderCode =
 	| 'ttd';
 
 type PrebidParams =
-	| PrebidAdYouLikeParams
 	| PrebidAppNexusParams
 	| PrebidCriteoParams
 	| PrebidIndexExchangeParams
@@ -315,7 +309,6 @@ export type {
 	PrebidXaxisParams,
 	PrebidAppNexusParams,
 	PrebidOpenXParams,
-	PrebidAdYouLikeParams,
 	PrebidCriteoParams,
 	PrebidKargoParams,
 	PrebidMagniteParams,

@@ -115,7 +115,6 @@ const resetConfig = () => {
 		prebidIndexExchange: true,
 		prebidTrustx: true,
 		prebidXaxis: true,
-		prebidAdYouLike: true,
 		prebidTriplelift: true,
 		prebidCriteo: true,
 	};
@@ -347,14 +346,14 @@ describe('bids', () => {
 	});
 
 	test('should only include multiple bidders being tested, even when their switches are off', () => {
-		setQueryString('pbtest=xhb&pbtest=adyoulike');
+		setQueryString('pbtest=xhb&pbtest=oxd');
 		const mockShouldInclude = jest.fn().mockReturnValue(false);
 		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
 		isUserInVariant.mockImplementation(
 			(testId, variantId) => variantId === 'variant',
 		);
 
-		expect(getBidders()).toEqual(['xhb', 'adyoulike']);
+		expect(getBidders()).toEqual(['xhb', 'oxd']);
 	});
 
 	test('should ignore bidder that does not exist', () => {

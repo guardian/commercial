@@ -85,7 +85,6 @@ const resetConfig = () => {
 	window.guardian.config.switches.prebidIndexExchange = true;
 	window.guardian.config.switches.prebidTrustx = true;
 	window.guardian.config.switches.prebidXaxis = true;
-	window.guardian.config.switches.prebidAdYouLike = true;
 	window.guardian.config.page.contentType = 'Article';
 	window.guardian.config.page.section = 'Magic';
 	window.guardian.config.page.edition = 'UK';

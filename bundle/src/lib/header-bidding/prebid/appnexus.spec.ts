@@ -57,7 +57,6 @@ const resetConfig = () => {
 		prebidIndexExchange: true,
 		prebidTrustx: true,
 		prebidXaxis: true,
-		prebidAdYouLike: true,
 		prebidTriplelift: true,
 		prebidCriteo: true,
 	};
