@@ -1,5 +1,5 @@
 import type { Admiral, AdmiralEvent } from '@guardian/commercial-core/types';
-import { log } from '@guardian/libs';
+import { admiralLog } from './admiral';
 
 type MeasureDetectedEvent = {
 	adblocking: boolean;
@@ -16,8 +16,6 @@ type CandidateDismissedEvent = {
 	candidateGroups: string[];
 };
 
-const admiralLogPrefix = '🛡️ Admiral';
-
 const handleMeasureDetectedEvent = (event: AdmiralEvent): void => {
 	const isMeasureDetectedEvent = (
 		e: AdmiralEvent,
@@ -29,27 +27,19 @@ const handleMeasureDetectedEvent = (event: AdmiralEvent): void => {
 
 	if (isMeasureDetectedEvent(event)) {
 		if (event.adblocking) {
-			log(
-				'commercial',
-				`${admiralLogPrefix}: user has an adblocker and it is enabled`,
-			);
+			admiralLog('user has an adblocker and it is enabled');
 		}
 		if (event.whitelisted) {
-			log(
-				'commercial',
-				`${admiralLogPrefix}: user has seen Engage and subsequently disabled their adblocker`,
+			admiralLog(
+				'user has seen Engage and subsequently disabled their adblocker',
 			);
 		}
 		if (event.subscribed) {
-			log(
-				'commercial',
-				`${admiralLogPrefix}: user has an active subscription to a transact plan`,
-			);
+			admiralLog('user has an active subscription to a transact plan');
 		}
 	} else {
-		log(
-			'commercial',
-			`${admiralLogPrefix}: Event is not of expected format of measure.detected ${JSON.stringify(event)}`,
+		admiralLog(
+			'Event is not of expected format of measure.detected ${JSON.stringify(event)}',
 		);
 	}
 };
@@ -62,14 +52,12 @@ const handleCandidateShownEvent = (event: AdmiralEvent): void => {
 		'candidateGroups' in e;
 
 	if (isCandidateShownEvent(event)) {
-		log(
-			'commercial',
-			`${admiralLogPrefix}: Launching candidate ${event.candidateID} with variant ${event.variantID}`,
+		admiralLog(
+			'Launching candidate ${event.candidateID} with variant ${event.variantID}',
 		);
 	} else {
-		log(
-			'commercial',
-			`${admiralLogPrefix}: Event is not of expected format of candidate.shown ${JSON.stringify(event)}`,
+		admiralLog(
+			'Event is not of expected format of candidate.shown ${JSON.stringify(event)}',
 		);
 	}
 };
@@ -81,14 +69,10 @@ const handleCandidateDismissedEvent = (event: AdmiralEvent): void => {
 		typeof e === 'object' && 'candidateID' in e && 'candidateGroups' in e;
 
 	if (isCandidateDismissedEvent(event)) {
-		log(
-			'commercial',
-			`${admiralLogPrefix}: Candidate ${event.candidateID} was dismissed`,
-		);
+		admiralLog('Candidate ${event.candidateID} was dismissed');
 	} else {
-		log(
-			'commercial',
-			`${admiralLogPrefix}: Event is not of expected format of candidate.dismissed ${JSON.stringify(event)}`,
+		admiralLog(
+			'Event is not of expected format of candidate.dismissed ${JSON.stringify(event)}',
 		);
 	}
 };
@@ -114,7 +98,7 @@ const setUpAdmiralEventLogger = (admiral: Admiral): void => {
  * @see /bundle/src/init/consented/third-party-tags.ts
  *
  * This function ensures admiral is available on the window object
- * and adds an event handler callback for measure.detected events
+ * and sets up Admiral event logging
  */
 const initAdmiralAdblockRecovery = (): Promise<void> => {
 	// Set up window.admiral
