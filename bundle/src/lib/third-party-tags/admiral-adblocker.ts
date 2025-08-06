@@ -9,6 +9,23 @@ const baseAjaxUrl =
 		? 'https://code.api.nextgen.guardianapps.co.uk'
 		: 'https://api.nextgen.guardianapps.co.uk';
 
+/** Fetches AB test variant name */
+const getAbTestVariant = (): string | undefined => {
+	if (isUserInVariant(admiralAdblockRecovery, 'variant-detect')) {
+		return 'variant-detect';
+	}
+	if (isUserInVariant(admiralAdblockRecovery, 'variant-recover')) {
+		return 'variant-recover';
+	}
+	if (isUserInVariant(admiralAdblockRecovery, 'control')) {
+		return 'control';
+	}
+	return undefined;
+};
+
+const abTestVariant = getAbTestVariant();
+const isInVariant = abTestVariant?.startsWith('variant') ?? false;
+
 /**
  * The Admiral bootstrap script should only run under the following conditions:
  *
@@ -23,7 +40,7 @@ const shouldRun =
 	cmp.hasInitialised() &&
 	!cmp.willShowPrivacyMessageSync() &&
 	isInUsa() &&
-	isUserInVariant(admiralAdblockRecovery, 'variant') &&
+	isInVariant &&
 	!window.guardian.config.page.shouldHideAdverts &&
 	!window.guardian.config.page.shouldHideReaderRevenue &&
 	!window.guardian.config.page.isSensitive &&
@@ -47,6 +64,16 @@ export const admiralTag: ReturnType<GetThirdPartyTag> = {
 	name: 'admiral',
 	async: true,
 	url: `${baseAjaxUrl}/commercial/admiral-bootstrap.js`,
-	beforeLoad: () =>
-		log('commercial', '🛡️ Loading Admiral script on the page'),
+	beforeLoad: () => {
+		log('commercial', '🛡️ Loading Admiral script on the page');
+
+		/** Send targeting to Admiral for AB test variants */
+		if (isInVariant && abTestVariant) {
+			window.admiral?.('targeting', 'set', 'guAbTest', abTestVariant);
+			log(
+				'commercial',
+				`🛡️ Setting targeting for Admiral: guAbTest = ${abTestVariant}`,
+			);
+		}
+	},
 };

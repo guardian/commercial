@@ -1,7 +1,6 @@
-import type { Admiral } from '@guardian/commercial-core/types';
+import type { Admiral, AdmiralEvent } from '@guardian/commercial-core/types';
 import { log } from '@guardian/libs';
 
-type AdmiralEvent = Record<string, unknown>;
 type MeasureDetectedEvent = {
 	adblocking: boolean;
 	whitelisted: boolean;

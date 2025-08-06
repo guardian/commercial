@@ -18,8 +18,22 @@ export const admiralAdblockRecovery: ABTest = {
 				/* no-op */
 			},
 		},
+		/**
+		 * variant-detect will run the Admiral script but will not launch
+		 * the recovery modal for users with ad blockers
+		 */
 		{
-			id: 'variant',
+			id: 'variant-detect',
+			test: (): void => {
+				/* no-op */
+			},
+		},
+		/**
+		 * variant-recover will run the Admiral script and launch the
+		 * recovery modal for users with ad blockers
+		 */
+		{
+			id: 'variant-recover',
 			test: (): void => {
 				/* no-op */
 			},

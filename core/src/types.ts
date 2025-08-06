@@ -501,11 +501,10 @@ type GoogleTrackConversionObject = {
 	google_remarketing_only: boolean;
 };
 
-type Admiral = (
-	action?: string,
-	eventName?: string,
-	callback?: (eventData: Record<string, unknown>) => void,
-) => void;
+type AdmiralEvent = Record<string, unknown>;
+type AdmiralCallback = (event: AdmiralEvent) => void;
+type AdmiralArg = string | AdmiralCallback;
+type Admiral = (...args: AdmiralArg[]) => void;
 
 export type {
 	Advert,
@@ -542,4 +541,5 @@ export type {
 	GoogleTagParams,
 	GoogleTrackConversionObject,
 	Admiral,
+	AdmiralEvent,
 };
