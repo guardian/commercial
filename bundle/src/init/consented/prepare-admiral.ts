@@ -1,54 +1,110 @@
+import type { Admiral } from '@guardian/commercial-core/types';
 import { log } from '@guardian/libs';
 
-type AdmiralMeasureDetectedEvent = {
+type AdmiralEvent = Record<string, unknown>;
+type MeasureDetectedEvent = {
 	adblocking: boolean;
 	whitelisted: boolean;
 	subscribed: boolean;
 };
+type CandidateShownEvent = {
+	candidateID: string;
+	variantID?: string;
+	candidateGroups: string[];
+};
+type CandidateDismissedEvent = {
+	candidateID: string;
+	candidateGroups: string[];
+};
 
 const admiralLogPrefix = '🛡️ Admiral';
 
-const isAdmiralMeasureDetectedEvent = (
-	e: Record<string, unknown>,
-): e is AdmiralMeasureDetectedEvent => {
-	if (
+const handleMeasureDetectedEvent = (event: AdmiralEvent): void => {
+	const isMeasureDetectedEvent = (
+		e: AdmiralEvent,
+	): e is MeasureDetectedEvent =>
 		typeof e === 'object' &&
 		'adblocking' in e &&
 		'whitelisted' in e &&
-		'subscribed' in e
-	) {
-		return true;
-	}
-	return false;
-};
+		'subscribed' in e;
 
-const setUpAdmiralEventLogger = (): void => {
-	window.admiral?.('after', 'measure.detected', function (event) {
-		if (isAdmiralMeasureDetectedEvent(event)) {
-			if (event.adblocking) {
-				log(
-					'commercial',
-					`${admiralLogPrefix}: user has an adblocker and it is enabled`,
-				);
-			}
-			if (event.whitelisted) {
-				log(
-					'commercial',
-					`${admiralLogPrefix}: user has seen Engage and subsequently disabled their adblocker`,
-				);
-			}
-			if (event.subscribed) {
-				log(
-					'commercial',
-					`${admiralLogPrefix}: user has an active subscription to a transact plan`,
-				);
-			}
-		} else {
+	if (isMeasureDetectedEvent(event)) {
+		if (event.adblocking) {
 			log(
 				'commercial',
-				`${admiralLogPrefix}: Event is not of expected format of measure.detected ${JSON.stringify(event)}`,
+				`${admiralLogPrefix}: user has an adblocker and it is enabled`,
 			);
 		}
+		if (event.whitelisted) {
+			log(
+				'commercial',
+				`${admiralLogPrefix}: user has seen Engage and subsequently disabled their adblocker`,
+			);
+		}
+		if (event.subscribed) {
+			log(
+				'commercial',
+				`${admiralLogPrefix}: user has an active subscription to a transact plan`,
+			);
+		}
+	} else {
+		log(
+			'commercial',
+			`${admiralLogPrefix}: Event is not of expected format of measure.detected ${JSON.stringify(event)}`,
+		);
+	}
+};
+
+const handleCandidateShownEvent = (event: AdmiralEvent): void => {
+	const isCandidateShownEvent = (e: AdmiralEvent): e is CandidateShownEvent =>
+		typeof e === 'object' &&
+		'candidateID' in e &&
+		'variantID' in e &&
+		'candidateGroups' in e;
+
+	if (isCandidateShownEvent(event)) {
+		log(
+			'commercial',
+			`${admiralLogPrefix}: Launching candidate ${event.candidateID} with variant ${event.variantID}`,
+		);
+	} else {
+		log(
+			'commercial',
+			`${admiralLogPrefix}: Event is not of expected format of candidate.shown ${JSON.stringify(event)}`,
+		);
+	}
+};
+
+const handleCandidateDismissedEvent = (event: AdmiralEvent): void => {
+	const isCandidateDismissedEvent = (
+		e: AdmiralEvent,
+	): e is CandidateDismissedEvent =>
+		typeof e === 'object' && 'candidateID' in e && 'candidateGroups' in e;
+
+	if (isCandidateDismissedEvent(event)) {
+		log(
+			'commercial',
+			`${admiralLogPrefix}: Candidate ${event.candidateID} was dismissed`,
+		);
+	} else {
+		log(
+			'commercial',
+			`${admiralLogPrefix}: Event is not of expected format of candidate.dismissed ${JSON.stringify(event)}`,
+		);
+	}
+};
+
+const setUpAdmiralEventLogger = (admiral: Admiral): void => {
+	admiral('after', 'measure.detected', function (event) {
+		handleMeasureDetectedEvent(event);
+	});
+
+	admiral('after', 'candidate.shown', function (event) {
+		handleCandidateShownEvent(event);
+	});
+
+	admiral('after', 'candidate.dismissed', function (event) {
+		handleCandidateDismissedEvent(event);
 	});
 };
 
@@ -72,7 +128,7 @@ const initAdmiralAdblockRecovery = (): Promise<void> => {
 		};
 	/* eslint-enable */
 
-	void setUpAdmiralEventLogger();
+	void setUpAdmiralEventLogger(window.admiral);
 	return Promise.resolve();
 };
 
