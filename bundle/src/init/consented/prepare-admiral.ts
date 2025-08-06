@@ -132,7 +132,11 @@ const initAdmiralAdblockRecovery = (): Promise<void> => {
 	/** Send targeting to Admiral for AB test variants */
 	const abTestVariant = getVariant(admiralAdblockRecovery);
 	if (abTestVariant) {
-		window.admiral('targeting', 'set', 'abTestGroup', abTestVariant);
+		window.admiral('targeting', 'set', 'guAbTest', abTestVariant);
+		log(
+			'commercial',
+			`${admiralLogPrefix}: Setting targeting for Admiral. guAbTest = ${abTestVariant}`,
+		);
 	}
 
 	void setUpAdmiralEventLogger(window.admiral);
