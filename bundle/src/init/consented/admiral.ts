@@ -28,17 +28,18 @@ const recordAdmiralOphanEvent = ({
 	action,
 	value,
 }: {
-	action?: ComponentEvent['action'];
+	action: ComponentEvent['action'];
 	value?: ComponentEvent['value'];
 }): void => {
 	const abTestVariant = getAdmiralAbTestVariant();
 
 	const componentEvent: ComponentEvent = {
 		component: {
-			// @ts-expect-error -- waiting for Ophan tracker JS release 2.4.0
 			componentType: 'AD_BLOCK_RECOVERY',
 			id: 'admiral-adblock-recovery',
 		},
+		action,
+		...(value ? { value } : {}),
 		...(abTestVariant
 			? {
 					abTest: {
@@ -47,8 +48,6 @@ const recordAdmiralOphanEvent = ({
 					},
 				}
 			: {}),
-		...(action ? { action } : {}),
-		...(value ? { value } : {}),
 	};
 
 	window.guardian.ophan?.record({ componentEvent });

@@ -32,7 +32,6 @@ const handleMeasureDetectedEvent = (event: AdmiralEvent): void => {
 				'commercial',
 				'🛡️ Admiral - user has an adblocker and it is enabled',
 			);
-			// @ts-expect-error -- waiting for Ophan tracker JS release 2.4.0
 			recordAdmiralOphanEvent({ action: 'DETECT', value: 'blocked' });
 		}
 		if (event.whitelisted) {
@@ -40,7 +39,6 @@ const handleMeasureDetectedEvent = (event: AdmiralEvent): void => {
 				'commercial',
 				'🛡️ Admiral - user has seen Engage and subsequently disabled their adblocker',
 			);
-			// @ts-expect-error -- waiting for Ophan tracker JS release 2.4.0
 			recordAdmiralOphanEvent({ action: 'DETECT', value: 'whitelisted' });
 		}
 		if (event.subscribed) {
