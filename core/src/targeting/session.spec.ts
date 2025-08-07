@@ -7,6 +7,7 @@ describe('Session targeting', () => {
 			ab: null,
 			at: null,
 			cc: 'GB',
+			lh: '12',
 			pv: '1234567',
 			ref: null,
 			si: 'f',
@@ -21,6 +22,7 @@ describe('Session targeting', () => {
 			adTest: null,
 			pageViewId: '1234567',
 			countryCode: 'GB',
+			localHour: '12',
 			isSignedIn: false,
 		});
 		expect(targeting).toMatchObject(expected);
@@ -48,6 +50,7 @@ describe('Session targeting', () => {
 			],
 			at: null,
 			cc: 'GB',
+			lh: '12',
 			pv: '1234567',
 			ref: null,
 			si: 'f',
@@ -59,6 +62,7 @@ describe('Session targeting', () => {
 			adTest: null,
 			pageViewId: '1234567',
 			countryCode: 'GB',
+			localHour: '12',
 			isSignedIn: false,
 		});
 		expect(targeting).toMatchObject(expected);
@@ -77,6 +81,7 @@ describe('Session targeting', () => {
 			ab: null,
 			at: null,
 			cc: 'GB',
+			lh: '12',
 			pv: '1234567',
 			si: 'f',
 			ref,
@@ -91,6 +96,7 @@ describe('Session targeting', () => {
 			adTest: null,
 			pageViewId: '1234567',
 			countryCode: 'GB',
+			localHour: '12',
 			isSignedIn: false,
 		});
 		expect(targeting).toMatchObject(expected);
@@ -117,6 +123,7 @@ describe('Session targeting', () => {
 				adTest: null,
 				pageViewId: '1234567',
 				countryCode: 'GB',
+				localHour: '12',
 				isSignedIn,
 			});
 			expect(targeting).toMatchObject(expected);

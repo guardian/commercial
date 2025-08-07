@@ -6,9 +6,13 @@ import type {
 import { cmp as cmp_, setCookie, storage } from '@guardian/libs';
 import { getLocale as getLocale_ } from '../geo/get-locale';
 import type { Edition } from '../types';
-import { buildPageTargeting } from './build-page-targeting';
+import {
+	buildPageTargeting,
+	getLocalHour as getLocalHour_,
+} from './build-page-targeting';
 
 const getLocale = getLocale_ as jest.MockedFunction<typeof getLocale_>;
+const getLocalHour = getLocalHour_ as jest.MockedFunction<typeof getLocalHour_>;
 
 const cmp = {
 	hasInitialised: cmp_.hasInitialised as jest.MockedFunction<
@@ -22,6 +26,10 @@ const cmp = {
 
 jest.mock('../geo/get-locale', () => ({
 	getLocale: jest.fn(),
+}));
+
+jest.mock('./build-page-targeting', () => ({
+	getLocalHour: jest.fn(),
 }));
 
 jest.mock('@guardian/libs', () => ({
@@ -170,6 +178,8 @@ describe('Build Page Targeting', () => {
 
 		getLocale.mockReturnValue('US');
 
+		getLocalHour.mockReturnValue('12');
+
 		jest.spyOn(global.Math, 'random').mockReturnValue(0.5);
 
 		expect.hasAssertions();
@@ -208,6 +218,7 @@ describe('Build Page Targeting', () => {
 		expect(pageTargeting.pv).toEqual('presetOphanPageViewId');
 		expect(pageTargeting.pa).toEqual('f');
 		expect(pageTargeting.cc).toEqual('US');
+		expect(pageTargeting.lh).toEqual('12');
 		expect(pageTargeting.rp).toEqual('dotcom-platform');
 		expect(pageTargeting.rc).toEqual('7');
 		expect(pageTargeting.allkw).toEqual([
@@ -456,6 +467,7 @@ describe('Build Page Targeting', () => {
 			at: 'ng101',
 			bp: 'mobile',
 			cc: 'US',
+			lh: '12',
 			cmp_interaction: 'na',
 			consent_tcfv2: 'na',
 			dcre: 'f',
