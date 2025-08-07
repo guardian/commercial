@@ -25,6 +25,7 @@ type PageTargeting = PartialWithNulls<
 		at: string; // Ad Test
 		bp: 'mobile' | 'tablet' | 'desktop'; // BreakPoint
 		cc: CountryCode; // Country Code
+		lh: string; // Local Hour
 		cmp_interaction: string;
 		consent_tcfv2: string;
 		dcre: TrueOrFalse; // DotCom-Rendering Eligible
@@ -94,6 +95,10 @@ const isFirstVisit = (referrer: string): boolean => {
 	return !referrerMatchesHost(referrer);
 };
 
+const getLocalHour = (): string => {
+	return new Date().getHours().toString();
+};
+
 type BuildPageTargetingParams = {
 	adFree: boolean;
 	clientSideParticipations: Participations;
@@ -135,6 +140,7 @@ const buildPageTargeting = ({
 	const sessionTargeting: SessionTargeting = getSessionTargeting({
 		adTest: getCookie({ name: 'adtest', shouldMemoize: true }),
 		countryCode: getLocale(),
+		localHour: getLocalHour(),
 		isSignedIn,
 		pageViewId: window.guardian.config.ophan.pageViewId,
 		participations: {
@@ -186,5 +192,5 @@ const buildPageTargeting = ({
 	return pageTargeting;
 };
 
-export { buildPageTargeting, filterValues };
+export { buildPageTargeting, filterValues, getLocalHour };
 export type { PageTargeting };

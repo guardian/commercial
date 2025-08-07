@@ -67,6 +67,15 @@ type SessionTargeting = {
 	cc: CountryCode;
 
 	/**
+	 * **l**ocal **h**our - [see on Ad Manager][gam]
+	 *
+	 * Type: _Dynamic_
+	 *
+	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=17299564
+	 */
+	lh: string;
+
+	/**
 	 * Ophan **P**age **V**iew id – [see on Ad Manager][gam]
 	 *
 	 * ID Generated client-side, usually available on
@@ -161,6 +170,7 @@ const experimentsTargeting = ({
 type Session = {
 	adTest: SessionTargeting['at'];
 	countryCode: CountryCode;
+	localHour: string;
 	isSignedIn: boolean;
 	pageViewId: SessionTargeting['pv'];
 	participations: AllParticipations;
@@ -170,6 +180,7 @@ type Session = {
 const getSessionTargeting = ({
 	adTest,
 	countryCode,
+	localHour,
 	isSignedIn,
 	pageViewId,
 	participations,
@@ -178,6 +189,7 @@ const getSessionTargeting = ({
 	ab: experimentsTargeting(participations),
 	at: adTest,
 	cc: countryCode,
+	lh: localHour,
 	pv: pageViewId,
 	ref: getReferrer(referrer),
 	si: isSignedIn ? 't' : 'f',
