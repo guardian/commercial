@@ -50,13 +50,14 @@
 		"@types/googletag": "catalog:"
 	},
 	"devDependencies": {
-		"@types/node": "catalog:",
-		"typescript": "catalog:",
+		"@guardian/ophan-tracker-js": "catalog:",
 		"@types/jest": "catalog:",
+		"@types/node": "catalog:",
 		"jest": "catalog:",
 		"jest-environment-jsdom": "catalog:",
 		"jest-environment-jsdom-global": "catalog:",
 		"ts-jest": "catalog:",
+		"typescript": "catalog:",
 		"type-fest": "catalog:"
 	},
 	"publishConfig": {
