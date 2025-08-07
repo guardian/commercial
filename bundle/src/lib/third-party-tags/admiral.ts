@@ -1,7 +1,6 @@
 import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
-import { cmp } from '@guardian/libs';
+import { cmp, log } from '@guardian/libs';
 import {
-	admiralLog,
 	getAdmiralAbTestVariant,
 	setAdmiralTargeting,
 } from '../../init/consented/admiral';
@@ -54,12 +53,15 @@ const admiralTag: ReturnType<GetThirdPartyTag> = {
 	async: true,
 	url: `${BASE_AJAX_URL}/commercial/admiral-bootstrap.js`,
 	beforeLoad: () => {
-		admiralLog('loading script on the page');
+		log('commercial', '🛡️ Admiral - loading script on the page');
 
 		/** Send targeting to Admiral for AB test variants */
 		if (isInVariant && abTestVariant) {
 			setAdmiralTargeting('guAbTest', abTestVariant);
-			admiralLog(`setting targeting: guAbTest = ${abTestVariant}`);
+			log(
+				'commercial',
+				`🛡️ Admiral - setting targeting: guAbTest = ${abTestVariant}`,
+			);
 		}
 	},
 };

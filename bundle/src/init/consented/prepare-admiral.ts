@@ -1,5 +1,5 @@
 import type { Admiral, AdmiralEvent } from '@guardian/commercial-core/types';
-import { admiralLog } from './admiral';
+import { log } from '@guardian/libs';
 
 type MeasureDetectedEvent = {
 	adblocking: boolean;
@@ -27,19 +27,27 @@ const handleMeasureDetectedEvent = (event: AdmiralEvent): void => {
 
 	if (isMeasureDetectedEvent(event)) {
 		if (event.adblocking) {
-			admiralLog('user has an adblocker and it is enabled');
+			log(
+				'commercial',
+				'🛡️ Admiral - user has an adblocker and it is enabled',
+			);
 		}
 		if (event.whitelisted) {
-			admiralLog(
-				'user has seen Engage and subsequently disabled their adblocker',
+			log(
+				'commercial',
+				'🛡️ Admiral - user has seen Engage and subsequently disabled their adblocker',
 			);
 		}
 		if (event.subscribed) {
-			admiralLog('user has an active subscription to a transact plan');
+			log(
+				'commercial',
+				'🛡️ Admiral - user has an active subscription to a transact plan',
+			);
 		}
 	} else {
-		admiralLog(
-			'Event is not of expected format of measure.detected ${JSON.stringify(event)}',
+		log(
+			'commercial',
+			`🛡️ Admiral - Event is not of expected format of measure.detected ${JSON.stringify(event)}`,
 		);
 	}
 };
@@ -52,12 +60,14 @@ const handleCandidateShownEvent = (event: AdmiralEvent): void => {
 		'candidateGroups' in e;
 
 	if (isCandidateShownEvent(event)) {
-		admiralLog(
-			'Launching candidate ${event.candidateID} with variant ${event.variantID}',
+		log(
+			'commercial',
+			`🛡️ Admiral - Launching candidate ${event.candidateID}`,
 		);
 	} else {
-		admiralLog(
-			'Event is not of expected format of candidate.shown ${JSON.stringify(event)}',
+		log(
+			'commercial',
+			`🛡️ Admiral - Event is not of expected format of candidate.shown ${JSON.stringify(event)}`,
 		);
 	}
 };
@@ -69,10 +79,14 @@ const handleCandidateDismissedEvent = (event: AdmiralEvent): void => {
 		typeof e === 'object' && 'candidateID' in e && 'candidateGroups' in e;
 
 	if (isCandidateDismissedEvent(event)) {
-		admiralLog('Candidate ${event.candidateID} was dismissed');
+		log(
+			'commercial',
+			`🛡️ Admiral - Candidate ${event.candidateID} was dismissed`,
+		);
 	} else {
-		admiralLog(
-			'Event is not of expected format of candidate.dismissed ${JSON.stringify(event)}',
+		log(
+			'commercial',
+			`🛡️ Admiral - Event is not of expected format of candidate.dismissed ${JSON.stringify(event)}`,
 		);
 	}
 };
