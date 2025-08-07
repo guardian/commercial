@@ -1,29 +1,17 @@
 import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { cmp, log } from '@guardian/libs';
-import { isUserInVariant } from '../../experiments/ab';
-import { admiralAdblockRecovery } from '../../experiments/tests/admiral-adblocker-recovery';
+import {
+	getAdmiralAbTestVariant,
+	setAdmiralTargeting,
+} from '../../init/consented/admiral';
 import type { GetThirdPartyTag } from '../types';
 
-const baseAjaxUrl =
+const BASE_AJAX_URL =
 	window.guardian.config.stage === 'CODE'
 		? 'https://code.api.nextgen.guardianapps.co.uk'
 		: 'https://api.nextgen.guardianapps.co.uk';
 
-/** Fetches AB test variant name */
-const getAbTestVariant = (): string | undefined => {
-	if (isUserInVariant(admiralAdblockRecovery, 'variant-detect')) {
-		return 'variant-detect';
-	}
-	if (isUserInVariant(admiralAdblockRecovery, 'variant-recover')) {
-		return 'variant-recover';
-	}
-	if (isUserInVariant(admiralAdblockRecovery, 'control')) {
-		return 'control';
-	}
-	return undefined;
-};
-
-const abTestVariant = getAbTestVariant();
+const abTestVariant = getAdmiralAbTestVariant();
 const isInVariant = abTestVariant?.startsWith('variant') ?? false;
 
 /**
@@ -59,21 +47,23 @@ const shouldRun =
 /**
  * Admiral adblock recovery tag
  */
-export const admiralTag: ReturnType<GetThirdPartyTag> = {
+const admiralTag: ReturnType<GetThirdPartyTag> = {
 	shouldRun,
 	name: 'admiral',
 	async: true,
-	url: `${baseAjaxUrl}/commercial/admiral-bootstrap.js`,
+	url: `${BASE_AJAX_URL}/commercial/admiral-bootstrap.js`,
 	beforeLoad: () => {
-		log('commercial', '🛡️ Loading Admiral script on the page');
+		log('commercial', '🛡️ Admiral - loading script on the page');
 
 		/** Send targeting to Admiral for AB test variants */
 		if (isInVariant && abTestVariant) {
-			window.admiral?.('targeting', 'set', 'guAbTest', abTestVariant);
+			setAdmiralTargeting('guAbTest', abTestVariant);
 			log(
 				'commercial',
-				`🛡️ Setting targeting for Admiral: guAbTest = ${abTestVariant}`,
+				`🛡️ Admiral - setting targeting: guAbTest = ${abTestVariant}`,
 			);
 		}
 	},
 };
+
+export { admiralTag };

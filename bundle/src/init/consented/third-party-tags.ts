@@ -3,7 +3,7 @@
 import { getConsentFor, onConsent } from '@guardian/libs';
 import { commercialFeatures } from '../../lib/commercial-features';
 import fastdom from '../../lib/fastdom-promise';
-import { admiralTag as admiral } from '../../lib/third-party-tags/admiral-adblocker';
+import { admiralTag as admiral } from '../../lib/third-party-tags/admiral';
 import { ias } from '../../lib/third-party-tags/ias';
 import { imrWorldwide } from '../../lib/third-party-tags/imr-worldwide';
 import { imrWorldwideLegacy } from '../../lib/third-party-tags/imr-worldwide-legacy';
