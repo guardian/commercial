@@ -1,3 +1,4 @@
+import type { ComponentEvent } from '@guardian/ophan-tracker-js';
 import { isUserInVariant } from '../../experiments/ab';
 import { admiralAdblockRecovery } from '../../experiments/tests/admiral-adblocker-recovery';
 
@@ -18,6 +19,42 @@ const getAdmiralAbTestVariant = (): string | undefined => {
 };
 
 /**
+ * Sends component events to Ophan with the componentType of `AD_BLOCK_RECOVERY`
+ * as well as sending the AB test participation
+ *
+ * @param overrides allows overriding / setting values for `action` and `value`
+ */
+const recordAdmiralOphanEvent = ({
+	action,
+	value,
+}: {
+	action?: ComponentEvent['action'];
+	value?: ComponentEvent['value'];
+}): void => {
+	const abTestVariant = getAdmiralAbTestVariant();
+
+	const componentEvent: ComponentEvent = {
+		component: {
+			// @ts-expect-error -- waiting for Ophan tracker JS release 2.4.0
+			componentType: 'AD_BLOCK_RECOVERY',
+			id: 'admiral-adblock-recovery',
+		},
+		...(abTestVariant
+			? {
+					abTest: {
+						name: 'AdmiralAdblockRecovery',
+						variant: abTestVariant,
+					},
+				}
+			: {}),
+		...(action ? { action } : {}),
+		...(value ? { value } : {}),
+	};
+
+	window.guardian.ophan?.record({ componentEvent });
+};
+
+/**
  * Sets targeting on the Admiral object
  *
  * @param key targeting key sent to Admiral
@@ -26,4 +63,8 @@ const getAdmiralAbTestVariant = (): string | undefined => {
 const setAdmiralTargeting = (key: string, value: string): void =>
 	window.admiral?.('targeting', 'set', key, value);
 
-export { getAdmiralAbTestVariant, setAdmiralTargeting };
+export {
+	getAdmiralAbTestVariant,
+	recordAdmiralOphanEvent,
+	setAdmiralTargeting,
+};
