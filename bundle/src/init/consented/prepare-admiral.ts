@@ -1,6 +1,6 @@
 import type { Admiral, AdmiralEvent } from '@guardian/commercial-core/types';
 import { log } from '@guardian/libs';
-import { recordAdmiralOphanEvent } from './admiral';
+import { recordAdmiralOphanEvent, setUpMessagePickerListener } from './admiral';
 
 type MeasureDetectedEvent = {
 	adblocking: boolean;
@@ -131,6 +131,7 @@ const initAdmiralAdblockRecovery = (): Promise<void> => {
 	/* eslint-enable */
 
 	void setUpAdmiralEventLogger(window.admiral);
+	void setUpMessagePickerListener();
 	return Promise.resolve();
 };
 

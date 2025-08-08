@@ -62,8 +62,44 @@ const recordAdmiralOphanEvent = ({
 const setAdmiralTargeting = (key: string, value: string): void =>
 	window.admiral?.('targeting', 'set', key, value);
 
+// document.dispatchEvent(
+// 					new CustomEvent<{
+// 						type: string;
+// 						winner: string | null;
+// 					}>('supporterRevenue:messagePicker', {
+// 						detail: {
+// 							type: name,
+// 							winner: winner?.candidate.id ?? null,
+// 						},
+// 					}),
+// 				);
+
+type MessagePickerEvent = Event & {
+	detail: {
+		type: string;
+		winner: string;
+	};
+};
+const isMessagePickerEvent = (event: Event): event is MessagePickerEvent => {
+	return typeof event === 'object' && 'detail' in event;
+};
+
+const setUpMessagePickerListener = () => {
+	window.document.addEventListener(
+		'supporterRevenue:messagePicker',
+		(event: Event) => {
+			if (isMessagePickerEvent(event)) {
+				const { detail: { type, winner } = {} } = event;
+
+				console.log(`${JSON.stringify({ type, winner })}`);
+			}
+		},
+	);
+};
+
 export {
 	getAdmiralAbTestVariant,
 	recordAdmiralOphanEvent,
 	setAdmiralTargeting,
+	setUpMessagePickerListener,
 };
