@@ -1,7 +1,8 @@
 import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { cmp, log } from '@guardian/libs';
+import { getVariant } from '../../experiments/ab';
+import { admiralAdblockRecovery } from '../../experiments/tests/admiral-adblocker-recovery';
 import {
-	getAdmiralAbTestVariant,
 	recordAdmiralOphanEvent,
 	setAdmiralTargeting,
 } from '../../init/consented/admiral';
@@ -12,7 +13,7 @@ const BASE_AJAX_URL =
 		? 'https://code.api.nextgen.guardianapps.co.uk'
 		: 'https://api.nextgen.guardianapps.co.uk';
 
-const abTestVariant = getAdmiralAbTestVariant();
+const abTestVariant = getVariant(admiralAdblockRecovery);
 const isInVariant = abTestVariant?.startsWith('variant') ?? false;
 
 /**
