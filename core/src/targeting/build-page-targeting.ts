@@ -10,7 +10,7 @@ import { getPersonalisedTargeting } from './personalised';
 import type { SessionTargeting } from './session';
 import { getSessionTargeting } from './session';
 import type { SharedTargeting } from './shared';
-import { getSharedTargeting } from './shared';
+import { getLocalHour, getSharedTargeting } from './shared';
 import type { True, TrueOrFalse } from './types';
 import type { ViewportTargeting } from './viewport';
 import { getViewportTargeting } from './viewport';
@@ -93,10 +93,6 @@ const isFirstVisit = (referrer: string): boolean => {
 	}
 
 	return !referrerMatchesHost(referrer);
-};
-
-const getLocalHour = (): string => {
-	return new Date().getHours().toString();
 };
 
 type BuildPageTargetingParams = {

@@ -6,13 +6,10 @@ import type {
 import { cmp as cmp_, setCookie, storage } from '@guardian/libs';
 import { getLocale as getLocale_ } from '../geo/get-locale';
 import type { Edition } from '../types';
-import {
-	buildPageTargeting,
-	getLocalHour as getLocalHour_,
-} from './build-page-targeting';
+import { buildPageTargeting } from './build-page-targeting';
+import { getLocalHour } from './shared';
 
 const getLocale = getLocale_ as jest.MockedFunction<typeof getLocale_>;
-const getLocalHour = getLocalHour_ as jest.MockedFunction<typeof getLocalHour_>;
 
 const cmp = {
 	hasInitialised: cmp_.hasInitialised as jest.MockedFunction<
@@ -28,8 +25,9 @@ jest.mock('../geo/get-locale', () => ({
 	getLocale: jest.fn(),
 }));
 
-jest.mock('./build-page-targeting', () => ({
-	getLocalHour: jest.fn(),
+jest.mock('./shared', () => ({
+	...jest.requireActual('./shared'),
+	getLocalHour: jest.fn().mockReturnValue('12'),
 }));
 
 jest.mock('@guardian/libs', () => ({
@@ -178,7 +176,7 @@ describe('Build Page Targeting', () => {
 
 		getLocale.mockReturnValue('US');
 
-		getLocalHour.mockReturnValue('12');
+		jest.mocked(getLocalHour).mockImplementation(() => '12');
 
 		jest.spyOn(global.Math, 'random').mockReturnValue(0.5);
 
@@ -196,6 +194,8 @@ describe('Build Page Targeting', () => {
 	});
 
 	it('should build correct page targeting', () => {
+		jest.mocked(getLocalHour).mockReturnValue('12');
+
 		const pageTargeting = buildPageTargeting({
 			adFree: false,
 			clientSideParticipations: {},
