@@ -8,8 +8,6 @@ import {
 } from '@guardian/commercial-core/geo/geo-utils';
 import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { isUserInVariant } from '../../experiments/ab';
-import { prebidAdUnit } from '../../experiments/tests/prebid-ad-unit';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
@@ -258,6 +256,3 @@ export const containsWS = (sizes: HeaderBiddingSize[]): boolean =>
 	contains(sizes, createAdSize(160, 600));
 
 export const shouldIncludeOnlyA9 = window.location.hash.includes('#only-a9');
-
-export const shouldIncludePrebidAdUnit =
-	isSwitchedOn('prebidBidCache') && isUserInVariant(prebidAdUnit, 'variant');
