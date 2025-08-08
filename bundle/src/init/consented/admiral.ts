@@ -1,3 +1,4 @@
+import { log } from '@guardian/libs';
 import type { ComponentEvent } from '@guardian/ophan-tracker-js';
 import { isUserInVariant } from '../../experiments/ab';
 import { admiralAdblockRecovery } from '../../experiments/tests/admiral-adblocker-recovery';
@@ -59,11 +60,56 @@ const recordAdmiralOphanEvent = ({
  * @param key targeting key sent to Admiral
  * @param value targeting value sent to Admiral
  */
-const setAdmiralTargeting = (key: string, value: string): void =>
+const setAdmiralTargeting = (key: string, value: string): void => {
+	log(
+		'commercial',
+		`🛡️ Admiral - setting targeting of key: ${key}, value: ${value}`,
+	);
 	window.admiral?.('targeting', 'set', key, value);
+};
+
+type MessagePickerEvent = Event & {
+	detail: {
+		type: string;
+		winner: string | null;
+	};
+};
+const isMessagePickerEvent = (event: Event): event is MessagePickerEvent => {
+	return (
+		typeof event === 'object' &&
+		'detail' in event &&
+		typeof event.detail === 'object' &&
+		event.detail !== null &&
+		'type' in event.detail &&
+		'winner' in event.detail
+	);
+};
+
+const setUpMessagePickerListener = () => {
+	log('commercial', '🛡️ Admiral - setting up message picker listener');
+	window.document.addEventListener(
+		'supporterRevenue:messagePicker',
+		(event: Event) => {
+			if (isMessagePickerEvent(event)) {
+				const { detail: { type, winner } = {} } = event;
+				log(
+					'commercial',
+					`🛡️ Admiral - messagePicker result ${JSON.stringify({ type, winner })}`,
+				);
+
+				if (type === 'banner' && !winner) {
+					setAdmiralTargeting('guBannerClash', 'false');
+				} else {
+					setAdmiralTargeting('guBannerClash', 'true');
+				}
+			}
+		},
+	);
+};
 
 export {
 	getAdmiralAbTestVariant,
 	recordAdmiralOphanEvent,
 	setAdmiralTargeting,
+	setUpMessagePickerListener,
 };

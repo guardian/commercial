@@ -60,10 +60,6 @@ const admiralTag: ReturnType<GetThirdPartyTag> = {
 		/** Send targeting to Admiral for AB test variants */
 		if (isInVariant && abTestVariant) {
 			setAdmiralTargeting('guAbTest', abTestVariant);
-			log(
-				'commercial',
-				`🛡️ Admiral - setting targeting: guAbTest = ${abTestVariant}`,
-			);
 		}
 	},
 };

@@ -104,7 +104,6 @@ const loadOther = (): Promise<void> => {
 
 	return insertScripts(advertisingServices, performanceServices);
 };
-
 const init = async (): Promise<boolean> => {
 	if (commercialFeatures.thirdPartyTags) {
 		void loadOther();
