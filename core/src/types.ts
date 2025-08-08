@@ -1,3 +1,4 @@
+import type { EventPayload } from '@guardian/ophan-tracker-js';
 import type { AdSize, SizeMapping } from './ad-sizes';
 import type { PageTargeting } from './targeting/build-page-targeting';
 import 'googletag';
@@ -57,7 +58,7 @@ interface NetworkInformation extends EventTarget {
 }
 
 type OphanRecordFunction = (
-	event: Record<string, unknown> & {
+	event: EventPayload & {
 		/**
 		 * the experiences key will override previously set values.
 		 * Use `recordExperiences` instead.

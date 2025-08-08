@@ -2,6 +2,7 @@ import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { cmp, log } from '@guardian/libs';
 import {
 	getAdmiralAbTestVariant,
+	recordAdmiralOphanEvent,
 	setAdmiralTargeting,
 } from '../../init/consented/admiral';
 import type { GetThirdPartyTag } from '../types';
@@ -54,6 +55,7 @@ const admiralTag: ReturnType<GetThirdPartyTag> = {
 	url: `${BASE_AJAX_URL}/commercial/admiral-bootstrap.js`,
 	beforeLoad: () => {
 		log('commercial', '🛡️ Admiral - loading script on the page');
+		recordAdmiralOphanEvent({ action: 'INSERT' });
 
 		/** Send targeting to Admiral for AB test variants */
 		if (isInVariant && abTestVariant) {

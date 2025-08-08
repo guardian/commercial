@@ -1,5 +1,6 @@
 import type { Admiral, AdmiralEvent } from '@guardian/commercial-core/types';
 import { log } from '@guardian/libs';
+import { recordAdmiralOphanEvent } from './admiral';
 
 type MeasureDetectedEvent = {
 	adblocking: boolean;
@@ -31,12 +32,14 @@ const handleMeasureDetectedEvent = (event: AdmiralEvent): void => {
 				'commercial',
 				'🛡️ Admiral - user has an adblocker and it is enabled',
 			);
+			recordAdmiralOphanEvent({ action: 'DETECT', value: 'blocked' });
 		}
 		if (event.whitelisted) {
 			log(
 				'commercial',
 				'🛡️ Admiral - user has seen Engage and subsequently disabled their adblocker',
 			);
+			recordAdmiralOphanEvent({ action: 'DETECT', value: 'whitelisted' });
 		}
 		if (event.subscribed) {
 			log(
@@ -64,6 +67,7 @@ const handleCandidateShownEvent = (event: AdmiralEvent): void => {
 			'commercial',
 			`🛡️ Admiral - Launching candidate ${event.candidateID}`,
 		);
+		recordAdmiralOphanEvent({ action: 'VIEW', value: event.candidateID });
 	} else {
 		log(
 			'commercial',
@@ -83,6 +87,7 @@ const handleCandidateDismissedEvent = (event: AdmiralEvent): void => {
 			'commercial',
 			`🛡️ Admiral - Candidate ${event.candidateID} was dismissed`,
 		);
+		recordAdmiralOphanEvent({ action: 'CLOSE', value: event.candidateID });
 	} else {
 		log(
 			'commercial',
