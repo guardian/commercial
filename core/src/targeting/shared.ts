@@ -178,6 +178,10 @@ const getSurgingParam = (surging: number): SharedTargeting['su'] => {
 
 /* -- Targeting -- */
 
+const getLocalHour = (): string => {
+	return new Date().getHours().toString();
+};
+
 /**
  * What goes in comes out
  */
@@ -190,4 +194,4 @@ export const _ = {
 };
 
 export type { SharedTargeting };
-export { getSharedTargeting };
+export { getSharedTargeting, getLocalHour };
