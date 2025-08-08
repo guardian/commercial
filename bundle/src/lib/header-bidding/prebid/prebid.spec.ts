@@ -1,6 +1,5 @@
 import { type ConsentState } from '@guardian/libs';
 import { getConsentFor } from '@guardian/libs';
-import { isUserInVariant } from '../../../experiments/ab';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
 import { shouldIncludeBidder, shouldIncludePermutive } from '../utils';
@@ -26,10 +25,6 @@ jest.mock('../utils', () => ({
 	shouldIncludeBidder: jest
 		.fn()
 		.mockReturnValue(jest.fn().mockReturnValue(true)),
-}));
-
-jest.mock('experiments/ab', () => ({
-	isUserInVariant: jest.fn(),
 }));
 
 jest.mock('@guardian/libs', () => ({
@@ -77,8 +72,6 @@ describe('initialise', () => {
 		jest.mocked(shouldIncludeBidder).mockReturnValue(
 			jest.fn().mockReturnValue(true),
 		);
-		jest.mocked(isUserInVariant).mockReturnValue(false);
-		window.guardian.config.switches.prebidBidCache = true;
 		mockGetConsentForID5(true);
 
 		prebid.initialise(window, mockConsentState);
@@ -128,7 +121,6 @@ describe('initialise', () => {
 			},
 			priceGranularity: 'custom',
 			timeoutBuffer: 400,
-			useBidCache: true,
 			userSync: {
 				syncDelay: 3000,
 				syncEnabled: true,
@@ -189,7 +181,6 @@ describe('initialise', () => {
 		jest.mocked(shouldIncludeBidder).mockReturnValue(
 			jest.fn().mockReturnValue(true),
 		);
-		jest.mocked(isUserInVariant).mockReturnValue(false);
 
 		mockGetConsentForID5(false);
 		prebid.initialise(window, mockConsentState);
@@ -242,18 +233,6 @@ describe('initialise', () => {
 		window.guardian.config.switches.consentManagement = false;
 		prebid.initialise(window, mockConsentState);
 		expect(window.pbjs?.getConfig('consentManagement')).toBeUndefined();
-	});
-
-	test('should set value of useBidCache correctly in Prebid config when the switch is on', () => {
-		window.guardian.config.switches.prebidBidCache = true;
-		prebid.initialise(window, mockConsentState);
-		expect(window.pbjs?.getConfig('useBidCache')).toBe(true);
-	});
-
-	test('should set value of useBidCache correctly in Prebid config when the switch is off', () => {
-		window.guardian.config.switches.prebidBidCache = false;
-		prebid.initialise(window, mockConsentState);
-		expect(window.pbjs?.getConfig('useBidCache')).toBe(false);
 	});
 
 	test('should not include realTimeData object if permutive should not be included', () => {
