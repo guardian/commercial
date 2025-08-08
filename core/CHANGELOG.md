@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 27.2.1
+
+### Patch Changes
+
+- 21c6ea1: Update Admiral types
+
 ## 27.2.0
 
 ### Minor Changes
