@@ -8,7 +8,6 @@ type HeaderBiddingSize = AdSize;
 interface Advert {
 	id: string;
 	node: HTMLElement;
-	prebidAdUnit: string;
 	sizes: SizeMapping;
 	headerBiddingSizes: HeaderBiddingSize[] | null;
 	size: AdSize | 'fluid' | null;
