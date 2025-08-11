@@ -194,7 +194,6 @@ describe('Build Page Targeting', () => {
 	});
 
 	it('should build correct page targeting', () => {
-
 		const pageTargeting = buildPageTargeting({
 			adFree: false,
 			clientSideParticipations: {},
