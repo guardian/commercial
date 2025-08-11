@@ -5,7 +5,7 @@ export const prebid946: ABTest = {
 	author: '@commercial-dev',
 	start: '2025-06-26',
 	expiry: '2025-07-14',
-	audience: 0 / 100,
+	audience: 5 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',
 	successMeasure: '',
