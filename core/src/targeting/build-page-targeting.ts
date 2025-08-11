@@ -10,7 +10,7 @@ import { getPersonalisedTargeting } from './personalised';
 import type { SessionTargeting } from './session';
 import { getSessionTargeting } from './session';
 import type { SharedTargeting } from './shared';
-import { getSharedTargeting } from './shared';
+import { getLocalHour, getSharedTargeting } from './shared';
 import type { True, TrueOrFalse } from './types';
 import type { ViewportTargeting } from './viewport';
 import { getViewportTargeting } from './viewport';
@@ -25,6 +25,7 @@ type PageTargeting = PartialWithNulls<
 		at: string; // Ad Test
 		bp: 'mobile' | 'tablet' | 'desktop'; // BreakPoint
 		cc: CountryCode; // Country Code
+		lh: string; // Local Hour
 		cmp_interaction: string;
 		consent_tcfv2: string;
 		dcre: TrueOrFalse; // DotCom-Rendering Eligible
@@ -135,6 +136,7 @@ const buildPageTargeting = ({
 	const sessionTargeting: SessionTargeting = getSessionTargeting({
 		adTest: getCookie({ name: 'adtest', shouldMemoize: true }),
 		countryCode: getLocale(),
+		localHour: getLocalHour(),
 		isSignedIn,
 		pageViewId: window.guardian.config.ophan.pageViewId,
 		participations: {
@@ -186,5 +188,5 @@ const buildPageTargeting = ({
 	return pageTargeting;
 };
 
-export { buildPageTargeting, filterValues };
+export { buildPageTargeting, filterValues, getLocalHour };
 export type { PageTargeting };

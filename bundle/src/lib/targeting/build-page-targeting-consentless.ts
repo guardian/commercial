@@ -11,6 +11,7 @@ const consentlessTargetingKeys = [
 	'bp',
 	'br',
 	'cc',
+	'lh',
 	'ct',
 	'dcre',
 	'edition',

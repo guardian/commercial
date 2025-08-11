@@ -62,6 +62,7 @@ describe('Build Page Targeting', () => {
 				ab: ['MtMaster-variantName'],
 				at: 'ng101',
 				cc: 'US',
+				lh: '12',
 				pv: 'presetOphanPageViewId',
 				si: 't',
 				bp: 'desktop',
