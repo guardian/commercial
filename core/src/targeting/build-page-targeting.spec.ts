@@ -194,7 +194,6 @@ describe('Build Page Targeting', () => {
 	});
 
 	it('should build correct page targeting', () => {
-		jest.mocked(getLocalHour).mockReturnValue('12');
 
 		const pageTargeting = buildPageTargeting({
 			adFree: false,

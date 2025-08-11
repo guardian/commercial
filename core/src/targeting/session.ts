@@ -67,7 +67,7 @@ type SessionTargeting = {
 	cc: CountryCode;
 
 	/**
-	 * **l**ocal **h**our - [see on Ad Manager][gam]
+	 * **L**ocal **H**our - [see on Ad Manager][gam]
 	 *
 	 * Type: _Dynamic_
 	 *
