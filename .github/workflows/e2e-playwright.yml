@@ -22,7 +22,7 @@ jobs:
     steps:
       # Commercial
       - name: Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
 
       - name: Set up Node
         uses: ./.github/actions/setup-node-env
