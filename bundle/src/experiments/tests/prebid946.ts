@@ -6,7 +6,7 @@ export const prebid946: ABTest = {
 	start: '2025-08-12',
 	expiry: '2025-08-29',
 	audience: 5 / 100,
-	audienceOffset: 5 / 100,
+	audienceOffset: 0 / 100,
 	audienceCriteria: '',
 	successMeasure: '',
 	description: 'Test v9.46.0 of Prebid ahead of general upgrade',
