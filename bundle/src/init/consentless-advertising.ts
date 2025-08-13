@@ -22,7 +22,7 @@ const bootConsentless = async (consentState: ConsentState): Promise<void> => {
 		initFixedSlots(),
 		initArticleBodyAdverts(),
 		reloadPageOnConsentChange(),
-		initPages()
+		initPages(),
 	];
 
 	await Promise.all(consentlessModuleList);

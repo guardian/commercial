@@ -97,7 +97,7 @@ describe('University Guide', () => {
 				region: null,
 				subjectArea: null,
 				year: null,
-			}
+			},
 		});
 	});
 
@@ -119,7 +119,7 @@ describe('University Guide', () => {
 				region: 'Region 2',
 				subjectArea: 'Subject 2',
 				year: 2025,
-			}
+			},
 		});
 	});
 });
