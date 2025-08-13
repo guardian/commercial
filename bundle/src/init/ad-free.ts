@@ -6,6 +6,7 @@ import { removeDisabledSlots as closeDisabledSlots } from './consented/remove-sl
 import { initTeadsCookieless } from './consented/teads-cookieless';
 import { init as initTrackGpcSignal } from './consented/track-gpc-signal';
 import { init as initTrackScrollDepth } from './consented/track-scroll-depth';
+import { init as initPages } from './pages';
 
 // modules not related to ad loading
 const commercialModules = [
@@ -16,6 +17,7 @@ const commercialModules = [
 	initTeadsCookieless,
 	initTrackScrollDepth,
 	initTrackGpcSignal,
+	initPages,
 ];
 
 const bootCommercialWhenReady = () => {
