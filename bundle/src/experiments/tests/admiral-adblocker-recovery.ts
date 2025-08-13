@@ -3,9 +3,9 @@ import type { ABTest } from '@guardian/ab-core';
 export const admiralAdblockRecovery: ABTest = {
 	id: 'AdmiralAdblockRecovery',
 	author: '@commercial-dev',
-	start: '2025-07-17',
-	expiry: '2025-08-29',
-	audience: 0 / 100,
+	start: '2025-08-13',
+	expiry: '2025-09-17',
+	audience: 100 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',
 	successMeasure: '',
