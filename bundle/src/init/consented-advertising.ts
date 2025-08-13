@@ -18,6 +18,7 @@ import { initTeadsCookieless } from './consented/teads-cookieless';
 import { init as initThirdPartyTags } from './consented/third-party-tags';
 import { init as initTrackGpcSignal } from './consented/track-gpc-signal';
 import { init as initTrackScrollDepth } from './consented/track-scroll-depth';
+import { init as initPages } from './pages';
 import { reloadPageOnConsentChange } from './shared/reload-page-on-consent-change';
 import { init as setAdTestCookie } from './shared/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from './shared/set-adtest-in-labels-cookie';
@@ -46,6 +47,7 @@ const commercialModules = [
 	initThirdPartyTags,
 	initOpinaryPollListener,
 	initAdmiralAdblockRecovery,
+	initPages,
 ];
 
 const bootCommercialWhenReady = () => {
