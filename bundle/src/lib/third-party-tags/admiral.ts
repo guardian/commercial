@@ -15,11 +15,6 @@ const BASE_AJAX_URL =
 const abTestVariant = getAdmiralAbTestVariant();
 const isInVariant = abTestVariant?.startsWith('variant') ?? false;
 
-console.log('***', !getCookie({
-	name: 'gu_hide_support_messaging',
-	shouldMemoize: true,
-}));
-
 /**
  * The Admiral bootstrap script should only run under the following conditions:
  *
