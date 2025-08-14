@@ -1,5 +1,5 @@
 import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
-import { cmp, log } from '@guardian/libs';
+import { cmp, getCookie, log } from '@guardian/libs';
 import {
 	getAdmiralAbTestVariant,
 	recordAdmiralOphanEvent,
@@ -21,6 +21,7 @@ const isInVariant = abTestVariant?.startsWith('variant') ?? false;
  * - Should not run if the CMP is due to show
  * - Should only run in the US
  * - Should only run if in the variant of the AB test
+ * - Should not run if the gu_hide_support_messaging cookie is set
  * - Should not run for content marked as: shouldHideAdverts, shouldHideReaderRevenue, isSensitive
  * - Should not run for paid-content sponsorship type (includes Hosted Content)
  * - Should not run for certain sections
@@ -30,6 +31,10 @@ const shouldRun =
 	!cmp.willShowPrivacyMessageSync() &&
 	isInUsa() &&
 	isInVariant &&
+	!getCookie({
+		name: 'gu_hide_support_messaging',
+		shouldMemoize: true,
+	}) &&
 	!window.guardian.config.page.shouldHideAdverts &&
 	!window.guardian.config.page.shouldHideReaderRevenue &&
 	!window.guardian.config.page.isSensitive &&
