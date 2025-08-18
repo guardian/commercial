@@ -186,6 +186,18 @@ const getTripleLiftInventoryCode = (
 		}
 	}
 
+	if (containsBillboard(sizes)) {
+		if (isInUsOrCa()) {
+			return isArticle
+				? 'theguardian_article_970x250_prebid'
+				: 'theguardian_sectionfront_970x250_prebid';
+		} else if (isInAuOrNz()) {
+			return isArticle
+				? 'theguardian_article_970x250_prebid_AU'
+				: 'theguardian_sectionfront_970x250_prebid_AU';
+		}
+	}
+
 	if (containsMobileSticky(sizes)) {
 		if (isInUsOrCa()) {
 			return 'theguardian_320x50_HDX';
@@ -408,6 +420,7 @@ const tripleLiftBidder: PrebidBidder = {
 		sizes: HeaderBiddingSize[],
 	): PrebidTripleLiftParams => ({
 		inventoryCode: getTripleLiftInventoryCode(slotId, sizes),
+		tagid: getTripleLiftInventoryCode(slotId, sizes),
 	}),
 };
 
