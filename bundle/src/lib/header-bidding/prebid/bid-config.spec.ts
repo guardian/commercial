@@ -623,8 +623,8 @@ describe('triplelift adapter', () => {
 			mockConsentState,
 		).find((bid) => bid.bidder === 'triplelift');
 		expect(tripleLiftBids?.params).toEqual({
-			inventoryCode: 'theguardian_sectionfront_970x250_prebid',
-			tagid: 'theguardian_sectionfront_970x250_prebid',
+			inventoryCode: 'theguardian_article_970x250_prebid',
+			tagid: 'theguardian_article_970x250_prebid',
 		});
 	});
 
@@ -644,8 +644,8 @@ describe('triplelift adapter', () => {
 			mockConsentState,
 		).find((bid) => bid.bidder === 'triplelift');
 		expect(tripleLiftBids?.params).toEqual({
-			inventoryCode: 'theguardian_sectionfront_970x250_prebid_AU',
-			tagid: 'theguardian_sectionfront_970x250_prebid_AU',
+			inventoryCode: 'theguardian_article_970x250_prebid_AU',
+			tagid: 'theguardian_article_970x250_prebid_AU',
 		});
 	});
 });

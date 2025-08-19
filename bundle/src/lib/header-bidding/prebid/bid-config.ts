@@ -188,13 +188,9 @@ const getTripleLiftInventoryCode = (
 
 	if (containsBillboard(sizes)) {
 		if (isInUsOrCa()) {
-			return isArticle
-				? 'theguardian_article_970x250_prebid'
-				: 'theguardian_sectionfront_970x250_prebid';
+			return 'theguardian_article_970x250_prebid';
 		} else if (isInAuOrNz()) {
-			return isArticle
-				? 'theguardian_article_970x250_prebid_AU'
-				: 'theguardian_sectionfront_970x250_prebid_AU';
+			return 'theguardian_article_970x250_prebid_AU';
 		}
 	}
 
