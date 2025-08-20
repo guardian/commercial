@@ -8,6 +8,7 @@ import { initExclusionSlot } from './consentless/dynamic/exclusion-slot';
 import { initFixedSlots } from './consentless/init-fixed-slots';
 import { initConsentless } from './consentless/prepare-ootag';
 import { init as initPages } from './pages';
+import { refreshAdsBfcache } from './shared/refresh-ads-for-bfcache';
 import { reloadPageOnConsentChange } from './shared/reload-page-on-consent-change';
 import { init as setAdTestCookie } from './shared/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from './shared/set-adtest-in-labels-cookie';
@@ -23,6 +24,7 @@ const bootConsentless = async (consentState: ConsentState): Promise<void> => {
 		initArticleBodyAdverts(),
 		reloadPageOnConsentChange(),
 		initPages(),
+		refreshAdsBfcache(),
 	];
 
 	await Promise.all(consentlessModuleList);
