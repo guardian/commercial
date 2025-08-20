@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { breakpoints } from '../fixtures/breakpoints';
+import { breakpoints } from '../lib/breakpoints';
 import { blogs } from '../fixtures/pages';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';

@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
-import type { BreakpointSizes } from '../fixtures/breakpoints';
-import { breakpoints } from '../fixtures/breakpoints';
+import type { BreakpointSizes } from '../lib/breakpoints';
+import { breakpoints } from '../lib/breakpoints';
 import { blogs } from '../fixtures/pages';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';

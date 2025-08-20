@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 import { isDefined } from '../../src/lib/types';
-import { testAtBreakpoints } from '../fixtures/breakpoints';
+import { testAtBreakpoints } from '../lib/breakpoints';
 import { articles, blogs } from '../fixtures/pages';
 import type { GuPage } from '../fixtures/pages/Page';
 import { cmpAcceptAll } from '../lib/cmp';

@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
-import { breakpoints } from '../fixtures/breakpoints';
+import { breakpoints } from '../lib/breakpoints';
 import { frontWithPageSkin } from '../fixtures/pages';
 import { cmpAcceptAll } from '../lib/cmp';
 import { assertHeader, waitForGAMResponseForSlot } from '../lib/gam';
