@@ -482,10 +482,11 @@ describe('triplelift adapter', () => {
 	});
 
 	test('should return correct triplelift adapter params for leaderboard, with requests from US or Canada', () => {
-		containsLeaderboard.mockReturnValueOnce(true);
+		containsLeaderboard.mockReturnValue(true);
+		containsBillboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValue(false);
+		containsMobileSticky.mockReturnValueOnce(false);
 		isInUsOrCa.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -497,14 +498,16 @@ describe('triplelift adapter', () => {
 		).find((bid) => bid.bidder === 'triplelift');
 		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_topbanner_728x90_prebid',
+			tagid: 'theguardian_topbanner_728x90_prebid',
 		});
 	});
 
 	test('should return correct triplelift adapter params for leaderboard, with requests from Aus or NZ', () => {
-		containsLeaderboard.mockReturnValueOnce(true);
+		containsLeaderboard.mockReturnValue(true);
+		containsBillboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValue(false);
+		containsMobileSticky.mockReturnValueOnce(false);
 		isInAuOrNz.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -516,14 +519,16 @@ describe('triplelift adapter', () => {
 		).find((bid) => bid.bidder === 'triplelift');
 		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_topbanner_728x90_prebid_AU',
+			tagid: 'theguardian_topbanner_728x90_prebid_AU',
 		});
 	});
 
 	test('should return correct triplelift adapter params for MPU, with requests from US or Canada', () => {
 		containsLeaderboard.mockReturnValueOnce(false);
-		containsMpu.mockReturnValueOnce(true);
+		containsBillboard.mockReturnValueOnce(false);
+		containsMpu.mockReturnValue(true);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValue(false);
+		containsMobileSticky.mockReturnValueOnce(false);
 		isInUsOrCa.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -535,14 +540,16 @@ describe('triplelift adapter', () => {
 		).find((bid) => bid.bidder === 'triplelift');
 		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_sectionfront_300x250_prebid',
+			tagid: 'theguardian_sectionfront_300x250_prebid',
 		});
 	});
 
 	test('should return correct triplelift adapter params for MPU, with requests from Aus or NZ', () => {
 		containsLeaderboard.mockReturnValueOnce(false);
-		containsMpu.mockReturnValueOnce(true);
+		containsBillboard.mockReturnValueOnce(false);
+		containsMpu.mockReturnValue(true);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValue(false);
+		containsMobileSticky.mockReturnValueOnce(false);
 		isInAuOrNz.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -554,11 +561,13 @@ describe('triplelift adapter', () => {
 		).find((bid) => bid.bidder === 'triplelift');
 		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_sectionfront_300x250_prebid_AU',
+			tagid: 'theguardian_sectionfront_300x250_prebid_AU',
 		});
 	});
 
 	test('should return correct triplelift adapter params for mobile sticky, with requests from US or Canada', () => {
 		containsLeaderboard.mockReturnValueOnce(false);
+		containsBillboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
 		containsMobileSticky.mockReturnValue(true);
@@ -573,11 +582,13 @@ describe('triplelift adapter', () => {
 		).find((bid) => bid.bidder === 'triplelift');
 		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_320x50_HDX',
+			tagid: 'theguardian_320x50_HDX',
 		});
 	});
 
 	test('should return correct triplelift adapter params for mobile sticky, with requests from Aus or NZ', () => {
 		containsLeaderboard.mockReturnValueOnce(false);
+		containsBillboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
 		containsMobileSticky.mockReturnValue(true);
@@ -592,6 +603,49 @@ describe('triplelift adapter', () => {
 		).find((bid) => bid.bidder === 'triplelift');
 		expect(tripleLiftBids?.params).toEqual({
 			inventoryCode: 'theguardian_320x50_HDX_AU',
+			tagid: 'theguardian_320x50_HDX_AU',
+		});
+	});
+
+	test('should return correct triplelift adapter params for billboard, with requests from US or Canada', () => {
+		containsLeaderboard.mockReturnValueOnce(false);
+		containsBillboard.mockReturnValue(true);
+		containsMpu.mockReturnValueOnce(false);
+		containsDmpu.mockReturnValueOnce(false);
+		containsMobileSticky.mockReturnValueOnce(false);
+		isInUsOrCa.mockReturnValue(true);
+
+		const tripleLiftBids = bids(
+			'dfp-ad--merchandising-high',
+			[createAdSize(970, 250)],
+			mockPageTargeting,
+			'gpid',
+			mockConsentState,
+		).find((bid) => bid.bidder === 'triplelift');
+		expect(tripleLiftBids?.params).toEqual({
+			inventoryCode: 'theguardian_article_970x250_prebid',
+			tagid: 'theguardian_article_970x250_prebid',
+		});
+	});
+
+	test('should return correct triplelift adapter params for billboard, with requests from Aus or NZ', () => {
+		containsLeaderboard.mockReturnValueOnce(false);
+		containsBillboard.mockReturnValue(true);
+		containsMpu.mockReturnValueOnce(false);
+		containsDmpu.mockReturnValueOnce(false);
+		containsMobileSticky.mockReturnValueOnce(false);
+		isInAuOrNz.mockReturnValue(true);
+
+		const tripleLiftBids = bids(
+			'dfp-ad--merchandising-high',
+			[createAdSize(970, 250)],
+			mockPageTargeting,
+			'gpid',
+			mockConsentState,
+		).find((bid) => bid.bidder === 'triplelift');
+		expect(tripleLiftBids?.params).toEqual({
+			inventoryCode: 'theguardian_article_970x250_prebid_AU',
+			tagid: 'theguardian_article_970x250_prebid_AU',
 		});
 	});
 });
