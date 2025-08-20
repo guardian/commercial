@@ -27,9 +27,8 @@ const refreshAdsBfcache = (): Promise<void> => {
 		console.log('=====> PAGE SHOW EVENT. persisted? ', event.persisted);
 
 		// Force ads to refresh on the page
-		googletag.cmd.push(() => {
-			googletag.pubads().refresh();
-		});
+		console.log('=====> FORCING REFRESH OF ADS');
+		googletag.pubads().refresh();
 	});
 
 	return Promise.resolve();
