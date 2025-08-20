@@ -26,7 +26,7 @@ const hostnames = {
 const headerBiddingAnalyticsUrl = {
 	dev: 'http://performance-events.code.dev-guardianapis.com/header-bidding',
 	code: 'https://performance-events.code.dev-guardianapis.com/header-bidding',
-	prod: 'http://performance-events.guardianapis.com/header-bidding',
+	prod: 'https://performance-events.guardianapis.com/header-bidding',
 } as const;
 
 const getHost = (stage?: Stage) => {
@@ -56,22 +56,9 @@ const getPath = (
 	stage: Stage,
 	type: ContentType = 'article',
 	path: string,
-	fixtureId: string | undefined,
-	fixture: Record<string, unknown> | undefined,
 ) => {
 	if (stage === 'dev') {
 		const dcrContentType = getDcrContentType(type);
-
-		if (fixtureId) {
-			return `${dcrContentType}/http://localhost:3031/renderFixtureWithId/${fixtureId}/${path}`;
-		}
-
-		if (fixture) {
-			const fixtureJson = JSON.stringify(fixture);
-			const base64Fixture = Buffer.from(fixtureJson).toString('base64');
-			return `${dcrContentType}/http://localhost:3031/renderFixture/${path}?fixture=${base64Fixture}`;
-		}
-
 		return `${dcrContentType}/https://www.theguardian.com${path}`;
 	}
 	return path;
@@ -85,18 +72,14 @@ const getTestUrl = ({
 	path,
 	type = 'article',
 	adtest = 'fixed-puppies-ci',
-	fixtureId,
-	fixture,
 }: {
 	stage: Stage;
 	path: string;
 	type?: ContentType;
 	adtest?: string;
-	fixtureId?: string;
-	fixture?: Record<string, unknown>;
 }) => {
 	const url = new URL(
-		getPath(stage, type, path, fixtureId, fixture),
+		getPath(stage, type, path),
 		getHost(stage),
 	);
 
