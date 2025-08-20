@@ -47,7 +47,7 @@ jobs:
             -p 3030:3030 \
             -e "PORT=3030" \
             -e "COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js" \
-            ghcr.io/guardian/dotcom-rendering:main
+            ghcr.io/guardian/dotcom-rendering:f1fb96c3464be0d7d46a5bccac476278d6c3357e
           echo "exitcode=$?" >> $GITHUB_OUTPUT
 
       - name: Start DCR in a container step failed
