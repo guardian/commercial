@@ -186,6 +186,14 @@ const getTripleLiftInventoryCode = (
 		}
 	}
 
+	if (containsBillboard(sizes)) {
+		if (isInUsOrCa()) {
+			return 'theguardian_article_970x250_prebid';
+		} else if (isInAuOrNz()) {
+			return 'theguardian_article_970x250_prebid_AU';
+		}
+	}
+
 	if (containsMobileSticky(sizes)) {
 		if (isInUsOrCa()) {
 			return 'theguardian_320x50_HDX';
@@ -408,6 +416,7 @@ const tripleLiftBidder: PrebidBidder = {
 		sizes: HeaderBiddingSize[],
 	): PrebidTripleLiftParams => ({
 		inventoryCode: getTripleLiftInventoryCode(slotId, sizes),
+		tagid: getTripleLiftInventoryCode(slotId, sizes),
 	}),
 };
 
