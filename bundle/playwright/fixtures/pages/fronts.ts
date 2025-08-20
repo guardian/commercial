@@ -1,4 +1,4 @@
-import { getStage, getTestUrl } from '../../lib/util';
+import { getTestUrl } from '../../lib/util';
 import type { GuPage } from './Page';
 
 type Front = GuPage & {
@@ -7,12 +7,9 @@ type Front = GuPage & {
 
 type TagPage = GuPage;
 
-const stage = getStage();
-
 const fronts = [
 	{
 		path: getTestUrl({
-			stage,
 			path: '/uk',
 			type: 'front',
 			adtest: 'fixed-puppies',
@@ -21,7 +18,6 @@ const fronts = [
 	},
 	{
 		path: getTestUrl({
-			stage,
 			path: '/uk/commentisfree',
 			type: 'front',
 			adtest: 'fixed-puppies',
@@ -30,7 +26,6 @@ const fronts = [
 	},
 	{
 		path: getTestUrl({
-			stage,
 			path: '/uk/sport',
 			type: 'front',
 			adtest: 'fixed-puppies',
@@ -42,7 +37,6 @@ const fronts = [
 const tagPages = [
 	{
 		path: getTestUrl({
-			stage,
 			path: '/tone/recipes/all',
 			type: 'tagPage',
 			adtest: 'fixed-puppies',
@@ -52,7 +46,6 @@ const tagPages = [
 
 const frontWithPageSkin = {
 	path: getTestUrl({
-		stage,
 		path: '/uk',
 		type: 'front',
 		adtest: 'puppies-pageskin',
@@ -62,7 +55,6 @@ const frontWithPageSkin = {
 
 const frontWithExclusion = {
 	path: getTestUrl({
-		stage,
 		path: '/us-news/baltimore-bridge-collapse',
 		type: 'tagPage',
 		adtest: 'clear',
@@ -70,4 +62,4 @@ const frontWithExclusion = {
 	section: 'us-news',
 } as const satisfies Front;
 
-export { frontWithPageSkin, fronts, tagPages, frontWithExclusion };
+export { fronts, frontWithExclusion, frontWithPageSkin, tagPages };

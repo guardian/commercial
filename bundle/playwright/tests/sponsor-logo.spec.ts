@@ -1,15 +1,13 @@
 import { test } from '@playwright/test';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
-import { getStage, getTestUrl, waitForSlot } from '../lib/util';
+import { getTestUrl, waitForSlot } from '../lib/util';
 
 test.describe('sponsorshipLogo', () => {
 	test('sponsor logo ad is correctly filled in thrasher fixture', async ({
 		page,
 	}) => {
-
 		const path = getTestUrl({
-			stage: getStage(),
 			path: 'uk',
 			type: 'front',
 			adtest: undefined,
@@ -26,7 +24,6 @@ test.describe('sponsorshipLogo', () => {
 		page,
 	}) => {
 		const path = getTestUrl({
-			stage: getStage(),
 			path: 'uk',
 			type: 'front',
 			adtest: undefined,

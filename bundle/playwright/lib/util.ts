@@ -1,38 +1,14 @@
 import type { BrowserContext, Cookie, Page } from '@playwright/test';
 
-type Stage = 'code' | 'prod' | 'dev';
-
 type ContentType = 'article' | 'liveblog' | 'front' | 'tagPage';
 
-const normalizeStage = (stage: string): Stage =>
-	['code', 'prod', 'dev'].includes(stage) ? (stage as Stage) : 'dev';
-
-/**
- * Set the stage via environment variable STAGE
- * e.g. `STAGE=code pnpm playwright test`
- */
-const getStage = (): Stage => {
-	// TODO check playwright picks up the STAGE env var
-	const stage = process.env.STAGE;
-	return normalizeStage(stage?.toLowerCase() ?? 'dev');
-};
-
-const hostnames = {
-	code: 'https://code.dev-theguardian.com',
-	prod: 'https://www.theguardian.com',
-	dev: 'http://localhost:3030',
-} as const;
+export const ORIGIN = `http://localhost:3030`;
 
 const headerBiddingAnalyticsUrl = {
 	dev: 'http://performance-events.code.dev-guardianapis.com/header-bidding',
 	code: 'https://performance-events.code.dev-guardianapis.com/header-bidding',
 	prod: 'https://performance-events.guardianapis.com/header-bidding',
 } as const;
-
-const getHost = (stage?: Stage) => {
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- defensive runtime
-	return hostnames[stage ?? getStage()] ?? hostnames.dev;
-};
 
 const getDcrContentType = (
 	type: ContentType,
@@ -51,47 +27,32 @@ const getDcrContentType = (
 
 /**
  * Generate the path for the request to DCR
+ * e.g. Article/https://www.theguardian.com/article/2023/oct/01/example-article
  */
-const getPath = (
-	stage: Stage,
-	type: ContentType = 'article',
-	path: string,
-) => {
-	if (stage === 'dev') {
-		const dcrContentType = getDcrContentType(type);
-		return `${dcrContentType}/https://www.theguardian.com${path}`;
-	}
-	return path;
+const getPath = (type: ContentType = 'article', path: string) => {
+	const dcrContentType = getDcrContentType(type);
+	return `${dcrContentType}/https://www.theguardian.com${path}`;
 };
 
 /**
- * Generate a full URL i.e domain and path
+ * Generate a full DCR URL i.e domain and path
  */
 const getTestUrl = ({
-	stage,
 	path,
 	type = 'article',
 	adtest = 'fixed-puppies-ci',
 }: {
-	stage: Stage;
 	path: string;
 	type?: ContentType;
 	adtest?: string;
 }) => {
-	const url = new URL(
-		getPath(stage, type, path),
-		getHost(stage),
-	);
-
+	const url = new URL(getPath(type, path), ORIGIN);
 	if (type === 'liveblog') {
 		url.searchParams.append('live', '1');
 	}
-
 	url.searchParams.append('adtest', adtest);
-
 	// force an invalid epic so it is not shown
 	url.searchParams.append('force-epic', '9999:CONTROL');
-
 	return url.toString();
 };
 
@@ -181,13 +142,12 @@ const logCommercial = (page: Page) => {
 };
 
 export {
-	countLiveblogInlineSlots,
 	clearCookie,
-	getStage,
+	countLiveblogInlineSlots,
 	getTestUrl,
+	headerBiddingAnalyticsUrl,
+	logCommercial,
+	logUnfilledSlots,
 	waitForIsland,
 	waitForSlot,
-	logUnfilledSlots,
-	logCommercial,
-	headerBiddingAnalyticsUrl,
 };

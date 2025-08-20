@@ -2,10 +2,9 @@ import { breakpoints } from '@guardian/source/foundations';
 import { expect, test } from '@playwright/test';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
-import { getStage, getTestUrl, waitForIsland, waitForSlot } from '../lib/util';
+import { getTestUrl, waitForIsland, waitForSlot } from '../lib/util';
 
 const path = getTestUrl({
-	stage: getStage(),
 	path: '/commentisfree/2024/feb/05/cook-gas-induction-hob-electric',
 });
 
