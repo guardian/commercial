@@ -25,6 +25,11 @@ const refreshAdsBfcache = (): Promise<void> => {
 			window.guardian.config.page.pageAdTargeting?.pv,
 		);
 		console.log('=====> PAGE SHOW EVENT. persisted? ', event.persisted);
+
+		// Force ads to refresh on the page
+		googletag.cmd.push(() => {
+			googletag.pubads().refresh();
+		});
 	});
 
 	return Promise.resolve();
