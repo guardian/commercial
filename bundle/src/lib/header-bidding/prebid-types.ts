@@ -55,7 +55,6 @@ type PrebidTrustXParams = {
 
 type PrebidTripleLiftParams = {
 	inventoryCode: string;
-	tagid: string;
 };
 
 type PrebidXaxisParams = {
