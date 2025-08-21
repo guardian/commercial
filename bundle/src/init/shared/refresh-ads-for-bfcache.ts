@@ -20,6 +20,11 @@ const refreshAdsBfcache = (): Promise<void> => {
 
 	// if (isUserInVariant(bfcache, 'variant')) {
 	window.addEventListener('pageshow', (event) => {
+		if (window.guardian.config.page.pageAdTargeting) {
+			window.guardian.config.page.pageAdTargeting.pv =
+				window.guardian.config.ophan.pageViewId;
+		}
+
 		console.log('=====> pageshow event ', { persisted: event.persisted });
 
 		console.log(
