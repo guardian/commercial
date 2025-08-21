@@ -3,6 +3,7 @@ import { init as initMessenger } from '../lib/messenger';
 import { init as background } from '../lib/messenger/background';
 import { init as resize } from '../lib/messenger/resize';
 import { init as type } from '../lib/messenger/type';
+import { init as cmpTesting } from './cmp-testing';
 import { initArticleBodyAdverts } from './consentless/dynamic/article-body-adverts';
 import { initExclusionSlot } from './consentless/dynamic/exclusion-slot';
 import { initFixedSlots } from './consentless/init-fixed-slots';
@@ -21,6 +22,7 @@ const bootConsentless = async (consentState: ConsentState): Promise<void> => {
 		initFixedSlots(),
 		initArticleBodyAdverts(),
 		reloadPageOnConsentChange(),
+		cmpTesting,
 	];
 
 	await Promise.all(consentlessModuleList);

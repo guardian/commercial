@@ -1,5 +1,6 @@
 import { init as prepareAdVerification } from '../lib/ad-verification/prepare-ad-verification';
 import { bootCommercial } from '../lib/commercial-boot-utils';
+import { init as cmpTesting } from './cmp-testing';
 import { adFreeSlotRemove } from './consented/ad-free-slot-remove';
 import { init as initComscore } from './consented/comscore';
 import { initDfpListeners } from './consented/dfp-listeners';
@@ -46,6 +47,7 @@ const commercialModules = [
 	initThirdPartyTags,
 	initOpinaryPollListener,
 	initAdmiralAdblockRecovery,
+	cmpTesting,
 ];
 
 const bootCommercialWhenReady = () => {
