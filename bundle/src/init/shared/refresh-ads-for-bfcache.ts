@@ -1,3 +1,5 @@
+import { init as prepareGoogletag } from '../consented/prepare-googletag';
+
 /**
  * An event listener for the `pageshow` event, which happens each time a page is loaded.
  * This event is fired for both
@@ -28,7 +30,7 @@ const refreshAdsBfcache = (): Promise<void> => {
 
 		// Force ads to refresh on the page
 		console.log('=====> FORCING REFRESH OF ADS');
-		googletag.pubads().refresh();
+		void prepareGoogletag();
 	});
 
 	return Promise.resolve();
