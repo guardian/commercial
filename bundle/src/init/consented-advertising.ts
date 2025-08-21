@@ -53,11 +53,16 @@ const commercialModules = [
 ];
 
 const bootCommercialWhenReady = () => {
-	if (!!window.guardian.mustardCut || !!window.guardian.polyfilled) {
-		void bootCommercial(commercialModules);
-	} else {
-		window.guardian.queue.push(() => bootCommercial(commercialModules));
-	}
+	window.addEventListener('pageshow', () => {
+		console.log('** ==> PAGE SHOW EVENT **');
+		console.log('** ==> Starting up commercial consented flow **');
+
+		if (!!window.guardian.mustardCut || !!window.guardian.polyfilled) {
+			void bootCommercial(commercialModules);
+		} else {
+			window.guardian.queue.push(() => bootCommercial(commercialModules));
+		}
+	});
 };
 
 export { bootCommercialWhenReady };
