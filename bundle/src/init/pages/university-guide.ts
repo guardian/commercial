@@ -19,6 +19,7 @@ const selectors = {
 	courseInput: "[placeholder='Course']",
 	institutionInput: "[placeholder='Institution']",
 	regionDropdown: '.c-search-form__region-select select',
+	searchForm: '.c-search-form',
 	subjectAreaDropdown: '.c-search-form__subject-area-select select',
 	submitButton: '.c-search-form__submit-button',
 };
@@ -55,7 +56,7 @@ const track = (wrapper: Element, year: number) => {
 };
 
 export default function () {
-	const searchForm = document.querySelector('.c-search-form');
+	const searchForm = document.querySelector(selectors.searchForm);
 	if (!searchForm) {
 		return;
 	}
