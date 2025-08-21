@@ -1,5 +1,3 @@
-import { init as prepareGoogletag } from '../consented/prepare-googletag';
-
 /**
  * An event listener for the `pageshow` event, which happens each time a page is loaded.
  * This event is fired for both
@@ -20,18 +18,28 @@ const refreshAdsBfcache = (): Promise<void> => {
 	// 	false,
 	// );
 
+	// if (isUserInVariant(bfcache, 'variant')) {
 	window.addEventListener('pageshow', (event) => {
-		console.log('=====> OPHAN PAGE VIEW ID', window.guardian.ophan?.viewId);
+		console.log('=====> pageshow event ', { persisted: event.persisted });
+
 		console.log(
-			'=====> TARGETING PAGE VIEW ID',
+			'=====> window.guardian.ophan.viewId',
+			window.guardian.ophan?.viewId,
+		);
+		console.log(
+			'=====> window.guardian.ophan.pageViewId',
+			window.guardian.ophan?.pageViewId,
+		);
+		console.log(
+			'=====> window.guardian.config.ophan.pageViewId',
+			window.guardian.config.ophan.pageViewId,
+		);
+		console.log(
+			'=====> window.guardian.config.page.pageAdTargeting.pv',
 			window.guardian.config.page.pageAdTargeting?.pv,
 		);
-		console.log('=====> PAGE SHOW EVENT. persisted? ', event.persisted);
-
-		// Force ads to refresh on the page
-		console.log('=====> FORCING REFRESH OF ADS');
-		void prepareGoogletag();
 	});
+	// }
 
 	return Promise.resolve();
 };
