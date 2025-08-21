@@ -18,6 +18,7 @@ import { initTeadsCookieless } from './consented/teads-cookieless';
 import { init as initThirdPartyTags } from './consented/third-party-tags';
 import { init as initTrackGpcSignal } from './consented/track-gpc-signal';
 import { init as initTrackScrollDepth } from './consented/track-scroll-depth';
+import { refreshAdsBfcache } from './shared/refresh-ads-for-bfcache';
 import { reloadPageOnConsentChange } from './shared/reload-page-on-consent-change';
 import { init as setAdTestCookie } from './shared/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from './shared/set-adtest-in-labels-cookie';
@@ -35,6 +36,7 @@ const commercialModules = [
 	setAdTestCookie,
 	setAdTestInLabelsCookie,
 	reloadPageOnConsentChange,
+	refreshAdsBfcache,
 	preparePrebid,
 	initDfpListeners,
 	// Permutive init code must run before googletag.enableServices() is called
@@ -49,11 +51,16 @@ const commercialModules = [
 ];
 
 const bootCommercialWhenReady = () => {
-	if (!!window.guardian.mustardCut || !!window.guardian.polyfilled) {
-		void bootCommercial(commercialModules);
-	} else {
-		window.guardian.queue.push(() => bootCommercial(commercialModules));
-	}
+	window.addEventListener('pageshow', () => {
+		console.log('** ==> PAGE SHOW EVENT **');
+		console.log('** ==> Starting up commercial consented flow **');
+
+		if (!!window.guardian.mustardCut || !!window.guardian.polyfilled) {
+			void bootCommercial(commercialModules);
+		} else {
+			window.guardian.queue.push(() => bootCommercial(commercialModules));
+		}
+	});
 };
 
 export { bootCommercialWhenReady };
