@@ -15,7 +15,6 @@ test.describe('shouldLoadGoogletagSwitch', () => {
 		const path = getTestUrl({
 			path: 'uk',
 			type: 'front',
-			adtest: undefined,
 		});
 		await loadPage(page, path);
 		await cmpAcceptAll(page);
@@ -33,7 +32,6 @@ test.describe('shouldLoadGoogletagSwitch', () => {
 		const path = getTestUrl({
 			path: 'uk',
 			type: 'front',
-			adtest: undefined,
 		});
 		await loadPage(page, path);
 		await cmpAcceptAll(page);
