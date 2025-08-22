@@ -33,11 +33,11 @@ const waitForOptOut = (page: Page) =>
 
 test.describe('tcfv2 consent', () => {
 	test(`Accept all, ad slots are fulfilled`, async ({ page }) => {
-		await loadPage(page, path);
+		await loadPage({ page, path });
 
 		await cmpAcceptAll(page);
 
-		await loadPage(page, path);
+		await loadPage({ page, path });
 
 		await adSlotsAreFulfilled(page);
 	});
@@ -45,7 +45,7 @@ test.describe('tcfv2 consent', () => {
 	test(`Reject all, load Opt Out, ad slots are present`, async ({ page }) => {
 		// if we pretend to be in Ireland, we can reject all and see opt out ads
 		// without needing to fake logging into an ad-lite account
-		await loadPage(page, path, 'IE');
+		await loadPage({ page, path, region: 'IE' });
 
 		const optOutPromise = waitForOptOut(page);
 
@@ -91,7 +91,7 @@ test.describe('tcfv2 consent', () => {
 	}) => {
 		// if we pretend to be in Ireland, we can reject all and see opt out ads
 		// without needing to fake logging into an ad-lite account
-		await loadPage(page, path, 'IE');
+		await loadPage({ page, path, region: 'IE' });
 
 		const optOutPromise = waitForOptOut(page);
 
@@ -158,11 +158,11 @@ test.describe('tcfv2 consent', () => {
 	}) => {
 		// if we pretend to be in Ireland, we can reject all and see opt out ads
 		// without needing to fake logging into an ad-lite account
-		await loadPage(page, path, 'IE');
+		await loadPage({ page, path, region: 'IE' });
 
 		await cmpRejectAll(page);
 
-		await loadPage(page, path, 'IE');
+		await loadPage({ page, path, region: 'IE' });
 
 		await adSlotsArePresent(page);
 

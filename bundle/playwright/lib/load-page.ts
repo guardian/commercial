@@ -15,11 +15,11 @@ type FrontendModel = {
 };
 
 type LoadPageOptions = {
-	queryParams?: Record<string, string>;
+	queryParams?: Record<string, string | undefined>;
 	queryParamsOn?: boolean;
 	fragment?: `#${string}`;
 	waitUntil?: 'domcontentloaded' | 'load';
-	region?: 'GB' | 'US' | 'AU' | 'INT';
+	region?: 'AU' | 'GB' | 'IE' | 'INT' | 'US';
 	preventSupportBanner?: boolean;
 	overrides?: {
 		configOverrides?: Record<string, unknown>;
@@ -32,54 +32,6 @@ type LoadPageParams = {
 	page: Page;
 	path: string;
 } & LoadPageOptions;
-
-type ContentType = 'article' | 'liveblog' | 'front' | 'tagPage';
-
-const getDcrContentType = (
-	type: ContentType,
-): 'Article' | 'Front' | 'TagPage' => {
-	switch (type) {
-		case 'front':
-			return 'Front';
-
-		case 'tagPage':
-			return 'TagPage';
-
-		default:
-			return 'Article';
-	}
-};
-
-/**
- * Generate the path for the request to DCR
- * e.g. Article/https://www.theguardian.com/article/2023/oct/01/example-article
- */
-const getPath = (type: ContentType = 'article', path: string) => {
-	const dcrContentType = getDcrContentType(type);
-	return `${dcrContentType}/https://www.theguardian.com${path}`;
-};
-
-/**
- * Generate a full DCR URL i.e domain and path
- */
-const getTestUrl = ({
-	path,
-	type = 'article',
-	adtest = 'fixed-puppies-ci',
-}: {
-	path: string;
-	type?: ContentType;
-	adtest?: string;
-}) => {
-	const url = new URL(getPath(type, path), ORIGIN);
-	if (type === 'liveblog') {
-		url.searchParams.append('live', '1');
-	}
-	url.searchParams.append('adtest', adtest);
-	// force an invalid epic so it is not shown
-	url.searchParams.append('force-epic', '9999:CONTROL');
-	return url.toString();
-};
 
 /**
  * @param path The path for a DCR endpoint path
@@ -110,6 +62,8 @@ const getFrontendJson = async (
 	try {
 		const paramsString = `${new URLSearchParams({
 			dcr: 'true',
+			// force an invalid epic so it is not shown
+			'force-epic': '9999:CONTROL',
 			...queryParams,
 		}).toString()}`;
 		const frontendUrl = `${getFrontendJsonUrl(path)}?${paramsString}`;
@@ -117,7 +71,7 @@ const getFrontendJson = async (
 		const response = await fetch(frontendUrl, { headers: { cookie } });
 		if (!response.ok) {
 			throw new Error(
-				`Failed to fetch from ${path}: ${response.statusText}`,
+				`Failed to fetch from ${frontendUrl}: ${response.statusText}`,
 			);
 		}
 		return response.json();

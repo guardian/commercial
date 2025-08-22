@@ -2,11 +2,10 @@ import { breakpoints } from '@guardian/source/foundations';
 import { expect, test } from '@playwright/test';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
-import { getTestUrl, waitForIsland, waitForSlot } from '../lib/util';
+import { waitForIsland, waitForSlot } from '../lib/util';
 
-const path = getTestUrl({
-	path: '/commentisfree/2024/feb/05/cook-gas-induction-hob-electric',
-});
+const path =
+	'/Article/https://www.theguardian.com/commentisfree/2024/feb/05/cook-gas-induction-hob-electric';
 
 test.describe('desktop comments-expanded slot', () => {
 	test(`Check that comments-expanded slot is added when comments are expanded on desktop`, async ({
@@ -17,7 +16,7 @@ test.describe('desktop comments-expanded slot', () => {
 			height: 800,
 		});
 
-		await loadPage(page, path);
+		await loadPage({ page, path });
 
 		await cmpAcceptAll(page);
 
@@ -45,7 +44,7 @@ test.describe('mobile comments-expanded slot', () => {
 			height: 800,
 		});
 
-		await loadPage(page, path);
+		await loadPage({ page, path });
 
 		await cmpAcceptAll(page);
 

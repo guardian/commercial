@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
-import { getTestUrl, waitForSlot } from '../lib/util';
+import { waitForSlot } from '../lib/util';
 
 test.describe('shouldLoadGoogletagSwitch', () => {
 	test('ad slot should be filled when switch is true', async ({ page }) => {
@@ -12,11 +12,7 @@ test.describe('shouldLoadGoogletagSwitch', () => {
 				},
 			},
 		};
-		const path = getTestUrl({
-			path: 'uk',
-			type: 'front',
-		});
-		await loadPage(page, path);
+		await loadPage({ page, path: '/Front/https://www.theguardian.com/uk' });
 		await cmpAcceptAll(page);
 		await waitForSlot(page, 'top-above-nav');
 	});
@@ -29,11 +25,7 @@ test.describe('shouldLoadGoogletagSwitch', () => {
 				},
 			},
 		};
-		const path = getTestUrl({
-			path: 'uk',
-			type: 'front',
-		});
-		await loadPage(page, path);
+		await loadPage({ page, path: '/Front/https://www.theguardian.com/uk' });
 		await cmpAcceptAll(page);
 
 		// top-above-nav is immediately visible

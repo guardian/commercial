@@ -5,7 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
 	testDir: './playwright/tests',
-	// Don't run tests _within_ files in parallel as this causes flakiness locally - investigating
+	// Don't run tests _within_ files in parallel as this causes flakiness
 	// Test files still run in parallel as per the number of workers set below
 	fullyParallel: false,
 	// Fail the build on CI if you accidentally left test.only in the source code.

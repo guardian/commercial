@@ -1,8 +1,8 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
+import { blogs } from '../fixtures/pages';
 import type { BreakpointSizes } from '../lib/breakpoints';
 import { breakpoints } from '../lib/breakpoints';
-import { blogs } from '../fixtures/pages';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 import { countLiveblogInlineSlots } from '../lib/util';
@@ -70,7 +70,7 @@ test.describe('A minimum amount of ad slots load', () => {
 				height: desktopBreakpoint.height,
 			});
 
-			await loadPage(page, path);
+			await loadPage({ page, path, queryParams: { live: 'true' } });
 			await cmpAcceptAll(page);
 
 			const initialSlotCount = await countLiveblogInlineSlots(

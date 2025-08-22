@@ -5,17 +5,16 @@ import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 
 const { path } = articles[0] as unknown as GuPage;
-const pathWithDebug = path + '?sfdebug';
 
 test.describe('Spacefinder debugger', () => {
 	test(`Check that Spacefinder debug control panel loads when '?sfdebug' is added to the URL`, async ({
 		page,
 	}) => {
-		await loadPage(page, path);
+		await loadPage({ page, path });
 
 		await cmpAcceptAll(page);
 
-		await loadPage(page, pathWithDebug);
+		await loadPage({ page, path, queryParams: { sfdebug: 'true' } });
 
 		const debuggerPanelLocator = page.locator('sfdebug-panel');
 

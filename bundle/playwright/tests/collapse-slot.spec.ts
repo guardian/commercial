@@ -1,16 +1,17 @@
 import { expect, test } from '@playwright/test';
-import { articleWithCollapsedSlots } from '../fixtures/pages/articles';
 import { cmpAcceptAll } from '../lib/cmp';
 import { assertHeader, waitForGAMResponseForSlot } from '../lib/gam';
 import { loadPage } from '../lib/load-page';
-
-const { path } = articleWithCollapsedSlots;
 
 test.describe('Ad slot removal', () => {
 	test(`Empty ad slots should be removed from the DOM`, async ({ page }) => {
 		const gamResponse = waitForGAMResponseForSlot(page, 'top-above-nav');
 
-		await loadPage(page, path);
+		await loadPage({
+			page,
+			path: '/Article/https://www.theguardian.com/technology/2020/jan/20/jabra-elite-75t-review-small-and-long-lasting-airpod-beaters',
+			queryParams: { adtest: 'collapse-slot' },
+		});
 
 		await cmpAcceptAll(page);
 

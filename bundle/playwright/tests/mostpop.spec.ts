@@ -1,13 +1,12 @@
 import { test } from '@playwright/test';
 import { isDefined } from '../../src/lib/types';
-import { testAtBreakpoints } from '../lib/breakpoints';
 import { articles, blogs } from '../fixtures/pages';
-import type { GuPage } from '../fixtures/pages/Page';
+import { testAtBreakpoints } from '../lib/breakpoints';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 import { waitForSlot } from '../lib/util';
 
-const pages = [articles[0], blogs[0]].filter<GuPage>(isDefined);
+const pages = [articles[0], blogs[0]].filter(isDefined);
 
 test.describe('mostpop slot', () => {
 	pages.forEach(({ path }, index) => {
@@ -25,7 +24,7 @@ test.describe('mostpop slot', () => {
 						height,
 					});
 
-					await loadPage(page, path);
+					await loadPage({ page, path });
 					await cmpAcceptAll(page);
 
 					await waitForSlot(page, 'mostpop');

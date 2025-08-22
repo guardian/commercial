@@ -1,19 +1,17 @@
 import { test } from '@playwright/test';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
-import { getTestUrl, waitForSlot } from '../lib/util';
+import { waitForSlot } from '../lib/util';
 
 test.describe('sponsorshipLogo', () => {
 	test('sponsor logo ad is correctly filled in thrasher fixture', async ({
 		page,
 	}) => {
-		const path = getTestUrl({
-			path: 'uk',
-			type: 'front',
-			adtest: undefined,
+		await loadPage({
+			page,
+			path: '/Front/https://www.theguardian.com/uk',
+			queryParams: { adtest: undefined },
 		});
-
-		await loadPage(page, path);
 
 		await cmpAcceptAll(page);
 
@@ -23,13 +21,11 @@ test.describe('sponsorshipLogo', () => {
 	test('sponsor logo ad is correctly populated when it fires a custom event', async ({
 		page,
 	}) => {
-		const path = getTestUrl({
-			path: 'uk',
-			type: 'front',
-			adtest: undefined,
+		await loadPage({
+			page,
+			path: '/Front/https://www.theguardian.com/uk',
+			queryParams: { adtest: undefined },
 		});
-
-		await loadPage(page, path);
 
 		await cmpAcceptAll(page);
 

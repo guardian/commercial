@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
-import { testAtBreakpoints } from '../lib/breakpoints';
 import { articles } from '../fixtures/pages';
+import { testAtBreakpoints } from '../lib/breakpoints';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 
@@ -29,7 +29,7 @@ test.describe('Slots and iframes load on article pages', () => {
 							height,
 						});
 
-						await loadPage(page, article.path);
+						await loadPage({ page, path: article.path });
 						await cmpAcceptAll(page);
 
 						// wait for Spacefinder to place the first inline slot into the DOM
@@ -61,7 +61,7 @@ test.describe('Slots and iframes load on article pages', () => {
 							height,
 						});
 
-						await loadPage(page, article.path);
+						await loadPage({ page, path: article.path });
 						await cmpAcceptAll(page);
 
 						await page
