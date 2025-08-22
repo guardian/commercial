@@ -16,7 +16,6 @@ type FrontendModel = {
 
 type LoadPageOptions = {
 	queryParams?: Record<string, string | undefined>;
-	queryParamsOn?: boolean;
 	fragment?: `#${string}`;
 	waitUntil?: 'domcontentloaded' | 'load';
 	region?: 'AU' | 'GB' | 'IE' | 'INT' | 'US';
@@ -95,15 +94,12 @@ const getFrontendJson = async (
  */
 const getDcrUrl = ({
 	path,
-	queryParamsOn,
 	queryParams,
-}: Pick<LoadPageParams, 'path' | 'queryParamsOn' | 'queryParams'>): string => {
-	const paramsString = queryParamsOn
-		? `?${new URLSearchParams({
-				adtest: 'fixed-puppies-ci',
-				...queryParams,
-			}).toString()}`
-		: '';
+}: Pick<LoadPageParams, 'path' | 'queryParams'>): string => {
+	const paramsString = `?${new URLSearchParams({
+		adtest: 'fixed-puppies-ci',
+		...queryParams,
+	}).toString()}`;
 	return `${ORIGIN}${path}${paramsString}`;
 };
 
@@ -162,7 +158,6 @@ const loadPage = async ({
 	page,
 	path,
 	queryParams = {},
-	queryParamsOn = true,
 	fragment,
 	waitUntil = 'domcontentloaded',
 	region = 'GB',
@@ -220,7 +215,6 @@ const loadPage = async ({
 
 	const dcrUrl = getDcrUrl({
 		path,
-		queryParamsOn,
 		queryParams,
 	});
 

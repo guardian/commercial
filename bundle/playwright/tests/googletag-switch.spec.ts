@@ -5,27 +5,29 @@ import { waitForSlot } from '../lib/util';
 
 test.describe('shouldLoadGoogletagSwitch', () => {
 	test('ad slot should be filled when switch is true', async ({ page }) => {
-		const fixture = {
-			config: {
-				switches: {
+		await loadPage({
+			page,
+			path: '/Front/https://www.theguardian.com/uk',
+			overrides: {
+				switchOverrides: {
 					shouldLoadGoogletag: true,
 				},
 			},
-		};
-		await loadPage({ page, path: '/Front/https://www.theguardian.com/uk' });
+		});
 		await cmpAcceptAll(page);
 		await waitForSlot(page, 'top-above-nav');
 	});
 
 	test('ad slot should be filled when switch is false', async ({ page }) => {
-		const fixture = {
-			config: {
-				switches: {
+		await loadPage({
+			page,
+			path: '/Front/https://www.theguardian.com/uk',
+			overrides: {
+				switchOverrides: {
 					shouldLoadGoogletag: false,
 				},
 			},
-		};
-		await loadPage({ page, path: '/Front/https://www.theguardian.com/uk' });
+		});
 		await cmpAcceptAll(page);
 
 		// top-above-nav is immediately visible

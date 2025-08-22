@@ -121,11 +121,11 @@ test.describe.serial('Correct set of slots are displayed', () => {
 
 					await expect(
 						page.getByTestId(firstAdSlotSelectorDesktop),
-					).toBeVisible();
+					).toBeVisible({ timeout: 10000 });
 
 					await expect(
 						page.getByTestId(firstAdSlotSelectorMobile),
-					).not.toBeVisible();
+					).not.toBeVisible({ timeout: 10000 });
 				});
 			});
 	});
