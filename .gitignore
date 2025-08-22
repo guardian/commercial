@@ -25,7 +25,7 @@ coverage
 wip
 
 # Playwright
-/test-results/
-/playwright-report/
-/playwright/.cache/
-/playwright/.auth/
+test-results/
+playwright-report/
+playwright/.cache/
+playwright/.auth/

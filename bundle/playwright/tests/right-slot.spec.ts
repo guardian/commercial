@@ -14,7 +14,7 @@ test.describe('right slot', () => {
 				height: 800,
 			});
 
-			await loadPage(page, path);
+			await loadPage({ page, path });
 			await cmpAcceptAll(page);
 
 			await waitForSlot(page, 'right');

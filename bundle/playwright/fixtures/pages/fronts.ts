@@ -1,4 +1,3 @@
-import { getStage, getTestUrl } from '../../lib/util';
 import type { GuPage } from './Page';
 
 type Front = GuPage & {
@@ -7,67 +6,65 @@ type Front = GuPage & {
 
 type TagPage = GuPage;
 
-const stage = getStage();
-
 const fronts = [
 	{
-		path: getTestUrl({
-			stage,
-			path: '/uk',
-			type: 'front',
-			adtest: 'fixed-puppies',
-		}),
+		// path: getTestUrl({
+		// 	path: '/uk',
+		// 	type: 'front',
+		// 	adtest: 'fixed-puppies',
+		// }),
+		path: '/Front/https://www.theguardian.com/uk',
 		section: 'uk',
 	},
 	{
-		path: getTestUrl({
-			stage,
-			path: '/uk/commentisfree',
-			type: 'front',
-			adtest: 'fixed-puppies',
-		}),
+		// path: getTestUrl({
+		// 	path: '/uk/commentisfree',
+		// 	type: 'front',
+		// 	adtest: 'fixed-puppies',
+		// }),
+		path: '/Front/https://www.theguardian.com/uk/commentisfree',
 		section: 'commentisfree',
 	},
 	{
-		path: getTestUrl({
-			stage,
-			path: '/uk/sport',
-			type: 'front',
-			adtest: 'fixed-puppies',
-		}),
+		// path: getTestUrl({
+		// 	path: '/uk/sport',
+		// 	type: 'front',
+		// 	adtest: 'fixed-puppies',
+		// }),
+		path: '/Front/https://www.theguardian.com/uk/sport',
 		section: 'sport',
 	},
 ] as const satisfies Front[];
 
 const tagPages = [
 	{
-		path: getTestUrl({
-			stage,
-			path: '/tone/recipes/all',
-			type: 'tagPage',
-			adtest: 'fixed-puppies',
-		}),
+		// path: getTestUrl({
+		// 	path: '/tone/recipes/all',
+		// 	type: 'tagPage',
+		// 	adtest: 'fixed-puppies',
+		// }),
+		path: '/TagPage/https://www.theguardian.com/tone/recipes/all',
 	},
 ] as const satisfies TagPage[];
 
 const frontWithPageSkin = {
-	path: getTestUrl({
-		stage,
-		path: '/uk',
-		type: 'front',
-		adtest: 'puppies-pageskin',
-	}),
+	// path: getTestUrl({
+	// 	path: '/uk',
+	// 	type: 'front',
+	// 	adtest: 'puppies-pageskin',
+	// }),
+	path: '/Front/https://www.theguardian.com/uk',
 	section: 'uk',
 } as const satisfies Front;
 
 const frontWithExclusion = {
-	path: getTestUrl({
-		stage,
-		path: '/us-news/baltimore-bridge-collapse',
-		type: 'tagPage',
-		adtest: 'clear',
-	}),
+	// path: getTestUrl({
+	// 	path: '/us-news/baltimore-bridge-collapse',
+	// 	type: 'tagPage',
+	// 	adtest: 'clear',
+	// }),
+	path: '/Front/https://www.theguardian.com/us-news/baltimore-bridge-collapse',
 	section: 'us-news',
 } as const satisfies Front;
 
-export { frontWithPageSkin, fronts, tagPages, frontWithExclusion };
+export { fronts, frontWithExclusion, frontWithPageSkin, tagPages };

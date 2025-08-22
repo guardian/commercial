@@ -12,7 +12,7 @@ test.describe('Exclusion targeting', () => {
 	}) => {
 		const gamResponse = waitForGAMResponseForSlot(page, 'top-above-nav');
 
-		await loadPage(page, path);
+		await loadPage({ page, path });
 
 		await cmpAcceptAll(page);
 

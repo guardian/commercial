@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
-import { breakpoints } from '../fixtures/breakpoints';
 import { frontWithPageSkin } from '../fixtures/pages';
+import { breakpoints } from '../lib/breakpoints';
 import { cmpAcceptAll } from '../lib/cmp';
 import { assertHeader, waitForGAMResponseForSlot } from '../lib/gam';
 import { loadPage } from '../lib/load-page';
@@ -31,7 +31,11 @@ test.describe('pageskin on uk front', () => {
 				page,
 				'top-above-nav',
 			);
-			await loadPage(page, frontWithPageSkin.path);
+			await loadPage({
+				page,
+				path: frontWithPageSkin.path,
+				queryParams: { adtest: 'puppies-pageskin' },
+			});
 			await cmpAcceptAll(page);
 			const response = await gamResponsePromise;
 
@@ -76,7 +80,11 @@ test.describe('pageskin on uk front', () => {
 
 			// the request to GAM uses the slot name of 'top-above-nav' for mobile and tablet
 			const gamResponsePromise = waitForGAMResponseForSlot(page, slot);
-			await loadPage(page, frontWithPageSkin.path);
+			await loadPage({
+				page,
+				path: frontWithPageSkin.path,
+				queryParams: { adtest: 'puppies-pageskin' },
+			});
 			await cmpAcceptAll(page);
 
 			// need to wait for top-above-nav on mobile as it is out of view

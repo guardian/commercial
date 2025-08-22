@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
-import { breakpoints } from '../fixtures/breakpoints';
 import { blogs } from '../fixtures/pages';
+import { breakpoints } from '../lib/breakpoints';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 import { countLiveblogInlineSlots } from '../lib/util';
@@ -25,7 +25,11 @@ test.describe.serial('Liveblog live updates', () => {
 					height,
 				});
 
-				await loadPage(page, path);
+				await loadPage({
+					page,
+					path,
+					queryParams: { live: 'true' },
+				});
 				await cmpAcceptAll(page);
 
 				await page.evaluate(() => {
