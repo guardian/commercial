@@ -58,6 +58,14 @@ declare global {
 						extras?: Record<string, unknown>,
 					) => void;
 				};
+				abTests?: {
+					getParticipations: () => Record<string, string>;
+					isUserInTest: (testId: string) => boolean;
+					isUserInTestGroup: (
+						testId: string,
+						variantId: string,
+					) => boolean;
+				};
 			};
 		};
 
