@@ -1,4 +1,5 @@
 import { bootCommercial } from '../lib/commercial-boot-utils';
+import { init as cmpTesting } from './cmp-testing';
 import { adFreeSlotRemove } from './consented/ad-free-slot-remove';
 import { init as initComscore } from './consented/comscore';
 import { init as initIpsosMori } from './consented/ipsos-mori';
@@ -16,6 +17,7 @@ const commercialModules = [
 	initTeadsCookieless,
 	initTrackScrollDepth,
 	initTrackGpcSignal,
+	cmpTesting,
 ];
 
 const bootCommercialWhenReady = () => {

@@ -1,7 +1,9 @@
 # Commercial Bundle
+
 This package contains the commercial (advertising) code that is loaded on all pages on theguardian.com.
 
 ## Development
+
 To develop the bundle locally on the bundle, run `pnpm serve` to start a local server. This will watch for changes and rebuild the bundle. Serving it at `http://localhost:3031`.
 
 ### Working locally with DCR
@@ -12,7 +14,7 @@ To develop the bundle locally on the bundle, run `pnpm serve` to start a local s
 
     This will override `commercialBundleUrl` passed via the page config from PROD/CODE.
 
-1. In another terminal start the commercial dev server to serve the local bundle:
+1.  In another terminal start the commercial dev server to serve the local bundle:
 
     `pnpm serve`
 
@@ -47,7 +49,6 @@ Frontend will then use the local bundle instead of the one from PROD/CODE. Front
 To test the bundle on CODE, create a PR, wait for github actions to run and a riff-raff comment should appear. Click the link in the comment to confirm the CODE deployment.
 
 Although you can deploy CODE changes without deploying Frontend or DCR, it's a good idea to flag any CODE deployments on the dotcom semaphore chat in case it has an effect on anything anyone else is testing.
-
 
 ### Deploying to PROD
 
