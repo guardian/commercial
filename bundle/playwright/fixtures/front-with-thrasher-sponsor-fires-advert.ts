@@ -1,4 +1,4 @@
-export const frontWithSponsorInThrasher = {
+export const frontWithThrasherSponsorFiresAdvert = {
 	pressedPage: {
 		collections: [
 			{
@@ -60,17 +60,33 @@ export const frontWithSponsorInThrasher = {
 							display: 'StandardDisplay',
 						},
 						enriched: {
-							embedHtml: `<div class="ad-slot-container">
-								<div
-								id="dfp-ad--sponsor-logo"
-								data-link-name="ad slot sponsor-logo"
-								data-name="sponsor-logo"
-								aria-hidden="true"
-								class="js-ad-slot ad-slot ad-slot--sponsor-logo ad-slot--rendered"
-								data-label="false"
-								data-refresh="false"></div></div>`,
+							embedHtml: `<div class="test-thrasher">
+								<div class="ad-slot-container">
+								Hello I am an advert inside a thrasher and I am going to fire the custom event 'gu.commercial.slot.fill'
+								</div>
+							</div>`,
 							embedCss: '',
-							embedJs: '',
+							embedJs: `setTimeout(() => {
+								const adSlot = document.createElement('div');
+								adSlot.id = 'dfp-ad--sponsor-logo';
+								adSlot.dataset.name = 'sponsor-logo';
+								adSlot.dataset.label = 'false';
+								adSlot.dataset.refresh = 'false';
+
+								const container = document.querySelector('.test-thrasher .ad-slot-container');
+
+								if (!container) {
+									throw Error('ad slot container not found');
+								}
+
+								container.appendChild(adSlot);
+
+								document.dispatchEvent(
+									new CustomEvent('gu.commercial.slot.fill', {
+										detail: { slotId: 'dfp-ad--sponsor-logo' },
+									}),
+								);
+							}, 5_000);`,
 						},
 						type: 'LinkSnap',
 					},
