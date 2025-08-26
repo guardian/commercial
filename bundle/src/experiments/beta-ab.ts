@@ -6,28 +6,35 @@ const reportNoAbModule = () => {
 };
 
 export const getParticipations = () => {
-	if (!window.guardian.modules.abTests) {
+	// This variable is deliberately not extracted to the top level to give further insurance against the possible race condition
+	const abModule = window.guardian.modules.abTests;
+
+	if (!abModule) {
 		reportNoAbModule();
 		return {};
 	}
 
-	return window.guardian.modules.abTests.getParticipations();
+	return abModule.getParticipations();
 };
 
 export const isUserInTest = (testId: string) => {
-	if (!window.guardian.modules.abTests) {
+	const abModule = window.guardian.modules.abTests;
+
+	if (!abModule) {
 		reportNoAbModule();
 		return false;
 	}
 
-	return window.guardian.modules.abTests.isUserInTest(testId);
+	return abModule.isUserInTest(testId);
 };
 
 export const isUserInTestGroup = (testId: string, variantId: string) => {
-	if (!window.guardian.modules.abTests) {
+	const abModule = window.guardian.modules.abTests;
+
+	if (!abModule) {
 		reportNoAbModule();
 		return false;
 	}
 
-	return window.guardian.modules.abTests.isUserInTestGroup(testId, variantId);
+	return abModule.isUserInTestGroup(testId, variantId);
 };
