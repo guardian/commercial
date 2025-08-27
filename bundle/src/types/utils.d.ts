@@ -5,3 +5,8 @@ type DeepPartial<T> = {
 		? Array<DeepPartial<I>>
 		: DeepPartial<T[P]>;
 };
+
+// make all properties of an object nullable
+type Nullable<T> = {
+	[K in keyof T]: T[K] | null;
+};
