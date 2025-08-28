@@ -5,6 +5,7 @@ import type { BreakpointSizes } from '../lib/breakpoints';
 import { breakpoints } from '../lib/breakpoints';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
+import { expectLocatorToBeVisible } from '../lib/locators';
 import { countLiveblogInlineSlots } from '../lib/util';
 
 const pages = blogs.filter(
@@ -48,7 +49,7 @@ const addAndAwaitNewBlocks = async (page: Page, blockContent: string) => {
 
 	// Here, we force the test to wait until the blocks are visible on the page before counting the ad slots
 	const newBlock = page.getByText(blockContent).first();
-	await expect(newBlock).toBeVisible();
+	await expectLocatorToBeVisible(newBlock);
 };
 
 test.describe('A minimum amount of ad slots load', () => {

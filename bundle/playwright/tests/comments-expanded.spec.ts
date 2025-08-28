@@ -1,7 +1,8 @@
 import { breakpoints } from '@guardian/source/foundations';
-import { expect, test } from '@playwright/test';
+import { test } from '@playwright/test';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
+import { expectToBeVisible } from '../lib/locators';
 import { waitForIsland, waitForSlot } from '../lib/util';
 
 const path =
@@ -20,11 +21,7 @@ test.describe('desktop comments-expanded slot', () => {
 
 		await cmpAcceptAll(page);
 
-		await expect(
-			page.locator('[data-testid=comment-counts]').nth(0),
-		).toBeVisible({
-			timeout: 10_000, // 10s
-		});
+		await expectToBeVisible(page, '[data-testid=comment-counts]');
 
 		// Click the comment count to expand the comments
 		await page.locator('[data-testid=comment-counts]').click();
@@ -48,11 +45,7 @@ test.describe('mobile comments-expanded slot', () => {
 
 		await cmpAcceptAll(page);
 
-		await expect(
-			page.locator('[data-testid=comment-counts]').nth(0),
-		).toBeVisible({
-			timeout: 10_000, // 10s
-		});
+		await expectToBeVisible(page, '[data-testid=comment-counts]');
 
 		// Click the comment count to expand the comments
 		await page.locator('[data-testid=comment-counts]').click();

@@ -3,6 +3,7 @@ import { blogs } from '../fixtures/pages';
 import { breakpoints, testAtBreakpoints } from '../lib/breakpoints';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
+import { expectToBeVisible, expectToNotBeVisible } from '../lib/locators';
 import { countLiveblogInlineSlots } from '../lib/util';
 
 const blogPages = blogs.filter((page) => 'expectedMinInlineSlots' in page);
@@ -49,8 +50,9 @@ test.describe.serial('Correct set of slots are displayed', () => {
 		(blog) => 'name' in blog && blog.name === 'under-ad-limit',
 	);
 
-	const firstAdSlotSelectorDesktop = 'liveblog-inline--inline1';
-	const firstAdSlotSelectorMobile = 'liveblog-inline-mobile--top-above-nav';
+	const firstAdSlotSelectorDesktop = '[data-testid=liveblog-inline--inline1]';
+	const firstAdSlotSelectorMobile =
+		'[data-testid=liveblog-inline-mobile--top-above-nav]';
 
 	testBlogs.forEach(({ path }) => {
 		breakpoints
@@ -77,16 +79,15 @@ test.describe.serial('Correct set of slots are displayed', () => {
 					});
 
 					await page
-						.getByTestId(firstAdSlotSelectorMobile)
+						.locator(firstAdSlotSelectorMobile)
 						.scrollIntoViewIfNeeded();
 
-					await expect(
-						page.getByTestId(firstAdSlotSelectorMobile),
-					).toBeVisible();
+					await expectToBeVisible(page, firstAdSlotSelectorMobile);
 
-					await expect(
-						page.getByTestId(firstAdSlotSelectorDesktop),
-					).not.toBeVisible();
+					await expectToNotBeVisible(
+						page,
+						firstAdSlotSelectorDesktop,
+					);
 				});
 			});
 	});
@@ -116,16 +117,12 @@ test.describe.serial('Correct set of slots are displayed', () => {
 					});
 
 					await page
-						.getByTestId(firstAdSlotSelectorDesktop)
+						.locator(firstAdSlotSelectorDesktop)
 						.scrollIntoViewIfNeeded();
 
-					await expect(
-						page.getByTestId(firstAdSlotSelectorDesktop),
-					).toBeVisible({ timeout: 10000 });
+					await expectToBeVisible(page, firstAdSlotSelectorDesktop);
 
-					await expect(
-						page.getByTestId(firstAdSlotSelectorMobile),
-					).not.toBeVisible({ timeout: 10000 });
+					await expectToNotBeVisible(page, firstAdSlotSelectorMobile);
 				});
 			});
 	});
