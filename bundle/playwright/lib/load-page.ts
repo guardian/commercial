@@ -62,7 +62,6 @@ const getFrontendJson = async (
 		const paramsString = `${new URLSearchParams({
 			dcr: 'true',
 			// force an invalid epic so it is not shown
-			'force-epic': '9999:CONTROL',
 			...queryParams,
 		}).toString()}`;
 		const frontendUrl = `${getFrontendJsonUrl(path)}?${paramsString}`;
@@ -98,6 +97,8 @@ const getDcrUrl = ({
 }: Pick<LoadPageParams, 'path' | 'queryParams'>): string => {
 	const paramsString = `?${new URLSearchParams({
 		adtest: 'fixed-puppies-ci',
+		// force an invalid epic so it is not shown
+		'force-liveblog-epic': '9999:CONTROL',
 		...queryParams,
 	}).toString()}`;
 	return `${ORIGIN}${path}${paramsString}`;
