@@ -1,3 +1,7 @@
+import { onConsent } from '@guardian/libs';
+import { isUserLoggedIn } from '../../lib/identity/api';
+import { getPageTargeting } from '../../lib/page-targeting';
+
 /**
  * An event listener for the `pageshow` event, which happens each time a page is loaded.
  * This event is fired for both
@@ -7,17 +11,27 @@
  * Ophan generates a new page view each time on back or forward in browser history so we need to refresh
  * ads to make sure that ad impressions match the correct pageview ID
  */
-const refreshAdsBfcache = (): Promise<void> => {
+const refreshAdsBfcache = async (): Promise<void> => {
+	const isSignedIn = await isUserLoggedIn();
+	const consentState = await onConsent();
+
 	window.addEventListener('pageshow', (event) => {
 		// If bfcache used, refresh the page targeting
 		if (event.persisted) {
-			if (window.guardian.config.page.pageAdTargeting) {
-				window.guardian.config.page.pageAdTargeting.pv =
-					window.guardian.config.ophan.pageViewId;
-			}
-			window.googletag
-				.pubads()
-				.setTargeting('pv', window.guardian.config.ophan.pageViewId);
+			Object.entries(getPageTargeting(consentState, isSignedIn)).forEach(
+				([key, value]) => {
+					if (!value) return;
+					window.googletag.pubads().setTargeting(key, value);
+				},
+			);
+
+			// if (window.guardian.config.page.pageAdTargeting) {
+			// 	window.guardian.config.page.pageAdTargeting.pv =
+			// 		window.guardian.config.ophan.pageViewId;
+			// }
+			// window.googletag
+			// 	.pubads()
+			// 	.setTargeting('pv', window.guardian.config.ophan.pageViewId);
 		}
 
 		console.log('=====> pageshow event ', { persisted: event.persisted });
