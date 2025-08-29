@@ -1,11 +1,9 @@
 import type { Advert } from '../define/Advert';
 import { pageSkin } from '../lib/creatives/page-skin';
 import { dfpEnv } from '../lib/dfp/dfp-env';
-import { disableChildDirectedTreatment } from './disable-child-directed';
 import { loadAdvert } from './load-advert';
 
 const displayAds = (): void => {
-	disableChildDirectedTreatment();
 	/*
 	 * We enable Single Request Architecture (SRA) by invoking:
 	 * googletag.pubads().enableSingleRequest()

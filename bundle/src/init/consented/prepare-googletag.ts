@@ -1,6 +1,7 @@
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/libs';
 import { getConsentFor, loadScript, log, onConsent } from '@guardian/libs';
+import { disableChildDirectedTreatment } from '../../display/disable-child-directed';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { getGoogleTagId, isUserLoggedIn } from '../../lib/identity/api';
 import { getPageTargeting } from '../../lib/page-targeting';
@@ -93,6 +94,7 @@ export const init = (): Promise<void> => {
 			window.googletag.cmd.push(
 				() => EventTimer.get().mark('googletagInitEnd'),
 				() => setPageTargeting(consentState, isSignedIn),
+				() => disableChildDirectedTreatment(),
 				// Note: this function isn't synchronous like most buffered cmds, it's a promise. It's put in here to ensure
 				// it strictly follows preceding prepare-googletag work (and the module itself ensures dependencies are
 				// fulfilled), but don't assume this function is complete when queueing subsequent work using cmd.push
