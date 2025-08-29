@@ -7,7 +7,7 @@ import { waitForSlot } from '../lib/util';
 test.describe('top-above-nav slot', () => {
 	[...allPages].forEach(({ path }, index) => {
 		test(`Test page ${index} has slot and iframe`, async ({ page }) => {
-			await loadPage(page, path);
+			await loadPage({ page, path });
 
 			await cmpAcceptAll(page);
 

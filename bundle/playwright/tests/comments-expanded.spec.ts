@@ -1,13 +1,12 @@
 import { breakpoints } from '@guardian/source/foundations';
-import { expect, test } from '@playwright/test';
+import { test } from '@playwright/test';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
-import { getStage, getTestUrl, waitForIsland, waitForSlot } from '../lib/util';
+import { expectToBeVisible } from '../lib/locators';
+import { waitForIsland, waitForSlot } from '../lib/util';
 
-const path = getTestUrl({
-	stage: getStage(),
-	path: '/commentisfree/2024/feb/05/cook-gas-induction-hob-electric',
-});
+const path =
+	'/Article/https://www.theguardian.com/commentisfree/2024/feb/05/cook-gas-induction-hob-electric';
 
 test.describe('desktop comments-expanded slot', () => {
 	test(`Check that comments-expanded slot is added when comments are expanded on desktop`, async ({
@@ -18,15 +17,11 @@ test.describe('desktop comments-expanded slot', () => {
 			height: 800,
 		});
 
-		await loadPage(page, path);
+		await loadPage({ page, path });
 
 		await cmpAcceptAll(page);
 
-		await expect(
-			page.locator('[data-testid=comment-counts]').nth(0),
-		).toBeVisible({
-			timeout: 10_000, // 10s
-		});
+		await expectToBeVisible(page, '[data-testid=comment-counts]');
 
 		// Click the comment count to expand the comments
 		await page.locator('[data-testid=comment-counts]').click();
@@ -46,15 +41,11 @@ test.describe('mobile comments-expanded slot', () => {
 			height: 800,
 		});
 
-		await loadPage(page, path);
+		await loadPage({ page, path });
 
 		await cmpAcceptAll(page);
 
-		await expect(
-			page.locator('[data-testid=comment-counts]').nth(0),
-		).toBeVisible({
-			timeout: 10_000, // 10s
-		});
+		await expectToBeVisible(page, '[data-testid=comment-counts]');
 
 		// Click the comment count to expand the comments
 		await page.locator('[data-testid=comment-counts]').click();

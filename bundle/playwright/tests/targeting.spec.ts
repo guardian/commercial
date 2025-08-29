@@ -23,7 +23,7 @@ test.describe('GAM targeting', () => {
 			page,
 			'top-above-nav',
 		);
-		await loadPage(page, article.path);
+		await loadPage({ page, path: article.path });
 		await cmpAcceptAll(page);
 		await gamRequestPromise;
 	});
@@ -33,7 +33,7 @@ test.describe('GAM targeting', () => {
 			page,
 			'top-above-nav',
 		);
-		await loadPage(page, article.path);
+		await loadPage({ page, path: article.path });
 		await cmpAcceptAll(page);
 		const request = await gamRequestPromise;
 		const matched = assertRequestParameter(
@@ -57,7 +57,7 @@ test.describe('GAM targeting', () => {
 		if (!sensitivePage) {
 			throw new Error('No sensitive articles found to run test.');
 		}
-		await loadPage(page, sensitivePage.path);
+		await loadPage({ page, path: sensitivePage.path });
 		await cmpAcceptAll(page);
 		const request = await gamRequestPromise;
 		const matched = assertRequestParameter(
@@ -115,7 +115,7 @@ test.describe('Prebid targeting', () => {
 			if (!isCriteoBid) return false;
 			return true;
 		});
-		await loadPage(page, article.path);
+		await loadPage({ page, path: article.path });
 		await cmpAcceptAll(page);
 		const gamCriteoRequest = await gamCriteoRequestPromise;
 		assertGamCriteoRequest(gamCriteoRequest);
