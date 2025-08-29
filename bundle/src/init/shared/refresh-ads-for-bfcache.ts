@@ -11,6 +11,10 @@ const refreshAdsBfcache = (): Promise<void> => {
 	window.addEventListener('pageshow', (event) => {
 		// If bfcache used, refresh the page targeting
 		if (event.persisted) {
+			if (window.guardian.config.page.pageAdTargeting) {
+				window.guardian.config.page.pageAdTargeting.pv =
+					window.guardian.config.ophan.pageViewId;
+			}
 			window.googletag
 				.pubads()
 				.setTargeting('pv', window.guardian.config.ophan.pageViewId);
