@@ -1,8 +1,10 @@
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/libs';
 import { getConsentFor, loadScript, log, onConsent } from '@guardian/libs';
-import { disableChildDirectedTreatment } from '../../display/disable-child-directed';
+import { isUserInVariant } from '../../experiments/ab';
+import { disableChildDirected } from '../../experiments/tests/disable-child-directed';
 import { commercialFeatures } from '../../lib/commercial-features';
+import { isSwitchedOn } from '../../lib/header-bidding/utils';
 import { getGoogleTagId, isUserLoggedIn } from '../../lib/identity/api';
 import { getPageTargeting } from '../../lib/page-targeting';
 import { checkThirdPartyCookiesEnabled } from '../../lib/third-party-cookies';
@@ -77,6 +79,20 @@ const handleLocalePermissions = (consentState: ConsentState) => {
 		});
 	}
 };
+
+/* setPrivacySettings when the condition is met will keep the value false
+ * but when the condition changes and is not met anymore
+ * we need to reset it by passing null to clear the configuration
+ */
+const disableChildDirectedTreatment = () =>
+	isSwitchedOn('disableChildDirected') &&
+	isUserInVariant(disableChildDirected, 'variant')
+		? window.googletag.pubads().setPrivacySettings({
+				childDirectedTreatment: false,
+			})
+		: window.googletag.pubads().setPrivacySettings({
+				childDirectedTreatment: null,
+			});
 
 export const init = (): Promise<void> => {
 	const setupAdvertising = async (): Promise<void> => {
