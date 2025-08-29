@@ -18,7 +18,7 @@ export default merge(config, {
 	devServer: {
 		port,
 		compress: true,
-		hot: false,
+		hot: true,
 		liveReload: true,
 		setupMiddlewares: (middlewares, devServer) => {
 			setupFixturesServer(devServer);
