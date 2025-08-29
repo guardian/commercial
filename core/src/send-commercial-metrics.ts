@@ -271,6 +271,8 @@ async function initCommercialMetrics({
 	setAdBlockerProperties(adBlockerInUse);
 	addVisibilityListeners();
 
+	console.log('=====> initCommercialMetrics pageViewId', pageViewId);
+
 	if (window.guardian.config.commercialMetricsInitialised) {
 		return false;
 	}

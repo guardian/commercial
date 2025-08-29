@@ -8,25 +8,15 @@
  * ads to make sure that ad impressions match the correct pageview ID
  */
 const refreshAdsBfcache = (): Promise<void> => {
-	// window.addEventListener(
-	// 	'pageshow',
-	// 	function (event) {
-	// 		if (event.persisted) {
-	// 			// This is when users navigate backwards or forwards in their browser history
-	// 		}
-	// 	},
-	// 	false,
-	// );
-
-	// if (isUserInVariant(bfcache, 'variant')) {
 	window.addEventListener('pageshow', (event) => {
-		if (window.guardian.config.page.pageAdTargeting) {
-			window.guardian.config.page.pageAdTargeting.pv =
-				window.guardian.config.ophan.pageViewId;
+		// If bfcache used, refresh the page targeting
+		if (event.persisted) {
+			window.googletag
+				.pubads()
+				.setTargeting('pv', window.guardian.config.ophan.pageViewId);
 		}
 
 		console.log('=====> pageshow event ', { persisted: event.persisted });
-
 		console.log(
 			'=====> window.guardian.ophan.viewId',
 			window.guardian.ophan?.viewId,
@@ -44,7 +34,6 @@ const refreshAdsBfcache = (): Promise<void> => {
 			window.guardian.config.page.pageAdTargeting?.pv,
 		);
 	});
-	// }
 
 	return Promise.resolve();
 };
