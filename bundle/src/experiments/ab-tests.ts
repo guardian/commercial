@@ -1,5 +1,6 @@
 import type { ABTest } from '@guardian/ab-core';
 import { admiralAdblockRecovery } from './tests/admiral-adblocker-recovery';
+import { disableChildDirected } from './tests/disable-child-directed';
 import { prebid946 } from './tests/prebid946';
 
 /**
@@ -11,4 +12,5 @@ export const concurrentTests: ABTest[] = [
 	// one test per line
 	prebid946,
 	admiralAdblockRecovery,
+	disableChildDirected,
 ];
