@@ -1,15 +1,15 @@
 import type { ABTest } from '@guardian/ab-core';
 
-export const prebid946: ABTest = {
-	id: 'Prebid946',
+export const disableChildDirected: ABTest = {
+	id: 'DisableChildDirected',
 	author: '@commercial-dev',
-	start: '2025-08-12',
-	expiry: '2025-09-12',
+	start: '2025-08-28',
+	expiry: '2025-09-19',
 	audience: 5 / 100,
-	audienceOffset: 0 / 100,
+	audienceOffset: 5 / 100,
 	audienceCriteria: '',
 	successMeasure: '',
-	description: 'Test v9.46.0 of Prebid ahead of general upgrade',
+	description: 'Test disabling child-directed treatment for ads',
 	variants: [
 		{
 			id: 'control',
