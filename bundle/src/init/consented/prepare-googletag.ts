@@ -86,7 +86,7 @@ const handleLocalePermissions = (consentState: ConsentState) => {
  */
 const disableChildDirectedTreatment = () =>
 	isSwitchedOn('disableChildDirected') &&
-	isUserInVariant(disableChildDirected, 'variant')
+	!isUserInVariant(disableChildDirected, 'control')
 		? window.googletag.pubads().setPrivacySettings({
 				childDirectedTreatment: false,
 			})
