@@ -54,6 +54,11 @@ jobs:
         if: ${{ failure() && steps.start-dcr-container.conclusion == 'failure' && steps.start-dcr-container.outputs.exitcode == 125 }}
         run: echo "Unable to fetch a DCR container image from the registry. Run the DCR main build in order to create a new container image." && exit 1
 
+      - name: Turn off mandb updates
+        run: |
+          sudo mv /usr/bin/mandb /usr/bin/mandb-OFF
+          sudo cp -p /bin/true /usr/bin/mandb
+
       - name: Install Playwright Browsers
         run: pnpm playwright install --with-deps chromium
         working-directory: ./bundle
