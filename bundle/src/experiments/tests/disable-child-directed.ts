@@ -5,7 +5,7 @@ export const disableChildDirected: ABTest = {
 	author: '@commercial-dev',
 	start: '2025-08-28',
 	expiry: '2025-09-19',
-	audience: 2.5 / 100,
+	audience: 5 / 100,
 	audienceOffset: 5 / 100,
 	audienceCriteria: '',
 	successMeasure: '',
