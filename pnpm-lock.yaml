@@ -174,8 +174,8 @@ importers:
         specifier: ^1.18.5
         version: 1.18.8
       babel-jest:
-        specifier: ^30.1.0
-        version: 30.1.0(@babel/core@7.28.3)
+        specifier: ^30.1.2
+        version: 30.1.2(@babel/core@7.28.3)
       babel-loader:
         specifier: ^10.0.0
         version: 10.0.0(@babel/core@7.28.3)(webpack@5.101.3)
@@ -217,7 +217,7 @@ importers:
         version: 5.3.14(webpack@5.101.3)
       ts-jest:
         specifier: 'catalog:'
-        version: 29.4.1(@babel/core@7.28.3)(@jest/transform@30.1.0)(@jest/types@30.0.5)(babel-jest@30.1.0(@babel/core@7.28.3))(jest-util@30.0.5)(jest@30.0.5(@types/node@24.2.0))(typescript@5.8.3)
+        version: 29.4.1(@babel/core@7.28.3)(@jest/transform@30.1.2)(@jest/types@30.0.5)(babel-jest@30.1.2(@babel/core@7.28.3))(jest-util@30.0.5)(jest@30.0.5(@types/node@24.2.0))(typescript@5.8.3)
       ts-loader:
         specifier: ^9.5.4
         version: 9.5.4(typescript@5.8.3)(webpack@5.101.3)
@@ -275,7 +275,7 @@ importers:
         version: 4.0.0(jest-environment-jsdom@30.0.5)
       ts-jest:
         specifier: 'catalog:'
-        version: 29.4.1(@babel/core@7.28.3)(@jest/transform@30.1.0)(@jest/types@30.0.5)(babel-jest@30.1.0(@babel/core@7.28.3))(jest-util@30.0.5)(jest@30.0.5(@types/node@24.2.0))(typescript@5.8.3)
+        version: 29.4.1(@babel/core@7.28.3)(@jest/transform@30.1.2)(@jest/types@30.0.5)(babel-jest@30.1.2(@babel/core@7.28.3))(jest-util@30.0.5)(jest@30.0.5(@types/node@24.2.0))(typescript@5.8.3)
       type-fest:
         specifier: 'catalog:'
         version: 4.41.0
@@ -1305,8 +1305,8 @@ packages:
     resolution: {integrity: sha512-Vk8amLQCmuZyy6GbBht1Jfo9RSdBtg7Lks+B0PecnjI8J+PCLQPGh7uI8Q/2wwpW2gLdiAfiHNsmekKlywULqg==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
 
-  '@jest/transform@30.1.0':
-    resolution: {integrity: sha512-OvzganIbExZDS2jl37re14XSJXK3sREyGP641RL+Ek1galupCMLWHlxop+4wQnVX7e3fxF6C3W16VzWdl2ducQ==}
+  '@jest/transform@30.1.2':
+    resolution: {integrity: sha512-UYYFGifSgfjujf1Cbd3iU/IQoSd6uwsj8XHj5DSDf5ERDcWMdJOPTkHWXj4U+Z/uMagyOQZ6Vne8C4nRIrCxqA==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
 
   '@jest/types@30.0.1':
@@ -2048,8 +2048,8 @@ packages:
     peerDependencies:
       '@babel/core': ^7.11.0
 
-  babel-jest@30.1.0:
-    resolution: {integrity: sha512-xoF2zwb3po3dOJMahde//mE284gcxp9WH8TTbo3Y102fas7Ga1mjGUwrw137RmvUkuA2liISRlg2BFQhmTfeHg==}
+  babel-jest@30.1.2:
+    resolution: {integrity: sha512-IQCus1rt9kaSh7PQxLYRY5NmkNrNlU2TpabzwV7T2jljnpdHOcmnYYv8QmE04Li4S3a2Lj8/yXyET5pBarPr6g==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
     peerDependencies:
       '@babel/core': ^7.11.0
@@ -6980,7 +6980,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@jest/transform@30.1.0':
+  '@jest/transform@30.1.2':
     dependencies:
       '@babel/core': 7.28.3
       '@jest/types': 30.0.5
@@ -7863,10 +7863,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  babel-jest@30.1.0(@babel/core@7.28.3):
+  babel-jest@30.1.2(@babel/core@7.28.3):
     dependencies:
       '@babel/core': 7.28.3
-      '@jest/transform': 30.1.0
+      '@jest/transform': 30.1.2
       '@types/babel__core': 7.20.5
       babel-plugin-istanbul: 7.0.0
       babel-preset-jest: 30.0.1(@babel/core@7.28.3)
@@ -11668,7 +11668,7 @@ snapshots:
 
   ts-dedent@2.2.0: {}
 
-  ts-jest@29.4.1(@babel/core@7.28.3)(@jest/transform@30.1.0)(@jest/types@30.0.5)(babel-jest@30.1.0(@babel/core@7.28.3))(jest-util@30.0.5)(jest@30.0.5(@types/node@24.2.0))(typescript@5.8.3):
+  ts-jest@29.4.1(@babel/core@7.28.3)(@jest/transform@30.1.2)(@jest/types@30.0.5)(babel-jest@30.1.2(@babel/core@7.28.3))(jest-util@30.0.5)(jest@30.0.5(@types/node@24.2.0))(typescript@5.8.3):
     dependencies:
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
@@ -11683,9 +11683,9 @@ snapshots:
       yargs-parser: 21.1.1
     optionalDependencies:
       '@babel/core': 7.28.3
-      '@jest/transform': 30.1.0
+      '@jest/transform': 30.1.2
       '@jest/types': 30.0.5
-      babel-jest: 30.1.0(@babel/core@7.28.3)
+      babel-jest: 30.1.2(@babel/core@7.28.3)
       jest-util: 30.0.5
 
   ts-loader@9.5.4(typescript@5.8.3)(webpack@5.101.3):
