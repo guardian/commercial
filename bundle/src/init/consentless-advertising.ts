@@ -5,7 +5,6 @@ import { init as resize } from '../lib/messenger/resize';
 import { init as type } from '../lib/messenger/type';
 import { initArticleBodyAdverts } from './consentless/dynamic/article-body-adverts';
 import { initExclusionSlot } from './consentless/dynamic/exclusion-slot';
-import { handleBfcacheConsentless } from './consentless/handle-bfcache-consentless';
 import { initFixedSlots } from './consentless/init-fixed-slots';
 import { initConsentless } from './consentless/prepare-ootag';
 import { init as initPages } from './pages';
@@ -23,7 +22,6 @@ const bootConsentless = async (consentState: ConsentState): Promise<void> => {
 		initFixedSlots(),
 		initArticleBodyAdverts(),
 		reloadPageOnConsentChange(),
-		handleBfcacheConsentless(consentState),
 		initPages(),
 	];
 

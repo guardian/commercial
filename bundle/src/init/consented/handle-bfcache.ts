@@ -10,7 +10,7 @@ import { setPageTargeting } from './prepare-googletag';
  * is true, as this represents when the page has been served from cache
  * This is to ensure that ad targeting is set up to match the correct pageview ID
  */
-const handleBfcacheConsented = async (): Promise<void> => {
+const handleBfcache = async (): Promise<void> => {
 	const consentState = await onConsent();
 	const isSignedIn = await isUserLoggedIn();
 
@@ -25,4 +25,4 @@ const handleBfcacheConsented = async (): Promise<void> => {
 	return Promise.resolve();
 };
 
-export { handleBfcacheConsented };
+export { handleBfcache };
