@@ -1,6 +1,5 @@
 import { join } from 'path';
 import { merge } from 'webpack-merge';
-import { setupFixturesServer } from '../scripts/fixtures/fixtures-server.js';
 import config from './webpack.config.mjs';
 
 const port = 3031;
@@ -20,10 +19,5 @@ export default merge(config, {
 		compress: true,
 		hot: false,
 		liveReload: true,
-		setupMiddlewares: (middlewares, devServer) => {
-			setupFixturesServer(devServer);
-
-			return middlewares;
-		},
 	},
 });

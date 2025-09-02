@@ -1,4 +1,4 @@
-const advertThatFiresEventInThrasher = {
+export const frontWithThrasherSponsorFiresAdvert = {
 	pressedPage: {
 		collections: [
 			{
@@ -62,6 +62,7 @@ const advertThatFiresEventInThrasher = {
 						enriched: {
 							embedHtml: `<div class="test-thrasher">
 								<div class="ad-slot-container">
+								Hello I am an advert inside a thrasher and I am going to fire the custom event 'gu.commercial.slot.fill'
 								</div>
 							</div>`,
 							embedCss: '',
@@ -120,20 +121,4 @@ const advertThatFiresEventInThrasher = {
 			},
 		],
 	},
-};
-
-/**
- * The fixtures represent a set of objects that is deeply merged into the JSON
- * data that is used by DCR. It can be used to override properties for the
- * purposes of testing e.g. to set a switch state to be true regardless of
- * the state in PROD.
- *
- * Each of the fixtures is available via an endpoint (see fixtures-server.js)
- */
-const fixtures = {
-	advertThatFiresEventInThrasher,
-};
-
-module.exports = {
-	fixtures,
 };

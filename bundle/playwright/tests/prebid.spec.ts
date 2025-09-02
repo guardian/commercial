@@ -3,7 +3,6 @@ import type { PrebidAuctionInitEvent } from '../../src/lib/header-bidding/prebid
 import { articles } from '../fixtures/pages';
 import { cmpAcceptAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
-import { getStage, headerBiddingAnalyticsUrl } from '../lib/util';
 
 const testPage = articles[0];
 
@@ -12,7 +11,7 @@ test.describe('Prebid', () => {
 		const scriptRequestPromise = page.waitForRequest(
 			/graun\.Prebid\.js\.commercial\.js$/,
 		);
-		await loadPage(page, testPage.path);
+		await loadPage({ page, path: testPage.path });
 		await cmpAcceptAll(page);
 		const prebid = await scriptRequestPromise;
 
@@ -20,7 +19,7 @@ test.describe('Prebid', () => {
 	});
 
 	test('should request bids for top-above-nav', async ({ page }) => {
-		await loadPage(page, testPage.path);
+		await loadPage({ page, path: testPage.path });
 
 		await cmpAcceptAll(page);
 
@@ -78,7 +77,7 @@ test.describe('Prebid', () => {
 	test('should not find bidderErrors (excluding timeouts)', async ({
 		page,
 	}) => {
-		await loadPage(page, testPage.path);
+		await loadPage({ page, path: testPage.path });
 
 		await cmpAcceptAll(page);
 
@@ -106,13 +105,15 @@ test.describe('Prebid', () => {
 	});
 
 	test('analytics should be called', async ({ page }) => {
-		const stage = getStage();
+		const analyticsRequestPromise = page.waitForRequest(
+			'http://performance-events.code.dev-guardianapis.com/header-bidding',
+		);
 
-		const analyticsEndpoint = headerBiddingAnalyticsUrl[stage];
-
-		const analyticsRequestPromise = page.waitForRequest(analyticsEndpoint);
-
-		await loadPage(page, testPage.path + '&pbjs-analytics=true');
+		await loadPage({
+			page,
+			path: testPage.path,
+			queryParams: { 'pbjs-analytics': 'true' },
+		});
 		await cmpAcceptAll(page);
 
 		// trigger pagehide event

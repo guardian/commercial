@@ -1,73 +1,21 @@
-import { getStage, getTestUrl } from '../../lib/util';
 import type { GuPage } from './Page';
 
-type Front = GuPage & {
-	section: string;
-};
-
-type TagPage = GuPage;
-
-const stage = getStage();
-
 const fronts = [
-	{
-		path: getTestUrl({
-			stage,
-			path: '/uk',
-			type: 'front',
-			adtest: 'fixed-puppies',
-		}),
-		section: 'uk',
-	},
-	{
-		path: getTestUrl({
-			stage,
-			path: '/uk/commentisfree',
-			type: 'front',
-			adtest: 'fixed-puppies',
-		}),
-		section: 'commentisfree',
-	},
-	{
-		path: getTestUrl({
-			stage,
-			path: '/uk/sport',
-			type: 'front',
-			adtest: 'fixed-puppies',
-		}),
-		section: 'sport',
-	},
-] as const satisfies Front[];
+	{ path: '/Front/https://www.theguardian.com/uk' },
+	{ path: '/Front/https://www.theguardian.com/uk/commentisfree' },
+	{ path: '/Front/https://www.theguardian.com/uk/sport' },
+] as const satisfies GuPage[];
 
 const tagPages = [
-	{
-		path: getTestUrl({
-			stage,
-			path: '/tone/recipes/all',
-			type: 'tagPage',
-			adtest: 'fixed-puppies',
-		}),
-	},
-] as const satisfies TagPage[];
+	{ path: '/TagPage/https://www.theguardian.com/tone/recipes/all' },
+] as const satisfies GuPage[];
 
 const frontWithPageSkin = {
-	path: getTestUrl({
-		stage,
-		path: '/uk',
-		type: 'front',
-		adtest: 'puppies-pageskin',
-	}),
-	section: 'uk',
-} as const satisfies Front;
+	path: '/Front/https://www.theguardian.com/uk',
+} as const satisfies GuPage;
 
 const frontWithExclusion = {
-	path: getTestUrl({
-		stage,
-		path: '/us-news/baltimore-bridge-collapse',
-		type: 'tagPage',
-		adtest: 'clear',
-	}),
-	section: 'us-news',
-} as const satisfies Front;
+	path: '/TagPage/https://www.theguardian.com/us-news/baltimore-bridge-collapse',
+} as const satisfies GuPage;
 
-export { frontWithPageSkin, fronts, tagPages, frontWithExclusion };
+export { fronts, frontWithExclusion, frontWithPageSkin, tagPages };
