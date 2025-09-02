@@ -5,6 +5,7 @@ import { init as initComscore } from './consented/comscore';
 import { initDfpListeners } from './consented/dfp-listeners';
 import { initDynamicAdSlots } from './consented/dynamic-ad-slots';
 import { initFillSlotListener } from './consented/fill-slot-listener';
+import { handleBfcacheConsented } from './consented/handle-bfcache-consented';
 import { init as initIpsosMori } from './consented/ipsos-mori';
 import { init as initMessenger } from './consented/messenger';
 import { initOpinaryPollListener } from './consented/opinary';
@@ -19,7 +20,6 @@ import { init as initThirdPartyTags } from './consented/third-party-tags';
 import { init as initTrackGpcSignal } from './consented/track-gpc-signal';
 import { init as initTrackScrollDepth } from './consented/track-scroll-depth';
 import { init as initPages } from './pages';
-import { handleBfcache } from './shared/handle-bfcache';
 import { reloadPageOnConsentChange } from './shared/reload-page-on-consent-change';
 import { init as setAdTestCookie } from './shared/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from './shared/set-adtest-in-labels-cookie';
@@ -45,7 +45,7 @@ const commercialModules = [
 	prepareA9,
 	initFillSlotListener,
 	prepareAdVerification,
-	handleBfcache,
+	handleBfcacheConsented,
 	initThirdPartyTags,
 	initOpinaryPollListener,
 	initAdmiralAdblockRecovery,

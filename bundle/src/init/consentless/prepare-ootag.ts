@@ -4,6 +4,24 @@ import { commercialFeatures } from '../../lib/commercial-features';
 import { isUserLoggedIn } from '../../lib/identity/api';
 import { buildPageTargetingConsentless } from '../../lib/targeting/build-page-targeting-consentless';
 
+const setOptOutTargeting = (
+	consentState: ConsentState,
+	isSignedIn: boolean,
+) => {
+	Object.entries(
+		buildPageTargetingConsentless(
+			consentState,
+			commercialFeatures.adFree,
+			isSignedIn,
+		),
+	).forEach(([key, value]) => {
+		if (!value) {
+			return;
+		}
+		window.ootag.addParameter(key, value);
+	});
+};
+
 function initConsentless(consentState: ConsentState): Promise<void> {
 	return new Promise((resolve) => {
 		// Stub the command queue
@@ -27,18 +45,7 @@ function initConsentless(consentState: ConsentState): Promise<void> {
 			});
 
 			void isUserLoggedIn().then((isSignedIn) => {
-				Object.entries(
-					buildPageTargetingConsentless(
-						consentState,
-						commercialFeatures.adFree,
-						isSignedIn,
-					),
-				).forEach(([key, value]) => {
-					if (!value) {
-						return;
-					}
-					window.ootag.addParameter(key, value);
-				});
+				setOptOutTargeting(consentState, isSignedIn);
 				resolve();
 			});
 		});
@@ -49,4 +56,4 @@ function initConsentless(consentState: ConsentState): Promise<void> {
 	});
 }
 
-export { initConsentless };
+export { initConsentless, setOptOutTargeting };
