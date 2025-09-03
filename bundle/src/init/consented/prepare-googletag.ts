@@ -94,7 +94,7 @@ const disableChildDirectedTreatment = () =>
 				childDirectedTreatment: null,
 			});
 
-const init = (): Promise<void> => {
+export const init = (): Promise<void> => {
 	const setupAdvertising = async (): Promise<void> => {
 		const consentState = await onConsent();
 		EventTimer.get().mark('googletagInitStart');
@@ -151,5 +151,3 @@ const init = (): Promise<void> => {
 
 	return removeSlots();
 };
-
-export { init, setPageTargeting };
