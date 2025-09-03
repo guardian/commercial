@@ -47,14 +47,6 @@ const isInternetExplorer = () => {
 	return !!navigator.userAgent.match(/MSIE|Trident/g)?.length;
 };
 
-const DIGITAL_SUBSCRIBER_COOKIE = 'gu_digital_subscriber';
-
-const isDigitalSubscriber = (): boolean =>
-	getCookie({ name: DIGITAL_SUBSCRIBER_COOKIE }) === 'true';
-
-const isAdFreeUser = (): boolean =>
-	isDigitalSubscriber() || adFreeDataIsPresent();
-
 const isUserPrefsAdsOff = (): boolean =>
 	storage.local.get(`gu.prefs.switch.adverts`) === false;
 
@@ -115,7 +107,7 @@ class CommercialFeatures {
 		].includes(window.guardian.config.page.pageId);
 
 		// Feature switches
-		this.adFree = !!forceAdFree || isAdFreeUser();
+		this.adFree = !!forceAdFree || adFreeDataIsPresent();
 
 		this.youtubeAdvertising = !this.adFree && !sensitiveContent;
 
