@@ -5,6 +5,7 @@ import { init as initComscore } from './consented/comscore';
 import { initDfpListeners } from './consented/dfp-listeners';
 import { initDynamicAdSlots } from './consented/dynamic-ad-slots';
 import { initFillSlotListener } from './consented/fill-slot-listener';
+import { handleBfcache } from './consented/handle-bfcache';
 import { init as initIpsosMori } from './consented/ipsos-mori';
 import { init as initMessenger } from './consented/messenger';
 import { initOpinaryPollListener } from './consented/opinary';
@@ -44,6 +45,7 @@ const commercialModules = [
 	prepareA9,
 	initFillSlotListener,
 	prepareAdVerification,
+	handleBfcache,
 	initThirdPartyTags,
 	initOpinaryPollListener,
 	initAdmiralAdblockRecovery,
