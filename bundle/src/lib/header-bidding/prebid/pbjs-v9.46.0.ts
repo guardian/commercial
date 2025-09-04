@@ -26,9 +26,9 @@ import 'prebid-v9.46.0.js/modules/rtdModule';
 import 'prebid-v9.46.0.js/modules/permutiveRtdProvider';
 
 // Guardian specific adapters that we have modified or created
-import './modules/appnexusBidAdapter';
-import './modules/openxBidAdapter';
-import './modules/analyticsAdapter';
+import './modules/appnexusBidAdapter-v9.46.0';
+import './modules/openxBidAdapter-v9.46.0';
+import './modules/analyticsAdapter-v9.46.0';
 
 pbjs.processQueue();
 
