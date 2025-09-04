@@ -71,7 +71,7 @@ describe('Commercial features', () => {
 		expect.hasAssertions();
 	});
 
-	describe('DFP advertising', () => {
+	describe('GAM advertising', () => {
 		it('Runs by default', () => {
 			const features = new CommercialFeatures();
 			expect(features.shouldLoadGoogletag).toBe(true);
