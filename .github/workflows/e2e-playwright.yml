@@ -50,7 +50,7 @@ jobs:
             ghcr.io/guardian/dotcom-rendering:main
           echo "exitcode=$?" >> $GITHUB_OUTPUT
 
-      - name: Start DCR in a container step failed
+      - name: Report if "start DCR in a container" step failed
         if: ${{ failure() && steps.start-dcr-container.conclusion == 'failure' && steps.start-dcr-container.outputs.exitcode == 125 }}
         run: echo "Unable to fetch a DCR container image from the registry. Run the DCR main build in order to create a new container image." && exit 1
 
