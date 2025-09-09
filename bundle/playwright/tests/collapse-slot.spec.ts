@@ -20,7 +20,7 @@ test.describe('Ad slot removal', () => {
 		const matched = await assertHeader(
 			response,
 			'google-lineitem-id',
-			(value) => value === '6966767669',
+			(value) => value === '7081858484',
 		);
 
 		expect(matched).toBeTruthy();
