@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- 4637181: adding a module to handle a/b tests under the new framework
+- 4637181: Include types for a module to handle a/b tests under the new framework
 
 ## 27.2.1
 
