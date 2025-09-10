@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 27.3.0
+
+### Minor Changes
+
+- 4637181: adding a module to handle a/b tests under the new framework
+
 ## 27.2.1
 
 ### Patch Changes
