@@ -41,24 +41,24 @@
 		"tsc": "tsc --noEmit"
 	},
 	"peerDependencies": {
-		"@guardian/ab-core": "catalog:",
-		"@guardian/libs": "catalog:"
+		"@guardian/ab-core": "^8.0.1",
+		"@guardian/libs": "^25.2.0"
 	},
 	"dependencies": {
-		"@guardian/ab-core": "catalog:",
-		"@guardian/libs": "catalog:",
-		"@types/googletag": "catalog:"
+		"@guardian/ab-core": "8.0.1",
+		"@guardian/libs": "25.2.0",
+		"@types/googletag": "~3.3.0"
 	},
 	"devDependencies": {
-		"@guardian/ophan-tracker-js": "catalog:",
-		"@types/jest": "catalog:",
-		"@types/node": "catalog:",
-		"jest": "catalog:",
-		"jest-environment-jsdom": "catalog:",
-		"jest-environment-jsdom-global": "catalog:",
-		"ts-jest": "catalog:",
-		"typescript": "catalog:",
-		"type-fest": "catalog:"
+		"@guardian/ophan-tracker-js": "2.4.0",
+		"@types/jest": "30.0.0",
+		"@types/node": "24.2.0",
+		"jest": "^30.1.3",
+		"jest-environment-jsdom": "^30.1.2",
+		"jest-environment-jsdom-global": "~4.0.0",
+		"ts-jest": "^29.4.1",
+		"typescript": "5.8.3",
+		"type-fest": "^4.41.0"
 	},
 	"publishConfig": {
 		"access": "public"

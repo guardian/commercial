@@ -4,45 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-catalogs:
-  default:
-    '@guardian/ab-core':
-      specifier: 8.0.1
-      version: 8.0.1
-    '@guardian/libs':
-      specifier: 25.2.0
-      version: 25.2.0
-    '@guardian/ophan-tracker-js':
-      specifier: 2.4.0
-      version: 2.4.0
-    '@types/googletag':
-      specifier: ~3.3.0
-      version: 3.3.0
-    '@types/jest':
-      specifier: 30.0.0
-      version: 30.0.0
-    '@types/node':
-      specifier: 24.2.0
-      version: 24.2.0
-    jest:
-      specifier: ^30.1.3
-      version: 30.1.3
-    jest-environment-jsdom:
-      specifier: ^30.1.2
-      version: 30.1.2
-    jest-environment-jsdom-global:
-      specifier: ~4.0.0
-      version: 4.0.0
-    ts-jest:
-      specifier: ^29.4.1
-      version: 29.4.1
-    type-fest:
-      specifier: ^4.41.0
-      version: 4.41.0
-    typescript:
-      specifier: 5.8.3
-      version: 5.8.3
-
 patchedDependencies:
   jsdom:
     hash: bld754pt2rccrfojs6tbcgt5kq
@@ -89,7 +50,7 @@ importers:
   bundle:
     dependencies:
       '@guardian/ab-core':
-        specifier: 'catalog:'
+        specifier: 8.0.1
         version: 8.0.1(tslib@2.8.1)(typescript@5.8.3)
       '@guardian/commercial-core':
         specifier: workspace:*
@@ -104,7 +65,7 @@ importers:
         specifier: 12.0.0
         version: 12.0.0(@guardian/identity-auth@10.0.0(@guardian/libs@25.2.0(@guardian/ophan-tracker-js@2.4.0)(tslib@2.8.1)(typescript@5.8.3))(tslib@2.8.1)(typescript@5.8.3))(@guardian/libs@25.2.0(@guardian/ophan-tracker-js@2.4.0)(tslib@2.8.1)(typescript@5.8.3))(tslib@2.8.1)(typescript@5.8.3)
       '@guardian/libs':
-        specifier: 'catalog:'
+        specifier: 25.2.0
         version: 25.2.0(@guardian/ophan-tracker-js@2.4.0)(tslib@2.8.1)(typescript@5.8.3)
       '@guardian/source':
         specifier: 11.3.0
@@ -153,22 +114,22 @@ importers:
         specifier: ^6.1.1
         version: 6.1.2(browserslist@4.25.3)(tslib@2.8.1)
       '@guardian/ophan-tracker-js':
-        specifier: 'catalog:'
+        specifier: 2.4.0
         version: 2.4.0
       '@playwright/test':
         specifier: 1.55.0
         version: 1.55.0
       '@types/googletag':
-        specifier: 'catalog:'
+        specifier: ~3.3.0
         version: 3.3.0
       '@types/jest':
-        specifier: 'catalog:'
+        specifier: 30.0.0
         version: 30.0.0
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
       '@types/node':
-        specifier: 'catalog:'
+        specifier: 24.2.0
         version: 24.2.0
       '@types/webpack-env':
         specifier: ^1.18.5
@@ -195,13 +156,13 @@ importers:
         specifier: ^9.1.7
         version: 9.1.7
       jest:
-        specifier: 'catalog:'
+        specifier: ^30.1.3
         version: 30.1.3(@types/node@24.2.0)
       jest-environment-jsdom:
-        specifier: 'catalog:'
+        specifier: ^30.1.2
         version: 30.1.2
       jest-environment-jsdom-global:
-        specifier: 'catalog:'
+        specifier: ~4.0.0
         version: 4.0.0(jest-environment-jsdom@30.1.2)
       lint-staged:
         specifier: ^16.1.6
@@ -216,16 +177,16 @@ importers:
         specifier: ^5.3.11
         version: 5.3.14(webpack@5.101.3)
       ts-jest:
-        specifier: 'catalog:'
+        specifier: ^29.4.1
         version: 29.4.1(@babel/core@7.28.4)(@jest/transform@30.1.2)(@jest/types@30.0.5)(babel-jest@30.1.2(@babel/core@7.28.4))(jest-util@30.0.5)(jest@30.1.3(@types/node@24.2.0))(typescript@5.8.3)
       ts-loader:
         specifier: ^9.5.4
         version: 9.5.4(typescript@5.8.3)(webpack@5.101.3)
       type-fest:
-        specifier: 'catalog:'
+        specifier: ^4.41.0
         version: 4.41.0
       typescript:
-        specifier: 'catalog:'
+        specifier: 5.8.3
         version: 5.8.3
       webpack:
         specifier: ^5.101.3
@@ -246,41 +207,41 @@ importers:
   core:
     dependencies:
       '@guardian/ab-core':
-        specifier: 'catalog:'
+        specifier: 8.0.1
         version: 8.0.1(tslib@2.8.1)(typescript@5.8.3)
       '@guardian/libs':
-        specifier: 'catalog:'
+        specifier: 25.2.0
         version: 25.2.0(@guardian/ophan-tracker-js@2.4.0)(tslib@2.8.1)(typescript@5.8.3)
       '@types/googletag':
-        specifier: 'catalog:'
+        specifier: ~3.3.0
         version: 3.3.0
     devDependencies:
       '@guardian/ophan-tracker-js':
-        specifier: 'catalog:'
+        specifier: 2.4.0
         version: 2.4.0
       '@types/jest':
-        specifier: 'catalog:'
+        specifier: 30.0.0
         version: 30.0.0
       '@types/node':
-        specifier: 'catalog:'
+        specifier: 24.2.0
         version: 24.2.0
       jest:
-        specifier: 'catalog:'
+        specifier: ^30.1.3
         version: 30.1.3(@types/node@24.2.0)
       jest-environment-jsdom:
-        specifier: 'catalog:'
+        specifier: ^30.1.2
         version: 30.1.2
       jest-environment-jsdom-global:
-        specifier: 'catalog:'
+        specifier: ~4.0.0
         version: 4.0.0(jest-environment-jsdom@30.1.2)
       ts-jest:
-        specifier: 'catalog:'
+        specifier: ^29.4.1
         version: 29.4.1(@babel/core@7.28.4)(@jest/transform@30.1.2)(@jest/types@30.0.5)(babel-jest@30.1.2(@babel/core@7.28.4))(jest-util@30.0.5)(jest@30.1.3(@types/node@24.2.0))(typescript@5.8.3)
       type-fest:
-        specifier: 'catalog:'
+        specifier: ^4.41.0
         version: 4.41.0
       typescript:
-        specifier: 'catalog:'
+        specifier: 5.8.3
         version: 5.8.3
 
 packages:
@@ -1236,10 +1197,6 @@ packages:
     resolution: {integrity: sha512-N8t1Ytw4/mr9uN28OnVf0SYE2dGhaIxOVYcwsf9IInBKjvofAjbFRvedvBBlyTYk2knbJTiEjEJ2PyyDIBnd9w==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
 
-  '@jest/expect-utils@30.0.4':
-    resolution: {integrity: sha512-EgXecHDNfANeqOkcak0DxsoVI4qkDUsR7n/Lr2vtmTBjwLPBnnPOF71S11Q8IObWzxm2QgQoY6f9hzrRD3gHRA==}
-    engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
-
   '@jest/expect-utils@30.1.2':
     resolution: {integrity: sha512-HXy1qT/bfdjCv7iC336ExbqqYtZvljrV8odNdso7dWK9bSeHtLlvwWWC3YSybSPL03Gg5rug6WLCZAZFH72m0A==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
@@ -1250,10 +1207,6 @@ packages:
 
   '@jest/fake-timers@30.1.2':
     resolution: {integrity: sha512-Beljfv9AYkr9K+ETX9tvV61rJTY706BhBUtiaepQHeEGfe0DbpvUA5Z3fomwc5Xkhns6NWrcFDZn+72fLieUnA==}
-    engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
-
-  '@jest/get-type@30.0.1':
-    resolution: {integrity: sha512-AyYdemXCptSRFirI5EPazNxyPwAL0jXt3zceFjaj8NFiKP9pOi0bfXonf6qkf82z2t3QWPeLCWWw4stPBzctLw==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
 
   '@jest/get-type@30.1.0':
@@ -1277,10 +1230,6 @@ packages:
       node-notifier:
         optional: true
 
-  '@jest/schemas@30.0.1':
-    resolution: {integrity: sha512-+g/1TKjFuGrf1Hh0QPCv0gISwBxJ+MQSNXmG9zjHy7BmFhtoJ9fdNhWJp3qUKRi93AOZHXtdxZgJ1vAtz6z65w==}
-    engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
-
   '@jest/schemas@30.0.5':
     resolution: {integrity: sha512-DmdYgtezMkh3cpU8/1uyXakv3tJRcmcXxBOcO0tbaozPwpmh4YMsnWrQm9ZmZMfa5ocbxzbFk6O4bDPEc/iAnA==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
@@ -1303,10 +1252,6 @@ packages:
 
   '@jest/transform@30.1.2':
     resolution: {integrity: sha512-UYYFGifSgfjujf1Cbd3iU/IQoSd6uwsj8XHj5DSDf5ERDcWMdJOPTkHWXj4U+Z/uMagyOQZ6Vne8C4nRIrCxqA==}
-    engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
-
-  '@jest/types@30.0.1':
-    resolution: {integrity: sha512-HGwoYRVF0QSKJu1ZQX0o5ZrUrrhj0aOOFA8hXrumD7SIzjouevhawbTjmXdwOmURdGluU9DM/XvGm3NyFoiQjw==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
 
   '@jest/types@30.0.5':
@@ -3026,10 +2971,6 @@ packages:
     resolution: {integrity: sha512-+I6B/IkJc1o/2tiURyz/ivu/O0nKNEArIUB5O7zBrlDVJr22SCLH3xTeEry428LvFhRzIA1g8izguxJ/gbNcVQ==}
     engines: {node: '>= 0.8.0'}
 
-  expect@30.0.4:
-    resolution: {integrity: sha512-dDLGjnP2cKbEppxVICxI/Uf4YemmGMPNy0QytCbfafbpYk9AFQsxb8Uyrxii0RPK7FWgLGlSem+07WirwS3cFQ==}
-    engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
-
   expect@30.1.2:
     resolution: {integrity: sha512-xvHszRavo28ejws8FpemjhwswGj4w/BetHIL8cU49u4sGyXDw2+p3YbeDbj6xzlxi6kWTjIRSTJ+9sNXPnF0Zg==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
@@ -3802,10 +3743,6 @@ packages:
       ts-node:
         optional: true
 
-  jest-diff@30.0.4:
-    resolution: {integrity: sha512-TSjceIf6797jyd+R64NXqicttROD+Qf98fex7CowmlSn7f8+En0da1Dglwr1AXxDtVizoxXYZBlUQwNhoOXkNw==}
-    engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
-
   jest-diff@30.1.2:
     resolution: {integrity: sha512-4+prq+9J61mOVXCa4Qp8ZjavdxzrWQXrI80GNxP8f4tkI2syPuPrJgdRPZRrfUTRvIoUwcmNLbqEJy9W800+NQ==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
@@ -3845,24 +3782,12 @@ packages:
     resolution: {integrity: sha512-AoFvJzwxK+4KohH60vRuHaqXfWmeBATFZpzpmzNmYTtmRMiyGPVhkXpBqxUQunw+dQB48bDf4NpUs6ivVbRv1g==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
 
-  jest-matcher-utils@30.0.4:
-    resolution: {integrity: sha512-ubCewJ54YzeAZ2JeHHGVoU+eDIpQFsfPQs0xURPWoNiO42LGJ+QGgfSf+hFIRplkZDkhH5MOvuxHKXRTUU3dUQ==}
-    engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
-
   jest-matcher-utils@30.1.2:
     resolution: {integrity: sha512-7ai16hy4rSbDjvPTuUhuV8nyPBd6EX34HkBsBcBX2lENCuAQ0qKCPb/+lt8OSWUa9WWmGYLy41PrEzkwRwoGZQ==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
 
-  jest-message-util@30.0.2:
-    resolution: {integrity: sha512-vXywcxmr0SsKXF/bAD7t7nMamRvPuJkras00gqYeB1V0WllxZrbZ0paRr3XqpFU2sYYjD0qAaG2fRyn/CGZ0aw==}
-    engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
-
   jest-message-util@30.1.0:
     resolution: {integrity: sha512-HizKDGG98cYkWmaLUHChq4iN+oCENohQLb7Z5guBPumYs+/etonmNFlg1Ps6yN9LTPyZn+M+b/9BbnHx3WTMDg==}
-    engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
-
-  jest-mock@30.0.2:
-    resolution: {integrity: sha512-PnZOHmqup/9cT/y+pXIVbbi8ID6U1XHRmbvR7MvUy4SLqhCbwpkmXhLbsWbGewHrV5x/1bF7YDjs+x24/QSvFA==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
 
   jest-mock@30.0.5:
@@ -3900,10 +3825,6 @@ packages:
 
   jest-snapshot@30.1.2:
     resolution: {integrity: sha512-4q4+6+1c8B6Cy5pGgFvjDy/Pa6VYRiGu0yQafKkJ9u6wQx4G5PqI2QR6nxTl43yy7IWsINwz6oT4o6tD12a8Dg==}
-    engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
-
-  jest-util@30.0.2:
-    resolution: {integrity: sha512-8IyqfKS4MqprBuUpZNlFB5l+WFehc8bfCe1HSZFHzft2mOuND8Cvi9r1musli+u6F3TqanCZ/Ik4H4pXUolZIg==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
 
   jest-util@30.0.5:
@@ -4561,10 +4482,6 @@ packages:
 
   pretty-error@4.0.0:
     resolution: {integrity: sha512-AoJ5YMAcXKYxKhuJGdcvse+Voc6v1RgnsR3nWcYU7q4t6z0Q6T86sv5Zq8VIRbOWWFpvdGE83LtdSMNd+6Y0xw==}
-
-  pretty-format@30.0.2:
-    resolution: {integrity: sha512-yC5/EBSOrTtqhCKfLHqoUIAXVRZnukHPwWBJWR7h84Q3Be1DRQZLncwcfLoPA5RPQ65qfiCMqgYwdUuQ//eVpg==}
-    engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
 
   pretty-format@30.0.5:
     resolution: {integrity: sha512-D1tKtYvByrBkFLe2wHJl2bwMJIiT8rW+XA+TiataH79/FszLQMrpGEvzUVkzPau7OCO0Qnrhpe87PqtOAIB8Yw==}
@@ -6851,10 +6768,6 @@ snapshots:
       '@types/node': 24.2.0
       jest-mock: 30.0.5
 
-  '@jest/expect-utils@30.0.4':
-    dependencies:
-      '@jest/get-type': 30.0.1
-
   '@jest/expect-utils@30.1.2':
     dependencies:
       '@jest/get-type': 30.1.0
@@ -6874,8 +6787,6 @@ snapshots:
       jest-message-util: 30.1.0
       jest-mock: 30.0.5
       jest-util: 30.0.5
-
-  '@jest/get-type@30.0.1': {}
 
   '@jest/get-type@30.1.0': {}
 
@@ -6920,10 +6831,6 @@ snapshots:
       v8-to-istanbul: 9.3.0
     transitivePeerDependencies:
       - supports-color
-
-  '@jest/schemas@30.0.1':
-    dependencies:
-      '@sinclair/typebox': 0.34.37
 
   '@jest/schemas@30.0.5':
     dependencies:
@@ -6975,16 +6882,6 @@ snapshots:
       write-file-atomic: 5.0.1
     transitivePeerDependencies:
       - supports-color
-
-  '@jest/types@30.0.1':
-    dependencies:
-      '@jest/pattern': 30.0.1
-      '@jest/schemas': 30.0.1
-      '@types/istanbul-lib-coverage': 2.0.6
-      '@types/istanbul-reports': 3.0.4
-      '@types/node': 24.2.0
-      '@types/yargs': 17.0.33
-      chalk: 4.1.2
 
   '@jest/types@30.0.5':
     dependencies:
@@ -7224,8 +7121,8 @@ snapshots:
 
   '@types/jest@30.0.0':
     dependencies:
-      expect: 30.0.4
-      pretty-format: 30.0.2
+      expect: 30.1.2
+      pretty-format: 30.0.5
 
   '@types/jsdom@21.1.7':
     dependencies:
@@ -8909,15 +8806,6 @@ snapshots:
 
   exit-x@0.2.2: {}
 
-  expect@30.0.4:
-    dependencies:
-      '@jest/expect-utils': 30.0.4
-      '@jest/get-type': 30.0.1
-      jest-matcher-utils: 30.0.4
-      jest-message-util: 30.0.2
-      jest-mock: 30.0.2
-      jest-util: 30.0.2
-
   expect@30.1.2:
     dependencies:
       '@jest/expect-utils': 30.1.2
@@ -9873,13 +9761,6 @@ snapshots:
       - babel-plugin-macros
       - supports-color
 
-  jest-diff@30.0.4:
-    dependencies:
-      '@jest/diff-sequences': 30.0.1
-      '@jest/get-type': 30.0.1
-      chalk: 4.1.2
-      pretty-format: 30.0.2
-
   jest-diff@30.1.2:
     dependencies:
       '@jest/diff-sequences': 30.0.1
@@ -9945,31 +9826,12 @@ snapshots:
       '@jest/get-type': 30.1.0
       pretty-format: 30.0.5
 
-  jest-matcher-utils@30.0.4:
-    dependencies:
-      '@jest/get-type': 30.0.1
-      chalk: 4.1.2
-      jest-diff: 30.0.4
-      pretty-format: 30.0.2
-
   jest-matcher-utils@30.1.2:
     dependencies:
       '@jest/get-type': 30.1.0
       chalk: 4.1.2
       jest-diff: 30.1.2
       pretty-format: 30.0.5
-
-  jest-message-util@30.0.2:
-    dependencies:
-      '@babel/code-frame': 7.27.1
-      '@jest/types': 30.0.1
-      '@types/stack-utils': 2.0.3
-      chalk: 4.1.2
-      graceful-fs: 4.2.11
-      micromatch: 4.0.8
-      pretty-format: 30.0.2
-      slash: 3.0.0
-      stack-utils: 2.0.6
 
   jest-message-util@30.1.0:
     dependencies:
@@ -9982,12 +9844,6 @@ snapshots:
       pretty-format: 30.0.5
       slash: 3.0.0
       stack-utils: 2.0.6
-
-  jest-mock@30.0.2:
-    dependencies:
-      '@jest/types': 30.0.1
-      '@types/node': 24.2.0
-      jest-util: 30.0.2
 
   jest-mock@30.0.5:
     dependencies:
@@ -10098,15 +9954,6 @@ snapshots:
       synckit: 0.11.8
     transitivePeerDependencies:
       - supports-color
-
-  jest-util@30.0.2:
-    dependencies:
-      '@jest/types': 30.0.1
-      '@types/node': 24.2.0
-      chalk: 4.1.2
-      ci-info: 4.3.0
-      graceful-fs: 4.2.11
-      picomatch: 4.0.3
 
   jest-util@30.0.5:
     dependencies:
@@ -10896,12 +10743,6 @@ snapshots:
     dependencies:
       lodash: 4.17.21
       renderkid: 3.0.0
-
-  pretty-format@30.0.2:
-    dependencies:
-      '@jest/schemas': 30.0.1
-      ansi-styles: 5.2.0
-      react-is: 18.3.1
 
   pretty-format@30.0.5:
     dependencies:
