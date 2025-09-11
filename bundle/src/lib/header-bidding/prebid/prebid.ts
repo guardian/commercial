@@ -359,6 +359,9 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 			name: 'id5Id',
 			params: {
 				partner: 182,
+				// ID5 recommend specifying this to ensure use of the most recent module version
+				// https://wiki.id5.io/docs/id5-prebid-user-id-module
+				externalModuleUrl: 'https://cdn.id5-sync.com/api/1.0/id5PrebidModule.js',
 			},
 			storage: {
 				type: 'html5',
