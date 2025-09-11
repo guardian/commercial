@@ -1,3 +1,8 @@
+import {
+	isInAustralia,
+	isInUk,
+	isInUsa,
+} from '@guardian/commercial-core/geo/geo-utils';
 import type { GetThirdPartyTag } from '../types';
 
 const handleQuerySurveyDone = (
@@ -25,6 +30,22 @@ const onLoad = (): void => {
 	});
 };
 
+const scriptBasedOnRegion = (): string => {
+	if (isInUk()) {
+		return '//cdn.brandmetrics.com/tag/c3330059-9ad5-4d32-8e7a-e9f6c7d74957/the_guardian_uk.js';
+	}
+
+	if (isInUsa()) {
+		return '//cdn.brandmetrics.com/tag/c3330059-9ad5-4d32-8e7a-e9f6c7d74957/the_guardian_us.js';
+	}
+
+	if (isInAustralia()) {
+		return '//cdn.brandmetrics.com/tag/c3330059-9ad5-4d32-8e7a-e9f6c7d74957/the_guardian_au.js';
+	}
+
+	return '';
+};
+
 /**
  * Allows creatives to show survey
  * https://trello.com/c/wHffHVF1/171-integrate-and-test-inizio
@@ -32,7 +53,7 @@ const onLoad = (): void => {
  */
 export const inizio: GetThirdPartyTag = ({ shouldRun }) => ({
 	shouldRun,
-	url: '//cdn.brandmetrics.com/survey/script/e96d04c832084488a841a06b49b8fb2d.js',
+	url: scriptBasedOnRegion(),
 	name: 'inizio',
 	onLoad,
 });
