@@ -1,13 +1,87 @@
+import {
+	isInAustralia,
+	isInUk,
+	isInUsa,
+} from '@guardian/commercial-core/geo/geo-utils';
 import { _, inizio } from './inizio';
+
+jest.mock('@guardian/commercial-core/geo/geo-utils', () => ({
+	isInUk: jest.fn(() => false),
+	isInUsa: jest.fn(() => false),
+	isInAustralia: jest.fn(() => false),
+}));
 
 describe('index', () => {
 	it('should use the feature switch option', () => {
+		(isInUk as jest.Mock).mockReturnValue(true);
+		(isInUsa as jest.Mock).mockReturnValue(false);
+		(isInAustralia as jest.Mock).mockReturnValue(false);
+
 		const inizioInstance = inizio({ shouldRun: true });
+
 		expect(inizioInstance).toMatchObject({
 			shouldRun: true,
-			url: '//cdn.brandmetrics.com/survey/script/e96d04c832084488a841a06b49b8fb2d.js',
+			url: '//cdn.brandmetrics.com/tag/c3330059-9ad5-4d32-8e7a-e9f6c7d74957/the_guardian_uk.js',
 			name: 'inizio',
 		});
+	});
+});
+
+describe('scriptBasedOnRegion', () => {
+	beforeEach(() => {
+		jest.resetAllMocks();
+	});
+
+	it('should return UK script URL when user is in UK', () => {
+		(isInUk as jest.Mock).mockReturnValue(true);
+		(isInUsa as jest.Mock).mockReturnValue(false);
+		(isInAustralia as jest.Mock).mockReturnValue(false);
+
+		const result = inizio({ shouldRun: true });
+
+		expect(result.url).toBe(
+			'//cdn.brandmetrics.com/tag/c3330059-9ad5-4d32-8e7a-e9f6c7d74957/the_guardian_uk.js',
+		);
+		expect(isInUk).toHaveBeenCalled();
+	});
+
+	it('should return US script URL when user is in USA', () => {
+		(isInUk as jest.Mock).mockReturnValue(false);
+		(isInUsa as jest.Mock).mockReturnValue(true);
+		(isInAustralia as jest.Mock).mockReturnValue(false);
+
+		const result = inizio({ shouldRun: true });
+
+		expect(result.url).toBe(
+			'//cdn.brandmetrics.com/tag/c3330059-9ad5-4d32-8e7a-e9f6c7d74957/the_guardian_us.js',
+		);
+		expect(isInUsa).toHaveBeenCalled();
+	});
+
+	it('should return Australia script URL when user is in Australia', () => {
+		(isInUk as jest.Mock).mockReturnValue(false);
+		(isInUsa as jest.Mock).mockReturnValue(false);
+		(isInAustralia as jest.Mock).mockReturnValue(true);
+
+		const result = inizio({ shouldRun: true });
+
+		expect(result.url).toBe(
+			'//cdn.brandmetrics.com/tag/c3330059-9ad5-4d32-8e7a-e9f6c7d74957/the_guardian_au.js',
+		);
+		expect(isInAustralia).toHaveBeenCalled();
+	});
+
+	it('should return empty string when user is not in any supported region', () => {
+		(isInUk as jest.Mock).mockReturnValue(false);
+		(isInUsa as jest.Mock).mockReturnValue(false);
+		(isInAustralia as jest.Mock).mockReturnValue(false);
+
+		const result = inizio({ shouldRun: true });
+
+		expect(result.url).toBe('');
+		expect(isInUk).toHaveBeenCalled();
+		expect(isInUsa).toHaveBeenCalled();
+		expect(isInAustralia).toHaveBeenCalled();
 	});
 });
 
