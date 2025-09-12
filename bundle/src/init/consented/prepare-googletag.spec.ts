@@ -158,6 +158,7 @@ const reset = () => {
 	window.guardian.config.switches = {
 		prebidHeaderBidding: false,
 		a9HeaderBidding: false,
+		disableChildDirected: false,
 	};
 };
 
@@ -606,6 +607,37 @@ describe('DFP', () => {
 			mockGetConsentFor(false);
 			await prepareGoogletag();
 			expect(loadScript).toHaveBeenCalledTimes(0);
+		});
+	});
+	describe('disableChildDirected privacy settings', () => {
+		beforeEach(() => {
+			jest.clearAllMocks();
+		});
+
+		it('should set childDirectedTreatment to false when disableChildDirected switch is true', async () => {
+			window.guardian.config.switches.disableChildDirected = true;
+
+			mockOnConsent(tcfv2WithConsent);
+			mockGetConsentFor(true);
+
+			await prepareGoogletag();
+
+			expect(pubAds.setPrivacySettings).toHaveBeenCalledWith({
+				childDirectedTreatment: false,
+			});
+		});
+
+		it('should not set childDirectedTreatment when disableChildDirected switch is false', async () => {
+			window.guardian.config.switches.disableChildDirected = false;
+
+			mockOnConsent(tcfv2WithConsent);
+			mockGetConsentFor(true);
+
+			await prepareGoogletag();
+
+			expect(pubAds.setPrivacySettings).toHaveBeenCalledWith({
+				childDirectedTreatment: null,
+			});
 		});
 	});
 });
