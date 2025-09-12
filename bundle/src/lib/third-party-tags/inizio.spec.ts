@@ -1,5 +1,6 @@
 import {
 	isInAustralia,
+	isInCanada,
 	isInUk,
 	isInUsa,
 } from '@guardian/commercial-core/geo/geo-utils';
@@ -9,6 +10,7 @@ jest.mock('@guardian/commercial-core/geo/geo-utils', () => ({
 	isInUk: jest.fn(() => false),
 	isInUsa: jest.fn(() => false),
 	isInAustralia: jest.fn(() => false),
+	isInCanada: jest.fn(() => false),
 }));
 
 describe('index', () => {
@@ -75,10 +77,12 @@ describe('scriptBasedOnRegion', () => {
 		(isInUk as jest.Mock).mockReturnValue(false);
 		(isInUsa as jest.Mock).mockReturnValue(false);
 		(isInAustralia as jest.Mock).mockReturnValue(false);
+		(isInCanada as jest.Mock).mockReturnValue(true);
 
 		const result = inizio({ shouldRun: true });
 
 		expect(result.url).toBe('');
+		expect(result.shouldRun).toBe(false);
 		expect(isInUk).toHaveBeenCalled();
 		expect(isInUsa).toHaveBeenCalled();
 		expect(isInAustralia).toHaveBeenCalled();

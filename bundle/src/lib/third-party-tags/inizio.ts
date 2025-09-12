@@ -51,12 +51,15 @@ const scriptBasedOnRegion = (): string => {
  * https://trello.com/c/wHffHVF1/171-integrate-and-test-inizio
  * @param  {} {shouldRun}
  */
-export const inizio: GetThirdPartyTag = ({ shouldRun }) => ({
-	shouldRun,
-	url: scriptBasedOnRegion(),
-	name: 'inizio',
-	onLoad,
-});
+export const inizio: GetThirdPartyTag = ({ shouldRun }) => {
+	const url = scriptBasedOnRegion();
+	return {
+		shouldRun: shouldRun && url !== '',
+		url,
+		name: 'inizio',
+		onLoad,
+	};
+};
 
 export const _ = {
 	onLoad,
