@@ -1,8 +1,6 @@
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/libs';
 import { getConsentFor, loadScript, log, onConsent } from '@guardian/libs';
-import { isUserInVariant } from '../../experiments/ab';
-import { disableChildDirected } from '../../experiments/tests/disable-child-directed';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isSwitchedOn } from '../../lib/header-bidding/utils';
 import { getGoogleTagId, isUserLoggedIn } from '../../lib/identity/api';
@@ -85,8 +83,7 @@ const handleLocalePermissions = (consentState: ConsentState) => {
  * we need to reset it by passing null to clear the configuration
  */
 const disableChildDirectedTreatment = () =>
-	isSwitchedOn('disableChildDirected') &&
-	!isUserInVariant(disableChildDirected, 'control')
+	isSwitchedOn('disableChildDirected')
 		? window.googletag.pubads().setPrivacySettings({
 				childDirectedTreatment: false,
 			})
