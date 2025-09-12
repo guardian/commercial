@@ -1,6 +1,5 @@
 import {
 	isInAustralia,
-	isInUk,
 	isInUsa,
 } from '@guardian/commercial-core/geo/geo-utils';
 import type { GetThirdPartyTag } from '../types';
@@ -31,10 +30,6 @@ const onLoad = (): void => {
 };
 
 const scriptBasedOnRegion = (): string => {
-	if (isInUk()) {
-		return '//cdn.brandmetrics.com/tag/c3330059-9ad5-4d32-8e7a-e9f6c7d74957/the_guardian_uk.js';
-	}
-
 	if (isInUsa()) {
 		return '//cdn.brandmetrics.com/tag/c3330059-9ad5-4d32-8e7a-e9f6c7d74957/the_guardian_us.js';
 	}
@@ -43,7 +38,7 @@ const scriptBasedOnRegion = (): string => {
 		return '//cdn.brandmetrics.com/tag/c3330059-9ad5-4d32-8e7a-e9f6c7d74957/the_guardian_au.js';
 	}
 
-	return '';
+	return '//cdn.brandmetrics.com/tag/c3330059-9ad5-4d32-8e7a-e9f6c7d74957/the_guardian_uk.js';
 };
 
 /**
@@ -51,15 +46,12 @@ const scriptBasedOnRegion = (): string => {
  * https://trello.com/c/wHffHVF1/171-integrate-and-test-inizio
  * @param  {} {shouldRun}
  */
-export const inizio: GetThirdPartyTag = ({ shouldRun }) => {
-	const url = scriptBasedOnRegion();
-	return {
-		shouldRun: shouldRun && url !== '',
-		url,
-		name: 'inizio',
-		onLoad,
-	};
-};
+export const inizio: GetThirdPartyTag = ({ shouldRun }) => ({
+	shouldRun,
+	url: scriptBasedOnRegion(),
+	name: 'inizio',
+	onLoad,
+});
 
 export const _ = {
 	onLoad,
