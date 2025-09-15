@@ -18,33 +18,18 @@ type SignedIn = {
 type AuthStatus = SignedOut | SignedIn;
 
 const getAuthStatus = async (): Promise<AuthStatus> => {
-	console.log('🔐 getAuthStatus: Starting...');
-	try {
-		const { isAuthenticated, accessToken, idToken } =
-			await getIdentityAuth().isSignedInWithAuthState();
-
-		console.log('🔐 getAuthStatus: Raw auth state:', {
-			isAuthenticated,
-			hasAccessToken: !!accessToken,
-			hasIdToken: !!idToken,
-		});
-
-		if (isAuthenticated) {
-			console.log('🔐 getAuthStatus: User is authenticated');
-			return {
-				kind: 'SignedIn',
-				accessToken,
-				idToken,
-			};
-		}
-		console.log('🔐 getAuthStatus: User is NOT authenticated');
+	const { isAuthenticated, accessToken, idToken } =
+		await getIdentityAuth().isSignedInWithAuthState();
+	if (isAuthenticated) {
 		return {
-			kind: 'SignedOut',
+			kind: 'SignedIn',
+			accessToken,
+			idToken,
 		};
-	} catch (error) {
-		console.error('❌ getAuthStatus: Error:', error);
-		throw error;
 	}
+	return {
+		kind: 'SignedOut',
+	};
 };
 
 const isUserLoggedIn = (): Promise<boolean> => getIdentityAuth().isSignedIn();
@@ -73,28 +58,6 @@ const getEmail = (): Promise<string | null> => {
 		return null;
 	});
 };
-
-// const lazyFetchEmailWithTimeout = (): (() => Promise<string | null>) => () => {
-// 	console.log('⏰ lazyFetchEmailWithTimeout: Starting timeout wrapper...');
-// 	return new Promise((resolve) => {
-// 		console.log('⏰ lazyFetchEmailWithTimeout: Setting 1s timeout...');
-// 		setTimeout(() => {
-// 			console.log(
-// 				'⏰ lazyFetchEmailWithTimeout: Timeout reached, resolving with null',
-// 			);
-// 			resolve(null);
-// 		}, 1000);
-
-// 		console.log('⏰ lazyFetchEmailWithTimeout: Calling getEmail...');
-// 		void getEmail().then((email) => {
-// 			console.log(
-// 				'⏰ lazyFetchEmailWithTimeout: getEmail resolved with:',
-// 				email,
-// 			);
-// 			resolve(email ?? null);
-// 		});
-// 	});
-// };
 
 export {
 	getAuthStatus,
