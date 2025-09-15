@@ -65,46 +65,42 @@ const getGoogleTagId = (): Promise<string | null> =>
 	);
 
 const getEmail = (): Promise<string | null> => {
-	console.log('📧 getEmail: Starting...');
 	return getAuthStatus().then((authStatus) => {
-		console.log('📧 getEmail: Auth status:', authStatus.kind);
 		if (authStatus.kind === 'SignedIn') {
 			const email = authStatus.idToken.claims.email;
-			console.log('📧 getEmail: Found email:', email ? 'YES' : 'NO');
 			return email;
 		}
-		console.log('📧 getEmail: User not signed in, returning null');
 		return null;
 	});
 };
 
-const lazyFetchEmailWithTimeout = (): (() => Promise<string | null>) => () => {
-	console.log('⏰ lazyFetchEmailWithTimeout: Starting timeout wrapper...');
-	return new Promise((resolve) => {
-		console.log('⏰ lazyFetchEmailWithTimeout: Setting 1s timeout...');
-		setTimeout(() => {
-			console.log(
-				'⏰ lazyFetchEmailWithTimeout: Timeout reached, resolving with null',
-			);
-			resolve(null);
-		}, 1000);
+// const lazyFetchEmailWithTimeout = (): (() => Promise<string | null>) => () => {
+// 	console.log('⏰ lazyFetchEmailWithTimeout: Starting timeout wrapper...');
+// 	return new Promise((resolve) => {
+// 		console.log('⏰ lazyFetchEmailWithTimeout: Setting 1s timeout...');
+// 		setTimeout(() => {
+// 			console.log(
+// 				'⏰ lazyFetchEmailWithTimeout: Timeout reached, resolving with null',
+// 			);
+// 			resolve(null);
+// 		}, 1000);
 
-		console.log('⏰ lazyFetchEmailWithTimeout: Calling getEmail...');
-		void getEmail().then((email) => {
-			console.log(
-				'⏰ lazyFetchEmailWithTimeout: getEmail resolved with:',
-				email,
-			);
-			resolve(email ?? null);
-		});
-	});
-};
+// 		console.log('⏰ lazyFetchEmailWithTimeout: Calling getEmail...');
+// 		void getEmail().then((email) => {
+// 			console.log(
+// 				'⏰ lazyFetchEmailWithTimeout: getEmail resolved with:',
+// 				email,
+// 			);
+// 			resolve(email ?? null);
+// 		});
+// 	});
+// };
 
 export {
 	getAuthStatus,
 	isUserLoggedIn,
 	getGoogleTagId,
 	getEmail,
-	lazyFetchEmailWithTimeout,
+	// lazyFetchEmailWithTimeout,
 };
 export type { AuthStatus };

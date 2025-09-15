@@ -1,6 +1,7 @@
 import { bootCommercial } from '../lib/commercial-boot-utils';
 import { adFreeSlotRemove } from './consented/ad-free-slot-remove';
 import { init as initComscore } from './consented/comscore';
+import { init as emailTesting } from './consented/identity-fetch';
 import { init as initIpsosMori } from './consented/ipsos-mori';
 import { removeDisabledSlots as closeDisabledSlots } from './consented/remove-slots';
 import { initTeadsCookieless } from './consented/teads-cookieless';
@@ -18,6 +19,7 @@ const commercialModules = [
 	initTrackScrollDepth,
 	initTrackGpcSignal,
 	initPages,
+	emailTesting,
 ];
 
 const bootCommercialWhenReady = () => {
