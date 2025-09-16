@@ -8,4 +8,19 @@ async function sha256(string: string) {
 	return hashHex;
 }
 
-export { sha256 };
+function normaliseEmail(email: string) {
+	let normalised = email.toLowerCase().trim();
+	if (normalised.includes('@gmail')) {
+		const [local] = normalised.split('@');
+		const withoutAlias = local?.split('+')[0];
+		normalised = `${withoutAlias}@gmail.com`;
+	}
+	return normalised;
+}
+
+function hashEmailForId5(email: string) {
+	const normalisedEmail = normaliseEmail(email);
+	return sha256(normalisedEmail);
+}
+
+export { hashEmailForId5 };

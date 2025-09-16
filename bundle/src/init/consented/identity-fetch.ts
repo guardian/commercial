@@ -1,30 +1,28 @@
 import { type ConsentState, onConsent } from '@guardian/libs';
 import { getEmail } from '../../lib/identity/api';
-import { sha256 } from '../../lib/utils/crypto';
+import { hashEmailForId5 } from '../../lib/utils/crypto';
 
-export const init = async (): Promise<void> => {
+export const init = async (): Promise<string | null> => {
 	console.log(`Idenetity Fetch working 📨`);
 	try {
 		const consentState: ConsentState = await onConsent();
-		console.log(
-			`Consent framework: ${consentState.framework}, canTarget: ${consentState.canTarget}`,
-		);
 
 		if (!consentState.canTarget) {
 			console.log('❌ No consent for targeting - skipping email fetch');
-			return;
+			return null;
 		}
 
 		const email = await getEmail();
 
 		if (email) {
-			const hashedEmail = await sha256(email);
-			console.log(`Hashed Email: ${hashedEmail}`);
+			const hashedEmail = await hashEmailForId5(email);
+			console.log(`ID5 Hashed Email: ${hashedEmail}`);
+			return hashedEmail;
 		}
-		console.log(`Email: ${email}`);
+
+		return null;
 	} catch (error) {
 		console.error('❌ Error in identity fetcher:', error);
+		return null;
 	}
-
-	console.log('🏁 Identity Email Fetcher: Complete');
 };
