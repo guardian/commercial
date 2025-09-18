@@ -80,9 +80,10 @@ type PrebidOpenXParams = {
 type PrebidCriteoParams =
 	| {
 			networkId: number;
+			inventoryGroupId?: number;
 	  }
 	| {
-			zoneId: number;
+			inventoryGroupId?: number;
 	  };
 
 type PrebidKargoParams = {

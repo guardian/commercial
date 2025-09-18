@@ -443,7 +443,8 @@ const criteoBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 		return {
 			...defaultParams,
 			bidParams: () => ({
-				zoneId: 1759354,
+				networkId: 337,
+				inventoryGroupId: 110733,
 			}),
 		};
 	}
@@ -452,6 +453,7 @@ const criteoBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 		...defaultParams,
 		bidParams: () => ({
 			networkId: 337,
+			inventoryGroupId: 110733,
 		}),
 	};
 };
