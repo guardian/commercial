@@ -1,19 +1,12 @@
 import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { cmp, getCookie, log } from '@guardian/libs';
-import {
-	getAdmiralAbTestVariant,
-	recordAdmiralOphanEvent,
-	setAdmiralTargeting,
-} from '../../init/consented/admiral';
+import { recordAdmiralOphanEvent } from '../../init/consented/admiral';
 import type { GetThirdPartyTag } from '../types';
 
 const BASE_AJAX_URL =
 	window.guardian.config.stage === 'CODE'
 		? 'https://code.api.nextgen.guardianapps.co.uk'
 		: 'https://api.nextgen.guardianapps.co.uk';
-
-const abTestVariant = getAdmiralAbTestVariant();
-const isInVariant = abTestVariant?.startsWith('variant') ?? false;
 
 /**
  * The Admiral bootstrap script should only run under the following conditions:
@@ -30,7 +23,7 @@ const shouldRun =
 	cmp.hasInitialised() &&
 	!cmp.willShowPrivacyMessageSync() &&
 	isInUsa() &&
-	isInVariant &&
+	!!window.guardian.config.switches.admiralAdblockRecovery &&
 	!getCookie({
 		name: 'gu_hide_support_messaging',
 		shouldMemoize: true,
@@ -61,15 +54,6 @@ const admiralTag: ReturnType<GetThirdPartyTag> = {
 	beforeLoad: () => {
 		log('commercial', '🛡️ Admiral - loading script on the page');
 		recordAdmiralOphanEvent({ action: 'INSERT' });
-
-		/** Send targeting to Admiral for AB test variants */
-		if (isInVariant && abTestVariant) {
-			setAdmiralTargeting('guAbTest', abTestVariant);
-			log(
-				'commercial',
-				`🛡️ Admiral - setting targeting: guAbTest = ${abTestVariant}`,
-			);
-		}
 	},
 };
 
