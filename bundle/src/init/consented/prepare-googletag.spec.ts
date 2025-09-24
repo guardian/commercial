@@ -136,7 +136,7 @@ const mockOnConsent = (consentState: ConsentState) =>
 	(onConsent as jest.Mock).mockReturnValueOnce(Promise.resolve(consentState));
 
 const mockGetConsentFor = (hasConsent: boolean) =>
-	(getConsentFor as jest.Mock).mockReturnValueOnce(hasConsent);
+	(getConsentFor as jest.Mock).mockReturnValue(hasConsent);
 
 let $style: HTMLElement;
 const makeFakeEvent = (
