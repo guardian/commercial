@@ -4,7 +4,7 @@ export const admiralAdblockRecovery: ABTest = {
 	id: 'AdmiralAdblockRecovery',
 	author: '@commercial-dev',
 	start: '2025-08-13',
-	expiry: '2025-09-25',
+	expiry: '2025-10-23',
 	audience: 100 / 100,
 	audienceOffset: 0 / 100,
 	audienceCriteria: '',
