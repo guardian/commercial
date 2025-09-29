@@ -79,7 +79,7 @@ type PrebidOpenXParams = {
 
 type PrebidCriteoParams =
 	| {
-			zoneId?: number;
+			zoneId: number;
 	  }
 	| {
 			networkId: number;
