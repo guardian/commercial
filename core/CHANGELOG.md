@@ -1,5 +1,12 @@
 # @guardian/commercial-core
 
+## 28.0.0
+
+### Major Changes
+
+- 5e5be85: Bumping @guardian/libs to 26.0.0
+  Releasing Consent or Pay Europe behind a 0% A/B Test and Switch
+
 ## 27.3.0
 
 ### Minor Changes
