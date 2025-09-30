@@ -452,6 +452,7 @@ const criteoBidder = (slotSizes: HeaderBiddingSize[]): PrebidBidder => {
 		...defaultParams,
 		bidParams: () => ({
 			networkId: 337,
+			pubid: '110733',
 		}),
 	};
 };
