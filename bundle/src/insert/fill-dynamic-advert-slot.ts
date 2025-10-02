@@ -6,7 +6,6 @@ import { enableLazyLoad } from '../display/lazy-load';
 import { loadAdvert } from '../display/load-advert';
 import { dfpEnv } from '../lib/dfp/dfp-env';
 import { queueAdvert } from '../lib/dfp/queue-advert';
-import { reportError } from '../lib/error/report-error';
 
 const displayAd = (advert: Advert, forceDisplay: boolean) => {
 	if (dfpEnv.shouldLazyLoad() && !forceDisplay) {
@@ -29,10 +28,6 @@ const fillDynamicAdSlot = (
 			if (dfpEnv.adverts.has(adSlot.id)) {
 				const errorMessage = `Attempting to add slot with exisiting id ${adSlot.id}`;
 				log('commercial', errorMessage);
-				reportError(Error(errorMessage), 'commercial', {
-					slotId: adSlot.id,
-				});
-
 				return;
 			}
 
