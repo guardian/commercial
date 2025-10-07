@@ -5,6 +5,7 @@ import type { GuPage } from '../fixtures/pages/Page';
 import { cmpAcceptAll, cmpReconsent, cmpRejectAll } from '../lib/cmp';
 import { loadPage } from '../lib/load-page';
 import { waitForSlot } from '../lib/util';
+import { allowRejectAll } from '../lib/allow-reject-all';
 
 const { path } = articles[0] as unknown as GuPage;
 
@@ -42,10 +43,13 @@ test.describe('tcfv2 consent', () => {
 		await adSlotsAreFulfilled(page);
 	});
 
-	test(`Reject all, load Opt Out, ad slots are present`, async ({ page }) => {
-		// if we pretend to be in Ireland, we can reject all and see opt out ads
-		// without needing to fake logging into an ad-lite account
-		await loadPage({ page, path, region: 'IE' });
+	test(`Reject all, load Opt Out, ad slots are present`, async ({
+		page,
+		context,
+	}) => {
+		await allowRejectAll(context);
+
+		await loadPage({ page, path });
 
 		const optOutPromise = waitForOptOut(page);
 
@@ -88,10 +92,11 @@ test.describe('tcfv2 consent', () => {
 
 	test(`Reject all, ad slots are fulfilled, then accept all, ad slots are fulfilled`, async ({
 		page,
+		context,
 	}) => {
-		// if we pretend to be in Ireland, we can reject all and see opt out ads
-		// without needing to fake logging into an ad-lite account
-		await loadPage({ page, path, region: 'IE' });
+		await allowRejectAll(context);
+
+		await loadPage({ page, path });
 
 		const optOutPromise = waitForOptOut(page);
 
@@ -155,14 +160,15 @@ test.describe('tcfv2 consent', () => {
 
 	test(`Reject all, ad slots are present, accept all, page refreshes, ad slots are fulfilled`, async ({
 		page,
+		context,
 	}) => {
-		// if we pretend to be in Ireland, we can reject all and see opt out ads
-		// without needing to fake logging into an ad-lite account
-		await loadPage({ page, path, region: 'IE' });
+		await allowRejectAll(context);
+
+		await loadPage({ page, path });
 
 		await cmpRejectAll(page);
 
-		await loadPage({ page, path, region: 'IE' });
+		await loadPage({ page, path });
 
 		await adSlotsArePresent(page);
 
