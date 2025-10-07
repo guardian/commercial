@@ -216,7 +216,10 @@ const loadPage = async ({
 
 	const dcrUrl = getDcrUrl({
 		path,
-		queryParams,
+		queryParams: {
+			...queryParams,
+			_sp_geo_override: `${region}-XX`, // pass the region to sourcepoint, "XX" is the state which isn't used
+		},
 	});
 
 	// Override any request matching dcrUrl to use a POST method
