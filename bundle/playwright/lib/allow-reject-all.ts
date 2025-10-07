@@ -9,7 +9,7 @@ const allowRejectAll = async (context: BrowserContext) => {
 	await context.addCookies([
 		{
 			name: 'gu_allow_reject_all',
-			value: 'true',
+			value: `${Date.now() + 1000 * 60 * 60}`, // 1 hour
 			domain: 'localhost',
 			path: '/',
 			httpOnly: false,
