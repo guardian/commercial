@@ -76,12 +76,9 @@ importers:
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
-      prebid-v9.46.0.js:
-        specifier: npm:prebid.js@9.46.0
-        version: prebid.js@9.46.0(ejs@3.1.10)(handlebars@4.7.8)
       prebid.js:
-        specifier: 9.27.0
-        version: 9.27.0(ejs@3.1.10)(handlebars@4.7.8)
+        specifier: 9.46.0
+        version: 9.46.0(ejs@3.1.10)(handlebars@4.7.8)
       process:
         specifier: ^0.11.10
         version: 0.11.10
@@ -864,10 +861,6 @@ packages:
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
-
-  '@babel/runtime@7.27.6':
-    resolution: {integrity: sha512-vbavdySgbTTrmFE+EsiqUTzlOr5bzlnJtUv9PynGCAKvfQqjIXbvFdumPM/GxMDfyuGMJaJAU6TO4zc1Jf1i8Q==}
-    engines: {node: '>=6.9.0'}
 
   '@babel/runtime@7.28.4':
     resolution: {integrity: sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==}
@@ -4493,10 +4486,6 @@ packages:
     resolution: {integrity: sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg==}
     engines: {node: '>= 0.4'}
 
-  prebid.js@9.27.0:
-    resolution: {integrity: sha512-gUIX7AhIEWj+aYcycadci/KfxMh1DUHe3l3kTY09EBF/xvBOpjS8+rHdELememdV5Z2C9BdwOZJtw3kfQPsB+Q==}
-    engines: {node: '>=20.0.0'}
-
   prebid.js@9.46.0:
     resolution: {integrity: sha512-l0a4kveeSjNmO/QeTMQRA4lVyStmumyAByNvIK6ifhNT7DhJnXs/SW2R0LUNsxMt4fwyrJcl4ehDs/95CBv+3Q==}
     engines: {node: '>=20.0.0'}
@@ -6371,8 +6360,6 @@ snapshots:
       '@babel/plugin-transform-react-pure-annotations': 7.27.1(@babel/core@7.28.4)
     transitivePeerDependencies:
       - supports-color
-
-  '@babel/runtime@7.27.6': {}
 
   '@babel/runtime@7.28.4': {}
 
@@ -10699,85 +10686,12 @@ snapshots:
 
   possible-typed-array-names@1.1.0: {}
 
-  prebid.js@9.27.0(ejs@3.1.10)(handlebars@4.7.8):
-    dependencies:
-      '@babel/core': 7.28.4
-      '@babel/plugin-transform-runtime': 7.28.3(@babel/core@7.28.4)
-      '@babel/preset-env': 7.28.3(@babel/core@7.28.4)
-      '@babel/runtime': 7.27.6
-      core-js: 3.36.1
-      core-js-pure: 3.36.1
-      crypto-js: 4.2.0
-      dlv: 1.1.3
-      dset: 3.1.4
-      express: 4.21.2
-      fun-hooks: 0.9.10
-      gulp-wrap: 0.15.0(ejs@3.1.10)(handlebars@4.7.8)
-      klona: 2.0.6
-      live-connect-js: 7.2.0
-    optionalDependencies:
-      fsevents: 2.3.3
-    transitivePeerDependencies:
-      - arc-templates
-      - atpl
-      - babel-core
-      - bracket-template
-      - coffee-script
-      - dot
-      - dust
-      - dustjs-helpers
-      - dustjs-linkedin
-      - eco
-      - ect
-      - ejs
-      - haml-coffee
-      - hamlet
-      - hamljs
-      - handlebars
-      - hogan.js
-      - htmling
-      - jade
-      - jazz
-      - jqtpl
-      - just
-      - liquid-node
-      - liquor
-      - marko
-      - mote
-      - mustache
-      - nunjucks
-      - plates
-      - pug
-      - qejs
-      - ractive
-      - razor-tmpl
-      - react
-      - react-dom
-      - slm
-      - squirrelly
-      - supports-color
-      - swig
-      - swig-templates
-      - teacup
-      - templayed
-      - then-jade
-      - then-pug
-      - tinyliquid
-      - toffee
-      - twig
-      - twing
-      - underscore
-      - vash
-      - velocityjs
-      - walrus
-      - whiskers
-
   prebid.js@9.46.0(ejs@3.1.10)(handlebars@4.7.8):
     dependencies:
       '@babel/core': 7.28.4
       '@babel/plugin-transform-runtime': 7.28.3(@babel/core@7.28.4)
       '@babel/preset-env': 7.28.3(@babel/core@7.28.4)
-      '@babel/runtime': 7.27.6
+      '@babel/runtime': 7.28.4
       core-js: 3.36.1
       core-js-pure: 3.36.1
       crypto-js: 4.2.0
