@@ -9,7 +9,7 @@ import { init as initTrackScrollDepth } from './consented/track-scroll-depth';
 import { init as initPages } from './pages';
 
 // modules not related to ad loading
-const commercialModules = [
+const adFreeModules = [
 	adFreeSlotRemove,
 	closeDisabledSlots,
 	initComscore,
@@ -20,12 +20,12 @@ const commercialModules = [
 	initPages,
 ];
 
-const bootCommercialWhenReady = () => {
+const bootAdFreeWhenReady = () => {
 	if (!!window.guardian.mustardCut || !!window.guardian.polyfilled) {
-		void bootCommercial(commercialModules);
+		void bootCommercial(adFreeModules);
 	} else {
-		window.guardian.queue.push(() => bootCommercial(commercialModules));
+		window.guardian.queue.push(() => bootCommercial(adFreeModules));
 	}
 };
 
-export { bootCommercialWhenReady };
+export { bootAdFreeWhenReady };
