@@ -79,10 +79,15 @@ type PrebidOpenXParams = {
 
 type PrebidCriteoParams =
 	| {
-			networkId: number;
+			/*
+			 * @deprecated
+			 * @see: https://docs.prebid.org/dev-docs/bidders/criteo.html
+			 */
+			zoneId: number;
 	  }
 	| {
-			zoneId: number;
+			networkId: number;
+			pubId?: number;
 	  };
 
 type PrebidKargoParams = {
