@@ -137,6 +137,10 @@ const getReferrer = (referrer: string): SessionTargeting['ref'] => {
 	return matchedRef ? matchedRef.id : null;
 };
 
+/**
+ * @todo drop old client/server side participations and rename to just `abTestsParticipations` once
+ * all tests have been migrated to the new AB testing platform
+ */
 const experimentsTargeting = ({
 	clientSideParticipations,
 	serverSideParticipations,
