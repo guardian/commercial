@@ -158,11 +158,26 @@ const experimentsTargeting = ({
 		.map((test) => testToParams(...test))
 		.filter(isString);
 
-	if (clientSideExperiment.length + serverSideExperiments.length === 0) {
+	const newABTestParticipations =
+		window.guardian.modules.abTests?.getParticipations() ?? {};
+
+	const newAbTests = Object.entries(newABTestParticipations)
+		.map((test) => {
+			const [name, variant] = test;
+			return testToParams(name, variant);
+		})
+		.filter(isString);
+
+	if (
+		clientSideExperiment.length +
+			serverSideExperiments.length +
+			newAbTests.length ===
+		0
+	) {
 		return null;
 	}
 
-	return [...clientSideExperiment, ...serverSideExperiments];
+	return [...clientSideExperiment, ...serverSideExperiments, ...newAbTests];
 };
 
 /* -- Targeting -- */
