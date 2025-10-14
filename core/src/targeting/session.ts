@@ -121,6 +121,7 @@ type AllParticipations = {
 		[key: `${string}Control`]: 'control';
 		[key: `${string}Variant`]: 'variant';
 	};
+	newAbTestParticipations: Record<string, string>;
 };
 
 /* -- Methods -- */
@@ -139,6 +140,7 @@ const getReferrer = (referrer: string): SessionTargeting['ref'] => {
 const experimentsTargeting = ({
 	clientSideParticipations,
 	serverSideParticipations,
+	newAbTestParticipations,
 }: AllParticipations): SessionTargeting['ab'] => {
 	const testToParams = (testName: string, variant: string): string | null => {
 		if (variant === 'notintest') return null;
@@ -158,10 +160,7 @@ const experimentsTargeting = ({
 		.map((test) => testToParams(...test))
 		.filter(isString);
 
-	const newABTestParticipations =
-		window.guardian.modules.abTests?.getParticipations() ?? {};
-
-	const newAbTests = Object.entries(newABTestParticipations)
+	const newAbTests = Object.entries(newAbTestParticipations)
 		.map((test) => {
 			const [name, variant] = test;
 			return testToParams(name, variant);
