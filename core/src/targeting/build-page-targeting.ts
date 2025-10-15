@@ -142,7 +142,7 @@ const buildPageTargeting = ({
 		participations: {
 			clientSideParticipations,
 			serverSideParticipations: window.guardian.config.tests ?? {},
-			newAbTestParticipations:
+			betaAbTestParticipations:
 				window.guardian.modules.abTests?.getParticipations() ?? {},
 		},
 		referrer,

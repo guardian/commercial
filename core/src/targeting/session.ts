@@ -121,7 +121,7 @@ type AllParticipations = {
 		[key: `${string}Control`]: 'control';
 		[key: `${string}Variant`]: 'variant';
 	};
-	newAbTestParticipations: Record<string, string>;
+	betaAbTestParticipations: Record<string, string>;
 };
 
 /* -- Methods -- */
@@ -144,7 +144,7 @@ const getReferrer = (referrer: string): SessionTargeting['ref'] => {
 const experimentsTargeting = ({
 	clientSideParticipations,
 	serverSideParticipations,
-	newAbTestParticipations,
+	betaAbTestParticipations,
 }: AllParticipations): SessionTargeting['ab'] => {
 	const testToParams = (testName: string, variant: string): string | null => {
 		if (variant === 'notintest') return null;
@@ -164,7 +164,7 @@ const experimentsTargeting = ({
 		.map((test) => testToParams(...test))
 		.filter(isString);
 
-	const newAbTests = Object.entries(newAbTestParticipations)
+	const betaAbTests = Object.entries(betaAbTestParticipations)
 		.map((test) => {
 			const [name, variant] = test;
 			return testToParams(name, variant);
@@ -174,13 +174,13 @@ const experimentsTargeting = ({
 	if (
 		clientSideExperiment.length +
 			serverSideExperiments.length +
-			newAbTests.length ===
+			betaAbTests.length ===
 		0
 	) {
 		return null;
 	}
 
-	return [...clientSideExperiment, ...serverSideExperiments, ...newAbTests];
+	return [...clientSideExperiment, ...serverSideExperiments, ...betaAbTests];
 };
 
 /* -- Targeting -- */
