@@ -738,7 +738,7 @@ describe('getOzonePlacementId', () => {
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
 		expect(getOzonePlacementId([createAdSize(300, 250)])).toBe(
-			'1420436308',
+			'1500001036',
 		);
 	});
 
