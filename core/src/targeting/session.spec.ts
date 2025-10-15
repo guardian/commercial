@@ -18,6 +18,7 @@ describe('Session targeting', () => {
 			participations: {
 				serverSideParticipations: {},
 				clientSideParticipations: {},
+				betaAbTestParticipations: {},
 			},
 			adTest: null,
 			pageViewId: '1234567',
@@ -41,12 +42,16 @@ describe('Session targeting', () => {
 			serverSideParticipations: {
 				abStandaloneBundleVariant: 'variant',
 			},
+			betaAbTestParticipations: {
+				'ab-new-ad-targeting': 'variant',
+			},
 		};
 
 		const expected: SessionTargeting = {
 			ab: [
 				'ab-new-ad-targeting-variant',
 				'abStandaloneBundleVariant-variant',
+				'ab-new-ad-targeting-variant',
 			],
 			at: null,
 			cc: 'GB',
@@ -92,6 +97,7 @@ describe('Session targeting', () => {
 			participations: {
 				serverSideParticipations: {},
 				clientSideParticipations: {},
+				betaAbTestParticipations: {},
 			},
 			adTest: null,
 			pageViewId: '1234567',
@@ -119,6 +125,7 @@ describe('Session targeting', () => {
 				participations: {
 					serverSideParticipations: {},
 					clientSideParticipations: {},
+					betaAbTestParticipations: {},
 				},
 				adTest: null,
 				pageViewId: '1234567',

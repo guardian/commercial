@@ -162,9 +162,16 @@ describe('Build Page Targeting', () => {
 					},
 					isSensitive: false,
 					webPublicationDate: 608857200,
-				} as unknown as typeof window.guardian.config.page,
+				},
 			},
-		} as typeof window.guardian;
+			modules: {
+				abTests: {
+					getParticipations: jest
+						.fn()
+						.mockReturnValue({} as Record<string, string>),
+				},
+			},
+		} as unknown as typeof window.guardian;
 
 		setCookie({ name: 'adtest', value: 'ng101' });
 

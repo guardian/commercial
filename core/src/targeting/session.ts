@@ -121,6 +121,7 @@ type AllParticipations = {
 		[key: `${string}Control`]: 'control';
 		[key: `${string}Variant`]: 'variant';
 	};
+	betaAbTestParticipations: Record<string, string>;
 };
 
 /* -- Methods -- */
@@ -136,9 +137,14 @@ const getReferrer = (referrer: string): SessionTargeting['ref'] => {
 	return matchedRef ? matchedRef.id : null;
 };
 
+/**
+ * @todo drop old client/server side participations and rename to just `abTestsParticipations` once
+ * all tests have been migrated to the new AB testing platform
+ */
 const experimentsTargeting = ({
 	clientSideParticipations,
 	serverSideParticipations,
+	betaAbTestParticipations,
 }: AllParticipations): SessionTargeting['ab'] => {
 	const testToParams = (testName: string, variant: string): string | null => {
 		if (variant === 'notintest') return null;
@@ -158,11 +164,23 @@ const experimentsTargeting = ({
 		.map((test) => testToParams(...test))
 		.filter(isString);
 
-	if (clientSideExperiment.length + serverSideExperiments.length === 0) {
+	const betaAbTests = Object.entries(betaAbTestParticipations)
+		.map((test) => {
+			const [name, variant] = test;
+			return testToParams(name, variant);
+		})
+		.filter(isString);
+
+	if (
+		clientSideExperiment.length +
+			serverSideExperiments.length +
+			betaAbTests.length ===
+		0
+	) {
 		return null;
 	}
 
-	return [...clientSideExperiment, ...serverSideExperiments];
+	return [...clientSideExperiment, ...serverSideExperiments, ...betaAbTests];
 };
 
 /* -- Targeting -- */
