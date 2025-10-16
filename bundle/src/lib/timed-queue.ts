@@ -43,7 +43,10 @@ export function TimedQueue<T extends GenericJob>() {
 			if (pipeline.length || timeWhenPaused) {
 				// if there are pending jobs or if the queue is paused,
 				// add to the queue to be run when drained
-				const pipelineJob = createPipelineJob(job, executeImmediatelyAfterPause);
+				const pipelineJob = createPipelineJob(
+					job,
+					executeImmediatelyAfterPause,
+				);
 				pipeline.push(pipelineJob);
 			} else {
 				// run immediately if not paused and no pending jobs
