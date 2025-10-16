@@ -18,8 +18,7 @@ const getStyles = (
 
 		if (
 			ownerNode instanceof HTMLStyleElement &&
-			ownerNode.matches(specs.selector) &&
-			ownerNode.textContent !== null
+			ownerNode.matches(specs.selector)
 		) {
 			result.push(ownerNode.textContent);
 		}
