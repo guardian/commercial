@@ -58,7 +58,8 @@ export function TimedQueue<T extends GenericJob>() {
 			void Promise.allSettled(
 				pipeline.map(({ jobId, job, timestamp }) => {
 					// run job immediately if timestamp is 0 (added with executeImmediatelyAfterPause)
-					const timeDifference = timestamp === 0 ? 0 : timestamp - startTime;
+					const timeDifference =
+						timestamp === 0 ? 0 : timestamp - startTime;
 					return runJob(job, timeDifference).then(() => {
 						// remove job from queue
 						pipeline = pipeline.filter(
