@@ -42,11 +42,11 @@
 	},
 	"peerDependencies": {
 		"@guardian/ab-core": "^8.0.1",
-		"@guardian/libs": "^25.2.0"
+		"@guardian/libs": "^26.0.0"
 	},
 	"dependencies": {
 		"@guardian/ab-core": "8.0.1",
-		"@guardian/libs": "25.2.0",
+		"@guardian/libs": "26.0.0",
 		"@types/googletag": "~3.3.0"
 	},
 	"devDependencies": {
