@@ -49,5 +49,21 @@ const getGoogleTagId = (): Promise<string | null> =>
 			: null,
 	);
 
-export { getAuthStatus, isUserLoggedIn, getGoogleTagId };
+const getEmail = (): Promise<string | null> => {
+	return getAuthStatus().then((authStatus) => {
+		if (authStatus.kind === 'SignedIn') {
+			const email = authStatus.idToken.claims.email;
+			return email;
+		}
+		return null;
+	});
+};
+
+export {
+	getAuthStatus,
+	isUserLoggedIn,
+	getGoogleTagId,
+	getEmail,
+	// lazyFetchEmailWithTimeout,
+};
 export type { AuthStatus };
