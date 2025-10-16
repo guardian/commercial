@@ -6,7 +6,7 @@ type TimedQueueJob<T> = {
 	timestamp: number;
 };
 
-const createJob = <T>(
+const createPipelineJob = <T>(
 	job: T,
 	executeImmediatelyAfterPause: boolean,
 ): TimedQueueJob<T> => ({
@@ -41,10 +41,10 @@ export function TimedQueue<T extends GenericJob>() {
 	return {
 		add(job: T, executeImmediatelyAfterPause = false) {
 			if (pipeline.length || timeWhenPaused) {
-				// if there are pending jobs or if the queue is paused
+				// if there are pending jobs or if the queue is paused,
 				// add to the queue to be run when drained
-				const newJob = createJob(job, executeImmediatelyAfterPause);
-				pipeline.push(newJob);
+				const pipelineJob = createPipelineJob(job, executeImmediatelyAfterPause);
+				pipeline.push(pipelineJob);
 			} else {
 				// run immediately if not paused and no pending jobs
 				job();

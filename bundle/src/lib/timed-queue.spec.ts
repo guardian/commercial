@@ -148,7 +148,7 @@ describe('TimedQueue', () => {
 
 		queue.pause().add(job1).add(job2).drain();
 
-		// advice time long enough for job1 to be incomplete
+		// advance time long enough for job1 to be incomplete
 		jest.advanceTimersByTime(3000);
 		expect(results).toEqual([2]);
 	});
