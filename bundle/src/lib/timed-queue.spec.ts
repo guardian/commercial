@@ -64,6 +64,23 @@ describe('TimedQueue', () => {
 		expect(result).toEqual([1, 2]);
 	});
 
+	it('drains and runs zero-time queued jobs immediately after pause', () => {
+		const queue = TimedQueue();
+		const result: number[] = [];
+		const job1 = jest.fn(() => result.push(1));
+		const job2 = jest.fn(() => result.push(2));
+
+		queue.pause().add(job1);
+		jest.advanceTimersByTime(1000);
+
+		queue.add(job2, true).drain();
+		jest.advanceTimersToNextTimer();
+
+		expect(job1).toHaveBeenCalledTimes(1);
+		expect(job2).toHaveBeenCalledTimes(1);
+		expect(result).toEqual([1, 2]);
+	});
+
 	it('allows multiple pause and drain cycles', async () => {
 		const queue = TimedQueue();
 		const job1 = jest.fn();
@@ -170,5 +187,33 @@ describe('TimedQueue', () => {
 		// (1500ms after drain, 500ms after job2)
 		await jest.advanceTimersByTimeAsync(1);
 		expect(results).toEqual([1, 2, 3, 4]);
+	});
+
+	// TODO: to be implemented
+	it.skip('allows jobs to be paused while draining queue', async () => {
+		const queue = TimedQueue();
+		const results: number[] = [];
+
+		const job1 = jest.fn(() => results.push(1));
+		const job2 = jest.fn(() => results.push(2));
+
+		// add job21 in a paused queue, then move 1 second forward
+		queue.pause().add(job1);
+		jest.advanceTimersByTime(1000);
+
+		// add job2 and start draining the queue
+		// job1 should run immediately, job2 should be queued
+		queue.add(job2).drain();
+
+		// while job2 is waiting to run, pause the queue again
+		// (500ms after drain, 500ms before job2 is scheduled to run)
+		jest.advanceTimersByTime(500);
+		queue.pause();
+
+		await jest.advanceTimersByTimeAsync(1000);
+		expect(results).toEqual([1]);
+
+		queue.drain();
+		expect(results).toEqual([1, 2]);
 	});
 });

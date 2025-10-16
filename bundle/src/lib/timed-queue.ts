@@ -6,10 +6,13 @@ type TimedQueueJob<T> = {
 	timestamp: number;
 };
 
-const createJob = <T>(job: T): TimedQueueJob<T> => ({
+const createJob = <T>(
+	job: T,
+	executeImmediatelyAfterPause: boolean,
+): TimedQueueJob<T> => ({
 	job,
 	jobId: Math.random(),
-	timestamp: Date.now(),
+	timestamp: executeImmediatelyAfterPause ? 0 : Date.now(),
 });
 
 const runJob = <T extends GenericJob>(
@@ -36,11 +39,11 @@ export function TimedQueue<T extends GenericJob>() {
 	let timeWhenPaused = 0;
 
 	return {
-		add(job: T) {
+		add(job: T, executeImmediatelyAfterPause = false) {
 			if (pipeline.length || timeWhenPaused) {
 				// if there are pending jobs or if the queue is paused
 				// add to the queue to be run when drained
-				const newJob = createJob(job);
+				const newJob = createJob(job, executeImmediatelyAfterPause);
 				pipeline.push(newJob);
 			} else {
 				// run immediately if not paused and no pending jobs
@@ -50,13 +53,12 @@ export function TimedQueue<T extends GenericJob>() {
 		},
 
 		drain(startTime = timeWhenPaused) {
-			console.log("--- jobs in pipeline", pipeline.length);
 			const lastJob = pipeline[pipeline.length - 1] ?? pipeline[0];
 			const lastJobTimestamp = lastJob?.timestamp ?? 0;
 			void Promise.allSettled(
 				pipeline.map(({ jobId, job, timestamp }) => {
-					const timeDifference = timestamp - startTime;
-					console.log("---jobId", Math.round(jobId * 100000))
+					// run job immediately if timestamp is 0 (added with executeImmediatelyAfterPause)
+					const timeDifference = timestamp === 0 ? 0 : timestamp - startTime;
 					return runJob(job, timeDifference).then(() => {
 						// remove job from queue
 						pipeline = pipeline.filter(
