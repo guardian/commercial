@@ -1,5 +1,15 @@
 # @guardian/commercial-core
 
+## 29.0.0
+
+### Major Changes
+
+- b3b6be2: Bump guardian/libs peer dependency to 26.0.0
+
+### Minor Changes
+
+- a8b7af0: Add new ab tests to `ab` field in page targeting
+
 ## 28.0.0
 
 ### Major Changes
