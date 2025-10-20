@@ -113,6 +113,15 @@ type SessionTargeting = {
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=215727
 	 */
 	si: True | False;
+
+	/**
+	 * **G**lobal **P**ublisher **ID** – [see on Ad Manager][gam]
+	 *
+	 * Type: _Dynamic_
+	 *
+	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=17382364
+	 */
+	gpid: string | undefined;
 };
 
 type AllParticipations = {
@@ -193,6 +202,7 @@ type Session = {
 	pageViewId: SessionTargeting['pv'];
 	participations: AllParticipations;
 	referrer: string;
+	globalPublisherId?: string;
 };
 
 const getSessionTargeting = ({
@@ -203,6 +213,7 @@ const getSessionTargeting = ({
 	pageViewId,
 	participations,
 	referrer,
+	globalPublisherId,
 }: Session): SessionTargeting => ({
 	ab: experimentsTargeting(participations),
 	at: adTest,
@@ -211,6 +222,7 @@ const getSessionTargeting = ({
 	pv: pageViewId,
 	ref: getReferrer(referrer),
 	si: isSignedIn ? 't' : 'f',
+	gpid: globalPublisherId,
 });
 
 export type { SessionTargeting, AllParticipations };

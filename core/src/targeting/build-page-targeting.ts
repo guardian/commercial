@@ -26,6 +26,7 @@ type PageTargeting = PartialWithNulls<
 		bp: 'mobile' | 'tablet' | 'desktop'; // BreakPoint
 		cc: CountryCode; // Country Code
 		lh: string; // Local Hour
+		gpid: string; // Global Publisher ID
 		cmp_interaction: string;
 		consent_tcfv2: string;
 		dcre: TrueOrFalse; // DotCom-Rendering Eligible
@@ -101,6 +102,7 @@ type BuildPageTargetingParams = {
 	consentState: ConsentState;
 	isSignedIn?: boolean;
 	youtube?: boolean;
+	gpid?: string;
 };
 
 const buildPageTargeting = ({
@@ -109,6 +111,7 @@ const buildPageTargeting = ({
 	consentState,
 	isSignedIn = false,
 	youtube = false,
+	gpid,
 }: BuildPageTargetingParams): Record<string, string | string[]> => {
 	const { page, isDotcomRendering } = window.guardian.config;
 
@@ -146,6 +149,7 @@ const buildPageTargeting = ({
 				window.guardian.modules.abTests?.getParticipations() ?? {},
 		},
 		referrer,
+		globalPublisherId: gpid,
 	});
 
 	type Viewport = { width: number; height: number };
