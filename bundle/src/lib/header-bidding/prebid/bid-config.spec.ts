@@ -726,6 +726,15 @@ describe('getOzonePlacementId', () => {
 		);
 	});
 
+	test('should return correct placementID for mpu in US when it is in mobile', () => {
+		isInUsa.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMpu.mockReturnValue(true);
+		expect(getOzonePlacementId([createAdSize(300, 250)])).toBe(
+			'1500001036',
+		);
+	});
+
 	test('should return correct placementID for mobile-sticky in US', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
@@ -738,7 +747,7 @@ describe('getOzonePlacementId', () => {
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
 		expect(getOzonePlacementId([createAdSize(300, 250)])).toBe(
-			'1420436308',
+			'1500001036',
 		);
 	});
 
@@ -747,6 +756,61 @@ describe('getOzonePlacementId', () => {
 		getBreakpointKey.mockReturnValue('M');
 		containsMobileSticky.mockReturnValue(true);
 		expect(getOzonePlacementId([createAdSize(320, 50)])).toBe('1500000260');
+	});
+
+	test('should return correct placementID for hangtime ads in inline2 in UK', () => {
+		isInUk.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMpu.mockReturnValue(true);
+		expect(
+			getOzonePlacementId([createAdSize(300, 250)], 'dfp-ad--inline2'),
+		).toBe('1500001025');
+	});
+
+	test('should return correct placementID for hangtime ads in inline2 in ROW', () => {
+		isInRow.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMpu.mockReturnValue(true);
+		expect(
+			getOzonePlacementId([createAdSize(300, 250)], 'dfp-ad--inline2'),
+		).toBe('1500001025');
+	});
+
+	test('should return correct placementID for hangtime ads in inline2 in US or CAN', () => {
+		isInUsOrCa.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMpu.mockReturnValue(true);
+		expect(
+			getOzonePlacementId([createAdSize(300, 250)], 'dfp-ad--inline2'),
+		).toBe('1500001025');
+	});
+
+	test('should return correct placementID for hangtime ads in inline2 in AUZ or NZ', () => {
+		isInAuOrNz.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMpu.mockReturnValue(true);
+		expect(
+			getOzonePlacementId([createAdSize(300, 250)], 'dfp-ad--inline2'),
+		).toBe('1500001025');
+	});
+
+	test('should NOT return hangtime for non-inline2 mobile MPU slots', () => {
+		isInUsa.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMpu.mockReturnValue(true);
+		containsMobileSticky.mockReturnValue(false);
+		expect(
+			getOzonePlacementId([createAdSize(300, 250)], 'dfp-ad--inline1'),
+		).toBe('1500001036');
+	});
+
+	test('should NOT return hangtime for desktop inline2 slots', () => {
+		isInUsa.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('D');
+		containsMpu.mockReturnValue(true);
+		expect(
+			getOzonePlacementId([createAdSize(300, 250)], 'dfp-ad--inline2'),
+		).toBe('3500010911'); // ← Should get desktop MPU, not hangtime
 	});
 
 	test('should return correct placementID if none of the conditions are met', () => {
