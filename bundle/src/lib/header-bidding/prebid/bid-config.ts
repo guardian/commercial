@@ -266,11 +266,6 @@ const openxBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 });
 
 const getOzonePlacementId = (sizes: HeaderBiddingSize[], slotId?: string) => {
-	if (getBreakpointKey() === 'M') {
-		if (slotId === 'dfp-ad--inline2' && containsMpu(sizes)) {
-			return '1500001025';
-		}
-	}
 	if (isInUsa()) {
 		if (getBreakpointKey() === 'D') {
 			if (containsBillboard(sizes)) {
@@ -296,6 +291,12 @@ const getOzonePlacementId = (sizes: HeaderBiddingSize[], slotId?: string) => {
 	if (isInRow()) {
 		if (containsMobileSticky(sizes)) {
 			return '1500000260';
+		}
+	}
+
+	if (getBreakpointKey() === 'M') {
+		if (slotId === 'dfp-ad--inline2' && containsMpu(sizes)) {
+			return '1500001025';
 		}
 	}
 
