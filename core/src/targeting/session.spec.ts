@@ -11,7 +11,6 @@ describe('Session targeting', () => {
 			pv: '1234567',
 			ref: null,
 			si: 'f',
-			gpid: undefined,
 		};
 
 		const targeting = getSessionTargeting({
@@ -60,7 +59,6 @@ describe('Session targeting', () => {
 			pv: '1234567',
 			ref: null,
 			si: 'f',
-			gpid: undefined,
 		};
 
 		const targeting = getSessionTargeting({
@@ -92,7 +90,6 @@ describe('Session targeting', () => {
 			pv: '1234567',
 			si: 'f',
 			ref,
-			gpid: undefined,
 		};
 
 		const targeting = getSessionTargeting({

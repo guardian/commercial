@@ -52,6 +52,17 @@ type PageTargeting = PartialWithNulls<
 	} & SharedTargeting
 >;
 
+type GlobalPublisherId = {
+	/**
+	 * **G**lobal **P**ublisher **ID** – [see on Ad Manager][gam]
+	 *
+	 * Type: _Dynamic_
+	 *
+	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=17382364
+	 */
+	gpid: string | undefined;
+};
+
 const filterValues = (pageTargets: Record<string, unknown>) => {
 	const filtered: Record<string, string | string[]> = {};
 	for (const key in pageTargets) {
@@ -149,8 +160,11 @@ const buildPageTargeting = ({
 				window.guardian.modules.abTests?.getParticipations() ?? {},
 		},
 		referrer,
-		globalPublisherId: gpid,
 	});
+
+	const globalPublisherId: GlobalPublisherId = {
+		gpid,
+	};
 
 	type Viewport = { width: number; height: number };
 
@@ -184,6 +198,7 @@ const buildPageTargeting = ({
 		...adFreeTargeting,
 		...contentTargeting,
 		...sessionTargeting,
+		...globalPublisherId,
 		...viewportTargeting,
 		...consentlessTargeting,
 	};

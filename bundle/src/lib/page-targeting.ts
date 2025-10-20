@@ -5,6 +5,7 @@ import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { getParticipations } from '../experiments/ab';
 import { commercialFeatures } from './commercial-features';
+import type { HeaderBiddingSlot } from './header-bidding/prebid-types';
 import { removeFalsyValues } from './header-bidding/utils';
 
 const formatAppNexusTargeting = (obj: Record<string, string | string[]>) => {
@@ -44,7 +45,7 @@ const buildAppNexusTargeting = once((pageTargeting: PageTargeting): string =>
 const getPageTargeting = (
 	consentState: ConsentState,
 	isSignedIn: boolean,
-	gpid?: string,
+	slot?: HeaderBiddingSlot,
 ): PageTargeting => {
 	const { page } = window.guardian.config;
 
@@ -53,7 +54,9 @@ const getPageTargeting = (
 		clientSideParticipations: getParticipations(),
 		consentState,
 		isSignedIn,
-		gpid,
+		gpid: slot
+			? `/59666047/gu/${page.section}/${page.contentType}/${slot.key}`
+			: 'No gpid yet as slot not defined',
 	});
 
 	// third-parties wish to access our page targeting, before the googletag script is loaded.

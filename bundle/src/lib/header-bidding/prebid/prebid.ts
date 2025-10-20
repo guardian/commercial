@@ -665,26 +665,28 @@ const requestBids = async (
 		return requestQueue;
 	}
 
-	const sectionName = window.guardian.config.page.section;
-	const contentType = window.guardian.config.page.contentType;
-
 	const adUnits = await onConsent()
 		.then(async (consentState) => {
 			// calculate this once before mapping over
 			const isSignedIn = await isUserLoggedIn();
-			const baseTargeting = getPageTargeting(consentState, isSignedIn); // gpid will be added per ad unit below
 			return flatten(
 				adverts.map((advert) =>
 					getHeaderBiddingAdSlots(advert, slotFlatMap)
 						.map((slot) => {
-							const gpid = `/59666047/gu/${sectionName}/${contentType}/${slot.key}`;
-							const pageTargeting = {
-								...baseTargeting,
-								gpid,
-							};
+							const pageTargeting = getPageTargeting(
+								consentState,
+								isSignedIn,
+								slot,
+							);
 
-							console.log(
-								'Page Targeting with GPID',
+							// Debug: log gpid and targeting for each ad unit
+							log(
+								'commercial',
+								`AdUnit: ${advert.id}, Slot: ${slot.key}, GPID: ${pageTargeting.gpid}`,
+							);
+							log(
+								'commercial',
+								'Targeting object:',
 								pageTargeting,
 							);
 
