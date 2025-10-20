@@ -134,6 +134,7 @@ class Advert implements IAdvert {
 	headerBiddingSizes: HeaderBiddingSize[] | null = null;
 	size: AdSize | 'fluid' | null = null;
 	slot: googletag.Slot;
+	gpid: string;
 	isEmpty: boolean | null = null;
 	isRendered = false;
 	shouldRefresh = false;
@@ -164,6 +165,7 @@ class Advert implements IAdvert {
 		this.slot = slotDefinition.slot;
 		this.whenSlotReady = slotDefinition.slotReady;
 		this.testgroup = slotDefinition.slot.getTargeting('testgroup')[0];
+		this.gpid = slotDefinition.slot.getTargeting('gpid')[0] ?? '';
 	}
 
 	/**

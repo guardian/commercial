@@ -152,6 +152,8 @@ const defineSlot = (
 
 	const id = adSlotNode.id;
 
+	const { page } = window.guardian.config;
+
 	const googletagSizeMapping = buildGoogletagSizeMapping(sizeMapping);
 	if (!googletagSizeMapping) {
 		if (canDefineSlot()) {
@@ -231,6 +233,10 @@ const defineSlot = (
 
 	slot.addService(window.googletag.pubads())
 		.setTargeting('slot', slotTarget)
+		.setTargeting(
+			'gpid',
+			`/59666047/gu/${page.section}/${page.contentType}/${slotTarget}`,
+		)
 		.setTargeting('testgroup', String(Math.floor(100 * Math.random())));
 
 	return {

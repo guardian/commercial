@@ -670,15 +670,14 @@ const requestBids = async (
 			// calculate this once before mapping over
 			const isSignedIn = await isUserLoggedIn();
 			return flatten(
-				adverts.map((advert) =>
-					getHeaderBiddingAdSlots(advert, slotFlatMap)
+				adverts.map((advert) => {
+					const pageTargeting = getPageTargeting(
+						consentState,
+						isSignedIn,
+						advert.gpid,
+					);
+					return getHeaderBiddingAdSlots(advert, slotFlatMap)
 						.map((slot) => {
-							const pageTargeting = getPageTargeting(
-								consentState,
-								isSignedIn,
-								slot,
-							);
-
 							// Debug: log gpid and targeting for each ad unit
 							log(
 								'commercial',
@@ -697,8 +696,8 @@ const requestBids = async (
 								consentState,
 							);
 						})
-						.filter((adUnit) => !adUnit.isEmpty()),
-				),
+						.filter((adUnit) => !adUnit.isEmpty());
+				}),
 			);
 		})
 		.catch((e) => {
