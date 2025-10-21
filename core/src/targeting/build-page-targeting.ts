@@ -26,7 +26,6 @@ type PageTargeting = PartialWithNulls<
 		bp: 'mobile' | 'tablet' | 'desktop'; // BreakPoint
 		cc: CountryCode; // Country Code
 		lh: string; // Local Hour
-		gpid: string; // Global Publisher ID
 		cmp_interaction: string;
 		consent_tcfv2: string;
 		dcre: TrueOrFalse; // DotCom-Rendering Eligible
@@ -51,17 +50,6 @@ type PageTargeting = PartialWithNulls<
 		[_: string]: string | string[];
 	} & SharedTargeting
 >;
-
-type GlobalPublisherId = {
-	/**
-	 * **G**lobal **P**ublisher **ID** – [see on Ad Manager][gam]
-	 *
-	 * Type: _Dynamic_
-	 *
-	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=17382364
-	 */
-	gpid: string | undefined;
-};
 
 const filterValues = (pageTargets: Record<string, unknown>) => {
 	const filtered: Record<string, string | string[]> = {};
@@ -113,7 +101,6 @@ type BuildPageTargetingParams = {
 	consentState: ConsentState;
 	isSignedIn?: boolean;
 	youtube?: boolean;
-	gpid?: string;
 };
 
 const buildPageTargeting = ({
@@ -122,7 +109,6 @@ const buildPageTargeting = ({
 	consentState,
 	isSignedIn = false,
 	youtube = false,
-	gpid,
 }: BuildPageTargetingParams): Record<string, string | string[]> => {
 	const { page, isDotcomRendering } = window.guardian.config;
 
@@ -162,10 +148,6 @@ const buildPageTargeting = ({
 		referrer,
 	});
 
-	const globalPublisherId: GlobalPublisherId = {
-		gpid,
-	};
-
 	type Viewport = { width: number; height: number };
 
 	const getViewport = (): Viewport => {
@@ -198,7 +180,6 @@ const buildPageTargeting = ({
 		...adFreeTargeting,
 		...contentTargeting,
 		...sessionTargeting,
-		...globalPublisherId,
 		...viewportTargeting,
 		...consentlessTargeting,
 	};

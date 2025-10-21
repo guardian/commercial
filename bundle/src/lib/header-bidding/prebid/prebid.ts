@@ -222,7 +222,7 @@ class PrebidAdUnit {
 	) {
 		this.code = advert.id;
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
-		this.gpid = this.generateGpid(advert, slot);
+		this.gpid = advert.gpid ?? '';
 		this.ortb2Imp = {
 			ext: {
 				gpid: this.gpid,
@@ -246,13 +246,6 @@ class PrebidAdUnit {
 
 	isEmpty() {
 		return this.code == null;
-	}
-
-	private generateGpid(advert: Advert, slot: HeaderBiddingSlot): string {
-		const sectionName = window.guardian.config.page.section;
-		const contentType = window.guardian.config.page.contentType;
-		const slotName = slot.key;
-		return `/59666047/gu/${sectionName}/${contentType}/${slotName}`;
 	}
 }
 
@@ -669,26 +662,11 @@ const requestBids = async (
 		.then(async (consentState) => {
 			// calculate this once before mapping over
 			const isSignedIn = await isUserLoggedIn();
+			const pageTargeting = getPageTargeting(consentState, isSignedIn);
 			return flatten(
-				adverts.map((advert) => {
-					const pageTargeting = getPageTargeting(
-						consentState,
-						isSignedIn,
-						advert.gpid,
-					);
-					return getHeaderBiddingAdSlots(advert, slotFlatMap)
+				adverts.map((advert) =>
+					getHeaderBiddingAdSlots(advert, slotFlatMap)
 						.map((slot) => {
-							// Debug: log gpid and targeting for each ad unit
-							log(
-								'commercial',
-								`AdUnit: ${advert.id}, Slot: ${slot.key}, GPID: ${pageTargeting.gpid}`,
-							);
-							log(
-								'commercial',
-								'Targeting object:',
-								pageTargeting,
-							);
-
 							return new PrebidAdUnit(
 								advert,
 								slot,
@@ -696,8 +674,8 @@ const requestBids = async (
 								consentState,
 							);
 						})
-						.filter((adUnit) => !adUnit.isEmpty());
-				}),
+						.filter((adUnit) => !adUnit.isEmpty()),
+				),
 			);
 		})
 		.catch((e) => {
