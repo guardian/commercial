@@ -666,14 +666,15 @@ const requestBids = async (
 			return flatten(
 				adverts.map((advert) =>
 					getHeaderBiddingAdSlots(advert, slotFlatMap)
-						.map((slot) => {
-							return new PrebidAdUnit(
-								advert,
-								slot,
-								pageTargeting,
-								consentState,
-							);
-						})
+						.map(
+							(slot) =>
+								new PrebidAdUnit(
+									advert,
+									slot,
+									pageTargeting,
+									consentState,
+								),
+						)
 						.filter((adUnit) => !adUnit.isEmpty()),
 				),
 			);
