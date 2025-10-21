@@ -179,4 +179,22 @@ describe('Define Slot', () => {
 			'dfp-ad--top-above-nav',
 		);
 	});
+
+	it('should set gpid targeting key with correct value', () => {
+		const slotDiv = document.createElement('div');
+		slotDiv.id = 'dfp-ad--top-above-nav';
+		slotDiv.setAttribute('name', 'top-above-nav');
+
+		const topAboveNavSizes = {
+			tablet: [createAdSize(728, 90)],
+			desktop: [createAdSize(728, 90)],
+		};
+
+		const { slot } = defineSlot(slotDiv, topAboveNavSizes);
+
+		expect(slot.setTargeting).toHaveBeenCalledWith(
+			'gpid',
+			expect.stringContaining('/59666047/gu/'),
+		);
+	});
 });
