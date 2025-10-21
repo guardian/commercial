@@ -46,7 +46,7 @@
 	},
 	"dependencies": {
 		"@guardian/ab-core": "8.0.1",
-		"@guardian/libs": "26.0.0",
+		"@guardian/libs": "26.0.1",
 		"@types/googletag": "~3.3.0"
 	},
 	"devDependencies": {
