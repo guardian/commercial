@@ -222,7 +222,7 @@ class PrebidAdUnit {
 	) {
 		this.code = advert.id;
 		this.mediaTypes = { banner: { sizes: slot.sizes } };
-		this.gpid = this.generateGpid(advert, slot);
+		this.gpid = advert.gpid ?? '';
 		this.ortb2Imp = {
 			ext: {
 				gpid: this.gpid,
@@ -246,13 +246,6 @@ class PrebidAdUnit {
 
 	isEmpty() {
 		return this.code == null;
-	}
-
-	private generateGpid(advert: Advert, slot: HeaderBiddingSlot): string {
-		const sectionName = window.guardian.config.page.section;
-		const contentType = window.guardian.config.page.contentType;
-		const slotName = slot.key;
-		return `/59666047/gu/${sectionName}/${contentType}/${slotName}`;
 	}
 }
 

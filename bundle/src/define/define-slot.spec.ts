@@ -42,6 +42,7 @@ beforeEach(() => {
 		defineSizeMapping: jest.fn(() => window.googletag),
 		addService: jest.fn(() => window.googletag),
 		setTargeting: jest.fn(() => window.googletag),
+		setSafeFrameConfig: jest.fn(() => window.googletag),
 		/* @ts-expect-error -- no way to override types */
 		pubads() {
 			return pubAds;
@@ -177,6 +178,37 @@ describe('Define Slot', () => {
 				'fluid',
 			],
 			'dfp-ad--top-above-nav',
+		);
+	});
+
+	it('should set gpid targeting key with correct value', () => {
+		const slotDiv = document.createElement('div');
+		slotDiv.id = 'dfp-ad--top-above-nav';
+		slotDiv.setAttribute('data-name', 'top-above-nav');
+
+		window.guardian = {
+			config: {
+				page: {
+					section: 'news',
+					contentType: 'Article',
+				},
+			},
+		} as typeof window.guardian;
+
+		const { section: sectionName, contentType } =
+			window.guardian.config.page;
+		const slotTarget = slotDiv.getAttribute('data-name');
+
+		const topAboveNavSizes = {
+			tablet: [createAdSize(728, 90)],
+			desktop: [createAdSize(728, 90)],
+		};
+
+		const { slot } = defineSlot(slotDiv, topAboveNavSizes);
+
+		expect(slot.setTargeting).toHaveBeenCalledWith(
+			'gpid',
+			`/59666047/gu/${sectionName}/${contentType || 'other'}/${slotTarget}`,
 		);
 	});
 });
