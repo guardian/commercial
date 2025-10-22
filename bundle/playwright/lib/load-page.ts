@@ -181,7 +181,7 @@ const loadPage = async ({
 
 			window.googletag.cmd.push(() => {
 				// @ts-expect-error this is valid, @types/googletag not updated, see https://developers.google.com/publisher-tag/reference#typescript_65
-				googletag.setConfig({ location: 'GB' });
+				googletag.setConfig({ location: args.region });
 			});
 		},
 		{
