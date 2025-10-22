@@ -190,7 +190,7 @@ describe('Define Slot', () => {
 			config: {
 				page: {
 					section: 'news',
-					contentType: 'article',
+					contentType: 'Article',
 				},
 			},
 		} as typeof window.guardian;
@@ -208,7 +208,7 @@ describe('Define Slot', () => {
 
 		expect(slot.setTargeting).toHaveBeenCalledWith(
 			'gpid',
-			`/59666047/gu/${sectionName}/${contentType}/${slotTarget}`,
+			`/59666047/gu/${sectionName}/${contentType || 'other'}/${slotTarget}`,
 		);
 	});
 });

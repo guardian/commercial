@@ -242,7 +242,7 @@ const defineSlot = (
 		 */
 		.setTargeting(
 			'gpid',
-			`/59666047/gu/${sectionName}/${contentType}/${slotTarget}`,
+			`/59666047/gu/${sectionName}/${contentType || 'other'}/${slotTarget}`,
 		)
 		.setTargeting('testgroup', String(Math.floor(100 * Math.random())));
 
