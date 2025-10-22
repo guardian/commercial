@@ -1,7 +1,5 @@
-import { createHash } from 'crypto';
+import SHA256 from 'crypto-js/sha256';
 
-function hashEmailForId5(email: string) {
-    return createHash('SHA256').update(email, 'utf8').digest('hex');
+export function hashEmailForId5(email: string) {
+	return SHA256(email).toString();
 }
-
-export { hashEmailForId5 };
