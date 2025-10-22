@@ -152,7 +152,7 @@ const defineSlot = (
 
 	const id = adSlotNode.id;
 
-	const { sectionName, contentType } = window.guardian.config.page;
+	const { section: sectionName, contentType } = window.guardian.config.page;
 
 	const googletagSizeMapping = buildGoogletagSizeMapping(sizeMapping);
 	if (!googletagSizeMapping) {
