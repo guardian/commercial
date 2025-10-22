@@ -11,7 +11,6 @@ type AdSlotConfig = {
 };
 
 type SlotName =
-	| 'carrot'
 	| 'comments-expanded'
 	| 'comments'
 	| 'crossword-banner-mobile'
@@ -33,11 +32,6 @@ type CreateSlotOptions = {
 const adSlotConfigs: AdSlotConfigs = {
 	'merchandising-high': {
 		refresh: false,
-	},
-	carrot: {
-		label: false,
-		refresh: false,
-		name: 'carrot',
 	},
 	'mobile-sticky': {
 		label: true,

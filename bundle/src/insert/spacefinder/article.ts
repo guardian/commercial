@@ -10,7 +10,6 @@ import {
 import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
 import fastdom from '../../lib/fastdom-promise';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
-import { initCarrot } from './carrot-traffic-driver';
 import { rules } from './rules';
 import { spaceFiller } from './space-filler';
 import type { SpacefinderWriter } from './spacefinder';
@@ -267,7 +266,7 @@ const addInlineAds = (
 };
 
 /**
- * Init all the article body adverts, including `carrot`
+ * Init all the article body adverts
  * @param fillAdSlot a function to fill the ad slots
  */
 const init = async (fillAdSlot: FillAdSlot): Promise<void> => {
@@ -276,8 +275,6 @@ const init = async (fillAdSlot: FillAdSlot): Promise<void> => {
 	}
 
 	await addInlineAds(fillAdSlot, false);
-
-	await initCarrot();
 };
 
 export { init, addInlineAds, type FillAdSlot };
