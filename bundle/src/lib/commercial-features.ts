@@ -55,7 +55,6 @@ class CommercialFeatures {
 	shouldLoadGoogletag: boolean;
 	isSecureContact: boolean;
 	articleBodyAdverts: boolean;
-	carrotTrafficDriver: boolean;
 	highMerch: boolean;
 	thirdPartyTags: boolean;
 	commentAdverts: boolean;
@@ -161,11 +160,6 @@ class CommercialFeatures {
 				articleBodyAdvertsFalseConditions,
 			);
 		}
-
-		this.carrotTrafficDriver =
-			!this.adFree &&
-			this.articleBodyAdverts &&
-			!window.guardian.config.page.isPaidContent;
 
 		this.highMerch =
 			this.shouldLoadGoogletag &&
