@@ -195,9 +195,32 @@ describe('Define Slot', () => {
 			},
 		} as typeof window.guardian;
 
-		const { section: sectionName, contentType } =
-			window.guardian.config.page;
-		const slotTarget = slotDiv.getAttribute('data-name');
+		const topAboveNavSizes = {
+			tablet: [createAdSize(728, 90)],
+			desktop: [createAdSize(728, 90)],
+		};
+
+		const { slot } = defineSlot(slotDiv, topAboveNavSizes);
+
+		expect(slot.setTargeting).toHaveBeenCalledWith(
+			'gpid',
+			'/59666047/gu/news/Article/top-above-nav',
+		);
+	});
+
+	it('should set gpid targeting key with default value in case of missing section or contentType', () => {
+		const slotDiv = document.createElement('div');
+		slotDiv.id = 'dfp-ad--top-above-nav';
+		slotDiv.setAttribute('data-name', 'top-above-nav');
+
+		window.guardian = {
+			config: {
+				page: {
+					section: 'news',
+					contentType: '',
+				},
+			},
+		} as typeof window.guardian;
 
 		const topAboveNavSizes = {
 			tablet: [createAdSize(728, 90)],
@@ -208,7 +231,7 @@ describe('Define Slot', () => {
 
 		expect(slot.setTargeting).toHaveBeenCalledWith(
 			'gpid',
-			`/59666047/gu/${sectionName}/${contentType || 'other'}/${slotTarget}`,
+			'/59666047/gu/news/other/top-above-nav',
 		);
 	});
 });
