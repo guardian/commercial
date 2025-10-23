@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 29.1.0
+
+### Minor Changes
+
+- cc00925: Add gpid to Advert type
+
 ## 29.0.0
 
 ### Major Changes
