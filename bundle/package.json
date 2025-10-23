@@ -38,7 +38,7 @@
 		"@guardian/commercial-core": "workspace:*",
 		"@guardian/identity-auth": "^11.0.0",
 		"@guardian/identity-auth-frontend": "13.0.0",
-		"@guardian/libs": "26.0.0",
+		"@guardian/libs": "26.0.1",
 		"@guardian/source": "11.3.0",
 		"fastdom": "^1.0.12",
 		"lodash-es": "^4.17.21",
