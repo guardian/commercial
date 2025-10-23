@@ -121,10 +121,12 @@ const isEligibleForOutstream = (slotTarget: string) =>
 	(slotTarget === 'inline1' || slotTarget === 'top-above-nav');
 
 const allowSafeFrameToExpand = (slot: googletag.Slot) => {
-	slot.setSafeFrameConfig({
-		allowOverlayExpansion: false,
-		allowPushExpansion: true,
-		sandbox: true,
+	slot.setConfig({
+		safeFrame: {
+			allowOverlayExpansion: false,
+			allowPushExpansion: true,
+			sandbox: true,
+		},
 	});
 
 	return slot;
@@ -203,16 +205,28 @@ const defineSlot = (
 		const isTeadsEligible = isEligibleForTeads(id);
 
 		if (isTeadsEligible) {
-			slot.setTargeting('teadsEligible', 'true');
+			slot.setConfig({
+				targeting: {
+					teadsEligible: 'true',
+				},
+			});
 		} else {
-			slot.setTargeting('teadsEligible', 'false');
+			slot.setConfig({
+				targeting: {
+					teadsEligible: 'false',
+				},
+			});
 		}
 	});
 
 	const isbn = window.guardian.config.page.isbn;
 
 	if (slotTarget === isbn) {
-		slot.setTargeting('isbn', isbn);
+		slot.setConfig({
+			targeting: {
+				isbn: isbn,
+			},
+		});
 	}
 
 	const fabricKeyValues = new Map<SlotName, string>([
@@ -224,27 +238,35 @@ const defineSlot = (
 	const slotFabric = fabricKeyValues.get(slotTarget);
 
 	if (slotFabric) {
-		slot.setTargeting('slot-fabric', slotFabric);
+		slot.setConfig({
+			targeting: {
+				'slot-fabric': slotFabric,
+			},
+		});
 	}
 
 	Object.entries(slotTargeting).forEach(([key, value]) => {
-		slot.setTargeting(key, value);
+		slot.setConfig({
+			targeting: {
+				[key]: value,
+			},
+		});
 	});
 
-	slot.addService(window.googletag.pubads())
-		.setTargeting('slot', slotTarget)
-		/**
-		 * **G**lobal **P**ublisher **ID** – [see on Ad Manager][gam]
-		 *
-		 * Type: _Dynamic_
-		 *
-		 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=17382364
-		 */
-		.setTargeting(
-			'gpid',
-			`/59666047/gu/${section || 'other'}/${contentType || 'other'}/${slotTarget}`,
-		)
-		.setTargeting('testgroup', String(Math.floor(100 * Math.random())));
+	slot.addService(window.googletag.pubads()).setConfig({
+		targeting: {
+			slot: slotTarget,
+			testgroup: String(Math.floor(100 * Math.random())),
+			/**
+			 * **G**lobal **P**ublisher **ID** – [see on Ad Manager][gam]
+			 *
+			 * Type: _Dynamic_
+			 *
+			 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=17382364
+			 */
+			gpid: `/59666047/gu/${section || 'other'}/${contentType || 'other'}/${slotTarget}`,
+		},
+	});
 
 	return {
 		slot,

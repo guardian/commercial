@@ -37,10 +37,11 @@ describe('shouldRefresh', () => {
 		//@ts-expect-error - it is a partial mock
 		googleSlot = {
 			defineSizeMapping: jest.fn(() => googleSlot),
-			setSafeFrameConfig: jest.fn(() => googleSlot),
-			setTargeting: jest.fn(() => googleSlot),
+			setConfig: jest.fn(() => googleSlot),
 			addService: jest.fn(() => googleSlot),
-			getTargeting: jest.fn(() => []),
+			getConfig: jest.fn(() => ({
+				targeting: {},
+			})),
 		};
 
 		const partialGoogletag: Partial<typeof googletag> = {

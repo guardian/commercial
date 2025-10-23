@@ -13,7 +13,11 @@ const setPageTargeting = (consentState: ConsentState, isSignedIn: boolean) =>
 	Object.entries(getPageTargeting(consentState, isSignedIn)).forEach(
 		([key, value]) => {
 			if (!value) return;
-			window.googletag.pubads().setTargeting(key, value);
+			window.googletag.setConfig({
+				targeting: {
+					[key]: value,
+				},
+			});
 		},
 	);
 
@@ -35,9 +39,11 @@ const setCookieDeprecationLabel = (): void => {
 	if ('cookieDeprecationLabel' in navigator) {
 		void navigator.cookieDeprecationLabel?.getValue().then((value) => {
 			const cookieDeprecationLabel = value || 'empty';
-			window.googletag
-				.pubads()
-				.setTargeting('cookieDeprecationLabel', cookieDeprecationLabel);
+			window.googletag.setConfig({
+				targeting: {
+					cookieDeprecationLabel: cookieDeprecationLabel,
+				},
+			});
 		});
 	}
 };
