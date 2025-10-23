@@ -16,7 +16,7 @@ jest.mock('@guardian/commercial-core/targeting/teads-eligibility', () => ({
 
 beforeEach(() => {
 	const pubAds = {
-		setTargeting: jest.fn(),
+		setConfig: jest.fn(),
 	};
 
 	type MockSizeMappingBuilder = googletag.SizeMappingBuilder & {
@@ -41,8 +41,7 @@ beforeEach(() => {
 		defineSlot: jest.fn(() => window.googletag),
 		defineSizeMapping: jest.fn(() => window.googletag),
 		addService: jest.fn(() => window.googletag),
-		setTargeting: jest.fn(() => window.googletag),
-		setSafeFrameConfig: jest.fn(() => window.googletag),
+		setConfig: jest.fn(() => window.googletag),
 		/* @ts-expect-error -- no way to override types */
 		pubads() {
 			return pubAds;
@@ -202,10 +201,11 @@ describe('Define Slot', () => {
 
 		const { slot } = defineSlot(slotDiv, topAboveNavSizes);
 
-		expect(slot.setTargeting).toHaveBeenCalledWith(
-			'gpid',
-			'/59666047/gu/news/Article/top-above-nav',
-		);
+		expect(slot.setConfig).toHaveBeenCalledWith({
+			targeting: expect.objectContaining({
+				gpid: '/59666047/gu/news/Article/top-above-nav',
+			}) as Record<string, unknown>,
+		});
 	});
 
 	it('should set gpid targeting key with default value in case of missing section or contentType', () => {
@@ -229,9 +229,10 @@ describe('Define Slot', () => {
 
 		const { slot } = defineSlot(slotDiv, topAboveNavSizes);
 
-		expect(slot.setTargeting).toHaveBeenCalledWith(
-			'gpid',
-			'/59666047/gu/news/other/top-above-nav',
-		);
+		expect(slot.setConfig).toHaveBeenCalledWith({
+			targeting: expect.objectContaining({
+				gpid: '/59666047/gu/news/other/top-above-nav',
+			}) as Record<string, unknown>,
+		});
 	});
 });
