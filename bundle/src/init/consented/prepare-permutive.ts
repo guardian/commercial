@@ -232,11 +232,14 @@ const initPermutiveSegmentation = () => {
 
 	/* eslint-enable */
 	window.googletag.cmd.push(() => {
-		if (window.googletag.pubads().getTargeting('permutive').length === 0) {
+		const targetingConfig = window.googletag.getConfig('targeting');
+		if (targetingConfig.targeting?.permutive?.length === 0) {
 			const g = window.localStorage.getItem('_pdfps');
-			window.googletag
-				.pubads()
-				.setTargeting('permutive', g ? JSON.parse(g) : []);
+			window.googletag.setConfig({
+				targeting: {
+					permutive: g ? (JSON.parse(g) as string[]) : [],
+				},
+			});
 		}
 	});
 	const permutiveConfig: PermutivePageConfig = {

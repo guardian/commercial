@@ -34,7 +34,7 @@ jest.mock('../dfp/get-advert-by-id', () => ({
 		if (!validIds.includes(id)) return null;
 		return {
 			id,
-			slot: { setTargeting: jest.fn() },
+			slot: { setConfig: jest.fn() },
 		};
 	}),
 }));

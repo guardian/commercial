@@ -4,39 +4,27 @@ window.__iasPET = {
 	queue: [],
 };
 
-const pubAds = {
-	setTargeting: jest.fn(),
-};
-
 window.googletag = {
+	setConfig: jest.fn(),
 	/* @ts-expect-error -- no way to override types */
 	pubads() {
-		return pubAds;
+		return {};
 	},
 };
 
 window.guardian.config.page.adUnit = 'adUnit';
 
-const googletagSize = (width: number, height: number): googletag.Size => {
-	return {
-		width,
-		height,
-		getWidth: () => width,
-		getHeight: () => height,
-	};
-};
-
 describe('initSlotIas', () => {
 	it('should call iasPET.queue.push with the correct arguments and call the callback with expected parameters', async () => {
 		const slot = {
 			getSlotElementId: () => 'slot-id',
-			getSizes: () => [googletagSize(300, 250), 'fluid'],
-			setTargeting: jest.fn(),
+			setConfig: jest.fn(),
 		} as unknown as googletag.Slot;
 
 		const id = 'slot-id';
+		const sizes: googletag.SingleSize[] = [[300, 250], [728, 90], 'fluid'];
 
-		await initSlotIas(id, slot);
+		await initSlotIas(id, slot, sizes);
 
 		const queue = window.__iasPET?.queue ?? [];
 
@@ -51,7 +39,10 @@ describe('initSlotIas', () => {
 			{
 				adSlotId: 'slot-id',
 				adUnitPath: 'adUnit',
-				size: [[300, 250]],
+				size: [
+					[300, 250],
+					[728, 90],
+				],
 			},
 		]);
 
@@ -74,28 +65,29 @@ describe('initSlotIas', () => {
 			}),
 		);
 
-		expect(window.googletag.pubads().setTargeting).toHaveBeenNthCalledWith(
-			1,
-			'ias-brand-safety',
-			'ias-brand-safety',
-		);
+		expect(window.googletag.setConfig).toHaveBeenCalledWith({
+			targeting: {
+				'ias-brand-safety': 'ias-brand-safety',
+			},
+		});
 
-		expect(window.googletag.pubads().setTargeting).toHaveBeenNthCalledWith(
-			2,
-			'fra',
-			'fr',
-		);
+		expect(window.googletag.setConfig).toHaveBeenCalledWith({
+			targeting: {
+				fra: 'fr',
+			},
+		});
 
-		expect(window.googletag.pubads().setTargeting).toHaveBeenNthCalledWith(
-			3,
-			'ias-kw',
-			'ias-kw',
-		);
+		expect(window.googletag.setConfig).toHaveBeenCalledWith({
+			targeting: {
+				'ias-kw': 'ias-kw',
+			},
+		});
 
-		expect(slot.setTargeting).toHaveBeenCalledWith(
-			'slot-targeting',
-			'slot-targeting',
-		);
+		expect(slot.setConfig).toHaveBeenCalledWith({
+			targeting: {
+				'slot-targeting': 'slot-targeting',
+			},
+		});
 	});
 
 	it('should timeout if 1000ms passes without resolving', async () => {
@@ -106,13 +98,13 @@ describe('initSlotIas', () => {
 
 		const slot = {
 			getSlotElementId: () => 'slot-id',
-			getSizes: () => [googletagSize(300, 250), 'fluid'],
-			setTargeting: jest.fn(),
+			setConfig: jest.fn(),
 		} as unknown as googletag.Slot;
 
 		const id = 'slot-id';
+		const sizes: googletag.SingleSize[] = [[300, 250], 'fluid'];
 
-		await initSlotIas(id, slot);
+		await initSlotIas(id, slot, sizes);
 
 		// just to make sure the promise is resolved even if the dataHandler is not called
 		expect(1).toBe(1);

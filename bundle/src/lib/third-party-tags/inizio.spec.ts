@@ -95,7 +95,7 @@ describe('scriptBasedOnRegion', () => {
 
 describe('handleQuerySurveyDone', () => {
 	console.log = jest.fn();
-	const setTargeting = jest.fn();
+	const setConfig = jest.fn();
 
 	describe('mock googletag', () => {
 		beforeAll(() => {
@@ -105,9 +105,8 @@ describe('handleQuerySurveyDone', () => {
 						callback();
 					},
 				},
-				pubads: () => ({
-					setTargeting,
-				}),
+				pubads: () => ({}),
+				setConfig,
 			};
 			Object.defineProperty(window, 'googletag', {
 				configurable: true,
@@ -117,16 +116,20 @@ describe('handleQuerySurveyDone', () => {
 			});
 		});
 
-		it('setTargeting and logging called when survey available', () => {
+		it('setTargetingConfig and logging called when survey available', () => {
 			_.handleQuerySurveyDone(true, { measurementId: 'xyz' });
 			expect(console.log).toHaveBeenCalledWith('surveyAvailable: xyz');
-			expect(setTargeting).toHaveBeenLastCalledWith('inizio', 't');
+			expect(setConfig).toHaveBeenLastCalledWith({
+				targeting: {
+					inizio: 't',
+				},
+			});
 		});
 
-		it('setTargeting and logging not called when survey not available', () => {
+		it('setTargetingConfig and logging not called when survey not available', () => {
 			_.handleQuerySurveyDone(false, { measurementId: 'xyz' });
 			expect(console.log).toHaveBeenCalledTimes(0);
-			expect(setTargeting).toHaveBeenCalledTimes(0);
+			expect(setConfig).toHaveBeenCalledTimes(0);
 		});
 	});
 
@@ -142,7 +145,7 @@ describe('handleQuerySurveyDone', () => {
 		it('survey available and setTargeting not called', () => {
 			_.handleQuerySurveyDone(true, { measurementId: 'xyz' });
 			expect(console.log).toHaveBeenCalledWith('surveyAvailable: xyz');
-			expect(setTargeting).toHaveBeenCalledTimes(0);
+			expect(setConfig).toHaveBeenCalledTimes(0);
 		});
 	});
 });

@@ -12,7 +12,11 @@ const handleQuerySurveyDone = (
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- @types/googletag declares it, but it may be missing
 		if (window.googletag) {
 			window.googletag.cmd.push(() => {
-				window.googletag.pubads().setTargeting('inizio', 't');
+				window.googletag.setConfig({
+					targeting: {
+						inizio: 't',
+					},
+				});
 			});
 		}
 		console.log(`surveyAvailable: ${survey.measurementId}`);
