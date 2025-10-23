@@ -15,11 +15,13 @@ const reportEmptyResponse = (
 	// Keep the sample rate low, otherwise we'll get rate-limited (report-error will also sample down)
 	if (Math.random() < 1 / 10_000) {
 		const adUnitPath = event.slot.getAdUnitPath();
-		const adTargetingKeys = event.slot.getTargetingKeys();
-		const adTargetingKValues = adTargetingKeys.includes('k')
-			? event.slot.getTargeting('k')
-			: [];
-		const adKeywords = adTargetingKValues.join(', ');
+		const targeting = event.slot.getConfig('targeting').targeting ?? {};
+		const adTargetingKValues = targeting['k'] ?? [];
+
+		const adKeywords = Array.isArray(adTargetingKValues)
+			? adTargetingKValues.join(', ')
+			: String(adTargetingKValues);
+
 		reportError(
 			new Error('dfp returned an empty ad response'),
 			'commercial',

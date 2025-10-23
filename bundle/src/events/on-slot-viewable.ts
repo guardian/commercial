@@ -121,9 +121,12 @@ const onSlotViewableFunction = (): ((
 	const queryParams = getUrlVars();
 
 	return (event: googletag.events.ImpressionViewableEvent) => {
-		const slot = event.slot.getTargeting('slot')[0];
-		EventTimer.get().mark('viewable', slot);
-		log('commercial', 'Slot viewable', slot);
+		const slot = event.slot.getConfig('targeting').targeting?.['slot']?.[0];
+		if (slot) {
+			EventTimer.get().mark('viewable', slot);
+			log('commercial', 'Slot viewable', slot);
+		}
+
 		if (queryParams.adrefresh !== 'false') {
 			setSlotAdRefresh(event);
 		}

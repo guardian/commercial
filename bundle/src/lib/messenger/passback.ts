@@ -228,12 +228,39 @@ const init = (register: RegisterListener): void => {
 				 */
 				const pageTargeting = mapValues(
 					window.googletag.pubads().getTargetingKeys(),
-					(key) => window.googletag.pubads().getTargeting(key),
+					(key) => {
+						const targetingConfig =
+							window.googletag.getConfig('targeting').targeting;
+						const targeting = targetingConfig
+							? targetingConfig[key]
+							: undefined;
+						if (Array.isArray(targeting)) {
+							return targeting;
+						}
+						if (typeof targeting === 'string') {
+							return [targeting];
+						}
+						return [];
+					},
 				);
 				const slotTargeting = mapValues(
 					initialSlot.getTargetingKeys(),
-					(key) => initialSlot.getTargeting(key),
+					(key) => {
+						const targetingConfig =
+							initialSlot.getConfig('targeting').targeting;
+						const targeting = targetingConfig
+							? targetingConfig[key]
+							: undefined;
+						if (Array.isArray(targeting)) {
+							return targeting;
+						}
+						if (typeof targeting === 'string') {
+							return [targeting];
+						}
+						return [];
+					},
 				);
+
 				log(
 					'commercial',
 					'Passback: initial slot targeting',
@@ -331,7 +358,11 @@ const init = (register: RegisterListener): void => {
 						passbackSlot.defineSizeMapping(sizeMappings);
 						passbackSlot.addService(window.googletag.pubads());
 						passbackTargeting.forEach(([key, value]) => {
-							passbackSlot.setTargeting(key, value);
+							passbackSlot.setConfig({
+								targeting: {
+									[key]: value,
+								},
+							});
 						});
 						log(
 							'commercial',
