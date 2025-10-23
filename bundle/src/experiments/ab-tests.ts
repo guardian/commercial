@@ -1,5 +1,4 @@
 import type { ABTest } from '@guardian/ab-core';
-import { admiralAdblockRecovery } from './tests/admiral-adblocker-recovery';
 
 /**
  * You only need to add tests to this file if the code you are testing is here in
@@ -8,5 +7,4 @@ import { admiralAdblockRecovery } from './tests/admiral-adblocker-recovery';
  */
 export const concurrentTests: ABTest[] = [
 	// one test per line
-	admiralAdblockRecovery,
 ];
