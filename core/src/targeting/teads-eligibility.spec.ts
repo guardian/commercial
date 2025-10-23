@@ -1,14 +1,15 @@
 import { isEligibleForTeads } from './teads-eligibility';
 
-// Mocking the IAS keywords
-const pubAds = {
-	getTargeting: jest.fn(() => ['']),
+const getTargetingConfig = {
+	getConfig: jest.fn(() => ({
+		targeting: {},
+	})),
 };
 
 window.googletag = {
 	/* @ts-expect-error -- no way to override types */
 	pubads() {
-		return pubAds;
+		return getTargetingConfig;
 	},
 };
 
@@ -72,7 +73,11 @@ describe('Teads Eligibility', () => {
 	it('should not be eligible for teads when IAS indicates that content is not brand safe', () => {
 		// Mocking the IAS keywords - need to mock a non brand safe article
 		const pubAds = {
-			getTargeting: jest.fn(() => ['IAS_16425_KW']),
+			getConfig: jest.fn(() => ({
+				targeting: {
+					'ias-kw': ['IAS_16425_KW'],
+				},
+			})),
 		};
 
 		window.googletag = {
