@@ -226,7 +226,8 @@ const init = (register: RegisterListener): void => {
 				/**
 				 * Copy the targeting from the initial slot
 				 */
-				const pageTargetingConfig = window.googletag.getConfig('targeting').targeting ?? {};
+				const pageTargetingConfig =
+					window.googletag.getConfig('targeting').targeting ?? {};
 				const pageTargeting = mapValues(
 					Object.keys(pageTargetingConfig),
 					(key) => {
@@ -240,7 +241,8 @@ const init = (register: RegisterListener): void => {
 						return [];
 					},
 				);
-				const slotTargetingConfig = initialSlot.getConfig('targeting').targeting ?? {};
+				const slotTargetingConfig =
+					initialSlot.getConfig('targeting').targeting ?? {};
 				const slotTargeting = mapValues(
 					Object.keys(slotTargetingConfig),
 					(key) => {
