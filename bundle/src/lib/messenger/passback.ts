@@ -226,14 +226,11 @@ const init = (register: RegisterListener): void => {
 				/**
 				 * Copy the targeting from the initial slot
 				 */
+				const pageTargetingConfig = window.googletag.getConfig('targeting').targeting ?? {};
 				const pageTargeting = mapValues(
-					window.googletag.pubads().getTargetingKeys(),
+					Object.keys(pageTargetingConfig),
 					(key) => {
-						const targetingConfig =
-							window.googletag.getConfig('targeting').targeting;
-						const targeting = targetingConfig
-							? targetingConfig[key]
-							: undefined;
+						const targeting = pageTargetingConfig[key];
 						if (Array.isArray(targeting)) {
 							return targeting;
 						}
@@ -243,14 +240,11 @@ const init = (register: RegisterListener): void => {
 						return [];
 					},
 				);
+				const slotTargetingConfig = initialSlot.getConfig('targeting').targeting ?? {};
 				const slotTargeting = mapValues(
-					initialSlot.getTargetingKeys(),
+					Object.keys(slotTargetingConfig),
 					(key) => {
-						const targetingConfig =
-							initialSlot.getConfig('targeting').targeting;
-						const targeting = targetingConfig
-							? targetingConfig[key]
-							: undefined;
+						const targeting = slotTargetingConfig[key];
 						if (Array.isArray(targeting)) {
 							return targeting;
 						}
