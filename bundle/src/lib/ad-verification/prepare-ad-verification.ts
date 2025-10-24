@@ -49,7 +49,11 @@ const maybeRefreshBlockedSlotOnce: ConfiantCallback = (
 
 	void bypassCommercialMetricsSampling();
 
-	advert.slot.setTargeting('confiant', String(blockingType));
+	advert.slot.setConfig({
+		targeting: {
+			confiant: String(blockingType),
+		},
+	});
 
 	// if the slot has already been refreshed, don’t do anything
 	if (confiantRefreshedSlots.includes(blockedSlotPath)) return;

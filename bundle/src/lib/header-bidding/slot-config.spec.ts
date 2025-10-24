@@ -32,9 +32,8 @@ const slotPrototype = {
 	fake: 'slot',
 	defineSizeMapping: () => slotPrototype,
 	addService: () => slotPrototype,
-	setTargeting: () => slotPrototype,
-	setSafeFrameConfig: () => slotPrototype,
-	getTargeting: () => slotPrototype,
+	setConfig: () => slotPrototype,
+	getConfig: () => slotPrototype,
 };
 
 // Mock window.googletag

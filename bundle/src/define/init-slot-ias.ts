@@ -40,10 +40,15 @@ const timeout = async <T>(
  *
  * @param id - the slot id
  * @param slot - the googletag slot object
+ * @param sizes - the array of ad sizes for this slot
  * @returns a promise that resolves when the IAS data is returned or the timeout resolves
  **/
 
-const initSlotIas = (id: string, slot: googletag.Slot) =>
+const initSlotIas = (
+	id: string,
+	slot: googletag.Slot,
+	sizes: googletag.SingleSize[],
+) =>
 	timeout(
 		new Promise<void>((resolve) => {
 			window.__iasPET = window.__iasPET ?? {};
@@ -52,24 +57,20 @@ const initSlotIas = (id: string, slot: googletag.Slot) =>
 			iasPET.queue = iasPET.queue ?? [];
 			iasPET.pubId = '10249';
 
-			// need to reorganize the type due to https://github.com/microsoft/TypeScript/issues/33591
-			const slotSizes: Array<googletag.Size | 'fluid'> = slot.getSizes();
-
-			// IAS Optimization Targeting
+			// Filter out 'fluid' sizes and convert SingleSize to [width, height] tuples
+			const numericSizes: Array<[number, number]> = sizes
+				.filter(
+					(size): size is googletag.SingleSizeArray =>
+						Array.isArray(size) && size.length === 2,
+				)
+				.map((size) => [size[0], size[1]]); // IAS Optimization Targeting
 			const iasPETSlots: IasPETSlot[] = [
 				{
 					adSlotId: id,
-					size: slotSizes
-						.filter(
-							(
-								size: 'fluid' | googletag.Size,
-							): size is googletag.Size => size !== 'fluid',
-						)
-						.map((size) => [size.getWidth(), size.getHeight()]),
+					size: numericSizes,
 					adUnitPath: adUnit(), // why do we have this method and not just slot.getAdUnitPath()?
 				},
 			];
-
 			const iasDataCallback = (targetingJSON: string) => {
 				/*  There is a name-clash with the `fr` targeting returned by IAS
                 and the `fr` paramater we already use for frequency. Therefore
@@ -82,18 +83,26 @@ const initSlotIas = (id: string, slot: googletag.Slot) =>
 				Object.keys(targeting.brandSafety).forEach((key) => {
 					const brandSafetyValue = targeting.brandSafety[key];
 					if (brandSafetyValue) {
-						window.googletag
-							.pubads()
-							.setTargeting(key, brandSafetyValue);
+						window.googletag.setConfig({
+							targeting: {
+								[key]: brandSafetyValue,
+							},
+						});
 					}
 				});
 				if (targeting.fr) {
-					window.googletag.pubads().setTargeting('fra', targeting.fr);
+					window.googletag.setConfig({
+						targeting: {
+							fra: targeting.fr,
+						},
+					});
 				}
 				if (targeting.custom?.['ias-kw']) {
-					window.googletag
-						.pubads()
-						.setTargeting('ias-kw', targeting.custom['ias-kw']);
+					window.googletag.setConfig({
+						targeting: {
+							'ias-kw': targeting.custom['ias-kw'],
+						},
+					});
 				}
 
 				// viewability targeting is on a slot level
@@ -109,7 +118,11 @@ const initSlotIas = (id: string, slot: googletag.Slot) =>
 								const targetingValue = targetingSlot[key];
 
 								if (targetingValue) {
-									slot.setTargeting(key, targetingValue);
+									slot.setConfig({
+										targeting: {
+											[key]: targetingValue,
+										},
+									});
 								}
 							}
 						});

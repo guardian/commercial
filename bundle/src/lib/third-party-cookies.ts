@@ -25,9 +25,11 @@ const checkThirdPartyCookiesEnabled = (): void => {
 
 			// only set targeting if the value is defined
 			if (hasStorageAccess !== undefined) {
-				window.googletag
-					.pubads()
-					.setTargeting('3pc', [hasStorageAccess ? 't' : 'f']);
+				window.googletag.setConfig({
+					targeting: {
+						'3pc': [hasStorageAccess ? 't' : 'f'],
+					},
+				});
 			}
 		}
 	});
