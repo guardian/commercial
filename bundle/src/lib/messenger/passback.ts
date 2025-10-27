@@ -338,14 +338,11 @@ const init = (register: RegisterListener): void => {
 							'Passback: passback slot targeting map',
 							(
 								passbackSlot as googletag.Slot & {
-									getConfig: (key: string) => {
-										targeting?: Record<
-											string,
-											string | string[] | null
-										>;
-									};
+									getConfig: (
+										key: string,
+									) => Record<string, string | string[]>;
 								}
-							).getConfig('targeting').targeting ?? {},
+							).getConfig('targeting'),
 						);
 						log(
 							'commercial',
