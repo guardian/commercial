@@ -17,26 +17,18 @@ window.googletag = {
 
 window.guardian.config.page.adUnit = 'adUnit';
 
-const googletagSize = (width: number, height: number): googletag.Size => {
-	return {
-		width,
-		height,
-		getWidth: () => width,
-		getHeight: () => height,
-	};
-};
-
 describe('initSlotIas', () => {
 	it('should call iasPET.queue.push with the correct arguments and call the callback with expected parameters', async () => {
 		const slot = {
 			getSlotElementId: () => 'slot-id',
-			getSizes: () => [googletagSize(300, 250), 'fluid'],
 			setTargeting: jest.fn(),
 		} as unknown as googletag.Slot;
 
 		const id = 'slot-id';
 
-		await initSlotIas(id, slot);
+		const sizes: googletag.SingleSize[] = [[300, 250], [728, 90], 'fluid'];
+
+		await initSlotIas(id, slot, sizes);
 
 		const queue = window.__iasPET?.queue ?? [];
 
@@ -51,7 +43,10 @@ describe('initSlotIas', () => {
 			{
 				adSlotId: 'slot-id',
 				adUnitPath: 'adUnit',
-				size: [[300, 250]],
+				size: [
+					[300, 250],
+					[728, 90],
+				],
 			},
 		]);
 
@@ -106,13 +101,14 @@ describe('initSlotIas', () => {
 
 		const slot = {
 			getSlotElementId: () => 'slot-id',
-			getSizes: () => [googletagSize(300, 250), 'fluid'],
 			setTargeting: jest.fn(),
 		} as unknown as googletag.Slot;
 
 		const id = 'slot-id';
 
-		await initSlotIas(id, slot);
+		const sizes: googletag.SingleSize[] = [[300, 250], 'fluid'];
+
+		await initSlotIas(id, slot, sizes);
 
 		// just to make sure the promise is resolved even if the dataHandler is not called
 		expect(1).toBe(1);
