@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 29.2.0
+
+### Minor Changes
+
+- deeff03: Update Google Publisher Tag types package
+
 ## 29.1.0
 
 ### Minor Changes
