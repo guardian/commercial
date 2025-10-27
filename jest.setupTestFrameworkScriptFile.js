@@ -2,11 +2,11 @@
 require('core-js');
 
 const { TextEncoder } = require('util');
-Object.assign(global, {  TextEncoder });
-const { webcrypto } =require('node:crypto');
+Object.assign(global, { TextEncoder });
+const { webcrypto } = require('node:crypto');
 
 Object.defineProperty(globalThis, 'crypto', {
-  value: webcrypto,
+	value: webcrypto,
 });
 
 // Stub global Guardian config
