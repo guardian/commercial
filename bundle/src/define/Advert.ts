@@ -167,8 +167,17 @@ class Advert implements IAdvert {
 
 		this.slot = slotDefinition.slot;
 		this.whenSlotReady = slotDefinition.slotReady;
-		this.testgroup = targetingConfig?.testgroup as string | undefined;
-		this.gpid = targetingConfig?.gpid as string | undefined;
+
+		// Extract targeting values, handling both string and string[] types
+		const testgroupValue = targetingConfig?.testgroup;
+		this.testgroup = Array.isArray(testgroupValue)
+			? testgroupValue[0]
+			: (testgroupValue ?? undefined);
+
+		const gpidValue = targetingConfig?.gpid;
+		this.gpid = Array.isArray(gpidValue)
+			? gpidValue[0]
+			: (gpidValue ?? undefined);
 	}
 
 	/**

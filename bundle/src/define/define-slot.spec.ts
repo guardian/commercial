@@ -15,9 +15,7 @@ jest.mock('@guardian/commercial-core/targeting/teads-eligibility', () => ({
 }));
 
 beforeEach(() => {
-	const pubAds = {
-		setConfig: jest.fn(),
-	};
+	const pubAds = {};
 
 	type MockSizeMappingBuilder = googletag.SizeMappingBuilder & {
 		sizes: googletag.SizeMappingArray;
