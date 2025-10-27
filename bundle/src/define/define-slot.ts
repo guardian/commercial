@@ -193,7 +193,7 @@ const defineSlot = (
 		);
 	}
 
-	const slotReady = initSlotIas(id, slot);
+	const slotReady = initSlotIas(id, slot, sizes);
 
 	void slotReady.then(() => {
 		EventTimer.get().mark('defineSlotEnd', slotTarget);

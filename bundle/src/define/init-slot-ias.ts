@@ -43,7 +43,11 @@ const timeout = async <T>(
  * @returns a promise that resolves when the IAS data is returned or the timeout resolves
  **/
 
-const initSlotIas = (id: string, slot: googletag.Slot) =>
+const initSlotIas = (
+	id: string,
+	slot: googletag.Slot,
+	sizes: googletag.SingleSize[],
+) =>
 	timeout(
 		new Promise<void>((resolve) => {
 			window.__iasPET = window.__iasPET ?? {};
@@ -52,20 +56,19 @@ const initSlotIas = (id: string, slot: googletag.Slot) =>
 			iasPET.queue = iasPET.queue ?? [];
 			iasPET.pubId = '10249';
 
-			// need to reorganize the type due to https://github.com/microsoft/TypeScript/issues/33591
-			const slotSizes: Array<googletag.Size | 'fluid'> = slot.getSizes();
+			// Filter out 'fluid' sizes and convert SingleSize to [width, height] tuples
+			const numericSizes: Array<[number, number]> = sizes
+				.filter(
+					(size): size is googletag.SingleSizeArray =>
+						Array.isArray(size) && size.length === 2,
+				)
+				.map((size) => [size[0], size[1]]);
 
 			// IAS Optimization Targeting
 			const iasPETSlots: IasPETSlot[] = [
 				{
 					adSlotId: id,
-					size: slotSizes
-						.filter(
-							(
-								size: 'fluid' | googletag.Size,
-							): size is googletag.Size => size !== 'fluid',
-						)
-						.map((size) => [size.getWidth(), size.getHeight()]),
+					size: numericSizes,
 					adUnitPath: adUnit(), // why do we have this method and not just slot.getAdUnitPath()?
 				},
 			];
