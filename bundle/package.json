@@ -40,7 +40,6 @@
 		"@guardian/identity-auth-frontend": "13.0.0",
 		"@guardian/libs": "26.0.1",
 		"@guardian/source": "11.3.0",
-		"@types/google-publisher-tag": "1.20250811.1",
 		"fastdom": "^1.0.12",
 		"lodash-es": "^4.17.21",
 		"prebid.js": "9.46.0",
