@@ -1,6 +1,14 @@
 // Polyfill test environment (done by polyfill.io in production)
 require('core-js');
 
+const { TextEncoder } = require('util');
+Object.assign(global, {  TextEncoder });
+const { webcrypto } =require('node:crypto');
+
+Object.defineProperty(globalThis, 'crypto', {
+  value: webcrypto,
+});
+
 // Stub global Guardian config
 // eslint-disable-next-line id-denylist -- this is on purpose
 window.guardian = {
