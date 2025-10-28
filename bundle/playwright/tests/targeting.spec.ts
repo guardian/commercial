@@ -90,7 +90,7 @@ test.describe('GAM targeting', () => {
 		await cmpAcceptAll(page);
 
 		// Wait for the request to be captured
-		await page.waitForTimeout(3000); // Give time for the request to be intercepted
+		await page.waitForTimeout(3000); 
 
 		expect(capturedRequest).toBeTruthy();
 
@@ -165,7 +165,9 @@ test.describe('GAM targeting', () => {
 
 		// Additional assertions on specific parameters
 		expect(paramValues.slot?.value).toBe('top-above-nav');
-		expect(paramValues.gpid?.value).toContain('/59666047/gu/');
+		expect(paramValues.gpid?.value).toBe(
+			'/59666047/gu/politics/Article/top-above-nav',
+		);
 		expect(paramValues.ct?.value).toBe('article');
 	});
 
@@ -200,8 +202,6 @@ test.describe('GAM targeting', () => {
 			'cust_params',
 		);
 
-		// Critical targeting parameters that must match exactly
-		// These are the ones affected by your changes from getTargeting to getConfig
 		const criticalSlotParams = {
 			slot: 'top-above-nav',
 			gpid: '/59666047/gu/politics/Article/top-above-nav',
