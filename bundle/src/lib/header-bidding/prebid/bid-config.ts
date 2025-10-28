@@ -265,7 +265,16 @@ const openxBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	},
 });
 
-const getOzonePlacementId = (sizes: HeaderBiddingSize[], slotId?: string) => {
+const isCrosswordPage = (slotId: string, pageTargeting: PageTargeting) =>
+	slotId.includes('crossword') ||
+	pageTargeting.ct === 'crossword' ||
+	pageTargeting.s === 'crossword';
+
+const getOzonePlacementId = (
+	sizes: HeaderBiddingSize[],
+	slotId?: string,
+	pageTargeting?: PageTargeting,
+) => {
 	if (isInUsa()) {
 		if (getBreakpointKey() === 'D') {
 			if (containsBillboard(sizes)) {
@@ -279,6 +288,12 @@ const getOzonePlacementId = (sizes: HeaderBiddingSize[], slotId?: string) => {
 		if (getBreakpointKey() === 'M') {
 			if (containsMobileSticky(sizes)) {
 				return '3500014217';
+			}
+			if (
+				isCrosswordPage(slotId ?? '', pageTargeting ?? {}) &&
+				containsMobileSticky(sizes)
+			) {
+				return '1500001036';
 			}
 			if (containsMpu(sizes)) {
 				return '1500001036';
@@ -320,7 +335,7 @@ const ozoneBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 		return {
 			publisherId: 'OZONEGMG0001',
 			siteId: '4204204209',
-			placementId: getOzonePlacementId(sizes, _slotId),
+			placementId: getOzonePlacementId(sizes, _slotId, pageTargeting),
 			customData: [
 				{
 					settings: {},
