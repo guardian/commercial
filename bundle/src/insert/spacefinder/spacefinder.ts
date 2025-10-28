@@ -56,7 +56,6 @@ type SpacefinderRules = {
 	minDistanceFromBottom: number;
 	/**
 	 * Vertical px to clear the content meta element (byline etc) by. 0 to ignore.
-	 * used for carrot ads
 	 */
 	clearContentMeta?: number;
 	/**
@@ -86,11 +85,7 @@ type SpacefinderRules = {
 
 type SpacefinderWriter = (paras: HTMLElement[]) => Promise<void>;
 
-type SpacefinderPass =
-	| 'inline1'
-	| 'subsequent-inlines'
-	| 'mobile-inlines'
-	| 'carrot';
+type SpacefinderPass = 'inline1' | 'subsequent-inlines' | 'mobile-inlines';
 
 type SpacefinderOptions = {
 	waitForImages?: boolean;

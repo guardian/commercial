@@ -152,6 +152,8 @@ const defineSlot = (
 
 	const id = adSlotNode.id;
 
+	const { section: sectionName, contentType } = window.guardian.config.page;
+
 	const googletagSizeMapping = buildGoogletagSizeMapping(sizeMapping);
 	if (!googletagSizeMapping) {
 		if (canDefineSlot()) {
@@ -191,7 +193,7 @@ const defineSlot = (
 		);
 	}
 
-	const slotReady = initSlotIas(id, slot);
+	const slotReady = initSlotIas(id, slot, sizes);
 
 	void slotReady.then(() => {
 		EventTimer.get().mark('defineSlotEnd', slotTarget);
@@ -231,6 +233,17 @@ const defineSlot = (
 
 	slot.addService(window.googletag.pubads())
 		.setTargeting('slot', slotTarget)
+		/**
+		 * **G**lobal **P**ublisher **ID** – [see on Ad Manager][gam]
+		 *
+		 * Type: _Dynamic_
+		 *
+		 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=17382364
+		 */
+		.setTargeting(
+			'gpid',
+			`/59666047/gu/${sectionName}/${contentType || 'other'}/${slotTarget}`,
+		)
 		.setTargeting('testgroup', String(Math.floor(100 * Math.random())));
 
 	return {

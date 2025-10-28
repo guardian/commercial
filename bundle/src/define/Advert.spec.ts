@@ -127,6 +127,23 @@ describe('Advert', () => {
 			`Tried to render ad slot 'bad-slot' without any size mappings`,
 		);
 	});
+
+	it('should set advert.gpid from slot targeting', () => {
+		const slot = document.createElement('div');
+		slot.setAttribute('data-name', 'top-above-nav');
+		const expectedGpid = '/59666047/gu/news/article/top-above-nav';
+
+		// Mock getTargeting to return the expected GPID for the 'gpid' key
+		(googleSlot.getTargeting as jest.Mock).mockImplementation((key) => {
+			if (key === 'gpid') return [expectedGpid];
+			return [];
+		});
+
+		const ad = new Advert(slot);
+
+		expect(ad).toBeDefined();
+		expect(ad.gpid).toBe(expectedGpid);
+	});
 });
 
 describe('getAdSizeMapping', () => {

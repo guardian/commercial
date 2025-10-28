@@ -87,8 +87,6 @@ const setSlotAdRefresh = (
 			);
 		});
 
-	const viewabilityThresholdMs = ADVERT_REFRESH_RATE;
-
 	// Event listener that will load an advert once a document becomes visible
 	const onDocumentVisible = () => {
 		if (!document.hidden) {
@@ -110,7 +108,7 @@ const setSlotAdRefresh = (
 		} else {
 			enableLazyLoad(advert);
 		}
-	}, viewabilityThresholdMs);
+	}, ADVERT_REFRESH_RATE);
 };
 
 /*

@@ -96,7 +96,6 @@ type SizeKeys =
 
 type SlotName =
 	| 'article-end'
-	| 'carrot'
 	| 'comments-expanded'
 	| 'comments'
 	| 'crossword-banner-mobile'
@@ -380,9 +379,6 @@ const slotSizeMappings = {
 	},
 	survey: {
 		desktop: [adSizes.outOfPage],
-	},
-	carrot: {
-		mobile: [adSizes.fluid],
 	},
 	'mobile-sticky': {
 		mobile: [adSizes.mobilesticky, adSizes.empty, createAdSize(300, 50)],

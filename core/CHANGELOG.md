@@ -1,5 +1,28 @@
 # @guardian/commercial-core
 
+## 29.2.0
+
+### Minor Changes
+
+- deeff03: Update Google Publisher Tag types package
+
+## 29.1.0
+
+### Minor Changes
+
+- cc00925: Add gpid to Advert type
+
+## 29.0.0
+
+### Major Changes
+
+- b3b6be2: Bump guardian/libs peer dependency to 26.0.0
+- f7b6f9f: Remove (deprecated) carrot slot from ad-sizes
+
+### Minor Changes
+
+- a8b7af0: Add new ab tests to `ab` field in page targeting
+
 ## 28.0.0
 
 ### Major Changes

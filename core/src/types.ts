@@ -12,6 +12,7 @@ interface Advert {
 	headerBiddingSizes: HeaderBiddingSize[] | null;
 	size: AdSize | 'fluid' | null;
 	slot: googletag.Slot;
+	gpid: string | undefined;
 	isEmpty: boolean | null;
 	isRendered: boolean;
 	shouldRefresh: boolean;
