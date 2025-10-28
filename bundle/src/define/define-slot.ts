@@ -204,19 +204,11 @@ const defineSlot = (
 		// wait until IAS has initialised before checking teads eligibility
 		const isTeadsEligible = isEligibleForTeads(id);
 
-		if (isTeadsEligible) {
-			slot.setConfig({
-				targeting: {
-					teadsEligible: 'true',
-				},
-			});
-		} else {
-			slot.setConfig({
-				targeting: {
-					teadsEligible: 'false',
-				},
-			});
-		}
+		slot.setConfig({
+			targeting: {
+				teadsEligible: String(isTeadsEligible),
+			},
+		});
 	});
 
 	const isbn = window.guardian.config.page.isbn;
