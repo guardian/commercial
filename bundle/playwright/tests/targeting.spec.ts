@@ -214,7 +214,7 @@ test.describe('GAM targeting', () => {
 			p: 'ng',
 			su: '0',
 			bp: 'desktop',
-			edition: 'uk',
+			edition: 'us',
 			url: '/politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',
 		};
 
