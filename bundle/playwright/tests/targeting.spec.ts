@@ -73,33 +73,17 @@ test.describe('GAM targeting', () => {
 	test('targeting parameters regression - compare with expected values', async ({
 		page,
 	}) => {
-		let capturedRequest: Request | null = null;
-
-		await page.route(gamUrl, (route) => {
-			const request = route.request();
-			if (!capturedRequest && request.url().includes('top-above-nav')) {
-				capturedRequest = request;
-			}
-			void route.abort();
-		});
-
+		const gamRequestPromise = waitForGAMRequestForSlot(
+			page,
+			'top-above-nav',
+		);
 		await loadPage({ page, path: article.path });
 		await cmpAcceptAll(page);
-		await page.waitForTimeout(3000);
 
-		expect(capturedRequest).toBeTruthy();
-		if (!capturedRequest) {
-			throw new Error('GAM request was not captured');
-		}
+		const request = await gamRequestPromise;
 
-		const prevScpParams = getEncodedParamsFromRequest(
-			capturedRequest,
-			'prev_scp',
-		);
-		const custParams = getEncodedParamsFromRequest(
-			capturedRequest,
-			'cust_params',
-		);
+		const prevScpParams = getEncodedParamsFromRequest(request, 'prev_scp');
+		const custParams = getEncodedParamsFromRequest(request, 'cust_params');
 
 		const criticalSlotParams = {
 			slot: 'top-above-nav',
