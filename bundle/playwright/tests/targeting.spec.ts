@@ -69,6 +69,183 @@ test.describe('GAM targeting', () => {
 		);
 		expect(matched).toBeTruthy();
 	});
+
+	test('checks that all required targeting parameters are present', async ({
+		page,
+	}) => {
+		let capturedRequest: Request | null = null;
+
+		// Intercept GAM requests and abort them to prevent actual ad calls
+		await page.route(gamUrl, (route) => {
+			const request = route.request();
+			// Capture the first GAM request for top-above-nav
+			if (!capturedRequest && request.url().includes('top-above-nav')) {
+				capturedRequest = request;
+			}
+			// Abort the request to prevent actual ad loading
+			void route.abort();
+		});
+
+		await loadPage({ page, path: article.path });
+		await cmpAcceptAll(page);
+
+		// Wait for the request to be captured
+		await page.waitForTimeout(3000); // Give time for the request to be intercepted
+
+		expect(capturedRequest).toBeTruthy();
+
+		if (!capturedRequest) {
+			throw new Error('GAM request was not captured');
+		}
+
+		// Check both prev_scp and cust_params
+		const prevScpParams = getEncodedParamsFromRequest(
+			capturedRequest,
+			'prev_scp',
+		);
+		const custParams = getEncodedParamsFromRequest(
+			capturedRequest,
+			'cust_params',
+		);
+
+		// Define required targeting parameters and where they should be
+		const requiredParams = {
+			// Slot-level targeting (in prev_scp after setConfig)
+			slot: 'prev_scp',
+			gpid: 'prev_scp',
+			testgroup: 'prev_scp',
+			// Page-level targeting (in cust_params)
+			ct: 'cust_params',
+			p: 'cust_params',
+			su: 'cust_params',
+			bp: 'cust_params',
+			url: 'cust_params',
+			edition: 'cust_params',
+		} as const;
+
+		const missingParams: string[] = [];
+		const paramValues: Record<string, { value: string; location: string }> =
+			{};
+
+		// Check each required parameter
+		for (const [name, expectedLocation] of Object.entries(requiredParams)) {
+			const params =
+				expectedLocation === 'prev_scp' ? prevScpParams : custParams;
+			const value = params?.get(name);
+
+			if (!value) {
+				missingParams.push(`${name} (expected in ${expectedLocation})`);
+			} else {
+				paramValues[name] = { value, location: expectedLocation };
+			}
+		}
+
+		// Log captured parameters for debugging
+		console.log('\n========== GAM Targeting Parameters ==========');
+		console.log(
+			'Slot-level (prev_scp):',
+			Object.fromEntries(prevScpParams?.entries() ?? []),
+		);
+		console.log(
+			'Page-level (cust_params):',
+			Object.fromEntries(custParams?.entries() ?? []),
+		);
+		console.log('\nValidated required parameters:');
+		for (const [key, { value, location }] of Object.entries(paramValues)) {
+			console.log(`  ✓ ${key} = "${value}" (in ${location})`);
+		}
+		console.log('==============================================\n');
+
+		if (missingParams.length > 0) {
+			console.error('❌ Missing required parameters:', missingParams);
+		}
+
+		// Assert all required parameters are present
+		expect(missingParams).toHaveLength(0);
+
+		// Additional assertions on specific parameters
+		expect(paramValues.slot?.value).toBe('top-above-nav');
+		expect(paramValues.gpid?.value).toContain('/59666047/gu/');
+		expect(paramValues.ct?.value).toBe('article');
+	});
+
+	test('targeting parameters regression - compare with expected values', async ({
+		page,
+	}) => {
+		let capturedRequest: Request | null = null;
+
+		await page.route(gamUrl, (route) => {
+			const request = route.request();
+			if (!capturedRequest && request.url().includes('top-above-nav')) {
+				capturedRequest = request;
+			}
+			void route.abort();
+		});
+
+		await loadPage({ page, path: article.path });
+		await cmpAcceptAll(page);
+		await page.waitForTimeout(3000);
+
+		expect(capturedRequest).toBeTruthy();
+		if (!capturedRequest) {
+			throw new Error('GAM request was not captured');
+		}
+
+		const prevScpParams = getEncodedParamsFromRequest(
+			capturedRequest,
+			'prev_scp',
+		);
+		const custParams = getEncodedParamsFromRequest(
+			capturedRequest,
+			'cust_params',
+		);
+
+		// Critical targeting parameters that must match exactly
+		// These are the ones affected by your changes from getTargeting to getConfig
+		const criticalSlotParams = {
+			slot: 'top-above-nav',
+			gpid: '/59666047/gu/politics/Article/top-above-nav',
+			'slot-fabric': 'fabric1',
+			teadsEligible: 'false',
+		};
+
+		const criticalPageParams = {
+			ct: 'article',
+			p: 'ng',
+			su: '0',
+			bp: 'desktop',
+			edition: 'uk',
+			url: '/politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',
+		};
+
+		// Verify slot-level targeting (prev_scp)
+		for (const [key, expectedValue] of Object.entries(criticalSlotParams)) {
+			const actualValue = prevScpParams?.get(key);
+			expect(actualValue, `Slot param '${key}' should match`).toBe(
+				expectedValue,
+			);
+		}
+
+		// Verify page-level targeting (cust_params)
+		for (const [key, expectedValue] of Object.entries(criticalPageParams)) {
+			const actualValue = custParams?.get(key);
+			expect(actualValue, `Page param '${key}' should match`).toBe(
+				expectedValue,
+			);
+		}
+
+		// Log all parameters for manual comparison if needed
+		console.log('\n========== Complete Targeting Comparison ==========');
+		console.log('Slot-level (prev_scp):');
+		for (const [key, value] of prevScpParams?.entries() ?? []) {
+			console.log(`  ${key}: ${value}`);
+		}
+		console.log('\nPage-level (cust_params):');
+		for (const [key, value] of custParams?.entries() ?? []) {
+			console.log(`  ${key}: ${value}`);
+		}
+		console.log('===================================================\n');
+	});
 });
 
 type CriteoRequestPostBody = {

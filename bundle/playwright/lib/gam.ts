@@ -67,6 +67,7 @@ const assertHeader = async (
 export {
 	assertRequestParameter,
 	assertHeader,
+	assertOnSlotFromRequest,
 	gamUrl,
 	getEncodedParamsFromRequest,
 	waitForGAMRequestForSlot,
