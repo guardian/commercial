@@ -368,8 +368,26 @@ const initialise = async (
 	];
 
 	if (getConsentFor('id5', consentState)) {
+		const userIdsForId5 = {
+			name: 'id5Id',
+			params: {
+				partner: 182,
+				// ID5 recommend specifying this to ensure use of the most recent module version
+				// https://wiki.id5.io/docs/id5-prebid-user-id-module
+				externalModuleUrl:
+					'https://cdn.id5-sync.com/api/1.0/id5PrebidModule.js',
+			},
+			storage: {
+				type: 'html5',
+				name: 'id5id',
+				expires: 90,
+				refreshInSeconds: 7200,
+			},
+		} as const;
 		const email = await getEmail();
-		if (email) {
+		if (!email) {
+			userIds.push(userIdsForId5);
+		} else {
 			const hashedEmail = await hashEmail(email);
 
 			// keys from https://wiki.id5.io/docs/passing-partner-data-to-id5
@@ -389,24 +407,12 @@ const initialise = async (
 			const pdString = btoa(pdRaw);
 
 			userIds.push({
-				name: 'id5Id',
+				...userIdsForId5,
 				params: {
-					partner: 182,
+					...userIdsForId5.params,
 					pd: pdString,
-					// ID5 recommend specifying this to ensure use of the most recent module version
-					// https://wiki.id5.io/docs/id5-prebid-user-id-module
-					externalModuleUrl:
-						'https://cdn.id5-sync.com/api/1.0/id5PrebidModule.js',
-				},
-				storage: {
-					type: 'html5',
-					name: 'id5id',
-					expires: 90,
-					refreshInSeconds: 7200,
 				},
 			});
-		} else {
-			console.error('❌ Error in identity fetcher for email');
 		}
 	}
 
