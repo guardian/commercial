@@ -265,9 +265,8 @@ const openxBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	},
 });
 
-const isCrosswordPage = (slotId?: string, pageTargeting: PageTargeting = {}) =>
-	(slotId?.includes('crossword') ?? pageTargeting.ct === 'crossword') ||
-	pageTargeting.s === 'crossword';
+const isCrosswordPage = (pageTargeting: PageTargeting = {}) =>
+	pageTargeting.s === 'crosswords';
 
 const getOzonePlacementId = (
 	sizes: HeaderBiddingSize[],
@@ -285,15 +284,13 @@ const getOzonePlacementId = (
 			}
 		}
 		if (getBreakpointKey() === 'M') {
-			if (
-				isCrosswordPage(slotId, pageTargeting) &&
-				containsMobileSticky(sizes)
-			) {
-				return '1500001036';
-			}
 			if (containsMobileSticky(sizes)) {
+				if (isCrosswordPage(pageTargeting)) {
+					return '1500001035';
+				}
 				return '3500014217';
 			}
+
 			if (containsMpu(sizes)) {
 				return '1500001036';
 			}
