@@ -8,7 +8,8 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/guardian/commercial.git"
+		"url": "git+https://github.com/guardian/commercial.git",
+		"directory": "core"
 	},
 	"license": "Apache-2.0",
 	"files": [
