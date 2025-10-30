@@ -8,11 +8,19 @@ const ineligiblePassbacks = ['teadsdesktop', 'teadsmobile', 'teads'];
 const passbackRefresh = (specs: string, adSlot: HTMLElement) => {
 	const advert = getAdvertById(adSlot.id);
 	if (advert) {
-		advert.slot.setTargeting('passback', specs);
+		advert.slot.setConfig({
+			targeting: {
+				passback: specs,
+			},
+		});
 
 		// passbacks with these values are not eligible for teads
 		if (ineligiblePassbacks.includes(specs)) {
-			advert.slot.setTargeting('teadsEligible', 'false');
+			advert.slot.setConfig({
+				targeting: {
+					teadsEligible: 'false',
+				},
+			});
 		}
 
 		refreshAdvert(advert);

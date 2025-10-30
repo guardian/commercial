@@ -275,7 +275,6 @@ describe('DFP', () => {
 				listeners[eventType] = listener;
 				return pubAds;
 			}),
-			setTargeting: jest.fn(),
 			enableSingleRequest: jest.fn(),
 			collapseEmptyDivs: jest.fn(),
 			refresh: jest.fn(),
@@ -300,10 +299,11 @@ describe('DFP', () => {
 
 		googleSlot = {
 			defineSizeMapping: jest.fn(() => googleSlot),
-			setSafeFrameConfig: jest.fn(() => googleSlot),
-			setTargeting: jest.fn(() => googleSlot),
+			setConfig: jest.fn(() => googleSlot),
 			addService: jest.fn(() => googleSlot),
-			getTargeting: jest.fn(() => []),
+			getConfig: jest.fn(() => ({
+				targeting: {},
+			})),
 		} as unknown as googletag.Slot;
 
 		googleTag = {
@@ -325,6 +325,7 @@ describe('DFP', () => {
 			defineOutOfPageSlot: jest.fn(() => googleSlot),
 			enableServices: jest.fn(),
 			display: jest.fn(),
+			setConfig: jest.fn(() => googleTag),
 		} as unknown as typeof googletag;
 
 		window.googletag = googleTag;
@@ -480,10 +481,11 @@ describe('DFP', () => {
 				});
 			}
 			expect(googleSlot.defineSizeMapping).toHaveBeenCalledWith(data[2]);
-			expect(googleSlot.setTargeting).toHaveBeenCalledWith(
-				'slot',
-				data[3],
-			);
+			expect(googleSlot.setConfig).toHaveBeenCalledWith({
+				targeting: expect.objectContaining({
+					slot: data[3],
+				}) as Record<string, unknown>,
+			});
 		});
 	});
 
@@ -545,10 +547,11 @@ describe('DFP', () => {
 			mockOnConsent(tcfv2WithConsent);
 			mockGetConsentFor(true);
 			await prepareGoogletag();
-			expect(pubAds.setTargeting).toHaveBeenCalledWith('k', [
-				'korea',
-				'ukraine',
-			]);
+			expect(googleTag.setConfig).toHaveBeenCalledWith({
+				targeting: {
+					k: ['korea', 'ukraine'],
+				},
+			});
 		});
 	});
 

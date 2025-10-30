@@ -65,10 +65,11 @@ describe('Advert', () => {
 		//@ts-expect-error - it is a partial mock
 		googleSlot = {
 			defineSizeMapping: jest.fn(() => googleSlot),
-			setSafeFrameConfig: jest.fn(() => googleSlot),
-			setTargeting: jest.fn(() => googleSlot),
+			setConfig: jest.fn(() => googleSlot),
 			addService: jest.fn(() => googleSlot),
-			getTargeting: jest.fn(() => []),
+			getConfig: jest.fn(() => ({
+				targeting: {},
+			})),
 		};
 
 		const partialGoogletag: Partial<typeof googletag> = {
@@ -92,10 +93,12 @@ describe('Advert', () => {
 		slot.setAttribute('data-name', 'top-above-nav');
 		const ad = new Advert(slot);
 		expect(ad).toBeDefined();
-		expect(googleSlot.setSafeFrameConfig).toHaveBeenCalledWith({
-			allowOverlayExpansion: false,
-			allowPushExpansion: true,
-			sandbox: true,
+		expect(googleSlot.setConfig).toHaveBeenCalledWith({
+			safeFrame: expect.objectContaining({
+				allowOverlayExpansion: false,
+				allowPushExpansion: true,
+				sandbox: true,
+			}) as Record<string, unknown>,
 		});
 	});
 
@@ -104,10 +107,12 @@ describe('Advert', () => {
 		slot.setAttribute('data-name', 'inline1');
 		const ad = new Advert(slot);
 		expect(ad).toBeDefined();
-		expect(googleSlot.setSafeFrameConfig).toHaveBeenCalledWith({
-			allowOverlayExpansion: false,
-			allowPushExpansion: true,
-			sandbox: true,
+		expect(googleSlot.setConfig).toHaveBeenCalledWith({
+			safeFrame: expect.objectContaining({
+				allowOverlayExpansion: false,
+				allowPushExpansion: true,
+				sandbox: true,
+			}) as Record<string, unknown>,
 		});
 	});
 
@@ -116,7 +121,9 @@ describe('Advert', () => {
 		slot.setAttribute('data-name', 'inline2');
 		const ad = new Advert(slot);
 		expect(ad).toBeDefined();
-		expect(googleSlot.setSafeFrameConfig).not.toHaveBeenCalled();
+		expect(googleSlot.setConfig).not.toHaveBeenCalledWith({
+			safeFrame: {},
+		});
 	});
 
 	it('should throw an error if no size mappings are found or passed in', () => {
@@ -133,10 +140,15 @@ describe('Advert', () => {
 		slot.setAttribute('data-name', 'top-above-nav');
 		const expectedGpid = '/59666047/gu/news/article/top-above-nav';
 
-		// Mock getTargeting to return the expected GPID for the 'gpid' key
-		(googleSlot.getTargeting as jest.Mock).mockImplementation((key) => {
-			if (key === 'gpid') return [expectedGpid];
-			return [];
+		(googleSlot.getConfig as jest.Mock).mockImplementation((key) => {
+			if (key === 'targeting') {
+				return {
+					targeting: {
+						gpid: expectedGpid,
+					},
+				};
+			}
+			return { targeting: {} };
 		});
 
 		const ad = new Advert(slot);

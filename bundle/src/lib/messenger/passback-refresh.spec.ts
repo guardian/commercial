@@ -7,7 +7,7 @@ const { passbackRefresh } = _;
 jest.mock('lib/dfp/get-advert-by-id', () => ({
 	getAdvertById: jest.fn().mockReturnValue({
 		slot: {
-			setTargeting: jest.fn(),
+			setConfig: jest.fn(),
 		},
 	}),
 }));
@@ -41,10 +41,11 @@ describe('Cross-frame messenger: refresh', () => {
 			);
 			expect(getAdvertById).toHaveBeenCalledWith('slot01');
 			expect(refreshAdvert).toHaveBeenCalled();
-			expect(advert?.slot.setTargeting).toHaveBeenCalledWith(
-				'passback',
-				'mockString',
-			);
+			expect(advert?.slot.setConfig).toHaveBeenCalledWith({
+				targeting: {
+					passback: 'mockString',
+				},
+			});
 		});
 	});
 });

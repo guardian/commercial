@@ -40,6 +40,7 @@ const timeout = async <T>(
  *
  * @param id - the slot id
  * @param slot - the googletag slot object
+ * @param sizes - the array of ad sizes for this slot
  * @returns a promise that resolves when the IAS data is returned or the timeout resolves
  **/
 
@@ -62,9 +63,7 @@ const initSlotIas = (
 					(size): size is googletag.SingleSizeArray =>
 						Array.isArray(size) && size.length === 2,
 				)
-				.map((size) => [size[0], size[1]]);
-
-			// IAS Optimization Targeting
+				.map((size) => [size[0], size[1]]); // IAS Optimization Targeting
 			const iasPETSlots: IasPETSlot[] = [
 				{
 					adSlotId: id,
@@ -72,7 +71,6 @@ const initSlotIas = (
 					adUnitPath: adUnit(), // why do we have this method and not just slot.getAdUnitPath()?
 				},
 			];
-
 			const iasDataCallback = (targetingJSON: string) => {
 				/*  There is a name-clash with the `fr` targeting returned by IAS
                 and the `fr` paramater we already use for frequency. Therefore
@@ -85,18 +83,26 @@ const initSlotIas = (
 				Object.keys(targeting.brandSafety).forEach((key) => {
 					const brandSafetyValue = targeting.brandSafety[key];
 					if (brandSafetyValue) {
-						window.googletag
-							.pubads()
-							.setTargeting(key, brandSafetyValue);
+						window.googletag.setConfig({
+							targeting: {
+								[key]: brandSafetyValue,
+							},
+						});
 					}
 				});
 				if (targeting.fr) {
-					window.googletag.pubads().setTargeting('fra', targeting.fr);
+					window.googletag.setConfig({
+						targeting: {
+							fra: targeting.fr,
+						},
+					});
 				}
 				if (targeting.custom?.['ias-kw']) {
-					window.googletag
-						.pubads()
-						.setTargeting('ias-kw', targeting.custom['ias-kw']);
+					window.googletag.setConfig({
+						targeting: {
+							'ias-kw': targeting.custom['ias-kw'],
+						},
+					});
 				}
 
 				// viewability targeting is on a slot level
@@ -112,7 +118,11 @@ const initSlotIas = (
 								const targetingValue = targetingSlot[key];
 
 								if (targetingValue) {
-									slot.setTargeting(key, targetingValue);
+									slot.setConfig({
+										targeting: {
+											[key]: targetingValue,
+										},
+									});
 								}
 							}
 						});

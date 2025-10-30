@@ -69,6 +69,66 @@ test.describe('GAM targeting', () => {
 		);
 		expect(matched).toBeTruthy();
 	});
+
+	test('targeting parameters regression - compare with expected values', async ({
+		page,
+	}) => {
+		const gamRequestPromise = waitForGAMRequestForSlot(
+			page,
+			'top-above-nav',
+		);
+		await loadPage({ page, path: article.path });
+		await cmpAcceptAll(page);
+
+		const request = await gamRequestPromise;
+
+		const prevScpParams = getEncodedParamsFromRequest(request, 'prev_scp');
+		const custParams = getEncodedParamsFromRequest(request, 'cust_params');
+
+		const criticalSlotParams = {
+			slot: 'top-above-nav',
+			gpid: '/59666047/gu/politics/Article/top-above-nav',
+			'slot-fabric': 'fabric1',
+			teadsEligible: 'false',
+		};
+
+		const criticalPageParams = {
+			ct: 'article',
+			p: 'ng',
+			su: '0',
+			bp: 'desktop',
+			edition: 'us',
+			url: '/politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',
+		};
+
+		// Verify slot-level targeting (prev_scp)
+		for (const [key, expectedValue] of Object.entries(criticalSlotParams)) {
+			const actualValue = prevScpParams?.get(key);
+			expect(actualValue, `Slot param '${key}' should match`).toBe(
+				expectedValue,
+			);
+		}
+
+		// Verify page-level targeting (cust_params)
+		for (const [key, expectedValue] of Object.entries(criticalPageParams)) {
+			const actualValue = custParams?.get(key);
+			expect(actualValue, `Page param '${key}' should match`).toBe(
+				expectedValue,
+			);
+		}
+
+		// Log all parameters for manual comparison if needed
+		console.log('\n========== Complete Targeting Comparison ==========');
+		console.log('Slot-level (prev_scp):');
+		for (const [key, value] of prevScpParams?.entries() ?? []) {
+			console.log(`  ${key}: ${value}`);
+		}
+		console.log('\nPage-level (cust_params):');
+		for (const [key, value] of custParams?.entries() ?? []) {
+			console.log(`  ${key}: ${value}`);
+		}
+		console.log('===================================================\n');
+	});
 });
 
 type CriteoRequestPostBody = {

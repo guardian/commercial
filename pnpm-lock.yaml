@@ -117,8 +117,8 @@ importers:
         specifier: 1.56.0
         version: 1.56.0
       '@types/google-publisher-tag':
-        specifier: 1.20250210.0
-        version: 1.20250210.0
+        specifier: ~1.20250811.1
+        version: 1.20250811.1
       '@types/jest':
         specifier: 30.0.0
         version: 30.0.0
@@ -209,13 +209,13 @@ importers:
       '@guardian/libs':
         specifier: 26.0.1
         version: 26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3)
-      '@types/google-publisher-tag':
-        specifier: 1.20250210.0
-        version: 1.20250210.0
     devDependencies:
       '@guardian/ophan-tracker-js':
         specifier: 2.6.1
         version: 2.6.1
+      '@types/google-publisher-tag':
+        specifier: ~1.20250811.1
+        version: 1.20250811.1
       '@types/jest':
         specifier: 30.0.0
         version: 30.0.0
@@ -1412,8 +1412,8 @@ packages:
   '@types/express@4.17.24':
     resolution: {integrity: sha512-Mbrt4SRlXSTWryOnHAh2d4UQ/E7n9lZyGSi6KgX+4hkuL9soYbLOVXVhnk/ODp12YsGc95f4pOvqywJ6kngUwg==}
 
-  '@types/google-publisher-tag@1.20250210.0':
-    resolution: {integrity: sha512-VAGJPSphhIYubiqyZwmZI1bzVDxAveiJJj8EEBo1RDXlOmozsrQg6ZzBRqbzm8HG8pTKQeX42qbu0P84aFhiaQ==}
+  '@types/google-publisher-tag@1.20250811.1':
+    resolution: {integrity: sha512-35rEuUfoCENB5aCt2mQIfLomoSfGtp/DwcAZMQ1dSFyEceXEsz7TmPuRGz4lwoZiSq991ZaDz49MNawtPy5XPw==}
 
   '@types/html-minifier-terser@6.1.0':
     resolution: {integrity: sha512-oh/6byDPnL1zeNXFrDXFLyZjkr1MsBG667IM792caf1L2UPOOMf65NFzjUH/ltyfwjAGfs1rsX1eftK0jC/KIg==}
@@ -6863,7 +6863,7 @@ snapshots:
       '@types/qs': 6.14.0
       '@types/serve-static': 1.15.10
 
-  '@types/google-publisher-tag@1.20250210.0': {}
+  '@types/google-publisher-tag@1.20250811.1': {}
 
   '@types/html-minifier-terser@6.1.0': {}
 

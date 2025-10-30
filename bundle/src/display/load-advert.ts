@@ -76,10 +76,18 @@ export const refreshAdvert = (advert: Advert): void => {
 				return refreshBidsForAd(advert);
 			})
 			.then(() => {
-				advert.slot.setTargeting('refreshed', 'true');
+				advert.slot.setConfig({
+					targeting: {
+						refreshed: 'true',
+					},
+				});
 
 				// slots that have refreshed are not eligible for teads
-				advert.slot.setTargeting('teadsEligible', 'false');
+				advert.slot.setConfig({
+					targeting: {
+						teadsEligible: 'false',
+					},
+				});
 
 				if (advert.id === 'dfp-ad--top-above-nav') {
 					// force the slot sizes to be the same as advert.size (current)
@@ -95,7 +103,6 @@ export const refreshAdvert = (advert: Advert): void => {
 						if (mapping) advert.slot.defineSizeMapping(mapping);
 					}
 				}
-
 				window.googletag.pubads().refresh([advert.slot]);
 			});
 	});
