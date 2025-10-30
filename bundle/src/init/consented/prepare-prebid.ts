@@ -23,7 +23,7 @@ const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 			`../../lib/header-bidding/prebid/pbjs`
 		);
 
-		prebid.initialise(window, consentState);
+		await prebid.initialise(window, consentState);
 	}
 };
 
