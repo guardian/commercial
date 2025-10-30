@@ -38,6 +38,8 @@ const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 			/* webpackChunkName: "Prebid.js" */
 			'../../lib/header-bidding/prebid/pbjs'
 		);
+
+		await prebid.initialise(window, consentState);
 	}
 
 	prebid.initialise(window, consentState);
