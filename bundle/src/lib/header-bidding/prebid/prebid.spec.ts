@@ -71,13 +71,13 @@ describe('initialise', () => {
 		getAdvertById.mockReset();
 	});
 
-	test('should generate correct Prebid config when all switches are on and all bidders included', () => {
+	test('should generate correct Prebid config when all switches are on and all bidders included', async () => {
 		jest.mocked(shouldIncludeBidder).mockReturnValue(
 			jest.fn().mockReturnValue(true),
 		);
 		mockGetConsentForID5(true);
 
-		prebid.initialise(window, mockConsentState);
+		await prebid.initialise(window, mockConsentState);
 
 		expect(window.pbjs?.getConfig()).toMatchObject({
 			auctionOptions: {},
@@ -181,13 +181,13 @@ describe('initialise', () => {
 		});
 	});
 
-	test('should generate correct Prebid config when no consent for ID5', () => {
+	test('should generate correct Prebid config when no consent for ID5', async () => {
 		jest.mocked(shouldIncludeBidder).mockReturnValue(
 			jest.fn().mockReturnValue(true),
 		);
 
 		mockGetConsentForID5(false);
-		prebid.initialise(window, mockConsentState);
+		await prebid.initialise(window, mockConsentState);
 
 		expect(window.pbjs?.getConfig('userSync')).toMatchObject({
 			syncDelay: 3000,
@@ -213,8 +213,11 @@ describe('initialise', () => {
 		});
 	});
 
-	test('should generate correct Prebid config consent management in USNAT', () => {
-		prebid.initialise(window, { ...mockConsentState, framework: 'usnat' });
+	test('should generate correct Prebid config consent management in USNAT', async () => {
+		await prebid.initialise(window, {
+			...mockConsentState,
+			framework: 'usnat',
+		});
 		expect(window.pbjs?.getConfig('consentManagement')).toEqual({
 			gpp: {
 				cmpApi: 'iab',
@@ -223,8 +226,11 @@ describe('initialise', () => {
 		});
 	});
 
-	test('should generate correct Prebid config consent management in AUS', () => {
-		prebid.initialise(window, { ...mockConsentState, framework: 'aus' });
+	test('should generate correct Prebid config consent management in AUS', async () => {
+		await prebid.initialise(window, {
+			...mockConsentState,
+			framework: 'aus',
+		});
 		expect(window.pbjs?.getConfig('consentManagement')).toEqual({
 			usp: {
 				cmpApi: 'iab',
@@ -233,21 +239,21 @@ describe('initialise', () => {
 		});
 	});
 
-	test('should generate correct Prebid config when consent management off', () => {
+	test('should generate correct Prebid config when consent management off', async () => {
 		window.guardian.config.switches.consentManagement = false;
-		prebid.initialise(window, mockConsentState);
+		await prebid.initialise(window, mockConsentState);
 		expect(window.pbjs?.getConfig('consentManagement')).toBeUndefined();
 	});
 
-	test('should not include realTimeData object if permutive should not be included', () => {
+	test('should not include realTimeData object if permutive should not be included', async () => {
 		jest.mocked(shouldIncludePermutive).mockReturnValue(false);
-		prebid.initialise(window, mockConsentState);
+		await prebid.initialise(window, mockConsentState);
 
 		expect(window.pbjs?.getConfig('realTimeData')).toBeUndefined();
 	});
 
 	describe('permutive realTimeData', () => {
-		test('should filter out non included bidders from permutive acBidders array', () => {
+		test('should filter out non included bidders from permutive acBidders array', async () => {
 			jest.mocked(shouldIncludePermutive).mockReturnValue(true);
 			jest.mocked(shouldIncludeBidder).mockReturnValue(
 				jest
@@ -259,7 +265,7 @@ describe('initialise', () => {
 					.mockReturnValueOnce(false), // trustx
 			);
 
-			prebid.initialise(window, mockConsentState);
+			await prebid.initialise(window, mockConsentState);
 			expect(window.pbjs?.getConfig()).toMatchObject({
 				realTimeData: {
 					dataProviders: [
@@ -277,7 +283,7 @@ describe('initialise', () => {
 			});
 		});
 
-		test('should filter out pubmatic from the overwrites field and the acBidders array if shouldInclude is false', () => {
+		test('should filter out pubmatic from the overwrites field and the acBidders array if shouldInclude is false', async () => {
 			jest.mocked(shouldIncludePermutive).mockReturnValue(true);
 			jest.mocked(shouldIncludeBidder).mockReturnValue(
 				jest
@@ -289,7 +295,7 @@ describe('initialise', () => {
 					.mockReturnValueOnce(true), // trustx
 			);
 
-			prebid.initialise(window, mockConsentState);
+			await prebid.initialise(window, mockConsentState);
 			expect(window.pbjs?.getConfig()).toMatchObject({
 				realTimeData: {
 					dataProviders: [
@@ -311,87 +317,87 @@ describe('initialise', () => {
 	});
 
 	describe('criteo bidder settings', () => {
-		test('should generate correct bidder settings for criteo if included', () => {
+		test('should generate correct bidder settings for criteo if included', async () => {
 			jest.mocked(shouldIncludeBidder).mockReturnValue(
 				jest.fn().mockReturnValue(true),
 			);
-			prebid.initialise(window, mockConsentState);
+			await prebid.initialise(window, mockConsentState);
 			expect(window.pbjs?.bidderSettings.criteo).toMatchObject({
 				storageAllowed: true,
 			});
 		});
 
-		test('should omit criteo bidder settings if not included', () => {
+		test('should omit criteo bidder settings if not included', async () => {
 			jest.mocked(shouldIncludeBidder).mockReturnValue(
 				jest.fn().mockReturnValue(false),
 			);
-			prebid.initialise(window, mockConsentState);
+			await prebid.initialise(window, mockConsentState);
 			expect(window.pbjs?.bidderSettings.criteo).toBeUndefined();
 		});
 	});
 
 	describe('xaxis bidder settings', () => {
-		test('should generate correct bidder settings for xaxis if included', () => {
+		test('should generate correct bidder settings for xaxis if included', async () => {
 			jest.mocked(shouldIncludeBidder).mockReturnValue(
 				jest.fn().mockReturnValue(true),
 			);
-			prebid.initialise(window, mockConsentState);
+			await prebid.initialise(window, mockConsentState);
 			expect(window.pbjs?.bidderSettings.xhb).toHaveProperty(
 				'adserverTargeting',
 			);
 		});
 
-		test('should omit xaxis bidder settings if not included', () => {
+		test('should omit xaxis bidder settings if not included', async () => {
 			jest.mocked(shouldIncludeBidder).mockReturnValue(
 				jest.fn().mockReturnValue(false),
 			);
-			prebid.initialise(window, mockConsentState);
+			await prebid.initialise(window, mockConsentState);
 			expect(window.pbjs?.bidderSettings.xhb).toBeUndefined();
 		});
 	});
 	describe('kargo bidder settings', () => {
-		test('should generate correct bidder settings for kargo if included', () => {
+		test('should generate correct bidder settings for kargo if included', async () => {
 			jest.mocked(shouldIncludeBidder).mockReturnValue(
 				jest.fn().mockReturnValue(true),
 			);
-			prebid.initialise(window, mockConsentState);
+			await prebid.initialise(window, mockConsentState);
 			expect(window.pbjs?.bidderSettings.kargo).toMatchObject({
 				storageAllowed: true,
 			});
 		});
 
-		test('should omit kargo bidder settings if not included', () => {
+		test('should omit kargo bidder settings if not included', async () => {
 			jest.mocked(shouldIncludeBidder).mockReturnValue(
 				jest.fn().mockReturnValue(false),
 			);
-			prebid.initialise(window, mockConsentState);
+			await prebid.initialise(window, mockConsentState);
 			expect(window.pbjs?.bidderSettings.kargo).toBeUndefined();
 		});
 	});
 
 	describe('magnite bidder settings', () => {
-		test('should generate correct bidder settings for magnite if included', () => {
+		test('should generate correct bidder settings for magnite if included', async () => {
 			jest.mocked(shouldIncludeBidder).mockReturnValue(
 				jest.fn().mockReturnValue(true),
 			);
-			prebid.initialise(window, mockConsentState);
+			await prebid.initialise(window, mockConsentState);
 			expect(window.pbjs?.bidderSettings.magnite).toMatchObject({
 				storageAllowed: true,
 			});
 		});
 
-		test('should omit magnite bidder settings if not included', () => {
+		test('should omit magnite bidder settings if not included', async () => {
 			jest.mocked(shouldIncludeBidder).mockReturnValue(
 				jest.fn().mockReturnValue(false),
 			);
-			prebid.initialise(window, mockConsentState);
+			await prebid.initialise(window, mockConsentState);
 			expect(window.pbjs?.bidderSettings.magnite).toBeUndefined();
 		});
 	});
 
-	test('should generate correct Prebid config when user-sync off', () => {
+	test('should generate correct Prebid config when user-sync off', async () => {
 		window.guardian.config.switches.prebidUserSync = false;
-		prebid.initialise(window, mockConsentState);
+		await prebid.initialise(window, mockConsentState);
 		// @ts-expect-error -- it works with the alternative type
 		expect(window.pbjs?.getConfig().userSync.syncEnabled).toEqual(false);
 	});
@@ -404,7 +410,7 @@ type BidWonHandler = (arg0: {
 }) => void;
 
 describe('Prebid.js bidWon Events', () => {
-	test('should respond for correct configuration', () => {
+	test('should respond for correct configuration', async () => {
 		let bidWonEventName;
 		let bidWonEventHandler: BidWonHandler;
 		const dummyAdvert = {
@@ -420,7 +426,7 @@ describe('Prebid.js bidWon Events', () => {
 
 		getAdvertById.mockImplementation(() => dummyAdvert);
 
-		prebid.initialise(window, mockConsentState);
+		await prebid.initialise(window, mockConsentState);
 
 		expect(bidWonEventName).toBe('bidWon');
 		expect(window.pbjs.onEvent).toHaveBeenCalledTimes(1);
@@ -463,20 +469,22 @@ describe('Prebid.js bidWon Events', () => {
 				height: 100,
 			},
 		],
-	])('should not respond if %s is missing from prebid data', (_, data) => {
-		let bidWonEventName;
-		let bidWonEventHandler: BidWonHandler;
+	])(
+		'should not respond if %s is missing from prebid data',
+		async (_, data) => {
+			let bidWonEventName;
+			let bidWonEventHandler: BidWonHandler;
 
-		if (!window.pbjs) return false;
-		window.pbjs.onEvent = jest.fn((eventName, eventHandler) => {
-			bidWonEventName = eventName;
-			bidWonEventHandler = eventHandler;
-		});
+			if (!window.pbjs) return false;
+			window.pbjs.onEvent = jest.fn((eventName, eventHandler) => {
+				bidWonEventName = eventName;
+				bidWonEventHandler = eventHandler;
+			});
 
-		prebid.initialise(window, mockConsentState);
+			await prebid.initialise(window, mockConsentState);
 
-		expect(bidWonEventName).toBe('bidWon');
-		expect(window.pbjs.onEvent).toHaveBeenCalledTimes(1);
+			expect(bidWonEventName).toBe('bidWon');
+			expect(window.pbjs.onEvent).toHaveBeenCalledTimes(1);
 
 		// @ts-expect-error -- this is handled by onEvent
 		// - eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- it used to be that way
@@ -485,6 +493,7 @@ describe('Prebid.js bidWon Events', () => {
 			bidWonEventHandler(data);
 		}
 
-		expect(getAdvertById).not.toHaveBeenCalled();
-	});
+			expect(getAdvertById).not.toHaveBeenCalled();
+		},
+	);
 });
