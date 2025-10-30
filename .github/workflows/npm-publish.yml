@@ -59,15 +59,15 @@ jobs:
         uses: changesets/action@v1.5.3
         with:
           publish: pnpm changeset publish
-          title: "🦋 Release package updates"
-          commit: "Bump package versions"
+          title: '🦋 Release package updates'
+          commit: 'Bump package versions'
           setupGitUser: false
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   publish-beta:
-    name: "@guardian/commercial-core"
+    name: '@guardian/commercial-core'
     runs-on: ubuntu-latest
     if: github.event.label.name == '[beta] @guardian/commercial-core'
     steps:

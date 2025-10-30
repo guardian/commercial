@@ -2,10 +2,10 @@ name: CI
 on:
   push:
     branches:
-      - "main"
+      - 'main'
   pull_request:
     branches-ignore:
-      - "gh-pages"
+      - 'gh-pages'
 
 permissions: write-all
 
