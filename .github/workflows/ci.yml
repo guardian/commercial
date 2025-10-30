@@ -2,10 +2,10 @@ name: CI
 on:
   push:
     branches:
-      - 'main'
+      - "main"
   pull_request:
     branches-ignore:
-      - 'gh-pages'
+      - "gh-pages"
 
 permissions: write-all
 
@@ -89,51 +89,6 @@ jobs:
         with:
           name: core-dist
           path: core/dist
-
-  changesets:
-    name: Core Changesets
-    needs: [build-core, test, lint, types]
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5.0.0
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-
-      - name: Set up Node
-        uses: ./.github/actions/setup-node-env
-
-      - name: Fetch build
-        uses: actions/download-artifact@v5.0.0
-        with:
-          name: core-dist
-          path: core/dist
-
-      - name: Use GitHub App Token
-        uses: actions/create-github-app-token@v2
-        id: app-token
-        with:
-          app-id: ${{ secrets.GU_CHANGESETS_APP_ID }}
-          private-key: ${{ secrets.GU_CHANGESETS_PRIVATE_KEY }}
-
-      - name: Set git user to Gu Changesets app
-        run: |
-          git config user.name "gu-changesets-release-pr[bot]"
-          git config user.email "gu-changesets-release-pr[bot]@users.noreply.github.com"
-
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@v1.5.3
-        with:
-          publish: pnpm changeset publish
-          title: '🦋 Release package updates'
-          commit: 'Bump package versions'
-          setupGitUser: false
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   riff-raff:
     name: Upload Bundle Riff Raff Artifacts
