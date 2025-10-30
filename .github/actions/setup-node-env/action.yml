@@ -14,6 +14,13 @@ runs:
       with:
         node-version-file: '.nvmrc'
         cache: 'pnpm'
+        registry-url: 'https://registry.npmjs.org'
+
+      # See https://docs.npmjs.com/trusted-publishers
+      # Find the latest version with `npm info npm@latest version`
+    - name: Install suitable NPM version for trusted publishing
+      run: npm install -g npm@11.6.2
+      shell: bash
 
     - run: pnpm install --frozen-lockfile
       shell: bash
