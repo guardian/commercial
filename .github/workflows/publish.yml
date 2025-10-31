@@ -39,11 +39,8 @@ jobs:
       - name: Set up Node
         uses: ./.github/actions/setup-node-env
 
-      - name: Fetch build
-        uses: actions/download-artifact@v5.0.0
-        with:
-          name: core-dist
-          path: core/dist
+      - name: Build package
+        run: pnpm build:core
 
       - name: Use GitHub App Token
         uses: actions/create-github-app-token@v2
@@ -62,14 +59,14 @@ jobs:
         uses: changesets/action@v1.5.3
         with:
           publish: pnpm changeset publish
-          title: '🦋 Release package updates'
-          commit: 'Bump package versions'
+          title: "🦋 Release package updates"
+          commit: "Bump package versions"
           setupGitUser: false
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
   publish-beta:
-    name: '@guardian/commercial-core'
+    name: "@guardian/commercial-core"
     runs-on: ubuntu-latest
     # Only run the `publish-beta` job if the correct label has been added to the PR
     if: github.event.label.name == '[beta] @guardian/commercial-core'

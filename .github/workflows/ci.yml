@@ -2,10 +2,10 @@ name: CI
 on:
   push:
     branches:
-      - 'main'
+      - "main"
   pull_request:
     branches-ignore:
-      - 'gh-pages'
+      - "gh-pages"
 
 permissions: write-all
 
@@ -70,25 +70,6 @@ jobs:
         with:
           name: bundle-dist
           path: bundle/dist
-
-  build-core:
-    name: Build Core
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v5.0.0
-
-      - name: Set up Node
-        uses: ./.github/actions/setup-node-env
-
-      - name: Build package
-        run: pnpm build:core
-
-      - name: Save build
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          name: core-dist
-          path: core/dist
 
   riff-raff:
     name: Upload Bundle Riff Raff Artifacts
