@@ -1,6 +1,7 @@
 import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import { PREBID_TIMEOUT } from '@guardian/commercial-core/constants/prebid-timeout';
+import { hashEmail } from '@guardian/commercial-core/email-hash';
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import { getPermutiveSegments } from '@guardian/commercial-core/permutive';
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
@@ -12,7 +13,7 @@ import type { Advert } from '../../../define/Advert';
 import { getParticipations } from '../../../experiments/ab';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
-import { isUserLoggedIn } from '../../identity/api';
+import { getEmail, isUserLoggedIn } from '../../identity/api';
 import { getPageTargeting } from '../../page-targeting';
 import type {
 	AnalyticsConfig,
@@ -341,7 +342,10 @@ const bidderTimeout = PREBID_TIMEOUT;
 let requestQueue: Promise<void> = Promise.resolve();
 let initialised = false;
 
-const initialise = (window: Window, consentState: ConsentState): void => {
+const initialise = async (
+	window: Window,
+	consentState: ConsentState,
+): Promise<void> => {
 	if (!window.pbjs) {
 		log('commercial', 'window.pbjs not found on window');
 		return; // We couldn’t initialise
@@ -360,7 +364,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	];
 
 	if (getConsentFor('id5', consentState)) {
-		userIds.push({
+		const userIdsForId5 = {
 			name: 'id5Id',
 			params: {
 				partner: 182,
@@ -375,7 +379,37 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 				expires: 90,
 				refreshInSeconds: 7200,
 			},
-		});
+		} as const;
+		const email = await getEmail();
+		if (!email) {
+			userIds.push(userIdsForId5);
+		} else {
+			const hashedEmail = await hashEmail(email);
+
+			// keys from https://wiki.id5.io/docs/passing-partner-data-to-id5
+			const pdKeys = {
+				1: hashedEmail,
+			};
+
+			// convert the key/values into a querystring format
+			const pdRaw = Object.keys(pdKeys)
+				.map((key) => {
+					const typedKey = key as unknown as keyof typeof pdKeys;
+					return key + '=' + pdKeys[typedKey];
+				})
+				.join('&');
+
+			// base64 encode the raw string; this is the final value you can pass into the pd field
+			const pdString = btoa(pdRaw);
+
+			userIds.push({
+				...userIdsForId5,
+				params: {
+					...userIdsForId5.params,
+					pd: pdString,
+				},
+			});
+		}
 	}
 
 	const userSync: UserSync = isSwitchedOn('prebidUserSync')
