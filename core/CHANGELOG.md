@@ -1,5 +1,17 @@
 # @guardian/commercial-core
 
+## 29.3.0
+
+### Minor Changes
+
+- a209c28: Additional hashing function to normalise emails for ad partners
+- 83e7fef: Upgrade @types/google-publisher-tag to version 1.20250811.1
+
+### Patch Changes
+
+- 07074e1: Update commercial core package json
+- fce52f1: Bumping guardian/libs to 26.0.1
+
 ## 29.2.0
 
 ### Minor Changes
