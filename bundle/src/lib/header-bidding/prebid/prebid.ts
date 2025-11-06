@@ -368,7 +368,7 @@ const initialise = async (
 	];
 
 	if (getConsentFor('id5', consentState)) {
-		const userIdsForId5 = {
+		const id5UserId = {
 			name: 'id5Id',
 			params: {
 				partner: 182,
@@ -386,7 +386,7 @@ const initialise = async (
 		} as const;
 		const email = await getEmail();
 		if (!email) {
-			userIds.push(userIdsForId5);
+			userIds.push(id5UserId);
 		} else {
 			const hashedEmail = await hashEmail(email);
 
@@ -407,9 +407,9 @@ const initialise = async (
 			const pdString = btoa(pdRaw);
 
 			userIds.push({
-				...userIdsForId5,
+				...id5UserId,
 				params: {
-					...userIdsForId5.params,
+					...id5UserId.params,
 					pd: pdString,
 				},
 			});

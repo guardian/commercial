@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition -- temporary until v10 migration complete */
-
+import { hashEmail } from '@guardian/commercial-core/email-hash';
 import { type ConsentState } from '@guardian/libs';
 import { getConsentFor } from '@guardian/libs';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
+import { getEmail } from '../../identity/api';
 import { shouldIncludeBidder, shouldIncludePermutive } from '../utils';
 import { prebid } from './prebid';
 
@@ -32,6 +32,14 @@ jest.mock('../utils', () => ({
 jest.mock('@guardian/libs', () => ({
 	...jest.requireActual('@guardian/libs'),
 	getConsentFor: jest.fn(),
+}));
+
+jest.mock('../../identity/api', () => ({
+	getEmail: jest.fn(),
+}));
+
+jest.mock('@guardian/commercial-core/email-hash', () => ({
+	hashEmail: jest.fn(),
 }));
 
 const mockGetConsentForID5 = (hasConsent: boolean) =>
@@ -79,7 +87,7 @@ describe('initialise', () => {
 
 		await prebid.initialise(window, mockConsentState);
 
-		expect(window.pbjs?.getConfig()).toMatchObject({
+		expect(window.pbjs.getConfig()).toMatchObject({
 			auctionOptions: {},
 			bidderSequence: 'random',
 			bidderTimeout: 1500,
@@ -181,6 +189,57 @@ describe('initialise', () => {
 		});
 	});
 
+	test('should get user email for ID5', async () => {
+		jest.mocked(shouldIncludeBidder).mockReturnValue(
+			jest.fn().mockReturnValue(true),
+		);
+		(getEmail as jest.Mock).mockReturnValue('guardianuser@gmail.com');
+		mockGetConsentForID5(true);
+		await prebid.initialise(window, mockConsentState);
+
+		const result = await getEmail();
+		expect(result).toBe('guardianuser@gmail.com');
+	});
+
+	test('Builds pdKeys correctly. email for ID5', async () => {
+		jest.mocked(shouldIncludeBidder).mockReturnValue(
+			jest.fn().mockReturnValue(true),
+		);
+		(getEmail as jest.Mock).mockReturnValue('guardianuse@gmail.com');
+		(hashEmail as jest.Mock).mockReturnValue(
+			'528f4e83dbdd916e811358e43518555f68229b1dc279b6b2cd3c480f68371e7d',
+		);
+		mockGetConsentForID5(true);
+
+		await prebid.initialise(window, mockConsentState);
+
+		expect(window.pbjs.getConfig().userSync).toMatchObject({
+			userIds: [
+				{
+					name: 'sharedId',
+					storage: {
+						type: 'cookie',
+						name: '_pubcid',
+						expires: 365,
+					},
+				},
+				{
+					name: 'id5Id',
+					params: {
+						partner: 182,
+						pd: 'MT01MjhmNGU4M2RiZGQ5MTZlODExMzU4ZTQzNTE4NTU1ZjY4MjI5YjFkYzI3OWI2YjJjZDNjNDgwZjY4MzcxZTdk',
+					},
+					storage: {
+						type: 'html5',
+						name: 'id5id',
+						expires: 90,
+						refreshInSeconds: 7200,
+					},
+				},
+			],
+		});
+	});
+
 	test('should generate correct Prebid config when no consent for ID5', async () => {
 		jest.mocked(shouldIncludeBidder).mockReturnValue(
 			jest.fn().mockReturnValue(true),
@@ -189,7 +248,7 @@ describe('initialise', () => {
 		mockGetConsentForID5(false);
 		await prebid.initialise(window, mockConsentState);
 
-		expect(window.pbjs?.getConfig('userSync')).toMatchObject({
+		expect(window.pbjs.getConfig('userSync')).toMatchObject({
 			syncDelay: 3000,
 			syncEnabled: true,
 			syncsPerBidder: 0,
@@ -218,7 +277,7 @@ describe('initialise', () => {
 			...mockConsentState,
 			framework: 'usnat',
 		});
-		expect(window.pbjs?.getConfig('consentManagement')).toEqual({
+		expect(window.pbjs.getConfig('consentManagement')).toEqual({
 			gpp: {
 				cmpApi: 'iab',
 				timeout: 1500,
@@ -231,7 +290,7 @@ describe('initialise', () => {
 			...mockConsentState,
 			framework: 'aus',
 		});
-		expect(window.pbjs?.getConfig('consentManagement')).toEqual({
+		expect(window.pbjs.getConfig('consentManagement')).toEqual({
 			usp: {
 				cmpApi: 'iab',
 				timeout: 1500,
@@ -242,14 +301,14 @@ describe('initialise', () => {
 	test('should generate correct Prebid config when consent management off', async () => {
 		window.guardian.config.switches.consentManagement = false;
 		await prebid.initialise(window, mockConsentState);
-		expect(window.pbjs?.getConfig('consentManagement')).toBeUndefined();
+		expect(window.pbjs.getConfig('consentManagement')).toBeUndefined();
 	});
 
 	test('should not include realTimeData object if permutive should not be included', async () => {
 		jest.mocked(shouldIncludePermutive).mockReturnValue(false);
 		await prebid.initialise(window, mockConsentState);
 
-		expect(window.pbjs?.getConfig('realTimeData')).toBeUndefined();
+		expect(window.pbjs.getConfig('realTimeData')).toBeUndefined();
 	});
 
 	describe('permutive realTimeData', () => {
@@ -266,7 +325,7 @@ describe('initialise', () => {
 			);
 
 			await prebid.initialise(window, mockConsentState);
-			expect(window.pbjs?.getConfig()).toMatchObject({
+			expect(window.pbjs.getConfig()).toMatchObject({
 				realTimeData: {
 					dataProviders: [
 						{
@@ -296,7 +355,7 @@ describe('initialise', () => {
 			);
 
 			await prebid.initialise(window, mockConsentState);
-			expect(window.pbjs?.getConfig()).toMatchObject({
+			expect(window.pbjs.getConfig()).toMatchObject({
 				realTimeData: {
 					dataProviders: [
 						{
@@ -322,7 +381,7 @@ describe('initialise', () => {
 				jest.fn().mockReturnValue(true),
 			);
 			await prebid.initialise(window, mockConsentState);
-			expect(window.pbjs?.bidderSettings.criteo).toMatchObject({
+			expect(window.pbjs.bidderSettings.criteo).toMatchObject({
 				storageAllowed: true,
 			});
 		});
@@ -332,7 +391,7 @@ describe('initialise', () => {
 				jest.fn().mockReturnValue(false),
 			);
 			await prebid.initialise(window, mockConsentState);
-			expect(window.pbjs?.bidderSettings.criteo).toBeUndefined();
+			expect(window.pbjs.bidderSettings.criteo).toBeUndefined();
 		});
 	});
 
@@ -342,7 +401,7 @@ describe('initialise', () => {
 				jest.fn().mockReturnValue(true),
 			);
 			await prebid.initialise(window, mockConsentState);
-			expect(window.pbjs?.bidderSettings.xhb).toHaveProperty(
+			expect(window.pbjs.bidderSettings.xhb).toHaveProperty(
 				'adserverTargeting',
 			);
 		});
@@ -352,7 +411,7 @@ describe('initialise', () => {
 				jest.fn().mockReturnValue(false),
 			);
 			await prebid.initialise(window, mockConsentState);
-			expect(window.pbjs?.bidderSettings.xhb).toBeUndefined();
+			expect(window.pbjs.bidderSettings.xhb).toBeUndefined();
 		});
 	});
 	describe('kargo bidder settings', () => {
@@ -361,7 +420,7 @@ describe('initialise', () => {
 				jest.fn().mockReturnValue(true),
 			);
 			await prebid.initialise(window, mockConsentState);
-			expect(window.pbjs?.bidderSettings.kargo).toMatchObject({
+			expect(window.pbjs.bidderSettings.kargo).toMatchObject({
 				storageAllowed: true,
 			});
 		});
@@ -371,7 +430,7 @@ describe('initialise', () => {
 				jest.fn().mockReturnValue(false),
 			);
 			await prebid.initialise(window, mockConsentState);
-			expect(window.pbjs?.bidderSettings.kargo).toBeUndefined();
+			expect(window.pbjs.bidderSettings.kargo).toBeUndefined();
 		});
 	});
 
@@ -381,7 +440,7 @@ describe('initialise', () => {
 				jest.fn().mockReturnValue(true),
 			);
 			await prebid.initialise(window, mockConsentState);
-			expect(window.pbjs?.bidderSettings.magnite).toMatchObject({
+			expect(window.pbjs.bidderSettings.magnite).toMatchObject({
 				storageAllowed: true,
 			});
 		});
@@ -391,7 +450,7 @@ describe('initialise', () => {
 				jest.fn().mockReturnValue(false),
 			);
 			await prebid.initialise(window, mockConsentState);
-			expect(window.pbjs?.bidderSettings.magnite).toBeUndefined();
+			expect(window.pbjs.bidderSettings.magnite).toBeUndefined();
 		});
 	});
 
@@ -399,7 +458,7 @@ describe('initialise', () => {
 		window.guardian.config.switches.prebidUserSync = false;
 		await prebid.initialise(window, mockConsentState);
 		// @ts-expect-error -- it works with the alternative type
-		expect(window.pbjs?.getConfig().userSync.syncEnabled).toEqual(false);
+		expect(window.pbjs.getConfig().userSync.syncEnabled).toEqual(false);
 	});
 });
 
