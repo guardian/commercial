@@ -499,8 +499,8 @@ describe('DFP', () => {
 
 		expect(googleTag.setConfig).toHaveBeenCalledWith(
 			expect.objectContaining({
-				singleRequest: expect.any(Boolean) as boolean,
-				collapseDiv: expect.any(String) as string,
+				singleRequest: true,
+				collapseDiv: 'ON_NO_FILL',
 			}),
 		);
 		expect(pubAds.setPublisherProvidedId).toHaveBeenCalledWith(
