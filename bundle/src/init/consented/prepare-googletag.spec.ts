@@ -275,8 +275,6 @@ describe('DFP', () => {
 				listeners[eventType] = listener;
 				return pubAds;
 			}),
-			enableSingleRequest: jest.fn(),
-			collapseEmptyDivs: jest.fn(),
 			refresh: jest.fn(),
 			setRequestNonPersonalizedAds: jest.fn(),
 			setPrivacySettings: jest.fn(),
@@ -499,8 +497,12 @@ describe('DFP', () => {
 		await fillStaticAdvertSlots();
 		await prepareGoogletag();
 
-		expect(pubAds.enableSingleRequest).toHaveBeenCalled();
-		expect(pubAds.collapseEmptyDivs).toHaveBeenCalled();
+		expect(googleTag.setConfig).toHaveBeenCalledWith(
+			expect.objectContaining({
+				singleRequest: expect.any(Boolean) as boolean,
+				collapseDiv: expect.any(String) as string,
+			}),
+		);
 		expect(pubAds.setPublisherProvidedId).toHaveBeenCalledWith(
 			'test-id-string',
 		);
