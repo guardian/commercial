@@ -109,12 +109,6 @@ declare module 'prebid.js/src/ajax.js' {
 
 // version 10.11.0 specific modules
 
-declare module 'prebid-v10.11.0.js/adapters/bidderFactory' {
-	const registerBidder: (spec: unknown) => void;
-
-	export { registerBidder };
-}
-
 type BidderCode = string;
 
 type AdapterAlias =
@@ -125,22 +119,16 @@ type AdapterAlias =
 			skipPbsAliasing?: boolean;
 	  };
 
-declare module 'prebid-v10.11.0.js/modules/appnexusBidAdapter' {
-	const spec: {
-		aliases: AdapterAlias[];
-	};
-
-	export { spec };
+declare module 'prebid-v10.11.0.js/libraries/analyticsAdapter/AnalyticsAdapter' {
+	function adapter(config: AnalyticsAdapterConfig): AnalyticsAdapter;
+	export default adapter;
 }
 
-declare module 'prebid-v10.11.0.js/modules/openxBidAdapter' {
-	const spec: {
-		aliases: AdapterAlias[];
-	};
+declare module 'prebid-v10.11.0.js/adapters/bidderFactory' {
+	const registerBidder: (spec: unknown) => void;
 
-	export { spec };
+	export { registerBidder };
 }
-
 declare module 'prebid-v10.11.0.js/src/cpmBucketManager' {
 	type PrebidPriceGranularity = {
 		buckets: Array<{
@@ -161,10 +149,20 @@ declare module 'prebid-v10.11.0.js/src/cpmBucketManager' {
 	export type { PrebidPriceGranularity };
 }
 
-// Added type definitions for prebid.js analytics modules
-declare module 'prebid-v10.11.0.js/libraries/analyticsAdapter/AnalyticsAdapter' {
-	function adapter(config: AnalyticsAdapterConfig): AnalyticsAdapter;
-	export default adapter;
+declare module 'prebid-v10.11.0.js/modules/appnexusBidAdapter' {
+	const spec: {
+		aliases: AdapterAlias[];
+	};
+
+	export { spec };
+}
+
+declare module 'prebid-v10.11.0.js/modules/openxBidAdapter' {
+	const spec: {
+		aliases: AdapterAlias[];
+	};
+
+	export { spec };
 }
 
 declare module 'prebid-v10.11.0.js/src/adapterManager' {
@@ -180,6 +178,11 @@ declare module 'prebid-v10.11.0.js/src/adapterManager' {
 	};
 
 	export default adapterManager;
+}
+
+declare module 'prebid-v10.11.0.js/src/ajax' {
+	const prebidFetch: typeof fetch;
+	export { prebidFetch as fetch };
 }
 
 declare module 'prebid-v10.11.0.js/src/constants' {
@@ -204,9 +207,4 @@ declare module 'prebid-v10.11.0.js/src/utils' {
 	};
 
 	export { utils };
-}
-
-declare module 'prebid-v10.11.0.js/src/ajax' {
-	const prebidFetch: typeof fetch;
-	export { prebidFetch as fetch };
 }

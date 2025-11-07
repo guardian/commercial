@@ -706,7 +706,6 @@ const requestBids = async (
 				});
 				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ignore during v10 test
 				window.pbjs?.que.push(() => {
-
 					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ignore during v10 test
 					window.pbjs?.requestBids({
 						adUnits,
