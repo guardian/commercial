@@ -52,6 +52,7 @@ const mockConsentState = {
 } satisfies ConsentState;
 
 const resetPrebid = () => {
+	// @ts-expect-error -- ignore during v10 test
 	delete window.pbjs;
 	// @ts-expect-error -- there’s no types for this
 	delete window.pbjsChunk;

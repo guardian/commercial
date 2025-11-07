@@ -443,7 +443,7 @@ describe('prebid analyticsAdapter', () => {
 								bid: 'req-123',
 								sid: 'ad-slot-1',
 								cpm: 1.5,
-								pb: 1.50,
+								pb: 1.5,
 								cry: 'USD',
 								net: true,
 								did: 'ad-123',
@@ -629,11 +629,11 @@ describe('prebid analyticsAdapter', () => {
 					args: {
 						statusMessage: 'Bid available',
 						bidderCode: 'ozone',
-					adId: '456-0-0',
-					adserverTargeting: {
-						oz_appnexus_adId: '123-0-0',
-						oz_winner: 'triplelift',
-					},
+						adId: '456-0-0',
+						adserverTargeting: {
+							oz_appnexus_adId: '123-0-0',
+							oz_winner: 'triplelift',
+						},
 					},
 				});
 				triggerAuctionEnd();
@@ -660,10 +660,10 @@ describe('prebid analyticsAdapter', () => {
 					args: {
 						statusMessage: 'Bid available',
 						bidderCode: 'ozone',
-					adId: '456-0-0',
-					adserverTargeting: {
-						oz_appnexus_adId: '123-0-0',
-					},
+						adId: '456-0-0',
+						adserverTargeting: {
+							oz_appnexus_adId: '123-0-0',
+						},
 					},
 				});
 				triggerAuctionEnd();

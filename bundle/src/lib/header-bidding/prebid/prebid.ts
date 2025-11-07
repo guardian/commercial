@@ -251,7 +251,11 @@ class PrebidAdUnit {
 
 declare global {
 	interface Window {
-		pbjs?: {
+		// the optional pbjs object causes a typecheck failure as the v10
+		// window.pbjs is not optional, so the compiler complains that the
+		// modifiers are not identical. restore this if we migrate back to prebid v9.x
+		// pbjs?: {
+		pbjs: {
 			que: {
 				push: (cb: () => void) => void;
 			};
@@ -342,6 +346,7 @@ let requestQueue: Promise<void> = Promise.resolve();
 let initialised = false;
 
 const initialise = (window: Window, consentState: ConsentState): void => {
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ignore during v10 test
 	if (!window.pbjs) {
 		log('commercial', 'window.pbjs not found on window');
 		return; // We couldn’t initialise
@@ -631,6 +636,7 @@ const bidsBackHandler = (
 	eventTimer: EventTimer,
 ): Promise<void> =>
 	new Promise((resolve) => {
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ignore during v10 test
 		window.pbjs?.setTargetingForGPTAsync(
 			adUnits.map((u) => u.code).filter(isString),
 		);
@@ -698,7 +704,10 @@ const requestBids = async (
 						);
 					}
 				});
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ignore during v10 test
 				window.pbjs?.que.push(() => {
+
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ignore during v10 test
 					window.pbjs?.requestBids({
 						adUnits,
 						bidsBackHandler: () =>

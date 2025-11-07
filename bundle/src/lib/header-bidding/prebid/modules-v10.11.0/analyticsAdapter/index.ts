@@ -45,14 +45,10 @@ const analyticsAdapter = Object.assign(adapter({ analyticsType: 'endpoint' }), {
 				// Ignore abort errors, they are expected when the fetch times out
 				return;
 			}
-			reportError(
-				error,
-				'commercial',
-				{},
-				{
-					events,
-				},
-			);
+
+			const feature = 'commercial';
+			const extras = { events };
+			reportError(error, feature, {}, extras);
 		}
 	},
 	track({

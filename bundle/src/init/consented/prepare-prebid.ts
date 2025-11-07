@@ -85,7 +85,7 @@ export const setupPrebidOnce: () => Promise<void> = once(setupPrebid);
 export const init = (shouldLoadNewVersion?: boolean): Promise<void> => {
 	loadNewVersion = !!shouldLoadNewVersion;
 	return setupPrebidOnce();
-}
+};
 
 export const _ = {
 	setupPrebid,

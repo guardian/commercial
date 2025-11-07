@@ -79,7 +79,10 @@ export type AnalyticsPayload = {
 	hb_ev: EventData[];
 };
 
-export const createPayload = (events: EventData[], pv: string): AnalyticsPayload => {
+export const createPayload = (
+	events: EventData[],
+	pv: string,
+): AnalyticsPayload => {
 	return {
 		v: VERSION,
 		pv,

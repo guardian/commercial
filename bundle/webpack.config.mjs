@@ -65,6 +65,27 @@ const config = {
 				'src',
 				'adapters',
 			),
+			// New prebid version aliases
+			'prebid-v10.11.0.js/src': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebid-v10.11.0.js',
+				'src',
+			),
+			'prebid-v10.11.0.js/adapters': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebid-v10.11.0.js',
+				'src',
+				'adapters',
+			),
+			'prebid-v10.11.0.js/libraries': join(
+				import.meta.dirname,
+				'node_modules',
+				'prebid-v10.11.0.js',
+				'src',
+				'libraries',
+			),
 		},
 		extensions: ['.js', '.ts', '.tsx', '.jsx'],
 	},
@@ -135,43 +156,6 @@ const config = {
 			failOnError: true,
 		}),
 	],
-
-	// update aliases for prebid.js version directories
-	alias: {
-		'prebid.js/src': join(
-			import.meta.dirname,
-			'node_modules',
-			'prebid.js',
-			'src',
-		),
-		'prebid.js/libraries': join(
-			import.meta.dirname,
-			'node_modules',
-			'prebid.js',
-			'libraries',
-		),
-		'prebid.js/adapters': join(
-			import.meta.dirname,
-			'node_modules',
-			'prebid.js',
-			'src',
-			'adapters',
-		),
-		// New prebid version aliases
-		'prebid-v10.11.0.js/src': join(
-			import.meta.dirname,
-			'node_modules',
-			'prebid-v10.11.0.js',
-			'src',
-		),
-		'prebid-v10.11.0.js/adapters': join(
-			import.meta.dirname,
-			'node_modules',
-			'prebid-v10.11.0.js',
-			'src',
-			'adapters',
-		),
-	},
 };
 
 export default config;

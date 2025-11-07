@@ -1,7 +1,13 @@
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
 
-const esModules = ['@guardian/', 'lodash-es', 'prebid.js', 'prebid-v10.11.0.js', 'dlv'].join('|');
+const esModules = [
+	'@guardian/',
+	'lodash-es',
+	'prebid.js',
+	'prebid-v10.11.0.js',
+	'dlv',
+].join('|');
 
 module.exports = {
 	clearMocks: true,
@@ -23,7 +29,8 @@ module.exports = {
 		'^prebid.js/(.*)$': '<rootDir>/node_modules/prebid.js/$1',
 		'^prebid-v10.11.0.js/adapters/(.*)$':
 			'<rootDir>/node_modules/prebid-v10.11.0.js/src/adapters/$1',
-		'^prebid-v10.11.0.js/(.*)$': '<rootDir>/node_modules/prebid-v10.11.0.js/$1',
+		'^prebid-v10.11.0.js/(.*)$':
+			'<rootDir>/node_modules/prebid-v10.11.0.js/$1',
 	},
 	setupFilesAfterEnv: ['<rootDir>/../jest.setupTestFrameworkScriptFile.js'],
 	testEnvironment: 'jest-environment-jsdom-global',
