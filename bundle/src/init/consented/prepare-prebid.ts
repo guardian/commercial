@@ -16,15 +16,27 @@ const shouldLoadPrebid = () =>
 	!shouldIncludeOnlyA9 &&
 	!isInCanada();
 
+let loadNewVersion: boolean = false;
+
 const loadPrebid = async (consentState: ConsentState): Promise<void> => {
-	if (shouldLoadPrebid()) {
+	// double check that we should load prebid
+	if (!shouldLoadPrebid()) {
+		return;
+	}
+
+	if (loadNewVersion) {
+		await import(
+			/* webpackChunkName: "Prebid@10.11.0.js" */
+			'../../lib/header-bidding/prebid/pbjs-v10.11.0'
+		);
+	} else {
 		await import(
 			/* webpackChunkName: "Prebid.js" */
-			`../../lib/header-bidding/prebid/pbjs`
+			'../../lib/header-bidding/prebid/pbjs'
 		);
-
-		prebid.initialise(window, consentState);
 	}
+
+	prebid.initialise(window, consentState);
 };
 
 const throwIfUnconsented = (hasConsentForPrebid: boolean): void => {
@@ -70,7 +82,10 @@ export const setupPrebidOnce: () => Promise<void> = once(setupPrebid);
  * https://docs.prebid.org/overview/intro.html
  * @returns Promise
  */
-export const init = (): Promise<void> => setupPrebidOnce();
+export const init = (shouldLoadNewVersion?: boolean): Promise<void> => {
+	loadNewVersion = !!shouldLoadNewVersion;
+	return setupPrebidOnce();
+}
 
 export const _ = {
 	setupPrebid,
