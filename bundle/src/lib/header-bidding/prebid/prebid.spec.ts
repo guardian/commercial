@@ -189,19 +189,7 @@ describe('initialise', () => {
 		});
 	});
 
-	test('should get user email for ID5', async () => {
-		jest.mocked(shouldIncludeBidder).mockReturnValue(
-			jest.fn().mockReturnValue(true),
-		);
-		(getEmail as jest.Mock).mockReturnValue('guardianuser@gmail.com');
-		mockGetConsentForID5(true);
-		await prebid.initialise(window, mockConsentState);
-
-		const result = await getEmail();
-		expect(result).toBe('guardianuser@gmail.com');
-	});
-
-	test('Builds pdKeys correctly. email for ID5', async () => {
+	test('should return ID5 user module with pd when consent is present and email is available', async () => {
 		jest.mocked(shouldIncludeBidder).mockReturnValue(
 			jest.fn().mockReturnValue(true),
 		);
@@ -213,7 +201,10 @@ describe('initialise', () => {
 
 		await prebid.initialise(window, mockConsentState);
 
-		expect(window.pbjs.getConfig().userSync).toMatchObject({
+		expect(window.pbjs.getConfig().userSync).toStrictEqual({
+			syncDelay: 3000,
+			syncEnabled: true,
+			syncsPerBidder: 0,
 			userIds: [
 				{
 					name: 'sharedId',
@@ -228,6 +219,8 @@ describe('initialise', () => {
 					params: {
 						partner: 182,
 						pd: 'MT01MjhmNGU4M2RiZGQ5MTZlODExMzU4ZTQzNTE4NTU1ZjY4MjI5YjFkYzI3OWI2YjJjZDNjNDgwZjY4MzcxZTdk',
+						externalModuleUrl:
+							'https://cdn.id5-sync.com/api/1.0/id5PrebidModule.js',
 					},
 					storage: {
 						type: 'html5',
@@ -237,6 +230,62 @@ describe('initialise', () => {
 					},
 				},
 			],
+			auctionDelay: 500,
+			filterSettings: {
+				all: {
+					bidders: '*',
+					filter: 'include',
+				},
+			},
+		});
+	});
+	test('should return ID5 user module without pd when consent is present but email is unavailable', async () => {
+		jest.mocked(shouldIncludeBidder).mockReturnValue(
+			jest.fn().mockReturnValue(true),
+		);
+		(getEmail as jest.Mock).mockReturnValue('');
+		(hashEmail as jest.Mock).mockReturnValue(
+			'528f4e83dbdd916e811358e43518555f68229b1dc279b6b2cd3c480f68371e7d',
+		);
+		mockGetConsentForID5(true);
+
+		await prebid.initialise(window, mockConsentState);
+
+		expect(window.pbjs.getConfig().userSync).toStrictEqual({
+			syncDelay: 3000,
+			syncEnabled: true,
+			syncsPerBidder: 0,
+			userIds: [
+				{
+					name: 'sharedId',
+					storage: {
+						type: 'cookie',
+						name: '_pubcid',
+						expires: 365,
+					},
+				},
+				{
+					name: 'id5Id',
+					params: {
+						partner: 182,
+						externalModuleUrl:
+							'https://cdn.id5-sync.com/api/1.0/id5PrebidModule.js',
+					},
+					storage: {
+						type: 'html5',
+						name: 'id5id',
+						expires: 90,
+						refreshInSeconds: 7200,
+					},
+				},
+			],
+			auctionDelay: 500,
+			filterSettings: {
+				all: {
+					bidders: '*',
+					filter: 'include',
+				},
+			},
 		});
 	});
 
