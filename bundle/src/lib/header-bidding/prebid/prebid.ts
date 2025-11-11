@@ -11,6 +11,7 @@ import { flatten } from 'lodash-es';
 import type { PrebidPriceGranularity } from 'prebid.js/src/cpmBucketManager';
 import type { Advert } from '../../../define/Advert';
 import { getParticipations } from '../../../experiments/ab';
+import { isUserInTestGroup } from '../../../experiments/beta-ab';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { getEmail, isUserLoggedIn } from '../../identity/api';
@@ -384,10 +385,12 @@ const initialise = async (
 				refreshInSeconds: 7200,
 			},
 		} as const;
+
 		const email = await getEmail();
-		if (!email) {
-			userIds.push(id5UserId);
-		} else {
+		if (
+			email &&
+			isUserInTestGroup('commercial-user-module-ID5', 'control')
+		) {
 			const hashedEmail = await hashEmail(email);
 
 			// keys from https://wiki.id5.io/docs/passing-partner-data-to-id5
@@ -413,6 +416,8 @@ const initialise = async (
 					pd: pdString,
 				},
 			});
+		} else {
+			userIds.push(id5UserId);
 		}
 	}
 
