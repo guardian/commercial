@@ -50,26 +50,26 @@ importers:
   bundle:
     dependencies:
       '@guardian/ab-core':
-        specifier: 8.0.1
-        version: 8.0.1(tslib@2.8.1)(typescript@5.9.3)
+        specifier: 8.0.2
+        version: 8.0.2(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/commercial-core':
         specifier: workspace:*
         version: link:../core
       '@guardian/core-web-vitals':
-        specifier: 15.0.0
-        version: 15.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)(web-vitals@5.1.0)
+        specifier: 15.0.1
+        version: 15.0.1(@guardian/libs@26.1.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)(web-vitals@5.1.0)
       '@guardian/identity-auth':
-        specifier: ^11.0.0
-        version: 11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
+        specifier: ^11.0.1
+        version: 11.0.1(@guardian/libs@26.1.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/identity-auth-frontend':
-        specifier: 13.0.0
-        version: 13.0.0(@guardian/identity-auth@11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3))(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
+        specifier: 13.0.1
+        version: 13.0.1(@guardian/identity-auth@11.0.1(@guardian/libs@26.1.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3))(@guardian/libs@26.1.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/libs':
-        specifier: 26.0.1
-        version: 26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3)
+        specifier: 26.1.0
+        version: 26.1.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/source':
-        specifier: 11.3.0
-        version: 11.3.0(tslib@2.8.1)(typescript@5.9.3)
+        specifier: 11.3.1
+        version: 11.3.1(tslib@2.8.1)(typescript@5.9.3)
       fastdom:
         specifier: ^1.0.12
         version: 1.0.12
@@ -204,11 +204,11 @@ importers:
   core:
     dependencies:
       '@guardian/ab-core':
-        specifier: 8.0.1
-        version: 8.0.1(tslib@2.8.1)(typescript@5.9.3)
+        specifier: 8.0.2
+        version: 8.0.2(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/libs':
-        specifier: 26.0.1
-        version: 26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3)
+        specifier: 26.1.0
+        version: 26.1.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3)
     devDependencies:
       '@guardian/ophan-tracker-js':
         specifier: 2.6.1
@@ -1025,8 +1025,8 @@ packages:
     resolution: {integrity: sha512-sB5uyeq+dwCWyPi31B2gQlVlo+j5brPlWx4yZBrEaRo/nhdDE8Xke1gsGgtiBdaBTxuTkceLVuVt/pclrasb0A==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@guardian/ab-core@8.0.1':
-    resolution: {integrity: sha512-m4sS68EbYxgNNdLg0NjFVF5BxI4ABTb8RVb3DTlvdygFKoISpgzlDlPL8s9gBILqMhjXu2/6X/Vej3k8SPRAUA==}
+  '@guardian/ab-core@8.0.2':
+    resolution: {integrity: sha512-WfUWokWmbpjMfH0Ft9xAsWPXARBzDvl0J8qlZkT109cVf8oHrSPpc6qHLFhbJ0S9fD+j8kZEsmOuMQZdXLLdWw==}
     peerDependencies:
       tslib: ^2.6.2
       typescript: ~5.5.2
@@ -1040,8 +1040,8 @@ packages:
       browserslist: ^4.22.2
       tslib: ^2.6.2
 
-  '@guardian/core-web-vitals@15.0.0':
-    resolution: {integrity: sha512-WL82tuvvLSSs48i+GhRNxQl2k4/2F7zVGgL36OpqwUuK6ypptIDwPhFbBKzWZVevwnsnxl6IjWvAItn+xnolmw==}
+  '@guardian/core-web-vitals@15.0.1':
+    resolution: {integrity: sha512-QOyobiavmzELHLykmSI8BCJwpiYlTwy1Go30rmE07SA/95JW482TFgzXn04osaFAL8E3adVIz3g/SaK0OZcWLg==}
     peerDependencies:
       '@guardian/libs': ^26.0.0
       tslib: ^2.6.2
@@ -1056,8 +1056,8 @@ packages:
     peerDependencies:
       eslint: ^9.19.0
 
-  '@guardian/identity-auth-frontend@13.0.0':
-    resolution: {integrity: sha512-SUcfhbsm7YpC/KkBKMJEKXBR85vGgCx4f8L2SRGtn+XREL/rhwlkvTjqaNPUXyETH71hFl9xhASqeKNAa5uj5w==}
+  '@guardian/identity-auth-frontend@13.0.1':
+    resolution: {integrity: sha512-+iQCiXH/D+jgOFtPRRe77pza4oYn+R5+EjknsuX5w37Dyf77BEiRjUZuoSnqxqm5stkowOTPbFlEoo9t+WFepw==}
     peerDependencies:
       '@guardian/identity-auth': ^11.0.0
       '@guardian/libs': ^26.0.0
@@ -1067,8 +1067,8 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/identity-auth@11.0.0':
-    resolution: {integrity: sha512-0ThH+iTb+wT5NsD89uuq16NB87oCnp7DfPqi9pcr1YazwRrS5d0sxHcdcNG5pUPPNTUJyoep/iFoyz608J9DZg==}
+  '@guardian/identity-auth@11.0.1':
+    resolution: {integrity: sha512-z1Jk/uEMCMiV0DkkuMCJgguuyQM9RqL+HMo/gdqVTZPKgpNkU5HFCLfgp7M1gbgNH/lHKijX7J05qh8xWw1CWQ==}
     peerDependencies:
       '@guardian/libs': ^26.0.0
       tslib: ^2.6.2
@@ -1077,8 +1077,8 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/libs@26.0.1':
-    resolution: {integrity: sha512-0O3hKTFAJtXBLfCA+FU5adA1pgY4AieOiGQzrZiK/3DB36zcsOWEIqNdAOlhnnrb78Nxaja2CXr54WpkLe61Uw==}
+  '@guardian/libs@26.1.0':
+    resolution: {integrity: sha512-7giFn9lqkxNd7NrQ/nzpmb52qpw+wfN853M16vcJYbrFhmo3/h9ldoEpQh+GWS2jiKKNBMMu9wKSKvFLkjqEWw==}
     peerDependencies:
       '@guardian/ophan-tracker-js': ^2.2.10
       tslib: ^2.6.2
@@ -1097,8 +1097,8 @@ packages:
       prettier: ^3.2.2
       tslib: ^2.6.2
 
-  '@guardian/source@11.3.0':
-    resolution: {integrity: sha512-J8KDoa/dZ926zkx1LdmoGo5i83znqjGDYuyOOc/UBcfH8dKbXDBmi4tvg8Xbl7/C4jSJpgG1JkjRHyzDarcAjg==}
+  '@guardian/source@11.3.1':
+    resolution: {integrity: sha512-pp22MZW0FR31kdDLN6o0uWak6WvBWP8HtriFP+85esHrL9gohlZtI5+f1fnxzdY9TGodaaexMWEP77fy5Sy9zw==}
     peerDependencies:
       '@emotion/react': ^11.11.4
       '@types/react': ^18.2.79
@@ -6345,7 +6345,7 @@ snapshots:
       '@eslint/core': 0.16.0
       levn: 0.4.1
 
-  '@guardian/ab-core@8.0.1(tslib@2.8.1)(typescript@5.9.3)':
+  '@guardian/ab-core@8.0.2(tslib@2.8.1)(typescript@5.9.3)':
     dependencies:
       tslib: 2.8.1
     optionalDependencies:
@@ -6356,9 +6356,9 @@ snapshots:
       browserslist: 4.27.0
       tslib: 2.8.1
 
-  '@guardian/core-web-vitals@15.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)(web-vitals@5.1.0)':
+  '@guardian/core-web-vitals@15.0.1(@guardian/libs@26.1.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)(web-vitals@5.1.0)':
     dependencies:
-      '@guardian/libs': 26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3)
+      '@guardian/libs': 26.1.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3)
       tslib: 2.8.1
       web-vitals: 5.1.0
     optionalDependencies:
@@ -6385,22 +6385,22 @@ snapshots:
       - supports-color
       - typescript
 
-  '@guardian/identity-auth-frontend@13.0.0(@guardian/identity-auth@11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3))(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)':
+  '@guardian/identity-auth-frontend@13.0.1(@guardian/identity-auth@11.0.1(@guardian/libs@26.1.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3))(@guardian/libs@26.1.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)':
     dependencies:
-      '@guardian/identity-auth': 11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
-      '@guardian/libs': 26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3)
+      '@guardian/identity-auth': 11.0.1(@guardian/libs@26.1.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
+      '@guardian/libs': 26.1.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3)
       tslib: 2.8.1
     optionalDependencies:
       typescript: 5.9.3
 
-  '@guardian/identity-auth@11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)':
+  '@guardian/identity-auth@11.0.1(@guardian/libs@26.1.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)':
     dependencies:
-      '@guardian/libs': 26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3)
+      '@guardian/libs': 26.1.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3)
       tslib: 2.8.1
     optionalDependencies:
       typescript: 5.9.3
 
-  '@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3)':
+  '@guardian/libs@26.1.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.9.3)':
     dependencies:
       '@guardian/ophan-tracker-js': 2.6.1
       tslib: 2.8.1
@@ -6416,7 +6416,7 @@ snapshots:
       prettier: 3.6.2
       tslib: 2.8.1
 
-  '@guardian/source@11.3.0(tslib@2.8.1)(typescript@5.9.3)':
+  '@guardian/source@11.3.1(tslib@2.8.1)(typescript@5.9.3)':
     dependencies:
       mini-svg-data-uri: 1.4.4
       tslib: 2.8.1

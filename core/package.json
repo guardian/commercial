@@ -46,8 +46,8 @@
 		"@guardian/libs": "^26.0.0"
 	},
 	"dependencies": {
-		"@guardian/ab-core": "8.0.1",
-		"@guardian/libs": "26.0.1"
+		"@guardian/ab-core": "8.0.2",
+		"@guardian/libs": "26.1.0"
 	},
 	"devDependencies": {
 		"@guardian/ophan-tracker-js": "2.6.1",
