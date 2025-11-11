@@ -2,6 +2,7 @@ import { isInCanada } from '@guardian/commercial-core/geo/geo-utils';
 import type { ConsentState } from '@guardian/libs';
 import { log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
+import { isUserInTestGroup } from '../../experiments/beta-ab';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
@@ -16,15 +17,18 @@ const shouldLoadPrebid = () =>
 	!shouldIncludeOnlyA9 &&
 	!isInCanada();
 
-let loadNewVersion: boolean = false;
-
 const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 	// double check that we should load prebid
 	if (!shouldLoadPrebid()) {
 		return;
 	}
 
-	if (loadNewVersion) {
+	const isPrebidV10Enabled = isUserInTestGroup(
+		'commercial-prebid-v10',
+		'variant',
+	);
+
+	if (isPrebidV10Enabled) {
 		await import(
 			/* webpackChunkName: "Prebid@10.11.0.js" */
 			'../../lib/header-bidding/prebid/pbjs-v10.11.0'
@@ -82,8 +86,7 @@ export const setupPrebidOnce: () => Promise<void> = once(setupPrebid);
  * https://docs.prebid.org/overview/intro.html
  * @returns Promise
  */
-export const init = (shouldLoadNewVersion?: boolean): Promise<void> => {
-	loadNewVersion = !!shouldLoadNewVersion;
+export const init = (): Promise<void> => {
 	return setupPrebidOnce();
 };
 
