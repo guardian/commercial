@@ -42,7 +42,7 @@
 		"@guardian/source": "11.3.0",
 		"fastdom": "^1.0.12",
 		"lodash-es": "^4.17.21",
-		"prebid.js": "9.46.0",
+		"prebid.js": "10.16.0",
 		"prebid-v10.11.0.js": "npm:prebid.js@10.11.0",
 		"process": "^0.11.10",
 		"web-vitals": "^5.1.0"
