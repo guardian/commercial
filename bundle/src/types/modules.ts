@@ -107,42 +107,29 @@ declare module 'prebid.js/src/ajax.js' {
 	export { prebidFetch as fetch };
 }
 
-/**
- * The declarations below for prebid-v9.46.0.js
- * can be deleted once we've tested this dependency
- **/
+// version 10.11.0 specific modules
 
-declare module 'prebid-v9.46.0.js' {
-	const pbjs: {
-		processQueue: () => void;
-	};
+type BidderCode = string;
 
-	export default pbjs;
+type AdapterAlias =
+	| BidderCode
+	| {
+			code: BidderCode;
+			gvlid?: number;
+			skipPbsAliasing?: boolean;
+	  };
+
+declare module 'prebid-v10.11.0.js/libraries/analyticsAdapter/AnalyticsAdapter' {
+	function adapter(config: AnalyticsAdapterConfig): AnalyticsAdapter;
+	export default adapter;
 }
 
-declare module 'prebid-v9.46.0.js/modules/openxBidAdapter' {
-	const spec: {
-		aliases: string[];
-	};
-
-	export { spec };
-}
-
-declare module 'prebid-v9.46.0.js/modules/appnexusBidAdapter' {
-	const spec: {
-		aliases: Array<{ code: string }>;
-	};
-
-	export { spec };
-}
-
-declare module 'prebid-v9.46.0.js/adapters/bidderFactory' {
+declare module 'prebid-v10.11.0.js/adapters/bidderFactory' {
 	const registerBidder: (spec: unknown) => void;
 
 	export { registerBidder };
 }
-
-declare module 'prebid-v9.46.0.js/src/cpmBucketManager' {
+declare module 'prebid-v10.11.0.js/src/cpmBucketManager' {
 	type PrebidPriceGranularity = {
 		buckets: Array<{
 			precision?: number;
@@ -162,13 +149,23 @@ declare module 'prebid-v9.46.0.js/src/cpmBucketManager' {
 	export type { PrebidPriceGranularity };
 }
 
-// Added type definitions for prebid-v9.46.0.js analytics modules
-declare module 'prebid-v9.46.0.js/libraries/analyticsAdapter/AnalyticsAdapter.js' {
-	function adapter(config: AnalyticsAdapterConfig): AnalyticsAdapter;
-	export default adapter;
+declare module 'prebid-v10.11.0.js/modules/appnexusBidAdapter' {
+	const spec: {
+		aliases: AdapterAlias[];
+	};
+
+	export { spec };
 }
 
-declare module 'prebid-v9.46.0.js/src/adapterManager.js' {
+declare module 'prebid-v10.11.0.js/modules/openxBidAdapter' {
+	const spec: {
+		aliases: AdapterAlias[];
+	};
+
+	export { spec };
+}
+
+declare module 'prebid-v10.11.0.js/src/adapterManager' {
 	interface AnalyticsAdapterRegistration {
 		adapter: unknown;
 		code: string;
@@ -183,30 +180,31 @@ declare module 'prebid-v9.46.0.js/src/adapterManager.js' {
 	export default adapterManager;
 }
 
-declare module 'prebid-v9.46.0.js/src/constants.js' {
+declare module 'prebid-v10.11.0.js/src/ajax' {
+	const prebidFetch: typeof fetch;
+	export { prebidFetch as fetch };
+}
+
+declare module 'prebid-v10.11.0.js/src/constants' {
+	// there are more events, but these are
+	// the ones used in the analytics adapter
 	const EVENTS: {
+		AUCTION_END: string;
 		AUCTION_INIT: string;
 		BID_REQUESTED: string;
 		BID_RESPONSE: string;
-		NO_BID: string;
-		AUCTION_END: string;
 		BID_WON: string;
-		[key: string]: string;
+		NO_BID: string;
 	};
 
 	export { EVENTS };
 }
 
-declare module 'prebid-v9.46.0.js/src/utils.js' {
+declare module 'prebid-v10.11.0.js/src/utils' {
 	const utils: {
 		logError: (message: string) => void;
 		[key: string]: unknown;
 	};
 
 	export { utils };
-}
-
-declare module 'prebid-v9.46.0.js/src/ajax.js' {
-	const prebidFetch: typeof fetch;
-	export { prebidFetch as fetch };
 }

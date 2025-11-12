@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition -- temporary until v10 migration complete */
+
 import { type ConsentState } from '@guardian/libs';
 import { getConsentFor } from '@guardian/libs';
 import { pubmatic } from '../../__vendor/pubmatic';
@@ -52,6 +54,7 @@ const mockConsentState = {
 } satisfies ConsentState;
 
 const resetPrebid = () => {
+	// @ts-expect-error -- ignore during v10 test
 	delete window.pbjs;
 	// @ts-expect-error -- there’s no types for this
 	delete window.pbjsChunk;
@@ -422,7 +425,7 @@ describe('Prebid.js bidWon Events', () => {
 		expect(window.pbjs.onEvent).toHaveBeenCalledTimes(1);
 
 		// @ts-expect-error -- this is handled by onEvent
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- it used to be that way
+		// - eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- it used to be that way
 		if (bidWonEventHandler) {
 			bidWonEventHandler({
 				height: 100,
@@ -475,7 +478,7 @@ describe('Prebid.js bidWon Events', () => {
 		expect(window.pbjs.onEvent).toHaveBeenCalledTimes(1);
 
 		// @ts-expect-error -- this is handled by onEvent
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- it used to be that way
+		// - eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- it used to be that way
 		if (bidWonEventHandler) {
 			// @ts-expect-error -- we’re testing malformed data
 			bidWonEventHandler(data);

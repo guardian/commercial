@@ -2,6 +2,7 @@ import { isInCanada } from '@guardian/commercial-core/geo/geo-utils';
 import type { ConsentState } from '@guardian/libs';
 import { log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
+import { isUserInTestGroup } from '../../experiments/beta-ab';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { prebid } from '../../lib/header-bidding/prebid/prebid';
@@ -17,14 +18,29 @@ const shouldLoadPrebid = () =>
 	!isInCanada();
 
 const loadPrebid = async (consentState: ConsentState): Promise<void> => {
-	if (shouldLoadPrebid()) {
+	// double check that we should load prebid
+	if (!shouldLoadPrebid()) {
+		return;
+	}
+
+	const isPrebidV10Enabled = isUserInTestGroup(
+		'commercial-prebid-v10',
+		'variant',
+	);
+
+	if (isPrebidV10Enabled) {
+		await import(
+			/* webpackChunkName: "Prebid@10.11.0.js" */
+			'../../lib/header-bidding/prebid/pbjs-v10.11.0'
+		);
+	} else {
 		await import(
 			/* webpackChunkName: "Prebid.js" */
-			`../../lib/header-bidding/prebid/pbjs`
+			'../../lib/header-bidding/prebid/pbjs'
 		);
-
-		prebid.initialise(window, consentState);
 	}
+
+	prebid.initialise(window, consentState);
 };
 
 const throwIfUnconsented = (hasConsentForPrebid: boolean): void => {
@@ -70,7 +86,9 @@ export const setupPrebidOnce: () => Promise<void> = once(setupPrebid);
  * https://docs.prebid.org/overview/intro.html
  * @returns Promise
  */
-export const init = (): Promise<void> => setupPrebidOnce();
+export const init = (): Promise<void> => {
+	return setupPrebidOnce();
+};
 
 export const _ = {
 	setupPrebid,
