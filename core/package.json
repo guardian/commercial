@@ -15,17 +15,16 @@
 	"files": [
 		"dist"
 	],
-	"type": "module",
 	"main": "dist/cjs/index.js",
-	"module": "dist/esm/index.js",
+	"module": "dist/esm/index.mjs",
 	"exports": {
 		".": {
-			"import": "./dist/esm/index.js",
+			"import": "./dist/esm/index.mjs",
 			"require": "./dist/cjs/index.js",
 			"workspace": "./src/index.ts"
 		},
 		"./*": {
-			"import": "./dist/esm/*.js",
+			"import": "./dist/esm/*.mjs",
 			"require": "./dist/cjs/*.js",
 			"workspace": "./src/*.ts"
 		},
