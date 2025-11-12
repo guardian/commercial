@@ -95,7 +95,7 @@ const setSlotAdRefresh = (
 		}
 	};
 
-	setTimeout(() => {
+	const refreshTimeout = setTimeout(() => {
 		// During the elapsed time, a 'disable-refresh' message may have been posted.
 		// Check the flag again.
 		if (!advert.shouldRefresh) {
@@ -109,6 +109,8 @@ const setSlotAdRefresh = (
 			enableLazyLoad(advert);
 		}
 	}, ADVERT_REFRESH_RATE);
+
+	advert.setRefreshTimeout(refreshTimeout);
 };
 
 /*
