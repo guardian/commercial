@@ -169,6 +169,7 @@ describe('initialise', () => {
 								'ozone',
 								'pubmatic',
 								'trustx',
+								'rubicon',
 							],
 							overwrites: {
 								pubmatic,

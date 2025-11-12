@@ -463,7 +463,14 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 
 	if (shouldIncludePermutive(consentState)) {
 		const includedAcBidders = (
-			['and', 'ix', 'ozone', 'pubmatic', 'trustx'] satisfies BidderCode[]
+			[
+				'and',
+				'ix',
+				'ozone',
+				'pubmatic',
+				'trustx',
+				'rubicon',
+			] satisfies BidderCode[]
 		)
 			.filter(shouldInclude)
 			// "and" is the alias for the custom Guardian "appnexus" direct bidder
