@@ -351,6 +351,7 @@ const initialise = async (
 	window: Window,
 	consentState: ConsentState,
 ): Promise<void> => {
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ignore during v10 test
 	if (!window.pbjs) {
 		log('commercial', 'window.pbjs not found on window');
 		return; // We couldn’t initialise
@@ -389,7 +390,7 @@ const initialise = async (
 		const email = await getEmail();
 		if (
 			email &&
-			isUserInTestGroup('commercial-user-module-ID5', 'control')
+			!isUserInTestGroup('commercial-user-module-ID5', 'variant')
 		) {
 			const hashedEmail = await hashEmail(email);
 
