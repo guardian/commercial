@@ -6,7 +6,7 @@ import { loadAdvert } from './load-advert';
 const displayAds = (): void => {
 	/*
 	 * We enable Single Request Architecture (SRA) by invoking:
-	 * googletag.pubads().enableSingleRequest()
+	 * googletag.setConfig({ singleRequest: true })
 	 *
 	 * This instructs googletag.pubads to combine requests for all (fixed) ads into one request
 	 * From this one request Google Ad Manager will then run all auctions for every slot
@@ -18,8 +18,10 @@ const displayAds = (): void => {
 	 * https://developers.google.com/publisher-tag/reference#googletag.display
 	 *
 	 */
-	window.googletag.pubads().enableSingleRequest();
-	window.googletag.pubads().collapseEmptyDivs();
+	window.googletag.setConfig({
+		singleRequest: true,
+		collapseDiv: 'ON_NO_FILL',
+	});
 	window.googletag.enableServices();
 
 	const firstAdvertToLoad: Advert | undefined = dfpEnv.advertsToLoad.length
