@@ -2,8 +2,7 @@
 	"extends": "./tsconfig.json",
 	"exclude": ["./src/**/*.test.ts", "./src/**/*.spec.ts"],
 	"compilerOptions": {
-		"noEmit": false,
-		"module": "esnext",
+		"noEmit": false
 	},
 	"tsc-alias": {
 		"resolveFullPaths": true
