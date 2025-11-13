@@ -110,14 +110,12 @@ const setSlotAdRefresh = (
 		}
 	}, ADVERT_REFRESH_RATE);
 
-	advert.setRefreshTimeout(refreshTimeout);
-
 	window.addEventListener('pageshow', (event) => {
 		// Loaded from bfcache
 		if (event.persisted) {
 			console.log('Clearing old refresh timer');
-			advert.clearRefreshTimeout();
-			const refreshTimeout = setTimeout(() => {
+			clearTimeout(refreshTimeout);
+			setTimeout(() => {
 				// During the elapsed time, a 'disable-refresh' message may have been posted.
 				// Check the flag again.
 				if (!advert.shouldRefresh) {
@@ -134,8 +132,6 @@ const setSlotAdRefresh = (
 					enableLazyLoad(advert);
 				}
 			}, 20_000);
-
-			advert.setRefreshTimeout(refreshTimeout);
 		}
 	});
 };

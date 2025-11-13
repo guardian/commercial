@@ -146,7 +146,6 @@ class Advert implements IAdvert {
 	creativeId: number | null = null;
 	creativeTemplateId: number | null = null;
 	testgroup: string | undefined; //Ozone testgroup property
-	refreshTimeout: NodeJS.Timeout | null;
 
 	constructor(
 		adSlotNode: HTMLElement,
@@ -156,8 +155,6 @@ class Advert implements IAdvert {
 		this.id = adSlotNode.id;
 		this.node = adSlotNode;
 		this.sizes = this.generateSizeMapping(additionalSizeMapping);
-
-		this.refreshTimeout = null;
 
 		const slotDefinition = defineSlot(
 			adSlotNode,
@@ -264,17 +261,6 @@ class Advert implements IAdvert {
 		if (googletagSizeMapping) {
 			this.slot.defineSizeMapping(googletagSizeMapping);
 		}
-	}
-
-	setRefreshTimeout(timeoutId: NodeJS.Timeout) {
-		this.refreshTimeout = timeoutId;
-	}
-
-	clearRefreshTimeout() {
-		if (this.refreshTimeout) {
-			clearTimeout(this.refreshTimeout);
-		}
-		this.refreshTimeout = null;
 	}
 }
 
