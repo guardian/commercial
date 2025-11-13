@@ -16,15 +16,16 @@
 		"dist"
 	],
 	"main": "dist/cjs/index.js",
-	"module": "dist/esm/index.mjs",
+	"module": "dist/esm/index.js",
+	"type": "module",
 	"exports": {
 		".": {
-			"import": "./dist/esm/index.mjs",
+			"import": "./dist/esm/index.js",
 			"require": "./dist/cjs/index.js",
 			"workspace": "./src/index.ts"
 		},
 		"./*": {
-			"import": "./dist/esm/*.mjs",
+			"import": "./dist/esm/*.js",
 			"require": "./dist/cjs/*.js",
 			"workspace": "./src/*.ts"
 		},
@@ -33,7 +34,7 @@
 	"scripts": {
 		"build": "pnpm run --parallel --aggregate-output /^build:.*/",
 		"clean": "rm -rf dist",
-		"build:esm": "tsc --outDir ./dist/esm --project ./tsconfig.esm.json",
+		"build:esm": "tsc --outDir ./dist/esm --project ./tsconfig.esm.json && tsc-alias --project ./tsconfig.esm.json",
 		"build:cjs": "tsc --outDir ./dist/cjs --project ./tsconfig.cjs.json",
 		"lint": "eslint .",
 		"prettier:check": "prettier . --check --cache",
@@ -51,13 +52,14 @@
 	},
 	"devDependencies": {
 		"@guardian/ophan-tracker-js": "2.6.1",
+		"@types/google-publisher-tag": "~1.20250811.1",
 		"@types/jest": "30.0.0",
 		"@types/node": "24.7.2",
-		"@types/google-publisher-tag": "~1.20250811.1",
 		"jest": "^30.2.0",
 		"jest-environment-jsdom": "^30.2.0",
 		"jest-environment-jsdom-global": "~4.0.0",
 		"ts-jest": "^29.4.4",
+		"tsc-alias": "1.8.16",
 		"type-fest": "^4.41.0",
 		"typescript": "5.9.3"
 	},
