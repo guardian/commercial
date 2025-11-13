@@ -3,7 +3,7 @@
 	"exclude": ["./src/**/*.test.ts", "./src/**/*.spec.ts"],
 	"compilerOptions": {
 		"noEmit": false,
-		"module": "esnext",
+		"module": "esnext"
 	},
 	"tsc-alias": {
 		"resolveFullPaths": true

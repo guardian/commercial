@@ -23,6 +23,7 @@ pnpm build
 This will build the package into the `dist` directory, which is what is published to npm.
 
 #### Beta Releases
+
 You can add the [beta] @guardian/commercial-core label to your pull request, this will release a beta version of the bundle to NPM, the exact version will be commented on your PR.
 
 In order to do this, run `pnpm changeset`. This will create a new changeset file in the .changeset directory. Commit this file with your PR.
@@ -30,6 +31,7 @@ In order to do this, run `pnpm changeset`. This will create a new changeset file
 Note: Once the beta version is released, the label will be removed from the PR, so you will need to add it again if you want to release subsequent new versions.
 
 ## Releasing to NPM
+
 This repository uses changesets for version management.
 
 To release a new version with your changes, run:
