@@ -1,6 +1,7 @@
 import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import { PREBID_TIMEOUT } from '@guardian/commercial-core/constants/prebid-timeout';
+import { hashEmail } from '@guardian/commercial-core/email-hash';
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import { getPermutiveSegments } from '@guardian/commercial-core/permutive';
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
@@ -10,9 +11,10 @@ import { flatten } from 'lodash-es';
 import type { PrebidPriceGranularity } from 'prebid.js/src/cpmBucketManager';
 import type { Advert } from '../../../define/Advert';
 import { getParticipations } from '../../../experiments/ab';
+import { isUserInTestGroup } from '../../../experiments/beta-ab';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
-import { isUserLoggedIn } from '../../identity/api';
+import { getEmail, isUserLoggedIn } from '../../identity/api';
 import { getPageTargeting } from '../../page-targeting';
 import type {
 	AnalyticsConfig,
@@ -345,7 +347,10 @@ const bidderTimeout = PREBID_TIMEOUT;
 let requestQueue: Promise<void> = Promise.resolve();
 let initialised = false;
 
-const initialise = (window: Window, consentState: ConsentState): void => {
+const initialise = async (
+	window: Window,
+	consentState: ConsentState,
+): Promise<void> => {
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ignore during v10 test
 	if (!window.pbjs) {
 		log('commercial', 'window.pbjs not found on window');
@@ -365,7 +370,7 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 	];
 
 	if (getConsentFor('id5', consentState)) {
-		userIds.push({
+		const id5UserId = {
 			name: 'id5Id',
 			params: {
 				partner: 182,
@@ -380,7 +385,29 @@ const initialise = (window: Window, consentState: ConsentState): void => {
 				expires: 90,
 				refreshInSeconds: 7200,
 			},
-		});
+		} as const;
+
+		const email = await getEmail();
+		if (
+			email &&
+			!isUserInTestGroup('commercial-user-module-ID5', 'variant')
+		) {
+			const hashedEmail = await hashEmail(email);
+
+			const pdRaw = new URLSearchParams([['1', hashedEmail]]).toString();
+
+			const pdString = btoa(pdRaw);
+
+			userIds.push({
+				...id5UserId,
+				params: {
+					...id5UserId.params,
+					pd: pdString,
+				},
+			});
+		} else {
+			userIds.push(id5UserId);
+		}
 	}
 
 	const userSync: UserSync = isSwitchedOn('prebidUserSync')

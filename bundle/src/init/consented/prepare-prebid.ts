@@ -40,7 +40,7 @@ const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 		);
 	}
 
-	prebid.initialise(window, consentState);
+	await prebid.initialise(window, consentState);
 };
 
 const throwIfUnconsented = (hasConsentForPrebid: boolean): void => {
