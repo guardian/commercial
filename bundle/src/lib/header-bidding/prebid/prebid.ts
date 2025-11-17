@@ -394,20 +394,8 @@ const initialise = async (
 		) {
 			const hashedEmail = await hashEmail(email);
 
-			// keys from https://wiki.id5.io/docs/passing-partner-data-to-id5
-			const pdKeys = {
-				1: hashedEmail,
-			};
+			const pdRaw = new URLSearchParams([['1', hashedEmail]]).toString();
 
-			// convert the key/values into a querystring format
-			const pdRaw = Object.keys(pdKeys)
-				.map((key) => {
-					const typedKey = key as unknown as keyof typeof pdKeys;
-					return key + '=' + pdKeys[typedKey];
-				})
-				.join('&');
-
-			// base64 encode the raw string; this is the final value you can pass into the pd field
 			const pdString = btoa(pdRaw);
 
 			userIds.push({
