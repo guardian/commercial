@@ -192,6 +192,7 @@ const defineSlot = (
 		throw new DefineSlotError(
 			`googletag.defineSlot did not return a slot`,
 			sizeMapping,
+			false
 		);
 	}
 
