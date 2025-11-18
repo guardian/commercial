@@ -3,5 +3,8 @@
 	"exclude": ["./src/**/*.test.ts", "./src/**/*.spec.ts"],
 	"compilerOptions": {
 		"noEmit": false
+	},
+	"tsc-alias": {
+		"resolveFullPaths": true
 	}
 }
