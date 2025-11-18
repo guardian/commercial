@@ -55,6 +55,10 @@
 	"pnpm": {
 		"patchedDependencies": {
 			"jsdom": "patches/jsdom.patch"
+		},
+		"overrides": {
+			"glob@10": "^12.0.0",
+			"glob@11": "^12.0.0"
 		}
 	}
 }
