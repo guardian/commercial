@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 29.3.1
+
+### Patch Changes
+
+- 09dacf4: add type: module to commercial-core
+
 ## 29.3.0
 
 ### Minor Changes
