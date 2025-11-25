@@ -1,5 +1,6 @@
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
+import { isUserInTestGroup } from '../../../experiments/beta-ab';
 import type {
 	A9AdUnitInterface,
 	FetchBidResponse,
@@ -42,6 +43,10 @@ const initialise = (): void => {
 			pubID: window.guardian.config.page.a9PublisherId,
 			adServer: 'googletag',
 			bidTimeout: bidderTimeout,
+			useSafeFrames: isUserInTestGroup(
+				'commercial-a9-safe-frames',
+				'variant',
+			),
 			blockedBidders,
 		});
 	}
