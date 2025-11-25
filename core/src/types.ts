@@ -384,6 +384,7 @@ type ApstagInitConfig = {
 	adServer?: string;
 	bidTimeout?: number;
 	blockedBidders?: string[];
+	useSafeFrames?: boolean;
 };
 
 // https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/javascript-guide/api-reference.html#apstaginit
