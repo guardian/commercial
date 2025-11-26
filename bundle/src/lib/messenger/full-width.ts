@@ -23,7 +23,11 @@ const init = (register: RegisterListener): void => {
 
 			// only allow for banner ads
 			const name = adSlot?.dataset.name;
-			if (!name?.startsWith('fronts-banner') || !adSlot) {
+			if (
+				(!name?.startsWith('fronts-banner') &&
+					!name?.startsWith('merchandising')) ||
+				!adSlot
+			) {
 				return;
 			}
 
