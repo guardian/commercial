@@ -82,9 +82,16 @@ export const onSlotRender = (
 				const parentHeight = parentElement.offsetHeight;
 				const parentWidth = parentElement.offsetWidth;
 
+				const isRightAdSlot = advert.node.id === "dfp-ad--right";
+
 				if (
 					adElementWidth > parentWidth ||
-					adElementHeight > parentHeight
+					adElementHeight > parentHeight ||
+
+					// Note: this is an experiment to determine which element is
+					// causing issues with the right ad slot (as well as other ads).
+					// We can remove this check once we have enough data.
+					(isRightAdSlot && adElementWidth > 300)
 				) {
 					reportError(
 						new Error('Ad is overflowing its container'),
