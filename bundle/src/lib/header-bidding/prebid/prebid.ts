@@ -1,7 +1,11 @@
 import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import { PREBID_TIMEOUT } from '@guardian/commercial-core/constants/prebid-timeout';
-import { hashEmail } from '@guardian/commercial-core/email-hash';
+// import { hashEmail } from '@guardian/commercial-core/email-hash';
+import {
+	hashEmailBase64,
+	hashEmailHex,
+} from '@guardian/commercial-core/email-hash';
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import { getPermutiveSegments } from '@guardian/commercial-core/permutive';
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
@@ -392,9 +396,11 @@ const initialise = async (
 			email &&
 			!isUserInTestGroup('commercial-user-module-ID5', 'variant')
 		) {
-			const hashedEmail = await hashEmail(email);
+			const hashedId5Email = await hashEmailHex(email);
 
-			const pdRaw = new URLSearchParams([['1', hashedEmail]]).toString();
+			const pdRaw = new URLSearchParams([
+				['1', hashedId5Email],
+			]).toString();
 
 			const pdString = btoa(pdRaw);
 
@@ -407,6 +413,35 @@ const initialise = async (
 			});
 		} else {
 			userIds.push(id5UserId);
+		}
+	}
+
+	if (getConsentFor('uid2', consentState)) {
+		const uid2UserId = {
+			name: 'uid2',
+			params: {
+				serverPublicKey:
+					'UID2-X-P-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7MS+2jntlSNTDP65WBYaCLR/Wla8r3h9NkYtN73lNtbo7WT5LFIKSGnD0kERa8VG8bNJvZrQs2bCU0P8ZH4uaA==',
+				subscriptionId: 'HhGv3vmQcS',
+				email: '',
+			},
+			storage: {
+				type: 'html5',
+				name: 'uid2',
+				expires: 90,
+				refreshInSeconds: 7200,
+			},
+		} as const;
+		const email = await getEmail();
+		if (
+			email &&
+			!isUserInTestGroup('commercial-user-module-uid2', 'variant')
+		) {
+			const hashedUid2Email = await hashEmailBase64(email);
+			userIds.push({
+				...uid2UserId,
+				params: { ...uid2UserId.params, email: hashedUid2Email },
+			});
 		}
 	}
 

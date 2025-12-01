@@ -1,20 +1,22 @@
-import { hashEmail } from './email-hash';
+import { hashEmailBase64, hashEmailHex } from './email-hash';
 
-describe('hashEmail', () => {
+describe('hashEmailHex for ID5', () => {
 	it('normalises and hashes an uppercase email', async () => {
-		const hashedEmail = await hashEmail('testGuardianUser@gmail.com');
+		const hashedEmail = await hashEmailHex('testGuardianUser@gmail.com');
 		expect(hashedEmail).toBe(
 			'528f4e83dbdd916e811358e43518555f68229b1dc279b6b2cd3c480f68371e7d',
 		);
 	});
 	it('normalises and hashes an uppercase email with leading and trailing whitespace', async () => {
-		const hashedEmail = await hashEmail('  testGuardianUser@gmail.com  ');
+		const hashedEmail = await hashEmailHex(
+			'  testGuardianUser@gmail.com  ',
+		);
 		expect(hashedEmail).toBe(
 			'528f4e83dbdd916e811358e43518555f68229b1dc279b6b2cd3c480f68371e7d',
 		);
 	});
 	it('hashes an email with a mix of "+" and "." and surrounding whitespace', async () => {
-		const hashedEmail = await hashEmail(
+		const hashedEmail = await hashEmailHex(
 			'  guardian+user.local@gmail.com  ',
 		);
 		expect(hashedEmail).toEqual(
@@ -22,9 +24,38 @@ describe('hashEmail', () => {
 		);
 	});
 	it('returns the hash for an input with only spaces (empty string after normalisation)', async () => {
-		const hashedEmail = await hashEmail('   ');
+		const hashedEmail = await hashEmailHex('   ');
 		expect(hashedEmail).toEqual(
 			'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+		);
+	});
+});
+
+describe('hashEmailBase64 for UID2', () => {
+	it('normalises and hashes an uppercase email', async () => {
+		const hashedEmail = await hashEmailBase64('User@Example.com');
+		expect(hashedEmail).toBe(
+			'tMmiiTI7IaAcPpQPFQ65uMVCWH8av9jw4cwf/F5HVRQ=',
+		);
+	});
+	it('normalises and hashes an uppercase email with leading and trailing whitespace', async () => {
+		const hashedEmail = await hashEmailBase64('  User@Example.com  ');
+		expect(hashedEmail).toBe(
+			'tMmiiTI7IaAcPpQPFQ65uMVCWH8av9jw4cwf/F5HVRQ=',
+		);
+	});
+	it('hashes an email with a mix of "+" and "." and surrounding whitespace', async () => {
+		const hashedEmail = await hashEmailBase64(
+			'  guardian+user.local@gmail.com  ',
+		);
+		expect(hashedEmail).toEqual(
+			'ZMdTkRGM1y2FmSy37xTUo5XlkvMJ4CyD1hhtLIRH+rc=',
+		);
+	});
+	it('returns the hash for an input with only spaces (empty string after normalisation)', async () => {
+		const hashedEmail = await hashEmailBase64('   ');
+		expect(hashedEmail).toEqual(
+			'47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=',
 		);
 	});
 });
