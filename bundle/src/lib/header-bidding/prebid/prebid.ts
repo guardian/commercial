@@ -2,10 +2,7 @@ import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import { PREBID_TIMEOUT } from '@guardian/commercial-core/constants/prebid-timeout';
 // import { hashEmail } from '@guardian/commercial-core/email-hash';
-import {
-	hashEmailBase64,
-	hashEmailHex,
-} from '@guardian/commercial-core/email-hash';
+import { hashEmail } from '@guardian/commercial-core/email-hash';
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import { getPermutiveSegments } from '@guardian/commercial-core/permutive';
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
@@ -396,7 +393,7 @@ const initialise = async (
 			email &&
 			!isUserInTestGroup('commercial-user-module-ID5', 'variant')
 		) {
-			const hashedId5Email = await hashEmailHex(email);
+			const hashedId5Email = await hashEmail(email, 'id5');
 
 			const pdRaw = new URLSearchParams([
 				['1', hashedId5Email],
@@ -440,7 +437,7 @@ const initialise = async (
 			email &&
 			!isUserInTestGroup('commercial-user-module-uid2', 'variant')
 		) {
-			const hashedUid2Email = await hashEmailBase64(email);
+			const hashedUid2Email = await hashEmail(email, 'uid2');
 			userIds.push({
 				...uid2UserId,
 				params: { ...uid2UserId.params, email: hashedUid2Email },

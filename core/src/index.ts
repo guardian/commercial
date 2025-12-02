@@ -11,7 +11,7 @@ export { postMessage } from './messenger/post-message';
 export { buildImaAdTagUrl } from './targeting/youtube-ima';
 export { getPermutivePFPSegments } from './permutive';
 export { isEligibleForTeads } from './targeting/teads-eligibility';
-export { hashEmailBase64, hashEmailHex } from './email-hash';
+export { hashEmail } from './email-hash';
 export type { AdSize, SizeMapping, SlotName } from './ad-sizes';
 export type { PageTargeting } from './targeting/build-page-targeting';
 export type {

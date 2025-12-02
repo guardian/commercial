@@ -1,21 +1,28 @@
-async function hashEmailHex(email: string) {
-	const normalisedEmail = email.trim().toLowerCase();
-	const utf8 = new TextEncoder().encode(normalisedEmail);
-	const hashBuffer = await crypto.subtle.digest('SHA-256', utf8); //good
-	const hashArray = Array.from(new Uint8Array(hashBuffer)); //Array.from converts it into a normal JS array of numbers [180, 201, 162, 137, 50, ...]
+type HashType = 'id5' | 'uid2';
+
+function hashEmailHex(hashBuffer: ArrayBuffer): string {
+	const hashArray = Array.from(new Uint8Array(hashBuffer));
 	const hashHex = hashArray
 		.map((bytes) => bytes.toString(16).padStart(2, '0'))
 		.join('');
 	return hashHex;
 }
-async function hashEmailBase64(email: string) {
-	const normalisedEmail = email.trim().toLowerCase();
-	const utf8 = new TextEncoder().encode(normalisedEmail);
-	const hashBuffer = await crypto.subtle.digest('SHA-256', utf8); // raw bytes
-	const hashBytes = new Uint8Array(hashBuffer); // raw bytes as Uint8Array
-	const base64Hash = btoa(String.fromCharCode(...hashBytes)); // Base64-encoded hash
+
+function hashEmailBase64(hashBuffer: ArrayBuffer): string {
+	const hashBytes = new Uint8Array(hashBuffer);
+	const base64Hash = btoa(String.fromCharCode(...hashBytes));
 
 	return base64Hash;
 }
 
-export { hashEmailHex, hashEmailBase64 };
+async function hashEmail(email: string, hashType: HashType): Promise<string> {
+	const normalisedEmail = email.trim().toLowerCase();
+	const utf8 = new TextEncoder().encode(normalisedEmail);
+	const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
+	if (hashType === 'id5') {
+		return hashEmailHex(hashBuffer);
+	}
+	return hashEmailBase64(hashBuffer);
+}
+
+export { hashEmail };
