@@ -191,7 +191,7 @@ const onInteractivesLoaded = memoize(async (rules: SpacefinderRules) => {
 				new MutationObserver((records, instance) => {
 					if (
 						!records[0]?.addedNodes[0] ||
-						!isIframe(records[0]?.addedNodes[0])
+						!isIframe(records[0].addedNodes[0])
 					) {
 						return;
 					}

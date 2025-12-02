@@ -494,11 +494,12 @@ export const unregister: UnregisterListener = (type, callback, options) => {
 export const init = (
 	listeners: Array<(register: RegisterListener) => void>,
 	persistentListeners: Array<(register: RegisterPersistentListener) => void>,
-): void => {
+): Promise<void> => {
 	listeners.forEach((moduleInit) => moduleInit(register));
 	persistentListeners.forEach((moduleInit) =>
 		moduleInit(registerPersistentListener),
 	);
+	return Promise.resolve();
 };
 
 export const _ = { onMessage };

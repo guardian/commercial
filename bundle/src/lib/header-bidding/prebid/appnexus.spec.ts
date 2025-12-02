@@ -137,6 +137,7 @@ describe('getAppNexusDirectPlacementId', () => {
 		containsBillboard.mockReturnValue(false);
 		containsLeaderboard.mockReturnValue(true);
 		containsLeaderboardOrBillboard.mockReturnValue(
+			// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- changing this breaks the test
 			containsBillboard() || containsLeaderboard(),
 		);
 		expect(getAppNexusDirectPlacementId([createAdSize(728, 90)])).toBe(

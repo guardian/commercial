@@ -13,7 +13,7 @@ import { init as setAdTestCookie } from './shared/set-adtest-cookie';
 import { init as setAdTestInLabelsCookie } from './shared/set-adtest-in-labels-cookie';
 
 const bootConsentless = async (consentState: ConsentState): Promise<void> => {
-	const consentlessModuleList = [
+	const consentlessModuleList: Array<Promise<unknown>> = [
 		initMessenger([background, resize, type], []),
 		setAdTestCookie(),
 		setAdTestInLabelsCookie(),

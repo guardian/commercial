@@ -17,7 +17,7 @@ import { init as viewport } from '../../lib/messenger/viewport';
 /**
  * Messenger gets to skip the promise chain and run immediately.
  */
-initMessenger(
+void initMessenger(
 	[
 		type,
 		getStyles,
