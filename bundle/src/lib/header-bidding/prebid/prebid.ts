@@ -416,7 +416,10 @@ const initialise = async (
 		}
 	}
 
-	if (getConsentFor('uid2', consentState)) {
+	if (
+		consentState.framework === 'usnat' &&
+		getConsentFor('theTradeDesk', consentState)
+	) {
 		const uid2UserId = {
 			name: 'uid2',
 			params: {
