@@ -9,9 +9,8 @@ let initialConsentState: ConsentState | undefined;
  */
 const reloadPageOnConsentChange = (): Promise<void> => {
 	onConsentChange((consent) => {
-		if (initialConsentState === undefined) {
-			initialConsentState = consent;
-		}
+		initialConsentState ??= consent;
+
 		if (initialConsentState.canTarget !== consent.canTarget) {
 			window.location.reload();
 		}
