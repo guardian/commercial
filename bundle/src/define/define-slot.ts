@@ -121,7 +121,11 @@ const isEligibleForOutstream = (slotTarget: string) =>
 	(slotTarget === 'inline1' || slotTarget === 'top-above-nav');
 
 const allowSafeFrameToExpand = (slot: googletag.Slot) => {
-	slot.setConfig({
+	/*
+		eslint-disable-next-line @typescript-eslint/no-unnecessary-condition --
+		the slot.setConfig function may not exist if googletag has been shimmed by an adblocker
+	*/
+	slot.setConfig?.({
 		safeFrame: {
 			allowOverlayExpansion: false,
 			allowPushExpansion: true,
@@ -246,7 +250,11 @@ const defineSlot = (
 		});
 	});
 
-	slot.addService(window.googletag.pubads()).setConfig({
+	/*
+		eslint-disable-next-line @typescript-eslint/no-unnecessary-condition --
+		the slot.setConfig function may not exist if googletag has been shimmed by an adblocker
+	*/
+	slot.addService(window.googletag.pubads()).setConfig?.({
 		targeting: {
 			slot: slotTarget,
 			testgroup: String(Math.floor(100 * Math.random())),
