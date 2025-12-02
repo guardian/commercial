@@ -63,11 +63,11 @@ importers:
         specifier: 15.0.0
         version: 15.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)(web-vitals@5.1.0)
       '@guardian/identity-auth':
-        specifier: ^11.0.0
-        version: 11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
+        specifier: ^12.0.0
+        version: 12.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/identity-auth-frontend':
         specifier: 13.0.0
-        version: 13.0.0(@guardian/identity-auth@11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3))(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
+        version: 13.0.0(@guardian/identity-auth@12.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3))(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/libs':
         specifier: 26.0.1
         version: 26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3)
@@ -1244,12 +1244,12 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/identity-auth@11.0.0':
-    resolution: {integrity: sha512-0ThH+iTb+wT5NsD89uuq16NB87oCnp7DfPqi9pcr1YazwRrS5d0sxHcdcNG5pUPPNTUJyoep/iFoyz608J9DZg==}
+  '@guardian/identity-auth@12.0.0':
+    resolution: {integrity: sha512-PE6R7dfrceFPFEaWnW2ijjjuHbkdZ85/NjL6tP+hpb4OMGj9kyM12+JgKJWg56DZ70S/iU542HS3Z+ST6yTPeA==}
     peerDependencies:
-      '@guardian/libs': ^26.0.0
-      tslib: ^2.6.2
-      typescript: ~5.5.2
+      '@guardian/libs': ^27.0.0
+      tslib: ^2.8.1
+      typescript: ~5.9.3
     peerDependenciesMeta:
       typescript:
         optional: true
@@ -6961,15 +6961,15 @@ snapshots:
       - supports-color
       - typescript
 
-  '@guardian/identity-auth-frontend@13.0.0(@guardian/identity-auth@11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3))(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)':
+  '@guardian/identity-auth-frontend@13.0.0(@guardian/identity-auth@12.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3))(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)':
     dependencies:
-      '@guardian/identity-auth': 11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
+      '@guardian/identity-auth': 12.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/libs': 26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3)
       tslib: 2.8.1
     optionalDependencies:
       typescript: 5.9.3
 
-  '@guardian/identity-auth@11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)':
+  '@guardian/identity-auth@12.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)':
     dependencies:
       '@guardian/libs': 26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3)
       tslib: 2.8.1
