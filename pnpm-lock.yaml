@@ -66,8 +66,8 @@ importers:
         specifier: ^11.0.0
         version: 11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/identity-auth-frontend':
-        specifier: 13.0.0
-        version: 13.0.0(@guardian/identity-auth@11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3))(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
+        specifier: 14.0.0
+        version: 14.0.0(@guardian/identity-auth@11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3))(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/libs':
         specifier: 26.0.1
         version: 26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3)
@@ -1233,13 +1233,13 @@ packages:
     peerDependencies:
       eslint: ^9.39.1
 
-  '@guardian/identity-auth-frontend@13.0.0':
-    resolution: {integrity: sha512-SUcfhbsm7YpC/KkBKMJEKXBR85vGgCx4f8L2SRGtn+XREL/rhwlkvTjqaNPUXyETH71hFl9xhASqeKNAa5uj5w==}
+  '@guardian/identity-auth-frontend@14.0.0':
+    resolution: {integrity: sha512-ZaRJrOKier89ot20Gw3mUMN5F76knNJWAFRYh4UZDprn53QrRF0Q6MjQAPnBMxMqAHfiX/Fhp9PxdXKjfbwqvg==}
     peerDependencies:
-      '@guardian/identity-auth': ^11.0.0
-      '@guardian/libs': ^26.0.0
-      tslib: ^2.6.2
-      typescript: ~5.5.2
+      '@guardian/identity-auth': ^12.0.0
+      '@guardian/libs': ^27.0.0
+      tslib: ^2.8.1
+      typescript: ~5.9.3
     peerDependenciesMeta:
       typescript:
         optional: true
@@ -6961,7 +6961,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@guardian/identity-auth-frontend@13.0.0(@guardian/identity-auth@11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3))(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)':
+  '@guardian/identity-auth-frontend@14.0.0(@guardian/identity-auth@11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3))(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)':
     dependencies:
       '@guardian/identity-auth': 11.0.0(@guardian/libs@26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/libs': 26.0.1(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3)
