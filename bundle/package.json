@@ -35,7 +35,7 @@
 	"dependencies": {
 		"@guardian/ab-core": "8.0.1",
 		"@guardian/commercial-core": "workspace:*",
-		"@guardian/core-web-vitals": "15.0.0",
+		"@guardian/core-web-vitals": "16.0.0",
 		"@guardian/identity-auth": "^11.0.0",
 		"@guardian/identity-auth-frontend": "13.0.0",
 		"@guardian/libs": "26.0.1",
