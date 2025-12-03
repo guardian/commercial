@@ -98,7 +98,7 @@ describe('ad container overflows', () => {
 	beforeEach(() => {
 		// create mock ad node and place within container element
 		node = document.createElement('div');
-		node.id = 'adNodeId';
+		node.id = 'dfp-ad--inline2';
 
 		container = document.createElement('div');
 		container.id = 'adContainerId';
@@ -118,6 +118,26 @@ describe('ad container overflows', () => {
 		expect(reportError).not.toHaveBeenCalled();
 	});
 
+	it('does not report error if ad is not an inline ad', async () => {
+		node.id = 'not-inline-ad';
+		mockElementDimensions(node, 200, 200);
+		mockElementDimensions(container, 100, 100);
+		onSlotRender(onSlotRenderEvent);
+
+		await jest.runAllTimersAsync();
+		expect(reportError).not.toHaveBeenCalled();
+	});
+
+	it('does not report error if ad id is first inline ad', async () => {
+		node.id = 'dfp-ad--inline1';
+		mockElementDimensions(node, 200, 200);
+		mockElementDimensions(container, 100, 100);
+		onSlotRender(onSlotRenderEvent);
+
+		await jest.runAllTimersAsync();
+		expect(reportError).not.toHaveBeenCalled();
+	});
+
 	it('reports error if ad element width is larger than parent element width', async () => {
 		mockElementDimensions(node, 200, 100);
 		mockElementDimensions(container, 100, 100);
@@ -131,15 +151,15 @@ describe('ad container overflows', () => {
 			'commercial',
 			{},
 			{
-				adHeight: 100,
-				adId: 'adNodeId',
+				adId: 'dfp-ad--inline2',
 				adSize: [300, 250],
-				adWidth: 200,
-				containerHeight: 100,
-				containerWidth: 100,
 				creativeId: 123,
 				creativeTemplateId: 456,
 				lineItemId: 789,
+				adElementHeight: 100,
+				adElementWidth: 200,
+				adContainerHeight: 100,
+				adContainerWidth: 100,
 			},
 		);
 	});
@@ -157,15 +177,15 @@ describe('ad container overflows', () => {
 			'commercial',
 			{},
 			{
-				adHeight: 200,
-				adId: 'adNodeId',
+				adId: 'dfp-ad--inline2',
 				adSize: [300, 250],
-				adWidth: 100,
-				containerHeight: 100,
-				containerWidth: 100,
 				creativeId: 123,
 				creativeTemplateId: 456,
 				lineItemId: 789,
+				adElementHeight: 200,
+				adElementWidth: 100,
+				adContainerHeight: 100,
+				adContainerWidth: 100,
 			},
 		);
 	});

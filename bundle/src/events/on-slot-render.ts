@@ -79,35 +79,34 @@ export const onSlotRender = (
 
 				const adElementHeight = advert.node.offsetHeight;
 				const adElementWidth = advert.node.offsetWidth;
-				const parentHeight = parentElement.offsetHeight;
-				const parentWidth = parentElement.offsetWidth;
+				const adContainerHeight = parentElement.offsetHeight;
+				const adContainerWidth = parentElement.offsetWidth;
 
+				const isWiderThanContainer = adElementWidth > adContainerWidth;
+				const isHigherThanContainer =
+					adElementHeight > adContainerHeight;
 				const isInlineTwoPlus =
 					advert.node.id.includes('dfp-ad--inline') &&
 					advert.node.id !== 'dfp-ad--inline1';
 
 				if (
-					adElementWidth > parentWidth ||
-					adElementHeight > parentHeight ||
-					// Note: this is an experiment to determine which element is
-					// causing issues with the right ad slot (as well as other ads).
-					// We can remove this check once we have enough data.
-					(isInlineTwoPlus && adElementWidth > 300)
+					isInlineTwoPlus &&
+					(isWiderThanContainer || isHigherThanContainer)
 				) {
 					reportError(
 						new Error('Ad is overflowing its container'),
 						'commercial',
 						{},
 						{
-							adHeight: adElementHeight,
 							adId: advert.node.id,
 							adSize: advert.size,
-							adWidth: adElementWidth,
-							containerHeight: parentHeight,
-							containerWidth: parentWidth,
 							creativeId: advert.creativeId,
 							creativeTemplateId: advert.creativeTemplateId,
 							lineItemId: advert.lineItemId,
+							adElementHeight,
+							adElementWidth,
+							adContainerHeight,
+							adContainerWidth,
 						},
 					);
 				}
