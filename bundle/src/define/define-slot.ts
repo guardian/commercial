@@ -202,24 +202,6 @@ const defineSlot = (
 
 	const slotReady = initSlotIas(id, slot, sizes);
 
-	void slotReady.then(() => {
-		EventTimer.get().mark('defineSlotEnd', slotTarget);
-		EventTimer.get().mark('slotReady', slotTarget);
-
-		// wait until IAS has initialised before checking teads eligibility
-		const isTeadsEligible = isEligibleForTeads(id);
-
-		/*
-			eslint-disable-next-line @typescript-eslint/no-unnecessary-condition --
-			the slot.setConfig function may not exist if googletag has been shimmed by an adblocker
-		*/
-		slot.setConfig?.({
-			targeting: {
-				teadsEligible: String(isTeadsEligible),
-			},
-		});
-	});
-
 	/*
 		eslint-disable-next-line @typescript-eslint/no-unnecessary-condition --
 		the slot.setConfig function may not exist if googletag has been shimmed by an adblocker
@@ -231,6 +213,20 @@ const defineSlot = (
 			slotReady,
 		};
 	}
+
+	void slotReady.then(() => {
+		EventTimer.get().mark('defineSlotEnd', slotTarget);
+		EventTimer.get().mark('slotReady', slotTarget);
+
+		// wait until IAS has initialised before checking teads eligibility
+		const isTeadsEligible = isEligibleForTeads(id);
+
+		slot.setConfig({
+			targeting: {
+				teadsEligible: String(isTeadsEligible),
+			},
+		});
+	});
 
 	const isbn = window.guardian.config.page.isbn;
 
