@@ -202,6 +202,18 @@ const defineSlot = (
 
 	const slotReady = initSlotIas(id, slot, sizes);
 
+	/*
+		eslint-disable-next-line @typescript-eslint/no-unnecessary-condition --
+		the slot.setConfig function may not exist if googletag has been shimmed by an adblocker
+	*/
+	if (!slot.setConfig) {
+		// return early if we can't set targeting
+		return {
+			slot,
+			slotReady,
+		};
+	}
+
 	void slotReady.then(() => {
 		EventTimer.get().mark('defineSlotEnd', slotTarget);
 		EventTimer.get().mark('slotReady', slotTarget);
@@ -250,11 +262,7 @@ const defineSlot = (
 		});
 	});
 
-	/*
-		eslint-disable-next-line @typescript-eslint/no-unnecessary-condition --
-		the slot.setConfig function may not exist if googletag has been shimmed by an adblocker
-	*/
-	slot.addService(window.googletag.pubads()).setConfig?.({
+	slot.addService(window.googletag.pubads()).setConfig({
 		targeting: {
 			slot: slotTarget,
 			testgroup: String(Math.floor(100 * Math.random())),

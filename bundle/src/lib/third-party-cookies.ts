@@ -25,7 +25,11 @@ const checkThirdPartyCookiesEnabled = (): void => {
 
 			// only set targeting if the value is defined
 			if (hasStorageAccess !== undefined) {
-				window.googletag.setConfig({
+				/*
+					eslint-disable-next-line @typescript-eslint/no-unnecessary-condition --
+					the slot.setConfig function may not exist if googletag has been shimmed by an adblocker
+				*/
+				window.googletag.setConfig?.({
 					targeting: {
 						'3pc': [hasStorageAccess ? 't' : 'f'],
 					},
