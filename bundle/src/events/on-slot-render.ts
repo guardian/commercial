@@ -75,24 +75,21 @@ export const onSlotRender = (
 			// log the ad size after display
 			fastdom.measure(() => {
 				const parentElement = advert.node.parentElement;
-				if (!parentElement) return;
+				const isInlineTwoPlus =
+					advert.node.id.includes('dfp-ad--inline') &&
+					advert.node.id !== 'dfp-ad--inline1';
+
+				if (!parentElement || !isInlineTwoPlus) return;
 
 				const adElementHeight = advert.node.offsetHeight;
 				const adElementWidth = advert.node.offsetWidth;
 				const adContainerHeight = parentElement.offsetHeight;
 				const adContainerWidth = parentElement.offsetWidth;
-
 				const isWiderThanContainer = adElementWidth > adContainerWidth;
 				const isHigherThanContainer =
 					adElementHeight > adContainerHeight;
-				const isInlineTwoPlus =
-					advert.node.id.includes('dfp-ad--inline') &&
-					advert.node.id !== 'dfp-ad--inline1';
 
-				if (
-					isInlineTwoPlus &&
-					(isWiderThanContainer || isHigherThanContainer)
-				) {
+				if (isWiderThanContainer || isHigherThanContainer) {
 					reportError(
 						new Error('Ad is overflowing its container'),
 						'commercial',
