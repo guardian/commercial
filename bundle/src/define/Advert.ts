@@ -163,7 +163,11 @@ class Advert implements IAdvert {
 		);
 
 		const targetingConfig =
-			slotDefinition.slot.getConfig('targeting').targeting;
+			/*
+				eslint-disable-next-line @typescript-eslint/no-unnecessary-condition --
+				the slot.getConfig function may not exist if googletag has been shimmed by an adblocker
+			*/
+			slotDefinition.slot.getConfig?.('targeting').targeting;
 
 		this.slot = slotDefinition.slot;
 		this.whenSlotReady = slotDefinition.slotReady;
