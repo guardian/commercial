@@ -209,12 +209,28 @@ const defineSlot = (
 		// wait until IAS has initialised before checking teads eligibility
 		const isTeadsEligible = isEligibleForTeads(id);
 
-		slot.setConfig({
+		/*
+			eslint-disable-next-line @typescript-eslint/no-unnecessary-condition --
+			the slot.setConfig function may not exist if googletag has been shimmed by an adblocker
+		*/
+		slot.setConfig?.({
 			targeting: {
 				teadsEligible: String(isTeadsEligible),
 			},
 		});
 	});
+
+	/*
+		eslint-disable-next-line @typescript-eslint/no-unnecessary-condition --
+		the slot.setConfig function may not exist if googletag has been shimmed by an adblocker
+	*/
+	if (!slot.setConfig) {
+		// return early if we can't set targeting
+		return {
+			slot,
+			slotReady,
+		};
+	}
 
 	const isbn = window.guardian.config.page.isbn;
 
@@ -250,11 +266,7 @@ const defineSlot = (
 		});
 	});
 
-	/*
-		eslint-disable-next-line @typescript-eslint/no-unnecessary-condition --
-		the slot.setConfig function may not exist if googletag has been shimmed by an adblocker
-	*/
-	slot.addService(window.googletag.pubads()).setConfig?.({
+	slot.addService(window.googletag.pubads()).setConfig({
 		targeting: {
 			slot: slotTarget,
 			testgroup: String(Math.floor(100 * Math.random())),
