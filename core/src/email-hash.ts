@@ -1,6 +1,6 @@
-type HashType = 'id5' | 'uid2';
+type HashClient = 'id5' | 'uid2';
 
-function hashEmailHex(hashBuffer: ArrayBuffer): string {
+function toHex(hashBuffer: ArrayBuffer): string {
 	const hashArray = Array.from(new Uint8Array(hashBuffer));
 	const hashHex = hashArray
 		.map((bytes) => bytes.toString(16).padStart(2, '0'))
@@ -8,21 +8,25 @@ function hashEmailHex(hashBuffer: ArrayBuffer): string {
 	return hashHex;
 }
 
-function hashEmailBase64(hashBuffer: ArrayBuffer): string {
+function toBase64(hashBuffer: ArrayBuffer): string {
 	const hashBytes = new Uint8Array(hashBuffer);
 	const base64Hash = btoa(String.fromCharCode(...hashBytes));
 
 	return base64Hash;
 }
 
-async function hashEmail(email: string, hashType: HashType): Promise<string> {
+async function hashEmailForClient(
+	email: string,
+	client: HashClient,
+): Promise<string> {
 	const normalisedEmail = email.trim().toLowerCase();
 	const utf8 = new TextEncoder().encode(normalisedEmail);
 	const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
-	if (hashType === 'id5') {
-		return hashEmailHex(hashBuffer);
+	switch (client) {
+		case 'id5':
+			return toHex(hashBuffer);
+		case 'uid2':
+			return toBase64(hashBuffer);
 	}
-	return hashEmailBase64(hashBuffer);
 }
-
-export { hashEmail };
+export { hashEmailForClient };
