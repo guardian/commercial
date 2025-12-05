@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition -- temporary until v10 migration complete */
 
-import { hashEmail } from '@guardian/commercial-core/email-hash';
+import { hashEmailForClient } from '@guardian/commercial-core/email-hash';
 import { type ConsentState } from '@guardian/libs';
 import { getConsentFor } from '@guardian/libs';
 import { isUserInTestGroup } from '../../../experiments/beta-ab';
@@ -42,7 +42,7 @@ jest.mock('../../identity/api', () => ({
 }));
 
 jest.mock('@guardian/commercial-core/email-hash', () => ({
-	hashEmail: jest.fn(),
+	hashEmailForClient: jest.fn(),
 }));
 
 jest.mock('../../../experiments/beta-ab', () => ({
@@ -202,7 +202,7 @@ describe('initialise', () => {
 			jest.fn().mockReturnValue(true),
 		);
 		(getEmail as jest.Mock).mockReturnValue('guardianuse@gmail.com');
-		(hashEmail as jest.Mock).mockReturnValue(
+		(hashEmailForClient as jest.Mock).mockReturnValue(
 			'528f4e83dbdd916e811358e43518555f68229b1dc279b6b2cd3c480f68371e7d',
 		);
 		(isUserInTestGroup as jest.Mock).mockReturnValue(false);
@@ -253,7 +253,7 @@ describe('initialise', () => {
 			jest.fn().mockReturnValue(true),
 		);
 		(getEmail as jest.Mock).mockReturnValue('guardianuse@gmail.com');
-		(hashEmail as jest.Mock).mockReturnValue(
+		(hashEmailForClient as jest.Mock).mockReturnValue(
 			'528f4e83dbdd916e811358e43518555f68229b1dc279b6b2cd3c480f68371e7d',
 		);
 		(isUserInTestGroup as jest.Mock).mockReturnValue(true);
@@ -303,7 +303,7 @@ describe('initialise', () => {
 			jest.fn().mockReturnValue(true),
 		);
 		(getEmail as jest.Mock).mockReturnValue('');
-		(hashEmail as jest.Mock).mockReturnValue(
+		(hashEmailForClient as jest.Mock).mockReturnValue(
 			'528f4e83dbdd916e811358e43518555f68229b1dc279b6b2cd3c480f68371e7d',
 		);
 		mockGetConsentForID5(true);
