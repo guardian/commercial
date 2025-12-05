@@ -1,6 +1,6 @@
 import { hashEmailForClient } from './email-hash';
 
-describe('hashEmail: Id5 client', () => {
+describe('hashEmail: ID5 client', () => {
 	it('normalises and hashes an uppercase email', async () => {
 		const hashedEmail = await hashEmailForClient(
 			'testGuardianUser@gmail.com',
@@ -36,7 +36,7 @@ describe('hashEmail: Id5 client', () => {
 	});
 });
 
-describe('hashEmail: Uid2 client', () => {
+describe('hashEmail: UID2 client', () => {
 	it('normalises and hashes an uppercase email', async () => {
 		const hashedEmail = await hashEmailForClient(
 			'user@example.com',
