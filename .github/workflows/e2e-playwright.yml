@@ -50,7 +50,6 @@ jobs:
             -e "PORT=3030" \
             -e "COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js" \
             ghcr.io/guardian/dotcom-rendering:fake-tag
-          echo "exitcode=$?" >> $GITHUB_OUTPUT
 
       - name: Report if "start DCR in a container" step failed
         if: ${{ steps.start-dcr-container.outcome == 'failure' }}
