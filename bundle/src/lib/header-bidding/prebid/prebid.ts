@@ -1,7 +1,7 @@
 import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import { PREBID_TIMEOUT } from '@guardian/commercial-core/constants/prebid-timeout';
-import { hashEmail } from '@guardian/commercial-core/email-hash';
+import { hashEmailForClient } from '@guardian/commercial-core/email-hash';
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import { getPermutiveSegments } from '@guardian/commercial-core/permutive';
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
@@ -392,7 +392,7 @@ const initialise = async (
 			email &&
 			!isUserInTestGroup('commercial-user-module-ID5', 'variant')
 		) {
-			const hashedEmail = await hashEmail(email);
+			const hashedEmail = await hashEmailForClient(email, 'id5');
 
 			const pdRaw = new URLSearchParams([['1', hashedEmail]]).toString();
 
@@ -407,6 +407,35 @@ const initialise = async (
 			});
 		} else {
 			userIds.push(id5UserId);
+		}
+	}
+
+	if (
+		consentState.framework === 'usnat' &&
+		getConsentFor('theTradeDesk', consentState)
+	) {
+		const email = await getEmail();
+		if (
+			email &&
+			!isUserInTestGroup('commercial-user-module-uid2', 'variant')
+		) {
+			const hashedUid2Email = await hashEmailForClient(email, 'uid2');
+
+			userIds.push({
+				name: 'uid2',
+				params: {
+					serverPublicKey:
+						'UID2-X-P-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7MS+2jntlSNTDP65WBYaCLR/Wla8r3h9NkYtN73lNtbo7WT5LFIKSGnD0kERa8VG8bNJvZrQs2bCU0P8ZH4uaA==',
+					subscriptionId: 'HhGv3vmQcS',
+					email: hashedUid2Email,
+				},
+				storage: {
+					type: 'html5',
+					name: 'uid2',
+					expires: 90,
+					refreshInSeconds: 7200,
+				},
+			});
 		}
 	}
 
