@@ -53,7 +53,7 @@ jobs:
           echo "exitcode=$?" >> $GITHUB_OUTPUT
 
       - name: Report if "start DCR in a container" step failed
-        if: ${{ failure() && steps.start-dcr-container.conclusion == 'failure' && steps.start-dcr-container.outputs.exitcode == 125 }}
+        if: ${{ steps.start-dcr-container.outcome == 'failure' }}
         run: echo "Unable to fetch a DCR container image from the registry. Run the DCR main build in order to create a new container image." && exit 1
 
       - name: Turn off mandb updates
