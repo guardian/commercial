@@ -6,7 +6,13 @@ import { EventTimer } from '@guardian/commercial-core/event-timer';
 import { getPermutiveSegments } from '@guardian/commercial-core/permutive';
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
 import type { ConsentState } from '@guardian/libs';
-import { getConsentFor, isString, log, onConsent } from '@guardian/libs';
+import {
+	getConsentFor,
+	isString,
+	loadScript,
+	log,
+	onConsent,
+} from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { PrebidPriceGranularity } from 'prebid.js/src/cpmBucketManager';
 import type { Advert } from '../../../define/Advert';
@@ -409,6 +415,79 @@ const initialise = async (
 			userIds.push(id5UserId);
 		}
 	}
+	// rather than blocking the loading of the scripts below
+	// run Promise.all without the await then eventually
+	// window.pbjs.mergeConfig({
+	// 	userIds ....
+	// });
+
+	const scriptProps = {
+		async: true,
+		defer: true,
+	};
+
+	await Promise.all([
+		loadScript(
+			'https://launchpad.privacymanager.io/latest/launchpad.bundle.js',
+			scriptProps,
+		),
+		loadScript(
+			'https://launchpad-wrapper.privacymanager.io/3a17d559-73d2-4f0d-aff1-54da33303144/launchpad-liveramp.js',
+			scriptProps,
+		),
+	])
+	.then(async () => {
+		console.log('commercial', 'Liveramp scripts loaded');
+		const email = await getEmail();
+		if (!email) {
+			console.log('commercial', 'No email for Liveramp identity link');
+			return;
+		}
+
+		const hashedEmail = await hashEmail(email);
+		window.addEventListener("envelopeModuleReady", function(){
+			console.log("ready")
+			window.ats.setAdditionalData({
+				'type': 'emailHashes',
+				'id': [
+					// 256-bit SHA256 hash EU/EAA
+					hashedEmail,
+					// SHA1 hash for US
+					hashedEmail,
+				]
+			});
+		});
+
+	})
+	.catch((e) => {
+		console.log('commercial', 'Error loading Liveramp scripts', e);
+	});
+
+	// TODO: enable liveramp based on consent in guardian/libs cmp
+	// if (getConsentFor('liveramp', consentState)) {
+	userIds.push({
+		name: 'identityLink',
+		params: {
+			// aTS Placement ID here
+			pid: '999',
+
+			// If you want to generate a RampID based on a LiveRamp 3p cookie
+			// (from a previous authentication) until ATS can generate a new
+			// RampID, set this property to false.
+			// notUse3P: true/false
+		},
+		storage: {
+			// localstorage
+			type: 'html5',
+			// "idl_env" is the required storage name
+			name: 'idl_env',
+			// Identity envelope can last for 15 days
+			expires: 15,
+			// Identity envelope will be updated every 30 minutes
+			refreshInSeconds: 1800,
+		},
+	});
+	// }
 
 	const userSync: UserSync = isSwitchedOn('prebidUserSync')
 		? {

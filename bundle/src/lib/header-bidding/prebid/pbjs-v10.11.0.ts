@@ -18,6 +18,7 @@ import 'prebid-v10.11.0.js/modules/ttdBidAdapter';
 
 // User IDs
 import 'prebid-v10.11.0.js/modules/id5IdSystem';
+import 'prebid-v10.11.0.js/modules/identityLinkIdSystem';
 import 'prebid-v10.11.0.js/modules/sharedIdSystem';
 import 'prebid-v10.11.0.js/modules/userId';
 
