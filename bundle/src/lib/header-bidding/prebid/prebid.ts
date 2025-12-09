@@ -417,7 +417,7 @@ const initialise = async (
 		const email = await getEmail();
 		if (
 			email &&
-			!isUserInTestGroup('commercial-user-module-uid2', 'variant')
+			isUserInTestGroup('commercial-user-module-uid2', 'variant')
 		) {
 			const hashedUid2Email = await hashEmailForClient(email, 'uid2');
 
