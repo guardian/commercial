@@ -20,6 +20,7 @@ import 'prebid.js/modules/ttdBidAdapter';
 import 'prebid.js/modules/id5IdSystem';
 import 'prebid.js/modules/sharedIdSystem';
 import 'prebid.js/modules/userId';
+import 'prebid.js/modules/euidIdSystem';
 
 // Real time data
 import 'prebid.js/modules/rtdModule';

@@ -74,7 +74,7 @@ type ConsentManagement =
 type UserId = {
 	name: string;
 	params?: Record<string, string | number>;
-	storage: {
+	storage?: {
 		type: 'cookie' | 'html5';
 		name: string;
 		expires: number;
@@ -410,10 +410,7 @@ const initialise = async (
 		}
 	}
 
-	if (
-		consentState.framework === 'usnat' &&
-		getConsentFor('theTradeDesk', consentState)
-	) {
+	if (getConsentFor('theTradeDesk', consentState)) {
 		const email = await getEmail();
 		if (
 			email &&
@@ -421,21 +418,33 @@ const initialise = async (
 		) {
 			const hashedUid2Email = await hashEmailForClient(email, 'uid2');
 
-			userIds.push({
-				name: 'uid2',
-				params: {
-					serverPublicKey:
-						'UID2-X-P-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7MS+2jntlSNTDP65WBYaCLR/Wla8r3h9NkYtN73lNtbo7WT5LFIKSGnD0kERa8VG8bNJvZrQs2bCU0P8ZH4uaA==',
-					subscriptionId: 'HhGv3vmQcS',
-					email: hashedUid2Email,
-				},
-				storage: {
-					type: 'html5',
+			if (consentState.framework === 'usnat') {
+				userIds.push({
 					name: 'uid2',
-					expires: 90,
-					refreshInSeconds: 7200,
-				},
-			});
+					params: {
+						serverPublicKey:
+							'UID2-X-P-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7MS+2jntlSNTDP65WBYaCLR/Wla8r3h9NkYtN73lNtbo7WT5LFIKSGnD0kERa8VG8bNJvZrQs2bCU0P8ZH4uaA==',
+						subscriptionId: 'HhGv3vmQcS',
+						email: hashedUid2Email,
+					},
+					storage: {
+						type: 'html5',
+						name: 'uid2',
+						expires: 90,
+						refreshInSeconds: 7200,
+					},
+				});
+			} else if (consentState.framework === 'tcfv2') {
+				userIds.push({
+					name: 'euid',
+					params: {
+						serverPublicKey:
+							'EUID-X-P-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEyoVAEgz82CK4G25Y1wGUngy3g9o3kCpl5bWTtCAJAx5gpG4PvhEaTPWCRp+FVVAzvkocZ/1IUJ4wPoS/QdIe5w==',
+						subscriptionId: 'SvB8xb94yD',
+						emailHash: hashedUid2Email,
+					},
+				});
+			}
 		}
 	}
 
