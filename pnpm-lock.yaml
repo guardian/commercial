@@ -55,8 +55,8 @@ importers:
   bundle:
     dependencies:
       '@guardian/ab-core':
-        specifier: 8.0.1
-        version: 8.0.1(tslib@2.8.1)(typescript@5.9.3)
+        specifier: 9.0.0
+        version: 9.0.0(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/commercial-core':
         specifier: workspace:*
         version: link:../core
@@ -1202,15 +1202,6 @@ packages:
   '@eslint/plugin-kit@0.4.1':
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  '@guardian/ab-core@8.0.1':
-    resolution: {integrity: sha512-m4sS68EbYxgNNdLg0NjFVF5BxI4ABTb8RVb3DTlvdygFKoISpgzlDlPL8s9gBILqMhjXu2/6X/Vej3k8SPRAUA==}
-    peerDependencies:
-      tslib: ^2.6.2
-      typescript: ~5.5.2
-    peerDependenciesMeta:
-      typescript:
-        optional: true
 
   '@guardian/ab-core@9.0.0':
     resolution: {integrity: sha512-3xzDd8+VMpsJiDiVnSpANcvqOaouTJwi+FGepoajEvPBzfDJqhv3rp2pIFdlMEEA3SXt8ejJ5RMtuvSFAt0rtQ==}
@@ -6927,12 +6918,6 @@ snapshots:
     dependencies:
       '@eslint/core': 0.17.0
       levn: 0.4.1
-
-  '@guardian/ab-core@8.0.1(tslib@2.8.1)(typescript@5.9.3)':
-    dependencies:
-      tslib: 2.8.1
-    optionalDependencies:
-      typescript: 5.9.3
 
   '@guardian/ab-core@9.0.0(tslib@2.8.1)(typescript@5.9.3)':
     dependencies:
