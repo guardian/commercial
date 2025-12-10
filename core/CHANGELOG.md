@@ -1,5 +1,17 @@
 # @guardian/commercial-core
 
+## 30.0.0
+
+### Major Changes
+
+- 8603433: BREAKING: Rename hashEmail to hashEmailForClient and change signature
+- 52e7c85: Update `@guardian/libs` to `27.0.0`
+  Update `@guardian/ab-core` to `9.0.0`
+
+### Patch Changes
+
+- 09dacf4: add type: module to commercial-core
+
 ## 29.3.0
 
 ### Minor Changes
