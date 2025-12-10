@@ -332,6 +332,40 @@ const shouldEnableAnalytics = (): boolean => {
 	);
 };
 
+const getTheTradeDeskIdParams = async (
+	id: 'uid2' | 'euid',
+	email: string,
+): Promise<{
+	name: 'uid2' | 'euid';
+	params: {
+		serverPublicKey: string;
+		subscriptionId: string;
+		emailHash: string;
+	};
+}> => {
+	const emailHash = await hashEmailForClient(email, id);
+	if (id === 'uid2') {
+		return {
+			name: 'uid2',
+			params: {
+				serverPublicKey:
+					'UID2-X-P-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7MS+2jntlSNTDP65WBYaCLR/Wla8r3h9NkYtN73lNtbo7WT5LFIKSGnD0kERa8VG8bNJvZrQs2bCU0P8ZH4uaA==',
+				subscriptionId: 'HhGv3vmQcS',
+				emailHash,
+			},
+		};
+	}
+	return {
+		name: 'euid',
+		params: {
+			serverPublicKey:
+				'EUID-X-P-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEyoVAEgz82CK4G25Y1wGUngy3g9o3kCpl5bWTtCAJAx5gpG4PvhEaTPWCRp+FVVAzvkocZ/1IUJ4wPoS/QdIe5w==',
+			subscriptionId: 'SvB8xb94yD',
+			emailHash,
+		},
+	};
+};
+
 /**
  * Prebid supports an additional timeout buffer to account for noisiness in
  * timing JavaScript on the page. This value is passed to the Prebid config
@@ -416,28 +450,16 @@ const initialise = async (
 			email &&
 			!isUserInTestGroup('commercial-user-module-uid2', 'variant')
 		) {
-			if (consentState.framework === 'usnat') {
-				const hashedUid2Email = await hashEmailForClient(email, 'uid2');
-				userIds.push({
-					name: 'uid2',
-					params: {
-						serverPublicKey:
-							'UID2-X-P-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7MS+2jntlSNTDP65WBYaCLR/Wla8r3h9NkYtN73lNtbo7WT5LFIKSGnD0kERa8VG8bNJvZrQs2bCU0P8ZH4uaA==',
-						subscriptionId: 'HhGv3vmQcS',
-						email: hashedUid2Email,
-					},
-				});
-			} else if (consentState.framework === 'tcfv2') {
-				const hashedUid2Email = await hashEmailForClient(email, 'uid2');
-				userIds.push({
-					name: 'euid',
-					params: {
-						serverPublicKey:
-							'EUID-X-P-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEyoVAEgz82CK4G25Y1wGUngy3g9o3kCpl5bWTtCAJAx5gpG4PvhEaTPWCRp+FVVAzvkocZ/1IUJ4wPoS/QdIe5w==',
-						subscriptionId: 'SvB8xb94yD',
-						emailHash: hashedUid2Email,
-					},
-				});
+			if (
+				consentState.framework &&
+				['tcfv2', 'usnat'].includes(consentState.framework)
+			) {
+				const idType =
+					consentState.framework === 'tcfv2' ? 'euid' : 'uid2';
+
+				const params = await getTheTradeDeskIdParams(idType, email);
+
+				userIds.push(params);
 			}
 		}
 	}
