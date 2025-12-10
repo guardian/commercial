@@ -332,17 +332,19 @@ const shouldEnableAnalytics = (): boolean => {
 	);
 };
 
-const getTheTradeDeskIdParams = async (
-	id: 'uid2' | 'euid',
-	email: string,
-): Promise<{
+type TheTradeDeskIdParams = {
 	name: 'uid2' | 'euid';
 	params: {
 		serverPublicKey: string;
 		subscriptionId: string;
 		emailHash: string;
 	};
-}> => {
+};
+
+const getTheTradeDeskIdParams = async (
+	id: 'uid2' | 'euid',
+	email: string,
+): Promise<TheTradeDeskIdParams> => {
 	const emailHash = await hashEmailForClient(email, id);
 	if (id === 'uid2') {
 		return {
@@ -444,23 +446,26 @@ const initialise = async (
 		}
 	}
 
+	const isInTheTradeDeskIdTest = !isUserInTestGroup(
+		'commercial-user-module-uid2',
+		'variant',
+	);
+	const isValidFrameworkForTheTradeDeskId =
+		consentState.framework &&
+		['tcfv2', 'usnat'].includes(consentState.framework);
+
 	if (getConsentFor('theTradeDesk', consentState)) {
 		const email = await getEmail();
 		if (
 			email &&
-			!isUserInTestGroup('commercial-user-module-uid2', 'variant')
+			isInTheTradeDeskIdTest &&
+			isValidFrameworkForTheTradeDeskId
 		) {
-			if (
-				consentState.framework &&
-				['tcfv2', 'usnat'].includes(consentState.framework)
-			) {
-				const idType =
-					consentState.framework === 'tcfv2' ? 'euid' : 'uid2';
+			const idType = consentState.framework === 'tcfv2' ? 'euid' : 'uid2';
 
-				const params = await getTheTradeDeskIdParams(idType, email);
+			const params = await getTheTradeDeskIdParams(idType, email);
 
-				userIds.push(params);
-			}
+			userIds.push(params);
 		}
 	}
 
