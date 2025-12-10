@@ -417,7 +417,7 @@ const initialise = async (
 		const email = await getEmail();
 		if (
 			email &&
-			isUserInTestGroup('commercial-user-module-uid2', 'variant')
+			!isUserInTestGroup('commercial-user-module-uid2', 'variant')
 		) {
 			const hashedUid2Email = await hashEmailForClient(email, 'uid2');
 
@@ -427,7 +427,7 @@ const initialise = async (
 					serverPublicKey:
 						'UID2-X-P-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7MS+2jntlSNTDP65WBYaCLR/Wla8r3h9NkYtN73lNtbo7WT5LFIKSGnD0kERa8VG8bNJvZrQs2bCU0P8ZH4uaA==',
 					subscriptionId: 'HhGv3vmQcS',
-					email: hashedUid2Email,
+					emailHash: hashedUid2Email,
 				},
 			});
 		}
