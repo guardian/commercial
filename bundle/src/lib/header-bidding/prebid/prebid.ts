@@ -74,7 +74,7 @@ type ConsentManagement =
 type UserId = {
 	name: string;
 	params?: Record<string, string | number>;
-	storage: {
+	storage?: {
 		type: 'cookie' | 'html5';
 		name: string;
 		expires: number;
@@ -427,13 +427,7 @@ const initialise = async (
 					serverPublicKey:
 						'UID2-X-P-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7MS+2jntlSNTDP65WBYaCLR/Wla8r3h9NkYtN73lNtbo7WT5LFIKSGnD0kERa8VG8bNJvZrQs2bCU0P8ZH4uaA==',
 					subscriptionId: 'HhGv3vmQcS',
-					email: hashedUid2Email,
-				},
-				storage: {
-					type: 'html5',
-					name: 'uid2',
-					expires: 90,
-					refreshInSeconds: 7200,
+					emailHash: hashedUid2Email,
 				},
 			});
 		}
