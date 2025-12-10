@@ -416,9 +416,8 @@ const initialise = async (
 			email &&
 			!isUserInTestGroup('commercial-user-module-uid2', 'variant')
 		) {
-			const hashedUid2Email = await hashEmailForClient(email, 'uid2');
-
 			if (consentState.framework === 'usnat') {
+				const hashedUid2Email = await hashEmailForClient(email, 'uid2');
 				userIds.push({
 					name: 'uid2',
 					params: {
@@ -427,14 +426,9 @@ const initialise = async (
 						subscriptionId: 'HhGv3vmQcS',
 						email: hashedUid2Email,
 					},
-					storage: {
-						type: 'html5',
-						name: 'uid2',
-						expires: 90,
-						refreshInSeconds: 7200,
-					},
 				});
 			} else if (consentState.framework === 'tcfv2') {
+				const hashedUid2Email = await hashEmailForClient(email, 'uid2');
 				userIds.push({
 					name: 'euid',
 					params: {
