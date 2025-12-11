@@ -15,56 +15,32 @@ updates:
       guardian:
         patterns:
           - '@guardian/*'
-        update-types:
-          - 'major'
-          - 'minor'
-          - 'patch'
       prebid:
         patterns:
           - 'prebid.js'
-        update-types:
-          - 'minor'
-          - 'patch'
       types:
         patterns:
           - '@types/*'
           - 'type-fest'
-        update-types:
-          - 'minor'
-          - 'patch'
       linters:
         patterns:
           - '*eslint*'
           - '*prettier*'
-        update-types:
-          - 'minor'
-          - 'patch'
       playwright:
         patterns:
           - '@playwright/*'
-        update-types:
-          - 'minor'
-          - 'patch'
       typescript:
         dependency-type: 'development'
         patterns:
           - 'typescript'
-        update-types:
-          - 'patch'
       minor-dependencies:
         dependency-type: 'production'
-        update-types:
-          - 'minor'
-          - 'patch'
         exclude-patterns:
           - 'prebid.js'
           - 'typescript'
           - '@types/*'
       minor-devDependencies:
         dependency-type: 'development'
-        update-types:
-          - 'minor'
-          - 'patch'
         exclude-patterns:
           - '@guardian/*'
           - '@types/*'
