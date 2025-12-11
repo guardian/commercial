@@ -95,7 +95,7 @@ const setSlotAdRefresh = (
 		}
 	};
 
-	setTimeout(() => {
+	const refreshTimeout = setTimeout(() => {
 		// During the elapsed time, a 'disable-refresh' message may have been posted.
 		// Check the flag again.
 		if (!advert.shouldRefresh) {
@@ -109,6 +109,31 @@ const setSlotAdRefresh = (
 			enableLazyLoad(advert);
 		}
 	}, ADVERT_REFRESH_RATE);
+
+	window.addEventListener('pageshow', (event) => {
+		// Loaded from bfcache
+		if (event.persisted) {
+			console.log('Clearing old refresh timer');
+			clearTimeout(refreshTimeout);
+			setTimeout(() => {
+				// During the elapsed time, a 'disable-refresh' message may have been posted.
+				// Check the flag again.
+				if (!advert.shouldRefresh) {
+					return;
+				}
+				// If the document is hidden don't refresh immediately
+				// Instead add an event listener to refresh when document becomes visible again
+				if (document.hidden) {
+					document.addEventListener(
+						'visibilitychange',
+						onDocumentVisible,
+					);
+				} else {
+					enableLazyLoad(advert);
+				}
+			}, 20_000);
+		}
+	});
 };
 
 /*
