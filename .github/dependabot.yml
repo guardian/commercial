@@ -11,60 +11,37 @@ updates:
       interval: 'weekly'
       day: 'tuesday'
       time: '09:00'
+    cooldown:
+      semver-major-days: 30
+      semver-minor-days: 14
+      semver-patch-days: 7
     groups:
       guardian:
         patterns:
           - '@guardian/*'
-        update-types:
-          - 'major'
-          - 'minor'
-          - 'patch'
-      prebid:
-        patterns:
-          - 'prebid.js'
-        update-types:
-          - 'minor'
-          - 'patch'
       types:
         patterns:
           - '@types/*'
           - 'type-fest'
-        update-types:
-          - 'minor'
-          - 'patch'
       linters:
         patterns:
           - '*eslint*'
           - '*prettier*'
-        update-types:
-          - 'minor'
-          - 'patch'
       playwright:
         patterns:
           - '@playwright/*'
-        update-types:
-          - 'minor'
-          - 'patch'
       typescript:
         dependency-type: 'development'
         patterns:
           - 'typescript'
-        update-types:
-          - 'patch'
-      minor-dependencies:
+      dependencies:
         dependency-type: 'production'
-        update-types:
-          - 'minor'
-          - 'patch'
         exclude-patterns:
           - 'prebid.js'
           - 'typescript'
           - '@types/*'
-      minor-devDependencies:
+      devDependencies:
         dependency-type: 'development'
-        update-types:
-          - 'minor'
-          - 'patch'
         exclude-patterns:
           - '@guardian/*'
           - '@types/*'
@@ -80,3 +57,5 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+    cooldown:
+      default-days: 7
