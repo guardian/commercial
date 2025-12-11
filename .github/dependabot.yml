@@ -11,6 +11,10 @@ updates:
       interval: 'weekly'
       day: 'tuesday'
       time: '09:00'
+    cooldown:
+      semver-major-days: 30
+      semver-minor-days: 14
+      semver-patch-days: 7
     groups:
       guardian:
         patterns:
@@ -56,3 +60,5 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+    cooldown:
+      default-days: 7
