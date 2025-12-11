@@ -19,6 +19,7 @@ import 'prebid.js/modules/ttdBidAdapter';
 // User IDs
 import 'prebid.js/modules/id5IdSystem';
 import 'prebid.js/modules/uid2IdSystem';
+import 'prebid.js/modules/euidIdSystem';
 import 'prebid.js/modules/sharedIdSystem';
 import 'prebid.js/modules/userId';
 

@@ -1,4 +1,4 @@
-type HashClient = 'id5' | 'uid2';
+type HashClient = 'id5' | 'uid2' | 'euid';
 
 function toHex(hashBuffer: ArrayBuffer): string {
 	const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -26,6 +26,7 @@ async function hashEmailForClient(
 		case 'id5':
 			return toHex(hashBuffer);
 		case 'uid2':
+		case 'euid':
 			return toBase64(hashBuffer);
 	}
 }
