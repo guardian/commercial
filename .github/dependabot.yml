@@ -19,9 +19,6 @@ updates:
       guardian:
         patterns:
           - '@guardian/*'
-      prebid:
-        patterns:
-          - 'prebid.js'
       types:
         patterns:
           - '@types/*'
@@ -37,13 +34,13 @@ updates:
         dependency-type: 'development'
         patterns:
           - 'typescript'
-      minor-dependencies:
+      dependencies:
         dependency-type: 'production'
         exclude-patterns:
           - 'prebid.js'
           - 'typescript'
           - '@types/*'
-      minor-devDependencies:
+      devDependencies:
         dependency-type: 'development'
         exclude-patterns:
           - '@guardian/*'
