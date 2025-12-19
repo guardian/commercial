@@ -27,3 +27,22 @@ To install dependencies, run `pnpm`.
 `@guardian/commercial-core` is published as an npm package and uses changesets, if you've made changes to this package, you will need to ensure you have added a changeset before merging your PR.
 
 A `commercial-dev` team member will then need to merge the changeset PR to release the new version.
+
+### Testing GitHub Workflows Locally
+
+Testing GitHub workflows locally allows developers to validate and debug CI/CD pipeline changes before pushing to GitHub, eliminating the need for trial-and-error commits.
+
+- Install [act](https://nektosact.com/): `brew install act`
+- Install docker:
+    - Via terminal: `brew install docker`
+    - Docker Desktop (optional): https://www.docker.com/
+
+#### Usage
+
+To simulate a workflow trigger such as a push or pull request, run `act push` or `act pull_request`, etc. Documentation for using act can be found on the website: https://nektosact.com/usage/index.html.
+
+#### Notes
+
+- If you encounter issues running _act_ that may be associated with your hardware, try specifying the container architecture: `act [action] --container-architecture linux/amd64`
+- You may be required to install a large GitHub actions docker image on first use. If so, the _medium_ build option will suffice.
+- Running docker desktop or `docker ps` will give you an overview of the containers created to run your workflows.
