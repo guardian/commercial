@@ -6,7 +6,7 @@ import type {
 } from '@guardian/libs';
 import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { commercialFeatures } from '../../lib/commercial-features';
-import { prebid } from '../../lib/header-bidding/prebid/prebid';
+import { prebid } from '../../lib/header-bidding/prebid';
 import { _ } from './prepare-prebid';
 
 const { setupPrebid } = _;

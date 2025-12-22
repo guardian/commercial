@@ -5,7 +5,7 @@ import { once } from 'lodash-es';
 import { isUserInTestGroup } from '../../experiments/beta-ab';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
-import { prebid } from '../../lib/header-bidding/prebid/prebid';
+import { prebid } from '../../lib/header-bidding/prebid';
 import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
 
 const shouldLoadPrebid = () =>
@@ -33,16 +33,16 @@ const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 		// as expected or if the test setup is wrong
 		await import(
 			/* webpackChunkName: "Prebid.js" */
-			'../../lib/header-bidding/prebid/pbjs'
+			'../../lib/header-bidding/prebid/load-modules'
 		);
 		// await import(
 		// 	/* webpackChunkName: "Prebid@10.11.0.js" */
-		// 	'../../lib/header-bidding/prebid/pbjs-v10.11.0'
+		// 	'../../lib/header-bidding/prebid/load-modules-v10.11.0'
 		// );
 	} else {
 		await import(
 			/* webpackChunkName: "Prebid.js" */
-			'../../lib/header-bidding/prebid/pbjs'
+			'../../lib/header-bidding/prebid/load-modules'
 		);
 	}
 
