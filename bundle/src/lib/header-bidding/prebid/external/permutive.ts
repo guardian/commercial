@@ -11,8 +11,8 @@ export const configurePermutive = (consentState: ConsentState) => {
 			'ix',
 			'ozone',
 			'pubmatic',
-			'rubicon',
 			'trustx',
+			'rubicon',
 		] satisfies BidderCode[]
 	)
 		.filter(shouldInclude)
