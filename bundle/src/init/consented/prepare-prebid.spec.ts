@@ -25,7 +25,7 @@ jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));
 
-jest.mock('lib/header-bidding/prebid/prebid', () => ({
+jest.mock('lib/header-bidding/prebid', () => ({
 	prebid: {
 		initialise: jest.fn(),
 	},
@@ -39,7 +39,7 @@ jest.mock('lib/page-targeting', () => ({
 	getPageTargeting: jest.fn(),
 }));
 
-jest.mock('lib/header-bidding/prebid/bid-config', () => ({
+jest.mock('lib/header-bidding/prebid/bidders/config', () => ({
 	isInVariant: jest.fn(),
 }));
 

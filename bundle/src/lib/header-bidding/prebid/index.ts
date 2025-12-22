@@ -162,8 +162,8 @@ const requestBids = async (
 		return requestQueue;
 	}
 
-	const adUnits = await onConsent()
-		.then(async (consentState) => {
+	const adUnits: PrebidAdUnit[] = await onConsent()
+		.then(async (consentState: ConsentState) => {
 			// calculate this once before mapping over
 			const isSignedIn = await isUserLoggedIn();
 			const pageTargeting = getPageTargeting(consentState, isSignedIn);
@@ -183,7 +183,7 @@ const requestBids = async (
 				),
 			);
 		})
-		.catch((e) => {
+		.catch((e: unknown) => {
 			// silently fail
 			log('commercial', 'Failed to execute prebid onConsent', e);
 			return [];

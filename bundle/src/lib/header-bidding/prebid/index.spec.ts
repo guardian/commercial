@@ -16,7 +16,7 @@ jest.mock('define/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
 );
 
-jest.mock('./bid-config', () => ({
+jest.mock('./bidders/config', () => ({
 	bids: jest.fn(),
 }));
 

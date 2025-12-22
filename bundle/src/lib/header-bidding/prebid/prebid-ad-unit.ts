@@ -7,7 +7,7 @@ import type {
 	PrebidBid,
 	PrebidMediaTypes,
 } from '../prebid-types';
-import { bids } from './bid-config';
+import { bids } from './bidders/config';
 
 export class PrebidAdUnit {
 	code: string | null | undefined;

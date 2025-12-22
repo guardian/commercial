@@ -8,8 +8,8 @@ import {
 	isInUsOrCa as isInUsOrCa_,
 } from '@guardian/commercial-core/geo/geo-utils';
 import { type ConsentState } from '@guardian/libs';
-import { isUserInVariant as isUserInVariant_ } from '../../../experiments/ab';
-import type { HeaderBiddingSize, PrebidBidder } from '../prebid-types';
+import { isUserInVariant as isUserInVariant_ } from '../../../../experiments/ab';
+import type { HeaderBiddingSize, PrebidBidder } from '../../prebid-types';
 import {
 	containsBillboard as containsBillboard_,
 	containsDmpu as containsDmpu_,
@@ -21,8 +21,8 @@ import {
 	getBreakpointKey as getBreakpointKey_,
 	shouldIncludeBidder,
 	stripMobileSuffix as stripMobileSuffix_,
-} from '../utils';
-import { _, bids } from './bid-config';
+} from '../../utils';
+import { _, bids } from './config';
 
 const mockPageTargeting = {} as unknown as PageTargeting;
 
@@ -63,8 +63,8 @@ jest.mock('lib/page-targeting', () => ({
 	getPageTargeting: () => 'bla',
 }));
 
-jest.mock('../utils', () => ({
-	...jest.requireActual('../utils'),
+jest.mock('../../utils', () => ({
+	...jest.requireActual('../../utils'),
 	shouldIncludeBidder: jest.fn(),
 	containsBillboard: jest.fn(),
 	containsDmpu: jest.fn(),

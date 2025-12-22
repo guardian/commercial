@@ -28,7 +28,7 @@ jest.mock('lib/__vendor/a9-apstag', () => ({
 
 jest.mock('lib/page-targeting');
 
-jest.mock('lib/header-bidding/prebid/bid-config');
+jest.mock('lib/header-bidding/prebid/bidders/config');
 
 jest.mock('lib/header-bidding/utils', () => ({
 	isInUsRegion: () => true,
