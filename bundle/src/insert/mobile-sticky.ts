@@ -32,30 +32,37 @@ const createAdWrapper = () => {
  * Initialise mobile sticky ad slot
  * @returns Promise
  */
-export const init = (): Promise<void> => {
-	if (shouldIncludeMobileSticky()) {
-		document.addEventListener('banner:close', () => {
-			void (async () => {
-				log('commercial', '🪵 Supporter revenue banner closed');
-				const mobileStickyWrapper = createAdWrapper();
 
-				await fastdom.mutate(() => {
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Is body really always defined?
-					if (document.body && mobileStickyWrapper) {
-						document.body.appendChild(mobileStickyWrapper);
-					}
-				});
-				if (mobileStickyWrapper) {
-					const mobileStickyAdSlot =
-						mobileStickyWrapper.querySelector<HTMLElement>(
-							'#dfp-ad--mobile-sticky',
-						);
-					if (mobileStickyAdSlot) {
-						void fillDynamicAdSlot(mobileStickyAdSlot, true);
-					}
-				}
-			})();
-		});
+
+const renderMobileStickySlot = async () => {
+	log('commercial', '🪵 Rendering MobileSticky');
+	const mobileStickyWrapper = createAdWrapper();
+	await fastdom.mutate(() => {
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Is body really always defined?
+		if (document.body && mobileStickyWrapper) {
+			document.body.appendChild(mobileStickyWrapper);
+		}
+	});
+	if (mobileStickyWrapper) {
+		const mobileStickyAdSlot =
+			mobileStickyWrapper.querySelector<HTMLElement>(
+				'#dfp-ad--mobile-sticky',
+			);
+		if (mobileStickyAdSlot) {
+			void fillDynamicAdSlot(mobileStickyAdSlot, true);
+		}
+	}
+};
+
+export const init =  (): Promise<void> => {
+	const handleBannerEvent = () => {
+		log('commercial', '🪵 Handle Banner Event');
+		 void renderMobileStickySlot();
+	};
+
+	if (shouldIncludeMobileSticky()) {
+		document.addEventListener('banner:close', handleBannerEvent);
+		document.addEventListener('banner:none', handleBannerEvent);
 	}
 
 	return Promise.resolve();
