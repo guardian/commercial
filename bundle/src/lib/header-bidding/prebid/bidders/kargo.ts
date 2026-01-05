@@ -1,5 +1,5 @@
-export const configureKargoBidderSettings = (): void => {
-	window.pbjs.bidderSettings.kargo = {
-		storageAllowed: true,
-	};
+import type { BidderSettings } from '../types';
+
+export const bidderSettings: BidderSettings[keyof BidderSettings] = {
+	storageAllowed: true,
 };

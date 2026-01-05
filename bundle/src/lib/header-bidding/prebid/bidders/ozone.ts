@@ -1,21 +1,13 @@
 import { overridePriceBucket } from '../price-config';
+import type { BidderSettings } from '../types';
 
-export const configureOzoneBidderSettings = (): void => {
-	// Use a custom price granularity, which is based upon the size of the slot being auctioned
-	window.pbjs.bidderSettings.ozone = {
-		adserverTargeting: [
-			{
-				key: 'hb_pb',
-				val: ({ width, height, cpm, pbCg }) => {
-					return overridePriceBucket(
-						'ozone',
-						width,
-						height,
-						cpm,
-						pbCg,
-					);
-				},
+export const bidderSettings: BidderSettings[keyof BidderSettings] = {
+	adserverTargeting: [
+		{
+			key: 'hb_pb',
+			val: ({ width, height, cpm, pbCg }) => {
+				return overridePriceBucket('ozone', width, height, cpm, pbCg);
 			},
-		],
-	};
+		},
+	],
 };

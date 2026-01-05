@@ -1,22 +1,24 @@
 import { getPermutiveSegments } from '@guardian/commercial-core/permutive';
+import type { BidderSettings } from '../types';
 
-export const configureRubiconBidderSettings = (): void => {
-	window.pbjs.bidderSettings.magnite = {
-		storageAllowed: true,
-	};
-
-	window.pbjs.setBidderConfig({
-		bidders: ['rubicon'],
-		config: {
-			ortb2: {
-				user: {
-					ext: {
-						data: {
-							permutive: getPermutiveSegments(),
+export const configureBidderSettings =
+	(): BidderSettings[keyof BidderSettings] => {
+		window.pbjs.setBidderConfig({
+			bidders: ['rubicon'],
+			config: {
+				ortb2: {
+					user: {
+						ext: {
+							data: {
+								permutive: getPermutiveSegments(),
+							},
 						},
 					},
 				},
 			},
-		},
-	});
-};
+		});
+
+		return {
+			storageAllowed: true,
+		};
+	};

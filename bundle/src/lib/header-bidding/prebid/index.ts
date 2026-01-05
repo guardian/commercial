@@ -18,12 +18,12 @@ import {
 	stripDfpAdPrefixFrom,
 } from '../utils';
 import { getAnalyticsConfig } from './analytics';
-import { configureCriteoBidderSettings } from './bidders/criteo';
-import { configureIxBidderSettings } from './bidders/ix';
-import { configureKargoBidderSettings } from './bidders/kargo';
-import { configureOzoneBidderSettings } from './bidders/ozone';
-import { configureRubiconBidderSettings } from './bidders/rubicon';
-import { configureXhbBidderSettings } from './bidders/xhb';
+import { bidderSettings as bidderSettingsForCriteo } from './bidders/criteo';
+import { bidderSettings as bidderSettingsForIx } from './bidders/ix';
+import { bidderSettings as bidderSettingsForKargo } from './bidders/kargo';
+import { bidderSettings as bidderSettingsForOzone } from './bidders/ozone';
+import { configureBidderSettings as bidderSettingsForRubicon } from './bidders/rubicon';
+import { bidderSettings as bidderSettingsForXhb } from './bidders/xhb';
 import { consentManagement } from './consent-management';
 import { configurePermutive } from './external/permutive';
 import { getUserSyncSettings } from './id-handlers';
@@ -89,14 +89,16 @@ const initialise = async (
 	const isBidderEnabled = shouldIncludeBidder(consentState);
 
 	// initialise enabled bidders
-	window.pbjs.bidderSettings = {};
-
-	if (isBidderEnabled('criteo')) configureCriteoBidderSettings();
-	if (isBidderEnabled('ix')) configureIxBidderSettings();
-	if (isBidderEnabled('kargo')) configureKargoBidderSettings();
-	if (isBidderEnabled('ozone')) configureOzoneBidderSettings();
-	if (isBidderEnabled('rubicon')) configureRubiconBidderSettings();
-	if (isBidderEnabled('xhb')) configureXhbBidderSettings();
+	window.pbjs.bidderSettings = {
+		criteo: isBidderEnabled('criteo') ? bidderSettingsForCriteo : undefined,
+		ix: isBidderEnabled('ix') ? bidderSettingsForIx : undefined,
+		kargo: isBidderEnabled('kargo') ? bidderSettingsForKargo : undefined,
+		magnite: isBidderEnabled('rubicon')
+			? bidderSettingsForRubicon()
+			: undefined,
+		ozone: isBidderEnabled('ozone') ? bidderSettingsForOzone : undefined,
+		xhb: isBidderEnabled('xhb') ? bidderSettingsForXhb : undefined,
+	};
 
 	// configure analytics
 	const analytics = getAnalyticsConfig();
