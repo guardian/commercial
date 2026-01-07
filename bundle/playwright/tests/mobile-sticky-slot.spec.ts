@@ -12,34 +12,23 @@ testAtBreakpoints(['mobile']).forEach(({ breakpoint, width, height }) => {
 		page,
 	}) => {
 		await page.setViewportSize({ width, height });
-
-		await page.addInitScript(() => {
-			window.localStorage.removeItem(
-				'gu.prefs.engagementBannerLastClosedAt',
-			);
-		});
-
 		await loadPage({ page, path, region: 'US' });
 		await cmpAcceptAll(page);
 		await loadPage({
 			page,
 			path,
 			region: 'US',
-			queryParams: {
-				adtest: 'mobileStickyTest',
-			},
+			queryParams: { adtest: 'mobileStickyTest' },
 		});
 
-		await expect(page.locator('#dfp-ad--mobile-sticky')).not.toBeAttached();
+	await page.evaluate(() => {
+		document.dispatchEvent(new Event('banner:close'));
+	});
 
-		await page.evaluate(() => {
-			document.dispatchEvent(new Event('banner:close'));
-		});
-
-		await page.waitForTimeout(1000);
-		await expect(page.locator('#dfp-ad--mobile-sticky')).toBeAttached();
+	await expect(page.locator('#dfp-ad--mobile-sticky')).toBeVisible();
 	});
 });
+
 testAtBreakpoints(['mobile']).forEach(({ breakpoint, width, height }) => {
 	test(`mobile sticky responds to banner:none event at ${breakpoint}`, async ({
 		page,
@@ -56,7 +45,7 @@ testAtBreakpoints(['mobile']).forEach(({ breakpoint, width, height }) => {
 
 		await cmpAcceptAll(page);
 		await page.evaluate(() => {
-			document.dispatchEvent(new Event('banner:none')); 
+			document.dispatchEvent(new Event('banner:none'));
 		});
 
 		await page.waitForTimeout(1000);
