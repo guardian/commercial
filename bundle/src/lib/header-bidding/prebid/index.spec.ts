@@ -8,7 +8,7 @@ import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
 import { getEmail } from '../../identity/api';
 import { shouldIncludeBidder, shouldIncludePermutive } from '../utils';
-import { prebid } from './prebid';
+import { prebid } from '.';
 
 const getAdvertById = getAdvertById_ as jest.Mock;
 
@@ -16,7 +16,7 @@ jest.mock('define/Advert', () =>
 	jest.fn().mockImplementation(() => ({ advert: jest.fn() })),
 );
 
-jest.mock('./bid-config', () => ({
+jest.mock('./bidders/config', () => ({
 	bids: jest.fn(),
 }));
 
@@ -74,7 +74,7 @@ const resetPrebid = () => {
 	// @ts-expect-error -- there’s no types for this
 	delete window.pbjsChunk;
 	jest.resetModules();
-	jest.requireActual('lib/header-bidding/prebid/pbjs');
+	jest.requireActual('lib/header-bidding/prebid/load-modules');
 };
 
 describe('initialise', () => {

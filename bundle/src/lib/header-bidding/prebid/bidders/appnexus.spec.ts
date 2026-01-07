@@ -15,10 +15,10 @@ import {
 	containsMpu as containsMpu_,
 	containsMpuOrDmpu as containsMpuOrDmpu_,
 	getBreakpointKey as getBreakpointKey_,
-} from '../utils';
+} from '../../utils';
 import { getAppNexusDirectPlacementId } from './appnexus';
 
-jest.mock('../utils');
+jest.mock('../../utils');
 const containsBillboard = containsBillboard_ as jest.Mock;
 const containsBillboardNotLeaderboard =
 	containsBillboardNotLeaderboard_ as jest.Mock;

@@ -6,7 +6,7 @@ import type {
 } from '@guardian/libs';
 import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { commercialFeatures } from '../../lib/commercial-features';
-import { prebid } from '../../lib/header-bidding/prebid/prebid';
+import { prebid } from '../../lib/header-bidding/prebid';
 import { _ } from './prepare-prebid';
 
 const { setupPrebid } = _;
@@ -25,7 +25,7 @@ jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));
 
-jest.mock('lib/header-bidding/prebid/prebid', () => ({
+jest.mock('lib/header-bidding/prebid', () => ({
 	prebid: {
 		initialise: jest.fn(),
 	},
@@ -39,7 +39,7 @@ jest.mock('lib/page-targeting', () => ({
 	getPageTargeting: jest.fn(),
 }));
 
-jest.mock('lib/header-bidding/prebid/bid-config', () => ({
+jest.mock('lib/header-bidding/prebid/bidders/config', () => ({
 	isInVariant: jest.fn(),
 }));
 

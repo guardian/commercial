@@ -211,7 +211,7 @@ This code has been more recently re-written in Typescript in https://github.com/
 
 We tend to use a version of [Prebid.js](https://github.com/prebid/Prebid.js) that is slightly behind the bleeding edge version
 
-Our Prebid.js set up is defined in [src/lib/header-bidding/prebid/pbjs.ts](https://github.com/guardian/commercial/blob/1e920009b61342687611056daed7714fe1cfead3/src/lib/header-bidding/prebid/pbjs.ts)
+Our Prebid.js set up is defined in [src/lib/header-bidding/prebid/load-modules.ts](https://github.com/guardian/commercial/blob/1e920009b61342687611056daed7714fe1cfead3/src/lib/header-bidding/prebid/load-modules.ts)
 
 The Guardian-specific Prebid modules are in [src/lib/header-bidding/prebid/modules](https://github.com/guardian/commercial/tree/1e920009b61342687611056daed7714fe1cfead3/src/lib/header-bidding/prebid/modules).
 

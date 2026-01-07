@@ -90,7 +90,7 @@ import prebid946BabelOptions from 'prebid-v9.46.0.js/.babelrc.js';
 ```
 
 ### Copy Prebid Setup
-Copy `bundle/src/lib/header-bidding/prebid/pbjs.ts` with a new name, e.g., `pbjs-v9.46.0.ts`, and update all imports to use the new prebid alias.
+Copy `bundle/src/lib/header-bidding/prebid/load-modules.ts` with a new name, e.g., `load-modules-v9.46.0.ts`, and update all imports to use the new prebid alias.
 Copy our custom modules using the same pattern, in `bundle/src/lib/header-bidding/prebid/modules`, and update all imports to use the new prebid alias.
 
 ### Create AB Test
@@ -99,12 +99,12 @@ Create an ab test and conditionally import the new prebid setup based on the tes
 if (shouldLoadPrebid946) {
     await import(
         /* webpackChunkName: "Prebid@9.46.0.js" */
-        `../../lib/header-bidding/prebid/pbjs-v9.46.0`
+        `../../lib/header-bidding/prebid/load-modules-v9.46.0`
     );
 } else {
     await import(
         /* webpackChunkName: "Prebid.js" */
-        `../../lib/header-bidding/prebid/pbjs`
+        `../../lib/header-bidding/prebid/load-modules`
     );
 }
 ```

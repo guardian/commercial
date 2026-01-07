@@ -2,7 +2,7 @@ import { commercialFeatures } from '../../lib/commercial-features';
 import { init } from './article';
 import { spaceFiller } from './space-filler';
 
-jest.mock('lib/header-bidding/prebid/prebid', () => ({
+jest.mock('lib/header-bidding/prebid', () => ({
 	requestBids: jest.fn(),
 }));
 
