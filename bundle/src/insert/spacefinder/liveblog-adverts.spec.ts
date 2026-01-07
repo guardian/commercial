@@ -7,7 +7,7 @@ const {
 	getStartingContentBlock,
 } = _;
 
-jest.mock('lib/header-bidding/prebid/prebid', () => ({
+jest.mock('lib/header-bidding/prebid', () => ({
 	requestBids: jest.fn(),
 }));
 jest.mock('insert/spacefinder/space-filler', () => ({

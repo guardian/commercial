@@ -7,10 +7,10 @@ import {
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
 import { log } from '@guardian/libs';
 import type { ConsentState } from '@guardian/libs';
-import type { PrebidIndexSite } from '../../../types/global';
-import { dfpEnv } from '../../dfp/dfp-env';
-import { buildAppNexusTargetingObject } from '../../page-targeting';
-import { pbTestNameMap } from '../../url';
+import type { PrebidIndexSite } from '../../../../types/global';
+import { dfpEnv } from '../../../dfp/dfp-env';
+import { buildAppNexusTargetingObject } from '../../../page-targeting';
+import { pbTestNameMap } from '../../../url';
 import type {
 	BidderCode,
 	HeaderBiddingSize,
@@ -27,7 +27,7 @@ import type {
 	PrebidTripleLiftParams,
 	PrebidTrustXParams,
 	PrebidXaxisParams,
-} from '../prebid-types';
+} from '../../prebid-types';
 import {
 	containsBillboard,
 	containsBillboardNotLeaderboard,
@@ -41,7 +41,7 @@ import {
 	shouldIncludeBidder,
 	stripDfpAdPrefixFrom,
 	stripMobileSuffix,
-} from '../utils';
+} from '../../utils';
 import { getAppNexusDirectBidParams } from './appnexus';
 import { getMagniteSiteId, getMagniteZoneId } from './magnite';
 

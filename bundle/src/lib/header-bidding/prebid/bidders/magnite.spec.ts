@@ -5,7 +5,7 @@ import {
 	isInUk as isInUk_,
 	isInUsOrCa as isInUsOrCa_,
 } from '@guardian/commercial-core/geo/geo-utils';
-import { getBreakpointKey as getBreakpointKey_ } from '../utils';
+import { getBreakpointKey as getBreakpointKey_ } from '../../utils';
 import { getMagniteSiteId, getMagniteZoneId } from './magnite';
 
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
@@ -19,8 +19,8 @@ jest.mock('experiments/ab', () => ({
 }));
 jest.mock('@guardian/commercial-core/geo/geo-utils');
 
-jest.mock('../utils', () => ({
-	...jest.requireActual('../utils'),
+jest.mock('../../utils', () => ({
+	...jest.requireActual('../../utils'),
 	getBreakpointKey: jest.fn(),
 }));
 

@@ -1,7 +1,7 @@
 import type { PageTargeting } from '@guardian/commercial-core';
 import { isInAuOrNz, isInRow } from '@guardian/commercial-core/geo/geo-utils';
-import { buildAppNexusTargetingObject } from '../../page-targeting';
-import type { HeaderBiddingSize } from '../prebid-types';
+import { buildAppNexusTargetingObject } from '../../../page-targeting';
+import type { HeaderBiddingSize } from '../../prebid-types';
 import {
 	containsBillboardNotLeaderboard,
 	containsLeaderboard,
@@ -11,7 +11,7 @@ import {
 	containsMpuOrDmpu,
 	getBreakpointKey,
 	getLargestSize,
-} from '../utils';
+} from '../../utils';
 
 type AppNexusDirectBidParams =
 	| {
