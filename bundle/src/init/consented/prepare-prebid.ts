@@ -33,7 +33,7 @@ const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 		// as expected or if the test setup is wrong
 		await import(
 			/* webpackChunkName: "Prebid.js" */
-			'../../lib/header-bidding/prebid/load-modules'
+			'../../lib/header-bidding/prebid/modules'
 		);
 		// await import(
 		// 	/* webpackChunkName: "Prebid@10.11.0.js" */
@@ -42,7 +42,7 @@ const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 	} else {
 		await import(
 			/* webpackChunkName: "Prebid.js" */
-			'../../lib/header-bidding/prebid/load-modules'
+			'../../lib/header-bidding/prebid/modules'
 		);
 	}
 
