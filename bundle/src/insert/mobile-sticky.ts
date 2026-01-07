@@ -33,7 +33,6 @@ const createAdWrapper = () => {
  * @returns Promise
  */
 
-
 const renderMobileStickySlot = async () => {
 	log('commercial', '🪵 Rendering MobileSticky');
 	const mobileStickyWrapper = createAdWrapper();
@@ -54,10 +53,10 @@ const renderMobileStickySlot = async () => {
 	}
 };
 
-export const init =  (): Promise<void> => {
+export const init = (): Promise<void> => {
 	const handleBannerEvent = () => {
 		log('commercial', '🪵 Handle Banner Event');
-		 void renderMobileStickySlot();
+		void renderMobileStickySlot();
 	};
 
 	if (shouldIncludeMobileSticky()) {

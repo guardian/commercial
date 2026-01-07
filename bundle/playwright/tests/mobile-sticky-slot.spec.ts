@@ -21,11 +21,11 @@ testAtBreakpoints(['mobile']).forEach(({ breakpoint, width, height }) => {
 			queryParams: { adtest: 'mobileStickyTest' },
 		});
 
-	await page.evaluate(() => {
-		document.dispatchEvent(new Event('banner:close'));
-	});
+		await page.evaluate(() => {
+			document.dispatchEvent(new Event('banner:close'));
+		});
 
-	await expect(page.locator('#dfp-ad--mobile-sticky')).toBeVisible();
+		await expect(page.locator('#dfp-ad--mobile-sticky')).toBeVisible();
 	});
 });
 
