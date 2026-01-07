@@ -17,19 +17,21 @@ import 'prebid-v10.11.0.js/modules/rubiconBidAdapter';
 import 'prebid-v10.11.0.js/modules/ttdBidAdapter';
 
 // User IDs
-import 'prebid-v10.11.0.js/modules/id5IdSystem';
-import 'prebid-v10.11.0.js/modules/sharedIdSystem';
-import 'prebid-v10.11.0.js/modules/userId';
 import 'prebid-v10.11.0.js/modules/euidIdSystem';
+import 'prebid-v10.11.0.js/modules/id5IdSystem';
+import 'prebid-v10.11.0.js/modules/identityLinkIdSystem';
+import 'prebid-v10.11.0.js/modules/sharedIdSystem';
+import 'prebid-v10.11.0.js/modules/uid2IdSystem';
+import 'prebid-v10.11.0.js/modules/userId';
 
 // Real time data
 import 'prebid-v10.11.0.js/modules/rtdModule';
 import 'prebid-v10.11.0.js/modules/permutiveRtdProvider';
 
 // Guardian specific adapters that we have modified or created
-import './modules-v10.11.0/appnexusBidAdapter';
-import './modules-v10.11.0/openxBidAdapter';
-import './modules-v10.11.0/analyticsAdapter';
+import './appnexusBidAdapter';
+import './openxBidAdapter';
+import './analyticsAdapter';
 
 void pbjs.processQueue();
 
