@@ -39,7 +39,7 @@ export type ConsentManagement =
 
 export type UserId = {
 	name: string;
-	params?: Record<string, string | number>;
+	params?: Record<string, string | number | boolean>;
 	storage?: {
 		type: 'cookie' | 'html5';
 		name: string;

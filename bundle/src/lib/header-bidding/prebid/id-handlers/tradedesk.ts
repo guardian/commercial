@@ -1,7 +1,6 @@
 import { hashEmailForClient } from '@guardian/commercial-core';
 import type { ConsentState } from '@guardian/libs';
 import { isUserInTestGroup } from '../../../../experiments/beta-ab';
-import { getEmail } from '../../../identity/api';
 import type { UserId } from '../types';
 
 type TradeDeskIdParams = {
@@ -41,6 +40,7 @@ const getTradeDeskIdParams = async (
 };
 
 export const getUserIdForTradeDesk = async (
+	email: string | null,
 	consentState: ConsentState,
 ): Promise<UserId | undefined> => {
 	const isInTest = !isUserInTestGroup(
@@ -51,7 +51,6 @@ export const getUserIdForTradeDesk = async (
 		consentState.framework &&
 		['tcfv2', 'usnat'].includes(consentState.framework);
 
-	const email = await getEmail();
 	if (email && isInTest && isValidFramework) {
 		const idType = consentState.framework === 'tcfv2' ? 'euid' : 'uid2';
 		const params = await getTradeDeskIdParams(idType, email);
