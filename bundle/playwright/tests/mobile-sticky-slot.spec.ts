@@ -6,26 +6,36 @@ import { articles } from '../fixtures/pages';
 import { GuPage } from '../fixtures/pages/Page';
 
 const { path } = articles[0] as unknown as GuPage;
-
 testAtBreakpoints(['mobile']).forEach(({ breakpoint, width, height }) => {
-	test(`mobile sticky responds to banner:close event at ${breakpoint}`, async ({
+	test(`can show and interact with SR banner at ${breakpoint}`, async ({
 		page,
 	}) => {
 		await page.setViewportSize({ width, height });
+
 		await loadPage({ page, path, region: 'US' });
 		await cmpAcceptAll(page);
 		await loadPage({
 			page,
 			path,
 			region: 'US',
-			queryParams: { adtest: 'mobileStickyTest' },
+			queryParams: { 'force-banner': '', adtest: 'mobileStickyTest' },
 		});
 
-		await page.evaluate(() => {
-			document.dispatchEvent(new Event('banner:close'));
-		});
+		// Banner should be visible, ad slot should not exist
+		await expect(
+			page.locator('[name="StickyBottomBanner"] > *'),
+		).toBeVisible();
+		await expect(page.locator('#dfp-ad--mobile-sticky')).not.toBeAttached();
 
-		await expect(page.locator('#dfp-ad--mobile-sticky')).toBeVisible();
+		// Dismiss banner
+		await page.getByRole('button', { name: 'Collapse banner' }).click();
+		await page.getByText('Maybe later').click();
+
+		// Banner hidden, ad slot should now appear
+		await expect(
+			page.locator('[name="StickyBottomBanner"]'),
+		).not.toBeVisible();
+		await expect(page.locator('#dfp-ad--mobile-sticky')).toBeAttached();
 	});
 });
 
@@ -42,13 +52,12 @@ testAtBreakpoints(['mobile']).forEach(({ breakpoint, width, height }) => {
 				adtest: 'mobileStickyTest',
 			},
 		});
-
 		await cmpAcceptAll(page);
+
 		await page.evaluate(() => {
 			document.dispatchEvent(new Event('banner:none'));
 		});
 
-		await page.waitForTimeout(1000);
-		await expect(page.locator('#dfp-ad--mobile-sticky')).toBeVisible();
+		await expect(page.locator('#dfp-ad--mobile-sticky')).toBeAttached();
 	});
 });
