@@ -277,7 +277,7 @@ describe('initialise', () => {
 						partner: 182,
 						externalModuleUrl:
 							'https://cdn.id5-sync.com/api/1.0/id5PrebidModule.js',
-						pd: "MT01MjhmNGU4M2RiZGQ5MTZlODExMzU4ZTQzNTE4NTU1ZjY4MjI5YjFkYzI3OWI2YjJjZDNjNDgwZjY4MzcxZTdk"
+						pd: 'MT01MjhmNGU4M2RiZGQ5MTZlODExMzU4ZTQzNTE4NTU1ZjY4MjI5YjFkYzI3OWI2YjJjZDNjNDgwZjY4MzcxZTdk',
 					},
 					storage: {
 						type: 'html5',
