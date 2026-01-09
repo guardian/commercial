@@ -424,10 +424,7 @@ const initialise = async (
 		} as const;
 
 		const email = await getEmail();
-		if (
-			email &&
-			!isUserInTestGroup('commercial-user-module-ID5', 'variant')
-		) {
+		if (email) {
 			const hashedEmail = await hashEmailForClient(email, 'id5');
 
 			const pdRaw = new URLSearchParams([['1', hashedEmail]]).toString();
