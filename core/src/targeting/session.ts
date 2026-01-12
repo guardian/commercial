@@ -118,9 +118,9 @@ type SessionTargeting = {
 	/**
 	 * **I**d **P**roviders – [see on Ad Manager][gam]
 	 *
-	 * Denote which id providers has been integrated.
+	 * Denote which id providers have been integrated.
 	 *
-	 * [gam]: Add new link when gam setup is ready
+	 * [gam]: To be added
 	 */
 	idp: string[] | null;
 };
