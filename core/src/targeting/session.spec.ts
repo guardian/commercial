@@ -11,6 +11,7 @@ describe('Session targeting', () => {
 			pv: '1234567',
 			ref: null,
 			si: 'f',
+			idp: [],
 		};
 
 		const targeting = getSessionTargeting({
@@ -25,6 +26,7 @@ describe('Session targeting', () => {
 			countryCode: 'GB',
 			localHour: '12',
 			isSignedIn: false,
+			idProviders: [],
 		});
 		expect(targeting).toMatchObject(expected);
 	});
@@ -59,6 +61,7 @@ describe('Session targeting', () => {
 			pv: '1234567',
 			ref: null,
 			si: 'f',
+			idp: [],
 		};
 
 		const targeting = getSessionTargeting({
@@ -69,6 +72,7 @@ describe('Session targeting', () => {
 			countryCode: 'GB',
 			localHour: '12',
 			isSignedIn: false,
+			idProviders: [],
 		});
 		expect(targeting).toMatchObject(expected);
 	});
@@ -90,6 +94,7 @@ describe('Session targeting', () => {
 			pv: '1234567',
 			si: 'f',
 			ref,
+			idp: [],
 		};
 
 		const targeting = getSessionTargeting({
@@ -104,6 +109,7 @@ describe('Session targeting', () => {
 			countryCode: 'GB',
 			localHour: '12',
 			isSignedIn: false,
+			idProviders: [],
 		});
 		expect(targeting).toMatchObject(expected);
 	});
@@ -132,6 +138,47 @@ describe('Session targeting', () => {
 				countryCode: 'GB',
 				localHour: '12',
 				isSignedIn,
+				idProviders: [],
+			});
+			expect(targeting).toMatchObject(expected);
+		},
+	);
+
+	const idProvidersOptions: Array<
+		[SessionTargeting['idp'], Array<{ name: string }>]
+	> = [
+		[[], []],
+		[['sharedId'], [{ name: 'sharedId' }]],
+		[
+			['sharedId', 'id5Id'],
+			[{ name: 'sharedId' }, { name: 'id5Id' }],
+		],
+		[
+			['sharedId', 'id5Id', 'intentIqId'],
+			[{ name: 'sharedId' }, { name: 'id5Id' }, { name: 'intentIqId' }],
+		],
+	];
+
+	test.each(idProvidersOptions)(
+		'should get `%s` for idProviders: %s',
+		(idp, idProviders) => {
+			const expected: Pick<SessionTargeting, 'idp'> = {
+				idp,
+			};
+
+			const targeting = getSessionTargeting({
+				referrer: '',
+				participations: {
+					serverSideParticipations: {},
+					clientSideParticipations: {},
+					betaAbTestParticipations: {},
+				},
+				adTest: null,
+				pageViewId: '1234567',
+				countryCode: 'GB',
+				localHour: '12',
+				isSignedIn: false,
+				idProviders,
 			});
 			expect(targeting).toMatchObject(expected);
 		},

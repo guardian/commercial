@@ -1,6 +1,7 @@
 import type { Participations } from '@guardian/ab-core';
 import type { CountryCode } from '@guardian/libs';
 import { isString } from '@guardian/libs';
+import type { UserId } from '../targeting/build-page-targeting';
 import type { False, True } from './types';
 
 /* -- Types -- */
@@ -113,6 +114,15 @@ type SessionTargeting = {
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=215727
 	 */
 	si: True | False;
+
+	/**
+	 * **I**d **P**roviders – [see on Ad Manager][gam]
+	 *
+	 * Denote which id providers has been integrated.
+	 *
+	 * [gam]: Add new link when gam setup is ready
+	 */
+	idp: string[] | null;
 };
 
 type AllParticipations = {
@@ -183,6 +193,10 @@ const experimentsTargeting = ({
 	return [...clientSideExperiment, ...serverSideExperiments, ...betaAbTests];
 };
 
+const getIdProviders = (userIds: UserId[]): string[] => {
+	return userIds.map((id) => id.name);
+};
+
 /* -- Targeting -- */
 
 type Session = {
@@ -193,6 +207,7 @@ type Session = {
 	pageViewId: SessionTargeting['pv'];
 	participations: AllParticipations;
 	referrer: string;
+	idProviders: UserId[];
 };
 
 const getSessionTargeting = ({
@@ -203,6 +218,7 @@ const getSessionTargeting = ({
 	pageViewId,
 	participations,
 	referrer,
+	idProviders,
 }: Session): SessionTargeting => ({
 	ab: experimentsTargeting(participations),
 	at: adTest,
@@ -211,6 +227,7 @@ const getSessionTargeting = ({
 	pv: pageViewId,
 	ref: getReferrer(referrer),
 	si: isSignedIn ? 't' : 'f',
+	idp: getIdProviders(idProviders),
 });
 
 export type { SessionTargeting, AllParticipations };

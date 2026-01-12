@@ -46,12 +46,19 @@ const getPageTargeting = (
 	isSignedIn: boolean,
 ): PageTargeting => {
 	const { page } = window.guardian.config;
+	const pbjsConfig = window.pbjs.getConfig();
+	const userSync = pbjsConfig.userSync;
+	const idProviders =
+		'userIds' in userSync && userSync.userIds.length > 0
+			? userSync.userIds
+			: [];
 
 	const pageTargeting = buildPageTargeting({
 		adFree: commercialFeatures.adFree,
 		clientSideParticipations: getParticipations(),
 		consentState,
 		isSignedIn,
+		idProviders,
 	});
 
 	// third-parties wish to access our page targeting, before the googletag script is loaded.
