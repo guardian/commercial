@@ -327,6 +327,13 @@ describe('DFP', () => {
 		} as unknown as typeof googletag;
 
 		window.googletag = googleTag;
+		window.pbjs = {
+			getConfig: jest.fn(() => ({
+				userSync: {
+					userIds: [],
+				},
+			})),
+		} as unknown as typeof window.pbjs;
 		(
 			window as unknown as {
 				__switch_zero: boolean;
@@ -341,7 +348,8 @@ describe('DFP', () => {
 		document.body.innerHTML = '';
 		$style.remove();
 		// @ts-expect-error -- we’re removing it
-		window.googletag = undefined;
+		window.googletag = undefined; // @ts-expect-error -- we're removing it
+		window.pbjs = undefined;
 	});
 
 	it('hides all ad slots when all DFP advertising is disabled', async () => {
