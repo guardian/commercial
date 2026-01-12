@@ -6,8 +6,8 @@ import { articles } from '../fixtures/pages';
 import { GuPage } from '../fixtures/pages/Page';
 
 const { path } = articles[0] as unknown as GuPage;
-testAtBreakpoints(['mobile']).forEach(({ breakpoint, width, height }) => {
-	test(`can show and interact with SR banner at ${breakpoint}`, async ({
+testAtBreakpoints(['mobile']).forEach(({ width, height }) => {
+	test(`mobile sticky ad waits for StickyBottomBanner to be dismissed before loading`, async ({
 		page,
 	}) => {
 		await page.setViewportSize({ width, height });
@@ -39,8 +39,8 @@ testAtBreakpoints(['mobile']).forEach(({ breakpoint, width, height }) => {
 	});
 });
 
-testAtBreakpoints(['mobile']).forEach(({ breakpoint, width, height }) => {
-	test(`mobile sticky responds to banner:none event at ${breakpoint}`, async ({
+testAtBreakpoints(['mobile']).forEach(({ width, height }) => {
+	test(`mobile sticky responds to banner:none event at mobile breakpoint`, async ({
 		page,
 	}) => {
 		await page.setViewportSize({ width, height });
