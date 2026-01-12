@@ -1,3 +1,4 @@
+import type { VendorName } from '@guardian/libs';
 import { type ConsentState, getConsentFor } from '@guardian/libs';
 import { getEmail } from '../../../identity/api';
 import { isSwitchedOn } from '../../utils';
@@ -12,7 +13,7 @@ export const getUserSyncSettings = async (consentState: ConsentState) => {
 	const fetchId5UserId =
 		getConsentFor('id5', consentState) && getUserIdForId5(userEmail);
 	const fetchLiveRampUserId =
-		getConsentFor('liveramp', consentState) &&
+		getConsentFor('liveramp' as VendorName, consentState) &&
 		getUserIdForLiveRamp(userEmail);
 	const fetchTradeDeskUserId =
 		getConsentFor('theTradeDesk', consentState) &&

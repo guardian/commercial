@@ -57,7 +57,7 @@ const getLiveRampParams = async (email: string): Promise<UserId> => {
 			// If you want to generate a RampID based on a LiveRamp 3p cookie
 			// (from a previous authentication) until ATS can generate a new
 			// RampID, set this property to false.
-			notUse3P: true,
+			notUse3P: 'true',
 		},
 		storage: {
 			type: 'cookie',
