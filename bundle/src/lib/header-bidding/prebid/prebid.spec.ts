@@ -3,7 +3,6 @@
 import { hashEmailForClient } from '@guardian/commercial-core/email-hash';
 import { type ConsentState } from '@guardian/libs';
 import { getConsentFor } from '@guardian/libs';
-import { isUserInTestGroup } from '../../../experiments/beta-ab';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
 import { getEmail } from '../../identity/api';
@@ -197,7 +196,7 @@ describe('initialise', () => {
 		});
 	});
 
-	test('should include pd in ID5 user module when consent and email are present and user is in the control group', async () => {
+	test('should include pd in ID5 user module when consent and email are present', async () => {
 		jest.mocked(shouldIncludeBidder).mockReturnValue(
 			jest.fn().mockReturnValue(true),
 		);
@@ -205,7 +204,6 @@ describe('initialise', () => {
 		(hashEmailForClient as jest.Mock).mockReturnValue(
 			'528f4e83dbdd916e811358e43518555f68229b1dc279b6b2cd3c480f68371e7d',
 		);
-		(isUserInTestGroup as jest.Mock).mockReturnValue(false);
 		mockGetConsentForID5(true);
 
 		await prebid.initialise(window, mockConsentState);
@@ -228,56 +226,6 @@ describe('initialise', () => {
 					params: {
 						partner: 182,
 						pd: 'MT01MjhmNGU4M2RiZGQ5MTZlODExMzU4ZTQzNTE4NTU1ZjY4MjI5YjFkYzI3OWI2YjJjZDNjNDgwZjY4MzcxZTdk',
-						externalModuleUrl:
-							'https://cdn.id5-sync.com/api/1.0/id5PrebidModule.js',
-					},
-					storage: {
-						type: 'html5',
-						name: 'id5id',
-						expires: 90,
-						refreshInSeconds: 7200,
-					},
-				},
-			],
-			auctionDelay: 500,
-			filterSettings: {
-				all: {
-					bidders: '*',
-					filter: 'include',
-				},
-			},
-		});
-	});
-	test('should NOT include pd in ID5 user module when consent and email are present and user is in the variant group', async () => {
-		jest.mocked(shouldIncludeBidder).mockReturnValue(
-			jest.fn().mockReturnValue(true),
-		);
-		(getEmail as jest.Mock).mockReturnValue('guardianuse@gmail.com');
-		(hashEmailForClient as jest.Mock).mockReturnValue(
-			'528f4e83dbdd916e811358e43518555f68229b1dc279b6b2cd3c480f68371e7d',
-		);
-		(isUserInTestGroup as jest.Mock).mockReturnValue(true);
-		mockGetConsentForID5(true);
-
-		await prebid.initialise(window, mockConsentState);
-
-		expect(window.pbjs?.getConfig().userSync).toStrictEqual({
-			syncDelay: 3000,
-			syncEnabled: true,
-			syncsPerBidder: 0,
-			userIds: [
-				{
-					name: 'sharedId',
-					storage: {
-						type: 'cookie',
-						name: '_pubcid',
-						expires: 365,
-					},
-				},
-				{
-					name: 'id5Id',
-					params: {
-						partner: 182,
 						externalModuleUrl:
 							'https://cdn.id5-sync.com/api/1.0/id5PrebidModule.js',
 					},
