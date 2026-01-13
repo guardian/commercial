@@ -154,8 +154,8 @@ describe('Session targeting', () => {
 			[{ name: 'sharedId' }, { name: 'id5Id' }],
 		],
 		[
-			['sharedId', 'id5Id', 'intentIqId'],
-			[{ name: 'sharedId' }, { name: 'id5Id' }, { name: 'intentIqId' }],
+			['sharedId', 'id5Id', 'euid'],
+			[{ name: 'sharedId' }, { name: 'id5Id' }, { name: 'euid' }],
 		],
 	];
 

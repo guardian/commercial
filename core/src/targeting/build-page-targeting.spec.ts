@@ -488,10 +488,10 @@ describe('Build Page Targeting', () => {
 				idProviders: [
 					{ name: 'sharedId' },
 					{ name: 'id5Id' },
-					{ name: 'intentIqId' },
+					{ name: 'euid' },
 				],
 			}).idp,
-		).toEqual(['sharedId', 'id5Id', 'intentIqId']);
+		).toEqual(['sharedId', 'id5Id', 'euid']);
 	});
 
 	it('should remove empty values', () => {
