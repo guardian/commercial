@@ -15,11 +15,23 @@ function toBase64(hashBuffer: ArrayBuffer): string {
 	return base64Hash;
 }
 
+function normaliseEmail(email: string) {
+	const normalisedEmail = email.trim().toLowerCase();
+	const emailSuffix = normalisedEmail.split('@')[1];
+	const emailLocal = normalisedEmail.split('@')[0];
+	if (emailSuffix != 'gmail.com') {
+		return normalisedEmail;
+	}
+	const strippedLocal = emailLocal?.replaceAll('.', '');
+	return strippedLocal + '@' + emailSuffix;
+}
+
 async function hashEmailForClient(
 	email: string,
 	client: HashClient,
 ): Promise<string> {
-	const normalisedEmail = email.trim().toLowerCase();
+	const normalisedEmail = normaliseEmail(email);
+	console.log(`HERE: OG: ${email} hashed::: ${normalisedEmail}`)
 	const utf8 = new TextEncoder().encode(normalisedEmail);
 	const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
 	switch (client) {
@@ -30,4 +42,4 @@ async function hashEmailForClient(
 			return toBase64(hashBuffer);
 	}
 }
-export { hashEmailForClient };
+export { hashEmailForClient, normaliseEmail };
