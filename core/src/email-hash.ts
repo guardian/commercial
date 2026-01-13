@@ -31,7 +31,6 @@ async function hashEmailForClient(
 	client: HashClient,
 ): Promise<string> {
 	const normalisedEmail = normaliseEmail(email);
-	console.log(`HERE: OG: ${email} hashed::: ${normalisedEmail}`);
 	const utf8 = new TextEncoder().encode(normalisedEmail);
 	const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
 	switch (client) {
