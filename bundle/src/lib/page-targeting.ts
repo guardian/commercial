@@ -46,10 +46,12 @@ const getPageTargeting = (
 	isSignedIn: boolean,
 ): PageTargeting => {
 	const { page } = window.guardian.config;
-	const pbjsConfig = window.pbjs.getConfig();
-	const userSync = pbjsConfig.userSync;
+	const pbjsConfig =
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- optional chaining for playwright tests
+		window.pbjs?.getConfig ? window.pbjs.getConfig() : undefined;
+	const userSync = pbjsConfig?.userSync;
 	const idProviders =
-		'userIds' in userSync && userSync.userIds.length > 0
+		userSync && 'userIds' in userSync && userSync.userIds.length > 0
 			? userSync.userIds
 			: [];
 
