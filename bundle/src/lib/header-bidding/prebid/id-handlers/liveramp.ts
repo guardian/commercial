@@ -1,6 +1,6 @@
 import { hashEmailForClient } from '@guardian/commercial-core';
 import { loadScript, log } from '@guardian/libs';
-// import { isUserInTestGroup } from '../../../../experiments/beta-ab';
+import { isUserInTestGroup } from '../../../../experiments/beta-ab';
 import type { UserId } from '../types';
 
 const ATS_PLACEMENT_ID = 14522;
@@ -71,13 +71,12 @@ const getLiveRampParams = async (email: string): Promise<UserId> => {
 export const getUserIdForLiveRamp = async (
 	email: string | null,
 ): Promise<UserId | undefined> => {
-	// const isInTest = isUserInTestGroup(
-	// 	'commercial-user-module-liveramp',
-	// 	'variant',
-	// );
+	const isInTest = isUserInTestGroup(
+		'commercial-user-module-liveramp',
+		'variant',
+	);
 
-	// if (email && isInTest) {
-	if (email) {
+	if (email && isInTest) {
 		const params = await getLiveRampParams(email);
 		return params;
 	}
