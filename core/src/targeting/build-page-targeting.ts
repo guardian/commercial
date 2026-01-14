@@ -41,6 +41,7 @@ type PageTargeting = PartialWithNulls<
 		s: string; // site Section
 		sens: TrueOrFalse; // SenSitive
 		si: TrueOrFalse; // Signed In
+		idp: string[]; // Id Providers
 		skinsize: 'l' | 's';
 		urlkw: string[]; // URL KeyWords
 		vl: string; // Video Length
@@ -95,12 +96,24 @@ const isFirstVisit = (referrer: string): boolean => {
 	return !referrerMatchesHost(referrer);
 };
 
+type UserId = {
+	name: string;
+	params?: Record<string, string | number>;
+	storage?: {
+		type: 'cookie' | 'html5';
+		name: string;
+		expires: number;
+		refreshInSeconds?: number;
+	};
+};
+
 type BuildPageTargetingParams = {
 	adFree: boolean;
 	clientSideParticipations: Participations;
 	consentState: ConsentState;
 	isSignedIn?: boolean;
 	youtube?: boolean;
+	idProviders?: UserId[];
 };
 
 const buildPageTargeting = ({
@@ -109,6 +122,7 @@ const buildPageTargeting = ({
 	consentState,
 	isSignedIn = false,
 	youtube = false,
+	idProviders = [],
 }: BuildPageTargetingParams): Record<string, string | string[]> => {
 	const { page, isDotcomRendering } = window.guardian.config;
 
@@ -146,6 +160,7 @@ const buildPageTargeting = ({
 				window.guardian.modules.abTests?.getParticipations() ?? {},
 		},
 		referrer,
+		idProviders,
 	});
 
 	type Viewport = { width: number; height: number };
@@ -191,4 +206,4 @@ const buildPageTargeting = ({
 };
 
 export { buildPageTargeting, filterValues, getLocalHour };
-export type { PageTargeting };
+export type { UserId, PageTargeting };

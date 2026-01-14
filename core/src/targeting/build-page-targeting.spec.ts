@@ -454,6 +454,46 @@ describe('Build Page Targeting', () => {
 		).toBeUndefined();
 	});
 
+	it('should not contain id providers targeting value', () => {
+		expect(
+			buildPageTargeting({
+				adFree: false,
+				clientSideParticipations: {},
+				consentState: emptyConsent,
+				isSignedIn: true,
+				idProviders: [],
+			}).idp,
+		).toBeUndefined();
+	});
+
+	it('should set correct idp param with single id provider', () => {
+		expect(
+			buildPageTargeting({
+				adFree: false,
+				clientSideParticipations: {},
+				consentState: emptyConsent,
+				isSignedIn: true,
+				idProviders: [{ name: 'sharedId' }],
+			}).idp,
+		).toEqual(['sharedId']);
+	});
+
+	it('should set correct idp param with multiple id providers', () => {
+		expect(
+			buildPageTargeting({
+				adFree: false,
+				clientSideParticipations: {},
+				consentState: emptyConsent,
+				isSignedIn: true,
+				idProviders: [
+					{ name: 'sharedId' },
+					{ name: 'id5Id' },
+					{ name: 'euid' },
+				],
+			}).idp,
+		).toEqual(['sharedId', 'id5Id', 'euid']);
+	});
+
 	it('should remove empty values', () => {
 		window.guardian.config.page = {
 			// pageId should always be defined

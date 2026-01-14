@@ -34,6 +34,16 @@ const emptyConsent: ConsentState = {
 };
 
 describe('Build Page Targeting', () => {
+	beforeEach(() => {
+		window.pbjs = {
+			getConfig: jest.fn().mockReturnValue({
+				userSync: {
+					userIds: [],
+				},
+			}),
+		} as unknown as typeof window.pbjs;
+	});
+
 	describe('appNexusPageTargeting', () => {
 		it('should set appNexusPageTargeting as flatten string', async () => {
 			buildPageTargeting.mockReturnValue({
@@ -75,6 +85,74 @@ describe('Build Page Targeting', () => {
 			getPageTargeting(emptyConsent, isSignedIn);
 			expect(window.guardian.config.page.appNexusPageTargeting).toEqual(
 				'sens=f,pt1=/football/series/footballweekly,pt2=us,pt3=video,pt4=ng,pt5=prince-charles-letters,pt5=uk/uk,pt5=prince-charles,pt6=5,pt7=desktop,pt9=presetOphanPageViewId|gabrielle-chan|news',
+			);
+		});
+	});
+
+	describe('idProviders', () => {
+		it('should pass empty array when no id providers configured', async () => {
+			window.pbjs = {
+				getConfig: jest.fn().mockReturnValue({
+					userSync: {
+						userIds: [],
+					},
+				}),
+			} as unknown as typeof window.pbjs;
+
+			buildPageTargeting.mockReturnValue({});
+
+			mockViewport(1024, 0);
+			const isSignedIn = await isUserLoggedIn();
+			getPageTargeting(emptyConsent, isSignedIn);
+
+			expect(buildPageTargeting).toHaveBeenCalledWith(
+				expect.objectContaining({
+					idProviders: [],
+				}),
+			);
+		});
+
+		it('should pass id providers when configured', async () => {
+			const mockUserIds = [{ name: 'sharedId' }, { name: 'id5Id' }];
+
+			window.pbjs = {
+				getConfig: jest.fn().mockReturnValue({
+					userSync: {
+						userIds: mockUserIds,
+					},
+				}),
+			} as unknown as typeof window.pbjs;
+
+			buildPageTargeting.mockReturnValue({});
+
+			mockViewport(1024, 0);
+			const isSignedIn = await isUserLoggedIn();
+			getPageTargeting(emptyConsent, isSignedIn);
+
+			expect(buildPageTargeting).toHaveBeenCalledWith(
+				expect.objectContaining({
+					idProviders: mockUserIds,
+				}),
+			);
+		});
+
+		it('should handle missing userIds property in userSync', async () => {
+			window.pbjs = {
+				getConfig: jest.fn().mockReturnValue({
+					userSync: {},
+				}),
+			} as unknown as typeof window.pbjs;
+
+			buildPageTargeting.mockReturnValue({});
+
+			mockViewport(1024, 0);
+			const isSignedIn = await isUserLoggedIn();
+			getPageTargeting(emptyConsent, isSignedIn);
+
+			expect(buildPageTargeting).toHaveBeenCalledWith(
+				expect.objectContaining({
+					idProviders: [],
+				}),
 			);
 		});
 	});
