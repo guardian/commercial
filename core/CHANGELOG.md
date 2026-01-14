@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 30.1.0
+
+### Minor Changes
+
+- 7a6a217: Add idProviders to the ad request
+
 ## 30.0.0
 
 ### Major Changes
