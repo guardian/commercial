@@ -2,6 +2,7 @@ import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import { isString } from '@guardian/libs';
 import fastdom from 'fastdom';
+import { getCurrentBreakpoint } from '../lib/detect/detect-breakpoint';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { reportError } from '../lib/error/report-error';
 import { emptyAdvert } from './empty-advert';
@@ -79,7 +80,21 @@ export const onSlotRender = (
 					advert.node.id.includes('dfp-ad--inline') &&
 					advert.node.id !== 'dfp-ad--inline1';
 
-				if (!parentElement || !isInlineTwoPlus) return;
+				const breakpoint = getCurrentBreakpoint();
+
+				/**
+				 * We only want to report ads that are overflowing their containers for
+				 * inline2+ ads on desktop and wide breakpoints aka when inline ads are in
+				 * the right column.
+				 */
+				if (
+					!parentElement ||
+					!isInlineTwoPlus ||
+					breakpoint === 'mobile' ||
+					breakpoint == 'tablet'
+				) {
+					return;
+				}
 
 				const adElementHeight = advert.node.offsetHeight;
 				const adElementWidth = advert.node.offsetWidth;
