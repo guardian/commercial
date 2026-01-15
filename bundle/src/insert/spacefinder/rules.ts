@@ -60,6 +60,8 @@ const inlineOpponentSelector = ['inline', 'supporting', 'showcase', 'halfWidth']
 
 const headingSelector = `:scope > h2, [data-spacefinder-role="nested"] > h2, :scope > h3, [data-spacefinder-role="nested"] > h3`;
 
+const interactiveElementSelector = `.element-interactive[data-spacefinder-role="inline"]`;
+
 const desktopInline1: SpacefinderRules = {
 	bodySelector,
 	candidateSelector,
@@ -90,6 +92,11 @@ const desktopInline1: SpacefinderRules = {
 		['[data-spacefinder-role="supporting"]']: {
 			marginBottom: 0,
 			marginTop: 100,
+		},
+		// Ensure sufficient space is left after inline interactive elements
+		[interactiveElementSelector]: {
+			marginBottom: 50,
+			marginTop: 0,
 		},
 	},
 };
