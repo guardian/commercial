@@ -252,6 +252,16 @@ const addInlineAds = (
 	isConsentless: boolean,
 ): Promise<boolean> => {
 	const currentBreakpoint = getCurrentBreakpoint();
+
+	const hasManualAdSlots =
+		document
+			.querySelector(articleBodySelector)
+			?.querySelector('.manual-ad-slot') !== null;
+	if (hasManualAdSlots) {
+		// TODO: Only insert ads in manual ad slots, skip automatic inline ads
+		return Promise.resolve(true);
+	}
+
 	if (['mobile', 'tablet'].includes(currentBreakpoint)) {
 		return addMobileAndTabletInlineAds(fillSlot, currentBreakpoint);
 	}
