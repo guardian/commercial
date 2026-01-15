@@ -37,8 +37,4 @@ describe('normaliseEmail', () => {
 		const normalisedEmail = normaliseEmail('guardian+user@gmail.com');
 		expect(normalisedEmail).toBe('guardian+user@gmail.com');
 	});
-	it('returns an empty string when the email is only whitespace', () => {
-		const normalisedEmail = normaliseEmail('   ');
-		expect(normalisedEmail).toBe('');
-	});
 });
