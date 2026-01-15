@@ -1,5 +1,5 @@
 type HashClient = 'id5' | 'uid2' | 'euid';
-type Email = `${string}@${string}`
+type Email = `${string}@${string}`;
 
 function toHex(hashBuffer: ArrayBuffer): string {
 	const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -18,12 +18,12 @@ function toBase64(hashBuffer: ArrayBuffer): string {
 
 function normaliseEmail(email: string): Email {
 	const normalisedEmail = email.trim().toLowerCase();
-	const [name, domain] = normalisedEmail.split('@')
-	if (domain != 'gmail.com') {
+	const [name, domain] = normalisedEmail.split('@');
+	if (domain !== 'gmail.com') {
 		return `${name}@${domain}`;
 	}
 	const strippedLocal = name?.replaceAll('.', '');
-	return `${strippedLocal}@${domain}`
+	return `${strippedLocal}@${domain}`;
 }
 
 async function hashEmailForClient(
