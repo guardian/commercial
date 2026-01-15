@@ -17,13 +17,12 @@ function toBase64(hashBuffer: ArrayBuffer): string {
 
 function normaliseEmail(email: string) {
 	const normalisedEmail = email.trim().toLowerCase();
-	const emailSuffix = normalisedEmail.split('@')[1];
-	const emailLocal = normalisedEmail.split('@')[0];
-	if (emailSuffix != 'gmail.com') {
+	const [name, domain] = normalisedEmail.split('@')
+	if (domain != 'gmail.com') {
 		return normalisedEmail;
 	}
-	const strippedLocal = emailLocal?.replaceAll('.', '');
-	return strippedLocal + '@' + emailSuffix;
+	const strippedLocal = name?.replaceAll('.', '');
+	return `${strippedLocal}@${domain}`
 }
 
 async function hashEmailForClient(
