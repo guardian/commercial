@@ -31,6 +31,10 @@ const loadLiveRamp = () => {
 
 const getLiveRampParams = async (email: string): Promise<UserId> => {
 	console.warn('liveramp: getting params for email', email);
+	window.addEventListener('envelopeModuleReady', function () {
+		console.warn('liveramp: envelopeModuleReady ready again');
+	});
+
 	await Promise.all([
 		hashEmailForClient(email, 'liveramp'),
 		loadBundle(),
@@ -40,7 +44,7 @@ const getLiveRampParams = async (email: string): Promise<UserId> => {
 			console.warn('liveramp: hashed email generated', hashedEmail);
 			window.addEventListener('envelopeModuleReady', function () {
 				console.warn('liveramp: envelopeModuleReady ready');
-				window.ats.setAdditionalData({
+				window.atsenvelopemodule?.setAdditionalData({
 					type: 'emailHashes',
 					id: [hashedEmail],
 				});

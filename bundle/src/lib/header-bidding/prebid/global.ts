@@ -11,7 +11,7 @@ import type {
 declare global {
 	interface Window {
 		// liveramp ats object is available once liveramp ats-module script is loaded
-		ats: {
+		atsenvelopemodule?: {
 			setAdditionalData: (data: { type: string; id: string[] }) => void;
 		};
 		// the optional pbjs object causes a typecheck failure as the v10
