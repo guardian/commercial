@@ -13,18 +13,20 @@ const scriptLoadProps = {
 	defer: true,
 };
 
+// bundle must be loaded in advance of liveramp script
+// and as a link in accordance with liveramp's guidance
 const loadBundle = () => {
-	return loadScript(
-		'https://launchpad.privacymanager.io/latest/launchpad.bundle.js',
-		scriptLoadProps,
-	);
+	const link = document.createElement('link');
+	link.as = 'script';
+	link.rel = 'preload';
+	link.href =
+		'https://launchpad.privacymanager.io/latest/launchpad.bundle.js';
+	document.head.appendChild(link);
 };
 
 const loadLiveRamp = () => {
-	// Note: This script depends on the bundle being loaded first
 	return loadScript(
-		'https://ats-wrapper.privacymanager.io/ats-modules/ee7e18b9-e61a-40ac-8501-2af11edb8ea8/ats.js', // pre-prod
-		// 'https://launchpad-wrapper.privacymanager.io/3a17d559-73d2-4f0d-aff1-54da33303144/launchpad-liveramp.js',	// prod
+		'https://launchpad-wrapper.privacymanager.io/3a17d559-73d2-4f0d-aff1-54da33303144/launchpad-liveramp.js', // prod
 		scriptLoadProps,
 	);
 };
@@ -35,11 +37,9 @@ const getLiveRampParams = async (email: string): Promise<UserId> => {
 		console.warn('liveramp: envelopeModuleReady ready again');
 	});
 
-	await Promise.all([
-		hashEmailForClient(email, 'liveramp'),
-		loadBundle(),
-		loadLiveRamp(),
-	])
+	loadBundle();
+
+	await Promise.all([hashEmailForClient(email, 'liveramp'), loadLiveRamp()])
 		.then(([hashedEmail]) => {
 			console.warn('liveramp: hashed email generated', hashedEmail);
 			window.addEventListener('envelopeModuleReady', function () {
