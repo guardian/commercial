@@ -48,11 +48,11 @@
 	},
 	"dependencies": {
 		"@guardian/ab-core": "9.0.0",
-		"@guardian/libs": "27.0.0"
+		"@guardian/libs": "27.0.0",
+		"@types/google-publisher-tag": "~1.20251117.0"
 	},
 	"devDependencies": {
 		"@guardian/ophan-tracker-js": "2.6.3",
-		"@types/google-publisher-tag": "~1.20251117.0",
 		"@types/jest": "30.0.0",
 		"@types/node": "24.10.1",
 		"jest": "^30.2.0",
