@@ -4,11 +4,20 @@
 
 ## Context
 
-There's currently no standard way to track the lifecycle of an [`Advert`](bundle/src/define/Advert.ts) instance.
+There's currently no standard way to track the lifecycle of an [`Advert`](../../../bundle/src/define/Advert.ts) instance.
 
 This makes it difficult to coordinate actions that depend on an advert's state.
 
-Internally we rely on the `whenSlotReady` promise and `isRendered` boolean, but this only covers those phases and in different ways.
+Internally we rely on a few different mechanisms to track the state of an advert, but these are inconsistent and scattered across the codebase.
+
+For example in [`define-slot.ts`](../../../bundle/src/define/define-slot.ts) we use `whenSlotReady` to ensure the slot is ready before performing actions like refreshing or collapsing the slot.
+
+But in [`on-slot-render.ts`](../../../bundle/src/init/consented/dfp-listeners.ts) we listen for events from googletag.
+
+And in [`lazy-load.ts`](../../../bundle/src/display/lazy-load.ts) we check the `isRendered` boolean to determine if the advert has already been rendered, so we can refresh instead of load.
+
+**Note:**
+I know we have some potential plans to refactor some of this code in the future, I still think having a clear system for advert lifecycle events would be beneficial particularly for those we don't control like when an advert is scrolled into view or when an advert is fetched from GAM.
 
 ## Proposal
 
