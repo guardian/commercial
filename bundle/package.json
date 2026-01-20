@@ -56,7 +56,7 @@
 		"@babel/preset-react": "^7.26.3",
 		"@changesets/cli": "^2.29.8",
 		"@guardian/browserslist-config": "^7.0.0",
-		"@guardian/ophan-tracker-js": "2.6.3",
+		"@guardian/ophan-tracker-js": "2.8.0",
 		"@playwright/test": "1.57.0",
 		"@types/google-publisher-tag": "~1.20251117.0",
 		"@types/jest": "30.0.0",
