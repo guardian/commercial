@@ -23,7 +23,7 @@
 		"prettier:fix": "prettier . --write --cache",
 		"serve": "pnpm --filter @guardian/commercial-bundle serve",
 		"test": "pnpm -r --parallel --aggregate-output test",
-		"test:ci": "pnpm -r --parallel --aggregate-output test -- --ci",
+		"test:ci": "pnpm -r --parallel --aggregate-output test -- --ci --coverage",
 		"tsc": "pnpm -r --parallel --aggregate-output tsc"
 	},
 	"devDependencies": {
