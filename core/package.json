@@ -40,6 +40,7 @@
 		"prettier:check": "prettier . --check --cache",
 		"prettier:fix": "prettier . --write --cache",
 		"test": "jest",
+		"test-cov": "jest --coverage",
 		"tsc": "tsc --noEmit"
 	},
 	"peerDependencies": {

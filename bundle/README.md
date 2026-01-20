@@ -24,6 +24,8 @@ To run the unit tests:
 
 `pnpm test`
 
+This might fail if the base test coverage hasn't been met. This is set in [jest.config.js](./jest.config.js). Ensure you add sufficient tests to meet the threshold if you can. If this is not possible for whatever reason, you can decrease the set thresholds but this should be considered a last resort
+
 To run the Playwright e2e tests:
 
 Follow the steps above to run DCR against the local bundle.
