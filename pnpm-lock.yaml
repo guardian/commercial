@@ -218,13 +218,13 @@ importers:
       '@guardian/libs':
         specifier: 27.0.0
         version: 27.0.0(@guardian/ophan-tracker-js@2.6.3)(tslib@2.8.1)(typescript@5.9.3)
+      '@types/google-publisher-tag':
+        specifier: ~1.20251117.0
+        version: 1.20251117.0
     devDependencies:
       '@guardian/ophan-tracker-js':
         specifier: 2.6.3
         version: 2.6.3
-      '@types/google-publisher-tag':
-        specifier: ~1.20251117.0
-        version: 1.20251117.0
       '@types/jest':
         specifier: 30.0.0
         version: 30.0.0
