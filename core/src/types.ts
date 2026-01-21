@@ -1,7 +1,7 @@
 import type { EventPayload } from '@guardian/ophan-tracker-js';
 import type { AdSize, SizeMapping } from './ad-sizes';
 import type { PageTargeting } from './targeting/build-page-targeting';
-import 'googletag';
+import '@types/google-publisher-tag';
 
 type HeaderBiddingSize = AdSize;
 
