@@ -76,7 +76,7 @@ const resetPrebid = () => {
 	jest.requireActual('lib/header-bidding/prebid/modules');
 };
 
-describe.skip('initialise', () => {
+describe('initialise', () => {
 	beforeEach(() => {
 		resetPrebid();
 		window.guardian.config.switches.consentManagement = true;

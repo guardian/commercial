@@ -7,7 +7,9 @@ import { getUserIdForLiveRamp } from './liveramp';
 import { sharedId } from './shared';
 import { getUserIdForTradeDesk } from './tradedesk';
 
-export const getUserSyncSettings = async (consentState: ConsentState) => {
+export const getUserSyncSettings = async (
+	consentState: ConsentState,
+): Promise<UserSync> => {
 	const userEmail = await getEmail();
 	const fetchId5UserId =
 		getConsentFor('id5', consentState) && getUserIdForId5(userEmail);
