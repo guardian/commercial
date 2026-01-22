@@ -12,12 +12,11 @@ Export a function that allows other code to register event listeners for Advert 
 
 ```ts
 import { onAdvertEvent } from '@guardian/commercial';
-onAdvertEvent('dfp--top-above-nav', 'loaded', (advert) => {
+onAdvertEvent('loaded', (advert) => {
 	console.log(`Advert ${advert.id} has loaded`);
 });
 
 onAdvertEvent(
-	'dfp--top-above-nav',
 	'rendered',
 	(advert) => {
 		console.log(`Advert ${advert.id} has rendered`);
@@ -25,11 +24,36 @@ onAdvertEvent(
 	{ once: true },
 );
 // onceAdvertEvent sounds weird, so using options instead
+
+// Example of listening to multiple events
+let startTime;
+onAdEvent(['ready', 'rendered'], (advert) => {
+	if (!advert.id !== 'dfp--top-above-nav') {
+		return;
+	}
+
+	switch (advert.state) {
+		case 'ready':
+			startTime = new Date().now();
+			break;
+		case 'rendered':
+			console.log('time to render:', new Date().now() - startTime);
+			break;
+	}
+});
+
+// Example of listening to all events
+onAdEvent((advert) => {
+	if (!advert.id !== 'dfp--top-above-nav') {
+		return;
+	}
+
+	console.log(`Advert ${advert.id} is:${advert.state}`);
+});
 ```
 
-The `onAdvertEvent` function would take three parameters:
+The `onAdvertEvent` function would take 2-3 parameters:
 
-- `advertId`: The ID of the advert to listen for events on.
 - `event`: The lifecycle event to listen for (e.g., 'ready', 'preparing', 'fetching', 'loading', 'rendered').
 - `callback`: A function to be called when the event occurs, receiving the Advert instance as a parameter.
   The registered callback will be invoked whenever the specified event occurs for the given Advert instance.
