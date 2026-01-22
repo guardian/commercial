@@ -2,4 +2,4 @@
 '@guardian/commercial-core': patch
 ---
 
-import newer @types/google-publisher-tag over @types/googletag
+Import newer @types/google-publisher-tag over @types/googletag for the `googletag` namespace
