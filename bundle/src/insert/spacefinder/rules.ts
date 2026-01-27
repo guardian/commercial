@@ -32,6 +32,8 @@ const MOST_VIEWED_HEIGHT = 600;
 
 const isImmersive = window.guardian.config.page.isImmersive;
 
+const isInteractive = window.guardian.config.page.contentType === 'Interactive';
+
 const hasImages = !!window.guardian.config.page.lightboxImages?.images.length;
 
 const hasVideo = window.guardian.config.page.hasYouTubeAtom;
@@ -175,10 +177,14 @@ const mobileOpponentSelectorRules: OpponentSelectorRules = {
 		// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
 		bypassMinTop: 'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 	},
+};
+
+const interactiveMobileOpponentSelectorRules: OpponentSelectorRules = {
+	...mobileOpponentSelectorRules,
 	// Ensure a reasonable gap around horizontal rules
 	[horizontalRuleSelector]: {
 		marginBottom: 150,
-		marginTop: 20,
+		marginTop: 150,
 	},
 };
 
@@ -187,7 +193,9 @@ const mobileAndTabletInlines: SpacefinderRules = {
 	candidateSelector: mobileCandidateSelector,
 	minDistanceFromTop: mobileMinDistanceFromArticleTop,
 	minDistanceFromBottom: 200,
-	opponentSelectorRules: mobileOpponentSelectorRules,
+	opponentSelectorRules: isInteractive
+		? interactiveMobileOpponentSelectorRules
+		: mobileOpponentSelectorRules,
 	/**
 	 * Filter out any candidates that are too close to the last winner
 	 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
