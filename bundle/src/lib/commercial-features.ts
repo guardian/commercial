@@ -1,4 +1,5 @@
 import { getCookie, log, storage } from '@guardian/libs';
+import { isUserInTestGroup } from '../experiments/beta-ab';
 import { getCurrentBreakpoint } from './detect/detect-breakpoint';
 
 /**
@@ -137,7 +138,16 @@ class CommercialFeatures {
 			);
 		}
 
-		const enableArticleBodyAdverts = isArticle;
+		const isInAdsInInteractivesOnMobileTest =
+			isUserInTestGroup(
+				'commercial-enable-spacefinder-on-interactives',
+				'true',
+			) &&
+			getCurrentBreakpoint() === 'mobile' &&
+			isInteractive;
+
+		const enableArticleBodyAdverts =
+			isArticle || isInAdsInInteractivesOnMobileTest;
 
 		const disableArticleBodyAdverts =
 			isMinuteArticle || isLiveBlog || isHosted || newRecipeDesign;
