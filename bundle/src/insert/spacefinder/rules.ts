@@ -58,6 +58,9 @@ const inlineOpponentSelector = ['inline', 'supporting', 'showcase', 'halfWidth']
 	)
 	.join(',');
 
+const horizontalRuleSelector =
+	':scope > hr, [data-spacefinder-role="nested"] > hr';
+
 const headingSelector = `:scope > h2, [data-spacefinder-role="nested"] > h2, :scope > h3, [data-spacefinder-role="nested"] > h3`;
 
 const desktopInline1: SpacefinderRules = {
@@ -171,6 +174,11 @@ const mobileOpponentSelectorRules: OpponentSelectorRules = {
 		marginTop: 200,
 		// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
 		bypassMinTop: 'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
+	},
+	// Ensure a reasonable gap around horizontal rules
+	[horizontalRuleSelector]: {
+		marginBottom: 150,
+		marginTop: 20,
 	},
 };
 
