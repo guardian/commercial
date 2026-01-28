@@ -98,7 +98,7 @@ const disableChildDirectedTreatment = () =>
 			});
 
 export const init = (): Promise<void> => {
-	const setupAdvertising = async (): Promise<void> => {
+	const setupAdvertising = new Promise<void>((resolve, reject) => {
 		const consentState = await onConsent();
 		EventTimer.get().mark('googletagInitStart');
 		const canRun = canRunGoogletag(consentState);
@@ -110,15 +110,11 @@ export const init = (): Promise<void> => {
 		// Just load googletag - it's already added to the window by Prebid.
 		if (canRun) {
 			const isSignedIn = await isUserLoggedIn();
-			window.googletag.cmd.push(
-				() => EventTimer.get().mark('googletagInitEnd'),
-				() => setPageTargeting(consentState, isSignedIn),
-				() => disableChildDirectedTreatment(),
-				// Note: this function isn't synchronous like most buffered cmds, it's a promise. It's put in here to ensure
-				// it strictly follows preceding prepare-googletag work (and the module itself ensures dependencies are
-				// fulfilled), but don't assume this function is complete when queueing subsequent work using cmd.push
-				() => void fillStaticAdvertSlots(),
-			);
+			window.googletag.cmd.push(() => {
+				EventTimer.get().mark('googletagInitEnd');
+				disableChildDirectedTreatment();
+				resolve();
+			});
 
 			// The DuckDuckGo browser blocks ads from loading by default, so it causes a lot of noise in Sentry.
 			// We filter these errors out here - DuckDuckGo is in the user agent string if someone is using the
@@ -128,6 +124,7 @@ export const init = (): Promise<void> => {
 					'//securepubads.g.doubleclick.net/tag/js/gpt.js',
 				{ async: false },
 			).catch((error: Error) => {
+				reject(error);
 				if (
 					navigator.userAgent.includes('DuckDuckGo') ||
 					navigator.userAgent.includes('Ddg')
@@ -142,7 +139,7 @@ export const init = (): Promise<void> => {
 				}
 			});
 		}
-	};
+	});
 
 	if (commercialFeatures.shouldLoadGoogletag) {
 		return (

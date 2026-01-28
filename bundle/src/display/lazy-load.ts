@@ -89,6 +89,7 @@ const shouldRunEagerPrebid = () =>
 
 export const enableLazyLoad = (advert: Advert): void => {
 	if (dfpEnv.lazyLoadObserve) {
+		console.log('Enabling lazy load for advert:', advert.id);
 		const isEagerPrebid = shouldRunEagerPrebid();
 		getDisplayAdObserver(isEagerPrebid).observe(advert.node);
 		if (isEagerPrebid) {
