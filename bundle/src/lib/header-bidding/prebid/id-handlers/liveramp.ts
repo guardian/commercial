@@ -30,6 +30,8 @@ const loadBundle = () => {
 // ready event can be listened for as early as possible.
 let emailAsHash: string | undefined;
 
+// envelopeModuleReady event is fired by the liveramp bundle script
+// when it has loaded and is ready to accept data.
 window.addEventListener('envelopeModuleReady', function () {
 	if (emailAsHash === undefined) return;
 	window.atsenvelopemodule?.setAdditionalData({

@@ -61,6 +61,6 @@ window.matchMedia =
 
 // reduce noise in test output
 global.console = {
-  ...console,
-  warn: jest.fn(),
+	...console,
+	warn: jest.fn(),
 };
