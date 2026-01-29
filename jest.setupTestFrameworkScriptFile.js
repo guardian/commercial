@@ -58,3 +58,9 @@ window.matchMedia =
 		addListener: jest.fn(),
 		addEventListener: jest.fn(),
 	}));
+
+// reduce noise in test output
+global.console = {
+  ...console,
+  warn: jest.fn(),
+};
