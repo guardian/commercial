@@ -42,7 +42,7 @@
 		"@guardian/libs": "27.0.0",
 		"@guardian/source": "12.2.0",
 		"fastdom": "^1.0.12",
-		"lodash-es": "^4.17.21",
+		"lodash-es": "^4.17.23",
 		"prebid-v10.11.0.js": "npm:prebid.js@10.11.0",
 		"prebid.js": "9.46.0",
 		"process": "^0.11.10",
