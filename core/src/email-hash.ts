@@ -1,19 +1,18 @@
-type HashClient = 'id5' | 'uid2' | 'euid';
+type HashClient = 'euid' | 'id5' | 'liveramp' | 'uid2';
 type Email = `${string}@${string}`;
 
-function toHex(hashBuffer: ArrayBuffer): string {
-	const hashArray = Array.from(new Uint8Array(hashBuffer));
+function toBase64(content: ArrayBuffer): string {
+	const hashBytes = new Uint8Array(content);
+	const base64Hash = btoa(String.fromCharCode(...hashBytes));
+	return base64Hash;
+}
+
+function toHex(content: ArrayBuffer): string {
+	const hashArray = Array.from(new Uint8Array(content));
 	const hashHex = hashArray
 		.map((bytes) => bytes.toString(16).padStart(2, '0'))
 		.join('');
 	return hashHex;
-}
-
-function toBase64(hashBuffer: ArrayBuffer): string {
-	const hashBytes = new Uint8Array(hashBuffer);
-	const base64Hash = btoa(String.fromCharCode(...hashBytes));
-
-	return base64Hash;
 }
 
 function normaliseEmail(email: string): Email {
@@ -31,14 +30,15 @@ async function hashEmailForClient(
 	client: HashClient,
 ): Promise<string> {
 	const normalisedEmail = normaliseEmail(email);
-	const utf8 = new TextEncoder().encode(normalisedEmail);
-	const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
+	const textAsBuffer = new TextEncoder().encode(normalisedEmail);
+	const hashBuffer = await crypto.subtle.digest('SHA-256', textAsBuffer);
 	switch (client) {
-		case 'id5':
-			return toHex(hashBuffer);
-		case 'uid2':
 		case 'euid':
+		case 'uid2':
 			return toBase64(hashBuffer);
+		case 'id5':
+		case 'liveramp':
+			return toHex(hashBuffer);
 	}
 }
 export { hashEmailForClient, normaliseEmail };
