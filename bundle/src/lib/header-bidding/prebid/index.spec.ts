@@ -524,7 +524,7 @@ type BidWonHandler = (arg0: {
 	adUnitCode: string;
 }) => void;
 
-describe.skip('Prebid.js bidWon Events', () => {
+describe('Prebid.js bidWon Events', () => {
 	test('should respond for correct configuration', async () => {
 		let bidWonEventName;
 		let bidWonEventHandler: BidWonHandler;
