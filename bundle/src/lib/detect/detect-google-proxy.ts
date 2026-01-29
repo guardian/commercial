@@ -15,5 +15,5 @@ const GOOGLE_WEB_PREVIEW = 'Google Web Preview';
 export const isGoogleProxy = (): boolean =>
 	Boolean(
 		navigator.userAgent.includes(GOOGLE_WEB_PREVIEW) ||
-		navigator.userAgent.includes(GOOGLE_WEB_LIGHT),
+			navigator.userAgent.includes(GOOGLE_WEB_LIGHT),
 	);
