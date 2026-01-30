@@ -15,6 +15,15 @@ updates:
       semver-major-days: 30
       semver-minor-days: 14
       semver-patch-days: 7
+    # Allow updates for all direct dependencies
+    allow:
+      - dependency-name: '*'
+        dependency-type: direct
+    # We don't upgrade Prebid major versions via dependabot
+    ignore:
+      - dependency-name: 'prebid.js'
+        update-types:
+          - version-update:semver-major
     groups:
       guardian:
         patterns:
@@ -34,14 +43,20 @@ updates:
         dependency-type: 'development'
         patterns:
           - 'typescript'
-      dependencies:
+      dependenciesMinor:
         dependency-type: 'production'
+        update-types:
+          - minor
+          - patch
         exclude-patterns:
           - 'prebid.js'
           - 'typescript'
           - '@types/*'
-      devDependencies:
+      devDependenciesMinor:
         dependency-type: 'development'
+        update-types:
+          - minor
+          - patch
         exclude-patterns:
           - '@guardian/*'
           - '@types/*'
