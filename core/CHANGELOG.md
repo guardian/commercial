@@ -1,5 +1,15 @@
 # @guardian/commercial-core
 
+## 30.2.0
+
+### Minor Changes
+
+- 998a523: Add Gmail dot-stripping to email normalisation before hashing
+
+### Patch Changes
+
+- a11d24e: Import newer @types/google-publisher-tag over @types/googletag for the `googletag` namespace
+
 ## 30.1.0
 
 ### Minor Changes

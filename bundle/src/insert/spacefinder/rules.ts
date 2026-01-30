@@ -32,6 +32,8 @@ const MOST_VIEWED_HEIGHT = 600;
 
 const isImmersive = window.guardian.config.page.isImmersive;
 
+const isInteractive = window.guardian.config.page.contentType === 'Interactive';
+
 const hasImages = !!window.guardian.config.page.lightboxImages?.images.length;
 
 const hasVideo = window.guardian.config.page.hasYouTubeAtom;
@@ -57,6 +59,9 @@ const inlineOpponentSelector = ['inline', 'supporting', 'showcase', 'halfWidth']
 			`:scope > [data-spacefinder-role="${role}"], [data-spacefinder-role="nested"] > [data-spacefinder-role="${role}"]`,
 	)
 	.join(',');
+
+const horizontalRuleSelector =
+	':scope > hr, [data-spacefinder-role="nested"] > hr';
 
 const headingSelector = `:scope > h2, [data-spacefinder-role="nested"] > h2, :scope > h3, [data-spacefinder-role="nested"] > h3`;
 
@@ -174,12 +179,23 @@ const mobileOpponentSelectorRules: OpponentSelectorRules = {
 	},
 };
 
+const interactiveMobileOpponentSelectorRules: OpponentSelectorRules = {
+	...mobileOpponentSelectorRules,
+	// Ensure a reasonable gap around horizontal rules
+	[horizontalRuleSelector]: {
+		marginBottom: 150,
+		marginTop: 150,
+	},
+};
+
 const mobileAndTabletInlines: SpacefinderRules = {
 	bodySelector,
 	candidateSelector: mobileCandidateSelector,
 	minDistanceFromTop: mobileMinDistanceFromArticleTop,
 	minDistanceFromBottom: 200,
-	opponentSelectorRules: mobileOpponentSelectorRules,
+	opponentSelectorRules: isInteractive
+		? interactiveMobileOpponentSelectorRules
+		: mobileOpponentSelectorRules,
 	/**
 	 * Filter out any candidates that are too close to the last winner
 	 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates

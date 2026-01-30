@@ -1,4 +1,5 @@
 import { getCookie, log, storage } from '@guardian/libs';
+import { isUserInTestGroup } from '../experiments/beta-ab';
 import { getCurrentBreakpoint } from './detect/detect-breakpoint';
 
 /**
@@ -77,14 +78,15 @@ class CommercialFeatures {
 		const isArticle = window.guardian.config.page.contentType === 'Article';
 		const isInteractive =
 			window.guardian.config.page.contentType === 'Interactive';
-		const isLiveBlog = window.guardian.config.page.isLiveBlog;
+		const isLiveBlog = window.guardian.config.page.isLiveBlog ?? false;
 		const isHosted = window.guardian.config.page.isHosted;
 		const isIdentityPage =
 			window.guardian.config.page.contentType === 'Identity' ||
 			window.guardian.config.page.section === 'identity'; // needed for pages under profile.* subdomain
 		const switches = window.guardian.config.switches;
 		const isWidePage = getCurrentBreakpoint() === 'wide';
-		const newRecipeDesign = window.guardian.config.page.showNewRecipeDesign;
+		const newRecipeDesign =
+			window.guardian.config.page.showNewRecipeDesign ?? false;
 
 		const isUnsupportedBrowser: boolean = isInternetExplorer();
 
@@ -136,28 +138,36 @@ class CommercialFeatures {
 			);
 		}
 
-		const articleBodyAdvertsTrueConditions = {
-			isArticle,
-		};
+		const isInAdsInInteractivesOnMobileTest =
+			isUserInTestGroup(
+				'commercial-enable-spacefinder-on-interactives',
+				'true',
+			) &&
+			getCurrentBreakpoint() === 'mobile' &&
+			isInteractive;
 
-		const articleBodyAdvertsFalseConditions = {
-			isMinuteArticle,
-			isLiveBlog: !!isLiveBlog,
-			isHosted,
-			newRecipeDesign: !!newRecipeDesign,
-		};
+		const enableArticleBodyAdverts =
+			isArticle || isInAdsInInteractivesOnMobileTest;
+
+		const disableArticleBodyAdverts =
+			isMinuteArticle || isLiveBlog || isHosted || newRecipeDesign;
 
 		this.articleBodyAdverts =
 			this.shouldLoadGoogletag &&
 			!this.adFree &&
-			Object.values(articleBodyAdvertsTrueConditions).every(Boolean) &&
-			!Object.values(articleBodyAdvertsFalseConditions).some(Boolean);
+			enableArticleBodyAdverts &&
+			!disableArticleBodyAdverts;
 
 		if (isArticle && !this.articleBodyAdverts) {
 			// Log why article adverts are disabled
 			adsDisabledLogger(
-				articleBodyAdvertsTrueConditions,
-				articleBodyAdvertsFalseConditions,
+				{ isArticle },
+				{
+					isMinuteArticle,
+					isLiveBlog,
+					isHosted,
+					newRecipeDesign,
+				},
 			);
 		}
 
