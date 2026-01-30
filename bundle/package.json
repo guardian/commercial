@@ -83,7 +83,7 @@
 		"type-fest": "^5.3.1",
 		"typescript": "5.9.3",
 		"webpack": "^5.103.0",
-		"webpack-bundle-analyzer": "^5.1.0",
+		"webpack-bundle-analyzer": "^5.1.1",
 		"webpack-cli": "^6.0.1",
 		"webpack-dev-server": "^5.2.3",
 		"webpack-merge": "^6.0.1"
