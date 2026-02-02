@@ -20,6 +20,7 @@ import 'prebid-v10.11.0.js/modules/ttdBidAdapter';
 import 'prebid-v10.11.0.js/modules/euidIdSystem';
 import 'prebid-v10.11.0.js/modules/id5IdSystem';
 import 'prebid-v10.11.0.js/modules/identityLinkIdSystem';
+import 'prebid-v10.11.0.js/modules/pairIdSystem';
 import 'prebid-v10.11.0.js/modules/sharedIdSystem';
 import 'prebid-v10.11.0.js/modules/uid2IdSystem';
 import 'prebid-v10.11.0.js/modules/userId';
