@@ -1,5 +1,6 @@
 import type { AdSize, SizeMapping } from '@guardian/commercial-core/ad-sizes';
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
+import { isUserInTestGroup } from '../../experiments/beta-ab';
 import { commercialFeatures } from '../../lib/commercial-features';
 import type { ContainerOptions } from '../../lib/create-ad-slot';
 import {
@@ -192,9 +193,9 @@ const addDesktopRightRailAds = (
 
 const additionalMobileAndTabletInlineSizes = (index: number) => {
 	if (index === 1) {
-		return {
-			mobile: [adSizes.portraitInterstitial],
-		};
+		return isUserInTestGroup('mobile-inline1-halfpage', 'variant')
+			? { mobile: [adSizes.portraitInterstitial, adSizes.halfPage] }
+			: { mobile: [adSizes.portraitInterstitial] };
 	} else if (index === 2) {
 		return {
 			mobile: [
