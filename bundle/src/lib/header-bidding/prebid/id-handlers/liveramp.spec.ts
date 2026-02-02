@@ -30,19 +30,29 @@ describe('getUserIdForLiveRamp', () => {
 			const email = 'test@example.com';
 			const result = await getUserIdForLiveRamp(email);
 
-			expect(result).toEqual({
-				name: 'identityLink',
-				params: {
-					pid: 14522,
-					notUse3P: false,
+			expect(result).toEqual([
+				{
+					name: 'identityLink',
+					params: {
+						pid: '14522',
+						notUse3P: false,
+					},
+					storage: {
+						type: 'cookie',
+						name: 'idl_env',
+						expires: 15,
+						refreshInSeconds: 1800,
+					},
 				},
-				storage: {
-					type: 'cookie',
-					name: 'idl_env',
-					expires: 15,
-					refreshInSeconds: 1800,
+				{
+					name: 'pairId',
+					params: {
+						liveramp: {
+							storageKey: '_lr_pairId',
+						},
+					},
 				},
-			});
+			]);
 		});
 
 		it('should preload the bundle script as a link element', async () => {
@@ -89,10 +99,10 @@ describe('getUserIdForLiveRamp', () => {
 			mockLoadScript.mockRejectedValue(error);
 
 			const result = await getUserIdForLiveRamp(email);
-			expect(result).toEqual({
+			expect(result).toContainEqual({
 				name: 'identityLink',
 				params: {
-					pid: 14522,
+					pid: '14522',
 					notUse3P: false,
 				},
 				storage: {
@@ -110,10 +120,10 @@ describe('getUserIdForLiveRamp', () => {
 			jest.spyOn(core, 'hashEmailForClient').mockRejectedValueOnce(error);
 
 			const result = await getUserIdForLiveRamp(email);
-			expect(result).toEqual({
+			expect(result).toContainEqual({
 				name: 'identityLink',
 				params: {
-					pid: 14522,
+					pid: '14522',
 					notUse3P: false,
 				},
 				storage: {
