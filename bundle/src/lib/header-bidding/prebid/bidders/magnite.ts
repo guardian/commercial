@@ -4,7 +4,7 @@ import {
 	isInUk,
 	isInUsOrCa,
 } from '@guardian/commercial-core/geo/geo-utils';
-import type { HeaderBiddingSize } from '../prebid-types';
+import type { HeaderBiddingSize } from '../../prebid-types';
 import {
 	containsBillboard,
 	containsLeaderboardOrBillboard,
@@ -14,7 +14,7 @@ import {
 	containsPortraitInterstitial,
 	containsWS,
 	getBreakpointKey,
-} from '../utils';
+} from '../../utils';
 
 export const getMagniteZoneId = (
 	slotId: string,
