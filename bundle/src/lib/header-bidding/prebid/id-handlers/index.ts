@@ -31,7 +31,12 @@ export const getUserSyncSettings = async (
 		fetchId5UserId,
 		fetchLiveRampUserId,
 		fetchTradeDeskUserId,
-	]).then((ids) => ids.filter((id) => !!id));
+	]).then((idModules) => {
+		const consentedIdModules = idModules.filter((idModule) => !!idModule);
+		return consentedIdModules.flatMap((idModule) => {
+			return Array.isArray(idModule) ? idModule : [idModule];
+		});
+	});
 
 	const userSync: UserSync = isSwitchedOn('prebidUserSync')
 		? {

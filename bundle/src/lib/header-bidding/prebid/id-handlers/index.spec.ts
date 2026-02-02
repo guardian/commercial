@@ -136,17 +136,19 @@ describe('getUserSyncSettings', () => {
 				},
 			} as ConsentState;
 
-			const mockLiveRampUserId: UserId = {
-				name: 'identityLink',
-				params: {
-					pid: 'test-pid',
+			const mockLiveRampUserId: UserId[] = [
+				{
+					name: 'identityLink',
+					params: {
+						pid: 'test-pid',
+					},
+					storage: {
+						type: 'cookie',
+						name: 'idl_env',
+						expires: 30,
+					},
 				},
-				storage: {
-					type: 'cookie',
-					name: 'idl_env',
-					expires: 30,
-				},
-			};
+			];
 
 			mockGetEmail.mockResolvedValue('test@example.com');
 			mockGetUserIdForLiveRamp.mockResolvedValue(mockLiveRampUserId);
@@ -158,7 +160,9 @@ describe('getUserSyncSettings', () => {
 			expect(mockGetUserIdForLiveRamp).toHaveBeenCalledWith(
 				'test@example.com',
 			);
-			expect(result.userIds).toContain(mockLiveRampUserId);
+			expect(result.userIds).toEqual(
+				expect.arrayContaining(mockLiveRampUserId),
+			);
 			expect(result.userIds).toContain(sharedId);
 		});
 
@@ -220,7 +224,7 @@ describe('getUserSyncSettings', () => {
 
 			mockGetEmail.mockResolvedValue('test@example.com');
 			mockGetUserIdForId5.mockResolvedValue(mockId5UserId);
-			mockGetUserIdForLiveRamp.mockResolvedValue(mockLiveRampUserId);
+			mockGetUserIdForLiveRamp.mockResolvedValue([mockLiveRampUserId]);
 			mockGetUserIdForTradeDesk.mockResolvedValue(mockTradeDeskUserId);
 
 			const result = (await getUserSyncSettings(

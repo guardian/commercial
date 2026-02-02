@@ -40,7 +40,7 @@ window.addEventListener('envelopeModuleReady', function () {
 	});
 });
 
-const getLiveRampParams = async (email: string): Promise<UserId> => {
+const getLiveRampParams = async (email: string): Promise<UserId[]> => {
 	// bundle must be loaded as link and in advance of
 	// liveramp script in accordance with liveramp's docs
 	loadBundle();
@@ -60,29 +60,39 @@ const getLiveRampParams = async (email: string): Promise<UserId> => {
 			log('commercial', 'Error loading Liveramp scripts', e);
 		});
 
-	return {
-		name: 'identityLink',
-		params: {
-			// ats placement id
-			pid: ATS_PLACEMENT_ID,
+	return [
+		{
+			name: 'identityLink',
+			params: {
+				// ats placement id
+				pid: String(ATS_PLACEMENT_ID),
 
-			// If you want to generate a RampID based on a LiveRamp 3p cookie
-			// (from a previous authentication) until ATS can generate a new
-			// RampID, set this property to false.
-			notUse3P: false,
+				// If you want to generate a RampID based on a LiveRamp 3p cookie
+				// (from a previous authentication) until ATS can generate a new
+				// RampID, set this property to false.
+				notUse3P: false,
+			},
+			storage: {
+				type: 'cookie',
+				name: ID_COOKIE_STORAGE_NAME,
+				expires: ID_COOKIE_EXPIRY_DAYS,
+				refreshInSeconds: THIRTY_MINS_IN_SECONDS,
+			},
 		},
-		storage: {
-			type: 'cookie',
-			name: ID_COOKIE_STORAGE_NAME,
-			expires: ID_COOKIE_EXPIRY_DAYS,
-			refreshInSeconds: THIRTY_MINS_IN_SECONDS,
+		{
+			name: 'pairId',
+			params: {
+				liveramp: {
+					storageKey: '_lr_pairId',
+				},
+			},
 		},
-	};
+	];
 };
 
 export const getUserIdForLiveRamp = async (
 	email: string | null,
-): Promise<UserId | undefined> => {
+): Promise<UserId[] | undefined> => {
 	const isInTest = isUserInTestGroup(
 		'commercial-user-module-liveramp',
 		'variant',
