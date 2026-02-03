@@ -193,7 +193,10 @@ const addDesktopRightRailAds = (
 
 const additionalMobileAndTabletInlineSizes = (index: number) => {
 	if (index === 1) {
-		return isUserInTestGroup('mobile-inline1-halfpage', 'variant')
+		return isUserInTestGroup(
+			'commercial-mobile-inline1-halfpage',
+			'variant',
+		)
 			? { mobile: [adSizes.portraitInterstitial, adSizes.halfPage] }
 			: { mobile: [adSizes.portraitInterstitial] };
 	} else if (index === 2) {
