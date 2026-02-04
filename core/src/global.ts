@@ -45,6 +45,8 @@ declare global {
 			commercial?: {
 				dfpEnv?: DfpEnv;
 				a9WinningBids?: FetchBidResponse[];
+				queue?: {push: (...items: Array<() => void>) => number; flush: () => void};
+
 			};
 			notificationEventHistory?: HeaderNotification[][];
 			commercialTimer?: EventTimer;
