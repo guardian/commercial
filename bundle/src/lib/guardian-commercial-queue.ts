@@ -15,7 +15,6 @@ export const createCommercialQueue = (): QueueArray => {
 
 	const queue = new Proxy(targetArray, {
 		get(target, property) {
-			// console.log(`Someone accessed property: ${property}`);
 			if (property === 'push') {
 				return (...items: QueueFunction[]) => {
 					if (isInitialised) {
@@ -53,7 +52,6 @@ export const createCommercialQueue = (): QueueArray => {
 			}
 
 			return Reflect.get(target, property);
-			// return target[property]
 		},
 	});
 	return queue as unknown as QueueArray;

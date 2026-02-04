@@ -48,7 +48,10 @@ const bootCommercial = async (
 
 	try {
 		return Promise.allSettled(modules.map((module) => module())).then(
-			recordCommercialMetrics,
+			() => {
+				recordCommercialMetrics();
+				window.guardian.commercial?.queue?.flush();
+			},
 		);
 	} catch (error) {
 		// report async errors in bootCommercial to Sentry with the commercial feature tag
