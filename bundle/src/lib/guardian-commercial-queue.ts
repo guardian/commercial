@@ -3,7 +3,6 @@ type QueueFunction = () => void;
 interface QueueArray {
 	push: (...items: QueueFunction[]) => number;
 	flush: () => void;
-	getAll: () => QueueFunction[];
 }
 
 export const createCommercialQueue = (): QueueArray => {
@@ -37,9 +36,6 @@ export const createCommercialQueue = (): QueueArray => {
 				}
 			});
 			buffer.length = 0;
-		},
-		getAll() {
-			return [...storage];
-		},
+		}
 	};
-}
+};
