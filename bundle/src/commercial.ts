@@ -1,6 +1,10 @@
 import type { ConsentState } from '@guardian/libs';
 import { getConsentFor, onConsent } from '@guardian/libs';
 import { commercialFeatures } from './lib/commercial-features';
+import { createCommercialQueue } from './lib/guardian-commercial-queue';
+
+window.guardian.commercial ??= {};
+window.guardian.commercial.queue = createCommercialQueue();
 
 const shouldBootConsentless = (consentState: ConsentState) => {
 	return (
