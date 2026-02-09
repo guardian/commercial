@@ -6,7 +6,6 @@ type QueueFunction = () => void;
 interface QueueArray {
 	push: (...items: QueueFunction[]) => number;
 	flush: () => void;
-	getAll: () => QueueFunction[];
 }
 
 type ConnectionType =

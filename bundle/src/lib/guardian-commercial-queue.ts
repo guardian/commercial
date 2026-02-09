@@ -36,6 +36,6 @@ export const createCommercialQueue = (): QueueArray => {
 				}
 			});
 			buffer.length = 0;
-		}
+		},
 	};
 };
