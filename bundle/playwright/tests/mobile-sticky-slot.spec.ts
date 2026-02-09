@@ -28,6 +28,8 @@ testAtBreakpoints(['mobile']).forEach(({ width, height }) => {
 		await expect(page.locator('#dfp-ad--mobile-sticky')).not.toBeAttached();
 
 		// Dismiss banner
+		// TODO: These text selectors are fragile - consider adding data-testid
+		// attributes if this test starts failing due to banner text changes
 		await page.getByRole('button', { name: 'Collapse banner' }).click();
 		await page.getByText('Maybe later').click();
 
