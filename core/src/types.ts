@@ -2,6 +2,7 @@ import type { EventPayload } from '@guardian/ophan-tracker-js';
 import type { AdSize, SizeMapping } from './ad-sizes';
 import type { PageTargeting } from './targeting/build-page-targeting';
 import '@types/google-publisher-tag';
+import type { EventTimer } from './event-timer';
 
 type HeaderBiddingSize = AdSize;
 
@@ -29,16 +30,6 @@ interface Advert {
 	updateExtraSlotClasses(...newClasses: string[]): Promise<void>;
 	generateSizeMapping(additionalSizeMapping: SizeMapping): SizeMapping;
 	updateSizeMapping(additionalSizeMapping: SizeMapping): void;
-}
-
-interface DfpEnv {
-	renderStartTime: number;
-	adSlotSelector: string;
-	lazyLoadEnabled: boolean;
-	lazyLoadObserve: boolean;
-	advertsToLoad: Advert[];
-	adverts: Map<Advert['id'], Advert>;
-	shouldLazyLoad: () => boolean;
 }
 
 type ConnectionType =
@@ -508,9 +499,30 @@ type AdmiralCallback = (event: AdmiralEvent) => void;
 type AdmiralArg = string | AdmiralCallback;
 type Admiral = (...args: AdmiralArg[]) => void;
 
+interface CoreGuardian {
+	config: Config;
+
+	commercialTimer?: EventTimer;
+	offlineCount?: number;
+	modules: {
+		sentry?: {
+			reportError?: (
+				error: Error,
+				feature: string,
+				tags?: Record<string, string>,
+				extras?: Record<string, unknown>,
+			) => void;
+		};
+		abTests?: {
+			getParticipations: () => Record<string, string>;
+			isUserInTest: (testId: string) => boolean;
+			isUserInTestGroup: (testId: string, variantId: string) => boolean;
+		};
+	};
+}
+
 export type {
 	Advert,
-	DfpEnv,
 	ConnectionType,
 	NetworkInformation,
 	OphanRecordFunction,
@@ -544,4 +556,5 @@ export type {
 	GoogleTrackConversionObject,
 	Admiral,
 	AdmiralEvent,
+	CoreGuardian,
 };
