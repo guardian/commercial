@@ -9,12 +9,26 @@ import type {
 	SlotName,
 } from '@guardian/commercial-core/ad-sizes';
 import type { Breakpoint } from '@guardian/commercial-core/breakpoint';
-import type { Advert as IAdvert } from '@guardian/commercial-core/types';
+import {
+	type AdvertStatus,
+	type Advert as IAdvert,
+} from '@guardian/commercial-core/types';
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import type { HeaderBiddingSize } from '../lib/header-bidding/prebid-types';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';
+
+const advertStatuses: AdvertStatus[] = [
+	'ready',
+	'preparing',
+	'prepared',
+	'fetching',
+	'fetched',
+	'loading',
+	'loaded',
+	'rendered',
+] as const;
 
 const stringToTuple = (size: string): [number, number] => {
 	const dimensions = size.split(',', 2).map(Number);
@@ -127,7 +141,8 @@ const isSizeMappingEmpty = (sizeMapping: SizeMapping): boolean => {
 		Object.entries(sizeMapping).every(([, mapping]) => mapping.length === 0)
 	);
 };
-class Advert implements IAdvert {
+
+class Advert extends EventTarget implements IAdvert {
 	id: string;
 	node: HTMLElement;
 	sizes: SizeMapping;
@@ -147,11 +162,52 @@ class Advert implements IAdvert {
 	creativeTemplateId: number | null = null;
 	testgroup: string | undefined; //Ozone testgroup property
 
+	private _status: AdvertStatus = 'ready';
+
+	/**
+	 * The status of the advert, which can be one of the following:
+	 * - `ready`: The advert has been created but not yet prepared
+	 * - `preparing`: The advert is in the process of being prepared, e.g. size mapping is being generated, header bidding bids are being requested etc.
+	 * - `prepared`: The advert has been prepared and is ready to be fetched
+	 * - `fetching`: The advert is in the process of being fetched, e.g. the GPT fetch command has been called but the slot has not yet received a response
+	 * - `fetched`: The advert has been fetched and has received a response from GPT, but it has not yet started loading
+	 * - `loading`: The advert is in the process of loading, e.g. the creative is being loaded but has not yet finished
+	 * - `loaded`: The advert has finished loading but has not yet rendered, e.g. the creative has loaded but the GPT render command has not yet been called or has been called but the creative has not yet rendered
+	 * - `rendered`: The advert has finished rendering and is visible on the page
+	 */
+	get status(): AdvertStatus {
+		return this._status;
+	}
+	set status(newStatus: AdvertStatus) {
+		const currentStatusIndex = advertStatuses.indexOf(this._status);
+		const newStatusIndex = advertStatuses.indexOf(newStatus);
+
+		if (newStatusIndex === -1) {
+			throw new Error(`Invalid status: ${newStatus}`);
+		}
+
+		// Prevent status from being set to an earlier status in the lifecycle, except for the specific case of going from 'rendered' back to 'ready' which will happen when an ad is refreshed
+		if (
+			newStatusIndex < currentStatusIndex &&
+			!(newStatus === 'ready' && this._status === 'rendered')
+		) {
+			throw new Error(
+				`Cannot change status from ${this._status} to ${newStatus}`,
+			);
+		}
+
+		this._status = newStatus;
+		this.dispatchEvent(
+			new CustomEvent('statusChange', { detail: newStatus }),
+		);
+	}
+
 	constructor(
 		adSlotNode: HTMLElement,
 		additionalSizeMapping: SizeMapping = {},
 		slotTargeting: Record<string, string> = {},
 	) {
+		super();
 		this.id = adSlotNode.id;
 		this.node = adSlotNode;
 		this.sizes = this.generateSizeMapping(additionalSizeMapping);
@@ -182,6 +238,74 @@ class Advert implements IAdvert {
 		this.gpid = Array.isArray(gpidValue)
 			? gpidValue[0]
 			: (gpidValue ?? undefined);
+	}
+
+	/**
+	 * Listen for a status or statuses in the advert lifecycle. The callback will be called once when the advert reaches the specified status, or immediately if the advert has already reached that status.
+	 *
+	 * @param status A status or array of statuses in the advert lifecycle to listen for
+	 * @param callback A callback function that will be called with the status when the advert reaches it
+	 * @returns A function that can be called to stop listening for the specified status or statuses
+	 */
+	on<
+		ListenStatus extends AdvertStatus,
+		ListenStatuses extends ListenStatus[],
+	>(
+		status: ListenStatus | ListenStatuses,
+		callback: (status: ListenStatuses[number]) => void,
+	): () => void {
+		const statusesToListenTo: AdvertStatus[] = Array.isArray(status)
+			? status
+			: [status];
+
+		// If the advert has already reached any of the specified statuses, call the callback immediately
+		if (statusesToListenTo.includes(this._status)) {
+			callback(this._status as ListenStatuses[number]);
+		}
+
+		const listener = (event: Event): void => {
+			const eventStatus = (event as CustomEvent).detail as AdvertStatus;
+			if (statusesToListenTo.includes(eventStatus)) {
+				callback(eventStatus as ListenStatuses[number]);
+			}
+		};
+
+		this.addEventListener('statusChange', listener);
+		return () => this.removeEventListener('statusChange', listener);
+	}
+
+	/**
+	 * Listen for a status or statuses in the advert lifecycle, but only call the callback the first time the advert reaches one of the specified statuses. If the advert has already reached any of the specified statuses, the callback will be called immediately.
+	 *
+	 * @param status A status or array of statuses in the advert lifecycle to listen for
+	 * @param callback A callback function that will be called with the status when the advert reaches it
+	 * @returns void
+	 */
+	once<
+		ListenStatus extends AdvertStatus,
+		ListenStatuses extends ListenStatus[],
+	>(
+		status: ListenStatus | ListenStatuses,
+		callback: (status: ListenStatuses[number]) => void,
+	): void {
+		const statusesToListenTo: AdvertStatus[] = Array.isArray(status)
+			? status
+			: [status];
+
+		if (statusesToListenTo.includes(this._status)) {
+			callback(this._status as ListenStatuses[number]);
+			return;
+		}
+
+		const listener = (event: Event): void => {
+			const eventStatus = (event as CustomEvent).detail as AdvertStatus;
+			if (statusesToListenTo.includes(eventStatus)) {
+				callback(eventStatus as ListenStatuses[number]);
+				this.removeEventListener('statusChange', listener);
+			}
+		};
+
+		this.addEventListener('statusChange', listener);
 	}
 
 	/**

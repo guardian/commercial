@@ -5,6 +5,16 @@ import '@types/google-publisher-tag';
 
 type HeaderBiddingSize = AdSize;
 
+type AdvertStatus =
+	| 'ready'
+	| 'preparing'
+	| 'prepared'
+	| 'fetching'
+	| 'fetched'
+	| 'loading'
+	| 'loaded'
+	| 'rendered';
+
 interface Advert {
 	id: string;
 	node: HTMLElement;
@@ -12,6 +22,7 @@ interface Advert {
 	headerBiddingSizes: HeaderBiddingSize[] | null;
 	size: AdSize | 'fluid' | null;
 	slot: googletag.Slot;
+	status: AdvertStatus;
 	gpid: string | undefined;
 	isEmpty: boolean | null;
 	isRendered: boolean;
@@ -25,7 +36,15 @@ interface Advert {
 	creativeTemplateId: number | null;
 	testgroup: string | undefined;
 
-	finishedRendering(isRendered: boolean): void;
+	on(
+		status: AdvertStatus | AdvertStatus[],
+		callback: (status: AdvertStatus | AdvertStatus[]) => void,
+	): void;
+	once(
+		status: AdvertStatus | AdvertStatus[],
+		callback: (status: AdvertStatus | AdvertStatus[]) => void,
+	): void;
+
 	updateExtraSlotClasses(...newClasses: string[]): Promise<void>;
 	generateSizeMapping(additionalSizeMapping: SizeMapping): SizeMapping;
 	updateSizeMapping(additionalSizeMapping: SizeMapping): void;
@@ -510,6 +529,7 @@ type Admiral = (...args: AdmiralArg[]) => void;
 
 export type {
 	Advert,
+	AdvertStatus,
 	DfpEnv,
 	ConnectionType,
 	NetworkInformation,
