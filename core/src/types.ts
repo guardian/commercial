@@ -1,7 +1,6 @@
 import type { EventPayload } from '@guardian/ophan-tracker-js';
 import type { EventTimer } from './event-timer';
 import type { PageTargeting } from './targeting/build-page-targeting';
-import '@types/google-publisher-tag';
 
 type ConnectionType =
 	| 'bluetooth'
