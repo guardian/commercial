@@ -142,9 +142,7 @@ class CommercialFeatures {
 			isUserInTestGroup(
 				'commercial-enable-spacefinder-on-interactives',
 				'true',
-			) &&
-			getCurrentBreakpoint() === 'mobile' &&
-			isInteractive;
+			) && isInteractive;
 
 		const enableArticleBodyAdverts =
 			isArticle || isInAdsInInteractivesOnMobileTest;

@@ -21,6 +21,8 @@ const articleBodySelector = '.article-body-commercial-selector';
 
 const isPaidContent = window.guardian.config.page.isPaidContent;
 
+const isInteractive = window.guardian.config.page.contentType === 'Interactive';
+
 /**
  * Get the classname for an ad slot container
  *
@@ -130,6 +132,7 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 const addDesktopRightRailAds = (
 	fillSlot: FillAdSlot,
 	isConsentless: boolean,
+	fullWidthGridBody = false,
 ): Promise<boolean> => {
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const stickyContainerHeights = await computeStickyHeights(
@@ -147,9 +150,13 @@ const addDesktopRightRailAds = (
 		const slots = paras.slice(0, paras.length).map(async (para, i) => {
 			const isLastInline = i === paras.length - 1;
 
-			const containerClasses =
-				getStickyContainerClassname(i) +
-				' offset-right ad-slot--offset-right ad-slot-container--offset-right';
+			const containerClasses = [
+				getStickyContainerClassname(i),
+				'ad-slot-container--right-column', // float the ad to the right and sets max width and transparent background https://github.com/guardian/dotcom-rendering/blob/main/dotcom-rendering/src/lib/adStyles.ts#L161
+				!fullWidthGridBody && 'ad-slot-container--offset-right', // adds a negative margin to push the ad into the right rail, this isn't needed if the article body is full width
+			]
+				.filter(Boolean)
+				.join(' ');
 
 			const containerOptions = {
 				sticky: true,
@@ -247,11 +254,37 @@ const addMobileAndTabletInlineAds = (
 };
 
 /**
+ * Checks if the article body is the full width of the article grid, which is the case for most interactive articles.
+ * Paragraphs are always the same width however, so when it's full width we don't need a negative margin to offset the ad into the right rail, `float: right` alone will suffice. (see addDesktopRightRailAds function)
+ */
+const hasFullWidthGridBody = async (): Promise<boolean> => {
+	if (!isInteractive) {
+		return false;
+	}
+
+	const gridBody = document.querySelector<HTMLElement>(
+		'[data-gu-name="body"]',
+	);
+	const parent = gridBody?.parentElement;
+
+	if (!gridBody || !parent) {
+		return false;
+	}
+
+	return fastdom.measure(() => {
+		const articleBodWidth = gridBody.getBoundingClientRect().width;
+		const parentWidth = parent.getBoundingClientRect().width;
+
+		return articleBodWidth >= parentWidth;
+	});
+};
+
+/**
  * Add inline slots to the article body
  * @param fillSlot A function to call that will fill the slot when each ad slot has been inserted,
  * these could be google display ads or opt opt consentless ads.
  */
-const addInlineAds = (
+const addInlineAds = async (
 	fillSlot: FillAdSlot,
 	isConsentless: boolean,
 ): Promise<boolean> => {
@@ -264,8 +297,10 @@ const addInlineAds = (
 		return addDesktopRightRailAds(fillSlot, isConsentless);
 	}
 
+	const fullWidthGridBody = await hasFullWidthGridBody();
+
 	return addDesktopInline1(fillSlot).then(() =>
-		addDesktopRightRailAds(fillSlot, isConsentless),
+		addDesktopRightRailAds(fillSlot, isConsentless, fullWidthGridBody),
 	);
 };
 
