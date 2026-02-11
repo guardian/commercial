@@ -1,5 +1,6 @@
 import { log } from '@guardian/libs';
 import type { ConnectionType } from './types';
+import './global';
 
 const supportsPerformanceAPI = () =>
 	typeof window !== 'undefined' &&
