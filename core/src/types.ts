@@ -1,36 +1,7 @@
 import type { EventPayload } from '@guardian/ophan-tracker-js';
-import type { AdSize, SizeMapping } from './ad-sizes';
 import type { PageTargeting } from './targeting/build-page-targeting';
 import '@types/google-publisher-tag';
 import type { EventTimer } from './event-timer';
-
-type HeaderBiddingSize = AdSize;
-
-interface Advert {
-	id: string;
-	node: HTMLElement;
-	sizes: SizeMapping;
-	headerBiddingSizes: HeaderBiddingSize[] | null;
-	size: AdSize | 'fluid' | null;
-	slot: googletag.Slot;
-	gpid: string | undefined;
-	isEmpty: boolean | null;
-	isRendered: boolean;
-	shouldRefresh: boolean;
-	whenSlotReady: Promise<void>;
-	extraNodeClasses: string[];
-	hasPrebidSize: boolean;
-	headerBiddingBidRequest: Promise<unknown> | null;
-	lineItemId: number | null;
-	creativeId: number | null;
-	creativeTemplateId: number | null;
-	testgroup: string | undefined;
-
-	finishedRendering(isRendered: boolean): void;
-	updateExtraSlotClasses(...newClasses: string[]): Promise<void>;
-	generateSizeMapping(additionalSizeMapping: SizeMapping): SizeMapping;
-	updateSizeMapping(additionalSizeMapping: SizeMapping): void;
-}
 
 type ConnectionType =
 	| 'bluetooth'
@@ -522,7 +493,6 @@ interface CoreGuardian {
 }
 
 export type {
-	Advert,
 	ConnectionType,
 	NetworkInformation,
 	OphanRecordFunction,
