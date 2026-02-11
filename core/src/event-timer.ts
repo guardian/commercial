@@ -1,5 +1,11 @@
 import { log } from '@guardian/libs';
-import type { ConnectionType } from './types';
+import type { ConnectionType, NetworkInformation } from './types';
+
+declare global {
+	interface Navigator {
+		readonly connection?: NetworkInformation;
+	}
+}
 
 const supportsPerformanceAPI = () =>
 	typeof window !== 'undefined' &&

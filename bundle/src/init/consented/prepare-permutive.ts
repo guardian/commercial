@@ -1,8 +1,8 @@
 import { log } from '@guardian/libs';
 import { reportError } from '../../lib/error/report-error';
-import type { Edition } from '../../lib/types';
 import type {
 	Config,
+	Edition,
 	PageConfig,
 	Permutive,
 	UserConfig,
