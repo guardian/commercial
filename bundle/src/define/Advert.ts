@@ -142,6 +142,10 @@ const isSizeMappingEmpty = (sizeMapping: SizeMapping): boolean => {
 	);
 };
 
+interface AdvertListener {
+	remove: () => void;
+}
+
 class Advert extends EventTarget implements IAdvert {
 	id: string;
 	node: HTMLElement;
@@ -243,69 +247,63 @@ class Advert extends EventTarget implements IAdvert {
 	/**
 	 * Listen for a status or statuses in the advert lifecycle. The callback will be called once when the advert reaches the specified status, or immediately if the advert has already reached that status.
 	 *
-	 * @param status A status or array of statuses in the advert lifecycle to listen for
+	 * @param listenStatus A status or array of statuses in the advert lifecycle to listen for
 	 * @param callback A callback function that will be called with the status when the advert reaches it
+	 * @param options.once If true, the listener will be removed after it is called once
 	 * @returns A function that can be called to stop listening for the specified status or statuses
 	 */
-	on<
-		ListenStatus extends AdvertStatus,
-		ListenStatuses extends ListenStatus[],
-	>(
-		status: ListenStatus | ListenStatuses,
-		callback: (status: ListenStatuses[number]) => void,
-	): () => void {
-		const statusesToListenTo: AdvertStatus[] = Array.isArray(status)
-			? status
-			: [status];
+	on<Status extends AdvertStatus>(
+		listenStatus: Status | Status[],
+		callback: (status: Status) => void,
+		{ once = false } = {},
+	): AdvertListener {
+		const listenStatuses: AdvertStatus[] = Array.isArray(listenStatus)
+			? listenStatus
+			: [listenStatus];
 
+		const listenerIncludesStatus = (
+			status: AdvertStatus,
+		): status is Status => {
+			if (!listenStatuses.includes(status)) {
+				return false;
+			}
+			return true;
+		};
 		// If the advert has already reached any of the specified statuses, call the callback immediately
-		if (statusesToListenTo.includes(this._status)) {
-			callback(this._status as ListenStatuses[number]);
+		if (listenerIncludesStatus(this._status)) {
+			callback(this._status);
+			if (once) {
+				return {
+					remove: () => {},
+				};
+			}
 		}
 
 		const listener = (event: Event): void => {
 			const eventStatus = (event as CustomEvent).detail as AdvertStatus;
-			if (statusesToListenTo.includes(eventStatus)) {
-				callback(eventStatus as ListenStatuses[number]);
+			if (listenerIncludesStatus(eventStatus)) {
+				callback(eventStatus);
+				if (once) {
+					this.removeEventListener('statusChange', listener);
+				}
 			}
 		};
 
 		this.addEventListener('statusChange', listener);
-		return () => this.removeEventListener('statusChange', listener);
+		return {
+			remove: () => this.removeEventListener('statusChange', listener),
+		};
 	}
 
 	/**
-	 * Listen for a status or statuses in the advert lifecycle, but only call the callback the first time the advert reaches one of the specified statuses. If the advert has already reached any of the specified statuses, the callback will be called immediately.
+	 * Listen for a status in the advert lifecycle, but only call the callback the first time the advert reaches that status. If the advert is already that status, the callback will be called immediately.
 	 *
-	 * @param status A status or array of statuses in the advert lifecycle to listen for
+	 * @param listenStatus A status or array of statuses in the advert lifecycle to listen for
 	 * @param callback A callback function that will be called with the status when the advert reaches it
 	 * @returns void
 	 */
-	once<
-		ListenStatus extends AdvertStatus,
-		ListenStatuses extends ListenStatus[],
-	>(
-		status: ListenStatus | ListenStatuses,
-		callback: (status: ListenStatuses[number]) => void,
-	): void {
-		const statusesToListenTo: AdvertStatus[] = Array.isArray(status)
-			? status
-			: [status];
-
-		if (statusesToListenTo.includes(this._status)) {
-			callback(this._status as ListenStatuses[number]);
-			return;
-		}
-
-		const listener = (event: Event): void => {
-			const eventStatus = (event as CustomEvent).detail as AdvertStatus;
-			if (statusesToListenTo.includes(eventStatus)) {
-				callback(eventStatus as ListenStatuses[number]);
-				this.removeEventListener('statusChange', listener);
-			}
-		};
-
-		this.addEventListener('statusChange', listener);
+	once(listenStatus: AdvertStatus, callback: () => void): void {
+		this.on(listenStatus, callback, { once: true });
 	}
 
 	/**

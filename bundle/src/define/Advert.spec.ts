@@ -249,7 +249,9 @@ describe('Advert', () => {
 			ad.status = 'preparing';
 
 			expect(listener).toHaveBeenCalledTimes(1);
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- test
 			expect(listener.mock.calls[0][0]).toBeInstanceOf(CustomEvent);
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- test
 			expect((listener.mock.calls[0][0] as CustomEvent).detail).toBe(
 				'preparing',
 			);
@@ -308,9 +310,9 @@ describe('Advert', () => {
 			const ad = new Advert(slot);
 
 			const callback = jest.fn();
-			const removeListener = ad.on('prepared', callback);
+			const { remove } = ad.on('prepared', callback);
 
-			removeListener();
+			remove();
 			ad.status = 'prepared';
 
 			expect(callback).not.toHaveBeenCalled();
@@ -361,52 +363,21 @@ describe('Advert', () => {
 			expect(callback).toHaveBeenCalledTimes(1);
 		});
 
-		it('should call callback for the first matching status in the array', () => {
-			const slot = document.createElement('div');
-			slot.setAttribute('data-name', 'top-above-nav');
-			const ad = new Advert(slot);
-
-			const callback = jest.fn();
-			ad.once(['fetching', 'fetched'], callback);
-
-			ad.status = 'fetching';
-			expect(callback).toHaveBeenCalledWith('fetching');
-			expect(callback).toHaveBeenCalledTimes(1);
-
-			ad.status = 'fetched';
-			expect(callback).toHaveBeenCalledTimes(1);
-		});
-
 		it('should not call callback again after being triggered once', () => {
 			const slot = document.createElement('div');
 			slot.setAttribute('data-name', 'top-above-nav');
 			const ad = new Advert(slot);
 
 			const callback = jest.fn();
-			ad.once('ready', callback);
+			ad.once('fetching', callback);
 
+			ad.status = 'fetching';
 			expect(callback).toHaveBeenCalledTimes(1);
 
 			ad.status = 'rendered';
 			ad.status = 'ready';
 
-			expect(callback).toHaveBeenCalledTimes(1);
-		});
-
-		it('should handle array of statuses and trigger only once', () => {
-			const slot = document.createElement('div');
-			slot.setAttribute('data-name', 'top-above-nav');
-			const ad = new Advert(slot);
-
-			const callback = jest.fn();
-			ad.once(['prepared', 'fetched', 'loaded'], callback);
-
-			ad.status = 'prepared';
-			expect(callback).toHaveBeenCalledWith('prepared');
-			expect(callback).toHaveBeenCalledTimes(1);
-
-			ad.status = 'fetched';
-			ad.status = 'loaded';
+			ad.status = 'fetching';
 			expect(callback).toHaveBeenCalledTimes(1);
 		});
 	});

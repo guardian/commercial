@@ -15,7 +15,7 @@ type AdvertStatus =
 	| 'loaded'
 	| 'rendered';
 
-interface Advert {
+interface Advert extends EventTarget {
 	id: string;
 	node: HTMLElement;
 	sizes: SizeMapping;
@@ -40,10 +40,9 @@ interface Advert {
 		status: AdvertStatus | AdvertStatus[],
 		callback: (status: AdvertStatus | AdvertStatus[]) => void,
 	): void;
-	once(
-		status: AdvertStatus | AdvertStatus[],
-		callback: (status: AdvertStatus | AdvertStatus[]) => void,
-	): void;
+	once(status: AdvertStatus, callback: () => void): void;
+
+	finishedRendering(isRendered: boolean): void;
 
 	updateExtraSlotClasses(...newClasses: string[]): Promise<void>;
 	generateSizeMapping(additionalSizeMapping: SizeMapping): SizeMapping;
