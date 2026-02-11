@@ -20,33 +20,6 @@ export type ThirdPartyTag = {
 
 export type GetThirdPartyTag = (arg0: { shouldRun: boolean }) => ThirdPartyTag;
 
-export type Edition = 'UK' | 'AU' | 'US';
-
-export type GuardianWindowConfig = {
-	commercialMetricsInitialised: boolean;
-	isDotcomRendering: boolean;
-	ophan: {
-		// somewhat redundant with guardian.ophan
-		browserId?: string;
-		pageViewId: string;
-	};
-	page: {
-		dcrCouldRender: boolean;
-		edition: Edition;
-		isPreview: boolean;
-		isSensitive: boolean;
-		pageId: string;
-		section: string;
-		sharedAdTargeting?: Record<string, string | string[]>;
-		videoDuration: number;
-		webPublicationDate: number;
-	};
-	tests?: {
-		[key: `${string}Control`]: 'control';
-		[key: `${string}Variant`]: 'variant';
-	};
-};
-
 export type GoogleTagParams = unknown;
 export type GoogleTrackConversionObject = {
 	google_conversion_id: number;

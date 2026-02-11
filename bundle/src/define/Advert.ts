@@ -9,17 +9,13 @@ import type {
 	SlotName,
 } from '@guardian/commercial-core/ad-sizes';
 import type { Breakpoint } from '@guardian/commercial-core/breakpoint';
-import {
-	type AdvertStatus,
-	type Advert as IAdvert,
-} from '@guardian/commercial-core/types';
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import type { HeaderBiddingSize } from '../lib/header-bidding/prebid-types';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';
 
-const advertStatuses: AdvertStatus[] = [
+const advertStatuses = [
 	'ready',
 	'preparing',
 	'prepared',
@@ -29,6 +25,8 @@ const advertStatuses: AdvertStatus[] = [
 	'loaded',
 	'rendered',
 ] as const;
+
+type AdvertStatus = (typeof advertStatuses)[number];
 
 const stringToTuple = (size: string): [number, number] => {
 	const dimensions = size.split(',', 2).map(Number);
@@ -146,7 +144,7 @@ interface AdvertListener {
 	remove: () => void;
 }
 
-class Advert extends EventTarget implements IAdvert {
+class Advert extends EventTarget {
 	id: string;
 	node: HTMLElement;
 	sizes: SizeMapping;

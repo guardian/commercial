@@ -1,63 +1,6 @@
 import type { EventPayload } from '@guardian/ophan-tracker-js';
-import type { AdSize, SizeMapping } from './ad-sizes';
+import type { EventTimer } from './event-timer';
 import type { PageTargeting } from './targeting/build-page-targeting';
-import '@types/google-publisher-tag';
-
-type HeaderBiddingSize = AdSize;
-
-type AdvertStatus =
-	| 'ready'
-	| 'preparing'
-	| 'prepared'
-	| 'fetching'
-	| 'fetched'
-	| 'loading'
-	| 'loaded'
-	| 'rendered';
-
-interface Advert extends EventTarget {
-	id: string;
-	node: HTMLElement;
-	sizes: SizeMapping;
-	headerBiddingSizes: HeaderBiddingSize[] | null;
-	size: AdSize | 'fluid' | null;
-	slot: googletag.Slot;
-	status: AdvertStatus;
-	gpid: string | undefined;
-	isEmpty: boolean | null;
-	isRendered: boolean;
-	shouldRefresh: boolean;
-	whenSlotReady: Promise<void>;
-	extraNodeClasses: string[];
-	hasPrebidSize: boolean;
-	headerBiddingBidRequest: Promise<unknown> | null;
-	lineItemId: number | null;
-	creativeId: number | null;
-	creativeTemplateId: number | null;
-	testgroup: string | undefined;
-
-	on(
-		status: AdvertStatus | AdvertStatus[],
-		callback: (status: AdvertStatus | AdvertStatus[]) => void,
-	): void;
-	once(status: AdvertStatus, callback: () => void): void;
-
-	finishedRendering(isRendered: boolean): void;
-
-	updateExtraSlotClasses(...newClasses: string[]): Promise<void>;
-	generateSizeMapping(additionalSizeMapping: SizeMapping): SizeMapping;
-	updateSizeMapping(additionalSizeMapping: SizeMapping): void;
-}
-
-interface DfpEnv {
-	renderStartTime: number;
-	adSlotSelector: string;
-	lazyLoadEnabled: boolean;
-	lazyLoadObserve: boolean;
-	advertsToLoad: Advert[];
-	adverts: Map<Advert['id'], Advert>;
-	shouldLazyLoad: () => boolean;
-}
 
 type ConnectionType =
 	| 'bluetooth'
@@ -526,10 +469,29 @@ type AdmiralCallback = (event: AdmiralEvent) => void;
 type AdmiralArg = string | AdmiralCallback;
 type Admiral = (...args: AdmiralArg[]) => void;
 
+interface CoreGuardian {
+	config: Config;
+
+	commercialTimer?: EventTimer;
+	offlineCount?: number;
+	modules: {
+		sentry?: {
+			reportError?: (
+				error: Error,
+				feature: string,
+				tags?: Record<string, string>,
+				extras?: Record<string, unknown>,
+			) => void;
+		};
+		abTests?: {
+			getParticipations: () => Record<string, string>;
+			isUserInTest: (testId: string) => boolean;
+			isUserInTestGroup: (testId: string, variantId: string) => boolean;
+		};
+	};
+}
+
 export type {
-	Advert,
-	AdvertStatus,
-	DfpEnv,
 	ConnectionType,
 	NetworkInformation,
 	OphanRecordFunction,
@@ -563,4 +525,5 @@ export type {
 	GoogleTrackConversionObject,
 	Admiral,
 	AdmiralEvent,
+	CoreGuardian,
 };
