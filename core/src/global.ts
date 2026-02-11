@@ -1,10 +1,6 @@
-import type { CoreGuardian, NetworkInformation } from './types';
+import type { CoreGuardian } from './types';
 
 declare global {
-	interface Navigator {
-		readonly connection?: NetworkInformation;
-	}
-
 	interface Window {
 		guardian: CoreGuardian;
 	}
