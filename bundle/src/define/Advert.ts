@@ -9,7 +9,6 @@ import type {
 	SlotName,
 } from '@guardian/commercial-core/ad-sizes';
 import type { Breakpoint } from '@guardian/commercial-core/breakpoint';
-import type { Advert as IAdvert } from '@guardian/commercial-core/types';
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
@@ -127,7 +126,7 @@ const isSizeMappingEmpty = (sizeMapping: SizeMapping): boolean => {
 		Object.entries(sizeMapping).every(([, mapping]) => mapping.length === 0)
 	);
 };
-class Advert implements IAdvert {
+class Advert {
 	id: string;
 	node: HTMLElement;
 	sizes: SizeMapping;

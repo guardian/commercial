@@ -4,7 +4,6 @@ window.googletag = {
 	getConfig: jest.fn(() => ({
 		targeting: {},
 	})),
-	/* @ts-expect-error -- no way to override types */
 	pubads() {
 		return {};
 	},
@@ -75,7 +74,6 @@ describe('Teads Eligibility', () => {
 					'ias-kw': ['IAS_16425_KW'],
 				},
 			})),
-			/* @ts-expect-error -- no way to override types */
 			pubads() {
 				return {};
 			},
