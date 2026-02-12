@@ -132,7 +132,7 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 const addDesktopRightRailAds = (
 	fillSlot: FillAdSlot,
 	isConsentless: boolean,
-	fullWidthGridBody = false,
+	standardArticleGrid = true,
 ): Promise<boolean> => {
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const stickyContainerHeights = await computeStickyHeights(
@@ -153,7 +153,7 @@ const addDesktopRightRailAds = (
 			const containerClasses = [
 				getStickyContainerClassname(i),
 				'ad-slot-container--right-column', // float the ad to the right and sets max width and transparent background https://github.com/guardian/dotcom-rendering/blob/main/dotcom-rendering/src/lib/adStyles.ts#L161
-				!fullWidthGridBody && 'ad-slot-container--offset-right', // adds a negative margin to push the ad into the right rail, this isn't needed if the article body is full width
+				standardArticleGrid && 'ad-slot-container--offset-right', // adds a negative margin to push the ad into the right rail, this isn't needed if the article body is full width
 			]
 				.filter(Boolean)
 				.join(' ');
@@ -253,30 +253,43 @@ const addMobileAndTabletInlineAds = (
 	});
 };
 
-/**
- * Checks if the article body is the full width of the article grid, which is the case for most interactive articles.
- * Paragraphs are always the same width however, so when it's full width we don't need a negative margin to offset the ad into the right rail, `float: right` alone will suffice. (see addDesktopRightRailAds function)
- */
-const hasFullWidthGridBody = async (): Promise<boolean> => {
-	if (!isInteractive) {
-		return false;
-	}
+const getGridWidths = () =>
+	fastdom.measure(() => {
+		const gridBody = document.querySelector<HTMLElement>(
+			'[data-gu-name="body"]',
+		);
+		const parent = gridBody?.parentElement;
 
-	const gridBody = document.querySelector<HTMLElement>(
-		'[data-gu-name="body"]',
-	);
-	const parent = gridBody?.parentElement;
-
-	if (!gridBody || !parent) {
-		return false;
-	}
-
-	return fastdom.measure(() => {
-		const articleBodWidth = gridBody.getBoundingClientRect().width;
-		const parentWidth = parent.getBoundingClientRect().width;
-
-		return articleBodWidth >= parentWidth;
+		const gridBodyWidth = gridBody?.getBoundingClientRect().width;
+		const parentWidth = parent?.getBoundingClientRect().width;
+		const viewportWidth = window.innerWidth;
+		return { gridBodyWidth, parentWidth, viewportWidth };
 	});
+
+/**
+ * Determine whether the grid body is the full width of its parent container. If the grid body is full width, then we need to insert the ad without the offset right class, otherwise the ad will be pushed too far into the right hand column and could end up outside of the viewport.
+ * @param gridBodyWidth
+ * @param parentWidth
+ * @returns
+ */
+const isGridBodyFullWidthOfParent = (
+	gridBodyWidth: number,
+	parentWidth: number,
+): boolean => {
+	return gridBodyWidth >= parentWidth;
+};
+
+/**
+ * Determine whether the grid body is the full width of the viewport. If the grid body is the full width of the viewport, then it's unlikely to have a right hand column, even if it does, it's probably using wacky styles that we can't easily work with, so we won't attempt to insert ads in this case.*
+ * @param gridBodyWidth
+ * @param viewportWidth
+ * @returns
+ **/
+const isGridBodyFullWidthOfViewport = (
+	gridBodyWidth: number,
+	viewportWidth: number,
+): boolean => {
+	return gridBodyWidth >= viewportWidth;
 };
 
 /**
@@ -297,10 +310,30 @@ const addInlineAds = async (
 		return addDesktopRightRailAds(fillSlot, isConsentless);
 	}
 
-	const fullWidthGridBody = await hasFullWidthGridBody();
+	if (isInteractive) {
+		const { gridBodyWidth, parentWidth, viewportWidth } =
+			await getGridWidths();
+
+		if (gridBodyWidth && parentWidth && viewportWidth) {
+			// If the grid body is  the full width of the viewport, then it's unlikely to have a right hand column, even if it does, it's probably using wacky styles that we can't easily work with, so we won't attempt to insert ads in this case.
+			if (isGridBodyFullWidthOfViewport(gridBodyWidth, viewportWidth)) {
+				return false;
+			}
+
+			const standardGrid = !isGridBodyFullWidthOfParent(
+				gridBodyWidth,
+				parentWidth,
+			);
+
+			return addDesktopInline1(fillSlot).then(() =>
+				addDesktopRightRailAds(fillSlot, isConsentless, standardGrid),
+			);
+		}
+		return false;
+	}
 
 	return addDesktopInline1(fillSlot).then(() =>
-		addDesktopRightRailAds(fillSlot, isConsentless, fullWidthGridBody),
+		addDesktopRightRailAds(fillSlot, isConsentless),
 	);
 };
 
