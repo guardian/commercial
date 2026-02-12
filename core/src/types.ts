@@ -469,6 +469,12 @@ type AdmiralCallback = (event: AdmiralEvent) => void;
 type AdmiralArg = string | AdmiralCallback;
 type Admiral = (...args: AdmiralArg[]) => void;
 
+type QueueItem = () => void;
+type Queue = {
+	push: (...items: QueueItem[]) => QueueItem[];
+	flush: () => void;
+};
+
 interface CoreGuardian {
 	config: Config;
 
@@ -526,4 +532,5 @@ export type {
 	Admiral,
 	AdmiralEvent,
 	CoreGuardian,
+	Queue,
 };

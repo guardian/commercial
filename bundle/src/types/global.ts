@@ -13,6 +13,7 @@ import type {
 	NSdkInstance,
 	OphanRecordFunction,
 	OptOutInitializeOptions,
+	Queue,
 	SafeFrameAPI,
 	TeadsAnalytics,
 	Trac,
@@ -313,6 +314,7 @@ interface Guardian extends CoreGuardian {
 	commercial?: {
 		dfpEnv?: DfpEnv;
 		a9WinningBids?: FetchBidResponse[];
+		queue?: Queue;
 	};
 	notificationEventHistory?: HeaderNotification[][];
 	page: {
