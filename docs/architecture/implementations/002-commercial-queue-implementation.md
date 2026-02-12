@@ -2,7 +2,7 @@
 
 External code can use `window.guardian.commercial.queue` to run functions after commercial initialisation.
 
-Initialisation  means all the modules as part of the `bootCommercial` function have been resolved.
+Initialisation means all the modules as part of the `bootCommercial` function have been resolved.
 
 ## Code Locations
 
@@ -17,8 +17,9 @@ Initialisation  means all the modules as part of the `bootCommercial` function h
 **After flush:** Functions execute immediately when pushed
 
 ### Usage
+
 ```javascript
 window.guardian.commercial.queue.push(() => {
-    // Your code here - runs after commercial loads
+	// Your code here - runs after commercial loads
 });
-
+```
