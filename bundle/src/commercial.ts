@@ -4,7 +4,11 @@ import { commercialFeatures } from './lib/commercial-features';
 import { createCommercialQueue } from './lib/guardian-commercial-queue';
 
 window.guardian.commercial ??= {};
-window.guardian.commercial.queue = createCommercialQueue();
+window.guardian.commercial.queue = createCommercialQueue(
+	Array.isArray(window.guardian.commercial.queue)
+		? window.guardian.commercial.queue
+		: [],
+);
 
 const shouldBootConsentless = (consentState: ConsentState) => {
 	return (

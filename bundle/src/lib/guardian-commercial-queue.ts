@@ -1,41 +1,42 @@
-type QueueFunction = () => void;
+type QueueItem = () => void;
 
-interface QueueArray {
-	push: (...items: QueueFunction[]) => number;
+type Queue = {
+	push: (...items: QueueItem[]) => QueueItem[];
 	flush: () => void;
-}
+};
 
-export const createCommercialQueue = (): QueueArray => {
-	const buffer: QueueFunction[] = [];
+const safelyExecuteQueueItem = (item: QueueItem) => {
+	try {
+		item();
+	} catch (error) {
+		console.error(`Error executing queue function during:`, error);
+	}
+};
+
+const createCommercialQueue = (queueArr: QueueItem[] = []): Queue => {
+	const buffer: QueueItem[] = [...queueArr];
 	let isInitialised = false;
-	const storage: QueueFunction[] = [];
 
 	return {
-		push(...items: QueueFunction[]) {
+		push(...items: QueueItem[]) {
 			items.forEach((item) => {
 				if (isInitialised) {
-					try {
-						item();
-					} catch (error) {
-						console.error('Error executing queue function:', error);
-					}
+					safelyExecuteQueueItem(item);
 				} else {
 					buffer.push(item);
 				}
 			});
-			return storage.push(...items);
+			return buffer;
 		},
 
 		flush() {
 			isInitialised = true;
-			buffer.forEach((item: QueueFunction) => {
-				try {
-					item();
-				} catch (error) {
-					console.error('Error executing from buffer queue:', error);
-				}
-			});
-			buffer.length = 0;
+			while (buffer.length > 0) {
+				const item = buffer.shift();
+				safelyExecuteQueueItem(item!);
+			}
 		},
 	};
 };
+
+export { createCommercialQueue };

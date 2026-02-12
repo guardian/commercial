@@ -2,12 +2,6 @@ import type { EventPayload } from '@guardian/ophan-tracker-js';
 import type { EventTimer } from './event-timer';
 import type { PageTargeting } from './targeting/build-page-targeting';
 
-type QueueFunction = () => void;
-interface QueueArray {
-	push: (...items: QueueFunction[]) => number;
-	flush: () => void;
-}
-
 type ConnectionType =
 	| 'bluetooth'
 	| 'cellular'
