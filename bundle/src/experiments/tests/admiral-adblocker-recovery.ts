@@ -39,5 +39,8 @@ export const admiralAdblockRecovery: ABTest = {
 			},
 		},
 	],
-	canRun: () => true,
+	canRun: () => {
+		// Only run if commercial is handling Admiral (not DCR)
+		return window.guardian.config.switches.dcrOwnsAdmiral !== true;
+	},
 };

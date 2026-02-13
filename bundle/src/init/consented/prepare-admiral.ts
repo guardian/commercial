@@ -120,6 +120,12 @@ const setUpAdmiralEventLogger = (admiral: Admiral): void => {
  * and sets up Admiral event logging
  */
 const initAdmiralAdblockRecovery = (): Promise<void> => {
+	// Check if DCR has already set up Admiral
+	if (window.guardian.config.switches.dcrOwnsAdmiral === true) {
+		log('commercial', '🛡️ Admiral - DCR owns Admiral, skipping commercial setup');
+		return Promise.resolve();
+	}
+
 	// Set up window.admiral
 	/* eslint-disable -- This is a stub provided by Admiral */
 	window.admiral =
