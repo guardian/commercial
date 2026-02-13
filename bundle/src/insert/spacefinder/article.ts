@@ -128,16 +128,27 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 
 /**
  * Inserts all inline ads on desktop except for inline1.
+ * @param fillSlot a function to call that will fill the slot when each ad slot has been inserted, these could be google display ads or opt opt consentless ads.
+ * @param isConsentless whether the ads being inserted are consentless ads, this is used to determine the distance from the top of the article that the ad can be placed, as we want to place consentless ads further down the article to increase the likelihood that users have scrolled far enough to see them and therefore be incentivised to opt into personalised ads.
+ * @param standardArticleGrid whether the article is using the standard article grid, this is used to determine whether to add the offset right class to the ad slot container, which adds a negative margin to push the ad into the right hand column, this isn't needed if the article body is full width
+ * @param isInteractive whether the article is an interactive, this is used to determine which set of spacefinder rules to use, as we want to be more conservative with ad placement in interactives as they often have more complex layouts and we want to avoid placing ads in a way that could break the layout or cover up important content.
  */
-const addDesktopRightRailAds = (
-	fillSlot: FillAdSlot,
-	isConsentless: boolean,
-	standardArticleGrid = true,
-): Promise<boolean> => {
+const addDesktopRightRailAds = ({
+	fillSlot,
+	isConsentless,
+	standardArticleGrid,
+	isInteractive,
+}: {
+	fillSlot: FillAdSlot;
+	isConsentless: boolean;
+	standardArticleGrid?: boolean;
+	isInteractive?: boolean;
+}): Promise<boolean> => {
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const stickyContainerHeights = await computeStickyHeights(
 			paras,
 			articleBodySelector,
+			isInteractive,
 		);
 
 		void insertHeightStyles(
@@ -187,15 +198,15 @@ const addDesktopRightRailAds = (
 		await Promise.all(slots);
 	};
 
-	return spaceFiller.fillSpace(
-		rules.desktopRightRail(isConsentless),
-		insertAds,
-		{
-			waitForImages: true,
-			waitForInteractives: true,
-			pass: 'subsequent-inlines',
-		},
-	);
+	const rightRailRules = isInteractive
+		? rules.interactiveRightRail
+		: rules.desktopRightRail(isConsentless);
+
+	return spaceFiller.fillSpace(rightRailRules, insertAds, {
+		waitForImages: true,
+		waitForInteractives: true,
+		pass: 'subsequent-inlines',
+	});
 };
 
 const additionalMobileAndTabletInlineSizes = (index: number) => {
@@ -307,7 +318,7 @@ const addInlineAds = async (
 	}
 
 	if (isPaidContent) {
-		return addDesktopRightRailAds(fillSlot, isConsentless);
+		return addDesktopRightRailAds({ fillSlot, isConsentless });
 	}
 
 	if (isInteractive) {
@@ -320,20 +331,25 @@ const addInlineAds = async (
 				return false;
 			}
 
-			const standardGrid = !isGridBodyFullWidthOfParent(
+			const standardArticleGrid = !isGridBodyFullWidthOfParent(
 				gridBodyWidth,
 				parentWidth,
 			);
 
 			return addDesktopInline1(fillSlot).then(() =>
-				addDesktopRightRailAds(fillSlot, isConsentless, standardGrid),
+				addDesktopRightRailAds({
+					fillSlot,
+					isConsentless,
+					standardArticleGrid,
+					isInteractive: true,
+				}),
 			);
 		}
 		return false;
 	}
 
 	return addDesktopInline1(fillSlot).then(() =>
-		addDesktopRightRailAds(fillSlot, isConsentless),
+		addDesktopRightRailAds({ fillSlot, isConsentless }),
 	);
 };
 

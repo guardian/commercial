@@ -115,37 +115,66 @@ const desktopRightRailMinAbove = (isConsentless: boolean) => {
 	return base;
 };
 
-const desktopRightRail = (isConsentless: boolean): SpacefinderRules => {
-	return {
-		bodySelector,
-		candidateSelector,
-		minDistanceFromTop: desktopRightRailMinAbove(isConsentless),
-		minDistanceFromBottom: 300,
-		opponentSelectorRules: {
-			[adSlotContainerSelector]: {
-				marginBottom: 500,
-				marginTop: 500,
-			},
-			[rightColumnOpponentSelector]: {
-				marginBottom: 0,
-				marginTop: 600,
-			},
+const desktopRightRail = (isConsentless: boolean): SpacefinderRules => ({
+	bodySelector,
+	candidateSelector,
+	minDistanceFromTop: desktopRightRailMinAbove(isConsentless),
+	minDistanceFromBottom: 300,
+	opponentSelectorRules: {
+		[adSlotContainerSelector]: {
+			marginBottom: 500,
+			marginTop: 500,
 		},
-		/**
-		 * Filter out any candidates that are too close to the last winner
-		 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
-		 * for more information
-		 **/
-		filter: (candidate, lastWinner) => {
-			if (!lastWinner) {
-				return true;
-			}
-			const largestSizeForSlot = adSizes.halfPage.height;
-			const distanceBetweenAds =
-				candidate.top - lastWinner.top - largestSizeForSlot;
-			return distanceBetweenAds >= minDistanceBetweenRightRailAds;
+		[rightColumnOpponentSelector]: {
+			marginBottom: 0,
+			marginTop: 600,
 		},
-	};
+	},
+	/**
+	 * Filter out any candidates that are too close to the last winner
+	 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
+	 * for more information
+	 **/
+	filter: (candidate, lastWinner) => {
+		if (!lastWinner) {
+			return true;
+		}
+		const largestSizeForSlot = adSizes.halfPage.height;
+		const distanceBetweenAds =
+			candidate.top - lastWinner.top - largestSizeForSlot;
+		return distanceBetweenAds >= minDistanceBetweenRightRailAds;
+	},
+});
+
+const interactiveRightRail: SpacefinderRules = {
+	bodySelector,
+	candidateSelector,
+	minDistanceFromTop: 250,
+	minDistanceFromBottom: 300,
+	opponentSelectorRules: {
+		[adSlotContainerSelector]: {
+			marginBottom: 500,
+			marginTop: 500,
+		},
+		[':scope > *:not(p)']: {
+			marginBottom: 0,
+			marginTop: 600,
+		},
+	},
+	/**
+	 * Filter out any candidates that are too close to the last winner
+	 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
+	 * for more information
+	 **/
+	filter: (candidate, lastWinner) => {
+		if (!lastWinner) {
+			return true;
+		}
+		const largestSizeForSlot = adSizes.halfPage.height;
+		const distanceBetweenAds =
+			candidate.top - lastWinner.top - largestSizeForSlot;
+		return distanceBetweenAds >= minDistanceBetweenRightRailAds;
+	},
 };
 
 const mobileMinDistanceFromArticleTop = 200;
@@ -213,5 +242,6 @@ const mobileAndTabletInlines: SpacefinderRules = {
 export const rules = {
 	desktopInline1,
 	desktopRightRail,
+	interactiveRightRail,
 	mobileAndTabletInlines,
 };
