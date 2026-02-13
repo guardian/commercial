@@ -13,13 +13,13 @@ import type {
 	NSdkInstance,
 	OphanRecordFunction,
 	OptOutInitializeOptions,
-	Queue,
 	SafeFrameAPI,
 	TeadsAnalytics,
 	Trac,
 } from '@guardian/commercial-core/types';
 import type { CustomClaims } from '@guardian/identity-auth';
 import type { Advert } from '../define/Advert';
+import type { Queue } from '../lib/guardian-commercial-queue';
 import type { ThirdPartyTag } from '../lib/types';
 
 type ServerSideABTest = `${string}${'Variant' | 'Control'}`;

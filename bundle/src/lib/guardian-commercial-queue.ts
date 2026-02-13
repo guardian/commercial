@@ -40,3 +40,4 @@ const createCommercialQueue = (queueArr: QueueItem[] = []): Queue => {
 };
 
 export { createCommercialQueue };
+export type { Queue, QueueItem };
