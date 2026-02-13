@@ -33,15 +33,22 @@ const isDcrHandlingAdmiral = (): boolean => {
 	// If window.admiral exists and has been initialized by bootstrap (not just the queue stub)
 	// the bootstrap replaces the stub with a proper function that doesn't have .q property
 	const admiralExists = typeof window.admiral === 'function';
-	const admiralAsRecord = window.admiral as unknown as Record<string, unknown>;
+	const admiralAsRecord = window.admiral as unknown as Record<
+		string,
+		unknown
+	>;
 	const admiralIsOnlyStub = admiralExists && Array.isArray(admiralAsRecord.q);
 	const admiralIsInitialized = admiralExists && !admiralIsOnlyStub;
 
 	// Also check for explicit DCR flag if set
-	const dcrOwnsAdmiral = window.guardian.config.switches.dcrOwnsAdmiral === true;
+	const dcrOwnsAdmiral =
+		window.guardian.config.switches.dcrOwnsAdmiral === true;
 
 	if (admiralIsInitialized || dcrOwnsAdmiral) {
-		log('commercial', '🛡️ Admiral - DCR is handling Admiral, skipping commercial initialization');
+		log(
+			'commercial',
+			'🛡️ Admiral - DCR is handling Admiral, skipping commercial initialization',
+		);
 		return true;
 	}
 	return false;

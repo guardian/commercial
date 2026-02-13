@@ -122,7 +122,10 @@ const setUpAdmiralEventLogger = (admiral: Admiral): void => {
 const initAdmiralAdblockRecovery = (): Promise<void> => {
 	// Check if DCR has already set up Admiral
 	if (window.guardian.config.switches.dcrOwnsAdmiral === true) {
-		log('commercial', '🛡️ Admiral - DCR owns Admiral, skipping commercial setup');
+		log(
+			'commercial',
+			'🛡️ Admiral - DCR owns Admiral, skipping commercial setup',
+		);
 		return Promise.resolve();
 	}
 
