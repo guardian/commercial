@@ -28,13 +28,7 @@ const createAdWrapper = () => {
 	return createAdWrapperDCR();
 };
 
-/**
- * Initialise mobile sticky ad slot
- * @returns Promise
- */
-
 const renderMobileStickySlot = async () => {
-	log('commercial', '🪵 Rendering MobileSticky');
 	const mobileStickyWrapper = createAdWrapper();
 	await fastdom.mutate(() => {
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Is body really always defined?
@@ -42,6 +36,7 @@ const renderMobileStickySlot = async () => {
 			document.body.appendChild(mobileStickyWrapper);
 		}
 	});
+
 	if (mobileStickyWrapper) {
 		const mobileStickyAdSlot =
 			mobileStickyWrapper.querySelector<HTMLElement>(
@@ -53,13 +48,16 @@ const renderMobileStickySlot = async () => {
 	}
 };
 
+/**
+ * Initialise mobile sticky ad slot
+ * @returns Promise
+ */
 export const init = (): Promise<void> => {
-	const handleBannerEvent = () => {
-		log('commercial', '🪵 Handle Banner Event');
-		void renderMobileStickySlot();
+	const handleBannerEvent = (event: Event) => {
+		log('commercial', '🪵 Handle Banner Event:', event.type);
 	};
-
 	if (shouldIncludeMobileSticky()) {
+		void renderMobileStickySlot();
 		document.addEventListener('banner:close', handleBannerEvent);
 		document.addEventListener('banner:none', handleBannerEvent);
 	}
