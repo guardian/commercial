@@ -5,6 +5,7 @@ import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { getParticipations } from '../experiments/ab';
 import { commercialFeatures } from './commercial-features';
+import type { UserId } from './header-bidding/prebid/types';
 import { removeFalsyValues } from './header-bidding/utils';
 
 const formatAppNexusTargeting = (obj: Record<string, string | string[]>) => {
@@ -51,8 +52,11 @@ const getPageTargeting = (
 		window.pbjs?.getConfig ? window.pbjs.getConfig() : undefined;
 	const userSync = pbjsConfig?.userSync;
 	const idProviders =
-		userSync && 'userIds' in userSync && userSync.userIds.length > 0
-			? userSync.userIds
+		userSync &&
+		'userIds' in userSync &&
+		Array.isArray(userSync.userIds) &&
+		userSync.userIds.length > 0
+			? (userSync.userIds as UserId[])
 			: [];
 
 	const pageTargeting = buildPageTargeting({

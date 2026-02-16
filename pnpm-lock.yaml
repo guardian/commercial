@@ -83,9 +83,9 @@ importers:
       lodash-es:
         specifier: ^4.17.23
         version: 4.17.23
-      prebid-v10.11.0.js:
-        specifier: npm:prebid.js@10.11.0
-        version: prebid.js@10.11.0(handlebars@4.7.8)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(schema-utils@4.3.3)
+      prebid-v10.23.0.js:
+        specifier: npm:prebid.js@10.23.0
+        version: prebid.js@10.23.0(handlebars@4.7.8)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(schema-utils@4.3.3)
       prebid.js:
         specifier: 9.46.0
         version: 9.46.0(handlebars@4.7.8)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -4829,8 +4829,8 @@ packages:
     resolution: {integrity: sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg==}
     engines: {node: '>= 0.4'}
 
-  prebid.js@10.11.0:
-    resolution: {integrity: sha512-/+MIo6jkCdAJYqZiT1PmjLDE650l5+ZW8dbStZzKhKOu2jJ8k/3TEZTZai0hCMIU8Zdv79HQDzu2FLwBc4u25w==}
+  prebid.js@10.23.0:
+    resolution: {integrity: sha512-N6NE55AP8SeTtDCyNz50YZOWz2QoSZpul/EOjCE4BMdEE22PW8bZhSQ0Qm34CBXn4bYoB8lIVqE6bKw0E5bCFw==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       schema-utils: ^4.3.2
@@ -11334,18 +11334,17 @@ snapshots:
 
   possible-typed-array-names@1.1.0: {}
 
-  prebid.js@10.11.0(handlebars@4.7.8)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(schema-utils@4.3.3):
+  prebid.js@10.23.0(handlebars@4.7.8)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(schema-utils@4.3.3):
     dependencies:
       '@babel/core': 7.28.6
-      '@babel/plugin-transform-runtime': 7.28.5(@babel/core@7.28.6)
       '@babel/preset-env': 7.28.6(@babel/core@7.28.6)
       '@babel/preset-typescript': 7.28.5(@babel/core@7.28.6)
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.28.6
       core-js: 3.46.0
       crypto-js: 4.2.0
       dlv: 1.1.3
       dset: 3.1.4
-      express: 4.21.2
+      express: 4.22.1
       fun-hooks: 1.1.0
       gulp-babel: 8.0.0(@babel/core@7.28.6)
       gulp-wrap: 0.15.0(handlebars@4.7.8)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)

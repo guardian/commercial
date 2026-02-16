@@ -3,108 +3,89 @@
 ## Overview
 This document outlines the steps to implement an AB test for a prebid update in the Commercial codebase.
 
-## Setup
+## v10 Updates
+
+Note: Assume `v10.23.0` is the version being tested against a current version of `v10.0.0`.
+
 ### package.json
+
 Add the new version of prebid as an alias alongside the current version in the `package.json` file:
+
 ```json
 "dependencies": {
-    "prebid.js": "9.27.0",
-    "prebid-v9.46.0.js": "npm:prebid.js@9.46.0",
-    ...
-    }
+    "prebid.js": "10.0.0",
+    "prebid-v10.23.0.js": "npm:prebid.js@10.23.0",
+}
 ```
 
 ### Webpack Configuration
+
 Copy the module aliases in the webpack for the new version of prebid:
-```js
+
+```mjs
 alias: {
-    'prebid.js/src': join(
+    'prebid-v10.23.0.js/dist': join(
         import.meta.dirname,
         'node_modules',
-        'prebid.js',
+        'prebid-v10.23.0.js',
+        'dist',
         'src',
-    ),
-    'prebid.js/libraries': join(
-        import.meta.dirname,
-        'node_modules',
-        'prebid.js',
-        'libraries',
-    ),
-    'prebid.js/adapters': join(
-        import.meta.dirname,
-        'node_modules',
-        'prebid.js',
-        'src',
-        'adapters',
-    ),
-    // New prebid version aliases
-    'prebid-v9.46.0.js/src': join(
-        import.meta.dirname,
-        'node_modules',
-        'prebid-v9.46.0.js',
-        'src',
-    ),
-    'prebid-v9.46.0.js/libraries': join(
-        import.meta.dirname,
-        'node_modules',
-        'prebid-v9.46.0.js',
-        'libraries',
-    ),
-    'prebid-v9.46.0.js/adapters': join(
-        import.meta.dirname,
-        'node_modules',
-        'prebid-v9.46.0.js',
-        'src',
-        'adapters',
     ),
 }
 ```
 
-Copy the `babel-loader` rule and update the `include` path for the new version of prebid, importing a new set of babel options if necessary:
-```js
-import prebidBabelOptions from 'prebid.js/.babelrc.js';
-import prebid946BabelOptions from 'prebid-v9.46.0.js/.babelrc.js';
-...
-{
-   module: {
-		rules: [
-            {
-				test: /.js$/,
-				include: /prebid\.js/,
-				use: {
-					loader: 'babel-loader',
-					options: prebidBabelOptions,
-				},
-			},
-			// New rule for prebid 9.46.0
-			{
-				test: /.js$/,
-				include: /prebid\.js@9\.46\.0/,
-				use: {
-					loader: 'babel-loader',
-					options: prebid946BabelOptions,
-				},
-			},
-        ],
-},
+### Type Module Declarations
+
+```ts
+declare module 'prebid-v10.23.0.js/dist/modules/*' {
+	type BidderSpec =
+		import('prebid-v10.23.0.js/dist/src/adapters/bidderFactory').BidderSpec<string>;
+
+	const spec: BidderSpec;
+
+	export { spec };
+}
+```
+
+### Jest Configuration
+
+```ts
+const esModules = [
+	'prebid-v10.23.0.js',
+].join('|');
+
+module.exports = {
+    moduleNameMapper: {
+        '^prebid-v10.23.0.js/dist/(.*)$':
+			'<rootDir>/node_modules/prebid-v10.23.0.js/dist/src/$1',
+    },
+    transformIgnorePatterns: [`/node_modules/.pnpm/(?!${esModules})`],
+}
 ```
 
 ### Copy Prebid Setup
-Copy `bundle/src/lib/header-bidding/prebid/load-modules.ts` with a new name, e.g., `load-modules-v9.46.0.ts`, and update all imports to use the new prebid alias.
-Copy our custom modules using the same pattern, in `bundle/src/lib/header-bidding/prebid/modules`, and update all imports to use the new prebid alias.
+
+Copy the folder `bundle/src/lib/header-bidding/prebid/modules` with a new name, e.g., `modules-v10.23.0`, and update all imports to use the new prebid alias.
 
 ### Create AB Test
+
 Create an ab test and conditionally import the new prebid setup based on the test variant in `prepare-prebid.ts`:
+
 ```ts
-if (shouldLoadPrebid946) {
+const isPrebidV1023Enabled = isUserInTestGroup(
+    'commercial-prebid-v1023',
+    'variant',
+);
+
+if (isPrebidV1023Enabled) {
     await import(
-        /* webpackChunkName: "Prebid@9.46.0.js" */
-        `../../lib/header-bidding/prebid/load-modules-v9.46.0`
+        /* webpackChunkName: "Prebid@10.23.0.js" */
+        `../../lib/header-bidding/prebid/modules-v10.23.0`
     );
 } else {
     await import(
         /* webpackChunkName: "Prebid.js" */
-        `../../lib/header-bidding/prebid/load-modules`
+        `../../lib/header-bidding/prebid/modules`
     );
 }
 ```

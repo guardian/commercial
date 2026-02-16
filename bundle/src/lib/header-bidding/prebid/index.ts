@@ -5,6 +5,7 @@ import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/libs';
 import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
+import type { AdUnitDefinition } from 'prebid-v10.23.0.js/dist/src/adUnits';
 import type { Advert } from '../../../define/Advert';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedIn } from '../../identity/api';
@@ -89,7 +90,8 @@ const initialise = async (
 	const isBidderEnabled = shouldIncludeBidder(consentState);
 
 	// initialise enabled bidders
-	window.pbjs.bidderSettings = {
+	// TODO: remove types once prebid is upgraded to v10
+	(window.pbjs as unknown as { bidderSettings: unknown }).bidderSettings = {
 		criteo: isBidderEnabled('criteo') ? bidderSettingsForCriteo : undefined,
 		ix: isBidderEnabled('ix') ? bidderSettingsForIx : undefined,
 		kargo: isBidderEnabled('kargo') ? bidderSettingsForKargo : undefined,
@@ -105,7 +107,8 @@ const initialise = async (
 	if (analytics) window.pbjs.enableAnalytics([analytics]);
 
 	// update config and adjust slot size when prebid ad loads
-	window.pbjs.setConfig(pbjsConfig);
+	// TODO: remove types once prebid is upgraded to v10
+	window.pbjs.setConfig(pbjsConfig as unknown as Record<string, unknown>);
 	window.pbjs.onEvent('bidWon', (data) => {
 		const { width, height, adUnitCode } = data;
 
@@ -164,6 +167,7 @@ const requestBids = async (
 		return requestQueue;
 	}
 
+	// TODO: use AdUnitDefinition type once prebid is upgraded to v10
 	const adUnits: PrebidAdUnit[] = await onConsent()
 		.then(async (consentState: ConsentState) => {
 			// calculate this once before mapping over
@@ -205,11 +209,11 @@ const requestBids = async (
 					}
 				});
 
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ignore during v10 test
-				window.pbjs?.que.push(() => {
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ignore during v10 test
-					void window.pbjs?.requestBids({
-						adUnits,
+				// TODO: remove types once prebid is upgraded to v10
+				const typedAdUnits = adUnits as unknown as AdUnitDefinition[];
+				window.pbjs.que.push(() => {
+					void window.pbjs.requestBids({
+						adUnits: typedAdUnits,
 						bidsBackHandler: () =>
 							void bidsBackHandler(adUnits, eventTimer).then(
 								resolve,
