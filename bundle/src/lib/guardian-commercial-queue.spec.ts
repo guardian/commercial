@@ -3,11 +3,6 @@ import { createCommercialQueue } from './guardian-commercial-queue';
 window.guardian.config.page.adUnit = 'adUnit';
 
 describe('createCommercialQueue', () => {
-	it('should return an object with push and flush methods', () => {
-		const queue = createCommercialQueue();
-		expect(queue).toBeDefined();
-	});
-
 	it('should buffer a function without executing it', () => {
 		const queue = createCommercialQueue();
 		const mockFn = jest.fn();
