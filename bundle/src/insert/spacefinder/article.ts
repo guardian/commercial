@@ -11,6 +11,7 @@ import {
 import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
 import fastdom from '../../lib/fastdom-promise';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
+import { calculateInteractiveGridType } from './interactive';
 import { rules } from './rules';
 import { spaceFiller } from './space-filler';
 import type { SpacefinderWriter } from './spacefinder';
@@ -264,45 +265,6 @@ const addMobileAndTabletInlineAds = (
 	});
 };
 
-const getGridWidths = () =>
-	fastdom.measure(() => {
-		const gridBody = document.querySelector<HTMLElement>(
-			'[data-gu-name="body"]',
-		);
-		const parent = gridBody?.parentElement;
-
-		const gridBodyWidth = gridBody?.getBoundingClientRect().width;
-		const parentWidth = parent?.getBoundingClientRect().width;
-		const viewportWidth = window.innerWidth;
-		return { gridBodyWidth, parentWidth, viewportWidth };
-	});
-
-/**
- * Determine whether the grid body is the full width of its parent container. If the grid body is full width, then we need to insert the ad without the offset right class, otherwise the ad will be pushed too far into the right hand column and could end up outside of the viewport.
- * @param gridBodyWidth
- * @param parentWidth
- * @returns
- */
-const isGridBodyFullWidthOfParent = (
-	gridBodyWidth: number,
-	parentWidth: number,
-): boolean => {
-	return gridBodyWidth >= parentWidth;
-};
-
-/**
- * Determine whether the grid body is the full width of the viewport. If the grid body is the full width of the viewport, then it's unlikely to have a right hand column, even if it does, it's probably using wacky styles that we can't easily work with, so we won't attempt to insert ads in this case.*
- * @param gridBodyWidth
- * @param viewportWidth
- * @returns
- **/
-const isGridBodyFullWidthOfViewport = (
-	gridBodyWidth: number,
-	viewportWidth: number,
-): boolean => {
-	return gridBodyWidth >= viewportWidth;
-};
-
 /**
  * Add inline slots to the article body
  * @param fillSlot A function to call that will fill the slot when each ad slot has been inserted,
@@ -317,35 +279,25 @@ const addInlineAds = async (
 		return addMobileAndTabletInlineAds(fillSlot, currentBreakpoint);
 	}
 
-	if (isPaidContent) {
-		return addDesktopRightRailAds({ fillSlot, isConsentless });
+	if (isInteractive) {
+		const interactiveGridType = await calculateInteractiveGridType();
+
+		if (interactiveGridType === 'unknown') {
+			return Promise.resolve(false);
+		}
+
+		return addDesktopInline1(fillSlot).then(() =>
+			addDesktopRightRailAds({
+				fillSlot,
+				isConsentless,
+				standardArticleGrid: interactiveGridType === 'standard',
+				isInteractive: true,
+			}),
+		);
 	}
 
-	if (isInteractive) {
-		const { gridBodyWidth, parentWidth, viewportWidth } =
-			await getGridWidths();
-
-		if (gridBodyWidth && parentWidth && viewportWidth) {
-			// If the grid body is  the full width of the viewport, then it's unlikely to have a right hand column, even if it does, it's probably using wacky styles that we can't easily work with, so we won't attempt to insert ads in this case.
-			if (isGridBodyFullWidthOfViewport(gridBodyWidth, viewportWidth)) {
-				return false;
-			}
-
-			const standardArticleGrid = !isGridBodyFullWidthOfParent(
-				gridBodyWidth,
-				parentWidth,
-			);
-
-			return addDesktopInline1(fillSlot).then(() =>
-				addDesktopRightRailAds({
-					fillSlot,
-					isConsentless,
-					standardArticleGrid,
-					isInteractive: true,
-				}),
-			);
-		}
-		return false;
+	if (isPaidContent) {
+		return addDesktopRightRailAds({ fillSlot, isConsentless });
 	}
 
 	return addDesktopInline1(fillSlot).then(() =>
