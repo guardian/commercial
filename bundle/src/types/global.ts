@@ -1,7 +1,6 @@
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
 import type {
 	AdBlockers,
-	Admiral,
 	Apstag,
 	ArticleCounts,
 	Confiant,
@@ -390,9 +389,6 @@ declare global {
 			cmd: string;
 			val: Record<string, unknown>;
 		}>;
-
-		// Admiral ad blocker detection
-		admiral?: Admiral;
 	}
 }
 
