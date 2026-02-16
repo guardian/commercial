@@ -156,6 +156,231 @@ describe('Advert', () => {
 		expect(ad).toBeDefined();
 		expect(ad.gpid).toBe(expectedGpid);
 	});
+
+	describe('status management', () => {
+		it('should initialize with status "ready"', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+			expect(ad.status).toBe('ready');
+		});
+
+		it('should allow status to progress through lifecycle', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			ad.status = 'preparing';
+			expect(ad.status).toBe('preparing');
+
+			ad.status = 'prepared';
+			expect(ad.status).toBe('prepared');
+
+			ad.status = 'fetching';
+			expect(ad.status).toBe('fetching');
+
+			ad.status = 'fetched';
+			expect(ad.status).toBe('fetched');
+
+			ad.status = 'loading';
+			expect(ad.status).toBe('loading');
+
+			ad.status = 'loaded';
+			expect(ad.status).toBe('loaded');
+
+			ad.status = 'rendered';
+			expect(ad.status).toBe('rendered');
+		});
+
+		it('should allow status to reset from "rendered" to "ready"', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			ad.status = 'rendered';
+			ad.status = 'ready';
+			expect(ad.status).toBe('ready');
+		});
+
+		it('should throw error when setting invalid status', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			expect(() => {
+				// @ts-expect-error - testing invalid status
+				ad.status = 'invalid-status';
+			}).toThrow('Invalid status: invalid-status');
+		});
+
+		it('should throw error when moving to earlier status (not from rendered)', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			ad.status = 'preparing';
+			ad.status = 'prepared';
+
+			expect(() => {
+				ad.status = 'preparing';
+			}).toThrow('Cannot change status from prepared to preparing');
+		});
+
+		it('should throw error when trying to go backward from "fetched"', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			ad.status = 'fetched';
+
+			expect(() => {
+				ad.status = 'ready';
+			}).toThrow('Cannot change status from fetched to ready');
+		});
+
+		it('should dispatch statusChange event when status changes', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			const listener = jest.fn();
+			ad.addEventListener('statusChange', listener);
+
+			ad.status = 'preparing';
+
+			expect(listener).toHaveBeenCalledTimes(1);
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- test
+			expect(listener.mock.calls[0][0]).toBeInstanceOf(CustomEvent);
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- test
+			expect((listener.mock.calls[0][0] as CustomEvent).detail).toBe(
+				'preparing',
+			);
+		});
+	});
+
+	describe('on() method', () => {
+		it('should call callback immediately if advert is already at the specified status', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			const callback = jest.fn();
+			ad.on('ready', callback);
+
+			expect(callback).toHaveBeenCalledWith('ready');
+		});
+
+		it('should call callback when advert reaches the specified status', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			const callback = jest.fn();
+			ad.on('prepared', callback);
+
+			expect(callback).not.toHaveBeenCalled();
+
+			ad.status = 'preparing';
+			expect(callback).not.toHaveBeenCalled();
+
+			ad.status = 'prepared';
+			expect(callback).toHaveBeenCalledWith('prepared');
+		});
+
+		it('should call callback for any status in the array', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			const callback = jest.fn();
+			ad.on(['fetching', 'fetched'], callback);
+
+			ad.status = 'fetching';
+			expect(callback).toHaveBeenCalledWith('fetching');
+			expect(callback).toHaveBeenCalledTimes(1);
+
+			ad.status = 'fetched';
+			expect(callback).toHaveBeenCalledWith('fetched');
+			expect(callback).toHaveBeenCalledTimes(2);
+		});
+
+		it('should return a function to remove the listener', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			const callback = jest.fn();
+			const { remove } = ad.on('prepared', callback);
+
+			remove();
+			ad.status = 'prepared';
+
+			expect(callback).not.toHaveBeenCalled();
+		});
+
+		it('should call callback multiple times if status changes through it multiple times', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			const callback = jest.fn();
+			ad.on('ready', callback);
+
+			expect(callback).toHaveBeenCalledTimes(1);
+
+			ad.status = 'rendered';
+			ad.status = 'ready';
+
+			expect(callback).toHaveBeenCalledTimes(2);
+		});
+	});
+
+	describe('once() method', () => {
+		it('should call callback immediately if advert is already at the specified status', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			const callback = jest.fn();
+			ad.once('ready', callback);
+
+			expect(callback).toHaveBeenCalledWith('ready');
+		});
+
+		it('should call callback only once when advert reaches the specified status', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			const callback = jest.fn();
+			ad.once('prepared', callback);
+
+			ad.status = 'prepared';
+			expect(callback).toHaveBeenCalledTimes(1);
+
+			ad.status = 'fetching';
+			ad.status = 'fetched';
+			expect(callback).toHaveBeenCalledTimes(1);
+		});
+
+		it('should not call callback again after being triggered once', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			const callback = jest.fn();
+			ad.once('fetching', callback);
+
+			ad.status = 'fetching';
+			expect(callback).toHaveBeenCalledTimes(1);
+
+			ad.status = 'rendered';
+			ad.status = 'ready';
+
+			ad.status = 'fetching';
+			expect(callback).toHaveBeenCalledTimes(1);
+		});
+	});
 });
 
 describe('getAdSizeMapping', () => {
