@@ -14,7 +14,6 @@ let queue: EventData[] = [];
 const analyticsAdapter: GuAnalyticsAdapter = Object.assign(
 	adapter({ analyticsType: 'endpoint' }),
 	{
-		// only exposed for testing, not part of the public API of the adapter
 		track({
 			eventType,
 			args,

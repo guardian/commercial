@@ -518,11 +518,6 @@ describe('initialise', () => {
 	});
 });
 
-// type BidWonHandler = (arg0: {
-// 	height: number;
-// 	width: number;
-// 	adUnitCode: string;
-// }) => void;
 type BidWonHandler = ((data: unknown) => void) | undefined;
 
 describe('Prebid.js bidWon Events', () => {
