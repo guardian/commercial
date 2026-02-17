@@ -217,8 +217,8 @@ importers:
         specifier: 9.0.0
         version: 9.0.0(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/libs':
-        specifier: 27.0.0
-        version: 27.0.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3)
+        specifier: 27.1.0
+        version: 27.1.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3)
     devDependencies:
       '@guardian/ophan-tracker-js':
         specifier: 2.8.0
@@ -1300,16 +1300,6 @@ packages:
     resolution: {integrity: sha512-PE6R7dfrceFPFEaWnW2ijjjuHbkdZ85/NjL6tP+hpb4OMGj9kyM12+JgKJWg56DZ70S/iU542HS3Z+ST6yTPeA==}
     peerDependencies:
       '@guardian/libs': ^27.0.0
-      tslib: ^2.8.1
-      typescript: ~5.9.3
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
-  '@guardian/libs@27.0.0':
-    resolution: {integrity: sha512-H5HV7pfAk9efC+/sIoTyqx9iYte1VwF8i90g+5o7OuE1iLr8dZhX8e1chQaXxEAj7vEFz/gYCs5/noARxoqsmA==}
-    peerDependencies:
-      '@guardian/ophan-tracker-js': ^2.2.10
       tslib: ^2.8.1
       typescript: ~5.9.3
     peerDependenciesMeta:
@@ -7415,13 +7405,6 @@ snapshots:
   '@guardian/identity-auth@12.0.0(@guardian/libs@27.1.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)':
     dependencies:
       '@guardian/libs': 27.1.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3)
-      tslib: 2.8.1
-    optionalDependencies:
-      typescript: 5.9.3
-
-  '@guardian/libs@27.0.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3)':
-    dependencies:
-      '@guardian/ophan-tracker-js': 2.8.0
       tslib: 2.8.1
     optionalDependencies:
       typescript: 5.9.3
