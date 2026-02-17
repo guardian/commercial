@@ -50,10 +50,10 @@
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.28.6",
-		"@babel/core": "^7.28.6",
+		"@babel/core": "^7.29.0",
 		"@babel/plugin-syntax-dynamic-import": "^7.8.3",
-		"@babel/plugin-transform-runtime": "^7.28.3",
-		"@babel/preset-env": "^7.28.6",
+		"@babel/plugin-transform-runtime": "^7.29.0",
+		"@babel/preset-env": "^7.29.0",
 		"@babel/preset-react": "^7.26.3",
 		"@changesets/cli": "^2.29.8",
 		"@guardian/browserslist-config": "^7.0.0",
@@ -83,7 +83,7 @@
 		"type-fest": "^5.4.3",
 		"typescript": "5.9.3",
 		"webpack": "^5.103.0",
-		"webpack-bundle-analyzer": "^5.1.1",
+		"webpack-bundle-analyzer": "^5.2.0",
 		"webpack-cli": "^6.0.1",
 		"webpack-dev-server": "^5.2.3",
 		"webpack-merge": "^6.0.1"
