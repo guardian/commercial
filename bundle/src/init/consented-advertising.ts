@@ -9,7 +9,6 @@ import { init as initIpsosMori } from './consented/ipsos-mori';
 import { init as initMessenger } from './consented/messenger';
 import { initOpinaryPollListener } from './consented/opinary';
 import { init as prepareA9 } from './consented/prepare-a9';
-import { initAdmiralAdblockRecovery } from './consented/prepare-admiral';
 import { init as prepareGoogletag } from './consented/prepare-googletag';
 import { initPermutive } from './consented/prepare-permutive';
 import { init as preparePrebid } from './consented/prepare-prebid';
@@ -46,7 +45,6 @@ const commercialModules = [
 	prepareAdVerification,
 	initThirdPartyTags,
 	initOpinaryPollListener,
-	initAdmiralAdblockRecovery,
 	initPages,
 ];
 
