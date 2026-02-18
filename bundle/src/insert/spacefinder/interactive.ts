@@ -23,7 +23,7 @@ const getInteractiveGridWidths = () =>
 /**
  * Determine whether the grid body is the full width of the content grid. If the grid body is full width, then we need to insert the ad without the offset right class, otherwise the ad will be pushed too far into the right hand column and could end up outside of the viewport.
  */
-const isBodyFullWidthOfGrid = (
+const isBodyFullWidthOfContentGrid = (
 	bodyWidth: number,
 	contentGridWidth: number,
 ): boolean => {
@@ -55,7 +55,10 @@ const calculateInteractiveGridType = async (): Promise<
 			return 'unknown';
 		}
 
-		const isFullWidth = isBodyFullWidthOfGrid(bodyWidth, contentGridWidth);
+		const isFullWidth = isBodyFullWidthOfContentGrid(
+			bodyWidth,
+			contentGridWidth,
+		);
 
 		return isFullWidth ? 'full-width' : 'standard';
 	}
