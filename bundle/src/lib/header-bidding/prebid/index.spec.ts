@@ -518,11 +518,7 @@ describe('initialise', () => {
 	});
 });
 
-type BidWonHandler = (arg0: {
-	height: number;
-	width: number;
-	adUnitCode: string;
-}) => void;
+type BidWonHandler = ((data: unknown) => void) | undefined;
 
 describe('Prebid.js bidWon Events', () => {
 	test('should respond for correct configuration', async () => {
@@ -536,7 +532,7 @@ describe('Prebid.js bidWon Events', () => {
 		if (!window.pbjs) return;
 		window.pbjs.onEvent = jest.fn((eventName, eventHandler) => {
 			bidWonEventName = eventName;
-			bidWonEventHandler = eventHandler;
+			bidWonEventHandler = eventHandler as unknown as BidWonHandler;
 		});
 
 		getAdvertById.mockImplementation(() => dummyAdvert);
@@ -546,15 +542,11 @@ describe('Prebid.js bidWon Events', () => {
 		expect(bidWonEventName).toBe('bidWon');
 		expect(window.pbjs.onEvent).toHaveBeenCalledTimes(1);
 
-		// @ts-expect-error -- this is handled by onEvent
-		// - eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- it used to be that way
-		if (bidWonEventHandler) {
-			bidWonEventHandler({
-				height: 100,
-				width: 100,
-				adUnitCode: 'foo',
-			});
-		}
+		bidWonEventHandler?.({
+			height: 100,
+			width: 100,
+			adUnitCode: 'foo',
+		});
 
 		expect(getAdvertById).toHaveBeenCalledTimes(1);
 		expect(getAdvertById).toHaveBeenCalledWith('foo');
@@ -593,7 +585,7 @@ describe('Prebid.js bidWon Events', () => {
 			if (!window.pbjs) return false;
 			window.pbjs.onEvent = jest.fn((eventName, eventHandler) => {
 				bidWonEventName = eventName;
-				bidWonEventHandler = eventHandler;
+				bidWonEventHandler = eventHandler as unknown as BidWonHandler;
 			});
 
 			await prebid.initialise(window, mockConsentState);
@@ -601,10 +593,7 @@ describe('Prebid.js bidWon Events', () => {
 			expect(bidWonEventName).toBe('bidWon');
 			expect(window.pbjs.onEvent).toHaveBeenCalledTimes(1);
 
-			// @ts-expect-error -- this is handled by onEvent
-			// - eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- it used to be that way
 			if (bidWonEventHandler) {
-				// @ts-expect-error -- we’re testing malformed data
 				bidWonEventHandler(data);
 			}
 

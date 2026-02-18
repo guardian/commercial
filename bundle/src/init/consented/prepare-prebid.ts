@@ -29,16 +29,10 @@ const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 	);
 
 	if (isPrebidV10Enabled) {
-		// temporarily load prebid v9 to see if bidding works
-		// as expected or if the test setup is wrong
 		await import(
-			/* webpackChunkName: "Prebid.js" */
-			'../../lib/header-bidding/prebid/modules'
+			/* webpackChunkName: "Prebid@10.23.0.js" */
+			'../../lib/header-bidding/prebid/modules-v10.23.0'
 		);
-		// await import(
-		// 	/* webpackChunkName: "Prebid@10.11.0.js" */
-		// 	'../../lib/header-bidding/prebid/load-modules-v10.11.0'
-		// );
 	} else {
 		await import(
 			/* webpackChunkName: "Prebid.js" */

@@ -67,37 +67,11 @@ const config = {
 			),
 
 			// New prebid version aliases
-			'prebid-v10.11.0.js/adapters': join(
+			'prebid-v10.23.0.js/dist': join(
 				import.meta.dirname,
 				'node_modules',
-				'prebid-v10.11.0.js',
+				'prebid-v10.23.0.js',
 				'dist',
-				'src',
-				'src',
-				'adapters',
-			),
-			'prebid-v10.11.0.js/libraries': join(
-				import.meta.dirname,
-				'node_modules',
-				'prebid-v10.11.0.js',
-				'dist',
-				'src',
-				'libraries',
-			),
-			'prebid-v10.11.0.js/modules': join(
-				import.meta.dirname,
-				'node_modules',
-				'prebid-v10.11.0.js',
-				'dist',
-				'src',
-				'modules',
-			),
-			'prebid-v10.11.0.js/src': join(
-				import.meta.dirname,
-				'node_modules',
-				'prebid-v10.11.0.js',
-				'dist',
-				'src',
 				'src',
 			),
 		},

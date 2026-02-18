@@ -1,4 +1,5 @@
 import type { PrebidPriceGranularity } from 'prebid.js/src/cpmBucketManager';
+import type { BidderCode } from '../prebid-types';
 
 type CmpApi = 'iab' | 'static';
 
@@ -115,7 +116,7 @@ export type PbjsEventData = {
 	adUrl?: string;
 	bidder?: string;
 	bidderCode?: BidderCode;
-	cpm?: number;
+	cpm: number;
 	creative_id?: number;
 	height: number;
 	requestTimestamp?: number;
@@ -166,7 +167,6 @@ export type BidderSetting<T = BidResponse> = {
 };
 
 export type BidderSettings = Partial<
-	// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents -- magnite uses a different response type
 	Record<Exclude<BidderCode, 'xhb'> | 'magnite', Partial<BidderSetting>>
 > & {
 	standard?: never; // prevent overriding the default settings

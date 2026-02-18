@@ -5,7 +5,7 @@ const esModules = [
 	'@guardian/',
 	'lodash-es',
 	'prebid.js',
-	'prebid-v10.11.0.js',
+	'prebid-v10.23.0.js',
 	'dlv',
 ].join('|');
 
@@ -27,10 +27,8 @@ module.exports = {
 		'^prebid.js/adapters/(.*)$':
 			'<rootDir>/node_modules/prebid.js/src/adapters/$1',
 		'^prebid.js/(.*)$': '<rootDir>/node_modules/prebid.js/$1',
-		'^prebid-v10.11.0.js/adapters/(.*)$':
-			'<rootDir>/node_modules/prebid-v10.11.0.js/src/adapters/$1',
-		'^prebid-v10.11.0.js/(.*)$':
-			'<rootDir>/node_modules/prebid-v10.11.0.js/$1',
+		'^prebid-v10.23.0.js/dist/(.*)$':
+			'<rootDir>/node_modules/prebid-v10.23.0.js/dist/src/$1',
 	},
 	setupFilesAfterEnv: ['<rootDir>/../jest.setupTestFrameworkScriptFile.js'],
 	testEnvironment: 'jest-environment-jsdom-global',

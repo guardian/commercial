@@ -1,6 +1,15 @@
 {
 	"compilerOptions": {
-		"rootDir": "src"
+		"rootDir": "src",
+		"paths": {
+			// We have to point to the prebid dist files here because the source files
+			// don't have type definitions, but the dist files do. Ensure these paths
+			// are in sync with the paths in the webpack config aliases or they'll pass
+			// in type checking but fail the build
+			"prebid-v10.23.0.js/dist/*": [
+				"./node_modules/prebid-v10.23.0.js/dist/src/*"
+			]
+		}
 	},
 	"extends": "../tsconfig.json",
 	"include": ["./src/**/*.ts"],

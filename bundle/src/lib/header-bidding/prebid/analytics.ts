@@ -1,5 +1,8 @@
+import type { AnalyticsConfig } from 'prebid-v10.23.0.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
 import { getParticipations } from '../../../experiments/ab';
-import type { AnalyticsConfig } from '../prebid-types';
+
+// TODO: remove once prebid is upgraded to v10
+// import type { AnalyticsConfig } from '../prebid-types';
 
 const shouldEnableAnalytics = (): boolean => {
 	if (!window.guardian.config.switches.prebidAnalytics) {
@@ -35,7 +38,7 @@ const shouldEnableAnalytics = (): boolean => {
 	);
 };
 
-export const getAnalyticsConfig = (): AnalyticsConfig | undefined => {
+export const getAnalyticsConfig = (): AnalyticsConfig<'gu'> | undefined => {
 	const pageViewId = window.guardian.ophan?.pageViewId;
 	if (shouldEnableAnalytics() && pageViewId) {
 		return {
