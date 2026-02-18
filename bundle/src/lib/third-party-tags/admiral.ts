@@ -18,6 +18,7 @@ const isInVariant = abTestVariant?.startsWith('variant') ?? false;
 /**
  * The Admiral bootstrap script should only run under the following conditions:
  *
+ * - Should not run if DCR has already initialized Admiral
  * - Should not run if the CMP is due to show
  * - Should only run in the US
  * - Should only run if in the variant of the AB test
@@ -26,7 +27,35 @@ const isInVariant = abTestVariant?.startsWith('variant') ?? false;
  * - Should not run for paid-content sponsorship type (includes Hosted Content)
  * - Should not run for certain sections
  */
+
+// Check if DCR has already initialized Admiral (bootstrap loaded, not just stub)
+const isDcrHandlingAdmiral = (): boolean => {
+	// If window.admiral exists and has been initialized by bootstrap (not just the queue stub)
+	// the bootstrap replaces the stub with a proper function that doesn't have .q property
+	const admiralExists = typeof window.admiral === 'function';
+	const admiralAsRecord = window.admiral as unknown as Record<
+		string,
+		unknown
+	>;
+	const admiralIsOnlyStub = admiralExists && Array.isArray(admiralAsRecord.q);
+	const admiralIsInitialized = admiralExists && !admiralIsOnlyStub;
+
+	// Also check for explicit DCR flag if set
+	const dcrOwnsAdmiral =
+		window.guardian.config.switches.dcrOwnsAdmiral === true;
+
+	if (admiralIsInitialized || dcrOwnsAdmiral) {
+		log(
+			'commercial',
+			'🛡️ Admiral - DCR is handling Admiral, skipping commercial initialization',
+		);
+		return true;
+	}
+	return false;
+};
+
 const shouldRun =
+	!isDcrHandlingAdmiral() &&
 	cmp.hasInitialised() &&
 	!cmp.willShowPrivacyMessageSync() &&
 	isInUsa() &&
