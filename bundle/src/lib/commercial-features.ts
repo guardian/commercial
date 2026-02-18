@@ -138,14 +138,14 @@ class CommercialFeatures {
 			);
 		}
 
-		const isInAdsInInteractivesOnMobileTest =
+		const isInSpacefinderOnInteractivesTest =
 			isUserInTestGroup(
 				'commercial-enable-spacefinder-on-interactives',
 				'true',
 			) && isInteractive;
 
 		const enableArticleBodyAdverts =
-			isArticle || isInAdsInInteractivesOnMobileTest;
+			isArticle || isInSpacefinderOnInteractivesTest;
 
 		const disableArticleBodyAdverts =
 			isMinuteArticle || isLiveBlog || isHosted || newRecipeDesign;
