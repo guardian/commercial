@@ -129,7 +129,7 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 
 /**
  * Inserts all inline ads on desktop except for inline1.
- * @param fillSlot a function to call that will fill the slot when each ad slot has been inserted, these could be google display ads or opt opt consentless ads.
+ * @param fillSlot a function to call that will fill the slot when each ad slot has been inserted, these could be google display ads or opt out consentless ads.
  * @param isConsentless whether the ads being inserted are consentless ads, this is used to determine the distance from the top of the article that the ad can be placed.
  * @param standardArticleGrid whether the article is using the standard article grid, this is used to determine whether to add the offset right class to the ad slot container, which adds a negative margin to push the ad into the right hand column, this isn't needed if the article body is full width
  * @param isInteractive whether the article is an interactive, this is used to determine which set of spacefinder rules to use, as we want to be more conservative with ad placement in interactives.
