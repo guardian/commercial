@@ -39,9 +39,7 @@ testAtBreakpoints(['mobile']).forEach(({ width, height }) => {
 		).not.toBeVisible();
 		await expect(page.locator('#dfp-ad--mobile-sticky')).toBeAttached();
 	});
-});
 
-testAtBreakpoints(['mobile']).forEach(({ width, height }) => {
 	test(`mobile sticky responds to banner:none event at mobile breakpoint`, async ({
 		page,
 	}) => {
@@ -58,6 +56,28 @@ testAtBreakpoints(['mobile']).forEach(({ width, height }) => {
 
 		await page.evaluate(() => {
 			document.dispatchEvent(new Event('banner:none'));
+		});
+
+		await expect(page.locator('#dfp-ad--mobile-sticky')).toBeAttached();
+	});
+
+	test(`mobile sticky responds to banner:sign-in-gate event at mobile breakpoint`, async ({
+		page,
+	}) => {
+		await page.setViewportSize({ width, height });
+		await loadPage({
+			page,
+			path,
+			region: 'US',
+			queryParams: {
+				adtest: 'mobileStickyTest',
+			},
+		});
+		await cmpAcceptAll(page);
+
+		await page.reload();
+		await page.evaluate(() => {
+			document.dispatchEvent(new Event('banner:sign-in-gate'));
 		});
 
 		await expect(page.locator('#dfp-ad--mobile-sticky')).toBeAttached();
