@@ -81,18 +81,22 @@ const insertHeightStyles = (
 const computeStickyHeights = async (
 	winners: HTMLElement[],
 	articleBodySelector: string,
+	isInteractive = false,
 ): Promise<number[]> => {
 	// Immersive figures can extend into the right column
 	// Therefore we have to take them into account when we can compute how far an ad can be sticky for
-	const immersiveFigures = [
+	const opponentsToAvoid = [
 		...document.querySelectorAll<HTMLElement>(
-			'[data-spacefinder-role="immersive"]',
+			isInteractive
+				? // interactives occasionally incorrectly apply showcase to elements that should be immersive, so we need to check for both roles
+					'.article-body-commercial-selector > *:not(p)'
+				: '[data-spacefinder-role="immersive"]',
 		),
 	];
 
 	const { figures, winningParas, articleBodyElementHeightBottom } =
 		await fastdom.measure(() => {
-			const figures: RightColItem[] = immersiveFigures.map((element) => ({
+			const figures: RightColItem[] = opponentsToAvoid.map((element) => ({
 				kind: 'figure',
 				top: element.getBoundingClientRect().top,
 				element,

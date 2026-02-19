@@ -11,6 +11,7 @@ import {
 import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
 import fastdom from '../../lib/fastdom-promise';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
+import { calculateInteractiveGridType } from './interactive';
 import { rules } from './rules';
 import { spaceFiller } from './space-filler';
 import type { SpacefinderWriter } from './spacefinder';
@@ -20,6 +21,8 @@ type SlotName = Parameters<typeof createAdSlot>[0];
 const articleBodySelector = '.article-body-commercial-selector';
 
 const isPaidContent = window.guardian.config.page.isPaidContent;
+
+const isInteractive = window.guardian.config.page.contentType === 'Interactive';
 
 /**
  * Get the classname for an ad slot container
@@ -126,15 +129,27 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 
 /**
  * Inserts all inline ads on desktop except for inline1.
+ * @param fillSlot a function to call that will fill the slot when each ad slot has been inserted, these could be google display ads or opt out consentless ads.
+ * @param isConsentless whether the ads being inserted are consentless ads, this is used to determine the distance from the top of the article that the ad can be placed.
+ * @param standardArticleGrid whether the article is using the standard article grid, this is used to determine whether to add the offset right class to the ad slot container, which adds a negative margin to push the ad into the right hand column, this isn't needed if the article body is full width
+ * @param isInteractive whether the article is an interactive, this is used to determine which set of spacefinder rules to use, as we want to be more conservative with ad placement in interactives.
  */
-const addDesktopRightRailAds = (
-	fillSlot: FillAdSlot,
-	isConsentless: boolean,
-): Promise<boolean> => {
+const addDesktopRightRailAds = ({
+	fillSlot,
+	isConsentless,
+	standardArticleGrid,
+	isInteractive,
+}: {
+	fillSlot: FillAdSlot;
+	isConsentless: boolean;
+	standardArticleGrid?: boolean;
+	isInteractive?: boolean;
+}): Promise<boolean> => {
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const stickyContainerHeights = await computeStickyHeights(
 			paras,
 			articleBodySelector,
+			isInteractive,
 		);
 
 		void insertHeightStyles(
@@ -147,9 +162,13 @@ const addDesktopRightRailAds = (
 		const slots = paras.slice(0, paras.length).map(async (para, i) => {
 			const isLastInline = i === paras.length - 1;
 
-			const containerClasses =
-				getStickyContainerClassname(i) +
-				' offset-right ad-slot--offset-right ad-slot-container--offset-right';
+			const containerClasses = [
+				getStickyContainerClassname(i),
+				'ad-slot-container--right-column', // float the ad to the right and sets max width and transparent background https://github.com/guardian/dotcom-rendering/blob/main/dotcom-rendering/src/lib/adStyles.ts#L161
+				standardArticleGrid && 'ad-slot-container--offset-right', // adds a negative margin to push the ad into the right rail, this isn't needed if the article body is full width
+			]
+				.filter(Boolean)
+				.join(' ');
 
 			const containerOptions = {
 				sticky: true,
@@ -180,15 +199,15 @@ const addDesktopRightRailAds = (
 		await Promise.all(slots);
 	};
 
-	return spaceFiller.fillSpace(
-		rules.desktopRightRail(isConsentless),
-		insertAds,
-		{
-			waitForImages: true,
-			waitForInteractives: true,
-			pass: 'subsequent-inlines',
-		},
-	);
+	const rightRailRules = isInteractive
+		? rules.interactiveRightRail
+		: rules.desktopRightRail(isConsentless);
+
+	return spaceFiller.fillSpace(rightRailRules, insertAds, {
+		waitForImages: true,
+		waitForInteractives: true,
+		pass: 'subsequent-inlines',
+	});
 };
 
 const additionalMobileAndTabletInlineSizes = (index: number) => {
@@ -251,7 +270,7 @@ const addMobileAndTabletInlineAds = (
  * @param fillSlot A function to call that will fill the slot when each ad slot has been inserted,
  * these could be google display ads or opt opt consentless ads.
  */
-const addInlineAds = (
+const addInlineAds = async (
 	fillSlot: FillAdSlot,
 	isConsentless: boolean,
 ): Promise<boolean> => {
@@ -260,12 +279,29 @@ const addInlineAds = (
 		return addMobileAndTabletInlineAds(fillSlot, currentBreakpoint);
 	}
 
+	if (isInteractive) {
+		const interactiveGridType = await calculateInteractiveGridType();
+
+		if (interactiveGridType === 'unknown') {
+			return Promise.resolve(false);
+		}
+
+		return addDesktopInline1(fillSlot).then(() =>
+			addDesktopRightRailAds({
+				fillSlot,
+				isConsentless,
+				standardArticleGrid: interactiveGridType === 'standard',
+				isInteractive: true,
+			}),
+		);
+	}
+
 	if (isPaidContent) {
-		return addDesktopRightRailAds(fillSlot, isConsentless);
+		return addDesktopRightRailAds({ fillSlot, isConsentless });
 	}
 
 	return addDesktopInline1(fillSlot).then(() =>
-		addDesktopRightRailAds(fillSlot, isConsentless),
+		addDesktopRightRailAds({ fillSlot, isConsentless }),
 	);
 };
 

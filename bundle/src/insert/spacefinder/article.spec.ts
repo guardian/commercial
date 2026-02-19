@@ -60,4 +60,28 @@ describe('Article Body Adverts', () => {
 			expect(spaceFillerStub).not.toHaveBeenCalled();
 		});
 	});
+
+	it('should call relevant functions to fill space on desktop', () => {
+		const fillAdSlot = jest.fn();
+		mockViewport(1300, 1300);
+		return init(fillAdSlot).then(() => {
+			expect(spaceFillerStub).toHaveBeenCalledTimes(2);
+			console.log(spaceFillerStub.mock.calls[0]?.[0]);
+			expect(spaceFillerStub.mock.calls[0]?.[2]?.pass).toEqual('inline1');
+			expect(spaceFillerStub.mock.calls[1]?.[2]?.pass).toEqual(
+				'subsequent-inlines',
+			);
+		});
+	});
+
+	it('should call relevant functions to fill space on mobile and tablet', () => {
+		const fillAdSlot = jest.fn();
+		mockViewport(500, 1300);
+		return init(fillAdSlot).then(() => {
+			expect(spaceFillerStub).toHaveBeenCalledTimes(1);
+			expect(spaceFillerStub.mock.calls[0]?.[2]?.pass).toEqual(
+				'mobile-inlines',
+			);
+		});
+	});
 });
