@@ -5,7 +5,7 @@ import { init as initIpsosMori } from './consented/ipsos-mori';
 import { removeDisabledSlots as closeDisabledSlots } from './consented/remove-slots';
 import { initTeadsCookieless } from './consented/teads-cookieless';
 import { init as initTrackGpcSignal } from './consented/track-gpc-signal';
-import { init as initTrackScrollDepth } from './consented/track-scroll-depth';
+import { initTrackScrollDepth } from './consented/track-scroll-depth';
 import { init as initPages } from './pages';
 
 // modules not related to ad loading
