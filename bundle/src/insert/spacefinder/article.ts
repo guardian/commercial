@@ -137,8 +137,8 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 const addDesktopRightRailAds = ({
 	fillSlot,
 	isConsentless,
-	standardArticleGrid,
-	isInteractive,
+	standardArticleGrid = true,
+	isInteractive = false,
 }: {
 	fillSlot: FillAdSlot;
 	isConsentless: boolean;
