@@ -1,3 +1,4 @@
+import { EventTimer } from '@guardian/commercial-core/event-timer';
 import { type ConsentState, getConsentFor } from '@guardian/libs';
 import { getEmail } from '../../../identity/api';
 import { isSwitchedOn } from '../../utils';
@@ -10,6 +11,8 @@ import { getUserIdForTradeDesk } from './tradedesk';
 export const getUserSyncSettings = async (
 	consentState: ConsentState,
 ): Promise<UserSync> => {
+	EventTimer.get().mark('getUserIdsStart');
+
 	const userEmail = await getEmail();
 	const fetchId5UserId =
 		getConsentFor('id5', consentState) && getUserIdForId5(userEmail);
@@ -37,6 +40,7 @@ export const getUserSyncSettings = async (
 			return Array.isArray(idModule) ? idModule : [idModule];
 		});
 	});
+	EventTimer.get().mark('getUserIdsEnd');
 
 	const userSync: UserSync = isSwitchedOn('prebidUserSync')
 		? {
