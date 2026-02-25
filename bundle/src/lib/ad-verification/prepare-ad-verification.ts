@@ -1,7 +1,6 @@
 import { bypassCommercialMetricsSampling } from '@guardian/commercial-core';
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import { loadScript, log } from '@guardian/libs';
-import { refreshAdvert } from '../../display/load-advert';
 import type { ConfiantCallback } from '../../types/global';
 import { getAdvertById } from '../dfp/get-advert-by-id';
 import { stripDfpAdPrefixFrom } from '../header-bidding/utils';
@@ -59,7 +58,7 @@ const maybeRefreshBlockedSlotOnce: ConfiantCallback = (
 	if (confiantRefreshedSlots.includes(blockedSlotPath)) return;
 
 	// refresh the blocked slot to get new ad
-	refreshAdvert(advert);
+	advert.refresh();
 	// mark it as refreshed so it won’t refresh multiple time
 	confiantRefreshedSlots.push(blockedSlotPath);
 };

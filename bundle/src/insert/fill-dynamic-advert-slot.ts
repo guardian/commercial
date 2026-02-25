@@ -3,7 +3,6 @@ import { log } from '@guardian/libs';
 import type { Advert } from '../define/Advert';
 import { createAdvert } from '../define/create-advert';
 import { enableLazyLoad } from '../display/lazy-load';
-import { loadAdvert } from '../display/load-advert';
 import { dfpEnv } from '../lib/dfp/dfp-env';
 import { queueAdvert } from '../lib/dfp/queue-advert';
 
@@ -12,7 +11,7 @@ const displayAd = (advert: Advert, forceDisplay: boolean) => {
 		queueAdvert(advert);
 		enableLazyLoad(advert);
 	} else {
-		loadAdvert(advert);
+		advert.load();
 	}
 };
 

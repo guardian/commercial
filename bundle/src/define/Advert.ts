@@ -1,3 +1,4 @@
+import { EventTimer } from '@guardian/commercial-core';
 import {
 	createAdSize,
 	findAppliedSizesForBreakpoint,
@@ -12,8 +13,16 @@ import type { Breakpoint } from '@guardian/commercial-core/breakpoint';
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
-import type { HeaderBiddingSize } from '../lib/header-bidding/prebid-types';
+import { a9 } from '../lib/header-bidding/a9/a9';
+import { prebid } from '../lib/header-bidding/prebid';
+import type {
+	HeaderBiddingSize,
+	HeaderBiddingSlot,
+} from '../lib/header-bidding/prebid-types';
+import { stripDfpAdPrefixFrom } from '../lib/header-bidding/utils';
+import { adQueue } from '../lib/timed-queue';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';
+import { refreshedAdSizes } from './refreshed-ad-sizes';
 
 const advertStatuses = [
 	'ready',
@@ -146,6 +155,7 @@ interface AdvertListener {
 
 class Advert extends EventTarget {
 	id: string;
+	name: string;
 	node: HTMLElement;
 	sizes: SizeMapping;
 	headerBiddingSizes: HeaderBiddingSize[] | null = null;
@@ -211,6 +221,7 @@ class Advert extends EventTarget {
 	) {
 		super();
 		this.id = adSlotNode.id;
+		this.name = stripDfpAdPrefixFrom(this.id);
 		this.node = adSlotNode;
 		this.sizes = this.generateSizeMapping(additionalSizeMapping);
 
@@ -384,6 +395,102 @@ class Advert extends EventTarget {
 		const googletagSizeMapping = buildGoogletagSizeMapping(sizeMapping);
 		if (googletagSizeMapping) {
 			this.slot.defineSizeMapping(googletagSizeMapping);
+		}
+	}
+
+	requestBids = async (): Promise<void> => {
+		const promise = Promise.all([
+			prebid.requestBids([this]),
+			a9.requestBids([this]),
+		]);
+
+		this.headerBiddingBidRequest = promise;
+
+		await promise;
+	};
+
+	refreshBids = async (): Promise<void> => {
+		const promise = Promise.all([
+			prebid.requestBids([this], (prebidSlot: HeaderBiddingSlot) =>
+				refreshedAdSizes(this.size, prebidSlot),
+			),
+			a9.requestBids([this], (a9Slot: HeaderBiddingSlot) =>
+				refreshedAdSizes(this.size, a9Slot),
+			),
+		]);
+
+		this.headerBiddingBidRequest = promise;
+
+		await promise;
+	};
+
+	load(): void {
+		console.info(`Loading advert with id ${this.id}`);
+		adQueue.add(async () => {
+			EventTimer.get().mark('adRenderStart', this.name);
+
+			await this.whenSlotReady.catch(() => {
+				// The display needs to be called, even in the event of an error.
+			});
+			EventTimer.get().mark('prepareSlotStart', this.name);
+			await this.requestBids();
+
+			EventTimer.get().mark('prepareSlotEnd', this.name);
+			EventTimer.get().mark('fetchAdStart', this.name);
+			window.googletag.display(this.id);
+		}, true);
+	}
+
+	refresh(): void {
+		// advert.size contains the effective size being displayed prior to refreshing
+		adQueue.add(async () => {
+			await this.whenSlotReady.catch(() => {
+				// The refresh needs to be called, even in the event of an error.
+			});
+
+			void fastdom.mutate(() => {
+				if (this.id.includes('fronts-banner')) {
+					this.node
+						.closest<HTMLElement>('.ad-slot-container')
+						?.classList.remove('ad-slot--full-width');
+				}
+			});
+
+			await this.refreshBids();
+
+			this.slot.setConfig({
+				targeting: {
+					refreshed: 'true',
+				},
+			});
+
+			// slots that have refreshed are not eligible for teads
+			this.slot.setConfig({
+				targeting: {
+					teadsEligible: 'false',
+				},
+			});
+
+			if (this.id === 'dfp-ad--top-above-nav') {
+				// force the slot sizes to be the same as advert.size (current)
+				// only when advert.size is an array (forget 'fluid' and other specials)
+				if (Array.isArray(this.size)) {
+					const mapping = window.googletag
+						.sizeMapping()
+						.addSize([0, 0], this.size as googletag.GeneralSize)
+						.build();
+					if (mapping) this.slot.defineSizeMapping(mapping);
+				}
+			}
+			window.googletag.pubads().refresh([this.slot]);
+		});
+	}
+
+	display(): void {
+		if (this.isRendered) {
+			this.refresh();
+		} else {
+			this.load();
 		}
 	}
 }

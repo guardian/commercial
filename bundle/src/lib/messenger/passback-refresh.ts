@@ -1,5 +1,4 @@
 import { isString } from '@guardian/libs';
-import { refreshAdvert } from '../../display/load-advert';
 import { getAdvertById } from '../dfp/get-advert-by-id';
 import type { RegisterListener } from '../messenger';
 
@@ -23,7 +22,7 @@ const passbackRefresh = (specs: string, adSlot: HTMLElement) => {
 			});
 		}
 
-		refreshAdvert(advert);
+		advert.refresh();
 	}
 };
 

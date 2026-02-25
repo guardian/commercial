@@ -4,25 +4,15 @@ import type { Advert } from '../define/Advert';
 import { getCurrentBreakpoint } from '../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../lib/dfp/dfp-env';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
-import { loadAdvert, refreshAdvert } from './load-advert';
-import { requestBidsForAd } from './request-bids';
 
 const displayAd = (advertId: string) => {
 	const advert = getAdvertById(advertId);
-	if (advert) {
-		if (advert.isRendered) {
-			refreshAdvert(advert);
-		} else {
-			loadAdvert(advert);
-		}
-	}
+	advert?.display();
 };
 
 const requestBids = (advertId: string) => {
 	const advert = getAdvertById(advertId);
-	if (advert) {
-		void requestBidsForAd(advert);
-	}
+	void advert?.requestBids();
 };
 
 const onIntersectDisplayAd = (

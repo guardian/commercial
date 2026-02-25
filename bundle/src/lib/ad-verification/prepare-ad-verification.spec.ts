@@ -35,11 +35,9 @@ jest.mock('../dfp/get-advert-by-id', () => ({
 		return {
 			id,
 			slot: { setConfig: jest.fn() },
+			refresh: jest.fn(),
 		};
 	}),
-}));
-jest.mock('display/load-advert', () => ({
-	refreshAdvert: jest.fn(),
 }));
 
 const { init, maybeRefreshBlockedSlotOnce } = _;
