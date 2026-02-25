@@ -168,7 +168,10 @@ class Advert extends EventTarget {
 	whenSlotReady: Promise<void>;
 	extraNodeClasses: string[] = [];
 	hasPrebidSize = false;
-	headerBiddingBidRequest: Promise<unknown> | null = null;
+	/**
+	 * This property is used to store the promise for the **initial** header bidding bid request, so that if requestBids is called multiple times before the first bid request has completed, it will return the same promise instead of making multiple bid requests
+	 */
+	headerBiddingBidRequest: Promise<void> | null = null;
 	lineItemId: number | null = null;
 	creativeId: number | null = null;
 	creativeTemplateId: number | null = null;
@@ -398,33 +401,47 @@ class Advert extends EventTarget {
 		}
 	}
 
+	/**
+	 * Request header bidding bids for this advert
+	 *
+	 * This is sometimes called separately from the display method, for example in the case of Prebid when we want to request bids earlier for certain breakpoints to improve performance.
+	 *
+	 * @returns A promise that resolves once the bid request has completed
+	 */
 	requestBids = async (): Promise<void> => {
+		if (this.headerBiddingBidRequest) {
+			return this.headerBiddingBidRequest;
+		}
 		const promise = Promise.all([
 			prebid.requestBids([this]),
 			a9.requestBids([this]),
-		]);
+		]).then(() => Promise.resolve());
 
 		this.headerBiddingBidRequest = promise;
 
 		await promise;
 	};
 
-	refreshBids = async (): Promise<void> => {
-		const promise = Promise.all([
+	/**
+	 * Refresh the header bidding bids for this advert, this should be called before refreshing the advert if you want to get new bids for the refreshed ad
+	 *
+	 * @returns A promise that resolves once the bid refresh has completed
+	 */
+	#refreshBids = async (): Promise<void> => {
+		return Promise.all([
 			prebid.requestBids([this], (prebidSlot: HeaderBiddingSlot) =>
 				refreshedAdSizes(this.size, prebidSlot),
 			),
 			a9.requestBids([this], (a9Slot: HeaderBiddingSlot) =>
 				refreshedAdSizes(this.size, a9Slot),
 			),
-		]);
-
-		this.headerBiddingBidRequest = promise;
-
-		await promise;
+		]).then(() => Promise.resolve());
 	};
 
-	load(): void {
+	/**
+	 * Load and display the advert, this should only be called once per advert instance, if you want to update the ad after it has been displayed you should call refresh instead
+	 */
+	#load(): void {
 		console.info(`Loading advert with id ${this.id}`);
 		adQueue.add(async () => {
 			EventTimer.get().mark('adRenderStart', this.name);
@@ -441,8 +458,10 @@ class Advert extends EventTarget {
 		}, true);
 	}
 
-	refresh(): void {
-		// advert.size contains the effective size being displayed prior to refreshing
+	/**
+	 * Refresh the advert, runs header bidding to get new bids, sets targeting and then calls the GPT refresh command for this slot
+	 */
+	#refresh(): void {
 		adQueue.add(async () => {
 			await this.whenSlotReady.catch(() => {
 				// The refresh needs to be called, even in the event of an error.
@@ -456,7 +475,7 @@ class Advert extends EventTarget {
 				}
 			});
 
-			await this.refreshBids();
+			await this.#refreshBids();
 
 			this.slot.setConfig({
 				targeting: {
@@ -486,11 +505,14 @@ class Advert extends EventTarget {
 		});
 	}
 
+	/**
+	 * Display the advert, if the advert has not been displayed before it will load, if it has already been displayed it will refresh to get new header-bidding bids and a new creative
+	 */
 	display(): void {
 		if (this.isRendered) {
-			this.refresh();
+			this.#refresh();
 		} else {
-			this.load();
+			this.#load();
 		}
 	}
 }
