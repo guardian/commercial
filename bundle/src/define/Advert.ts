@@ -441,7 +441,7 @@ class Advert extends EventTarget {
 	/**
 	 * Load and display the advert, this should only be called once per advert instance, if you want to update the ad after it has been displayed you should call refresh instead
 	 */
-	#load(): void {
+	load(): void {
 		console.info(`Loading advert with id ${this.id}`);
 		adQueue.add(async () => {
 			EventTimer.get().mark('adRenderStart', this.name);
@@ -461,7 +461,7 @@ class Advert extends EventTarget {
 	/**
 	 * Refresh the advert, runs header bidding to get new bids, sets targeting and then calls the GPT refresh command for this slot
 	 */
-	#refresh(): void {
+	refresh(): void {
 		adQueue.add(async () => {
 			await this.whenSlotReady.catch(() => {
 				// The refresh needs to be called, even in the event of an error.
@@ -510,9 +510,9 @@ class Advert extends EventTarget {
 	 */
 	display(): void {
 		if (this.isRendered) {
-			this.#refresh();
+			this.refresh();
 		} else {
-			this.#load();
+			this.load();
 		}
 	}
 }
