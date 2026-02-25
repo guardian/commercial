@@ -12,22 +12,17 @@ const getInteractiveGridWidths = () =>
 			'[data-gu-name="body"]',
 		);
 
-		const contentGridWidth =
-			contentGridElement?.getBoundingClientRect().width;
 		const bodyWidth = bodyElement?.getBoundingClientRect().width;
 		const viewportWidth = window.innerWidth;
 
-		return { contentGridWidth, bodyWidth, viewportWidth };
+		return { bodyWidth, viewportWidth };
 	});
 
 /**
- * Determine whether the grid body is the full width of the content grid. If the grid body is full width, then we need to insert the ad without the offset right class, otherwise the ad will be pushed too far into the right hand column and could end up outside of the viewport.
+ * Determine whether the grid body is the standard desktop width, if it is then right rail ads don't need the offset right class, if it's not then we need to add the offset right class to move the ad over to the right.
  */
-const isBodyFullWidthOfContentGrid = (
-	bodyWidth: number,
-	contentGridWidth: number,
-): boolean => {
-	return bodyWidth >= contentGridWidth;
+const isBodyStandardDesktopWidth = (bodyWidth: number): boolean => {
+	return bodyWidth === 620;
 };
 
 /**
@@ -46,21 +41,17 @@ const isBodyFullWidthOfViewport = (
 const calculateInteractiveGridType = async (): Promise<
 	'standard' | 'full-width' | 'unknown'
 > => {
-	const { bodyWidth, contentGridWidth, viewportWidth } =
-		await getInteractiveGridWidths();
+	const { bodyWidth, viewportWidth } = await getInteractiveGridWidths();
 
-	if (bodyWidth && contentGridWidth && viewportWidth) {
+	if (bodyWidth && viewportWidth) {
 		// If the grid body is  the full width of the viewport, then it's unlikely to have a right hand column, even if it does, it's probably using wacky styles that we can't easily work with, so we won't attempt to insert ads in this case.
 		if (isBodyFullWidthOfViewport(bodyWidth, viewportWidth)) {
 			return 'unknown';
 		}
 
-		const isFullWidth = isBodyFullWidthOfContentGrid(
-			bodyWidth,
-			contentGridWidth,
-		);
+		const isStandardWidth = isBodyStandardDesktopWidth(bodyWidth);
 
-		return isFullWidth ? 'full-width' : 'standard';
+		return isStandardWidth ? 'standard' : 'full-width';
 	}
 	return 'unknown';
 };
