@@ -10,6 +10,7 @@ import type {
 	SlotName,
 } from '@guardian/commercial-core/ad-sizes';
 import type { Breakpoint } from '@guardian/commercial-core/breakpoint';
+import { log } from '@guardian/libs';
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
@@ -23,19 +24,6 @@ import { stripDfpAdPrefixFrom } from '../lib/header-bidding/utils';
 import { adQueue } from '../lib/timed-queue';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';
 import { refreshedAdSizes } from './refreshed-ad-sizes';
-
-const advertStatuses = [
-	'ready',
-	'preparing',
-	'prepared',
-	'fetching',
-	'fetched',
-	'loading',
-	'loaded',
-	'rendered',
-] as const;
-
-type AdvertStatus = (typeof advertStatuses)[number];
 
 const stringToTuple = (size: string): [number, number] => {
 	const dimensions = size.split(',', 2).map(Number);
@@ -149,9 +137,38 @@ const isSizeMappingEmpty = (sizeMapping: SizeMapping): boolean => {
 	);
 };
 
+const addPubadsEventListener = (
+	slot: googletag.Slot,
+	eventName: keyof googletag.events.EventTypeMap,
+	callback: () => void,
+) => {
+	window.googletag.cmd.push(() => {
+		const pubads = window.googletag.pubads();
+		pubads.addEventListener(
+			eventName,
+			(event: googletag.events.SlotRequestedEvent) => {
+				if (event.slot === slot) {
+					callback();
+				}
+			},
+		);
+	});
+};
+
 interface AdvertListener {
 	remove: () => void;
 }
+
+type AdvertStatus =
+	| 'ready'
+	| 'preparing'
+	| 'prepared'
+	| 'fetching'
+	| 'fetched'
+	| 'loading'
+	| 'loaded'
+	| 'rendered'
+	| 'refreshed';
 
 class Advert extends EventTarget {
 	id: string;
@@ -165,7 +182,6 @@ class Advert extends EventTarget {
 	isEmpty: boolean | null = null;
 	isRendered = false;
 	shouldRefresh = false;
-	whenSlotReady: Promise<void>;
 	extraNodeClasses: string[] = [];
 	hasPrebidSize = false;
 	/**
@@ -177,45 +193,17 @@ class Advert extends EventTarget {
 	creativeTemplateId: number | null = null;
 	testgroup: string | undefined; //Ozone testgroup property
 
-	private _status: AdvertStatus = 'ready';
-
-	/**
-	 * The status of the advert, which can be one of the following:
-	 * - `ready`: The advert has been created but not yet prepared
-	 * - `preparing`: The advert is in the process of being prepared, e.g. size mapping is being generated, header bidding bids are being requested etc.
-	 * - `prepared`: The advert has been prepared and is ready to be fetched
-	 * - `fetching`: The advert is in the process of being fetched, e.g. the GPT fetch command has been called but the slot has not yet received a response
-	 * - `fetched`: The advert has been fetched and has received a response from GPT, but it has not yet started loading
-	 * - `loading`: The advert is in the process of loading, e.g. the creative is being loaded but has not yet finished
-	 * - `loaded`: The advert has finished loading but has not yet rendered, e.g. the creative has loaded but the GPT render command has not yet been called or has been called but the creative has not yet rendered
-	 * - `rendered`: The advert has finished rendering and is visible on the page
-	 */
-	get status(): AdvertStatus {
-		return this._status;
-	}
-	set status(newStatus: AdvertStatus) {
-		const currentStatusIndex = advertStatuses.indexOf(this._status);
-		const newStatusIndex = advertStatuses.indexOf(newStatus);
-
-		if (newStatusIndex === -1) {
-			throw new Error(`Invalid status: ${newStatus}`);
-		}
-
-		// Prevent status from being set to an earlier status in the lifecycle, except for the specific case of going from 'rendered' back to 'ready' which will happen when an ad is refreshed
-		if (
-			newStatusIndex < currentStatusIndex &&
-			!(newStatus === 'ready' && this._status === 'rendered')
-		) {
-			throw new Error(
-				`Cannot change status from ${this._status} to ${newStatus}`,
-			);
-		}
-
-		this._status = newStatus;
-		this.dispatchEvent(
-			new CustomEvent('statusChange', { detail: newStatus }),
-		);
-	}
+	#status: Required<Record<AdvertStatus, boolean>> = {
+		ready: false,
+		preparing: false,
+		prepared: false,
+		fetching: false,
+		fetched: false,
+		loading: false,
+		loaded: false,
+		rendered: false,
+		refreshed: false,
+	};
 
 	constructor(
 		adSlotNode: HTMLElement,
@@ -242,7 +230,10 @@ class Advert extends EventTarget {
 			slotDefinition.slot.getConfig?.('targeting').targeting;
 
 		this.slot = slotDefinition.slot;
-		this.whenSlotReady = slotDefinition.slotReady;
+
+		void slotDefinition.slotReady.then(() => {
+			this.setStatus('ready', true);
+		});
 
 		// Extract targeting values, handling both string and string[] types
 		const testgroupValue = targetingConfig?.testgroup;
@@ -254,6 +245,32 @@ class Advert extends EventTarget {
 		this.gpid = Array.isArray(gpidValue)
 			? gpidValue[0]
 			: (gpidValue ?? undefined);
+
+		addPubadsEventListener(this.slot, 'slotRequested', () => {
+			this.setStatus('fetching', true);
+		});
+		addPubadsEventListener(this.slot, 'slotResponseReceived', () => {
+			this.setStatus('fetching', false);
+			this.setStatus('fetched', true);
+		});
+		addPubadsEventListener(this.slot, 'slotRenderEnded', () => {
+			this.setStatus('loading', true);
+		});
+		addPubadsEventListener(this.slot, 'slotOnload', () => {
+			this.setStatus('loaded', true);
+			this.setStatus('rendered', true);
+		});
+	}
+
+	setStatus(name: AdvertStatus, status: boolean): void {
+		this.#status[name] = status;
+		log(
+			'commercial',
+			`Advert ${this.name} status update: ${name} is now ${status}`,
+		);
+		this.dispatchEvent(
+			new CustomEvent('statusChange', { detail: { name, status } }),
+		);
 	}
 
 	/**
@@ -266,35 +283,38 @@ class Advert extends EventTarget {
 	 */
 	on<Status extends AdvertStatus>(
 		listenStatus: Status | Status[],
-		callback: (status: Status) => void,
+		callback: (status: Status) => void | Promise<void>,
 		{ once = false } = {},
 	): AdvertListener {
 		const listenStatuses: AdvertStatus[] = Array.isArray(listenStatus)
 			? listenStatus
 			: [listenStatus];
 
-		const listenerIncludesStatus = (
-			status: AdvertStatus,
-		): status is Status => {
-			if (!listenStatuses.includes(status)) {
-				return false;
-			}
-			return true;
-		};
-		// If the advert has already reached any of the specified statuses, call the callback immediately
-		if (listenerIncludesStatus(this._status)) {
-			callback(this._status);
+		const currentTrueStatuses = Object.entries(this.#status)
+			.filter(([, status]) => status)
+			.map(([name]) => name as AdvertStatus);
+
+		const matchingStatuses = currentTrueStatuses.filter((status) =>
+			listenStatuses.includes(status),
+		) as Status[];
+
+		if (matchingStatuses.length > 0) {
+			matchingStatuses.forEach((status) => void callback(status));
 			if (once) {
-				return {
-					remove: () => {},
-				};
+				return { remove: () => {} };
 			}
 		}
 
 		const listener = (event: Event): void => {
-			const eventStatus = (event as CustomEvent).detail as AdvertStatus;
-			if (listenerIncludesStatus(eventStatus)) {
-				callback(eventStatus);
+			const eventStatus = (event as CustomEvent).detail as {
+				name: AdvertStatus;
+				status: boolean;
+			};
+			if (
+				listenStatuses.includes(eventStatus.name) &&
+				eventStatus.status
+			) {
+				void callback(eventStatus.name as Status);
 				if (once) {
 					this.removeEventListener('statusChange', listener);
 				}
@@ -314,7 +334,10 @@ class Advert extends EventTarget {
 	 * @param callback A callback function that will be called with the status when the advert reaches it
 	 * @returns void
 	 */
-	once(listenStatus: AdvertStatus, callback: () => void): void {
+	once(
+		listenStatus: AdvertStatus,
+		callback: () => void | Promise<void>,
+	): void {
 		this.on(listenStatus, callback, { once: true });
 	}
 
@@ -442,18 +465,17 @@ class Advert extends EventTarget {
 	 * Load and display the advert, this should only be called once per advert instance, if you want to update the ad after it has been displayed you should call refresh instead
 	 */
 	load(): void {
-		adQueue.add(async () => {
+		adQueue.add(() => {
 			EventTimer.get().mark('adRenderStart', this.name);
 
-			await this.whenSlotReady.catch(() => {
-				// The display needs to be called, even in the event of an error.
-			});
-			EventTimer.get().mark('prepareSlotStart', this.name);
-			await this.requestBids();
+			this.once('ready', async () => {
+				EventTimer.get().mark('prepareSlotStart', this.name);
+				await this.requestBids();
 
-			EventTimer.get().mark('prepareSlotEnd', this.name);
-			EventTimer.get().mark('fetchAdStart', this.name);
-			window.googletag.display(this.id);
+				EventTimer.get().mark('prepareSlotEnd', this.name);
+				EventTimer.get().mark('fetchAdStart', this.name);
+				window.googletag.display(this.id);
+			});
 		}, true);
 	}
 
@@ -461,41 +483,50 @@ class Advert extends EventTarget {
 	 * Refresh the advert, runs header bidding to get new bids, sets targeting and then calls the GPT refresh command for this slot
 	 */
 	refresh(): void {
-		adQueue.add(async () => {
-			await this.whenSlotReady.catch(() => {
-				// The refresh needs to be called, even in the event of an error.
-			});
+		adQueue.add(() => {
+			this.once('ready', async () => {
+				this.#status = {
+					ready: true,
+					preparing: false,
+					prepared: false,
+					fetching: false,
+					fetched: false,
+					loading: false,
+					loaded: false,
+					rendered: false,
+					refreshed: true,
+				};
+				void fastdom.mutate(() => {
+					if (this.id.includes('fronts-banner')) {
+						this.node
+							.closest<HTMLElement>('.ad-slot-container')
+							?.classList.remove('ad-slot--full-width');
+					}
+				});
 
-			void fastdom.mutate(() => {
-				if (this.id.includes('fronts-banner')) {
-					this.node
-						.closest<HTMLElement>('.ad-slot-container')
-						?.classList.remove('ad-slot--full-width');
+				await this.#refreshBids();
+
+				this.slot.setConfig({
+					targeting: {
+						refreshed: 'true',
+						// slots that have refreshed are not eligible for teads
+						teadsEligible: 'false',
+					},
+				});
+
+				if (this.id === 'dfp-ad--top-above-nav') {
+					// force the slot sizes to be the same as advert.size (current)
+					// only when advert.size is an array (forget 'fluid' and other specials)
+					if (Array.isArray(this.size)) {
+						const mapping = window.googletag
+							.sizeMapping()
+							.addSize([0, 0], this.size as googletag.GeneralSize)
+							.build();
+						if (mapping) this.slot.defineSizeMapping(mapping);
+					}
 				}
+				window.googletag.pubads().refresh([this.slot]);
 			});
-
-			await this.#refreshBids();
-
-			this.slot.setConfig({
-				targeting: {
-					refreshed: 'true',
-					// slots that have refreshed are not eligible for teads
-					teadsEligible: 'false',
-				},
-			});
-
-			if (this.id === 'dfp-ad--top-above-nav') {
-				// force the slot sizes to be the same as advert.size (current)
-				// only when advert.size is an array (forget 'fluid' and other specials)
-				if (Array.isArray(this.size)) {
-					const mapping = window.googletag
-						.sizeMapping()
-						.addSize([0, 0], this.size as googletag.GeneralSize)
-						.build();
-					if (mapping) this.slot.defineSizeMapping(mapping);
-				}
-			}
-			window.googletag.pubads().refresh([this.slot]);
 		});
 	}
 
