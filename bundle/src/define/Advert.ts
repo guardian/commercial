@@ -480,12 +480,7 @@ class Advert extends EventTarget {
 			this.slot.setConfig({
 				targeting: {
 					refreshed: 'true',
-				},
-			});
-
-			// slots that have refreshed are not eligible for teads
-			this.slot.setConfig({
-				targeting: {
+					// slots that have refreshed are not eligible for teads
 					teadsEligible: 'false',
 				},
 			});
