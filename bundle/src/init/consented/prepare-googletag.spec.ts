@@ -37,7 +37,6 @@ jest.mock('define/init-slot-ias', () => ({
 }));
 
 jest.mock('lib/header-bidding/prebid', () => ({
-	requestBids: jest.fn(),
 	prebid: {
 		requestBids: jest.fn(),
 	},
