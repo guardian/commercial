@@ -28,7 +28,6 @@ const displayAds = (): void => {
 		: undefined;
 
 	if (firstAdvertToLoad) {
-		console.info(`Loading first advert with id ${firstAdvertToLoad.id}`);
 		firstAdvertToLoad.load();
 		dfpEnv.advertsToLoad = [];
 	}

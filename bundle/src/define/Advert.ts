@@ -442,7 +442,6 @@ class Advert extends EventTarget {
 	 * Load and display the advert, this should only be called once per advert instance, if you want to update the ad after it has been displayed you should call refresh instead
 	 */
 	load(): void {
-		console.info(`Loading advert with id ${this.id}`);
 		adQueue.add(async () => {
 			EventTimer.get().mark('adRenderStart', this.name);
 
