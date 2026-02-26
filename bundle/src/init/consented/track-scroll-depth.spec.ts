@@ -1,7 +1,9 @@
 import { EventTimer } from '@guardian/commercial-core/event-timer';
-import { initTrackScrollDepth } from './track-scroll-depth';
+import { _ } from './track-scroll-depth';
 
-describe('initTrackScrollDepth', () => {
+const { trackScrollDepth } = _;
+
+describe('trackScrollDepth', () => {
 	const observe = jest.fn();
 	class IntersectionObserver {
 		constructor() {
@@ -46,7 +48,7 @@ describe('initTrackScrollDepth', () => {
 		const eventTimer = EventTimer.get();
 		window.innerHeight = 100;
 
-		initTrackScrollDepth();
+		trackScrollDepth();
 
 		// height of viewport recorded
 		expect(eventTimer.properties['pageHeightVH']).toEqual(10);

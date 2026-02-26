@@ -16,7 +16,7 @@ import { removeDisabledSlots as closeDisabledSlots } from './consented/remove-sl
 import { initTeadsCookieless } from './consented/teads-cookieless';
 import { init as initThirdPartyTags } from './consented/third-party-tags';
 import { init as initTrackGpcSignal } from './consented/track-gpc-signal';
-import { init as initTrackScrollDepth } from './consented/track-scroll-depth';
+import { initTrackScrollDepth } from './consented/track-scroll-depth';
 import { init as initPages } from './pages';
 import { reloadPageOnConsentChange } from './shared/reload-page-on-consent-change';
 import { init as setAdTestCookie } from './shared/set-adtest-cookie';
