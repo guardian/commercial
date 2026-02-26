@@ -1,4 +1,3 @@
-import { refreshAdvert } from '../../display/load-advert';
 import { getAdvertById } from '../dfp/get-advert-by-id';
 import { _ } from './passback-refresh';
 
@@ -9,11 +8,8 @@ jest.mock('lib/dfp/get-advert-by-id', () => ({
 		slot: {
 			setConfig: jest.fn(),
 		},
+		refresh: jest.fn(),
 	}),
-}));
-
-jest.mock('display/load-advert', () => ({
-	refreshAdvert: jest.fn(),
 }));
 
 describe('Cross-frame messenger: refresh', () => {
@@ -40,7 +36,7 @@ describe('Cross-frame messenger: refresh', () => {
 				document.getElementById('slot01') ?? fallback,
 			);
 			expect(getAdvertById).toHaveBeenCalledWith('slot01');
-			expect(refreshAdvert).toHaveBeenCalled();
+			expect(advert?.refresh).toHaveBeenCalled();
 			expect(advert?.slot.setConfig).toHaveBeenCalledWith({
 				targeting: {
 					passback: 'mockString',

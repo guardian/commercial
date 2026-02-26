@@ -1,7 +1,7 @@
 import type * as AdSizesType from '@guardian/commercial-core/ad-sizes';
 import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
-import { loadAdvert } from '../../display/load-advert';
+import type { Advert } from '../../define/Advert';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
@@ -37,7 +37,9 @@ jest.mock('define/init-slot-ias', () => ({
 }));
 
 jest.mock('lib/header-bidding/prebid', () => ({
-	requestBids: jest.fn(),
+	prebid: {
+		requestBids: jest.fn(),
+	},
 }));
 
 jest.mock('lib/identity/api', () => ({
@@ -117,10 +119,6 @@ jest.mock(
 		<T>(fn: (...args: unknown[]) => T) =>
 			fn,
 );
-
-jest.mock('display/load-advert', () => ({
-	loadAdvert: jest.fn(),
-}));
 
 jest.mock('./prepare-prebid', () => ({
 	setupPrebidOnce: jest
@@ -348,7 +346,8 @@ describe('DFP', () => {
 		document.body.innerHTML = '';
 		$style.remove();
 		// @ts-expect-error -- we’re removing it
-		window.googletag = undefined; // @ts-expect-error -- we're removing it
+		window.googletag = undefined;
+		// @ts-expect-error -- we’re removing it
 		window.pbjs = undefined;
 	});
 
@@ -496,6 +495,13 @@ describe('DFP', () => {
 	});
 
 	it('should display ads', async () => {
+		const advert = {
+			id: 'dfp-ad-html-slot',
+			load: jest.fn(),
+		} as unknown as Advert;
+
+		dfpEnv.advertsToLoad = [advert];
+
 		window.guardian.config.page.hasPageSkin = true;
 		getCurrentBreakpoint.mockReturnValue('wide');
 
@@ -515,7 +521,7 @@ describe('DFP', () => {
 			'test-id-string',
 		);
 		expect(window.googletag.enableServices).toHaveBeenCalled();
-		expect(loadAdvert).toHaveBeenCalled();
+		expect(advert.load).toHaveBeenCalled();
 	});
 
 	it('should be able to create "out of page" ad slot', async () => {

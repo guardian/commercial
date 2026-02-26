@@ -3,7 +3,6 @@ import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../lib/detect/det
 import { dfpEnv } from '../lib/dfp/dfp-env';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import { enableLazyLoad } from './lazy-load';
-import { loadAdvert } from './load-advert';
 
 const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
 	typeof getCurrentBreakpoint_
@@ -15,17 +14,19 @@ jest.mock('lodash-es', () => ({
 	once: jest.fn().mockImplementation(<T>(f: T) => f),
 }));
 
-jest.mock('display/request-bids', () => ({
-	requestBidsForAd: jest.fn(),
-}));
+const loadAdvert = jest.fn();
 
-jest.mock('define/Advert', () => jest.fn(() => ({ advert: jest.fn() })));
+jest.mock('define/Advert', () =>
+	jest.fn(() => ({
+		advert: jest.fn(() => ({
+			load: loadAdvert,
+			requestBids: jest.fn(),
+			display: jest.fn(),
+		})),
+	})),
+);
 
 jest.mock('lib/dfp/get-advert-by-id');
-
-jest.mock('display/load-advert', () => ({
-	loadAdvert: jest.fn(),
-}));
 
 jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
@@ -38,6 +39,8 @@ describe('enableLazyLoad', () => {
 		id: 'test-advert',
 		sizes: { desktop: [[300, 250]] },
 		isRendered: false,
+		load: loadAdvert,
+		display: jest.fn(),
 	};
 
 	beforeEach(() => {
@@ -97,6 +100,6 @@ describe('enableLazyLoad', () => {
 		expect((getAdvertById as jest.Mock).mock.calls).toEqual([
 			['test-advert'],
 		]);
-		expect(loadAdvert).toHaveBeenCalledWith(testAdvert);
+		expect(testAdvert.display).toHaveBeenCalled();
 	});
 });

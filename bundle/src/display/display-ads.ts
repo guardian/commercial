@@ -1,7 +1,6 @@
 import type { Advert } from '../define/Advert';
 import { pageSkin } from '../lib/creatives/page-skin';
 import { dfpEnv } from '../lib/dfp/dfp-env';
-import { loadAdvert } from './load-advert';
 
 const displayAds = (): void => {
 	/*
@@ -29,7 +28,7 @@ const displayAds = (): void => {
 		: undefined;
 
 	if (firstAdvertToLoad) {
-		loadAdvert(firstAdvertToLoad);
+		firstAdvertToLoad.load();
 		dfpEnv.advertsToLoad = [];
 	}
 	pageSkin();

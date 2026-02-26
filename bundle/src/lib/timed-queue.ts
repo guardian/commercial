@@ -34,7 +34,7 @@ const runJob = <T extends GenericJob>(
 	});
 };
 
-export function TimedQueue<T extends GenericJob>() {
+function TimedQueue<T extends GenericJob>() {
 	let pipeline = [] as Array<TimedQueueJob<T>>;
 	let timeWhenPaused = 0;
 
@@ -88,3 +88,29 @@ export function TimedQueue<T extends GenericJob>() {
 		},
 	};
 }
+
+const adQueue = TimedQueue();
+
+type ModalEventDetail = {
+	modalType: string;
+};
+
+document.addEventListener(
+	'modal:open',
+	(e: CustomEventInit<ModalEventDetail>) => {
+		if (e.detail?.modalType === `sign-in-gate-v2`) {
+			adQueue.pause();
+		}
+	},
+);
+
+document.addEventListener(
+	'modal:close',
+	(e: CustomEventInit<ModalEventDetail>) => {
+		if (e.detail?.modalType === `sign-in-gate-v2`) {
+			void adQueue.drain();
+		}
+	},
+);
+
+export { adQueue, TimedQueue };
