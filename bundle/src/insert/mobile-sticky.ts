@@ -53,13 +53,16 @@ const renderMobileStickySlot = async () => {
  * @returns Promise
  */
 export const init = (): Promise<void> => {
-	const handleBannerEvent = (event: Event) => {
-		log('commercial', '🪵 Handle Banner Event:', event.type);
+	const handleBannerEvent = (event: Event): void => {
+		log('commercial', `📲 Handling event ${event.type}`);
+		log('commercial', '📲 Launching mobile-sticky ad slot');
+		void renderMobileStickySlot();
 	};
 	if (shouldIncludeMobileSticky()) {
-		void renderMobileStickySlot();
+		// We only try to load the mobile-sticky slot when one of the following events has been received
 		document.addEventListener('banner:close', handleBannerEvent);
 		document.addEventListener('banner:none', handleBannerEvent);
+		document.addEventListener('banner:sign-in-gate', handleBannerEvent);
 	}
 
 	return Promise.resolve();
