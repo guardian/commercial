@@ -58,7 +58,7 @@
 		"@changesets/cli": "^2.29.8",
 		"@guardian/browserslist-config": "^7.0.0",
 		"@guardian/ophan-tracker-js": "2.8.0",
-		"@playwright/test": "1.57.0",
+		"@playwright/test": "1.58.2",
 		"@types/google-publisher-tag": "~1.20260126.0",
 		"@types/jest": "30.0.0",
 		"@types/lodash-es": "^4.17.12",
