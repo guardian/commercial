@@ -464,11 +464,6 @@ type GoogleTrackConversionObject = {
 	google_remarketing_only: boolean;
 };
 
-type AdmiralEvent = Record<string, unknown>;
-type AdmiralCallback = (event: AdmiralEvent) => void;
-type AdmiralArg = string | AdmiralCallback;
-type Admiral = (...args: AdmiralArg[]) => void;
-
 interface CoreGuardian {
 	config: Config;
 
@@ -523,7 +518,5 @@ export type {
 	Trac,
 	GoogleTagParams,
 	GoogleTrackConversionObject,
-	Admiral,
-	AdmiralEvent,
 	CoreGuardian,
 };
