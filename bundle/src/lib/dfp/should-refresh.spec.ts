@@ -54,6 +54,7 @@ describe('shouldRefresh', () => {
 			defineSlot() {
 				return googleSlot;
 			},
+			cmd: [],
 		};
 
 		// @ts-expect-error -- we’re making it a partial
