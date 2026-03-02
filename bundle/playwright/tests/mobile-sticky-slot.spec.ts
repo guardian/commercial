@@ -22,6 +22,10 @@ const loadPageWithUsRegion = async (
 	queryParams: Record<string, string> = {},
 ) => await loadPage({ page, path, region: 'US', queryParams });
 
+/**
+ * NOTE: this will not work in the UK!
+ * If this fails locally, please use a VPN to test outside of the UK
+ */
 test.describe('mobile-sticky', () => {
 	testAtBreakpoints(['mobile']).forEach(({ width, height }) => {
 		test(`should NOT render when the CMP is present on the page`, async ({
