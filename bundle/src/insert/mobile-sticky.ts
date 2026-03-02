@@ -55,6 +55,14 @@ const renderMobileStickySlot = async () => {
 export const init = (): Promise<void> => {
 	const handleBannerEvent = (event: Event): void => {
 		log('commercial', `📲 Handling event ${event.type}`);
+		// Early exit if CMP still detected on the same page view
+		if (document.querySelector('iframe[id*="sp_message_iframe"]')) {
+			log(
+				'commercial',
+				'📲 CMP still present on page. Will not launch mobile-sticky ad slot',
+			);
+			return;
+		}
 		log('commercial', '📲 Launching mobile-sticky ad slot');
 		void renderMobileStickySlot();
 	};
@@ -63,6 +71,7 @@ export const init = (): Promise<void> => {
 		document.addEventListener('banner:close', handleBannerEvent);
 		document.addEventListener('banner:none', handleBannerEvent);
 		document.addEventListener('banner:sign-in-gate', handleBannerEvent);
+		document.addEventListener('cmp:banner-close', handleBannerEvent);
 	}
 
 	return Promise.resolve();
