@@ -232,7 +232,7 @@ class Advert extends EventTarget {
 		this.slot = slotDefinition.slot;
 
 		void slotDefinition.slotReady.then(() => {
-			this.setStatus('ready', true);
+			this.#setStatus('ready', true);
 		});
 
 		// Extract targeting values, handling both string and string[] types
@@ -247,22 +247,22 @@ class Advert extends EventTarget {
 			: (gpidValue ?? undefined);
 
 		addPubadsEventListener(this.slot, 'slotRequested', () => {
-			this.setStatus('fetching', true);
+			this.#setStatus('fetching', true);
 		});
 		addPubadsEventListener(this.slot, 'slotResponseReceived', () => {
-			this.setStatus('fetching', false);
-			this.setStatus('fetched', true);
+			this.#setStatus('fetching', false);
+			this.#setStatus('fetched', true);
 		});
 		addPubadsEventListener(this.slot, 'slotRenderEnded', () => {
-			this.setStatus('loading', true);
+			this.#setStatus('loading', true);
 		});
 		addPubadsEventListener(this.slot, 'slotOnload', () => {
-			this.setStatus('loaded', true);
-			this.setStatus('rendered', true);
+			this.#setStatus('loaded', true);
+			this.#setStatus('rendered', true);
 		});
 	}
 
-	setStatus(name: AdvertStatus, status: boolean): void {
+	#setStatus(name: AdvertStatus, status: boolean): void {
 		this.#status[name] = status;
 		log(
 			'commercial',
@@ -271,6 +271,13 @@ class Advert extends EventTarget {
 		this.dispatchEvent(
 			new CustomEvent('statusChange', { detail: { name, status } }),
 		);
+	}
+
+	setStatus(name: AdvertStatus, status: boolean): void {
+		console.warn(
+			`Advert status should not be set from outside the Advert class, this method exists just for testing.`,
+		);
+		this.#setStatus(name, status);
 	}
 
 	/**
