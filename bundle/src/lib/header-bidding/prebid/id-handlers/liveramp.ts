@@ -93,7 +93,7 @@ const getLiveRampParams = async (email: string): Promise<UserId[]> => {
 export const getUserIdForLiveRamp = async (
 	email: string | null,
 ): Promise<UserId[] | undefined> => {
-	const isLiverampEnabled = isSwitchedOn('prebid-liveramp');
+	const isLiverampEnabled = isSwitchedOn('prebidLiveramp');
 
 	if (email && isLiverampEnabled) {
 		const params = await getLiveRampParams(email);
