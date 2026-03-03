@@ -1,4 +1,5 @@
 import { log } from '@guardian/libs';
+import { isUserInTestGroup } from '../experiments/beta-ab';
 import { createAdSlot } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import { shouldIncludeMobileSticky } from '../lib/header-bidding/utils';
@@ -67,11 +68,15 @@ export const init = (): Promise<void> => {
 		void renderMobileStickySlot();
 	};
 	if (shouldIncludeMobileSticky()) {
-		// We only try to load the mobile-sticky slot when one of the following events has been received
-		document.addEventListener('banner:close', handleBannerEvent);
-		document.addEventListener('banner:none', handleBannerEvent);
-		document.addEventListener('banner:sign-in-gate', handleBannerEvent);
-		document.addEventListener('cmp:banner-close', handleBannerEvent);
+		if (isUserInTestGroup('commercial-mobile-sticky', 'variant')) {
+			// We only try to load the mobile-sticky slot when one of the following events has been received
+			document.addEventListener('banner:close', handleBannerEvent);
+			document.addEventListener('banner:none', handleBannerEvent);
+			document.addEventListener('banner:sign-in-gate', handleBannerEvent);
+			document.addEventListener('cmp:banner-close', handleBannerEvent);
+		} else {
+			void renderMobileStickySlot();
+		}
 	}
 
 	return Promise.resolve();
