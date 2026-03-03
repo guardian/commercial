@@ -11,7 +11,7 @@ describe('getUserIdForLiveRamp', () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
 		jest.restoreAllMocks();
-		window.guardian.config.switches['prebid-liveramp'] = true;
+		window.guardian.config.switches['prebidLiveramp'] = true;
 	});
 
 	afterEach(() => {
