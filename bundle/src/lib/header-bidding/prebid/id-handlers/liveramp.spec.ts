@@ -1,24 +1,17 @@
 import * as core from '@guardian/commercial-core';
 import { loadScript } from '@guardian/libs';
-import { isUserInTestGroup } from '../../../../experiments/beta-ab';
 import { getUserIdForLiveRamp } from './liveramp';
 
 jest.mock('@guardian/libs');
 jest.mock('../../../../experiments/beta-ab');
 
 const mockLoadScript = loadScript as jest.MockedFunction<typeof loadScript>;
-const mockIsUserInTestGroup = isUserInTestGroup as jest.MockedFunction<
-	typeof isUserInTestGroup
->;
 
 describe('getUserIdForLiveRamp', () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
 		jest.restoreAllMocks();
-
-		// ensure user is always in test group for these tests
-		// TODO: remove once the experiment is over
-		mockIsUserInTestGroup.mockReturnValue(true);
+		window.guardian.config.switches['prebid-liveramp'] = true;
 	});
 
 	afterEach(() => {
