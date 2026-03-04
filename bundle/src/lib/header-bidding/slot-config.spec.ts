@@ -49,6 +49,7 @@ window.googletag = {
 	defineSlot: () => ({ ...slotPrototype }),
 	// @ts-expect-error these are just mocks
 	pubads: () => ({}),
+	cmd: [],
 };
 
 const buildAdvert = (name: string, sizes?: SizeMapping, id?: string) => {
