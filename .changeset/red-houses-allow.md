@@ -1,5 +1,5 @@
 ---
-'@guardian/commercial-core': minor
+'@guardian/commercial-core': major
 ---
 
-Bumping to the  version 29.0.0 for guardian/libs which contains a change to Australian framework.
+Bumping @guardian/libs to version 29.0.1, which contains a change to Australian framework.
