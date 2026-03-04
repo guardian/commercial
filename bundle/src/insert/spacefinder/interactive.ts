@@ -20,6 +20,8 @@ const getInteractiveGridWidths = () =>
 
 /**
  * Determine whether the grid body is the standard desktop width, if it is then right rail ads don't need the offset right class, if it's not then we need to add the offset right class to move the ad over to the right.
+ *
+ * The 620px comes from the `ArticleContainer` component in DCR https://github.com/guardian/dotcom-rendering/blob/a321a1e296f54c73580151f3b4c7170ce373eb1f/dotcom-rendering/src/components/ArticleContainer.tsx
  */
 const isBodyStandardDesktopWidth = (bodyWidth: number): boolean => {
 	return bodyWidth === 620;
