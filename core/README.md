@@ -30,8 +30,8 @@ To run the unit tests:
 
 This might fail if the base test coverage hasn't been met. This is set in jest.config.js. Ensure you add sufficient tests to meet the threshold if you can. If this is not possible for whatever reason, you can decrease the set thresholds but this should be considered a last resort
 
-
 #### Beta Releases
+
 You can add the [beta] @guardian/commercial-core label to your pull request, this will release a beta version of the bundle to NPM, the exact version will be commented on your PR.
 
 In order to do this, run `pnpm changeset`. This will create a new changeset file in the .changeset directory. Commit this file with your PR.
@@ -39,6 +39,7 @@ In order to do this, run `pnpm changeset`. This will create a new changeset file
 Note: Once the beta version is released, the label will be removed from the PR, so you will need to add it again if you want to release subsequent new versions.
 
 ## Releasing to NPM
+
 This repository uses changesets for version management.
 
 To release a new version with your changes, run:
