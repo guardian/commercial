@@ -8,6 +8,11 @@ const templatesWithoutLabels = [
 	12317037, // EVENTS_MULTIPLE
 	10070487, // CAPI_SINGLE_PAIDFOR
 	10063287, // MANUAL_MULTIPLE
+	11750608, // cAPI multiple no logos
+	12478885, // CAPI Multiple Paid For
+	10070367, // cAPI Multiple Supported
+	12490730, // CAPI Single Paid For
+	10070607, // cAPI Single Supported
 ];
 
 const shouldRenderLabel = (
