@@ -1,5 +1,9 @@
 import type * as AdSizesType from '@guardian/commercial-core/ad-sizes';
-import type { ConsentState, USNATConsentState } from '@guardian/libs';
+import type {
+	AUSConsentState,
+	ConsentState,
+	USNATConsentState,
+} from '@guardian/libs';
 import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
 import type { Advert } from '../../define/Advert';
 import { commercialFeatures } from '../../lib/commercial-features';
@@ -29,6 +33,16 @@ const usnatConsent: USNATConsentState = {
 
 const usnatNonConsent: USNATConsentState = {
 	doNotSell: true,
+	signalStatus: 'ready',
+};
+
+const ausConsent: AUSConsentState = {
+	personalisedAdvertising: true,
+	signalStatus: 'ready',
+};
+
+const ausNonConsent: AUSConsentState = {
+	personalisedAdvertising: false,
 	signalStatus: 'ready',
 };
 
@@ -187,13 +201,13 @@ const tcfv2WithConsent: ConsentState = {
 };
 
 const ausNotRejected: ConsentState = {
-	aus: { personalisedAdvertising: true },
+	aus: ausConsent,
 	canTarget: true,
 	framework: 'aus',
 };
 
 const ausRejected: ConsentState = {
-	aus: { personalisedAdvertising: false },
+	aus: ausNonConsent,
 	canTarget: false,
 	framework: 'aus',
 };

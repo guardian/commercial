@@ -1,4 +1,5 @@
 import type {
+	AUSConsentState,
 	ConsentState,
 	TCFv2ConsentState,
 	USNATConsentState,
@@ -73,14 +74,24 @@ const usnatWithoutConsentMock: ConsentState = {
 };
 
 // AUS
+
+const ausConsent: AUSConsentState = {
+	personalisedAdvertising: true,
+	signalStatus: 'ready',
+};
+
+const ausNonConsent: AUSConsentState = {
+	personalisedAdvertising: false,
+	signalStatus: 'ready',
+};
 const ausWithConsentMock: ConsentState = {
-	aus: { personalisedAdvertising: true },
+	aus: ausConsent,
 	canTarget: true,
 	framework: 'aus',
 };
 
 const ausWithoutConsentMock: ConsentState = {
-	aus: { personalisedAdvertising: false },
+	aus: ausNonConsent,
 	canTarget: false,
 	framework: 'aus',
 };
