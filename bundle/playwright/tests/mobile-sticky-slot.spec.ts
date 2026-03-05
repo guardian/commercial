@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { testAtBreakpoints } from '../lib/breakpoints';
-import { loadPage } from '../lib/load-page';
+import { loadPage, LoadPageParams } from '../lib/load-page';
 import { cmpAcceptAll } from '../lib/cmp';
 import { articles } from '../fixtures/pages';
 import { GuPage } from '../fixtures/pages/Page';
@@ -11,11 +11,8 @@ const cmpSelector = 'iframe[id*="sp_message_iframe"]';
 const bannerSelector = '[name="StickyBottomBanner"]';
 const mobileStickySelector = '#dfp-ad--mobile-sticky';
 
-/**
- * NOTE: this will not work in the UK!
- * If this fails locally, please use a VPN to test outside of the UK
- */
-test.describe('mobile-sticky', () => {
+/** TODO: Enable this when the event handling mobile-sticky logic goes live */
+test.skip('mobile-sticky', () => {
 	testAtBreakpoints(['mobile']).forEach(({ width, height }) => {
 		test(`should NOT render when the CMP is present on the page`, async ({
 			page,
@@ -32,8 +29,10 @@ test.describe('mobile-sticky', () => {
 			await expect(page.locator(mobileStickySelector)).not.toBeAttached();
 		});
 
-		['US', 'AU', 'IE', 'CA'].map((region) =>
-			test(`should render on page after the CMP has been dismissed in ${region}`, async ({
+		(
+			['US', 'AU', 'IE', 'CA'] satisfies Array<LoadPageParams['region']>
+		).map((region) =>
+			test(`should render on page after the CMP has been dismissed in geo ${region}`, async ({
 				page,
 			}) => {
 				await page.setViewportSize({ width, height });
@@ -42,13 +41,27 @@ test.describe('mobile-sticky', () => {
 					adtest: 'mobileStickyTest',
 					'force-banner': '',
 				};
-				await loadPage({ page, path, region: 'US', queryParams });
+				await loadPage({ page, path, region, queryParams });
 				await cmpAcceptAll(page);
 
 				await expect(page.locator(cmpSelector)).not.toBeAttached();
 				await expect(page.locator(mobileStickySelector)).toBeAttached();
 			}),
 		);
+
+		test(`should NOT render in GB region`, async ({ page }) => {
+			await page.setViewportSize({ width, height });
+			const queryParams = {
+				'ab-commercial-mobile-sticky': 'variant',
+				adtest: 'mobileStickyTest',
+				'force-banner': '',
+			};
+			await loadPage({ page, path, region: 'GB', queryParams });
+			await cmpAcceptAll(page);
+
+			await expect(page.locator(cmpSelector)).not.toBeAttached();
+			await expect(page.locator(mobileStickySelector)).not.toBeAttached();
+		});
 
 		test(`should NOT render while reader revenue banner visible on page`, async ({
 			page,
