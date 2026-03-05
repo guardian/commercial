@@ -42,8 +42,8 @@ importers:
         specifier: ^9.39.1
         version: 9.39.3
       globals:
-        specifier: 16.5.0
-        version: 16.5.0
+        specifier: 17.3.0
+        version: 17.3.0
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -154,8 +154,8 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2(webpack@5.105.0)
       globals:
-        specifier: 16.5.0
-        version: 16.5.0
+        specifier: 17.3.0
+        version: 17.3.0
       html-webpack-plugin:
         specifier: 5.6.6
         version: 5.6.6(webpack@5.105.0)
@@ -3305,14 +3305,10 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   globals@14.0.0:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
-    engines: {node: '>=18'}
-
-  globals@16.5.0:
-    resolution: {integrity: sha512-c/c15i26VrJ4IRt5Z89DnIzCGDn9EcebibhAOjw5ibqEHsE1wLUgkPn9RDmNcUKyU87GeaL633nyJ+pplFR2ZQ==}
     engines: {node: '>=18'}
 
   globals@17.3.0:
@@ -9277,8 +9273,6 @@ snapshots:
       path-is-absolute: 1.0.1
 
   globals@14.0.0: {}
-
-  globals@16.5.0: {}
 
   globals@17.3.0: {}
 
