@@ -1,5 +1,6 @@
 import { isInCanada } from '@guardian/commercial-core/geo/geo-utils';
 import type {
+	AUSConsentState,
 	ConsentState,
 	TCFv2ConsentState,
 	USNATConsentState,
@@ -88,6 +89,16 @@ const usnatNonConsent: USNATConsentState = {
 	signalStatus: 'ready',
 };
 
+const ausConsent: AUSConsentState = {
+	personalisedAdvertising: true,
+	signalStatus: 'ready',
+};
+
+const ausNonConsent: AUSConsentState = {
+	personalisedAdvertising: false,
+	signalStatus: 'ready',
+};
+
 const usnatWithConsent = {
 	usnat: usnatConsent,
 	canTarget: true,
@@ -101,13 +112,13 @@ const usnatWithoutConsent = {
 } as ConsentState;
 
 const ausWithConsent = {
-	aus: { personalisedAdvertising: true },
+	aus: ausConsent,
 	canTarget: true,
 	framework: 'aus',
 } as ConsentState;
 
 const ausWithoutConsent = {
-	aus: { personalisedAdvertising: false },
+	aus: ausNonConsent,
 	canTarget: false,
 	framework: 'aus',
 } as ConsentState;
