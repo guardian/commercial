@@ -18,7 +18,7 @@ type LoadPageOptions = {
 	queryParams?: Record<string, string | undefined>;
 	fragment?: `#${string}`;
 	waitUntil?: 'domcontentloaded' | 'load';
-	region?: 'AU' | 'GB' | 'IE' | 'INT' | 'US';
+	region?: 'AU' | 'GB' | 'IE' | 'CA' | 'US';
 	preventSupportBanner?: boolean;
 	overrides?: {
 		configOverrides?: Record<string, unknown>;
@@ -27,7 +27,7 @@ type LoadPageOptions = {
 	};
 };
 
-type LoadPageParams = {
+export type LoadPageParams = {
 	page: Page;
 	path: string;
 } & LoadPageOptions;
