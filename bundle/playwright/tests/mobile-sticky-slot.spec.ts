@@ -1,4 +1,4 @@
-import { expect, Page, test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { testAtBreakpoints } from '../lib/breakpoints';
 import { loadPage } from '../lib/load-page';
 import { cmpAcceptAll } from '../lib/cmp';
@@ -12,17 +12,6 @@ const bannerSelector = '[name="StickyBottomBanner"]';
 const mobileStickySelector = '#dfp-ad--mobile-sticky';
 
 /**
- * Note: in CI we do not run Playwright in multiple regions
- * Setting the region as "US" here does NOT mean this is simulating a network request from the US,
- * it sets the geo flag in the page metadata resulting in loading the US edition
- * We are bound to the region of the Github workflow runner that the CI workflow runs in
- */
-const loadPageWithUsRegion = async (
-	page: Page,
-	queryParams: Record<string, string> = {},
-) => await loadPage({ page, path, region: 'US', queryParams });
-
-/**
  * NOTE: this will not work in the UK!
  * If this fails locally, please use a VPN to test outside of the UK
  */
@@ -33,39 +22,44 @@ test.describe('mobile-sticky', () => {
 		}) => {
 			await page.setViewportSize({ width, height });
 			const queryParams = {
+				'ab-commercial-mobile-sticky': 'variant',
 				adtest: 'mobileStickyTest',
 				'force-banner': '',
 			};
-			await loadPageWithUsRegion(page, queryParams);
+			await loadPage({ page, path, region: 'US', queryParams });
 
 			await expect(page.locator(cmpSelector)).toBeAttached();
 			await expect(page.locator(mobileStickySelector)).not.toBeAttached();
 		});
 
-		test(`should render on page after the CMP has been dismissed`, async ({
-			page,
-		}) => {
-			await page.setViewportSize({ width, height });
-			const queryParams = {
-				adtest: 'mobileStickyTest',
-				'force-banner': '',
-			};
-			await loadPageWithUsRegion(page, queryParams);
-			await cmpAcceptAll(page);
+		['US', 'AU', 'IE', 'CA'].map((region) =>
+			test(`should render on page after the CMP has been dismissed in ${region}`, async ({
+				page,
+			}) => {
+				await page.setViewportSize({ width, height });
+				const queryParams = {
+					'ab-commercial-mobile-sticky': 'variant',
+					adtest: 'mobileStickyTest',
+					'force-banner': '',
+				};
+				await loadPage({ page, path, region: 'US', queryParams });
+				await cmpAcceptAll(page);
 
-			await expect(page.locator(cmpSelector)).not.toBeAttached();
-			await expect(page.locator(mobileStickySelector)).toBeAttached();
-		});
+				await expect(page.locator(cmpSelector)).not.toBeAttached();
+				await expect(page.locator(mobileStickySelector)).toBeAttached();
+			}),
+		);
 
 		test(`should NOT render while reader revenue banner visible on page`, async ({
 			page,
 		}) => {
 			await page.setViewportSize({ width, height });
 			const queryParams = {
+				'ab-commercial-mobile-sticky': 'variant',
 				adtest: 'mobileStickyTest',
 				'force-banner': '',
 			};
-			await loadPageWithUsRegion(page, queryParams);
+			await loadPage({ page, path, region: 'US', queryParams });
 			await cmpAcceptAll(page);
 			await page.reload();
 
@@ -79,10 +73,11 @@ test.describe('mobile-sticky', () => {
 		}) => {
 			await page.setViewportSize({ width, height });
 			const queryParams = {
+				'ab-commercial-mobile-sticky': 'variant',
 				adtest: 'mobileStickyTest',
 				'force-banner': '',
 			};
-			await loadPageWithUsRegion(page, queryParams);
+			await loadPage({ page, path, region: 'US', queryParams });
 			await cmpAcceptAll(page);
 			await page.reload();
 
@@ -128,8 +123,11 @@ test.describe('mobile-sticky', () => {
 					'{"value":{"gate-dismissed-count-AuxiaSignInGate-default-treatment-id":5}}',
 				);
 			});
-			const queryParams = { adtest: 'mobileStickyTest' };
-			await loadPageWithUsRegion(page, queryParams);
+			const queryParams = {
+				'ab-commercial-mobile-sticky': 'variant',
+				adtest: 'mobileStickyTest',
+			};
+			await loadPage({ page, path, region: 'US', queryParams });
 			await cmpAcceptAll(page);
 			await page.reload();
 
@@ -140,6 +138,7 @@ test.describe('mobile-sticky', () => {
 			page,
 		}) => {
 			await page.setViewportSize({ width, height });
+
 			await page.addInitScript(() => {
 				// Prevent the support banner from showing
 				window.localStorage.setItem(
@@ -147,7 +146,8 @@ test.describe('mobile-sticky', () => {
 					`{"value":"${new Date().toISOString()}"}`,
 				);
 			});
-			await loadPageWithUsRegion(page);
+			const queryParams = { 'ab-commercial-mobile-sticky': 'variant' };
+			await loadPage({ page, path, region: 'US', queryParams });
 			await cmpAcceptAll(page);
 			await page.reload();
 
