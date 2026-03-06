@@ -1,8 +1,13 @@
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import { log } from '@guardian/libs';
+import type { Advert, AdvertStatus } from '../define/Advert';
+import { dfpEnv } from '../lib/dfp/dfp-env';
 import { adSlotIdPrefix } from './dfp/dfp-env-globals';
 import { reportError } from './error/report-error';
 import { createCommercialQueue } from './guardian-commercial-queue';
+import { addListenerToStore } from './dfp/register-advert';
+
+// /Users/demetrios_skamiotis/code/commercial/bundle/src/lib/dfp/dfp-env.ts
 
 const tags: Record<string, string> = {
 	bundle: 'standalone',
@@ -34,6 +39,14 @@ const setupWindowCommercial = (): void => {
 			: [],
 	);
 	window.guardian.commercial.queue.flush();
+
+	window.guardian.commercial.onAdEvent = (status: AdvertStatus | AdvertStatus[], callback: (advert: Advert) => void) => {
+		addListenerToStore(status, callback);
+		window.guardian.commercial?.queue?.push(() => {
+			dfpEnv.adverts.forEach((advert) => advert.on(status, () => callback(advert)));
+		});
+	};
+
 };
 
 const bootCommercial = async (

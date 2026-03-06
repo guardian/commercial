@@ -2,6 +2,7 @@ import type { ConsentState } from '@guardian/libs';
 import { getConsentFor, onConsent } from '@guardian/libs';
 import { commercialFeatures } from './lib/commercial-features';
 
+
 const shouldBootConsentless = (consentState: ConsentState) => {
 	return (
 		window.guardian.config.switches.optOutAdvertising &&
