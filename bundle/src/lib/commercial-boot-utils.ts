@@ -2,6 +2,7 @@ import { EventTimer } from '@guardian/commercial-core/event-timer';
 import { log } from '@guardian/libs';
 import { adSlotIdPrefix } from './dfp/dfp-env-globals';
 import { reportError } from './error/report-error';
+import { createCommercialQueue } from './guardian-commercial-queue';
 
 const tags: Record<string, string> = {
 	bundle: 'standalone',
@@ -45,6 +46,14 @@ const bootCommercial = async (
 	window.googletag = {
 		cmd: [],
 	};
+
+	// Set up the commercial queue
+	window.guardian.commercial ??= {};
+	window.guardian.commercial.queue = createCommercialQueue(
+		Array.isArray(window.guardian.commercial.queue)
+			? window.guardian.commercial.queue
+			: [],
+	);
 
 	try {
 		return Promise.allSettled(modules.map((module) => module())).then(

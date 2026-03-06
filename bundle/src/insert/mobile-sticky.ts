@@ -1,4 +1,5 @@
 import { log } from '@guardian/libs';
+import { isUserInTestGroup } from '../experiments/beta-ab';
 import { createAdSlot } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import { shouldIncludeMobileSticky } from '../lib/header-bidding/utils';
@@ -53,13 +54,29 @@ const renderMobileStickySlot = async () => {
  * @returns Promise
  */
 export const init = (): Promise<void> => {
-	const handleBannerEvent = (event: Event) => {
-		log('commercial', '🪵 Handle Banner Event:', event.type);
+	const handleBannerEvent = (event: Event): void => {
+		log('commercial', `📲 Handling event ${event.type}`);
+		// Early exit if CMP still detected on the same page view
+		if (document.querySelector('iframe[id*="sp_message_iframe"]')) {
+			log(
+				'commercial',
+				'📲 CMP still present on page. Will not launch mobile-sticky ad slot',
+			);
+			return;
+		}
+		log('commercial', '📲 Launching mobile-sticky ad slot');
+		void renderMobileStickySlot();
 	};
 	if (shouldIncludeMobileSticky()) {
-		void renderMobileStickySlot();
-		document.addEventListener('banner:close', handleBannerEvent);
-		document.addEventListener('banner:none', handleBannerEvent);
+		if (isUserInTestGroup('commercial-mobile-sticky', 'variant')) {
+			// We only try to load the mobile-sticky slot when one of the following events has been received
+			document.addEventListener('banner:close', handleBannerEvent);
+			document.addEventListener('banner:none', handleBannerEvent);
+			document.addEventListener('banner:sign-in-gate', handleBannerEvent);
+			document.addEventListener('cmp:banner-close', handleBannerEvent);
+		} else {
+			void renderMobileStickySlot();
+		}
 	}
 
 	return Promise.resolve();
