@@ -313,7 +313,11 @@ interface Guardian extends CoreGuardian {
 	commercial?: {
 		dfpEnv?: DfpEnv;
 		a9WinningBids?: FetchBidResponse[];
-		queue?: Queue;
+		/**
+		 * The commercial queue can be stubbed and set up as an empty array
+		 * but is converted to a Queue on initialisation
+		 */
+		queue?: Queue | Array<() => void>;
 	};
 	notificationEventHistory?: HeaderNotification[][];
 	page: {
