@@ -553,7 +553,7 @@ const isAdSize = (size: Advert['size']): size is AdSize => {
 	return size !== null && size !== 'fluid';
 };
 
-export { Advert, findSmallestAdHeightForSlot, isAdSize };
+export { Advert, findSmallestAdHeightForSlot, isAdSize, type AdvertStatus };
 
 export const _ = {
 	getSlotSizeMapping,

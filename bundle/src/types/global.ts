@@ -17,7 +17,7 @@ import type {
 	Trac,
 } from '@guardian/commercial-core/types';
 import type { CustomClaims } from '@guardian/identity-auth';
-import type { Advert } from '../define/Advert';
+import type { Advert, AdvertStatus } from '../define/Advert';
 import type { Queue } from '../lib/guardian-commercial-queue';
 import type { ThirdPartyTag } from '../lib/types';
 
@@ -314,6 +314,7 @@ interface Guardian extends CoreGuardian {
 		dfpEnv?: DfpEnv;
 		a9WinningBids?: FetchBidResponse[];
 		queue?: Queue;
+		onAdEvent?: (status: AdvertStatus | AdvertStatus[], callback: (advert: Advert)=>void)=>void;
 	};
 	notificationEventHistory?: HeaderNotification[][];
 	page: {
