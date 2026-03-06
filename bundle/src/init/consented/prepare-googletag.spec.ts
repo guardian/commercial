@@ -187,13 +187,13 @@ const tcfv2WithConsent: ConsentState = {
 };
 
 const ausNotRejected: ConsentState = {
-	aus: { personalisedAdvertising: true },
+	aus: { personalisedAdvertising: true, signalStatus: 'ready' },
 	canTarget: true,
 	framework: 'aus',
 };
 
 const ausRejected: ConsentState = {
-	aus: { personalisedAdvertising: false },
+	aus: { personalisedAdvertising: false, signalStatus: 'ready' },
 	canTarget: false,
 	framework: 'aus',
 };
