@@ -49,8 +49,12 @@ const createCommercialQueue = (queueArr: QueueItem[] = []): Queue => {
 		},
 
 		flush() {
-			log('commercial', `Queued items:\n ${buffer.join(',\n')}`);
 			log('commercial', 'Flushing commercial queue');
+			if (buffer.length) {
+				log('commercial', `Queued items:\n ${buffer.join(',\n')}`);
+			} else {
+				log('commercial', 'No items in the commercial queue');
+			}
 			isInitialised = true;
 			while (buffer.length > 0) {
 				const item = buffer.shift();
