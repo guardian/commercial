@@ -2,6 +2,7 @@ import { EventTimer } from '@guardian/commercial-core/event-timer';
 import { log } from '@guardian/libs';
 import { adSlotIdPrefix } from './dfp/dfp-env-globals';
 import { reportError } from './error/report-error';
+import { createCommercialQueue } from './guardian-commercial-queue';
 
 const tags: Record<string, string> = {
 	bundle: 'standalone',
@@ -40,7 +41,7 @@ const bootCommercial = async (
 	EventTimer.get().mark('commercialStart');
 	EventTimer.get().mark('commercialBootStart');
 
-	// Stub the command queue
+	// Stub the googletag command queue
 	// @ts-expect-error -- it’s a stub, not the whole Googletag object
 	window.googletag = {
 		cmd: [],
@@ -50,7 +51,14 @@ const bootCommercial = async (
 		return Promise.allSettled(modules.map((module) => module())).then(
 			() => {
 				recordCommercialMetrics();
-				window.guardian.commercial?.queue?.flush();
+				// Initialise the commercial queue
+				window.guardian.commercial ??= {};
+				window.guardian.commercial.queue = createCommercialQueue(
+					Array.isArray(window.guardian.commercial.queue)
+						? window.guardian.commercial.queue
+						: [],
+				);
+				window.guardian.commercial.queue.flush();
 			},
 		);
 	} catch (error) {

@@ -1,6 +1,6 @@
 # A Queue on `window` for commercial dependant tasks
 
-## Status: Proposed
+## Status: Approved
 
 ## Context
 
