@@ -75,8 +75,8 @@ importers:
         specifier: 30.1.0
         version: 30.1.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/source':
-        specifier: 12.2.0
-        version: 12.2.0(tslib@2.8.1)(typescript@5.9.3)
+        specifier: 12.2.1
+        version: 12.2.1(tslib@2.8.1)(typescript@5.9.3)
       fastdom:
         specifier: ^1.0.12
         version: 1.0.12
@@ -1141,8 +1141,8 @@ packages:
       prettier: ^3.7.4
       tslib: ^2.8.1
 
-  '@guardian/source@12.2.0':
-    resolution: {integrity: sha512-+D7X1iR2QxFZI+ag43FljR3WIYTxur+HSfEnXnAg8XdMhGPfJWE/XsedYWH71f4YYEbCcaDbVos5sHXJUykIxQ==}
+  '@guardian/source@12.2.1':
+    resolution: {integrity: sha512-tyPzOo7yjZo1o1jA6+vlvf6RR9+g4eY7+B12R5ED9RgXBQf0g1zD1GBNRV6PqhAl5Rl5xfP7JLYlTBbBSLG2UQ==}
     peerDependencies:
       '@emotion/react': ^11.11.4
       '@types/react': ^18.2.79
@@ -3305,7 +3305,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   globals@14.0.0:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
@@ -6763,7 +6763,7 @@ snapshots:
       prettier: 3.8.1
       tslib: 2.8.1
 
-  '@guardian/source@12.2.0(tslib@2.8.1)(typescript@5.9.3)':
+  '@guardian/source@12.2.1(tslib@2.8.1)(typescript@5.9.3)':
     dependencies:
       mini-svg-data-uri: 1.4.4
       tslib: 2.8.1
