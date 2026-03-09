@@ -1,4 +1,8 @@
-import type { ConsentState, USNATConsentState } from '@guardian/libs';
+import type {
+	AUSConsentState,
+	ConsentState,
+	USNATConsentState,
+} from '@guardian/libs';
 import { storage } from '@guardian/libs';
 import type { PersonalisedTargeting } from './personalised';
 import { getPersonalisedTargeting } from './personalised';
@@ -16,6 +20,15 @@ const usnatNonConsent: USNATConsentState = {
 	signalStatus: 'ready',
 };
 
+const ausConsent: AUSConsentState = {
+	personalisedAdvertising: true,
+	signalStatus: 'ready',
+};
+
+const ausNonConsent: AUSConsentState = {
+	personalisedAdvertising: false,
+	signalStatus: 'ready',
+};
 describe('Personalised targeting', () => {
 	describe('TCFv2', () => {
 		test('Full consent', () => {
@@ -131,7 +144,7 @@ describe('Personalised targeting', () => {
 	describe('AUS', () => {
 		test('Full Consent', () => {
 			const state: ConsentState = {
-				aus: { personalisedAdvertising: true },
+				aus: ausConsent,
 				canTarget: true,
 				framework: 'aus',
 			};
@@ -153,7 +166,7 @@ describe('Personalised targeting', () => {
 
 		test('Personalised Advertising OFF', () => {
 			const state: ConsentState = {
-				aus: { personalisedAdvertising: false },
+				aus: ausNonConsent,
 				canTarget: false,
 				framework: 'aus',
 			};
@@ -303,7 +316,7 @@ describe('Personalised targeting', () => {
 
 		test('Ad manager group IS set if aus and consent not given', () => {
 			const state: ConsentState = {
-				aus: { personalisedAdvertising: false },
+				aus: ausNonConsent,
 				canTarget: false,
 				framework: 'aus',
 			};
