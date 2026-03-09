@@ -3,9 +3,9 @@ import { log } from '@guardian/libs';
 import type { Advert, AdvertStatus } from '../define/Advert';
 import { dfpEnv } from '../lib/dfp/dfp-env';
 import { adSlotIdPrefix } from './dfp/dfp-env-globals';
+import { addListenerToStore } from './dfp/register-advert';
 import { reportError } from './error/report-error';
 import { createCommercialQueue } from './guardian-commercial-queue';
-import { addListenerToStore } from './dfp/register-advert';
 
 // /Users/demetrios_skamiotis/code/commercial/bundle/src/lib/dfp/dfp-env.ts
 

@@ -318,7 +318,10 @@ interface Guardian extends CoreGuardian {
 		 * but is converted to a Queue on initialisation
 		 */
 		queue?: Queue | Array<() => void>;
-		onAdEvent?: (status: AdvertStatus | AdvertStatus[], callback: (advert: Advert)=>void)=>void;
+		onAdEvent?: (
+			status: AdvertStatus | AdvertStatus[],
+			callback: (advert: Advert) => void,
+		) => void;
 	};
 	notificationEventHistory?: HeaderNotification[][];
 	page: {
