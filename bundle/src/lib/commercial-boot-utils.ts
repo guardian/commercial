@@ -47,14 +47,6 @@ const bootCommercial = async (
 		cmd: [],
 	};
 
-	// Set up the commercial queue
-	window.guardian.commercial ??= {};
-	window.guardian.commercial.queue = createCommercialQueue(
-		Array.isArray(window.guardian.commercial.queue)
-			? window.guardian.commercial.queue
-			: [],
-	);
-
 	try {
 		return Promise.allSettled(modules.map((module) => module())).then(
 			() => {
