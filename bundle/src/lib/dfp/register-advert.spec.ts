@@ -11,7 +11,7 @@ const mockAdvert = () => {
 };
 
 const clearListenerStore = () => {
-	listenerStore = []
+	listenerStore = [];
 };
 
 describe('register-advert', () => {
