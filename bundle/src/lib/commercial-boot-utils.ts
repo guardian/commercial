@@ -7,7 +7,6 @@ import { addListenerToStore } from './dfp/register-advert';
 import { reportError } from './error/report-error';
 import { createCommercialQueue } from './guardian-commercial-queue';
 
-// /Users/demetrios_skamiotis/code/commercial/bundle/src/lib/dfp/dfp-env.ts
 
 const tags: Record<string, string> = {
 	bundle: 'standalone',
