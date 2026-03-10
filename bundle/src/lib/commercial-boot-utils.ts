@@ -38,13 +38,17 @@ const setupWindowCommercial = (): void => {
 	);
 	window.guardian.commercial.queue.flush();
 
-	window.guardian.commercial.onAdEvent = (status: AdvertStatus | AdvertStatus[], callback: (advert: Advert) => void) => {
+	window.guardian.commercial.onAdEvent = (
+		status: AdvertStatus | AdvertStatus[],
+		callback: (advert: Advert) => void,
+	) => {
 		addListenerToStore(status, callback);
 		window.guardian.commercial?.queue?.push(() => {
-			dfpEnv.adverts.forEach((advert) => advert.on(status, () => callback(advert)));
+			dfpEnv.adverts.forEach((advert) =>
+				advert.on(status, () => callback(advert)),
+			);
 		});
 	};
-
 };
 
 const bootCommercial = async (

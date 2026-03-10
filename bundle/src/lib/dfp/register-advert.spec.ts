@@ -1,17 +1,13 @@
 import type { Advert } from '../../define/Advert';
 import {
 	addListenerToStore,
-	listenerStore,
+	clearListenerStore,
 	registerAdvert,
 } from './register-advert';
 
 const mockAdvert = () => {
 	const on = jest.fn();
 	return { on } as unknown as Advert;
-};
-
-const clearListenerStore = () => {
-	listenerStore = [];
 };
 
 describe('register-advert', () => {

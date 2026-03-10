@@ -5,7 +5,7 @@ type AdEventListener = {
 	status: AdvertStatus | AdvertStatus[];
 	callback: (advert: Advert) => void;
 };
-const listenerStore: AdEventListener[] = [];
+let listenerStore: AdEventListener[] = [];
 
 const addListenerToStore = (
 	status: AdvertStatus | AdvertStatus[],
@@ -19,4 +19,9 @@ const registerAdvert = (advert: Advert) => {
 		advert.on(listener.status, () => listener.callback(advert));
 	});
 };
-export { addListenerToStore, registerAdvert, listenerStore };
+
+const clearListenerStore = () => {
+	listenerStore = [];
+};
+
+export { addListenerToStore, registerAdvert, clearListenerStore };
