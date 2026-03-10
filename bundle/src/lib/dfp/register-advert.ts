@@ -19,4 +19,4 @@ const registerAdvert = (advert: Advert) => {
 		advert.on(listener.status, () => listener.callback(advert));
 	});
 };
-export { addListenerToStore, registerAdvert };
+export { addListenerToStore, registerAdvert, listenerStore };
