@@ -8,7 +8,7 @@ const tags: Record<string, string> = {
 	bundle: 'standalone',
 };
 
-const recordCommercialMetrics = () => {
+const recordCommercialMetrics = (): void => {
 	const eventTimer = EventTimer.get();
 	eventTimer.mark('commercialBootEnd');
 	eventTimer.mark('commercialModulesLoaded');
@@ -23,6 +23,17 @@ const recordCommercialMetrics = () => {
 		`[id^="${adSlotIdPrefix}inline"]`,
 	).length;
 	eventTimer.setProperty('adSlotsInline', adSlotsInline);
+};
+
+const setupWindowCommercial = (): void => {
+	// Initialise the commercial queue
+	window.guardian.commercial ??= {};
+	window.guardian.commercial.queue = createCommercialQueue(
+		Array.isArray(window.guardian.commercial.queue)
+			? window.guardian.commercial.queue
+			: [],
+	);
+	window.guardian.commercial.queue.flush();
 };
 
 const bootCommercial = async (
@@ -51,14 +62,7 @@ const bootCommercial = async (
 		return Promise.allSettled(modules.map((module) => module())).then(
 			() => {
 				recordCommercialMetrics();
-				// Initialise the commercial queue
-				window.guardian.commercial ??= {};
-				window.guardian.commercial.queue = createCommercialQueue(
-					Array.isArray(window.guardian.commercial.queue)
-						? window.guardian.commercial.queue
-						: [],
-				);
-				window.guardian.commercial.queue.flush();
+				setupWindowCommercial();
 			},
 		);
 	} catch (error) {
