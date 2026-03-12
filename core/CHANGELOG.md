@@ -1,5 +1,12 @@
 # @guardian/commercial-core
 
+## 31.0.0
+
+### Major Changes
+
+- 531f579: Bumps version of @guardian/libs dependency
+  BREAKING: Updates @guardian/libs peer dependency to ^30.1.0
+
 ## 30.2.0
 
 ### Minor Changes
