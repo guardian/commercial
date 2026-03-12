@@ -7,6 +7,7 @@ import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { AdUnitDefinition } from 'prebid-v10.23.0.js/dist/src/adUnits';
 import type { Advert } from '../../../define/Advert';
+import { isUserInTestGroup } from '../../../experiments/beta-ab';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedIn } from '../../identity/api';
 import { getPageTargeting } from '../../page-targeting';
@@ -45,8 +46,21 @@ const initialise = async (
 	}
 	initialised = true;
 
-	const userSync: UserSync = await getUserSyncSettings(consentState);
-	const pbjsConfig: PbjsConfig = Object.assign(
+	const userSyncPromise: Promise<UserSync> =
+		getUserSyncSettings(consentState);
+
+	const isInTest = isUserInTestGroup(
+		'commercial-loading-userids-async',
+		'variant',
+	);
+
+	// For control group users, await userSync before setConfig so it's included immediately.
+	// For test group users, skip the await — userSync will be merged into the config
+	// at the end of initialise via mergeConfig.
+	const initialUserSyncConfig = isInTest ? undefined : await userSyncPromise;
+
+	// deleiberatly omitting userSync we know we wont have it here
+	const pbjsConfig: Omit<PbjsConfig, 'userSync'> = Object.assign(
 		{},
 		{
 			/**
@@ -61,7 +75,9 @@ const initialise = async (
 			 */
 			timeoutBuffer: 400,
 			priceGranularity,
-			userSync,
+			...(!isInTest && initialUserSyncConfig
+				? { userSync: initialUserSyncConfig }
+				: {}),
 			ortb2: {
 				site: {
 					ext: {
@@ -106,9 +122,10 @@ const initialise = async (
 	const analytics = getAnalyticsConfig();
 	if (analytics) window.pbjs.enableAnalytics([analytics]);
 
-	// update config and adjust slot size when prebid ad loads
-	// TODO: remove types once prebid is upgraded to v10
-	window.pbjs.setConfig(pbjsConfig as unknown as Record<string, unknown>);
+	window.pbjs.setConfig({ ...pbjsConfig } as unknown as Record<
+		string,
+		unknown
+	>);
 	window.pbjs.onEvent('bidWon', (data) => {
 		const { width, height, adUnitCode } = data;
 
@@ -130,6 +147,18 @@ const initialise = async (
 		advert.hasPrebidSize = true;
 		advert.size = size;
 	});
+
+	// For test group users, await the userSync promise here — after setConfig and bidder
+	// setup have run without blocking — so userIds are still ready before the first ad request.
+	const userSyncConfig = isInTest ? await userSyncPromise : undefined;
+
+	// update config and adjust slot size when prebid ad loads
+	// TODO: remove types once prebid is upgraded to v10
+	if (userSyncConfig) {
+		window.pbjs.mergeConfig({
+			userSync: userSyncConfig,
+		} as unknown as Record<string, unknown>);
+	}
 };
 
 const bidsBackHandler = (
