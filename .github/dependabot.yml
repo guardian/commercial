@@ -19,11 +19,9 @@ updates:
     allow:
       - dependency-name: '*'
         dependency-type: direct
-    # We don't upgrade Prebid major versions via dependabot
+    # We don't upgrade Prebid via dependabot
     ignore:
       - dependency-name: 'prebid.js'
-        update-types:
-          - version-update:semver-major
     groups:
       guardian:
         patterns:
@@ -49,9 +47,13 @@ updates:
           - minor
           - patch
         exclude-patterns:
-          - 'prebid.js'
-          - 'typescript'
+          - '@guardian/*'
           - '@types/*'
+          - 'type-fest'
+          - '*eslint*'
+          - '*prettier*'
+          - '@playwright/*'
+          - 'typescript'
       devDependenciesMinor:
         dependency-type: 'development'
         update-types:
@@ -65,7 +67,6 @@ updates:
           - '*prettier*'
           - '@playwright/*'
           - 'typescript'
-          - 'prebid.js'
     # The default is 5 but as we are going to group dependencies we might need to increase it
     open-pull-requests-limit: 10
   - package-ecosystem: 'github-actions'
@@ -74,3 +75,11 @@ updates:
       interval: 'weekly'
     cooldown:
       default-days: 7
+    groups:
+      actionsMinor:
+        update-types:
+          - minor
+          - patch
+      actionsMajor:
+        update-types:
+          - major
