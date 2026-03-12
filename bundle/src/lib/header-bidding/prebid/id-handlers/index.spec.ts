@@ -1,5 +1,4 @@
 import { type ConsentState } from '@guardian/libs';
-import { isUserInTestGroup } from '../../../../experiments/beta-ab';
 import { getEmail } from '../../../identity/api';
 import { isSwitchedOn } from '../../utils';
 import type { UserId, UserSync } from '../types';
@@ -18,9 +17,6 @@ jest.mock('../../../../experiments/beta-ab');
 
 const mockGetEmail = getEmail as jest.MockedFunction<typeof getEmail>;
 const mockIsSwitchedOn = isSwitchedOn as jest.MockedFunction<
-	typeof isSwitchedOn
->;
-const mockIsUserInTest = isUserInTestGroup as jest.MockedFunction<
 	typeof isSwitchedOn
 >;
 const mockGetUserIdForId5 = getUserIdForId5 as jest.MockedFunction<
@@ -299,90 +295,6 @@ describe('getUserSyncSettings', () => {
 			const result = await getUserSyncSettings(consentStateAll);
 			expect(result).toEqual({
 				syncEnabled: false,
-			});
-		});
-	});
-	describe('when user is in test group for allow Ids to be loaded async', () => {
-		beforeEach(() => {
-			mockIsSwitchedOn.mockReturnValue(true);
-			mockIsUserInTest.mockReturnValue(true);
-		});
-		it('when user is in test group for allow userIds to be loaded async', async () => {
-			const mockId5UserId: UserId = { name: 'id5Id' };
-			const mockLiveRampUserId: UserId = { name: 'identityLink' };
-			const mockTradeDeskUserId: UserId = { name: 'unifiedId' };
-
-			mockGetEmail.mockResolvedValue('test@example.com');
-			mockGetUserIdForId5.mockResolvedValue(mockId5UserId);
-			mockGetUserIdForLiveRamp.mockResolvedValue([mockLiveRampUserId]);
-			mockGetUserIdForTradeDesk.mockResolvedValue(mockTradeDeskUserId);
-
-			const consentStateAll = {
-				...mockConsentState,
-				tcfv2: {
-					...mockConsentState.tcfv2,
-					vendorConsents: {
-						[consentIds.id5]: true,
-						[consentIds.liveramp]: true,
-						[consentIds.theTradeDesk]: true,
-					},
-				},
-			} as ConsentState;
-
-			const result = await getUserSyncSettings(consentStateAll);
-			expect(result).toEqual({
-				syncsPerBidder: 0,
-				userIds: [sharedId],
-				filterSettings: {
-					all: {
-						bidders: '*',
-						filter: 'include',
-					},
-				},
-			});
-		});
-		it('should call mergeConfig with all resolved userIds after promises settle', async () => {
-			const mockId5UserId: UserId = { name: 'id5Id' };
-			const mockLiveRampUserId: UserId = { name: 'identityLink' };
-			const mockTradeDeskUserId: UserId = { name: 'unifiedId' };
-
-			mockGetEmail.mockResolvedValue('test@example.com');
-			mockGetUserIdForId5.mockResolvedValue(mockId5UserId);
-			mockGetUserIdForLiveRamp.mockResolvedValue([mockLiveRampUserId]);
-			mockGetUserIdForTradeDesk.mockResolvedValue(mockTradeDeskUserId);
-
-			const mockMergeConfig = jest.fn();
-			window.pbjs = {
-				mergeConfig: mockMergeConfig,
-			} as unknown as typeof window.pbjs;
-
-			const consentStateAll = {
-				...mockConsentState,
-				tcfv2: {
-					...mockConsentState.tcfv2,
-					vendorConsents: {
-						[consentIds.id5]: true,
-						[consentIds.liveramp]: true,
-						[consentIds.theTradeDesk]: true,
-					},
-				},
-			} as ConsentState;
-
-			await getUserSyncSettings(consentStateAll);
-
-			await Promise.resolve();
-			await Promise.resolve();
-			await Promise.resolve();
-
-			expect(mockMergeConfig).toHaveBeenCalledWith({
-				userSync: {
-					userIds: [
-						sharedId,
-						mockId5UserId,
-						mockLiveRampUserId,
-						mockTradeDeskUserId,
-					],
-				},
 			});
 		});
 	});
