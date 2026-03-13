@@ -1,4 +1,3 @@
-import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import type { HeaderBiddingSlot } from '../lib/header-bidding/prebid-types';
 import type { Advert } from './Advert';
 
@@ -29,7 +28,7 @@ export const refreshedAdSizes = (
 	return [
 		{
 			...hbSlot,
-			sizes: [[advertSize[0], advertSize[1]] as AdSize],
+			sizes: [[advertSize[0], advertSize[1]]],
 		},
 	];
 };
