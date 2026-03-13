@@ -1,11 +1,11 @@
+import type { BidderScopedSettings } from 'prebid.js/dist/src/bidderSettings';
 import { overridePriceBucket } from '../price-config';
-import type { BidderSettings, BidResponse } from '../types';
 
-export const bidderSettings: BidderSettings[keyof BidderSettings] = {
+export const bidderSettings: BidderScopedSettings<string> = {
 	adserverTargeting: [
 		{
 			key: 'hb_pb',
-			val: ({ width, height, cpm, pbCg }: BidResponse) => {
+			val: ({ width, height, cpm, pbCg }) => {
 				return overridePriceBucket('ozone', width, height, cpm, pbCg);
 			},
 		},

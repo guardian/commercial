@@ -1,21 +1,14 @@
 import { hashEmailForClient } from '@guardian/commercial-core';
 import type { ConsentState } from '@guardian/libs';
+import type { UserIdConfig } from 'prebid.js/dist/modules/userId/spec';
 import { isUserInTestGroup } from '../../../../experiments/beta-ab';
-import type { UserId } from '../types';
 
-type TradeDeskIdParams = {
-	name: 'uid2' | 'euid';
-	params: {
-		emailHash: string;
-		serverPublicKey: string;
-		subscriptionId: string;
-	};
-};
+type TradeDeskUserIdConfig = UserIdConfig<'uid2'> | UserIdConfig<'euid'>;
 
 const getTradeDeskIdParams = async (
 	id: 'uid2' | 'euid',
 	email: string,
-): Promise<TradeDeskIdParams> => {
+): Promise<TradeDeskUserIdConfig> => {
 	const emailHash = await hashEmailForClient(email, id);
 	if (id === 'uid2') {
 		return {
@@ -42,7 +35,7 @@ const getTradeDeskIdParams = async (
 export const getUserIdForTradeDesk = async (
 	email: string | null,
 	consentState: ConsentState,
-): Promise<UserId | undefined> => {
+): Promise<TradeDeskUserIdConfig | undefined> => {
 	const isInTest = !isUserInTestGroup(
 		'commercial-user-module-uid2',
 		'variant',
@@ -57,3 +50,5 @@ export const getUserIdForTradeDesk = async (
 		return params;
 	}
 };
+
+export type { TradeDeskUserIdConfig };

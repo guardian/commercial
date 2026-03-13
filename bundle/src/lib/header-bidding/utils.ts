@@ -1,4 +1,3 @@
-import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import {
 	isInAuOrNz,
 	isInCanada,
@@ -8,12 +7,13 @@ import {
 } from '@guardian/commercial-core/geo/geo-utils';
 import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
 import { once } from 'lodash-es';
+import type { Size } from 'prebid.js/dist/src/types/common';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
 } from '../detect/detect-breakpoint';
 import { pbTestNameMap } from '../url';
-import type { BidderCode, HeaderBiddingSize } from './prebid-types';
+import type { BidderCode } from './prebid-types';
 
 type StringManipulation = (a: string, b: string) => string;
 type RegExpRecords = Record<string, RegExp | undefined>;
@@ -34,10 +34,8 @@ const stripPrefix: StringManipulation = (s, prefix) => {
 	return s.replace(re, '');
 };
 
-const contains = (
-	sizes: HeaderBiddingSize[],
-	size: HeaderBiddingSize,
-): boolean => Boolean(sizes.find((s) => s[0] === size[0] && s[1] === size[1]));
+const contains = (sizes: Size[], size: Size): boolean =>
+	Boolean(sizes.find((s) => s[0] === size[0] && s[1] === size[1]));
 
 const isValidPageForMobileSticky = (): boolean => {
 	const { contentType, pageId } = window.guardian.config.page;
@@ -81,43 +79,35 @@ export const removeFalsyValues = <O extends Record<string, unknown>>(
 export const stripDfpAdPrefixFrom = (s: string): string =>
 	stripPrefix(s, 'dfp-ad--');
 
-export const containsMpu = (sizes: HeaderBiddingSize[]): boolean =>
-	contains(sizes, createAdSize(300, 250));
+export const containsMpu = (sizes: Size[]): boolean =>
+	contains(sizes, [300, 250]);
 
-export const containsDmpu = (sizes: HeaderBiddingSize[]): boolean =>
-	contains(sizes, createAdSize(300, 600));
+export const containsDmpu = (sizes: Size[]): boolean =>
+	contains(sizes, [300, 600]);
 
-export const containsLeaderboard = (sizes: HeaderBiddingSize[]): boolean =>
-	contains(sizes, createAdSize(728, 90));
+export const containsLeaderboard = (sizes: Size[]): boolean =>
+	contains(sizes, [728, 90]);
 
-export const containsBillboard = (sizes: HeaderBiddingSize[]): boolean =>
-	contains(sizes, createAdSize(970, 250));
+export const containsBillboard = (sizes: Size[]): boolean =>
+	contains(sizes, [970, 250]);
 
-export const containsBillboardNotLeaderboard = (
-	sizes: HeaderBiddingSize[],
-): boolean => containsBillboard(sizes) && !containsLeaderboard(sizes);
+export const containsBillboardNotLeaderboard = (sizes: Size[]): boolean =>
+	containsBillboard(sizes) && !containsLeaderboard(sizes);
 
-export const containsMpuOrDmpu = (sizes: HeaderBiddingSize[]): boolean =>
+export const containsMpuOrDmpu = (sizes: Size[]): boolean =>
 	containsMpu(sizes) || containsDmpu(sizes);
 
-export const containsMobileSticky = (sizes: HeaderBiddingSize[]): boolean =>
-	contains(sizes, createAdSize(320, 50));
+export const containsMobileSticky = (sizes: Size[]): boolean =>
+	contains(sizes, [320, 50]);
 
-export const containsLeaderboardOrBillboard = (
-	sizes: HeaderBiddingSize[],
-): boolean => containsLeaderboard(sizes) || containsBillboard(sizes);
+export const containsLeaderboardOrBillboard = (sizes: Size[]): boolean =>
+	containsLeaderboard(sizes) || containsBillboard(sizes);
 
-export const containsPortraitInterstitial = (
-	sizes: HeaderBiddingSize[],
-): boolean => contains(sizes, createAdSize(320, 480));
+export const containsPortraitInterstitial = (sizes: Size[]): boolean =>
+	contains(sizes, [320, 480]);
 
-export const getLargestSize = (
-	sizes: HeaderBiddingSize[],
-): HeaderBiddingSize | null => {
-	const reducer = (
-		previous: HeaderBiddingSize,
-		current: HeaderBiddingSize,
-	) => {
+export const getLargestSize = (sizes: Size[]): Size | null => {
+	const reducer = (previous: Size, current: Size) => {
 		if (previous[0] >= current[0] && previous[1] >= current[1]) {
 			return previous;
 		}
@@ -252,7 +242,7 @@ export const stripMobileSuffix = (s: string): string =>
 export const stripTrailingNumbersAbove1 = (s: string): string =>
 	stripSuffix(s, '([2-9]|\\d{2,})');
 
-export const containsWS = (sizes: HeaderBiddingSize[]): boolean =>
-	contains(sizes, createAdSize(160, 600));
+export const containsWS = (sizes: Size[]): boolean =>
+	contains(sizes, [160, 600]);
 
 export const shouldIncludeOnlyA9 = window.location.hash.includes('#only-a9');

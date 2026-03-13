@@ -1,7 +1,7 @@
 import type { PageTargeting } from '@guardian/commercial-core';
 import { isInAuOrNz, isInRow } from '@guardian/commercial-core/geo/geo-utils';
+import type { Size } from 'prebid.js/dist/src/types/common';
 import { buildAppNexusTargetingObject } from '../../../page-targeting';
-import type { HeaderBiddingSize } from '../../prebid-types';
 import {
 	containsBillboardNotLeaderboard,
 	containsLeaderboard,
@@ -23,7 +23,7 @@ type AppNexusDirectBidParams =
 	  }
 	| { placementId: string; keywords: PageTargeting };
 
-const getAppNexusInvCode = (sizes: HeaderBiddingSize[]): string | undefined => {
+const getAppNexusInvCode = (sizes: Size[]): string | undefined => {
 	const device = getBreakpointKey() === 'M' ? 'M' : 'D';
 	// section is optional and makes it through to the config object as an empty string... OTL
 	const sectionName =
@@ -36,9 +36,7 @@ const getAppNexusInvCode = (sizes: HeaderBiddingSize[]): string | undefined => {
 	}
 };
 
-export const getAppNexusDirectPlacementId = (
-	sizes: HeaderBiddingSize[],
-): string => {
+export const getAppNexusDirectPlacementId = (sizes: Size[]): string => {
 	if (isInAuOrNz()) {
 		return '11016434';
 	}
@@ -81,7 +79,7 @@ export const getAppNexusDirectPlacementId = (
 };
 
 export const getAppNexusDirectBidParams = (
-	sizes: HeaderBiddingSize[],
+	sizes: Size[],
 	pageTargeting: PageTargeting,
 	slotId: string,
 ): AppNexusDirectBidParams => {

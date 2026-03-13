@@ -1,10 +1,10 @@
-import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
 	isInUk as isInUk_,
 	isInUsOrCa as isInUsOrCa_,
 } from '@guardian/commercial-core/geo/geo-utils';
+import type { Size } from 'prebid.js/dist/src/types/common';
 import { getBreakpointKey as getBreakpointKey_ } from '../../utils';
 import { getMagniteSiteId, getMagniteZoneId } from './magnite';
 
@@ -32,27 +32,33 @@ describe('getMagniteZoneId', () => {
 	test.each([
 		{
 			slotId: 'dfp-ad--comments-expanded',
-			sizes: [createAdSize(160, 600)],
+			sizes: [[160, 600]],
 			expectedId: 3426780,
 		},
 		{
 			slotId: 'dfp-ad--inline3',
-			sizes: [createAdSize(300, 250), createAdSize(300, 600)],
+			sizes: [
+				[300, 250],
+				[300, 600],
+			],
 			expectedId: 3426780,
 		},
 		{
 			slotId: 'dfp-ad--top-above-nav',
-			sizes: [createAdSize(728, 90), createAdSize(970, 250)],
+			sizes: [
+				[728, 90],
+				[970, 250],
+			],
 			expectedId: 3426786,
 		},
 		{
 			slotId: 'dfp-ad--fronts-banner-3',
-			sizes: [createAdSize(970, 250)],
+			sizes: [[970, 250]],
 			expectedId: 3426790,
 		},
 		{
 			slotId: 'dfp-ad--top-above-nav',
-			sizes: [createAdSize(940, 230)],
+			sizes: [[940, 230]],
 			expectedId: -1,
 		},
 	])(
@@ -60,19 +66,22 @@ describe('getMagniteZoneId', () => {
 		({ sizes, slotId, expectedId }) => {
 			isInUk.mockReturnValue(true);
 			getBreakpointKey.mockReturnValueOnce('D');
-			expect(getMagniteZoneId(slotId, sizes)).toBe(expectedId);
+			expect(getMagniteZoneId(slotId, sizes as Size[])).toBe(expectedId);
 		},
 	);
 
 	test.each([
 		{
 			slotId: 'dfp-ad--top-above-nav--mobile',
-			sizes: [createAdSize(300, 250), createAdSize(320, 480)],
+			sizes: [
+				[300, 250],
+				[320, 480],
+			],
 			expectedId: 3426778,
 		},
 		{
 			slotId: 'dfp-ad--merchandising-high',
-			sizes: [createAdSize(300, 197)],
+			sizes: [[300, 197]],
 			expectedId: -1,
 		},
 	])(
@@ -80,34 +89,40 @@ describe('getMagniteZoneId', () => {
 		({ sizes, slotId, expectedId }) => {
 			isInUk.mockReturnValue(true);
 			getBreakpointKey.mockReturnValueOnce('M');
-			expect(getMagniteZoneId(slotId, sizes)).toBe(expectedId);
+			expect(getMagniteZoneId(slotId, sizes as Size[])).toBe(expectedId);
 		},
 	);
 
 	test.each([
 		{
 			slotId: 'dfp-ad--comments-expanded',
-			sizes: [createAdSize(160, 600)],
+			sizes: [[160, 600]],
 			expectedId: 3426822,
 		},
 		{
 			slotId: 'dfp-ad--inline3',
-			sizes: [createAdSize(300, 250), createAdSize(300, 600)],
+			sizes: [
+				[300, 250],
+				[300, 600],
+			],
 			expectedId: 3426822,
 		},
 		{
 			slotId: 'dfp-ad--top-above-nav',
-			sizes: [createAdSize(728, 90), createAdSize(970, 250)],
+			sizes: [
+				[728, 90],
+				[970, 250],
+			],
 			expectedId: 3426828,
 		},
 		{
 			slotId: 'dfp-ad--fronts-banner-3',
-			sizes: [createAdSize(970, 250)],
+			sizes: [[970, 250]],
 			expectedId: 3426834,
 		},
 		{
 			slotId: 'dfp-ad--top-above-nav',
-			sizes: [createAdSize(940, 230)],
+			sizes: [[940, 230]],
 			expectedId: -1,
 		},
 	])(
@@ -115,24 +130,27 @@ describe('getMagniteZoneId', () => {
 		({ sizes, slotId, expectedId }) => {
 			isInRow.mockReturnValue(true);
 			getBreakpointKey.mockReturnValueOnce('D');
-			expect(getMagniteZoneId(slotId, sizes)).toBe(expectedId);
+			expect(getMagniteZoneId(slotId, sizes as Size[])).toBe(expectedId);
 		},
 	);
 
 	test.each([
 		{
 			slotId: 'dfp-ad--top-above-nav--mobile',
-			sizes: [createAdSize(300, 250), createAdSize(320, 480)],
+			sizes: [
+				[300, 250],
+				[320, 480],
+			],
 			expectedId: 3426836,
 		},
 		{
 			slotId: 'dfp-ad--mobile-sticky',
-			sizes: [createAdSize(320, 50)],
+			sizes: [[320, 50]],
 			expectedId: 3477560,
 		},
 		{
 			slotId: 'dfp-ad--merchandising-high',
-			sizes: [createAdSize(300, 197)],
+			sizes: [[300, 197]],
 			expectedId: -1,
 		},
 	])(
@@ -140,34 +158,40 @@ describe('getMagniteZoneId', () => {
 		({ sizes, slotId, expectedId }) => {
 			isInRow.mockReturnValue(true);
 			getBreakpointKey.mockReturnValueOnce('M');
-			expect(getMagniteZoneId(slotId, sizes)).toBe(expectedId);
+			expect(getMagniteZoneId(slotId, sizes as Size[])).toBe(expectedId);
 		},
 	);
 
 	test.each([
 		{
 			slotId: 'dfp-ad--comments-expanded',
-			sizes: [createAdSize(160, 600)],
+			sizes: [[160, 600]],
 			expectedId: 3471422,
 		},
 		{
 			slotId: 'dfp-ad--inline3',
-			sizes: [createAdSize(300, 250), createAdSize(300, 600)],
+			sizes: [
+				[300, 250],
+				[300, 600],
+			],
 			expectedId: 3471422,
 		},
 		{
 			slotId: 'dfp-ad--top-above-nav',
-			sizes: [createAdSize(728, 90), createAdSize(970, 250)],
+			sizes: [
+				[728, 90],
+				[970, 250],
+			],
 			expectedId: 3471428,
 		},
 		{
 			slotId: 'dfp-ad--fronts-banner-3',
-			sizes: [createAdSize(970, 250)],
+			sizes: [[970, 250]],
 			expectedId: 3471434,
 		},
 		{
 			slotId: 'dfp-ad--top-above-nav',
-			sizes: [createAdSize(940, 230)],
+			sizes: [[940, 230]],
 			expectedId: -1,
 		},
 	])(
@@ -175,24 +199,27 @@ describe('getMagniteZoneId', () => {
 		({ sizes, slotId, expectedId }) => {
 			isInUsOrCa.mockReturnValue(true);
 			getBreakpointKey.mockReturnValueOnce('D');
-			expect(getMagniteZoneId(slotId, sizes)).toBe(expectedId);
+			expect(getMagniteZoneId(slotId, sizes as Size[])).toBe(expectedId);
 		},
 	);
 
 	test.each([
 		{
 			slotId: 'dfp-ad--top-above-nav--mobile',
-			sizes: [createAdSize(300, 250), createAdSize(320, 480)],
+			sizes: [
+				[300, 250],
+				[320, 480],
+			],
 			expectedId: 3471436,
 		},
 		{
 			slotId: 'dfp-ad--mobile-sticky',
-			sizes: [createAdSize(320, 50)],
+			sizes: [[320, 50]],
 			expectedId: 3471440,
 		},
 		{
 			slotId: 'dfp-ad--merchandising-high',
-			sizes: [createAdSize(300, 197)],
+			sizes: [[300, 197]],
 			expectedId: -1,
 		},
 	])(
@@ -200,34 +227,40 @@ describe('getMagniteZoneId', () => {
 		({ sizes, slotId, expectedId }) => {
 			isInUsOrCa.mockReturnValue(true);
 			getBreakpointKey.mockReturnValueOnce('M');
-			expect(getMagniteZoneId(slotId, sizes)).toBe(expectedId);
+			expect(getMagniteZoneId(slotId, sizes as Size[])).toBe(expectedId);
 		},
 	);
 
 	test.each([
 		{
 			slotId: 'dfp-ad--comments-expanded',
-			sizes: [createAdSize(160, 600)],
+			sizes: [[160, 600]],
 			expectedId: 3471452,
 		},
 		{
 			slotId: 'dfp-ad--inline3',
-			sizes: [createAdSize(300, 250), createAdSize(300, 600)],
+			sizes: [
+				[300, 250],
+				[300, 600],
+			],
 			expectedId: 3471452,
 		},
 		{
 			slotId: 'dfp-ad--top-above-nav',
-			sizes: [createAdSize(728, 90), createAdSize(970, 250)],
+			sizes: [
+				[728, 90],
+				[970, 250],
+			],
 			expectedId: 3471458,
 		},
 		{
 			slotId: 'dfp-ad--fronts-banner-3',
-			sizes: [createAdSize(970, 250)],
+			sizes: [[970, 250]],
 			expectedId: 3471462,
 		},
 		{
 			slotId: 'dfp-ad--top-above-nav',
-			sizes: [createAdSize(940, 230)],
+			sizes: [[940, 230]],
 			expectedId: -1,
 		},
 	])(
@@ -235,24 +268,27 @@ describe('getMagniteZoneId', () => {
 		({ sizes, slotId, expectedId }) => {
 			isInAuOrNz.mockReturnValue(true);
 			getBreakpointKey.mockReturnValueOnce('D');
-			expect(getMagniteZoneId(slotId, sizes)).toBe(expectedId);
+			expect(getMagniteZoneId(slotId, sizes as Size[])).toBe(expectedId);
 		},
 	);
 
 	test.each([
 		{
 			slotId: 'dfp-ad--top-above-nav--mobile',
-			sizes: [createAdSize(300, 250), createAdSize(320, 480)],
+			sizes: [
+				[300, 250],
+				[320, 480],
+			],
 			expectedId: 3471464,
 		},
 		{
 			slotId: 'dfp-ad--mobile-sticky',
-			sizes: [createAdSize(320, 50)],
+			sizes: [[320, 50]],
 			expectedId: 3471468,
 		},
 		{
 			slotId: 'dfp-ad--merchandising-high',
-			sizes: [createAdSize(300, 197)],
+			sizes: [[300, 197]],
 			expectedId: -1,
 		},
 	])(
@@ -260,7 +296,7 @@ describe('getMagniteZoneId', () => {
 		({ sizes, slotId, expectedId }) => {
 			isInAuOrNz.mockReturnValue(true);
 			getBreakpointKey.mockReturnValueOnce('M');
-			expect(getMagniteZoneId(slotId, sizes)).toBe(expectedId);
+			expect(getMagniteZoneId(slotId, sizes as Size[])).toBe(expectedId);
 		},
 	);
 });

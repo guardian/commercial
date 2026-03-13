@@ -1,5 +1,4 @@
 import type { PageTargeting } from '@guardian/commercial-core';
-import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
@@ -8,8 +7,9 @@ import {
 	isInUsOrCa as isInUsOrCa_,
 } from '@guardian/commercial-core/geo/geo-utils';
 import { type ConsentState } from '@guardian/libs';
+import type { Size } from 'prebid.js/dist/src/types/common';
 import { isUserInVariant as isUserInVariant_ } from '../../../../experiments/ab';
-import type { HeaderBiddingSize, PrebidBidder } from '../../prebid-types';
+import type { PrebidBidder } from '../../prebid-types';
 import {
 	containsBillboard as containsBillboard_,
 	containsDmpu as containsDmpu_,
@@ -43,7 +43,7 @@ const mockConsentState = {
 const getBidders = () =>
 	bids(
 		'dfp-ad--top-above-nav',
-		[createAdSize(728, 90)],
+		[[728, 90]],
 		mockPageTargeting,
 		'gpid',
 		mockConsentState,
@@ -167,9 +167,9 @@ describe('indexExchangeBidders', () => {
 		const mockShouldInclude = jest.fn().mockReturnValueOnce(false);
 		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
 
-		const slotSizes: HeaderBiddingSize[] = [
-			createAdSize(300, 250),
-			createAdSize(300, 600),
+		const slotSizes: Size[] = [
+			[300, 250],
+			[300, 600],
 		];
 		const bidders: PrebidBidder[] = indexExchangeBidders(slotSizes);
 		expect(bidders).toEqual([
@@ -190,16 +190,16 @@ describe('indexExchangeBidders', () => {
 		const mockShouldInclude = jest.fn().mockReturnValueOnce(true);
 		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
 
-		const slotSizes: HeaderBiddingSize[] = [
-			createAdSize(300, 250),
-			createAdSize(300, 600),
+		const slotSizes: Size[] = [
+			[300, 250],
+			[300, 600],
 		];
 		const bidders: PrebidBidder[] = indexExchangeBidders(slotSizes);
-		expect(bidders[0]?.bidParams('type', [createAdSize(1, 2)])).toEqual({
+		expect(bidders[0]?.bidParams('type', [[1, 2]])).toEqual({
 			siteId: '123456',
 			size: [300, 250],
 		});
-		expect(bidders[1]?.bidParams('type', [createAdSize(1, 2)])).toEqual({
+		expect(bidders[1]?.bidParams('type', [[1, 2]])).toEqual({
 			siteId: '123456',
 			size: [300, 600],
 		});
@@ -315,7 +315,10 @@ describe('bids', () => {
 		const rightSlotBidders = () =>
 			bids(
 				'dfp-right',
-				[createAdSize(300, 600), createAdSize(300, 250)],
+				[
+					[300, 600],
+					[300, 250],
+				],
 				mockPageTargeting,
 				'gpid',
 				mockConsentState,
@@ -371,7 +374,7 @@ describe('bids', () => {
 
 		const openXBid = bids(
 			'dfp-ad--top-above-nav',
-			[createAdSize(728, 90)],
+			[[728, 90]],
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
@@ -390,7 +393,7 @@ describe('bids', () => {
 
 		const openXBid = bids(
 			'dfp-ad--top-above-nav',
-			[createAdSize(728, 90)],
+			[[728, 90]],
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
@@ -409,7 +412,7 @@ describe('bids', () => {
 
 		const openXBid = bids(
 			'dfp-ad--top-above-nav',
-			[createAdSize(728, 90)],
+			[[728, 90]],
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
@@ -428,7 +431,7 @@ describe('bids', () => {
 
 		const openXBid = bids(
 			'dfp-ad--top-above-nav',
-			[createAdSize(728, 90)],
+			[[728, 90]],
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
@@ -447,7 +450,7 @@ describe('bids', () => {
 
 		const openXBid = bids(
 			'dfp-ad--mobile-sticky',
-			[createAdSize(320, 50)],
+			[[320, 50]],
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
@@ -491,7 +494,7 @@ describe('triplelift adapter', () => {
 
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
-			[createAdSize(728, 90)],
+			[[728, 90]],
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
@@ -512,7 +515,7 @@ describe('triplelift adapter', () => {
 
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
-			[createAdSize(728, 90)],
+			[[728, 90]],
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
@@ -533,7 +536,7 @@ describe('triplelift adapter', () => {
 
 		const tripleLiftBids = bids(
 			'dfp-ad--inline1',
-			[createAdSize(300, 250)],
+			[[300, 250]],
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
@@ -554,7 +557,7 @@ describe('triplelift adapter', () => {
 
 		const tripleLiftBids = bids(
 			'dfp-ad--inline1',
-			[createAdSize(300, 250)],
+			[[300, 250]],
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
@@ -575,7 +578,7 @@ describe('triplelift adapter', () => {
 
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
-			[createAdSize(320, 50)],
+			[[320, 50]],
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
@@ -596,7 +599,7 @@ describe('triplelift adapter', () => {
 
 		const tripleLiftBids = bids(
 			'dfp-ad--top-above-nav',
-			[createAdSize(320, 50)],
+			[[320, 50]],
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
@@ -617,7 +620,7 @@ describe('triplelift adapter', () => {
 
 		const tripleLiftBids = bids(
 			'dfp-ad--merchandising-high',
-			[createAdSize(970, 250)],
+			[[970, 250]],
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
@@ -638,7 +641,7 @@ describe('triplelift adapter', () => {
 
 		const tripleLiftBids = bids(
 			'dfp-ad--merchandising-high',
-			[createAdSize(970, 250)],
+			[[970, 250]],
 			mockPageTargeting,
 			'gpid',
 			mockConsentState,
@@ -670,12 +673,12 @@ describe('getXaxisPlacementId', () => {
 	});
 
 	const generateTestIds = () => {
-		const prebidSizes: HeaderBiddingSize[][] = [
-			[createAdSize(300, 250)],
-			[createAdSize(300, 600)],
-			[createAdSize(970, 250)],
-			[createAdSize(728, 90)],
-			[createAdSize(1, 2)],
+		const prebidSizes: Size[][] = [
+			[[300, 250]],
+			[[300, 600]],
+			[[970, 250]],
+			[[728, 90]],
+			[[1, 2]],
 		];
 		return prebidSizes.map(getXaxisPlacementId);
 	};
@@ -712,86 +715,78 @@ describe('getOzonePlacementId', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsBillboard.mockReturnValue(true);
-		expect(getOzonePlacementId([createAdSize(970, 250)])).toBe(
-			'3500010912',
-		);
+		expect(getOzonePlacementId([[970, 250]])).toBe('3500010912');
 	});
 
 	test('should return correct placementID for mpu in US when it is in desktop', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsMpu.mockReturnValue(true);
-		expect(getOzonePlacementId([createAdSize(300, 250)])).toBe(
-			'3500010911',
-		);
+		expect(getOzonePlacementId([[300, 250]])).toBe('3500010911');
 	});
 
 	test('should return correct placementID for mpu in US when it is in mobile', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
-		expect(getOzonePlacementId([createAdSize(300, 250)])).toBe(
-			'1500001036',
-		);
+		expect(getOzonePlacementId([[300, 250]])).toBe('1500001036');
 	});
 
 	test('should return correct placementID for mobile-sticky in US', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMobileSticky.mockReturnValue(true);
-		expect(getOzonePlacementId([createAdSize(320, 50)])).toBe('3500014217');
+		expect(getOzonePlacementId([[320, 50]])).toBe('3500014217');
 	});
 
 	test('should return correct placementID in US if none of the conditions are met', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
-		expect(getOzonePlacementId([createAdSize(300, 250)])).toBe(
-			'1500001036',
-		);
+		expect(getOzonePlacementId([[300, 250]])).toBe('1500001036');
 	});
 
 	test('should return correct placementID for mobile-sticky in ROW', () => {
 		isInRow.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMobileSticky.mockReturnValue(true);
-		expect(getOzonePlacementId([createAdSize(320, 50)])).toBe('1500000260');
+		expect(getOzonePlacementId([[320, 50]])).toBe('1500000260');
 	});
 
 	test('should return correct placementID for hangtime ads in inline2 in UK', () => {
 		isInUk.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
-		expect(
-			getOzonePlacementId([createAdSize(300, 250)], 'dfp-ad--inline2'),
-		).toBe('1500001025');
+		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline2')).toBe(
+			'1500001025',
+		);
 	});
 
 	test('should return correct placementID for hangtime ads in inline2 in ROW', () => {
 		isInRow.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
-		expect(
-			getOzonePlacementId([createAdSize(300, 250)], 'dfp-ad--inline2'),
-		).toBe('1500001025');
+		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline2')).toBe(
+			'1500001025',
+		);
 	});
 
 	test('should return correct placementID for hangtime ads in inline2 in US or CAN', () => {
 		isInUsOrCa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
-		expect(
-			getOzonePlacementId([createAdSize(300, 250)], 'dfp-ad--inline2'),
-		).toBe('1500001025');
+		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline2')).toBe(
+			'1500001025',
+		);
 	});
 
 	test('should return correct placementID for hangtime ads in inline2 in AUZ or NZ', () => {
 		isInAuOrNz.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
-		expect(
-			getOzonePlacementId([createAdSize(300, 250)], 'dfp-ad--inline2'),
-		).toBe('1500001025');
+		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline2')).toBe(
+			'1500001025',
+		);
 	});
 
 	test('should NOT return hangtime for non-inline2 mobile MPU slots', () => {
@@ -799,26 +794,24 @@ describe('getOzonePlacementId', () => {
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
 		containsMobileSticky.mockReturnValue(false);
-		expect(
-			getOzonePlacementId([createAdSize(300, 250)], 'dfp-ad--inline1'),
-		).toBe('1500001036');
+		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline1')).toBe(
+			'1500001036',
+		);
 	});
 
 	test('should NOT return hangtime for desktop inline2 slots', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsMpu.mockReturnValue(true);
-		expect(
-			getOzonePlacementId([createAdSize(300, 250)], 'dfp-ad--inline2'),
-		).toBe('3500010911'); // ← Should get desktop MPU, not hangtime
+		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline2')).toBe(
+			'3500010911',
+		); // ← Should get desktop MPU, not hangtime
 	});
 
 	test('should return correct placementID if none of the conditions are met', () => {
 		isInUk.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('T');
 		containsMpu.mockReturnValue(true);
-		expect(getOzonePlacementId([createAdSize(300, 250)])).toBe(
-			'0420420500',
-		);
+		expect(getOzonePlacementId([[300, 250]])).toBe('0420420500');
 	});
 });

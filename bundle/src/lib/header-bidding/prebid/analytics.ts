@@ -1,8 +1,5 @@
-import type { AnalyticsConfig } from 'prebid-v10.23.0.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
+import type { AnalyticsConfig } from 'prebid.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
 import { getParticipations } from '../../../experiments/ab';
-
-// TODO: remove once prebid is upgraded to v10
-// import type { AnalyticsConfig } from '../prebid-types';
 
 const shouldEnableAnalytics = (): boolean => {
 	if (!window.guardian.config.switches.prebidAnalytics) {

@@ -3,7 +3,6 @@ import { join } from 'path';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack from 'webpack';
-import prebidBabelOptions from 'prebid.js/.babelrc.js';
 
 const gitCommitSHA = () => {
 	try {
@@ -46,31 +45,31 @@ const config = {
 			),
 			// prebid doesn't export these directories, so we need to alias them,
 			// we use them for our custom modules located in src/lib/header-bidding/prebid/custom-modules
-			'prebid.js/src': join(
-				import.meta.dirname,
-				'node_modules',
-				'prebid.js',
-				'src',
-			),
-			'prebid.js/libraries': join(
-				import.meta.dirname,
-				'node_modules',
-				'prebid.js',
-				'libraries',
-			),
-			'prebid.js/adapters': join(
-				import.meta.dirname,
-				'node_modules',
-				'prebid.js',
-				'src',
-				'adapters',
-			),
+			// 'prebid.js/src': join(
+			// 	import.meta.dirname,
+			// 	'node_modules',
+			// 	'prebid.js',
+			// 	'src',
+			// ),
+			// 'prebid.js/libraries': join(
+			// 	import.meta.dirname,
+			// 	'node_modules',
+			// 	'prebid.js',
+			// 	'libraries',
+			// ),
+			// 'prebid.js/adapters': join(
+			// 	import.meta.dirname,
+			// 	'node_modules',
+			// 	'prebid.js',
+			// 	'src',
+			// 	'adapters',
+			// ),
 
-			// New prebid version aliases
-			'prebid-v10.23.0.js/dist': join(
+			// // New prebid version aliases
+			'prebid.js/dist': join(
 				import.meta.dirname,
 				'node_modules',
-				'prebid-v10.23.0.js',
+				'prebid.js',
 				'dist',
 				'src',
 			),
@@ -97,14 +96,14 @@ const config = {
 					},
 				],
 			},
-			{
-				test: /.js$/,
-				include: /prebid\.js/,
-				use: {
-					loader: 'babel-loader',
-					options: prebidBabelOptions,
-				},
-			},
+			// {
+			// 	test: /.js$/,
+			// 	include: /prebid\.js/,
+			// 	use: {
+			// 		loader: 'babel-loader',
+			// 		options: prebidBabelOptions,
+			// 	},
+			// },
 			{
 				test: /\.svg$/,
 				exclude: /(node_modules)/,

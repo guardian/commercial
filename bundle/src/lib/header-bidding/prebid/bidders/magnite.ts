@@ -4,7 +4,7 @@ import {
 	isInUk,
 	isInUsOrCa,
 } from '@guardian/commercial-core/geo/geo-utils';
-import type { HeaderBiddingSize } from '../../prebid-types';
+import type { Size } from 'prebid.js/dist/src/types/common';
 import {
 	containsBillboard,
 	containsLeaderboardOrBillboard,
@@ -16,10 +16,7 @@ import {
 	getBreakpointKey,
 } from '../../utils';
 
-export const getMagniteZoneId = (
-	slotId: string,
-	sizes: HeaderBiddingSize[],
-): number => {
+export const getMagniteZoneId = (slotId: string, sizes: Size[]): number => {
 	switch (getBreakpointKey()) {
 		case 'D':
 			if (containsMpuOrDmpu(sizes) || containsWS(sizes)) {

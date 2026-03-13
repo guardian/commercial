@@ -1,9 +1,9 @@
 import { hashEmailForClient } from '@guardian/commercial-core';
-import type { UserId } from '../types';
+import type { UserIdConfig } from 'prebid.js/dist/modules/userId/spec';
 
 export const getUserIdForId5 = async (
 	email: string | null,
-): Promise<UserId> => {
+): Promise<UserIdConfig<'id5Id'>> => {
 	const id5UserId = {
 		name: 'id5Id',
 		params: {

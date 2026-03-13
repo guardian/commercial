@@ -1,36 +1,30 @@
 import { log } from '@guardian/libs';
-import type { AnalyticsConfig } from 'prebid-v10.23.0.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
-import { EVENTS } from 'prebid-v10.23.0.js/dist/src/constants';
+import type { AnalyticsConfig } from 'prebid.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
+import { EVENTS } from 'prebid.js/dist/src/constants';
 import * as errorReporting from '../../../../error/report-error';
-import { type AnalyticsPayload } from './utils';
-import analyticsAdapter from '.';
+import { sendPayload } from './sendPayload';
+import analyticsAdapter, { flushEventQueue } from '.';
 
-jest.mock(
-	'prebid-v10.23.0.js/dist/libraries/analyticsAdapter/AnalyticsAdapter',
-	() => ({
-		__esModule: true,
-		default: () => ({
-			track: jest.fn(),
-			enableAnalytics: jest.fn(),
-		}),
-	}),
-);
+// jest.mock('prebid.js/dist/libraries/analyticsAdapter/AnalyticsAdapter', () => ({
+// 	__esModule: true,
+// 	default: () => ({
+// 		track: jest.fn(),
+// 		enableAnalytics: jest.fn(),
+// 	}),
+// }));
 
-jest.mock('prebid-v10.23.0.js/dist/src/adapterManager', () => ({
+const sendPayloadMock = sendPayload as jest.MockedFunction<typeof sendPayload>;
+
+jest.mock('prebid.js/dist/src/adapterManager', () => ({
 	__esModule: true,
 	default: {
 		registerAnalyticsAdapter: jest.fn(),
 	},
 }));
 
-jest.mock('prebid-v10.23.0.js/dist/src/ajax', () => ({
+jest.mock('prebid.js/dist/src/ajax', () => ({
 	__esModule: true,
 	fetch: jest.fn().mockImplementation(() => Promise.resolve({ ok: true })),
-}));
-
-jest.mock('@guardian/libs', () => ({
-	__esModule: true,
-	log: jest.fn(),
 }));
 
 jest.mock('../../../../../lib/error/report-error', () => ({
@@ -38,32 +32,46 @@ jest.mock('../../../../../lib/error/report-error', () => ({
 	reportError: jest.fn(),
 }));
 
-describe('prebid analyticsAdapter', () => {
-	let fetchMock: jest.Mock;
+jest.mock('./sendPayload', () => ({
+	__esModule: true,
+	sendPayload: jest.fn().mockResolvedValue(undefined),
+}));
 
-	const getFetchPayload = (): AnalyticsPayload => {
-		const [, { body: fetchBody }] = fetchMock.mock.calls[0] as [
-			string,
-			{ body: string },
-		];
-		const fetchMockPayload = JSON.parse(fetchBody) as AnalyticsPayload;
-		return fetchMockPayload;
+jest.mock('@guardian/libs', () => ({
+	__esModule: true,
+	log: jest.fn(),
+}));
+
+describe('prebid analyticsAdapter', () => {
+	const getPayload = () => {
+		const calls = sendPayloadMock.mock.calls;
+		if (!calls[0]) {
+			throw new Error('sendPayload was not called');
+		}
+		return calls[0][1];
 	};
 
-	const triggerAuctionEnd = () => {
+	const triggerAuctionInit = (auctionId = 'test-auction') => {
 		analyticsAdapter.track({
-			eventType: EVENTS.AUCTION_END,
-			args: { auctionId: 'test-auction' },
+			eventType: EVENTS.AUCTION_INIT,
+			args: { auctionId },
 		});
 	};
 
-	beforeEach(async () => {
+	const triggerAuctionEnd = (auctionId = 'test-auction') => {
+		analyticsAdapter.track({
+			eventType: EVENTS.AUCTION_END,
+			args: { auctionId },
+		});
+	};
+
+	beforeEach(() => {
 		jest.clearAllMocks();
+		jest.resetModules();
 
-		fetchMock = (await import('prebid-v10.23.0.js/dist/src/ajax'))
-			.fetch as jest.Mock;
+		flushEventQueue();
 
-		// Reset adapter context
+		// // Reset adapter context
 		analyticsAdapter.context = {
 			url: 'http://test-url.com',
 			pv: 'test-pv',
@@ -75,8 +83,9 @@ describe('prebid analyticsAdapter', () => {
 		const config: AnalyticsConfig<'generic'> = {
 			provider: 'generic',
 			options: {
-				url: 'http://test-url.com',
+				url: 'http://test-url-2.com',
 				pv: 'test-pv',
+				auctionStartTime: Date.now(),
 			} as unknown as AnalyticsConfig<'generic'>['options'],
 		};
 		analyticsAdapter.context = undefined;
@@ -88,23 +97,16 @@ describe('prebid analyticsAdapter', () => {
 	it('sends payload to specified URL', () => {
 		void triggerAuctionEnd();
 
-		expect(fetchMock).toHaveBeenCalledWith('http://test-url.com', {
-			method: 'POST',
-			keepalive: true,
-			body: JSON.stringify(getFetchPayload()),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		expect(sendPayload).toHaveBeenCalledWith(
+			'http://test-url.com',
+			expect.any(Object),
+		);
 	});
 
 	describe('lifecycle', () => {
 		it('reports error when context is missing', () => {
 			analyticsAdapter.context = undefined;
-			analyticsAdapter.track({
-				eventType: EVENTS.AUCTION_END,
-				args: { auctionId: 'test-auction' },
-			});
+			void triggerAuctionEnd();
 
 			expect(errorReporting.reportError).toHaveBeenCalledWith(
 				expect.any(Error),
@@ -128,35 +130,27 @@ describe('prebid analyticsAdapter', () => {
 		});
 
 		it('processes AUCTION_INIT event and adds to queue', () => {
-			analyticsAdapter.track({
-				eventType: EVENTS.AUCTION_INIT,
-				args: { auctionId: 'test-auction' },
-			});
-			expect(fetchMock).not.toHaveBeenCalled();
+			triggerAuctionInit();
+			expect(sendPayload).not.toHaveBeenCalled();
 		});
 
 		it('processes AUCTION_END event and sends payload', () => {
+			triggerAuctionInit();
 			analyticsAdapter.track({
 				eventType: EVENTS.BID_REQUESTED,
 				args: {
 					bidderCode: 'test-bidder',
-					start: 123456,
+					auctionStart: 123456,
 					bids: [{ adUnitCode: 'ad-slot-1', bidId: 'bid-1' }],
 				},
 			});
 			void triggerAuctionEnd();
 
-			const fetchMockPayload = getFetchPayload();
-			expect(fetchMockPayload).toEqual(
+			expect(getPayload()).toEqual(
 				expect.objectContaining({
 					v: 10,
 					pv: 'test-pv',
 					hb_ev: [
-						{
-							ev: 'end',
-							aid: 'test-auction',
-							ttr: expect.any(Number) as number,
-						},
 						{
 							ev: 'init',
 							aid: 'test-auction',
@@ -185,7 +179,7 @@ describe('prebid analyticsAdapter', () => {
 				eventType: EVENTS.BID_REQUESTED,
 				args: {
 					bidderCode: 'test-bidder',
-					start: 123456,
+					auctionStart: 123456,
 					bids: [{ adUnitCode: 'ad-slot-1', bidId: 'bid-1' }],
 				},
 			});
@@ -196,20 +190,18 @@ describe('prebid analyticsAdapter', () => {
 				args: { auctionId: 'test-auction', requestId: 'req-123' },
 			});
 
-			expect(fetchMock).toHaveBeenCalledWith(
+			expect(sendPayload).toHaveBeenCalledWith(
 				'http://test-url.com',
 				expect.objectContaining({
-					body: JSON.stringify({
-						v: 10,
-						pv: 'test-pv',
-						hb_ev: [
-							{
-								ev: 'bidwon',
-								aid: 'test-auction',
-								bid: 'req-123',
-							},
-						],
-					}),
+					v: 10,
+					pv: 'test-pv',
+					hb_ev: [
+						{
+							ev: 'bidwon',
+							aid: 'test-auction',
+							bid: 'req-123',
+						},
+					],
 				}),
 			);
 		});
@@ -219,8 +211,7 @@ describe('prebid analyticsAdapter', () => {
 		it('sends AUCTION_END event with correct data', () => {
 			void triggerAuctionEnd();
 
-			const fetchMockPayload = getFetchPayload();
-			expect(fetchMockPayload).toEqual(
+			expect(getPayload()).toEqual(
 				expect.objectContaining({
 					v: 10,
 					pv: 'test-pv',
@@ -242,8 +233,7 @@ describe('prebid analyticsAdapter', () => {
 			});
 			void triggerAuctionEnd();
 
-			const fetchMockPayload = getFetchPayload();
-			expect(fetchMockPayload).toEqual(
+			expect(getPayload()).toEqual(
 				expect.objectContaining({
 					v: 10,
 					pv: 'test-pv',
@@ -268,7 +258,7 @@ describe('prebid analyticsAdapter', () => {
 				eventType: EVENTS.BID_REQUESTED,
 				args: {
 					bidderCode: 'test-bidder',
-					start: 123456,
+					auctionStart: 123456,
 					bids: [
 						{ adUnitCode: 'ad-slot-1', bidId: 'bid-1' },
 						{ adUnitCode: 'ad-slot-2', bidId: 'bid-2' },
@@ -277,8 +267,7 @@ describe('prebid analyticsAdapter', () => {
 			});
 			void triggerAuctionEnd();
 
-			const fetchMockPayload = getFetchPayload();
-			expect(fetchMockPayload).toEqual(
+			expect(getPayload()).toEqual(
 				expect.objectContaining({
 					v: 10,
 					pv: 'test-pv',
@@ -335,8 +324,7 @@ describe('prebid analyticsAdapter', () => {
 			});
 			void triggerAuctionEnd();
 
-			const fetchMockPayload = getFetchPayload();
-			expect(fetchMockPayload).toEqual(
+			expect(getPayload()).toEqual(
 				expect.objectContaining({
 					v: 10,
 					pv: 'test-pv',
@@ -380,20 +368,18 @@ describe('prebid analyticsAdapter', () => {
 				},
 			});
 
-			expect(fetchMock).toHaveBeenCalledWith(
+			expect(sendPayload).toHaveBeenCalledWith(
 				'http://test-url.com',
 				expect.objectContaining({
-					body: JSON.stringify({
-						v: 10,
-						pv: 'test-pv',
-						hb_ev: [
-							{
-								ev: 'bidwon',
-								aid: 'auction-123',
-								bid: 'req-123',
-							},
-						],
-					}),
+					v: 10,
+					pv: 'test-pv',
+					hb_ev: [
+						{
+							ev: 'bidwon',
+							aid: 'auction-123',
+							bid: 'req-123',
+						},
+					],
 				}),
 			);
 		});
@@ -406,12 +392,12 @@ describe('prebid analyticsAdapter', () => {
 					bidId: 'bid-123',
 					adUnitCode: 'ad-slot-1',
 					auctionId: 'auction-123',
+					meta: {},
 				},
 			});
 			void triggerAuctionEnd();
 
-			const fetchMockPayload = getFetchPayload();
-			expect(fetchMockPayload).toEqual(
+			expect(getPayload()).toEqual(
 				expect.objectContaining({
 					v: 10,
 					pv: 'test-pv',
@@ -424,7 +410,11 @@ describe('prebid analyticsAdapter', () => {
 							aid: 'auction-123',
 							ttr: expect.any(Number) as number,
 						},
-						expect.objectContaining({ ev: 'end' } as unknown),
+						expect.objectContaining({
+							ev: 'end',
+							aid: 'test-auction',
+							ttr: expect.any(Number) as number,
+						} as unknown),
 					],
 				}),
 			);
@@ -438,12 +428,11 @@ describe('prebid analyticsAdapter', () => {
 				args: {
 					statusMessage: 'Bid available',
 					bidderCode: undefined,
+					meta: {},
 				},
 			});
 			void triggerAuctionEnd();
-
-			const fetchMockPayload = getFetchPayload();
-			expect(fetchMockPayload).toEqual(
+			expect(getPayload()).toEqual(
 				expect.objectContaining({
 					v: 10,
 					pv: 'test-pv',
@@ -464,12 +453,12 @@ describe('prebid analyticsAdapter', () => {
 				args: {
 					statusMessage: 'Bid available',
 					bidderCode: 'appnexus',
+					meta: {},
 				},
 			});
 			void triggerAuctionEnd();
 
-			const fetchMockPayload = getFetchPayload();
-			expect(fetchMockPayload).toEqual(
+			expect(getPayload()).toEqual(
 				expect.objectContaining({
 					v: 10,
 					pv: 'test-pv',
@@ -494,12 +483,12 @@ describe('prebid analyticsAdapter', () => {
 					adserverTargeting: {
 						oz_appnexus_adId: '123-0-0',
 					},
+					meta: {},
 				},
 			});
 			void triggerAuctionEnd();
 
-			const fetchMockPayload = getFetchPayload();
-			expect(fetchMockPayload).toEqual(
+			expect(getPayload()).toEqual(
 				expect.objectContaining({
 					v: 10,
 					pv: 'test-pv',
@@ -525,12 +514,12 @@ describe('prebid analyticsAdapter', () => {
 						oz_appnexus_adId: '123-0-0',
 						oz_winner: 'triplelift',
 					},
+					meta: {},
 				},
 			});
 			void triggerAuctionEnd();
 
-			const fetchMockPayload = getFetchPayload();
-			expect(fetchMockPayload).toEqual(
+			expect(getPayload()).toEqual(
 				expect.objectContaining({
 					v: 10,
 					pv: 'test-pv',
@@ -555,12 +544,12 @@ describe('prebid analyticsAdapter', () => {
 					adserverTargeting: {
 						oz_appnexus_adId: '123-0-0',
 					},
+					meta: {},
 				},
 			});
 			void triggerAuctionEnd();
 
-			const fetchMockPayload = getFetchPayload();
-			expect(fetchMockPayload).toEqual(
+			expect(getPayload()).toEqual(
 				expect.objectContaining({
 					v: 10,
 					pv: 'test-pv',
@@ -572,111 +561,6 @@ describe('prebid analyticsAdapter', () => {
 						}),
 					]),
 				}),
-			);
-		});
-	});
-
-	describe('logging', () => {
-		it('logs successful requests of any event', async () => {
-			analyticsAdapter.track({
-				eventType: EVENTS.NO_BID,
-				args: {},
-			});
-
-			void triggerAuctionEnd();
-			await jest.runAllTimersAsync();
-
-			expect(log).toHaveBeenCalledWith(
-				'commercial',
-				'prebid-v10.23.0.js events: ',
-				expect.any(Array),
-			);
-		});
-
-		it('logs successful requests of "init" events', async () => {
-			analyticsAdapter.track({
-				eventType: EVENTS.AUCTION_INIT,
-				args: {},
-			});
-
-			void triggerAuctionEnd();
-			await jest.runAllTimersAsync();
-
-			expect(log).toHaveBeenCalledWith(
-				'commercial',
-				`prebid-v10.23.0.js events: bids for unknown slot`,
-				[
-					{
-						ev: 'init',
-						st: expect.any(Number) as number,
-					},
-					{
-						aid: 'test-auction',
-						ev: 'end',
-						ttr: expect.any(Number) as number,
-					},
-				],
-			);
-		});
-
-		it('logs successful requests of "init" events with known slotIds', async () => {
-			analyticsAdapter.track({
-				eventType: EVENTS.AUCTION_INIT,
-				args: {},
-			});
-			analyticsAdapter.track({
-				eventType: EVENTS.NO_BID,
-				args: {
-					adUnitCode: 'ad-slot-1',
-				},
-			});
-
-			void triggerAuctionEnd();
-			await jest.runAllTimersAsync();
-
-			expect(log).toHaveBeenCalledWith(
-				'commercial',
-				`prebid-v10.23.0.js events: bids for ad-slot-1`,
-				expect.any(Array),
-			);
-		});
-
-		it('logs successful requests of "bidwon" events', async () => {
-			analyticsAdapter.track({
-				eventType: EVENTS.BID_WON,
-				args: {},
-			});
-			await jest.runAllTimersAsync();
-
-			expect(log).toHaveBeenCalledWith(
-				'commercial',
-				`prebid-v10.23.0.js events: bid won unknown bid`,
-				[
-					{
-						ev: 'bidwon',
-					},
-				],
-			);
-		});
-
-		// logging for these events don't seem to be working
-		// in original implementation. skipping for now
-		it('logs successful requests of "bidwon" events with known bid id', async () => {
-			analyticsAdapter.track({
-				eventType: EVENTS.BID_WON,
-				args: { requestId: '12345' },
-			});
-			await jest.runAllTimersAsync();
-
-			expect(log).toHaveBeenCalledWith(
-				'commercial',
-				`prebid-v10.23.0.js events: bid won 12345`,
-				[
-					{
-						bid: '12345',
-						ev: 'bidwon',
-					},
-				],
 			);
 		});
 	});

@@ -2,7 +2,6 @@ import { isInCanada } from '@guardian/commercial-core/geo/geo-utils';
 import type { ConsentState } from '@guardian/libs';
 import { log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { isUserInTestGroup } from '../../experiments/beta-ab';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { prebid } from '../../lib/header-bidding/prebid';
@@ -23,22 +22,10 @@ const loadPrebid = async (consentState: ConsentState): Promise<void> => {
 		return;
 	}
 
-	const isPrebidV10Enabled = isUserInTestGroup(
-		'commercial-prebid-v10',
-		'variant',
+	await import(
+		/* webpackChunkName: "Prebid.js" */
+		'../../lib/header-bidding/prebid/modules'
 	);
-
-	if (isPrebidV10Enabled) {
-		await import(
-			/* webpackChunkName: "Prebid@10.23.0.js" */
-			'../../lib/header-bidding/prebid/modules-v10.23.0'
-		);
-	} else {
-		await import(
-			/* webpackChunkName: "Prebid.js" */
-			'../../lib/header-bidding/prebid/modules'
-		);
-	}
 
 	await prebid.initialise(window, consentState);
 };

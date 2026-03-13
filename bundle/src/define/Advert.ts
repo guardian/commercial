@@ -12,14 +12,12 @@ import type {
 import type { Breakpoint } from '@guardian/commercial-core/breakpoint';
 import { log } from '@guardian/libs';
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
+import type { Size } from 'prebid.js/dist/src/types/common';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import { a9 } from '../lib/header-bidding/a9/a9';
 import { prebid } from '../lib/header-bidding/prebid';
-import type {
-	HeaderBiddingSize,
-	HeaderBiddingSlot,
-} from '../lib/header-bidding/prebid-types';
+import type { HeaderBiddingSlot } from '../lib/header-bidding/prebid-types';
 import { stripDfpAdPrefixFrom } from '../lib/header-bidding/utils';
 import { adQueue } from '../lib/timed-queue';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';
@@ -175,7 +173,7 @@ class Advert extends EventTarget {
 	name: string;
 	node: HTMLElement;
 	sizes: SizeMapping;
-	headerBiddingSizes: HeaderBiddingSize[] | null = null;
+	headerBiddingSizes: Size[] | null = null;
 	size: AdSize | 'fluid' | null = null;
 	slot: googletag.Slot;
 	gpid: string | undefined;
