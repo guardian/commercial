@@ -6,9 +6,7 @@
 			// don't have type definitions, but the dist files do. Ensure these paths
 			// are in sync with the paths in the webpack config aliases or they'll pass
 			// in type checking but fail the build
-			"prebid.js/dist/*": [
-				"./node_modules/prebid.js/dist/src/*"
-			]
+			"prebid.js/dist/*": ["./node_modules/prebid.js/dist/src/*"]
 		}
 	},
 	"extends": "../tsconfig.json",
