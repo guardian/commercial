@@ -31,10 +31,6 @@ module.exports = {
 	},
 	transformIgnorePatterns: [`/node_modules/\\.pnpm/(?!${esModules})`],
 	transform: {
-		// 'node_modules/.pnpm/prebid(.*)?\\.js$': [
-		// 	'babel-jest',
-		// 	prebidBabelOptions,
-		// ],
 		'^.+\\.mjs$': 'babel-jest',
 		'^.+\\.(ts|tsx)$': 'ts-jest',
 	},

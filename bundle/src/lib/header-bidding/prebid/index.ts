@@ -160,7 +160,6 @@ const requestBids = async (
 		return requestQueue;
 	}
 
-	// TODO: use AdUnitDefinition type once prebid is upgraded to v10
 	const adUnits: AdUnitDefinition[] = await onConsent()
 		.then(async (consentState: ConsentState) => {
 			// calculate this once before mapping over
@@ -200,11 +199,9 @@ const requestBids = async (
 					}
 				});
 
-				// TODO: remove types once prebid is upgraded to v10
-				const typedAdUnits = adUnits;
 				window.pbjs.que.push(() => {
 					void window.pbjs.requestBids({
-						adUnits: typedAdUnits,
+						adUnits,
 						bidsBackHandler: () =>
 							void bidsBackHandler(adUnits, eventTimer).then(
 								resolve,
