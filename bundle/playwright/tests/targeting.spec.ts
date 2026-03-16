@@ -175,7 +175,11 @@ test.describe('Prebid targeting', () => {
 			if (!isCriteoBid) return false;
 			return true;
 		});
-		await loadPage({ page, path: article.path });
+		await loadPage({
+			page,
+			path: `${article.path}`,
+			queryParams: { pbjs_debug: 'true' },
+		});
 		await cmpAcceptAll(page);
 		const gamCriteoRequest = await gamCriteoRequestPromise;
 		assertGamCriteoRequest(gamCriteoRequest);
