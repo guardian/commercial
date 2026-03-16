@@ -178,6 +178,7 @@ test.describe('Prebid targeting', () => {
 		await loadPage({
 			page,
 			path: `${article.path}`,
+			// Ensure we're using debug mode so that gzip compression doesn't interfere with our ability to read the post body of the request in the test
 			queryParams: { pbjs_debug: 'true' },
 		});
 		await cmpAcceptAll(page);
