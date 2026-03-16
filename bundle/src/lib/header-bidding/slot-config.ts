@@ -107,7 +107,10 @@ const filterByAdvert = (
 /**
  * convert AdSize objects to Size type
  */
-const getAdSize = (name: keyof typeof adSizes) => adSizes[name] as Size;
+const getAdSize = (name: keyof typeof adSizes): Size => [
+	adSizes[name][0],
+	adSizes[name][1],
+];
 
 const getSlots = (): HeaderBiddingSizeMapping => {
 	const { contentType, hasShowcaseMainElement } = window.guardian.config.page;
