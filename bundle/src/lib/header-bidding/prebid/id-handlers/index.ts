@@ -27,17 +27,23 @@ export const getUserSyncSettings = async (
 	// window.pbjs.mergeConfig({
 	// 	userIds ....
 	// });
-	const [id5UserId, liverampUserId, tradeDeskUserId] = await Promise.all([
+	const userIdModules = await Promise.all([
 		fetchId5UserId,
 		fetchLiveRampUserId,
 		fetchTradeDeskUserId,
 	]);
 
-	const userIds = [
-		...(id5UserId ? [id5UserId] : []),
-		...(Array.isArray(liverampUserId) ? liverampUserId : []), // liveramp returns an array of IDs
-		...(tradeDeskUserId ? [tradeDeskUserId] : []),
-	];
+	const userIds = userIdModules
+		// typescript doesn't like flatMap here
+		.map((idModule) => {
+			if (Array.isArray(idModule)) {
+				return idModule;
+			} else if (idModule) {
+				return [idModule];
+			}
+			return [];
+		})
+		.flat();
 
 	const userSync: UserSyncConfig = isSwitchedOn('prebidUserSync')
 		? {
