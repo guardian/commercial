@@ -1,6 +1,6 @@
-import type { UserId } from '../types';
+import type { UserIdConfig } from 'prebid.js/dist/modules/userId/spec';
 
-export const sharedId: UserId = {
+export const sharedId: UserIdConfig<'sharedId'> = {
 	name: 'sharedId',
 	storage: {
 		type: 'cookie',

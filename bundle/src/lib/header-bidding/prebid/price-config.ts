@@ -1,11 +1,9 @@
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { log } from '@guardian/libs';
-import {
-	getPriceBucketString,
-	type PrebidPriceGranularity,
-} from 'prebid.js/src/cpmBucketManager';
+import type { PriceBucketConfig } from 'prebid.js/dist/src/auction';
+import { getPriceBucketString } from 'prebid.js/dist/src/cpmBucketManager';
 
-export const priceGranularity: PrebidPriceGranularity = {
+export const priceGranularity: PriceBucketConfig = {
 	buckets: [
 		{
 			max: 10,
@@ -22,7 +20,7 @@ export const priceGranularity: PrebidPriceGranularity = {
 	],
 };
 
-export const criteoPriceGranularity: PrebidPriceGranularity = {
+export const criteoPriceGranularity: PriceBucketConfig = {
 	buckets: [
 		{
 			max: 12,
@@ -42,7 +40,7 @@ export const criteoPriceGranularity: PrebidPriceGranularity = {
 export const ozonePriceGranularity = (
 	width: number,
 	height: number,
-): PrebidPriceGranularity | undefined => {
+): PriceBucketConfig | undefined => {
 	const sizeString = [width, height].join(',');
 
 	if (
@@ -98,7 +96,7 @@ export const ozonePriceGranularity = (
 export const indexPriceGranularity = (
 	width: number,
 	height: number,
-): PrebidPriceGranularity | undefined => {
+): PriceBucketConfig | undefined => {
 	const sizeString = [width, height].join(',');
 
 	if (
@@ -153,7 +151,7 @@ export const getPriceGranularityForSize = (
 	bidder: 'ozone' | 'ix',
 	width: number,
 	height: number,
-): PrebidPriceGranularity | undefined => {
+): PriceBucketConfig | undefined => {
 	if (bidder === 'ozone') {
 		return ozonePriceGranularity(width, height);
 	}
@@ -166,7 +164,7 @@ export const overridePriceBucket = (
 	height: number,
 	cpm: number,
 	defaultPriceBucket: string,
-): string | undefined => {
+): string => {
 	const priceGranularity =
 		bidder === 'criteo'
 			? criteoPriceGranularity

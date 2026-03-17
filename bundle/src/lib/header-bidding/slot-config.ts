@@ -1,6 +1,7 @@
 import type { AdSize } from '@guardian/commercial-core/ad-sizes';
-import { adSizes, createAdSize } from '@guardian/commercial-core/ad-sizes';
+import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { isInUk } from '@guardian/commercial-core/geo/geo-utils';
+import type { Size } from 'prebid.js/dist/src/types/common';
 import type { Advert } from '../../define/Advert';
 import type {
 	HeaderBiddingSizeKey,
@@ -103,6 +104,14 @@ const filterByAdvert = (
 	];
 };
 
+/**
+ * convert AdSize objects to Size type
+ */
+const getAdSize = (name: keyof typeof adSizes): Size => [
+	adSizes[name][0],
+	adSizes[name][1],
+];
+
 const getSlots = (): HeaderBiddingSizeMapping => {
 	const { contentType, hasShowcaseMainElement } = window.guardian.config.page;
 	const isArticle = contentType === 'Article';
@@ -112,112 +121,132 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 	return {
 		right: {
 			desktop: hasShowcaseMainElement
-				? [adSizes.mpu]
-				: [adSizes.halfPage, adSizes.mpu],
+				? [getAdSize('mpu')]
+				: [getAdSize('halfPage'), getAdSize('mpu')],
 			tablet: hasShowcaseMainElement
-				? [adSizes.mpu]
-				: [adSizes.halfPage, adSizes.mpu],
+				? [getAdSize('mpu')]
+				: [getAdSize('halfPage'), getAdSize('mpu')],
 			mobile: hasShowcaseMainElement
-				? [adSizes.mpu]
-				: [adSizes.halfPage, adSizes.mpu],
+				? [getAdSize('mpu')]
+				: [getAdSize('halfPage'), getAdSize('mpu')],
 		},
 		'top-above-nav': {
-			desktop: [adSizes.billboard, adSizes.leaderboard],
-			tablet: [adSizes.leaderboard],
-			mobile: [adSizes.mpu],
+			desktop: [getAdSize('billboard'), getAdSize('leaderboard')],
+			tablet: [getAdSize('leaderboard')],
+			mobile: [getAdSize('mpu')],
 		},
 		'fronts-banner': {
-			desktop: [adSizes.billboard],
+			desktop: [getAdSize('billboard')],
 		},
 		inline: {
 			desktop: isArticle
-				? [adSizes.skyscraper, adSizes.halfPage, adSizes.mpu]
-				: [adSizes.mpu],
-			tablet: [adSizes.mpu],
-			mobile: [adSizes.mpu],
+				? [
+						getAdSize('skyscraper'),
+						getAdSize('halfPage'),
+						getAdSize('mpu'),
+					]
+				: [getAdSize('mpu')],
+			tablet: [getAdSize('mpu')],
+			mobile: [getAdSize('mpu')],
 		},
 		inline1: {
 			desktop: isArticle
-				? [adSizes.mpu, adSizes.outstreamDesktop]
-				: [adSizes.mpu],
+				? [getAdSize('mpu'), getAdSize('outstreamDesktop')]
+				: [getAdSize('mpu')],
 			tablet: isArticle
-				? [adSizes.mpu, adSizes.outstreamDesktop]
-				: [adSizes.mpu],
+				? [getAdSize('mpu'), getAdSize('outstreamDesktop')]
+				: [getAdSize('mpu')],
 			mobile: isArticle
 				? [
-						adSizes.outstreamMobile,
-						adSizes.mpu,
-						adSizes.portraitInterstitial,
+						getAdSize('outstreamMobile'),
+						getAdSize('mpu'),
+						getAdSize('portraitInterstitial'),
 					]
-				: [adSizes.mpu],
+				: [getAdSize('mpu')],
 		},
 		inline2: {
 			desktop: isArticle
-				? [adSizes.skyscraper, adSizes.halfPage, adSizes.mpu]
-				: [adSizes.mpu],
-			tablet: [adSizes.mpu],
+				? [
+						getAdSize('skyscraper'),
+						getAdSize('halfPage'),
+						getAdSize('mpu'),
+					]
+				: [getAdSize('mpu')],
+			tablet: [getAdSize('mpu')],
 			mobile: isArticle
 				? [
-						adSizes.mpu,
-						adSizes.portraitInterstitial,
-						adSizes.pubmaticInterscroller,
+						getAdSize('mpu'),
+						getAdSize('portraitInterstitial'),
+						getAdSize('pubmaticInterscroller'),
 					]
-				: [adSizes.mpu],
+				: [getAdSize('mpu')],
 		},
 		mostpop: {
 			desktop: hasExtendedMostPop
-				? [adSizes.halfPage, adSizes.mpu]
-				: [adSizes.mpu],
+				? [getAdSize('halfPage'), getAdSize('mpu')]
+				: [getAdSize('mpu')],
 			tablet: hasExtendedMostPop
-				? [adSizes.halfPage, adSizes.mpu, adSizes.leaderboard]
-				: [adSizes.mpu],
-			mobile: [adSizes.mpu],
+				? [
+						getAdSize('halfPage'),
+						getAdSize('mpu'),
+						getAdSize('leaderboard'),
+					]
+				: [getAdSize('mpu')],
+			mobile: [getAdSize('mpu')],
 		},
 		comments: {
-			desktop: [adSizes.skyscraper, adSizes.mpu, adSizes.halfPage],
+			desktop: [
+				getAdSize('skyscraper'),
+				getAdSize('mpu'),
+				getAdSize('halfPage'),
+			],
 		},
 		'comments-expanded': {
-			desktop: [adSizes.skyscraper, adSizes.mpu, adSizes.halfPage],
+			desktop: [
+				getAdSize('skyscraper'),
+				getAdSize('mpu'),
+				getAdSize('halfPage'),
+			],
 		},
 		banner: {
 			// Banner slots appear on interactives, like on
 			// https://www.theguardian.com/us-news/ng-interactive/2018/nov/06/midterm-elections-2018-live-results-latest-winners-and-seats
 			desktop: [
-				createAdSize(88, 70),
-				adSizes.leaderboard,
-				adSizes.cascade,
-				createAdSize(900, 250),
-				adSizes.billboard,
+				[88, 70],
+				getAdSize('leaderboard'),
+				getAdSize('cascade'),
+				[900, 250],
+				getAdSize('billboard'),
 			],
 		},
 		'mobile-sticky': {
 			mobile: shouldIncludeMobileSticky()
-				? [adSizes.mobilesticky, createAdSize(300, 50)]
+				? [getAdSize('mobilesticky'), [300, 50]]
 				: [],
 		},
 		'crossword-banner-mobile': {
-			mobile: [adSizes.mobilesticky],
+			mobile: [getAdSize('mobilesticky')],
 		},
 		'football-right': {
 			desktop: [
-				adSizes.empty,
-				adSizes.mpu,
-				adSizes.skyscraper,
-				adSizes.halfPage,
+				getAdSize('empty'),
+				getAdSize('mpu'),
+				getAdSize('skyscraper'),
+				getAdSize('halfPage'),
 			],
 		},
 		merchandising: {
-			mobile: [adSizes.mpu],
-			desktop: [adSizes.billboard],
+			mobile: [getAdSize('mpu')],
+			desktop: [getAdSize('billboard')],
 		},
 		'merchandising-high': {
-			mobile: [adSizes.mpu],
-			desktop: [adSizes.billboard],
+			mobile: [getAdSize('mpu')],
+			desktop: [getAdSize('billboard')],
 		},
 		'article-end': {
-			mobile: isInUk() ? [adSizes.mpu] : [],
-			tablet: isInUk() ? [adSizes.mpu] : [],
-			desktop: isInUk() ? [adSizes.mpu] : [],
+			mobile: isInUk() ? [getAdSize('mpu')] : [],
+			tablet: isInUk() ? [getAdSize('mpu')] : [],
+			desktop: isInUk() ? [getAdSize('mpu')] : [],
 		},
 	};
 };

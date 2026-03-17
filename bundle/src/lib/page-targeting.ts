@@ -1,11 +1,13 @@
-import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
+import type {
+	PageTargeting,
+	UserId,
+} from '@guardian/commercial-core/targeting/build-page-targeting';
 import { buildPageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
 import type { ConsentState } from '@guardian/libs';
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { getParticipations } from '../experiments/ab';
 import { commercialFeatures } from './commercial-features';
-import type { UserId } from './header-bidding/prebid/types';
 import { removeFalsyValues } from './header-bidding/utils';
 
 const formatAppNexusTargeting = (obj: Record<string, string | string[]>) => {

@@ -1,4 +1,4 @@
-import { fetch } from 'prebid-v10.23.0.js/dist/src/ajax';
+import { fetch } from 'prebid.js/dist/src/ajax';
 import { reportError } from '../../../../error/report-error';
 import { type AnalyticsPayload, logEvents } from './utils';
 

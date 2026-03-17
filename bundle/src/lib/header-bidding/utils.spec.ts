@@ -1,4 +1,3 @@
-import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import { getCountryCode as getCountryCode_ } from '@guardian/commercial-core/geo/country-code';
 import { _ } from '@guardian/commercial-core/geo/geo-utils';
 import {
@@ -121,17 +120,18 @@ describe('Utils', () => {
 
 	describe('getLargestSize', () => {
 		test('getLargestSize should return only one and the largest size', () => {
-			expect(getLargestSize([createAdSize(300, 250)])).toEqual([
-				300, 250,
-			]);
+			expect(getLargestSize([[300, 250]])).toEqual([300, 250]);
 			expect(
 				getLargestSize([
-					createAdSize(300, 250),
-					createAdSize(300, 600),
+					[300, 250],
+					[300, 600],
 				]),
 			).toEqual([300, 600]);
 			expect(
-				getLargestSize([createAdSize(970, 250), createAdSize(728, 80)]),
+				getLargestSize([
+					[970, 250],
+					[728, 80],
+				]),
 			).toEqual([970, 250]);
 		});
 

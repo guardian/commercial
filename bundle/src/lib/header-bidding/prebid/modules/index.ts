@@ -34,6 +34,6 @@ import './appnexusBidAdapter';
 import './openxBidAdapter';
 import './analyticsAdapter';
 
-pbjs.processQueue();
+void pbjs.processQueue();
 
 export { pbjs };

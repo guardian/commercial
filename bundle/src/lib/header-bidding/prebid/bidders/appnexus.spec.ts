@@ -1,4 +1,3 @@
-import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import {
 	isInAuOrNz as isInAuOrNz_,
 	isInRow as isInRow_,
@@ -75,60 +74,44 @@ describe('getAppNexusDirectPlacementId', () => {
 		isInAuOrNz.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsMpu.mockReturnValue(true);
-		expect(getAppNexusDirectPlacementId([createAdSize(300, 250)])).toBe(
-			'11016434',
-		);
+		expect(getAppNexusDirectPlacementId([[300, 250]])).toBe('11016434');
 	});
 
 	test('should return correct placementID for mobile-sticky and in ROW', () => {
 		isInRow.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMobileSticky.mockReturnValue(true);
-		expect(getAppNexusDirectPlacementId([createAdSize(320, 50)])).toBe(
-			'31512573',
-		);
+		expect(getAppNexusDirectPlacementId([[320, 50]])).toBe('31512573');
 	});
 
 	test('should return correct placementID for ad sizes not in the conditional statement and not mobile-sticky in ROW', () => {
 		isInRow.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsDmpu.mockReturnValue(true);
-		expect(getAppNexusDirectPlacementId([createAdSize(300, 600)])).toBe(
-			'9251752',
-		);
+		expect(getAppNexusDirectPlacementId([[300, 600]])).toBe('9251752');
 	});
 
 	test('should return correct placementID for desktop billboard not leaderboad in UK', () => {
 		isInUk.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsBillboardNotLeaderboard.mockReturnValue(true);
-		expect(getAppNexusDirectPlacementId([createAdSize(970, 250)])).toBe(
-			'30017511',
-		);
+		expect(getAppNexusDirectPlacementId([[970, 250]])).toBe('30017511');
 	});
 
 	test('should return correct placementID for desktop mpu or dmpu in UK', () => {
 		isInUk.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsMpuOrDmpu.mockReturnValue(true);
-		expect(getAppNexusDirectPlacementId([createAdSize(300, 600)])).toBe(
-			'9251752',
-		);
-		expect(getAppNexusDirectPlacementId([createAdSize(300, 250)])).toBe(
-			'9251752',
-		);
+		expect(getAppNexusDirectPlacementId([[300, 600]])).toBe('9251752');
+		expect(getAppNexusDirectPlacementId([[300, 250]])).toBe('9251752');
 	});
 
 	test('should return correct placementID for desktop billboard or leaderboard in ROW', () => {
 		isInRow.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsLeaderboardOrBillboard.mockReturnValue(true);
-		expect(getAppNexusDirectPlacementId([createAdSize(970, 250)])).toBe(
-			'9926678',
-		);
-		expect(getAppNexusDirectPlacementId([createAdSize(728, 90)])).toBe(
-			'9926678',
-		);
+		expect(getAppNexusDirectPlacementId([[970, 250]])).toBe('9926678');
+		expect(getAppNexusDirectPlacementId([[728, 90]])).toBe('9926678');
 	});
 
 	test('should return correct placementID for desktop leaderboard in ROW', () => {
@@ -140,53 +123,41 @@ describe('getAppNexusDirectPlacementId', () => {
 			// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- changing this breaks the test
 			containsBillboard() || containsLeaderboard(),
 		);
-		expect(getAppNexusDirectPlacementId([createAdSize(728, 90)])).toBe(
-			'9926678',
-		);
+		expect(getAppNexusDirectPlacementId([[728, 90]])).toBe('9926678');
 	});
 
 	test('should return correct placementID for tablet mpu in UK', () => {
 		isInUk.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('T');
 		containsMpu.mockReturnValue(true);
-		expect(getAppNexusDirectPlacementId([createAdSize(300, 250)])).toBe(
-			'4371641',
-		);
+		expect(getAppNexusDirectPlacementId([[300, 250]])).toBe('4371641');
 	});
 
 	test('should return correct placementID for tablet leaderboard in UK', () => {
 		isInUk.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('T');
 		containsLeaderboard.mockReturnValue(true);
-		expect(getAppNexusDirectPlacementId([createAdSize(728, 90)])).toBe(
-			'4371640',
-		);
+		expect(getAppNexusDirectPlacementId([[728, 90]])).toBe('4371640');
 	});
 
 	test('should return correct placementID for tablet dmpu in UK', () => {
 		isInUk.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('T');
 		containsDmpu.mockReturnValue(true);
-		expect(getAppNexusDirectPlacementId([createAdSize(300, 600)])).toBe(
-			'9251752',
-		);
+		expect(getAppNexusDirectPlacementId([[300, 600]])).toBe('9251752');
 	});
 
 	test('should return correct placementID for mobile mpu in UK', () => {
 		isInUk.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
-		expect(getAppNexusDirectPlacementId([createAdSize(300, 250)])).toBe(
-			'4298191',
-		);
+		expect(getAppNexusDirectPlacementId([[300, 250]])).toBe('4298191');
 	});
 
 	test('should return correct placementID for mobile-sticky in US', () => {
 		isInUsa.mockReturnValue('true');
 		getBreakpointKey.mockReturnValue('M');
 		containsMobileSticky.mockReturnValue(true);
-		expect(getAppNexusDirectPlacementId([createAdSize(320, 50)])).toBe(
-			'9251752',
-		);
+		expect(getAppNexusDirectPlacementId([[320, 50]])).toBe('9251752');
 	});
 });

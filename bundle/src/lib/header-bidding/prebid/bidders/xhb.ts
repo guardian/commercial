@@ -1,10 +1,17 @@
-import type { BidderSettings } from '../types';
+import type { BidderScopedSettings } from 'prebid.js/dist/src/bidderSettings';
+import type { Bid } from 'prebid.js/dist/src/types/summary/types';
 
-export const bidderSettings: BidderSettings['xhb'] = {
+type AppNexusBidResponse = Bid & {
+	appnexus?: {
+		buyerMemberId?: string;
+	};
+};
+
+export const bidderSettings: BidderScopedSettings<string> = {
 	adserverTargeting: [
 		{
 			key: 'hb_buyer_id',
-			val(bidResponse) {
+			val(bidResponse: AppNexusBidResponse) {
 				// TODO: should we return null or an empty string?
 				return bidResponse.appnexus?.buyerMemberId ?? '';
 			},

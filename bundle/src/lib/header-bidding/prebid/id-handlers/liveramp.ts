@@ -1,7 +1,12 @@
 import { hashEmailForClient } from '@guardian/commercial-core';
 import { loadScript, log } from '@guardian/libs';
+import type { UserIdConfig } from 'prebid.js/dist/modules/userId/spec';
 import { isSwitchedOn } from '../../utils';
-import type { UserId } from '../types';
+
+type LiverampUserIdConfig = [
+	UserIdConfig<'identityLink'>,
+	UserIdConfig<'pairId'>,
+];
 
 const ATS_PLACEMENT_ID = 14522;
 
@@ -40,7 +45,9 @@ window.addEventListener('envelopeModuleReady', function () {
 	});
 });
 
-const getLiveRampParams = async (email: string): Promise<UserId[]> => {
+const getLiveRampParams = async (
+	email: string,
+): Promise<LiverampUserIdConfig> => {
 	// bundle must be loaded as link and in advance of
 	// liveramp script in accordance with liveramp's docs
 	loadBundle();
@@ -92,7 +99,7 @@ const getLiveRampParams = async (email: string): Promise<UserId[]> => {
 
 export const getUserIdForLiveRamp = async (
 	email: string | null,
-): Promise<UserId[] | undefined> => {
+): Promise<LiverampUserIdConfig | undefined> => {
 	const isLiverampEnabled = isSwitchedOn('prebidLiveramp');
 
 	if (email && isLiverampEnabled) {
@@ -100,3 +107,5 @@ export const getUserIdForLiveRamp = async (
 		return params;
 	}
 };
+
+export type { LiverampUserIdConfig };

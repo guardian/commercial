@@ -1,35 +1,39 @@
 // see http://docs.prebid.org/dev-docs/integrate-with-the-prebid-analytics-api.html
 import { log } from '@guardian/libs';
-import adapter from 'prebid-v10.23.0.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
-import adapterManager from 'prebid-v10.23.0.js/dist/src/adapterManager';
-import { EVENTS } from 'prebid-v10.23.0.js/dist/src/constants';
+import adapter from 'prebid.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
+import adapterManager from 'prebid.js/dist/src/adapterManager';
+import { EVENTS } from 'prebid.js/dist/src/constants';
+import type { EventPayload } from 'prebid.js/dist/src/events';
 import { reportError } from '../../../../error/report-error';
-import type { BidArgs, EventData } from '../../../prebid-types';
-import { eventHandlers } from './eventHandlers';
+import type { GuEvent, GuEvents } from './eventHandlers';
+import { getHandler } from './eventHandlers';
 import { sendPayload } from './sendPayload';
 import { createPayload, type GuAnalyticsAdapter } from './utils';
 
-let queue: EventData[] = [];
+let eventQueue: GuEvent[] = [];
+
+const flushEventQueue = (): GuEvent[] => {
+	const events = [...eventQueue];
+	eventQueue = [];
+	return events;
+};
 
 const analyticsAdapter: GuAnalyticsAdapter = Object.assign(
 	adapter({ analyticsType: 'endpoint' }),
 	{
-		track({
-			eventType,
-			args,
-		}: {
-			eventType: (typeof EVENTS)[keyof typeof EVENTS];
-			args: BidArgs;
-		}): void {
-			const handler = eventHandlers[eventType];
+		track<
+			EventType extends keyof GuEvents,
+			Args extends EventPayload<EventType>,
+		>({ eventType, args }: { eventType: EventType; args: Args }): void {
+			const handler = getHandler(eventType);
 			if (handler) {
 				const events = handler(analyticsAdapter, args);
 				if (events) {
 					if (eventType === EVENTS.BID_WON) {
 						// clear queue to avoid sending late bids with bidWon event
-						queue = [];
+						eventQueue = [];
 					}
-					queue.push(...events);
+					eventQueue.push(...events);
 				}
 
 				if (
@@ -54,8 +58,7 @@ const analyticsAdapter: GuAnalyticsAdapter = Object.assign(
 						return;
 					}
 
-					const events = [...queue];
-					queue = [];
+					const events = flushEventQueue();
 					const payload = createPayload(events, pv);
 					void sendPayload(url, payload);
 				}
@@ -64,7 +67,8 @@ const analyticsAdapter: GuAnalyticsAdapter = Object.assign(
 	},
 );
 
-const originalEnableAnalytics = analyticsAdapter.enableAnalytics;
+const originalEnableAnalytics =
+	analyticsAdapter.enableAnalytics.bind(analyticsAdapter);
 
 analyticsAdapter.enableAnalytics = (config): void => {
 	analyticsAdapter.context = config.options ?? {};
@@ -75,5 +79,7 @@ adapterManager.registerAnalyticsAdapter({
 	adapter: analyticsAdapter,
 	code: 'gu',
 });
+
+export { flushEventQueue };
 
 export default analyticsAdapter;
