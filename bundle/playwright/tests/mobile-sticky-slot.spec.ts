@@ -11,8 +11,7 @@ const cmpSelector = 'iframe[id*="sp_message_iframe"]';
 const bannerSelector = '[name="StickyBottomBanner"]';
 const mobileStickySelector = '#dfp-ad--mobile-sticky';
 
-/** TODO: Enable this when the event handling mobile-sticky logic goes live */
-test.skip('mobile-sticky', () => {
+test.describe('mobile-sticky', () => {
 	testAtBreakpoints(['mobile']).forEach(({ width, height }) => {
 		test(`should NOT render when the CMP is present on the page`, async ({
 			page,
