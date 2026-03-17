@@ -1,9 +1,9 @@
 import type { ConsentState } from '@guardian/libs';
-import type { ConsentManagement } from './types';
+import type { ConsentManagementConfig } from 'prebid.js/dist/src/consentHandler';
 
 export const consentManagement = (
 	consentState: ConsentState,
-): ConsentManagement => {
+): ConsentManagementConfig => {
 	switch (consentState.framework) {
 		/** @see https://docs.prebid.org/dev-docs/modules/consentManagementUsp.html */
 		case 'aus':

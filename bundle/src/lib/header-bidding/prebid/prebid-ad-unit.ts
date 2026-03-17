@@ -1,18 +1,19 @@
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
 import type { ConsentState } from '@guardian/libs';
 import { log } from '@guardian/libs';
-import type { Advert } from '../../../define/Advert';
 import type {
-	HeaderBiddingSlot,
-	PrebidBid,
-	PrebidMediaTypes,
-} from '../prebid-types';
+	AdUnitBidDefinition,
+	AdUnitDefinition,
+} from 'prebid.js/dist/src/adUnits';
+import type { MediaTypes } from 'prebid.js/dist/src/mediaTypes';
+import type { Advert } from '../../../define/Advert';
+import type { HeaderBiddingSlot } from '../prebid-types';
 import { bids } from './bidders/config';
 
-export class PrebidAdUnit {
-	code: string | null | undefined;
-	bids: PrebidBid[] | null | undefined;
-	mediaTypes: PrebidMediaTypes | null | undefined;
+export class PrebidAdUnit implements AdUnitDefinition {
+	code: string;
+	bids: AdUnitBidDefinition[];
+	mediaTypes: MediaTypes;
 	gpid?: string;
 	ortb2Imp?: {
 		ext: {
@@ -51,9 +52,5 @@ export class PrebidAdUnit {
 
 		advert.headerBiddingSizes = slot.sizes;
 		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
-	}
-
-	isEmpty() {
-		return this.code == null;
 	}
 }

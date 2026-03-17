@@ -1,13 +1,13 @@
+import type { BidderScopedSettings } from 'prebid.js/dist/src/bidderSettings';
 import { overridePriceBucket } from '../price-config';
-import type { BidderSettings, BidResponse } from '../types';
 
-export const bidderSettings: BidderSettings[keyof BidderSettings] = {
+export const bidderSettings: BidderScopedSettings<string> = {
 	storageAllowed: true,
 	// Use a custom price granularity, which is based upon the size of the slot being auctioned
 	adserverTargeting: [
 		{
 			key: 'hb_pb',
-			val({ width, height, cpm, pbCg }: BidResponse) {
+			val({ width, height, cpm, pbCg }) {
 				return overridePriceBucket('criteo', width, height, cpm, pbCg);
 			},
 		},

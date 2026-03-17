@@ -1,6 +1,6 @@
-import type { PrebidJS } from 'prebid-v10.23.0.js/types.d.ts';
-import 'prebid-v10.23.0.js/types.d.ts';
-import 'prebid-v10.23.0.js/global.d.ts';
+import type { PrebidJS } from 'prebid.js/types.d.ts';
+import 'prebid.js/types.d.ts';
+import 'prebid.js/global.d.ts';
 
 declare global {
 	interface Window {

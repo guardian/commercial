@@ -3,7 +3,6 @@ import { join } from 'path';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack from 'webpack';
-import prebidBabelOptions from 'prebid.js/.babelrc.js';
 
 const gitCommitSHA = () => {
 	try {
@@ -44,33 +43,11 @@ const config = {
 				'core',
 				'src',
 			),
-			// prebid doesn't export these directories, so we need to alias them,
-			// we use them for our custom modules located in src/lib/header-bidding/prebid/custom-modules
-			'prebid.js/src': join(
+			// // prebid alias
+			'prebid.js/dist': join(
 				import.meta.dirname,
 				'node_modules',
 				'prebid.js',
-				'src',
-			),
-			'prebid.js/libraries': join(
-				import.meta.dirname,
-				'node_modules',
-				'prebid.js',
-				'libraries',
-			),
-			'prebid.js/adapters': join(
-				import.meta.dirname,
-				'node_modules',
-				'prebid.js',
-				'src',
-				'adapters',
-			),
-
-			// New prebid version aliases
-			'prebid-v10.23.0.js/dist': join(
-				import.meta.dirname,
-				'node_modules',
-				'prebid-v10.23.0.js',
 				'dist',
 				'src',
 			),
@@ -96,14 +73,6 @@ const config = {
 						},
 					},
 				],
-			},
-			{
-				test: /.js$/,
-				include: /prebid\.js/,
-				use: {
-					loader: 'babel-loader',
-					options: prebidBabelOptions,
-				},
 			},
 			{
 				test: /\.svg$/,

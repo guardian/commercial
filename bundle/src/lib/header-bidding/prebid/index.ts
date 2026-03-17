@@ -5,7 +5,8 @@ import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/libs';
 import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
-import type { AdUnitDefinition } from 'prebid-v10.23.0.js/dist/src/adUnits';
+import type { AdUnitDefinition } from 'prebid.js/dist/src/adUnits';
+import type { UserSyncConfig } from 'prebid.js/dist/src/userSync';
 import type { Advert } from '../../../define/Advert';
 import { isUserInTestGroup } from '../../../experiments/beta-ab';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
@@ -31,7 +32,6 @@ import { configurePermutive } from './external/permutive';
 import { getUserSyncSettings } from './id-handlers';
 import { PrebidAdUnit } from './prebid-ad-unit';
 import { priceGranularity } from './price-config';
-import type { PbjsConfig, UserSync } from './types';
 
 let initialised = false;
 
@@ -39,14 +39,9 @@ const initialise = async (
 	window: Window,
 	consentState: ConsentState,
 ): Promise<void> => {
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ignore during v10 test
-	if (!window.pbjs) {
-		log('commercial', 'window.pbjs not found on window');
-		return; // We couldn’t initialise
-	}
 	initialised = true;
 
-	const userSyncPromise: Promise<UserSync> =
+	const userSyncPromise: Promise<UserSyncConfig> =
 		getUserSyncSettings(consentState);
 
 	const isInTest = isUserInTestGroup(
@@ -59,45 +54,45 @@ const initialise = async (
 	// at the end of initialise via mergeConfig.
 	const initialUserSyncConfig = isInTest ? undefined : await userSyncPromise;
 
-	// deleiberatly omitting userSync we know we wont have it here
-	const pbjsConfig: Omit<PbjsConfig, 'userSync'> = Object.assign(
-		{},
-		{
-			/**
-			 * The amount of time reserved for the auction
-			 */
-			bidderTimeout: PREBID_TIMEOUT,
+	window.pbjs.setConfig({
+		/**
+		 * The amount of time reserved for the auction
+		 */
+		bidderTimeout: PREBID_TIMEOUT,
 
-			/**
-			 * Prebid supports an additional timeout buffer to account for noisiness in
-			 * timing JavaScript on the page. This value is passed to the Prebid config
-			 * and is adjustable via this constant
-			 */
-			timeoutBuffer: 400,
-			priceGranularity,
-			userSync:
-				!isInTest && initialUserSyncConfig
-					? initialUserSyncConfig
-					: undefined,
-			ortb2: {
-				site: {
-					ext: {
-						data: {
-							keywords:
-								window.guardian.config.page.keywords.split(','),
-						},
+		/**
+		 * Prebid supports an additional timeout buffer to account for noisiness in
+		 * timing JavaScript on the page. This value is passed to the Prebid config
+		 * and is adjustable via this constant
+		 */
+		timeoutBuffer: 400,
+		priceGranularity: 'custom',
+		customPriceBucket: priceGranularity,
+		userSync: !isInTest && initialUserSyncConfig
+			? initialUserSyncConfig
+			: undefined,
+		ortb2: {
+			site: {
+				ext: {
+					data: {
+						keywords:
+							window.guardian.config.page.keywords.split(','),
 					},
 				},
 			},
 		},
-	);
+	});
 
 	if (isSwitchedOn('consentManagement')) {
-		pbjsConfig.consentManagement = consentManagement(consentState);
+		pbjs.mergeConfig({
+			consentManagement: consentManagement(consentState),
+		});
 	}
 
 	if (shouldIncludePermutive(consentState)) {
-		pbjsConfig.realTimeData = configurePermutive(consentState);
+		pbjs.mergeConfig({
+			realTimeData: configurePermutive(consentState),
+		});
 	}
 
 	/** Helper function to decide if a bidder should be included.
@@ -107,8 +102,7 @@ const initialise = async (
 	const isBidderEnabled = shouldIncludeBidder(consentState);
 
 	// initialise enabled bidders
-	// TODO: remove types once prebid is upgraded to v10
-	(window.pbjs as unknown as { bidderSettings: unknown }).bidderSettings = {
+	window.pbjs.bidderSettings = {
 		criteo: isBidderEnabled('criteo') ? bidderSettingsForCriteo : undefined,
 		ix: isBidderEnabled('ix') ? bidderSettingsForIx : undefined,
 		kargo: isBidderEnabled('kargo') ? bidderSettingsForKargo : undefined,
@@ -123,10 +117,7 @@ const initialise = async (
 	const analytics = getAnalyticsConfig();
 	if (analytics) window.pbjs.enableAnalytics([analytics]);
 
-	window.pbjs.setConfig({ ...pbjsConfig } as unknown as Record<
-		string,
-		unknown
-	>);
+	// update config and adjust slot size when prebid ad loads
 	window.pbjs.onEvent('bidWon', (data) => {
 		const { width, height, adUnitCode } = data;
 
@@ -163,12 +154,11 @@ const initialise = async (
 };
 
 const bidsBackHandler = (
-	adUnits: PrebidAdUnit[],
+	adUnits: AdUnitDefinition[],
 	eventTimer: EventTimer,
 ): Promise<void> =>
 	new Promise((resolve) => {
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ignore during v10 test
-		window.pbjs?.setTargetingForGPTAsync(
+		window.pbjs.setTargetingForGPTAsync(
 			adUnits.map((u) => u.code).filter(isString),
 		);
 
@@ -197,25 +187,22 @@ const requestBids = async (
 		return requestQueue;
 	}
 
-	// TODO: use AdUnitDefinition type once prebid is upgraded to v10
-	const adUnits: PrebidAdUnit[] = await onConsent()
+	const adUnits: AdUnitDefinition[] = await onConsent()
 		.then(async (consentState: ConsentState) => {
 			// calculate this once before mapping over
 			const isSignedIn = await isUserLoggedIn();
 			const pageTargeting = getPageTargeting(consentState, isSignedIn);
 			return flatten(
 				adverts.map((advert) =>
-					getHeaderBiddingAdSlots(advert, slotFlatMap)
-						.map(
-							(slot) =>
-								new PrebidAdUnit(
-									advert,
-									slot,
-									pageTargeting,
-									consentState,
-								),
-						)
-						.filter((adUnit) => !adUnit.isEmpty()),
+					getHeaderBiddingAdSlots(advert, slotFlatMap).map(
+						(slot) =>
+							new PrebidAdUnit(
+								advert,
+								slot,
+								pageTargeting,
+								consentState,
+							),
+					),
 				),
 			);
 		})
@@ -239,11 +226,9 @@ const requestBids = async (
 					}
 				});
 
-				// TODO: remove types once prebid is upgraded to v10
-				const typedAdUnits = adUnits as unknown as AdUnitDefinition[];
 				window.pbjs.que.push(() => {
 					void window.pbjs.requestBids({
-						adUnits: typedAdUnits,
+						adUnits,
 						bidsBackHandler: () =>
 							void bidsBackHandler(adUnits, eventTimer).then(
 								resolve,

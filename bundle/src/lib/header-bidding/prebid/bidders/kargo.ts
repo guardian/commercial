@@ -1,5 +1,5 @@
-import type { BidderSettings } from '../types';
+import type { BidderScopedSettings } from 'prebid.js/dist/src/bidderSettings';
 
-export const bidderSettings: BidderSettings[keyof BidderSettings] = {
+export const bidderSettings: BidderScopedSettings<string> = {
 	storageAllowed: true,
 };

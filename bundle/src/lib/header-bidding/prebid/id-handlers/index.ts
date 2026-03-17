@@ -1,7 +1,7 @@
 import { type ConsentState, getConsentFor } from '@guardian/libs';
+import type { UserSyncConfig } from 'prebid.js/dist/src/userSync';
 import { getEmail } from '../../../identity/api';
 import { isSwitchedOn } from '../../utils';
-import type { UserId, UserSync } from '../types';
 import { getUserIdForId5 } from './id5';
 import { getUserIdForLiveRamp } from './liveramp';
 import { sharedId } from './shared';
@@ -9,7 +9,7 @@ import { getUserIdForTradeDesk } from './tradedesk';
 
 export const getUserSyncSettings = async (
 	consentState: ConsentState,
-): Promise<UserSync> => {
+): Promise<UserSyncConfig> => {
 	const userEmail = await getEmail();
 	const fetchId5UserId =
 		getConsentFor('id5', consentState) && getUserIdForId5(userEmail);
@@ -27,24 +27,31 @@ export const getUserSyncSettings = async (
 	// window.pbjs.mergeConfig({
 	// 	userIds ....
 	// });
-	const userIds: UserId[] = await Promise.all([
+	const userIdModules = await Promise.all([
 		fetchId5UserId,
 		fetchLiveRampUserId,
 		fetchTradeDeskUserId,
-	]).then((idModules) => {
-		const consentedIdModules = idModules.filter((idModule) => !!idModule);
-		return consentedIdModules.flatMap((idModule) => {
-			return Array.isArray(idModule) ? idModule : [idModule];
-		});
-	});
+	]);
 
-	const userSync: UserSync = isSwitchedOn('prebidUserSync')
+	const userIds = userIdModules
+		// typescript doesn't like flatMap here
+		.map((idModule) => {
+			if (Array.isArray(idModule)) {
+				return idModule;
+			} else if (idModule) {
+				return [idModule];
+			}
+			return [];
+		})
+		.flat();
+
+	const userSync: UserSyncConfig = isSwitchedOn('prebidUserSync')
 		? {
 				syncsPerBidder: 0, // allow all syncs
 				userIds: [sharedId, ...userIds],
 				filterSettings: {
 					all: {
-						bidders: '*', // allow all bidders to sync by iframe or image beacons
+						bidders: '*' as const, // allow all bidders to sync by iframe or image beacons
 						filter: 'include',
 					},
 				},

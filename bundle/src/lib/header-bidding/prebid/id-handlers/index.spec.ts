@@ -1,10 +1,12 @@
 import { type ConsentState } from '@guardian/libs';
+import type { UserIdConfig } from 'prebid.js/dist/modules/userId/spec';
 import { getEmail } from '../../../identity/api';
 import { isSwitchedOn } from '../../utils';
-import type { UserId, UserSync } from '../types';
 import { getUserIdForId5 } from './id5';
+import type { LiverampUserIdConfig } from './liveramp';
 import { getUserIdForLiveRamp } from './liveramp';
 import { sharedId } from './shared';
+import type { TradeDeskUserIdConfig } from './tradedesk';
 import { getUserIdForTradeDesk } from './tradedesk';
 import { getUserSyncSettings } from './index';
 
@@ -98,8 +100,8 @@ describe('getUserSyncSettings', () => {
 				},
 			} as ConsentState;
 
-			const mockId5UserId: UserId = {
-				name: 'id5',
+			const mockId5UserId: UserIdConfig<'id5Id'> = {
+				name: 'id5Id',
 				params: {
 					partner: 123,
 				},
@@ -114,9 +116,7 @@ describe('getUserSyncSettings', () => {
 			mockGetEmail.mockResolvedValue('test@example.com');
 			mockGetUserIdForId5.mockResolvedValue(mockId5UserId);
 
-			const result = (await getUserSyncSettings(
-				consentStateWithId5,
-			)) as Extract<UserSync, { userIds: UserId[] }>;
+			const result = await getUserSyncSettings(consentStateWithId5);
 
 			expect(mockGetUserIdForId5).toHaveBeenCalledWith(
 				'test@example.com',
@@ -137,7 +137,7 @@ describe('getUserSyncSettings', () => {
 				},
 			} as ConsentState;
 
-			const mockLiveRampUserId: UserId[] = [
+			const mockLiveRampUserId: LiverampUserIdConfig = [
 				{
 					name: 'identityLink',
 					params: {
@@ -149,14 +149,15 @@ describe('getUserSyncSettings', () => {
 						expires: 30,
 					},
 				},
+				{
+					name: 'pairId',
+				},
 			];
 
 			mockGetEmail.mockResolvedValue('test@example.com');
 			mockGetUserIdForLiveRamp.mockResolvedValue(mockLiveRampUserId);
 
-			const result = (await getUserSyncSettings(
-				consentStateWithLiveRamp,
-			)) as Extract<UserSync, { userIds: UserId[] }>;
+			const result = await getUserSyncSettings(consentStateWithLiveRamp);
 
 			expect(mockGetUserIdForLiveRamp).toHaveBeenCalledWith(
 				'test@example.com',
@@ -179,8 +180,8 @@ describe('getUserSyncSettings', () => {
 				},
 			} as ConsentState;
 
-			const mockTradeDeskUserId: UserId = {
-				name: 'unifiedId',
+			const mockTradeDeskUserId: TradeDeskUserIdConfig = {
+				name: 'uid2',
 				params: {
 					partner: 'test-partner',
 				},
@@ -194,9 +195,7 @@ describe('getUserSyncSettings', () => {
 			mockGetEmail.mockResolvedValue('test@example.com');
 			mockGetUserIdForTradeDesk.mockResolvedValue(mockTradeDeskUserId);
 
-			const result = (await getUserSyncSettings(
-				consentStateWithTradeDesk,
-			)) as Extract<UserSync, { userIds: UserId[] }>;
+			const result = await getUserSyncSettings(consentStateWithTradeDesk);
 
 			expect(mockGetUserIdForTradeDesk).toHaveBeenCalledWith(
 				'test@example.com',
@@ -219,23 +218,28 @@ describe('getUserSyncSettings', () => {
 				},
 			} as ConsentState;
 
-			const mockId5UserId: UserId = { name: 'id5Id' };
-			const mockLiveRampUserId: UserId = { name: 'identityLink' };
-			const mockTradeDeskUserId: UserId = { name: 'unifiedId' };
+			const mockId5UserId: UserIdConfig<'id5Id'> = { name: 'id5Id' };
+			const mockLiveRampUserId: LiverampUserIdConfig = [
+				{
+					name: 'identityLink',
+				},
+				{
+					name: 'pairId',
+				},
+			];
+			const mockTradeDeskUserId: TradeDeskUserIdConfig = { name: 'uid2' };
 
 			mockGetEmail.mockResolvedValue('test@example.com');
 			mockGetUserIdForId5.mockResolvedValue(mockId5UserId);
-			mockGetUserIdForLiveRamp.mockResolvedValue([mockLiveRampUserId]);
+			mockGetUserIdForLiveRamp.mockResolvedValue(mockLiveRampUserId);
 			mockGetUserIdForTradeDesk.mockResolvedValue(mockTradeDeskUserId);
 
-			const result = (await getUserSyncSettings(
-				consentStateAll,
-			)) as Extract<UserSync, { userIds: UserId[] }>;
+			const result = await getUserSyncSettings(consentStateAll);
 
 			expect(result.userIds).toEqual([
 				sharedId,
 				mockId5UserId,
-				mockLiveRampUserId,
+				...mockLiveRampUserId,
 				mockTradeDeskUserId,
 			]);
 		});
@@ -254,9 +258,7 @@ describe('getUserSyncSettings', () => {
 
 			mockGetEmail.mockResolvedValue(null);
 
-			const result = (await getUserSyncSettings(
-				consentStateWithId5,
-			)) as Extract<UserSync, { userIds: UserId[] }>;
+			const result = await getUserSyncSettings(consentStateWithId5);
 
 			expect(mockGetUserIdForId5).toHaveBeenCalledWith(null);
 			expect(result.userIds).toEqual([sharedId]);

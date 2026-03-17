@@ -1,7 +1,10 @@
-import { registerBidder } from 'prebid.js/adapters/bidderFactory';
-import { spec } from 'prebid.js/modules/openxBidAdapter';
+import { spec } from 'prebid.js/dist/modules/openxBidAdapter';
+import {
+	type BidderSpec,
+	registerBidder,
+} from 'prebid.js/dist/src/adapters/bidderFactory';
 
-const customSpec = {
+const customSpec: BidderSpec<'openx'> = {
 	...spec,
 	aliases: ['oxd'],
 };

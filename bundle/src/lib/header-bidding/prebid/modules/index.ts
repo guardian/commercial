@@ -7,7 +7,7 @@ import 'prebid.js/modules/consentManagementGpp';
 
 // Bid adapters
 import 'prebid.js/modules/criteoBidAdapter';
-import 'prebid.js/modules/gridBidAdapter';
+import 'prebid.js/modules/trustxBidAdapter';
 import 'prebid.js/modules/ixBidAdapter';
 import 'prebid.js/modules/ozoneBidAdapter';
 import 'prebid.js/modules/pubmaticBidAdapter';
@@ -34,6 +34,6 @@ import './appnexusBidAdapter';
 import './openxBidAdapter';
 import './analyticsAdapter';
 
-pbjs.processQueue();
+void pbjs.processQueue();
 
 export { pbjs };
