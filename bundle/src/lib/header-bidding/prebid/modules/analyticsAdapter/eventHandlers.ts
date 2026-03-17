@@ -1,4 +1,3 @@
-import { log } from '@guardian/libs';
 import type { Bid } from 'prebid.js/dist/src/bidfactory';
 import { EVENTS } from 'prebid.js/dist/src/constants';
 import type { EventPayload } from 'prebid.js/dist/src/events';
@@ -236,7 +235,6 @@ function getHandler<EventType extends keyof GuEvents>(
 ): EventHandler<EventType> | null {
 	const handler = eventHandlers[eventType];
 	if (!handler) {
-		log('commercial', `No handler for event type ${eventType}`);
 		return null;
 	}
 	return handler;
