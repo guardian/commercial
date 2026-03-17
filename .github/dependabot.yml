@@ -70,7 +70,9 @@ updates:
     # The default is 5 but as we are going to group dependencies we might need to increase it
     open-pull-requests-limit: 10
   - package-ecosystem: 'github-actions'
-    directory: '/'
+    directories:
+      - '/.github/workflows'
+      - '/.github/actions/setup-node-env'
     schedule:
       interval: 'weekly'
     cooldown:

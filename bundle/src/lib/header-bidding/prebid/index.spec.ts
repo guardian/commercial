@@ -649,7 +649,7 @@ describe('commercial-loading-userids-async experiment', () => {
 		);
 
 		expect(setConfigSpy).toHaveBeenCalledWith(
-			expect.objectContaining({ userSync: undefined}),
+			expect.objectContaining({ userSync: undefined }),
 		);
 	});
 });
