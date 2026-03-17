@@ -15,7 +15,6 @@ jest.mock('../../utils');
 jest.mock('./id5');
 jest.mock('./liveramp');
 jest.mock('./tradedesk');
-jest.mock('../../../../experiments/beta-ab');
 
 const mockGetEmail = getEmail as jest.MockedFunction<typeof getEmail>;
 const mockIsSwitchedOn = isSwitchedOn as jest.MockedFunction<

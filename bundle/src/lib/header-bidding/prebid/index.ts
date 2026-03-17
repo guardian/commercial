@@ -68,9 +68,10 @@ const initialise = async (
 		timeoutBuffer: 400,
 		priceGranularity: 'custom',
 		customPriceBucket: priceGranularity,
-		userSync: !isInTest && initialUserSyncConfig
-			? initialUserSyncConfig
-			: undefined,
+		userSync:
+			!isInTest && initialUserSyncConfig
+				? initialUserSyncConfig
+				: undefined,
 		ortb2: {
 			site: {
 				ext: {
