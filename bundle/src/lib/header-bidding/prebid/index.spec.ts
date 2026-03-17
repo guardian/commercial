@@ -3,6 +3,7 @@
 import { hashEmailForClient } from '@guardian/commercial-core/email-hash';
 import { type ConsentState } from '@guardian/libs';
 import { getConsentFor } from '@guardian/libs';
+import { isUserInTestGroup } from '../../../experiments/beta-ab';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
 import { getEmail } from '../../identity/api';
@@ -600,4 +601,55 @@ describe('Prebid.js bidWon Events', () => {
 			expect(getAdvertById).not.toHaveBeenCalled();
 		},
 	);
+});
+describe('commercial-loading-userids-async experiment', () => {
+	test('when user is not in variant test group, pbjs.setConfig to be called with userIds', async () => {
+		jest.mocked(isUserInTestGroup).mockReturnValue(false);
+		mockGetConsentForID5(true);
+		(getEmail as jest.Mock).mockReturnValue('');
+		window.guardian.config.switches.prebidUserSync = true;
+		const setConfigSpy = jest.spyOn(window.pbjs, 'setConfig');
+
+		await prebid.initialise(window, mockConsentState);
+
+		expect(setConfigSpy).toHaveBeenCalledWith(
+			expect.objectContaining({
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Jest matchers return any
+				userSync: expect.objectContaining({
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Jest matchers return any
+					userIds: expect.arrayContaining([
+						expect.objectContaining({ name: 'sharedId' }),
+						expect.objectContaining({ name: 'id5Id' }),
+					]),
+				}),
+			}),
+		);
+	});
+	test('when user is in test group, mergeConfig is called with all resolved userIds after promises settle', async () => {
+		jest.mocked(isUserInTestGroup).mockReturnValue(true);
+		mockGetConsentForID5(true);
+		(getEmail as jest.Mock).mockReturnValue('');
+		window.guardian.config.switches.prebidUserSync = true;
+		const mergeConfigSpy = jest.spyOn(window.pbjs, 'mergeConfig');
+		const setConfigSpy = jest.spyOn(window.pbjs, 'setConfig');
+
+		await prebid.initialise(window, mockConsentState);
+
+		expect(mergeConfigSpy).toHaveBeenCalledWith(
+			expect.objectContaining({
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Jest matchers return any
+				userSync: expect.objectContaining({
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Jest matchers return any
+					userIds: expect.arrayContaining([
+						expect.objectContaining({ name: 'sharedId' }),
+						expect.objectContaining({ name: 'id5Id' }),
+					]),
+				}),
+			}),
+		);
+
+		expect(setConfigSpy).toHaveBeenCalledWith(
+			expect.objectContaining({ userSync: undefined }),
+		);
+	});
 });
