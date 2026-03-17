@@ -146,7 +146,6 @@ const initialise = async (
 	const userSyncConfig = isInTest ? await userSyncPromise : undefined;
 
 	// update config and adjust slot size when prebid ad loads
-	// TODO: remove types once prebid is upgraded to v10
 	if (userSyncConfig) {
 		window.pbjs.mergeConfig({
 			userSync: userSyncConfig,

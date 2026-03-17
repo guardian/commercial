@@ -603,7 +603,7 @@ describe('Prebid.js bidWon Events', () => {
 	);
 });
 describe('commercial-loading-userids-async experiment', () => {
-	test('when user is in control group, pbjs.setConfig to be called with userIds', async () => {
+	test('when user is not in variant test group, pbjs.setConfig to be called with userIds', async () => {
 		jest.mocked(isUserInTestGroup).mockReturnValue(false);
 		mockGetConsentForID5(true);
 		(getEmail as jest.Mock).mockReturnValue('');
@@ -648,9 +648,8 @@ describe('commercial-loading-userids-async experiment', () => {
 			}),
 		);
 
-		expect(setConfigSpy).not.toHaveBeenCalledWith(
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Jest matchers return any
-			expect.objectContaining({ userSync: expect.anything() }),
+		expect(setConfigSpy).toHaveBeenCalledWith(
+			expect.objectContaining({ userSync: undefined}),
 		);
 	});
 });
