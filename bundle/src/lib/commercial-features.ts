@@ -1,5 +1,6 @@
-import { getCookie, log, storage } from '@guardian/libs';
+import { log, storage } from '@guardian/libs';
 import { isUserInTestGroup } from '../experiments/beta-ab';
+import { isAdFree } from './ad-free';
 import { getCurrentBreakpoint } from './detect/detect-breakpoint';
 
 /**
@@ -28,20 +29,6 @@ function adsDisabledLogger(
 }
 
 /**
- * Ad free cookie helpers
- */
-const AD_FREE_USER_COOKIE = 'GU_AF1';
-
-const getAdFreeCookie = (): string | null =>
-	getCookie({ name: AD_FREE_USER_COOKIE });
-
-const adFreeDataIsPresent = (): boolean => {
-	const cookieVal = getAdFreeCookie();
-	if (!cookieVal) return false;
-	return !Number.isNaN(parseInt(cookieVal, 10));
-};
-
-/**
  * Determine whether current browser is a version of Internet Explorer
  */
 const isInternetExplorer = () => {
@@ -68,7 +55,6 @@ class CommercialFeatures {
 	constructor() {
 		// this is used for SpeedCurve tests
 		const noadsUrl = /[#&]noads(&.*)?$/.test(window.location.hash);
-		const forceAdFree = /[#&]noadsaf(&.*)?$/.test(window.location.hash);
 		const forceAds = /[?&]forceads(&.*)?$/.test(window.location.search);
 		const externalAdvertising = !noadsUrl && !isUserPrefsAdsOff();
 		const sensitiveContent =
@@ -107,8 +93,7 @@ class CommercialFeatures {
 			'help/2016/sep/19/how-to-contact-the-guardian-securely',
 		].includes(window.guardian.config.page.pageId);
 
-		// Feature switches
-		this.adFree = !!forceAdFree || adFreeDataIsPresent();
+		this.adFree = isAdFree();
 
 		this.youtubeAdvertising = !this.adFree && !sensitiveContent;
 
