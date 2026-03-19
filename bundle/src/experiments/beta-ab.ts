@@ -1,42 +1,31 @@
 import { reportError } from '../lib/error/report-error';
 
-const reportNoAbModule = (path: string) => {
-	const error = Error(`Unable to access 'window.guardian.modules.${path}'`);
+const reportNoAbModule = () => {
+	const error = Error(`'window.guardian.modules.abTests' is not set up`);
 	reportError(error, 'commercial');
 };
 
-export const getParticipations = () => {
-	// This variable is deliberately not extracted to the top level to give further insurance against the possible race condition
-	const abGetParticipations =
-		window.guardian.modules.abTests?.getParticipations;
-
-	if (!abGetParticipations) {
-		reportNoAbModule('abTests.getParticipations');
-		return {};
+const getAbModule = () => {
+	// Check if the AB testing module is available before trying to access it
+	// it could be missing or not fully initialized, and we want to avoid throwing errors in those cases
+	if (
+		!window.guardian.modules.abTests ||
+		!('getParticipations' in window.guardian.modules.abTests)
+	) {
+		reportNoAbModule();
+		return null;
 	}
+	return window.guardian.modules.abTests;
+};
 
-	return abGetParticipations();
+export const getParticipations = () => {
+	return getAbModule()?.getParticipations() ?? {};
 };
 
 export const isUserInTest = (testId: string) => {
-	const abIsUserInTest = window.guardian.modules.abTests?.isUserInTest;
-
-	if (!abIsUserInTest) {
-		reportNoAbModule('abTests.isUserInTest');
-		return false;
-	}
-
-	return abIsUserInTest(testId);
+	return getAbModule()?.isUserInTest(testId) ?? false;
 };
 
 export const isUserInTestGroup = (testId: string, variantId: string) => {
-	const abIsUserInTestGroup =
-		window.guardian.modules.abTests?.isUserInTestGroup;
-
-	if (!abIsUserInTestGroup) {
-		reportNoAbModule('abTests.isUserInTestGroup');
-		return false;
-	}
-
-	return abIsUserInTestGroup(testId, variantId);
+	return getAbModule()?.isUserInTestGroup(testId, variantId) ?? false;
 };
