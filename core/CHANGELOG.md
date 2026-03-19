@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 31.1.0
+
+### Minor Changes
+
+- b388056: adds 300x100 size to mobile-sticky
+
 ## 31.0.0
 
 ### Major Changes
