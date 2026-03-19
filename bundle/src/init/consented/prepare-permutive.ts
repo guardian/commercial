@@ -1,5 +1,7 @@
+import { hashEmailForClient } from '@guardian/commercial-core/email-hash';
 import { log } from '@guardian/libs';
 import { reportError } from '../../lib/error/report-error';
+import { getEmail } from '../../lib/identity/api';
 import type {
 	Config,
 	Edition,
@@ -143,18 +145,37 @@ const generatePermutiveIdentities = (
 	return [];
 };
 
-const runPermutive = (
+const runPermutive = async (
 	pageConfig: PermutivePageConfig,
 	permutiveGlobal: Permutive | undefined,
-): void => {
+): Promise<void> => {
 	try {
 		if (!permutiveGlobal?.addon) {
 			throw new Error('Global Permutive setup error');
 		}
+		// TODO: Consider adding a consent gate here using getConsentFor('permutive', consentState)
+		// to ensure Permutive only runs when the user has granted targeting consent.
 
-		const permutiveIdentities = generatePermutiveIdentities(pageConfig);
-		if (permutiveGlobal.identify && permutiveIdentities.length > 0) {
-			permutiveGlobal.identify(permutiveIdentities);
+		const email = await getEmail();
+		const ophanIdentities = generatePermutiveIdentities(pageConfig);
+
+		const identities = [
+			...ophanIdentities,
+			...(email
+				? [
+						{
+							id: await hashEmailForClient(
+								email,
+								'permutive',
+							),
+							tag: 'email_sha256',
+						},
+					]
+				: []),
+		];
+
+		if (permutiveGlobal.identify && identities.length > 0) {
+			permutiveGlobal.identify(identities);
 		}
 
 		const payload = generatePayload(pageConfig);
@@ -171,7 +192,7 @@ const runPermutive = (
  * https://permutive.com/audience-platform/publishers/
  * @returns Promise
  */
-const initPermutiveSegmentation = () => {
+const initPermutiveSegmentation = async () => {
 	log('commercial', 'Initialising Permutive segmentation');
 	/* eslint-disable -- permutive code */
 	// From here until we re-enable eslint is the Permutive code
@@ -247,7 +268,7 @@ const initPermutiveSegmentation = () => {
 		page: window.guardian.config.page,
 		ophan: window.guardian.config.ophan,
 	};
-	runPermutive(permutiveConfig, window.permutive);
+	await runPermutive(permutiveConfig, window.permutive);
 };
 
 export const initPermutive = () => {
