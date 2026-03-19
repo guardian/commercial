@@ -1,7 +1,7 @@
 import { reportError } from '../lib/error/report-error';
 
-const reportNoAbModule = () => {
-	const error = Error('Unable to access abTests module on window.guardian');
+const reportNoAbModule = (path: string) => {
+	const error = Error(`Unable to access 'window.guardian.modules.${path}'`);
 	reportError(error, 'commercial');
 };
 
@@ -11,7 +11,7 @@ export const getParticipations = () => {
 		window.guardian.modules.abTests?.getParticipations;
 
 	if (!abGetParticipations) {
-		reportNoAbModule();
+		reportNoAbModule('abTests.getParticipations');
 		return {};
 	}
 
@@ -22,7 +22,7 @@ export const isUserInTest = (testId: string) => {
 	const abIsUserInTest = window.guardian.modules.abTests?.isUserInTest;
 
 	if (!abIsUserInTest) {
-		reportNoAbModule();
+		reportNoAbModule('abTests.isUserInTest');
 		return false;
 	}
 
@@ -34,7 +34,7 @@ export const isUserInTestGroup = (testId: string, variantId: string) => {
 		window.guardian.modules.abTests?.isUserInTestGroup;
 
 	if (!abIsUserInTestGroup) {
-		reportNoAbModule();
+		reportNoAbModule('abTests.isUserInTestGroup');
 		return false;
 	}
 
