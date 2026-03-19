@@ -7,34 +7,36 @@ const reportNoAbModule = () => {
 
 export const getParticipations = () => {
 	// This variable is deliberately not extracted to the top level to give further insurance against the possible race condition
-	const abModule = window.guardian.modules.abTests;
+	const abGetParticipations =
+		window.guardian.modules.abTests?.getParticipations;
 
-	if (!abModule) {
+	if (!abGetParticipations) {
 		reportNoAbModule();
 		return {};
 	}
 
-	return abModule.getParticipations();
+	return abGetParticipations();
 };
 
 export const isUserInTest = (testId: string) => {
-	const abModule = window.guardian.modules.abTests;
+	const abIsUserInTest = window.guardian.modules.abTests?.isUserInTest;
 
-	if (!abModule) {
+	if (!abIsUserInTest) {
 		reportNoAbModule();
 		return false;
 	}
 
-	return abModule.isUserInTest(testId);
+	return abIsUserInTest(testId);
 };
 
 export const isUserInTestGroup = (testId: string, variantId: string) => {
-	const abModule = window.guardian.modules.abTests;
+	const abIsUserInTestGroup =
+		window.guardian.modules.abTests?.isUserInTestGroup;
 
-	if (!abModule) {
+	if (!abIsUserInTestGroup) {
 		reportNoAbModule();
 		return false;
 	}
 
-	return abModule.isUserInTestGroup(testId, variantId);
+	return abIsUserInTestGroup(testId, variantId);
 };
