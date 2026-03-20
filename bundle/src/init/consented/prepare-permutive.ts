@@ -164,10 +164,7 @@ const runPermutive = async (
 			...(email
 				? [
 						{
-							id: await hashEmailForClient(
-								email,
-								'permutive',
-							),
+							id: await hashEmailForClient(email, 'permutive'),
 							tag: 'email_sha256',
 						},
 					]
