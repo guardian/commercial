@@ -5,6 +5,7 @@ import { createAdvert } from '../define/create-advert';
 import { enableLazyLoad } from '../display/lazy-load';
 import { dfpEnv } from '../lib/dfp/dfp-env';
 import { queueAdvert } from '../lib/dfp/queue-advert';
+import { registerAdvert } from '../lib/dfp/register-advert';
 
 const displayAd = (advert: Advert, forceDisplay: boolean) => {
 	if (dfpEnv.shouldLazyLoad() && !forceDisplay) {
@@ -33,6 +34,7 @@ const fillDynamicAdSlot = (
 			const advert = createAdvert(adSlot, additionalSizes, slotTargeting);
 			if (advert === null) return;
 
+			registerAdvert(advert);
 			dfpEnv.adverts.set(advert.id, advert);
 			displayAd(advert, forceDisplay);
 
