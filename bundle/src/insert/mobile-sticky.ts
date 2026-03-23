@@ -1,3 +1,5 @@
+import { createAdSize } from '@guardian/commercial-core/ad-sizes';
+import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { log } from '@guardian/libs';
 import { createAdSlot } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
@@ -37,13 +39,17 @@ const renderMobileStickySlot = async () => {
 		}
 	});
 
+	const additionalSizes = isInUsa()
+		? { mobile: [createAdSize(320, 100)] }
+		: undefined;
+
 	if (mobileStickyWrapper) {
 		const mobileStickyAdSlot =
 			mobileStickyWrapper.querySelector<HTMLElement>(
 				'#dfp-ad--mobile-sticky',
 			);
 		if (mobileStickyAdSlot) {
-			void fillDynamicAdSlot(mobileStickyAdSlot, true);
+			void fillDynamicAdSlot(mobileStickyAdSlot, true, additionalSizes);
 		}
 	}
 };

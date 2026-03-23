@@ -1,13 +1,13 @@
 import type { ConsentState } from '@guardian/libs';
 import { getConsentFor, onConsent } from '@guardian/libs';
-import { commercialFeatures } from './lib/commercial-features';
+import { isAdFree } from './lib/ad-free';
 
 const shouldBootConsentless = (consentState: ConsentState) => {
 	return (
 		window.guardian.config.switches.optOutAdvertising &&
 		consentState.tcfv2 &&
 		!getConsentFor('googletag', consentState) &&
-		!commercialFeatures.adFree
+		!isAdFree()
 	);
 };
 
@@ -26,7 +26,7 @@ void (async () => {
 			/* webpackChunkName: "consentless-advertising" */
 			'./init/consentless-advertising'
 		).then(({ bootConsentless }) => bootConsentless(consentState));
-	} else if (commercialFeatures.adFree) {
+	} else if (isAdFree()) {
 		void import(
 			/* webpackChunkName: "ad-free" */
 			'./init/ad-free'

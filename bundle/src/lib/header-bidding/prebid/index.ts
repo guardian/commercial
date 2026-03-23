@@ -8,6 +8,7 @@ import { flatten } from 'lodash-es';
 import type { AdUnitDefinition } from 'prebid.js/dist/src/adUnits';
 import type { UserSyncConfig } from 'prebid.js/dist/src/userSync';
 import type { Advert } from '../../../define/Advert';
+import { isUserInTestGroup } from '../../../experiments/beta-ab';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedIn } from '../../identity/api';
 import { getPageTargeting } from '../../page-targeting';
@@ -40,7 +41,19 @@ const initialise = async (
 ): Promise<void> => {
 	initialised = true;
 
-	const userSync: UserSyncConfig = await getUserSyncSettings(consentState);
+	const userSyncPromise: Promise<UserSyncConfig> =
+		getUserSyncSettings(consentState);
+
+	const isInTest = isUserInTestGroup(
+		'commercial-loading-userids-async',
+		'variant',
+	);
+
+	// For control group users, await userSync before setConfig so it's included immediately.
+	// For test group users, skip the await — userSync will be merged into the config
+	// at the end of initialise via mergeConfig.
+	const initialUserSyncConfig = isInTest ? undefined : await userSyncPromise;
+
 	window.pbjs.setConfig({
 		/**
 		 * The amount of time reserved for the auction
@@ -55,7 +68,10 @@ const initialise = async (
 		timeoutBuffer: 400,
 		priceGranularity: 'custom',
 		customPriceBucket: priceGranularity,
-		userSync,
+		userSync:
+			!isInTest && initialUserSyncConfig
+				? initialUserSyncConfig
+				: undefined,
 		ortb2: {
 			site: {
 				ext: {
@@ -124,6 +140,17 @@ const initialise = async (
 		advert.hasPrebidSize = true;
 		advert.size = size;
 	});
+
+	// For test group users, await the userSync promise here — after setConfig and bidder
+	// setup have run without blocking — so userIds are still ready before the first ad request.
+	const userSyncConfig = isInTest ? await userSyncPromise : undefined;
+
+	// update config and adjust slot size when prebid ad loads
+	if (userSyncConfig) {
+		window.pbjs.mergeConfig({
+			userSync: userSyncConfig,
+		} as unknown as Record<string, unknown>);
+	}
 };
 
 const bidsBackHandler = (
