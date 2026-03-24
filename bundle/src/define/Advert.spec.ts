@@ -291,20 +291,14 @@ describe('Advert', () => {
 			const listener2 = jest.fn();
 
 			globalAdEvents.addEventListener('adStatusChange', listener1);
-			globalAdEvents.addEventListener(
-				'adStatusChange',
-				listener2,
-			);
+			globalAdEvents.addEventListener('adStatusChange', listener2);
 
 			ad.setStatus('loading', true);
 
 			expect(listener1).toHaveBeenCalledTimes(1);
 			expect(listener2).toHaveBeenCalledTimes(1);
 			globalAdEvents.removeEventListener('adStatusChange', listener1);
-			globalAdEvents.removeEventListener(
-				'adStatusChange',
-				listener2,
-			);
+			globalAdEvents.removeEventListener('adStatusChange', listener2);
 		});
 	});
 
