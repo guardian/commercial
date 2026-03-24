@@ -63,25 +63,8 @@ globalAdEvents.addEventListener(
 );
 ```
 
-### Clean up a listener
+## Notes
 
-```typescript
-const handler = (event) => {
-	const { advert, name } = event.detail;
-	if (name === 'loaded') {
-		// do something
-	}
-};
-
-globalAdEvents.addEventListener('adStatusChange', handler);
-
-// Later, remove it
-globalAdEvents.removeEventListener('adStatusChange', handler);
-```
-
-## Important notes
-
-- **Event name must match exactly.** Listeners must use the string `'adStatusChange'`. A typo like `'adstatuschange'` or `'statusChange'` will silently receive nothing.
-- **All listeners hear all events.** Every `adStatusChange` listener is called for every ad slot on the page. Filter using `event.detail.advert` and `event.detail.name` inside your callback.
-- **This is a singleton.** There is one `globalAdEvents` instance shared across the entire page. Multiple consumers can subscribe independently — they won't interfere with each other.
-- **Per-advert listening is separate.** If you have a direct reference to an `Advert` instance, you can use `advert.on('rendered', callback)` instead. The global event bus is for code that doesn't have (or want) a reference to specific advert instances.
+- The event name is `'adStatusChange'` — it must match exactly or the listener will silently receive nothing.
+- All listeners hear all events. Filter by `event.detail.name` or `event.detail.advert` in your callback.
+- If you have a direct reference to an `Advert` instance, you can use `advert.on()` instead.
