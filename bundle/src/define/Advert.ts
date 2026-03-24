@@ -10,6 +10,7 @@ import type {
 	SlotName,
 } from '@guardian/commercial-core/ad-sizes';
 import type { Breakpoint } from '@guardian/commercial-core/breakpoint';
+import { globalAdEvents } from '@guardian/commercial-core/global-ad-events';
 import { log } from '@guardian/libs';
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import type { Size } from 'prebid.js/dist/src/types/common';
@@ -268,6 +269,11 @@ class Advert extends EventTarget {
 		);
 		this.dispatchEvent(
 			new CustomEvent('statusChange', { detail: { name, status } }),
+		);
+		globalAdEvents.dispatchEvent(
+			new CustomEvent('adStatusChange', {
+				detail: { advert: this, name, status },
+			}),
 		);
 	}
 
