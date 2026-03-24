@@ -57,43 +57,6 @@ importers:
         version: 3.8.1
 
   bundle:
-    dependencies:
-      '@guardian/ab-core':
-        specifier: 9.0.0
-        version: 9.0.0(tslib@2.8.1)(typescript@5.9.3)
-      '@guardian/commercial-core':
-        specifier: workspace:*
-        version: link:../core
-      '@guardian/core-web-vitals':
-        specifier: 17.0.0
-        version: 17.0.0(@guardian/libs@30.1.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)(web-vitals@5.1.0)
-      '@guardian/identity-auth':
-        specifier: ^13.0.0
-        version: 13.0.0(@guardian/libs@30.1.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
-      '@guardian/identity-auth-frontend':
-        specifier: 15.0.0
-        version: 15.0.0(@guardian/identity-auth@13.0.0(@guardian/libs@30.1.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3))(@guardian/libs@30.1.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
-      '@guardian/libs':
-        specifier: 30.1.0
-        version: 30.1.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3)
-      '@guardian/source':
-        specifier: 12.2.1
-        version: 12.2.1(tslib@2.8.1)(typescript@5.9.3)
-      fastdom:
-        specifier: ^1.0.12
-        version: 1.0.12
-      lodash-es:
-        specifier: ^4.17.23
-        version: 4.17.23
-      prebid.js:
-        specifier: 10.23.0
-        version: 10.23.0(handlebars@4.7.8)(schema-utils@4.3.3)
-      process:
-        specifier: ^0.11.10
-        version: 0.11.10
-      web-vitals:
-        specifier: ^5.1.0
-        version: 5.1.0
     devDependencies:
       '@babel/cli':
         specifier: ^7.28.6
@@ -116,12 +79,33 @@ importers:
       '@changesets/cli':
         specifier: ^2.30.0
         version: 2.30.0(@types/node@25.3.3)
+      '@guardian/ab-core':
+        specifier: 9.0.0
+        version: 9.0.0(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/browserslist-config':
         specifier: ^7.0.0
         version: 7.0.0(browserslist@4.28.1)(tslib@2.8.1)
+      '@guardian/commercial-core':
+        specifier: workspace:*
+        version: link:../core
+      '@guardian/core-web-vitals':
+        specifier: 17.0.0
+        version: 17.0.0(@guardian/libs@30.1.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)(web-vitals@5.1.0)
+      '@guardian/identity-auth':
+        specifier: ^13.0.0
+        version: 13.0.0(@guardian/libs@30.1.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
+      '@guardian/identity-auth-frontend':
+        specifier: 15.0.0
+        version: 15.0.0(@guardian/identity-auth@13.0.0(@guardian/libs@30.1.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3))(@guardian/libs@30.1.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
+      '@guardian/libs':
+        specifier: 30.1.0
+        version: 30.1.0(@guardian/ophan-tracker-js@2.8.0)(tslib@2.8.1)(typescript@5.9.3)
       '@guardian/ophan-tracker-js':
         specifier: 2.8.0
         version: 2.8.0
+      '@guardian/source':
+        specifier: 12.2.1
+        version: 12.2.1(tslib@2.8.1)(typescript@5.9.3)
       '@playwright/test':
         specifier: 1.58.2
         version: 1.58.2
@@ -152,6 +136,9 @@ importers:
       circular-dependency-plugin:
         specifier: ^5.2.2
         version: 5.2.2(webpack@5.105.4)
+      fastdom:
+        specifier: ^1.0.12
+        version: 1.0.12
       globals:
         specifier: 17.3.0
         version: 17.3.0
@@ -173,9 +160,18 @@ importers:
       lint-staged:
         specifier: ^16.3.1
         version: 16.3.1
+      lodash-es:
+        specifier: ^4.17.23
+        version: 4.17.23
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5
+      prebid.js:
+        specifier: 10.23.0
+        version: 10.23.0(handlebars@4.7.8)(schema-utils@4.3.3)
+      process:
+        specifier: ^0.11.10
+        version: 0.11.10
       raw-loader:
         specifier: ^4.0.2
         version: 4.0.2(webpack@5.105.4)
@@ -194,6 +190,9 @@ importers:
       typescript:
         specifier: 5.9.3
         version: 5.9.3
+      web-vitals:
+        specifier: ^5.1.0
+        version: 5.1.0
       webpack:
         specifier: ^5.105.4
         version: 5.105.4(webpack-cli@6.0.1)
