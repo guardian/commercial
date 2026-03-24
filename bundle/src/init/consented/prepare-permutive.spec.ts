@@ -28,6 +28,14 @@ const testOphanConfig = {
 	browserId: 'browserId',
 };
 
+jest.mock('../../lib/identity/api', () => ({
+	getEmail: jest.fn().mockResolvedValue(null),
+}));
+
+jest.mock('@guardian/commercial-core/email-hash', () => ({
+	hashEmailForClient: jest.fn().mockResolvedValue('abc123hashedvalue'),
+}));
+
 describe('Generating Permutive payload utils', () => {
 	describe('isEmpty', () => {
 		it('returns true for empty values', () => {
@@ -280,36 +288,59 @@ describe('Generating Permutive payload utils', () => {
 		});
 	});
 	describe('generatePermutiveIdentities', () => {
-		it('returns array containing ophan-tagged id if browser ID is present', () => {
+		it('returns array containing ophan-tagged id if browser ID is present', async () => {
 			expect(
-				_.generatePermutiveIdentities({
+				await _.generatePermutiveIdentities({
 					page: testPageConfig,
 					ophan: { browserId: 'abc123', pageViewId: 'def456' },
 				}),
 			).toEqual([{ tag: 'ophan', id: 'abc123' }]);
 		});
-		it('returns an empty array if there is no browser ID present', () => {
+		it('returns an empty array if there is no browser ID present', async () => {
 			expect(
-				_.generatePermutiveIdentities({
+				await _.generatePermutiveIdentities({
 					page: testPageConfig,
 					ophan: { pageViewId: 'pvid' },
 				}),
 			).toEqual([]);
 		});
-		it('returns an empty array if an empty browser ID is present', () => {
+		it('returns an empty array if an empty browser ID is present', async () => {
 			expect(
-				_.generatePermutiveIdentities({
+				await _.generatePermutiveIdentities({
 					page: testPageConfig,
 					ophan: { browserId: '', pageViewId: 'pvid' },
 				}),
 			).toEqual([]);
 		});
-		it('returns an empty array if ophan config object is completely missing', () => {
+		it('returns an empty array if ophan config object is completely missing', async () => {
 			expect(
-				_.generatePermutiveIdentities({
+				await _.generatePermutiveIdentities({
 					page: testPageConfig,
 				}),
 			).toEqual([]);
+		});
+		it('returns an array with a hashed email', async () => {
+			jest.requireMock<{ getEmail: jest.Mock }>(
+				'../../lib/identity/api',
+			).getEmail.mockResolvedValueOnce('testabc@gmial.com');
+			expect(
+				await _.generatePermutiveIdentities({ page: testPageConfig }),
+			).toEqual([{ tag: 'email_sha256', id: 'abc123hashedvalue' }]);
+		});
+		it('returns both ophan-tagged id and hashed email when browser ID and email are present', async () => {
+			jest.requireMock<{ getEmail: jest.Mock }>(
+				'../../lib/identity/api',
+			).getEmail.mockResolvedValueOnce('testabc@gmial.com');
+
+			expect(
+				await _.generatePermutiveIdentities({
+					page: testPageConfig,
+					ophan: { browserId: 'abc123', pageViewId: 'def456' },
+				}),
+			).toEqual([
+				{ tag: 'ophan', id: 'abc123' },
+				{ tag: 'email_sha256', id: 'abc123hashedvalue' },
+			]);
 		});
 	});
 	describe('runPermutive', () => {
@@ -317,9 +348,9 @@ describe('Generating Permutive payload utils', () => {
 			page: { ...testPageConfig, section: 'uk' },
 		};
 
-		it('catches errors and calls reportError correctly when no global permutive', () => {
+		it('catches errors and calls reportError correctly when no global permutive', async () => {
 			const reportError = window.guardian.modules.sentry?.reportError;
-			_.runPermutive(
+			await _.runPermutive(
 				{
 					page: testPageConfig,
 				},
@@ -332,11 +363,11 @@ describe('Generating Permutive payload utils', () => {
 			expect(err?.message).toBe('Global Permutive setup error');
 		});
 
-		it('calls the permutive addon method with the correct payload', () => {
+		it('calls the permutive addon method with the correct payload', async () => {
 			const mockPermutive = { addon: jest.fn(), identify: jest.fn() };
 			const logger = jest.fn();
 
-			_.runPermutive(validConfigForPayload, mockPermutive);
+			await _.runPermutive(validConfigForPayload, mockPermutive);
 			expect(mockPermutive.addon).toHaveBeenCalledWith('web', {
 				page: {
 					content: expect.objectContaining({ section: 'uk' }) as {
@@ -349,7 +380,7 @@ describe('Generating Permutive payload utils', () => {
 			});
 			expect(logger).not.toHaveBeenCalled();
 		});
-		it("calls permutive's identify method, passing the ophan browser ID", () => {
+		it("calls permutive's identify method, passing the ophan browser ID", async () => {
 			const mockPermutive = { addon: jest.fn(), identify: jest.fn() };
 			const logger = jest.fn();
 			const bwid = '1234567890abcdef';
@@ -358,13 +389,13 @@ describe('Generating Permutive payload utils', () => {
 				...validConfigForPayload,
 			};
 
-			_.runPermutive(config, mockPermutive);
+			await _.runPermutive(config, mockPermutive);
 			expect(mockPermutive.identify).toHaveBeenCalledWith([
 				{ tag: 'ophan', id: bwid },
 			]);
 			expect(logger).not.toHaveBeenCalled();
 		});
-		it("calls permutive's identify before it calls addon, if the browser ID is present", () => {
+		it("calls permutive's identify before it calls addon, if the browser ID is present", async () => {
 			const mockPermutive = { addon: jest.fn(), identify: jest.fn() };
 			const bwid = '1234567890abcdef';
 			const config = {
@@ -372,18 +403,18 @@ describe('Generating Permutive payload utils', () => {
 				...validConfigForPayload,
 			};
 
-			_.runPermutive(config, mockPermutive);
+			await _.runPermutive(config, mockPermutive);
 			const [identifyCallOrder] =
 				mockPermutive.identify.mock.invocationCallOrder;
 			const [addonCallOrder] = mockPermutive.addon.mock
 				.invocationCallOrder as [number];
 			expect(identifyCallOrder).toBeLessThan(addonCallOrder);
 		});
-		it('does not call the identify method if no browser ID is present', () => {
+		it('does not call the identify method if no browser ID is present', async () => {
 			const mockPermutive = { addon: jest.fn(), identify: jest.fn() };
 			const logger = jest.fn();
 
-			_.runPermutive(validConfigForPayload, mockPermutive);
+			await _.runPermutive(validConfigForPayload, mockPermutive);
 			expect(mockPermutive.identify).not.toHaveBeenCalled();
 			expect(logger).not.toHaveBeenCalled();
 		});
