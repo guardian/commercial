@@ -288,36 +288,59 @@ describe('Generating Permutive payload utils', () => {
 		});
 	});
 	describe('generatePermutiveIdentities', () => {
-		it('returns array containing ophan-tagged id if browser ID is present', () => {
+		it('returns array containing ophan-tagged id if browser ID is present', async () => {
 			expect(
-				_.generatePermutiveIdentities({
+				await _.generatePermutiveIdentities({
 					page: testPageConfig,
 					ophan: { browserId: 'abc123', pageViewId: 'def456' },
 				}),
 			).toEqual([{ tag: 'ophan', id: 'abc123' }]);
 		});
-		it('returns an empty array if there is no browser ID present', () => {
+		it('returns an empty array if there is no browser ID present', async () => {
 			expect(
-				_.generatePermutiveIdentities({
+				await _.generatePermutiveIdentities({
 					page: testPageConfig,
 					ophan: { pageViewId: 'pvid' },
 				}),
 			).toEqual([]);
 		});
-		it('returns an empty array if an empty browser ID is present', () => {
+		it('returns an empty array if an empty browser ID is present', async () => {
 			expect(
-				_.generatePermutiveIdentities({
+				await _.generatePermutiveIdentities({
 					page: testPageConfig,
 					ophan: { browserId: '', pageViewId: 'pvid' },
 				}),
 			).toEqual([]);
 		});
-		it('returns an empty array if ophan config object is completely missing', () => {
+		it('returns an empty array if ophan config object is completely missing', async () => {
 			expect(
-				_.generatePermutiveIdentities({
+				await _.generatePermutiveIdentities({
 					page: testPageConfig,
 				}),
 			).toEqual([]);
+		});
+		it('returns an array with a hashed email', async () => {
+			jest.requireMock<{ getEmail: jest.Mock }>(
+				'../../lib/identity/api',
+			).getEmail.mockResolvedValueOnce('testabc@gmial.com');
+			expect(
+				await _.generatePermutiveIdentities({ page: testPageConfig }),
+			).toEqual([{ tag: 'email_sha256', id: 'abc123hashedvalue' }]);
+		});
+		it('returns both ophan-tagged id and hashed email when browser ID and email are present', async () => {
+			jest.requireMock<{ getEmail: jest.Mock }>(
+				'../../lib/identity/api',
+			).getEmail.mockResolvedValueOnce('testabc@gmial.com');
+
+			expect(
+				await _.generatePermutiveIdentities({
+					page: testPageConfig,
+					ophan: { browserId: 'abc123', pageViewId: 'def456' },
+				}),
+			).toEqual([
+				{ tag: 'ophan', id: 'abc123' },
+				{ tag: 'email_sha256', id: 'abc123hashedvalue' },
+			]);
 		});
 	});
 	describe('runPermutive', () => {
@@ -394,34 +417,6 @@ describe('Generating Permutive payload utils', () => {
 			await _.runPermutive(validConfigForPayload, mockPermutive);
 			expect(mockPermutive.identify).not.toHaveBeenCalled();
 			expect(logger).not.toHaveBeenCalled();
-		});
-		it('calls the identify method with hashed email', async () => {
-			const mockPermutive = { addon: jest.fn(), identify: jest.fn() };
-			jest.requireMock<{ getEmail: jest.Mock }>(
-				'../../lib/identity/api',
-			).getEmail.mockResolvedValueOnce('testabc@gmial.com');
-
-			await _.runPermutive(validConfigForPayload, mockPermutive);
-			expect(mockPermutive.identify).toHaveBeenCalledWith([
-				{ tag: 'email_sha256', id: 'abc123hashedvalue' },
-			]);
-		});
-		it('calls the identify method with hashed email and ophan browser id', async () => {
-			const mockPermutive = { addon: jest.fn(), identify: jest.fn() };
-			jest.requireMock<{ getEmail: jest.Mock }>(
-				'../../lib/identity/api',
-			).getEmail.mockResolvedValueOnce('testabc@gmial.com');
-			const bwid = '1234567890abcdef';
-			const config = {
-				ophan: { browserId: bwid, pageViewId: 'pvid' },
-				...validConfigForPayload,
-			};
-
-			await _.runPermutive(config, mockPermutive);
-			expect(mockPermutive.identify).toHaveBeenCalledWith([
-				{ tag: 'ophan', id: bwid },
-				{ tag: 'email_sha256', id: 'abc123hashedvalue' },
-			]);
 		});
 	});
 });

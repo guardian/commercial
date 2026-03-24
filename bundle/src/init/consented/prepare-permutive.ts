@@ -132,17 +132,26 @@ const generatePayload = ({
 	return cleanPayload;
 };
 
-const generatePermutiveIdentities = (
+const generatePermutiveIdentities = async (
 	config: PermutivePageConfig,
-): Array<{ tag: 'ophan'; id: string }> => {
+): Promise<Array<{ tag: string; id: string }>> => {
+	const email = await getEmail();
+
+	const permutiveIdentities = [];
 	if (
 		typeof config.ophan === 'object' &&
 		typeof config.ophan.browserId === 'string' &&
 		config.ophan.browserId.length > 0
 	) {
-		return [{ tag: 'ophan', id: config.ophan.browserId }];
+		permutiveIdentities.push({ tag: 'ophan', id: config.ophan.browserId });
 	}
-	return [];
+	if (email) {
+		permutiveIdentities.push({
+			id: await hashEmailForClient(email, 'permutive'),
+			tag: 'email_sha256',
+		});
+	}
+	return permutiveIdentities;
 };
 
 const runPermutive = async (
@@ -156,20 +165,7 @@ const runPermutive = async (
 		// TODO: Consider adding a consent gate here using getConsentFor('permutive', consentState)
 		// to ensure Permutive only runs when the user has granted targeting consent.
 
-		const email = await getEmail();
-		const ophanIdentities = generatePermutiveIdentities(pageConfig);
-
-		const identities = [
-			...ophanIdentities,
-			...(email
-				? [
-						{
-							id: await hashEmailForClient(email, 'permutive'),
-							tag: 'email_sha256',
-						},
-					]
-				: []),
-		];
+		const identities = await generatePermutiveIdentities(pageConfig);
 
 		if (permutiveGlobal.identify && identities.length > 0) {
 			permutiveGlobal.identify(identities);
