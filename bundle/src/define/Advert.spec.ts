@@ -1,3 +1,4 @@
+import { globalAdEvents } from '@guardian/commercial-core';
 import type * as AdSizesType from '@guardian/commercial-core/ad-sizes';
 import { slotSizeMappings as slotSizeMappings_ } from '@guardian/commercial-core/ad-sizes';
 import { _, Advert, findSmallestAdHeightForSlot } from './Advert';
@@ -177,6 +178,133 @@ describe('Advert', () => {
 				name: 'loading',
 				status: true,
 			});
+		});
+	});
+
+	describe('globalAdEvents', () => {
+		it('should dispatch adStatusChange on globalAdEvents when status changes', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			const listener = jest.fn();
+			globalAdEvents.addEventListener('adStatusChange', listener);
+
+			ad.setStatus('loading', true);
+
+			expect(listener).toHaveBeenCalledTimes(1);
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- test
+			expect((listener.mock.calls[0][0] as CustomEvent).detail).toEqual(
+				expect.objectContaining({
+					name: 'loading',
+					status: true,
+				}),
+			);
+
+			globalAdEvents.removeEventListener('adStatusChange', listener);
+		});
+		it('should dispatch adStatusChange on globalAdEvents when status changes on multiple adverts', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad1 = new Advert(slot);
+			const ad2 = new Advert(slot);
+
+			const listener = jest.fn();
+
+			globalAdEvents.addEventListener('adStatusChange', listener);
+
+			ad1.setStatus('loading', true);
+			ad2.setStatus('loaded', true);
+
+			expect(listener).toHaveBeenCalledTimes(2);
+
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- test
+			expect((listener.mock.calls[0][0] as CustomEvent).detail).toEqual(
+				expect.objectContaining({
+					name: 'loading',
+					status: true,
+				}),
+			);
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- test
+			expect((listener.mock.calls[1][0] as CustomEvent).detail).toEqual(
+				expect.objectContaining({
+					name: 'loaded',
+					status: true,
+				}),
+			);
+
+			globalAdEvents.removeEventListener('adStatusChange', listener);
+		});
+		it('should dispatch adStatusChange on globalAdEvents when multiple status changes on the same advert', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad1 = new Advert(slot);
+
+			const listener = jest.fn();
+
+			globalAdEvents.addEventListener('adStatusChange', listener);
+
+			ad1.setStatus('loading', true);
+			ad1.setStatus('rendered', true);
+
+			expect(listener).toHaveBeenCalledTimes(2);
+
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- test
+			expect((listener.mock.calls[0][0] as CustomEvent).detail).toEqual(
+				expect.objectContaining({
+					name: 'loading',
+					status: true,
+				}),
+			);
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- test
+			expect((listener.mock.calls[1][0] as CustomEvent).detail).toEqual(
+				expect.objectContaining({
+					name: 'rendered',
+					status: true,
+				}),
+			);
+
+			globalAdEvents.removeEventListener('adStatusChange', listener);
+		});
+		it('should dispatch adStatusChange on globalAdEvents when listener is removed', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			const listener = jest.fn();
+
+			globalAdEvents.addEventListener('adStatusChange', listener);
+
+			ad.setStatus('loading', true);
+
+			globalAdEvents.removeEventListener('adStatusChange', listener);
+			ad.setStatus('rendered', true);
+
+			expect(listener).toHaveBeenCalledTimes(1);
+		});
+		it('should allow for multiple independent listeners, and both should hear the same event', () => {
+			const slot = document.createElement('div');
+			slot.setAttribute('data-name', 'top-above-nav');
+			const ad = new Advert(slot);
+
+			const listener1 = jest.fn();
+			const listener2 = jest.fn();
+
+			globalAdEvents.addEventListener('adStatusChange', listener1);
+			globalAdEvents.addEventListener(
+				'adStatusChange',
+				listener2,
+			);
+
+			ad.setStatus('loading', true);
+
+			expect(listener1).toHaveBeenCalledTimes(1);
+			expect(listener2).toHaveBeenCalledTimes(1);
+			globalAdEvents.removeEventListener('adStatusChange', listener1);
+			globalAdEvents.removeEventListener(
+				'adStatusChange',
+				listener2,
+			);
 		});
 	});
 
