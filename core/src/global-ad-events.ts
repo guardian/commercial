@@ -1,3 +1,3 @@
 const globalAdEvents = new EventTarget();
 
-export { globalAdEvents }
+export { globalAdEvents };
