@@ -42,7 +42,6 @@ const initialise = (): void => {
 			pubID: window.guardian.config.page.a9PublisherId,
 			adServer: 'googletag',
 			bidTimeout: bidderTimeout,
-			useSafeFrames: true, // Enable safeframe support for A9 ads, this doesn't mean all ads will be in safeframes
 			blockedBidders,
 		});
 	}
