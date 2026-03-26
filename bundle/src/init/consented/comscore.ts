@@ -71,7 +71,7 @@ const setupComscore = async (): Promise<void> => {
 
 const setupComscoreOnce = once(setupComscore);
 
-export const init = (): Promise<void> => setupComscoreOnce();
+export const initComscore = (): Promise<void> => setupComscoreOnce();
 
 export const _ = {
 	getGlobals,

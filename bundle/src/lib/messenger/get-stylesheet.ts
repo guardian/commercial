@@ -32,7 +32,7 @@ const getStyles = (
 	return result;
 };
 
-const init = (register: RegisterListener): void => {
+const initGetStylesMessage = (register: RegisterListener): void => {
 	register('get-styles', (specs) => {
 		if (isStyleSpecs(specs)) {
 			return getStyles(specs, document.styleSheets);
@@ -42,4 +42,4 @@ const init = (register: RegisterListener): void => {
 
 export const _ = { getStyles, isStyleSpecs };
 
-export { init };
+export { initGetStylesMessage };

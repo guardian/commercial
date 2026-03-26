@@ -103,15 +103,13 @@ const loadOther = (): Promise<void> => {
 	return insertScripts(advertisingServices, performanceServices);
 };
 
-const init = async (): Promise<boolean> => {
+export const initThirdPartyTags = async (): Promise<boolean> => {
 	if (commercialFeatures.thirdPartyTags) {
 		void loadOther();
 		return Promise.resolve(true);
 	}
 	return Promise.resolve(false);
 };
-
-export { init };
 export const _ = {
 	insertScripts,
 	loadOther,

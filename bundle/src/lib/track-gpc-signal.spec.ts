@@ -1,6 +1,6 @@
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState, USNATConsentState } from '@guardian/libs';
-import { initTrackGpcSignal } from './track-gpc-signal';
+import { trackGpcSignal } from './track-gpc-signal';
 
 describe('initTrackGpcSignal', () => {
 	const usnatConsent: USNATConsentState = {
@@ -16,7 +16,7 @@ describe('initTrackGpcSignal', () => {
 			framework: 'usnat',
 		};
 
-		initTrackGpcSignal(consentState);
+		trackGpcSignal(consentState);
 
 		expect(eventTimer.properties['gpcSignal']).toEqual(-1);
 	});
@@ -31,7 +31,7 @@ describe('initTrackGpcSignal', () => {
 			gpcSignal: false,
 		};
 
-		initTrackGpcSignal(consentState);
+		trackGpcSignal(consentState);
 
 		expect(eventTimer.properties['gpcSignal']).toEqual(0);
 	});
@@ -46,7 +46,7 @@ describe('initTrackGpcSignal', () => {
 			gpcSignal: true,
 		};
 
-		initTrackGpcSignal(consentState);
+		trackGpcSignal(consentState);
 
 		expect(eventTimer.properties['gpcSignal']).toEqual(1);
 	});

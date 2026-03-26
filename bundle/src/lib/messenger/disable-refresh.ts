@@ -26,7 +26,7 @@ self.addEventListener('message', function onMessage(evt) {
 </script>
 */
 
-const init = (register: RegisterListener): void => {
+const initDisableRefreshMessage = (register: RegisterListener): void => {
 	register('disable-refresh', (specs, ret, iframe) => {
 		if (iframe) {
 			const adSlot = iframe.closest('.js-ad-slot');
@@ -41,4 +41,4 @@ const init = (register: RegisterListener): void => {
 	});
 };
 
-export { init };
+export { initDisableRefreshMessage };

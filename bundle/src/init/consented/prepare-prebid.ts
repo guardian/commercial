@@ -73,7 +73,7 @@ export const setupPrebidOnce: () => Promise<void> = once(setupPrebid);
  * https://docs.prebid.org/overview/intro.html
  * @returns Promise
  */
-export const init = (): Promise<void> => {
+export const preparePrebid = (): Promise<void> => {
 	return setupPrebidOnce();
 };
 

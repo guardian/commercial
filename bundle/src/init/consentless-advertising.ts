@@ -1,20 +1,21 @@
 import type { ConsentState } from '@guardian/libs';
-import { init as initMessenger } from '../lib/messenger';
-import { init as background } from '../lib/messenger/background';
-import { init as resize } from '../lib/messenger/resize';
-import { init as type } from '../lib/messenger/type';
+import { messenger } from '../lib/messenger';
+import { initBackgroundMessage } from '../lib/messenger/background';
+import { initResizeMessage } from '../lib/messenger/resize';
+import { initTypeMessage } from '../lib/messenger/type';
 import { initArticleBodyAdverts } from './consentless/dynamic/article-body-adverts';
 import { initExclusionSlot } from './consentless/dynamic/exclusion-slot';
 import { initFixedSlots } from './consentless/init-fixed-slots';
 import { initConsentless } from './consentless/prepare-ootag';
-import { init as initPages } from './pages';
+import { initPages } from './pages';
 import { reloadPageOnConsentChange } from './shared/reload-page-on-consent-change';
-import { init as setAdTestCookie } from './shared/set-adtest-cookie';
-import { init as setAdTestInLabelsCookie } from './shared/set-adtest-in-labels-cookie';
+import { setAdTestCookie } from './shared/set-adtest-cookie';
+import { setAdTestInLabelsCookie } from './shared/set-adtest-in-labels-cookie';
+
+void messenger([initBackgroundMessage, initResizeMessage, initTypeMessage], []);
 
 const bootConsentless = async (consentState: ConsentState): Promise<void> => {
 	const consentlessModuleList: Array<Promise<unknown>> = [
-		initMessenger([background, resize, type], []),
 		setAdTestCookie(),
 		setAdTestInLabelsCookie(),
 		initConsentless(consentState),

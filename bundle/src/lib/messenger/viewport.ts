@@ -98,10 +98,10 @@ const onMessage = (
 	}
 };
 
-const init = (register: RegisterPersistentListener): void => {
+const initViewportMessage = (register: RegisterPersistentListener): void => {
 	register('viewport', onMessage);
 };
 
 export const _ = { addResizeListener, removeResizeListener, reset, onMessage };
 
-export { init };
+export { initViewportMessage };

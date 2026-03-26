@@ -7,7 +7,7 @@ import { log } from '@guardian/libs';
  * then use an intersection observer to mark the time when the viewport intersects with these elements.
  * Approach inspired by https://gist.github.com/bgreater/2412517f5a3f9c6fc4cafeb1ca71384f
  */
-const initTrackScrollDepth = () => {
+const trackScrollDepth = () => {
 	const pageHeight = document.body.offsetHeight;
 	const intViewportHeight = window.innerHeight;
 
@@ -53,4 +53,4 @@ const initTrackScrollDepth = () => {
 	}
 };
 
-export { initTrackScrollDepth };
+export { trackScrollDepth };

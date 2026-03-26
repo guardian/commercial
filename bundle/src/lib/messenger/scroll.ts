@@ -110,7 +110,7 @@ const removeScrollListener = (iframe: HTMLIFrameElement): void => {
 
 const isCallable = (x: unknown): x is Respond => typeof x === 'function';
 
-const init = (register: RegisterListener): void => {
+const initScrollMessage = (register: RegisterListener): void => {
 	register('scroll', (respond, start, iframe) => {
 		if (!iframe) return;
 		if (start && isCallable(respond)) {
@@ -123,4 +123,4 @@ const init = (register: RegisterListener): void => {
 
 export const _ = { addScrollListener, removeScrollListener, reset };
 
-export { init };
+export { initScrollMessage };

@@ -104,7 +104,7 @@ const getPassbackValue = (source: string): string => {
  * https://github.com/guardian/frontend/pull/24903
  * https://github.com/guardian/frontend/pull/25008
  */
-const init = (register: RegisterListener): void => {
+const initPassbackMessage = (register: RegisterListener): void => {
 	register('passback', (messagePayload, ret, iframe) => {
 		window.googletag.cmd.push(() => {
 			/**
@@ -383,4 +383,4 @@ const init = (register: RegisterListener): void => {
 	});
 };
 
-export { init };
+export { initPassbackMessage };

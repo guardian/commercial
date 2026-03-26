@@ -68,7 +68,7 @@ const maybeRefreshBlockedSlotOnce: ConfiantCallback = (
  * https://www.confiant.com/solutions/quality
  * @returns Promise
  */
-export const init = async (): Promise<void> => {
+export const prepareAdVerification = async (): Promise<void> => {
 	const host = 'cdn.confiant-integrations.net';
 	const id = '7oDgiTsq88US4rrBG0_Nxpafkrg';
 	const remoteScriptUrl = `//${host}/${id}/gpt_and_prebid/config.js`;

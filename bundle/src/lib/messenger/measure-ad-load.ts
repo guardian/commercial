@@ -27,7 +27,7 @@ const getSlotId = (specs: unknown): string | undefined =>
 
 const eventTimer = EventTimer.get();
 
-const init = (register: RegisterListener): void => {
+const initMeasureAdLoadMessage = (register: RegisterListener): void => {
 	register('measure-ad-load', (specs) => {
 		eventTimer.mark('adOnPage', getSlotId(specs));
 		eventTimer.mark('fetchAdEnd', getSlotId(specs));
@@ -35,4 +35,4 @@ const init = (register: RegisterListener): void => {
 	});
 };
 
-export { init };
+export { initMeasureAdLoadMessage };

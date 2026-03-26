@@ -80,7 +80,7 @@ const removeAnyOutstreamClass = (adSlot: HTMLElement) => {
 	});
 };
 
-const init = (register: RegisterListener): void => {
+const initResizeMessage = (register: RegisterListener): void => {
 	register('resize', (specs, ret, iframe) => {
 		if (iframe && specs) {
 			const adSlot =
@@ -100,4 +100,4 @@ const init = (register: RegisterListener): void => {
 
 export const _ = { resize, normalise };
 
-export { init };
+export { initResizeMessage };

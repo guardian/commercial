@@ -6,7 +6,7 @@ import { log } from '@guardian/libs';
  * Collect metrics on gpcSignal presence and value
  * https://globalprivacycontrol.github.io/gpc-spec/
  */
-const initTrackGpcSignal = (consentState: ConsentState) => {
+const trackGpcSignal = (consentState: ConsentState) => {
 	// If undefined we set the property value to -1, false is 0, true is 1
 	const gpcSignal =
 		consentState.gpcSignal === undefined ? -1 : +consentState.gpcSignal;
@@ -18,4 +18,4 @@ const initTrackGpcSignal = (consentState: ConsentState) => {
 	eventTimer.setProperty('gpcSignal', gpcSignal);
 };
 
-export { initTrackGpcSignal };
+export { trackGpcSignal };

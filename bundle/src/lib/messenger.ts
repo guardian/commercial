@@ -491,7 +491,7 @@ export const unregister: UnregisterListener = (type, callback, options) => {
  * @param listeners The listener registration functions
  * @param persistentListeners The persistent listener registration functions
  */
-export const init = (
+export const messenger = (
 	listeners: Array<(register: RegisterListener) => void>,
 	persistentListeners: Array<(register: RegisterPersistentListener) => void>,
 ): Promise<void> => {
