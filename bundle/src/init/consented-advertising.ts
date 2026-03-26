@@ -22,7 +22,7 @@ import { reloadPageOnConsentChange } from './shared/reload-page-on-consent-chang
 import { setAdTestCookie } from './shared/set-adtest-cookie';
 import { setAdTestInLabelsCookie } from './shared/set-adtest-in-labels-cookie';
 
-// Initialise messenger immediately
+// @todo why does messenger skip the boot process of all the other modules?
 initMessenger();
 
 // all modules needed for commercial code and ads to run
