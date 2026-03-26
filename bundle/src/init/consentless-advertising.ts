@@ -12,11 +12,12 @@ import { reloadPageOnConsentChange } from './shared/reload-page-on-consent-chang
 import { setAdTestCookie } from './shared/set-adtest-cookie';
 import { setAdTestInLabelsCookie } from './shared/set-adtest-in-labels-cookie';
 
-// @todo why does messenger skip the boot process of all the other modules?
-void messenger([initBackgroundMessage, initResizeMessage, initTypeMessage], []);
-
 const bootConsentless = async (consentState: ConsentState): Promise<void> => {
 	const consentlessModuleList: Array<Promise<unknown>> = [
+		messenger(
+			[initBackgroundMessage, initResizeMessage, initTypeMessage],
+			[],
+		),
 		setAdTestCookie(),
 		setAdTestInLabelsCookie(),
 		initConsentless(consentState),
