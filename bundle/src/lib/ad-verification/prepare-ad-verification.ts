@@ -91,7 +91,7 @@ export const prepareAdVerification = async (): Promise<void> => {
 };
 
 export const _ = {
-	init,
+	prepareAdVerification,
 	maybeRefreshBlockedSlotOnce,
 	confiantRefreshedSlots,
 };
