@@ -2,7 +2,7 @@ import { getConsentFor, onConsent } from '@guardian/libs';
 import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { commercialFeatures } from '../../lib/commercial-features';
 import type { ThirdPartyTag } from '../../types/global';
-import { _, init } from './third-party-tags';
+import { _, initThirdPartyTags } from './third-party-tags';
 
 const { insertScripts, loadOther } = _;
 
@@ -121,7 +121,7 @@ const mockGetConsentFor = (hasConsent: boolean) =>
 
 describe('third party tags', () => {
 	it('should exist', () => {
-		expect(init).toBeDefined();
+		expect(initThirdPartyTags).toBeDefined();
 		expect(loadOther).toBeDefined();
 		expect(insertScripts).toBeDefined();
 	});
@@ -129,7 +129,7 @@ describe('third party tags', () => {
 	it('should not run if disabled in commercial features', (done) => {
 		mockOnConsent(tcfv2AllConsent);
 		commercialFeatures.thirdPartyTags = false;
-		init()
+		initThirdPartyTags()
 			.then((enabled) => {
 				expect(enabled).toBe(false);
 				done();
@@ -143,7 +143,7 @@ describe('third party tags', () => {
 		mockOnConsent(tcfv2AllConsent);
 		commercialFeatures.thirdPartyTags = true;
 		commercialFeatures.adFree = false;
-		init()
+		initThirdPartyTags()
 			.then((enabled) => {
 				expect(enabled).toBe(true);
 				done();

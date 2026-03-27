@@ -26,7 +26,7 @@ const passbackRefresh = (specs: string, adSlot: HTMLElement) => {
 	}
 };
 
-const init = (register: RegisterListener): void => {
+const initPassbackRefreshMessage = (register: RegisterListener): void => {
 	register('passback-refresh', (specs, _, iframe) => {
 		if (iframe && isString(specs)) {
 			const adSlot =
@@ -42,4 +42,4 @@ const init = (register: RegisterListener): void => {
 
 export const _ = { passbackRefresh };
 
-export { init };
+export { initPassbackRefreshMessage };

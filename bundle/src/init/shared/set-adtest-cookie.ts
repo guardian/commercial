@@ -7,7 +7,7 @@ import { getUrlVars } from '../../lib/url';
  * in order to test individual line items
  * @returns Promise
  */
-const init = (): Promise<void> => {
+export const setAdTestCookie = (): Promise<void> => {
 	const queryParams = getUrlVars();
 
 	if (queryParams.adtest === 'clear') {
@@ -22,5 +22,3 @@ const init = (): Promise<void> => {
 
 	return Promise.resolve();
 };
-
-export { init };

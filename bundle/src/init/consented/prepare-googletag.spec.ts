@@ -5,7 +5,7 @@ import type { Advert } from '../../define/Advert';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
-import { init as prepareGoogletag } from './prepare-googletag';
+import { prepareGoogletag } from './prepare-googletag';
 import { fillStaticAdvertSlots } from './static-ad-slots';
 
 const getAdverts = (withEmpty: boolean) => {

@@ -97,7 +97,7 @@ const disableChildDirectedTreatment = () =>
 				childDirectedTreatment: null,
 			});
 
-export const init = (): Promise<void> => {
+export const prepareGoogletag = (): Promise<void> => {
 	const setupAdvertising = async (): Promise<void> => {
 		const consentState = await onConsent();
 		EventTimer.get().mark('googletagInitStart');

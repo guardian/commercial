@@ -7,7 +7,7 @@ const setType = (adSlotType: string, adSlot: Element) =>
 		adSlot.classList.add(`ad-slot--${adSlotType}`);
 	});
 
-const init = (register: RegisterListener): void => {
+const initTypeMessage = (register: RegisterListener): void => {
 	register('type', (specs, ret, iframe) => {
 		const adSlot = iframe?.closest('.js-ad-slot');
 
@@ -17,4 +17,4 @@ const init = (register: RegisterListener): void => {
 	});
 };
 
-export { init };
+export { initTypeMessage };

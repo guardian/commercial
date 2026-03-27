@@ -283,7 +283,7 @@ const setupBackground = async (
 	});
 };
 
-const init = (register: RegisterListener): void => {
+const initBackgroundMessage = (register: RegisterListener): void => {
 	register('background', async (specs, ret, iframe): Promise<void> => {
 		if (!isBackgroundSpecs(specs)) {
 			return Promise.resolve();
@@ -300,6 +300,6 @@ export const _ = {
 	getStylesFromSpec,
 };
 
-export { init };
+export { initBackgroundMessage };
 
 export type { BackgroundSpecs };

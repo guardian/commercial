@@ -1,26 +1,29 @@
-import { init as prepareAdVerification } from '../lib/ad-verification/prepare-ad-verification';
+import { prepareAdVerification } from '../lib/ad-verification/prepare-ad-verification';
 import { bootCommercial } from '../lib/commercial-boot-utils';
 import { adFreeSlotRemove } from './consented/ad-free-slot-remove';
-import { init as initComscore } from './consented/comscore';
+import { initComscore } from './consented/comscore';
 import { initDfpListeners } from './consented/dfp-listeners';
 import { initDynamicAdSlots } from './consented/dynamic-ad-slots';
 import { initFillSlotListener } from './consented/fill-slot-listener';
-import { init as initIpsosMori } from './consented/ipsos-mori';
-import { init as initMessenger } from './consented/messenger';
+import { initIpsosMori } from './consented/ipsos-mori';
+import { initMessenger } from './consented/messenger';
 import { initOpinaryPollListener } from './consented/opinary';
-import { init as prepareA9 } from './consented/prepare-a9';
-import { init as prepareGoogletag } from './consented/prepare-googletag';
+import { prepareA9 } from './consented/prepare-a9';
+import { prepareGoogletag } from './consented/prepare-googletag';
 import { initPermutive } from './consented/prepare-permutive';
-import { init as preparePrebid } from './consented/prepare-prebid';
+import { preparePrebid } from './consented/prepare-prebid';
 import { removeDisabledSlots as closeDisabledSlots } from './consented/remove-slots';
 import { initTeadsCookieless } from './consented/teads-cookieless';
-import { init as initThirdPartyTags } from './consented/third-party-tags';
-import { init as initTrackGpcSignal } from './consented/track-gpc-signal';
-import { init as initTrackScrollDepth } from './consented/track-scroll-depth';
-import { init as initPages } from './pages';
+import { initThirdPartyTags } from './consented/third-party-tags';
+import { initTrackGpcSignal } from './consented/track-gpc-signal';
+import { initTrackScrollDepth } from './consented/track-scroll-depth';
+import { initPages } from './pages';
 import { reloadPageOnConsentChange } from './shared/reload-page-on-consent-change';
-import { init as setAdTestCookie } from './shared/set-adtest-cookie';
-import { init as setAdTestInLabelsCookie } from './shared/set-adtest-in-labels-cookie';
+import { setAdTestCookie } from './shared/set-adtest-cookie';
+import { setAdTestInLabelsCookie } from './shared/set-adtest-in-labels-cookie';
+
+// @todo why does messenger skip the boot process of all the other modules?
+initMessenger();
 
 // all modules needed for commercial code and ads to run
 const commercialModules = [
@@ -31,7 +34,6 @@ const commercialModules = [
 	initTeadsCookieless,
 	initTrackScrollDepth,
 	initTrackGpcSignal,
-	initMessenger,
 	setAdTestCookie,
 	setAdTestInLabelsCookie,
 	reloadPageOnConsentChange,

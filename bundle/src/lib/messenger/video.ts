@@ -5,9 +5,7 @@ import {
 	updateVideoProgress,
 } from '../video-progress-reporting';
 
-const initMessengerVideoProgressReporting = (
-	register: RegisterListener,
-): void => {
+const initVideoProgressMessage = (register: RegisterListener): void => {
 	register('video-progress', async (specs, ret, iframe): Promise<void> => {
 		const adSlot = iframe?.closest<HTMLElement>('.js-ad-slot');
 		if (
@@ -23,4 +21,4 @@ const initMessengerVideoProgressReporting = (
 	});
 };
 
-export { initMessengerVideoProgressReporting };
+export { initVideoProgressMessage };

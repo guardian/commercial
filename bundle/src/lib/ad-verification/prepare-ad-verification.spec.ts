@@ -40,7 +40,7 @@ jest.mock('../dfp/get-advert-by-id', () => ({
 	}),
 }));
 
-const { init, maybeRefreshBlockedSlotOnce } = _;
+const { prepareAdVerification: init, maybeRefreshBlockedSlotOnce } = _;
 
 describe('prepare-ad-verification', () => {
 	beforeAll(() => {

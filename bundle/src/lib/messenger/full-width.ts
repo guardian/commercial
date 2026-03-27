@@ -11,7 +11,7 @@ const fullWidth = (fullWidth: boolean, slotContainer: HTMLElement) =>
 		}
 	});
 
-const init = (register: RegisterListener): void => {
+const initFullWidthMessage = (register: RegisterListener): void => {
 	register('full-width', (specs, ret, iframe) => {
 		if (iframe && specs) {
 			if (!isBoolean(specs)) {
@@ -44,4 +44,4 @@ const init = (register: RegisterListener): void => {
 
 export const _ = { fullWidth };
 
-export { init };
+export { initFullWidthMessage };

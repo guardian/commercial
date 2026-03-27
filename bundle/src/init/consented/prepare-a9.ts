@@ -35,7 +35,7 @@ const setupA9Once = once(setupA9);
  * Initialise A9, Amazon header bidding library
  * https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/javascript-guide/display.html
  */
-export const init = (): Promise<void | boolean> =>
+export const prepareA9 = (): Promise<void | boolean> =>
 	onConsent()
 		.then((consentState) => {
 			if (getConsentFor('a9', consentState)) {

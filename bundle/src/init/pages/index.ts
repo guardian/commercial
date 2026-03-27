@@ -1,5 +1,5 @@
 // export as promise to match index signature of commercial boot logic
-export const init = async (): Promise<void> => {
+export const initPages = async (): Promise<void> => {
 	if (
 		window.guardian.config.page.keywordIds.includes(
 			'education/universityguide',

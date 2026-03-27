@@ -7,7 +7,7 @@ import { getUrlVars } from '../../lib/url';
  * This is used when determining whether or not to display the value of the `adtest` cookie in ad labels
  * @returns Promise
  */
-const init = (): Promise<void> => {
+export const setAdTestInLabelsCookie = (): Promise<void> => {
 	const queryParams = getUrlVars();
 
 	if (queryParams.adtestInLabels === 'clear') {
@@ -21,5 +21,3 @@ const init = (): Promise<void> => {
 
 	return Promise.resolve();
 };
-
-export { init };
