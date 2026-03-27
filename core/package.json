@@ -54,7 +54,7 @@
 	"devDependencies": {
 		"@guardian/ophan-tracker-js": "2.8.0",
 		"@types/jest": "30.0.0",
-		"@types/node": "25.3.3",
+		"@types/node": "25.4.0",
 		"jest": "^30.3.0",
 		"jest-environment-jsdom": "^30.3.0",
 		"jest-environment-jsdom-global": "~4.0.0",
