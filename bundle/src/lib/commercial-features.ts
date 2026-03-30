@@ -124,9 +124,9 @@ class CommercialFeatures {
 		}
 
 		const isInSpacefinderOnInteractivesTest =
-			isUserInTestGroup(
-				'commercial-enable-spacefinder-on-interactives',
-				'true',
+			!isUserInTestGroup(
+				'commercial-holdback-spacefinder-on-interactives',
+				'holdback',
 			) && isInteractive;
 
 		const enableArticleBodyAdverts =
