@@ -45,7 +45,7 @@ jest.mock('@guardian/commercial-core/email-hash', () => ({
 	hashEmailForClient: jest.fn(),
 }));
 
-jest.mock('../../../experiments/beta-ab', () => ({
+jest.mock('../../../ab-testing', () => ({
 	isUserInTestGroup: jest.fn(),
 }));
 

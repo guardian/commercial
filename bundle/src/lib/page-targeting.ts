@@ -63,7 +63,7 @@ const getPageTargeting = (
 
 	const pageTargeting = buildPageTargeting({
 		adFree: commercialFeatures.adFree,
-		clientSideParticipations: getParticipations(),
+		abTestParticipations: getParticipations(),
 		consentState,
 		isSignedIn,
 		idProviders,

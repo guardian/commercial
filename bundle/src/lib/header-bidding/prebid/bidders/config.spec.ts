@@ -8,7 +8,6 @@ import {
 } from '@guardian/commercial-core/geo/geo-utils';
 import { type ConsentState } from '@guardian/libs';
 import type { Size } from 'prebid.js/dist/src/types/common';
-import { isUserInVariant as isUserInVariant_ } from '../../../../ab-testing';
 import type { PrebidBidder } from '../../prebid-types';
 import {
 	containsBillboard as containsBillboard_,
@@ -86,7 +85,6 @@ const containsMpu = containsMpu_ as jest.Mock;
 const containsMpuOrDmpu = containsMpuOrDmpu_ as jest.Mock;
 const stripMobileSuffix = stripMobileSuffix_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
-const isUserInVariant = isUserInVariant_ as jest.Mock;
 
 jest.mock('@guardian/commercial-core/geo/geo-utils');
 const isInAuOrNz = isInAuOrNz_ as jest.Mock;
@@ -94,10 +92,6 @@ const isInRow = isInRow_ as jest.Mock;
 const isInUk = isInUk_ as jest.Mock;
 const isInUsOrCa = isInUsOrCa_ as jest.Mock;
 const isInUsa = isInUsa_ as jest.Mock;
-
-jest.mock('experiments/ab', () => ({
-	isUserInVariant: jest.fn(),
-}));
 
 const resetConfig = () => {
 	window.guardian.ophan = {
@@ -352,9 +346,6 @@ describe('bids', () => {
 		setQueryString('pbtest=xhb&pbtest=oxd');
 		const mockShouldInclude = jest.fn().mockReturnValue(false);
 		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
-		isUserInVariant.mockImplementation(
-			(testId, variantId) => variantId === 'variant',
-		);
 
 		expect(getBidders()).toEqual(['xhb', 'oxd']);
 	});

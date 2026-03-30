@@ -15,12 +15,6 @@ jest.mock('@guardian/commercial-core/geo/geo-utils', () => ({
 	isInCanada: jest.fn(() => false),
 }));
 
-jest.mock('experiments/ab', () => ({
-	isInABTestSynchronous: jest.fn().mockReturnValue(false),
-	isInVariantSynchronous: jest.fn().mockReturnValue(false),
-	isUserInVariant: jest.fn().mockReturnValue(false),
-}));
-
 jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
 }));

@@ -5,7 +5,6 @@ import {
 	type CountryCode,
 	getConsentFor as getConsentFor_,
 } from '@guardian/libs';
-import { isUserInVariant as isUserInVariant_ } from '../../ab-testing';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
@@ -30,9 +29,6 @@ const getCurrentTweakpoint = getCurrentTweakpoint_ as jest.MockedFunction<
 >;
 const matchesBreakpoints = matchesBreakpoints_ as jest.MockedFunction<
 	typeof matchesBreakpoints_
->;
-const isUserInVariant = isUserInVariant_ as jest.MockedFunction<
-	typeof isUserInVariant_
 >;
 
 const getConsentFor = getConsentFor_ as jest.MockedFunction<
@@ -65,17 +61,10 @@ jest.mock('lodash-es/once', () => (fn: (...args: unknown[]) => unknown) => fn);
 jest.mock('@guardian/commercial-core//geo/country-code', () => ({
 	getCountryCode: jest.fn(() => 'GB'),
 }));
-
-jest.mock('experiments/ab', () => ({
-	isUserInVariant: jest.fn(),
-}));
-
 jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentTweakpoint: jest.fn(() => 'mobile'),
 	matchesBreakpoints: jest.fn(),
 }));
-
-jest.mock('experiments/ab-tests');
 
 const resetConfig = () => {
 	window.guardian.config.switches.prebidAppnexus = true;
@@ -279,9 +268,6 @@ describe('Utils', () => {
 
 		describe('shouldIncludeXaxis', () => {
 			test('should be true if geolocation is GB and opted in AB test variant', () => {
-				isUserInVariant.mockImplementationOnce(
-					(testId, variantId) => variantId === 'variant',
-				);
 				window.guardian.config.page.isDev = true;
 				getCountryCode.mockReturnValue('GB');
 				getConsentFor.mockReturnValue(true);

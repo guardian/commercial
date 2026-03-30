@@ -57,7 +57,7 @@ const buildPageTargetingConsentless = (
 	const consentedPageTargeting: PageTargeting = buildPageTargeting({
 		adFree,
 		consentState,
-		clientSideParticipations: {},
+		abTestParticipations: {},
 		isSignedIn,
 	});
 

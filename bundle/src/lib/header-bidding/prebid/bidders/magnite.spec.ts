@@ -14,9 +14,6 @@ const isInRow = isInRow_ as jest.Mock;
 const isInUk = isInUk_ as jest.Mock;
 const isInUsOrCa = isInUsOrCa_ as jest.Mock;
 
-jest.mock('experiments/ab', () => ({
-	isUserInVariant: jest.fn(),
-}));
 jest.mock('@guardian/commercial-core/geo/geo-utils');
 
 jest.mock('../../utils', () => ({

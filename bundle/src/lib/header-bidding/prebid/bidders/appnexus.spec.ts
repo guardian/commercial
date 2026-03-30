@@ -36,10 +36,6 @@ const isInRow = isInRow_ as jest.Mock;
 const isInUk = isInUk_ as jest.Mock;
 const isInUsa = isInUsa_ as jest.Mock;
 
-jest.mock('experiments/ab', () => ({
-	isUserInVariant: jest.fn(),
-}));
-
 const resetConfig = () => {
 	window.guardian.ophan = {
 		pageViewId: 'pvid',

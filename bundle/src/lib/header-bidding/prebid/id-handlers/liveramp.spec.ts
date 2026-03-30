@@ -3,7 +3,7 @@ import { loadScript } from '@guardian/libs';
 import { getUserIdForLiveRamp } from './liveramp';
 
 jest.mock('@guardian/libs');
-jest.mock('../../../../experiments/beta-ab');
+jest.mock('../../../../ab-testing');
 
 const mockLoadScript = loadScript as jest.MockedFunction<typeof loadScript>;
 

@@ -137,11 +137,7 @@ const getReferrer = (referrer: string): SessionTargeting['ref'] => {
 	return matchedRef ? matchedRef.id : null;
 };
 
-/**
- * @todo drop old client/server side participations and rename to just `abTestsParticipations` once
- * all tests have been migrated to the new AB testing platform
- */
-const experimentsTargeting = (
+const abTestingTargeting = (
 	abTestParticipations: Record<string, string>,
 ): SessionTargeting['ab'] => {
 	const testToParams = (testName: string, variant: string): string | null => {
@@ -192,7 +188,7 @@ const getSessionTargeting = ({
 	referrer,
 	idProviders,
 }: Session): SessionTargeting => ({
-	ab: experimentsTargeting(participations),
+	ab: abTestingTargeting(participations),
 	at: adTest,
 	cc: countryCode,
 	lh: localHour,
@@ -203,4 +199,4 @@ const getSessionTargeting = ({
 });
 
 export type { SessionTargeting };
-export { getSessionTargeting, experimentsTargeting };
+export { getSessionTargeting, abTestingTargeting as experimentsTargeting };
