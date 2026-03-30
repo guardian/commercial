@@ -8,7 +8,7 @@ import {
 } from '@guardian/commercial-core/geo/geo-utils';
 import { type ConsentState } from '@guardian/libs';
 import type { Size } from 'prebid.js/dist/src/types/common';
-import { isUserInVariant as isUserInVariant_ } from '../../../../experiments/ab';
+import { isUserInVariant as isUserInVariant_ } from '../../../../ab-testing';
 import type { PrebidBidder } from '../../prebid-types';
 import {
 	containsBillboard as containsBillboard_,

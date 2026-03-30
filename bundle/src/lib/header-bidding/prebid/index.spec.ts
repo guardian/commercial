@@ -3,7 +3,7 @@
 import { hashEmailForClient } from '@guardian/commercial-core/email-hash';
 import { type ConsentState } from '@guardian/libs';
 import { getConsentFor } from '@guardian/libs';
-import { isUserInTestGroup } from '../../../experiments/beta-ab';
+import { isUserInTestGroup } from '../../../ab-testing';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
 import { getEmail } from '../../identity/api';

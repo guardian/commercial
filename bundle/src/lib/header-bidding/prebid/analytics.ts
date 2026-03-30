@@ -1,5 +1,5 @@
 import type { AnalyticsConfig } from 'prebid.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
-import { getParticipations } from '../../../experiments/ab';
+import { getParticipations } from '../../../ab-testing';
 
 const shouldEnableAnalytics = (): boolean => {
 	if (!window.guardian.config.switches.prebidAnalytics) {

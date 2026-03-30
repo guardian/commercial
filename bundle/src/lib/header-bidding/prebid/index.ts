@@ -8,7 +8,7 @@ import { flatten } from 'lodash-es';
 import type { AdUnitDefinition } from 'prebid.js/dist/src/adUnits';
 import type { UserSyncConfig } from 'prebid.js/dist/src/userSync';
 import type { Advert } from '../../../define/Advert';
-import { isUserInTestGroup } from '../../../experiments/beta-ab';
+import { isUserInTestGroup } from '../../../ab-testing';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedIn } from '../../identity/api';
 import { getPageTargeting } from '../../page-targeting';

@@ -6,7 +6,7 @@ import { buildPageTargeting } from '@guardian/commercial-core/targeting/build-pa
 import type { ConsentState } from '@guardian/libs';
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { getParticipations } from '../experiments/ab';
+import { getParticipations } from '../ab-testing';
 import { commercialFeatures } from './commercial-features';
 import { removeFalsyValues } from './header-bidding/utils';
 

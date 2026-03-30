@@ -1,6 +1,6 @@
 import type { AdSize, SizeMapping } from '@guardian/commercial-core/ad-sizes';
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
-import { isUserInTestGroup } from '../../experiments/beta-ab';
+import { isUserInTestGroup } from '../../ab-testing';
 import { commercialFeatures } from '../../lib/commercial-features';
 import type { ContainerOptions } from '../../lib/create-ad-slot';
 import {

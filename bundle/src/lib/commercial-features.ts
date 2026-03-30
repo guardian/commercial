@@ -1,5 +1,5 @@
 import { log, storage } from '@guardian/libs';
-import { isUserInTestGroup } from '../experiments/beta-ab';
+import { isUserInTestGroup } from '../ab-testing';
 import { isAdFree } from './ad-free';
 import { getCurrentBreakpoint } from './detect/detect-breakpoint';
 

@@ -40,7 +40,6 @@
 		"@babel/preset-env": "^7.29.2",
 		"@babel/preset-react": "^7.26.3",
 		"@changesets/cli": "^2.30.0",
-		"@guardian/ab-core": "9.0.0",
 		"@guardian/browserslist-config": "^7.0.0",
 		"@guardian/commercial-core": "workspace:*",
 		"@guardian/core-web-vitals": "17.0.0",

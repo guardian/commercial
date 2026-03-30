@@ -5,7 +5,7 @@ import {
 	type CountryCode,
 	getConsentFor as getConsentFor_,
 } from '@guardian/libs';
-import { isUserInVariant as isUserInVariant_ } from '../../experiments/ab';
+import { isUserInVariant as isUserInVariant_ } from '../../ab-testing';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,

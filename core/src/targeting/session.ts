@@ -1,4 +1,3 @@
-import type { Participations } from '@guardian/ab-core';
 import type { CountryCode } from '@guardian/libs';
 import { isString } from '@guardian/libs';
 import type { UserId } from '../targeting/build-page-targeting';
@@ -125,15 +124,6 @@ type SessionTargeting = {
 	idp: string[] | null;
 };
 
-type AllParticipations = {
-	clientSideParticipations: Participations;
-	serverSideParticipations: {
-		[key: `${string}Control`]: 'control';
-		[key: `${string}Variant`]: 'variant';
-	};
-	betaAbTestParticipations: Record<string, string>;
-};
-
 /* -- Methods -- */
 
 const getReferrer = (referrer: string): SessionTargeting['ref'] => {
@@ -151,11 +141,9 @@ const getReferrer = (referrer: string): SessionTargeting['ref'] => {
  * @todo drop old client/server side participations and rename to just `abTestsParticipations` once
  * all tests have been migrated to the new AB testing platform
  */
-const experimentsTargeting = ({
-	clientSideParticipations,
-	serverSideParticipations,
-	betaAbTestParticipations,
-}: AllParticipations): SessionTargeting['ab'] => {
+const experimentsTargeting = (
+	abTestParticipations: Record<string, string>,
+): SessionTargeting['ab'] => {
 	const testToParams = (testName: string, variant: string): string | null => {
 		if (variant === 'notintest') return null;
 
@@ -163,34 +151,18 @@ const experimentsTargeting = ({
 		return `${testName}-${variant}`.substring(0, 40);
 	};
 
-	const clientSideExperiment = Object.entries(clientSideParticipations)
-		.map((test) => {
-			const [name, variant] = test;
-			return testToParams(name, variant.variant);
-		})
-		.filter(isString);
-
-	const serverSideExperiments = Object.entries(serverSideParticipations)
-		.map((test) => testToParams(...test))
-		.filter(isString);
-
-	const betaAbTests = Object.entries(betaAbTestParticipations)
+	const abTests = Object.entries(abTestParticipations)
 		.map((test) => {
 			const [name, variant] = test;
 			return testToParams(name, variant);
 		})
 		.filter(isString);
 
-	if (
-		clientSideExperiment.length +
-			serverSideExperiments.length +
-			betaAbTests.length ===
-		0
-	) {
+	if (abTests.length === 0) {
 		return null;
 	}
 
-	return [...clientSideExperiment, ...serverSideExperiments, ...betaAbTests];
+	return abTests;
 };
 
 const getIdProviders = (userIds: UserId[]): string[] => {
@@ -205,7 +177,7 @@ type Session = {
 	localHour: string;
 	isSignedIn: boolean;
 	pageViewId: SessionTargeting['pv'];
-	participations: AllParticipations;
+	participations: Record<string, string>;
 	referrer: string;
 	idProviders: UserId[];
 };
@@ -230,5 +202,5 @@ const getSessionTargeting = ({
 	idp: getIdProviders(idProviders),
 });
 
-export type { SessionTargeting, AllParticipations };
+export type { SessionTargeting };
 export { getSessionTargeting, experimentsTargeting };

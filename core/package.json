@@ -44,11 +44,9 @@
 		"tsc": "tsc --noEmit"
 	},
 	"peerDependencies": {
-		"@guardian/ab-core": "^9.0.0",
 		"@guardian/libs": "^30.1.0"
 	},
 	"dependencies": {
-		"@guardian/ab-core": "9.0.0",
 		"@guardian/libs": "30.1.0"
 	},
 	"devDependencies": {
