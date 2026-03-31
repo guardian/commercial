@@ -1,6 +1,6 @@
 # Add an Advert Lifecycle Events API to `Advert` Class
 
-## Status: Proposed
+## Status: Approved
 
 ## Context
 

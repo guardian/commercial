@@ -1,6 +1,6 @@
 # Export Event Listener API for Advert Lifecycle Events
 
-## Status: Proposed
+## Status: Approved
 
 ## Context
 
