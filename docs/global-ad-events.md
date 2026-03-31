@@ -10,6 +10,18 @@ The event listener will trigger even if the event has already happened by the ti
 import { onAdEvents } from '@guardian/commercial-core';
 ```
 
+## Signature
+
+```typescript
+function onAdEvents(
+	listenStatus: AdvertStatus | AdvertStatus[],
+	callback: (detail: AdEventDetail) => void | Promise<void>,
+	options?: { once?: boolean },
+): () => void;
+```
+
+note: the `once` option is once per advert, so if you listen for 'rendered' and 'refreshed' with `once: true`, the callback will be called once for the first advert status change (e.g., 'rendered') and then never again for that advert, even if it changes to 'refreshed'. However, if another advert changes status, the callback will be called again for that advert.
+
 ## Events
 
 Fired every time any ad slot changes status. All listeners receive every event — use the `detail` payload to filter.
