@@ -4,6 +4,7 @@ import type {
 	Apstag,
 	ArticleCounts,
 	Confiant,
+	Commercial as CoreCommercial,
 	CoreGuardian,
 	GoogleTagParams,
 	GoogleTrackConversionObject,
@@ -17,8 +18,7 @@ import type {
 	Trac,
 } from '@guardian/commercial-core/types';
 import type { CustomClaims } from '@guardian/identity-auth';
-import type { Advert, AdvertStatus } from '../define/Advert';
-import type { Queue } from '../lib/guardian-commercial-queue';
+import type { Advert } from '../define/Advert';
 import type { ThirdPartyTag } from '../lib/types';
 
 type ServerSideABTest = `${string}${'Variant' | 'Control'}`;
@@ -301,6 +301,10 @@ interface DfpEnv {
 	shouldLazyLoad: () => boolean;
 }
 
+interface Commercial extends CoreCommercial {
+	dfpEnv?: DfpEnv;
+}
+
 interface Guardian extends CoreGuardian {
 	ophan?: Ophan;
 	config: Config;
@@ -310,19 +314,7 @@ interface Guardian extends CoreGuardian {
 	adBlockers: AdBlockers;
 	css: { onLoad: () => void; loaded: boolean };
 	articleCounts?: ArticleCounts;
-	commercial?: {
-		dfpEnv?: DfpEnv;
-		a9WinningBids?: FetchBidResponse[];
-		/**
-		 * The commercial queue can be stubbed and set up as an empty array
-		 * but is converted to a Queue on initialisation
-		 */
-		queue?: Queue | Array<() => void>;
-		onAdEvent?: (
-			status: AdvertStatus | AdvertStatus[],
-			callback: (advert: Advert) => void,
-		) => void;
-	};
+	commercial?: Commercial;
 	notificationEventHistory?: HeaderNotification[][];
 	page: {
 		dcrCouldRender: boolean;

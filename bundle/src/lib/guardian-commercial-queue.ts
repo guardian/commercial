@@ -1,11 +1,5 @@
+import type { Queue, QueueItem } from '@guardian/commercial-core/types';
 import { log } from '@guardian/libs';
-
-type QueueItem = () => void;
-
-type Queue = {
-	push: (...items: QueueItem[]) => QueueItem[];
-	flush: () => void;
-};
 
 const safelyExecuteQueueItem = (item: QueueItem) => {
 	try {
@@ -58,12 +52,18 @@ const createCommercialQueue = (queueArr: QueueItem[] = []): Queue => {
 			isInitialised = true;
 			while (buffer.length > 0) {
 				const item = buffer.shift();
-				log('commercial', `Executing queue item ${item?.toString()}`);
-				safelyExecuteQueueItem(item!);
+				if (!item) {
+					log(
+						'commercial',
+						'No more items to execute in the commercial queue',
+					);
+					break;
+				}
+				log('commercial', `Executing queue item ${item.toString()}`);
+				safelyExecuteQueueItem(item);
 			}
 		},
 	};
 };
 
 export { createCommercialQueue };
-export type { Queue, QueueItem };

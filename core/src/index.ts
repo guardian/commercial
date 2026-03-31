@@ -12,7 +12,7 @@ export { buildImaAdTagUrl } from './targeting/youtube-ima';
 export { getPermutivePFPSegments } from './permutive';
 export { isEligibleForTeads } from './targeting/teads-eligibility';
 export { hashEmailForClient } from './email-hash';
-export { globalAdEvents } from './global-ad-events';
+export { onAdEvent } from './global-ad-events';
 export type { AdSize, SizeMapping, SlotName } from './ad-sizes';
 export type { PageTargeting } from './targeting/build-page-targeting';
 export type {

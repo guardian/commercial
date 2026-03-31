@@ -10,10 +10,14 @@ import type {
 	SlotName,
 } from '@guardian/commercial-core/ad-sizes';
 import type { Breakpoint } from '@guardian/commercial-core/breakpoint';
-import { globalAdEvents } from '@guardian/commercial-core/global-ad-events';
+import type {
+	AdvertListener,
+	AdvertStatus,
+} from '@guardian/commercial-core/global-ad-events';
 import { log } from '@guardian/libs';
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import type { Size } from 'prebid.js/dist/src/types/common';
+import { globalAdEvents } from '../lib/ad-events';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import { a9 } from '../lib/header-bidding/a9/a9';
@@ -154,21 +158,6 @@ const addPubadsEventListener = (
 	});
 };
 
-interface AdvertListener {
-	remove: () => void;
-}
-
-type AdvertStatus =
-	| 'ready'
-	| 'preparing'
-	| 'prepared'
-	| 'fetching'
-	| 'fetched'
-	| 'loading'
-	| 'loaded'
-	| 'rendered'
-	| 'refreshed';
-
 class Advert extends EventTarget {
 	id: string;
 	name: string;
@@ -203,6 +192,11 @@ class Advert extends EventTarget {
 		rendered: false,
 		refreshed: false,
 	};
+
+	// readonly status property, the status can only be updated using the setStatus method, which also dispatches the relevant events
+	get status(): Record<AdvertStatus, boolean> {
+		return this.#status;
+	}
 
 	constructor(
 		adSlotNode: HTMLElement,
@@ -259,6 +253,12 @@ class Advert extends EventTarget {
 			this.#setStatus('loaded', true);
 			this.#setStatus('rendered', true);
 		});
+
+		globalAdEvents.dispatchEvent(
+			new CustomEvent('adCreated', {
+				detail: { advert: this },
+			}),
+		);
 	}
 
 	#setStatus(name: AdvertStatus, status: boolean): void {
@@ -269,11 +269,6 @@ class Advert extends EventTarget {
 		);
 		this.dispatchEvent(
 			new CustomEvent('statusChange', { detail: { name, status } }),
-		);
-		globalAdEvents.dispatchEvent(
-			new CustomEvent('adStatusChange', {
-				detail: { advert: this, name, status },
-			}),
 		);
 	}
 
@@ -557,7 +552,13 @@ const isAdSize = (size: Advert['size']): size is AdSize => {
 	return size !== null && size !== 'fluid';
 };
 
-export { Advert, findSmallestAdHeightForSlot, isAdSize, type AdvertStatus };
+export {
+	Advert,
+	findSmallestAdHeightForSlot,
+	isAdSize,
+	type AdvertStatus,
+	type AdvertListener,
+};
 
 export const _ = {
 	getSlotSizeMapping,

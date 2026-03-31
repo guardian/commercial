@@ -1,5 +1,10 @@
 import type { EventPayload } from '@guardian/ophan-tracker-js';
 import type { EventTimer } from './event-timer';
+import type {
+	AdEventDetail,
+	AdvertListener,
+	AdvertStatus,
+} from './global-ad-events';
 import type { PageTargeting } from './targeting/build-page-targeting';
 
 type ConnectionType =
@@ -469,8 +474,33 @@ type AdmiralCallback = (event: AdmiralEvent) => void;
 type AdmiralArg = string | AdmiralCallback;
 type Admiral = (...args: AdmiralArg[]) => void;
 
+type QueueItem = () => void;
+
+type Queue = {
+	push: (...items: QueueItem[]) => QueueItem[];
+	flush: () => void;
+};
+
+type OnAdEvent = (
+	advertName: string,
+	listenStatus: AdvertStatus | AdvertStatus[],
+	callback: (detail: AdEventDetail) => void | Promise<void>,
+	options?: { once?: boolean },
+) => AdvertListener;
+
+type Commercial = {
+	a9WinningBids?: FetchBidResponse[];
+	/**
+	 * The commercial queue can be stubbed and set up as an empty array
+	 * but is converted to a Queue on initialisation
+	 */
+	queue?: Queue | Array<() => void>;
+	onAdEvent?: OnAdEvent;
+};
+
 interface CoreGuardian {
 	config: Config;
+	commercial?: Commercial;
 
 	commercialTimer?: EventTimer;
 	offlineCount?: number;
@@ -526,4 +556,7 @@ export type {
 	Admiral,
 	AdmiralEvent,
 	CoreGuardian,
+	QueueItem,
+	Queue,
+	Commercial,
 };
