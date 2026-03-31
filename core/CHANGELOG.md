@@ -1,5 +1,15 @@
 # @guardian/commercial-core
 
+## 32.0.0
+
+### Major Changes
+
+- e1d6d94: ab testing params for `buildImaAdTagUrl` updated to use new framework and drop old AB testing frameworks
+
+  update `buildPageTargeting` to use new AB testing framework and drop old AB testing frameworks
+
+  Dropped `@guardian/ab-core` as a dependency and peer dependency and updated imports to use new AB testing framework.
+
 ## 31.0.0
 
 ### Major Changes
