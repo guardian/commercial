@@ -482,7 +482,6 @@ type Queue = {
 };
 
 type OnAdEvent = (
-	advertName: string,
 	listenStatus: AdvertStatus | AdvertStatus[],
 	callback: (detail: AdEventDetail) => void | Promise<void>,
 	options?: { once?: boolean },

@@ -4,6 +4,7 @@ import type {
 	AdvertStatus,
 } from '@guardian/commercial-core/global-ad-events';
 import type { Advert } from '../define/Advert';
+import { dfpEnv } from './dfp/dfp-env';
 import { getAdvertById } from './dfp/get-advert-by-id';
 
 const globalAdEvents = new EventTarget();
@@ -19,51 +20,45 @@ const globalAdEvents = new EventTarget();
  * @param options - Optional configuration for the listener, such as whether it should only trigger once.
  */
 const onAdEvent = (
-	advertName: string,
 	listenStatus: AdvertStatus | AdvertStatus[],
 	callback: (detail: AdEventDetail) => void | Promise<void>,
 	{ once = false } = {},
 ): AdvertListener => {
-	const advert = getAdvertById(`dfp-ad--${advertName}`);
+	const currentAdverts = Array.from(dfpEnv.adverts.values());
 
-	if (advert) {
-		const listener = advert.on(
-			listenStatus,
-			(status) => {
-				void callback({
-					advertId: advert.id,
-					advertName: advert.name,
-					status,
-				});
-			},
-			{ once },
+	let listeners: AdvertListener[] = [];
+	if (currentAdverts.length) {
+		listeners = currentAdverts.map((advert) =>
+			advert.on(
+				listenStatus,
+				(status) => {
+					void callback({
+						advertName: advert.name,
+						status,
+					});
+				},
+				{ once },
+			),
 		);
-
-		return listener;
 	}
 
-	let listener: AdvertListener | null = null;
 	const globalListener = (event: Event) => {
 		const { advert } = (event as CustomEvent<{ advert: Advert }>).detail;
 
 		const createdAdvert = getAdvertById(`dfp-ad--${advert.name}`);
-		if (advert.name === advertName) {
-			listener =
-				createdAdvert?.on(
+		if (createdAdvert) {
+			listeners.push(
+				createdAdvert.on(
 					listenStatus,
 					(status) => {
 						void callback({
-							advertId: createdAdvert.id,
 							advertName: createdAdvert.name,
 							status,
 						});
 					},
 					{ once },
-				) ?? null;
-
-			// Cleanup the listener for the 'adCreated' event after it has been handled
-			globalAdEvents.removeEventListener('adCreated', globalListener);
-			return listener;
+				),
+			);
 		}
 	};
 
@@ -73,9 +68,7 @@ const onAdEvent = (
 
 	return {
 		remove: () => {
-			if (listener) {
-				listener.remove();
-			}
+			listeners.forEach((listener) => listener.remove());
 			globalAdEvents.removeEventListener('adCreated', globalListener);
 		},
 	};
