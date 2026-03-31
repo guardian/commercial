@@ -213,7 +213,10 @@ const initPassbackMessage = (register: RegisterListener): void => {
 				const initialSlot = window.googletag
 					.pubads()
 					.getSlots()
-					.find((s) => s.getSlotElementId() === slotIdWithPrefix);
+					.find((s) =>
+						// startsWWith to account with `--mobile` suffix added to the slotId for mobile slots
+						s.getSlotElementId().startsWith(slotIdWithPrefix),
+					);
 
 				if (!initialSlot) {
 					log(
