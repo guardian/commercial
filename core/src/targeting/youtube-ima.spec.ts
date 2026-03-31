@@ -31,7 +31,7 @@ describe('Builds an IMA ad tag URL', () => {
 			adUnit: 'someAdUnit',
 			customParams: {},
 			consentState: emptyConsent,
-			clientSideParticipations: {},
+			abTestParticipations: {},
 			isSignedIn: true,
 		});
 		expect(adTagURL).toEqual(
@@ -54,7 +54,7 @@ describe('Builds an IMA ad tag URL', () => {
 				param6: '=&,',
 			},
 			consentState: emptyConsent,
-			clientSideParticipations: {},
+			abTestParticipations: {},
 			isSignedIn: true,
 		});
 		expect(adTagURL).toEqual(
@@ -73,7 +73,7 @@ describe('Builds an IMA ad tag URL', () => {
 				param1: 'hello1',
 			},
 			consentState: emptyConsent,
-			clientSideParticipations: {},
+			abTestParticipations: {},
 			isSignedIn: true,
 		});
 		expect(adTagURL).toEqual(

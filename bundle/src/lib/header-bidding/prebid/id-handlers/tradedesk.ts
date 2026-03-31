@@ -1,7 +1,7 @@
 import { hashEmailForClient } from '@guardian/commercial-core';
 import type { ConsentState } from '@guardian/libs';
 import type { UserIdConfig } from 'prebid.js/dist/modules/userId/spec';
-import { isUserInTestGroup } from '../../../../experiments/beta-ab';
+import { isUserInTestGroup } from '../../../../ab-testing';
 
 type TradeDeskUserIdConfig = UserIdConfig<'uid2'> | UserIdConfig<'euid'>;
 

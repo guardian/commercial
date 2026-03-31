@@ -1,47 +1,7 @@
 # AB Testing in Commercial
 
-## Client side tests
-
 ### Setup
 
-1. Follow steps 1-6 in [the DCR documentation](https://github.com/guardian/dotcom-rendering/blob/main/dotcom-rendering/docs/development/ab-testing-in-dcr.md)
-1. Create a test in [src/experiments/tests](https://github.com/guardian/commercial/blob/main/src/experiments/tests)
-1. Add the test to [concurrent tests](https://github.com/guardian/commercial/blob/main/src/experiments/ab-tests.ts)
+Follow steps in [the DCR documentation](https://github.com/guardian/dotcom-rendering/blob/main/dotcom-rendering/docs/development/ab-testing-in-dcr.md)
 
-### Example usage
-
-```ts
-import { isUserInVariant } from 'experiments/ab';
-import { sectionAdDensity } from 'experiments/tests/section-ad-density';
-
-const isInVariant = isUserInVariant(sectionAdDensity, 'variant');
-```
-
-### How to test
-
-Use the URL opt-in link to force yourself into a particular variant, e.g. `http://localhost:3030/Front/https://www.theguardian.com/uk#ab-yourTest=yourVariant`
-
-If you test has multiple variants, you can test each one by updating the `yourVariant` part of the above URL.
-
-To remove yourself from the test unset the varaint e.g. `http://localhost:3030/Front/https://www.theguardian.com/uk#ab-yourTest=`
-
-## Server-side tests
-
-### Setup
-
-1. Follow the instructions in the [frontend documentation](https://github.com/guardian/frontend/blob/main/docs/03-dev-howtos/01-ab-testing.md#write-a-server-side-test)
-
-### Example usage
-
-> [!WARNING]
-> The name of the test in unintuitive.
-
-```ts
-const isInABTest = window.guardian.config.tests?.crosswordMobileBannerVariant === 'variant';
-```
-
-### How to test
-
-There are two ways to check the test, outlined in the [frontend documentation](https://github.com/guardian/frontend/blob/main/docs/03-dev-howtos/01-ab-testing.md#checking-the-test) and summarised here:
-- When running locally, you will need to change the headers of your request for a page by using a header hacker extension.
-- When using CODE (or production), you can use the above OR you can use the simpler method of an opt-in link e.g. https://www.theguardian.com/opt/in/your-test-name
+Use [the `ab-testing` module](/bundle/src/ab-testing/index.ts) that wraps the window functions provided by DCR to check if a user is in a variant.

@@ -1,4 +1,4 @@
-import type { AllParticipations, SessionTargeting } from './session';
+import type { SessionTargeting } from './session';
 import { getSessionTargeting } from './session';
 
 describe('Session targeting', () => {
@@ -16,11 +16,7 @@ describe('Session targeting', () => {
 
 		const targeting = getSessionTargeting({
 			referrer: '',
-			participations: {
-				serverSideParticipations: {},
-				clientSideParticipations: {},
-				betaAbTestParticipations: {},
-			},
+			participations: {},
 			adTest: null,
 			pageViewId: '1234567',
 			countryCode: 'GB',
@@ -32,29 +28,13 @@ describe('Session targeting', () => {
 	});
 
 	test('With participations', () => {
-		const participations: AllParticipations = {
-			clientSideParticipations: {
-				'ab-new-ad-targeting': {
-					variant: 'variant',
-				},
-				'ab-some-other-test': {
-					variant: 'notintest',
-				},
-			},
-			serverSideParticipations: {
-				abStandaloneBundleVariant: 'variant',
-			},
-			betaAbTestParticipations: {
-				'ab-new-ad-targeting': 'variant',
-			},
+		const participations = {
+			'ab-new-ad-targeting': 'variant',
+			'ab-some-other-test': 'control',
 		};
 
 		const expected: SessionTargeting = {
-			ab: [
-				'ab-new-ad-targeting-variant',
-				'abStandaloneBundleVariant-variant',
-				'ab-new-ad-targeting-variant',
-			],
+			ab: ['ab-new-ad-targeting-variant', 'ab-some-other-test-control'],
 			at: null,
 			cc: 'GB',
 			lh: '12',
@@ -99,11 +79,7 @@ describe('Session targeting', () => {
 
 		const targeting = getSessionTargeting({
 			referrer,
-			participations: {
-				serverSideParticipations: {},
-				clientSideParticipations: {},
-				betaAbTestParticipations: {},
-			},
+			participations: {},
 			adTest: null,
 			pageViewId: '1234567',
 			countryCode: 'GB',
@@ -128,11 +104,7 @@ describe('Session targeting', () => {
 
 			const targeting = getSessionTargeting({
 				referrer: '',
-				participations: {
-					serverSideParticipations: {},
-					clientSideParticipations: {},
-					betaAbTestParticipations: {},
-				},
+				participations: {},
 				adTest: null,
 				pageViewId: '1234567',
 				countryCode: 'GB',
@@ -168,11 +140,7 @@ describe('Session targeting', () => {
 
 			const targeting = getSessionTargeting({
 				referrer: '',
-				participations: {
-					serverSideParticipations: {},
-					clientSideParticipations: {},
-					betaAbTestParticipations: {},
-				},
+				participations: {},
 				adTest: null,
 				pageViewId: '1234567',
 				countryCode: 'GB',

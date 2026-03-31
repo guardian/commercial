@@ -14,12 +14,6 @@ jest.mock('./utils', () => {
 	};
 });
 
-jest.mock('experiments/ab', () => ({
-	isInVariantSynchronous: jest.fn(
-		(testId, variantId) => variantId === 'variant',
-	),
-}));
-
 jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
 }));

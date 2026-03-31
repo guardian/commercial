@@ -203,7 +203,7 @@ describe('Build Page Targeting', () => {
 	it('should build correct page targeting', () => {
 		const pageTargeting = buildPageTargeting({
 			adFree: false,
-			clientSideParticipations: {},
+			abTestParticipations: {},
 			consentState: emptyConsent,
 			isSignedIn: true,
 		});
@@ -238,7 +238,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: tcfv2WithConsentMock,
 				isSignedIn: true,
 			}).pa,
@@ -246,7 +246,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: tcfv2WithoutConsentMock,
 				isSignedIn: true,
 			}).pa,
@@ -254,7 +254,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: tcfv2NullConsentMock,
 				isSignedIn: true,
 			}).pa,
@@ -262,7 +262,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: tcfv2MixedConsentMock,
 				isSignedIn: true,
 			}).pa,
@@ -270,7 +270,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: usnatWithConsentMock,
 				isSignedIn: true,
 			}).pa,
@@ -278,7 +278,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: usnatWithoutConsentMock,
 				isSignedIn: true,
 			}).pa,
@@ -289,7 +289,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: tcfv2WithoutConsentMock,
 				isSignedIn: true,
 			}).rdp,
@@ -297,7 +297,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: tcfv2NullConsentMock,
 				isSignedIn: true,
 			}).rdp,
@@ -305,7 +305,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: usnatWithConsentMock,
 				isSignedIn: true,
 			}).rdp,
@@ -313,7 +313,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: usnatWithoutConsentMock,
 				isSignedIn: true,
 			}).rdp,
@@ -324,7 +324,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: tcfv2WithConsentMock,
 				isSignedIn: true,
 			}).consent_tcfv2,
@@ -332,7 +332,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: tcfv2WithConsentMock,
 				isSignedIn: true,
 			}).cmp_interaction,
@@ -341,7 +341,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: tcfv2WithoutConsentMock,
 				isSignedIn: true,
 			}).consent_tcfv2,
@@ -349,7 +349,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: tcfv2WithoutConsentMock,
 				isSignedIn: true,
 			}).cmp_interaction,
@@ -358,7 +358,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: tcfv2MixedConsentMock,
 				isSignedIn: true,
 			}).consent_tcfv2,
@@ -366,7 +366,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: tcfv2MixedConsentMock,
 				isSignedIn: true,
 			}).cmp_interaction,
@@ -377,7 +377,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 			}).edition,
@@ -388,7 +388,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 			}).se,
@@ -399,7 +399,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 			}).k,
@@ -410,10 +410,8 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {
-					someTest: {
-						variant: 'variantName',
-					},
+				abTestParticipations: {
+					someTest: 'variantName',
 				},
 				consentState: emptyConsent,
 				isSignedIn: true,
@@ -425,7 +423,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 			}).ob,
@@ -436,7 +434,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 			}).br,
@@ -447,7 +445,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 			}).af,
@@ -458,7 +456,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 				idProviders: [],
@@ -470,7 +468,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 				idProviders: [{ name: 'sharedId' }],
@@ -482,7 +480,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 				idProviders: [
@@ -504,7 +502,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 			}),
@@ -538,7 +536,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).bp,
@@ -550,7 +548,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).bp,
@@ -562,7 +560,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).bp,
@@ -574,7 +572,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).bp,
@@ -586,7 +584,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).bp,
@@ -598,7 +596,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).bp,
@@ -610,7 +608,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).bp,
@@ -622,7 +620,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).bp,
@@ -635,7 +633,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: true,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).af,
@@ -651,7 +649,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: usnatWithConsentMock,
 					isSignedIn: true,
 				}).permutive,
@@ -665,7 +663,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: usnatWithConsentMock,
 					isSignedIn: true,
 				}).fr,
@@ -677,7 +675,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: usnatWithConsentMock,
 					isSignedIn: true,
 				}).fr,
@@ -689,7 +687,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: usnatWithConsentMock,
 					isSignedIn: true,
 				}).fr,
@@ -701,7 +699,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: usnatWithConsentMock,
 					isSignedIn: true,
 				}).fr,
@@ -713,7 +711,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: usnatWithConsentMock,
 					isSignedIn: true,
 				}).fr,
@@ -725,7 +723,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: usnatWithoutConsentMock,
 					isSignedIn: true,
 				}).fr,
@@ -737,7 +735,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).fr,
@@ -753,7 +751,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).ref,
@@ -767,7 +765,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).ref,
@@ -781,7 +779,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).ref,
@@ -795,7 +793,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).ref,
@@ -809,7 +807,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).ref,
@@ -822,7 +820,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).urlkw,
@@ -835,7 +833,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).urlkw,
@@ -857,7 +855,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).urlkw,
@@ -882,7 +880,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).inskin,
@@ -896,7 +894,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).inskin,
@@ -920,7 +918,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).skinsize,
@@ -932,7 +930,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).skinsize,
@@ -947,7 +945,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: tcfv2WithConsentMock,
 					isSignedIn: true,
 				}).amtgrp,
@@ -971,7 +969,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: consentState,
 					isSignedIn: true,
 				}).amtgrp,
@@ -984,7 +982,7 @@ describe('Build Page Targeting', () => {
 			jest.spyOn(global.Math, 'random').mockRestore();
 			const valueGenerated = buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: tcfv2WithConsentMock,
 				isSignedIn: true,
 			}).amtgrp;
@@ -1002,7 +1000,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).dcre,
@@ -1014,7 +1012,7 @@ describe('Build Page Targeting', () => {
 			expect(
 				buildPageTargeting({
 					adFree: false,
-					clientSideParticipations: {},
+					abTestParticipations: {},
 					consentState: emptyConsent,
 					isSignedIn: true,
 				}).dcre,
@@ -1033,7 +1031,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 			}).firstvisit,
@@ -1058,7 +1056,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 			}).firstvisit,
@@ -1083,7 +1081,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 			}).firstvisit,
@@ -1110,7 +1108,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 			}).firstvisit,
@@ -1137,7 +1135,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 			}).firstvisit,
@@ -1164,7 +1162,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: emptyConsent,
 				isSignedIn: true,
 			}).firstvisit,
@@ -1179,7 +1177,7 @@ describe('Build Page Targeting', () => {
 		expect(
 			buildPageTargeting({
 				adFree: false,
-				clientSideParticipations: {},
+				abTestParticipations: {},
 				consentState: usnatWithConsentMock,
 				isSignedIn: true,
 			}).firstvisit,

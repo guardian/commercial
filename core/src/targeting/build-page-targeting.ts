@@ -1,4 +1,3 @@
-import type { Participations } from '@guardian/ab-core';
 import type { ConsentState, CountryCode } from '@guardian/libs';
 import { cmp, getConsentFor, getCookie, isString } from '@guardian/libs';
 import { supportsPerformanceAPI } from '../event-timer';
@@ -112,7 +111,7 @@ type UserId = {
 
 type BuildPageTargetingParams = {
 	adFree: boolean;
-	clientSideParticipations: Participations;
+	abTestParticipations: Record<string, string>;
 	consentState: ConsentState;
 	isSignedIn?: boolean;
 	youtube?: boolean;
@@ -121,7 +120,7 @@ type BuildPageTargetingParams = {
 
 const buildPageTargeting = ({
 	adFree,
-	clientSideParticipations,
+	abTestParticipations,
 	consentState,
 	isSignedIn = false,
 	youtube = false,
@@ -156,12 +155,7 @@ const buildPageTargeting = ({
 		localHour: getLocalHour(),
 		isSignedIn,
 		pageViewId: window.guardian.config.ophan.pageViewId,
-		participations: {
-			clientSideParticipations,
-			serverSideParticipations: window.guardian.config.tests ?? {},
-			betaAbTestParticipations:
-				window.guardian.modules.abTests?.getParticipations() ?? {},
-		},
+		participations: abTestParticipations,
 		referrer,
 		idProviders,
 	});

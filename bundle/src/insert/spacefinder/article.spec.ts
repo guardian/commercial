@@ -20,10 +20,6 @@ jest.mock('insert/spacefinder/space-filler', () => ({
 	},
 }));
 
-jest.mock('experiments/ab', () => ({
-	isUserInVariant: () => false,
-}));
-
 const spaceFillerStub = spaceFiller.fillSpace as jest.MockedFunction<
 	typeof spaceFiller.fillSpace
 >;
