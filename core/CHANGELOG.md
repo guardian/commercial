@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 33.0.0
+
+### Major Changes
+
+- 347af68: Bump guardian/libs to 31.0.0
+
 ## 32.0.0
 
 ### Major Changes
