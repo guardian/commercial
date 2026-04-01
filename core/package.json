@@ -44,10 +44,10 @@
 		"tsc": "tsc --noEmit"
 	},
 	"peerDependencies": {
-		"@guardian/libs": "^30.1.0"
+		"@guardian/libs": "^31.0.0"
 	},
 	"dependencies": {
-		"@guardian/libs": "30.1.0"
+		"@guardian/libs": "31.0.0"
 	},
 	"devDependencies": {
 		"@guardian/ophan-tracker-js": "2.8.0",
