@@ -74,13 +74,13 @@ const usnatWithoutConsentMock: ConsentState = {
 
 // AUS
 const ausWithConsentMock: ConsentState = {
-	aus: { personalisedAdvertising: true },
+	aus: { personalisedAdvertising: true, signalStatus: 'ready' },
 	canTarget: true,
 	framework: 'aus',
 };
 
 const ausWithoutConsentMock: ConsentState = {
-	aus: { personalisedAdvertising: false },
+	aus: { personalisedAdvertising: false, signalStatus: 'ready' },
 	canTarget: false,
 	framework: 'aus',
 };
