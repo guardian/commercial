@@ -131,7 +131,7 @@ describe('Personalised targeting', () => {
 	describe('AUS', () => {
 		test('Full Consent', () => {
 			const state: ConsentState = {
-				aus: { personalisedAdvertising: true },
+				aus: { personalisedAdvertising: true, signalStatus: 'ready' },
 				canTarget: true,
 				framework: 'aus',
 			};
@@ -153,7 +153,7 @@ describe('Personalised targeting', () => {
 
 		test('Personalised Advertising OFF', () => {
 			const state: ConsentState = {
-				aus: { personalisedAdvertising: false },
+				aus: { personalisedAdvertising: false, signalStatus: 'ready' },
 				canTarget: false,
 				framework: 'aus',
 			};
@@ -303,7 +303,7 @@ describe('Personalised targeting', () => {
 
 		test('Ad manager group IS set if aus and consent not given', () => {
 			const state: ConsentState = {
-				aus: { personalisedAdvertising: false },
+				aus: { personalisedAdvertising: false, signalStatus: 'ready' },
 				canTarget: false,
 				framework: 'aus',
 			};
