@@ -1,3 +1,5 @@
 packages:
     - core
     - bundle
+# All dependencies must have been released for at least one day before being installed
+minimumReleaseAge: 1440
