@@ -5,3 +5,4 @@ packages:
 minimumReleaseAge: 1440
 minimumReleaseAgeExclude:
     - '@guardian/*'
+blockExoticSubdeps: true
