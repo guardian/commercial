@@ -1,8 +1,7 @@
 packages:
     - core
     - bundle
-# All dependencies must have been released for at least one day before being installed
-minimumReleaseAge: 1440
+minimumReleaseAge: 2880 # 2 day minimum package version age
 minimumReleaseAgeExclude:
     - '@guardian/*'
 blockExoticSubdeps: true
