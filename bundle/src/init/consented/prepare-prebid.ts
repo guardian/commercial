@@ -6,11 +6,12 @@ import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { prebid } from '../../lib/header-bidding/prebid';
 import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
+import { shouldLoadAds } from '../../lib/should-load-ads';
 
 const shouldLoadPrebid = () =>
 	!isGoogleProxy() &&
 	window.guardian.config.switches.prebidHeaderBidding &&
-	commercialFeatures.shouldLoadGoogletag &&
+	shouldLoadAds() &&
 	!commercialFeatures.adFree &&
 	!window.guardian.config.page.hasPageSkin &&
 	!shouldIncludeOnlyA9 &&

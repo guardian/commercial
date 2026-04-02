@@ -1,10 +1,10 @@
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/libs';
 import { getConsentFor, loadScript, log, onConsent } from '@guardian/libs';
-import { commercialFeatures } from '../../lib/commercial-features';
 import { isSwitchedOn } from '../../lib/header-bidding/utils';
 import { getGoogleTagId, isUserLoggedIn } from '../../lib/identity/api';
 import { getPageTargeting } from '../../lib/page-targeting';
+import { shouldLoadAds } from '../../lib/should-load-ads';
 import { checkThirdPartyCookiesEnabled } from '../../lib/third-party-cookies';
 import { removeSlots } from './remove-slots';
 import { fillStaticAdvertSlots } from './static-ad-slots';
@@ -97,7 +97,7 @@ const disableChildDirectedTreatment = () =>
 				childDirectedTreatment: null,
 			});
 
-export const prepareGoogletag = (): Promise<void> => {
+const prepareGoogletag = (): Promise<void> => {
 	const setupAdvertising = async (): Promise<void> => {
 		const consentState = await onConsent();
 		EventTimer.get().mark('googletagInitStart');
@@ -144,7 +144,7 @@ export const prepareGoogletag = (): Promise<void> => {
 		}
 	};
 
-	if (commercialFeatures.shouldLoadGoogletag) {
+	if (shouldLoadAds()) {
 		return (
 			setupAdvertising()
 				// on error, remove all slots
@@ -154,3 +154,5 @@ export const prepareGoogletag = (): Promise<void> => {
 
 	return removeSlots();
 };
+
+export { prepareGoogletag };

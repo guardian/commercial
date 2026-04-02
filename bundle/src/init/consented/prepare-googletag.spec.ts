@@ -2,9 +2,9 @@ import type * as AdSizesType from '@guardian/commercial-core/ad-sizes';
 import type { ConsentState, USNATConsentState } from '@guardian/libs';
 import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
 import type { Advert } from '../../define/Advert';
-import { commercialFeatures } from '../../lib/commercial-features';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
+import { shouldLoadAds } from '../../lib/should-load-ads';
 import { prepareGoogletag } from './prepare-googletag';
 import { fillStaticAdvertSlots } from './static-ad-slots';
 
@@ -128,6 +128,10 @@ jest.mock('./prepare-prebid', () => ({
 
 jest.mock('@guardian/commercial-core/targeting/teads-eligibility', () => ({
 	isEligibleForTeads: jest.fn(),
+}));
+
+jest.mock('lib/should-load-ads', () => ({
+	shouldLoadAds: jest.fn(),
 }));
 
 const mockOnConsent = (consentState: ConsentState) =>
@@ -338,7 +342,7 @@ describe('DFP', () => {
 			}
 		).__switch_zero = false;
 
-		commercialFeatures.shouldLoadGoogletag = true;
+		(shouldLoadAds as jest.Mock).mockReturnValue(true);
 	});
 
 	afterEach(() => {
@@ -352,7 +356,7 @@ describe('DFP', () => {
 	});
 
 	it('hides all ad slots when all DFP advertising is disabled', async () => {
-		commercialFeatures.shouldLoadGoogletag = false;
+		(shouldLoadAds as jest.Mock).mockReturnValue(false);
 		await prepareGoogletag();
 		const remainingAdSlots = document.querySelectorAll('.js-ad-slot');
 		expect(remainingAdSlots.length).toBe(0);
