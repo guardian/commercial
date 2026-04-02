@@ -1,3 +1,7 @@
 packages:
     - core
     - bundle
+minimumReleaseAge: 2880 # 2 day minimum package version age
+minimumReleaseAgeExclude:
+    - '@guardian/*'
+blockExoticSubdeps: true
