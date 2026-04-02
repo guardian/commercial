@@ -3,7 +3,7 @@ import { isAdFree } from './ad-free';
 const forceAds = /[?&]forceads(&.*)?$/.test(window.location.search);
 
 /**
- * A list of conditions that disable ads if any are true
+ * Evaluate the conditions to determine whether ads should be loaded on the page, if any are true then ads should not be loaded
  */
 const shouldDisableAds = () =>
 	[
