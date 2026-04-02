@@ -6,13 +6,14 @@ import { commercialFeatures } from '../../lib/commercial-features';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { a9 } from '../../lib/header-bidding/a9/a9';
 import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
+import { shouldLoadAds } from '../../lib/should-load-ads';
 
 const shouldLoadA9 = () =>
 	// There are two articles that InfoSec would like to avoid loading scripts on
 	(!commercialFeatures.isSecureContact &&
 		!isGoogleProxy() &&
 		window.guardian.config.switches.a9HeaderBidding &&
-		commercialFeatures.shouldLoadGoogletag &&
+		shouldLoadAds() &&
 		!commercialFeatures.adFree &&
 		!window.guardian.config.page.hasPageSkin &&
 		!isInCanada()) ??
