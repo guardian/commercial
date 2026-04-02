@@ -9,6 +9,12 @@ type AdvertStatus =
 	| 'rendered'
 	| 'refreshed';
 
+type AdEventCustomEvent = CustomEvent<{
+	slotName: string;
+	name: AdvertStatus;
+	status: boolean;
+}>;
+
 const eventHistory: AdEventCustomEvent[] = [];
 
 document.addEventListener('commercial:adStatusChange', (e: Event) => {
@@ -16,29 +22,36 @@ document.addEventListener('commercial:adStatusChange', (e: Event) => {
 	eventHistory.push(event);
 });
 
-type AdEventCustomEvent = CustomEvent<{
-	slotName: string;
-	name: AdvertStatus;
-	status: boolean;
-}>;
-
 function globalAdEvents(
 	status: AdvertStatus | AdvertStatus[],
 	slotName: string | undefined,
 	listenerHandler: (event: AdEventCustomEvent) => void,
 ) {
 	const newStatus = Array.isArray(status) ? status : [status];
+	const matches = (event: AdEventCustomEvent) => {
+		const statusMatch = newStatus.includes(event.detail.name);
+		const slotMatch = !slotName || event.detail.slotName === slotName;
+		return statusMatch && slotMatch;
+	};
+	const listener = (e: Event) => {
+		const event = e as AdEventCustomEvent;
+		if (matches(event)) {
+			listenerHandler(event);
+		}
+	};
+
 	eventHistory.forEach((historyEvent) => {
-		if (newStatus.includes(historyEvent.detail.name)) {
+		if (matches(historyEvent)) {
 			listenerHandler(historyEvent);
 		}
 	});
-	document.addEventListener('commercial:adStatusChange', (e: Event) => {
-		const event = e as AdEventCustomEvent;
-		if (newStatus.includes(event.detail.name)) {
-			listenerHandler(event);
-		}
-	});
+
+	document.addEventListener('commercial:adStatusChange', listener);
+
+	const remove = () =>
+		document.removeEventListener('commercial:adStatusChange', listener);
+
+	return { remove };
 }
 
 export { globalAdEvents };
