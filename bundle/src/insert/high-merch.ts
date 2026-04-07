@@ -1,6 +1,21 @@
-import { commercialFeatures } from '../lib/commercial-features';
+import { isAdFree } from '../lib/ad-free';
 import { createAdSlot, wrapSlotInContainer } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
+import { shouldLoadAds } from '../lib/should-load-ads';
+
+const isInteractive = window.guardian.config.page.contentType === 'Interactive';
+const newRecipeDesign =
+	window.guardian.config.page.showNewRecipeDesign ?? false;
+
+export const isHighMerch = (): boolean =>
+	shouldLoadAds() &&
+	!isAdFree() &&
+	!window.guardian.config.page.isMinuteArticle &&
+	!window.guardian.config.page.isHosted &&
+	!isInteractive &&
+	!window.guardian.config.page.isFront &&
+	!window.guardian.config.isDotcomRendering &&
+	!newRecipeDesign;
 
 /**
  * Initialise merchandising-high ad slot on Frontend rendered content
@@ -10,7 +25,7 @@ import fastdom from '../lib/fastdom-promise';
  * Revisit whether this code is needed once galleries have been migrated to DCR
  */
 export const init = (): Promise<void> => {
-	if (commercialFeatures.highMerch) {
+	if (isHighMerch()) {
 		const anchorSelector = window.guardian.config.page.commentable
 			? '#comments + *'
 			: '.content-footer > :first-child';

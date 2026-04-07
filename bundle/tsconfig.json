@@ -7,7 +7,8 @@
 			// are in sync with the paths in the webpack config aliases or they'll pass
 			// in type checking but fail the build
 			"prebid.js/dist/*": ["./node_modules/prebid.js/dist/src/*"]
-		}
+		},
+		"types": ["jest"]
 	},
 	"extends": "../tsconfig.json",
 	"include": ["./src/**/*.ts"],
