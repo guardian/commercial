@@ -4069,8 +4069,8 @@ packages:
   lodash.startcase@4.4.0:
     resolution: {integrity: sha512-+WKqsK294HMSc2jEbNgpHpd0JfIBhp7rEV4aqXWqFr6AlXov+SlcgB1Fv01y2kGe3Gc8nMW7VA0SrGuSkRfIEg==}
 
-  lodash@4.17.23:
-    resolution: {integrity: sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==}
+  lodash@4.18.1:
+    resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
 
   log-update@6.1.0:
     resolution: {integrity: sha512-9ie8ItPR6tjY5uYJh8K/Zrv/RMZ5VOlOWvtZdEHYSTFKZfIBPQa9tOAEeAWhd+AnIneLJ22w5fjOYtoutpWq5w==}
@@ -8368,12 +8368,12 @@ snapshots:
 
   connect-history-api-fallback@2.0.0: {}
 
-  consolidate@0.15.1(handlebars@4.7.9)(lodash@4.17.23):
+  consolidate@0.15.1(handlebars@4.7.9)(lodash@4.18.1):
     dependencies:
       bluebird: 3.7.2
     optionalDependencies:
       handlebars: 4.7.9
-      lodash: 4.17.23
+      lodash: 4.18.1
 
   content-disposition@0.5.4:
     dependencies:
@@ -9222,11 +9222,11 @@ snapshots:
 
   gulp-wrap@0.15.0(handlebars@4.7.9):
     dependencies:
-      consolidate: 0.15.1(handlebars@4.7.9)(lodash@4.17.23)
+      consolidate: 0.15.1(handlebars@4.7.9)(lodash@4.18.1)
       es6-promise: 4.2.8
       fs-readfile-promise: 3.0.1
       js-yaml: 3.14.2
-      lodash: 4.17.23
+      lodash: 4.18.1
       node.extend: 2.0.2
       plugin-error: 1.0.1
       through2: 3.0.2
@@ -9364,7 +9364,7 @@ snapshots:
     dependencies:
       '@types/html-minifier-terser': 6.1.0
       html-minifier-terser: 6.1.0
-      lodash: 4.17.23
+      lodash: 4.18.1
       pretty-error: 4.0.0
       tapable: 2.3.0
     optionalDependencies:
@@ -10234,7 +10234,7 @@ snapshots:
 
   lodash.startcase@4.4.0: {}
 
-  lodash@4.17.23: {}
+  lodash@4.18.1: {}
 
   log-update@6.1.0:
     dependencies:
@@ -10750,7 +10750,7 @@ snapshots:
 
   pretty-error@4.0.0:
     dependencies:
-      lodash: 4.17.23
+      lodash: 4.18.1
       renderkid: 3.0.0
 
   pretty-format@30.2.0:
@@ -10927,7 +10927,7 @@ snapshots:
       css-select: 4.3.0
       dom-converter: 0.2.0
       htmlparser2: 6.1.0
-      lodash: 4.17.23
+      lodash: 4.18.1
       strip-ansi: 6.0.1
 
   replace-ext@1.0.1: {}
