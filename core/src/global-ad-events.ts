@@ -24,8 +24,8 @@ document.addEventListener('commercial:adStatusChange', (e: Event) => {
 
 function globalAdEvents(
 	status: AdvertStatus | AdvertStatus[],
-	slotName: string | undefined,
 	listenerHandler: (event: AdEventCustomEvent) => void,
+	slotName?: string,
 ) {
 	const newStatus = Array.isArray(status) ? status : [status];
 	const matches = (event: AdEventCustomEvent) => {
@@ -54,4 +54,8 @@ function globalAdEvents(
 	return { remove };
 }
 
-export { globalAdEvents };
+export const _resetHistory = () => {
+	eventHistory.length = 0;
+};
+
+export { globalAdEvents, eventHistory };
