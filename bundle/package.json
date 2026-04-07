@@ -89,6 +89,5 @@
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"
-	],
-	"packageManager": "pnpm@9.15.2"
+	]
 }
