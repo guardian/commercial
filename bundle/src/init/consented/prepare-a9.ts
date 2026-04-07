@@ -2,19 +2,20 @@ import { isInCanada } from '@guardian/commercial-core/geo/geo-utils';
 import { getConsentFor, log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { a9Apstag } from '../../lib/__vendor/a9-apstag';
-import { commercialFeatures } from '../../lib/commercial-features';
+import { isAdFree } from '../../lib/ad-free';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { a9 } from '../../lib/header-bidding/a9/a9';
 import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
+import { isSecureContactPage } from '../../lib/is-secure-contact';
 import { shouldLoadAds } from '../../lib/should-load-ads';
 
 const shouldLoadA9 = () =>
-	// There are two articles that InfoSec would like to avoid loading scripts on
-	(!commercialFeatures.isSecureContact &&
+	// All of the following conditions must be met to load A9
+	(!isSecureContactPage(window.guardian.config.page.pageId) &&
 		!isGoogleProxy() &&
 		window.guardian.config.switches.a9HeaderBidding &&
 		shouldLoadAds() &&
-		!commercialFeatures.adFree &&
+		!isAdFree() &&
 		!window.guardian.config.page.hasPageSkin &&
 		!isInCanada()) ??
 	false;
