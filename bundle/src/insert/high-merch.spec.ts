@@ -1,7 +1,7 @@
 import { setCookie, storage } from '@guardian/libs';
 import { isAdFree } from '../lib/ad-free';
 import { shouldLoadAds } from '../lib/should-load-ads';
-import { isHighMerch } from './high-merch';
+import { highMerch } from './high-merch';
 
 jest.mock('lib/should-load-ads', () => ({
 	shouldLoadAds: jest.fn(),
@@ -64,17 +64,17 @@ describe('high-merch', () => {
 	describe('High-relevance commercial component', () => {
 		it('Does not run on fronts', () => {
 			window.guardian.config.page.isFront = true;
-			expect(isHighMerch()).toBe(false);
+			expect(highMerch()).toBe(false);
 		});
 
 		it('Does run on outside of fronts', () => {
 			window.guardian.config.page.isFront = false;
-			expect(isHighMerch()).toBe(true);
+			expect(highMerch()).toBe(true);
 		});
 
 		it('Does not run on minute articles', () => {
 			window.guardian.config.page.isMinuteArticle = true;
-			expect(isHighMerch()).toBe(false);
+			expect(highMerch()).toBe(false);
 		});
 	});
 
@@ -86,17 +86,17 @@ describe('high-merch', () => {
 
 		it('Does not run on fronts', () => {
 			window.guardian.config.page.isFront = true;
-			expect(isHighMerch()).toBe(false);
+			expect(highMerch()).toBe(false);
 		});
 
 		it('Does not run outside of fronts', () => {
 			window.guardian.config.page.isFront = false;
-			expect(isHighMerch()).toBe(false);
+			expect(highMerch()).toBe(false);
 		});
 
 		it('Does not run on minute articles', () => {
 			window.guardian.config.page.isMinuteArticle = true;
-			expect(isHighMerch()).toBe(false);
+			expect(highMerch()).toBe(false);
 		});
 	});
 });

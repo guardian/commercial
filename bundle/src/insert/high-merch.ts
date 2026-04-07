@@ -7,7 +7,7 @@ const isInteractive = window.guardian.config.page.contentType === 'Interactive';
 const newRecipeDesign =
 	window.guardian.config.page.showNewRecipeDesign ?? false;
 
-export const isHighMerch = (): boolean =>
+export const highMerch = (): boolean =>
 	shouldLoadAds() &&
 	!isAdFree() &&
 	!window.guardian.config.page.isMinuteArticle &&
@@ -25,7 +25,7 @@ export const isHighMerch = (): boolean =>
  * Revisit whether this code is needed once galleries have been migrated to DCR
  */
 export const init = (): Promise<void> => {
-	if (isHighMerch()) {
+	if (highMerch()) {
 		const anchorSelector = window.guardian.config.page.commentable
 			? '#comments + *'
 			: '.content-footer > :first-child';
