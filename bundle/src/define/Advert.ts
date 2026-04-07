@@ -269,16 +269,9 @@ class Advert extends EventTarget {
 		this.dispatchEvent(
 			new CustomEvent('statusChange', { detail: { name, status } }),
 		);
-		console.log(`[Ad Status] ${this.name} → ${name}: ${status}`, {
-			slotName: this.name,
-			slotId: this.id,
-			lifecycle: name,
-			status,
-			TRREEE: this,
-		});
 		document.dispatchEvent(
-			new CustomEvent('adStatusChange', {
-				detail: { advert: this, name, status },
+			new CustomEvent('commercial:adStatusChange', {
+				detail: { slotName: this.name, name, status },
 			}),
 		);
 	}
