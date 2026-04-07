@@ -98,8 +98,10 @@ class CommercialFeatures {
 		const disableArticleBodyAdverts =
 			isMinuteArticle || isLiveBlog || isHosted || newRecipeDesign;
 
+		const adsEnabled = shouldLoadAds();
+
 		this.articleBodyAdverts =
-			shouldLoadAds() &&
+			adsEnabled &&
 			!this.adFree &&
 			enableArticleBodyAdverts &&
 			!disableArticleBodyAdverts;
@@ -118,7 +120,7 @@ class CommercialFeatures {
 		}
 
 		this.highMerch =
-			shouldLoadAds() &&
+			adsEnabled &&
 			!this.adFree &&
 			!isMinuteArticle &&
 			!isHosted &&
@@ -134,14 +136,14 @@ class CommercialFeatures {
 			!this.isSecureContact;
 
 		this.commentAdverts =
-			shouldLoadAds() &&
+			adsEnabled &&
 			!this.adFree &&
 			!isMinuteArticle &&
 			!!window.guardian.config.switches.enableDiscussionSwitch &&
 			window.guardian.config.page.commentable &&
 			(!isLiveBlog || isWidePage);
 
-		this.liveblogAdverts = !!isLiveBlog && shouldLoadAds() && !this.adFree;
+		this.liveblogAdverts = !!isLiveBlog && adsEnabled && !this.adFree;
 
 		this.comscore =
 			!!window.guardian.config.switches.comscore &&
