@@ -1,6 +1,7 @@
 import { isInCanada } from '@guardian/commercial-core/geo/geo-utils';
 import { commercialFeatures } from '../../lib/commercial-features';
 import { a9 } from '../../lib/header-bidding/a9/a9';
+import { shouldLoadAds } from '../../lib/should-load-ads';
 import { _ } from './prepare-a9';
 
 const { setupA9 } = _;
@@ -11,6 +12,10 @@ jest.mock('@guardian/commercial-core/geo/geo-utils', () => ({
 
 jest.mock('lib/commercial-features', () => ({
 	commercialFeatures: {},
+}));
+
+jest.mock('lib/should-load-ads', () => ({
+	shouldLoadAds: jest.fn(),
 }));
 
 jest.mock('lib/header-bidding/a9/a9');
@@ -44,6 +49,7 @@ describe('init', () => {
 		jest.resetAllMocks();
 		fakeUserAgent();
 		window.guardian.config.switches = {};
+		(shouldLoadAds as jest.Mock).mockReturnValue(true);
 	});
 
 	afterAll(() => {
@@ -54,7 +60,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 
 		await setupA9();
@@ -66,7 +71,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		(isInCanada as jest.Mock).mockReturnValueOnce(true);
 
@@ -79,7 +83,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		await setupA9();
 		expect(a9.initialise).toHaveBeenCalled();
@@ -103,7 +106,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.shouldLoadGoogletag = false;
+		(shouldLoadAds as jest.Mock).mockReturnValue(false);
 		commercialFeatures.adFree = false;
 		await setupA9();
 		expect(a9.initialise).not.toHaveBeenCalled();
@@ -113,7 +116,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = true;
 		await setupA9();
 		expect(a9.initialise).not.toHaveBeenCalled();
@@ -123,7 +125,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		window.guardian.config.page.hasPageSkin = true;
 		await setupA9();
@@ -134,7 +135,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		window.guardian.config.page.hasPageSkin = false;
 		await setupA9();
@@ -145,7 +145,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		commercialFeatures.shouldLoadGoogletag = true;
 		commercialFeatures.adFree = false;
 		commercialFeatures.isSecureContact = true;
 		await setupA9();

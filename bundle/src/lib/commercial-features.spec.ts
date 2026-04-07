@@ -3,6 +3,7 @@ import type { CommercialFeaturesConstructor } from './commercial-features';
 import { commercialFeatures } from './commercial-features';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from './detect/detect-breakpoint';
 import { isUserLoggedIn } from './identity/api';
+import { shouldLoadAds } from './should-load-ads';
 
 const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
 	typeof getCurrentBreakpoint_
@@ -15,6 +16,10 @@ jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
 }));
 
+jest.mock('lib/should-load-ads', () => ({
+	shouldLoadAds: jest.fn(),
+}));
+
 jest.mock('lib/identity/api');
 
 const originalUserAgent = navigator.userAgent;
@@ -22,13 +27,6 @@ const originalUserAgent = navigator.userAgent;
 const clearUserAgent = () => {
 	Object.defineProperty(navigator, 'userAgent', {
 		value: originalUserAgent,
-		writable: true,
-	});
-};
-
-const mockUserAgent = (userAgent: string) => {
-	Object.defineProperty(navigator, 'userAgent', {
-		value: userAgent,
 		writable: true,
 	});
 };
@@ -69,98 +67,7 @@ describe('Commercial features', () => {
 		jest.mocked(isUserLoggedIn).mockResolvedValue(true);
 
 		expect.hasAssertions();
-	});
-
-	describe('GAM advertising', () => {
-		it('Runs by default', () => {
-			const features = new CommercialFeatures();
-			expect(features.shouldLoadGoogletag).toBe(true);
-		});
-
-		it('Is disabled on sensitive pages', () => {
-			// Like all newspapers, the Guardian must sometimes cover disturbing and graphic content.
-			// Showing adverts on these pages would be crass - callous, even.
-			window.guardian.config.page.shouldHideAdverts = true;
-			const features = new CommercialFeatures();
-			expect(features.shouldLoadGoogletag).toBe(false);
-		});
-
-		it('Is disabled on the children`s book site', () => {
-			// ASA guidelines prohibit us from showing adverts on anything that might be deemed childrens' content
-			window.guardian.config.page.section = 'childrens-books-site';
-			const features = new CommercialFeatures();
-			expect(features.shouldLoadGoogletag).toBe(false);
-		});
-
-		it('Is skipped for speedcurve tests', () => {
-			// We don't want external dependencies getting in the way of perf tests
-			window.location.hash = '#noads';
-			const features = new CommercialFeatures();
-			expect(features.shouldLoadGoogletag).toBe(false);
-		});
-
-		it('Is disabled for speedcurve tests in ad-free mode', () => {
-			window.location.hash = '#noadsaf';
-			const features = new CommercialFeatures();
-			expect(features.adFree).toBe(true);
-			expect(features.shouldLoadGoogletag).toBe(false);
-		});
-
-		describe('In browser', () => {
-			const unsupportedBrowsers = [
-				[
-					'Internet Explorer 11',
-					'Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko',
-				],
-				[
-					'Internet Explorer 10',
-					'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)',
-				],
-				[
-					'Internet Explorer 9',
-					'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)',
-				],
-				[
-					'Internet Explorer 8',
-					'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0)',
-				],
-				[
-					'Internet Explorer 7',
-					'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)',
-				],
-			];
-
-			it.each(unsupportedBrowsers)('%s is disabled', (_, userAgent) => {
-				mockUserAgent(userAgent);
-				const features = new CommercialFeatures();
-				expect(features.shouldLoadGoogletag).toBe(false);
-			});
-
-			const someSupportedBrowsers = [
-				[
-					'Chrome - Mac',
-					'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36',
-				],
-				[
-					'Chrome - Windows',
-					'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36',
-				],
-				[
-					'Firefox - Windows',
-					'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:70.0) Gecko/20100101 Firefox/70.0',
-				],
-				[
-					'Safari - Mac',
-					'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Safari/605.1.15',
-				],
-			];
-
-			it.each(someSupportedBrowsers)('%s is enabled', (_, userAgent) => {
-				mockUserAgent(userAgent);
-				const features = new CommercialFeatures();
-				expect(features.shouldLoadGoogletag).toBe(true);
-			});
-		});
+		(shouldLoadAds as jest.Mock).mockReturnValue(true);
 	});
 
 	describe('Article body adverts', () => {

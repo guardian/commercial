@@ -2,6 +2,7 @@ import { log, storage } from '@guardian/libs';
 import { isUserInTestGroup } from '../ab-testing';
 import { isAdFree } from './ad-free';
 import { getCurrentBreakpoint } from './detect/detect-breakpoint';
+import { shouldLoadAds } from './should-load-ads';
 
 /**
  * Log the reason why adverts are disabled
@@ -28,19 +29,11 @@ function adsDisabledLogger(
 	}
 }
 
-/**
- * Determine whether current browser is a version of Internet Explorer
- */
-const isInternetExplorer = () => {
-	return !!navigator.userAgent.match(/MSIE|Trident/g)?.length;
-};
-
 const isUserPrefsAdsOff = (): boolean =>
 	storage.local.get(`gu.prefs.switch.adverts`) === false;
 
 // Having a constructor means we can easily re-instantiate the object in a test
 class CommercialFeatures {
-	shouldLoadGoogletag: boolean;
 	isSecureContact: boolean;
 	articleBodyAdverts: boolean;
 	highMerch: boolean;
@@ -55,7 +48,6 @@ class CommercialFeatures {
 	constructor() {
 		// this is used for SpeedCurve tests
 		const noadsUrl = /[#&]noads(&.*)?$/.test(window.location.hash);
-		const forceAds = /[?&]forceads(&.*)?$/.test(window.location.search);
 		const externalAdvertising = !noadsUrl && !isUserPrefsAdsOff();
 		const sensitiveContent =
 			window.guardian.config.page.shouldHideAdverts ||
@@ -69,12 +61,9 @@ class CommercialFeatures {
 		const isIdentityPage =
 			window.guardian.config.page.contentType === 'Identity' ||
 			window.guardian.config.page.section === 'identity'; // needed for pages under profile.* subdomain
-		const switches = window.guardian.config.switches;
 		const isWidePage = getCurrentBreakpoint() === 'wide';
 		const newRecipeDesign =
 			window.guardian.config.page.showNewRecipeDesign ?? false;
-
-		const isUnsupportedBrowser: boolean = isInternetExplorer();
 
 		// Detect presence of space for football-right ad slot
 		const { pageId } = window.guardian.config.page;
@@ -97,32 +86,6 @@ class CommercialFeatures {
 
 		this.youtubeAdvertising = !this.adFree && !sensitiveContent;
 
-		const shouldLoadGoogletagTrueConditions = {
-			'switches.shouldLoadGoogletag': !!switches.shouldLoadGoogletag,
-			externalAdvertising,
-		};
-
-		const shouldLoadGoogletagFalseConditions = {
-			sensitiveContent,
-			isIdentityPage,
-			adFree: this.adFree,
-			isUnsupportedBrowser,
-		};
-
-		this.shouldLoadGoogletag =
-			forceAds ||
-			(Object.values(shouldLoadGoogletagTrueConditions).every(Boolean) &&
-				!Object.values(shouldLoadGoogletagFalseConditions).some(
-					Boolean,
-				));
-
-		if (!this.shouldLoadGoogletag) {
-			adsDisabledLogger(
-				shouldLoadGoogletagTrueConditions,
-				shouldLoadGoogletagFalseConditions,
-			);
-		}
-
 		const isInSpacefinderOnInteractivesTest =
 			!isUserInTestGroup(
 				'commercial-holdback-spacefinder-on-interactives',
@@ -135,8 +98,10 @@ class CommercialFeatures {
 		const disableArticleBodyAdverts =
 			isMinuteArticle || isLiveBlog || isHosted || newRecipeDesign;
 
+		const adsEnabled = shouldLoadAds();
+
 		this.articleBodyAdverts =
-			this.shouldLoadGoogletag &&
+			adsEnabled &&
 			!this.adFree &&
 			enableArticleBodyAdverts &&
 			!disableArticleBodyAdverts;
@@ -155,7 +120,7 @@ class CommercialFeatures {
 		}
 
 		this.highMerch =
-			this.shouldLoadGoogletag &&
+			adsEnabled &&
 			!this.adFree &&
 			!isMinuteArticle &&
 			!isHosted &&
@@ -171,15 +136,14 @@ class CommercialFeatures {
 			!this.isSecureContact;
 
 		this.commentAdverts =
-			this.shouldLoadGoogletag &&
+			adsEnabled &&
 			!this.adFree &&
 			!isMinuteArticle &&
 			!!window.guardian.config.switches.enableDiscussionSwitch &&
 			window.guardian.config.page.commentable &&
 			(!isLiveBlog || isWidePage);
 
-		this.liveblogAdverts =
-			!!isLiveBlog && this.shouldLoadGoogletag && !this.adFree;
+		this.liveblogAdverts = !!isLiveBlog && adsEnabled && !this.adFree;
 
 		this.comscore =
 			!!window.guardian.config.switches.comscore &&
