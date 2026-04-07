@@ -1,4 +1,6 @@
 import { isInCanada } from '@guardian/commercial-core/geo/geo-utils';
+import type { ConsentState, TCFv2ConsentState } from '@guardian/libs';
+import { onConsent } from '@guardian/libs';
 import { isAdFree } from '../../lib/ad-free';
 import { a9 } from '../../lib/header-bidding/a9/a9';
 import { isSecureContactPage } from '../../lib/is-secure-contact';
@@ -35,10 +37,6 @@ jest.mock('lib/page-targeting');
 
 jest.mock('lib/header-bidding/prebid/bidders/config');
 
-jest.mock('lib/header-bidding/utils', () => ({
-	isInUsRegion: () => true,
-}));
-
 jest.mock('@guardian/libs');
 
 const originalUA = navigator.userAgent;
@@ -48,8 +46,32 @@ const fakeUserAgent = (userAgent?: string) => {
 		configurable: true,
 	});
 };
+const SOURCEPOINT_ID = '5f369a02b8e05c308701f829';
 
-describe('init', () => {
+const defaultTCFv2State = {
+	consents: { 1: false },
+	eventStatus: 'tcloaded',
+	vendorConsents: { abc: false },
+	addtlConsent: 'xyz',
+	gdprApplies: true,
+	tcString: 'YAAA',
+} as TCFv2ConsentState;
+
+const tcfv2WithoutConsent = {
+	tcfv2: {
+		...defaultTCFv2State,
+		vendorConsents: {
+			[SOURCEPOINT_ID]: false,
+		},
+	},
+	canTarget: false,
+	framework: 'tcfv2',
+} as ConsentState;
+
+const mockOnConsent = (consentState: ConsentState) =>
+	jest.mocked(onConsent).mockReturnValueOnce(Promise.resolve(consentState));
+
+describe('prepareA9', () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
 		fakeUserAgent();
@@ -59,6 +81,13 @@ describe('init', () => {
 
 	afterAll(() => {
 		jest.clearAllMocks();
+	});
+
+	it('should not run if no consent for a9', async () => {
+		mockOnConsent(tcfv2WithoutConsent);
+		await setupA9();
+
+		expect(a9.initialise).not.toHaveBeenCalled();
 	});
 
 	it('should initialise A9 when A9 switch is ON and advertising is on and ad-free is off', async () => {
