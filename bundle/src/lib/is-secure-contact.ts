@@ -3,7 +3,7 @@ const SECURE_CONTACT_PAGES = [
 	'help/2016/sep/19/how-to-contact-the-guardian-securely',
 ];
 
-const isSecureContactPage = (pageId: string): boolean =>
-	SECURE_CONTACT_PAGES.includes(pageId);
+const isSecureContactPage = (): boolean =>
+	SECURE_CONTACT_PAGES.includes(window.guardian.config.page.pageId);
 
 export { isSecureContactPage };
