@@ -36,7 +36,6 @@ const isUserPrefsAdsOff = (): boolean =>
 // Having a constructor means we can easily re-instantiate the object in a test
 class CommercialFeatures {
 	articleBodyAdverts: boolean;
-	highMerch: boolean;
 	thirdPartyTags: boolean;
 	commentAdverts: boolean;
 	liveblogAdverts: boolean;
@@ -113,16 +112,6 @@ class CommercialFeatures {
 				},
 			);
 		}
-
-		this.highMerch =
-			adsEnabled &&
-			!this.adFree &&
-			!isMinuteArticle &&
-			!isHosted &&
-			!isInteractive &&
-			!window.guardian.config.page.isFront &&
-			!window.guardian.config.isDotcomRendering &&
-			!newRecipeDesign;
 
 		this.thirdPartyTags =
 			!this.adFree &&
