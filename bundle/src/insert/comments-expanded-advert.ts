@@ -2,12 +2,16 @@ import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { AD_LABEL_HEIGHT } from '@guardian/commercial-core/constants/ad-label-height';
 import { log } from '@guardian/libs';
 import { emptyAdvert } from '../events/empty-advert';
-import { commercialFeatures } from '../lib/commercial-features';
+import { isAdFree } from '../lib/ad-free';
 import { createAdSlot } from '../lib/create-ad-slot';
-import { getBreakpoint } from '../lib/detect/detect-breakpoint';
+import {
+	getBreakpoint,
+	getCurrentBreakpoint,
+} from '../lib/detect/detect-breakpoint';
 import { getViewport } from '../lib/detect/detect-viewport';
 import { getAdvertById } from '../lib/dfp/get-advert-by-id';
 import fastdom from '../lib/fastdom-promise';
+import { shouldLoadAds } from '../lib/should-load-ads';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 
 const tallestCommentAd = adSizes.mpu.height + AD_LABEL_HEIGHT;
@@ -162,8 +166,21 @@ const handleCommentsLoadedMobileEvent = async (): Promise<void> => {
 	}
 };
 
+export const commentAdverts = (): boolean => {
+	const isWidePage = getCurrentBreakpoint() === 'wide';
+
+	return (
+		shouldLoadAds() &&
+		!isAdFree() &&
+		!window.guardian.config.page.isMinuteArticle &&
+		!!window.guardian.config.switches.enableDiscussionSwitch &&
+		window.guardian.config.page.commentable &&
+		(!window.guardian.config.page.isLiveBlog || isWidePage)
+	);
+};
+
 export const initCommentsExpandedAdverts = (): Promise<void> => {
-	if (!commercialFeatures.commentAdverts) {
+	if (!commentAdverts()) {
 		log(
 			'commercial',
 			'Adverts in comments are disabled in commercialFeatures',
