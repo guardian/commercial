@@ -59,3 +59,4 @@ export const _resetHistory = () => {
 };
 
 export { globalAdEvents, eventHistory };
+export type { AdEventCustomEvent };

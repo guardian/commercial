@@ -1,3 +1,4 @@
+import type { AdEventCustomEvent } from './global-ad-events';
 import {
 	_resetHistory,
 	eventHistory,
@@ -192,6 +193,33 @@ describe('globalAdEvents', () => {
 				detail: {
 					slotName: 'top-above-nav',
 					name: 'loaded',
+					status: true,
+				},
+			}),
+		);
+	});
+
+	it('replays matching historical events for new listeners', () => {
+		// Add a historical event
+		eventHistory.push(
+			new CustomEvent('commercial:adStatusChange', {
+				detail: {
+					slotName: 'top-above-nav',
+					name: 'rendered',
+					status: true,
+				},
+			}) as AdEventCustomEvent,
+		);
+
+		const handler = jest.fn();
+		subscription = globalAdEvents('rendered', handler, 'top-above-nav');
+
+		expect(handler).toHaveBeenCalledTimes(1);
+		expect(handler).toHaveBeenCalledWith(
+			expect.objectContaining({
+				detail: {
+					slotName: 'top-above-nav',
+					name: 'rendered',
 					status: true,
 				},
 			}),
