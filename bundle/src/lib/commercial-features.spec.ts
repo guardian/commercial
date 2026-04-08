@@ -103,50 +103,6 @@ describe('Commercial features', () => {
 		});
 	});
 
-	describe('High-relevance commercial component', () => {
-		it('Does not run on fronts', () => {
-			window.guardian.config.page.isFront = true;
-			const features = new CommercialFeatures();
-			expect(features.highMerch).toBe(false);
-		});
-
-		it('Does run on outside of fronts', () => {
-			window.guardian.config.page.isFront = false;
-			const features = new CommercialFeatures();
-			expect(features.highMerch).toBe(true);
-		});
-
-		it('Does not run on minute articles', () => {
-			window.guardian.config.page.isMinuteArticle = true;
-			const features = new CommercialFeatures();
-			expect(features.highMerch).toBe(false);
-		});
-	});
-
-	describe('High-relevance commercial component under ad-free', () => {
-		beforeEach(() => {
-			setCookie({ name: 'GU_AF1', value: '10' });
-		});
-
-		it('Does not run on fronts', () => {
-			window.guardian.config.page.isFront = true;
-			const features = new CommercialFeatures();
-			expect(features.highMerch).toBe(false);
-		});
-
-		it('Does not run outside of fronts', () => {
-			window.guardian.config.page.isFront = false;
-			const features = new CommercialFeatures();
-			expect(features.highMerch).toBe(false);
-		});
-
-		it('Does not run on minute articles', () => {
-			window.guardian.config.page.isMinuteArticle = true;
-			const features = new CommercialFeatures();
-			expect(features.highMerch).toBe(false);
-		});
-	});
-
 	describe('Third party tags', () => {
 		it('Runs by default', () => {
 			const features = new CommercialFeatures();

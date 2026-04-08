@@ -2,6 +2,7 @@ import { log, storage } from '@guardian/libs';
 import { isUserInTestGroup } from '../ab-testing';
 import { isAdFree } from './ad-free';
 import { getCurrentBreakpoint } from './detect/detect-breakpoint';
+import { isSecureContactPage } from './is-secure-contact';
 import { shouldLoadAds } from './should-load-ads';
 
 /**
@@ -34,9 +35,7 @@ const isUserPrefsAdsOff = (): boolean =>
 
 // Having a constructor means we can easily re-instantiate the object in a test
 class CommercialFeatures {
-	isSecureContact: boolean;
 	articleBodyAdverts: boolean;
-	highMerch: boolean;
 	thirdPartyTags: boolean;
 	commentAdverts: boolean;
 	liveblogAdverts: boolean;
@@ -77,11 +76,6 @@ class CommercialFeatures {
 
 		this.footballFixturesAdverts = isFootballPage && isPageWithRightAdSpace;
 
-		this.isSecureContact = [
-			'help/ng-interactive/2017/mar/17/contact-the-guardian-securely',
-			'help/2016/sep/19/how-to-contact-the-guardian-securely',
-		].includes(window.guardian.config.page.pageId);
-
 		this.adFree = isAdFree();
 
 		this.youtubeAdvertising = !this.adFree && !sensitiveContent;
@@ -119,21 +113,11 @@ class CommercialFeatures {
 			);
 		}
 
-		this.highMerch =
-			adsEnabled &&
-			!this.adFree &&
-			!isMinuteArticle &&
-			!isHosted &&
-			!isInteractive &&
-			!window.guardian.config.page.isFront &&
-			!window.guardian.config.isDotcomRendering &&
-			!newRecipeDesign;
-
 		this.thirdPartyTags =
 			!this.adFree &&
 			externalAdvertising &&
 			!isIdentityPage &&
-			!this.isSecureContact;
+			!isSecureContactPage(window.guardian.config.page.pageId);
 
 		this.commentAdverts =
 			adsEnabled &&
@@ -148,7 +132,7 @@ class CommercialFeatures {
 		this.comscore =
 			!!window.guardian.config.switches.comscore &&
 			!isIdentityPage &&
-			!this.isSecureContact;
+			!isSecureContactPage(window.guardian.config.page.pageId);
 	}
 }
 
