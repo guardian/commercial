@@ -27,8 +27,6 @@ describe('globalAdEvents', () => {
 			}),
 		);
 
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- test
-		console.log((handler.mock.calls[0][0] as CustomEvent).detail);
 		expect(handler).toHaveBeenCalledTimes(1);
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- test
 		expect(handler.mock.calls[0][0]).toBeInstanceOf(CustomEvent);

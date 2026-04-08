@@ -29,42 +29,39 @@ Fired every time any ad slot changes status. All listeners receive every event �
 ### Listen for any ad rendering
 
 ```typescript
-globalAdEvents.addEventListener('adStatusChange', (event) => {
-	const { advert, name } = event.detail;
-	if (name === 'rendered') {
-		console.log(`${advert.id} rendered`);
-	}
+globalAdEvents('rendered', (event) => {
+	console.log(`${event.detail.advert.id} rendered`);
 });
 ```
 
 ### Listen for a specific ad slot
 
 ```typescript
-globalAdEvents.addEventListener('adStatusChange', (event) => {
-	const { advert, name } = event.detail;
-	if (advert.id === 'dfp-ad--top-above-nav' && name === 'rendered') {
-		// React to the top ad rendering, e.g. resize the header
-	}
-});
-```
-
-### Listen once then stop
-
-```typescript
-globalAdEvents.addEventListener(
-	'adStatusChange',
+globalAdEvents(
+	'rendered',
 	(event) => {
-		const { name } = event.detail;
-		if (name === 'rendered') {
-			console.log('First ad rendered');
+		if (event.detail.advert.id === 'dfp-ad--top-above-nav') {
+			// React to the top ad rendering, e.g., resize the header
+			console.log('Top ad rendered');
 		}
 	},
-	{ once: true },
+	'top-above-nav',
 );
+```
+
+### Remove a listener
+
+```typescript
+const subscription = globalAdEvents('rendered', (event) => {
+	console.log(`${event.detail.advert.id} rendered`);
+});
+
+// Later, remove the listener
+subscription.remove();
 ```
 
 ## Notes
 
-- The event name is `'adStatusChange'` — it must match exactly or the listener will silently receive nothing.
+- The event name is `'commercial:adStatusChange'` — it must match exactly, or the listener will silently receive nothing.
 - All listeners hear all events. Filter by `event.detail.name` or `event.detail.advert` in your callback.
 - If you have a direct reference to an `Advert` instance, you can use `advert.on()` instead.
