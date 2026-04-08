@@ -38,7 +38,6 @@ class CommercialFeatures {
 	articleBodyAdverts: boolean;
 	thirdPartyTags: boolean;
 	commentAdverts: boolean;
-	liveblogAdverts: boolean;
 	adFree: boolean;
 	comscore: boolean;
 	youtubeAdvertising: boolean;
@@ -126,8 +125,6 @@ class CommercialFeatures {
 			!!window.guardian.config.switches.enableDiscussionSwitch &&
 			window.guardian.config.page.commentable &&
 			(!isLiveBlog || isWidePage);
-
-		this.liveblogAdverts = !!isLiveBlog && adsEnabled && !this.adFree;
 
 		this.comscore =
 			!!window.guardian.config.switches.comscore &&
