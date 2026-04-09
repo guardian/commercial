@@ -15,23 +15,33 @@ type AdEventCustomEvent = CustomEvent<{
 	status: boolean;
 }>;
 
-const eventHistory: AdEventCustomEvent[] = [];
+let eventHistory: AdEventCustomEvent[] = [];
+let isInitialised = false;
 
-document.addEventListener('commercial:adStatusChange', (e: Event) => {
-	const event = e as AdEventCustomEvent;
-	eventHistory.push(event);
-});
+const initialiseEventHistory = () => {
+	if (typeof document !== 'undefined' && !isInitialised) {
+		document.addEventListener('commercial:adStatusChange', (e: Event) => {
+			const event = e as AdEventCustomEvent;
+			eventHistory.push(event);
+		});
+		isInitialised = true;
+	}
+};
 
 function globalAdEvents(
 	status: AdvertStatus | AdvertStatus[],
 	listenerHandler: (event: AdEventCustomEvent) => void,
 	slotName?: string,
 ) {
+	// Ensure this code only runs in the browser
 	if (typeof document === 'undefined') {
 		return {
 			remove: () => {},
 		};
 	}
+
+	// Initialize event history lazily
+	initialiseEventHistory();
 
 	const parsedStatus = Array.isArray(status) ? status : [status];
 
@@ -65,6 +75,7 @@ function globalAdEvents(
 		}
 	};
 
+	// Replay past events
 	eventHistory.forEach((historyEvent) => {
 		if (matches(historyEvent, parsedStatus, slotName)) {
 			listenerHandler(historyEvent);
@@ -80,7 +91,8 @@ function globalAdEvents(
 }
 
 export const _resetHistory = () => {
-	eventHistory.length = 0;
+	eventHistory = [];
+	isInitialised = false;
 };
 
 export { globalAdEvents, eventHistory };
