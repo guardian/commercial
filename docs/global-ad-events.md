@@ -62,6 +62,5 @@ subscription.remove();
 
 ## Notes
 
-- The event name is `'commercial:adStatusChange'` — it must match exactly, or the listener will silently receive nothing.
 - All listeners hear all events. Filter by `event.detail.name` or `event.detail.advert` in your callback.
 - If you have a direct reference to an `Advert` instance, you can use `advert.on()` instead.
