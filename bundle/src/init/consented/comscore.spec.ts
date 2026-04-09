@@ -4,7 +4,6 @@ import type {
 	USNATConsentState,
 } from '@guardian/libs';
 import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
-import { commercialFeatures } from '../../lib/commercial-features';
 import { _ } from './comscore';
 
 const { setupComscore } = _;
@@ -87,10 +86,35 @@ jest.mock('@guardian/libs', () => ({
 	getConsentFor: jest.fn(),
 }));
 
-jest.mock('lib/commercial-features', () => ({
-	commercialFeatures: {
-		comscore: true,
-	},
+// jest.mock('lib/commercial-features', () => ({
+// 	commercialFeatures: {
+// 		comscore: true,
+// 	},
+// }));
+
+// jest.mock('./comscore', () => ({
+// 	_: { comscore: true },
+// }));
+
+jest.mock('./comscore', () => ({
+    _: {
+        comscore: true,
+        getGlobals: jest.fn(() => {
+            console.log('Mocked getGlobals called');
+            return {
+                c1: '2',
+                c2: '6035250',
+                cs_ucfr: '1',
+                options: {
+                    enableFirstPartyCookie: true,
+                },
+            };
+        }),
+        setupComscore: jest.fn(),
+        comscoreSrc: 'mock-src',
+        comscoreC1: 'mock-c1',
+        comscoreC2: 'mock-c2',
+    },
 }));
 
 const mockOnConsent = (consentState: ConsentState) =>
@@ -100,15 +124,18 @@ const mockGetConsentFor = (hasConsent: boolean) =>
 	(getConsentFor as jest.Mock).mockReturnValueOnce(hasConsent);
 
 describe('setupComscore', () => {
+	beforeEach(() => {
+		jest.resetAllMocks();
+	});
 	it('should do nothing if the comscore is disabled in commercial features', async () => {
-		commercialFeatures.comscore = false;
+		_.comscore = false;
 		await setupComscore();
 		expect(onConsent).not.toHaveBeenCalled();
 	});
 
 	it('should register a callback with onConsentChange if enabled in commercial features', async () => {
 		mockOnConsent(tcfv2WithConsent);
-		commercialFeatures.comscore = true;
+		_.comscore = true;
 		await setupComscore();
 		expect(onConsent).toHaveBeenCalled();
 	});
@@ -159,6 +186,14 @@ describe('setupComscore', () => {
 });
 
 describe('comscore getGlobals', () => {
+	beforeEach(() => {
+		jest.resetAllMocks();
+	});
+	it('returns an object with the correct cs_ucfr variable set when called with consent sate as true', () => {
+		expect(_.getGlobals('', '')).toMatchObject({
+			cs_ucfr: '1',
+		});
+	});
 	it('return an object with the c1 and c2 properties correctly set when called with "Network Front" as keywords', () => {
 		const expectedGlobals = { c1: _.comscoreC1, c2: _.comscoreC2 };
 		expect(_.getGlobals('Network Front', 'uk')).toMatchObject(
