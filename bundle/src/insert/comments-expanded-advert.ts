@@ -166,25 +166,21 @@ const handleCommentsLoadedMobileEvent = async (): Promise<void> => {
 	}
 };
 
-export const commentAdverts = (): boolean => {
+const allowCommentsExpandedAdverts = (): boolean => {
 	const isWidePage = getCurrentBreakpoint() === 'wide';
-
 	return (
 		shouldLoadAds() &&
 		!isAdFree() &&
 		!window.guardian.config.page.isMinuteArticle &&
 		!!window.guardian.config.switches.enableDiscussionSwitch &&
-		window.guardian.config.page.commentable &&
+		!!window.guardian.config.page.commentable &&
 		(!window.guardian.config.page.isLiveBlog || isWidePage)
 	);
 };
 
 export const initCommentsExpandedAdverts = (): Promise<void> => {
-	if (!commentAdverts()) {
-		log(
-			'commercial',
-			'Adverts in comments are disabled in commercialFeatures',
-		);
+	if (!allowCommentsExpandedAdverts()) {
+		log('commercial', 'Adverts in comments are disabled');
 		return Promise.resolve();
 	}
 
@@ -206,4 +202,8 @@ export const initCommentsExpandedAdverts = (): Promise<void> => {
 	});
 
 	return Promise.resolve();
+};
+
+export const _ = {
+	allowCommentsExpandedAdverts,
 };

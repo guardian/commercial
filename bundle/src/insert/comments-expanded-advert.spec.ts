@@ -1,13 +1,8 @@
-import { setCookie, storage } from '@guardian/libs';
 import { isAdFree } from '../lib/ad-free';
-import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../lib/detect/detect-breakpoint';
-import { isUserLoggedIn } from '../lib/identity/api';
-import { shouldLoadAds } from '../lib/should-load-ads';
-import { commentAdverts } from './comments-expanded-advert';
+import { getCurrentBreakpoint } from '../lib/detect/detect-breakpoint';
+import { _, initCommentsExpandedAdverts } from './comments-expanded-advert';
 
-const getCurrentBreakpoint = getCurrentBreakpoint_ as jest.MockedFunction<
-	typeof getCurrentBreakpoint_
->;
+const { allowCommentsExpandedAdverts } = _;
 
 jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentBreakpoint: jest.fn(),
@@ -20,32 +15,13 @@ jest.mock('lib/detect/detect-breakpoint', () => ({
 	}),
 }));
 
-jest.mock('lib/should-load-ads', () => ({
-	shouldLoadAds: jest.fn(),
-}));
-
 jest.mock('lib/ad-free', () => ({
 	isAdFree: jest.fn(),
 }));
 
-jest.mock('lib/identity/api');
-
-const originalUserAgent = navigator.userAgent;
-
-const clearUserAgent = () => {
-	Object.defineProperty(navigator, 'userAgent', {
-		value: originalUserAgent,
-		writable: true,
-	});
-};
-
-describe('Comment adverts', () => {
+describe('Adverts in the comment section', () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
-
-		// Restore user agent to jsdom default
-		clearUserAgent();
-
 		// Set up a happy path by default
 		window.guardian.config = {
 			// @ts-expect-error -- It's a partial for a mock
@@ -58,7 +34,7 @@ describe('Comment adverts', () => {
 				shouldHideReaderRevenue: false,
 				isFront: false,
 				showRelatedContent: true,
-				commentable: false,
+				commentable: true,
 				isLiveBlog: false,
 			},
 			switches: {
@@ -66,103 +42,120 @@ describe('Comment adverts', () => {
 				enableDiscussionSwitch: true,
 			},
 		};
-
-		window.location.hash = '';
-
-		storage.local.remove(`gu.prefs.switch.adverts`);
-
-		setCookie({ name: 'GU_AF1', value: '' });
-
-		getCurrentBreakpoint.mockReturnValue('desktop');
-		jest.mocked(isUserLoggedIn).mockResolvedValue(true);
-
-		expect.hasAssertions();
-		(shouldLoadAds as jest.Mock).mockReturnValue(true);
-		(isAdFree as jest.Mock).mockReturnValue(false);
+		jest.mocked(getCurrentBreakpoint).mockReturnValue('wide');
 	});
 
-	describe('Comment adverts without ad-free', () => {
-		beforeEach(() => {
-			window.guardian.config.page.commentable = true;
-			jest.mocked(isUserLoggedIn).mockResolvedValue(true);
-		});
-
-		it('Displays when page has comments', () => {
-			expect(commentAdverts()).toBe(true);
-		});
-
-		it('Will also display when the user is not logged in', () => {
-			jest.mocked(isUserLoggedIn).mockResolvedValue(false);
-			expect(commentAdverts()).toBe(true);
-		});
-
-		it('Does not display on minute articles', () => {
-			window.guardian.config.page.isMinuteArticle = true;
-			expect(commentAdverts()).toBe(false);
-		});
-
-		it('Short circuits when no comments to add adverts to', () => {
-			window.guardian.config.page.commentable = false;
-			expect(commentAdverts()).toBe(false);
-		});
-
-		describe('If live blog', () => {
+	describe('allowCommentsExpandedAdverts', () => {
+		describe('Comment adverts without ad-free', () => {
 			beforeEach(() => {
-				window.guardian.config.page.isLiveBlog = true;
+				jest.mocked(isAdFree).mockReturnValue(false);
 			});
 
-			it('Appears if page is wide', () => {
-				getCurrentBreakpoint.mockReturnValue('wide');
-				expect(commentAdverts()).toBe(true);
+			it('Displays when page is commentable', () => {
+				window.guardian.config.page.commentable = true;
+				expect(allowCommentsExpandedAdverts()).toBe(true);
 			});
 
-			it('Does not appear if page is not wide', () => {
-				getCurrentBreakpoint.mockReturnValue('desktop');
-				expect(commentAdverts()).toBe(false);
+			it('Does not display on minute articles', () => {
+				window.guardian.config.page.isMinuteArticle = true;
+				expect(allowCommentsExpandedAdverts()).toBe(false);
+			});
+
+			it('Short circuits when no comments to add adverts to', () => {
+				window.guardian.config.page.commentable = false;
+				expect(allowCommentsExpandedAdverts()).toBe(false);
+			});
+
+			describe('If live blog', () => {
+				beforeEach(() => {
+					window.guardian.config.page.isLiveBlog = true;
+				});
+
+				it('Appears if page is wide', () => {
+					jest.mocked(getCurrentBreakpoint).mockReturnValue('wide');
+					expect(allowCommentsExpandedAdverts()).toBe(true);
+				});
+
+				it('Does not appear if page is not wide', () => {
+					jest.mocked(getCurrentBreakpoint).mockReturnValue(
+						'desktop',
+					);
+					expect(allowCommentsExpandedAdverts()).toBe(false);
+				});
+			});
+		});
+
+		describe('Comment adverts under ad-free', () => {
+			beforeEach(() => {
+				jest.mocked(isAdFree).mockReturnValue(true);
+			});
+
+			it('Does not display when page has comments', () => {
+				expect(allowCommentsExpandedAdverts()).toBe(false);
+			});
+
+			it('Does not display on minute articles', () => {
+				window.guardian.config.page.isMinuteArticle = true;
+				expect(allowCommentsExpandedAdverts()).toBe(false);
+			});
+
+			it('Short circuits when no comments to add adverts to', () => {
+				window.guardian.config.page.commentable = false;
+				expect(allowCommentsExpandedAdverts()).toBe(false);
+			});
+
+			describe('If live blog', () => {
+				beforeEach(() => {
+					window.guardian.config.page.isLiveBlog = true;
+				});
+
+				it('Does not appear if page is wide', () => {
+					jest.mocked(getCurrentBreakpoint).mockReturnValue('wide');
+					expect(allowCommentsExpandedAdverts()).toBe(false);
+				});
+
+				it('Does not appear if page is not wide', () => {
+					jest.mocked(getCurrentBreakpoint).mockReturnValue(
+						'desktop',
+					);
+					expect(allowCommentsExpandedAdverts()).toBe(false);
+				});
 			});
 		});
 	});
 
-	describe('Comment adverts under ad-free', () => {
-		beforeEach(() => {
-			window.guardian.config.page.commentable = true;
-			setCookie({ name: 'GU_AF1', value: '10' });
-			(isAdFree as jest.Mock).mockReturnValue(true);
+	describe('initCommentsExpandedAdverts', () => {
+		it('adds event listeners when criteria met for ads in comments', async () => {
+			const addEventListenerSpy = jest.spyOn(
+				document,
+				'addEventListener',
+			);
+
+			await initCommentsExpandedAdverts();
+
+			expect(addEventListenerSpy).toHaveBeenCalledTimes(2);
+
+			expect(addEventListenerSpy.mock.calls[0]).toEqual([
+				'comments-loaded',
+				expect.any(Function),
+			]);
+
+			expect(addEventListenerSpy.mock.calls[1]).toEqual([
+				'comments-state-change',
+				expect.any(Function),
+			]);
 		});
 
-		it('Does not display when page has comments', () => {
-			expect(commentAdverts()).toBe(false);
-		});
+		it('does not add event listeners when criteria not met for ads in comments', async () => {
+			const addEventListenerSpy = jest.spyOn(
+				document,
+				'addEventListener',
+			);
+			jest.mocked(isAdFree).mockReturnValue(true);
 
-		it('Does not display on minute articles', () => {
-			window.guardian.config.page.isMinuteArticle = true;
-			expect(commentAdverts()).toBe(false);
-		});
+			await initCommentsExpandedAdverts();
 
-		it('Does not appear when user signed out', () => {
-			jest.mocked(isUserLoggedIn).mockResolvedValue(false);
-			expect(commentAdverts()).toBe(false);
-		});
-
-		it('Short circuits when no comments to add adverts to', () => {
-			window.guardian.config.page.commentable = false;
-			expect(commentAdverts()).toBe(false);
-		});
-
-		describe('If live blog', () => {
-			beforeEach(() => {
-				window.guardian.config.page.isLiveBlog = true;
-			});
-
-			it('Does not appear if page is wide', () => {
-				getCurrentBreakpoint.mockReturnValue('wide');
-				expect(commentAdverts()).toBe(false);
-			});
-
-			it('Does not appear if page is not wide', () => {
-				getCurrentBreakpoint.mockReturnValue('desktop');
-				expect(commentAdverts()).toBe(false);
-			});
+			expect(addEventListenerSpy).toHaveBeenCalledTimes(0);
 		});
 	});
 });
