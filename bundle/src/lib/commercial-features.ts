@@ -1,7 +1,6 @@
 import { log, storage } from '@guardian/libs';
 import { isUserInTestGroup } from '../ab-testing';
 import { isAdFree } from './ad-free';
-import { getCurrentBreakpoint } from './detect/detect-breakpoint';
 import { isSecureContactPage } from './is-secure-contact';
 import { shouldLoadAds } from './should-load-ads';
 
@@ -37,7 +36,6 @@ const isUserPrefsAdsOff = (): boolean =>
 class CommercialFeatures {
 	articleBodyAdverts: boolean;
 	thirdPartyTags: boolean;
-	commentAdverts: boolean;
 	liveblogAdverts: boolean;
 	adFree: boolean;
 	comscore: boolean;
@@ -60,7 +58,6 @@ class CommercialFeatures {
 		const isIdentityPage =
 			window.guardian.config.page.contentType === 'Identity' ||
 			window.guardian.config.page.section === 'identity'; // needed for pages under profile.* subdomain
-		const isWidePage = getCurrentBreakpoint() === 'wide';
 		const newRecipeDesign =
 			window.guardian.config.page.showNewRecipeDesign ?? false;
 
@@ -118,14 +115,6 @@ class CommercialFeatures {
 			externalAdvertising &&
 			!isIdentityPage &&
 			!isSecureContactPage(window.guardian.config.page.pageId);
-
-		this.commentAdverts =
-			adsEnabled &&
-			!this.adFree &&
-			!isMinuteArticle &&
-			!!window.guardian.config.switches.enableDiscussionSwitch &&
-			window.guardian.config.page.commentable &&
-			(!isLiveBlog || isWidePage);
 
 		this.liveblogAdverts = !!isLiveBlog && adsEnabled && !this.adFree;
 
