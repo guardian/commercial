@@ -32,7 +32,6 @@ function adsDisabledLogger(
 // Having a constructor means we can easily re-instantiate the object in a test
 class CommercialFeatures {
 	articleBodyAdverts: boolean;
-	liveblogAdverts: boolean;
 	adFree: boolean;
 	comscore: boolean;
 	youtubeAdvertising: boolean;
@@ -102,8 +101,6 @@ class CommercialFeatures {
 				},
 			);
 		}
-
-		this.liveblogAdverts = !!isLiveBlog && adsEnabled && !this.adFree;
 
 		this.comscore =
 			!!window.guardian.config.switches.comscore &&

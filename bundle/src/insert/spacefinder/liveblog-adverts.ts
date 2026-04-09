@@ -1,9 +1,10 @@
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { log } from '@guardian/libs';
-import { commercialFeatures } from '../../lib/commercial-features';
+import { isAdFree } from '../../lib/ad-free';
 import { createAdSlot } from '../../lib/create-ad-slot';
 import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
 import fastdom from '../../lib/fastdom-promise';
+import { shouldLoadAds } from '../../lib/should-load-ads';
 import { fillDynamicAdSlot } from '../fill-dynamic-advert-slot';
 import { spaceFiller } from './space-filler';
 import type {
@@ -241,8 +242,13 @@ const onUpdate = (): void => {
  * Inserts inline ad slots between new content
  * blocks when they are pushed to the page.
  */
+
+const isLiveBlog = window.guardian.config.page.isLiveBlog ?? false;
+const adsEnabled = shouldLoadAds();
+const adFree = isAdFree();
+
 export const init = (): Promise<void> => {
-	if (commercialFeatures.liveblogAdverts) {
+	if (!!isLiveBlog && adsEnabled && !adFree) {
 		void startListening();
 	}
 
