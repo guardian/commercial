@@ -1,7 +1,6 @@
-import { log, storage } from '@guardian/libs';
+import { log } from '@guardian/libs';
 import { isUserInTestGroup } from '../ab-testing';
 import { isAdFree } from './ad-free';
-import { getCurrentBreakpoint } from './detect/detect-breakpoint';
 import { isSecureContactPage } from './is-secure-contact';
 import { shouldLoadAds } from './should-load-ads';
 
@@ -30,14 +29,9 @@ function adsDisabledLogger(
 	}
 }
 
-const isUserPrefsAdsOff = (): boolean =>
-	storage.local.get(`gu.prefs.switch.adverts`) === false;
-
 // Having a constructor means we can easily re-instantiate the object in a test
 class CommercialFeatures {
 	articleBodyAdverts: boolean;
-	thirdPartyTags: boolean;
-	commentAdverts: boolean;
 	liveblogAdverts: boolean;
 	adFree: boolean;
 	comscore: boolean;
@@ -45,9 +39,6 @@ class CommercialFeatures {
 	footballFixturesAdverts: boolean;
 
 	constructor() {
-		// this is used for SpeedCurve tests
-		const noadsUrl = /[#&]noads(&.*)?$/.test(window.location.hash);
-		const externalAdvertising = !noadsUrl && !isUserPrefsAdsOff();
 		const sensitiveContent =
 			window.guardian.config.page.shouldHideAdverts ||
 			window.guardian.config.page.section === 'childrens-books-site';
@@ -60,7 +51,6 @@ class CommercialFeatures {
 		const isIdentityPage =
 			window.guardian.config.page.contentType === 'Identity' ||
 			window.guardian.config.page.section === 'identity'; // needed for pages under profile.* subdomain
-		const isWidePage = getCurrentBreakpoint() === 'wide';
 		const newRecipeDesign =
 			window.guardian.config.page.showNewRecipeDesign ?? false;
 
@@ -113,26 +103,12 @@ class CommercialFeatures {
 			);
 		}
 
-		this.thirdPartyTags =
-			!this.adFree &&
-			externalAdvertising &&
-			!isIdentityPage &&
-			!isSecureContactPage(window.guardian.config.page.pageId);
-
-		this.commentAdverts =
-			adsEnabled &&
-			!this.adFree &&
-			!isMinuteArticle &&
-			!!window.guardian.config.switches.enableDiscussionSwitch &&
-			window.guardian.config.page.commentable &&
-			(!isLiveBlog || isWidePage);
-
 		this.liveblogAdverts = !!isLiveBlog && adsEnabled && !this.adFree;
 
 		this.comscore =
 			!!window.guardian.config.switches.comscore &&
 			!isIdentityPage &&
-			!isSecureContactPage(window.guardian.config.page.pageId);
+			!isSecureContactPage();
 	}
 }
 

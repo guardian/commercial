@@ -1,8 +1,9 @@
 /* A regionalised container for all the commercial tags. */
 
 import { getConsentFor, onConsent } from '@guardian/libs';
-import { commercialFeatures } from '../../lib/commercial-features';
+import { isAdFree } from '../../lib/ad-free';
 import fastdom from '../../lib/fastdom-promise';
+import { isSecureContactPage } from '../../lib/is-secure-contact';
 import { ias } from '../../lib/third-party-tags/ias';
 import { imrWorldwide } from '../../lib/third-party-tags/imr-worldwide';
 import { imrWorldwideLegacy } from '../../lib/third-party-tags/imr-worldwide-legacy';
@@ -10,6 +11,16 @@ import { inizio } from '../../lib/third-party-tags/inizio';
 import { permutive } from '../../lib/third-party-tags/permutive';
 import { remarketing } from '../../lib/third-party-tags/remarketing';
 import type { ThirdPartyTag } from '../../types/global';
+
+const isIdentityPage = () =>
+	window.guardian.config.page.contentType === 'Identity' ||
+	window.guardian.config.page.section === 'identity'; // needed for pages under profile.* subdomain
+
+// Used for speedcurve tests
+const noadsUrl = () => /[#&]noads(&.*)?$/.test(window.location.hash);
+
+const canRunThirdPartyTags = () =>
+	!isAdFree() && !noadsUrl() && !isIdentityPage() && !isSecureContactPage();
 
 const createTagScript = (tag: ThirdPartyTag) => {
 	const script = document.createElement('script');
@@ -104,7 +115,7 @@ const loadOther = (): Promise<void> => {
 };
 
 export const initThirdPartyTags = async (): Promise<boolean> => {
-	if (commercialFeatures.thirdPartyTags) {
+	if (canRunThirdPartyTags()) {
 		void loadOther();
 		return Promise.resolve(true);
 	}
@@ -113,4 +124,5 @@ export const initThirdPartyTags = async (): Promise<boolean> => {
 export const _ = {
 	insertScripts,
 	loadOther,
+	canRunThirdPartyTags,
 };
