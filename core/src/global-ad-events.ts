@@ -27,6 +27,12 @@ function globalAdEvents(
 	listenerHandler: (event: AdEventCustomEvent) => void,
 	slotName?: string,
 ) {
+	if (typeof document === 'undefined') {
+		return {
+			remove: () => {},
+		};
+	}
+
 	const parsedStatus = Array.isArray(status) ? status : [status];
 
 	const matches = (
