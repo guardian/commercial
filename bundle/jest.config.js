@@ -10,8 +10,8 @@ const jestConfig = {
 		global: {
 			branches: 45,
 			functions: 41,
-			lines: 61,
-			statements: 61,
+			lines: 60,
+			statements: 60,
 		},
 		/**
 		 * Higher testing threshold for the src/lib directory

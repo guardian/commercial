@@ -1,15 +1,17 @@
 import { getConsentFor, onConsent } from '@guardian/libs';
 import type { ConsentState, USNATConsentState } from '@guardian/libs';
-import { commercialFeatures } from '../../lib/commercial-features';
+import { isAdFree } from '../../lib/ad-free';
 import type { ThirdPartyTag } from '../../types/global';
 import { _, initThirdPartyTags } from './third-party-tags';
-
-const { insertScripts, loadOther } = _;
 
 jest.mock('@guardian/libs', () => ({
 	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
 	onConsent: jest.fn(),
 	getConsentFor: jest.fn(),
+}));
+
+jest.mock('../../lib/ad-free', () => ({
+	isAdFree: jest.fn(),
 }));
 
 const tcfv2AllConsent = {
@@ -99,12 +101,6 @@ afterEach(() => {
 	document.body.innerHTML = '';
 });
 
-jest.mock('lib/commercial-features', () => ({
-	commercialFeatures: {
-		thirdPartyTags: true,
-	},
-}));
-
 jest.mock('lib/third-party-tags/imr-worldwide', () => ({
 	imrWorldwide: {
 		shouldRun: true,
@@ -120,37 +116,64 @@ const mockGetConsentFor = (hasConsent: boolean) =>
 	(getConsentFor as jest.Mock).mockReturnValueOnce(hasConsent);
 
 describe('third party tags', () => {
-	it('should exist', () => {
-		expect(initThirdPartyTags).toBeDefined();
-		expect(loadOther).toBeDefined();
-		expect(insertScripts).toBeDefined();
+	describe('canRunThirdPartyTags', () => {
+		beforeEach(() => {
+			jest.mocked(isAdFree).mockReturnValue(false);
+			window.location.hash = '';
+			window.guardian.config.page.contentType = '';
+			window.guardian.config.page.section = '';
+			window.guardian.config.page.pageId = '';
+		});
+
+		it('Does not run for ad free', () => {
+			jest.mocked(isAdFree).mockReturnValue(true);
+			expect(_.canRunThirdPartyTags()).toBe(false);
+		});
+
+		it('Does not run on identity content type', () => {
+			window.guardian.config.page.contentType = 'Identity';
+			expect(_.canRunThirdPartyTags()).toBe(false);
+		});
+
+		it('Does not run on identity section', () => {
+			// This is needed for identity pages in the profile subdomain
+			window.guardian.config.page.section = 'identity';
+			expect(_.canRunThirdPartyTags()).toBe(false);
+		});
+
+		it('Does not run for #noads', () => {
+			window.location.hash = '#noads';
+			expect(_.canRunThirdPartyTags()).toBe(false);
+		});
+
+		it('Does not run on secure contact pages', () => {
+			window.guardian.config.page.pageId =
+				'help/ng-interactive/2017/mar/17/contact-the-guardian-securely';
+
+			expect(_.canRunThirdPartyTags()).toBe(false);
+		});
 	});
 
-	it('should not run if disabled in commercial features', (done) => {
-		mockOnConsent(tcfv2AllConsent);
-		commercialFeatures.thirdPartyTags = false;
-		initThirdPartyTags()
-			.then((enabled) => {
+	describe('initThirdPartyTags', () => {
+		it('should not run if third party tags criteria not met', async () => {
+			jest.mocked(isAdFree).mockReturnValue(true);
+
+			await initThirdPartyTags().then((enabled) => {
 				expect(enabled).toBe(false);
-				done();
-			})
-			.catch(() => {
-				done.fail('third-party tags failed');
 			});
-	});
+		});
 
-	it('should run if commercial enabled', (done) => {
-		mockOnConsent(tcfv2AllConsent);
-		commercialFeatures.thirdPartyTags = true;
-		commercialFeatures.adFree = false;
-		initThirdPartyTags()
-			.then((enabled) => {
+		it('should run if criteria met for running third party tags', async () => {
+			jest.mocked(isAdFree).mockReturnValue(false);
+			window.location.hash = '';
+			window.guardian.config.page.contentType = '';
+			window.guardian.config.page.section = '';
+			window.guardian.config.page.pageId = '';
+
+			await initThirdPartyTags().then((enabled) => {
 				expect(enabled).toBe(true);
-				done();
-			})
-			.catch(() => {
-				done.fail('init failed');
 			});
+		});
 	});
 
 	describe('insertScripts', () => {
@@ -182,7 +205,7 @@ describe('third party tags', () => {
 		it('should add scripts to the document when TCFv2 consent has been given', async () => {
 			mockOnConsent(tcfv2AllConsent);
 			mockGetConsentFor(true);
-			await insertScripts(
+			await _.insertScripts(
 				[fakeThirdPartyAdvertisingTag],
 				[fakeThirdPartyPerformanceTag],
 			);
@@ -192,7 +215,7 @@ describe('third party tags', () => {
 		it('should only add performance scripts to the document when TCFv2 consent has not been given', async () => {
 			mockOnConsent(tcfv2WithoutConsent);
 			mockGetConsentFor(false);
-			await insertScripts(
+			await _.insertScripts(
 				[fakeThirdPartyAdvertisingTag],
 				[fakeThirdPartyPerformanceTag],
 			);
@@ -205,7 +228,7 @@ describe('third party tags', () => {
 				framework: 'usnat',
 			});
 			mockGetConsentFor(true);
-			await insertScripts(
+			await _.insertScripts(
 				[fakeThirdPartyAdvertisingTag],
 				[fakeThirdPartyPerformanceTag],
 			);
@@ -217,7 +240,7 @@ describe('third party tags', () => {
 				framework: 'usnat',
 			});
 			mockGetConsentFor(false);
-			await insertScripts(
+			await _.insertScripts(
 				[fakeThirdPartyAdvertisingTag],
 				[fakeThirdPartyPerformanceTag],
 			);
@@ -228,7 +251,7 @@ describe('third party tags', () => {
 			mockOnConsent(tcfv2WithConsent);
 			mockGetConsentFor(true);
 			mockGetConsentFor(false);
-			await insertScripts(
+			await _.insertScripts(
 				[fakeThirdPartyAdvertisingTag, fakeThirdPartyAdvertisingTag2],
 				[],
 			);
@@ -241,11 +264,11 @@ describe('third party tags', () => {
 			mockGetConsentFor(false);
 			mockOnConsent(tcfv2WithoutConsent);
 			mockGetConsentFor(false);
-			await insertScripts(
+			await _.insertScripts(
 				[fakeThirdPartyAdvertisingTag, fakeThirdPartyAdvertisingTag2],
 				[],
 			);
-			await insertScripts(
+			await _.insertScripts(
 				[fakeThirdPartyAdvertisingTag, fakeThirdPartyAdvertisingTag2],
 				[],
 			);
@@ -255,7 +278,7 @@ describe('third party tags', () => {
 		it('should not add scripts to the document when TCFv2 consent has not been given', async () => {
 			mockOnConsent(tcfv2WithoutConsent);
 			mockGetConsentFor(false);
-			await insertScripts(
+			await _.insertScripts(
 				[fakeThirdPartyAdvertisingTag, fakeThirdPartyAdvertisingTag2],
 				[],
 			);

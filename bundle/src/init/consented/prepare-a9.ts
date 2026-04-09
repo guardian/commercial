@@ -11,7 +11,7 @@ import { shouldLoadAds } from '../../lib/should-load-ads';
 
 const shouldLoadA9 = () =>
 	// All of the following conditions must be met to load A9
-	(!isSecureContactPage(window.guardian.config.page.pageId) &&
+	(!isSecureContactPage() &&
 		!isGoogleProxy() &&
 		window.guardian.config.switches.a9HeaderBidding &&
 		shouldLoadAds() &&
