@@ -1,4 +1,4 @@
-import { setCookie, storage } from '@guardian/libs';
+import { setCookie } from '@guardian/libs';
 import type { CommercialFeaturesConstructor } from './commercial-features';
 import { commercialFeatures } from './commercial-features';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from './detect/detect-breakpoint';
@@ -59,8 +59,6 @@ describe('Commercial features', () => {
 
 		window.location.hash = '';
 
-		storage.local.remove(`gu.prefs.switch.adverts`);
-
 		setCookie({ name: 'GU_AF1', value: '' });
 
 		getCurrentBreakpoint.mockReturnValue('desktop');
@@ -100,73 +98,6 @@ describe('Commercial features', () => {
 			setCookie({ name: 'GU_AF1', value: '10' });
 			const features = new CommercialFeatures();
 			expect(features.articleBodyAdverts).toBe(false);
-		});
-	});
-
-	describe('Third party tags', () => {
-		it('Runs by default', () => {
-			const features = new CommercialFeatures();
-			expect(features.thirdPartyTags).toBe(true);
-		});
-
-		it('Does not run on identity pages', () => {
-			window.guardian.config.page.contentType = 'Identity';
-			const features = new CommercialFeatures();
-			expect(features.thirdPartyTags).toBe(false);
-		});
-
-		it('Does not run on identity section', () => {
-			// This is needed for identity pages in the profile subdomain
-			window.guardian.config.page.section = 'identity';
-			const features = new CommercialFeatures();
-			expect(features.thirdPartyTags).toBe(false);
-		});
-
-		it('Does not run on the secure contact interactive', () => {
-			window.guardian.config.page.pageId =
-				'help/ng-interactive/2017/mar/17/contact-the-guardian-securely';
-			const features = new CommercialFeatures();
-			expect(features.thirdPartyTags).toBe(false);
-		});
-
-		it('Does not run on secure contact help page', () => {
-			window.guardian.config.page.pageId =
-				'help/2016/sep/19/how-to-contact-the-guardian-securely';
-
-			const features = new CommercialFeatures();
-			expect(features.thirdPartyTags).toBe(false);
-		});
-	});
-
-	describe('Third party tags under ad-free', () => {
-		beforeEach(() => {
-			setCookie({ name: 'GU_AF1', value: '10' });
-		});
-
-		it('Does not run by default', () => {
-			const features = new CommercialFeatures();
-			expect(features.thirdPartyTags).toBe(false);
-		});
-
-		it('Does not run on identity pages', () => {
-			window.guardian.config.page.contentType = 'Identity';
-			const features = new CommercialFeatures();
-			expect(features.thirdPartyTags).toBe(false);
-		});
-
-		it('Does not run on identity section', () => {
-			// This is needed for identity pages in the profile subdomain
-			window.guardian.config.page.section = 'identity';
-			const features = new CommercialFeatures();
-			expect(features.thirdPartyTags).toBe(false);
-		});
-
-		it('Does not run on secure contact pages', () => {
-			window.guardian.config.page.contentType =
-				'help/ng-interactive/2017/mar/17/contact-the-guardian-securely';
-
-			const features = new CommercialFeatures();
-			expect(features.thirdPartyTags).toBe(false);
 		});
 	});
 

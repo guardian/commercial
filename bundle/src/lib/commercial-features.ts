@@ -1,4 +1,4 @@
-import { log, storage } from '@guardian/libs';
+import { log } from '@guardian/libs';
 import { isUserInTestGroup } from '../ab-testing';
 import { isAdFree } from './ad-free';
 import { isSecureContactPage } from './is-secure-contact';
@@ -29,13 +29,9 @@ function adsDisabledLogger(
 	}
 }
 
-const isUserPrefsAdsOff = (): boolean =>
-	storage.local.get(`gu.prefs.switch.adverts`) === false;
-
 // Having a constructor means we can easily re-instantiate the object in a test
 class CommercialFeatures {
 	articleBodyAdverts: boolean;
-	thirdPartyTags: boolean;
 	liveblogAdverts: boolean;
 	adFree: boolean;
 	comscore: boolean;
@@ -43,9 +39,6 @@ class CommercialFeatures {
 	footballFixturesAdverts: boolean;
 
 	constructor() {
-		// this is used for SpeedCurve tests
-		const noadsUrl = /[#&]noads(&.*)?$/.test(window.location.hash);
-		const externalAdvertising = !noadsUrl && !isUserPrefsAdsOff();
 		const sensitiveContent =
 			window.guardian.config.page.shouldHideAdverts ||
 			window.guardian.config.page.section === 'childrens-books-site';
@@ -110,18 +103,12 @@ class CommercialFeatures {
 			);
 		}
 
-		this.thirdPartyTags =
-			!this.adFree &&
-			externalAdvertising &&
-			!isIdentityPage &&
-			!isSecureContactPage(window.guardian.config.page.pageId);
-
 		this.liveblogAdverts = !!isLiveBlog && adsEnabled && !this.adFree;
 
 		this.comscore =
 			!!window.guardian.config.switches.comscore &&
 			!isIdentityPage &&
-			!isSecureContactPage(window.guardian.config.page.pageId);
+			!isSecureContactPage();
 	}
 }
 
