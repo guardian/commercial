@@ -28,8 +28,13 @@ function globalAdEvents(
 	slotName?: string,
 ) {
 	const parsedStatus = Array.isArray(status) ? status : [status];
-	const matches = (event: AdEventCustomEvent) => {
-		const statusMatch = parsedStatus.includes(event.detail.name);
+
+	const matches = (
+		event: AdEventCustomEvent,
+		statusList: AdvertStatus[],
+		slotName?: string,
+	) => {
+		const statusMatch = statusList.includes(event.detail.name);
 		const slotMatch = !slotName || event.detail.slotName === slotName;
 		return statusMatch && slotMatch;
 	};
@@ -49,13 +54,13 @@ function globalAdEvents(
 		if (!isCustomEvent(e)) {
 			return;
 		}
-		if (matches(e)) {
+		if (matches(e, parsedStatus, slotName)) {
 			listenerHandler(e);
 		}
 	};
 
 	eventHistory.forEach((historyEvent) => {
-		if (matches(historyEvent)) {
+		if (matches(historyEvent, parsedStatus, slotName)) {
 			listenerHandler(historyEvent);
 		}
 	});
