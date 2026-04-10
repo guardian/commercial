@@ -1,5 +1,4 @@
 import { AD_LABEL_HEIGHT } from '@guardian/commercial-core/constants/index';
-import { commercialFeatures } from '../lib/commercial-features';
 import { createAdSlot, wrapSlotInContainer } from '../lib/create-ad-slot';
 import { getBreakpoint } from '../lib/detect/detect-breakpoint';
 import { getViewport } from '../lib/detect/detect-viewport';
@@ -45,7 +44,19 @@ export const init = (): Promise<void> => {
 		return Promise.resolve();
 	}
 
-	if (!commercialFeatures.footballFixturesAdverts) {
+	// Detect presence of space for football-right ad slot
+	const { pageId } = window.guardian.config.page;
+	const isFootballPage = pageId.startsWith('football/');
+	const isPageWithRightAdSpace =
+		pageId.endsWith('/fixtures') ||
+		pageId.endsWith('/live') ||
+		pageId.endsWith('/results') ||
+		pageId.endsWith('/tables') ||
+		pageId.endsWith('/table');
+
+	const footballFixturesAdverts = isFootballPage && isPageWithRightAdSpace;
+
+	if (!footballFixturesAdverts) {
 		return Promise.resolve();
 	}
 

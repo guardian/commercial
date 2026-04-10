@@ -35,7 +35,6 @@ class CommercialFeatures {
 	adFree: boolean;
 	comscore: boolean;
 	youtubeAdvertising: boolean;
-	footballFixturesAdverts: boolean;
 
 	constructor() {
 		const sensitiveContent =
@@ -52,18 +51,6 @@ class CommercialFeatures {
 			window.guardian.config.page.section === 'identity'; // needed for pages under profile.* subdomain
 		const newRecipeDesign =
 			window.guardian.config.page.showNewRecipeDesign ?? false;
-
-		// Detect presence of space for football-right ad slot
-		const { pageId } = window.guardian.config.page;
-		const isFootballPage = pageId.startsWith('football/');
-		const isPageWithRightAdSpace =
-			pageId.endsWith('/fixtures') ||
-			pageId.endsWith('/live') ||
-			pageId.endsWith('/results') ||
-			pageId.endsWith('/tables') ||
-			pageId.endsWith('/table');
-
-		this.footballFixturesAdverts = isFootballPage && isPageWithRightAdSpace;
 
 		this.adFree = isAdFree();
 
