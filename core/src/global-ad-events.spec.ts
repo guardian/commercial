@@ -1,4 +1,3 @@
-import type { AdEventCustomEvent } from './global-ad-events';
 import { globalAdEvents } from './global-ad-events';
 
 describe('globalAdEvents', () => {

@@ -6,6 +6,10 @@ const reportNoAbModule = () => {
 };
 
 const getAbModule = () => {
+	// We only support running commercial AB tests in dotcom rendering
+	if (!window.guardian.config.isDotcomRendering) {
+		return null;
+	}
 	// Check if the AB testing module is available before trying to access it
 	// it could be missing or not fully initialized, and we want to avoid throwing errors in those cases
 	if (

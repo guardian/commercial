@@ -16,9 +16,9 @@ type AdEventCustomEvent = CustomEvent<{
 }>;
 
 if (typeof document !== 'undefined') {
-    document.addEventListener('commercial:adStatusChange', (event) => {
-        console.log('Dispatched event details:', event);
-    });
+	document.addEventListener('commercial:adStatusChange', (event) => {
+		console.log('Dispatched event details:', event);
+	});
 }
 
 const isCustomEvent = (e: Event): e is AdEventCustomEvent => {
@@ -37,7 +37,7 @@ function globalAdEvents(
 	listenerHandler: (event: AdEventCustomEvent) => void,
 	slotName?: string,
 ) {
-	if (typeof document !== "undefined") {
+	if (typeof document !== 'undefined') {
 		const parsedStatus = Array.isArray(status) ? status : [status];
 
 		const matches = (
@@ -58,10 +58,15 @@ function globalAdEvents(
 
 		document.addEventListener('commercial:adStatusChange', listener);
 
-		return { remove: ()=>document.removeEventListener('commercial:adStatusChange', listener) };
-	} 
-		return { remove: () => null };
-	
+		return {
+			remove: () =>
+				document.removeEventListener(
+					'commercial:adStatusChange',
+					listener,
+				),
+		};
+	}
+	return { remove: () => null };
 }
 
 export { globalAdEvents };
