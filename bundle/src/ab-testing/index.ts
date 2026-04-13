@@ -6,7 +6,7 @@ const reportNoAbModule = () => {
 };
 
 const getAbModule = () => {
-	// We don't currently support frontend AB tests for commercial
+	// We only support running commercial AB tests in dotcom rendering
 	if (!window.guardian.config.isDotcomRendering) {
 		return null;
 	}
