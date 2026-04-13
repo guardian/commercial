@@ -15,17 +15,21 @@ type AdEventCustomEvent = CustomEvent<{
 	status: boolean;
 }>;
 
-let eventHistory: AdEventCustomEvent[] = [];
-let isInitialised = false;
+if (typeof document !== 'undefined') {
+    document.addEventListener('commercial:adStatusChange', (event) => {
+        console.log('Dispatched event details:', event);
+    });
+}
 
-const initialiseEventHistory = () => {
-	if (typeof document !== 'undefined' && !isInitialised) {
-		document.addEventListener('commercial:adStatusChange', (e: Event) => {
-			const event = e as AdEventCustomEvent;
-			eventHistory.push(event);
-		});
-		isInitialised = true;
-	}
+const isCustomEvent = (e: Event): e is AdEventCustomEvent => {
+	return (
+		e instanceof CustomEvent &&
+		typeof e.detail === 'object' &&
+		e.detail !== null &&
+		'name' in e.detail &&
+		'slotName' in e.detail &&
+		'status' in e.detail
+	);
 };
 
 function globalAdEvents(
@@ -33,67 +37,32 @@ function globalAdEvents(
 	listenerHandler: (event: AdEventCustomEvent) => void,
 	slotName?: string,
 ) {
-	// Ensure this code only runs in the browser
-	if (typeof document === 'undefined') {
-		return {
-			remove: () => {},
+	if (typeof document !== "undefined") {
+		const parsedStatus = Array.isArray(status) ? status : [status];
+
+		const matches = (
+			event: AdEventCustomEvent,
+			statusList: AdvertStatus[],
+			slotName?: string,
+		) => {
+			const statusMatch = statusList.includes(event.detail.name);
+			const slotMatch = !slotName || event.detail.slotName === slotName;
+			return statusMatch && slotMatch;
 		};
-	}
 
-	// Initialize event history lazily
-	initialiseEventHistory();
+		const listener = (e: Event) => {
+			if (isCustomEvent(e) && matches(e, parsedStatus, slotName)) {
+				listenerHandler(e);
+			}
+		};
 
-	const parsedStatus = Array.isArray(status) ? status : [status];
+		document.addEventListener('commercial:adStatusChange', listener);
 
-	const matches = (
-		event: AdEventCustomEvent,
-		statusList: AdvertStatus[],
-		slotName?: string,
-	) => {
-		const statusMatch = statusList.includes(event.detail.name);
-		const slotMatch = !slotName || event.detail.slotName === slotName;
-		return statusMatch && slotMatch;
-	};
-
-	const isCustomEvent = (e: Event): e is AdEventCustomEvent => {
-		return (
-			e instanceof CustomEvent &&
-			typeof e.detail === 'object' &&
-			e.detail !== null &&
-			'name' in e.detail &&
-			'slotName' in e.detail &&
-			'status' in e.detail
-		);
-	};
-
-	const listener = (e: Event) => {
-		if (!isCustomEvent(e)) {
-			return;
-		}
-		if (matches(e, parsedStatus, slotName)) {
-			listenerHandler(e);
-		}
-	};
-
-	// Replay past events
-	eventHistory.forEach((historyEvent) => {
-		if (matches(historyEvent, parsedStatus, slotName)) {
-			listenerHandler(historyEvent);
-		}
-	});
-
-	document.addEventListener('commercial:adStatusChange', listener);
-
-	const remove = () =>
-		document.removeEventListener('commercial:adStatusChange', listener);
-
-	return { remove };
+		return { remove: ()=>document.removeEventListener('commercial:adStatusChange', listener) };
+	} 
+		return { remove: () => null };
+	
 }
 
-export const _resetHistory = () => {
-	eventHistory = [];
-	isInitialised = false;
-};
-
-export { globalAdEvents, eventHistory };
+export { globalAdEvents };
 export type { AdEventCustomEvent };

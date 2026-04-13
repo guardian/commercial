@@ -1,13 +1,8 @@
 import type { AdEventCustomEvent } from './global-ad-events';
-import {
-	_resetHistory,
-	eventHistory,
-	globalAdEvents,
-} from './global-ad-events';
+import { globalAdEvents } from './global-ad-events';
 
 describe('globalAdEvents', () => {
 	afterEach(() => {
-		_resetHistory();
 		jest.clearAllMocks();
 	});
 
@@ -207,37 +202,6 @@ describe('globalAdEvents', () => {
 		subscription.remove();
 	});
 
-	it('replays matching historical events for new listeners', () => {
-		eventHistory.push(
-			new CustomEvent('commercial:adStatusChange', {
-				detail: {
-					slotName: 'top-above-nav',
-					name: 'rendered',
-					status: true,
-				},
-			}) as AdEventCustomEvent,
-		);
-
-		const handler = jest.fn();
-		const subscription = globalAdEvents(
-			'rendered',
-			handler,
-			'top-above-nav',
-		);
-
-		expect(handler).toHaveBeenCalledTimes(1);
-		expect(handler).toHaveBeenCalledWith(
-			expect.objectContaining({
-				detail: {
-					slotName: 'top-above-nav',
-					name: 'rendered',
-					status: true,
-				},
-			}),
-		);
-		subscription.remove();
-	});
-
 	it('does not call handler when event status "rendering" does not match subscription status "loading"', () => {
 		const handler = jest.fn();
 
@@ -293,26 +257,6 @@ describe('globalAdEvents', () => {
 			}),
 		);
 		expect(handler).not.toHaveBeenCalled();
-		subscription.remove();
-	});
-	it('adds events to eventHistory', () => {
-		const subscription = globalAdEvents('rendered', jest.fn());
-		document.dispatchEvent(
-			new CustomEvent('commercial:adStatusChange', {
-				detail: {
-					slotName: 'top-above-nav',
-					name: 'rendered',
-					status: true,
-				},
-			}),
-		);
-
-		expect(eventHistory).toHaveLength(1);
-		expect(eventHistory[0]?.detail).toEqual({
-			slotName: 'top-above-nav',
-			name: 'rendered',
-			status: true,
-		});
 		subscription.remove();
 	});
 	it('does not call handler after remove is called', () => {
