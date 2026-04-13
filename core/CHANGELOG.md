@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 33.0.1
+
+### Patch Changes
+
+- e25435b: Pin dependency versions
+
 ## 33.0.0
 
 ### Major Changes
