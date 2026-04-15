@@ -1,6 +1,6 @@
 import { addInlineAds } from '../../../insert/spacefinder/article';
 import type { FillAdSlot } from '../../../insert/spacefinder/article';
-import { commercialFeatures } from '../../../lib/commercial-features';
+import { allowArticleBodyAdverts } from '../../../lib/article-body-adverts';
 import { getCurrentBreakpoint } from '../../../lib/detect/detect-breakpoint';
 import { defineSlot } from '../define-slot';
 
@@ -16,7 +16,7 @@ const fillConsentlessAdSlot: FillAdSlot = (name, slot) => {
 
 const initArticleBodyAdverts = async (): Promise<void> => {
 	// do we need to rerun for the sign-in gate?
-	if (!commercialFeatures.articleBodyAdverts) {
+	if (!allowArticleBodyAdverts()) {
 		return;
 	}
 

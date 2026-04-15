@@ -68,39 +68,6 @@ describe('Commercial features', () => {
 		(shouldLoadAds as jest.Mock).mockReturnValue(true);
 	});
 
-	describe('Article body adverts', () => {
-		it('Runs by default', () => {
-			const features = new CommercialFeatures();
-			expect(features.articleBodyAdverts).toBe(true);
-		});
-
-		it('Doesn`t run in minute articles', () => {
-			window.guardian.config.page.isMinuteArticle = true;
-			const features = new CommercialFeatures();
-			expect(features.articleBodyAdverts).toBe(false);
-		});
-
-		it('Doesn`t run in non-article pages', () => {
-			window.guardian.config.page.contentType = 'Network Front';
-			const features = new CommercialFeatures();
-			expect(features.articleBodyAdverts).toBe(false);
-		});
-
-		it('Doesn`t run in live blogs', () => {
-			window.guardian.config.page.isLiveBlog = true;
-			const features = new CommercialFeatures();
-			expect(features.articleBodyAdverts).toBe(false);
-		});
-	});
-
-	describe('Article body adverts under ad-free', () => {
-		it('are disabled', () => {
-			setCookie({ name: 'GU_AF1', value: '10' });
-			const features = new CommercialFeatures();
-			expect(features.articleBodyAdverts).toBe(false);
-		});
-	});
-
 	describe('comscore ', () => {
 		beforeEach(() => {
 			window.guardian.config.switches.comscore = true;
