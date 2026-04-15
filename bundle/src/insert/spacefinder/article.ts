@@ -1,7 +1,7 @@
 import type { AdSize, SizeMapping } from '@guardian/commercial-core/ad-sizes';
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { isUserInTestGroup } from '../../ab-testing';
-import { commercialFeatures } from '../../lib/commercial-features';
+import { allowArticleBodyAdverts } from '../../lib/article-body-adverts';
 import type { ContainerOptions } from '../../lib/create-ad-slot';
 import {
 	adSlotContainerClass,
@@ -310,7 +310,7 @@ const addInlineAds = async (
  * @param fillAdSlot a function to fill the ad slots
  */
 const init = async (fillAdSlot: FillAdSlot): Promise<void> => {
-	if (!commercialFeatures.articleBodyAdverts) {
+	if (!allowArticleBodyAdverts()) {
 		return Promise.resolve();
 	}
 

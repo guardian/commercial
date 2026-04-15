@@ -1,4 +1,4 @@
-import { commercialFeatures } from '../../lib/commercial-features';
+import { allowArticleBodyAdverts } from '../../lib/article-body-adverts';
 import { init } from './article';
 import { spaceFiller } from './space-filler';
 
@@ -10,8 +10,8 @@ jest.mock('insert/fill-dynamic-advert-slot', () => ({
 	fillDynamicAdSlot: jest.fn(),
 }));
 
-jest.mock('lib/commercial-features', () => ({
-	commercialFeatures: {},
+jest.mock('lib/article-body-adverts', () => ({
+	allowArticleBodyAdverts: jest.fn().mockReturnValue(true),
 }));
 
 jest.mock('insert/spacefinder/space-filler', () => ({
@@ -20,9 +20,7 @@ jest.mock('insert/spacefinder/space-filler', () => ({
 	},
 }));
 
-const spaceFillerStub = spaceFiller.fillSpace as jest.MockedFunction<
-	typeof spaceFiller.fillSpace
->;
+const fillSpace = jest.mocked(spaceFiller.fillSpace);
 
 const mockViewport = (width: number, height: number): void => {
 	Object.defineProperties(window, {
@@ -38,9 +36,7 @@ const mockViewport = (width: number, height: number): void => {
 describe('Article Body Adverts', () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
-		commercialFeatures.articleBodyAdverts = true;
-		// @ts-expect-error -- we need to TS space-filler’s queue
-		spaceFillerStub.mockImplementation(() => Promise.resolve(2));
+		fillSpace.mockImplementation(() => Promise.resolve(true));
 		mockViewport(0, 1300);
 		expect.hasAssertions();
 	});
@@ -49,22 +45,23 @@ describe('Article Body Adverts', () => {
 		expect(init).toBeDefined();
 	});
 
-	it('should exit if commercial feature disabled', () => {
+	it('should exit if ads in article body are disabled', () => {
 		const fillAdSlot = jest.fn();
-		commercialFeatures.articleBodyAdverts = false;
+		jest.mocked(allowArticleBodyAdverts).mockReturnValue(false);
 		return init(fillAdSlot).then(() => {
-			expect(spaceFillerStub).not.toHaveBeenCalled();
+			expect(fillSpace).not.toHaveBeenCalled();
 		});
 	});
 
 	it('should call relevant functions to fill space on desktop', () => {
 		const fillAdSlot = jest.fn();
+		jest.mocked(allowArticleBodyAdverts).mockReturnValue(true);
 		mockViewport(1300, 1300);
 		return init(fillAdSlot).then(() => {
-			expect(spaceFillerStub).toHaveBeenCalledTimes(2);
-			console.log(spaceFillerStub.mock.calls[0]?.[0]);
-			expect(spaceFillerStub.mock.calls[0]?.[2]?.pass).toEqual('inline1');
-			expect(spaceFillerStub.mock.calls[1]?.[2]?.pass).toEqual(
+			expect(fillSpace).toHaveBeenCalledTimes(2);
+			console.log(fillSpace.mock.calls[0]?.[0]);
+			expect(fillSpace.mock.calls[0]?.[2]?.pass).toEqual('inline1');
+			expect(fillSpace.mock.calls[1]?.[2]?.pass).toEqual(
 				'subsequent-inlines',
 			);
 		});
@@ -72,10 +69,11 @@ describe('Article Body Adverts', () => {
 
 	it('should call relevant functions to fill space on mobile and tablet', () => {
 		const fillAdSlot = jest.fn();
+		jest.mocked(allowArticleBodyAdverts).mockReturnValue(true);
 		mockViewport(500, 1300);
 		return init(fillAdSlot).then(() => {
-			expect(spaceFillerStub).toHaveBeenCalledTimes(1);
-			expect(spaceFillerStub.mock.calls[0]?.[2]?.pass).toEqual(
+			expect(fillSpace).toHaveBeenCalledTimes(1);
+			expect(fillSpace.mock.calls[0]?.[2]?.pass).toEqual(
 				'mobile-inlines',
 			);
 		});
