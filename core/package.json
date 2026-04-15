@@ -1,6 +1,6 @@
 {
 	"name": "@guardian/commercial-core",
-	"version": "33.0.0",
+	"version": "33.0.1",
 	"description": "Guardian advertising business logic",
 	"homepage": "https://github.com/guardian/commercial#readme",
 	"bugs": {
@@ -53,12 +53,12 @@
 		"@guardian/ophan-tracker-js": "2.8.0",
 		"@types/jest": "30.0.0",
 		"@types/node": "25.5.0",
-		"jest": "^30.3.0",
-		"jest-environment-jsdom": "^30.3.0",
-		"jest-environment-jsdom-global": "~4.0.0",
-		"ts-jest": "^29.4.6",
+		"jest": "30.3.0",
+		"jest-environment-jsdom": "30.3.0",
+		"jest-environment-jsdom-global": "4.0.0",
+		"ts-jest": "29.4.6",
 		"tsc-alias": "1.8.16",
-		"type-fest": "^5.5.0",
+		"type-fest": "5.5.0",
 		"typescript": "5.9.3"
 	},
 	"publishConfig": {

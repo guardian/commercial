@@ -34,12 +34,8 @@ class CommercialFeatures {
 	articleBodyAdverts: boolean;
 	adFree: boolean;
 	comscore: boolean;
-	youtubeAdvertising: boolean;
 
 	constructor() {
-		const sensitiveContent =
-			window.guardian.config.page.shouldHideAdverts ||
-			window.guardian.config.page.section === 'childrens-books-site';
 		const isMinuteArticle = window.guardian.config.page.isMinuteArticle;
 		const isArticle = window.guardian.config.page.contentType === 'Article';
 		const isInteractive =
@@ -53,8 +49,6 @@ class CommercialFeatures {
 			window.guardian.config.page.showNewRecipeDesign ?? false;
 
 		this.adFree = isAdFree();
-
-		this.youtubeAdvertising = !this.adFree && !sensitiveContent;
 
 		const isInSpacefinderOnInteractivesTest =
 			!isUserInTestGroup(
