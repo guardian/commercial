@@ -15,11 +15,7 @@ jest.mock('insert/spacefinder/space-filler', () => ({
 		fillSpace: jest.fn(() => Promise.resolve(true)),
 	},
 }));
-jest.mock('lib/commercial-features', () => ({
-	commercialFeatures: {
-		liveblogAdverts: true,
-	},
-}));
+
 jest.mock('insert/fill-dynamic-advert-slot');
 
 describe('Liveblog Dynamic Adverts', () => {

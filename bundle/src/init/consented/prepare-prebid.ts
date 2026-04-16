@@ -2,7 +2,7 @@ import { isInCanada } from '@guardian/commercial-core/geo/geo-utils';
 import type { ConsentState } from '@guardian/libs';
 import { log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { commercialFeatures } from '../../lib/commercial-features';
+import { isAdFree } from '../../lib/ad-free';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { prebid } from '../../lib/header-bidding/prebid';
 import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
@@ -12,7 +12,7 @@ const shouldLoadPrebid = () =>
 	!isGoogleProxy() &&
 	window.guardian.config.switches.prebidHeaderBidding &&
 	shouldLoadAds() &&
-	!commercialFeatures.adFree &&
+	!isAdFree() &&
 	!window.guardian.config.page.hasPageSkin &&
 	!shouldIncludeOnlyA9 &&
 	!isInCanada();
