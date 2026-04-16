@@ -8,7 +8,6 @@ import { shouldIncludeOnlyA9 } from '../../lib/header-bidding/utils';
 import { shouldLoadAds } from '../../lib/should-load-ads';
 import { adFree } from './ad-free-slot-remove';
 
-
 const shouldLoadPrebid = () =>
 	!isGoogleProxy() &&
 	window.guardian.config.switches.prebidHeaderBidding &&

@@ -1,6 +1,5 @@
 import { renderConsentlessAdvertLabel } from './render-advert-label';
 
-
 const adSelector = '.js-ad-slot';
 
 const adverts = {
