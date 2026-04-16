@@ -7,12 +7,18 @@ import { removeSlots } from './remove-slots';
  * as the ad slots are still left on the page on fronts, and mostpop on articles
  */
 
-const adFreeSlotRemove = once(() => {
+const removeAdFreeSlots = () => {
 	if (!isAdFree()) {
 		return Promise.resolve();
 	}
 
 	return removeSlots();
-});
+};
+
+const adFreeSlotRemove = once(removeAdFreeSlots);
 
 export { adFreeSlotRemove };
+
+export const _ = {
+	removeAdFreeSlots,
+};

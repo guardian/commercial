@@ -5,10 +5,10 @@ import { isNonNullable, log } from '@guardian/libs';
 import { createAdvert } from '../../define/create-advert';
 import { displayAds } from '../../display/display-ads';
 import { displayLazyAds } from '../../display/display-lazy-ads';
+import { isAdFree } from '../../lib/ad-free';
 import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
 import { queueAdvert } from '../../lib/dfp/queue-advert';
-import { adFree } from './ad-free-slot-remove';
 import { setupPrebidOnce } from './prepare-prebid';
 import { removeDisabledSlots } from './remove-slots';
 
@@ -60,7 +60,7 @@ const fillStaticAdvertSlots = async (): Promise<void> => {
 	);
 
 	// Quit if ad-free
-	if (adFree()) {
+	if (isAdFree()) {
 		return Promise.resolve();
 	}
 

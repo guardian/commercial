@@ -1,5 +1,5 @@
 import fastdom from 'fastdom';
-import { adFree } from '../../init/consented/ad-free-slot-remove';
+import { isAdFree } from '../ad-free';
 import {
 	hasCrossedBreakpoint,
 	matchesBreakpoints,
@@ -29,7 +29,7 @@ const pageSkin = (): void => {
 			hasPageSkin &&
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- needs to be investigated
 			hasCrossedBreakpoint(true) &&
-			!adFree()
+			!isAdFree()
 		) {
 			togglePageSkinActiveClass();
 		}

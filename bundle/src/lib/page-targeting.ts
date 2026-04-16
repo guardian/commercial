@@ -7,7 +7,7 @@ import type { ConsentState } from '@guardian/libs';
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { getParticipations } from '../ab-testing';
-import { adFree } from '../init/consented/ad-free-slot-remove';
+import { isAdFree } from './ad-free';
 import { removeFalsyValues } from './header-bidding/utils';
 
 const formatAppNexusTargeting = (obj: Record<string, string | string[]>) => {
@@ -62,7 +62,7 @@ const getPageTargeting = (
 			: [];
 
 	const pageTargeting = buildPageTargeting({
-		adFree: adFree(),
+		adFree: isAdFree(),
 		abTestParticipations: getParticipations(),
 		consentState,
 		isSignedIn,
