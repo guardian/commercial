@@ -1,3 +1,4 @@
+import 'google-publisher-tag';
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
 import type {
 	AdBlockers,
@@ -346,6 +347,8 @@ declare global {
 
 	interface Window {
 		guardian: Guardian;
+
+		googletag: typeof googletag;
 
 		ootag: {
 			queue: Array<() => void>;
