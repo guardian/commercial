@@ -1,6 +1,6 @@
 import { getConsentFor, loadScript, log, onConsent } from '@guardian/libs';
 import { once } from 'lodash-es';
-import { commercialFeatures } from '../../lib/commercial-features';
+import { isSecureContactPage } from '../../lib/is-secure-contact';
 import type { ComscoreGlobals } from '../../types/global';
 
 const comscoreSrc = '//sb.scorecardresearch.com/cs/6035250/beacon.js';
@@ -40,8 +40,18 @@ const initOnConsent = () => {
  * Initialise comscore, industry-wide audience tracking
  * https://www.comscore.com/About
  */
+
+const isIdentityPage =
+	window.guardian.config.page.contentType === 'Identity' ||
+	window.guardian.config.page.section === 'identity'; // needed for pages under profile.* subdomain
+
+const canRunComscore = () =>
+	!!window.guardian.config.switches.comscore &&
+	!isIdentityPage &&
+	!isSecureContactPage();
+
 const setupComscore = async (): Promise<void> => {
-	if (!commercialFeatures.comscore) {
+	if (!canRunComscore()) {
 		return Promise.resolve();
 	}
 	try {
@@ -79,4 +89,5 @@ export const _ = {
 	comscoreSrc,
 	comscoreC1,
 	comscoreC2,
+	canRunComscore,
 };
