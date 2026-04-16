@@ -5,9 +5,9 @@ import type {
 	USNATConsentState,
 } from '@guardian/libs';
 import { getConsentFor, log, onConsent } from '@guardian/libs';
+import { isAdFree } from '../../lib/ad-free';
 import { prebid } from '../../lib/header-bidding/prebid';
 import { shouldLoadAds } from '../../lib/should-load-ads';
-import { adFree } from './ad-free-slot-remove';
 import { _ } from './prepare-prebid';
 
 const { setupPrebid } = _;
@@ -16,9 +16,8 @@ jest.mock('@guardian/commercial-core/geo/geo-utils', () => ({
 	isInCanada: jest.fn(() => false),
 }));
 
-jest.mock('./ad-free-slot-remove', () => ({
-	adFree: jest.fn(),
-	adFreeSlotRemove: jest.fn(),
+jest.mock('lib/ad-free', () => ({
+	isAdFree: jest.fn(),
 }));
 
 jest.mock('lib/should-load-ads', () => ({
@@ -127,12 +126,12 @@ const fakeUserAgent = (userAgent?: string) => {
 
 describe('init', () => {
 	beforeEach(() => {
-    jest.resetAllMocks();
-    (adFree as jest.Mock).mockReturnValue(false);
-    (shouldLoadAds as jest.Mock).mockReturnValue(true);
-    fakeUserAgent();
-    window.guardian.config.switches = {};
-});
+		jest.resetAllMocks();
+		(isAdFree as jest.Mock).mockReturnValue(false);
+		(shouldLoadAds as jest.Mock).mockReturnValue(true);
+		fakeUserAgent();
+		window.guardian.config.switches = {};
+	});
 
 	it('should initialise Prebid when Prebid switch is ON and advertising is on and ad-free is off', async () => {
 		expect.hasAssertions();
@@ -219,7 +218,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		(adFree as jest.Mock).mockReturnValue(true);
+		(isAdFree as jest.Mock).mockReturnValue(true);
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 
