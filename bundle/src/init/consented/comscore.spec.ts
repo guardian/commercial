@@ -4,7 +4,6 @@ import type {
 	USNATConsentState,
 } from '@guardian/libs';
 import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
-import { commercialFeatures } from '../../lib/commercial-features';
 import { _ } from './comscore';
 
 const { setupComscore } = _;
@@ -87,12 +86,6 @@ jest.mock('@guardian/libs', () => ({
 	getConsentFor: jest.fn(),
 }));
 
-jest.mock('lib/commercial-features', () => ({
-	commercialFeatures: {
-		comscore: true,
-	},
-}));
-
 const mockOnConsent = (consentState: ConsentState) =>
 	(onConsent as jest.Mock).mockReturnValueOnce(Promise.resolve(consentState));
 
@@ -100,15 +93,23 @@ const mockGetConsentFor = (hasConsent: boolean) =>
 	(getConsentFor as jest.Mock).mockReturnValueOnce(hasConsent);
 
 describe('setupComscore', () => {
-	it('should do nothing if the comscore is disabled in commercial features', async () => {
-		commercialFeatures.comscore = false;
+	beforeEach(() => {
+		jest.restoreAllMocks();
+
+		window.guardian.config.page.contentType = 'Article';
+		window.guardian.config.page.section = 'news';
+		window.guardian.config.switches.comscore = true;
+		window.guardian.config.page.pageId = 'page-id';
+	});
+
+	it('should do nothing if comscore is disabled', async () => {
+		window.guardian.config.switches.comscore = false;
 		await setupComscore();
 		expect(onConsent).not.toHaveBeenCalled();
 	});
 
 	it('should register a callback with onConsentChange if enabled in commercial features', async () => {
 		mockOnConsent(tcfv2WithConsent);
-		commercialFeatures.comscore = true;
 		await setupComscore();
 		expect(onConsent).toHaveBeenCalled();
 	});
