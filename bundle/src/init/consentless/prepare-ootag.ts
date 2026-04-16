@@ -1,8 +1,8 @@
 import type { ConsentState } from '@guardian/libs';
 import { loadScript, log } from '@guardian/libs';
-import { commercialFeatures } from '../../lib/commercial-features';
 import { isUserLoggedIn } from '../../lib/identity/api';
 import { buildPageTargetingConsentless } from '../../lib/targeting/build-page-targeting-consentless';
+import { adFree } from '../consented/ad-free-slot-remove';
 
 function initConsentless(consentState: ConsentState): Promise<void> {
 	return new Promise((resolve) => {
@@ -30,7 +30,7 @@ function initConsentless(consentState: ConsentState): Promise<void> {
 				Object.entries(
 					buildPageTargetingConsentless(
 						consentState,
-						commercialFeatures.adFree,
+						adFree(),
 						isSignedIn,
 					),
 				).forEach(([key, value]) => {

@@ -1,8 +1,5 @@
 import { renderConsentlessAdvertLabel } from './render-advert-label';
 
-jest.mock('lib/commercial-features', () => ({
-	commercialFeatures: {},
-}));
 
 const adSelector = '.js-ad-slot';
 
