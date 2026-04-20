@@ -658,6 +658,7 @@ describe('commercial-loading-userids-async experiment', () => {
 	});
 });
 describe('isInPrebidFloorPriceTest', () => {
+	/* eslint-disable @typescript-eslint/no-unsafe-assignment -- Jest matchers return any */
 	test('when user is in variant test group, pbjs.setConfig to be called with floor price values', async () => {
 		jest.mocked(isUserInTestGroup)
 			.mockReturnValueOnce(false)
@@ -669,19 +670,18 @@ describe('isInPrebidFloorPriceTest', () => {
 
 		expect(setConfigSpy).toHaveBeenCalledWith(
 			expect.objectContaining({
-				floors: {
-					data: {
-						schema: {
-							fields: ['mediaType', 'size'],
-						},
-						values: {
-							'*|*': 0.1,
-						},
-					},
-				},
+				floors: expect.objectContaining({
+					enabled: true,
+					data: expect.objectContaining({
+						schema: { fields: ['mediaType'] },
+						values: { '*': 0.1 },
+						default: 0.1,
+					}),
+				}),
 			}),
 		);
 	});
+	/* eslint-enable @typescript-eslint/no-unsafe-assignment */
 	test('when user is not in variant test group, pbjs.setConfig to be called without floor price values', async () => {
 		jest.mocked(isUserInTestGroup)
 			.mockReturnValueOnce(false)

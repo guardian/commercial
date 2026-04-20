@@ -64,17 +64,18 @@ const initialise = async (
 		 * The amount of time reserved for the auction
 		 */
 		bidderTimeout: PREBID_TIMEOUT,
-
+		/**
+		 * Applying one global floor price of £0.10 for all bids.
+		 * Initially gated behind an AB test.
+		 */
 		...(isInPrebidFloorPriceTest
 			? {
 					floors: {
+						enabled: true,
 						data: {
-							schema: {
-								fields: ['mediaType', 'size'],
-							},
-							values: {
-								'*|*': 0.1,
-							},
+							schema: { fields: ['mediaType'] },
+							values: { '*': 0.1 },
+							default: 0.1,
 						},
 					},
 				}
