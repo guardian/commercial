@@ -49,6 +49,11 @@ const initialise = async (
 		'variant',
 	);
 
+	const isInPrebidFloorPriceTest = isUserInTestGroup(
+		'commercial-prebid-price-floor',
+		'variant',
+	);
+
 	// For control group users, await userSync before setConfig so it's included immediately.
 	// For test group users, skip the await — userSync will be merged into the config
 	// at the end of initialise via mergeConfig.
@@ -59,7 +64,22 @@ const initialise = async (
 		 * The amount of time reserved for the auction
 		 */
 		bidderTimeout: PREBID_TIMEOUT,
-
+		/**
+		 * Applying one global floor price of £0.10 for all bids.
+		 * Initially gated behind an AB test.
+		 */
+		...(isInPrebidFloorPriceTest
+			? {
+					floors: {
+						enabled: true,
+						data: {
+							schema: { fields: ['mediaType'] },
+							values: { '*': 0.1 },
+							default: 0.1,
+						},
+					},
+				}
+			: {}),
 		/**
 		 * Prebid supports an additional timeout buffer to account for noisiness in
 		 * timing JavaScript on the page. This value is passed to the Prebid config

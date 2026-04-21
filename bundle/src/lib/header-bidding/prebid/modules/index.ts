@@ -29,6 +29,9 @@ import 'prebid.js/modules/userId';
 import 'prebid.js/modules/rtdModule';
 import 'prebid.js/modules/permutiveRtdProvider';
 
+// Price floors
+import 'prebid.js/modules/priceFloors';
+
 // Guardian specific adapters that we have modified or created
 import './appnexusBidAdapter';
 import './openxBidAdapter';

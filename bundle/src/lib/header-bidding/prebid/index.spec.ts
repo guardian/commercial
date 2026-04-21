@@ -604,7 +604,9 @@ describe('Prebid.js bidWon Events', () => {
 });
 describe('commercial-loading-userids-async experiment', () => {
 	test('when user is not in variant test group, pbjs.setConfig to be called with userIds', async () => {
-		jest.mocked(isUserInTestGroup).mockReturnValue(false);
+		jest.mocked(isUserInTestGroup)
+			.mockReturnValueOnce(false) // userids-async → not in test
+			.mockReturnValueOnce(false); // price-floor → not in test
 		mockGetConsentForID5(true);
 		(getEmail as jest.Mock).mockReturnValue('');
 		window.guardian.config.switches.prebidUserSync = true;
@@ -626,7 +628,9 @@ describe('commercial-loading-userids-async experiment', () => {
 		);
 	});
 	test('when user is in test group, mergeConfig is called with all resolved userIds after promises settle', async () => {
-		jest.mocked(isUserInTestGroup).mockReturnValue(true);
+		jest.mocked(isUserInTestGroup)
+			.mockReturnValueOnce(true) // userids-async → in test
+			.mockReturnValueOnce(false); // price-floor → not in test
 		mockGetConsentForID5(true);
 		(getEmail as jest.Mock).mockReturnValue('');
 		window.guardian.config.switches.prebidUserSync = true;
@@ -650,6 +654,48 @@ describe('commercial-loading-userids-async experiment', () => {
 
 		expect(setConfigSpy).toHaveBeenCalledWith(
 			expect.objectContaining({ userSync: undefined }),
+		);
+	});
+});
+describe('isInPrebidFloorPriceTest', () => {
+	/* eslint-disable @typescript-eslint/no-unsafe-assignment -- Jest matchers return any */
+	test('when user is in variant test group, pbjs.setConfig to be called with floor price values', async () => {
+		jest.mocked(isUserInTestGroup)
+			.mockReturnValueOnce(false)
+			.mockReturnValueOnce(true);
+
+		const setConfigSpy = jest.spyOn(window.pbjs, 'setConfig');
+
+		await prebid.initialise(window, mockConsentState);
+
+		expect(setConfigSpy).toHaveBeenCalledWith(
+			expect.objectContaining({
+				floors: expect.objectContaining({
+					enabled: true,
+					data: expect.objectContaining({
+						schema: { fields: ['mediaType'] },
+						values: { '*': 0.1 },
+						default: 0.1,
+					}),
+				}),
+			}),
+		);
+	});
+	/* eslint-enable @typescript-eslint/no-unsafe-assignment */
+	test('when user is not in variant test group, pbjs.setConfig to be called without floor price values', async () => {
+		jest.mocked(isUserInTestGroup)
+			.mockReturnValueOnce(false)
+			.mockReturnValueOnce(false);
+
+		const setConfigSpy = jest.spyOn(window.pbjs, 'setConfig');
+
+		await prebid.initialise(window, mockConsentState);
+
+		expect(setConfigSpy).toHaveBeenCalledWith(
+			expect.not.objectContaining({
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Jest matchers return any
+				floors: expect.anything(),
+			}),
 		);
 	});
 });
