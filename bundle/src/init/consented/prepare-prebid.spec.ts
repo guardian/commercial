@@ -5,7 +5,7 @@ import type {
 	USNATConsentState,
 } from '@guardian/libs';
 import { getConsentFor, log, onConsent } from '@guardian/libs';
-import { commercialFeatures } from '../../lib/commercial-features';
+import { isAdFree } from '../../lib/ad-free';
 import { prebid } from '../../lib/header-bidding/prebid';
 import { shouldLoadAds } from '../../lib/should-load-ads';
 import { _ } from './prepare-prebid';
@@ -16,8 +16,8 @@ jest.mock('@guardian/commercial-core/geo/geo-utils', () => ({
 	isInCanada: jest.fn(() => false),
 }));
 
-jest.mock('lib/commercial-features', () => ({
-	commercialFeatures: {},
+jest.mock('lib/ad-free', () => ({
+	isAdFree: jest.fn(),
 }));
 
 jest.mock('lib/should-load-ads', () => ({
@@ -127,9 +127,10 @@ const fakeUserAgent = (userAgent?: string) => {
 describe('init', () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
+		jest.mocked(isAdFree).mockReturnValue(false);
+		jest.mocked(shouldLoadAds).mockReturnValue(true);
 		fakeUserAgent();
 		window.guardian.config.switches = {};
-		(shouldLoadAds as jest.Mock).mockReturnValue(true);
 	});
 
 	it('should initialise Prebid when Prebid switch is ON and advertising is on and ad-free is off', async () => {
@@ -137,7 +138,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 
@@ -150,7 +150,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.adFree = false;
 		fakeUserAgent('Google Web Preview');
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
@@ -162,7 +161,6 @@ describe('init', () => {
 	it('should not initialise Prebid when no header bidding switches are on', async () => {
 		expect.hasAssertions();
 
-		commercialFeatures.adFree = false;
 		window.guardian.config.switches = {
 			prebidHeaderBidding: false,
 		};
@@ -179,7 +177,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 
@@ -193,7 +190,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 		(isInCanada as jest.Mock).mockReturnValueOnce(true);
@@ -208,8 +204,8 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		(shouldLoadAds as jest.Mock).mockReturnValue(false);
-		commercialFeatures.adFree = false;
+		// (shouldLoadAds as jest.Mock).mockReturnValue(false);
+		jest.mocked(shouldLoadAds).mockReturnValue(false);
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 
@@ -223,7 +219,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.adFree = true;
+		jest.mocked(isAdFree).mockReturnValue(true);
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 
@@ -237,7 +233,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.adFree = false;
 		window.guardian.config.page.hasPageSkin = true;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
@@ -250,7 +245,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.adFree = false;
 		window.guardian.config.page.hasPageSkin = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
@@ -265,7 +259,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.adFree = false;
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 
@@ -279,7 +272,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.adFree = false;
 		mockOnConsent(usnatWithConsent);
 		mockGetConsentFor(true);
 
@@ -293,7 +285,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.adFree = false;
 		mockOnConsent(usnatWithoutConsent);
 		mockGetConsentFor(false);
 
@@ -313,7 +304,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.adFree = false;
 		mockOnConsent(ausWithConsent);
 		mockGetConsentFor(true);
 
@@ -327,7 +317,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.adFree = false;
 		mockOnConsent(ausWithoutConsent);
 		mockGetConsentFor(false);
 
@@ -347,7 +336,6 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		commercialFeatures.adFree = false;
 		mockOnConsent(invalidWithoutConsent);
 		mockGetConsentFor(true);
 

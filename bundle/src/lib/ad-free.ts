@@ -13,4 +13,4 @@ const adFreeDataIsPresent = (): boolean => {
 	return !Number.isNaN(parseInt(cookieVal, 10));
 };
 
-export const isAdFree = () => !!forceAdFree() || adFreeDataIsPresent();
+export const isAdFree = (): boolean => !!forceAdFree() || adFreeDataIsPresent();
