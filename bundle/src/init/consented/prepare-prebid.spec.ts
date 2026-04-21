@@ -127,8 +127,8 @@ const fakeUserAgent = (userAgent?: string) => {
 describe('init', () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
-		(isAdFree as jest.Mock).mockReturnValue(false);
-		(shouldLoadAds as jest.Mock).mockReturnValue(true);
+		jest.mocked(isAdFree).mockReturnValue(false);
+		jest.mocked(shouldLoadAds).mockReturnValue(true);
 		fakeUserAgent();
 		window.guardian.config.switches = {};
 	});
@@ -204,7 +204,8 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		(shouldLoadAds as jest.Mock).mockReturnValue(false);
+		// (shouldLoadAds as jest.Mock).mockReturnValue(false);
+		jest.mocked(shouldLoadAds).mockReturnValue(false);
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 
@@ -218,7 +219,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		(isAdFree as jest.Mock).mockReturnValue(true);
+		jest.mocked(isAdFree).mockReturnValue(true);
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);
 
