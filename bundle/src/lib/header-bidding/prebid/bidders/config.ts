@@ -285,6 +285,10 @@ const getOzonePlacementId = (
 				return '3500014217';
 			}
 
+			if (slotId === 'dfp-ad--inline2' && containsMpu(sizes)) {
+				return '1500001025';
+			}
+
 			if (containsMpu(sizes)) {
 				return '1500001036';
 			}

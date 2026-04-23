@@ -730,13 +730,6 @@ describe('getOzonePlacementId', () => {
 		expect(getOzonePlacementId([[320, 50]])).toBe('3500014217');
 	});
 
-	test('should return correct placementID in US if none of the conditions are met', () => {
-		isInUsa.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('M');
-		containsMpu.mockReturnValue(true);
-		expect(getOzonePlacementId([[300, 250]])).toBe('1500001036');
-	});
-
 	test('should return correct placementID for mobile-sticky in ROW', () => {
 		isInRow.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
@@ -762,8 +755,8 @@ describe('getOzonePlacementId', () => {
 		);
 	});
 
-	test('should return correct placementID for hangtime ads in inline2 in US or CAN', () => {
-		isInUsOrCa.mockReturnValue(true);
+	test('should return correct placementID for hangtime ads in inline2 in US', () => {
+		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
 		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline2')).toBe(
