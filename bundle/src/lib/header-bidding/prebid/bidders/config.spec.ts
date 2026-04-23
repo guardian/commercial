@@ -755,7 +755,7 @@ describe('getOzonePlacementId', () => {
 		);
 	});
 
-	test('should return correct placementID for hangtime ads in inline2 in US or CAN', () => {
+	test('should return correct placementID for hangtime ads in inline2 in US', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
