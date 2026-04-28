@@ -1,6 +1,8 @@
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { log } from '@guardian/libs';
 import { breakpoints } from '@guardian/source/foundations';
+import { defineSlot } from '../../define/define-slot';
+import { emptyAdvert } from '../../events/empty-advert';
 import { getCurrentBreakpoint } from '../detect/detect-breakpoint';
 import { adSlotIdPrefix } from '../dfp/dfp-env-globals';
 import { getAdvertById } from '../dfp/get-advert-by-id';
@@ -159,228 +161,180 @@ const initPassbackMessage = (register: RegisterListener): void => {
 				return;
 			}
 
-			/**
-			 * Keep the initial outstream iFrame so they can detect passbacks.
-			 * Maintain the iFrame initial size by setting visibility hidden to prevent CLS.
-			 * In a full width column we then just need to resize the height.
-			 */
-			const updateInitialSlotPromise = fastdom.mutate(() => {
-				iFrameContainer.style.visibility = 'hidden';
-				// Allows passback slot to position absolutely over the parent slot
-				slotElement.style.position = 'relative';
-				// Remove any outstream styling for the parent slot
-				slotElement.classList.remove('ad-slot--outstream');
-				// Prevent refreshing of the parent slot
-				slotElement.setAttribute('data-refresh', 'false');
-				const advert = getAdvertById(slotElement.id);
-				if (advert) advert.shouldRefresh = false;
-			});
+			const initialGamSlot = window.googletag
+				.pubads()
+				.getSlots()
+				.find((s) =>
+					// startsWith to account with `--mobile` suffix added to the slotId for mobile slots
+					s.getSlotElementId().startsWith(slotIdWithPrefix),
+				);
 
-			/**
-			 * Create a new passback ad slot element
-			 */
-			const createNewSlotElementPromise = updateInitialSlotPromise.then(
-				() => {
-					const passbackElement = document.createElement('div');
-					passbackElement.id = `${slotIdWithPrefix}--passback`;
-					passbackElement.classList.add('ad-slot', 'js-ad-slot');
-					passbackElement.setAttribute('aria-hidden', 'true');
-					// position absolute to position over the container slot
-					passbackElement.style.position = 'absolute';
-					// account for the ad label
-					passbackElement.style.top = `${adLabelHeight}px`;
-					// take the full width so it will center horizontally
-					passbackElement.style.width = '100%';
+			if (!initialGamSlot) {
+				log(
+					'commercial',
+					'Passback: cannot determine the googletag slot from the slotId',
+				);
+				return;
+			}
 
-					return fastdom
-						.mutate(() => {
-							slotElement.insertAdjacentElement(
-								'beforeend',
-								passbackElement,
-							);
-						})
-						.then(() => passbackElement);
+			const pageTargetingConfig =
+				window.googletag.getConfig('targeting').targeting ?? {};
+
+			const pageTargeting = mapValues(
+				Object.keys(pageTargetingConfig),
+				(key) => {
+					const targeting = pageTargetingConfig[key];
+					if (Array.isArray(targeting)) {
+						return targeting;
+					}
+					if (typeof targeting === 'string') {
+						return [targeting];
+					}
+					return [];
 				},
 			);
 
+			const slotTargetingConfig =
+				initialGamSlot.getConfig('targeting').targeting ?? {};
+			const slotTargeting = mapValues(
+				Object.keys(slotTargetingConfig),
+				(key) => {
+					const targeting = slotTargetingConfig[key];
+					if (Array.isArray(targeting)) {
+						return targeting;
+					}
+					if (typeof targeting === 'string') {
+						return [targeting];
+					}
+					return [];
+				},
+			);
+
+			log(
+				'commercial',
+				'Passback: initial slot targeting',
+				Object.fromEntries([...pageTargeting, ...slotTargeting]),
+			);
+
 			/**
-			 * Create and display the new passback slot
+			 * Create the targeting for the new passback slot
 			 */
-			void createNewSlotElementPromise.then((passbackElement) => {
-				/**
-				 * Find the initial slot object from googletag
-				 */
-				const initialSlot = window.googletag
-					.pubads()
-					.getSlots()
-					.find((s) =>
-						// startsWWith to account with `--mobile` suffix added to the slotId for mobile slots
-						s.getSlotElementId().startsWith(slotIdWithPrefix),
-					);
+			const passbackTargeting: Array<[string, string[]]> = [
+				...pageTargeting,
+				...slotTargeting,
+				['passback', [getPassbackValue(source)]],
+				['slot', [slotId]],
+			];
 
-				if (!initialSlot) {
-					log(
-						'commercial',
-						'Passback: cannot determine the googletag slot from the slotId',
-					);
-					return;
-				}
+			// Destroy the top-above-nav slot so that we can reuse it for a passback slot
+			const advert = getAdvertById(slotElement.id);
+			if (advert) {
+				emptyAdvert(advert);
+			}
 
-				/**
-				 * Copy the targeting from the initial slot
-				 */
-				const pageTargetingConfig =
-					window.googletag.getConfig('targeting').targeting ?? {};
-				const pageTargeting = mapValues(
-					Object.keys(pageTargetingConfig),
-					(key) => {
-						const targeting = pageTargetingConfig[key];
-						if (Array.isArray(targeting)) {
-							return targeting;
-						}
-						if (typeof targeting === 'string') {
-							return [targeting];
-						}
-						return [];
-					},
-				);
-				const slotTargetingConfig =
-					initialSlot.getConfig('targeting').targeting ?? {};
-				const slotTargeting = mapValues(
-					Object.keys(slotTargetingConfig),
-					(key) => {
-						const targeting = slotTargetingConfig[key];
-						if (Array.isArray(targeting)) {
-							return targeting;
-						}
-						if (typeof targeting === 'string') {
-							return [targeting];
-						}
-						return [];
-					},
-				);
+			// Now re-define the slot as a passback
+			defineSlot(slotElement);
 
-				log(
-					'commercial',
-					'Passback: initial slot targeting',
-					Object.fromEntries([...pageTargeting, ...slotTargeting]),
-				);
-
-				/**
-				 * Create the targeting for the new passback slot
-				 */
-				const passbackTargeting: Array<[string, string[]]> = [
-					...pageTargeting,
-					...slotTargeting,
-					['passback', [getPassbackValue(source)]],
-					['slot', [slotId]],
-				];
-
-				/**
-				 * Register a listener to adjust the container height once the
-				 * passback has loaded. We need to do this because the passback
-				 * ad is absolutely positioned in order to not cause layout shift.
-				 * So it is taken out of normal document flow and the parent container
-				 * does not take the height of the child ad element as normal.
-				 * We set the container height by adding a listener to the googletag
-				 * slotRenderEnded event which provides the size of the loaded ad.
-				 * https://developers.google.com/publisher-tag/reference#googletag.events.slotrenderendedevent
-				 */
-				googletag
-					.pubads()
-					.addEventListener(
-						'slotRenderEnded',
-						function (
-							event: googletag.events.SlotRenderEndedEvent,
-						) {
-							const slotId = event.slot.getSlotElementId();
-							if (slotId === passbackElement.id) {
-								const size = event.size;
-								if (Array.isArray(size) && size[1]) {
-									const adHeight = size[1];
+			/**
+			 * Register a listener to adjust the container height once the
+			 * passback has loaded. We need to do this because the passback
+			 * ad is absolutely positioned in order to not cause layout shift.
+			 * So it is taken out of normal document flow and the parent container
+			 * does not take the height of the child ad element as normal.
+			 * We set the container height by adding a listener to the googletag
+			 * slotRenderEnded event which provides the size of the loaded ad.
+			 * https://developers.google.com/publisher-tag/reference#googletag.events.slotrenderendedevent
+			 */
+			googletag
+				.pubads()
+				.addEventListener(
+					'slotRenderEnded',
+					function (event: googletag.events.SlotRenderEndedEvent) {
+						const slotId = event.slot.getSlotElementId();
+						if (slotId === passbackElement.id) {
+							const size = event.size;
+							if (Array.isArray(size) && size[1]) {
+								const adHeight = size[1];
+								log(
+									'commercial',
+									`Passback: ad height is ${adHeight}`,
+								);
+								void fastdom.mutate(() => {
+									const slotHeight = `${
+										(getCurrentBreakpoint() === 'mobile'
+											? adHeight
+											: adSizes.outstreamDesktop.height) +
+										adLabelHeight
+									}px`;
 									log(
 										'commercial',
-										`Passback: ad height is ${adHeight}`,
+										`Passback: setting height of passback slot to ${slotHeight}`,
 									);
-									void fastdom.mutate(() => {
-										const slotHeight = `${
-											(getCurrentBreakpoint() === 'mobile'
-												? adHeight
-												: adSizes.outstreamDesktop
-														.height) + adLabelHeight
-										}px`;
-										log(
-											'commercial',
-											`Passback: setting height of passback slot to ${slotHeight}`,
-										);
-										slotElement.style.height = slotHeight;
+									slotElement.style.height = slotHeight;
 
-										/**
-										 * The centre styling is added in here instead of where the element is created
-										 * because googletag removes the display style on the passbackElement
-										 */
-										passbackElement.style.display = 'flex';
-										passbackElement.style.flexDirection =
-											'column';
-										passbackElement.style.justifyContent =
-											'center';
-										passbackElement.style.alignItems =
-											'center';
-										passbackElement.style.height = `calc(100% - ${adLabelHeight}px)`;
+									/**
+									 * The centre styling is added in here instead of where the element is created
+									 * because googletag removes the display style on the passbackElement
+									 */
+									passbackElement.style.display = 'flex';
+									passbackElement.style.flexDirection =
+										'column';
+									passbackElement.style.justifyContent =
+										'center';
+									passbackElement.style.alignItems = 'center';
+									passbackElement.style.height = `calc(100% - ${adLabelHeight}px)`;
 
-										/**
-										 * Also resize the initial outstream iframe so it doesn't block text selection
-										 * directly under the new ad
-										 */
-										iframe.style.height = slotHeight;
-										iFrameContainer.style.height =
-											slotHeight;
-									});
-								}
+									/**
+									 * Also resize the initial outstream iframe so it doesn't block text selection
+									 * directly under the new ad
+									 */
+									iframe.style.height = slotHeight;
+									iFrameContainer.style.height = slotHeight;
+								});
 							}
-						},
-					);
+						}
+					},
+				);
 
-				/**
-				 * Define and display the new passback slot
-				 */
-				window.googletag.cmd.push(() => {
-					const { sizes, sizeMappings } = decideSizes(source);
-					// https://developers.google.com/publisher-tag/reference#googletag.defineSlot
-					const passbackSlot = googletag.defineSlot(
-						initialSlot.getAdUnitPath(),
-						sizes,
-						passbackElement.id,
-					);
-					if (passbackSlot) {
-						// https://developers.google.com/publisher-tag/guides/ad-sizes#responsive_ads
-						passbackSlot.defineSizeMapping(sizeMappings);
-						passbackSlot.addService(window.googletag.pubads());
-						passbackTargeting.forEach(([key, value]) => {
-							passbackSlot.setConfig({
-								targeting: {
-									[key]: value,
-								},
-							});
+			/**
+			 * Define and display the new passback slot
+			 */
+			window.googletag.cmd.push(() => {
+				const { sizes, sizeMappings } = decideSizes(source);
+				// https://developers.google.com/publisher-tag/reference#googletag.defineSlot
+				const passbackSlot = googletag.defineSlot(
+					initialSlot.getAdUnitPath(),
+					sizes,
+					passbackElement.id,
+				);
+				if (passbackSlot) {
+					// https://developers.google.com/publisher-tag/guides/ad-sizes#responsive_ads
+					passbackSlot.defineSizeMapping(sizeMappings);
+					passbackSlot.addService(window.googletag.pubads());
+					passbackTargeting.forEach(([key, value]) => {
+						passbackSlot.setConfig({
+							targeting: {
+								[key]: value,
+							},
 						});
-						log(
-							'commercial',
-							'Passback: passback slot targeting map',
-							(
-								passbackSlot as googletag.Slot & {
-									getConfig: (
-										key: string,
-									) => Record<string, string | string[]>;
-								}
-							).getConfig('targeting'),
-						);
-						log(
-							'commercial',
-							`Passback: displaying slot '${passbackElement.id}'`,
-						);
-						googletag.display(passbackElement.id);
-					}
-				});
+					});
+					log(
+						'commercial',
+						'Passback: passback slot targeting map',
+						(
+							passbackSlot as googletag.Slot & {
+								getConfig: (
+									key: string,
+								) => Record<string, string | string[]>;
+							}
+						).getConfig('targeting'),
+					);
+					log(
+						'commercial',
+						`Passback: displaying slot '${passbackElement.id}'`,
+					);
+					googletag.display(passbackElement.id);
+				}
 			});
 		});
 	});
