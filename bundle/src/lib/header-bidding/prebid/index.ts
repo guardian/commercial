@@ -41,23 +41,12 @@ const initialise = async (
 ): Promise<void> => {
 	initialised = true;
 
-	const userSyncPromise: Promise<UserSyncConfig> =
-		getUserSyncSettings(consentState);
-
-	const isInTest = isUserInTestGroup(
-		'commercial-loading-userids-async',
-		'variant',
-	);
+	const userSync: UserSyncConfig = await getUserSyncSettings(consentState);
 
 	const isInPrebidFloorPriceTest = isUserInTestGroup(
 		'commercial-prebid-price-floor',
 		'variant',
 	);
-
-	// For control group users, await userSync before setConfig so it's included immediately.
-	// For test group users, skip the await — userSync will be merged into the config
-	// at the end of initialise via mergeConfig.
-	const initialUserSyncConfig = isInTest ? undefined : await userSyncPromise;
 
 	window.pbjs.setConfig({
 		/**
@@ -88,10 +77,7 @@ const initialise = async (
 		timeoutBuffer: 400,
 		priceGranularity: 'custom',
 		customPriceBucket: priceGranularity,
-		userSync:
-			!isInTest && initialUserSyncConfig
-				? initialUserSyncConfig
-				: undefined,
+		userSync,
 		ortb2: {
 			site: {
 				ext: {
@@ -160,17 +146,6 @@ const initialise = async (
 		advert.hasPrebidSize = true;
 		advert.size = size;
 	});
-
-	// For test group users, await the userSync promise here — after setConfig and bidder
-	// setup have run without blocking — so userIds are still ready before the first ad request.
-	const userSyncConfig = isInTest ? await userSyncPromise : undefined;
-
-	// update config and adjust slot size when prebid ad loads
-	if (userSyncConfig) {
-		window.pbjs.mergeConfig({
-			userSync: userSyncConfig,
-		} as unknown as Record<string, unknown>);
-	}
 };
 
 const bidsBackHandler = (
