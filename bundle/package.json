@@ -75,7 +75,7 @@
 		"ts-jest": "29.4.9",
 		"ts-loader": "9.5.4",
 		"type-fest": "5.5.0",
-		"typescript": "5.9.3",
+		"typescript": "6.0.2",
 		"webpack": "5.106.1",
 		"webpack-bundle-analyzer": "5.3.0",
 		"webpack-cli": "7.0.2",
