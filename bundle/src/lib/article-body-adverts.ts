@@ -1,5 +1,4 @@
 import { log } from '@guardian/libs';
-import { isUserInTestGroup } from '../ab-testing';
 import { isAdFree } from './ad-free';
 import { shouldLoadAds } from './should-load-ads';
 
@@ -38,14 +37,7 @@ const allowArticleBodyAdverts = (): boolean => {
 	const newRecipeDesign =
 		window.guardian.config.page.showNewRecipeDesign ?? false;
 
-	const isInSpacefinderOnInteractivesTest =
-		!isUserInTestGroup(
-			'commercial-holdback-spacefinder-on-interactives',
-			'holdback',
-		) && isInteractive;
-
-	const enableArticleBodyAdverts =
-		isArticle || isInSpacefinderOnInteractivesTest;
+	const enableArticleBodyAdverts = isArticle || isInteractive;
 
 	const disableArticleBodyAdverts =
 		isMinuteArticle || isLiveBlog || isHosted || newRecipeDesign;
