@@ -4,7 +4,7 @@ import { isUserInTestGroup } from '../../../../ab-testing';
 import { getEmail } from '../../../identity/api';
 import { isSwitchedOn } from '../../utils';
 import { getUserIdForId5 } from './id5';
-import { getUserIdForIntentIQ } from './intentIQ';
+import { getUserIdForIntentIQ } from './intent-iq';
 import { getUserIdForLiveRamp } from './liveramp';
 import { sharedId } from './shared';
 import { getUserIdForTradeDesk } from './tradedesk';
