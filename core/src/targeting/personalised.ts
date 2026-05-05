@@ -1,4 +1,7 @@
-import type { ConsentState, TCEventStatusCode } from '@guardian/libs';
+import type {
+	ConsentState,
+	TCEventStatusCode,
+} from '@guardian/consent-manager';
 import { storage } from '@guardian/libs';
 import {
 	clearPermutiveSegments,

@@ -1,5 +1,7 @@
-import type { ConsentState, TeamName } from '@guardian/libs';
-import { getMeasures, isNonNullable, log, onConsent } from '@guardian/libs';
+import type { ConsentState } from '@guardian/consent-manager';
+import { onConsent } from '@guardian/consent-manager';
+import type { TeamName } from '@guardian/libs';
+import { getMeasures, isNonNullable, log } from '@guardian/libs';
 import { EventTimer } from './event-timer';
 import type { ConnectionType } from './types';
 

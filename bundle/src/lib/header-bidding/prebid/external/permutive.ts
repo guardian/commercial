@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState } from '@guardian/consent-manager';
 import { pubmatic } from '../../../__vendor/pubmatic';
 import type { BidderCode } from '../../prebid-types';
 import { shouldIncludeBidder } from '../../utils';

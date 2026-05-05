@@ -1,5 +1,5 @@
 import { hashEmailForClient } from '@guardian/commercial-core';
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState } from '@guardian/consent-manager';
 import type { UserIdConfig } from 'prebid.js/dist/modules/userId/spec';
 import { isUserInTestGroup } from '../../../../ab-testing';
 

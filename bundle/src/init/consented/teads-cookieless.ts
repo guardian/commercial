@@ -1,10 +1,9 @@
 import {
 	getConsentFor,
-	getCookie,
-	loadScript,
 	onConsent,
 	onConsentChange,
-} from '@guardian/libs';
+} from '@guardian/consent-manager';
+import { getCookie, loadScript } from '@guardian/libs';
 
 const initTeadsCookieless = async (): Promise<void> => {
 	const consentState = await onConsent();

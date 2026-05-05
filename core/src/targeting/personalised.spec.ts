@@ -1,4 +1,7 @@
-import type { ConsentState, USNATConsentState } from '@guardian/libs';
+import type {
+	ConsentState,
+	USNATConsentState,
+} from '@guardian/consent-manager';
 import { storage } from '@guardian/libs';
 import type { PersonalisedTargeting } from './personalised';
 import { getPersonalisedTargeting } from './personalised';
