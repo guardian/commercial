@@ -1,4 +1,5 @@
-import { getConsentFor, loadScript, log, onConsent } from '@guardian/libs';
+import { getConsentFor, onConsent } from '@guardian/consent-manager';
+import { loadScript, log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { isSecureContactPage } from '../../lib/is-secure-contact';
 import type { ComscoreGlobals } from '../../types/global';

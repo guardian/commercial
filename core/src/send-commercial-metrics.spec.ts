@@ -1,5 +1,8 @@
-import type { ConsentState, USNATConsentState } from '@guardian/libs';
-import { onConsent } from '@guardian/libs';
+import type {
+	ConsentState,
+	USNATConsentState,
+} from '@guardian/consent-manager';
+import { onConsent } from '@guardian/consent-manager';
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import {
 	_,
@@ -15,8 +18,10 @@ const {
 	transformToObjectEntries,
 } = _;
 
-jest.mock('@guardian/libs', () => ({
-	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
+jest.mock('@guardian/consent-manager', () => ({
+	...jest.requireActual<typeof import('@guardian/consent-manager')>(
+		'@guardian/consent-manager',
+	),
 	onConsent: jest.fn(),
 }));
 

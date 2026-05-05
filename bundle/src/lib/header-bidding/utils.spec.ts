@@ -2,9 +2,9 @@ import { getCountryCode as getCountryCode_ } from '@guardian/commercial-core/geo
 import { _ } from '@guardian/commercial-core/geo/geo-utils';
 import {
 	type ConsentState,
-	type CountryCode,
 	getConsentFor as getConsentFor_,
-} from '@guardian/libs';
+} from '@guardian/consent-manager';
+import type { CountryCode } from '@guardian/libs';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
@@ -49,9 +49,11 @@ const mockConsentState = {
 	framework: 'tcfv2',
 } satisfies ConsentState;
 
-jest.mock('@guardian/libs', () => {
+jest.mock('@guardian/consent-manager', () => {
 	return {
-		...jest.requireActual('@guardian/libs'),
+		...jest.requireActual<typeof import('@guardian/consent-manager')>(
+			'@guardian/consent-manager',
+		),
 		getConsentFor: jest.fn(),
 	};
 });

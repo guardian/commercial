@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState } from '@guardian/consent-manager';
 import { log } from '@guardian/libs';
 import { buildPageTargeting, filterValues } from './build-page-targeting';
 import type { CustomParams, MaybeArray } from './types';
