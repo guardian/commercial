@@ -39,7 +39,6 @@ const setupWindowCommercial = (): void => {
 const bootCommercial = async (
 	modules: Array<() => Promise<unknown>>,
 ): Promise<void> => {
-	// @ts-expect-error -- @see https://webpack.js.org/guides/public-path
 	log('commercial', '📦 standalone.commercial.ts', __webpack_public_path__);
 	if (process.env.COMMIT_SHA) {
 		log(

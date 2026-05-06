@@ -8,7 +8,7 @@
 			// in type checking but fail the build
 			"prebid.js/dist/*": ["./node_modules/prebid.js/dist/src/*"]
 		},
-		"types": ["node", "jest", "google-publisher-tag"]
+		"types": ["node", "jest", "google-publisher-tag", "webpack-env"]
 	},
 	"extends": "../tsconfig.json",
 	"include": ["./src/**/*.ts"],
