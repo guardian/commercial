@@ -26,8 +26,7 @@
 		"strict": true,
 		"target": "ESNEXT",
 		"noUncheckedIndexedAccess": true,
-		"customConditions": ["workspace", "import", "default"],
-		"types": ["node", "jest"]
+		"customConditions": ["workspace", "import", "default"]
 	},
 	"exclude": [
 		"node_modules",
