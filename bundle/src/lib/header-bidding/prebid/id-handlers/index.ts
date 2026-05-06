@@ -22,7 +22,7 @@ export const getUserSyncSettings = async (
 		getConsentFor('theTradeDesk', consentState) &&
 		getUserIdForTradeDesk(userEmail, consentState);
 	const fetchIntentIqUserId =
-		getConsentFor('intentIq', consentState) && getUserIdForIntentIQ();
+		getConsentFor('intentIQ', consentState) && getUserIdForIntentIQ();
 
 	// run all ID providers asynchronously
 
