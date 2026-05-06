@@ -1,3 +1,4 @@
+import 'google-publisher-tag';
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { log } from '@guardian/libs';
 import { breakpoints } from '@guardian/source/foundations';
@@ -96,6 +97,28 @@ const getPassbackValue = (source: string): string => {
 	return `${source}${isMobile ? 'mobile' : 'desktop'}`;
 };
 
+const createPassbackSlotElement = async (
+	originalSlotId: string,
+	adjacentTo: Element,
+) => {
+	// Create passback slot element
+	const passbackElement = document.createElement('div');
+	passbackElement.id = `${originalSlotId}--passback`;
+	passbackElement.classList.add('ad-slot', 'js-ad-slot');
+	passbackElement.setAttribute('aria-hidden', 'true');
+	// position absolute to position over the container slot
+	passbackElement.style.position = 'absolute';
+	// account for the ad label
+	passbackElement.style.top = `${adLabelHeight}px`;
+	// take the full width so it will center horizontally
+	passbackElement.style.width = '100%';
+	return fastdom
+		.mutate(() => {
+			adjacentTo.insertAdjacentElement('beforeend', passbackElement);
+		})
+		.then(() => passbackElement);
+};
+
 /**
  * A listener for 'passback' messages from ad slot iFrames
  * Ad providers will postMessage a 'passback' message to tell us they have not filled this slot
@@ -120,7 +143,6 @@ const initPassbackMessage = (register: RegisterListener): void => {
 				);
 				return;
 			}
-
 			if (!iframe) {
 				log(
 					'commercial',
@@ -133,7 +155,7 @@ const initPassbackMessage = (register: RegisterListener): void => {
 			 * Determine the slot from the calling iFrame as provided by messenger
 			 */
 			const slotElement = iframe.closest<HTMLDivElement>('.ad-slot');
-			const slotId = slotElement?.dataset.name;
+			const slotId = slotElement?.dataset.name; // e.g. inline-1
 
 			if (!slotId) {
 				log(
@@ -143,16 +165,14 @@ const initPassbackMessage = (register: RegisterListener): void => {
 				return;
 			}
 
-			const slotIdWithPrefix = `${adSlotIdPrefix}${slotId}`;
-
+			const slotIdWithPrefix = `${adSlotIdPrefix}${slotId}`; // e.g. dfp-ad--inline-1
 			log(
 				'commercial',
 				`Passback: from source '${source}' for slot '${slotIdWithPrefix}'`,
 			);
 
 			const iFrameContainer =
-				iframe.closest<HTMLDivElement>('.ad-slot__content');
-
+				iframe.closest<HTMLDivElement>('.ad-slot__content'); // id="google_ads_iframe_/....."
 			if (!iFrameContainer) {
 				log(
 					'commercial',
@@ -164,7 +184,7 @@ const initPassbackMessage = (register: RegisterListener): void => {
 			const initialGamSlot = window.googletag
 				.pubads()
 				.getSlots()
-				.find((s) =>
+				.find((s: googletag.Slot) =>
 					// startsWith to account with `--mobile` suffix added to the slotId for mobile slots
 					s.getSlotElementId().startsWith(slotIdWithPrefix),
 				);
@@ -177,6 +197,119 @@ const initPassbackMessage = (register: RegisterListener): void => {
 				return;
 			}
 
+			const initialGamUnitPath = initialGamSlot.getAdUnitPath();
+
+			/**
+			 * ._____div:ad-slot-container________.
+			 * | .____div:ad-slot_______________. |
+			 * | | .___div:ad-slot__content___. | |
+			 * | | | .______iframe__________. | | |
+			 * | | | |                      | | | |
+			 * | | | |   original ad.       | | | |
+			 * | | | |                      | | | |
+			 * | | | |_____________________ | | | |
+			 * | | |__________________________| | |
+			 * | |______________________________| |
+			 * |__________________________________|
+			 *
+			 *                |
+			 *                |
+			 *                |
+			 *                |
+			 *                V
+			 *
+			 * ._____div:ad-slot-container________.
+			 * | .____div:ad-slot_______________. |
+			 * | | .___div:ad-slot__content___. | |
+			 * | | | .______iframe__________. | | |
+			 * | | | |                      | | | |
+			 * | | | |   original ad        | | | |
+			 * | | | |   (destroyed)        | | | |
+			 * | | | |_____________________ | | | |
+			 * | | |__________________________| | |
+			 * | |______________________________| |
+			 * |                                  |
+			 * | .____div:ad-slot(passback)_____. |
+			 * | | .___div:ad-slot__content___. | |
+			 * | | | .______iframe__________. | | |
+			 * | | | |                      | | | |
+			 * | | | |     passback ad      | | | |
+			 * | | | |                      | | | |
+			 * | | | |_____________________ | | | |
+			 * | | |__________________________| | |
+			 * | |______________________________| |
+			 * |__________________________________|
+			 *
+			 * 			      |
+			 *                |
+			 *                |
+			 *                |
+			 *                V
+			 *
+			 * ._____div:ad-slot-container________.
+			 * | .____div:ad-slot_______________. |
+			 * | | .___div:ad-slot__content___. | |
+			 * | | | .______iframe__________. | | |
+			 * | | | |                      | | | |
+			 * | | | |   passback ad        | | | |
+			 * | | | |                      | | | |
+			 * | | | |_____________________ | | | |
+			 * | | |__________________________| | |
+			 * | |______________________________| |
+			 * |__________________________________|
+			 *
+			 */
+
+			//FIXME
+			void createPassbackSlotElement(slotIdWithPrefix, slotElement);
+
+			// Destroy the initial slot
+			window.googletag.destroySlots([initialGamSlot]);
+
+			/**
+			 * Define and display the new passback slot
+			 */
+			window.googletag.cmd.push(() => {
+				const { sizes, sizeMappings } = decideSizes(source);
+				// https://developers.google.com/publisher-tag/reference#googletag.defineSlot
+				const passbackSlot = googletag.defineSlot(
+					initialGamUnitPath,
+					sizes,
+					`${slotIdWithPrefix}--passback`,
+				);
+				if (passbackSlot) {
+					// https://developers.google.com/publisher-tag/guides/ad-sizes#responsive_ads
+					passbackSlot.defineSizeMapping(sizeMappings);
+					passbackSlot.addService(window.googletag.pubads());
+					passbackTargeting.forEach(([key, value]) => {
+						passbackSlot.setConfig({
+							targeting: {
+								[key]: value,
+							},
+						});
+					});
+					log(
+						'commercial',
+						'Passback: passback slot targeting map',
+						(
+							passbackSlot as googletag.Slot & {
+								getConfig: (
+									key: string,
+								) => Record<string, string | string[]>;
+							}
+						).getConfig('targeting'),
+					);
+					log(
+						'commercial',
+						`Passback: displaying slot '${passbackElement.id}'`,
+					);
+					googletag.display(passbackElement.id);
+				}
+			});
+
+			/**
+			 * Add page targeting to the slot
+			 */
 			const pageTargetingConfig =
 				window.googletag.getConfig('targeting').targeting ?? {};
 
