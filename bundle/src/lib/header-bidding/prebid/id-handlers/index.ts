@@ -1,3 +1,4 @@
+import { getLocale } from '@guardian/commercial-core/geo/get-locale';
 import { type ConsentState, getConsentFor } from '@guardian/libs';
 import type { UserSyncConfig } from 'prebid.js/dist/src/userSync';
 import { isUserInTestGroup } from '../../../../ab-testing';
@@ -41,7 +42,32 @@ export const getUserSyncSettings = async (
 		'commercial-user-module-intentIq',
 		'variant',
 	);
-	const intentIqModule = isUserInTestGroupIntentIQ && fetchIntentIqUserId;
+
+	//IntentIQ do not support every country, it's recommended if we cap them to the countries listed
+	const intentIQRegions = [
+		'US',
+		'CA',
+		'AU',
+		'NZ',
+		'JP',
+		'SG',
+		'TH',
+		'PH',
+		'MY',
+		'KR',
+		'MX',
+		'BR',
+		'GB',
+		'IE',
+		'ES',
+		'FR',
+		'DE',
+	];
+	const isUserInIntentRegion = intentIQRegions.includes(getLocale());
+	const intentIqModule =
+		isUserInTestGroupIntentIQ &&
+		isUserInIntentRegion &&
+		fetchIntentIqUserId;
 
 	const userIds = [...userIdModules, intentIqModule]
 		// typescript doesn't like flatMap here
