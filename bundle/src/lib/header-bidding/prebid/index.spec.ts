@@ -605,7 +605,9 @@ describe('Prebid.js bidWon Events', () => {
 describe('isInPrebidFloorPriceTest', () => {
 	/* eslint-disable @typescript-eslint/no-unsafe-assignment -- Jest matchers return any */
 	test('when user is in variant test group, pbjs.setConfig to be called with floor price values', async () => {
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
+		jest.mocked(isUserInTestGroup)
+			.mockReturnValueOnce(false) // commercial-user-module-intentIq (id-handlers)
+			.mockReturnValueOnce(true); // commercial-prebid-price-floor
 
 		const setConfigSpy = jest.spyOn(window.pbjs, 'setConfig');
 
@@ -626,7 +628,9 @@ describe('isInPrebidFloorPriceTest', () => {
 	});
 	/* eslint-enable @typescript-eslint/no-unsafe-assignment */
 	test('when user is not in variant test group, pbjs.setConfig to be called without floor price values', async () => {
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false);
+		jest.mocked(isUserInTestGroup)
+			.mockReturnValueOnce(false) // commercial-user-module-intentIq (id-handlers)
+			.mockReturnValueOnce(false); // commercial-prebid-price-floor
 
 		const setConfigSpy = jest.spyOn(window.pbjs, 'setConfig');
 

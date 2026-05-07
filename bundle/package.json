@@ -45,7 +45,7 @@
 		"@guardian/core-web-vitals": "20.0.0",
 		"@guardian/identity-auth": "16.0.0",
 		"@guardian/identity-auth-frontend": "18.0.0",
-		"@guardian/libs": "31.0.0",
+		"@guardian/libs": "31.0.1",
 		"@guardian/ophan-tracker-js": "2.8.0",
 		"@guardian/source": "12.2.1",
 		"@playwright/test": "1.59.1",
