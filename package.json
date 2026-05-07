@@ -32,7 +32,7 @@
 		"@guardian/prettier": "10.0.0",
 		"@typescript-eslint/eslint-plugin": "8.59.0",
 		"@typescript-eslint/parser": "8.59.0",
-		"eslint": "10.2.0",
+		"eslint": "9.39.4",
 		"globals": "17.5.0",
 		"husky": "9.1.7",
 		"lint-staged": "16.4.0",
