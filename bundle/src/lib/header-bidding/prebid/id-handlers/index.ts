@@ -22,7 +22,7 @@ export const getUserSyncSettings = async (
 	const fetchTradeDeskUserId =
 		getConsentFor('theTradeDesk', consentState) &&
 		getUserIdForTradeDesk(userEmail, consentState);
-	const fetchIntentIqUserId =
+	const fetchIntentIQUserId =
 		getConsentFor('intentIQ', consentState) && getUserIdForIntentIQ();
 
 	// run all ID providers asynchronously
@@ -63,11 +63,11 @@ export const getUserSyncSettings = async (
 		'FR',
 		'DE',
 	];
-	const isUserInIntentRegion = intentIQRegions.includes(getLocale());
+	const isUserInIntentIQRegion = intentIQRegions.includes(getLocale());
 	const intentIqModule =
 		isUserInTestGroupIntentIQ &&
-		isUserInIntentRegion &&
-		fetchIntentIqUserId;
+		isUserInIntentIQRegion &&
+		fetchIntentIQUserId;
 
 	const userIds = [...userIdModules, intentIqModule]
 		// typescript doesn't like flatMap here
