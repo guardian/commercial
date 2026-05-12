@@ -5,6 +5,7 @@ import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/libs';
 import { isString, log, onConsent } from '@guardian/libs';
 import { flatten } from 'lodash-es';
+import type { AnalyticsConfig } from 'prebid.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
 import type { AdUnitDefinition } from 'prebid.js/dist/src/adUnits';
 import type { UserSyncConfig } from 'prebid.js/dist/src/userSync';
 import { isUserInTestGroup } from '../../../ab-testing';
@@ -20,7 +21,7 @@ import {
 	shouldIncludePermutive,
 	stripDfpAdPrefixFrom,
 } from '../utils';
-import { getAnalyticsConfig } from './analytics';
+import { getGUAnalyticsConfig, getIntentIQAnalyticsConfig } from './analytics';
 import { bidderSettings as bidderSettingsForCriteo } from './bidders/criteo';
 import { bidderSettings as bidderSettingsForIx } from './bidders/ix';
 import { bidderSettings as bidderSettingsForKargo } from './bidders/kargo';
@@ -121,8 +122,16 @@ const initialise = async (
 	};
 
 	// configure analytics
-	const analytics = getAnalyticsConfig();
-	if (analytics) window.pbjs.enableAnalytics([analytics]);
+	const guAnalytics = getGUAnalyticsConfig();
+	const intentIQAnalyitics = getIntentIQAnalyticsConfig();
+	const filteredAnalytics: Array<AnalyticsConfig<string>> = [];
+	if (guAnalytics) {
+		filteredAnalytics.push(guAnalytics);
+	}
+	if (intentIQAnalyitics) {
+		filteredAnalytics.push(intentIQAnalyitics);
+	}
+	window.pbjs.enableAnalytics(filteredAnalytics);
 
 	// update config and adjust slot size when prebid ad loads
 	window.pbjs.onEvent('bidWon', (data) => {

@@ -35,7 +35,7 @@ const shouldEnableAnalytics = (): boolean => {
 	);
 };
 
-export const getAnalyticsConfig = (): AnalyticsConfig<'gu'> | undefined => {
+export const getGUAnalyticsConfig = (): AnalyticsConfig<'gu'> | undefined => {
 	const pageViewId = window.guardian.ophan?.pageViewId;
 	if (shouldEnableAnalytics() && pageViewId) {
 		return {
@@ -47,6 +47,22 @@ export const getAnalyticsConfig = (): AnalyticsConfig<'gu'> | undefined => {
 					window.location.hostname.includes('localhost')
 						? `//performance-events.code.dev-guardianapis.com/header-bidding`
 						: `//performance-events.guardianapis.com/header-bidding`,
+			},
+		};
+	}
+};
+
+export const getIntentIQAnalyticsConfig = ():
+	| AnalyticsConfig<'iiqAnalytics'>
+	| undefined => {
+	if (shouldEnableAnalytics()) {
+		return {
+			provider: 'iiqAnalytics',
+			options: {
+				partner: 377078111,
+				ABTestingConfigurationSource: 'IIQServer',
+				domainName: 'theguardian.com',
+				gamObjectReference: googletag,
 			},
 		};
 	}
