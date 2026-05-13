@@ -1,3 +1,5 @@
+import type { ConsentState } from '@guardian/libs';
+import { getConsentFor } from '@guardian/libs';
 import type { AnalyticsConfig } from 'prebid.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
 import { getParticipations } from '../../../ab-testing';
 
@@ -52,10 +54,10 @@ export const getGUAnalyticsConfig = (): AnalyticsConfig<'gu'> | undefined => {
 	}
 };
 
-export const getIntentIQAnalyticsConfig = ():
-	| AnalyticsConfig<'iiqAnalytics'>
-	| undefined => {
-	if (shouldEnableAnalytics()) {
+export const getIntentIQAnalyticsConfig = (
+	consentState: ConsentState,
+): AnalyticsConfig<'iiqAnalytics'> | undefined => {
+	if (getConsentFor('intentIQ', consentState)) {
 		return {
 			provider: 'iiqAnalytics',
 			options: {

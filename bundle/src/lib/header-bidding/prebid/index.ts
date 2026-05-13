@@ -122,16 +122,23 @@ const initialise = async (
 	};
 
 	// configure analytics
+	const isUserInTestGroupIntentIQ = isUserInTestGroup(
+		'commercial-user-module-intentIq',
+		'variant',
+	);
+
+	const analytics: Array<AnalyticsConfig<string>> = [];
 	const guAnalytics = getGUAnalyticsConfig();
-	const intentIQAnalyitics = getIntentIQAnalyticsConfig();
-	const filteredAnalytics: Array<AnalyticsConfig<string>> = [];
 	if (guAnalytics) {
-		filteredAnalytics.push(guAnalytics);
+		analytics.push(guAnalytics);
 	}
-	if (intentIQAnalyitics) {
-		filteredAnalytics.push(intentIQAnalyitics);
+	const intentIQAnalytics = isUserInTestGroupIntentIQ
+		? getIntentIQAnalyticsConfig(consentState)
+		: undefined;
+	if (intentIQAnalytics) {
+		analytics.push(intentIQAnalytics);
 	}
-	window.pbjs.enableAnalytics(filteredAnalytics);
+	window.pbjs.enableAnalytics(analytics);
 
 	// update config and adjust slot size when prebid ad loads
 	window.pbjs.onEvent('bidWon', (data) => {
