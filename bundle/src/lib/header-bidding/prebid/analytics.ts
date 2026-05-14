@@ -2,6 +2,12 @@ import type { ConsentState } from '@guardian/libs';
 import { getConsentFor } from '@guardian/libs';
 import type { AnalyticsConfig } from 'prebid.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
 import { getParticipations } from '../../../ab-testing';
+import {
+	EU_PARTNER_ID,
+	isUserInAllowedEURegion,
+	isUserInIntentIQRegion,
+	NON_EU_PARTNER_ID,
+} from './id-handlers/intent-iq';
 
 const shouldEnableAnalytics = (): boolean => {
 	if (!window.guardian.config.switches.prebidAnalytics) {
@@ -57,15 +63,20 @@ export const getGUAnalyticsConfig = (): AnalyticsConfig<'gu'> | undefined => {
 export const getIntentIQAnalyticsConfig = (
 	consentState: ConsentState,
 ): AnalyticsConfig<'iiqAnalytics'> | undefined => {
-	if (getConsentFor('intentIQ', consentState)) {
+	if (getConsentFor('intentIQ', consentState) && isUserInIntentIQRegion()) {
 		return {
 			provider: 'iiqAnalytics',
 			options: {
-				partner: 377078111,
+				partner: isUserInAllowedEURegion()
+					? EU_PARTNER_ID
+					: NON_EU_PARTNER_ID,
 				ABTestingConfigurationSource: 'IIQServer',
 				domainName: 'theguardian.com',
 				gamObjectReference: googletag,
-				reportingServerAddress: "https://reports-gdpr.intentiq.com/report",
+				...(isUserInAllowedEURegion() && {
+					reportingServerAddress:
+						'https://reports-gdpr.intentiq.com/report',
+				}),
 			},
 		};
 	}
