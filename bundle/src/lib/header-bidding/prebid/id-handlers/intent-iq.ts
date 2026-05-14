@@ -5,6 +5,8 @@ export const getUserIdForIntentIQ = (): UserIdConfig<'intentIqId'> => {
 		name: 'intentIqId',
 		params: {
 			partner: 377078111,
+			iiqServerAddress: "https://api-gdpr.intentiq.com",
+			iiqPixelServerAddress: "https://sync-gdpr.intentiq.com"
 		},
 		storage: {
 			type: 'html5',
