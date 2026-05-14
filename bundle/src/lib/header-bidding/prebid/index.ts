@@ -21,7 +21,7 @@ import {
 	shouldIncludePermutive,
 	stripDfpAdPrefixFrom,
 } from '../utils';
-import { getGUAnalyticsConfig, getIntentIQAnalyticsConfig } from './analytics';
+import { getGUAnalyticsConfig } from './analytics';
 import { bidderSettings as bidderSettingsForCriteo } from './bidders/criteo';
 import { bidderSettings as bidderSettingsForIx } from './bidders/ix';
 import { bidderSettings as bidderSettingsForKargo } from './bidders/kargo';
@@ -31,6 +31,7 @@ import { bidderSettings as bidderSettingsForXhb } from './bidders/xhb';
 import { consentManagement } from './consent-management';
 import { configurePermutive } from './external/permutive';
 import { getUserSyncSettings } from './id-handlers';
+import { getIntentIQAnalyticsConfig } from './intent-iq-analytics';
 import { PrebidAdUnit } from './prebid-ad-unit';
 import { priceGranularity } from './price-config';
 
