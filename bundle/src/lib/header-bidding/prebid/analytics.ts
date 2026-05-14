@@ -76,6 +76,7 @@ export const getIntentIQAnalyticsConfig = (
 				...(isUserInAllowedEURegion() && {
 					reportingServerAddress:
 						'https://reports-gdpr.intentiq.com/report',
+					browserBlackList: 'chrome',
 				}),
 			},
 		};

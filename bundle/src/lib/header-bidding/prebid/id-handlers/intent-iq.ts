@@ -48,9 +48,8 @@ const getUserIdForIntentIQ = async (): Promise<
 				gamObjectReference: googletag,
 				...(isUserInAllowedEURegion() && {
 					iiqServerAddress: 'https://api-gdpr.intentiq.com',
-				}),
-				...(isUserInAllowedEURegion() && {
 					iiqPixelServerAddress: 'https://sync-gdpr.intentiq.com',
+					browserBlackList: 'chrome',
 				}),
 			},
 			storage: {
