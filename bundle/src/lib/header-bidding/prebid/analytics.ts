@@ -65,6 +65,7 @@ export const getIntentIQAnalyticsConfig = (
 				ABTestingConfigurationSource: 'IIQServer',
 				domainName: 'theguardian.com',
 				gamObjectReference: googletag,
+				reportingServerAddress: "https://reports-gdpr.intentiq.com/report",
 			},
 		};
 	}
