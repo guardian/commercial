@@ -1,8 +1,11 @@
+import { getLocale } from '@guardian/commercial-core/geo/get-locale';
 import { type ConsentState, getConsentFor } from '@guardian/consent-manager';
 import type { UserSyncConfig } from 'prebid.js/dist/src/userSync';
+import { isUserInTestGroup } from '../../../../ab-testing';
 import { getEmail } from '../../../identity/api';
 import { isSwitchedOn } from '../../utils';
 import { getUserIdForId5 } from './id5';
+import { getUserIdForIntentIQ } from './intent-iq';
 import { getUserIdForLiveRamp } from './liveramp';
 import { sharedId } from './shared';
 import { getUserIdForTradeDesk } from './tradedesk';
@@ -19,13 +22,15 @@ export const getUserSyncSettings = async (
 	const fetchTradeDeskUserId =
 		getConsentFor('theTradeDesk', consentState) &&
 		getUserIdForTradeDesk(userEmail, consentState);
+	const fetchIntentIQUserId =
+		getConsentFor('intentIQ', consentState) && getUserIdForIntentIQ();
 
 	// run all ID providers asynchronously
 
 	// NOTE: rather than blocking the loading of downstream functions,
 	// we could run Promise.all without the await then eventually run
 	// window.pbjs.mergeConfig({
-	// 	userIds ....
+	//  userIds ....
 	// });
 	const userIdModules = await Promise.all([
 		fetchId5UserId,
@@ -33,7 +38,38 @@ export const getUserSyncSettings = async (
 		fetchTradeDeskUserId,
 	]);
 
-	const userIds = userIdModules
+	const isUserInTestGroupIntentIQ = isUserInTestGroup(
+		'commercial-user-module-intentIq',
+		'variant',
+	);
+
+	//IntentIQ do not support every country, it's recommended if we cap them to the countries listed
+	const intentIQRegions = [
+		'US',
+		'CA',
+		'AU',
+		'NZ',
+		'JP',
+		'SG',
+		'TH',
+		'PH',
+		'MY',
+		'KR',
+		'MX',
+		'BR',
+		'GB',
+		'IE',
+		'ES',
+		'FR',
+		'DE',
+	];
+	const isUserInIntentIQRegion = intentIQRegions.includes(getLocale());
+	const intentIqModule =
+		isUserInTestGroupIntentIQ &&
+		isUserInIntentIQRegion &&
+		fetchIntentIQUserId;
+
+	const userIds = [...userIdModules, intentIqModule]
 		// typescript doesn't like flatMap here
 		.map((idModule) => {
 			if (Array.isArray(idModule)) {
