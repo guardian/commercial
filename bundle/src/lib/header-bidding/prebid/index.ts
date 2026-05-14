@@ -123,19 +123,13 @@ const initialise = async (
 	};
 
 	// configure analytics
-	const isUserInTestGroupIntentIQ = isUserInTestGroup(
-		'commercial-user-module-intentIq',
-		'variant',
-	);
 
 	const analytics: Array<AnalyticsConfig<string>> = [];
 	const guAnalytics = getGUAnalyticsConfig();
 	if (guAnalytics) {
 		analytics.push(guAnalytics);
 	}
-	const intentIQAnalytics = isUserInTestGroupIntentIQ
-		? getIntentIQAnalyticsConfig(consentState)
-		: undefined;
+	const intentIQAnalytics = getIntentIQAnalyticsConfig(consentState);
 	if (intentIQAnalytics) {
 		analytics.push(intentIQAnalytics);
 	}
