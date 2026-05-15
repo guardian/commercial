@@ -89,7 +89,7 @@ test.describe('mobile-sticky', () => {
 				adtest: 'mobileStickyTest',
 				'force-banner': '',
 			};
-			await loadPage({ page, path, region: 'GB', queryParams });
+			await loadPage({ page, path, region: 'US', queryParams });
 			await cmpAcceptAll(page);
 			await page.reload();
 
