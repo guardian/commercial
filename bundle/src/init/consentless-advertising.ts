@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState } from '@guardian/consent-manager';
 import { messenger } from '../lib/messenger';
 import { initBackgroundMessage } from '../lib/messenger/background';
 import { initResizeMessage } from '../lib/messenger/resize';

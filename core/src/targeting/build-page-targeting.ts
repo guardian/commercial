@@ -1,5 +1,7 @@
-import type { ConsentState, CountryCode } from '@guardian/libs';
-import { cmp, getConsentFor, getCookie, isString } from '@guardian/libs';
+import type { ConsentState } from '@guardian/consent-manager';
+import { cmp, getConsentFor } from '@guardian/consent-manager';
+import type { CountryCode } from '@guardian/libs';
+import { getCookie, isString } from '@guardian/libs';
 import { supportsPerformanceAPI } from '../event-timer';
 import { getLocale } from '../geo/get-locale';
 import type { ContentTargeting } from './content';

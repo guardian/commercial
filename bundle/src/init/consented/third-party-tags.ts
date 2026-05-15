@@ -1,6 +1,6 @@
 /* A regionalised container for all the commercial tags. */
 
-import { getConsentFor, onConsent } from '@guardian/libs';
+import { getConsentFor, onConsent } from '@guardian/consent-manager';
 import { isAdFree } from '../../lib/ad-free';
 import fastdom from '../../lib/fastdom-promise';
 import { isSecureContactPage } from '../../lib/is-secure-contact';

@@ -3,8 +3,9 @@ import type {
 	ConsentState,
 	TCFv2ConsentState,
 	USNATConsentState,
-} from '@guardian/libs';
-import { getConsentFor, log, onConsent } from '@guardian/libs';
+} from '@guardian/consent-manager';
+import { getConsentFor, onConsent } from '@guardian/consent-manager';
+import { log } from '@guardian/libs';
 import { isAdFree } from '../../lib/ad-free';
 import { prebid } from '../../lib/header-bidding/prebid';
 import { shouldLoadAds } from '../../lib/should-load-ads';
@@ -48,6 +49,9 @@ jest.mock('lib/header-bidding/utils', () => ({
 
 jest.mock('@guardian/libs', () => ({
 	log: jest.fn(),
+}));
+
+jest.mock('@guardian/consent-manager', () => ({
 	onConsent: jest.fn(),
 	getConsentFor: jest.fn(),
 }));

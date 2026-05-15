@@ -1,4 +1,4 @@
-import { type ConsentState } from '@guardian/libs';
+import { type ConsentState } from '@guardian/consent-manager';
 import type { UserIdConfig } from 'prebid.js/dist/modules/userId/spec';
 import { getEmail } from '../../../identity/api';
 import { isSwitchedOn } from '../../utils';

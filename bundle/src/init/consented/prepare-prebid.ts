@@ -1,6 +1,7 @@
 import { isInCanada } from '@guardian/commercial-core/geo/geo-utils';
-import type { ConsentState } from '@guardian/libs';
-import { log, onConsent } from '@guardian/libs';
+import type { ConsentState } from '@guardian/consent-manager';
+import { onConsent } from '@guardian/consent-manager';
+import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { isAdFree } from '../../lib/ad-free';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';

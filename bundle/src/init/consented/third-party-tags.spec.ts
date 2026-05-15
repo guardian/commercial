@@ -1,11 +1,16 @@
-import { getConsentFor, onConsent } from '@guardian/libs';
-import type { ConsentState, USNATConsentState } from '@guardian/libs';
+import { getConsentFor, onConsent } from '@guardian/consent-manager';
+import type {
+	ConsentState,
+	USNATConsentState,
+} from '@guardian/consent-manager';
 import { isAdFree } from '../../lib/ad-free';
 import type { ThirdPartyTag } from '../../types/global';
 import { _, initThirdPartyTags } from './third-party-tags';
 
-jest.mock('@guardian/libs', () => ({
-	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
+jest.mock('@guardian/consent-manager', () => ({
+	...jest.requireActual<typeof import('@guardian/consent-manager')>(
+		'@guardian/consent-manager',
+	),
 	onConsent: jest.fn(),
 	getConsentFor: jest.fn(),
 }));

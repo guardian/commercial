@@ -1,5 +1,5 @@
 import { getLocale } from '@guardian/commercial-core/geo/get-locale';
-import { type ConsentState, getConsentFor } from '@guardian/libs';
+import { type ConsentState, getConsentFor } from '@guardian/consent-manager';
 import type { UserSyncConfig } from 'prebid.js/dist/src/userSync';
 import { isUserInTestGroup } from '../../../../ab-testing';
 import { getEmail } from '../../../identity/api';
