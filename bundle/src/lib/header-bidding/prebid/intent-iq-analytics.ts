@@ -17,6 +17,7 @@ const isUserInTestGroupIntentIQ = isUserInTestGroup(
 export const getIntentIQAnalyticsConfig = (
 	consentState: ConsentState,
 ): AnalyticsConfig<'iiqAnalytics'> | undefined => {
+	const isEU = isUserInAllowedEURegion();
 	if (
 		isUserInTestGroupIntentIQ &&
 		getConsentFor('intentIQ', consentState) &&
@@ -25,13 +26,11 @@ export const getIntentIQAnalyticsConfig = (
 		return {
 			provider: 'iiqAnalytics',
 			options: {
-				partner: isUserInAllowedEURegion()
-					? EU_PARTNER_ID
-					: NON_EU_PARTNER_ID,
+				partner: isEU ? EU_PARTNER_ID : NON_EU_PARTNER_ID,
 				ABTestingConfigurationSource: 'IIQServer',
 				domainName: 'theguardian.com',
 				gamObjectReference: googletag,
-				...(isUserInAllowedEURegion() && {
+				...(isEU && {
 					reportingServerAddress:
 						'https://reports-gdpr.intentiq.com/report',
 					browserBlackList: 'chrome',
