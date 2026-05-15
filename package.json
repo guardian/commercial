@@ -27,7 +27,7 @@
 		"tsc": "pnpm -r --parallel --aggregate-output tsc"
 	},
 	"devDependencies": {
-		"@changesets/cli": "2.30.0",
+		"@changesets/cli": "2.31.0",
 		"@guardian/eslint-config": "14.0.1",
 		"@guardian/prettier": "10.0.0",
 		"@typescript-eslint/eslint-plugin": "8.59.0",
