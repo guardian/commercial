@@ -18,7 +18,6 @@ test.describe('mobile-sticky', () => {
 		}) => {
 			await page.setViewportSize({ width, height });
 			const queryParams = {
-				'ab-commercial-mobile-sticky': 'variant',
 				adtest: 'mobileStickyTest',
 				'force-banner': '',
 			};
@@ -36,7 +35,6 @@ test.describe('mobile-sticky', () => {
 			}) => {
 				await page.setViewportSize({ width, height });
 				const queryParams = {
-					'ab-commercial-mobile-sticky': 'variant',
 					adtest: 'mobileStickyTest',
 					'force-banner': '',
 				};
@@ -51,7 +49,6 @@ test.describe('mobile-sticky', () => {
 		test(`should NOT render in GB region`, async ({ page }) => {
 			await page.setViewportSize({ width, height });
 			const queryParams = {
-				'ab-commercial-mobile-sticky': 'variant',
 				adtest: 'mobileStickyTest',
 				'force-banner': '',
 			};
@@ -67,7 +64,6 @@ test.describe('mobile-sticky', () => {
 		}) => {
 			await page.setViewportSize({ width, height });
 			const queryParams = {
-				'ab-commercial-mobile-sticky': 'variant',
 				adtest: 'mobileStickyTest',
 				'force-banner': '',
 			};
@@ -85,7 +81,6 @@ test.describe('mobile-sticky', () => {
 		}) => {
 			await page.setViewportSize({ width, height });
 			const queryParams = {
-				'ab-commercial-mobile-sticky': 'variant',
 				adtest: 'mobileStickyTest',
 				'force-banner': '',
 			};
@@ -96,20 +91,21 @@ test.describe('mobile-sticky', () => {
 			// Dismiss banner
 			// TODO: These text selectors are fragile - consider adding data-testid
 			// attributes if this test starts failing due to banner text changes
-			try {
-				// Two step banner dismissal
-				await page
-					.getByRole('alert')
-					.getByRole('button', { name: 'Collapse banner' })
-					.click();
+			const twoStepBanner = page
+				.getByRole('alert')
+				.getByRole('button', { name: 'Collapse banner' });
+
+			const oneStepBanner = page
+				.getByRole('alert')
+				.getByRole('button', { name: 'Close' });
+
+			expect(twoStepBanner.or(oneStepBanner)).toBeVisible;
+
+			if (await twoStepBanner.isVisible()) {
+				await twoStepBanner.click();
 				await page.getByText('Maybe later').click();
-			} catch {
-				// If not a two-step banner, try single step
-				// Single step banner dismissal
-				await page
-					.getByRole('alert')
-					.getByRole('button', { name: 'Close' })
-					.click();
+			} else {
+				await oneStepBanner.click();
 			}
 
 			// Banner hidden, ad slot should now appear
@@ -136,7 +132,6 @@ test.describe('mobile-sticky', () => {
 				);
 			});
 			const queryParams = {
-				'ab-commercial-mobile-sticky': 'variant',
 				adtest: 'mobileStickyTest',
 			};
 			await loadPage({ page, path, region: 'US', queryParams });
@@ -158,8 +153,7 @@ test.describe('mobile-sticky', () => {
 					`{"value":"${new Date().toISOString()}"}`,
 				);
 			});
-			const queryParams = { 'ab-commercial-mobile-sticky': 'variant' };
-			await loadPage({ page, path, region: 'US', queryParams });
+			await loadPage({ page, path, region: 'US' });
 			await cmpAcceptAll(page);
 			await page.reload();
 
