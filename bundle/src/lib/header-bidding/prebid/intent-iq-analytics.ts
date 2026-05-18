@@ -1,5 +1,5 @@
-import type { ConsentState } from '@guardian/libs';
-import { getConsentFor } from '@guardian/libs';
+import type { ConsentState } from '@guardian/consent-manager';
+import { getConsentFor } from '@guardian/consent-manager';
 import type { AnalyticsConfig } from 'prebid.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
 import { isUserInTestGroup } from '../../../ab-testing';
 import {
