@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 34.0.0
+
+### Major Changes
+
+- 52e3e22: Migrate from CMP from libs to consent-manager
+
 ## 33.0.1
 
 ### Patch Changes
