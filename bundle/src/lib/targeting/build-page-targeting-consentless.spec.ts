@@ -1,5 +1,5 @@
 import { buildPageTargeting } from '@guardian/commercial-core';
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState } from '@guardian/consent-manager';
 import { buildPageTargetingConsentless } from './build-page-targeting-consentless';
 
 jest.mock('@guardian/commercial-core/targeting/build-page-targeting');

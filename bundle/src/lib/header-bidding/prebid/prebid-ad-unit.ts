@@ -1,5 +1,5 @@
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState } from '@guardian/consent-manager';
 import { log } from '@guardian/libs';
 import type {
 	AdUnitBidDefinition,

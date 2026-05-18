@@ -1,6 +1,10 @@
 import type * as AdSizesType from '@guardian/commercial-core/ad-sizes';
-import type { ConsentState, USNATConsentState } from '@guardian/libs';
-import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
+import type {
+	ConsentState,
+	USNATConsentState,
+} from '@guardian/consent-manager';
+import { getConsentFor, onConsent } from '@guardian/consent-manager';
+import { loadScript } from '@guardian/libs';
 import type { Advert } from '../../define/Advert';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
@@ -104,6 +108,14 @@ jest.mock('@guardian/libs', () => {
 			'@guardian/libs',
 		),
 		loadScript: jest.fn(() => Promise.resolve()),
+	};
+});
+
+jest.mock('@guardian/consent-manager', () => {
+	return {
+		...jest.requireActual<typeof import('@guardian/consent-manager')>(
+			'@guardian/consent-manager',
+		),
 		onConsent: jest.fn(),
 		getConsentFor: jest.fn(),
 		cmp: {

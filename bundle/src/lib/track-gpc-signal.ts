@@ -1,5 +1,5 @@
 import { EventTimer } from '@guardian/commercial-core/event-timer';
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState } from '@guardian/consent-manager';
 import { log } from '@guardian/libs';
 
 /**

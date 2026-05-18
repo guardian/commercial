@@ -6,7 +6,7 @@ import {
 	isInUsa as isInUsa_,
 	isInUsOrCa as isInUsOrCa_,
 } from '@guardian/commercial-core/geo/geo-utils';
-import { type ConsentState } from '@guardian/libs';
+import { type ConsentState } from '@guardian/consent-manager';
 import type { Size } from 'prebid.js/dist/src/types/common';
 import type { PrebidBidder } from '../../prebid-types';
 import {

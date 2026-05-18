@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState } from '@guardian/consent-manager';
 import type { ConsentManagementConfig } from 'prebid.js/dist/src/consentHandler';
 
 export const consentManagement = (
