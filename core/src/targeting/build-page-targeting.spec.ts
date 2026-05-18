@@ -2,8 +2,9 @@ import type {
 	ConsentState,
 	TCFv2ConsentState,
 	USNATConsentState,
-} from '@guardian/libs';
-import { cmp as cmp_, setCookie, storage } from '@guardian/libs';
+} from '@guardian/consent-manager';
+import { cmp as cmp_ } from '@guardian/consent-manager';
+import { setCookie, storage } from '@guardian/libs';
 import { getLocale as getLocale_ } from '../geo/get-locale';
 import type { Edition } from '../types';
 import { buildPageTargeting } from './build-page-targeting';
@@ -30,8 +31,10 @@ jest.mock('./shared', () => ({
 	getLocalHour: jest.fn().mockReturnValue('12'),
 }));
 
-jest.mock('@guardian/libs', () => ({
-	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
+jest.mock('@guardian/consent-manager', () => ({
+	...jest.requireActual<typeof import('@guardian/consent-manager')>(
+		'@guardian/consent-manager',
+	),
 	cmp: {
 		hasInitialised: jest.fn(),
 		willShowPrivacyMessageSync: jest.fn(),

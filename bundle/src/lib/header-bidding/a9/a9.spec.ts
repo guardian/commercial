@@ -1,8 +1,8 @@
-import { getConsentFor, onConsentChange } from '@guardian/libs';
+import { getConsentFor, onConsentChange } from '@guardian/consent-manager';
 import type {
 	OnConsentChangeCallback,
 	USNATConsentState,
-} from '@guardian/libs';
+} from '@guardian/consent-manager';
 import { _, a9 } from './a9';
 
 const tcfv2WithConsentMock = (callback: OnConsentChangeCallback) =>
@@ -61,6 +61,12 @@ jest.mock('../slot-config', () => ({
 jest.mock('@guardian/libs', () => ({
 	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
 	log: jest.fn(),
+}));
+
+jest.mock('@guardian/consent-manager', () => ({
+	...jest.requireActual<typeof import('@guardian/consent-manager')>(
+		'@guardian/consent-manager',
+	),
 	getConsentFor: jest.fn(),
 	onConsentChange: jest.fn(),
 }));

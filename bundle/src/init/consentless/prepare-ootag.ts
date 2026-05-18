@@ -1,4 +1,4 @@
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState } from '@guardian/consent-manager';
 import { loadScript, log } from '@guardian/libs';
 import { isAdFree } from '../../lib/ad-free';
 import { isUserLoggedIn } from '../../lib/identity/api';

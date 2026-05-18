@@ -1,4 +1,4 @@
-import type { VendorName } from '@guardian/libs';
+import type { VendorName } from '@guardian/consent-manager';
 
 export type TagAttribute = {
 	name: string;

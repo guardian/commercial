@@ -1,5 +1,6 @@
 import { isInCanada } from '@guardian/commercial-core/geo/geo-utils';
-import { getConsentFor, log, onConsent } from '@guardian/libs';
+import { getConsentFor, onConsent } from '@guardian/consent-manager';
+import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { a9Apstag } from '../../lib/__vendor/a9-apstag';
 import { isAdFree } from '../../lib/ad-free';

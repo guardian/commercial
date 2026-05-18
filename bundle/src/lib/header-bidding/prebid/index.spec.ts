@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition -- temporary until v10 migration complete */
 
 import { hashEmailForClient } from '@guardian/commercial-core/email-hash';
-import { type ConsentState } from '@guardian/libs';
-import { getConsentFor } from '@guardian/libs';
+import { type ConsentState } from '@guardian/consent-manager';
+import { getConsentFor } from '@guardian/consent-manager';
 import { isUserInTestGroup } from '../../../ab-testing';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
@@ -32,8 +32,10 @@ jest.mock('../utils', () => ({
 		.mockReturnValue(jest.fn().mockReturnValue(true)),
 }));
 
-jest.mock('@guardian/libs', () => ({
-	...jest.requireActual('@guardian/libs'),
+jest.mock('@guardian/consent-manager', () => ({
+	...jest.requireActual<typeof import('@guardian/consent-manager')>(
+		'@guardian/consent-manager',
+	),
 	getConsentFor: jest.fn(),
 }));
 

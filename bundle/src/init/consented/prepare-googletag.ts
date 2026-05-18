@@ -1,6 +1,7 @@
 import { EventTimer } from '@guardian/commercial-core/event-timer';
-import type { ConsentState } from '@guardian/libs';
-import { getConsentFor, loadScript, log, onConsent } from '@guardian/libs';
+import type { ConsentState } from '@guardian/consent-manager';
+import { getConsentFor, onConsent } from '@guardian/consent-manager';
+import { loadScript, log } from '@guardian/libs';
 import { isSwitchedOn } from '../../lib/header-bidding/utils';
 import { getGoogleTagId, isUserLoggedIn } from '../../lib/identity/api';
 import { getPageTargeting } from '../../lib/page-targeting';

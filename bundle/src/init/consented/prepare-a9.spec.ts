@@ -1,6 +1,9 @@
 import { isInCanada } from '@guardian/commercial-core/geo/geo-utils';
-import type { ConsentState, TCFv2ConsentState } from '@guardian/libs';
-import { onConsent } from '@guardian/libs';
+import type {
+	ConsentState,
+	TCFv2ConsentState,
+} from '@guardian/consent-manager';
+import { onConsent } from '@guardian/consent-manager';
 import { isAdFree } from '../../lib/ad-free';
 import { a9 } from '../../lib/header-bidding/a9/a9';
 import { isSecureContactPage } from '../../lib/is-secure-contact';
@@ -37,7 +40,7 @@ jest.mock('lib/page-targeting');
 
 jest.mock('lib/header-bidding/prebid/bidders/config');
 
-jest.mock('@guardian/libs');
+jest.mock('@guardian/consent-manager');
 
 const originalUA = navigator.userAgent;
 const fakeUserAgent = (userAgent?: string) => {

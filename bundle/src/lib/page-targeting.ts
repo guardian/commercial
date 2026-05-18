@@ -3,7 +3,7 @@ import type {
 	UserId,
 } from '@guardian/commercial-core/targeting/build-page-targeting';
 import { buildPageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState } from '@guardian/consent-manager';
 import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { getParticipations } from '../ab-testing';

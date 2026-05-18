@@ -2,8 +2,9 @@ import type {
 	ConsentState,
 	TCFv2ConsentState,
 	USNATConsentState,
-} from '@guardian/libs';
-import { getConsentFor, loadScript, onConsent } from '@guardian/libs';
+} from '@guardian/consent-manager';
+import { getConsentFor, onConsent } from '@guardian/consent-manager';
+import { loadScript } from '@guardian/libs';
 import { _ } from './comscore';
 
 const { setupComscore } = _;
@@ -82,6 +83,9 @@ const AusWithConsent = {
 jest.mock('@guardian/libs', () => ({
 	loadScript: jest.fn(() => Promise.resolve()),
 	log: jest.fn(),
+}));
+
+jest.mock('@guardian/consent-manager', () => ({
 	onConsent: jest.fn(),
 	getConsentFor: jest.fn(),
 }));

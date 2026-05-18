@@ -5,7 +5,9 @@ import {
 	isInUsa,
 	isInUsOrCa,
 } from '@guardian/commercial-core/geo/geo-utils';
-import { type ConsentState, getConsentFor, isString } from '@guardian/libs';
+import { type ConsentState } from '@guardian/consent-manager';
+import { getConsentFor } from '@guardian/consent-manager';
+import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import type { Size } from 'prebid.js/dist/src/types/common';
 import {
