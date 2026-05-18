@@ -35,7 +35,7 @@ const shouldEnableAnalytics = (): boolean => {
 	);
 };
 
-export const getAnalyticsConfig = (): AnalyticsConfig<'gu'> | undefined => {
+export const getGUAnalyticsConfig = (): AnalyticsConfig<'gu'> | undefined => {
 	const pageViewId = window.guardian.ophan?.pageViewId;
 	if (shouldEnableAnalytics() && pageViewId) {
 		return {
