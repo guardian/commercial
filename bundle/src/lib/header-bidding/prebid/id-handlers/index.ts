@@ -1,7 +1,5 @@
-import { getLocale } from '@guardian/commercial-core/geo/get-locale';
 import { type ConsentState, getConsentFor } from '@guardian/libs';
 import type { UserSyncConfig } from 'prebid.js/dist/src/userSync';
-import { isUserInTestGroup } from '../../../../ab-testing';
 import { getEmail } from '../../../identity/api';
 import { isSwitchedOn } from '../../utils';
 import { getUserIdForId5 } from './id5';
@@ -36,40 +34,10 @@ export const getUserSyncSettings = async (
 		fetchId5UserId,
 		fetchLiveRampUserId,
 		fetchTradeDeskUserId,
+		fetchIntentIQUserId,
 	]);
 
-	const isUserInTestGroupIntentIQ = isUserInTestGroup(
-		'commercial-user-module-intentIq',
-		'variant',
-	);
-
-	//IntentIQ do not support every country, it's recommended if we cap them to the countries listed
-	const intentIQRegions = [
-		'US',
-		'CA',
-		'AU',
-		'NZ',
-		'JP',
-		'SG',
-		'TH',
-		'PH',
-		'MY',
-		'KR',
-		'MX',
-		'BR',
-		'GB',
-		'IE',
-		'ES',
-		'FR',
-		'DE',
-	];
-	const isUserInIntentIQRegion = intentIQRegions.includes(getLocale());
-	const intentIqModule =
-		isUserInTestGroupIntentIQ &&
-		isUserInIntentIQRegion &&
-		fetchIntentIQUserId;
-
-	const userIds = [...userIdModules, intentIqModule]
+	const userIds = [...userIdModules]
 		// typescript doesn't like flatMap here
 		.map((idModule) => {
 			if (Array.isArray(idModule)) {
