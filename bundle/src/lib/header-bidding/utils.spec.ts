@@ -1,5 +1,5 @@
-import { getLocale as getLocale_ } from '@guardian/commercial-core/geo/get-locale';
 import { _ } from '@guardian/commercial-core/geo/geo-utils';
+import { getLocale as getLocale_ } from '@guardian/commercial-core/geo/get-locale';
 import {
 	type ConsentState,
 	getConsentFor as getConsentFor_,
