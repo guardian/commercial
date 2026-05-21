@@ -22,7 +22,6 @@ const editionToGeolocationMap: Record<Edition, CountryCode> = {
 const editionToGeolocation = (editionKey: Edition): CountryCode =>
 	editionToGeolocationMap[editionKey];
 
-// just used for tests
 export const __resetCachedValue = (): void => (locale = undefined);
 
 /**

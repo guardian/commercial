@@ -1,22 +1,14 @@
-import type { CountryCode } from '@guardian/libs';
-import { getCountryCode } from './country-code';
+import { __resetCachedValue, getLocale } from './get-locale';
 
-// cache the users location so we only have to look it up once
-let geo: CountryCode | undefined;
-const currentGeoLocation = (): CountryCode => {
-	geo = geo ?? getCountryCode();
-	return geo;
-};
+export const isInUk = (): boolean => getLocale() === 'GB';
 
-export const isInUk = (): boolean => currentGeoLocation() === 'GB';
+export const isInUsa = (): boolean => getLocale() === 'US';
 
-export const isInUsa = (): boolean => currentGeoLocation() === 'US';
+export const isInCanada = (): boolean => getLocale() === 'CA';
 
-export const isInCanada = (): boolean => currentGeoLocation() === 'CA';
+export const isInAustralia = (): boolean => getLocale() === 'AU';
 
-export const isInAustralia = (): boolean => currentGeoLocation() === 'AU';
-
-export const isInNewZealand = (): boolean => currentGeoLocation() === 'NZ';
+export const isInNewZealand = (): boolean => getLocale() === 'NZ';
 
 export const isInUsOrCa = (): boolean => isInUsa() || isInCanada();
 
@@ -27,6 +19,6 @@ export const isInRow = (): boolean =>
 
 export const _ = {
 	resetModule: (): void => {
-		geo = undefined;
+		__resetCachedValue();
 	},
 };

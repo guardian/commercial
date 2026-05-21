@@ -1,5 +1,6 @@
+import { getLocale } from '@guardian/commercial-core/geo/get-locale';
 import { getConsentFor, onConsent } from '@guardian/consent-manager';
-import { getLocale, loadScript, log } from '@guardian/libs';
+import { loadScript, log } from '@guardian/libs';
 import { ipsosMoriStub } from '../../lib/__vendor/ipsos-mori';
 
 const loadIpsosScript = (locale: 'au' | 'uk') => {
@@ -23,7 +24,7 @@ const loadIpsosScript = (locale: 'au' | 'uk') => {
  * @returns Promise
  */
 export const initIpsosMori = async (): Promise<void> => {
-	const locale = await getLocale();
+	const locale = getLocale();
 	const consentState = await onConsent();
 	const isAU = locale === 'AU' && !!consentState.aus;
 	const isUK = locale === 'GB' && !!consentState.tcfv2;

@@ -1,5 +1,5 @@
-import { getCountryCode as getCountryCode_ } from '@guardian/commercial-core/geo/country-code';
 import { _ } from '@guardian/commercial-core/geo/geo-utils';
+import { getLocale as getLocale_ } from '@guardian/commercial-core/geo/get-locale';
 import {
 	type ConsentState,
 	getConsentFor as getConsentFor_,
@@ -21,9 +21,7 @@ import {
 	stripTrailingNumbersAbove1,
 } from './utils';
 
-const getCountryCode = getCountryCode_ as jest.MockedFunction<
-	typeof getCountryCode_
->;
+const getLocale = getLocale_ as jest.MockedFunction<typeof getLocale_>;
 const getCurrentTweakpoint = getCurrentTweakpoint_ as jest.MockedFunction<
 	typeof getCurrentTweakpoint_
 >;
@@ -60,8 +58,9 @@ jest.mock('@guardian/consent-manager', () => {
 
 jest.mock('lodash-es/once', () => (fn: (...args: unknown[]) => unknown) => fn);
 
-jest.mock('@guardian/commercial-core//geo/country-code', () => ({
-	getCountryCode: jest.fn(() => 'GB'),
+jest.mock('@guardian/commercial-core/geo/get-locale', () => ({
+	getLocale: jest.fn(() => 'GB'),
+	__resetCachedValue: jest.fn(),
 }));
 jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentTweakpoint: jest.fn(() => 'mobile'),
@@ -177,7 +176,7 @@ describe('Utils', () => {
 				(region, switchState, expected) => {
 					window.guardian.config.switches.prebidAppnexusUkRow =
 						switchState === 'on';
-					getCountryCode.mockReturnValue(region);
+					getLocale.mockReturnValue(region);
 					getConsentFor.mockReturnValue(true);
 					expect(shouldInclude('and')).toBe(expected);
 				},
@@ -185,7 +184,7 @@ describe('Utils', () => {
 
 			test('If consent denied should not load in GB region', () => {
 				window.guardian.config.switches.prebidAppnexusUkRow = true;
-				getCountryCode.mockReturnValue('GB');
+				getLocale.mockReturnValue('GB');
 				getConsentFor.mockReturnValue(false);
 				expect(shouldInclude('and')).toBe(false);
 			});
@@ -193,13 +192,13 @@ describe('Utils', () => {
 
 		describe('shouldIncludeOpenX', () => {
 			test('should return true if geolocation is GB', () => {
-				getCountryCode.mockReturnValueOnce('GB');
+				getLocale.mockReturnValueOnce('GB');
 				getConsentFor.mockReturnValue(true);
 				expect(shouldInclude('oxd')).toBe(true);
 			});
 
 			test('should return false if consent not given', () => {
-				getCountryCode.mockReturnValueOnce('GB');
+				getLocale.mockReturnValueOnce('GB');
 				getConsentFor.mockReturnValue(false);
 				expect(shouldInclude('oxd')).toBe(false);
 			});
@@ -215,7 +214,7 @@ describe('Utils', () => {
 					'IE',
 				];
 				for (const testGeo of testGeos) {
-					getCountryCode.mockReturnValueOnce(testGeo);
+					getLocale.mockReturnValueOnce(testGeo);
 					getConsentFor.mockReturnValue(true);
 					expect(shouldInclude('oxd')).toBe(true);
 				}
@@ -224,7 +223,7 @@ describe('Utils', () => {
 			test('should return false if within US region', () => {
 				const testGeos: CountryCode[] = ['CA', 'US'];
 				for (const testGeo of testGeos) {
-					getCountryCode.mockReturnValue(testGeo);
+					getLocale.mockReturnValue(testGeo);
 					getConsentFor.mockReturnValue(true);
 					expect(shouldInclude('oxd')).toBe(false);
 				}
@@ -233,7 +232,7 @@ describe('Utils', () => {
 			test('should return true if within AU region', () => {
 				const testGeos: CountryCode[] = ['NZ', 'AU'];
 				for (const testGeo of testGeos) {
-					getCountryCode.mockReturnValue(testGeo);
+					getLocale.mockReturnValue(testGeo);
 					getConsentFor.mockReturnValue(true);
 					expect(shouldInclude('oxd')).toBe(true);
 				}
@@ -242,12 +241,12 @@ describe('Utils', () => {
 
 		describe('shouldIncludeTrustX', () => {
 			test('should return true if geolocation is US', () => {
-				getCountryCode.mockReturnValueOnce('US');
+				getLocale.mockReturnValueOnce('US');
 				expect(shouldInclude('trustx')).toBe(true);
 			});
 
 			test('should return true if geolocation is US', () => {
-				getCountryCode.mockReturnValueOnce('US');
+				getLocale.mockReturnValueOnce('US');
 				expect(shouldInclude('trustx')).toBe(true);
 			});
 
@@ -262,7 +261,7 @@ describe('Utils', () => {
 					'AU',
 				];
 				for (const testGeo of testGeos) {
-					getCountryCode.mockReturnValueOnce(testGeo);
+					getLocale.mockReturnValueOnce(testGeo);
 					expect(shouldInclude('trustx')).toBe(false);
 				}
 			});
@@ -271,7 +270,7 @@ describe('Utils', () => {
 		describe('shouldIncludeXaxis', () => {
 			test('should be true if geolocation is GB and opted in AB test variant', () => {
 				window.guardian.config.page.isDev = true;
-				getCountryCode.mockReturnValue('GB');
+				getLocale.mockReturnValue('GB');
 				getConsentFor.mockReturnValue(true);
 				expect(shouldInclude('xhb')).toBe(true);
 			});
@@ -291,7 +290,7 @@ describe('Utils', () => {
 					'NZ',
 				];
 				for (const testGeo of testGeos) {
-					getCountryCode.mockReturnValue(testGeo);
+					getLocale.mockReturnValue(testGeo);
 					getConsentFor.mockReturnValue(true);
 					expect(shouldInclude('xhb')).toBe(false);
 				}
@@ -366,7 +365,7 @@ describe('Utils', () => {
 			`should be $expected if geolocation is $region and content is Article on mobiles`,
 			({ region, expected }) => {
 				window.guardian.config.page.contentType = 'Article';
-				getCountryCode.mockReturnValue(region);
+				getLocale.mockReturnValue(region);
 				matchesBreakpoints.mockReturnValue(true);
 				expect(shouldIncludeMobileSticky()).toBe(expected);
 			},
@@ -376,7 +375,7 @@ describe('Utils', () => {
 			`should be $expected if geolocation is $region and pageId is football/ on mobiles`,
 			({ region, expected }) => {
 				window.guardian.config.page.pageId = 'football/';
-				getCountryCode.mockReturnValue(region);
+				getLocale.mockReturnValue(region);
 				matchesBreakpoints.mockReturnValue(true);
 				expect(shouldIncludeMobileSticky()).toBe(expected);
 			},
@@ -386,7 +385,7 @@ describe('Utils', () => {
 			window.guardian.config.page.contentType = 'Network Front';
 			window.guardian.config.page.pageId = 'lifeandstyle/';
 			matchesBreakpoints.mockReturnValue(true);
-			getCountryCode.mockReturnValue('US');
+			getLocale.mockReturnValue('US');
 			expect(shouldIncludeMobileSticky()).toBe(false);
 		});
 
@@ -394,28 +393,28 @@ describe('Utils', () => {
 			window.guardian.config.page.contentType = 'Article';
 			matchesBreakpoints.mockReturnValue(true);
 			window.guardian.config.page.isHosted = true;
-			getCountryCode.mockReturnValue('US');
+			getLocale.mockReturnValue('US');
 			expect(shouldIncludeMobileSticky()).toBe(false);
 		});
 
 		test('should be false if all conditions true except continent', () => {
 			window.guardian.config.page.contentType = 'Article';
 			matchesBreakpoints.mockReturnValue(true);
-			getCountryCode.mockReturnValue('GB');
+			getLocale.mockReturnValue('GB');
 			expect(shouldIncludeMobileSticky()).toBe(false);
 		});
 
 		test('should be false if all conditions true except mobile', () => {
 			window.guardian.config.page.contentType = 'Article';
 			matchesBreakpoints.mockReturnValue(false);
-			getCountryCode.mockReturnValue('US');
+			getLocale.mockReturnValue('US');
 			expect(shouldIncludeMobileSticky()).toBe(false);
 		});
 
 		test('should be true if test param exists irrespective of other conditions', () => {
 			window.guardian.config.page.contentType = 'Network Front';
 			matchesBreakpoints.mockReturnValue(false);
-			getCountryCode.mockReturnValue('US');
+			getLocale.mockReturnValue('US');
 			window.location.hash = '#mobile-sticky';
 			expect(shouldIncludeMobileSticky()).toBe(true);
 		});
