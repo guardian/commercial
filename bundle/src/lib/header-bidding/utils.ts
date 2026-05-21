@@ -217,6 +217,12 @@ export const shouldIncludeBidder =
 					getConsentFor('xandr', consentState) &&
 					isInUk()
 				);
+			case 'teads':
+				return (
+					isSwitchedOn('prebidTeads') &&
+					getConsentFor('teads', consentState) &&
+					isInUk()
+				);
 		}
 	};
 
