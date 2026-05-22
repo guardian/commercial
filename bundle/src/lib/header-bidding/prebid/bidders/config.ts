@@ -651,4 +651,5 @@ export const _ = {
 	getTrustXAdUnitId,
 	indexExchangeBidders,
 	getOzonePlacementId,
+	getTeadsPlacementId,
 };
