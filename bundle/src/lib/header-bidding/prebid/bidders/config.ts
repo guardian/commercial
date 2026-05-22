@@ -267,10 +267,11 @@ const isCrosswordPage = (pageTargeting: PageTargeting = {}) =>
 	pageTargeting.s === 'crosswords';
 
 const getTeadsPlacementId = (sizes: Size[]): PrebidTeadsParams | undefined => {
+	const breakpoint = getBreakpointKey();
+	const isDesktop = breakpoint === 'D' || breakpoint === 'T';
+
 	if (isInUk()) {
-		console.log(sizes);
-		// return { pageId: 244722, placementId: 7777 };
-		if (getBreakpointKey() === 'D') {
+		if (isDesktop) {
 			if (
 				containsMpu(sizes) ||
 				containsDmpu(sizes) ||
@@ -281,14 +282,14 @@ const getTeadsPlacementId = (sizes: Size[]): PrebidTeadsParams | undefined => {
 				return { pageId: 244722, placementId: 261612 };
 			}
 		}
-		if (getBreakpointKey() === 'M') {
+		if (breakpoint === 'M') {
 			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
 				return { pageId: 244724, placementId: 261614 };
 			}
 		}
 	}
 	if (isInRow()) {
-		if (getBreakpointKey() === 'D') {
+		if (isDesktop) {
 			if (
 				containsMpu(sizes) ||
 				containsDmpu(sizes) ||
@@ -299,7 +300,7 @@ const getTeadsPlacementId = (sizes: Size[]): PrebidTeadsParams | undefined => {
 				return { pageId: 244725, placementId: 261615 };
 			}
 		}
-		if (getBreakpointKey() === 'M') {
+		if (breakpoint === 'M') {
 			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
 				return { pageId: 244726, placementId: 261616 };
 			}
@@ -309,7 +310,7 @@ const getTeadsPlacementId = (sizes: Size[]): PrebidTeadsParams | undefined => {
 		}
 	}
 	if (isInUsa()) {
-		if (getBreakpointKey() === 'D') {
+		if (isDesktop) {
 			if (
 				containsMpu(sizes) ||
 				containsDmpu(sizes) ||
@@ -320,12 +321,12 @@ const getTeadsPlacementId = (sizes: Size[]): PrebidTeadsParams | undefined => {
 				return { pageId: 244728, placementId: 261618 };
 			}
 		}
-		if (getBreakpointKey() === 'M') {
+		if (breakpoint === 'M') {
 			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
-				return { pageId: 244729, placementId: 261619 }
+				return { pageId: 244729, placementId: 261619 };
 			}
 			if (containsMobileSticky(sizes)) {
-				return { pageId: 244730, placementId: 261620 }
+				return { pageId: 244730, placementId: 261620 };
 			}
 		}
 	}
