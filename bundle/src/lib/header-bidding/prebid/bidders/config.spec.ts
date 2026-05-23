@@ -8,6 +8,7 @@ import {
 } from '@guardian/commercial-core/geo/geo-utils';
 import { type ConsentState } from '@guardian/consent-manager';
 import type { Size } from 'prebid.js/dist/src/types/common';
+import { isUserInTestGroup } from '../../../../ab-testing';
 import type { PrebidBidder } from '../../prebid-types';
 import {
 	containsBillboard as containsBillboard_,
@@ -80,6 +81,11 @@ jest.mock('../../utils', () => ({
 	getBreakpointKey: jest.fn(),
 	stripMobileSuffix: jest.fn(),
 }));
+
+jest.mock('../../../../ab-testing', () => ({
+	isUserInTestGroup: jest.fn(),
+}));
+
 const containsBillboard = containsBillboard_ as jest.Mock;
 const containsDmpu = containsDmpu_ as jest.Mock;
 const containsLeaderboard = containsLeaderboard_ as jest.Mock;
@@ -339,6 +345,44 @@ describe('bids', () => {
 		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
 
 		expect(getBidders()).toEqual(['xhb']);
+	});
+	test('should include teadsBidder when user is in the AB Test variant', () => {
+		const mockShouldInclude = jest
+			.fn()
+			.mockReturnValueOnce(false) // ix
+			.mockReturnValueOnce(false) // criteo
+			.mockReturnValueOnce(false) // trustx
+			.mockReturnValueOnce(false) // triplelift
+			.mockReturnValueOnce(false) // and
+			.mockReturnValueOnce(false) // xhb
+			.mockReturnValueOnce(false) // pubmatic
+			.mockReturnValueOnce(false) // ozone
+			.mockReturnValueOnce(false) // oxd
+			.mockReturnValueOnce(false) // kargo
+			.mockReturnValueOnce(true); // teads
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
+
+		expect(getBidders()).toEqual(['teads']);
+	});
+	test('should NOT include teadsBidder when user is NOT in the AB Test variant', () => {
+		const mockShouldInclude = jest
+			.fn()
+			.mockReturnValueOnce(false) // ix
+			.mockReturnValueOnce(false) // criteo
+			.mockReturnValueOnce(false) // trustx
+			.mockReturnValueOnce(false) // triplelift
+			.mockReturnValueOnce(false) // and
+			.mockReturnValueOnce(false) // xhb
+			.mockReturnValueOnce(false) // pubmatic
+			.mockReturnValueOnce(false) // ozone
+			.mockReturnValueOnce(false) // oxd
+			.mockReturnValueOnce(false) // kargo
+			.mockReturnValueOnce(true); // rubicon (teads skipped due to short-circuit)
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
+
+		expect(getBidders()).toEqual(['rubicon']);
 	});
 
 	test('should only include bidder being tested, even when it should not be included', () => {
