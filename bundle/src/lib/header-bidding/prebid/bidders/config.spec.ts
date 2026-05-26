@@ -57,7 +57,7 @@ const {
 	getTrustXAdUnitId,
 	indexExchangeBidders,
 	getOzonePlacementId,
-	getTeadsPlacementId,
+	getTeadsParams,
 } = _;
 
 jest.mock('lib/page-targeting', () => ({
@@ -748,7 +748,7 @@ describe('getXaxisPlacementId', () => {
 	});
 });
 
-describe('getTeadsPlacementId', () => {
+describe('getTeadsParams', () => {
 	afterEach(() => {
 		jest.resetAllMocks();
 	});
@@ -765,7 +765,7 @@ describe('getTeadsPlacementId', () => {
 				isInUk.mockReturnValue(true);
 				getBreakpointKey.mockReturnValue('D');
 				mockFunction.mockReturnValue(true);
-				expect(getTeadsPlacementId([size as Size])).toStrictEqual({
+				expect(getTeadsParams([size as Size])).toStrictEqual({
 					pageId: 244722,
 					placementId: 261612,
 				});
@@ -780,7 +780,7 @@ describe('getTeadsPlacementId', () => {
 				isInUk.mockReturnValue(true);
 				getBreakpointKey.mockReturnValue('M');
 				mockFunction.mockReturnValue(true);
-				expect(getTeadsPlacementId([size as Size])).toStrictEqual({
+				expect(getTeadsParams([size as Size])).toStrictEqual({
 					pageId: 244724,
 					placementId: 261614,
 				});
@@ -800,7 +800,7 @@ describe('getTeadsPlacementId', () => {
 				isInRow.mockReturnValue(true);
 				getBreakpointKey.mockReturnValue('D');
 				mockFucntion.mockReturnValue(true);
-				expect(getTeadsPlacementId([size as Size])).toStrictEqual({
+				expect(getTeadsParams([size as Size])).toStrictEqual({
 					pageId: 244725,
 					placementId: 261615,
 				});
@@ -815,7 +815,7 @@ describe('getTeadsPlacementId', () => {
 				isInRow.mockReturnValue(true);
 				getBreakpointKey.mockReturnValue('M');
 				mockFucntion.mockReturnValue(true);
-				expect(getTeadsPlacementId([size as Size])).toStrictEqual({
+				expect(getTeadsParams([size as Size])).toStrictEqual({
 					pageId: 244726,
 					placementId: 261616,
 				});
@@ -827,7 +827,7 @@ describe('getTeadsPlacementId', () => {
 				isInRow.mockReturnValue(true);
 				getBreakpointKey.mockReturnValue('M');
 				mockFucntion.mockReturnValue(true);
-				expect(getTeadsPlacementId([size as Size])).toStrictEqual({
+				expect(getTeadsParams([size as Size])).toStrictEqual({
 					pageId: 244723,
 					placementId: 261613,
 				});
@@ -847,7 +847,7 @@ describe('getTeadsPlacementId', () => {
 				isInUsa.mockReturnValue(true);
 				getBreakpointKey.mockReturnValue('D');
 				mockFunction.mockReturnValue(true);
-				expect(getTeadsPlacementId([size as Size])).toStrictEqual({
+				expect(getTeadsParams([size as Size])).toStrictEqual({
 					pageId: 244728,
 					placementId: 261618,
 				});
@@ -862,7 +862,7 @@ describe('getTeadsPlacementId', () => {
 				isInUsa.mockReturnValue(true);
 				getBreakpointKey.mockReturnValue('M');
 				mockFunction.mockReturnValue(true);
-				expect(getTeadsPlacementId([size as Size])).toStrictEqual({
+				expect(getTeadsParams([size as Size])).toStrictEqual({
 					pageId: 244729,
 					placementId: 261619,
 				});
@@ -874,7 +874,7 @@ describe('getTeadsPlacementId', () => {
 				isInUsa.mockReturnValue(true);
 				getBreakpointKey.mockReturnValue('M');
 				mockFunction.mockReturnValue(true);
-				expect(getTeadsPlacementId([size as Size])).toStrictEqual({
+				expect(getTeadsParams([size as Size])).toStrictEqual({
 					pageId: 244730,
 					placementId: 261620,
 				});

@@ -267,7 +267,7 @@ const openxBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 const isCrosswordPage = (pageTargeting: PageTargeting = {}) =>
 	pageTargeting.s === 'crosswords';
 
-const getTeadsPlacementId = (sizes: Size[]): PrebidTeadsParams | undefined => {
+const getTeadsParams = (sizes: Size[]): PrebidTeadsParams | undefined => {
 	const breakpoint = getBreakpointKey();
 	const isDesktop = breakpoint === 'D' || breakpoint === 'T';
 
@@ -388,7 +388,7 @@ const teadsBidder: PrebidBidder = {
 	name: 'teads',
 	switchName: 'prebidTeads',
 	bidParams: (_slotId: string, sizes: Size[]): PrebidTeadsParams => {
-		const params = getTeadsPlacementId(sizes);
+		const params = getTeadsParams(sizes);
 		return params ?? { pageId: 0, placementId: 0 };
 	},
 };
@@ -657,5 +657,5 @@ export const _ = {
 	getTrustXAdUnitId,
 	indexExchangeBidders,
 	getOzonePlacementId,
-	getTeadsPlacementId,
+	getTeadsParams,
 };

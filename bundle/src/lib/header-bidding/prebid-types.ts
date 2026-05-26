@@ -133,6 +133,7 @@ type PrebidParams =
 	| PrebidTripleLiftParams
 	| PrebidTrustXParams
 	| PrebidXaxisParams
+	| PrebidTeadsParams
 	| PrebidTheTradeDeskParams;
 
 type PrebidBidder = {
