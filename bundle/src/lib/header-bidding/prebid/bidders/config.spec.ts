@@ -378,8 +378,8 @@ describe('bids', () => {
 			.mockReturnValueOnce(false) // ozone
 			.mockReturnValueOnce(false) // oxd
 			.mockReturnValueOnce(false) // kargo
-			.mockReturnValueOnce(true); // rubicon (teads skipped due to short-circuit)
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false);
+			.mockReturnValueOnce(false) // teads
+			.mockReturnValueOnce(true); // rubicon
 		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
 
 		expect(getBidders()).toEqual(['rubicon']);

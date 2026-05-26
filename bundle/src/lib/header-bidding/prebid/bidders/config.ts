@@ -603,10 +603,10 @@ const currentBidders = (
 	gpid: string,
 	consentState: ConsentState,
 ): PrebidBidder[] => {
-	const isInTeadsTest = isUserInTestGroup(
-		'commercial-teads-prebid',
-		'variant',
-	);
+	// const isInTeadsTest = isUserInTestGroup(
+	// 	'commercial-teads-prebid',
+	// 	'variant',
+	// );
 	const shouldInclude = shouldIncludeBidder(consentState);
 
 	const ixBidders = shouldInclude('ix')
@@ -623,7 +623,7 @@ const currentBidders = (
 		[shouldInclude('ozone'), ozoneBidder(pageTargeting)],
 		[shouldInclude('oxd'), openxBidder(pageTargeting)],
 		[shouldInclude('kargo'), kargoBidder],
-		[isInTeadsTest && shouldInclude('teads'), teadsBidder],
+		[shouldInclude('teads'), teadsBidder],
 		[shouldInclude('rubicon'), magniteBidder],
 		[shouldInclude('ttd'), theTradeDeskBidder(gpid)],
 	];

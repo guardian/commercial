@@ -10,6 +10,7 @@ import { getConsentFor } from '@guardian/consent-manager';
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import type { Size } from 'prebid.js/dist/src/types/common';
+import { isUserInTestGroup } from '../../ab-testing';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
@@ -154,6 +155,10 @@ export const isSwitchedOn = (switchName: string): boolean =>
 export const shouldIncludeBidder =
 	(consentState: ConsentState) =>
 	(bidder: BidderCode): boolean => {
+		const isInTeadsTest = isUserInTestGroup(
+			'commercial-teads-prebid',
+			'variant',
+		);
 		switch (bidder) {
 			case 'and':
 				return (
@@ -219,6 +224,7 @@ export const shouldIncludeBidder =
 				);
 			case 'teads':
 				return (
+					isInTeadsTest &&
 					isSwitchedOn('prebidTeads') &&
 					getConsentFor('teads', consentState) &&
 					isInUk()
