@@ -437,10 +437,6 @@ describe('Generating Permutive payload utils', () => {
 			window.guardian.config.switches.permutive = true;
 		});
 
-		afterEach(() => {
-			window.guardian.config.switches.permutive = false;
-		});
-
 		it('does not call getEmail when Permutive consent is not granted', async () => {
 			mockOnConsent({ canTarget: false, framework: null });
 			mockGetConsentFor(false);
