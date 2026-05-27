@@ -606,8 +606,8 @@ describe('Prebid.js bidWon Events', () => {
 });
 describe('isInPrebidFloorPriceTest', () => {
 	/* eslint-disable @typescript-eslint/no-unsafe-assignment -- Jest matchers return any */
-	test('when user is in variant test group, pbjs.setConfig to be called with floor price values', async () => {
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
+	test('when user can use price floors and is not in the variant holdback group, pbjs.setConfig is called with floor price values', async () => {
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false);
 
 		const setConfigSpy = jest.spyOn(window.pbjs, 'setConfig');
 		await prebid.initialise(window, mockConsentState);
@@ -626,8 +626,8 @@ describe('isInPrebidFloorPriceTest', () => {
 		);
 	});
 	/* eslint-enable @typescript-eslint/no-unsafe-assignment */
-	test('when user is not in variant test group, pbjs.setConfig to be called without floor price values', async () => {
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false);
+	test('when user is in the variant holdback group, pbjs.setConfig is called without floor price values', async () => {
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
 
 		const setConfigSpy = jest.spyOn(window.pbjs, 'setConfig');
 
