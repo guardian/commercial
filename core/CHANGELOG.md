@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 34.1.0
+
+### Minor Changes
+
+- 46d9b06: Removes getCountryCode function in favour of getLocale from commercial/core
+
 ## 34.0.0
 
 ### Major Changes
