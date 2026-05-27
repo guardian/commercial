@@ -46,8 +46,9 @@ const initialise = async (
 
 	const userSync: UserSyncConfig = await getUserSyncSettings(consentState);
 
-	const isInPrebidFloorPriceTest = isUserInTestGroup(
-		'commercial-prebid-price-floor',
+	// We're holding back 5% of users, who will not get any price floors applied
+	const canUsePriceFloors = !isUserInTestGroup(
+		'commercial-prebid-price-floor-holdback',
 		'variant',
 	);
 
@@ -58,9 +59,8 @@ const initialise = async (
 		bidderTimeout: PREBID_TIMEOUT,
 		/**
 		 * Applying one global floor price of £0.10 for all bids.
-		 * Initially gated behind an AB test.
 		 */
-		...(isInPrebidFloorPriceTest
+		...(canUsePriceFloors
 			? {
 					floors: {
 						enabled: true,
