@@ -1,4 +1,5 @@
 import { hashEmailForClient } from '@guardian/commercial-core/email-hash';
+import { getConsentFor, onConsent } from '@guardian/consent-manager';
 import { log } from '@guardian/libs';
 import { reportError } from '../../lib/error/report-error';
 import { getEmail } from '../../lib/identity/api';
@@ -162,8 +163,6 @@ const runPermutive = async (
 		if (!permutiveGlobal?.addon) {
 			throw new Error('Global Permutive setup error');
 		}
-		// TODO: Consider adding a consent gate here using getConsentFor('permutive', consentState)
-		// to ensure Permutive only runs when the user has granted targeting consent.
 
 		const identities = await generatePermutiveIdentities(pageConfig);
 
@@ -264,12 +263,19 @@ const initPermutiveSegmentation = async () => {
 	await runPermutive(permutiveConfig, window.permutive);
 };
 
-export const initPermutive = () => {
-	if (window.guardian.config.switches.permutive) {
-		void initPermutiveSegmentation();
-	}
-	return Promise.resolve();
-};
+export const initPermutive = () =>
+	onConsent()
+		.then((consentState) => {
+			if (
+				window.guardian.config.switches.permutive &&
+				getConsentFor('permutive', consentState)
+			) {
+				return initPermutiveSegmentation();
+			}
+		})
+		.catch((e) => {
+			log('commercial', '⚠️ Failed to execute Permutive', e);
+		});
 
 export const _ = {
 	isEmpty,

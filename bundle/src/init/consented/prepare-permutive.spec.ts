@@ -1,5 +1,7 @@
+import type { ConsentState } from '@guardian/consent-manager';
+import { getConsentFor, onConsent } from '@guardian/consent-manager';
 import type { Edition } from '../../types/global';
-import { _ } from './prepare-permutive';
+import { _, initPermutive } from './prepare-permutive';
 
 const testPageConfig = {
 	pageId: 'world/2019/nov/29',
@@ -27,6 +29,11 @@ const testOphanConfig = {
 	pageViewId: 'pageViewId',
 	browserId: 'browserId',
 };
+
+jest.mock('@guardian/consent-manager', () => ({
+	getConsentFor: jest.fn().mockReturnValue(true),
+	onConsent: jest.fn(),
+}));
 
 jest.mock('../../lib/identity/api', () => ({
 	getEmail: jest.fn().mockResolvedValue(null),
@@ -417,6 +424,29 @@ describe('Generating Permutive payload utils', () => {
 			await _.runPermutive(validConfigForPayload, mockPermutive);
 			expect(mockPermutive.identify).not.toHaveBeenCalled();
 			expect(logger).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('initPermutive', () => {
+		const mockOnConsent = (consentState: ConsentState) =>
+			(onConsent as jest.Mock).mockResolvedValue(consentState);
+		const mockGetConsentFor = (hasConsent: boolean) =>
+			(getConsentFor as jest.Mock).mockReturnValue(hasConsent);
+
+		beforeEach(() => {
+			window.guardian.config.switches.permutive = true;
+		});
+
+		it('does not call getEmail when Permutive consent is not granted', async () => {
+			mockOnConsent({ canTarget: false, framework: null });
+			mockGetConsentFor(false);
+			const getEmail = jest.requireMock<{ getEmail: jest.Mock }>(
+				'../../lib/identity/api',
+			).getEmail;
+
+			await initPermutive();
+
+			expect(getEmail).not.toHaveBeenCalled();
 		});
 	});
 });
