@@ -49,7 +49,7 @@
 		"@guardian/libs": "32.0.0",
 		"@guardian/ophan-tracker-js": "2.8.0",
 		"@guardian/source": "12.2.1",
-		"@playwright/test": "1.59.1",
+		"@playwright/test": "1.60.0",
 		"@types/google-publisher-tag": "1.20260420.0",
 		"@types/jest": "30.0.0",
 		"@types/lodash-es": "4.17.12",
