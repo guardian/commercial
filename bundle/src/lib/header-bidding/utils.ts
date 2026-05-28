@@ -1,6 +1,7 @@
 import {
 	isInAuOrNz,
 	isInCanada,
+	isInRow,
 	isInUk,
 	isInUsa,
 	isInUsOrCa,
@@ -226,7 +227,8 @@ export const shouldIncludeBidder =
 				return (
 					isInTeadsTest &&
 					isSwitchedOn('prebidTeads') &&
-					getConsentFor('teads', consentState)
+					getConsentFor('teads', consentState) &&
+					(isInUk() || isInUsa() || isInRow())
 				);
 		}
 	};
