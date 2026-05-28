@@ -226,8 +226,7 @@ export const shouldIncludeBidder =
 				return (
 					isInTeadsTest &&
 					isSwitchedOn('prebidTeads') &&
-					getConsentFor('teads', consentState) &&
-					isInUk()
+					getConsentFor('teads', consentState)
 				);
 		}
 	};
