@@ -5,6 +5,7 @@ import {
 	getConsentFor as getConsentFor_,
 } from '@guardian/consent-manager';
 import type { CountryCode } from '@guardian/libs';
+import { isUserInTestGroup } from '../../ab-testing';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
@@ -65,6 +66,10 @@ jest.mock('@guardian/commercial-core/geo/get-locale', () => ({
 jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentTweakpoint: jest.fn(() => 'mobile'),
 	matchesBreakpoints: jest.fn(),
+}));
+
+jest.mock('../../ab-testing', () => ({
+	isUserInTestGroup: jest.fn(),
 }));
 
 const resetConfig = () => {
@@ -294,6 +299,61 @@ describe('Utils', () => {
 					getConsentFor.mockReturnValue(true);
 					expect(shouldInclude('xhb')).toBe(false);
 				}
+			});
+		});
+		describe('shouldIncludeTeads', () => {
+			test('should be true if geolocation is GB, in AB test variant, switch on, and consent given', () => {
+				window.guardian.config.switches.prebidTeads = true;
+				jest.mocked(isUserInTestGroup).mockReturnValue(true);
+				getLocale.mockReturnValue('GB');
+				getConsentFor.mockReturnValue(true);
+				expect(shouldInclude('teads')).toBe(true);
+			});
+
+			test('should be true if geolocation is in USA or RoW', () => {
+				window.guardian.config.switches.prebidTeads = true;
+				jest.mocked(isUserInTestGroup).mockReturnValue(true);
+				const testGeos: CountryCode[] = [
+					'FK',
+					'GI',
+					'GG',
+					'IM',
+					'JE',
+					'SH',
+					'US',
+				];
+				for (const testGeo of testGeos) {
+					getLocale.mockReturnValue(testGeo);
+					getConsentFor.mockReturnValue(true);
+					expect(shouldInclude('teads')).toBe(true);
+				}
+			});
+
+			test('should be false if user is NOT in AB test variant', () => {
+				window.guardian.config.switches.prebidTeads = true;
+				jest.mocked(isUserInTestGroup).mockReturnValue(false);
+				getLocale.mockReturnValue('GB');
+				getConsentFor.mockReturnValue(true);
+				expect(shouldInclude('teads')).toBe(false);
+			});
+
+			test('should be false if geolocation is in an unsupported region', () => {
+				window.guardian.config.switches.prebidTeads = true;
+				jest.mocked(isUserInTestGroup).mockReturnValue(true);
+				const testGeos: CountryCode[] = ['AU', 'CA', 'NZ'];
+				for (const testGeo of testGeos) {
+					getLocale.mockReturnValue(testGeo);
+					getConsentFor.mockReturnValue(true);
+					expect(shouldInclude('teads')).toBe(false);
+				}
+			});
+
+			test('should be false if consent not given', () => {
+				window.guardian.config.switches.prebidTeads = true;
+				jest.mocked(isUserInTestGroup).mockReturnValue(true);
+				getLocale.mockReturnValue('GB');
+				getConsentFor.mockReturnValue(false);
+				expect(shouldInclude('teads')).toBe(false);
 			});
 		});
 	});

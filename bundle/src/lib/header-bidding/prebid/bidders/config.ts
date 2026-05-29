@@ -1,6 +1,7 @@
 import {
 	isInAuOrNz,
 	isInRow,
+	isInUk,
 	isInUsa,
 	isInUsOrCa,
 } from '@guardian/commercial-core/geo/geo-utils';
@@ -23,6 +24,7 @@ import type {
 	PrebidOpenXParams,
 	PrebidOzoneParams,
 	PrebidPubmaticParams,
+	PrebidTeadsParams,
 	PrebidTheTradeDeskParams,
 	PrebidTripleLiftParams,
 	PrebidTrustXParams,
@@ -37,6 +39,8 @@ import {
 	containsMobileSticky,
 	containsMpu,
 	containsMpuOrDmpu,
+	containsPortraitInterstitial,
+	containsWS,
 	getBreakpointKey,
 	shouldIncludeBidder,
 	stripDfpAdPrefixFrom,
@@ -262,6 +266,73 @@ const openxBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 const isCrosswordPage = (pageTargeting: PageTargeting = {}) =>
 	pageTargeting.s === 'crosswords';
 
+const getTeadsParams = (sizes: Size[]): PrebidTeadsParams | undefined => {
+	const breakpoint = getBreakpointKey();
+	const isDesktop = breakpoint === 'D' || breakpoint === 'T';
+
+	if (isInUk()) {
+		if (isDesktop) {
+			if (
+				containsMpu(sizes) ||
+				containsDmpu(sizes) ||
+				containsWS(sizes) ||
+				containsLeaderboard(sizes) ||
+				containsBillboard(sizes)
+			) {
+				return { pageId: 244722, placementId: 261612 };
+			}
+		}
+		if (breakpoint === 'M') {
+			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+				return { pageId: 244724, placementId: 261614 };
+			}
+		}
+	}
+	if (isInRow()) {
+		if (isDesktop) {
+			if (
+				containsMpu(sizes) ||
+				containsDmpu(sizes) ||
+				containsWS(sizes) ||
+				containsLeaderboard(sizes) ||
+				containsBillboard(sizes)
+			) {
+				return { pageId: 244725, placementId: 261615 };
+			}
+		}
+		if (breakpoint === 'M') {
+			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+				return { pageId: 244726, placementId: 261616 };
+			}
+			if (containsMobileSticky(sizes)) {
+				return { pageId: 244723, placementId: 261613 };
+			}
+		}
+	}
+	if (isInUsa()) {
+		if (isDesktop) {
+			if (
+				containsMpu(sizes) ||
+				containsDmpu(sizes) ||
+				containsWS(sizes) ||
+				containsLeaderboard(sizes) ||
+				containsBillboard(sizes)
+			) {
+				return { pageId: 244728, placementId: 261618 };
+			}
+		}
+		if (breakpoint === 'M') {
+			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+				return { pageId: 244729, placementId: 261619 };
+			}
+			if (containsMobileSticky(sizes)) {
+				return { pageId: 244730, placementId: 261620 };
+			}
+		}
+	}
+
+	return undefined;
+};
 const getOzonePlacementId = (
 	sizes: Size[],
 	slotId?: string,
@@ -310,6 +381,15 @@ const getOzonePlacementId = (
 	}
 
 	return '0420420500';
+};
+
+const teadsBidder: PrebidBidder = {
+	name: 'teads',
+	switchName: 'prebidTeads',
+	bidParams: (_slotId: string, sizes: Size[]): PrebidTeadsParams => {
+		const params = getTeadsParams(sizes);
+		return params ?? { pageId: 0, placementId: 0 };
+	},
 };
 
 const ozoneBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
@@ -538,6 +618,7 @@ const currentBidders = (
 		[shouldInclude('ozone'), ozoneBidder(pageTargeting)],
 		[shouldInclude('oxd'), openxBidder(pageTargeting)],
 		[shouldInclude('kargo'), kargoBidder],
+		[shouldInclude('teads'), teadsBidder],
 		[shouldInclude('rubicon'), magniteBidder],
 		[shouldInclude('ttd'), theTradeDeskBidder(gpid)],
 	];
@@ -571,4 +652,5 @@ export const _ = {
 	getTrustXAdUnitId,
 	indexExchangeBidders,
 	getOzonePlacementId,
+	getTeadsParams,
 };

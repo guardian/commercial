@@ -8,6 +8,7 @@ import {
 } from '@guardian/commercial-core/geo/geo-utils';
 import { type ConsentState } from '@guardian/consent-manager';
 import type { Size } from 'prebid.js/dist/src/types/common';
+import { isUserInTestGroup } from '../../../../ab-testing';
 import type { PrebidBidder } from '../../prebid-types';
 import {
 	containsBillboard as containsBillboard_,
@@ -17,6 +18,8 @@ import {
 	containsMobileSticky as containsMobileSticky_,
 	containsMpu as containsMpu_,
 	containsMpuOrDmpu as containsMpuOrDmpu_,
+	containsPortraitInterstitial as containsPortraitInterstitial_,
+	containsWS as containsWS_,
 	getBreakpointKey as getBreakpointKey_,
 	shouldIncludeBidder,
 	stripMobileSuffix as stripMobileSuffix_,
@@ -54,6 +57,7 @@ const {
 	getTrustXAdUnitId,
 	indexExchangeBidders,
 	getOzonePlacementId,
+	getTeadsParams,
 } = _;
 
 jest.mock('lib/page-targeting', () => ({
@@ -72,9 +76,16 @@ jest.mock('../../utils', () => ({
 	containsMobileSticky: jest.fn(),
 	containsMpu: jest.fn(),
 	containsMpuOrDmpu: jest.fn(),
+	containsPortraitInterstitial: jest.fn(),
+	containsWS: jest.fn(),
 	getBreakpointKey: jest.fn(),
 	stripMobileSuffix: jest.fn(),
 }));
+
+jest.mock('../../../../ab-testing', () => ({
+	isUserInTestGroup: jest.fn(),
+}));
+
 const containsBillboard = containsBillboard_ as jest.Mock;
 const containsDmpu = containsDmpu_ as jest.Mock;
 const containsLeaderboard = containsLeaderboard_ as jest.Mock;
@@ -83,6 +94,8 @@ const containsLeaderboardOrBillboard =
 const containsMobileSticky = containsMobileSticky_ as jest.Mock;
 const containsMpu = containsMpu_ as jest.Mock;
 const containsMpuOrDmpu = containsMpuOrDmpu_ as jest.Mock;
+const containsPortraitInterstitial = containsPortraitInterstitial_ as jest.Mock;
+const containsWS = containsWS_ as jest.Mock;
 const stripMobileSuffix = stripMobileSuffix_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
 
@@ -332,6 +345,44 @@ describe('bids', () => {
 		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
 
 		expect(getBidders()).toEqual(['xhb']);
+	});
+	test('should include teadsBidder when user is in the AB Test variant', () => {
+		const mockShouldInclude = jest
+			.fn()
+			.mockReturnValueOnce(false) // ix
+			.mockReturnValueOnce(false) // criteo
+			.mockReturnValueOnce(false) // trustx
+			.mockReturnValueOnce(false) // triplelift
+			.mockReturnValueOnce(false) // and
+			.mockReturnValueOnce(false) // xhb
+			.mockReturnValueOnce(false) // pubmatic
+			.mockReturnValueOnce(false) // ozone
+			.mockReturnValueOnce(false) // oxd
+			.mockReturnValueOnce(false) // kargo
+			.mockReturnValueOnce(true); // teads
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
+
+		expect(getBidders()).toEqual(['teads']);
+	});
+	test('should NOT include teadsBidder when user is NOT in the AB Test variant', () => {
+		const mockShouldInclude = jest
+			.fn()
+			.mockReturnValueOnce(false) // ix
+			.mockReturnValueOnce(false) // criteo
+			.mockReturnValueOnce(false) // trustx
+			.mockReturnValueOnce(false) // triplelift
+			.mockReturnValueOnce(false) // and
+			.mockReturnValueOnce(false) // xhb
+			.mockReturnValueOnce(false) // pubmatic
+			.mockReturnValueOnce(false) // ozone
+			.mockReturnValueOnce(false) // oxd
+			.mockReturnValueOnce(false) // kargo
+			.mockReturnValueOnce(false) // teads
+			.mockReturnValueOnce(true); // rubicon
+		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
+
+		expect(getBidders()).toEqual(['rubicon']);
 	});
 
 	test('should only include bidder being tested, even when it should not be included', () => {
@@ -694,6 +745,141 @@ describe('getXaxisPlacementId', () => {
 		expect(generateTestIds()).toEqual([
 			20943669, 20943669, 20943670, 20943670, 20943670,
 		]);
+	});
+});
+
+describe('getTeadsParams', () => {
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
+	describe('UK Region', () => {
+		test.each([
+			[[300, 250], 'MPU', containsMpu],
+			[[300, 600], 'DMPU', containsDmpu],
+			[[728, 90], 'Leaderboard', containsLeaderboard],
+			[[970, 250], 'Billboard', containsBillboard],
+			[[160, 600], 'WS', containsWS],
+		])(
+			'should return correct placement and page ID for %s in UK when on desktop',
+			(size, label, mockFunction) => {
+				isInUk.mockReturnValue(true);
+				getBreakpointKey.mockReturnValue('D');
+				mockFunction.mockReturnValue(true);
+				expect(getTeadsParams([size as Size])).toStrictEqual({
+					pageId: 244722,
+					placementId: 261612,
+				});
+			},
+		);
+		test.each([
+			[[300, 250], 'MPU', containsMpu],
+			[[320, 480], 'PORTRAIT', containsPortraitInterstitial],
+		])(
+			'should return correct placement and page ID for %s in UK when on mobile',
+			(size, label, mockFunction) => {
+				isInUk.mockReturnValue(true);
+				getBreakpointKey.mockReturnValue('M');
+				mockFunction.mockReturnValue(true);
+				expect(getTeadsParams([size as Size])).toStrictEqual({
+					pageId: 244724,
+					placementId: 261614,
+				});
+			},
+		);
+	});
+	describe('Rest of World Region', () => {
+		test.each([
+			[[300, 250], 'MPU', containsMpu],
+			[[300, 600], 'DMPU', containsDmpu],
+			[[160, 600], 'WS', containsWS],
+			[[728, 90], 'LEADERBOARD', containsLeaderboard],
+			[[970, 250], 'BILLBOARD', containsBillboard],
+		])(
+			'should return correct placement and page ID for %s in RoW when on desktop',
+			(size, label, mockFucntion) => {
+				isInRow.mockReturnValue(true);
+				getBreakpointKey.mockReturnValue('D');
+				mockFucntion.mockReturnValue(true);
+				expect(getTeadsParams([size as Size])).toStrictEqual({
+					pageId: 244725,
+					placementId: 261615,
+				});
+			},
+		);
+		test.each([
+			[[300, 250], 'MPU', containsMpu],
+			[[320, 480], 'PORTRAIT', containsPortraitInterstitial],
+		])(
+			'should return correct placement and page ID for %s in RoW when on mobile',
+			(size, label, mockFucntion) => {
+				isInRow.mockReturnValue(true);
+				getBreakpointKey.mockReturnValue('M');
+				mockFucntion.mockReturnValue(true);
+				expect(getTeadsParams([size as Size])).toStrictEqual({
+					pageId: 244726,
+					placementId: 261616,
+				});
+			},
+		);
+		test.each([[[320, 50], 'MOBILE STICKY', containsMobileSticky]])(
+			'should return correct placement and page ID for %s in RoW when mobile sticky on mobile',
+			(size, label, mockFucntion) => {
+				isInRow.mockReturnValue(true);
+				getBreakpointKey.mockReturnValue('M');
+				mockFucntion.mockReturnValue(true);
+				expect(getTeadsParams([size as Size])).toStrictEqual({
+					pageId: 244723,
+					placementId: 261613,
+				});
+			},
+		);
+	});
+	describe('US Region', () => {
+		test.each([
+			[[300, 250], 'MPU', containsMpu],
+			[[300, 600], 'DMPU', containsDmpu],
+			[[160, 600], 'WS', containsWS],
+			[[728, 90], 'LEADERBOARD', containsLeaderboard],
+			[[970, 250], 'BILLBOARD', containsBillboard],
+		])(
+			'should return correct placement and page ID for %s in US when on desktop',
+			(size, label, mockFunction) => {
+				isInUsa.mockReturnValue(true);
+				getBreakpointKey.mockReturnValue('D');
+				mockFunction.mockReturnValue(true);
+				expect(getTeadsParams([size as Size])).toStrictEqual({
+					pageId: 244728,
+					placementId: 261618,
+				});
+			},
+		);
+		test.each([
+			[[300, 250], 'MPU', containsMpu],
+			[[320, 480], 'PORTRAIT', containsPortraitInterstitial],
+		])(
+			'should return correct placement and page ID for %s in US when on mobile',
+			(size, label, mockFunction) => {
+				isInUsa.mockReturnValue(true);
+				getBreakpointKey.mockReturnValue('M');
+				mockFunction.mockReturnValue(true);
+				expect(getTeadsParams([size as Size])).toStrictEqual({
+					pageId: 244729,
+					placementId: 261619,
+				});
+			},
+		);
+		test.each([[[320, 50], 'MOBILE STICKY', containsMobileSticky]])(
+			'should return correct placement and page ID for %s in US when mobile sticky on mobile',
+			(size, label, mockFunction) => {
+				isInUsa.mockReturnValue(true);
+				getBreakpointKey.mockReturnValue('M');
+				mockFunction.mockReturnValue(true);
+				expect(getTeadsParams([size as Size])).toStrictEqual({
+					pageId: 244730,
+					placementId: 261620,
+				});
+			},
+		);
 	});
 });
 

@@ -118,7 +118,8 @@ type BidderCode =
 	| 'triplelift'
 	| 'trustx'
 	| 'xhb'
-	| 'ttd';
+	| 'ttd'
+	| 'teads';
 
 type PrebidParams =
 	| PrebidAppNexusParams
@@ -132,6 +133,7 @@ type PrebidParams =
 	| PrebidTripleLiftParams
 	| PrebidTrustXParams
 	| PrebidXaxisParams
+	| PrebidTeadsParams
 	| PrebidTheTradeDeskParams;
 
 type PrebidBidder = {
@@ -144,6 +146,11 @@ type PrebidMediaTypes = {
 	banner: {
 		sizes: Size[];
 	};
+};
+
+type PrebidTeadsParams = {
+	pageId: number;
+	placementId: number;
 };
 
 type SlotFlatMap = (slot: HeaderBiddingSlot) => HeaderBiddingSlot[];
@@ -169,5 +176,6 @@ export type {
 	PrebidParams,
 	PrebidBidder,
 	PrebidMediaTypes,
+	PrebidTeadsParams,
 	SlotFlatMap,
 };
