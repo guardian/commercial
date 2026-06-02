@@ -49,7 +49,7 @@ const initialise = async (
 	// We're holding back 5% of users, who will not get any price floors applied
 	const canUsePriceFloors = !isUserInTestGroup(
 		'commercial-prebid-price-floor-holdback',
-		'variant',
+		'holdback',
 	);
 
 	window.pbjs.setConfig({
