@@ -1,4 +1,4 @@
-import { getLocale } from '@guardian/commercial-core/geo/get-locale';
+import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import type { ConsentState } from '@guardian/consent-manager';
 import { getConsentFor } from '@guardian/consent-manager';
 import type { AnalyticsConfig } from 'prebid.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
@@ -15,12 +15,10 @@ const isUserInTestGroupIntentIQ = isUserInTestGroup(
 	'variant',
 );
 
-const isUserInTestGroupIntentIQForUS = isUserInTestGroup(
+const canRunIntentIqInUS = !isUserInTestGroup(
 	'commercial-user-module-intentIq-us-region',
-	'variant',
+	'holdback',
 );
-
-const isUserInUSRegion = () => getLocale() === 'US';
 
 export const getIntentIQAnalyticsConfig = (
 	consentState: ConsentState,
@@ -31,7 +29,7 @@ export const getIntentIQAnalyticsConfig = (
 	const isNonUSEligible =
 		isUserInTestGroupIntentIQ && isUserInIntentIQRegion();
 
-	const isUSEligible = isUserInTestGroupIntentIQForUS && isUserInUSRegion();
+	const isUSEligible = canRunIntentIqInUS && isInUsa();
 
 	const enabledAnalytics = (isNonUSEligible || isUSEligible) && hasConsent;
 

@@ -1,3 +1,4 @@
+import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { getLocale } from '@guardian/commercial-core/geo/get-locale';
 import { isUserInTestGroup } from '../../../../ab-testing';
 import { getUserIdForIntentIQ } from './intent-iq';
@@ -7,6 +8,9 @@ jest.mock('../../../../ab-testing', () => ({
 }));
 jest.mock('@guardian/commercial-core/geo/get-locale');
 
+jest.mock('@guardian/commercial-core/geo/geo-utils', () => ({
+	isInUsa: jest.fn(),
+}));
 // @ts-expect-error -- mock global googletag
 global.googletag = {};
 
@@ -102,14 +106,14 @@ describe('getUserIdForIntentIQ - when user is NOT in test group', () => {
 	});
 });
 
-describe('getUserIdForIntentIQ - when user is in US region test group', () => {
+describe('getUserIdForIntentIQ - when US user not in holdback', () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
 	});
-	test('when locale is US and US experiment is variant', async () => {
+	test('when locale is US and US experiment is holdback', async () => {
 		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false); // isUserInTestGroupIntentIQ
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true); // isUserInTestGroupIntentIQForUS
-		jest.mocked(getLocale).mockReturnValue('US');
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false); // canRunIntentIqInUS
+		jest.mocked(isInUsa).mockReturnValue(true);
 
 		const result = await getUserIdForIntentIQ();
 
@@ -127,10 +131,10 @@ describe('getUserIdForIntentIQ - when user is in US region test group', () => {
 			},
 		});
 	});
-	test('when locale is US and both experiments are variant', async () => {
+	test('when locale is US and user is in first experiment and not in holdback', async () => {
 		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true); // isUserInTestGroupIntentIQ
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true); // isUserInTestGroupIntentIQForUS
-		jest.mocked(getLocale).mockReturnValue('US');
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false); // canRunIntentIqInUS
+		jest.mocked(isInUsa).mockReturnValue(true);
 
 		const result = await getUserIdForIntentIQ();
 
@@ -149,23 +153,23 @@ describe('getUserIdForIntentIQ - when user is in US region test group', () => {
 		});
 	});
 });
-describe('getUserIdForIntentIQ - when user is not in US region test group', () => {
+describe('getUserIdForIntentIQ - when user is in US and in test holdback group', () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
 	});
-	test('when locale is US and US experiment is control', async () => {
+	test('when locale is US and US experiment is in holdback', async () => {
 		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false); // isUserInTestGroupIntentIQ
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false); // isUserInTestGroupIntentIQForUS
-		jest.mocked(getLocale).mockReturnValueOnce('US');
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true); // canRunIntentIqInUS
+		jest.mocked(isInUsa).mockReturnValueOnce(true);
 
 		const result = await getUserIdForIntentIQ();
 
 		expect(result).toEqual(undefined);
 	});
-	test('when locale is US and only global experiment is variant', async () => {
+	test('when locale is US and only global experiment is variant and also in holdback', async () => {
 		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true); // isUserInTestGroupIntentIQ
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false); // isUserInTestGroupIntentIQForUS
-		jest.mocked(getLocale).mockReturnValueOnce('US');
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true); // canRunIntentIqInUS
+		jest.mocked(isInUsa).mockReturnValueOnce(true);
 
 		const result = await getUserIdForIntentIQ();
 
