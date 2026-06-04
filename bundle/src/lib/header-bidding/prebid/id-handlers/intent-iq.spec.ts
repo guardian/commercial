@@ -101,3 +101,74 @@ describe('getUserIdForIntentIQ - when user is NOT in test group', () => {
 		expect(result).toEqual(undefined);
 	});
 });
+
+describe('getUserIdForIntentIQ - when user is in US region test group', () => {
+	beforeEach(() => {
+		jest.resetAllMocks();
+	});
+	test('when locale is US and US experiment is variant', async () => {
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false); // isUserInTestGroupIntentIQ
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true); // isUserInTestGroupIntentIQForUS
+		jest.mocked(getLocale).mockReturnValue('US');
+
+		const result = await getUserIdForIntentIQ();
+
+		expect(result).toEqual({
+			name: 'intentIqId',
+			params: {
+				partner: 377078111,
+				gamObjectReference: {},
+			},
+			storage: {
+				type: 'html5',
+				name: 'intentIqId',
+				expires: 0,
+				refreshInSeconds: 0,
+			},
+		});
+	});
+	test('when locale is US and both experiments are variant', async () => {
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true); // isUserInTestGroupIntentIQ
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true); // isUserInTestGroupIntentIQForUS
+		jest.mocked(getLocale).mockReturnValue('US');
+
+		const result = await getUserIdForIntentIQ();
+
+		expect(result).toEqual({
+			name: 'intentIqId',
+			params: {
+				partner: 377078111,
+				gamObjectReference: {},
+			},
+			storage: {
+				type: 'html5',
+				name: 'intentIqId',
+				expires: 0,
+				refreshInSeconds: 0,
+			},
+		});
+	});
+});
+describe('getUserIdForIntentIQ - when user is not in US region test group', () => {
+	beforeEach(() => {
+		jest.resetAllMocks();
+	});
+	test('when locale is US and US experiment is control', async () => {
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false); // isUserInTestGroupIntentIQ
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false); // isUserInTestGroupIntentIQForUS
+		jest.mocked(getLocale).mockReturnValueOnce('US');
+
+		const result = await getUserIdForIntentIQ();
+
+		expect(result).toEqual(undefined);
+	});
+	test('when locale is US and only global experiment is variant', async () => {
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true); // isUserInTestGroupIntentIQ
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false); // isUserInTestGroupIntentIQForUS
+		jest.mocked(getLocale).mockReturnValueOnce('US');
+
+		const result = await getUserIdForIntentIQ();
+
+		expect(result).toEqual(undefined);
+	});
+});
