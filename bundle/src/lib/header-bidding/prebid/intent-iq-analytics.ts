@@ -10,7 +10,7 @@ import {
 	NON_EU_PARTNER_ID,
 } from './id-handlers/intent-iq';
 
-const isUserInTestGroupIntentIQ = isUserInTestGroup(
+const canRunIntentIqInAllowedRegions = isUserInTestGroup(
 	'commercial-user-module-intentIq',
 	'variant',
 );
@@ -27,7 +27,7 @@ export const getIntentIQAnalyticsConfig = (
 	const hasConsent = getConsentFor('intentIQ', consentState);
 
 	const isNonUSEligible =
-		isUserInTestGroupIntentIQ && isUserInIntentIQRegion();
+		canRunIntentIqInAllowedRegions && isUserInIntentIQRegion();
 
 	const isUSEligible = canRunIntentIqInUS && isInUsa();
 
