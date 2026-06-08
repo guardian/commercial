@@ -16,7 +16,7 @@ const canRunIntentIqInAllowedRegions = isUserInTestGroup(
 );
 
 const canRunIntentIqInUS = !isUserInTestGroup(
-	'commercial-user-module-intentIq-us-region',
+	'commercial-user-module-intentIq-us',
 	'holdback',
 );
 

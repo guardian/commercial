@@ -40,7 +40,7 @@ const getUserIdForIntentIQ = async (): Promise<
 	 * Released to all audience apart from holdback group in the US
 	 */
 	const canRunIntentIqInUS = !isUserInTestGroup(
-		'commercial-user-module-intentIq-us-region',
+		'commercial-user-module-intentIq-us',
 		'holdback',
 	);
 	const isEU = isUserInAllowedEURegion();
