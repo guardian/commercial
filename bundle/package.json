@@ -47,7 +47,7 @@
 		"@guardian/identity-auth": "16.0.0",
 		"@guardian/identity-auth-frontend": "18.0.0",
 		"@guardian/libs": "32.0.0",
-		"@guardian/ophan-tracker-js": "2.8.0",
+		"@guardian/ophan-tracker-js": "3.0.0",
 		"@guardian/source": "12.2.1",
 		"@playwright/test": "1.60.0",
 		"@types/google-publisher-tag": "1.20260420.0",
