@@ -109,3 +109,4 @@ export const getUserIdForLiveRamp = async (
 };
 
 export type { LiverampUserIdConfig };
+export { ATS_PLACEMENT_ID };
