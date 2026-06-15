@@ -50,6 +50,15 @@ const isValidPageForMobileSticky = (): boolean => {
 	);
 };
 
+const isLiveBlogPageInUs = (): boolean => {
+	const { contentType } = window.guardian.config.page;
+	return contentType === 'LiveBlog' && isInUsa();
+};
+
+// Use a holdback AB test: users in holdback do not get mobile-sticky on eligible US LiveBlog pages.
+const isMobileStickyLiveblogUsEnabled = (): boolean =>
+	!isUserInTestGroup('commercial-mobile-sticky-liveblog-us', 'holdback');
+
 /**
  * Cleans an object for targetting. Removes empty strings and other falsy values.
  * @param o object with falsy values
@@ -247,7 +256,8 @@ export const shouldIncludeMobileSticky = once(
 			max: 'mobileLandscape',
 		}) &&
 			!isInUk() &&
-			isValidPageForMobileSticky() &&
+			(isValidPageForMobileSticky() ||
+				(isMobileStickyLiveblogUsEnabled() && isLiveBlogPageInUs())) &&
 			!window.guardian.config.page.isHosted),
 );
 
