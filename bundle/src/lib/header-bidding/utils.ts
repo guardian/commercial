@@ -248,6 +248,8 @@ export const shouldIncludeMobileSticky = once(
 		}) &&
 			!isInUk() &&
 			(isValidPageForMobileSticky() ||
+				// We intentionally use variant as the holdback arm for this test.
+				// Only users not in variant are eligible for this LiveBlog US mobile-sticky path.
 				(!isUserInTestGroup(
 					'commercial-mobile-sticky-liveblog-us',
 					'variant',
