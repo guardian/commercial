@@ -27,6 +27,7 @@ import 'prebid.js/modules/uid2IdSystem';
 import 'prebid.js/modules/userId';
 import 'prebid.js/modules/intentIqIdSystem';
 import 'prebid.js/modules/intentIqAnalyticsAdapter';
+import 'prebid.js/modules/atsAnalyticsAdapter';
 
 // Real time data
 import 'prebid.js/modules/rtdModule';

@@ -33,6 +33,7 @@ import { consentManagement } from './consent-management';
 import { configurePermutive } from './external/permutive';
 import { getUserSyncSettings } from './id-handlers';
 import { getIntentIQAnalyticsConfig } from './intent-iq-analytics';
+import { getLiveRampATSAnalyticsConfig } from './liveramp-ats-analytics';
 import { PrebidAdUnit } from './prebid-ad-unit';
 import { priceGranularity } from './price-config';
 
@@ -133,6 +134,10 @@ const initialise = async (
 	const intentIQAnalytics = getIntentIQAnalyticsConfig(consentState);
 	if (intentIQAnalytics) {
 		analytics.push(intentIQAnalytics);
+	}
+	const liveRampATSAnalytics = getLiveRampATSAnalyticsConfig(consentState);
+	if (liveRampATSAnalytics) {
+		analytics.push(liveRampATSAnalytics);
 	}
 	window.pbjs.enableAnalytics(analytics);
 
