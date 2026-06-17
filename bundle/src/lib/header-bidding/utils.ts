@@ -247,7 +247,15 @@ export const shouldIncludeMobileSticky = once(
 			max: 'mobileLandscape',
 		}) &&
 			!isInUk() &&
-			isValidPageForMobileSticky() &&
+			(isValidPageForMobileSticky() ||
+				// We intentionally use variant as the holdback arm for this test.
+				// Only users not in variant are eligible for this LiveBlog US mobile-sticky path.
+				(!isUserInTestGroup(
+					'commercial-mobile-sticky-liveblog-us',
+					'variant',
+				) &&
+					window.guardian.config.page.contentType === 'LiveBlog' &&
+					isInUsa())) &&
 			!window.guardian.config.page.isHosted),
 );
 

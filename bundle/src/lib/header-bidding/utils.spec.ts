@@ -441,6 +441,22 @@ describe('Utils', () => {
 			},
 		);
 
+		test('should be true for US LiveBlog on mobile when user is not in holdback', () => {
+			window.guardian.config.page.contentType = 'LiveBlog';
+			getLocale.mockReturnValue('US');
+			matchesBreakpoints.mockReturnValue(true);
+			jest.mocked(isUserInTestGroup).mockReturnValue(false);
+			expect(shouldIncludeMobileSticky()).toBe(true);
+		});
+
+		test('should be false for US LiveBlog on mobile when user is in holdback', () => {
+			window.guardian.config.page.contentType = 'LiveBlog';
+			getLocale.mockReturnValue('US');
+			matchesBreakpoints.mockReturnValue(true);
+			jest.mocked(isUserInTestGroup).mockReturnValue(true);
+			expect(shouldIncludeMobileSticky()).toBe(false);
+		});
+
 		test('should be false if all conditions true except pageId or content type ', () => {
 			window.guardian.config.page.contentType = 'Network Front';
 			window.guardian.config.page.pageId = 'lifeandstyle/';
