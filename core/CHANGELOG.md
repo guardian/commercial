@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 34.1.1
+
+### Patch Changes
+
+- 4ae3141: Bump version of @guardian/ophan-tracker-js
+
 ## 34.1.0
 
 ### Minor Changes
