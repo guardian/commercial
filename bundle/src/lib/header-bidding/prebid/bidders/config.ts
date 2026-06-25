@@ -266,11 +266,19 @@ const openxBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 const isCrosswordPage = (pageTargeting: PageTargeting = {}) =>
 	pageTargeting.s === 'crosswords';
 
-const getTeadsParams = (sizes: Size[]): PrebidTeadsParams | undefined => {
+const getTeadsParams = (
+	sizes: Size[],
+	slotId?: string,
+): PrebidTeadsParams | undefined => {
 	const breakpoint = getBreakpointKey();
 	const isDesktop = breakpoint === 'D' || breakpoint === 'T';
 
 	if (isInUk()) {
+		if (isDesktop) {
+			if (slotId === 'dfp-ad--inline1' && containsMpu(sizes)) {
+				return { pageId: 265029, placementId: 248133 };
+			}
+		}
 		if (isDesktop) {
 			if (
 				containsMpu(sizes) ||
@@ -289,6 +297,11 @@ const getTeadsParams = (sizes: Size[]): PrebidTeadsParams | undefined => {
 		}
 	}
 	if (isInRow()) {
+		if (isDesktop) {
+			if (slotId === 'dfp-ad--inline1' && containsMpu(sizes)) {
+				return { pageId: 265030, placementId: 248134 };
+			}
+		}
 		if (isDesktop) {
 			if (
 				containsMpu(sizes) ||
@@ -311,6 +324,11 @@ const getTeadsParams = (sizes: Size[]): PrebidTeadsParams | undefined => {
 	}
 	if (isInUsa()) {
 		if (isDesktop) {
+			if (slotId === 'dfp-ad--inline1' && containsMpu(sizes)) {
+				return { pageId: 248135, placementId: 265031 };
+			}
+		}
+		if (isDesktop) {
 			if (
 				containsMpu(sizes) ||
 				containsDmpu(sizes) ||
@@ -327,6 +345,30 @@ const getTeadsParams = (sizes: Size[]): PrebidTeadsParams | undefined => {
 			}
 			if (containsMobileSticky(sizes)) {
 				return { pageId: 244730, placementId: 261620 };
+			}
+		}
+	}
+	if (isInAuOrNz()) {
+		if (isDesktop) {
+			if (slotId === 'dfp-ad--inline1' && containsMpu(sizes)) {
+				return { pageId: 248136, placementId: 265032 };
+			}
+			if (
+				containsMpu(sizes) ||
+				containsDmpu(sizes) ||
+				containsWS(sizes) ||
+				containsLeaderboard(sizes) ||
+				containsBillboard(sizes)
+			) {
+				return { pageId: 247434, placementId: 264330 };
+			}
+		}
+		if (breakpoint === 'M') {
+			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
+				return { pageId: 247435, placementId: 264331 };
+			}
+			if (containsMobileSticky(sizes)) {
+				return { pageId: 247436, placementId: 264332 };
 			}
 		}
 	}
@@ -387,7 +429,7 @@ const teadsBidder: PrebidBidder = {
 	name: 'teads',
 	switchName: 'prebidTeads',
 	bidParams: (_slotId: string, sizes: Size[]): PrebidTeadsParams => {
-		const params = getTeadsParams(sizes);
+		const params = getTeadsParams(sizes, _slotId);
 		return params ?? { pageId: 0, placementId: 0 };
 	},
 };
