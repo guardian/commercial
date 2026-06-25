@@ -503,6 +503,49 @@ describe('bids', () => {
 			unit: '560429384',
 		});
 	});
+
+	test('should pass inline1 slotId through to Teads params for desktop MPU in UK', () => {
+		const mockShouldInclude = jest.fn().mockReturnValue(true);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
+		isInUk.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('D');
+		containsMpu.mockReturnValue(true);
+
+		const teadsBid = bids(
+			'dfp-ad--inline1',
+			[[300, 250]],
+			mockPageTargeting,
+			'gpid',
+			mockConsentState,
+		).find((bid) => bid.bidder === 'teads');
+
+		expect(teadsBid?.params).toEqual({
+			pageId: 265029,
+			placementId: 248133,
+		});
+	});
+
+	test('should pass inline2 slotId through to Ozone params for mobile MPU in US', () => {
+		const mockShouldInclude = jest.fn().mockReturnValue(true);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
+		isInUsa.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMpu.mockReturnValue(true);
+
+		const ozoneBid = bids(
+			'dfp-ad--inline2',
+			[[300, 250]],
+			mockPageTargeting,
+			'gpid',
+			mockConsentState,
+		).find((bid) => bid.bidder === 'ozone');
+
+		expect(ozoneBid?.params).toMatchObject({
+			publisherId: 'OZONEGMG0001',
+			siteId: '4204204209',
+			placementId: '1500001025',
+		});
+	});
 });
 
 describe('triplelift adapter', () => {
@@ -922,7 +965,7 @@ describe('getTeadsParams', () => {
 			[[728, 90], 'LEADERBOARD', containsLeaderboard],
 			[[970, 250], 'BILLBOARD', containsBillboard],
 		])(
-			'should return correct placement and page ID for %s in US when on desktop',
+			'should return correct placement and page ID for %s in AU/NZ when on desktop',
 			(size, label, mockFunction) => {
 				isInAuOrNz.mockReturnValue(true);
 				getBreakpointKey.mockReturnValue('D');
@@ -937,7 +980,7 @@ describe('getTeadsParams', () => {
 			[[300, 250], 'MPU', containsMpu],
 			[[320, 480], 'PORTRAIT', containsPortraitInterstitial],
 		])(
-			'should return correct placement and page ID for %s in US when on mobile',
+			'should return correct placement and page ID for %s in AU/NZ when on mobile',
 			(size, label, mockFunction) => {
 				isInAuOrNz.mockReturnValue(true);
 				getBreakpointKey.mockReturnValue('M');
@@ -949,7 +992,7 @@ describe('getTeadsParams', () => {
 			},
 		);
 		test.each([[[320, 50], 'MOBILE STICKY', containsMobileSticky]])(
-			'should return correct placement and page ID for %s in US when mobile sticky on mobile',
+			'should return correct placement and page ID for %s in AU/NZ when mobile sticky on mobile',
 			(size, label, mockFunction) => {
 				isInAuOrNz.mockReturnValue(true);
 				getBreakpointKey.mockReturnValue('M');
@@ -960,7 +1003,7 @@ describe('getTeadsParams', () => {
 				});
 			},
 		);
-		test('should return correct pageD and placementID for MPU sized inline1 slots, in RoW when it is on desktop', () => {
+		test('should return correct pageD and placementID for MPU sized inline1 slots, in AU/NZ when it is on desktop', () => {
 			isInAuOrNz.mockReturnValue(true);
 			getBreakpointKey.mockReturnValue('D');
 			containsMpu.mockReturnValue(true);
