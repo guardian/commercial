@@ -829,7 +829,7 @@ describe('getTeadsParams', () => {
 				});
 			},
 		);
-		test('should return correct pageD and placementID for MPU sized inline1 slots, in Uk when it is on desktop', () => {
+		test('should return correct pageId and placementID for MPU sized inline1 slots, in Uk when it is on desktop', () => {
 			isInUk.mockReturnValue(true);
 			getBreakpointKey.mockReturnValue('D');
 			containsMpu.mockReturnValue(true);
@@ -887,7 +887,7 @@ describe('getTeadsParams', () => {
 				});
 			},
 		);
-		test('should return correct pageD and placementID for MPU sized inline1 slots, in RoW when it is on desktop', () => {
+		test('should return correct pageId and placementID for MPU sized inline1 slots, in RoW when it is on desktop', () => {
 			isInRow.mockReturnValue(true);
 			getBreakpointKey.mockReturnValue('D');
 			containsMpu.mockReturnValue(true);
@@ -945,7 +945,7 @@ describe('getTeadsParams', () => {
 				});
 			},
 		);
-		test('should return correct pageD and placementID for MPU sized inline1 slots, in RoW when it is on desktop', () => {
+		test('should return correct pageId and placementID for MPU sized inline1 slots, in US when it is on desktop', () => {
 			isInUsa.mockReturnValue(true);
 			getBreakpointKey.mockReturnValue('D');
 			containsMpu.mockReturnValue(true);
@@ -1003,7 +1003,7 @@ describe('getTeadsParams', () => {
 				});
 			},
 		);
-		test('should return correct pageD and placementID for MPU sized inline1 slots, in AU/NZ when it is on desktop', () => {
+		test('should return correct pageId and placementId for MPU sized inline1 slots, in AU/NZ when it is on desktop', () => {
 			isInAuOrNz.mockReturnValue(true);
 			getBreakpointKey.mockReturnValue('D');
 			containsMpu.mockReturnValue(true);

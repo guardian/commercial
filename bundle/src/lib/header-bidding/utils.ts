@@ -223,7 +223,7 @@ export const shouldIncludeBidder =
 				return (
 					isSwitchedOn('prebidTeads') &&
 					getConsentFor('teads', consentState) &&
-					(isInUk() || isInUsa() || isInRow())
+					(isInUk() || isInUsa() || isInRow() || isInAuOrNz())
 				);
 		}
 	};

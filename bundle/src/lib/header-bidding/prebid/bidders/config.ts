@@ -278,8 +278,6 @@ const getTeadsParams = (
 			if (slotId === 'dfp-ad--inline1' && containsMpu(sizes)) {
 				return { pageId: 265029, placementId: 248133 };
 			}
-		}
-		if (isDesktop) {
 			if (
 				containsMpu(sizes) ||
 				containsDmpu(sizes) ||
@@ -301,8 +299,6 @@ const getTeadsParams = (
 			if (slotId === 'dfp-ad--inline1' && containsMpu(sizes)) {
 				return { pageId: 265030, placementId: 248134 };
 			}
-		}
-		if (isDesktop) {
 			if (
 				containsMpu(sizes) ||
 				containsDmpu(sizes) ||
@@ -327,8 +323,6 @@ const getTeadsParams = (
 			if (slotId === 'dfp-ad--inline1' && containsMpu(sizes)) {
 				return { pageId: 248135, placementId: 265031 };
 			}
-		}
-		if (isDesktop) {
 			if (
 				containsMpu(sizes) ||
 				containsDmpu(sizes) ||

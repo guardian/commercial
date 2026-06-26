@@ -329,7 +329,7 @@ describe('Utils', () => {
 
 			test('should be false if geolocation is in an unsupported region', () => {
 				window.guardian.config.switches.prebidTeads = true;
-				const testGeos: CountryCode[] = ['AU', 'CA', 'NZ'];
+				const testGeos: CountryCode[] = ['CA'];
 				for (const testGeo of testGeos) {
 					getLocale.mockReturnValue(testGeo);
 					getConsentFor.mockReturnValue(true);
