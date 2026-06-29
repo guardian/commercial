@@ -60,6 +60,8 @@ const inlineOpponentSelector = ['inline', 'supporting', 'showcase', 'halfWidth']
 	)
 	.join(',');
 
+const inlineFullWidthSelector = `:scope > [data-spacefinder-role="fullWidth"], [data-spacefinder-role="nested"] > [data-spacefinder-role="fullWidth"],`;
+
 const horizontalRuleSelector =
 	':scope > hr, [data-spacefinder-role="nested"] > hr';
 
@@ -82,6 +84,10 @@ const desktopInline1: SpacefinderRules = {
 		},
 		[inlineOpponentSelector]: {
 			marginBottom: 35,
+			marginTop: 200,
+		},
+		[inlineFullWidthSelector]: {
+			marginBottom: 200,
 			marginTop: 200,
 		},
 		[leftColumnOpponentSelector]: {
