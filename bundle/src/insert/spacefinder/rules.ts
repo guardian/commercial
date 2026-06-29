@@ -60,7 +60,7 @@ const inlineOpponentSelector = ['inline', 'supporting', 'showcase', 'halfWidth']
 	)
 	.join(',');
 
-const inlineFullWidthOpponentSelector = `:scope > [data-spacefinder-role="fullWidth"], [data-spacefinder-role="nested"] > [data-spacefinder-role="fullWidth"],`;
+const inlineFullWidthOpponentSelector = `:scope > [data-spacefinder-role="fullWidth"], [data-spacefinder-role="nested"] > [data-spacefinder-role="fullWidth"]`;
 
 const horizontalRuleSelector =
 	':scope > hr, [data-spacefinder-role="nested"] > hr';
