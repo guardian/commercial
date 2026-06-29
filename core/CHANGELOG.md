@@ -1,5 +1,15 @@
 # @guardian/commercial-core
 
+## 34.2.0
+
+### Minor Changes
+
+- 7ccc3bc: Updates value of exported constant TOP_ABOVE_NAV_HEIGHT
+
+### Patch Changes
+
+- 4ae3141: Bump version of @guardian/ophan-tracker-js
+
 ## 34.1.0
 
 ### Minor Changes
