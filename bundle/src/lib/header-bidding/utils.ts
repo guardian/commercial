@@ -156,10 +156,6 @@ export const isSwitchedOn = (switchName: string): boolean =>
 export const shouldIncludeBidder =
 	(consentState: ConsentState) =>
 	(bidder: BidderCode): boolean => {
-		const isInTeadsTest = isUserInTestGroup(
-			'commercial-teads-prebid',
-			'variant',
-		);
 		switch (bidder) {
 			case 'and':
 				return (
@@ -225,10 +221,9 @@ export const shouldIncludeBidder =
 				);
 			case 'teads':
 				return (
-					isInTeadsTest &&
 					isSwitchedOn('prebidTeads') &&
 					getConsentFor('teads', consentState) &&
-					(isInUk() || isInUsa() || isInRow())
+					(isInUk() || isInUsa() || isInRow() || isInAuOrNz())
 				);
 		}
 	};
