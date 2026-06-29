@@ -209,6 +209,10 @@ const mobileOpponentSelectorRules: OpponentSelectorRules = {
 		// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
 		bypassMinTop: 'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 	},
+	[inlineFullWidthOpponentSelector]: {
+		marginBottom: 200,
+		marginTop: 200,
+	},
 	[rightColumnOpponentSelector]: {
 		marginBottom: 35,
 		marginTop: 200,
