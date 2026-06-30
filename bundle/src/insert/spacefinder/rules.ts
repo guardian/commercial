@@ -94,7 +94,7 @@ const desktopInline1: SpacefinderRules = {
 						marginBottom: 200,
 						marginTop: 200,
 					},
-			}),
+				}),
 		[leftColumnOpponentSelector]: {
 			marginBottom: 50,
 			marginTop: 100,
