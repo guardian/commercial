@@ -1,10 +1,7 @@
-import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { getLocale } from '@guardian/commercial-core/geo/get-locale';
 import type { UserIdConfig } from 'prebid.js/dist/modules/userId/spec';
-import { isUserInTestGroup } from '../../../../ab-testing';
 
-//IntentIQ does not support every country, it's recommended if we cap them to the countries listed
-// US has been removed from the non-EU region list for testing purposes and is handled separately.
+// IntentIQ does not support every country, so we restrict it to this allowlist.
 const intentIQNonEURegions = [
 	'CA',
 	'AU',
@@ -17,6 +14,7 @@ const intentIQNonEURegions = [
 	'KR',
 	'MX',
 	'BR',
+	'US',
 ];
 
 const intentIQEURegions = ['GB', 'IE', 'ES', 'FR', 'DE', 'GR', 'AT'];
@@ -32,22 +30,8 @@ const NON_EU_PARTNER_ID = 377078111;
 const getUserIdForIntentIQ = async (): Promise<
 	UserIdConfig<'intentIqId'> | undefined
 > => {
-	const isUserInTestGroupIntentIQ = isUserInTestGroup(
-		'commercial-user-module-intentIq',
-		'variant',
-	);
-	/**
-	 * Released to all audience apart from holdback group in the US
-	 */
-	const canRunIntentIqInUS = !isUserInTestGroup(
-		'commercial-user-module-intentIq-us',
-		'holdback',
-	);
 	const isEU = isUserInAllowedEURegion();
-	if (
-		(isUserInTestGroupIntentIQ && isUserInIntentIQRegion()) ||
-		(canRunIntentIqInUS && isInUsa())
-	) {
+	if (isUserInIntentIQRegion()) {
 		return Promise.resolve({
 			name: 'intentIqId',
 			params: {
