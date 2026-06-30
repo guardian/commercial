@@ -3,9 +3,6 @@ import { getUserIdForIntentIQ } from './intent-iq';
 
 jest.mock('@guardian/commercial-core/geo/get-locale');
 
-jest.mock('@guardian/commercial-core/geo/geo-utils', () => ({
-	isInUsa: jest.fn(),
-}));
 // @ts-expect-error -- mock global googletag
 global.googletag = {};
 
