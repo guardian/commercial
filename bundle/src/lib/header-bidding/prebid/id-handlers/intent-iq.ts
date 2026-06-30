@@ -56,7 +56,6 @@ const getUserIdForIntentIQ = async (): Promise<
 
 export {
 	getUserIdForIntentIQ,
-	intentIQEURegions,
 	isUserInAllowedEURegion,
 	isUserInIntentIQRegion,
 	EU_PARTNER_ID,
