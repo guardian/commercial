@@ -503,6 +503,49 @@ describe('bids', () => {
 			unit: '560429384',
 		});
 	});
+
+	test('should pass inline1 slotId through to Teads params for desktop MPU in UK', () => {
+		const mockShouldInclude = jest.fn().mockReturnValue(true);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
+		isInUk.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('D');
+		containsMpu.mockReturnValue(true);
+
+		const teadsBid = bids(
+			'dfp-ad--inline1',
+			[[300, 250]],
+			mockPageTargeting,
+			'gpid',
+			mockConsentState,
+		).find((bid) => bid.bidder === 'teads');
+
+		expect(teadsBid?.params).toEqual({
+			pageId: 265029,
+			placementId: 248133,
+		});
+	});
+
+	test('should pass inline2 slotId through to Ozone params for mobile MPU in US', () => {
+		const mockShouldInclude = jest.fn().mockReturnValue(true);
+		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
+		isInUsa.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMpu.mockReturnValue(true);
+
+		const ozoneBid = bids(
+			'dfp-ad--inline2',
+			[[300, 250]],
+			mockPageTargeting,
+			'gpid',
+			mockConsentState,
+		).find((bid) => bid.bidder === 'ozone');
+
+		expect(ozoneBid?.params).toMatchObject({
+			publisherId: 'OZONEGMG0001',
+			siteId: '4204204209',
+			placementId: '1500001025',
+		});
+	});
 });
 
 describe('triplelift adapter', () => {
@@ -786,6 +829,17 @@ describe('getTeadsParams', () => {
 				});
 			},
 		);
+		test('should return correct pageId and placementID for MPU sized inline1 slots, in Uk when it is on desktop', () => {
+			isInUk.mockReturnValue(true);
+			getBreakpointKey.mockReturnValue('D');
+			containsMpu.mockReturnValue(true);
+			expect(
+				getTeadsParams([[300, 250]], 'dfp-ad--inline1'),
+			).toStrictEqual({
+				pageId: 265029,
+				placementId: 248133,
+			});
+		});
 	});
 	describe('Rest of World Region', () => {
 		test.each([
@@ -833,6 +887,17 @@ describe('getTeadsParams', () => {
 				});
 			},
 		);
+		test('should return correct pageId and placementID for MPU sized inline1 slots, in RoW when it is on desktop', () => {
+			isInRow.mockReturnValue(true);
+			getBreakpointKey.mockReturnValue('D');
+			containsMpu.mockReturnValue(true);
+			expect(
+				getTeadsParams([[300, 250]], 'dfp-ad--inline1'),
+			).toStrictEqual({
+				pageId: 265030,
+				placementId: 248134,
+			});
+		});
 	});
 	describe('US Region', () => {
 		test.each([
@@ -880,6 +945,75 @@ describe('getTeadsParams', () => {
 				});
 			},
 		);
+		test('should return correct pageId and placementID for MPU sized inline1 slots, in US when it is on desktop', () => {
+			isInUsa.mockReturnValue(true);
+			getBreakpointKey.mockReturnValue('D');
+			containsMpu.mockReturnValue(true);
+			expect(
+				getTeadsParams([[300, 250]], 'dfp-ad--inline1'),
+			).toStrictEqual({
+				pageId: 248135,
+				placementId: 265031,
+			});
+		});
+	});
+	describe('AU or NZ Region', () => {
+		test.each([
+			[[300, 250], 'MPU', containsMpu],
+			[[300, 600], 'DMPU', containsDmpu],
+			[[160, 600], 'WS', containsWS],
+			[[728, 90], 'LEADERBOARD', containsLeaderboard],
+			[[970, 250], 'BILLBOARD', containsBillboard],
+		])(
+			'should return correct placement and page ID for %s in AU/NZ when on desktop',
+			(size, label, mockFunction) => {
+				isInAuOrNz.mockReturnValue(true);
+				getBreakpointKey.mockReturnValue('D');
+				mockFunction.mockReturnValue(true);
+				expect(getTeadsParams([size as Size])).toStrictEqual({
+					pageId: 247434,
+					placementId: 264330,
+				});
+			},
+		);
+		test.each([
+			[[300, 250], 'MPU', containsMpu],
+			[[320, 480], 'PORTRAIT', containsPortraitInterstitial],
+		])(
+			'should return correct placement and page ID for %s in AU/NZ when on mobile',
+			(size, label, mockFunction) => {
+				isInAuOrNz.mockReturnValue(true);
+				getBreakpointKey.mockReturnValue('M');
+				mockFunction.mockReturnValue(true);
+				expect(getTeadsParams([size as Size])).toStrictEqual({
+					pageId: 247435,
+					placementId: 264331,
+				});
+			},
+		);
+		test.each([[[320, 50], 'MOBILE STICKY', containsMobileSticky]])(
+			'should return correct placement and page ID for %s in AU/NZ when mobile sticky on mobile',
+			(size, label, mockFunction) => {
+				isInAuOrNz.mockReturnValue(true);
+				getBreakpointKey.mockReturnValue('M');
+				mockFunction.mockReturnValue(true);
+				expect(getTeadsParams([size as Size])).toStrictEqual({
+					pageId: 247436,
+					placementId: 264332,
+				});
+			},
+		);
+		test('should return correct pageId and placementId for MPU sized inline1 slots, in AU/NZ when it is on desktop', () => {
+			isInAuOrNz.mockReturnValue(true);
+			getBreakpointKey.mockReturnValue('D');
+			containsMpu.mockReturnValue(true);
+			expect(
+				getTeadsParams([[300, 250]], 'dfp-ad--inline1'),
+			).toStrictEqual({
+				pageId: 248136,
+				placementId: 265032,
+			});
+		});
 	});
 });
 

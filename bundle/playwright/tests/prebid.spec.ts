@@ -58,7 +58,7 @@ test.describe('Prebid', () => {
 		);
 
 		expect(bidders).toBeTruthy();
-		expect(bidders).toHaveLength(9);
+		expect(bidders).toHaveLength(10);
 		[
 			'oxd',
 			'and',
@@ -69,6 +69,7 @@ test.describe('Prebid', () => {
 			'criteo',
 			'ttd',
 			'rubicon',
+			'teads',
 		].forEach((bidder) => {
 			expect(bidders).toContain(bidder);
 		});
