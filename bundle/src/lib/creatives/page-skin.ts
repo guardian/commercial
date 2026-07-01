@@ -1,3 +1,4 @@
+import { AD_LABEL_HEIGHT } from '@guardian/commercial-core/constants/ad-label-height';
 import fastdom from 'fastdom';
 import { isAdFree } from '../ad-free';
 import {
@@ -10,7 +11,6 @@ const pageSkin = (): void => {
 	const hasPageSkin = window.guardian.config.page.hasPageSkin;
 	const isInAUEdition =
 		window.guardian.config.page.edition.toLowerCase() === 'au';
-	const adLabelHeight = 24;
 	let topPosition = 0;
 	let truskinRendered = false;
 	let pageskinRendered = false;
@@ -45,7 +45,7 @@ const pageSkin = (): void => {
 				document.querySelector<HTMLElement>('.new-header');
 			if (navHeader) {
 				topPosition = truskinRendered
-					? navHeader.offsetTop + adLabelHeight
+					? navHeader.offsetTop + AD_LABEL_HEIGHT
 					: navHeader.offsetTop + navHeader.offsetHeight;
 			}
 		}
@@ -85,7 +85,7 @@ const pageSkin = (): void => {
 			const topBannerBottom = topBannerAdBoundaries.bottom;
 			const fabricScrollStartPosition =
 				topBannerAdBoundaries.height +
-				adLabelHeight -
+				AD_LABEL_HEIGHT -
 				headerBoundaries.height;
 
 			if (
