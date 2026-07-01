@@ -25,7 +25,7 @@ const getHbBreakpoint = () => {
 
 /**
  * Remove any header bidding sizes that do not appear in the set
- * of slot sizes for the current breakpoint
+ * of slot sizes for the current breakpoint.
  *
  * NOTE we currently only perform this filtering on `inline` slots
  * (this does not include inline1)
@@ -151,14 +151,23 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 		},
 		inline1: {
 			desktop: isArticle
-				? [getAdSize('mpu'), getAdSize('outstreamDesktop')]
+				? [
+						getAdSize('mpu'),
+						getAdSize('outstreamDesktop'),
+						getAdSize('outstreamOzone'),
+					]
 				: [getAdSize('mpu')],
 			tablet: isArticle
-				? [getAdSize('mpu'), getAdSize('outstreamDesktop')]
+				? [
+						getAdSize('mpu'),
+						getAdSize('outstreamDesktop'),
+						getAdSize('outstreamOzone'),
+					]
 				: [getAdSize('mpu')],
 			mobile: isArticle
 				? [
 						getAdSize('outstreamMobile'),
+						getAdSize('outstreamOzone'),
 						getAdSize('mpu'),
 						getAdSize('portraitInterstitial'),
 					]

@@ -377,6 +377,7 @@ const getOzonePlacementId = (
 	if (isInUsa()) {
 		if (getBreakpointKey() === 'D') {
 			if (containsBillboard(sizes)) {
+				// Should this be containsLeaderboardOrBillboard()?
 				return '3500010912';
 			}
 
@@ -414,6 +415,10 @@ const getOzonePlacementId = (
 		if (slotId === 'dfp-ad--inline2' && containsMpu(sizes)) {
 			return '1500001025';
 		}
+	}
+
+	if (getBreakpointKey() === 'D' && slotId === 'dfp-ad--inline1') {
+		return '1500001169';
 	}
 
 	return '0420420500';

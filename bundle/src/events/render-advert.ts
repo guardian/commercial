@@ -87,6 +87,9 @@ sizeCallbacks[adSizes.outstreamGoogleDesktop.toString()] = (advert: Advert) =>
 sizeCallbacks[adSizes.outstreamMobile.toString()] = (advert: Advert) =>
 	advert.updateExtraSlotClasses('ad-slot--outstream');
 
+sizeCallbacks[adSizes.outstreamOzone.toString()] = (advert: Advert) =>
+	advert.updateExtraSlotClasses('ad-slot--outstream');
+
 sizeCallbacks[adSizes.googleCard.toString()] = (advert: Advert) =>
 	advert.updateExtraSlotClasses('ad-slot--gc');
 
