@@ -2,8 +2,8 @@ import type { SizeMapping } from '@guardian/commercial-core/ad-sizes';
 import { adSizes, createAdSize } from '@guardian/commercial-core/ad-sizes';
 import { Advert } from '../../define/Advert';
 import { getHeaderBiddingAdSlots } from './slot-config';
-import { getBreakpointKey, shouldIncludeMobileSticky } from './utils';
 import type * as Utils from './utils';
+import { getBreakpointKey, shouldIncludeMobileSticky } from './utils';
 
 jest.mock('./utils', () => {
 	const original: typeof Utils = jest.requireActual('./utils');
@@ -127,6 +127,7 @@ describe('getPrebidAdSlots', () => {
 		expect(hbSlots[0]?.sizes).toEqual([
 			createAdSize(300, 250),
 			createAdSize(620, 350),
+			createAdSize(640, 360),
 		]);
 	});
 
@@ -138,6 +139,7 @@ describe('getPrebidAdSlots', () => {
 		expect(hbSlots).toHaveLength(1);
 		expect(hbSlots[0]?.sizes).toEqual([
 			createAdSize(300, 197),
+			createAdSize(640, 360),
 			createAdSize(300, 250),
 			createAdSize(320, 480),
 		]);

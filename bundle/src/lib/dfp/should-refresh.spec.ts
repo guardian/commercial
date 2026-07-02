@@ -6,6 +6,7 @@ const outstreamSizes = [
 	adSizes.outstreamDesktop.toString(),
 	adSizes.outstreamMobile.toString(),
 	adSizes.outstreamGoogleDesktop.toString(),
+	adSizes.outstreamOzone.toString(),
 ];
 
 jest.mock('define/init-slot-ias', () => ({
