@@ -112,7 +112,7 @@ const getAdSize = (name: keyof typeof adSizes): Size => [
 	adSizes[name][1],
 ];
 
-const getSlots = (): HeaderBiddingSizeMapping => {
+const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 	const { contentType, hasShowcaseMainElement } = window.guardian.config.page;
 	const isArticle = contentType === 'Article';
 	const hasExtendedMostPop =
@@ -151,14 +151,23 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 		},
 		inline1: {
 			desktop: isArticle
-				? [getAdSize('mpu'), getAdSize('outstreamDesktop')]
+				? [
+						getAdSize('mpu'),
+						getAdSize('outstreamDesktop'),
+						getAdSize('outstreamOzone'),
+					]
 				: [getAdSize('mpu')],
 			tablet: isArticle
-				? [getAdSize('mpu'), getAdSize('outstreamDesktop')]
+				? [
+						getAdSize('mpu'),
+						getAdSize('outstreamDesktop'),
+						getAdSize('outstreamOzone'),
+					]
 				: [getAdSize('mpu')],
 			mobile: isArticle
 				? [
 						getAdSize('outstreamMobile'),
+						getAdSize('outstreamOzone'),
 						getAdSize('mpu'),
 						getAdSize('portraitInterstitial'),
 					]
@@ -256,7 +265,8 @@ export const getHeaderBiddingAdSlots = (
 	slotFlatMap: SlotFlatMap = (s) => [s],
 ): HeaderBiddingSlot[] => {
 	const breakpoint = getHbBreakpoint();
-	const headerBiddingSlots = filterByAdvert(ad, breakpoint, getSlots());
+	const slotSizeMapping = getSlotSizeMapping();
+	const headerBiddingSlots = filterByAdvert(ad, breakpoint, slotSizeMapping);
 
 	return headerBiddingSlots
 		.map(filterBySizeMapping(ad.sizes[breakpoint]))
