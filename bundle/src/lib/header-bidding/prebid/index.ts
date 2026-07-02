@@ -2,8 +2,8 @@ import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import { PREBID_TIMEOUT } from '@guardian/commercial-core/constants/prebid-timeout';
 import { EventTimer } from '@guardian/commercial-core/event-timer';
-import { onConsent } from '@guardian/consent-manager';
 import type { ConsentState } from '@guardian/consent-manager';
+import { onConsent } from '@guardian/consent-manager';
 import { isString, log } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { AnalyticsConfig } from 'prebid.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
@@ -73,12 +73,6 @@ const initialise = async (
 					},
 				}
 			: {}),
-		/**
-		 * Prebid supports an additional timeout buffer to account for noisiness in
-		 * timing JavaScript on the page. This value is passed to the Prebid config
-		 * and is adjustable via this constant
-		 */
-		timeoutBuffer: 400,
 		priceGranularity: 'custom',
 		customPriceBucket: priceGranularity,
 		userSync,
