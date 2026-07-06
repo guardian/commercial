@@ -386,11 +386,11 @@ const getOzonePlacementId = (
 
 	if (isInUsa()) {
 		if (getBreakpointKey() === 'D') {
-			if (containsBillboard(sizes)) {
+			if (containsLeaderboardOrBillboard(sizes)) {
 				return '3500010912';
 			}
 
-			if (containsMpu(sizes)) {
+			if (containsMpuOrDmpu(sizes)) {
 				return '3500010911';
 			}
 		}
