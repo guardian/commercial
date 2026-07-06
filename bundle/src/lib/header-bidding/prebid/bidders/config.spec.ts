@@ -1022,12 +1022,24 @@ describe('getOzonePlacementId', () => {
 		jest.resetAllMocks();
 	});
 
-	test('should return correct placementID for inline1 slot', () => {
+	test('should return correct placementID for inline1 slot when in AB test', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
 		containsMobileSticky.mockReturnValue(false);
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
 		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline1')).toBe(
+			'1500001169',
+		);
+	});
+
+	test('should NOT return inline1 placementID for inline1 slot when NOT in AB test', () => {
+		isInUsa.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMpu.mockReturnValue(true);
+		containsMobileSticky.mockReturnValue(false);
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false);
+		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline1')).not.toBe(
 			'1500001169',
 		);
 	});

@@ -1,6 +1,7 @@
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
 import type { ConsentState } from '@guardian/consent-manager';
 import type { Size } from 'prebid.js/dist/src/types/common';
+import { isUserInTestGroup } from '../../../ab-testing';
 import type { Advert } from '../../../define/Advert';
 import type { HeaderBiddingSlot } from '../prebid-types';
 import { bids } from './bidders/config';
@@ -15,6 +16,10 @@ function buildDummyBid() {
 
 jest.mock('./bidders/config', () => ({
 	bids: jest.fn().mockReturnValue([buildDummyBid()]),
+}));
+
+jest.mock('../../../ab-testing', () => ({
+	isUserInTestGroup: jest.fn(),
 }));
 
 const mockedBids = bids as jest.MockedFunction<typeof bids>;
@@ -51,6 +56,7 @@ describe('PrebidAdUnit', () => {
 	});
 
 	test('adds the video media type for inline1 with only outstream-compatible sizes', () => {
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
 		const advert = buildAdvert('dfp-ad--inline1');
 		const slot: HeaderBiddingSlot = {
 			key: 'inline1',
@@ -87,6 +93,30 @@ describe('PrebidAdUnit', () => {
 	});
 
 	test('does not add the video media type for non-inline1 slots', () => {
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
+		const advert = buildAdvert('dfp-ad--top-above-nav');
+		const slot: HeaderBiddingSlot = {
+			key: 'top-above-nav',
+			sizes: [size(728, 90)],
+		};
+
+		const adUnit = new PrebidAdUnit(
+			advert,
+			slot,
+			mockPageTargeting,
+			mockConsentState,
+		);
+
+		expect(adUnit.mediaTypes).toEqual({
+			banner: {
+				sizes: slot.sizes,
+			},
+		});
+		expect(adUnit.bids).toEqual([buildDummyBid()]);
+	});
+
+	test('does not add the video media type when NOT in AB test', () => {
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false);
 		const advert = buildAdvert('dfp-ad--top-above-nav');
 		const slot: HeaderBiddingSlot = {
 			key: 'top-above-nav',

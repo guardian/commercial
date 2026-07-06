@@ -10,6 +10,7 @@ import type {
 import type { MediaTypes } from 'prebid.js/dist/src/mediaTypes';
 import type { Size } from 'prebid.js/dist/src/types/common';
 import type { VideoMediaType } from 'prebid.js/dist/src/video';
+import { isUserInTestGroup } from '../../../ab-testing';
 import type { Advert } from '../../../define/Advert';
 import type { HeaderBiddingSlot } from '../prebid-types';
 import { bids } from './bidders/config';
@@ -48,12 +49,17 @@ export class PrebidAdUnit implements AdUnitDefinition {
 		pageTargeting: PageTargeting,
 		consentState: ConsentState,
 	) {
+		const isInTeadsTest = isUserInTestGroup(
+			'commercial-ozone-outstream',
+			'variant',
+		);
+
 		this.code = advert.id;
 		this.mediaTypes = {
 			banner: {
 				sizes: slot.sizes,
 			},
-			...(slot.key === 'inline1'
+			...(isInTeadsTest && slot.key === 'inline1'
 				? {
 						video: {
 							playerSize: filterSizesForVideoMediaType(

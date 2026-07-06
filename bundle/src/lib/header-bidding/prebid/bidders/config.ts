@@ -10,6 +10,7 @@ import type { ConsentState } from '@guardian/consent-manager';
 import { log } from '@guardian/libs';
 import type { AdUnitBidDefinition } from 'prebid.js/dist/src/adUnits';
 import type { Size } from 'prebid.js/dist/src/types/common';
+import { isUserInTestGroup } from '../../../../ab-testing';
 import type { PrebidIndexSite } from '../../../../types/global';
 import { dfpEnv } from '../../../dfp/dfp-env';
 import { buildAppNexusTargetingObject } from '../../../page-targeting';
@@ -374,7 +375,12 @@ const getOzonePlacementId = (
 	slotId?: string,
 	pageTargeting?: PageTargeting,
 ) => {
-	if (slotId === 'dfp-ad--inline1') {
+	const isInTeadsTest = isUserInTestGroup(
+		'commercial-ozone-outstream',
+		'variant',
+	);
+
+	if (isInTeadsTest && slotId === 'dfp-ad--inline1') {
 		return '1500001169';
 	}
 
