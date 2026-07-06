@@ -1,4 +1,4 @@
-import type { AdSize } from '@guardian/commercial-core/ad-sizes';
+import type { AdSizeString } from '@guardian/commercial-core/ad-sizes';
 import { outstreamSizes } from '@guardian/commercial-core/ad-sizes';
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
 import type { ConsentState } from '@guardian/consent-manager';
@@ -16,18 +16,12 @@ import type { HeaderBiddingSlot } from '../prebid-types';
 import { bids } from './bidders/config';
 
 /**
- * The ad sizes that are compatible for use with the mediaTypes.video property of PrebidAdUnit.
- * https://docs.prebid.org/dev-docs/adunit-reference.html#adUnit.mediaTypes
+ * Outstream ad sizes are only compatible with the mediaTypes.video property of PrebidAdUnit
  */
-const allowedVideoMediaTypeSizes: AdSize[] = Object.values(outstreamSizes);
-
-const filterSizesForVideoMediaType = (sizes: Size[]) =>
-	sizes.filter((size) =>
-		allowedVideoMediaTypeSizes.some(
-			(allowedSize) =>
-				allowedSize[0] === size[0] && allowedSize[1] === size[1],
-		),
-	);
+const isOutstream = (size: Size) =>
+	Object.values(outstreamSizes)
+		.map((outstreamSize) => outstreamSize.toString())
+		.includes(size.toString() as AdSizeString);
 
 export class PrebidAdUnit implements AdUnitDefinition {
 	code: string;
@@ -57,13 +51,13 @@ export class PrebidAdUnit implements AdUnitDefinition {
 		this.code = advert.id;
 		this.mediaTypes = {
 			banner: {
-				sizes: slot.sizes,
+				sizes: slot.sizes.filter((size) => !isOutstream(size)),
 			},
 			...(isInOzoneAbTest && slot.key === 'inline1'
 				? {
 						video: {
-							playerSize: filterSizesForVideoMediaType(
-								slot.sizes,
+							playerSize: slot.sizes.filter((size) =>
+								isOutstream(size),
 							),
 							context: 'outstream',
 							placement: 3, // in-article

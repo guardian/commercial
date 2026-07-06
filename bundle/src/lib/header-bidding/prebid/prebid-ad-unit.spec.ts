@@ -91,7 +91,8 @@ describe('PrebidAdUnit', () => {
 			sizes: [
 				[300, 250],
 				[620, 350],
-				[550, 310],
+				[300, 197],
+				[640, 360],
 			],
 		};
 
@@ -104,12 +105,13 @@ describe('PrebidAdUnit', () => {
 
 		expect(adUnit.mediaTypes).toEqual({
 			banner: {
-				sizes: slot.sizes,
+				sizes: [[300, 250]],
 			},
 			video: {
 				playerSize: [
 					[620, 350],
-					[550, 310],
+					[300, 197],
+					[640, 360],
 				],
 				context: 'outstream',
 				placement: 3,
@@ -158,6 +160,43 @@ describe('PrebidAdUnit', () => {
 		expect(adUnit.mediaTypes).toEqual({
 			banner: {
 				sizes: slot.sizes,
+			},
+		});
+	});
+
+	test('uses outstream video sizes only in video media type when in AB test', () => {
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
+		const advert = buildAdvert('dfp-ad--inline1');
+		const slot: HeaderBiddingSlot = {
+			key: 'inline1',
+			sizes: [
+				[300, 250],
+				[620, 350],
+				[300, 197],
+				[640, 360],
+			],
+		};
+
+		const adUnit = new PrebidAdUnit(
+			advert,
+			slot,
+			mockPageTargeting,
+			mockConsentState,
+		);
+
+		expect(adUnit.mediaTypes).toEqual({
+			banner: {
+				sizes: [[300, 250]],
+			},
+			video: {
+				playerSize: [
+					[620, 350],
+					[300, 197],
+					[640, 360],
+				],
+				context: 'outstream',
+				placement: 3,
+				plcmt: 4,
 			},
 		});
 	});
