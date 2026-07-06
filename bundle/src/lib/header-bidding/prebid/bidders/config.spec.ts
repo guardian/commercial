@@ -1022,7 +1022,6 @@ describe('getOzonePlacementId', () => {
 		jest.resetAllMocks();
 	});
 
-
 	test('should return correct placementID for inline1 slot', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
