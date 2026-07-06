@@ -1022,6 +1022,17 @@ describe('getOzonePlacementId', () => {
 		jest.resetAllMocks();
 	});
 
+
+	test('should return correct placementID for inline1 slot', () => {
+		isInUsa.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMpu.mockReturnValue(true);
+		containsMobileSticky.mockReturnValue(false);
+		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline1')).toBe(
+			'1500001169',
+		);
+	});
+
 	test('should return correct placementID for billboard in US when it is in desktop', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
@@ -1098,7 +1109,7 @@ describe('getOzonePlacementId', () => {
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
 		containsMobileSticky.mockReturnValue(false);
-		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline1')).toBe(
+		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline3')).toBe(
 			'1500001036',
 		);
 	});

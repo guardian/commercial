@@ -374,6 +374,10 @@ const getOzonePlacementId = (
 	slotId?: string,
 	pageTargeting?: PageTargeting,
 ) => {
+	if (slotId === 'dfp-ad--inline1') {
+		return '1500001169';
+	}
+
 	if (isInUsa()) {
 		if (getBreakpointKey() === 'D') {
 			if (containsBillboard(sizes)) {
