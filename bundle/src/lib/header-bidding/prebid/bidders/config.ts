@@ -375,12 +375,12 @@ const getOzonePlacementId = (
 	slotId?: string,
 	pageTargeting?: PageTargeting,
 ) => {
-	const isInTeadsTest = isUserInTestGroup(
+	const isInOzoneAbTest = isUserInTestGroup(
 		'commercial-ozone-outstream',
 		'variant',
 	);
 
-	if (isInTeadsTest && slotId === 'dfp-ad--inline1') {
+	if (isInOzoneAbTest && slotId === 'dfp-ad--inline1') {
 		return '1500001169';
 	}
 

@@ -49,7 +49,7 @@ export class PrebidAdUnit implements AdUnitDefinition {
 		pageTargeting: PageTargeting,
 		consentState: ConsentState,
 	) {
-		const isInTeadsTest = isUserInTestGroup(
+		const isInOzoneAbTest = isUserInTestGroup(
 			'commercial-ozone-outstream',
 			'variant',
 		);
@@ -59,7 +59,7 @@ export class PrebidAdUnit implements AdUnitDefinition {
 			banner: {
 				sizes: slot.sizes,
 			},
-			...(isInTeadsTest && slot.key === 'inline1'
+			...(isInOzoneAbTest && slot.key === 'inline1'
 				? {
 						video: {
 							playerSize: filterSizesForVideoMediaType(

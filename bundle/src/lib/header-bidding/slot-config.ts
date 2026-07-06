@@ -118,7 +118,7 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 	const isArticle = contentType === 'Article';
 	const hasExtendedMostPop =
 		isArticle && window.guardian.config.switches.extendedMostPopular;
-	const isInTeadsTest = isUserInTestGroup(
+	const isInOzoneAbTest = isUserInTestGroup(
 		'commercial-ozone-outstream',
 		'variant',
 	);
@@ -159,20 +159,26 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 				? [
 						getAdSize('mpu'),
 						getAdSize('outstreamDesktop'),
-						...(isInTeadsTest ? [getAdSize('outstreamOzone')] : []),
+						...(isInOzoneAbTest
+							? [getAdSize('outstreamOzone')]
+							: []),
 					]
 				: [getAdSize('mpu')],
 			tablet: isArticle
 				? [
 						getAdSize('mpu'),
 						getAdSize('outstreamDesktop'),
-						...(isInTeadsTest ? [getAdSize('outstreamOzone')] : []),
+						...(isInOzoneAbTest
+							? [getAdSize('outstreamOzone')]
+							: []),
 					]
 				: [getAdSize('mpu')],
 			mobile: isArticle
 				? [
 						getAdSize('outstreamMobile'),
-						...(isInTeadsTest ? [getAdSize('outstreamOzone')] : []),
+						...(isInOzoneAbTest
+							? [getAdSize('outstreamOzone')]
+							: []),
 						getAdSize('mpu'),
 						getAdSize('portraitInterstitial'),
 					]
