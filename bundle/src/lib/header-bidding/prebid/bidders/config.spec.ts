@@ -1047,14 +1047,14 @@ describe('getOzonePlacementId', () => {
 	test('should return correct placementID for billboard in US when it is in desktop', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
-		containsBillboard.mockReturnValue(true);
+		containsLeaderboardOrBillboard.mockReturnValue(true);
 		expect(getOzonePlacementId([[970, 250]])).toBe('3500010912');
 	});
 
 	test('should return correct placementID for mpu in US when it is in desktop', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
-		containsMpu.mockReturnValue(true);
+		containsMpuOrDmpu.mockReturnValue(true);
 		expect(getOzonePlacementId([[300, 250]])).toBe('3500010911');
 	});
 
@@ -1128,7 +1128,7 @@ describe('getOzonePlacementId', () => {
 	test('should NOT return hangtime for desktop inline2 slots', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
-		containsMpu.mockReturnValue(true);
+		containsMpuOrDmpu.mockReturnValue(true);
 		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline2')).toBe(
 			'3500010911',
 		); // ← Should get desktop MPU, not hangtime
