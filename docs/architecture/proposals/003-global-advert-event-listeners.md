@@ -4,7 +4,7 @@
 
 ## Context
 
-### Current approach
+### Current solution:
 
 At the moment there is no supported API for determining the current lifecycle status of an advert.
 
@@ -19,15 +19,13 @@ This approach has a number of drawbacks:
 - It requires polling or DOM observation rather than subscribing to advert lifecycle changes.
 - It is not a documented or supported interface.
 
+## Proposal
+
 ### The gap
 
 Global advert events allow consumers to react to lifecycle changes, but they do not communicate the current status of an advert.
 
 If a listener is registered after an event has already been fired, there is no way to determine the advert's current lifecycle position without inspecting the DOM.
-
-## Proposal
-
-### Short-term: adStatus object
 
 One possible approach would be to expose the current status of every advert alongside the lifecycle events.
 
@@ -53,9 +51,7 @@ The available statuses would be:
 - rendered – the advert has finished rendering (adOnPage).
 - The status would be updated whenever the corresponding lifecycle event is fired, allowing consumers to both subscribe to future changes and inspect the current status at any point.
 
-### Long-term: onAdvertEvent API
-
-Export a function that allows other code to register event listeners for Advert lifecycle events.
+#### Export a function that allows other code to register event listeners for Advert lifecycle events.
 
 ```ts
 import { onAdvertEvent } from '@guardian/commercial';
