@@ -43,6 +43,7 @@ import {
 	containsPortraitInterstitial,
 	containsWS,
 	getBreakpointKey,
+	isOutstream,
 	shouldIncludeBidder,
 	stripDfpAdPrefixFrom,
 	stripMobileSuffix,
@@ -370,21 +371,14 @@ const getTeadsParams = (
 
 	return undefined;
 };
+
 const getOzonePlacementId = (
 	sizes: Size[],
+	mediaType: 'banner' | 'video',
 	slotId?: string,
 	pageTargeting?: PageTargeting,
 ) => {
-	const isInOzoneAbTest = isUserInTestGroup(
-		'commercial-ozone-outstream',
-		'variant',
-	);
-
-	/**
-	 * We'd like to use this placement ID for outstream only, but AFAICT there's no way to link a Placement ID
-	 * to a media type. Therefore, the placement ID has to be associated with the slot/sizes instead.
-	 */
-	if (isInOzoneAbTest && slotId === 'dfp-ad--inline1') {
+	if (mediaType === 'video') {
 		return '1500001169';
 	}
 
@@ -442,35 +436,59 @@ const teadsBidder: PrebidBidder = {
 	},
 };
 
-const ozoneBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
+/**
+ * Ozone has a separate bidder for each supported mediaType: banner and video
+ */
+const ozoneBidders: (
+	slotSizes: Size[],
 	pageTargeting: PageTargeting,
-) => ({
-	name: 'ozone',
-	switchName: 'prebidOzone',
-	bidParams: (_slotId: string, sizes: Size[]): PrebidOzoneParams => {
-		const advert = dfpEnv.adverts.get(_slotId);
-		const testgroup = advert?.testgroup
-			? { testgroup: advert.testgroup }
-			: {};
+) => PrebidBidder[] = (slotSizes: Size[], pageTargeting: PageTargeting) => {
+	const isInOzoneAbTest = isUserInTestGroup(
+		'commercial-ozone-outstream',
+		'variant',
+	);
 
-		return {
-			publisherId: 'OZONEGMG0001',
-			siteId: '4204204209',
-			placementId: getOzonePlacementId(sizes, _slotId, pageTargeting),
-			customData: [
-				{
-					settings: {},
-					targeting: {
-						// Assigns a random integer between 0 and 99
-						...testgroup,
-						...buildAppNexusTargetingObject(pageTargeting),
+	const bidders: Array<'banner' | 'video'> = ['banner'];
+
+	const isVideoSlotSizes =
+		slotSizes.filter((size) => isOutstream(size)).length > 0;
+	if (isInOzoneAbTest && isVideoSlotSizes) {
+		bidders.push('video');
+	}
+
+	return bidders.map((mediaType) => ({
+		name: 'ozone',
+		switchName: 'prebidOzone',
+		bidParams: (_slotId: string, sizes: Size[]): PrebidOzoneParams => {
+			const advert = dfpEnv.adverts.get(_slotId);
+			const testgroup = advert?.testgroup
+				? { testgroup: advert.testgroup }
+				: {};
+
+			return {
+				publisherId: 'OZONEGMG0001',
+				siteId: '4204204209',
+				placementId: getOzonePlacementId(
+					sizes,
+					mediaType,
+					_slotId,
+					pageTargeting,
+				),
+				customData: [
+					{
+						settings: {},
+						targeting: {
+							// Assigns a random integer between 0 and 99
+							...testgroup,
+							...buildAppNexusTargetingObject(pageTargeting),
+						},
 					},
-				},
-			],
-			ozoneData: {}, // TODO: confirm if we need to send any
-		};
-	},
-});
+				],
+				ozoneData: {}, // TODO: confirm if we need to send any
+			};
+		},
+	}));
+};
 
 const getPubmaticPublisherId = (): string => {
 	if (isInUsOrCa()) {
@@ -607,7 +625,7 @@ const kargoBidder: PrebidBidder = {
 };
 
 const magniteBidder: PrebidBidder = {
-	//Rubicon is the old name for Magnite but it is still used for the integration
+	// Rubicon is the old name for Magnite but it is still used for the integration
 	name: 'rubicon',
 	switchName: 'prebidMagnite',
 	bidParams: (slotId: string, sizes: Size[]): PrebidMagniteParams => ({
@@ -658,6 +676,10 @@ const currentBidders = (
 		? indexExchangeBidders(slotSizes)
 		: [];
 
+	const ozoneBids = shouldInclude('ozone')
+		? ozoneBidders(slotSizes, pageTargeting)
+		: [];
+
 	const biddersToCheck: Array<[boolean, PrebidBidder]> = [
 		[shouldInclude('criteo'), criteoBidder(slotSizes)],
 		[shouldInclude('trustx'), trustXBidder],
@@ -665,7 +687,6 @@ const currentBidders = (
 		[shouldInclude('and'), appNexusBidder(pageTargeting)],
 		[shouldInclude('xhb'), xaxisBidder],
 		[shouldInclude('pubmatic'), pubmaticBidder(slotSizes)],
-		[shouldInclude('ozone'), ozoneBidder(pageTargeting)],
 		[shouldInclude('oxd'), openxBidder(pageTargeting)],
 		[shouldInclude('kargo'), kargoBidder],
 		[shouldInclude('teads'), teadsBidder],
@@ -677,7 +698,7 @@ const currentBidders = (
 		.filter(([shouldInclude]) => inPbTestOr(shouldInclude))
 		.map(([, bidder]) => bidder);
 
-	const allBidders = [...ixBidders, ...otherBidders];
+	const allBidders = [...ixBidders, ...ozoneBids, ...otherBidders];
 
 	return isPbTestOn() ? biddersBeingTested(allBidders) : allBidders;
 };

@@ -272,6 +272,7 @@ describe('bids', () => {
 		const mockShouldInclude = jest
 			.fn()
 			.mockReturnValueOnce(true) // ix
+			.mockReturnValueOnce(false) // ozone
 			.mockReturnValueOnce(false) // criteo
 			.mockReturnValueOnce(true) // trustx
 			.mockReturnValueOnce(false) // triplelift
@@ -294,6 +295,7 @@ describe('bids', () => {
 		const mockShouldInclude = jest
 			.fn()
 			.mockReturnValueOnce(false) // ix
+			.mockReturnValueOnce(true) // ozone
 			.mockReturnValueOnce(true) // criteo
 			.mockReturnValueOnce(true) // trustx
 			.mockReturnValueOnce(true) // triplelift
@@ -316,6 +318,7 @@ describe('bids', () => {
 		const mockShouldInclude = jest
 			.fn()
 			.mockReturnValueOnce(true) // ix
+			.mockReturnValueOnce(false) // ozone
 			.mockReturnValueOnce(true); // criteo
 		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
 
@@ -337,6 +340,7 @@ describe('bids', () => {
 		const mockShouldInclude = jest
 			.fn()
 			.mockReturnValueOnce(false) // ix
+			.mockReturnValueOnce(false) // ozone
 			.mockReturnValueOnce(false) // criteo
 			.mockReturnValueOnce(false) // trustx
 			.mockReturnValueOnce(false) // triplelift
@@ -350,13 +354,13 @@ describe('bids', () => {
 		const mockShouldInclude = jest
 			.fn()
 			.mockReturnValueOnce(false) // ix
+			.mockReturnValueOnce(false) // ozone
 			.mockReturnValueOnce(false) // criteo
 			.mockReturnValueOnce(false) // trustx
 			.mockReturnValueOnce(false) // triplelift
 			.mockReturnValueOnce(false) // and
 			.mockReturnValueOnce(false) // xhb
 			.mockReturnValueOnce(false) // pubmatic
-			.mockReturnValueOnce(false) // ozone
 			.mockReturnValueOnce(false) // oxd
 			.mockReturnValueOnce(false) // kargo
 			.mockReturnValueOnce(true); // teads
@@ -369,13 +373,13 @@ describe('bids', () => {
 		const mockShouldInclude = jest
 			.fn()
 			.mockReturnValueOnce(false) // ix
+			.mockReturnValueOnce(false) // ozone
 			.mockReturnValueOnce(false) // criteo
 			.mockReturnValueOnce(false) // trustx
 			.mockReturnValueOnce(false) // triplelift
 			.mockReturnValueOnce(false) // and
 			.mockReturnValueOnce(false) // xhb
 			.mockReturnValueOnce(false) // pubmatic
-			.mockReturnValueOnce(false) // ozone
 			.mockReturnValueOnce(false) // oxd
 			.mockReturnValueOnce(false) // kargo
 			.mockReturnValueOnce(false) // teads
@@ -555,6 +559,7 @@ describe('triplelift adapter', () => {
 		const mockShouldInclude = jest
 			.fn()
 			.mockReturnValueOnce(false) // ix
+			.mockReturnValueOnce(false) // ozone
 			.mockReturnValueOnce(false) // criteo
 			.mockReturnValueOnce(false) // trustx
 			.mockReturnValueOnce(true); // triplelift
@@ -1022,95 +1027,85 @@ describe('getOzonePlacementId', () => {
 		jest.resetAllMocks();
 	});
 
-	test('should return correct placementID for inline1 slot when in AB test', () => {
+	test('should return inline1 placementID for video media type', () => {
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
 		containsMobileSticky.mockReturnValue(false);
 		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
-		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline1')).toBe(
-			'1500001169',
-		);
-	});
-
-	test('should NOT return inline1 placementID for inline1 slot when NOT in AB test', () => {
-		getBreakpointKey.mockReturnValue('M');
-		containsMpu.mockReturnValue(true);
-		containsMobileSticky.mockReturnValue(false);
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false);
-		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline1')).not.toBe(
-			'1500001169',
-		);
+		expect(
+			getOzonePlacementId([[300, 250]], 'video', 'dfp-ad--inline1'),
+		).toBe('1500001169');
 	});
 
 	test('should return correct placementID for billboard in US when it is in desktop', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsLeaderboardOrBillboard.mockReturnValue(true);
-		expect(getOzonePlacementId([[970, 250]])).toBe('3500010912');
+		expect(getOzonePlacementId([[970, 250]], 'banner')).toBe('3500010912');
 	});
 
 	test('should return correct placementID for mpu in US when it is in desktop', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsMpuOrDmpu.mockReturnValue(true);
-		expect(getOzonePlacementId([[300, 250]])).toBe('3500010911');
+		expect(getOzonePlacementId([[300, 250]], 'banner')).toBe('3500010911');
 	});
 
 	test('should return correct placementID for mpu in US when it is in mobile', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
-		expect(getOzonePlacementId([[300, 250]])).toBe('1500001036');
+		expect(getOzonePlacementId([[300, 250]], 'banner')).toBe('1500001036');
 	});
 
 	test('should return correct placementID for mobile-sticky in US', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMobileSticky.mockReturnValue(true);
-		expect(getOzonePlacementId([[320, 50]])).toBe('3500014217');
+		expect(getOzonePlacementId([[320, 50]], 'banner')).toBe('3500014217');
 	});
 
 	test('should return correct placementID for mobile-sticky in ROW', () => {
 		isInRow.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMobileSticky.mockReturnValue(true);
-		expect(getOzonePlacementId([[320, 50]])).toBe('1500000260');
+		expect(getOzonePlacementId([[320, 50]], 'banner')).toBe('1500000260');
 	});
 
 	test('should return correct placementID for hangtime ads in inline2 in UK', () => {
 		isInUk.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
-		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline2')).toBe(
-			'1500001025',
-		);
+		expect(
+			getOzonePlacementId([[300, 250]], 'banner', 'dfp-ad--inline2'),
+		).toBe('1500001025');
 	});
 
 	test('should return correct placementID for hangtime ads in inline2 in ROW', () => {
 		isInRow.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
-		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline2')).toBe(
-			'1500001025',
-		);
+		expect(
+			getOzonePlacementId([[300, 250]], 'banner', 'dfp-ad--inline2'),
+		).toBe('1500001025');
 	});
 
 	test('should return correct placementID for hangtime ads in inline2 in US', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
-		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline2')).toBe(
-			'1500001025',
-		);
+		expect(
+			getOzonePlacementId([[300, 250]], 'banner', 'dfp-ad--inline2'),
+		).toBe('1500001025');
 	});
 
 	test('should return correct placementID for hangtime ads in inline2 in AUZ or NZ', () => {
 		isInAuOrNz.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
-		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline2')).toBe(
-			'1500001025',
-		);
+		expect(
+			getOzonePlacementId([[300, 250]], 'banner', 'dfp-ad--inline2'),
+		).toBe('1500001025');
 	});
 
 	test('should NOT return hangtime for non-inline2 mobile MPU slots', () => {
@@ -1118,24 +1113,24 @@ describe('getOzonePlacementId', () => {
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
 		containsMobileSticky.mockReturnValue(false);
-		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline3')).toBe(
-			'1500001036',
-		);
+		expect(
+			getOzonePlacementId([[300, 250]], 'banner', 'dfp-ad--inline3'),
+		).toBe('1500001036');
 	});
 
 	test('should NOT return hangtime for desktop inline2 slots', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsMpuOrDmpu.mockReturnValue(true);
-		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline2')).toBe(
-			'3500010911',
-		); // ← Should get desktop MPU, not hangtime
+		expect(
+			getOzonePlacementId([[300, 250]], 'banner', 'dfp-ad--inline2'),
+		).toBe('3500010911'); // ← Should get desktop MPU, not hangtime
 	});
 
 	test('should return correct placementID if none of the conditions are met', () => {
 		isInUk.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('T');
 		containsMpu.mockReturnValue(true);
-		expect(getOzonePlacementId([[300, 250]])).toBe('0420420500');
+		expect(getOzonePlacementId([[300, 250]], 'banner')).toBe('0420420500');
 	});
 });

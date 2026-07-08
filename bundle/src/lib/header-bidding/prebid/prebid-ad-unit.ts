@@ -52,8 +52,8 @@ export class PrebidAdUnit implements AdUnitDefinition {
 			...(isInOzoneAbTest && slot.key === 'inline1'
 				? {
 						video: {
-							playerSize: videoSizes,
 							context: 'outstream',
+							playerSize: videoSizes,
 							placement: 3, // in-article
 							plcmt: 4, // outstream
 						} as VideoMediaType,
@@ -80,6 +80,11 @@ export class PrebidAdUnit implements AdUnitDefinition {
 
 		advert.headerBiddingSizes = slot.sizes;
 
-		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
+		log(
+			'commercial',
+			`PrebidAdUnit ${this.code}`,
+			this.mediaTypes,
+			this.bids,
+		);
 	}
 }
