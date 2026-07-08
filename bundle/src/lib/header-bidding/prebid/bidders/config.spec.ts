@@ -1023,7 +1023,6 @@ describe('getOzonePlacementId', () => {
 	});
 
 	test('should return correct placementID for inline1 slot when in AB test', () => {
-		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
 		containsMobileSticky.mockReturnValue(false);
@@ -1034,7 +1033,6 @@ describe('getOzonePlacementId', () => {
 	});
 
 	test('should NOT return inline1 placementID for inline1 slot when NOT in AB test', () => {
-		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
 		containsMobileSticky.mockReturnValue(false);

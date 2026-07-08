@@ -380,6 +380,10 @@ const getOzonePlacementId = (
 		'variant',
 	);
 
+	/**
+	 * We'd like to use this placement ID for outstream only, but AFAICT there's no way to link a Placement ID
+	 * to a media type. Therefore, the placement ID has to be associated with the slot/sizes instead.
+	 */
 	if (isInOzoneAbTest && slotId === 'dfp-ad--inline1') {
 		return '1500001169';
 	}
