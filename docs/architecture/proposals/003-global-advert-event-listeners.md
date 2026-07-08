@@ -27,7 +27,7 @@ This approach has a number of drawbacks:
 
 Global advert events allow consumers to react to lifecycle changes, but they do not communicate the current status of an advert.
 
-If a listener is registered after an event has already been fired, there is no way to determine the advert's current lifecycle position without inspecting the DOM.
+If a listener is registered after an event has already been fired, there is no way to determine the advert's current lifecycle position.
 
 One possible approach would be to expose the current status of every advert alongside the lifecycle events.
 
