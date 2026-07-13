@@ -1,4 +1,5 @@
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
+import { isUserInTestGroup } from '../../ab-testing';
 import { adSlotContainerClass } from '../../lib/create-ad-slot';
 import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
 
@@ -60,6 +61,8 @@ const inlineOpponentSelector = ['inline', 'supporting', 'showcase', 'halfWidth']
 	)
 	.join(',');
 
+const inlineFullWidthOpponentSelector = `:scope > [data-spacefinder-role="fullWidth"], [data-spacefinder-role="nested"] > [data-spacefinder-role="fullWidth"]`;
+
 const horizontalRuleSelector =
 	':scope > hr, [data-spacefinder-role="nested"] > hr';
 
@@ -84,6 +87,14 @@ const desktopInline1: SpacefinderRules = {
 			marginBottom: 35,
 			marginTop: 200,
 		},
+		...(isUserInTestGroup('commercial-full-width-hold-back', 'holdback')
+			? {}
+			: {
+					[inlineFullWidthOpponentSelector]: {
+						marginBottom: 200,
+						marginTop: 200,
+					},
+				}),
 		[leftColumnOpponentSelector]: {
 			marginBottom: 50,
 			marginTop: 100,
@@ -203,6 +214,14 @@ const mobileOpponentSelectorRules: OpponentSelectorRules = {
 		// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
 		bypassMinTop: 'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 	},
+	...(isUserInTestGroup('commercial-full-width-hold-back', 'holdback')
+		? {}
+		: {
+				[inlineFullWidthOpponentSelector]: {
+					marginBottom: 200,
+					marginTop: 200,
+				},
+			}),
 	[rightColumnOpponentSelector]: {
 		marginBottom: 35,
 		marginTop: 200,

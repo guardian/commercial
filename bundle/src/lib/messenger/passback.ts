@@ -1,4 +1,5 @@
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
+import { AD_LABEL_HEIGHT } from '@guardian/commercial-core/constants/ad-label-height';
 import { log } from '@guardian/libs';
 import { breakpoints } from '@guardian/source/foundations';
 import { getCurrentBreakpoint } from '../detect/detect-breakpoint';
@@ -8,8 +9,6 @@ import fastdom from '../fastdom-promise';
 import type { RegisterListener } from '../messenger';
 
 type PassbackMessagePayload = { source: string };
-
-const adLabelHeight = 24;
 
 /**
  * Passback size mappings
@@ -188,7 +187,7 @@ const initPassbackMessage = (register: RegisterListener): void => {
 					// position absolute to position over the container slot
 					passbackElement.style.position = 'absolute';
 					// account for the ad label
-					passbackElement.style.top = `${adLabelHeight}px`;
+					passbackElement.style.top = `${AD_LABEL_HEIGHT}px`;
 					// take the full width so it will center horizontally
 					passbackElement.style.width = '100%';
 
@@ -307,7 +306,8 @@ const initPassbackMessage = (register: RegisterListener): void => {
 											(getCurrentBreakpoint() === 'mobile'
 												? adHeight
 												: adSizes.outstreamDesktop
-														.height) + adLabelHeight
+														.height) +
+											AD_LABEL_HEIGHT
 										}px`;
 										log(
 											'commercial',
@@ -326,7 +326,7 @@ const initPassbackMessage = (register: RegisterListener): void => {
 											'center';
 										passbackElement.style.alignItems =
 											'center';
-										passbackElement.style.height = `calc(100% - ${adLabelHeight}px)`;
+										passbackElement.style.height = `calc(100% - ${AD_LABEL_HEIGHT}px)`;
 
 										/**
 										 * Also resize the initial outstream iframe so it doesn't block text selection
