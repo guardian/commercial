@@ -374,11 +374,11 @@ const getTeadsParams = (
 
 const getOzonePlacementId = (
 	sizes: Size[],
-	mediaType: 'banner' | 'video',
+	bidderType: 'banner' | 'video',
 	slotId?: string,
 	pageTargeting?: PageTargeting,
 ) => {
-	if (mediaType === 'video') {
+	if (bidderType === 'video') {
 		return '1500001169';
 	}
 
@@ -437,57 +437,64 @@ const teadsBidder: PrebidBidder = {
 };
 
 /**
- * Ozone has a separate bidder for each supported mediaType: banner and video
+ * Ozone has a separate bidder for each supported PrebidAdUnit mediaType: banner and video
  */
-const ozoneBidders: (
-	slotSizes: Size[],
+const ozoneBidder: (
 	pageTargeting: PageTargeting,
-) => PrebidBidder[] = (slotSizes: Size[], pageTargeting: PageTargeting) => {
+	bidderType: 'banner' | 'video',
+) => PrebidBidder = (
+	pageTargeting: PageTargeting,
+	bidderType: 'banner' | 'video',
+) => ({
+	name: 'ozone',
+	switchName: 'prebidOzone',
+	bidParams: (_slotId: string, sizes: Size[]): PrebidOzoneParams => {
+		const advert = dfpEnv.adverts.get(_slotId);
+		const testgroup = advert?.testgroup
+			? { testgroup: advert.testgroup }
+			: {};
+
+		return {
+			publisherId: 'OZONEGMG0001',
+			siteId: '4204204209',
+			placementId: getOzonePlacementId(
+				sizes,
+				bidderType,
+				_slotId,
+				pageTargeting,
+			),
+			customData: [
+				{
+					settings: {},
+					targeting: {
+						// Assigns a random integer between 0 and 99
+						...testgroup,
+						...buildAppNexusTargetingObject(pageTargeting),
+					},
+				},
+			],
+			ozoneData: {}, // TODO: confirm if we need to send any
+		};
+	},
+});
+
+const ozoneBannerBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
+	pageTargeting: PageTargeting,
+) => ozoneBidder(pageTargeting, 'banner');
+
+const ozoneVideoBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
+	pageTargeting: PageTargeting,
+) => ozoneBidder(pageTargeting, 'video');
+
+const shouldIncludeOzoneVideoBidder = (slotSizes: Size[]): boolean => {
 	const isInOzoneAbTest = isUserInTestGroup(
 		'commercial-ozone-outstream',
 		'variant',
 	);
 
-	const bidders: Array<'banner' | 'video'> = ['banner'];
+	const isVideoSlotSizes = slotSizes.some(isOutstream);
 
-	const isVideoSlotSizes =
-		slotSizes.filter((size) => isOutstream(size)).length > 0;
-	if (isInOzoneAbTest && isVideoSlotSizes) {
-		bidders.push('video');
-	}
-
-	return bidders.map((mediaType) => ({
-		name: 'ozone',
-		switchName: 'prebidOzone',
-		bidParams: (_slotId: string, sizes: Size[]): PrebidOzoneParams => {
-			const advert = dfpEnv.adverts.get(_slotId);
-			const testgroup = advert?.testgroup
-				? { testgroup: advert.testgroup }
-				: {};
-
-			return {
-				publisherId: 'OZONEGMG0001',
-				siteId: '4204204209',
-				placementId: getOzonePlacementId(
-					sizes,
-					mediaType,
-					_slotId,
-					pageTargeting,
-				),
-				customData: [
-					{
-						settings: {},
-						targeting: {
-							// Assigns a random integer between 0 and 99
-							...testgroup,
-							...buildAppNexusTargetingObject(pageTargeting),
-						},
-					},
-				],
-				ozoneData: {}, // TODO: confirm if we need to send any
-			};
-		},
-	}));
+	return isInOzoneAbTest && isVideoSlotSizes;
 };
 
 const getPubmaticPublisherId = (): string => {
@@ -676,10 +683,6 @@ const currentBidders = (
 		? indexExchangeBidders(slotSizes)
 		: [];
 
-	const ozoneBids = shouldInclude('ozone')
-		? ozoneBidders(slotSizes, pageTargeting)
-		: [];
-
 	const biddersToCheck: Array<[boolean, PrebidBidder]> = [
 		[shouldInclude('criteo'), criteoBidder(slotSizes)],
 		[shouldInclude('trustx'), trustXBidder],
@@ -687,6 +690,11 @@ const currentBidders = (
 		[shouldInclude('and'), appNexusBidder(pageTargeting)],
 		[shouldInclude('xhb'), xaxisBidder],
 		[shouldInclude('pubmatic'), pubmaticBidder(slotSizes)],
+		[shouldInclude('ozone'), ozoneBannerBidder(pageTargeting)],
+		[
+			shouldInclude('ozone') && shouldIncludeOzoneVideoBidder(slotSizes),
+			ozoneVideoBidder(pageTargeting),
+		],
 		[shouldInclude('oxd'), openxBidder(pageTargeting)],
 		[shouldInclude('kargo'), kargoBidder],
 		[shouldInclude('teads'), teadsBidder],
@@ -698,7 +706,7 @@ const currentBidders = (
 		.filter(([shouldInclude]) => inPbTestOr(shouldInclude))
 		.map(([, bidder]) => bidder);
 
-	const allBidders = [...ixBidders, ...ozoneBids, ...otherBidders];
+	const allBidders = [...ixBidders, ...otherBidders];
 
 	return isPbTestOn() ? biddersBeingTested(allBidders) : allBidders;
 };

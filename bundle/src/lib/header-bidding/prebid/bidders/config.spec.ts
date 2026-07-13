@@ -272,7 +272,6 @@ describe('bids', () => {
 		const mockShouldInclude = jest
 			.fn()
 			.mockReturnValueOnce(true) // ix
-			.mockReturnValueOnce(false) // ozone
 			.mockReturnValueOnce(false) // criteo
 			.mockReturnValueOnce(true) // trustx
 			.mockReturnValueOnce(false) // triplelift
@@ -295,7 +294,6 @@ describe('bids', () => {
 		const mockShouldInclude = jest
 			.fn()
 			.mockReturnValueOnce(false) // ix
-			.mockReturnValueOnce(true) // ozone
 			.mockReturnValueOnce(true) // criteo
 			.mockReturnValueOnce(true) // trustx
 			.mockReturnValueOnce(true) // triplelift
@@ -318,7 +316,6 @@ describe('bids', () => {
 		const mockShouldInclude = jest
 			.fn()
 			.mockReturnValueOnce(true) // ix
-			.mockReturnValueOnce(false) // ozone
 			.mockReturnValueOnce(true); // criteo
 		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
 
@@ -340,7 +337,6 @@ describe('bids', () => {
 		const mockShouldInclude = jest
 			.fn()
 			.mockReturnValueOnce(false) // ix
-			.mockReturnValueOnce(false) // ozone
 			.mockReturnValueOnce(false) // criteo
 			.mockReturnValueOnce(false) // trustx
 			.mockReturnValueOnce(false) // triplelift
@@ -354,12 +350,13 @@ describe('bids', () => {
 		const mockShouldInclude = jest
 			.fn()
 			.mockReturnValueOnce(false) // ix
-			.mockReturnValueOnce(false) // ozone
 			.mockReturnValueOnce(false) // criteo
 			.mockReturnValueOnce(false) // trustx
 			.mockReturnValueOnce(false) // triplelift
 			.mockReturnValueOnce(false) // and
 			.mockReturnValueOnce(false) // xhb
+			.mockReturnValueOnce(false) // ozone - banner
+			.mockReturnValueOnce(false) // ozone - video
 			.mockReturnValueOnce(false) // pubmatic
 			.mockReturnValueOnce(false) // oxd
 			.mockReturnValueOnce(false) // kargo
@@ -373,12 +370,13 @@ describe('bids', () => {
 		const mockShouldInclude = jest
 			.fn()
 			.mockReturnValueOnce(false) // ix
-			.mockReturnValueOnce(false) // ozone
 			.mockReturnValueOnce(false) // criteo
 			.mockReturnValueOnce(false) // trustx
 			.mockReturnValueOnce(false) // triplelift
 			.mockReturnValueOnce(false) // and
 			.mockReturnValueOnce(false) // xhb
+			.mockReturnValueOnce(false) // ozone - banner
+			.mockReturnValueOnce(false) // ozone - video
 			.mockReturnValueOnce(false) // pubmatic
 			.mockReturnValueOnce(false) // oxd
 			.mockReturnValueOnce(false) // kargo
@@ -559,7 +557,6 @@ describe('triplelift adapter', () => {
 		const mockShouldInclude = jest
 			.fn()
 			.mockReturnValueOnce(false) // ix
-			.mockReturnValueOnce(false) // ozone
 			.mockReturnValueOnce(false) // criteo
 			.mockReturnValueOnce(false) // trustx
 			.mockReturnValueOnce(true); // triplelift
