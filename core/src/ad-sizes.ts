@@ -1,5 +1,5 @@
-import { breakpoints, isBreakpoint } from './breakpoint';
 import type { Breakpoint } from './breakpoint';
+import { breakpoints, isBreakpoint } from './breakpoint';
 import type { Indices } from './types';
 
 type AdSizeString = 'fluid' | `${number},${number}`;
@@ -88,6 +88,7 @@ type SizeKeys =
 	| 'outstreamDesktop'
 	| 'outstreamGoogleDesktop'
 	| 'outstreamMobile'
+	| 'outstreamOzone'
 	| 'portrait'
 	| 'portraitInterstitial'
 	| 'pubmaticInterscroller'
@@ -148,6 +149,7 @@ const outstreamSizes = {
 	outstreamDesktop: createAdSize(620, 350),
 	outstreamGoogleDesktop: createAdSize(550, 310),
 	outstreamMobile: createAdSize(300, 197),
+	outstreamOzone: createAdSize(640, 360), // Uses the same size for both desktop and mobile
 };
 
 /**
@@ -473,15 +475,15 @@ const findAppliedSizesForBreakpoint = (
 // Export for testing
 export const _ = { createAdSize };
 
-export type { AdSizeString, SizeKeys, SizeMapping, SlotSizeMappings, SlotName };
+export type { AdSizeString, SizeKeys, SizeMapping, SlotName, SlotSizeMappings };
 
 export {
 	AdSize,
 	adSizes,
-	standardAdSizes,
-	outstreamSizes,
-	getAdSize,
-	slotSizeMappings,
 	createAdSize,
 	findAppliedSizesForBreakpoint,
+	getAdSize,
+	outstreamSizes,
+	slotSizeMappings,
+	standardAdSizes,
 };

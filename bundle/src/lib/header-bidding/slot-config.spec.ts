@@ -1,9 +1,10 @@
 import type { SizeMapping } from '@guardian/commercial-core/ad-sizes';
 import { adSizes, createAdSize } from '@guardian/commercial-core/ad-sizes';
+import { isUserInTestGroup } from '../../ab-testing';
 import { Advert } from '../../define/Advert';
 import { getHeaderBiddingAdSlots } from './slot-config';
-import { getBreakpointKey, shouldIncludeMobileSticky } from './utils';
 import type * as Utils from './utils';
+import { getBreakpointKey, shouldIncludeMobileSticky } from './utils';
 
 jest.mock('./utils', () => {
 	const original: typeof Utils = jest.requireActual('./utils');
@@ -20,6 +21,10 @@ jest.mock('define/init-slot-ias', () => ({
 
 jest.mock('@guardian/commercial-core/targeting/teads-eligibility', () => ({
 	isEligibleForTeads: jest.fn(),
+}));
+
+jest.mock('../../ab-testing', () => ({
+	isUserInTestGroup: jest.fn(),
 }));
 
 const slotPrototype = {
@@ -118,8 +123,23 @@ describe('getPrebidAdSlots', () => {
 		]);
 	});
 
-	test('should return the correct inline1 slot at breakpoint D with no additional size mappings', () => {
+	test('should return the correct inline1 slot at breakpoint D with no additional size mappings and in test group', () => {
 		(getBreakpointKey as jest.Mock).mockReturnValue('D');
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
+		window.guardian.config.page.contentType = 'Article';
+
+		const hbSlots = getHeaderBiddingAdSlots(buildAdvert('inline1'));
+		expect(hbSlots).toHaveLength(1);
+		expect(hbSlots[0]?.sizes).toEqual([
+			createAdSize(300, 250),
+			createAdSize(620, 350),
+			createAdSize(640, 360),
+		]);
+	});
+
+	test('should return the correct inline1 slot at breakpoint D with no additional size mappings and NOT in test group', () => {
+		(getBreakpointKey as jest.Mock).mockReturnValue('D');
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false);
 		window.guardian.config.page.contentType = 'Article';
 
 		const hbSlots = getHeaderBiddingAdSlots(buildAdvert('inline1'));
@@ -130,8 +150,23 @@ describe('getPrebidAdSlots', () => {
 		]);
 	});
 
-	test('should return the correct inline1 slot at breakpoint M with no additional size mappings', () => {
+	test('should return the correct inline1 slot at breakpoint M with no additional size mappings and in test group', () => {
 		(getBreakpointKey as jest.Mock).mockReturnValue('M');
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
+		window.guardian.config.page.contentType = 'Article';
+
+		const hbSlots = getHeaderBiddingAdSlots(buildAdvert('inline1'));
+		expect(hbSlots).toHaveLength(1);
+		expect(hbSlots[0]?.sizes).toEqual([
+			createAdSize(300, 197),
+			createAdSize(640, 360),
+			createAdSize(300, 250),
+			createAdSize(320, 480),
+		]);
+	});
+	test('should return the correct inline1 slot at breakpoint M with no additional size mappings and NOT in test group', () => {
+		(getBreakpointKey as jest.Mock).mockReturnValue('M');
+		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false);
 		window.guardian.config.page.contentType = 'Article';
 
 		const hbSlots = getHeaderBiddingAdSlots(buildAdvert('inline1'));
