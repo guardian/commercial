@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 34.3.0
+
+### Minor Changes
+
+- 9a532db: Adds Outstream Ozone ad size
+
 ## 34.2.0
 
 ### Minor Changes
