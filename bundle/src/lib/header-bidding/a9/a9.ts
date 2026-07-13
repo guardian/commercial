@@ -35,7 +35,8 @@ const initialise = (): void => {
 		initialised = true;
 		const blockedBidders = window.guardian.config.page.isFront
 			? [
-					'1lsxjb4', // GumGum, as they have been showing wonky formats on fronts
+					// GumGum, as they have been showing wonky formats on fronts
+					'1lsxjb4',
 				]
 			: [];
 		window.apstag.init({
