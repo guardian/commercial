@@ -355,9 +355,9 @@ describe('bids', () => {
 			.mockReturnValueOnce(false) // triplelift
 			.mockReturnValueOnce(false) // and
 			.mockReturnValueOnce(false) // xhb
+			.mockReturnValueOnce(false) // pubmatic
 			.mockReturnValueOnce(false) // ozone - banner
 			.mockReturnValueOnce(false) // ozone - video
-			.mockReturnValueOnce(false) // pubmatic
 			.mockReturnValueOnce(false) // oxd
 			.mockReturnValueOnce(false) // kargo
 			.mockReturnValueOnce(true); // teads
@@ -375,9 +375,9 @@ describe('bids', () => {
 			.mockReturnValueOnce(false) // triplelift
 			.mockReturnValueOnce(false) // and
 			.mockReturnValueOnce(false) // xhb
+			.mockReturnValueOnce(false) // pubmatic
 			.mockReturnValueOnce(false) // ozone - banner
 			.mockReturnValueOnce(false) // ozone - video
-			.mockReturnValueOnce(false) // pubmatic
 			.mockReturnValueOnce(false) // oxd
 			.mockReturnValueOnce(false) // kargo
 			.mockReturnValueOnce(false) // teads
