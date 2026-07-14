@@ -160,7 +160,10 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 						getAdSize('mpu'),
 						...(isInOzoneAbTest
 							? [getAdSize('outstreamOzone')]
-							: [getAdSize('outstreamDesktop'), getAdSize('outOfPage')]),
+							: [
+									getAdSize('outstreamDesktop'),
+									getAdSize('outOfPage'),
+								]),
 					]
 				: [getAdSize('mpu')],
 			tablet: isArticle
