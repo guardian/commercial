@@ -522,8 +522,8 @@ describe('bids', () => {
 		).find((bid) => bid.bidder === 'teads');
 
 		expect(teadsBid?.params).toEqual({
-			pageId: 265029,
-			placementId: 248133,
+			pageId: 248133,
+			placementId: 265029,
 		});
 	});
 
@@ -838,8 +838,8 @@ describe('getTeadsParams', () => {
 			expect(
 				getTeadsParams([[300, 250]], 'dfp-ad--inline1'),
 			).toStrictEqual({
-				pageId: 265029,
-				placementId: 248133,
+				pageId: 248133,
+				placementId: 265029,
 			});
 		});
 	});
@@ -896,8 +896,8 @@ describe('getTeadsParams', () => {
 			expect(
 				getTeadsParams([[300, 250]], 'dfp-ad--inline1'),
 			).toStrictEqual({
-				pageId: 265030,
-				placementId: 248134,
+				pageId: 248134,
+				placementId: 265030,
 			});
 		});
 	});

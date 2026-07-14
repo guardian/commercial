@@ -278,7 +278,7 @@ const getTeadsParams = (
 	if (isInUk()) {
 		if (isDesktop) {
 			if (slotId === 'dfp-ad--inline1' && containsMpu(sizes)) {
-				return { pageId: 265029, placementId: 248133 };
+				return { pageId: 248133, placementId: 265029 };
 			}
 			if (
 				containsMpu(sizes) ||
@@ -299,7 +299,7 @@ const getTeadsParams = (
 	if (isInRow()) {
 		if (isDesktop) {
 			if (slotId === 'dfp-ad--inline1' && containsMpu(sizes)) {
-				return { pageId: 265030, placementId: 248134 };
+				return { pageId: 248134, placementId: 265030 };
 			}
 			if (
 				containsMpu(sizes) ||
