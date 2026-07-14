@@ -158,11 +158,9 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 			desktop: isArticle
 				? [
 						getAdSize('mpu'),
-						getAdSize('outstreamDesktop'),
-						getAdSize('outOfPage'),
 						...(isInOzoneAbTest
 							? [getAdSize('outstreamOzone')]
-							: [getAdSize('outstreamDesktop')]),
+							: [getAdSize('outstreamDesktop'), getAdSize('outOfPage')]),
 					]
 				: [getAdSize('mpu')],
 			tablet: isArticle
@@ -180,7 +178,7 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 							: [getAdSize('outstreamMobile')]),
 						getAdSize('mpu'),
 						getAdSize('portraitInterstitial'),
-						getAdSize('outOfPage'),
+						...(isInOzoneAbTest ? [] : [getAdSize('outOfPage')]),
 					]
 				: [getAdSize('mpu')],
 		},
