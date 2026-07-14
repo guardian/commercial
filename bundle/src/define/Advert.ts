@@ -1,13 +1,13 @@
 import { EventTimer } from '@guardian/commercial-core';
-import {
-	createAdSize,
-	findAppliedSizesForBreakpoint,
-	slotSizeMappings,
-} from '@guardian/commercial-core/ad-sizes';
 import type {
 	AdSize,
 	SizeMapping,
 	SlotName,
+} from '@guardian/commercial-core/ad-sizes';
+import {
+	createAdSize,
+	findAppliedSizesForBreakpoint,
+	slotSizeMappings,
 } from '@guardian/commercial-core/ad-sizes';
 import type { Breakpoint } from '@guardian/commercial-core/breakpoint';
 import { globalAdEvents } from '@guardian/commercial-core/global-ad-events';
@@ -184,7 +184,9 @@ class Advert extends EventTarget {
 	extraNodeClasses: string[] = [];
 	hasPrebidSize = false;
 	/**
-	 * This property is used to store the promise for the **initial** header bidding bid request, so that if requestBids is called multiple times before the first bid request has completed, it will return the same promise instead of making multiple bid requests
+	 * This property is used to store the promise for the **initial** header bidding bid request, so that
+	 * if requestBids is called multiple times before the first bid request has completed, it will return
+	 * the same promise instead of making multiple bid requests
 	 */
 	headerBiddingBidRequest: Promise<void> | null = null;
 	lineItemId: number | null = null;
@@ -285,7 +287,8 @@ class Advert extends EventTarget {
 	}
 
 	/**
-	 * Listen for a status or statuses in the advert lifecycle. The callback will be called once when the advert reaches the specified status, or immediately if the advert has already reached that status.
+	 * Listen for a status or statuses in the advert lifecycle. The callback will be called once when the
+	 * advert reaches the specified status, or immediately if the advert has already reached that status.
 	 *
 	 * @param listenStatus A status or array of statuses in the advert lifecycle to listen for
 	 * @param callback A callback function that will be called with the status when the advert reaches it
@@ -339,7 +342,8 @@ class Advert extends EventTarget {
 	}
 
 	/**
-	 * Listen for a status in the advert lifecycle, but only call the callback the first time the advert reaches that status. If the advert is already that status, the callback will be called immediately.
+	 * Listen for a status in the advert lifecycle, but only call the callback the first time the advert
+	 * reaches that status. If the advert is already that status, the callback will be called immediately.
 	 *
 	 * @param listenStatus A status or array of statuses in the advert lifecycle to listen for
 	 * @param callback A callback function that will be called with the status when the advert reaches it
@@ -396,7 +400,8 @@ class Advert extends EventTarget {
 			? getSlotSizeMapping(this.node.dataset.name)
 			: {};
 
-		// Data attribute size mappings are used in interactives e.g. https://www.theguardian.com/education/ng-interactive/2021/sep/11/the-best-uk-universities-2022-rankings
+		// Data attribute size mappings are used in interactives e.g.
+		// https://www.theguardian.com/education/ng-interactive/2021/sep/11/the-best-uk-universities-2022-rankings
 		const dataAttrSizeMapping = getSlotSizeMappingsFromDataAttrs(this.node);
 
 		let sizeMapping = concatSizeMappings(
@@ -438,7 +443,8 @@ class Advert extends EventTarget {
 	/**
 	 * Request header bidding bids for this advert
 	 *
-	 * This is sometimes called separately from the display method, for example in the case of Prebid when we want to request bids earlier for certain breakpoints to improve performance.
+	 * This is sometimes called separately from the display method, for example in the case of Prebid
+	 * when we want to request bids earlier for certain breakpoints to improve performance.
 	 *
 	 * @returns A promise that resolves once the bid request has completed
 	 */
@@ -457,7 +463,8 @@ class Advert extends EventTarget {
 	};
 
 	/**
-	 * Refresh the header bidding bids for this advert, this should be called before refreshing the advert if you want to get new bids for the refreshed ad
+	 * Refresh the header bidding bids for this advert, this should be called before refreshing the
+	 * advert if you want to get new bids for the refreshed ad
 	 *
 	 * @returns A promise that resolves once the bid refresh has completed
 	 */
@@ -473,7 +480,8 @@ class Advert extends EventTarget {
 	};
 
 	/**
-	 * Load and display the advert, this should only be called once per advert instance, if you want to update the ad after it has been displayed you should call refresh instead
+	 * Load and display the advert, this should only be called once per advert instance, if you want
+	 * to update the ad after it has been displayed you should call refresh instead
 	 */
 	load(): void {
 		adQueue.add(() => {
@@ -491,7 +499,8 @@ class Advert extends EventTarget {
 	}
 
 	/**
-	 * Refresh the advert, runs header bidding to get new bids, sets targeting and then calls the GPT refresh command for this slot
+	 * Refresh the advert, runs header bidding to get new bids, sets targeting and then calls the
+	 * GPT refresh command for this slot
 	 */
 	refresh(): void {
 		adQueue.add(() => {
@@ -542,7 +551,8 @@ class Advert extends EventTarget {
 	}
 
 	/**
-	 * Display the advert, if the advert has not been displayed before it will load, if it has already been displayed it will refresh to get new header-bidding bids and a new creative
+	 * Display the advert, if the advert has not been displayed before it will load, if it has
+	 * already been displayed it will refresh to get new header-bidding bids and a new creative
 	 */
 	display(): void {
 		if (this.isRendered) {

@@ -2,7 +2,6 @@ import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import type { Advert } from '../define/Advert';
 import { reportError } from '../lib/error/report-error';
 import fastdom from '../lib/fastdom-promise';
-import { logGumGumWinningBid } from '../lib/gumgum-winning-bid';
 import { emptyAdvert } from './empty-advert';
 import { renderAdvertLabel } from './render-advert-label';
 
@@ -85,6 +84,9 @@ sizeCallbacks[adSizes.outstreamGoogleDesktop.toString()] = (advert: Advert) =>
 	advert.updateExtraSlotClasses('ad-slot--outstream');
 
 sizeCallbacks[adSizes.outstreamMobile.toString()] = (advert: Advert) =>
+	advert.updateExtraSlotClasses('ad-slot--outstream');
+
+sizeCallbacks[adSizes.outstreamOzone.toString()] = (advert: Advert) =>
 	advert.updateExtraSlotClasses('ad-slot--outstream');
 
 sizeCallbacks[adSizes.googleCard.toString()] = (advert: Advert) =>
@@ -206,20 +208,6 @@ const renderAdvert = (
 	advert: Advert,
 	slotRenderEndedEvent: googletag.events.SlotRenderEndedEvent,
 ): Promise<boolean> => {
-	const matchingAd = window.guardian.commercial?.a9WinningBids?.find(
-		(bidResponse) => bidResponse.slotID == advert.id,
-	);
-
-	const isA9GumGum = matchingAd?.amznp === '1lsxjb4';
-
-	if (slotRenderEndedEvent.advertiserId === 4751525411 && isA9GumGum) {
-		const adSlotId = advert.node.id;
-		logGumGumWinningBid(
-			adSlotId,
-			slotRenderEndedEvent.advertiserId.toString(),
-		);
-	}
-
 	addContentClass(advert.node);
 	return hasIframe(advert.node)
 		.then((isRendered) => {

@@ -4,11 +4,56 @@
 
 ## Context
 
-There is currently no standard way for other code on the page (outside the commercial bundle) to listen for advert lifecycle events, for example to run code when an advert has rendered.
+### Current solution:
+
+At the moment there is no supported API for determining the current lifecycle status of an advert.
+
+Instead, some consumers inspect CSS classes or attributes that are added to the advert's DOM element. For example, the top-above-nav advert receives an `top-above-nav-ad-rendered` class once it has rendered.
+
+All ad slots when rendered have a class added `ad-slot--rendered` which can also be used currently to determine the rendered state.
+
+If the attribute is not yet present, the only option is to observe the DOM using a `MutationObserver` until it appears.
+
+This approach has a number of drawbacks:
+
+- It couples consumers to DOM implementation details.
+- It only exposes a small subset of the advert lifecycle.
+- It requires polling or DOM observation rather than subscribing to advert lifecycle changes.
+- It is not a documented or supported interface.
 
 ## Proposal
 
-Export a function that allows other code to register event listeners for Advert lifecycle events.
+### The gap
+
+Global advert events allow consumers to react to lifecycle changes, but they do not communicate the current status of an advert.
+
+If a listener is registered after an event has already been fired, there is no way to determine the advert's current lifecycle position.
+
+One possible approach would be to expose the current status of every advert alongside the lifecycle events.
+
+```ts
+window.guardian.commercial.adStatus = {
+	inline1: 'ready',
+	'top-above-nav': 'loaded',
+	merchandising: 'rendered',
+	'merchandising-high': 'fetched',
+	// ...
+};
+```
+
+The available statuses would be:
+
+- ready – the advert has been defined and is ready to be prepared.
+- preparing – header bidding is running.
+- prepared – the advert is ready to be fetched from GAM.
+- fetching – the advert is fetching from GAM.
+- fetched – the response has been received from GAM.
+- loading – the creative is being loaded into the slot.
+- loaded – the creative has loaded into the slot.
+- rendered – the advert has finished rendering (adOnPage).
+- The status would be updated whenever the corresponding lifecycle event is fired, allowing consumers to both subscribe to future changes and inspect the current status at any point.
+
+#### Export a function that allows other code to register event listeners for Advert lifecycle events.
 
 ```ts
 import { onAdvertEvent } from '@guardian/commercial';

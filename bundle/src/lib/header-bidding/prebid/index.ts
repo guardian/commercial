@@ -119,7 +119,6 @@ const initialise = async (
 	};
 
 	// configure analytics
-
 	const analytics: Array<AnalyticsConfig<string>> = [];
 	const guAnalytics = getGUAnalyticsConfig();
 	if (guAnalytics) {
@@ -243,6 +242,7 @@ const requestBids = async (
 				});
 			}),
 	);
+
 	return requestQueue;
 };
 

@@ -2,6 +2,7 @@ import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { isInUk } from '@guardian/commercial-core/geo/geo-utils';
 import type { Size } from 'prebid.js/dist/src/types/common';
+import { isUserInTestGroup } from '../../ab-testing';
 import type { Advert } from '../../define/Advert';
 import type {
 	HeaderBiddingSizeKey,
@@ -112,11 +113,15 @@ const getAdSize = (name: keyof typeof adSizes): Size => [
 	adSizes[name][1],
 ];
 
-const getSlots = (): HeaderBiddingSizeMapping => {
+const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 	const { contentType, hasShowcaseMainElement } = window.guardian.config.page;
 	const isArticle = contentType === 'Article';
 	const hasExtendedMostPop =
 		isArticle && window.guardian.config.switches.extendedMostPopular;
+	const isInOzoneAbTest = isUserInTestGroup(
+		'commercial-ozone-outstream',
+		'variant',
+	);
 
 	return {
 		right: {
@@ -155,14 +160,24 @@ const getSlots = (): HeaderBiddingSizeMapping => {
 						getAdSize('mpu'),
 						getAdSize('outstreamDesktop'),
 						getAdSize('outOfPage'),
+						...(isInOzoneAbTest
+							? [getAdSize('outstreamOzone')]
+							: [getAdSize('outstreamDesktop')]),
 					]
 				: [getAdSize('mpu')],
 			tablet: isArticle
-				? [getAdSize('mpu'), getAdSize('outstreamDesktop')]
+				? [
+						getAdSize('mpu'),
+						...(isInOzoneAbTest
+							? [getAdSize('outstreamOzone')]
+							: [getAdSize('outstreamDesktop')]),
+					]
 				: [getAdSize('mpu')],
 			mobile: isArticle
 				? [
-						getAdSize('outstreamMobile'),
+						...(isInOzoneAbTest
+							? [getAdSize('outstreamOzone')]
+							: [getAdSize('outstreamMobile')]),
 						getAdSize('mpu'),
 						getAdSize('portraitInterstitial'),
 						getAdSize('outOfPage'),
@@ -262,7 +277,8 @@ export const getHeaderBiddingAdSlots = (
 	slotFlatMap: SlotFlatMap = (s) => [s],
 ): HeaderBiddingSlot[] => {
 	const breakpoint = getHbBreakpoint();
-	const headerBiddingSlots = filterByAdvert(ad, breakpoint, getSlots());
+	const slotSizeMapping = getSlotSizeMapping();
+	const headerBiddingSlots = filterByAdvert(ad, breakpoint, slotSizeMapping);
 
 	return headerBiddingSlots
 		.map(filterBySizeMapping(ad.sizes[breakpoint]))
