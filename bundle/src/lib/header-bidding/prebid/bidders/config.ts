@@ -400,6 +400,11 @@ const getOzonePlacementId = (
 				return '3500014217';
 			}
 
+			// "Hangtime" is a high-impact ad format from our SSP, GumGum
+			// (preview: https://playlist.playground.xyz/list/format-hang-time).
+			// It is deliberately restricted to the mobile inline2 slot so that
+			// only one instance can appear per page, to avoid disrupting the
+			// user experience.
 			if (slotId === 'dfp-ad--inline2' && containsMpu(sizes)) {
 				return '1500001025';
 			}
@@ -419,6 +424,7 @@ const getOzonePlacementId = (
 	}
 
 	if (getBreakpointKey() === 'M') {
+		// "Hangtime" - see comment above for details.
 		if (slotId === 'dfp-ad--inline2' && containsMpu(sizes)) {
 			return '1500001025';
 		}
