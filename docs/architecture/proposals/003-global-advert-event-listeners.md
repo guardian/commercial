@@ -8,7 +8,7 @@
 
 At the moment there is no supported API for determining the current lifecycle status of an advert.
 
-Instead, some consumers inspect CSS classes or attributes that are added to the advert's DOM element. For example, the top-above-nav advert receives an `top-above-nav-ad-rendered` class once it has rendered.
+Instead, some consumers inspect CSS classes or attributes that are added to the advert's DOM element. For example, the top-above-nav advert receives an `top-above-nav-ad-rendered` attribute that is set to "true" once it has rendered.
 
 All ad slots when rendered have a class added `ad-slot--rendered` which can also be used currently to determine the rendered state.
 
