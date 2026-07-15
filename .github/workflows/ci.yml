@@ -97,7 +97,7 @@ jobs:
           path: bundle/dist
 
       - name: Riff-Raff Upload
-        uses: guardian/actions-riff-raff@f0806aac5659b052afe2416f5d35723448e7807f # v4.3.3
+        uses: guardian/actions-riff-raff@ab360a150e2540439f7f675c37d170a2fd6c8604 # v4.3.4
         with:
           roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
