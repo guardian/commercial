@@ -136,7 +136,7 @@ const initialise = async (
 
 	// update config and adjust slot size when prebid ad loads
 	window.pbjs.onEvent('bidWon', (data) => {
-		const { width, height, adUnitCode, bidderCode } = data;
+		const { width, height, adUnitCode } = data;
 
 		if (!width || !height || !adUnitCode) {
 			return;
@@ -155,12 +155,6 @@ const initialise = async (
 		 * */
 		advert.hasPrebidSize = true;
 		advert.size = size;
-
-		/**
-		 * Record the winning bidder so downstream rendering can distinguish a
-		 * Teads outstream 1x1 win from a genuine out-of-page 1x1 creative.
-		 */
-		advert.prebidWinningBidderCode = bidderCode;
 	});
 };
 

@@ -184,12 +184,6 @@ class Advert extends EventTarget {
 	extraNodeClasses: string[] = [];
 	hasPrebidSize = false;
 	/**
-	 * The bidder code of the winning prebid bid for the current render cycle,
-	 * e.g. 'teads'. Used to distinguish a Teads outstream 1x1 win from another out-of-page 1x1 creative (which should
-	 * be collapsed). Set on the prebid `bidWon` event.
-	 */
-	prebidWinningBidderCode: string | null = null;
-	/**
 	 * This property is used to store the promise for the **initial** header bidding bid request, so that
 	 * if requestBids is called multiple times before the first bid request has completed, it will return
 	 * the same promise instead of making multiple bid requests
