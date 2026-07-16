@@ -10,6 +10,7 @@ import type { ConsentState } from '@guardian/consent-manager';
 import { log } from '@guardian/libs';
 import type { AdUnitBidDefinition } from 'prebid.js/dist/src/adUnits';
 import type { Size } from 'prebid.js/dist/src/types/common';
+import { isUserInTestGroup } from '../../../../ab-testing';
 import type { PrebidIndexSite } from '../../../../types/global';
 import { dfpEnv } from '../../../dfp/dfp-env';
 import { buildAppNexusTargetingObject } from '../../../page-targeting';
@@ -42,6 +43,7 @@ import {
 	containsPortraitInterstitial,
 	containsWS,
 	getBreakpointKey,
+	isOutstream,
 	shouldIncludeBidder,
 	stripDfpAdPrefixFrom,
 	stripMobileSuffix,
@@ -276,7 +278,7 @@ const getTeadsParams = (
 	if (isInUk()) {
 		if (isDesktop) {
 			if (slotId === 'dfp-ad--inline1' && containsMpu(sizes)) {
-				return { pageId: 265029, placementId: 248133 };
+				return { pageId: 248133, placementId: 265029 };
 			}
 			if (
 				containsMpu(sizes) ||
@@ -297,7 +299,7 @@ const getTeadsParams = (
 	if (isInRow()) {
 		if (isDesktop) {
 			if (slotId === 'dfp-ad--inline1' && containsMpu(sizes)) {
-				return { pageId: 265030, placementId: 248134 };
+				return { pageId: 248134, placementId: 265030 };
 			}
 			if (
 				containsMpu(sizes) ||
@@ -369,18 +371,24 @@ const getTeadsParams = (
 
 	return undefined;
 };
+
 const getOzonePlacementId = (
 	sizes: Size[],
+	bidderType: 'banner' | 'video',
 	slotId?: string,
 	pageTargeting?: PageTargeting,
 ) => {
+	if (bidderType === 'video') {
+		return '1500001169';
+	}
+
 	if (isInUsa()) {
 		if (getBreakpointKey() === 'D') {
-			if (containsBillboard(sizes)) {
+			if (containsLeaderboardOrBillboard(sizes)) {
 				return '3500010912';
 			}
 
-			if (containsMpu(sizes)) {
+			if (containsMpuOrDmpu(sizes)) {
 				return '3500010911';
 			}
 		}
@@ -392,6 +400,11 @@ const getOzonePlacementId = (
 				return '3500014217';
 			}
 
+			// "Hangtime" is a high-impact ad format from our SSP, GumGum
+			// (preview: https://playlist.playground.xyz/list/format-hang-time).
+			// It is deliberately restricted to the mobile inline2 slot so that
+			// only one instance can appear per page, to avoid disrupting the
+			// user experience.
 			if (slotId === 'dfp-ad--inline2' && containsMpu(sizes)) {
 				return '1500001025';
 			}
@@ -411,6 +424,7 @@ const getOzonePlacementId = (
 	}
 
 	if (getBreakpointKey() === 'M') {
+		// "Hangtime" - see comment above for details.
 		if (slotId === 'dfp-ad--inline2' && containsMpu(sizes)) {
 			return '1500001025';
 		}
@@ -428,8 +442,15 @@ const teadsBidder: PrebidBidder = {
 	},
 };
 
-const ozoneBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
+/**
+ * Ozone has a separate bidder for each supported PrebidAdUnit mediaType: banner and video
+ */
+const ozoneBidder: (
 	pageTargeting: PageTargeting,
+	bidderType: 'banner' | 'video',
+) => PrebidBidder = (
+	pageTargeting: PageTargeting,
+	bidderType: 'banner' | 'video',
 ) => ({
 	name: 'ozone',
 	switchName: 'prebidOzone',
@@ -442,7 +463,12 @@ const ozoneBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 		return {
 			publisherId: 'OZONEGMG0001',
 			siteId: '4204204209',
-			placementId: getOzonePlacementId(sizes, _slotId, pageTargeting),
+			placementId: getOzonePlacementId(
+				sizes,
+				bidderType,
+				_slotId,
+				pageTargeting,
+			),
 			customData: [
 				{
 					settings: {},
@@ -457,6 +483,25 @@ const ozoneBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 		};
 	},
 });
+
+const ozoneBannerBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
+	pageTargeting: PageTargeting,
+) => ozoneBidder(pageTargeting, 'banner');
+
+const ozoneVideoBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
+	pageTargeting: PageTargeting,
+) => ozoneBidder(pageTargeting, 'video');
+
+const shouldIncludeOzoneVideoBidder = (slotSizes: Size[]): boolean => {
+	const isInOzoneAbTest = isUserInTestGroup(
+		'commercial-ozone-outstream',
+		'variant',
+	);
+
+	const isVideoSlotSizes = slotSizes.some(isOutstream);
+
+	return isInOzoneAbTest && isVideoSlotSizes;
+};
 
 const getPubmaticPublisherId = (): string => {
 	if (isInUsOrCa()) {
@@ -593,7 +638,7 @@ const kargoBidder: PrebidBidder = {
 };
 
 const magniteBidder: PrebidBidder = {
-	//Rubicon is the old name for Magnite but it is still used for the integration
+	// Rubicon is the old name for Magnite but it is still used for the integration
 	name: 'rubicon',
 	switchName: 'prebidMagnite',
 	bidParams: (slotId: string, sizes: Size[]): PrebidMagniteParams => ({
@@ -651,7 +696,11 @@ const currentBidders = (
 		[shouldInclude('and'), appNexusBidder(pageTargeting)],
 		[shouldInclude('xhb'), xaxisBidder],
 		[shouldInclude('pubmatic'), pubmaticBidder(slotSizes)],
-		[shouldInclude('ozone'), ozoneBidder(pageTargeting)],
+		[shouldInclude('ozone'), ozoneBannerBidder(pageTargeting)],
+		[
+			shouldInclude('ozone') && shouldIncludeOzoneVideoBidder(slotSizes),
+			ozoneVideoBidder(pageTargeting),
+		],
 		[shouldInclude('oxd'), openxBidder(pageTargeting)],
 		[shouldInclude('kargo'), kargoBidder],
 		[shouldInclude('teads'), teadsBidder],

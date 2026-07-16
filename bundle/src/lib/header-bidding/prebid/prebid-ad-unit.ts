@@ -6,8 +6,11 @@ import type {
 	AdUnitDefinition,
 } from 'prebid.js/dist/src/adUnits';
 import type { MediaTypes } from 'prebid.js/dist/src/mediaTypes';
+import type { VideoMediaType } from 'prebid.js/dist/src/video';
+import { isUserInTestGroup } from '../../../ab-testing';
 import type { Advert } from '../../../define/Advert';
 import type { HeaderBiddingSlot } from '../prebid-types';
+import { isOutstream } from '../utils';
 import { bids } from './bidders/config';
 
 export class PrebidAdUnit implements AdUnitDefinition {
@@ -30,8 +33,33 @@ export class PrebidAdUnit implements AdUnitDefinition {
 		pageTargeting: PageTargeting,
 		consentState: ConsentState,
 	) {
+		const isInOzoneAbTest = isUserInTestGroup(
+			'commercial-ozone-outstream',
+			'variant',
+		);
+
+		/**
+		 * Outstream ad sizes are only compatible with the mediaTypes.video property of PrebidAdUnit
+		 */
+		const bannerSizes = slot.sizes.filter((size) => !isOutstream(size));
+		const videoSizes = slot.sizes.filter((size) => isOutstream(size));
+
 		this.code = advert.id;
-		this.mediaTypes = { banner: { sizes: slot.sizes } };
+		this.mediaTypes = {
+			banner: {
+				sizes: bannerSizes,
+			},
+			...(isInOzoneAbTest && slot.key === 'inline1'
+				? {
+						video: {
+							context: 'outstream',
+							playerSize: videoSizes,
+							placement: 3, // in-article
+							plcmt: 4, // outstream
+						} as VideoMediaType,
+					}
+				: {}),
+		};
 		this.gpid = advert.gpid ?? '';
 		this.ortb2Imp = {
 			ext: {
@@ -51,6 +79,12 @@ export class PrebidAdUnit implements AdUnitDefinition {
 		);
 
 		advert.headerBiddingSizes = slot.sizes;
-		log('commercial', `PrebidAdUnit ${this.code}`, this.bids);
+
+		log(
+			'commercial',
+			`PrebidAdUnit ${this.code}`,
+			this.mediaTypes,
+			this.bids,
+		);
 	}
 }

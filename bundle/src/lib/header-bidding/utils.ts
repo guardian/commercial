@@ -1,4 +1,8 @@
 import {
+	type AdSizeString,
+	outstreamSizes,
+} from '@guardian/commercial-core/ad-sizes';
+import {
 	isInAuOrNz,
 	isInCanada,
 	isInRow,
@@ -6,8 +10,7 @@ import {
 	isInUsa,
 	isInUsOrCa,
 } from '@guardian/commercial-core/geo/geo-utils';
-import { type ConsentState } from '@guardian/consent-manager';
-import { getConsentFor } from '@guardian/consent-manager';
+import { type ConsentState, getConsentFor } from '@guardian/consent-manager';
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import type { Size } from 'prebid.js/dist/src/types/common';
@@ -109,6 +112,11 @@ export const containsLeaderboardOrBillboard = (sizes: Size[]): boolean =>
 
 export const containsPortraitInterstitial = (sizes: Size[]): boolean =>
 	contains(sizes, [320, 480]);
+
+export const isOutstream = (size: Size) =>
+	Object.values(outstreamSizes)
+		.map((outstreamSize) => outstreamSize.toString())
+		.includes(size.toString() as AdSizeString);
 
 export const getLargestSize = (sizes: Size[]): Size | null => {
 	const reducer = (previous: Size, current: Size) => {
