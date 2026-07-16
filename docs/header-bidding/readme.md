@@ -197,6 +197,12 @@ Here is an example header bidding creative script which includes a parameter for
 
 ## Other
 
+### Ad format glossary
+
+Some bidder-specific ad formats are referred to by name in the code without further explanation. These are documented here:
+
+-   **Hangtime** - A high-impact ad format from our SSP, [GumGum](https://www.gumgum.com/) ([preview](https://playlist.playground.xyz/list/format-hang-time)). It is configured for the mobile `inline2` ad slot, using Ozone placement id `1500001025`. As it is a high-impact format, it is deliberately restricted to that one slot so that only one instance can appear per page, to avoid disrupting the user experience.
+
 ### Generating GAM Line Items
 
 You may have noticed that there are separate line items for each bid price.

@@ -522,8 +522,8 @@ describe('bids', () => {
 		).find((bid) => bid.bidder === 'teads');
 
 		expect(teadsBid?.params).toEqual({
-			pageId: 265029,
-			placementId: 248133,
+			pageId: 248133,
+			placementId: 265029,
 		});
 	});
 
@@ -838,8 +838,8 @@ describe('getTeadsParams', () => {
 			expect(
 				getTeadsParams([[300, 250]], 'dfp-ad--inline1'),
 			).toStrictEqual({
-				pageId: 265029,
-				placementId: 248133,
+				pageId: 248133,
+				placementId: 265029,
 			});
 		});
 	});
@@ -896,8 +896,8 @@ describe('getTeadsParams', () => {
 			expect(
 				getTeadsParams([[300, 250]], 'dfp-ad--inline1'),
 			).toStrictEqual({
-				pageId: 265030,
-				placementId: 248134,
+				pageId: 248134,
+				placementId: 265030,
 			});
 		});
 	});
@@ -1069,6 +1069,7 @@ describe('getOzonePlacementId', () => {
 		expect(getOzonePlacementId([[320, 50]], 'banner')).toBe('1500000260');
 	});
 
+	// "Hangtime" - see the comment on getOzonePlacementId in config.ts for what this term means.
 	test('should return correct placementID for hangtime ads in inline2 in UK', () => {
 		isInUk.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
