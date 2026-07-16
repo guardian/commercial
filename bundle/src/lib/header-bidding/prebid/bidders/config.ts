@@ -10,7 +10,6 @@ import type { ConsentState } from '@guardian/consent-manager';
 import { log } from '@guardian/libs';
 import type { AdUnitBidDefinition } from 'prebid.js/dist/src/adUnits';
 import type { Size } from 'prebid.js/dist/src/types/common';
-import { isUserInTestGroup } from '../../../../ab-testing';
 import type { PrebidIndexSite } from '../../../../types/global';
 import { dfpEnv } from '../../../dfp/dfp-env';
 import { buildAppNexusTargetingObject } from '../../../page-targeting';
@@ -43,7 +42,6 @@ import {
 	containsPortraitInterstitial,
 	containsWS,
 	getBreakpointKey,
-	isOutstream,
 	shouldIncludeBidder,
 	stripDfpAdPrefixFrom,
 	stripMobileSuffix,
@@ -374,11 +372,10 @@ const getTeadsParams = (
 
 const getOzonePlacementId = (
 	sizes: Size[],
-	bidderType: 'banner' | 'video',
 	slotId?: string,
 	pageTargeting?: PageTargeting,
 ) => {
-	if (bidderType === 'video') {
+	if (slotId === 'dfp-ad--inline1') {
 		return '1500001169';
 	}
 
@@ -442,15 +439,8 @@ const teadsBidder: PrebidBidder = {
 	},
 };
 
-/**
- * Ozone has a separate bidder for each supported PrebidAdUnit mediaType: banner and video
- */
-const ozoneBidder: (
+const ozoneBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 	pageTargeting: PageTargeting,
-	bidderType: 'banner' | 'video',
-) => PrebidBidder = (
-	pageTargeting: PageTargeting,
-	bidderType: 'banner' | 'video',
 ) => ({
 	name: 'ozone',
 	switchName: 'prebidOzone',
@@ -463,12 +453,7 @@ const ozoneBidder: (
 		return {
 			publisherId: 'OZONEGMG0001',
 			siteId: '4204204209',
-			placementId: getOzonePlacementId(
-				sizes,
-				bidderType,
-				_slotId,
-				pageTargeting,
-			),
+			placementId: getOzonePlacementId(sizes, _slotId, pageTargeting),
 			customData: [
 				{
 					settings: {},
@@ -483,25 +468,6 @@ const ozoneBidder: (
 		};
 	},
 });
-
-const ozoneBannerBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
-	pageTargeting: PageTargeting,
-) => ozoneBidder(pageTargeting, 'banner');
-
-const ozoneVideoBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
-	pageTargeting: PageTargeting,
-) => ozoneBidder(pageTargeting, 'video');
-
-const shouldIncludeOzoneVideoBidder = (slotSizes: Size[]): boolean => {
-	const isInOzoneAbTest = isUserInTestGroup(
-		'commercial-ozone-outstream',
-		'variant',
-	);
-
-	const isVideoSlotSizes = slotSizes.some(isOutstream);
-
-	return isInOzoneAbTest && isVideoSlotSizes;
-};
 
 const getPubmaticPublisherId = (): string => {
 	if (isInUsOrCa()) {
@@ -696,11 +662,7 @@ const currentBidders = (
 		[shouldInclude('and'), appNexusBidder(pageTargeting)],
 		[shouldInclude('xhb'), xaxisBidder],
 		[shouldInclude('pubmatic'), pubmaticBidder(slotSizes)],
-		[shouldInclude('ozone'), ozoneBannerBidder(pageTargeting)],
-		[
-			shouldInclude('ozone') && shouldIncludeOzoneVideoBidder(slotSizes),
-			ozoneVideoBidder(pageTargeting),
-		],
+		[shouldInclude('ozone'), ozoneBidder(pageTargeting)],
 		[shouldInclude('oxd'), openxBidder(pageTargeting)],
 		[shouldInclude('kargo'), kargoBidder],
 		[shouldInclude('teads'), teadsBidder],
