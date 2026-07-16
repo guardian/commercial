@@ -2,7 +2,6 @@
 
 import { hashEmailForClient } from '@guardian/commercial-core/email-hash';
 import { type ConsentState, getConsentFor } from '@guardian/consent-manager';
-import { isUserInTestGroup } from '../../../ab-testing';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
 import { getEmail } from '../../identity/api';
@@ -44,10 +43,6 @@ jest.mock('../../identity/api', () => ({
 
 jest.mock('@guardian/commercial-core/email-hash', () => ({
 	hashEmailForClient: jest.fn(),
-}));
-
-jest.mock('../../../ab-testing', () => ({
-	isUserInTestGroup: jest.fn(),
 }));
 
 const mockGetConsentForID5 = (hasConsent: boolean) =>
@@ -602,11 +597,9 @@ describe('Prebid.js bidWon Events', () => {
 		},
 	);
 });
-describe('isInPrebidFloorPriceTest', () => {
+describe('prebid price floors', () => {
 	/* eslint-disable @typescript-eslint/no-unsafe-assignment -- Jest matchers return any */
-	test('when user can use price floors and is not in the variant holdback group, pbjs.setConfig is called with floor price values', async () => {
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false);
-
+	test('pbjs.setConfig is called with floor price values for all users', async () => {
 		const setConfigSpy = jest.spyOn(window.pbjs, 'setConfig');
 		await prebid.initialise(window, mockConsentState);
 
@@ -615,26 +608,12 @@ describe('isInPrebidFloorPriceTest', () => {
 				floors: expect.objectContaining({
 					enabled: true,
 					data: expect.objectContaining({
+						/* eslint-enable @typescript-eslint/no-unsafe-assignment */
 						schema: { fields: ['mediaType'] },
 						values: { '*': 0.1 },
 						default: 0.1,
 					}),
 				}),
-			}),
-		);
-	});
-	/* eslint-enable @typescript-eslint/no-unsafe-assignment */
-	test('when user is in the variant holdback group, pbjs.setConfig is called without floor price values', async () => {
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
-
-		const setConfigSpy = jest.spyOn(window.pbjs, 'setConfig');
-
-		await prebid.initialise(window, mockConsentState);
-
-		expect(setConfigSpy).toHaveBeenCalledWith(
-			expect.not.objectContaining({
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Jest matchers return any
-				floors: expect.anything(),
 			}),
 		);
 	});
