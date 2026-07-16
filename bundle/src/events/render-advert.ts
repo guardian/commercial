@@ -100,8 +100,15 @@ sizeCallbacks[adSizes.pubmaticInterscroller.toString()] = (advert: Advert) => {
 /**
  * Out of page adverts - creatives that aren't directly shown on the page - need to be hidden,
  * and their containers closed up.
+ *
+ * Exception: Teads outstream demand is delivered via a 1x1 (out-of-page) size, so we must NOT collapse the slot in that case. We instead apply outstream
+ * styling and leave the slot in place.
  */
 const outOfPageCallback = (advert: Advert) => {
+	if (advert.prebidWinningBidderCode === 'teads') {
+		return advert.updateExtraSlotClasses('ad-slot--outstream');
+	}
+
 	const parent = advert.node.parentNode as HTMLElement;
 	return fastdom.mutate(() => {
 		advert.node.classList.add('ad-slot--collapse');
@@ -226,7 +233,14 @@ const renderAdvert = (
 						sizeCallback !== undefined
 							? sizeCallback(advert, slotRenderEndedEvent)
 							: advert.updateExtraSlotClasses(),
-					);
+					).then(() => {
+						/**
+						 * Reset the winning bidder code once it has been consumed
+						 * so it can't leak into a subsequent non-prebid render on
+						 * the same slot.
+						 */
+						advert.prebidWinningBidderCode = null;
+					});
 				}
 
 				return Promise.resolve();
