@@ -138,7 +138,7 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 		'top-above-nav': {
 			desktop: [getAdSize('billboard'), getAdSize('leaderboard')],
 			tablet: [getAdSize('leaderboard')],
-			mobile: [getAdSize('mpu')],
+			mobile: [getAdSize('mpu'), getAdSize('outOfPage')],
 		},
 		'fronts-banner': {
 			desktop: [getAdSize('billboard')],
@@ -152,7 +152,7 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 					]
 				: [getAdSize('mpu')],
 			tablet: [getAdSize('mpu')],
-			mobile: [getAdSize('mpu')],
+			mobile: [getAdSize('mpu'), getAdSize('outOfPage')],
 		},
 		inline1: {
 			desktop: isArticle
@@ -160,7 +160,10 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 						getAdSize('mpu'),
 						...(isInOzoneAbTest
 							? [getAdSize('outstreamOzone')]
-							: [getAdSize('outstreamDesktop')]),
+							: [
+									getAdSize('outstreamDesktop'),
+									getAdSize('outOfPage'),
+								]),
 					]
 				: [getAdSize('mpu')],
 			tablet: isArticle
@@ -178,6 +181,7 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 							: [getAdSize('outstreamMobile')]),
 						getAdSize('mpu'),
 						getAdSize('portraitInterstitial'),
+						...(isInOzoneAbTest ? [] : [getAdSize('outOfPage')]),
 					]
 				: [getAdSize('mpu')],
 		},
@@ -195,6 +199,7 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 						getAdSize('mpu'),
 						getAdSize('portraitInterstitial'),
 						getAdSize('pubmaticInterscroller'),
+						getAdSize('outOfPage'),
 					]
 				: [getAdSize('mpu')],
 		},

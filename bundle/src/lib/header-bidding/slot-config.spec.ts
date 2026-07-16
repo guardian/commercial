@@ -103,7 +103,7 @@ describe('getPrebidAdSlots', () => {
 		expect(getHeaderBiddingAdSlots(buildAdvert('top-above-nav'))).toEqual([
 			{
 				key: 'top-above-nav',
-				sizes: [createAdSize(300, 250)],
+				sizes: [createAdSize(300, 250), createAdSize(1, 1)],
 			},
 		]);
 	});
@@ -146,6 +146,7 @@ describe('getPrebidAdSlots', () => {
 		expect(hbSlots[0]?.sizes).toEqual([
 			createAdSize(300, 250),
 			createAdSize(620, 350),
+			createAdSize(1, 1),
 		]);
 	});
 
@@ -173,6 +174,7 @@ describe('getPrebidAdSlots', () => {
 			createAdSize(300, 197),
 			createAdSize(300, 250),
 			createAdSize(320, 480),
+			createAdSize(1, 1),
 		]);
 	});
 
@@ -199,6 +201,7 @@ describe('getPrebidAdSlots', () => {
 			createAdSize(300, 250),
 			createAdSize(320, 480),
 			createAdSize(371, 660),
+			createAdSize(1, 1),
 		]);
 	});
 
@@ -210,7 +213,7 @@ describe('getPrebidAdSlots', () => {
 		expect(hbSlots).toContainEqual(
 			expect.objectContaining({
 				key: 'inline',
-				sizes: [createAdSize(300, 250)],
+				sizes: [createAdSize(300, 250), createAdSize(1, 1)],
 			}),
 		);
 	});
