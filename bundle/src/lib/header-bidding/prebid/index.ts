@@ -9,7 +9,6 @@ import { flatten } from 'lodash-es';
 import type { AnalyticsConfig } from 'prebid.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
 import type { AdUnitDefinition } from 'prebid.js/dist/src/adUnits';
 import type { UserSyncConfig } from 'prebid.js/dist/src/userSync';
-import { isUserInTestGroup } from '../../../ab-testing';
 import type { Advert } from '../../../define/Advert';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedIn } from '../../identity/api';
@@ -47,12 +46,6 @@ const initialise = async (
 
 	const userSync: UserSyncConfig = await getUserSyncSettings(consentState);
 
-	// We're holding back 5% of users, who will not get any price floors applied
-	const canUsePriceFloors = !isUserInTestGroup(
-		'commercial-prebid-price-floor-holdback',
-		'holdback',
-	);
-
 	window.pbjs.setConfig({
 		/**
 		 * The amount of time reserved for the auction
@@ -61,18 +54,14 @@ const initialise = async (
 		/**
 		 * Applying one global floor price of £0.10 for all bids.
 		 */
-		...(canUsePriceFloors
-			? {
-					floors: {
-						enabled: true,
-						data: {
-							schema: { fields: ['mediaType'] },
-							values: { '*': 0.1 },
-							default: 0.1,
-						},
-					},
-				}
-			: {}),
+		floors: {
+			enabled: true,
+			data: {
+				schema: { fields: ['mediaType'] },
+				values: { '*': 0.1 },
+				default: 0.1,
+			},
+		},
 		priceGranularity: 'custom',
 		customPriceBucket: priceGranularity,
 		userSync,
