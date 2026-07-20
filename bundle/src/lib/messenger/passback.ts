@@ -2,6 +2,7 @@ import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { AD_LABEL_HEIGHT } from '@guardian/commercial-core/constants/ad-label-height';
 import { log } from '@guardian/libs';
 import { breakpoints } from '@guardian/source/foundations';
+import { isUserInTestGroup } from '../../ab-testing';
 import { getCurrentBreakpoint } from '../detect/detect-breakpoint';
 import { adSlotIdPrefix } from '../dfp/dfp-env-globals';
 import { getAdvertById } from '../dfp/get-advert-by-id';
@@ -26,6 +27,11 @@ type PassbackMessagePayload = { source: string };
  */
 const mpu: [number, number] = [adSizes.mpu.width, adSizes.mpu.height];
 
+const isInOzoneAbTest = isUserInTestGroup(
+	'commercial-ozone-outstream',
+	'variant',
+);
+
 const outstreamDesktop: [number, number] = [
 	adSizes.outstreamDesktop.width,
 	adSizes.outstreamDesktop.height,
@@ -34,17 +40,27 @@ const outstreamMobile: [number, number] = [
 	adSizes.outstreamMobile.width,
 	adSizes.outstreamMobile.height,
 ];
+const outstreamOzone: [number, number] = [
+	adSizes.outstreamOzone.width,
+	adSizes.outstreamOzone.height,
+];
 
-const outstreamSizes = [mpu, outstreamMobile, outstreamDesktop];
+const outstreamHeightDesktop = isInOzoneAbTest
+	? adSizes.outstreamOzone.height
+	: adSizes.outstreamDesktop.height;
+
+const outstreamSizes = isInOzoneAbTest
+	? [outstreamOzone]
+	: [outstreamDesktop, outstreamMobile];
 
 const oustreamSizeMappings = [
 	[
 		[breakpoints.phablet, 0],
-		[mpu, outstreamDesktop],
+		[mpu, isInOzoneAbTest ? outstreamOzone : outstreamDesktop],
 	],
 	[
 		[breakpoints.mobile, 0],
-		[mpu, outstreamMobile],
+		[mpu, isInOzoneAbTest ? outstreamOzone : outstreamMobile],
 	],
 ] satisfies googletag.SizeMappingArray;
 
@@ -66,7 +82,7 @@ const defaultSizeMappings = [
 const decideSizes = (source: string) => {
 	if (source === 'teads') {
 		return {
-			sizes: outstreamSizes,
+			sizes: [mpu, ...outstreamSizes],
 			sizeMappings: oustreamSizeMappings,
 		};
 	}
@@ -305,8 +321,7 @@ const initPassbackMessage = (register: RegisterListener): void => {
 										const slotHeight = `${
 											(getCurrentBreakpoint() === 'mobile'
 												? adHeight
-												: adSizes.outstreamDesktop
-														.height) +
+												: outstreamHeightDesktop) +
 											AD_LABEL_HEIGHT
 										}px`;
 										log(
