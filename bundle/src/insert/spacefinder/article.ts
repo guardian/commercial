@@ -1,5 +1,6 @@
 import type { AdSize, SizeMapping } from '@guardian/commercial-core/ad-sizes';
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
+import { isUserInTestGroup } from '../../ab-testing';
 import { allowArticleBodyAdverts } from '../../lib/article-body-adverts';
 import type { ContainerOptions } from '../../lib/create-ad-slot';
 import {
@@ -102,11 +103,22 @@ const decideAdditionalSizes = async (
 };
 
 const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
+	const isInOzoneAbTest = isUserInTestGroup(
+		'commercial-ozone-outstream',
+		'variant',
+	);
+
 	// these are added here and not in size mappings because the inline[i] name
 	// is also used on fronts, where we don't want outstream or tall ads
 	const additionalSizes = {
-		phablet: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
-		desktop: [adSizes.outstreamDesktop, adSizes.outstreamGoogleDesktop],
+		phablet: [
+			isInOzoneAbTest ? adSizes.outstreamOzone : adSizes.outstreamDesktop,
+			adSizes.outstreamGoogleDesktop,
+		],
+		desktop: [
+			isInOzoneAbTest ? adSizes.outstreamOzone : adSizes.outstreamDesktop,
+			adSizes.outstreamGoogleDesktop,
+		],
 	};
 
 	const insertAd: SpacefinderWriter = async (paras) => {
@@ -210,8 +222,17 @@ const addDesktopRightRailAds = ({
 };
 
 const additionalMobileAndTabletInlineSizes = (index: number) => {
+	const isInOzoneAbTest = isUserInTestGroup(
+		'commercial-ozone-outstream',
+		'variant',
+	);
+
 	if (index === 1) {
-		return { mobile: [adSizes.portraitInterstitial] };
+		return {
+			mobile: isInOzoneAbTest
+				? [adSizes.portraitInterstitial, adSizes.outstreamOzone]
+				: [adSizes.portraitInterstitial],
+		};
 	} else if (index === 2) {
 		return {
 			mobile: [
@@ -220,35 +241,48 @@ const additionalMobileAndTabletInlineSizes = (index: number) => {
 			],
 		};
 	}
+
 	return undefined;
+};
+
+/**
+ * On mobile, the first inline ad is `top-above-nav`, followed by `inline1`, `inline2`, and so on.
+ * On tablet, the first inline ad is `inline1`.
+ */
+const getSlotName = (isMobile: boolean, index: number): string => {
+	if (isMobile) {
+		return index === 0 ? 'top-above-nav' : `inline${index}`;
+	}
+
+	return `inline${index + 1}`;
 };
 
 const addMobileAndTabletInlineAds = (
 	fillSlot: FillAdSlot,
-	currentBreakpoint: ReturnType<typeof getCurrentBreakpoint>,
+	currentBreakpoint: Extract<
+		ReturnType<typeof getCurrentBreakpoint>,
+		'mobile' | 'tablet'
+	>,
 ): Promise<boolean> => {
 	const insertAds: SpacefinderWriter = async (paras) => {
 		const slots = paras.map(async (para, i) => {
-			//Mobile top-above-nav is the first ad in the body and the inline1 is the second ad in the body.
-			//Tablet top-above-nav is above the website's navigation and the inline1 is the first ad in the body.
-			const name =
-				currentBreakpoint === 'mobile' && i === 0
-					? 'top-above-nav'
-					: currentBreakpoint === 'tablet'
-						? `inline${i + 1}`
-						: `inline${i}`;
+			const isMobile = currentBreakpoint === 'mobile';
+			const name = getSlotName(isMobile, i);
 
-			const type =
-				currentBreakpoint === 'mobile' && i === 0
-					? 'top-above-nav'
-					: 'inline';
-			const slot = await insertSlotAtPara(para, name, type, 'inline');
+			const slot = await insertSlotAtPara(
+				para,
+				name,
+				isMobile && i === 0 ? 'top-above-nav' : 'inline',
+				'inline',
+			);
+
 			return fillSlot(
 				name,
 				slot,
 				additionalMobileAndTabletInlineSizes(i),
 			);
 		});
+
 		await Promise.all(slots);
 	};
 
@@ -269,7 +303,7 @@ const addInlineAds = async (
 	isConsentless: boolean,
 ): Promise<boolean> => {
 	const currentBreakpoint = getCurrentBreakpoint();
-	if (['mobile', 'tablet'].includes(currentBreakpoint)) {
+	if (currentBreakpoint === 'mobile' || currentBreakpoint === 'tablet') {
 		return addMobileAndTabletInlineAds(fillSlot, currentBreakpoint);
 	}
 
@@ -311,4 +345,4 @@ const init = async (fillAdSlot: FillAdSlot): Promise<void> => {
 	await addInlineAds(fillAdSlot, false);
 };
 
-export { init, addInlineAds, type FillAdSlot };
+export { addInlineAds, init, type FillAdSlot };

@@ -1,5 +1,6 @@
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { log } from '@guardian/libs';
+import { isUserInTestGroup } from '../../ab-testing';
 import { isAdFree } from '../../lib/ad-free';
 import { createAdSlot } from '../../lib/create-ad-slot';
 import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
@@ -49,21 +50,30 @@ const insertAdAtPara = (para: Node) => {
 
 	container.appendChild(ad);
 
+	const isInOzoneAbTest = isUserInTestGroup(
+		'commercial-ozone-outstream',
+		'variant',
+	);
+
 	return fastdom
 		.mutate(() => {
 			if (para.parentNode) {
-				/* ads are inserted after the block on liveblogs */
+				// Ads are inserted after the block on liveblogs
 				para.parentNode.insertBefore(container, para.nextSibling);
 			}
 		})
 		.then(async () =>
 			fillDynamicAdSlot(ad, false, {
 				phablet: [
-					adSizes.outstreamDesktop,
+					isInOzoneAbTest
+						? adSizes.outstreamOzone
+						: adSizes.outstreamDesktop,
 					adSizes.outstreamGoogleDesktop,
 				],
 				desktop: [
-					adSizes.outstreamDesktop,
+					isInOzoneAbTest
+						? adSizes.outstreamOzone
+						: adSizes.outstreamDesktop,
 					adSizes.outstreamGoogleDesktop,
 				],
 			}),
@@ -238,15 +248,13 @@ const onUpdate = (): void => {
 	void lookForSpacesForAdSlots();
 };
 
-/**
- * Inserts inline ad slots between new content
- * blocks when they are pushed to the page.
- */
-
 const isLiveBlog = window.guardian.config.page.isLiveBlog ?? false;
 const adsEnabled = shouldLoadAds();
 const adFree = isAdFree();
 
+/**
+ * Inserts inline ad slots between new content blocks when they are pushed to the page.
+ */
 export const init = (): Promise<void> => {
 	if (!!isLiveBlog && adsEnabled && !adFree) {
 		void startListening();
