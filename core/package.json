@@ -52,7 +52,7 @@
 		"@guardian/consent-manager": "1.0.0"
 	},
 	"devDependencies": {
-		"@guardian/ophan-tracker-js": "3.0.0",
+		"@guardian/ophan-tracker-js": "5.0.0",
 		"@types/jest": "30.0.0",
 		"@types/node": "26.0.0",
 		"jest": "30.3.0",
