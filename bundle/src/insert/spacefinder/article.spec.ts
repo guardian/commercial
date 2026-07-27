@@ -1,5 +1,6 @@
+import { adSizes } from '@guardian/commercial-core';
 import { allowArticleBodyAdverts } from '../../lib/article-body-adverts';
-import { init } from './article';
+import { additionalMobileAndTabletInlineSizes, init } from './article';
 import { spaceFiller } from './space-filler';
 
 jest.mock('lib/header-bidding/prebid', () => ({
@@ -77,5 +78,29 @@ describe('Article Body Adverts', () => {
 				'mobile-inlines',
 			);
 		});
+	});
+});
+
+describe('additionalMobileAndTabletInlineSizes', () => {
+	it('should return the correct sizes for inline1', () => {
+		const sizes = additionalMobileAndTabletInlineSizes(1);
+		expect(sizes).toEqual({
+			mobile: [adSizes.portraitInterstitial, adSizes.outstreamOzone],
+		});
+	});
+
+	it('should return the correct sizes for inline2', () => {
+		const sizes = additionalMobileAndTabletInlineSizes(2);
+		expect(sizes).toEqual({
+			mobile: [
+				adSizes.portraitInterstitial,
+				adSizes.pubmaticInterscroller,
+			],
+		});
+	});
+
+	it('should return an empty object for other indices', () => {
+		const sizes = additionalMobileAndTabletInlineSizes(0);
+		expect(sizes).toEqual(undefined);
 	});
 });

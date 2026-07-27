@@ -2,7 +2,6 @@ import type { SizeMapping } from '@guardian/commercial-core/ad-sizes';
 import { adSizes, createAdSize } from '@guardian/commercial-core/ad-sizes';
 import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { isNonNullable, log } from '@guardian/libs';
-import { isUserInTestGroup } from '../../ab-testing';
 import { createAdvert } from '../../define/create-advert';
 import { displayAds } from '../../display/display-ads';
 import { displayLazyAds } from '../../display/display-lazy-ads';
@@ -23,27 +22,23 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 		};
 	}
 
-	const isInOzoneAbTest = isUserInTestGroup(
-		'commercial-ozone-outstream',
-		'variant',
-	);
-
 	if (contentType === 'LiveBlog' && name?.includes('inline')) {
-		return {
-			...(isInOzoneAbTest && { mobile: [adSizes.outstreamOzone] }),
-			phablet: [
-				isInOzoneAbTest
-					? adSizes.outstreamOzone
-					: adSizes.outstreamDesktop,
-				adSizes.outstreamGoogleDesktop,
-			],
-			desktop: [
-				isInOzoneAbTest
-					? adSizes.outstreamOzone
-					: adSizes.outstreamDesktop,
-				adSizes.outstreamGoogleDesktop,
-			],
-		};
+		return name === 'inline1'
+			? {
+					mobile: [adSizes.outstreamOzone],
+					phablet: [
+						adSizes.outstreamOzone,
+						adSizes.outstreamGoogleDesktop,
+					],
+					desktop: [
+						adSizes.outstreamOzone,
+						adSizes.outstreamGoogleDesktop,
+					],
+				}
+			: {
+					phablet: [adSizes.outstreamGoogleDesktop],
+					desktop: [adSizes.outstreamGoogleDesktop],
+				};
 	}
 
 	if (name === 'article-end' && isInUsa()) {
