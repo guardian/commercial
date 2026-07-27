@@ -37,7 +37,7 @@ export class PrebidAdUnit implements AdUnitDefinition {
 		 */
 		const bannerSizes = slot.sizes.filter((size) => !isOutstream(size));
 		const videoSizes = slot.sizes.filter((size) => isOutstream(size));
-		const isOutstreamVideoAllowed =
+		const useOutstreamVideo =
 			slot.key === 'inline1' && videoSizes.length > 0;
 
 		this.code = advert.id;
@@ -45,7 +45,7 @@ export class PrebidAdUnit implements AdUnitDefinition {
 			banner: {
 				sizes: bannerSizes,
 			},
-			...(isOutstreamVideoAllowed
+			...(useOutstreamVideo
 				? {
 						video: {
 							context: 'outstream',

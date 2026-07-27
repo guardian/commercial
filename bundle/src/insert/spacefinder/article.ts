@@ -327,4 +327,9 @@ const init = async (fillAdSlot: FillAdSlot): Promise<void> => {
 	await addInlineAds(fillAdSlot, false);
 };
 
-export { addInlineAds, init, type FillAdSlot };
+export {
+	addInlineAds,
+	additionalMobileAndTabletInlineSizes,
+	init,
+	type FillAdSlot,
+};
