@@ -1,6 +1,5 @@
 import type { PageTargeting } from '@guardian/commercial-core/targeting/build-page-targeting';
 import type { ConsentState } from '@guardian/consent-manager';
-import { isUserInTestGroup } from '../../../ab-testing';
 import type { Advert } from '../../../define/Advert';
 import type { HeaderBiddingSlot } from '../prebid-types';
 import { bids } from './bidders/config';
@@ -15,10 +14,6 @@ function buildDummyBid() {
 
 jest.mock('./bidders/config', () => ({
 	bids: jest.fn().mockReturnValue([buildDummyBid()]),
-}));
-
-jest.mock('../../../ab-testing', () => ({
-	isUserInTestGroup: jest.fn(),
 }));
 
 const mockedBids = bids as jest.MockedFunction<typeof bids>;
@@ -53,7 +48,6 @@ describe('PrebidAdUnit', () => {
 	});
 
 	test('returns the correct bids and sizes for slot', () => {
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false);
 		const advert = buildAdvert('dfp-ad--top-above-nav');
 		const slot: HeaderBiddingSlot = {
 			key: 'top-above-nav',
@@ -83,15 +77,12 @@ describe('PrebidAdUnit', () => {
 		expect(advert.headerBiddingSizes).toEqual(slot.sizes);
 	});
 
-	test('adds the video media type for non-inline1 slots', () => {
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
+	test('adds the video media type for inline1 slots', () => {
 		const advert = buildAdvert('dfp-ad--inline1');
 		const slot: HeaderBiddingSlot = {
 			key: 'inline1',
 			sizes: [
 				[300, 250],
-				[620, 350],
-				[300, 197],
 				[640, 360],
 			],
 		};
@@ -108,11 +99,7 @@ describe('PrebidAdUnit', () => {
 				sizes: [[300, 250]],
 			},
 			video: {
-				playerSize: [
-					[620, 350],
-					[300, 197],
-					[640, 360],
-				],
+				playerSize: [[640, 360]],
 				context: 'outstream',
 				placement: 3,
 				plcmt: 4,
@@ -121,11 +108,13 @@ describe('PrebidAdUnit', () => {
 	});
 
 	test('does not add the video media type for non-inline1 slots', () => {
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
 		const advert = buildAdvert('dfp-ad--top-above-nav');
 		const slot: HeaderBiddingSlot = {
 			key: 'top-above-nav',
-			sizes: [[728, 90]],
+			sizes: [
+				[300, 250],
+				[640, 360],
+			],
 		};
 
 		const adUnit = new PrebidAdUnit(
@@ -137,17 +126,19 @@ describe('PrebidAdUnit', () => {
 
 		expect(adUnit.mediaTypes).toEqual({
 			banner: {
-				sizes: slot.sizes,
+				sizes: [[300, 250]],
 			},
 		});
 	});
 
-	test('does not add the video media type when NOT in AB test', () => {
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(false);
+	test('does not add the video media type when there are no video sizes', () => {
 		const advert = buildAdvert('dfp-ad--inline1');
 		const slot: HeaderBiddingSlot = {
 			key: 'inline1',
-			sizes: [[728, 90]],
+			sizes: [
+				[970, 350],
+				[728, 90],
+			],
 		};
 
 		const adUnit = new PrebidAdUnit(
@@ -164,15 +155,12 @@ describe('PrebidAdUnit', () => {
 		});
 	});
 
-	test('uses outstream video sizes only in video media type when in AB test', () => {
-		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
+	test('uses outstream video sizes only in video media type', () => {
 		const advert = buildAdvert('dfp-ad--inline1');
 		const slot: HeaderBiddingSlot = {
 			key: 'inline1',
 			sizes: [
 				[300, 250],
-				[620, 350],
-				[300, 197],
 				[640, 360],
 			],
 		};
@@ -189,11 +177,7 @@ describe('PrebidAdUnit', () => {
 				sizes: [[300, 250]],
 			},
 			video: {
-				playerSize: [
-					[620, 350],
-					[300, 197],
-					[640, 360],
-				],
+				playerSize: [[640, 360]],
 				context: 'outstream',
 				placement: 3,
 				plcmt: 4,
