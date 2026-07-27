@@ -2,7 +2,6 @@ import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { isInUk } from '@guardian/commercial-core/geo/geo-utils';
 import type { Size } from 'prebid.js/dist/src/types/common';
-import { isUserInTestGroup } from '../../ab-testing';
 import type { Advert } from '../../define/Advert';
 import type {
 	HeaderBiddingSizeKey,
@@ -118,10 +117,6 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 	const isArticle = contentType === 'Article';
 	const hasExtendedMostPop =
 		isArticle && window.guardian.config.switches.extendedMostPopular;
-	const isInOzoneAbTest = isUserInTestGroup(
-		'commercial-ozone-outstream',
-		'variant',
-	);
 
 	return {
 		right: {
@@ -158,30 +153,19 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 			desktop: isArticle
 				? [
 						getAdSize('mpu'),
-						...(isInOzoneAbTest
-							? [getAdSize('outstreamOzone')]
-							: [
-									getAdSize('outstreamDesktop'),
-									getAdSize('outOfPage'),
-								]),
+						getAdSize('outstreamOzone'),
+						getAdSize('outOfPage'),
 					]
 				: [getAdSize('mpu')],
 			tablet: isArticle
-				? [
-						getAdSize('mpu'),
-						...(isInOzoneAbTest
-							? [getAdSize('outstreamOzone')]
-							: [getAdSize('outstreamDesktop')]),
-					]
+				? [getAdSize('mpu'), getAdSize('outstreamOzone')]
 				: [getAdSize('mpu')],
 			mobile: isArticle
 				? [
-						...(isInOzoneAbTest
-							? [getAdSize('outstreamOzone')]
-							: [getAdSize('outstreamMobile')]),
 						getAdSize('mpu'),
+						getAdSize('outstreamOzone'),
 						getAdSize('portraitInterstitial'),
-						...(isInOzoneAbTest ? [] : [getAdSize('outOfPage')]),
+						getAdSize('outOfPage'),
 					]
 				: [getAdSize('mpu')],
 		},

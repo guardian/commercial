@@ -1,6 +1,5 @@
 import type { AdSize, SizeMapping } from '@guardian/commercial-core/ad-sizes';
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
-import { isUserInTestGroup } from '../../ab-testing';
 import { allowArticleBodyAdverts } from '../../lib/article-body-adverts';
 import type { ContainerOptions } from '../../lib/create-ad-slot';
 import {
@@ -103,22 +102,11 @@ const decideAdditionalSizes = async (
 };
 
 const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
-	const isInOzoneAbTest = isUserInTestGroup(
-		'commercial-ozone-outstream',
-		'variant',
-	);
-
 	// these are added here and not in size mappings because the inline[i] name
 	// is also used on fronts, where we don't want outstream or tall ads
 	const additionalSizes = {
-		phablet: [
-			isInOzoneAbTest ? adSizes.outstreamOzone : adSizes.outstreamDesktop,
-			adSizes.outstreamGoogleDesktop,
-		],
-		desktop: [
-			isInOzoneAbTest ? adSizes.outstreamOzone : adSizes.outstreamDesktop,
-			adSizes.outstreamGoogleDesktop,
-		],
+		phablet: [adSizes.outstreamOzone, adSizes.outstreamGoogleDesktop],
+		desktop: [adSizes.outstreamOzone, adSizes.outstreamGoogleDesktop],
 	};
 
 	const insertAd: SpacefinderWriter = async (paras) => {
@@ -222,27 +210,21 @@ const addDesktopRightRailAds = ({
 };
 
 const additionalMobileAndTabletInlineSizes = (index: number) => {
-	const isInOzoneAbTest = isUserInTestGroup(
-		'commercial-ozone-outstream',
-		'variant',
-	);
-
-	if (index === 1) {
-		return {
-			mobile: isInOzoneAbTest
-				? [adSizes.portraitInterstitial, adSizes.outstreamOzone]
-				: [adSizes.portraitInterstitial],
-		};
-	} else if (index === 2) {
-		return {
-			mobile: [
-				adSizes.portraitInterstitial,
-				adSizes.pubmaticInterscroller,
-			],
-		};
+	switch (index) {
+		case 1:
+			return {
+				mobile: [adSizes.portraitInterstitial, adSizes.outstreamOzone],
+			};
+		case 2:
+			return {
+				mobile: [
+					adSizes.portraitInterstitial,
+					adSizes.pubmaticInterscroller,
+				],
+			};
+		default:
+			return undefined;
 	}
-
-	return undefined;
 };
 
 /**
