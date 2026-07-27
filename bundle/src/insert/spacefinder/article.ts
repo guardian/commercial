@@ -211,11 +211,11 @@ const addDesktopRightRailAds = ({
 
 const additionalMobileAndTabletInlineSizes = (index: number) => {
 	switch (index) {
-		case 1:
+		case 1: // inline1
 			return {
 				mobile: [adSizes.portraitInterstitial, adSizes.outstreamOzone],
 			};
-		case 2:
+		case 2: // inline2
 			return {
 				mobile: [
 					adSizes.portraitInterstitial,

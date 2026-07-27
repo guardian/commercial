@@ -42,12 +42,31 @@ const insertAdAtPara = (para: Node) => {
 		isMobile ? 'mobile' : 'desktop'
 	}`;
 
+	const slotName = getSlotName(isMobile, AD_COUNTER);
+
 	const ad = createAdSlot('inline', {
-		name: getSlotName(isMobile, AD_COUNTER),
+		name: slotName,
 		classes: `liveblog-inline${isMobile ? '--mobile' : ''}`,
 	});
 
 	container.appendChild(ad);
+
+	const additionalSizes =
+		slotName === 'inline1'
+			? {
+					phablet: [
+						adSizes.outstreamOzone,
+						adSizes.outstreamGoogleDesktop,
+					],
+					desktop: [
+						adSizes.outstreamOzone,
+						adSizes.outstreamGoogleDesktop,
+					],
+				}
+			: {
+					phablet: [adSizes.outstreamGoogleDesktop],
+					desktop: [adSizes.outstreamGoogleDesktop],
+				};
 
 	return fastdom
 		.mutate(() => {
@@ -56,18 +75,7 @@ const insertAdAtPara = (para: Node) => {
 				para.parentNode.insertBefore(container, para.nextSibling);
 			}
 		})
-		.then(async () =>
-			fillDynamicAdSlot(ad, false, {
-				phablet: [
-					adSizes.outstreamOzone,
-					adSizes.outstreamGoogleDesktop,
-				],
-				desktop: [
-					adSizes.outstreamOzone,
-					adSizes.outstreamGoogleDesktop,
-				],
-			}),
-		);
+		.then(async () => fillDynamicAdSlot(ad, false, additionalSizes));
 };
 
 const insertAds: SpacefinderWriter = async (paras) => {

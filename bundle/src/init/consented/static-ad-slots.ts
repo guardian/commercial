@@ -23,11 +23,22 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 	}
 
 	if (contentType === 'LiveBlog' && name?.includes('inline')) {
-		return {
-			mobile: [adSizes.outstreamOzone],
-			phablet: [adSizes.outstreamOzone, adSizes.outstreamGoogleDesktop],
-			desktop: [adSizes.outstreamOzone, adSizes.outstreamGoogleDesktop],
-		};
+		return name === 'inline1'
+			? {
+					mobile: [adSizes.outstreamOzone],
+					phablet: [
+						adSizes.outstreamOzone,
+						adSizes.outstreamGoogleDesktop,
+					],
+					desktop: [
+						adSizes.outstreamOzone,
+						adSizes.outstreamGoogleDesktop,
+					],
+				}
+			: {
+					phablet: [adSizes.outstreamGoogleDesktop],
+					desktop: [adSizes.outstreamGoogleDesktop],
+				};
 	}
 
 	if (name === 'article-end' && isInUsa()) {
