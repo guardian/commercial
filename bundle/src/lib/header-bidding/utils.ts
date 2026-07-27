@@ -14,7 +14,6 @@ import { type ConsentState, getConsentFor } from '@guardian/consent-manager';
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import type { Size } from 'prebid.js/dist/src/types/common';
-import { isUserInTestGroup } from '../../ab-testing';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
@@ -251,13 +250,7 @@ export const shouldIncludeMobileSticky = once(
 		}) &&
 			!isInUk() &&
 			(isValidPageForMobileSticky() ||
-				// We intentionally use variant as the holdback arm for this test.
-				// Only users not in variant are eligible for this LiveBlog US mobile-sticky path.
-				(!isUserInTestGroup(
-					'commercial-mobile-sticky-liveblog-us',
-					'variant',
-				) &&
-					window.guardian.config.page.contentType === 'LiveBlog' &&
+				(window.guardian.config.page.contentType === 'LiveBlog' &&
 					isInUsa())) &&
 			!window.guardian.config.page.isHosted),
 );
