@@ -5,7 +5,6 @@ import {
 	getConsentFor as getConsentFor_,
 } from '@guardian/consent-manager';
 import type { CountryCode } from '@guardian/libs';
-import { isUserInTestGroup } from '../../ab-testing';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
@@ -66,10 +65,6 @@ jest.mock('@guardian/commercial-core/geo/get-locale', () => ({
 jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentTweakpoint: jest.fn(() => 'mobile'),
 	matchesBreakpoints: jest.fn(),
-}));
-
-jest.mock('../../ab-testing', () => ({
-	isUserInTestGroup: jest.fn(),
 }));
 
 const resetConfig = () => {
@@ -429,20 +424,11 @@ describe('Utils', () => {
 			},
 		);
 
-		test('should be true for US LiveBlog on mobile when user is not in holdback', () => {
+		test('should be true for US LiveBlog on mobile', () => {
 			window.guardian.config.page.contentType = 'LiveBlog';
 			getLocale.mockReturnValue('US');
 			matchesBreakpoints.mockReturnValue(true);
-			jest.mocked(isUserInTestGroup).mockReturnValue(false);
 			expect(shouldIncludeMobileSticky()).toBe(true);
-		});
-
-		test('should be false for US LiveBlog on mobile when user is in holdback', () => {
-			window.guardian.config.page.contentType = 'LiveBlog';
-			getLocale.mockReturnValue('US');
-			matchesBreakpoints.mockReturnValue(true);
-			jest.mocked(isUserInTestGroup).mockReturnValue(true);
-			expect(shouldIncludeMobileSticky()).toBe(false);
 		});
 
 		test('should be false if all conditions true except pageId or content type ', () => {
