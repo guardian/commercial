@@ -241,12 +241,9 @@ const setupBackground = async (
 
 				// Mute/unmute toggle button
 				const muteButton = document.createElement('button');
-				muteButton.classList.add(
-					'interscroller-video__mute-button',
-				);
 				muteButton.setAttribute('aria-label', 'Unmute video');
 				muteButton.style.position = 'absolute';
-				muteButton.style.bottom = '48px';
+				muteButton.style.top = '48px';
 				muteButton.style.right = '16px';
 				muteButton.style.zIndex = '2'; // todo check this
 				muteButton.style.width = '32px';
