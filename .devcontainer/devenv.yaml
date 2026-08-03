@@ -36,15 +36,15 @@ forwardPorts:
 # Each command has a 'cmd' field and a 'workingDirectory' field
 # e.g.
 postCreateCommand:
-    - cmd: 'mise exec -- corepack enable'
+    - cmd: 'mise x -- corepack enable'
       workingDirectory: '${containerWorkspaceFolder}'
       logLine: 'enable-corepack'
 
-    - cmd: 'mise exec -- corepack install'
+    - cmd: 'mise x -- corepack install'
       workingDirectory: '${containerWorkspaceFolder}'
       logLine: 'install-pnpm'
 
-    - cmd: 'mise exec -- pnpm install --frozen-lockfile'
+    - cmd: 'mise x -- pnpm install --frozen-lockfile'
       workingDirectory: '${containerWorkspaceFolder}'
       logLine: 'install-project-dependencies'
 
