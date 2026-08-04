@@ -86,7 +86,7 @@ test.describe('mobile-sticky', () => {
 			};
 			await loadPage({ page, path, region: 'US', queryParams });
 			await cmpAcceptAll(page);
-			await page.reload();
+			await page.reload({ waitUntil: 'networkidle' });
 
 			// Dismiss banner
 			// TODO: These text selectors are fragile - consider adding data-testid
@@ -99,7 +99,7 @@ test.describe('mobile-sticky', () => {
 				.getByRole('alert')
 				.getByRole('button', { name: 'Close' });
 
-			expect(twoStepBanner.or(oneStepBanner)).toBeVisible;
+			expect(twoStepBanner.or(oneStepBanner)).toBeVisible();
 
 			if (await twoStepBanner.isVisible()) {
 				await twoStepBanner.click();
