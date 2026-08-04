@@ -126,6 +126,7 @@ describe('getPrebidAdSlots', () => {
 		expect(hbSlots).toHaveLength(1);
 		expect(hbSlots[0]?.sizes).toEqual([
 			createAdSize(300, 250),
+			createAdSize(620, 350),
 			createAdSize(640, 360),
 			createAdSize(1, 1),
 		]);
@@ -139,6 +140,7 @@ describe('getPrebidAdSlots', () => {
 		expect(hbSlots).toHaveLength(1);
 		expect(hbSlots[0]?.sizes).toEqual([
 			createAdSize(300, 250),
+			createAdSize(300, 197),
 			createAdSize(640, 360),
 			createAdSize(320, 480),
 			createAdSize(1, 1),
