@@ -26,10 +26,13 @@ export const getParticipations = () => {
 	return getAbModule()?.getParticipations() ?? {};
 };
 
-export const isUserInTest = (testId: string) => {
+export const isUserInTest = (testId: string): boolean => {
 	return getAbModule()?.isUserInTest(testId) ?? false;
 };
 
-export const isUserInTestGroup = (testId: string, variantId: string) => {
+export const isUserInTestGroup = (
+	testId: string,
+	variantId: string,
+): boolean => {
 	return getAbModule()?.isUserInTestGroup(testId, variantId) ?? false;
 };
