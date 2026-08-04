@@ -12,12 +12,23 @@ There are 2 packages in this repo:
 
 -   Node
     -   see [.nvmrc](./.nvmrc) for the current version
-    -   the version manager [fnm](https://github.com/Schniz/fnm) is recommended with additional configuration to automatically switch on [changing directory](https://github.com/Schniz/fnm#shell-setup)
+    -   the version manager [mise](https://mise.jdx.dev/getting-started.html) is recommended
 -   pnpm
+    - install this via [`corepack`](https://github.com/nodejs/corepack) which ships with Node automatically
+
+### Running locally
+
+Please use the [.devcontainer](.devcontainer) configuration to open your IDE in an isolated development environment ie. a [dev container](https://containers.dev).
+You will need to have Docker installed (or at least have a Docker daemon running). 
+See documentation available at https://github.com/guardian/devenv for extra information and help with development containers.
+
+When updating the `devenv.yaml` file, ensure that you regenerate the resulting devcontainer.json files by running `devenv generate`.
+Your IDE should prompt you to rebuild your dev container when this is done.
+All usual commands should be available from within the dev container.
 
 ### Setup
 
-To install dependencies, run `pnpm`.
+To install dependencies, run `pnpm i`.
 
 ### A Note on Deployments
 [`@guardian/commercial-bundle`](./bundle/) and [`@guardian/commercial-core`](./core/) are deployed separately.
