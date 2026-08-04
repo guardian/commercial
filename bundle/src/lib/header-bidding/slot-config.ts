@@ -207,11 +207,7 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 			mobile: [getAdSize('mpu')],
 		},
 		comments: {
-			desktop: [
-				getAdSize('skyscraper'),
-				getAdSize('mpu'),
-				getAdSize('halfPage'),
-			],
+			desktop: [getAdSize('mpu')],
 		},
 		'comments-expanded': {
 			desktop: [
