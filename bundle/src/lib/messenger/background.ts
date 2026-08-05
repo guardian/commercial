@@ -97,8 +97,7 @@ const createParent = (
 	return { backgroundParent, background };
 };
 
-const
-	setBackgroundStyles = (
+const setBackgroundStyles = (
 	specs: BackgroundSpecs,
 	background: HTMLElement,
 ): void => {
