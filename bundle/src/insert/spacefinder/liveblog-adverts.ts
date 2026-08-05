@@ -56,16 +56,24 @@ const insertAdAtPara = (para: Node) => {
 			? {
 					phablet: [
 						adSizes.outstreamOzone,
+						adSizes.outstreamDesktop,
 						adSizes.outstreamGoogleDesktop,
 					],
 					desktop: [
 						adSizes.outstreamOzone,
+						adSizes.outstreamDesktop,
 						adSizes.outstreamGoogleDesktop,
 					],
 				}
 			: {
-					phablet: [adSizes.outstreamGoogleDesktop],
-					desktop: [adSizes.outstreamGoogleDesktop],
+					phablet: [
+						adSizes.outstreamDesktop,
+						adSizes.outstreamGoogleDesktop,
+					],
+					desktop: [
+						adSizes.outstreamDesktop,
+						adSizes.outstreamGoogleDesktop,
+					],
 				};
 
 	return fastdom

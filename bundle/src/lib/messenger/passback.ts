@@ -26,19 +26,33 @@ type PassbackMessagePayload = { source: string };
  */
 const mpu: [number, number] = [adSizes.mpu.width, adSizes.mpu.height];
 
+const outstreamDesktop: [number, number] = [
+	adSizes.outstreamDesktop.width,
+	adSizes.outstreamDesktop.height,
+];
+const outstreamMobile: [number, number] = [
+	adSizes.outstreamMobile.width,
+	adSizes.outstreamMobile.height,
+];
 const outstreamOzone: [number, number] = [
 	adSizes.outstreamOzone.width,
 	adSizes.outstreamOzone.height,
 ];
 
+const outstreamSizes = [outstreamDesktop, outstreamMobile, outstreamOzone];
+
+const outstreamHeightDesktop = Math.max(
+	...outstreamSizes.map((size) => size[1]),
+);
+
 const oustreamSizeMappings = [
 	[
 		[breakpoints.phablet, 0],
-		[mpu, outstreamOzone],
+		[mpu, outstreamDesktop, outstreamOzone],
 	],
 	[
 		[breakpoints.mobile, 0],
-		[mpu, outstreamOzone],
+		[mpu, outstreamMobile, outstreamOzone],
 	],
 ] satisfies googletag.SizeMappingArray;
 
@@ -60,7 +74,7 @@ const defaultSizeMappings = [
 const decideSizes = (source: string) => {
 	if (source === 'teads') {
 		return {
-			sizes: [mpu, outstreamOzone],
+			sizes: [mpu, ...outstreamSizes],
 			sizeMappings: oustreamSizeMappings,
 		};
 	}
@@ -299,8 +313,7 @@ const initPassbackMessage = (register: RegisterListener): void => {
 										const slotHeight = `${
 											(getCurrentBreakpoint() === 'mobile'
 												? adHeight
-												: adSizes.outstreamOzone
-														.height) +
+												: outstreamHeightDesktop) +
 											AD_LABEL_HEIGHT
 										}px`;
 										log(
