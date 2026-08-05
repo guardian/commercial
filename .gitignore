@@ -10,6 +10,9 @@ yarn-error.log*
 # Node Modules
 node_modules
 
+# PNPM Store
+.pnpm-store
+
 # Build
 dist
 coverage
@@ -29,3 +32,4 @@ test-results/
 playwright-report/
 playwright/.cache/
 playwright/.auth/
+
