@@ -27,7 +27,7 @@ interface BackgroundSpecs {
 	scrollType?: 'interscroller' | 'fixed' | 'parallax';
 	ctaUrl?: string;
 	videoSource?: string;
-	hasAudio?: boolean;
+	hasAudio?: 'true' | 'false';
 }
 
 const getStylesFromSpec = (
@@ -97,7 +97,8 @@ const createParent = (
 	return { backgroundParent, background };
 };
 
-const setBackgroundStyles = (
+const
+	setBackgroundStyles = (
 	specs: BackgroundSpecs,
 	background: HTMLElement,
 ): void => {
@@ -315,8 +316,8 @@ const setupBackground = async (
 				video.style.height = '100%';
 				video.style.transform = 'translate(-50%, -50%)';
 				background.appendChild(video);
-
-				if (specs.hasAudio) {
+				console.log(specs)
+				if (specs.hasAudio === 'true') {
 					createMuteButton(video, adSlot);
 				}
 
