@@ -105,8 +105,16 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 	// these are added here and not in size mappings because the inline[i] name
 	// is also used on fronts, where we don't want outstream or tall ads
 	const additionalSizes = {
-		phablet: [adSizes.outstreamOzone, adSizes.outstreamGoogleDesktop],
-		desktop: [adSizes.outstreamOzone, adSizes.outstreamGoogleDesktop],
+		phablet: [
+			adSizes.outstreamOzone,
+			adSizes.outstreamDesktop,
+			adSizes.outstreamGoogleDesktop,
+		],
+		desktop: [
+			adSizes.outstreamOzone,
+			adSizes.outstreamDesktop,
+			adSizes.outstreamGoogleDesktop,
+		],
 	};
 
 	const insertAd: SpacefinderWriter = async (paras) => {
