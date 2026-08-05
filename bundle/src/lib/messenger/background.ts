@@ -316,7 +316,7 @@ const setupBackground = async (
 				video.style.height = '100%';
 				video.style.transform = 'translate(-50%, -50%)';
 				background.appendChild(video);
-				console.log(specs)
+
 				if (specs.hasAudio === 'true') {
 					createMuteButton(video, adSlot);
 				}
