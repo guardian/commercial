@@ -224,11 +224,6 @@ const mutedIcon = `
 	</svg>
 `;
 
-/**
- * Create a mute/unmute toggle button for an interscroller video.
- * The button is appended to adSlot (rather than backgroundParent)
- * so it sits outside the CTA anchor link.
- */
 const createMuteButton = (
 	video: HTMLVideoElement,
 	adSlot: HTMLElement,
