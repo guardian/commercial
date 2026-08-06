@@ -192,8 +192,8 @@ const unmutedIcon = `
 		height="30"
 		viewBox="-3 -3 30 30"
 		xmlns="http://www.w3.org/2000/svg"
-		focusable={false}
-		aria-hidden={true}
+		focusable="false"
+		aria-hidden="true"
 	>
 		<path
 			fillRule="evenodd"
