@@ -188,8 +188,8 @@ const setupParallax = (
 // from https://github.com/guardian/csnx/blob/3a0d883e1ac36c362820d586012f2980ce8f5944/libs/%40guardian/source/src/react-components/__generated__/icons/SvgAudio.tsx
 const unmutedIcon = `
 <svg
-		width="30"
-		height="30"
+		width="16"
+		height="16"
 		viewBox="-3 -3 30 30"
 		xmlns="http://www.w3.org/2000/svg"
 		focusable="false"
@@ -207,8 +207,8 @@ const unmutedIcon = `
 // from https://github.com/guardian/csnx/blob/3a0d883e1ac36c362820d586012f2980ce8f5944/libs/%40guardian/source/src/react-components/__generated__/icons/SvgAudioMute.tsx
 const mutedIcon = `
 <svg
-		width="30"
-		height="30"
+		width="16"
+		height="16"
 		viewBox="-3 -3 30 30"
 		xmlns="http://www.w3.org/2000/svg"
 		focusable="false"
@@ -234,9 +234,11 @@ const createMuteButton = (
 	muteButton.style.right = '16px'; //space[4]
 	muteButton.style.borderRadius = '50%';
 	muteButton.style.border = 'none';
-	muteButton.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
-	muteButton.style.padding = '0';
+	muteButton.style.backgroundColor = '#121212B3';
+	muteButton.style.padding = '8px'; // space[2]
 	muteButton.style.display = 'flex';
+	muteButton.style.alignItems = 'center';
+	muteButton.style.justifyContent = 'center';
 	muteButton.style.cursor = 'pointer';
 	muteButton.innerHTML = mutedIcon;
 
