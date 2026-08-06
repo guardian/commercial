@@ -423,7 +423,7 @@ describe('Utils', () => {
 				expect(shouldIncludeMobileSticky()).toBe(expected);
 			},
 		);
-		
+
 		test.each(regionsTestCases)(
 			`should be $expected if geolocation is $region and content is LiveBlog on mobiles`,
 			({ region, expected }) => {

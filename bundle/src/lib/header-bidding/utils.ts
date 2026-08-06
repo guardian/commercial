@@ -48,6 +48,7 @@ const isValidPageForMobileSticky = (): boolean => {
 	return (
 		contentType === 'Article' ||
 		contentType === 'Interactive' ||
+		contentType === 'LiveBlog' ||
 		pageId.startsWith('football/')
 	);
 };
@@ -249,8 +250,7 @@ export const shouldIncludeMobileSticky = once(
 			max: 'mobileLandscape',
 		}) &&
 			!isInUk() &&
-			(isValidPageForMobileSticky() ||
-				(window.guardian.config.page.contentType === 'LiveBlog')) &&
+			isValidPageForMobileSticky() &&
 			!window.guardian.config.page.isHosted),
 );
 
