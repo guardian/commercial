@@ -185,7 +185,7 @@ const setupParallax = (
 	observer.observe(backgroundParent);
 };
 
-// from https://github.com/guardian/csnx/blob/main/libs/%40guardian/source/src/react-components/__generated__/icons/SvgAudio.tsx
+// from https://github.com/guardian/csnx/blob/3a0d883e1ac36c362820d586012f2980ce8f5944/libs/%40guardian/source/src/react-components/__generated__/icons/SvgAudio.tsx
 const unmutedIcon = `
 <svg
 		width="30"
@@ -196,15 +196,15 @@ const unmutedIcon = `
 		aria-hidden="true"
 	>
 		<path
-			fillRule="evenodd"
-			clipRule="evenodd"
+			fill-rule="evenodd"
+			clip-rule="evenodd"
 			d="M2 15.75h3.75L11 21h1V3h-1L5.75 8.25H2l-1 1v5.5zM21.3 12c0 2.7-.925 5.175-2.5 7.175l.55.525A9.9 9.9 0 0 0 23 12c0-3.125-1.425-5.9-3.65-7.725l-.55.525c1.575 2 2.5 4.475 2.5 7.2m-5.2 0q0 2.362-1.275 4.2l.65.65C16.75 15.575 17.5 13.9 17.5 12c0-1.925-.75-3.6-2.025-4.875l-.65.65C15.675 9 16.1 10.425 16.1 12"
 			fill="#fff"
 		/>
 	</svg>
 `;
 
-// from https://github.com/guardian/csnx/blob/main/libs/%40guardian/source/src/react-components/__generated__/icons/SvgAudioMute.tsx
+// from https://github.com/guardian/csnx/blob/3a0d883e1ac36c362820d586012f2980ce8f5944/libs/%40guardian/source/src/react-components/__generated__/icons/SvgAudioMute.tsx
 const mutedIcon = `
 <svg
 		width="30"
@@ -215,8 +215,8 @@ const mutedIcon = `
 		aria-hidden="true"
 	>
 		<path
-			fillRule="evenodd"
-			clipRule="evenodd"
+			fill-rule="evenodd"
+			clip-rule="evenodd"
 			d="M2 15.75h3.75L11 21h1V3h-1L5.75 8.25H2l-1 1v5.5zM17.28 12l-3.4 3.85.725.725 3.825-3.425 3.85 3.425.725-.725L19.58 12l3.425-3.85-.725-.725-3.85 3.425-3.825-3.425-.725.725z"
 			fill="#fff"
 		/>
