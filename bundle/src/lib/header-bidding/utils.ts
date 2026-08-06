@@ -250,8 +250,7 @@ export const shouldIncludeMobileSticky = once(
 		}) &&
 			!isInUk() &&
 			(isValidPageForMobileSticky() ||
-				(window.guardian.config.page.contentType === 'LiveBlog' &&
-					isInUsa())) &&
+				(window.guardian.config.page.contentType === 'LiveBlog')) &&
 			!window.guardian.config.page.isHosted),
 );
 

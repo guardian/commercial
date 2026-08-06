@@ -423,13 +423,16 @@ describe('Utils', () => {
 				expect(shouldIncludeMobileSticky()).toBe(expected);
 			},
 		);
-
-		test('should be true for US LiveBlog on mobile', () => {
-			window.guardian.config.page.contentType = 'LiveBlog';
-			getLocale.mockReturnValue('US');
-			matchesBreakpoints.mockReturnValue(true);
-			expect(shouldIncludeMobileSticky()).toBe(true);
-		});
+		
+		test.each(regionsTestCases)(
+			`should be $expected if geolocation is $region and content is LiveBlog on mobiles`,
+			({ region, expected }) => {
+				window.guardian.config.page.contentType = 'LiveBlog';
+				getLocale.mockReturnValue(region);
+				matchesBreakpoints.mockReturnValue(true);
+				expect(shouldIncludeMobileSticky()).toBe(expected);
+			},
+		);
 
 		test('should be false if all conditions true except pageId or content type ', () => {
 			window.guardian.config.page.contentType = 'Network Front';
