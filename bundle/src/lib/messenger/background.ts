@@ -27,6 +27,7 @@ interface BackgroundSpecs {
 	scrollType?: 'interscroller' | 'fixed' | 'parallax';
 	ctaUrl?: string;
 	videoSource?: string;
+	hasAudio?: string;
 }
 
 const getStylesFromSpec = (
@@ -184,6 +185,79 @@ const setupParallax = (
 	observer.observe(backgroundParent);
 };
 
+// from https://github.com/guardian/csnx/blob/3a0d883e1ac36c362820d586012f2980ce8f5944/libs/%40guardian/source/src/react-components/__generated__/icons/SvgAudio.tsx
+const unmutedIcon = `
+<svg
+		width="16"
+		height="16"
+		viewBox="-3 -3 30 30"
+		xmlns="http://www.w3.org/2000/svg"
+		focusable="false"
+		aria-hidden="true"
+	>
+		<path
+			fill-rule="evenodd"
+			clip-rule="evenodd"
+			d="M2 15.75h3.75L11 21h1V3h-1L5.75 8.25H2l-1 1v5.5zM21.3 12c0 2.7-.925 5.175-2.5 7.175l.55.525A9.9 9.9 0 0 0 23 12c0-3.125-1.425-5.9-3.65-7.725l-.55.525c1.575 2 2.5 4.475 2.5 7.2m-5.2 0q0 2.362-1.275 4.2l.65.65C16.75 15.575 17.5 13.9 17.5 12c0-1.925-.75-3.6-2.025-4.875l-.65.65C15.675 9 16.1 10.425 16.1 12"
+			fill="#fff"
+		/>
+	</svg>
+`;
+
+// from https://github.com/guardian/csnx/blob/3a0d883e1ac36c362820d586012f2980ce8f5944/libs/%40guardian/source/src/react-components/__generated__/icons/SvgAudioMute.tsx
+const mutedIcon = `
+<svg
+		width="16"
+		height="16"
+		viewBox="-3 -3 30 30"
+		xmlns="http://www.w3.org/2000/svg"
+		focusable="false"
+		aria-hidden="true"
+	>
+		<path
+			fill-rule="evenodd"
+			clip-rule="evenodd"
+			d="M2 15.75h3.75L11 21h1V3h-1L5.75 8.25H2l-1 1v5.5zM17.28 12l-3.4 3.85.725.725 3.825-3.425 3.85 3.425.725-.725L19.58 12l3.425-3.85-.725-.725-3.85 3.425-3.825-3.425-.725.725z"
+			fill="#fff"
+		/>
+	</svg>
+`;
+
+const createMuteButton = (
+	video: HTMLVideoElement,
+	adSlot: HTMLElement,
+): void => {
+	const muteButton = document.createElement('button');
+	muteButton.setAttribute('aria-label', 'Unmute video');
+	muteButton.style.position = 'absolute';
+	muteButton.style.top = '48px'; // space[12]
+	muteButton.style.right = '16px'; //space[4]
+	muteButton.style.borderRadius = '50%';
+	muteButton.style.border = 'none';
+	muteButton.style.backgroundColor = '#121212B3';
+	muteButton.style.padding = '8px'; // space[2]
+	muteButton.style.display = 'flex';
+	muteButton.style.alignItems = 'center';
+	muteButton.style.justifyContent = 'center';
+	muteButton.style.cursor = 'pointer';
+	muteButton.innerHTML = mutedIcon;
+
+	muteButton.addEventListener('click', (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		video.muted = !video.muted;
+		if (video.muted) {
+			muteButton.setAttribute('aria-label', 'Unmute video');
+			muteButton.innerHTML = mutedIcon;
+		} else {
+			muteButton.setAttribute('aria-label', 'Mute video');
+			muteButton.innerHTML = unmutedIcon;
+		}
+	});
+
+	adSlot.appendChild(muteButton);
+};
+
 const setupBackground = async (
 	specs: BackgroundSpecs,
 	adSlot: HTMLElement,
@@ -238,6 +312,10 @@ const setupBackground = async (
 				video.style.height = '100%';
 				video.style.transform = 'translate(-50%, -50%)';
 				background.appendChild(video);
+
+				if (specs.hasAudio === 'true') {
+					createMuteButton(video, adSlot);
+				}
 
 				let played = false;
 				video.onended = () => (played = true);
