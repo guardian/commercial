@@ -27,7 +27,7 @@ interface BackgroundSpecs {
 	scrollType?: 'interscroller' | 'fixed' | 'parallax';
 	ctaUrl?: string;
 	videoSource?: string;
-	hasAudio?: 'true' | 'false';
+	hasAudio?: string;
 }
 
 const getStylesFromSpec = (
