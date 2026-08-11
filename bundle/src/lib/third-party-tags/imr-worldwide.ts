@@ -71,9 +71,13 @@ const onLoad = (): void => {
 			? sectionFromMeta
 			: 'The Guardian - brand only';
 
-	const nolggGlobalParams = {
+	const nolggGlobalParams: {
+		sfcode: string;
+		apid: string;
+		apn: string;
+	} = {
 		sfcode: 'dcr',
-		apid: subBrandApId,
+		apid: subBrandApId as string,
 		apn: 'theguardian',
 	};
 
