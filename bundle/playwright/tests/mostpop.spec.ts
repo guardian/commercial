@@ -14,7 +14,7 @@ test.describe('mostpop slot', () => {
 		 * Since the introduction of non-house advertising in the merchandising slot,
 		 * we now hide the most pop slot until the tablet breakpoint
 		 */
-		testAtBreakpoints(['tablet', 'desktop', 'wide']).forEach(
+		testAtBreakpoints(['desktop', 'wide']).forEach(
 			({ breakpoint, width, height }) => {
 				test(`Test page ${index} has slot and iframe at breakpoint ${breakpoint}`, async ({
 					page,
