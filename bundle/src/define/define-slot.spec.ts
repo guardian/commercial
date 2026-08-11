@@ -1,4 +1,3 @@
-import type { SizeMapping } from '@guardian/commercial-core/ad-sizes';
 import { adSizes, createAdSize } from '@guardian/commercial-core/ad-sizes';
 import {
 	buildGoogletagSizeMapping,
@@ -66,7 +65,7 @@ describe('buildGoogletagSizeMapping', () => {
 				adSizes.halfPage,
 			],
 		};
-		const result = buildGoogletagSizeMapping(sizeMapping as SizeMapping);
+		const result = buildGoogletagSizeMapping(sizeMapping);
 
 		expect(result).toEqual([
 			[
@@ -86,36 +85,36 @@ describe('collectSizes', () => {
 		sizeMapping: googletag.SizeMappingArray;
 		output: googletag.SingleSize[];
 	}> = [
-		{
-			sizeMapping: [
-				[[980, 0], ['fluid']],
-				[[0, 0], [[728, 90]]],
-			],
-			output: ['fluid', [728, 90]],
-		},
-		{
-			sizeMapping: [
-				[
-					[0, 0],
-					[[1, 1], [2, 2], [728, 90], 'fluid'],
+			{
+				sizeMapping: [
+					[[980, 0], ['fluid']],
+					[[0, 0], [[728, 90]]],
 				],
-			],
-			output: [[1, 1], [2, 2], [728, 90], 'fluid'],
-		},
-		{
-			sizeMapping: [
-				[
-					[980, 0],
-					[[1, 1], [2, 2], [728, 90], [88, 71], 'fluid'],
+				output: ['fluid', [728, 90]],
+			},
+			{
+				sizeMapping: [
+					[
+						[0, 0],
+						[[1, 1], [2, 2], [728, 90], 'fluid'],
+					],
 				],
-				[
-					[0, 0],
-					[[1, 1], [2, 2], [728, 90], 'fluid'],
+				output: [[1, 1], [2, 2], [728, 90], 'fluid'],
+			},
+			{
+				sizeMapping: [
+					[
+						[980, 0],
+						[[1, 1], [2, 2], [728, 90], [88, 71], 'fluid'],
+					],
+					[
+						[0, 0],
+						[[1, 1], [2, 2], [728, 90], 'fluid'],
+					],
 				],
-			],
-			output: [[1, 1], [2, 2], [728, 90], [88, 71], 'fluid'],
-		},
-	];
+				output: [[1, 1], [2, 2], [728, 90], [88, 71], 'fluid'],
+			},
+		];
 
 	it.each(tests)(
 		'should return array of sizes',

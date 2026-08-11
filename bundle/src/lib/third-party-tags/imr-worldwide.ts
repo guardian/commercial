@@ -65,7 +65,7 @@ const onLoad = (): void => {
 	*/
 	const lookupKey = sectionFromMeta?.toLowerCase();
 	const subBrandApId =
-		guMetadata[lookupKey] ?? (guMetadata['brand-only'] as string);
+		guMetadata[lookupKey] ?? (guMetadata['brand-only']);
 
 	const sectionRef =
 		sectionFromMeta in guMetadata
