@@ -64,8 +64,7 @@ const onLoad = (): void => {
 		Defensive: section may be undefined in some edge cases.
 	*/
 	const lookupKey = sectionFromMeta?.toLowerCase();
-	const subBrandApId =
-		guMetadata[lookupKey] ?? (guMetadata['brand-only']);
+	const subBrandApId = guMetadata[lookupKey] ?? guMetadata['brand-only'];
 
 	const sectionRef =
 		sectionFromMeta in guMetadata
