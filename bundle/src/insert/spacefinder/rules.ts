@@ -6,12 +6,12 @@ import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
 const bodySelector = '.article-body-commercial-selector';
 const adSlotContainerSelector = `.${adSlotContainerClass}`;
 
-const shouldIncludeLifeAndStyle = isUserInTestGroup(
+const shouldIncludeExpandedSections = isUserInTestGroup(
 	'commercial-spacefinder-highvalue-section',
 	'variant',
 );
 
-const highValueSections = [
+const originalHighValueSections = [
 	'business',
 	'environment',
 	'music',
@@ -22,7 +22,13 @@ const highValueSections = [
 	'travel',
 	'wellness',
 	'games',
-	...(shouldIncludeLifeAndStyle ? ['lifeandstyle'] : []),
+];
+
+const highValueSections = [
+	...originalHighValueSections,
+	...(shouldIncludeExpandedSections
+		? ['commentisfree', 'football', 'lifeandstyle', 'politics', 'sport']
+		: []),
 ];
 
 const isInHighValueSection = highValueSections.includes(
