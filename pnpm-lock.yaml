@@ -111,8 +111,8 @@ importers:
         specifier: 1.61.1
         version: 1.61.1
       '@types/google-publisher-tag':
-        specifier: 1.20260713.0
-        version: 1.20260713.0
+        specifier: 1.20260720.0
+        version: 1.20260720.0
       '@types/jest':
         specifier: 30.0.0
         version: 30.0.0
@@ -1673,8 +1673,8 @@ packages:
   '@types/express@4.17.25':
     resolution: {integrity: sha512-dVd04UKsfpINUnK0yBoYHDF3xu7xVH4BuDotC/xGuycx4CgbP48X/KF/586bcObxT0HENHXEU8Nqtu6NR+eKhw==}
 
-  '@types/google-publisher-tag@1.20260713.0':
-    resolution: {integrity: sha512-cTgMI+AbaX2E8kY6IZERzi6UH2NqaKHnXJU/vZHFufvjWjuligjqTy/ALa3zCoNQdZWmWNrUGBGIwGgpeooR6g==}
+  '@types/google-publisher-tag@1.20260720.0':
+    resolution: {integrity: sha512-eECxs1DUjRx2cSZoURUyX1hA0Qoi1gIZ70nNJOZxqiymlqHgDcaTZNqWj3gzQZnMnqkWyqD8rpbJZWr2Ld/lvw==}
 
   '@types/html-minifier-terser@6.1.0':
     resolution: {integrity: sha512-oh/6byDPnL1zeNXFrDXFLyZjkr1MsBG667IM792caf1L2UPOOMf65NFzjUH/ltyfwjAGfs1rsX1eftK0jC/KIg==}
@@ -7846,7 +7846,7 @@ snapshots:
       '@types/qs': 6.14.0
       '@types/serve-static': 1.15.10
 
-  '@types/google-publisher-tag@1.20260713.0': {}
+  '@types/google-publisher-tag@1.20260720.0': {}
 
   '@types/html-minifier-terser@6.1.0': {}
 
