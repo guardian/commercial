@@ -1,6 +1,8 @@
 {
 	"compilerOptions": {
-		"rootDir": "src",
+		"rootDir": ".",
+		"module": "preserve",
+		"moduleResolution": "bundler",
 		"paths": {
 			// We have to point to the prebid dist files here because the source files
 			// don't have type definitions, but the dist files do. Ensure these paths

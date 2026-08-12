@@ -1,9 +1,9 @@
 {
 	"compilerOptions": {
-		"rootDir": "src",
+		"rootDir": ".",
 		"declaration": true,
 		"outDir": "dist",
-		"types": ["node", "jest"]
+		"types": ["node", "jest"],
 	},
 	"extends": "../tsconfig.json",
 	"include": ["./src/**/*.ts"],
