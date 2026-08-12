@@ -1,4 +1,3 @@
-import type { SizeMapping } from '@guardian/commercial-core/ad-sizes';
 import { adSizes, createAdSize } from '@guardian/commercial-core/ad-sizes';
 import {
 	buildGoogletagSizeMapping,
@@ -66,7 +65,7 @@ describe('buildGoogletagSizeMapping', () => {
 				adSizes.halfPage,
 			],
 		};
-		const result = buildGoogletagSizeMapping(sizeMapping as SizeMapping);
+		const result = buildGoogletagSizeMapping(sizeMapping);
 
 		expect(result).toEqual([
 			[

@@ -251,7 +251,7 @@ describe('Generating Permutive payload utils', () => {
 				}),
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- the assertion is any for some reason
 				user: expect.objectContaining({
-					edition: 'UK' as Edition,
+					edition: 'UK',
 					identity: false,
 				}),
 			};

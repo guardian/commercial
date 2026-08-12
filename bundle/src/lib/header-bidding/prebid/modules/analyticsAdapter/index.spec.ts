@@ -414,7 +414,7 @@ describe('prebid analyticsAdapter', () => {
 							ev: 'end',
 							aid: 'test-auction',
 							ttr: expect.any(Number) as number,
-						} as unknown),
+						}),
 					],
 				}),
 			);

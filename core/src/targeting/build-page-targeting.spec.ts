@@ -169,9 +169,7 @@ describe('Build Page Targeting', () => {
 			},
 			modules: {
 				abTests: {
-					getParticipations: jest
-						.fn()
-						.mockReturnValue({} as Record<string, string>),
+					getParticipations: jest.fn().mockReturnValue({}),
 				},
 			},
 		} as unknown as typeof window.guardian;

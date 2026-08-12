@@ -64,17 +64,20 @@ const onLoad = (): void => {
 		Defensive: section may be undefined in some edge cases.
 	*/
 	const lookupKey = sectionFromMeta?.toLowerCase();
-	const subBrandApId =
-		guMetadata[lookupKey] ?? (guMetadata['brand-only'] as string);
+	const subBrandApId = guMetadata[lookupKey] ?? guMetadata['brand-only'];
 
 	const sectionRef =
 		sectionFromMeta in guMetadata
 			? sectionFromMeta
 			: 'The Guardian - brand only';
 
-	const nolggGlobalParams = {
+	const nolggGlobalParams: {
+		sfcode: string;
+		apid: string;
+		apn: string;
+	} = {
 		sfcode: 'dcr',
-		apid: subBrandApId,
+		apid: subBrandApId as string,
 		apn: 'theguardian',
 	};
 

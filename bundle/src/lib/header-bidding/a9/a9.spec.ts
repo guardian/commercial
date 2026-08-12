@@ -167,10 +167,10 @@ describe('Logging a9 bid response', () => {
 
 		window.guardian.commercial = {
 			a9WinningBids: [],
-		} as typeof window.guardian.commercial;
+		};
 
 		a9.logA9BidResponse(mockBidresponse);
-		expect(window.guardian.commercial?.a9WinningBids).toEqual(
+		expect(window.guardian.commercial.a9WinningBids).toEqual(
 			mockBidresponse,
 		);
 	});
@@ -198,11 +198,11 @@ describe('Logging a9 bid response', () => {
 		];
 		window.guardian.commercial = {
 			a9WinningBids: [...mockBidresponse],
-		} as typeof window.guardian.commercial;
+		};
 
 		a9.logA9BidResponse(mockBidresponse);
-		expect(window.guardian.commercial?.a9WinningBids?.length).toEqual(2);
-		expect(window.guardian.commercial?.a9WinningBids).toMatchObject(
+		expect(window.guardian.commercial.a9WinningBids?.length).toEqual(2);
+		expect(window.guardian.commercial.a9WinningBids).toMatchObject(
 			expect.arrayContaining([...mockBidresponse, ...mockBidresponse]),
 		);
 	});
