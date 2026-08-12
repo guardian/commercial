@@ -1,11 +1,17 @@
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
+import { isUserInTestGroup } from '../../ab-testing';
 import { adSlotContainerClass } from '../../lib/create-ad-slot';
 import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
 
 const bodySelector = '.article-body-commercial-selector';
 const adSlotContainerSelector = `.${adSlotContainerClass}`;
 
-const highValueSections = [
+const shouldIncludeExpandedSections = isUserInTestGroup(
+	'commercial-spacefinder-highvalue-section',
+	'variant',
+);
+
+const originalHighValueSections = [
 	'business',
 	'environment',
 	'music',
@@ -16,6 +22,13 @@ const highValueSections = [
 	'travel',
 	'wellness',
 	'games',
+];
+
+const highValueSections = [
+	...originalHighValueSections,
+	...(shouldIncludeExpandedSections
+		? ['commentisfree', 'football', 'lifeandstyle', 'politics', 'sport']
+		: []),
 ];
 
 const isInHighValueSection = highValueSections.includes(
