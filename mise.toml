@@ -1,3 +1,10 @@
 [tools]
 "github:guardian/devenv" = "20260721-123412"
 nodejs = "22.15.0"
+
+[hooks]
+postinstall = 'npx corepack enable'
+
+[settings]
+# This must be enabled to make the hooks work
+experimental = true

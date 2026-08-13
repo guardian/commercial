@@ -24,8 +24,8 @@ forwardPorts:
     - 3030 # dcr in docker container for playwright
 
 # Optional: Mount directories from host to container
-mounts:
-  - "source=${localEnv:HOME}/Library/pnpm/store/v10,target=/home/vscode/pnpm/store/v10,readonly,type=bind,consistency=cached"
+# mounts:
+#   - "source=${localEnv:HOME}/.gu/example,target=/home/vscode/.gu/example,readonly,type=bind,consistency=cached"
 
 # Optional: IDE plugins - shared project plugins like language support
 # plugins:
@@ -36,15 +36,7 @@ mounts:
 # Each command has a 'cmd' field and a 'workingDirectory' field
 # e.g.
 postCreateCommand:
-    - cmd: 'mise x -- corepack enable'
-      workingDirectory: '${containerWorkspaceFolder}'
-      logLine: 'enable-corepack'
-
-    - cmd: 'mise x -- corepack install'
-      workingDirectory: '${containerWorkspaceFolder}'
-      logLine: 'install-pnpm'
-
-    - cmd: 'mise x -- pnpm install --frozen-lockfile'
+    - cmd: 'COREPACK_ENABLE_DOWNLOAD_PROMPT=0 mise x -- pnpm install --frozen-lockfile'
       workingDirectory: '${containerWorkspaceFolder}'
       logLine: 'install-project-dependencies'
 
