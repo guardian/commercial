@@ -24,8 +24,8 @@ forwardPorts:
     - 3030 # dcr in docker container for playwright
 
 # Optional: Mount directories from host to container
-# mounts:
-#   - "source=${localEnv:HOME}/.gu/example,target=/home/vscode/.gu/example,readonly,type=bind,consistency=cached"
+mounts:
+  - "source=${localEnv:HOME}/Library/pnpm/store/v10,target=/home/vscode/pnpm/store/v10,readonly,type=bind,consistency=cached"
 
 # Optional: IDE plugins - shared project plugins like language support
 # plugins:
