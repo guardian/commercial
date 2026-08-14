@@ -14,13 +14,15 @@ type MessageType =
 	| 'measure-ad-load'
 	| 'passback'
 	| 'resize'
+	| 'full-height'
 	| 'full-width'
 	| 'set-ad-height'
 	| 'scroll'
 	| 'type'
 	| 'viewport'
 	| 'passback-refresh'
-	| 'video-progress';
+	| 'video-progress'
+	| 'reset-height';
 
 /**
  * A message that is sent from an iframe following a standard format
