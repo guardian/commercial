@@ -6,7 +6,7 @@ import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
 const bodySelector = '.article-body-commercial-selector';
 const adSlotContainerSelector = `.${adSlotContainerClass}`;
 
-const shouldIncludeExpandedSections = isUserInTestGroup(
+const inHighValueSectionVariant = isUserInTestGroup(
 	'commercial-spacefinder-highvalue-section',
 	'variant',
 );
@@ -26,12 +26,16 @@ const originalHighValueSections = [
 
 const highValueSections = [
 	...originalHighValueSections,
-	...(shouldIncludeExpandedSections
+	...(inHighValueSectionVariant
 		? ['commentisfree', 'football', 'lifeandstyle', 'politics', 'sport']
 		: []),
 ];
 
 const isInHighValueSection = highValueSections.includes(
+	window.guardian.config.page.section,
+);
+// desktop only — excludes test sections so variant doesn't affect heading margins
+const isInOriginalHighValueSection = originalHighValueSections.includes(
 	window.guardian.config.page.section,
 );
 
@@ -89,7 +93,7 @@ const desktopInline1: SpacefinderRules = {
 		// don't place ads right after a heading
 		[headingSelector]: {
 			marginBottom: 150,
-			marginTop: isInHighValueSection ? 0 : 190,
+			marginTop: isInOriginalHighValueSection ? 0 : 190,
 		},
 		[adSlotContainerSelector]: {
 			marginBottom: 500,
