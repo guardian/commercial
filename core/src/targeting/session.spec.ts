@@ -34,7 +34,7 @@ describe('Session targeting', () => {
 		};
 
 		const expected: SessionTargeting = {
-			ab: ['ab-new-ad-targeting-variant', 'ab-some-other-test-control'],
+			ab: ['variant-ab-new-ad-targeting', 'control-ab-some-other-test'],
 			at: null,
 			cc: 'GB',
 			lh: '12',

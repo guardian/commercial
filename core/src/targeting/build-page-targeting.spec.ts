@@ -417,7 +417,7 @@ describe('Build Page Targeting', () => {
 				consentState: emptyConsent,
 				isSignedIn: true,
 			}).ab,
-		).toEqual(['someTest-variantName']);
+		).toEqual(['variantName-someTest']);
 	});
 
 	it('should set Observer flag for Observer content', () => {
