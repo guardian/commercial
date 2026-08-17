@@ -8,6 +8,7 @@ import { initGetStylesMessage } from '../../lib/messenger/get-stylesheet';
 import { initMeasureAdLoadMessage } from '../../lib/messenger/measure-ad-load';
 import { initPassbackMessage } from '../../lib/messenger/passback';
 import { initPassbackRefreshMessage } from '../../lib/messenger/passback-refresh';
+import { initResetHeightMessage } from '../../lib/messenger/reset-height';
 import { initResizeMessage } from '../../lib/messenger/resize';
 import { initScrollMessage } from '../../lib/messenger/scroll';
 import { initTypeMessage } from '../../lib/messenger/type';
@@ -26,6 +27,7 @@ export const initMessenger = (): void => {
 			initMeasureAdLoadMessage,
 			initPassbackMessage,
 			initPassbackRefreshMessage,
+			initResetHeightMessage,
 			initResizeMessage,
 			initScrollMessage,
 			initTypeMessage,
