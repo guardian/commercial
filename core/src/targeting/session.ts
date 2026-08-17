@@ -143,8 +143,8 @@ const abTestingTargeting = (
 	const testToParams = (testName: string, variant: string): string | null => {
 		if (variant === 'notintest') return null;
 
-		// GAM key-value pairs accept value strings up to 40 characters long
-		return `${testName}-${variant}`.substring(0, 40);
+		// GAM key-value pairs accept value strings up to 40 characters long, put variant first so it isn't truncated
+		return `${variant}-${testName}`.substring(0, 40);
 	};
 
 	const abTests = Object.entries(abTestParticipations)
