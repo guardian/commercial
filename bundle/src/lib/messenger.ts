@@ -8,18 +8,19 @@ type MessageType =
 	| 'background'
 	| 'click'
 	| 'disable-refresh'
+	| 'full-width'
 	| 'get-page-targeting'
 	| 'get-page-url'
 	| 'get-styles'
 	| 'measure-ad-load'
 	| 'passback'
+	| 'passback-refresh'
+	| 'reset-height'
 	| 'resize'
-	| 'full-width'
 	| 'set-ad-height'
 	| 'scroll'
 	| 'type'
 	| 'viewport'
-	| 'passback-refresh'
 	| 'video-progress';
 
 /**

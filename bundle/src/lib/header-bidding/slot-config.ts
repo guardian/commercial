@@ -1,6 +1,5 @@
 import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
-import { isInUk } from '@guardian/commercial-core/geo/geo-utils';
 import type { Size } from 'prebid.js/dist/src/types/common';
 import type { Advert } from '../../define/Advert';
 import type {
@@ -250,11 +249,6 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 		'merchandising-high': {
 			mobile: [getAdSize('mpu')],
 			desktop: [getAdSize('billboard')],
-		},
-		'article-end': {
-			mobile: isInUk() ? [getAdSize('mpu')] : [],
-			tablet: isInUk() ? [getAdSize('mpu')] : [],
-			desktop: isInUk() ? [getAdSize('mpu')] : [],
 		},
 	};
 };
