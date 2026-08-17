@@ -251,11 +251,6 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 			mobile: [getAdSize('mpu')],
 			desktop: [getAdSize('billboard')],
 		},
-		'article-end': {
-			mobile: isInUk() ? [getAdSize('mpu')] : [],
-			tablet: isInUk() ? [getAdSize('mpu')] : [],
-			desktop: isInUk() ? [getAdSize('mpu')] : [],
-		},
 	};
 };
 
