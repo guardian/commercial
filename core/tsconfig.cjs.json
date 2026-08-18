@@ -4,7 +4,7 @@
 	"compilerOptions": {
 		"noEmit": false,
 		"module": "commonjs",
-		"moduleResolution": "node",
+		"moduleResolution": "bundler",
 		"customConditions": null
 	}
 }
