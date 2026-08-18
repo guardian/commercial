@@ -41,6 +41,9 @@ updates:
         patterns:
           - '@babel/*'
           - babel*
+      webpack:
+        patterns:
+          - '*webpack*'
       typescript:
         dependency-type: 'development'
         patterns:
@@ -59,6 +62,7 @@ updates:
           - '@playwright/*'
           - '@babel/*'
           - babel*
+          - '*webpack*'
           - 'typescript'
       devDependenciesMinor:
         dependency-type: 'development'
@@ -74,6 +78,7 @@ updates:
           - '@playwright/*'
           - '@babel/*'
           - babel*
+          - '*webpack*'
           - 'typescript'
     # The default is 5 but as we are going to group dependencies we might need to increase it
     open-pull-requests-limit: 10
