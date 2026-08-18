@@ -58,10 +58,10 @@
 		"jest": "30.3.0",
 		"jest-environment-jsdom": "30.4.1",
 		"jest-environment-jsdom-global": "4.0.0",
-		"ts-jest": "29.4.9",
+		"ts-jest": "29.4.12",
 		"tsc-alias": "1.8.16",
 		"type-fest": "5.8.0",
-		"typescript": "5.9.3"
+		"typescript": "6.0.3"
 	},
 	"publishConfig": {
 		"access": "public"
