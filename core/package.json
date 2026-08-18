@@ -55,11 +55,11 @@
 		"@guardian/ophan-tracker-js": "5.1.2",
 		"@types/jest": "30.0.0",
 		"@types/node": "26.1.2",
-		"jest": "30.3.0",
+		"jest": "30.4.2",
 		"jest-environment-jsdom": "30.4.1",
 		"jest-environment-jsdom-global": "4.0.0",
 		"ts-jest": "29.4.12",
-		"tsc-alias": "1.8.16",
+		"tsc-alias": "1.9.1",
 		"type-fest": "5.8.0",
 		"typescript": "6.0.3"
 	},
