@@ -1,6 +1,6 @@
 import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { createAdSize } from '@guardian/commercial-core/ad-sizes';
-import { PREBID_TIMEOUT } from '@guardian/commercial-core/constants/prebid-timeout';
+import { PREBID_TIMEOUT } from '@guardian/commercial-core/constants/prebid-timeouts';
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/consent-manager';
 import { onConsent } from '@guardian/consent-manager';
@@ -106,10 +106,12 @@ const initialise = async (
 		});
 	}
 
-	/** Helper function to decide if a bidder should be included.
+	/**
+	 * Helper function to decide if a bidder should be included.
 	 * It is a curried function prepared with the consent state
 	 * at the time of initialisation to avoid unnecessary repetition
-	 * of consent state throughout */
+	 * of consent state throughout
+	 */
 	const isBidderEnabled = shouldIncludeBidder(consentState);
 
 	// initialise enabled bidders
@@ -158,7 +160,7 @@ const initialise = async (
 		/**
 		 * when hasPrebidSize is true we use size
 		 * set here when adjusting the slot size.
-		 * */
+		 */
 		advert.hasPrebidSize = true;
 		advert.size = size;
 
@@ -209,6 +211,7 @@ const requestBids = async (
 			// calculate this once before mapping over
 			const isSignedIn = await isUserLoggedIn();
 			const pageTargeting = getPageTargeting(consentState, isSignedIn);
+
 			return flatten(
 				adverts.map((advert) =>
 					getHeaderBiddingAdSlots(advert, slotFlatMap).map(
