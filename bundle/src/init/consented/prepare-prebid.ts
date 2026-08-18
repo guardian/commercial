@@ -19,11 +19,6 @@ const shouldLoadPrebid = () =>
 	!isInCanada();
 
 const loadPrebid = async (consentState: ConsentState): Promise<void> => {
-	// double check that we should load prebid
-	if (!shouldLoadPrebid()) {
-		return;
-	}
-
 	await import(
 		/* webpackChunkName: "Prebid.js" */
 		'../../lib/header-bidding/prebid/modules'
@@ -42,12 +37,15 @@ const throwIfUnconsented = (hasConsentForPrebid: boolean): void => {
 	}
 };
 
-const setupPrebid = async (): Promise<void> => {
+const setupPrebidIfAllowed = async (): Promise<void> => {
+	if (!shouldLoadPrebid()) {
+		return;
+	}
+
 	try {
 		const consentState = await onConsent();
-
 		if (!consentState.framework) {
-			throw new Error('Unknown framework');
+			throw new Error('Unknown consent framework');
 		}
 
 		switch (consentState.framework) {
@@ -61,6 +59,7 @@ const setupPrebid = async (): Promise<void> => {
 				// We do per-vendor checks for this framework, no requirement for a top-level check for Prebid
 				break;
 		}
+
 		return loadPrebid(consentState);
 	} catch (err: unknown) {
 		const error = err as Error;
@@ -68,7 +67,7 @@ const setupPrebid = async (): Promise<void> => {
 	}
 };
 
-export const setupPrebidOnce: () => Promise<void> = once(setupPrebid);
+export const setupPrebidOnce: () => Promise<void> = once(setupPrebidIfAllowed);
 
 /**
  * Initialise prebid - header bidding for display and video ads
@@ -80,5 +79,5 @@ export const preparePrebid = (): Promise<void> => {
 };
 
 export const _ = {
-	setupPrebid,
+	setupPrebid: setupPrebidIfAllowed,
 };
