@@ -347,7 +347,7 @@ describe('init', () => {
 		expect(log).toHaveBeenCalledWith(
 			'commercial',
 			expect.stringContaining('Failed to execute prebid'),
-			expect.stringContaining('Unknown framework'),
+			expect.stringContaining('Unknown consent framework'),
 		);
 
 		expect(prebid.initialise).not.toHaveBeenCalled();
