@@ -37,6 +37,10 @@ updates:
       playwright:
         patterns:
           - '@playwright/*'
+      babel:
+        patterns:
+          - '@babel/*'
+          - babel*
       typescript:
         dependency-type: 'development'
         patterns:
@@ -53,6 +57,8 @@ updates:
           - '*eslint*'
           - '*prettier*'
           - '@playwright/*'
+          - '@babel/*'
+          - babel*
           - 'typescript'
       devDependenciesMinor:
         dependency-type: 'development'
@@ -66,6 +72,8 @@ updates:
           - '*eslint*'
           - '*prettier*'
           - '@playwright/*'
+          - '@babel/*'
+          - babel*
           - 'typescript'
     # The default is 5 but as we are going to group dependencies we might need to increase it
     open-pull-requests-limit: 10

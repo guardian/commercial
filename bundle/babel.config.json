@@ -1,0 +1,16 @@
+{
+	"presets": ["@babel/preset-env", "@babel/preset-react"],
+	"plugins": ["@babel/plugin-transform-runtime"],
+	"targets": "defaults",
+	"env": {
+		"production": {
+			"presets": [["@babel/preset-env", { "modules": false }]]
+		},
+		"test": {
+			"presets": [
+				["@babel/preset-env", { "targets": { "node": "current" } }]
+			]
+		}
+	},
+	"ignore": ["eslintrc.js"]
+}
