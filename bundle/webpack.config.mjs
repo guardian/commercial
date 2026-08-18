@@ -60,11 +60,9 @@ const config = {
 				test: /\.[jt]sx?|mjs$/,
 				use: [
 					{
-						/** Use babel-loader for transpilation into browser-safe JS  */
 						loader: 'babel-loader',
 					},
 					{
-						/** Use ts-loader for TS type checking */
 						loader: 'ts-loader',
 						options: {
 							transpileOnly: true,
