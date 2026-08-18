@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 34.3.1
+
+### Patch Changes
+
+- 54f002f: Bump version of Typescript to v6.0.3
+
 ## 34.3.0
 
 ### Minor Changes
