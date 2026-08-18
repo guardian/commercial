@@ -80,6 +80,8 @@ const resetPrebid = () => {
 
 describe('initialise', () => {
 	beforeEach(() => {
+		/** jsdom mock for video play operation */
+		window.HTMLMediaElement.prototype.play = () => Promise.resolve();
 		resetPrebid();
 		window.guardian.config.switches.consentManagement = true;
 		window.guardian.config.switches.prebidUserSync = true;
