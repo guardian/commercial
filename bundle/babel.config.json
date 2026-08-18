@@ -1,0 +1,23 @@
+{
+	"presets": [
+		["@babel/preset-env", { "bugfixes": true }],
+		"@babel/preset-react"
+	],
+	"plugins": [
+		"@babel/plugin-syntax-dynamic-import",
+		"@babel/plugin-transform-runtime"
+	],
+	"targets": "defaults",
+	"env": {
+		"production": {
+			"presets": [["@babel/preset-env", { "modules": false }]]
+		},
+		"test": {
+			"presets": [
+				["@babel/preset-env", { "targets": { "node": "current" } }]
+			],
+			"plugins": ["dynamic-import-node"]
+		}
+	},
+	"ignore": ["eslintrc.js"]
+}
