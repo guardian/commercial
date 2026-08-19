@@ -58,7 +58,7 @@ jobs:
         id: changesets
         uses: changesets/action@22ccf9aa43179fe9e27dc62e575971d28cce197c # v2.0.0
         with:
-          publish: pnpm changeset publish
+          publish-script: pnpm changeset publish
           title: 🦋 Release package updates
           commit: Bump package versions
           setupGitUser: false
@@ -97,7 +97,7 @@ jobs:
         uses: changesets/action@22ccf9aa43179fe9e27dc62e575971d28cce197c # v2.0.0
         id: changeset
         with:
-          publish: pnpm changeset publish --tag beta
+          publish-script: pnpm changeset publish --tag beta
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
