@@ -1,4 +1,4 @@
-type HashClient = 'euid' | 'id5' | 'liveramp' | 'uid2' | 'permutive';
+type HashClient = 'euid' | 'id5' | 'liveramp' | 'uid2' | 'permutive' | 'ozone';
 type Email = `${string}@${string}`;
 
 function toBase64(content: ArrayBuffer): string {
@@ -39,6 +39,7 @@ async function hashEmailForClient(
 		case 'id5':
 		case 'liveramp':
 		case 'permutive':
+		case 'ozone':
 			return toHex(hashBuffer);
 	}
 }
