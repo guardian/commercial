@@ -106,7 +106,7 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const publishedPackages = ${{ steps.changeset.outputs.publishedPackages }};
+            const publishedPackages = ${{ steps.changeset.outputs.published-packages }};
 
             if(publishedPackages.length === 0) {
               throw new Error('No packages published, did you forget to add a changeset?');
