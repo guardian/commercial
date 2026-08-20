@@ -23,6 +23,17 @@ describe('hashEmail', () => {
 		);
 	});
 
+	it('returns a hex encoded email for ozone', async () => {
+		const hashedEmail = await hashEmailForClient(
+			'testGuardianUser@gmail.com',
+			'ozone',
+		);
+
+		expect(hashedEmail).toBe(
+			'528f4e83dbdd916e811358e43518555f68229b1dc279b6b2cd3c480f68371e7d',
+		);
+	});
+
 	it('returns a base64 encoded email for uid2', async () => {
 		const hashedEmail = await hashEmailForClient(
 			'user@example.com',
