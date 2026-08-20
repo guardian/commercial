@@ -181,6 +181,7 @@ const bidsBackHandler = (
 	hasBeenCalled: { value: boolean },
 ): Promise<void> => {
 	if (hasBeenCalled.value) {
+		// This handler has already been called, either by all bids being returned or by the failsafe timeout.
 		return Promise.resolve();
 	}
 	hasBeenCalled.value = true;
@@ -249,11 +250,11 @@ const requestBids = async (
 		'variant',
 	);
 
-	// A reference value so that scoping works correctly.
+	// This is a reference rather than a value type so that scoping works correctly.
 	const hasBidsBackHandlerBeenCalled = { value: false };
 
 	if (isInFailsafeTestGroup) {
-		// This failsafe timeout is a safety net that invokes bidsBackHandler in case something goes wrong.
+		// This failsafe timeout is a safety net that invokes bidsBackHandler in case something goes wrong with Prebid.
 		setTimeout(function () {
 			void bidsBackHandler(
 				adUnits,
