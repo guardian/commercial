@@ -1,6 +1,9 @@
 import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { createAdSize } from '@guardian/commercial-core/ad-sizes';
-import { PREBID_TIMEOUT } from '@guardian/commercial-core/constants/prebid-timeout';
+import {
+	PREBID_AUCTION_TIMEOUT,
+	PREBID_FAILSAFE_TIMEOUT,
+} from '@guardian/commercial-core/constants/prebid-timeouts';
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/consent-manager';
 import { onConsent } from '@guardian/consent-manager';
@@ -62,7 +65,7 @@ const initialise = async (
 		/**
 		 * The amount of time reserved for the auction
 		 */
-		bidderTimeout: PREBID_TIMEOUT,
+		bidderTimeout: PREBID_AUCTION_TIMEOUT,
 		/**
 		 * Applying one global floor price of £0.10 for all bids.
 		 */
@@ -106,10 +109,12 @@ const initialise = async (
 		});
 	}
 
-	/** Helper function to decide if a bidder should be included.
+	/**
+	 * Helper function to decide if a bidder should be included.
 	 * It is a curried function prepared with the consent state
 	 * at the time of initialisation to avoid unnecessary repetition
-	 * of consent state throughout */
+	 * of consent state throughout
+	 */
 	const isBidderEnabled = shouldIncludeBidder(consentState);
 
 	// initialise enabled bidders
@@ -158,7 +163,7 @@ const initialise = async (
 		/**
 		 * when hasPrebidSize is true we use size
 		 * set here when adjusting the slot size.
-		 * */
+		 */
 		advert.hasPrebidSize = true;
 		advert.size = size;
 
@@ -173,8 +178,15 @@ const initialise = async (
 const bidsBackHandler = (
 	adUnits: AdUnitDefinition[],
 	eventTimer: EventTimer,
-): Promise<void> =>
-	new Promise((resolve) => {
+	hasBeenCalled: { value: boolean },
+): Promise<void> => {
+	if (hasBeenCalled.value) {
+		// This handler has already been called, either by all bids being returned or by the failsafe timeout.
+		return Promise.resolve();
+	}
+	hasBeenCalled.value = true;
+
+	return new Promise((resolve) => {
 		window.pbjs.setTargetingForGPTAsync(
 			adUnits.map((u) => u.code).filter(isString),
 		);
@@ -187,6 +199,7 @@ const bidsBackHandler = (
 			}
 		});
 	});
+};
 
 let requestQueue: Promise<void> = Promise.resolve();
 
@@ -209,6 +222,7 @@ const requestBids = async (
 			// calculate this once before mapping over
 			const isSignedIn = await isUserLoggedIn();
 			const pageTargeting = getPageTargeting(consentState, isSignedIn);
+
 			return flatten(
 				adverts.map((advert) =>
 					getHeaderBiddingAdSlots(advert, slotFlatMap).map(
@@ -231,6 +245,25 @@ const requestBids = async (
 
 	const eventTimer = EventTimer.get();
 
+	const isInFailsafeTestGroup = isUserInTestGroup(
+		'commercial-prebid-failsafe-timeout',
+		'variant',
+	);
+
+	// This is a reference rather than a value type so that scoping works correctly.
+	const hasBidsBackHandlerBeenCalled = { value: false };
+
+	if (isInFailsafeTestGroup) {
+		// This failsafe timeout is a safety net that invokes bidsBackHandler in case something goes wrong with Prebid.
+		setTimeout(function () {
+			void bidsBackHandler(
+				adUnits,
+				eventTimer,
+				hasBidsBackHandlerBeenCalled,
+			);
+		}, PREBID_FAILSAFE_TIMEOUT);
+	}
+
 	requestQueue = requestQueue.then(
 		() =>
 			new Promise<void>((resolve) => {
@@ -247,9 +280,11 @@ const requestBids = async (
 					void window.pbjs.requestBids({
 						adUnits,
 						bidsBackHandler: () =>
-							void bidsBackHandler(adUnits, eventTimer).then(
-								resolve,
-							),
+							void bidsBackHandler(
+								adUnits,
+								eventTimer,
+								hasBidsBackHandlerBeenCalled,
+							).then(resolve),
 					});
 				});
 			}),
