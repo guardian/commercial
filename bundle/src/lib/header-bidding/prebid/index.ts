@@ -1,6 +1,9 @@
 import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { createAdSize } from '@guardian/commercial-core/ad-sizes';
-import { PREBID_TIMEOUT } from '@guardian/commercial-core/constants/prebid-timeouts';
+import {
+	PREBID_AUCTION_TIMEOUT,
+	PREBID_FAILSAFE_TIMEOUT,
+} from '@guardian/commercial-core/constants/prebid-timeouts';
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/consent-manager';
 import { onConsent } from '@guardian/consent-manager';
@@ -62,7 +65,7 @@ const initialise = async (
 		/**
 		 * The amount of time reserved for the auction
 		 */
-		bidderTimeout: PREBID_TIMEOUT,
+		bidderTimeout: PREBID_AUCTION_TIMEOUT,
 		/**
 		 * Applying one global floor price of £0.10 for all bids.
 		 */
@@ -175,8 +178,14 @@ const initialise = async (
 const bidsBackHandler = (
 	adUnits: AdUnitDefinition[],
 	eventTimer: EventTimer,
-): Promise<void> =>
-	new Promise((resolve) => {
+	hasBeenCalled: { value: boolean },
+): Promise<void> => {
+	if (hasBeenCalled.value) {
+		return Promise.resolve();
+	}
+	hasBeenCalled.value = true;
+
+	return new Promise((resolve) => {
 		window.pbjs.setTargetingForGPTAsync(
 			adUnits.map((u) => u.code).filter(isString),
 		);
@@ -189,6 +198,7 @@ const bidsBackHandler = (
 			}
 		});
 	});
+};
 
 let requestQueue: Promise<void> = Promise.resolve();
 
@@ -234,6 +244,25 @@ const requestBids = async (
 
 	const eventTimer = EventTimer.get();
 
+	const isInFailsafeTestGroup = isUserInTestGroup(
+		'commercial-prebid-failsafe-timeout',
+		'variant',
+	);
+
+	// A reference value so that scoping works correctly.
+	const hasBidsBackHandlerBeenCalled = { value: false };
+
+	if (isInFailsafeTestGroup) {
+		// This failsafe timeout is a safety net that invokes bidsBackHandler in case something goes wrong.
+		setTimeout(function () {
+			void bidsBackHandler(
+				adUnits,
+				eventTimer,
+				hasBidsBackHandlerBeenCalled,
+			);
+		}, PREBID_FAILSAFE_TIMEOUT);
+	}
+
 	requestQueue = requestQueue.then(
 		() =>
 			new Promise<void>((resolve) => {
@@ -250,9 +279,11 @@ const requestBids = async (
 					void window.pbjs.requestBids({
 						adUnits,
 						bidsBackHandler: () =>
-							void bidsBackHandler(adUnits, eventTimer).then(
-								resolve,
-							),
+							void bidsBackHandler(
+								adUnits,
+								eventTimer,
+								hasBidsBackHandlerBeenCalled,
+							).then(resolve),
 					});
 				});
 			}),

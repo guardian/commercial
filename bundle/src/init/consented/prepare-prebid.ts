@@ -37,7 +37,7 @@ const throwIfUnconsented = (hasConsentForPrebid: boolean): void => {
 	}
 };
 
-const setupPrebidIfAllowed = async (): Promise<void> => {
+const setupPrebid = async (): Promise<void> => {
 	if (!shouldLoadPrebid()) {
 		return;
 	}
@@ -67,7 +67,7 @@ const setupPrebidIfAllowed = async (): Promise<void> => {
 	}
 };
 
-export const setupPrebidOnce: () => Promise<void> = once(setupPrebidIfAllowed);
+export const setupPrebidOnce: () => Promise<void> = once(setupPrebid);
 
 /**
  * Initialise prebid - header bidding for display and video ads
@@ -79,5 +79,5 @@ export const preparePrebid = (): Promise<void> => {
 };
 
 export const _ = {
-	setupPrebid: setupPrebidIfAllowed,
+	setupPrebid,
 };
