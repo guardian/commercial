@@ -41,7 +41,6 @@ export const getUserSyncSettings = async (
 		fetchOzoneUserId,
 	]);
 
-
 	const userIds = [...userIdModules]
 		// typescript doesn't like flatMap here
 		.map((idModule) => {
