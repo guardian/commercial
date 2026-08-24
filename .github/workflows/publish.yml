@@ -56,9 +56,9 @@ jobs:
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
-        uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
+        uses: changesets/action@22ccf9aa43179fe9e27dc62e575971d28cce197c # v2.0.0
         with:
-          publish: pnpm changeset publish
+          publish-script: pnpm changeset publish
           title: 🦋 Release package updates
           commit: Bump package versions
           setupGitUser: false
@@ -94,10 +94,10 @@ jobs:
         run: pnpm changeset version --snapshot beta
 
       - name: Create Release
-        uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
+        uses: changesets/action@22ccf9aa43179fe9e27dc62e575971d28cce197c # v2.0.0
         id: changeset
         with:
-          publish: pnpm changeset publish --tag beta
+          publish-script: pnpm changeset publish --tag beta
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -106,7 +106,7 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const publishedPackages = ${{ steps.changeset.outputs.publishedPackages }};
+            const publishedPackages = ${{ steps.changeset.outputs.published-packages }};
 
             if(publishedPackages.length === 0) {
               throw new Error('No packages published, did you forget to add a changeset?');
