@@ -39,7 +39,7 @@ const onIntersectDisplayAd = (
 	);
 };
 
-const onIntersectPrebid = (
+const onIntersectHeaderBidder = (
 	entries: IntersectionObserverEntry[],
 	observer: IntersectionObserver,
 ) => {
@@ -49,7 +49,7 @@ const onIntersectPrebid = (
 		.forEach((entry) => {
 			log(
 				'commercial',
-				'prebid observer triggered for: ',
+				'header bidder observer triggered for: ',
 				entry.target.id,
 			);
 
@@ -59,30 +59,30 @@ const onIntersectPrebid = (
 		});
 };
 
-const getDisplayAdObserver = once((isEagerPrebid: boolean) => {
+const getDisplayAdObserver = once((isEager: boolean) => {
 	return new window.IntersectionObserver(onIntersectDisplayAd, {
-		rootMargin: isEagerPrebid ? '10% 0px' : '20% 0px',
+		rootMargin: isEager ? '10% 0px' : '20% 0px',
 	});
 });
 
-const getPrebidObserver = once(() => {
-	return new window.IntersectionObserver(onIntersectPrebid, {
+const getHeaderBidderObserver = once(() => {
+	return new window.IntersectionObserver(onIntersectHeaderBidder, {
 		rootMargin: '50% 0px',
 	});
 });
 
 /**
- * Only load Prebid eagerly on desktop and above
+ * Only load header bidders eagerly on desktop and above
  */
-const shouldRunEagerPrebid = () =>
+const shouldRunEagerHeaderBidding = () =>
 	['desktop', 'wide'].includes(getCurrentBreakpoint());
 
 export const enableLazyLoad = (advert: Advert): void => {
 	if (dfpEnv.lazyLoadObserve) {
-		const isEagerPrebid = shouldRunEagerPrebid();
-		getDisplayAdObserver(isEagerPrebid).observe(advert.node);
-		if (isEagerPrebid) {
-			getPrebidObserver().observe(advert.node);
+		const isEagerHeaderBidding = shouldRunEagerHeaderBidding();
+		getDisplayAdObserver(isEagerHeaderBidding).observe(advert.node);
+		if (isEagerHeaderBidding) {
+			getHeaderBidderObserver().observe(advert.node);
 		}
 	} else {
 		displayAd(advert.id);
