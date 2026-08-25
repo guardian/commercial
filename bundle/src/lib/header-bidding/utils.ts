@@ -14,6 +14,10 @@ import { type ConsentState, getConsentFor } from '@guardian/consent-manager';
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import type { Size } from 'prebid.js/dist/src/types/common';
+import { isAdFree } from '../../lib/ad-free';
+import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
+import { isSecureContactPage } from '../../lib/is-secure-contact';
+import { shouldLoadAds } from '../../lib/should-load-ads';
 import {
 	getCurrentTweakpoint,
 	matchesBreakpoints,
@@ -52,6 +56,13 @@ const isValidPageForMobileSticky = (): boolean => {
 		pageId.startsWith('football/')
 	);
 };
+
+const canLoadHeaderBidders = (): boolean =>
+	!isGoogleProxy() &&
+	shouldLoadAds() &&
+	!isAdFree() &&
+	!window.guardian.config.page.hasPageSkin &&
+	!isInCanada();
 
 /**
  * Cleans an object for targetting. Removes empty strings and other falsy values.
@@ -264,3 +275,13 @@ export const containsWS = (sizes: Size[]): boolean =>
 	contains(sizes, [160, 600]);
 
 export const shouldIncludeOnlyA9 = window.location.hash.includes('#only-a9');
+
+export const shouldLoadPrebid = () =>
+	canLoadHeaderBidders() &&
+	window.guardian.config.switches.prebidHeaderBidding === true &&
+	!shouldIncludeOnlyA9;
+
+export const shouldLoadA9 = () =>
+	canLoadHeaderBidders() &&
+	window.guardian.config.switches.a9HeaderBidding === true &&
+	!isSecureContactPage();

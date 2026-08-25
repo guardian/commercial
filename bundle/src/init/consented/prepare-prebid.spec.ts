@@ -208,7 +208,7 @@ describe('init', () => {
 		window.guardian.config.switches = {
 			prebidHeaderBidding: true,
 		};
-		// (shouldLoadAds as jest.Mock).mockReturnValue(false);
+
 		jest.mocked(shouldLoadAds).mockReturnValue(false);
 		mockOnConsent(tcfv2WithConsent);
 		mockGetConsentFor(true);

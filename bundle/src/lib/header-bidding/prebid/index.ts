@@ -3,7 +3,7 @@ import { createAdSize } from '@guardian/commercial-core/ad-sizes';
 import {
 	PREBID_AUCTION_TIMEOUT,
 	PREBID_FAILSAFE_TIMEOUT,
-} from '@guardian/commercial-core/constants/prebid-timeouts';
+} from '@guardian/commercial-core/constants/header-bidding-timeouts';
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/consent-manager';
 import { onConsent } from '@guardian/consent-manager';
@@ -23,6 +23,7 @@ import {
 	isSwitchedOn,
 	shouldIncludeBidder,
 	shouldIncludePermutive,
+	shouldLoadPrebid,
 	stripDfpAdPrefixFrom,
 } from '../utils';
 import { getGUAnalyticsConfig } from './analytics';
@@ -209,11 +210,7 @@ const requestBids = async (
 	adverts: Advert[],
 	slotFlatMap?: SlotFlatMap,
 ): Promise<void> => {
-	if (!initialised) {
-		return requestQueue;
-	}
-
-	if (!window.guardian.config.switches.prebidHeaderBidding) {
+	if (!shouldLoadPrebid() || !initialised) {
 		return requestQueue;
 	}
 
