@@ -5,6 +5,7 @@ import { isSwitchedOn } from '../../utils';
 import { getUserIdForId5 } from './id5';
 import { getUserIdForIntentIQ } from './intent-iq';
 import { getUserIdForLiveRamp } from './liveramp';
+import { getUserIdForOzone } from './ozone';
 import { sharedId } from './shared';
 import { getUserIdForTradeDesk } from './tradedesk';
 
@@ -22,6 +23,8 @@ export const getUserSyncSettings = async (
 		getUserIdForTradeDesk(userEmail, consentState);
 	const fetchIntentIQUserId =
 		getConsentFor('intentIQ', consentState) && getUserIdForIntentIQ();
+	const fetchOzoneUserId =
+		getConsentFor('ozone', consentState) && getUserIdForOzone(userEmail);
 
 	// run all ID providers asynchronously
 
@@ -35,6 +38,7 @@ export const getUserSyncSettings = async (
 		fetchLiveRampUserId,
 		fetchTradeDeskUserId,
 		fetchIntentIQUserId,
+		fetchOzoneUserId,
 	]);
 
 	const userIds = [...userIdModules]
