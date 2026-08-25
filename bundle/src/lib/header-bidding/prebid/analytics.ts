@@ -26,6 +26,7 @@ const shouldEnableAnalytics = (): boolean => {
 	const hasQueryParam = window.location.search.includes(
 		'pbjs-analytics=true',
 	);
+
 	return (
 		isInServerSideTest ||
 		isInClientSideTest ||
