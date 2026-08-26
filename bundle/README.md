@@ -10,12 +10,11 @@ To develop the bundle locally on the bundle, run `pnpm serve` to start a local s
 
 #### Inside a Dev Container (ie. for Playwright in this repo)
 
-1.   Run DCR in a Docker container. You can do this by running the script `./scripts/start-dcr-container`. 
-     You can provide a commit hash as an argument to this script to run with a specific build, or leave blank to default to the build from the `main` branch. 
-     The container image with a tag of the commit hash must be available in Github Container Registry for dotcom-rendering for this to work: https://github.com/guardian/dotcom-rendering/pkgs/container/dotcom-rendering
+1.  Run DCR in a Docker container. 
+    You can do this by running the script `./scripts/start-dcr-container` or `pnpm run start-dcr`. 
+    You can provide a commit hash as an argument to this script to run with a specific build, or leave blank to default to the build from the `main` branch. 
+    The container image with a tag of the commit hash must be available in Github Container Registry for dotcom-rendering for this to work: https://github.com/guardian/dotcom-rendering/pkgs/container/dotcom-rendering
    
-     **N.b. This step is already included in the commands to start Playwright: `pnpm playwright:run` and `pnpm playwright:open`**
-
 2.  In another terminal start the commercial dev server to serve the local bundle:
 
     `pnpm serve`
