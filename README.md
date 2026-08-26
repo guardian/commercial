@@ -19,7 +19,7 @@ There are 2 packages in this repo:
 ### Running locally
 
 Please use the [.devcontainer](.devcontainer) configuration to open your IDE in an isolated development environment ie. a [dev container](https://containers.dev).
-You will need to have Docker installed (or at least have a Docker daemon running). 
+You will need to have Docker installed (or at least have a Docker daemon running).
 See documentation available at https://github.com/guardian/devenv for extra information and help with development containers.
 
 When updating the `devenv.yaml` file, ensure that you regenerate the resulting devcontainer.json files by running `devenv generate`.
@@ -31,6 +31,7 @@ All usual commands should be available from within the dev container.
 To install dependencies, run `pnpm i`.
 
 ### A Note on Deployments
+
 [`@guardian/commercial-bundle`](./bundle/) and [`@guardian/commercial-core`](./core/) are deployed separately.
 
 `@guardian/commercial-bundle` is deployed to PROD automatically when merged to main. It does not use changesets.
