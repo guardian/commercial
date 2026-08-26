@@ -22,6 +22,7 @@ modules:
 forwardPorts:
     - 3031 # commercial
     - 3030 # dcr in docker container for playwright
+    - 4321 # port for running `pnpm playwright:open` locally
 
 # Optional: Mount directories from host to container
 # mounts:
@@ -39,6 +40,10 @@ postCreateCommand:
     - cmd: 'COREPACK_ENABLE_DOWNLOAD_PROMPT=0 mise x -- pnpm install --frozen-lockfile'
       workingDirectory: '${containerWorkspaceFolder}'
       logLine: 'install-project-dependencies'
+    
+    - cmd: 'mise x -- pnpm exec playwright install chromium --with-deps'
+      workingDirectory: '${containerWorkspaceFolder}/bundle'
+      logLine: 'install-playwright-browsers'
 
 postStartCommand:
     - cmd: "echo 'Container started successfully'"
