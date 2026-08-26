@@ -221,6 +221,10 @@ Our Prebid.js set up is defined in [src/lib/header-bidding/prebid/load-modules.t
 
 The Guardian-specific Prebid modules are in [src/lib/header-bidding/prebid/modules](https://github.com/guardian/commercial/tree/1e920009b61342687611056daed7714fe1cfead3/src/lib/header-bidding/prebid/modules).
 
-#### Debugging prebid.js
+### Debugging prebid.js
 
 Adding `?pbjs_debug=true` to the URL will output prebid.js debug information to the developer console.
+
+### Timeouts
+
+We use an auction timeout for both Prebid and APS. If this timeout is reached, the auction is terminated and only bids that have been received within this timeframe are considered for the ad slot. Currently, this is set at 1,500 ms for both Prebid and APS. We have a failsafe timeout around the Prebid auction, whose purpose is to invoke the ad server callback in case something goes wrong with Prebid. In all regular scenarios, Prebid.js will have already invoked the callback before this timeout is reached. This is to ensure the Prebid auction doesn't hang indefinitely in case something goes wrong.
