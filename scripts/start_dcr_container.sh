@@ -4,8 +4,7 @@
 # If you want to use a specific commit, provide this as an argument to this script
 if [ ! $1 ]
  then TAG="main";
-else
- TAG="$1";
+ else TAG="$1";
 fi
 
 # See https://github.com/guardian/dotcom-rendering/pkgs/container/dotcom-rendering for available images
