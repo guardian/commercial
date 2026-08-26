@@ -8,13 +8,28 @@ To develop the bundle locally on the bundle, run `pnpm serve` to start a local s
 
 ### Working locally with DCR
 
+#### Inside a Dev Container (ie. for Playwright in this repo)
+
+1.   Run DCR in a Docker container. You can do this by running the script `./scripts/start-dcr-container`. 
+     You can provide a commit hash as an argument to this script to run with a specific build, or leave blank to default to the build from the `main` branch. 
+     The container image with a tag of the commit hash must be available in Github Container Registry for dotcom-rendering for this to work: https://github.com/guardian/dotcom-rendering/pkgs/container/dotcom-rendering
+   
+     **N.b. This step is already included in the commands to start Playwright: `pnpm playwright:run` and `pnpm playwright:open`**
+
+2.  In another terminal start the commercial dev server to serve the local bundle:
+
+    `pnpm serve`
+
+
+#### Outside of a Dev Container
+
 1.  To point DCR to the local commercial bundle, in the `dotcom-rendering/dotcom-rendering` directory run:
 
     `COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js PORT=3030 make dev`
 
     This will override `commercialBundleUrl` passed via the page config from PROD/CODE.
 
-1.  In another terminal start the commercial dev server to serve the local bundle:
+2.  In another terminal start the commercial dev server to serve the local bundle:
 
     `pnpm serve`
 
@@ -28,11 +43,11 @@ This might fail if the base test coverage hasn't been met. This is set in [jest.
 
 To run the Playwright e2e tests:
 
-Follow the steps above to run DCR against the local bundle.
+**Follow the steps above to run DCR against the local bundle. Then:**
 
-`pnpm playwright:run` will run the tests on the command line
+- `pnpm playwright:run` will run the tests on the command line
 
-`pnpm playwright:open` will open the Playwright UI so you can inspect the tests as they run
+- `pnpm playwright:open` will open the Playwright UI so you can inspect the tests as they run
 
 ### Working locally with Frontend
 
