@@ -59,8 +59,8 @@ jobs:
         uses: changesets/action@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1
         with:
           publish-script: pnpm changeset publish
-          title: 🦋 Release package updates
-          commit: Bump package versions
+          pr-title: 🦋 Release package updates
+          commit-message: Bump package versions
           setupGitUser: false
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
