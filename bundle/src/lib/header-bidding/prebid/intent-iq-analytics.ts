@@ -7,13 +7,15 @@ import {
 	isUserInIntentIQRegion,
 	NON_EU_PARTNER_ID,
 } from './id-handlers/intent-iq';
+import { isSwitchedOn } from '../utils';
 
 export const getIntentIQAnalyticsConfig = (
 	consentState: ConsentState,
 ): AnalyticsConfig<'iiqAnalytics'> | undefined => {
 	const isEU = isUserInAllowedEURegion();
 	const hasConsent = getConsentFor('intentIQ', consentState);
-	const enabledAnalytics = isUserInIntentIQRegion() && hasConsent;
+	const isEnabled = isSwitchedOn('prebidIntentIq')
+	const enabledAnalytics = isUserInIntentIQRegion() && hasConsent && isEnabled;
 
 	if (enabledAnalytics) {
 		return {

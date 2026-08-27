@@ -29,7 +29,7 @@ export const initIpsosMori = async (): Promise<void> => {
 	const isAU = locale === 'AU' && !!consentState.aus;
 	const isUK = locale === 'GB' && !!consentState.tcfv2;
 
-	if (!isAU && !isUK) {
+	if (!isAU && !isUK && !window.guardian.config.switches.ipsosMori) {
 		log('commercial', 'Skipping ipsos process outside GB or AU');
 	}
 

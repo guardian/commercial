@@ -1,5 +1,6 @@
 import { getLocale } from '@guardian/commercial-core/geo/get-locale';
 import type { UserIdConfig } from 'prebid.js/dist/modules/userId/spec';
+import { isSwitchedOn } from '../../utils';
 
 // IntentIQ does not support every country, so we restrict it to this allowlist.
 const intentIQNonEURegions = [
@@ -31,7 +32,9 @@ const getUserIdForIntentIQ = async (): Promise<
 	UserIdConfig<'intentIqId'> | undefined
 > => {
 	const isEU = isUserInAllowedEURegion();
-	if (isUserInIntentIQRegion()) {
+	const isIntentIqEnabled = isSwitchedOn('prebidIntentIq');
+
+	if (isIntentIqEnabled && isUserInIntentIQRegion()) {
 		return Promise.resolve({
 			name: 'intentIqId',
 			params: {

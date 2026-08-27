@@ -2,6 +2,7 @@ import { hashEmailForClient } from '@guardian/commercial-core';
 import type { ConsentState } from '@guardian/consent-manager';
 import type { UserIdConfig } from 'prebid.js/dist/modules/userId/spec';
 import { isUserInTestGroup } from '../../../../ab-testing';
+import { isSwitchedOn } from '../../utils';
 
 type TradeDeskUserIdConfig = UserIdConfig<'uid2'> | UserIdConfig<'euid'>;
 
@@ -10,6 +11,7 @@ const getTradeDeskIdParams = async (
 	email: string,
 ): Promise<TradeDeskUserIdConfig> => {
 	const emailHash = await hashEmailForClient(email, id);
+
 	if (id === 'uid2') {
 		return {
 			name: 'uid2',
@@ -30,6 +32,7 @@ const getTradeDeskIdParams = async (
 			emailHash,
 		},
 	};
+
 };
 
 export const getUserIdForTradeDesk = async (
@@ -44,7 +47,9 @@ export const getUserIdForTradeDesk = async (
 		consentState.framework &&
 		['tcfv2', 'usnat'].includes(consentState.framework);
 
-	if (email && isInTest && isValidFramework) {
+	const isTtdIdEnabled = isSwitchedOn('prebidTtdId');
+
+	if (email && isInTest && isValidFramework && isTtdIdEnabled) {
 		const idType = consentState.framework === 'tcfv2' ? 'euid' : 'uid2';
 		const params = await getTradeDeskIdParams(idType, email);
 		return params;

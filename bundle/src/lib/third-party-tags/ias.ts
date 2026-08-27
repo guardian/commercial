@@ -5,7 +5,7 @@ import type { GetThirdPartyTag } from '../types';
  * https://integralads.com/uk/
  */
 export const ias: ReturnType<GetThirdPartyTag> = {
-	shouldRun: true,
+	shouldRun: window.guardian.config.switches.commercialIas ?? false,
 	url: '//cdn.adsafeprotected.com/iasPET.1.js',
 	name: 'ias',
 };
