@@ -52,13 +52,14 @@ const scriptBasedOnRegion = (): string => {
 /**
  * Allows creatives to show survey
  * https://trello.com/c/wHffHVF1/171-integrate-and-test-inizio
+ * @param  {} {shouldRun}
  */
-export const inizio: ReturnType<GetThirdPartyTag> = {
-	shouldRun: window.guardian.config.switches.inizio ?? false,
+export const inizio: GetThirdPartyTag = ({ shouldRun }) => ({
+	shouldRun,
 	url: scriptBasedOnRegion(),
 	name: 'inizio',
 	onLoad,
-};
+});
 
 export const _ = {
 	onLoad,

@@ -9,6 +9,7 @@ global.googletag = {};
 describe('getUserIdForIntentIQ', () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
+		window.guardian.config.switches.prebidIntentIq = true;
 	});
 	test('should generate correct EU userID config, in an allowed EU region (GB)', async () => {
 		jest.mocked(getLocale).mockReturnValue('GB');
@@ -60,6 +61,13 @@ describe('getUserIdForIntentIQ', () => {
 	});
 	test('should return undefined as userID config, for users in an unsupported region (CZ)', async () => {
 		jest.mocked(getLocale).mockReturnValueOnce('CZ');
+
+		const result = await getUserIdForIntentIQ();
+
+		expect(result).toEqual(undefined);
+	});
+	test('should return undefined as userID config, when the feature switch is off', async () => {
+		window.guardian.config.switches.prebidIntentIq = false;
 
 		const result = await getUserIdForIntentIQ();
 

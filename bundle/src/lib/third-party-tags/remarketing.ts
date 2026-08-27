@@ -11,10 +11,11 @@ const onLoad = () => {
 /**
  * Google conversion tracking
  * https://support.google.com/google-ads/answer/6095821
+ * @param  {} {shouldRun}
  */
-export const remarketing: ReturnType<GetThirdPartyTag> = {
-	shouldRun: window.guardian.config.switches.remarketing ?? false,
+export const remarketing: GetThirdPartyTag = ({ shouldRun }) => ({
+	shouldRun,
 	url: '//www.googleadservices.com/pagead/conversion_async.js',
 	name: 'remarketing',
 	onLoad,
-}
+});

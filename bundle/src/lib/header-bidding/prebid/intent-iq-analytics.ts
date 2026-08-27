@@ -1,13 +1,13 @@
 import type { ConsentState } from '@guardian/consent-manager';
 import { getConsentFor } from '@guardian/consent-manager';
 import type { AnalyticsConfig } from 'prebid.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
+import { isSwitchedOn } from '../utils';
 import {
 	EU_PARTNER_ID,
 	isUserInAllowedEURegion,
 	isUserInIntentIQRegion,
 	NON_EU_PARTNER_ID,
 } from './id-handlers/intent-iq';
-import { isSwitchedOn } from '../utils';
 
 export const getIntentIQAnalyticsConfig = (
 	consentState: ConsentState,
