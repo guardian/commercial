@@ -94,14 +94,10 @@ const insertScripts = async (
 
 const loadOther = (): Promise<void> => {
 	const advertisingServices: ThirdPartyTag[] = [
-		remarketing({
-			shouldRun: window.guardian.config.switches.remarketing ?? false,
-		}),
-		permutive({
-			shouldRun: window.guardian.config.switches.permutive ?? false,
-		}),
+		remarketing,
+		permutive,
 		ias,
-		inizio({ shouldRun: window.guardian.config.switches.inizio ?? false }),
+		inizio,
 	].filter((_) => _.shouldRun);
 
 	const performanceServices: ThirdPartyTag[] = [
