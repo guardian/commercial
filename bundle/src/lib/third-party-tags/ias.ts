@@ -3,7 +3,6 @@ import type { GetThirdPartyTag } from '../types';
 /**
  * IAS script filters bad ads
  * https://integralads.com/uk/
- * @param  {} {shouldRun}
  */
 export const ias: ReturnType<GetThirdPartyTag> = {
 	shouldRun: true,
