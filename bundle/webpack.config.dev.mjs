@@ -19,5 +19,6 @@ export default merge(config, {
 		compress: true,
 		hot: false,
 		liveReload: true,
+		allowedHosts: 'localhost',
 	},
 });
