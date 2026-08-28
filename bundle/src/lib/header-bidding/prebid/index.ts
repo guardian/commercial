@@ -56,8 +56,6 @@ const initialise = async (
 		'holdback',
 	);
 
-	console.log('canUsePriceFloors:', canUsePriceFloors);
-
 	const shouldEnableTransactionIds = isUserInTestGroup(
 		'commercial-prebid-transaction-ids',
 		'variant',
@@ -77,7 +75,7 @@ const initialise = async (
 						enabled: true,
 						data: {
 							schema: { fields: ['mediaType'] },
-							values: { banner: 0.1, video: 0.1 }, // The wildcard token doesn't seem to work correctly.
+							values: { banner: 0.1, video: 0.1 },
 							default: 0.1,
 						},
 					},
