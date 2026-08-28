@@ -33,22 +33,20 @@ export class PrebidAdUnit implements AdUnitDefinition {
 		pageTargeting: PageTargeting,
 		consentState: ConsentState,
 	) {
-		/**
-		 * Only the Outstream Ozone ad size is compatible with the mediaTypes.video property of PrebidAdUnit
-		 */
 		const bannerSizes = slot.sizes.filter(
 			(size) => !isOutstreamOzone(size),
 		);
-		const videoSizes = slot.sizes.filter((size) => isOutstreamOzone(size));
-		const useOutstreamVideo =
-			slot.key === 'inline1' && videoSizes.length > 0;
+
+		const useVideoMediaType =
+			slot.key === 'inline1' &&
+			slot.sizes.some((size) => isOutstreamOzone(size));
 
 		this.code = advert.id;
 		this.mediaTypes = {
 			banner: {
 				sizes: bannerSizes,
 			},
-			...(useOutstreamVideo
+			...(useVideoMediaType
 				? {
 						video: {
 							playerSize: outstreamSizes.outstreamOzone.toArray(),
