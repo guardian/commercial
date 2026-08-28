@@ -65,6 +65,9 @@ jobs:
           commit-message: Bump package versions
           # Changesets app token
           github-token: ${{ steps.app-token.outputs.token }}
+        # If there are no unreleased changes, this action fails
+        # We have no dependent steps so don't need to recognise this as a failure
+        continue-on-error: true
 
   publish-beta:
     name: '@guardian/commercial-core'
