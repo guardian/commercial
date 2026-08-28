@@ -2,6 +2,7 @@ import type { GetThirdPartyTag } from '../types';
 
 /**
  * Permutive script updates local user segmentation data
+ * @param  {} {shouldRun}
  */
 export const permutive: GetThirdPartyTag = ({ shouldRun }) => ({
 	shouldRun,

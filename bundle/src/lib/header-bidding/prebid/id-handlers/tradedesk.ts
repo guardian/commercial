@@ -32,7 +32,6 @@ const getTradeDeskIdParams = async (
 			emailHash,
 		},
 	};
-
 };
 
 export const getUserIdForTradeDesk = async (
