@@ -618,7 +618,10 @@ describe('isInPrebidFloorPriceTest', () => {
 					enabled: true,
 					data: expect.objectContaining({
 						schema: { fields: ['mediaType'] },
-						values: { '*': 0.1 },
+						values: expect.objectContaining({
+							banner: 0.1,
+							video: 0.1,
+						}),
 						default: 0.1,
 					}),
 				}),
