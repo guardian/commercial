@@ -17,3 +17,6 @@ then
 	echo "${RED}This application has updated dependencies. Installing with pnpm...${ENDCOLOR}"
 	pnpm install --frozen-lockfile
 fi
+
+# Make sure the user dev container configuration is up to date
+devenv generate
