@@ -48,6 +48,8 @@ jobs:
         with:
           app-id: ${{ secrets.GU_CHANGESETS_APP_ID }}
           private-key: ${{ secrets.GU_CHANGESETS_PRIVATE_KEY }}
+          permission-contents: read
+          permission-pull-requests: write
 
       - name: Set git user to Gu Changesets app
         run: |
@@ -61,9 +63,7 @@ jobs:
           publish-script: pnpm changeset publish
           pr-title: 🦋 Release package updates
           commit-message: Bump package versions
-          setupGitUser: false
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          github-token: ${{ steps.app-token.outputs.token }}
 
   publish-beta:
     name: '@guardian/commercial-core'
