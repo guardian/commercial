@@ -34,6 +34,7 @@ const GU_EVENTS = {
 	BID_RESPONSE: EVENTS.BID_RESPONSE,
 	BID_WON: EVENTS.BID_WON,
 	NO_BID: EVENTS.NO_BID,
+	BID_TIMEOUT: EVENTS.BID_TIMEOUT,
 } as const;
 
 interface GuEvents {
@@ -81,6 +82,14 @@ interface GuEvents {
 	};
 	[GU_EVENTS.NO_BID]: {
 		ev: 'nobid';
+		n: string;
+		bid: string;
+		sid: string;
+		aid: string;
+		ttr: number;
+	};
+	[GU_EVENTS.BID_TIMEOUT]: {
+		ev: 'bidtimeout';
 		n: string;
 		bid: string;
 		sid: string;
@@ -211,6 +220,7 @@ const eventHandlers: EventHandlers = {
 			aid: args.auctionId,
 			bid: args.requestId,
 		});
+
 		return [event];
 	},
 	[EVENTS.NO_BID]: (adapter, args) => {
@@ -228,6 +238,21 @@ const eventHandlers: EventHandlers = {
 
 		return [event];
 	},
+	[EVENTS.BID_TIMEOUT]: (adapter, args) => {
+		const duration = Date.now() - (adapter.context?.auctionTimeStart ?? 0);
+		const events = args.map((bid) =>
+			createEvent<'bidTimeout'>({
+				ev: 'bidtimeout',
+				n: bid.bidder,
+				bid: bid.bidId,
+				sid: bid.adUnitCode,
+				aid: bid.auctionId,
+				ttr: duration,
+			}),
+		);
+
+		return events;
+	},
 };
 
 function getHandler<EventType extends keyof GuEvents>(
@@ -240,4 +265,4 @@ function getHandler<EventType extends keyof GuEvents>(
 	return handler;
 }
 
-export { GU_EVENTS, getHandler, type GuEvent, type GuEvents };
+export { getHandler, GU_EVENTS, type GuEvent, type GuEvents };

@@ -419,6 +419,44 @@ describe('prebid analyticsAdapter', () => {
 				}),
 			);
 		});
+
+		it('sends BID_TIMEOUT event with correct data', () => {
+			analyticsAdapter.track({
+				eventType: EVENTS.BID_TIMEOUT,
+				args: [
+					{
+						bidder: 'test-bidder',
+						bidId: 'bid-123',
+						adUnitCode: 'ad-slot-1',
+						auctionId: 'auction-123',
+					},
+				],
+			});
+
+			void triggerAuctionEnd();
+
+			expect(getPayload()).toEqual(
+				expect.objectContaining({
+					v: 10,
+					pv: 'test-pv',
+					hb_ev: [
+						{
+							ev: 'bidtimeout',
+							n: 'test-bidder',
+							bid: 'bid-123',
+							sid: 'ad-slot-1',
+							aid: 'auction-123',
+							ttr: expect.any(Number) as number,
+						},
+						expect.objectContaining({
+							ev: 'end',
+							aid: 'test-auction',
+							ttr: expect.any(Number) as number,
+						}),
+					],
+				}),
+			);
+		});
 	});
 
 	describe('bidder code submission', () => {
