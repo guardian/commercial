@@ -48,7 +48,7 @@
 		"@guardian/ophan-tracker-js": "5.1.2",
 		"@guardian/source": "13.1.0",
 		"@playwright/test": "1.62.1",
-		"@types/google-publisher-tag": "1.20260720.0",
+		"@types/google-publisher-tag": "1.20260810.0",
 		"@types/jest": "30.0.0",
 		"@types/lodash-es": "4.17.12",
 		"@types/node": "26.2.0",
