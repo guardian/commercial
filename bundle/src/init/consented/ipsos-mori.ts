@@ -24,12 +24,16 @@ const loadIpsosScript = (locale: 'au' | 'uk') => {
  * @returns Promise
  */
 export const initIpsosMori = async (): Promise<void> => {
+	if (!window.guardian.config.switches.ipsosMori) {
+		log('commercial', 'Ipsos Mori switch is turned off');
+		return Promise.resolve();
+	}
 	const locale = getLocale();
 	const consentState = await onConsent();
 	const isAU = locale === 'AU' && !!consentState.aus;
 	const isUK = locale === 'GB' && !!consentState.tcfv2;
 
-	if (!isAU && !isUK && !window.guardian.config.switches.ipsosMori) {
+	if (!isAU && !isUK) {
 		log('commercial', 'Skipping ipsos process outside GB or AU');
 	}
 
