@@ -1,7 +1,6 @@
 import { type ConsentState } from '@guardian/consent-manager';
 import type { UserIdConfig } from 'prebid.js/dist/modules/userId/spec';
 import { getEmail } from '../../../identity/api';
-import { isSwitchedOn } from '../../utils';
 import { getUserIdForId5 } from './id5';
 import type { LiverampUserIdConfig } from './liveramp';
 import { getUserIdForLiveRamp } from './liveramp';
@@ -11,15 +10,11 @@ import { getUserIdForTradeDesk } from './tradedesk';
 import { getUserSyncSettings } from './index';
 
 jest.mock('../../../identity/api');
-jest.mock('../../utils');
 jest.mock('./id5');
 jest.mock('./liveramp');
 jest.mock('./tradedesk');
 
 const mockGetEmail = getEmail as jest.MockedFunction<typeof getEmail>;
-const mockIsSwitchedOn = isSwitchedOn as jest.MockedFunction<
-	typeof isSwitchedOn
->;
 const mockGetUserIdForId5 = getUserIdForId5 as jest.MockedFunction<
 	typeof getUserIdForId5
 >;
@@ -52,7 +47,7 @@ describe('getUserSyncSettings', () => {
 				[consentIds.theTradeDesk]: false,
 			},
 		},
-	};
+	} satisfies ConsentState;
 
 	beforeEach(() => {
 		jest.resetAllMocks();
@@ -61,7 +56,12 @@ describe('getUserSyncSettings', () => {
 
 	describe('when prebidUserSync is switched on', () => {
 		beforeEach(() => {
-			mockIsSwitchedOn.mockReturnValue(true);
+			window.guardian.config.switches.prebidUserSync = true;
+			window.guardian.config.switches.prebidId5 = true;
+			window.guardian.config.switches.prebidLiveramp = true;
+			window.guardian.config.switches.prebidTtdId = true;
+			window.guardian.config.switches.prebidIntentIq = true;
+			window.guardian.config.switches.prebidOzoneId = true;
 		});
 
 		it('should return userSync settings with sharedId when no consent is given for any provider', async () => {
@@ -71,9 +71,43 @@ describe('getUserSyncSettings', () => {
 					...mockConsentState.tcfv2,
 					consents: {},
 				},
-			} as ConsentState;
+			};
 
 			const result = await getUserSyncSettings(noConsentState);
+
+			expect(result).toEqual({
+				syncsPerBidder: 0,
+				userIds: [sharedId],
+				filterSettings: {
+					all: {
+						bidders: '*',
+						filter: 'include',
+					},
+				},
+			});
+		});
+
+		it('should return userSync settings with sharedId when feature switches are off for all providers', async () => {
+			// General user sync switch ON
+			window.guardian.config.switches.prebidUserSync = true;
+			// Individual ID provider switches OFF
+			window.guardian.config.switches.prebidId5 = false;
+			window.guardian.config.switches.prebidLiveramp = false;
+			window.guardian.config.switches.prebidTtdId = false;
+			window.guardian.config.switches.prebidIntentIq = false;
+			window.guardian.config.switches.prebidOzoneId = false;
+
+			const result = await getUserSyncSettings({
+				...mockConsentState,
+				tcfv2: {
+					...mockConsentState.tcfv2,
+					vendorConsents: {
+						[consentIds.id5]: true,
+						[consentIds.liveramp]: true,
+						[consentIds.theTradeDesk]: true,
+					}
+				},
+			});
 
 			expect(result).toEqual({
 				syncsPerBidder: 0,
@@ -97,7 +131,7 @@ describe('getUserSyncSettings', () => {
 						[consentIds.id5]: true,
 					},
 				},
-			} as ConsentState;
+			};
 
 			const mockId5UserId: UserIdConfig<'id5Id'> = {
 				name: 'id5Id',
@@ -134,7 +168,7 @@ describe('getUserSyncSettings', () => {
 						[consentIds.liveramp]: true,
 					},
 				},
-			} as ConsentState;
+			};
 
 			const mockLiveRampUserId: LiverampUserIdConfig = [
 				{
@@ -177,7 +211,7 @@ describe('getUserSyncSettings', () => {
 						[consentIds.theTradeDesk]: true,
 					},
 				},
-			} as ConsentState;
+			};
 
 			const mockTradeDeskUserId: TradeDeskUserIdConfig = {
 				name: 'uid2',
@@ -215,7 +249,7 @@ describe('getUserSyncSettings', () => {
 						[consentIds.theTradeDesk]: true,
 					},
 				},
-			} as ConsentState;
+			};
 
 			const mockId5UserId: UserIdConfig<'id5Id'> = { name: 'id5Id' };
 			const mockLiveRampUserId: LiverampUserIdConfig = [
@@ -253,7 +287,7 @@ describe('getUserSyncSettings', () => {
 						[consentIds.id5]: true,
 					},
 				},
-			} as ConsentState;
+			};
 
 			mockGetEmail.mockResolvedValue(null);
 
@@ -266,15 +300,13 @@ describe('getUserSyncSettings', () => {
 
 	describe('when prebidUserSync is switched off', () => {
 		beforeEach(() => {
-			mockIsSwitchedOn.mockReturnValue(false);
+			window.guardian.config.switches.prebidUserSync = false;
 		});
 
 		it('should return userSync disabled when isSwitchedOn returns false', async () => {
 			const result = await getUserSyncSettings(
-				mockConsentState as ConsentState,
+				mockConsentState,
 			);
-
-			expect(mockIsSwitchedOn).toHaveBeenCalledWith('prebidUserSync');
 			expect(result).toEqual({
 				syncEnabled: false,
 			});
@@ -291,7 +323,7 @@ describe('getUserSyncSettings', () => {
 						[consentIds.theTradeDesk]: true,
 					},
 				},
-			} as ConsentState;
+			};
 
 			const result = await getUserSyncSettings(consentStateAll);
 			expect(result).toEqual({

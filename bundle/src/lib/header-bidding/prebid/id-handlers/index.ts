@@ -14,17 +14,25 @@ export const getUserSyncSettings = async (
 ): Promise<UserSyncConfig> => {
 	const userEmail = await getEmail();
 	const fetchId5UserId =
-		getConsentFor('id5', consentState) && getUserIdForId5(userEmail);
+		isSwitchedOn('prebidId5') &&
+		getConsentFor('id5', consentState) &&
+		getUserIdForId5(userEmail);
 	const fetchLiveRampUserId =
+		isSwitchedOn('prebidLiveramp') &&
 		getConsentFor('liveramp', consentState) &&
 		getUserIdForLiveRamp(userEmail);
 	const fetchTradeDeskUserId =
+		isSwitchedOn('prebidTtdId') &&
 		getConsentFor('theTradeDesk', consentState) &&
 		getUserIdForTradeDesk(userEmail, consentState);
 	const fetchIntentIQUserId =
-		getConsentFor('intentIQ', consentState) && getUserIdForIntentIQ();
+		isSwitchedOn('prebidIntentIq') &&
+		getConsentFor('intentIQ', consentState) &&
+		getUserIdForIntentIQ();
 	const fetchOzoneUserId =
-		getConsentFor('ozone', consentState) && getUserIdForOzone(userEmail);
+		isSwitchedOn('prebidOzoneId') &&
+		getConsentFor('ozone', consentState) &&
+		getUserIdForOzone(userEmail);
 
 	// run all ID providers asynchronously
 
@@ -55,15 +63,15 @@ export const getUserSyncSettings = async (
 
 	const userSync: UserSyncConfig = isSwitchedOn('prebidUserSync')
 		? {
-				syncsPerBidder: 0, // allow all syncs
-				userIds: [sharedId, ...userIds],
-				filterSettings: {
-					all: {
-						bidders: '*' as const, // allow all bidders to sync by iframe or image beacons
-						filter: 'include',
-					},
+			syncsPerBidder: 0, // allow all syncs
+			userIds: [sharedId, ...userIds],
+			filterSettings: {
+				all: {
+					bidders: '*' as const, // allow all bidders to sync by iframe or image beacons
+					filter: 'include',
 				},
-			}
+			},
+		}
 		: { syncEnabled: false };
 
 	return userSync;

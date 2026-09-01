@@ -14,9 +14,8 @@ export const getIntentIQAnalyticsConfig = (
 ): AnalyticsConfig<'iiqAnalytics'> | undefined => {
 	const isEU = isUserInAllowedEURegion();
 	const hasConsent = getConsentFor('intentIQ', consentState);
-	const isEnabled = isSwitchedOn('prebidIntentIq');
 	const enabledAnalytics =
-		isUserInIntentIQRegion() && hasConsent && isEnabled;
+		isSwitchedOn('prebidIntentIq') && isUserInIntentIQRegion() && hasConsent;
 
 	if (enabledAnalytics) {
 		return {
