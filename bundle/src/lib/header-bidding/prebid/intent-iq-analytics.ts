@@ -15,7 +15,9 @@ export const getIntentIQAnalyticsConfig = (
 	const isEU = isUserInAllowedEURegion();
 	const hasConsent = getConsentFor('intentIQ', consentState);
 	const enabledAnalytics =
-		isSwitchedOn('prebidIntentIq') && isUserInIntentIQRegion() && hasConsent;
+		isSwitchedOn('prebidIntentIq') &&
+		isUserInIntentIQRegion() &&
+		hasConsent;
 
 	if (enabledAnalytics) {
 		return {

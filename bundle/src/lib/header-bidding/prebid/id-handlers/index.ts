@@ -63,15 +63,15 @@ export const getUserSyncSettings = async (
 
 	const userSync: UserSyncConfig = isSwitchedOn('prebidUserSync')
 		? {
-			syncsPerBidder: 0, // allow all syncs
-			userIds: [sharedId, ...userIds],
-			filterSettings: {
-				all: {
-					bidders: '*' as const, // allow all bidders to sync by iframe or image beacons
-					filter: 'include',
+				syncsPerBidder: 0, // allow all syncs
+				userIds: [sharedId, ...userIds],
+				filterSettings: {
+					all: {
+						bidders: '*' as const, // allow all bidders to sync by iframe or image beacons
+						filter: 'include',
+					},
 				},
-			},
-		}
+			}
 		: { syncEnabled: false };
 
 	return userSync;

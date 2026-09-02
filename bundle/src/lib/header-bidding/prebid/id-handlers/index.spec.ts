@@ -28,7 +28,7 @@ const consentIds = {
 	liveramp: '5eb559cfb8e05c2bbe33f3f3',
 	theTradeDesk: '5e865b36b8e05c48537f60a7',
 	intentIQ: '6690256f4f9aeedb88306507',
-	ozone: '5e7ced57b8e05c5a7d171cd3'
+	ozone: '5e7ced57b8e05c5a7d171cd3',
 };
 
 describe('getUserSyncSettings', () => {
@@ -104,7 +104,7 @@ describe('getUserSyncSettings', () => {
 						[consentIds.id5]: true,
 						[consentIds.liveramp]: true,
 						[consentIds.theTradeDesk]: true,
-					}
+					},
 				},
 			});
 
@@ -145,7 +145,6 @@ describe('getUserSyncSettings', () => {
 				},
 			};
 
-
 			it('should include id5 userId when consent is given for id5 and the switch is turned on', async () => {
 				mockGetEmail.mockResolvedValue('test@example.com');
 				mockGetUserIdForId5.mockResolvedValue(mockId5UserId);
@@ -184,7 +183,7 @@ describe('getUserSyncSettings', () => {
 				expect(result.userIds).not.toContain(mockId5UserId);
 				expect(result.userIds).toContain(sharedId);
 			});
-		})
+		});
 
 		describe('liveramp', () => {
 			const consentStateWithLiveRamp = {
@@ -219,7 +218,9 @@ describe('getUserSyncSettings', () => {
 				mockGetEmail.mockResolvedValue('test@example.com');
 				mockGetUserIdForLiveRamp.mockResolvedValue(mockLiveRampUserId);
 
-				const result = await getUserSyncSettings(consentStateWithLiveRamp);
+				const result = await getUserSyncSettings(
+					consentStateWithLiveRamp,
+				);
 
 				expect(mockGetUserIdForLiveRamp).toHaveBeenCalledWith(
 					'test@example.com',
@@ -235,7 +236,9 @@ describe('getUserSyncSettings', () => {
 				mockGetEmail.mockResolvedValue('test@example.com');
 				mockGetUserIdForLiveRamp.mockResolvedValue(mockLiveRampUserId);
 
-				const result = await getUserSyncSettings(consentStateWithLiveRamp);
+				const result = await getUserSyncSettings(
+					consentStateWithLiveRamp,
+				);
 
 				expect(mockGetUserIdForLiveRamp).not.toHaveBeenCalledWith(
 					'test@example.com',
@@ -245,7 +248,7 @@ describe('getUserSyncSettings', () => {
 				);
 				expect(result.userIds).toContain(sharedId);
 			});
-		})
+		});
 
 		describe('the Trade Desk', () => {
 			const consentStateWithTradeDesk = {
@@ -273,9 +276,13 @@ describe('getUserSyncSettings', () => {
 
 			it('should include theTradeDesk userId when consent is given for theTradeDesk', async () => {
 				mockGetEmail.mockResolvedValue('test@example.com');
-				mockGetUserIdForTradeDesk.mockResolvedValue(mockTradeDeskUserId);
+				mockGetUserIdForTradeDesk.mockResolvedValue(
+					mockTradeDeskUserId,
+				);
 
-				const result = await getUserSyncSettings(consentStateWithTradeDesk);
+				const result = await getUserSyncSettings(
+					consentStateWithTradeDesk,
+				);
 
 				expect(mockGetUserIdForTradeDesk).toHaveBeenCalledWith(
 					'test@example.com',
@@ -288,9 +295,13 @@ describe('getUserSyncSettings', () => {
 			it('should include theTradeDesk userId when consent is given for theTradeDesk but the switch is off', async () => {
 				window.guardian.config.switches.prebidTtdId = false;
 				mockGetEmail.mockResolvedValue('test@example.com');
-				mockGetUserIdForTradeDesk.mockResolvedValue(mockTradeDeskUserId);
+				mockGetUserIdForTradeDesk.mockResolvedValue(
+					mockTradeDeskUserId,
+				);
 
-				const result = await getUserSyncSettings(consentStateWithTradeDesk);
+				const result = await getUserSyncSettings(
+					consentStateWithTradeDesk,
+				);
 
 				expect(mockGetUserIdForTradeDesk).not.toHaveBeenCalledWith(
 					'test@example.com',
@@ -299,7 +310,7 @@ describe('getUserSyncSettings', () => {
 				expect(result.userIds).not.toContain(mockTradeDeskUserId);
 				expect(result.userIds).toContain(sharedId);
 			});
-		})
+		});
 
 		describe('IntentIQ', () => {
 			const consentStateWithIntentIq = {
@@ -329,7 +340,9 @@ describe('getUserSyncSettings', () => {
 			it('should include IntentIQ userId when consent is given for IntentIQ', async () => {
 				mockGetUserIdForIntentIq.mockResolvedValue(mockIntentIqUserId);
 
-				const result = await getUserSyncSettings(consentStateWithIntentIq);
+				const result = await getUserSyncSettings(
+					consentStateWithIntentIq,
+				);
 				expect(result.userIds).toContain(mockIntentIqUserId);
 				expect(result.userIds).toContain(sharedId);
 			});
@@ -338,11 +351,13 @@ describe('getUserSyncSettings', () => {
 				window.guardian.config.switches.prebidIntentIq = false;
 				mockGetUserIdForIntentIq.mockResolvedValue(mockIntentIqUserId);
 
-				const result = await getUserSyncSettings(consentStateWithIntentIq);
+				const result = await getUserSyncSettings(
+					consentStateWithIntentIq,
+				);
 				expect(result.userIds).not.toContain(mockIntentIqUserId);
 				expect(result.userIds).toContain(sharedId);
 			});
-		})
+		});
 
 		it('should include all userIds when consent is given for all providers', async () => {
 			const consentStateAll = {
@@ -365,8 +380,12 @@ describe('getUserSyncSettings', () => {
 				{ name: 'pairId' },
 			];
 			const mockTradeDeskUserId: TradeDeskUserIdConfig = { name: 'uid2' };
-			const mockIntentIQUserId: UserIdConfig<'intentIqId'> = { name: 'intentIqId' }
-			const mockOzoneUserId: UserIdConfig<'pubProvidedId'> = { name: 'pubProvidedId' }
+			const mockIntentIQUserId: UserIdConfig<'intentIqId'> = {
+				name: 'intentIqId',
+			};
+			const mockOzoneUserId: UserIdConfig<'pubProvidedId'> = {
+				name: 'pubProvidedId',
+			};
 
 			mockGetEmail.mockResolvedValue('test@example.com');
 			mockGetUserIdForId5.mockResolvedValue(mockId5UserId);
@@ -383,7 +402,7 @@ describe('getUserSyncSettings', () => {
 				...mockLiveRampUserId,
 				mockTradeDeskUserId,
 				mockIntentIQUserId,
-				mockOzoneUserId
+				mockOzoneUserId,
 			]);
 		});
 
