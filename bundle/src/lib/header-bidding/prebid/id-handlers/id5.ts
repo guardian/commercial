@@ -1,12 +1,9 @@
 import { hashEmailForClient } from '@guardian/commercial-core';
 import type { UserIdConfig } from 'prebid.js/dist/modules/userId/spec';
-import { isSwitchedOn } from '../../utils';
 
 export const getUserIdForId5 = async (
 	email: string | null,
 ): Promise<UserIdConfig<'id5Id'>> => {
-	const isId5Enabled = isSwitchedOn('prebidId5');
-
 	const id5UserId = {
 		name: 'id5Id',
 		params: {
@@ -24,7 +21,7 @@ export const getUserIdForId5 = async (
 		},
 	} as const;
 
-	if (email && isId5Enabled) {
+	if (email) {
 		const hashedEmail = await hashEmailForClient(email, 'id5');
 		const pdRaw = new URLSearchParams([['1', hashedEmail]]).toString();
 		const pdString = btoa(pdRaw);

@@ -11,7 +11,6 @@ const mockIsUserInTestGroup = isUserInTestGroup as jest.MockedFunction<
 describe('getUserIdForOzone', () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
-		window.guardian.config.switches.prebidOzoneId = true;
 	});
 
 	it('returns undefined when the user is not in the test variant group', async () => {
@@ -24,14 +23,6 @@ describe('getUserIdForOzone', () => {
 
 	it('returns undefined when there is no email', async () => {
 		mockIsUserInTestGroup.mockReturnValue(true);
-
-		const result = await getUserIdForOzone(null);
-
-		expect(result).toBeUndefined();
-	});
-
-	it('returns undefined when the feature switch is off', async () => {
-		window.guardian.config.switches.prebidOzoneId = false;
 
 		const result = await getUserIdForOzone(null);
 

@@ -208,7 +208,6 @@ describe('initialise', () => {
 			'528f4e83dbdd916e811358e43518555f68229b1dc279b6b2cd3c480f68371e7d',
 		);
 		mockGetConsentForID5(true);
-		window.guardian.config.switches.prebidId5 = true;
 
 		await prebid.initialise(window, mockConsentState);
 
