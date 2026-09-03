@@ -292,7 +292,7 @@ describe('getUserSyncSettings', () => {
 				expect(result.userIds).toContain(sharedId);
 			});
 
-			it('should include theTradeDesk userId when consent is given for theTradeDesk but the switch is off', async () => {
+			it('should not include theTradeDesk userId when consent is given for theTradeDesk but the switch is off', async () => {
 				window.guardian.config.switches.prebidTtdId = false;
 				mockGetEmail.mockResolvedValue('test@example.com');
 				mockGetUserIdForTradeDesk.mockResolvedValue(
