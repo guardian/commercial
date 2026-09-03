@@ -1,6 +1,7 @@
 import type { ConsentState } from '@guardian/consent-manager';
 import { getConsentFor } from '@guardian/consent-manager';
 import type { AnalyticsConfig } from 'prebid.js/dist/libraries/analyticsAdapter/AnalyticsAdapter';
+import { isSwitchedOn } from '../utils';
 import {
 	EU_PARTNER_ID,
 	isUserInAllowedEURegion,
@@ -13,7 +14,10 @@ export const getIntentIQAnalyticsConfig = (
 ): AnalyticsConfig<'iiqAnalytics'> | undefined => {
 	const isEU = isUserInAllowedEURegion();
 	const hasConsent = getConsentFor('intentIQ', consentState);
-	const enabledAnalytics = isUserInIntentIQRegion() && hasConsent;
+	const enabledAnalytics =
+		isSwitchedOn('prebidIntentIq') &&
+		isUserInIntentIQRegion() &&
+		hasConsent;
 
 	if (enabledAnalytics) {
 		return {

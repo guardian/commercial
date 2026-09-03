@@ -31,6 +31,7 @@ const consentState = {} as ConsentState;
 describe('getIntentIQAnalyticsConfig', () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
+		window.guardian.config.switches.prebidIntentIq = true;
 	});
 
 	it('returns EU analytics config for eligible consented EU users', () => {
@@ -84,6 +85,15 @@ describe('getIntentIQAnalyticsConfig', () => {
 		mockedIsUserInAllowedEURegion.mockReturnValue(true);
 		mockedIsUserInIntentIQRegion.mockReturnValue(true);
 		mockedGetConsentFor.mockReturnValue(false);
+
+		expect(getIntentIQAnalyticsConfig(consentState)).toBeUndefined();
+	});
+
+	it('returns undefined when the feature switch is turned off', () => {
+		window.guardian.config.switches.prebidIntentIq = false;
+		mockedIsUserInAllowedEURegion.mockReturnValue(true);
+		mockedIsUserInIntentIQRegion.mockReturnValue(true);
+		mockedGetConsentFor.mockReturnValue(true);
 
 		expect(getIntentIQAnalyticsConfig(consentState)).toBeUndefined();
 	});

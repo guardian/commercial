@@ -14,6 +14,7 @@ const initTeadsCookieless = async (): Promise<void> => {
 	const allowedContentTypes = ['Article', 'LiveBlog'];
 
 	if (
+		!!window.guardian.config.switches.teadsCookieless &&
 		hasConsent &&
 		allowedContentTypes.includes(window.guardian.config.page.contentType)
 	) {
