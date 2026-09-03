@@ -75,7 +75,7 @@ const initialise = async (
 						enabled: true,
 						data: {
 							schema: { fields: ['mediaType'] },
-							values: { '*': 0.1 },
+							values: { banner: 0.1, video: 0.1 },
 							default: 0.1,
 						},
 					},

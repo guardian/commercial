@@ -21,7 +21,6 @@ type BreakpointIndices = Indices<typeof breakpoints>;
  *
  * size[0] = 200; // throws error
  * size.width = 200; // throws error
- *
  */
 class AdSize extends Array<number> {
 	readonly [0]: number;
@@ -51,8 +50,16 @@ class AdSize extends Array<number> {
 		const isFluid = this.toString() === 'fluid';
 		const isMerch = this.width === 88;
 		const isSponsorLogo = this.width === 3 && this.height === 3;
+		const isOzoneOutstream = this.width === 640 && this.height === 360;
 
-		return isOutOfPage || isEmpty || isFluid || isMerch || isSponsorLogo;
+		return (
+			isOutOfPage ||
+			isEmpty ||
+			isFluid ||
+			isMerch ||
+			isSponsorLogo ||
+			isOzoneOutstream
+		);
 	}
 
 	get width(): number {
@@ -149,7 +156,11 @@ const outstreamSizes = {
 	outstreamDesktop: createAdSize(620, 350),
 	outstreamGoogleDesktop: createAdSize(550, 310),
 	outstreamMobile: createAdSize(300, 197),
-	outstreamOzone: createAdSize(640, 360), // Uses the same size for both desktop and mobile
+	/**
+	 * 640x360 is the industry-standard 16:9 ratio for outstream video. Ozone's renderer
+	 * is responsive and will scale the player to fit the width of the user's screen.
+	 */
+	outstreamOzone: createAdSize(640, 360),
 };
 
 /**

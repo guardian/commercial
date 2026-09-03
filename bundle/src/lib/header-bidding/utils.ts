@@ -1,7 +1,4 @@
-import {
-	type AdSizeString,
-	outstreamSizes,
-} from '@guardian/commercial-core/ad-sizes';
+import { outstreamSizes } from '@guardian/commercial-core/ad-sizes';
 import {
 	isInAuOrNz,
 	isInCanada,
@@ -113,10 +110,9 @@ export const containsLeaderboardOrBillboard = (sizes: Size[]): boolean =>
 export const containsPortraitInterstitial = (sizes: Size[]): boolean =>
 	contains(sizes, [320, 480]);
 
-export const isOutstream = (size: Size) =>
-	Object.values(outstreamSizes)
-		.map((outstreamSize) => outstreamSize.toString())
-		.includes(size.toString() as AdSizeString);
+export const isOutstreamOzone = (size: [number, number]): boolean =>
+	size[0] === outstreamSizes.outstreamOzone[0] &&
+	size[1] === outstreamSizes.outstreamOzone[1];
 
 export const getLargestSize = (sizes: Size[]): Size | null => {
 	const reducer = (previous: Size, current: Size) => {
