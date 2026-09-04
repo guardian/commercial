@@ -133,6 +133,17 @@ const renderAdvertLabel = (
 						'true',
 					);
 				}
+				if (
+					adSlotNode.parentElement?.classList.contains(
+						'ad-slot-container',
+					) &&
+					adSlotNode.id === 'dfp-ad--mobile-above-nav'
+				) {
+					adSlotNode.parentElement.setAttribute(
+						'mobile-above-nav-ad-rendered',
+						'true',
+					);
+				}
 				// \Remove this
 
 				if (shouldRenderCloseButton(adSlotNode)) {

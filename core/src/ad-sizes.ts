@@ -90,6 +90,7 @@ type SizeKeys =
 	| 'merchandisingHigh'
 	| 'merchandisingHighAdFeature'
 	| 'mobilesticky'
+	| 'mobilestickyXl'
 	| 'mpu'
 	| 'outOfPage'
 	| 'outstreamDesktop'
@@ -117,6 +118,7 @@ type SlotName =
 	| 'mobile-sticky'
 	| 'football-right'
 	| 'mostpop'
+	| 'mobile-above-nav'
 	| 'right'
 	| 'sponsor-logo'
 	| 'survey'
@@ -136,6 +138,7 @@ const namedStandardAdSizes = {
 	halfPage: createAdSize(300, 600),
 	leaderboard: createAdSize(728, 90),
 	mobilesticky: createAdSize(320, 50),
+	mobilestickyXl: createAdSize(320, 100),
 	mpu: createAdSize(300, 250),
 	portrait: createAdSize(300, 1050),
 	skyscraper: createAdSize(160, 600),
@@ -398,6 +401,20 @@ const slotSizeMappings = {
 	},
 	'crossword-banner-mobile': {
 		mobile: [adSizes.mobilesticky],
+	},
+	'mobile-above-nav': {
+		mobile: [
+			adSizes.empty,
+			adSizes.mobilesticky,
+			adSizes.mobilestickyXl,
+			adSizes.fluid,
+		],
+		tablet: [
+			adSizes.empty,
+			adSizes.mobilesticky,
+			adSizes.mobilestickyXl,
+			adSizes.fluid,
+		],
 	},
 	'football-right': {
 		desktop: [
