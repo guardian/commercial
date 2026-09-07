@@ -80,6 +80,11 @@ const createAdTestLabel = (
 	return adTestLabel;
 };
 
+const renderedAttrSlots: Record<string, string> = {
+	'dfp-ad--top-above-nav': 'top-above-nav-ad-rendered',
+	'dfp-ad--mobile-above-nav': 'mobile-above-nav-ad-rendered',
+};
+
 const createAdTestCookieRemovalLink = (): HTMLElement => {
 	const adTestCookieRemovalLink = document.createElement('div');
 	adTestCookieRemovalLink.style.cssText =
@@ -121,26 +126,16 @@ const renderAdvertLabel = (
 			return fastdom.mutate(() => {
 				adSlotNode.setAttribute('data-label-show', 'true');
 				adSlotNode.setAttribute('ad-label-text', adLabelContent);
-				// Remove this once new `ad-slot-container--centre-slot` class is in place
+
+				const renderedAttr = renderedAttrSlots[adSlotNode.id];
 				if (
 					adSlotNode.parentElement?.classList.contains(
 						'ad-slot-container',
 					) &&
-					adSlotNode.id === 'dfp-ad--top-above-nav'
+					renderedAttr
 				) {
 					adSlotNode.parentElement.setAttribute(
-						'top-above-nav-ad-rendered',
-						'true',
-					);
-				}
-				if (
-					adSlotNode.parentElement?.classList.contains(
-						'ad-slot-container',
-					) &&
-					adSlotNode.id === 'dfp-ad--mobile-above-nav'
-				) {
-					adSlotNode.parentElement.setAttribute(
-						'mobile-above-nav-ad-rendered',
+						renderedAttr,
 						'true',
 					);
 				}
