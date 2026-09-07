@@ -403,14 +403,8 @@ const slotSizeMappings = {
 		mobile: [adSizes.mobilesticky],
 	},
 	'mobile-above-nav': {
-		mobile: [
-			adSizes.empty,
-			adSizes.mobilestickyXl,
-		],
-		tablet: [
-			adSizes.empty,
-			adSizes.mobilestickyXl,
-		],
+		mobile: [adSizes.empty, adSizes.mobilestickyXl],
+		tablet: [adSizes.empty, adSizes.mobilestickyXl],
 	},
 	'football-right': {
 		desktop: [

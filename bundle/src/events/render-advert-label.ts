@@ -134,10 +134,7 @@ const renderAdvertLabel = (
 					) &&
 					renderedAttr
 				) {
-					adSlotNode.parentElement.setAttribute(
-						renderedAttr,
-						'true',
-					);
+					adSlotNode.parentElement.setAttribute(renderedAttr, 'true');
 				}
 				// \Remove this
 
