@@ -136,7 +136,6 @@ const renderAdvertLabel = (
 				) {
 					adSlotNode.parentElement.setAttribute(renderedAttr, 'true');
 				}
-				// \Remove this
 
 				if (shouldRenderCloseButton(adSlotNode)) {
 					adSlotNode.insertBefore(
