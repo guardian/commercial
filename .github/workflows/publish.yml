@@ -48,7 +48,7 @@ jobs:
         with:
           client-id: ${{ secrets.GU_CHANGESETS_APP_ID }}
           private-key: ${{ secrets.GU_CHANGESETS_PRIVATE_KEY }}
-          permission-contents: read
+          permission-contents: write
           permission-pull-requests: write
 
       - name: Set git user to Gu Changesets app
