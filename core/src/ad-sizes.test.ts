@@ -33,7 +33,7 @@ const sizes = [
 	['googleCard', 300, 274, '300,274'],
 	['outstreamGoogleDesktop', 550, 310, '550,310'],
 	['300x600', 300, 600, '300,600'],
-	['mobilestickyXl', 320, 100, '320,100'],
+	['mobileLeaderboardXl', 320, 100, '320,100'],
 ] as const;
 
 describe('getAdSize', () => {

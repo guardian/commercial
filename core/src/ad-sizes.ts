@@ -90,7 +90,7 @@ type SizeKeys =
 	| 'merchandisingHigh'
 	| 'merchandisingHighAdFeature'
 	| 'mobilesticky'
-	| 'mobilestickyXl'
+	| 'mobileLeaderboardXl'
 	| 'mpu'
 	| 'outOfPage'
 	| 'outstreamDesktop'
@@ -138,7 +138,7 @@ const namedStandardAdSizes = {
 	halfPage: createAdSize(300, 600),
 	leaderboard: createAdSize(728, 90),
 	mobilesticky: createAdSize(320, 50),
-	mobilestickyXl: createAdSize(320, 100),
+	mobileLeaderboardXl: createAdSize(320, 100),
 	mpu: createAdSize(300, 250),
 	portrait: createAdSize(300, 1050),
 	skyscraper: createAdSize(160, 600),
@@ -403,8 +403,8 @@ const slotSizeMappings = {
 		mobile: [adSizes.mobilesticky],
 	},
 	'mobile-above-nav': {
-		mobile: [adSizes.empty, adSizes.mobilestickyXl],
-		tablet: [adSizes.empty, adSizes.mobilestickyXl],
+		mobile: [adSizes.empty, adSizes.mobileLeaderboardXl],
+		tablet: [adSizes.empty, adSizes.mobileLeaderboardXl],
 	},
 	'football-right': {
 		desktop: [
