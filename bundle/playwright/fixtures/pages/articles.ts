@@ -5,7 +5,7 @@ import type { GuPage } from './Page';
  * Array.from(document.querySelectorAll('.article-body-commercial-selector > *')).map((el, index) => el.classList.contains('ad-slot-container') ? index : undefined).filter((index) => index !== undefined)
  *
  * Make sure that you are on the same viewport size as the test you are trying to update.
- **/
+ */
 const articles = [
 	{
 		path: '/Article/https://www.theguardian.com/politics/2022/feb/10/keir-starmer-says-stop-the-war-coalition-gives-help-to-authoritarians-like-putin',

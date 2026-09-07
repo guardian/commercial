@@ -7,11 +7,11 @@ import { getUrlVars } from '../../lib/url';
 
 type RuleSpacing = {
 	/**
-	 * Don't place an ad closer than this to the bottom of the opponent
+	 * The minimum spacing in px between the bottom of the opponent and the top of an ad
 	 */
 	marginBottom: number;
 	/**
-	 * Don't place an ad closer than this to the top of the opponent
+	 * The minimum spacing in px between the top of the opponent and the bottom of an ad
 	 */
 	marginTop: number;
 	bypassMinTop?: string;
@@ -147,6 +147,7 @@ const onImagesLoaded = memoize((rules: SpacefinderRules) => {
 				img.addEventListener('load', resolve);
 			}),
 	);
+
 	return Promise.all(imgPromises).then(() => Promise.resolve());
 }, getFuncId);
 
@@ -314,7 +315,7 @@ const testCandidate = (
 	const isOpponentAbove =
 		opponent.top < candidate.top && opponent.bottom <= candidate.top;
 
-	// this can happen when the an opponent like an image or interactive is floated right
+	// This can happen when the an opponent like an image or interactive is floated left or right
 	const opponentOverlaps =
 		(isOpponentAbove && isOpponentBelow) ||
 		(!isOpponentAbove && !isOpponentBelow);
@@ -447,6 +448,7 @@ class SpaceError extends Error {
 		this.message = `There is no space left matching rules from ${rules.bodySelector}`;
 	}
 }
+
 /**
  * Wait for the page to be ready (images loaded, interactives loaded)
  * or for LOADING_TIMEOUT to elapse, whichever comes first.
@@ -624,13 +626,13 @@ const findSpace = async (
 export { findSpace, SpaceError };
 
 export type {
-	RuleSpacing,
 	OpponentSelectorRules,
+	RuleSpacing,
+	SpacefinderExclusions,
+	SpacefinderItem,
+	SpacefinderMetaItem,
+	SpacefinderOptions,
+	SpacefinderPass,
 	SpacefinderRules,
 	SpacefinderWriter,
-	SpacefinderOptions,
-	SpacefinderItem,
-	SpacefinderExclusions,
-	SpacefinderPass,
-	SpacefinderMetaItem,
 };

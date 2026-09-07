@@ -26,7 +26,7 @@ export const __resetCachedValue = (): void => (locale = undefined);
 
 /**
  * Fetches the user's current location as an ISO 3166-1 alpha-2 string e.g. 'GB', 'AU' etc
- * Note: This has been copied from guardian-libs and made syncronous by ommiting the call to
+ * Note: This has been copied from guardian-libs and made syncronous by omitting the call to
  * the geolocation API
  */
 export const getLocale = (): CountryCode => {
