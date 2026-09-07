@@ -394,7 +394,11 @@ const slotSizeMappings = {
 		desktop: [adSizes.outOfPage],
 	},
 	'mobile-sticky': {
-		mobile: [adSizes.mobileLeaderboard, adSizes.empty, createAdSize(300, 50)],
+		mobile: [
+			adSizes.mobileLeaderboard,
+			adSizes.empty,
+			createAdSize(300, 50),
+		],
 	},
 	'crossword-banner-mobile': {
 		mobile: [adSizes.mobileLeaderboard],
