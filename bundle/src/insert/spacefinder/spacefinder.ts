@@ -4,8 +4,9 @@ import { log } from '@guardian/libs';
 import { memoize } from 'lodash-es';
 import fastdom from '../../lib/fastdom-promise';
 import { getUrlVars } from '../../lib/url';
+import calculateRichLinkImageHeight from './richLinks';
 
-type RuleSpacing = {
+type InlineRuleSpacing = {
 	/**
 	 * The minimum spacing in px between the bottom of the opponent and the top of an ad
 	 */
@@ -15,7 +16,28 @@ type RuleSpacing = {
 	 */
 	marginTop: number;
 	bypassMinTop?: string;
+	isLeftColumnOpponent?: never;
 };
+
+/**
+ * Rule spacing for when the opponent is in the left or right column.
+ */
+type AdjacentRuleSpacing = {
+	/**
+	 * If the opponent is in the left column, then we want to use slightly different rule
+	 * spacing. We want to allow some vertical overlap between the advert and the opponent,
+	 * as the opponent is not inline.
+	 *
+	 * TODO: Use this for right-column opponents as well.
+	 */
+	isLeftColumnOpponent: true;
+	/**
+	 * The minimum spacing in px between the top of the opponent and the top of an ad.
+	 */
+	distanceBetweenTops: number;
+};
+
+type RuleSpacing = InlineRuleSpacing | AdjacentRuleSpacing;
 
 type SpacefinderMetaItem = {
 	required?: number;
@@ -232,13 +254,17 @@ const partitionCandidates = <T>(
 };
 
 /**
- * Check if the top of the candidate is far enough from the opponent
+ * Check if the top of the candidate is far enough from the opponent.
  *
- * The candidate is the element where we would like to insert an ad above. Candidates satisfy the `selector` rule.
+ * The candidate is the element where we would like to insert an ad above.
+ * Candidates satisfy the `selector` rule.
  *
  * Opponents are other elements in the article that are in the spacefinder ruleset
  * for the current pass. This includes slots inserted by a previous pass but not
- * those in the current pass as they're all inserted at the end.
+ * those in the current pass, as they're all inserted at the end.
+ *
+ * If the opponent is in the left column, we check the distance between the top
+ * of the candidate and the top of the opponent. Otherwise, see the graph below:
  *
  *                                                        │
  *                     Opponent Below                     │             Opponent Above
@@ -271,6 +297,13 @@ const isTopOfCandidateFarEnoughFromOpponent = (
 	isOpponentBelow: boolean,
 ): boolean => {
 	const potentialInsertPosition = candidate.top;
+
+	if (rule.isLeftColumnOpponent) {
+		return (
+			isOpponentBelow ||
+			potentialInsertPosition - opponent.top >= rule.distanceBetweenTops
+		);
+	}
 
 	if (isOpponentBelow && rule.marginTop) {
 		if (rule.bypassMinTop && candidate.element.matches(rule.bypassMinTop)) {
@@ -315,19 +348,18 @@ const testCandidate = (
 	const isOpponentAbove =
 		opponent.top < candidate.top && opponent.bottom <= candidate.top;
 
-	// This can happen when the an opponent like an image or interactive is floated left or right
-	const opponentOverlaps =
-		(isOpponentAbove && isOpponentBelow) ||
-		(!isOpponentAbove && !isOpponentBelow);
+	// this can happen when the an opponent like an image or interactive is floated left or right
+	const opponentOverlaps = rule.isLeftColumnOpponent
+		? candidate.top === opponent.top
+		: (isOpponentAbove && isOpponentBelow) ||
+			(!isOpponentAbove && !isOpponentBelow);
 
-	const pass =
-		!opponentOverlaps &&
-		isTopOfCandidateFarEnoughFromOpponent(
-			candidate,
-			opponent,
-			rule,
-			isOpponentBelow,
-		);
+	const pass = isTopOfCandidateFarEnoughFromOpponent(
+		candidate,
+		opponent,
+		rule,
+		isOpponentBelow,
+	);
 
 	if (!pass) {
 		if (opponentOverlaps) {
@@ -336,9 +368,11 @@ const testCandidate = (
 			});
 		} else {
 			// if the test fails, add debug information to the candidate metadata
-			const required = isOpponentBelow
-				? rule.marginTop
-				: rule.marginBottom;
+			const required = rule.isLeftColumnOpponent
+				? 0
+				: isOpponentBelow
+					? rule.marginTop
+					: rule.marginBottom;
 			const actual = isOpponentBelow
 				? opponent.top - candidate.top
 				: candidate.top - opponent.bottom;
@@ -512,16 +546,33 @@ const getCandidates = (
 	return candidates;
 };
 
-const getDimensions = (element: HTMLElement): Readonly<SpacefinderItem> =>
-	Object.freeze({
+const getDimensions = (element: HTMLElement): Readonly<SpacefinderItem> => {
+	let bottom = element.offsetTop + element.offsetHeight;
+
+	/*
+	 * Special handling for rich links: we don't wait for rich link images to load before running Spacefinder.
+	 * If the image hasn't loaded yet, we add the expected image height. This assumes there will be an image
+	 * with the rich link; sometimes there is not and we'll insert an ad lower than needed.
+	 */
+	if (element.dataset.spacefinderRole === 'richLink') {
+		const imageHeight = calculateRichLinkImageHeight();
+		const image = element.querySelector('[data-name="rich-link-image"]');
+
+		if (image === null) {
+			bottom += imageHeight;
+		}
+	}
+
+	return Object.freeze({
 		top: element.offsetTop,
-		bottom: element.offsetTop + element.offsetHeight,
+		bottom,
 		element,
 		meta: {
 			tooClose: [],
 			overlaps: [],
 		},
 	});
+};
 
 const getMeasurements = (
 	rules: SpacefinderRules,

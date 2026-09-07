@@ -84,39 +84,60 @@ const horizontalRuleSelector =
 
 const headingSelector = `:scope > h2, [data-spacefinder-role="nested"] > h2, :scope > h3, [data-spacefinder-role="nested"] > h3`;
 
+const desktopInline1OpponentSelectorRules: OpponentSelectorRules = {
+	[headingSelector]: {
+		marginBottom: 150, // don't place ads right after a heading
+		marginTop: isInOriginalHighValueSection ? 0 : 190,
+	},
+	[adSlotContainerSelector]: {
+		marginBottom: 500,
+		marginTop: 500,
+	},
+	[inlineOpponentSelector]: {
+		marginBottom: 35,
+		marginTop: 200,
+	},
+	[inlineFullWidthOpponentSelector]: {
+		marginBottom: 200,
+		marginTop: 200,
+	},
+	// At the desktop breakpoint, this content is rendered inline, but
+	// does not take up the full width. It is floated to the left.
+	[leftColumnOpponentSelector]: {
+		marginBottom: 50,
+		marginTop: 100,
+	},
+	[rightColumnOpponentSelector]: {
+		marginBottom: 0,
+		marginTop: 150,
+	},
+	['[data-spacefinder-role="supporting"]']: {
+		marginBottom: 0,
+		marginTop: 100,
+	},
+};
+
+/**
+ * Spacefinder rules for the inline1 advert between the desktop and the leftCol breakpoint.
+ */
 const desktopInline1: SpacefinderRules = {
 	bodySelector,
 	candidateSelector,
 	minDistanceFromTop: isImmersive ? 700 : 300,
 	minDistanceFromBottom: 300,
+	opponentSelectorRules: desktopInline1OpponentSelectorRules,
+};
+
+/**
+ * Spacefinder rules for the inline1 advert from the leftCol breakpoint
+ */
+const leftColInline1: SpacefinderRules = {
+	...desktopInline1,
 	opponentSelectorRules: {
-		[headingSelector]: {
-			marginBottom: 150, // don't place ads right after a heading
-			marginTop: isInOriginalHighValueSection ? 0 : 190,
-		},
-		[adSlotContainerSelector]: {
-			marginBottom: 500,
-			marginTop: 500,
-		},
-		[inlineOpponentSelector]: {
-			marginBottom: 35,
-			marginTop: 200,
-		},
-		[inlineFullWidthOpponentSelector]: {
-			marginBottom: 200,
-			marginTop: 200,
-		},
+		...desktopInline1OpponentSelectorRules,
 		[leftColumnOpponentSelector]: {
-			marginBottom: 50,
-			marginTop: 100,
-		},
-		[rightColumnOpponentSelector]: {
-			marginBottom: 0,
-			marginTop: 150,
-		},
-		['[data-spacefinder-role="supporting"]']: {
-			marginBottom: 0,
-			marginTop: 100,
+			isLeftColumnOpponent: true,
+			distanceBetweenTops: 100,
 		},
 	},
 };
@@ -281,6 +302,7 @@ const mobileAndTabletInlines: SpacefinderRules = {
 
 export const rules = {
 	desktopInline1,
+	leftColInline1,
 	desktopRightRail,
 	interactiveRightRail,
 	mobileAndTabletInlines,
