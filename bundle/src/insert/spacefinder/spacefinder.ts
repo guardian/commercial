@@ -354,12 +354,14 @@ const testCandidate = (
 		: (isOpponentAbove && isOpponentBelow) ||
 			(!isOpponentAbove && !isOpponentBelow);
 
-	const pass = isTopOfCandidateFarEnoughFromOpponent(
-		candidate,
-		opponent,
-		rule,
-		isOpponentBelow,
-	);
+	const pass =
+		!opponentOverlaps &&
+		isTopOfCandidateFarEnoughFromOpponent(
+			candidate,
+			opponent,
+			rule,
+			isOpponentBelow,
+		);
 
 	if (!pass) {
 		if (opponentOverlaps) {

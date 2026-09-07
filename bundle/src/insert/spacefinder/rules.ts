@@ -241,7 +241,7 @@ const mobileOpponentSelectorRules: OpponentSelectorRules = {
 		marginBottom: minDistanceBetweenInlineAds,
 		marginTop: minDistanceBetweenInlineAds,
 	},
-	[`${inlineOpponentSelector},${leftColumnOpponentSelector}`]: {
+	[inlineOpponentSelector]: {
 		marginBottom: 35,
 		marginTop: 200,
 		/**
@@ -250,6 +250,13 @@ const mobileOpponentSelectorRules: OpponentSelectorRules = {
 		 * to the current content, so we can place an ad there.
 		 */
 		bypassMinTop: 'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
+	},
+	/**
+	 * Left column content isn't full width, so has less visual weight than other inline content
+	 */
+	[leftColumnOpponentSelector]: {
+		marginBottom: 35,
+		marginTop: 100,
 	},
 	[inlineFullWidthOpponentSelector]: {
 		marginBottom: 200,
