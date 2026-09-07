@@ -89,7 +89,7 @@ type SizeKeys =
 	| 'merchandising'
 	| 'merchandisingHigh'
 	| 'merchandisingHighAdFeature'
-	| 'mobilesticky'
+	| 'mobileLeaderboard'
 	| 'mpu'
 	| 'outOfPage'
 	| 'outstreamDesktop'
@@ -135,7 +135,7 @@ const namedStandardAdSizes = {
 	billboard: createAdSize(970, 250),
 	halfPage: createAdSize(300, 600),
 	leaderboard: createAdSize(728, 90),
-	mobilesticky: createAdSize(320, 50),
+	mobileLeaderboard: createAdSize(320, 50),
 	mpu: createAdSize(300, 250),
 	portrait: createAdSize(300, 1050),
 	skyscraper: createAdSize(160, 600),
@@ -394,10 +394,10 @@ const slotSizeMappings = {
 		desktop: [adSizes.outOfPage],
 	},
 	'mobile-sticky': {
-		mobile: [adSizes.mobilesticky, adSizes.empty, createAdSize(300, 50)],
+		mobile: [adSizes.mobileLeaderboard, adSizes.empty, createAdSize(300, 50)],
 	},
 	'crossword-banner-mobile': {
-		mobile: [adSizes.mobilesticky],
+		mobile: [adSizes.mobileLeaderboard],
 	},
 	'football-right': {
 		desktop: [
