@@ -101,7 +101,7 @@ export const containsBillboardNotLeaderboard = (sizes: Size[]): boolean =>
 export const containsMpuOrDmpu = (sizes: Size[]): boolean =>
 	containsMpu(sizes) || containsDmpu(sizes);
 
-export const containsMobileSticky = (sizes: Size[]): boolean =>
+export const containsMobileLeaderboard = (sizes: Size[]): boolean =>
 	contains(sizes, [320, 50]);
 
 export const containsLeaderboardOrBillboard = (sizes: Size[]): boolean =>
