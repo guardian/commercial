@@ -10,7 +10,7 @@ import {
 	containsDmpu as containsDmpu_,
 	containsLeaderboard as containsLeaderboard_,
 	containsLeaderboardOrBillboard as containsLeaderboardOrBillboard_,
-	containsMobileSticky as containsMobileSticky_,
+	containsMobileLeaderboard as containsMobileLeaderboard_,
 	containsMpu as containsMpu_,
 	containsMpuOrDmpu as containsMpuOrDmpu_,
 	getBreakpointKey as getBreakpointKey_,
@@ -25,7 +25,7 @@ const containsDmpu = containsDmpu_ as jest.Mock;
 const containsLeaderboard = containsLeaderboard_ as jest.Mock;
 const containsLeaderboardOrBillboard =
 	containsLeaderboardOrBillboard_ as jest.Mock;
-const containsMobileSticky = containsMobileSticky_ as jest.Mock;
+const containsMobileLeaderboard = containsMobileLeaderboard_ as jest.Mock;
 const containsMpu = containsMpu_ as jest.Mock;
 const containsMpuOrDmpu = containsMpuOrDmpu_ as jest.Mock;
 const getBreakpointKey = getBreakpointKey_ as jest.Mock;
@@ -76,7 +76,7 @@ describe('getAppNexusDirectPlacementId', () => {
 	test('should return correct placementID for mobile-sticky and in ROW', () => {
 		isInRow.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
-		containsMobileSticky.mockReturnValue(true);
+		containsMobileLeaderboard.mockReturnValue(true);
 		expect(getAppNexusDirectPlacementId([[320, 50]])).toBe('31512573');
 	});
 
@@ -153,7 +153,7 @@ describe('getAppNexusDirectPlacementId', () => {
 	test('should return correct placementID for mobile-sticky in US', () => {
 		isInUsa.mockReturnValue('true');
 		getBreakpointKey.mockReturnValue('M');
-		containsMobileSticky.mockReturnValue(true);
+		containsMobileLeaderboard.mockReturnValue(true);
 		expect(getAppNexusDirectPlacementId([[320, 50]])).toBe('9251752');
 	});
 });

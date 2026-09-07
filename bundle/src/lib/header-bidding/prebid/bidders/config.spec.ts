@@ -15,7 +15,7 @@ import {
 	containsDmpu as containsDmpu_,
 	containsLeaderboard as containsLeaderboard_,
 	containsLeaderboardOrBillboard as containsLeaderboardOrBillboard_,
-	containsMobileSticky as containsMobileSticky_,
+	containsMobileLeaderboard as containsMobileLeaderboard_,
 	containsMpu as containsMpu_,
 	containsMpuOrDmpu as containsMpuOrDmpu_,
 	containsPortraitInterstitial as containsPortraitInterstitial_,
@@ -73,7 +73,7 @@ jest.mock('../../utils', () => ({
 	containsDmpu: jest.fn(),
 	containsLeaderboard: jest.fn(),
 	containsLeaderboardOrBillboard: jest.fn(),
-	containsMobileSticky: jest.fn(),
+	containsMobileLeaderboard: jest.fn(),
 	containsMpu: jest.fn(),
 	containsMpuOrDmpu: jest.fn(),
 	containsPortraitInterstitial: jest.fn(),
@@ -91,7 +91,7 @@ const containsDmpu = containsDmpu_ as jest.Mock;
 const containsLeaderboard = containsLeaderboard_ as jest.Mock;
 const containsLeaderboardOrBillboard =
 	containsLeaderboardOrBillboard_ as jest.Mock;
-const containsMobileSticky = containsMobileSticky_ as jest.Mock;
+const containsMobileLeaderboard = containsMobileLeaderboard_ as jest.Mock;
 const containsMpu = containsMpu_ as jest.Mock;
 const containsMpuOrDmpu = containsMpuOrDmpu_ as jest.Mock;
 const containsPortraitInterstitial = containsPortraitInterstitial_ as jest.Mock;
@@ -488,7 +488,7 @@ describe('bids', () => {
 		const mockShouldInclude = jest.fn().mockReturnValue(true);
 		jest.mocked(shouldIncludeBidder).mockReturnValue(mockShouldInclude);
 		isInRow.mockReturnValue(true);
-		containsMobileSticky.mockReturnValue(true);
+		containsMobileLeaderboard.mockReturnValue(true);
 
 		const openXBid = bids(
 			'dfp-ad--mobile-sticky',
@@ -574,7 +574,7 @@ describe('triplelift adapter', () => {
 		containsBillboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(false);
+		containsMobileLeaderboard.mockReturnValueOnce(false);
 		isInUsOrCa.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -595,7 +595,7 @@ describe('triplelift adapter', () => {
 		containsBillboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(false);
+		containsMobileLeaderboard.mockReturnValueOnce(false);
 		isInAuOrNz.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -616,7 +616,7 @@ describe('triplelift adapter', () => {
 		containsBillboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValue(true);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(false);
+		containsMobileLeaderboard.mockReturnValueOnce(false);
 		isInUsOrCa.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -637,7 +637,7 @@ describe('triplelift adapter', () => {
 		containsBillboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValue(true);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(false);
+		containsMobileLeaderboard.mockReturnValueOnce(false);
 		isInAuOrNz.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -658,7 +658,7 @@ describe('triplelift adapter', () => {
 		containsBillboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValue(true);
+		containsMobileLeaderboard.mockReturnValue(true);
 		isInUsOrCa.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -679,7 +679,7 @@ describe('triplelift adapter', () => {
 		containsBillboard.mockReturnValueOnce(false);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValue(true);
+		containsMobileLeaderboard.mockReturnValue(true);
 		isInAuOrNz.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -700,7 +700,7 @@ describe('triplelift adapter', () => {
 		containsBillboard.mockReturnValue(true);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(false);
+		containsMobileLeaderboard.mockReturnValueOnce(false);
 		isInUsOrCa.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -721,7 +721,7 @@ describe('triplelift adapter', () => {
 		containsBillboard.mockReturnValue(true);
 		containsMpu.mockReturnValueOnce(false);
 		containsDmpu.mockReturnValueOnce(false);
-		containsMobileSticky.mockReturnValueOnce(false);
+		containsMobileLeaderboard.mockReturnValueOnce(false);
 		isInAuOrNz.mockReturnValue(true);
 
 		const tripleLiftBids = bids(
@@ -875,7 +875,9 @@ describe('getTeadsParams', () => {
 				});
 			},
 		);
-		test.each([[[320, 50], 'MOBILE STICKY', containsMobileSticky]])(
+		test.each([
+			[[320, 50], 'MOBILE LEADERBOARD', containsMobileLeaderboard],
+		])(
 			'should return correct placement and page ID for %s in RoW when mobile sticky on mobile',
 			(size, label, mockFucntion) => {
 				isInRow.mockReturnValue(true);
@@ -933,7 +935,9 @@ describe('getTeadsParams', () => {
 				});
 			},
 		);
-		test.each([[[320, 50], 'MOBILE STICKY', containsMobileSticky]])(
+		test.each([
+			[[320, 50], 'MOBILE LEADERBOARD', containsMobileLeaderboard],
+		])(
 			'should return correct placement and page ID for %s in US when mobile sticky on mobile',
 			(size, label, mockFunction) => {
 				isInUsa.mockReturnValue(true);
@@ -991,7 +995,9 @@ describe('getTeadsParams', () => {
 				});
 			},
 		);
-		test.each([[[320, 50], 'MOBILE STICKY', containsMobileSticky]])(
+		test.each([
+			[[320, 50], 'MOBILE LEADERBOARD', containsMobileLeaderboard],
+		])(
 			'should return correct placement and page ID for %s in AU/NZ when mobile sticky on mobile',
 			(size, label, mockFunction) => {
 				isInAuOrNz.mockReturnValue(true);
@@ -1025,7 +1031,7 @@ describe('getOzonePlacementId', () => {
 	test('should return inline1 placementID for inline1 slot', () => {
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
-		containsMobileSticky.mockReturnValue(false);
+		containsMobileLeaderboard.mockReturnValue(false);
 		jest.mocked(isUserInTestGroup).mockReturnValueOnce(true);
 		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline1')).toBe(
 			'1500001169',
@@ -1056,14 +1062,14 @@ describe('getOzonePlacementId', () => {
 	test('should return correct placementID for mobile-sticky in US', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
-		containsMobileSticky.mockReturnValue(true);
+		containsMobileLeaderboard.mockReturnValue(true);
 		expect(getOzonePlacementId([[320, 50]])).toBe('3500014217');
 	});
 
 	test('should return correct placementID for mobile-sticky in ROW', () => {
 		isInRow.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
-		containsMobileSticky.mockReturnValue(true);
+		containsMobileLeaderboard.mockReturnValue(true);
 		expect(getOzonePlacementId([[320, 50]])).toBe('1500000260');
 	});
 
@@ -1108,7 +1114,7 @@ describe('getOzonePlacementId', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
-		containsMobileSticky.mockReturnValue(false);
+		containsMobileLeaderboard.mockReturnValue(false);
 		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline3')).toBe(
 			'1500001036',
 		);

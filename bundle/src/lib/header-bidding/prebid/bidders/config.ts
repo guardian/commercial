@@ -36,7 +36,7 @@ import {
 	containsDmpu,
 	containsLeaderboard,
 	containsLeaderboardOrBillboard,
-	containsMobileSticky,
+	containsMobileLeaderboard,
 	containsMpu,
 	containsMpuOrDmpu,
 	containsPortraitInterstitial,
@@ -130,7 +130,7 @@ const getIndexSiteId = (slotSizes: Size[]) => {
 	}
 
 	// Return a specific site id for the mobile sticky slot
-	if (containsMobileSticky(slotSizes)) {
+	if (containsMobileLeaderboard(slotSizes)) {
 		return '1047869';
 	}
 
@@ -195,7 +195,7 @@ const getTripleLiftInventoryCode = (slotId: string, sizes: Size[]): string => {
 		}
 	}
 
-	if (containsMobileSticky(sizes)) {
+	if (containsMobileLeaderboard(sizes)) {
 		if (isInUsOrCa()) {
 			return 'theguardian_320x50_HDX';
 		} else if (isInAuOrNz()) {
@@ -247,7 +247,7 @@ const openxBidder: (pageTargeting: PageTargeting) => PrebidBidder = (
 			};
 		}
 		// ROW has a unique unit ID for mobile-sticky
-		if (isInRow() && containsMobileSticky(sizes)) {
+		if (isInRow() && containsMobileLeaderboard(sizes)) {
 			return {
 				delDomain: 'guardian-d.openx.net',
 				unit: '560429384',
@@ -313,7 +313,7 @@ const getTeadsParams = (
 			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
 				return { pageId: 244726, placementId: 261616 };
 			}
-			if (containsMobileSticky(sizes)) {
+			if (containsMobileLeaderboard(sizes)) {
 				return { pageId: 244723, placementId: 261613 };
 			}
 		}
@@ -337,7 +337,7 @@ const getTeadsParams = (
 			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
 				return { pageId: 244729, placementId: 261619 };
 			}
-			if (containsMobileSticky(sizes)) {
+			if (containsMobileLeaderboard(sizes)) {
 				return { pageId: 244730, placementId: 261620 };
 			}
 		}
@@ -361,7 +361,7 @@ const getTeadsParams = (
 			if (containsMpu(sizes) || containsPortraitInterstitial(sizes)) {
 				return { pageId: 247435, placementId: 264331 };
 			}
-			if (containsMobileSticky(sizes)) {
+			if (containsMobileLeaderboard(sizes)) {
 				return { pageId: 247436, placementId: 264332 };
 			}
 		}
@@ -390,7 +390,7 @@ const getOzonePlacementId = (
 			}
 		}
 		if (getBreakpointKey() === 'M') {
-			if (containsMobileSticky(sizes)) {
+			if (containsMobileLeaderboard(sizes)) {
 				if (isCrosswordPage(pageTargeting)) {
 					return '1500001035';
 				}
@@ -415,7 +415,7 @@ const getOzonePlacementId = (
 	}
 
 	if (isInRow()) {
-		if (containsMobileSticky(sizes)) {
+		if (containsMobileLeaderboard(sizes)) {
 			return '1500000260';
 		}
 	}
@@ -495,7 +495,7 @@ const getKargoPlacementId = (sizes: Size[]): string => {
 		return '_qDBbBXYtzA';
 	}
 	// mobile-sticky on mobile
-	if (containsMobileSticky(sizes)) {
+	if (containsMobileLeaderboard(sizes)) {
 		return '_odszPLn2hK';
 	}
 
