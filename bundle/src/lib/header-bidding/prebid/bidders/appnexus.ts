@@ -6,7 +6,7 @@ import {
 	containsBillboardNotLeaderboard,
 	containsLeaderboard,
 	containsLeaderboardOrBillboard,
-	containsMobileSticky,
+	containsMobileLeaderboard,
 	containsMpu,
 	containsMpuOrDmpu,
 	getBreakpointKey,
@@ -41,7 +41,7 @@ export const getAppNexusDirectPlacementId = (sizes: Size[]): string => {
 		return '11016434';
 	}
 
-	if (isInRow() && containsMobileSticky(sizes)) {
+	if (isInRow() && containsMobileLeaderboard(sizes)) {
 		return '31512573';
 	}
 

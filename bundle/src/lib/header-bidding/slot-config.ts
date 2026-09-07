@@ -228,11 +228,11 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 		},
 		'mobile-sticky': {
 			mobile: shouldIncludeMobileSticky()
-				? [getAdSize('mobilesticky'), [300, 50]]
+				? [getAdSize('mobileLeaderboard'), [300, 50]]
 				: [],
 		},
 		'crossword-banner-mobile': {
-			mobile: [getAdSize('mobilesticky')],
+			mobile: [getAdSize('mobileLeaderboard')],
 		},
 		'football-right': {
 			desktop: [

@@ -8,7 +8,7 @@ import type { Size } from 'prebid.js/dist/src/types/common';
 import {
 	containsBillboard,
 	containsLeaderboardOrBillboard,
-	containsMobileSticky,
+	containsMobileLeaderboard,
 	containsMpu,
 	containsMpuOrDmpu,
 	containsPortraitInterstitial,
@@ -70,7 +70,7 @@ export const getMagniteZoneId = (slotId: string, sizes: Size[]): number => {
 					return 3471464;
 				}
 			}
-			if (containsMobileSticky(sizes)) {
+			if (containsMobileLeaderboard(sizes)) {
 				if (isInRow()) {
 					return 3477560;
 				} else if (isInUsOrCa()) {

@@ -56,15 +56,15 @@ const oustreamSizeMappings = [
 	],
 ] satisfies googletag.SizeMappingArray;
 
-const mobileSticky: [number, number] = [
-	adSizes.mobilesticky.width,
-	adSizes.mobilesticky.height,
+const mobileLeaderboard: [number, number] = [
+	adSizes.mobileLeaderboard.width,
+	adSizes.mobileLeaderboard.height,
 ];
 
-const mobileStickySizes = [mobileSticky];
+const mobileStickySizes = [mobileLeaderboard];
 
 const mobileStickySizeMappings = [
-	[[breakpoints.mobile, 0], [mobileSticky]],
+	[[breakpoints.mobile, 0], [mobileLeaderboard]],
 ] satisfies googletag.SizeMappingArray;
 
 const defaultSizeMappings = [
