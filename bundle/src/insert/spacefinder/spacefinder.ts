@@ -2,6 +2,7 @@
 
 import { log } from '@guardian/libs';
 import { memoize } from 'lodash-es';
+import { isUserInTestGroup } from '../../ab-testing';
 import fastdom from '../../lib/fastdom-promise';
 import { getUrlVars } from '../../lib/url';
 import calculateRichLinkImageHeight from './richLinks';
@@ -556,7 +557,11 @@ const getDimensions = (element: HTMLElement): Readonly<SpacefinderItem> => {
 	 * If the image hasn't loaded yet, we add the expected image height. This assumes there will be an image
 	 * with the rich link; sometimes there is not and we'll insert an ad lower than needed.
 	 */
-	if (element.dataset.spacefinderRole === 'richLink') {
+	const isInRichLinkTest = isUserInTestGroup(
+		'commercial-rich-links',
+		'variant',
+	);
+	if (isInRichLinkTest && element.dataset.spacefinderRole === 'richLink') {
 		const imageHeight = calculateRichLinkImageHeight();
 		const image = element.querySelector('[data-name="rich-link-image"]');
 

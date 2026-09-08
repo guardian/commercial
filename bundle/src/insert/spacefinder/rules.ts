@@ -11,6 +11,8 @@ const inHighValueSectionVariant = isUserInTestGroup(
 	'variant',
 );
 
+const isInRichLinkTest = isUserInTestGroup('commercial-rich-links', 'variant');
+
 const originalHighValueSections = [
 	'business',
 	'environment',
@@ -135,10 +137,14 @@ const leftColInline1: SpacefinderRules = {
 	...desktopInline1,
 	opponentSelectorRules: {
 		...desktopInline1OpponentSelectorRules,
-		[leftColumnOpponentSelector]: {
-			isLeftColumnOpponent: true,
-			distanceBetweenTops: 100,
-		},
+		...(isInRichLinkTest
+			? {
+					[leftColumnOpponentSelector]: {
+						isLeftColumnOpponent: true,
+						distanceBetweenTops: 100,
+					},
+				}
+			: {}),
 	},
 };
 
@@ -252,11 +258,11 @@ const mobileOpponentSelectorRules: OpponentSelectorRules = {
 		bypassMinTop: 'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 	},
 	/**
-	 * Left column content isn't full width, so has less visual weight than other inline content
+	 * Left column content isn't full width, so has less visual weight than other inline content.
 	 */
 	[leftColumnOpponentSelector]: {
 		marginBottom: 35,
-		marginTop: 100,
+		marginTop: isInRichLinkTest ? 100 : 200,
 	},
 	[inlineFullWidthOpponentSelector]: {
 		marginBottom: 200,
