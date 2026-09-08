@@ -102,6 +102,7 @@ describe('initialise', () => {
 			auctionOptions: {},
 			bidderSequence: 'random',
 			bidderTimeout: 1500,
+				enableTIDs: true,
 			consentManagement: {
 				gdpr: {
 					cmpApi: 'iab',
