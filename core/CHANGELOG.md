@@ -1,5 +1,20 @@
 # @guardian/commercial-core
 
+## 35.0.0
+
+### Major Changes
+
+- 8f52eca: Renames PREBID_TIMEOUT constant to PREBID_AUCTION_TIMEOUT. Adds PREBID_FAILSAFE_TIMEOUT constant. The file is renamed to prebid-timeouts.ts
+
+### Minor Changes
+
+- 1385fe4: Add `ozone` client to `hashEmailForClient` to support hashing emails for the Ozone Prebid `pubProvidedId` integration
+
+### Patch Changes
+
+- cabb9d5: Update name of mobile-sticky ad size to mobileLeaderboard
+- cb8d098: Adds ozone outstream to list of proxy ad sizes
+
 ## 34.3.1
 
 ### Patch Changes
