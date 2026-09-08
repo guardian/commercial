@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 35.1.0
+
+### Minor Changes
+
+- 9cb2414: Adding a new slot mobile-above-nav and a new size mobileLeaderboardXl 320x100
+
 ## 35.0.0
 
 ### Major Changes
