@@ -18,7 +18,7 @@ echo "Pulling image $IMAGE"
 # The container images are created via this workflow: https://github.com/guardian/dotcom-rendering/blob/18f4f9f6b861b04e2ad8deed82f442938e9f9197/.github/workflows/container.yml
 /usr/bin/docker run -d \
     --network host \
-    -p 3030:3030 \
+    -p 3030:3032 \
     -e "PORT=3030" \
     -e "COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js" \
     $IMAGE
