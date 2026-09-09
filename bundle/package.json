@@ -71,7 +71,7 @@
 		"raw-loader": "4.0.2",
 		"terser-webpack-plugin": "5.6.1",
 		"ts-jest": "29.4.12",
-		"ts-loader": "9.6.2",
+		"ts-loader": "9.5.4",
 		"type-fest": "5.8.0",
 		"typescript": "6.0.3",
 		"webpack": "5.109.2",
