@@ -56,11 +56,6 @@ const initialise = async (
 		'holdback',
 	);
 
-	const shouldEnableTransactionIds = isUserInTestGroup(
-		'commercial-prebid-transaction-ids',
-		'variant',
-	);
-
 	window.pbjs.setConfig({
 		/**
 		 * The amount of time reserved for the auction
@@ -75,7 +70,7 @@ const initialise = async (
 						enabled: true,
 						data: {
 							schema: { fields: ['mediaType'] },
-							values: { '*': 0.1 },
+							values: { banner: 0.1, video: 0.1 },
 							default: 0.1,
 						},
 					},
@@ -83,7 +78,7 @@ const initialise = async (
 			: {}),
 		priceGranularity: 'custom',
 		customPriceBucket: priceGranularity,
-		enableTIDs: shouldEnableTransactionIds,
+		enableTIDs: true,
 		userSync,
 		ortb2: {
 			site: {

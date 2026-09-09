@@ -1,7 +1,6 @@
 import { hashEmailForClient } from '@guardian/commercial-core';
 import { loadScript, log } from '@guardian/libs';
 import type { UserIdConfig } from 'prebid.js/dist/modules/userId/spec';
-import { isSwitchedOn } from '../../utils';
 
 type LiverampUserIdConfig = [
 	UserIdConfig<'identityLink'>,
@@ -100,9 +99,7 @@ const getLiveRampParams = async (
 export const getUserIdForLiveRamp = async (
 	email: string | null,
 ): Promise<LiverampUserIdConfig | undefined> => {
-	const isLiverampEnabled = isSwitchedOn('prebidLiveramp');
-
-	if (email && isLiverampEnabled) {
+	if (email) {
 		const params = await getLiveRampParams(email);
 		return params;
 	}

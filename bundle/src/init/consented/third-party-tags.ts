@@ -100,7 +100,9 @@ const loadOther = (): Promise<void> => {
 		permutive({
 			shouldRun: window.guardian.config.switches.permutive ?? false,
 		}),
-		ias,
+		ias({
+			shouldRun: window.guardian.config.switches.ias ?? false,
+		}),
 		inizio({ shouldRun: window.guardian.config.switches.inizio ?? false }),
 	].filter((_) => _.shouldRun);
 

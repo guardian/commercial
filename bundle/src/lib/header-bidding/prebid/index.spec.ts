@@ -102,6 +102,7 @@ describe('initialise', () => {
 			auctionOptions: {},
 			bidderSequence: 'random',
 			bidderTimeout: 1500,
+			enableTIDs: true,
 			consentManagement: {
 				gdpr: {
 					cmpApi: 'iab',
@@ -155,18 +156,6 @@ describe('initialise', () => {
 							expires: 365,
 						},
 					},
-					{
-						name: 'id5Id',
-						params: {
-							partner: 182,
-						},
-						storage: {
-							type: 'html5',
-							name: 'id5id',
-							expires: 90,
-							refreshInSeconds: 7200,
-						},
-					},
 				],
 				auctionDelay: 500,
 				filterSettings: {
@@ -200,6 +189,7 @@ describe('initialise', () => {
 	});
 
 	test('should include pd in ID5 user module when consent and email are present', async () => {
+		window.guardian.config.switches.prebidId5 = true;
 		jest.mocked(shouldIncludeBidder).mockReturnValue(
 			jest.fn().mockReturnValue(true),
 		);
@@ -257,6 +247,7 @@ describe('initialise', () => {
 		(hashEmailForClient as jest.Mock).mockReturnValue(
 			'528f4e83dbdd916e811358e43518555f68229b1dc279b6b2cd3c480f68371e7d',
 		);
+		window.guardian.config.switches.prebidId5 = true;
 		mockGetConsentForID5(true);
 
 		await prebid.initialise(window, mockConsentState);
@@ -618,7 +609,10 @@ describe('isInPrebidFloorPriceTest', () => {
 					enabled: true,
 					data: expect.objectContaining({
 						schema: { fields: ['mediaType'] },
-						values: { '*': 0.1 },
+						values: expect.objectContaining({
+							banner: 0.1,
+							video: 0.1,
+						}),
 						default: 0.1,
 					}),
 				}),

@@ -21,7 +21,6 @@ type BreakpointIndices = Indices<typeof breakpoints>;
  *
  * size[0] = 200; // throws error
  * size.width = 200; // throws error
- *
  */
 class AdSize extends Array<number> {
 	readonly [0]: number;
@@ -51,8 +50,16 @@ class AdSize extends Array<number> {
 		const isFluid = this.toString() === 'fluid';
 		const isMerch = this.width === 88;
 		const isSponsorLogo = this.width === 3 && this.height === 3;
+		const isOzoneOutstream = this.width === 640 && this.height === 360;
 
-		return isOutOfPage || isEmpty || isFluid || isMerch || isSponsorLogo;
+		return (
+			isOutOfPage ||
+			isEmpty ||
+			isFluid ||
+			isMerch ||
+			isSponsorLogo ||
+			isOzoneOutstream
+		);
 	}
 
 	get width(): number {
@@ -82,7 +89,8 @@ type SizeKeys =
 	| 'merchandising'
 	| 'merchandisingHigh'
 	| 'merchandisingHighAdFeature'
-	| 'mobilesticky'
+	| 'mobileLeaderboard'
+	| 'mobileLeaderboardXl'
 	| 'mpu'
 	| 'outOfPage'
 	| 'outstreamDesktop'
@@ -110,6 +118,7 @@ type SlotName =
 	| 'mobile-sticky'
 	| 'football-right'
 	| 'mostpop'
+	| 'mobile-above-nav'
 	| 'right'
 	| 'sponsor-logo'
 	| 'survey'
@@ -128,7 +137,8 @@ const namedStandardAdSizes = {
 	billboard: createAdSize(970, 250),
 	halfPage: createAdSize(300, 600),
 	leaderboard: createAdSize(728, 90),
-	mobilesticky: createAdSize(320, 50),
+	mobileLeaderboard: createAdSize(320, 50),
+	mobileLeaderboardXl: createAdSize(320, 100),
 	mpu: createAdSize(300, 250),
 	portrait: createAdSize(300, 1050),
 	skyscraper: createAdSize(160, 600),
@@ -149,7 +159,11 @@ const outstreamSizes = {
 	outstreamDesktop: createAdSize(620, 350),
 	outstreamGoogleDesktop: createAdSize(550, 310),
 	outstreamMobile: createAdSize(300, 197),
-	outstreamOzone: createAdSize(640, 360), // Uses the same size for both desktop and mobile
+	/**
+	 * 640x360 is the industry-standard 16:9 ratio for outstream video. Ozone's renderer
+	 * is responsive and will scale the player to fit the width of the user's screen.
+	 */
+	outstreamOzone: createAdSize(640, 360),
 };
 
 /**
@@ -383,10 +397,18 @@ const slotSizeMappings = {
 		desktop: [adSizes.outOfPage],
 	},
 	'mobile-sticky': {
-		mobile: [adSizes.mobilesticky, adSizes.empty, createAdSize(300, 50)],
+		mobile: [
+			adSizes.mobileLeaderboard,
+			adSizes.empty,
+			createAdSize(300, 50),
+		],
 	},
 	'crossword-banner-mobile': {
-		mobile: [adSizes.mobilesticky],
+		mobile: [adSizes.mobileLeaderboard],
+	},
+	'mobile-above-nav': {
+		mobile: [adSizes.empty, adSizes.mobileLeaderboardXl],
+		tablet: [adSizes.empty, adSizes.mobileLeaderboardXl],
 	},
 	'football-right': {
 		desktop: [

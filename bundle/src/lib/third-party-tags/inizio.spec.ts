@@ -19,10 +19,10 @@ describe('index', () => {
 		(isInUsa as jest.Mock).mockReturnValue(false);
 		(isInAustralia as jest.Mock).mockReturnValue(false);
 
-		const inizioInstance = inizio({ shouldRun: true });
+		const inizioInstance = inizio({ shouldRun: false });
 
 		expect(inizioInstance).toMatchObject({
-			shouldRun: true,
+			shouldRun: false,
 			url: '//cdn.brandmetrics.com/tag/c3330059-9ad5-4d32-8e7a-e9f6c7d74957/the_guardian_uk.js',
 			name: 'inizio',
 		});

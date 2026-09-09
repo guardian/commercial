@@ -99,7 +99,8 @@ describe('PrebidAdUnit', () => {
 				sizes: [[300, 250]],
 			},
 			video: {
-				playerSize: [[640, 360]],
+				playerSize: [640, 360],
+				mimes: ['video/mp4'],
 				context: 'outstream',
 				placement: 3,
 				plcmt: 4,
@@ -177,7 +178,8 @@ describe('PrebidAdUnit', () => {
 				sizes: [[300, 250]],
 			},
 			video: {
-				playerSize: [[640, 360]],
+				playerSize: [640, 360],
+				mimes: ['video/mp4'],
 				context: 'outstream',
 				placement: 3,
 				plcmt: 4,
