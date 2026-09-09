@@ -36,11 +36,12 @@ const allowArticleBodyAdverts = (): boolean => {
 	const isHosted = window.guardian.config.page.isHosted;
 	const newRecipeDesign =
 		window.guardian.config.page.showNewRecipeDesign ?? false;
+	const isSpacefinderDisabled = document.querySelector('.article-body-commercial-selector[data-spacefinder-disabled=true]')
 
 	const enableArticleBodyAdverts = isArticle || isInteractive;
 
 	const disableArticleBodyAdverts =
-		isMinuteArticle || isLiveBlog || isHosted || newRecipeDesign;
+		isMinuteArticle || isLiveBlog || isHosted || newRecipeDesign || isSpacefinderDisabled;
 
 	const articleBodyAdverts = () =>
 		shouldLoadAds() &&
