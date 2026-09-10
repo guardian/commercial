@@ -37,6 +37,10 @@ updates:
       playwright:
         patterns:
           - '@playwright/*'
+      babel:
+        patterns:
+          - '@babel/*'
+          - babel*
       webpack:
         patterns:
           - '*webpack*'
@@ -56,6 +60,8 @@ updates:
           - '*eslint*'
           - '*prettier*'
           - '@playwright/*'
+          - '@babel/*'
+          - babel*
           - '*webpack*'
           - 'typescript'
       devDependenciesMinor:
@@ -70,6 +76,8 @@ updates:
           - '*eslint*'
           - '*prettier*'
           - '@playwright/*'
+          - '@babel/*'
+          - babel*
           - '*webpack*'
           - 'typescript'
     # The default is 5 but as we are going to group dependencies we might need to increase it
