@@ -74,8 +74,7 @@ const addOverlay = (element: HTMLElement, text: string) => {
 const addHoverListener = (
 	candidate: HTMLElement,
 	tooClose: Exclude<SpacefinderItem['meta'], undefined>[
-		| 'tooClose'
-		| 'overlaps'],
+		'tooClose' | 'overlaps'],
 	pass: SpacefinderPass,
 ) => {
 	tooClose.forEach((opponent) => {

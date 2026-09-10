@@ -24,13 +24,12 @@ type QueryStringMap = Record<
 	string | true | undefined
 >;
 
-const queryStringToUrlVars = memoize(
-	(queryString: string): QueryStringMap =>
-		Array.from(new URLSearchParams(queryString).entries()) // polyfill.io guarantees URLSearchParams
-			.reduce<QueryStringMap>((acc, [key, value]) => {
-				acc[key] = value === '' ? true : value;
-				return acc;
-			}, {}),
+const queryStringToUrlVars = memoize((queryString: string): QueryStringMap =>
+	Array.from(new URLSearchParams(queryString).entries()) // polyfill.io guarantees URLSearchParams
+		.reduce<QueryStringMap>((acc, [key, value]) => {
+			acc[key] = value === '' ? true : value;
+			return acc;
+		}, {}),
 );
 
 /**
