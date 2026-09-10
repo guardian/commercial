@@ -21,7 +21,7 @@ modules:
 # Optional: Ports to forward
 forwardPorts:
     - 3031 # commercial
-    - 3030 # dcr in docker container for playwright
+    - 3032 # dcr in docker container for playwright
     - 4321 # port for running `pnpm playwright:open` locally
 
 # Optional: Mount directories from host to container

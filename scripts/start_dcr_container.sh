@@ -12,11 +12,13 @@ IMAGE="ghcr.io/guardian/dotcom-rendering:$TAG"
 
 echo "Pulling image $IMAGE"
 
+/usr/bin/docker pull $IMAGE
+
 # This script starts DCR in a Docker container using the dotcom-rendering main branch
 # The container images are created via this workflow: https://github.com/guardian/dotcom-rendering/blob/18f4f9f6b861b04e2ad8deed82f442938e9f9197/.github/workflows/container.yml
 /usr/bin/docker run -d \
     --network host \
-    -p 3030:3030 \
+    -p 3030:3032 \
     -e "PORT=3030" \
     -e "COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js" \
     $IMAGE

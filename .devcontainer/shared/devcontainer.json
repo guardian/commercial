@@ -17,7 +17,7 @@
   },
   "forwardPorts" : [
     3031,
-    3030,
+    3032,
     4321
   ],
   "image" : "mcr.microsoft.com/devcontainers/base:ubuntu26.04",

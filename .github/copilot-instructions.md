@@ -22,7 +22,7 @@ Unit tests use Jest with jsdom. Coverage thresholds are enforced, especially
 for `bundle/src/lib` and `bundle/src/init/consented`; avoid lowering them.
 Playwright tests require the bundle dev server and a DCR instance configured to
 load it, as described in `bundle/README.md`. The CI setup runs DCR in a
-container on port 3030 and starts the bundle server on port 3031.
+container on port 3032 and starts the bundle server on port 3031.
 
 ## Architecture
 
