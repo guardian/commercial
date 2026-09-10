@@ -67,7 +67,7 @@
 		"lint-staged": "17.3.0",
 		"lodash-es": "4.18.1",
 		"npm-run-all": "4.1.5",
-		"prebid.js": "11.32.0",
+		"prebid.js": "10.23.0",
 		"process": "0.11.10",
 		"raw-loader": "4.0.2",
 		"terser-webpack-plugin": "5.6.1",
