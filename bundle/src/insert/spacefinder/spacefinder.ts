@@ -371,20 +371,32 @@ const testCandidate = (
 			});
 		} else {
 			// if the test fails, add debug information to the candidate metadata
-			const required = rule.isLeftColumnOpponent
-				? 0
-				: isOpponentBelow
+			if (rule.isLeftColumnOpponent) {
+				const required = rule.distanceBetweenTops;
+				const actual =
+					opponent.top > candidate.top
+						? opponent.top - candidate.top
+						: candidate.top - opponent.top;
+
+				candidate.meta.tooClose.push({
+					required,
+					actual,
+					element: opponent.element,
+				});
+			} else {
+				const required = isOpponentBelow
 					? rule.marginTop
 					: rule.marginBottom;
-			const actual = isOpponentBelow
-				? opponent.top - candidate.top
-				: candidate.top - opponent.bottom;
+				const actual = isOpponentBelow
+					? opponent.top - candidate.top
+					: candidate.top - opponent.bottom;
 
-			candidate.meta.tooClose.push({
-				required,
-				actual,
-				element: opponent.element,
-			});
+				candidate.meta.tooClose.push({
+					required,
+					actual,
+					element: opponent.element,
+				});
+			}
 		}
 	}
 

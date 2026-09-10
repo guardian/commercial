@@ -34,7 +34,6 @@ test.describe('Rich links', () => {
 
 			await waitForIsland(page, 'RichLinkComponent');
 
-			// const richLinkImage = page.getByTestId('rich-link-image');
 			const richLinkImage = page.getByAltText(
 				'Martin Ødegaard (right) with Declan Rice',
 			);
