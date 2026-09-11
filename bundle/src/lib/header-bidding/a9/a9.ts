@@ -1,4 +1,3 @@
-import { APS_AUCTION_TIMEOUT } from '@guardian/commercial-core/constants/header-bidding-timeouts';
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
 import type {
@@ -6,6 +5,7 @@ import type {
 	FetchBidResponse,
 } from '../../../types/global';
 import { reportError } from '../../error/report-error';
+import { getAuctionTimeoutValue } from '../../header_bidder_timeouts';
 import type { HeaderBiddingSlot, SlotFlatMap } from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';
 import { shouldLoadA9 } from '../utils';
@@ -30,6 +30,8 @@ let initialised = false;
 let requestQueue = Promise.resolve();
 
 const initialise = (): void => {
+	const auctionTimeout = getAuctionTimeoutValue();
+
 	if (!initialised && window.apstag) {
 		initialised = true;
 		const blockedBidders = window.guardian.config.page.isFront
@@ -41,7 +43,7 @@ const initialise = (): void => {
 		window.apstag.init({
 			pubID: window.guardian.config.page.a9PublisherId,
 			adServer: 'googletag',
-			bidTimeout: APS_AUCTION_TIMEOUT,
+			bidTimeout: auctionTimeout,
 			blockedBidders,
 		});
 	}
