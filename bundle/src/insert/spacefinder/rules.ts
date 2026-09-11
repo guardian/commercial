@@ -11,6 +11,8 @@ const inHighValueSectionVariant = isUserInTestGroup(
 	'variant',
 );
 
+const isInRichLinkTest = isUserInTestGroup('commercial-rich-links', 'variant');
+
 const originalHighValueSections = [
 	'business',
 	'environment',
@@ -34,6 +36,7 @@ const highValueSections = [
 const isInHighValueSection = highValueSections.includes(
 	window.guardian.config.page.section,
 );
+
 // desktop only — excludes test sections so variant doesn't affect heading margins
 const isInOriginalHighValueSection = originalHighValueSections.includes(
 	window.guardian.config.page.section,
@@ -76,7 +79,6 @@ const inlineOpponentSelector = ['inline', 'supporting', 'showcase', 'halfWidth']
 			`:scope > [data-spacefinder-role="${role}"], [data-spacefinder-role="nested"] > [data-spacefinder-role="${role}"]`,
 	)
 	.join(',');
-
 const inlineFullWidthOpponentSelector = `:scope > [data-spacefinder-role="fullWidth"], [data-spacefinder-role="nested"] > [data-spacefinder-role="fullWidth"]`;
 
 const horizontalRuleSelector =
@@ -84,46 +86,71 @@ const horizontalRuleSelector =
 
 const headingSelector = `:scope > h2, [data-spacefinder-role="nested"] > h2, :scope > h3, [data-spacefinder-role="nested"] > h3`;
 
+const desktopInline1OpponentSelectorRules: OpponentSelectorRules = {
+	[headingSelector]: {
+		marginBottom: 150, // don't place ads right after a heading
+		marginTop: isInOriginalHighValueSection ? 0 : 190,
+	},
+	[adSlotContainerSelector]: {
+		marginBottom: 500,
+		marginTop: 500,
+	},
+	[inlineOpponentSelector]: {
+		marginBottom: 35,
+		marginTop: 200,
+	},
+	[inlineFullWidthOpponentSelector]: {
+		marginBottom: 200,
+		marginTop: 200,
+	},
+	// At the desktop breakpoint, this content is rendered inline, but
+	// does not take up the full width. It is floated to the left.
+	[leftColumnOpponentSelector]: {
+		marginBottom: 50,
+		marginTop: 100,
+	},
+	[rightColumnOpponentSelector]: {
+		marginBottom: 0,
+		marginTop: 150,
+	},
+	['[data-spacefinder-role="supporting"]']: {
+		marginBottom: 0,
+		marginTop: 100,
+	},
+};
+
+/**
+ * Spacefinder rules for the inline1 advert between the desktop and the leftCol breakpoint.
+ */
 const desktopInline1: SpacefinderRules = {
 	bodySelector,
 	candidateSelector,
 	minDistanceFromTop: isImmersive ? 700 : 300,
 	minDistanceFromBottom: 300,
+	opponentSelectorRules: desktopInline1OpponentSelectorRules,
+};
+
+/**
+ * Spacefinder rules for the inline1 advert from the leftCol breakpoint
+ */
+const leftColInline1: SpacefinderRules = {
+	...desktopInline1,
 	opponentSelectorRules: {
-		// don't place ads right after a heading
-		[headingSelector]: {
-			marginBottom: 150,
-			marginTop: isInOriginalHighValueSection ? 0 : 190,
-		},
-		[adSlotContainerSelector]: {
-			marginBottom: 500,
-			marginTop: 500,
-		},
-		[inlineOpponentSelector]: {
-			marginBottom: 35,
-			marginTop: 200,
-		},
-		[inlineFullWidthOpponentSelector]: {
-			marginBottom: 200,
-			marginTop: 200,
-		},
-		[leftColumnOpponentSelector]: {
-			marginBottom: 50,
-			marginTop: 100,
-		},
-		[rightColumnOpponentSelector]: {
-			marginBottom: 0,
-			marginTop: 150,
-		},
-		['[data-spacefinder-role="supporting"]']: {
-			marginBottom: 0,
-			marginTop: 100,
-		},
+		...desktopInline1OpponentSelectorRules,
+		...(isInRichLinkTest
+			? {
+					[leftColumnOpponentSelector]: {
+						isLeftColumnOpponent: true,
+						distanceBetweenTops: 100,
+					},
+				}
+			: {}),
 	},
 };
 
 const desktopRightRailMinAbove = (isConsentless: boolean) => {
 	const base = 1000;
+
 	/**
 	 * In special cases, inline2 can overlap the "Most viewed" island, so
 	 * we need to make an adjustment to move the inline2 further down the page
@@ -135,41 +162,42 @@ const desktopRightRailMinAbove = (isConsentless: boolean) => {
 	if (hasShowcaseMainElement || (!hasImages && hasVideo)) {
 		return base + 250;
 	}
+
 	return base;
 };
 
-const desktopRightRail = (isConsentless: boolean): SpacefinderRules => {
-	return {
-		bodySelector,
-		candidateSelector,
-		minDistanceFromTop: desktopRightRailMinAbove(isConsentless),
-		minDistanceFromBottom: 300,
-		opponentSelectorRules: {
-			[adSlotContainerSelector]: {
-				marginBottom: 500,
-				marginTop: 500,
-			},
-			[rightColumnOpponentSelector]: {
-				marginBottom: 0,
-				marginTop: 600,
-			},
+const desktopRightRail = (isConsentless: boolean): SpacefinderRules => ({
+	bodySelector,
+	candidateSelector,
+	minDistanceFromTop: desktopRightRailMinAbove(isConsentless),
+	minDistanceFromBottom: 300,
+	opponentSelectorRules: {
+		[adSlotContainerSelector]: {
+			marginBottom: 500,
+			marginTop: 500,
 		},
-		/**
-		 * Filter out any candidates that are too close to the last winner
-		 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
-		 * for more information
-		 **/
-		filter: (candidate, lastWinner) => {
-			if (!lastWinner) {
-				return true;
-			}
-			const largestSizeForSlot = adSizes.halfPage.height;
-			const distanceBetweenAds =
-				candidate.top - lastWinner.top - largestSizeForSlot;
-			return distanceBetweenAds >= minDistanceBetweenRightRailAds;
+		[rightColumnOpponentSelector]: {
+			marginBottom: 0,
+			marginTop: 600,
 		},
-	};
-};
+	},
+	/**
+	 * Filter out any candidates that are too close to the last winner
+	 * see https://github.com/guardian/commercial/tree/main/docs/spacefinder#avoiding-other-winning-candidates
+	 * for more information
+	 **/
+	filter: (candidate, lastWinner) => {
+		if (!lastWinner) {
+			return true;
+		}
+
+		const largestSizeForSlot = adSizes.halfPage.height;
+		const distanceBetweenAds =
+			candidate.top - lastWinner.top - largestSizeForSlot;
+
+		return distanceBetweenAds >= minDistanceBetweenRightRailAds;
+	},
+});
 
 const interactiveRightRail: SpacefinderRules = {
 	bodySelector,
@@ -211,20 +239,30 @@ const mobileCandidateSelector =
 const mobileHeadingSelector = `${headingSelector}, :scope > [data-spacefinder-type$="NumberedTitleBlockElement"]`;
 
 const mobileOpponentSelectorRules: OpponentSelectorRules = {
-	// don't place ads right after a heading
 	[mobileHeadingSelector]: {
-		marginBottom: 100,
+		marginBottom: 100, // don't place ads right after a heading
 		marginTop: 0,
 	},
 	[adSlotContainerSelector]: {
 		marginBottom: minDistanceBetweenInlineAds,
 		marginTop: minDistanceBetweenInlineAds,
 	},
-	[`${inlineOpponentSelector},${leftColumnOpponentSelector}`]: {
+	[inlineOpponentSelector]: {
 		marginBottom: 35,
 		marginTop: 200,
-		// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
+		/**
+		 * Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up
+		 * related content too much. But if we have a heading above, anything above the heading won't be related
+		 * to the current content, so we can place an ad there.
+		 */
 		bypassMinTop: 'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
+	},
+	/**
+	 * Left column content isn't full width, so has less visual weight than other inline content.
+	 */
+	[leftColumnOpponentSelector]: {
+		marginBottom: 35,
+		marginTop: isInRichLinkTest ? 100 : 200,
 	},
 	[inlineFullWidthOpponentSelector]: {
 		marginBottom: 200,
@@ -233,7 +271,11 @@ const mobileOpponentSelectorRules: OpponentSelectorRules = {
 	[rightColumnOpponentSelector]: {
 		marginBottom: 35,
 		marginTop: 200,
-		// Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up related content too much. But if we have a heading above, anything above the heading won't be related to the current content, so we can place an ad there.
+		/**
+		 * Usually we don't want an ad right before videos, embeds and atoms etc. so that we don't break up
+		 * related content too much. But if we have a heading above, anything above the heading won't be related
+		 * to the current content, so we can place an ad there.
+		 */
 		bypassMinTop: 'h2,[data-spacefinder-type$="NumberedTitleBlockElement"]',
 	},
 };
@@ -264,13 +306,16 @@ const mobileAndTabletInlines: SpacefinderRules = {
 		if (!lastWinner) {
 			return true;
 		}
+
 		const distanceBetweenAds = candidate.top - lastWinner.top;
+
 		return distanceBetweenAds >= minDistanceBetweenInlineAds;
 	},
 };
 
 export const rules = {
 	desktopInline1,
+	leftColInline1,
 	desktopRightRail,
 	interactiveRightRail,
 	mobileAndTabletInlines,

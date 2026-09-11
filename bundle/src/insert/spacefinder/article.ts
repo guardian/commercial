@@ -7,7 +7,10 @@ import {
 	createAdSlot,
 	wrapSlotInContainer,
 } from '../../lib/create-ad-slot';
-import { getCurrentBreakpoint } from '../../lib/detect/detect-breakpoint';
+import {
+	getCurrentBreakpoint,
+	getCurrentTweakpoint,
+} from '../../lib/detect/detect-breakpoint';
 import fastdom from '../../lib/fastdom-promise';
 import { computeStickyHeights, insertHeightStyles } from '../sticky-inlines';
 import { calculateInteractiveGridType } from './interactive';
@@ -102,6 +105,11 @@ const decideAdditionalSizes = async (
 };
 
 const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
+	const rulesForTweakpoint =
+		getCurrentTweakpoint() === 'desktop'
+			? rules.desktopInline1
+			: rules.leftColInline1;
+
 	// these are added here and not in size mappings because the inline[i] name
 	// is also used on fronts, where we don't want outstream or tall ads
 	const additionalSizes = {
@@ -127,7 +135,7 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 		await Promise.all(slots);
 	};
 
-	return spaceFiller.fillSpace(rules.desktopInline1, insertAd, {
+	return spaceFiller.fillSpace(rulesForTweakpoint, insertAd, {
 		waitForImages: true,
 		waitForInteractives: true,
 		pass: 'inline1',
