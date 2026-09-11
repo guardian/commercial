@@ -36,11 +36,21 @@ const allowArticleBodyAdverts = (): boolean => {
 	const isHosted = window.guardian.config.page.isHosted;
 	const newRecipeDesign =
 		window.guardian.config.page.showNewRecipeDesign ?? false;
+	const isNonSupportedInteractive =
+		isInteractive &&
+		window.guardian.config.page.atoms?.includes(
+			// Disable Spacefinder for US midterm election results page
+			'interactives/2026/11/midterms/default',
+		);
 
 	const enableArticleBodyAdverts = isArticle || isInteractive;
 
 	const disableArticleBodyAdverts =
-		isMinuteArticle || isLiveBlog || isHosted || newRecipeDesign;
+		isMinuteArticle ||
+		isLiveBlog ||
+		isHosted ||
+		newRecipeDesign ||
+		isNonSupportedInteractive;
 
 	const articleBodyAdverts = () =>
 		shouldLoadAds() &&
