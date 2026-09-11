@@ -28,8 +28,6 @@ type AdjacentRuleSpacing = {
 	 * If the opponent is in the left column, then we want to use slightly different rule
 	 * spacing. We want to allow some vertical overlap between the advert and the opponent,
 	 * as the opponent is not inline.
-	 *
-	 * TODO: Use this for right-column opponents as well.
 	 */
 	isLeftColumnOpponent: true;
 	/**
