@@ -32,6 +32,7 @@
 		"@guardian/prettier": "11.0.0",
 		"@typescript-eslint/eslint-plugin": "8.68.0",
 		"@typescript-eslint/parser": "8.68.0",
+		"@babel/runtime": "8.0.0",
 		"eslint": "9.39.4",
 		"globals": "17.11.0",
 		"husky": "9.1.7",

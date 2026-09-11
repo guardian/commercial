@@ -26,6 +26,7 @@
 		"lint": "eslint .",
 		"lint-staged": "lint-staged",
 		"prettier:check": "prettier . --check --cache",
+		"check-modern-syntax": "node scripts/check-modern-syntax.mjs",
 		"prettier:fix": "prettier . --write --cache",
 		"serve": "OVERRIDE_BUNDLE=true pnpm webpack-dev-server -c ./webpack.config.dev.mjs",
 		"test": "jest",
