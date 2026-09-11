@@ -1,5 +1,6 @@
 import {
 	AD_LABEL_HEIGHT,
+	APS_AUCTION_TIMEOUT,
 	PREBID_AUCTION_TIMEOUT,
 	PREBID_FAILSAFE_TIMEOUT,
 	TOP_ABOVE_NAV_HEIGHT,
@@ -9,6 +10,10 @@ import {
 describe('Constant values are constant', () => {
 	test('TOP_ABOVE_NAV_HEIGHT', () => {
 		expect(TOP_ABOVE_NAV_HEIGHT).toBe(250);
+	});
+
+	test('APS_AUCTION_TIMEOUT', () => {
+		expect(APS_AUCTION_TIMEOUT).toBe(1500);
 	});
 
 	test('PREBID_AUCTION_TIMEOUT', () => {
