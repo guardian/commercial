@@ -1,3 +1,4 @@
+import { APS_AUCTION_TIMEOUT } from '@guardian/commercial-core/constants/header-bidding-timeouts';
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
 import type {
@@ -7,12 +8,12 @@ import type {
 import { reportError } from '../../error/report-error';
 import type { HeaderBiddingSlot, SlotFlatMap } from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';
+import { shouldLoadA9 } from '../utils';
 
 /*
  * Amazon's header bidding javascript library
  * https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/javascript-guide/display.html
  */
-
 class A9AdUnit implements A9AdUnitInterface {
 	slotID: string;
 	slotName?: string;
@@ -28,8 +29,6 @@ class A9AdUnit implements A9AdUnitInterface {
 let initialised = false;
 let requestQueue = Promise.resolve();
 
-const bidderTimeout = 1500;
-
 const initialise = (): void => {
 	if (!initialised && window.apstag) {
 		initialised = true;
@@ -42,7 +41,7 @@ const initialise = (): void => {
 		window.apstag.init({
 			pubID: window.guardian.config.page.a9PublisherId,
 			adServer: 'googletag',
-			bidTimeout: bidderTimeout,
+			bidTimeout: APS_AUCTION_TIMEOUT,
 			blockedBidders,
 		});
 	}
@@ -60,11 +59,7 @@ const requestBids = async (
 	adverts: Advert[],
 	slotFlatMap?: SlotFlatMap,
 ): Promise<void> => {
-	if (!initialised) {
-		return requestQueue;
-	}
-
-	if (!window.guardian.config.switches.a9HeaderBidding) {
+	if (!shouldLoadA9() || !initialised) {
 		return requestQueue;
 	}
 
