@@ -5,7 +5,6 @@ import {
 	getConsentFor as getConsentFor_,
 } from '@guardian/consent-manager';
 import type { CountryCode } from '@guardian/libs';
-import { isAdFree } from '../../lib/ad-free';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
@@ -70,9 +69,6 @@ jest.mock('lib/detect/detect-breakpoint', () => ({
 	matchesBreakpoints: jest.fn(),
 }));
 
-jest.mock('lib/ad-free', () => ({
-	isAdFree: jest.fn(),
-}));
 jest.mock('lib/should-load-ads', () => ({
 	shouldLoadAds: jest.fn(),
 }));
@@ -495,7 +491,6 @@ describe('Utils', () => {
 		describe('shouldLoadPrebid', () => {
 			beforeEach(() => {
 				jest.resetAllMocks();
-				jest.mocked(isAdFree).mockReturnValue(false);
 				jest.mocked(shouldLoadAds).mockReturnValue(true);
 				fakeUserAgent();
 				window.guardian.config.switches = {};
@@ -563,13 +558,13 @@ describe('Utils', () => {
 				expect(shouldLoadPrebid()).toBe(false);
 			});
 
-			it('should return false when ad-free is on', () => {
+			it('should return false when ads should not load', () => {
 				expect.hasAssertions();
 
+				jest.mocked(shouldLoadAds).mockReturnValue(false);
 				window.guardian.config.switches = {
 					prebidHeaderBidding: true,
 				};
-				jest.mocked(isAdFree).mockReturnValue(true);
 
 				expect(shouldLoadPrebid()).toBe(false);
 			});

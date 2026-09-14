@@ -11,7 +11,6 @@ import { type ConsentState, getConsentFor } from '@guardian/consent-manager';
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import type { Size } from 'prebid.js/dist/src/types/common';
-import { isAdFree } from '../../lib/ad-free';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { isSecureContactPage } from '../../lib/is-secure-contact';
 import { shouldLoadAds } from '../../lib/should-load-ads';
@@ -57,7 +56,6 @@ const isValidPageForMobileSticky = (): boolean => {
 const canLoadHeaderBidders = (): boolean =>
 	!isGoogleProxy() &&
 	shouldLoadAds() &&
-	!isAdFree() &&
 	!window.guardian.config.page.hasPageSkin &&
 	!isInCanada();
 
