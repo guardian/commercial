@@ -4,7 +4,6 @@ import type {
 	TCFv2ConsentState,
 } from '@guardian/consent-manager';
 import { onConsent } from '@guardian/consent-manager';
-import { isAdFree } from '../../lib/ad-free';
 import { a9 } from '../../lib/header-bidding/a9/a9';
 import { isSecureContactPage } from '../../lib/is-secure-contact';
 import { shouldLoadAds } from '../../lib/should-load-ads';
@@ -14,10 +13,6 @@ const { setupA9 } = _;
 
 jest.mock('@guardian/commercial-core/geo/geo-utils', () => ({
 	isInCanada: jest.fn(() => false),
-}));
-
-jest.mock('lib/ad-free', () => ({
-	isAdFree: jest.fn(),
 }));
 
 jest.mock('lib/should-load-ads', () => ({
@@ -88,6 +83,7 @@ describe('prepareA9', () => {
 
 	it('should not run if no consent for a9', async () => {
 		mockOnConsent(tcfv2WithoutConsent);
+
 		await setupA9();
 
 		expect(a9.initialise).not.toHaveBeenCalled();
@@ -97,7 +93,6 @@ describe('prepareA9', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		jest.mocked(isAdFree).mockReturnValue(false);
 
 		await setupA9();
 
@@ -108,7 +103,6 @@ describe('prepareA9', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		jest.mocked(isAdFree).mockReturnValue(false);
 		jest.mocked(isInCanada).mockReturnValueOnce(true);
 
 		await setupA9();
@@ -120,7 +114,6 @@ describe('prepareA9', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		jest.mocked(isAdFree).mockReturnValue(false);
 		await setupA9();
 		expect(a9.initialise).toHaveBeenCalled();
 	});
@@ -144,17 +137,6 @@ describe('prepareA9', () => {
 			a9HeaderBidding: true,
 		};
 		jest.mocked(shouldLoadAds).mockReturnValue(false);
-		jest.mocked(isAdFree).mockReturnValue(false);
-		await setupA9();
-		expect(a9.initialise).not.toHaveBeenCalled();
-	});
-
-	it('should not initialise a9 when ad-free is on', async () => {
-		window.guardian.config.switches = {
-			a9HeaderBidding: true,
-		};
-		jest.mocked(isAdFree).mockReturnValue(true);
-
 		await setupA9();
 		expect(a9.initialise).not.toHaveBeenCalled();
 	});
@@ -163,7 +145,6 @@ describe('prepareA9', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		jest.mocked(isAdFree).mockReturnValue(false);
 		window.guardian.config.page.hasPageSkin = true;
 		await setupA9();
 		expect(a9.initialise).not.toHaveBeenCalled();
@@ -173,7 +154,6 @@ describe('prepareA9', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		jest.mocked(isAdFree).mockReturnValue(false);
 		window.guardian.config.page.hasPageSkin = false;
 		await setupA9();
 		expect(a9.initialise).toHaveBeenCalled();
@@ -183,7 +163,6 @@ describe('prepareA9', () => {
 		window.guardian.config.switches = {
 			a9HeaderBidding: true,
 		};
-		jest.mocked(isAdFree).mockReturnValue(false);
 		jest.mocked(isSecureContactPage).mockReturnValue(true);
 
 		await setupA9();
