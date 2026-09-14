@@ -102,10 +102,7 @@ for (const dir of dirsToScan) {
 			while ((match = regex.exec(source)) !== null) {
 				const { line, column } = lineAndColumnAt(source, match.index);
 				const snippetStart = Math.max(0, match.index - 20);
-				const snippetEnd = Math.min(
-					source.length,
-					match.index + 20,
-				);
+				const snippetEnd = Math.min(source.length, match.index + 20);
 				const snippet = source
 					.slice(snippetStart, snippetEnd)
 					.replace(/\n/g, '\\n');
@@ -156,4 +153,3 @@ console.log(
 );
 
 process.exit(allowFailures ? 0 : 1);
-
