@@ -1,3 +1,4 @@
+import { log } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
 import type {
@@ -53,6 +54,7 @@ const logA9BidResponse = (bidResponse: FetchBidResponse[]): void => {
 	window.guardian.commercial ??= {};
 	window.guardian.commercial.a9WinningBids ??= [];
 	window.guardian.commercial.a9WinningBids.push(...bidResponse);
+	log('commercial', 'A9 bid response:', bidResponse);
 };
 
 // slotFlatMap allows you to dynamically interfere with the PrebidSlot definition
