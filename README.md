@@ -23,6 +23,7 @@ You will need to have Docker installed (or at least have a Docker daemon running
 See documentation available at https://github.com/guardian/devenv for extra information and help with development containers.
 
 When updating the `devenv.yaml` file, ensure that you regenerate the resulting devcontainer.json files by running `devenv generate`.
+VSCode users: You will need to install the Dev Conatiner extension otherwise the prompt to rebuild won't appear.
 Your IDE should prompt you to rebuild your dev container when this is done.
 All usual commands should be available from within the dev container.
 
