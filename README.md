@@ -20,6 +20,7 @@ There are 2 packages in this repo:
 
 Please use the [.devcontainer](.devcontainer) configuration to open your IDE in an isolated development environment ie. a [dev container](https://containers.dev).
 You will need to have Docker installed (or at least have a Docker daemon running).
+You will also need to install the Dev Conatiner extension otherwise the prompt to rebuild won't appear.
 See documentation available at https://github.com/guardian/devenv for extra information and help with development containers.
 
 When updating the `devenv.yaml` file, ensure that you regenerate the resulting devcontainer.json files by running `devenv generate`.
