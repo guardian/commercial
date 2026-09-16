@@ -11,10 +11,12 @@ import { dfpEnv } from '../../lib/dfp/dfp-env';
 import { queueAdvert } from '../../lib/dfp/queue-advert';
 import { setupPrebidOnce } from './prepare-prebid';
 import { removeDisabledSlots } from './remove-slots';
+import { isUserInTestGroup } from '../../ab-testing';
 
 const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 	const { contentType } = window.guardian.config.page;
 	const { name } = adSlot.dataset;
+	const isInArticleEndHeaderBiddingTest = isUserInTestGroup('commercial-article-end-header-bidding', 'variant');
 
 	if (contentType === 'Gallery' && name?.includes('inline')) {
 		return {
@@ -49,9 +51,9 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 				};
 	}
 
-	if (name === 'article-end' && isInUsa()) {
+	if (name === 'article-end' && isInUsa() && isInArticleEndHeaderBiddingTest) {
 		return {
-			mobile: [adSizes.fluid],
+			mobile: [adSizes.mpu],
 		};
 	}
 

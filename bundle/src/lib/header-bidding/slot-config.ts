@@ -10,6 +10,8 @@ import type {
 	SlotFlatMap,
 } from './prebid-types';
 import { getBreakpointKey, shouldIncludeMobileSticky } from './utils';
+import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
+import { isUserInTestGroup } from '../../ab-testing';
 
 const getHbBreakpoint = () => {
 	switch (getBreakpointKey()) {
@@ -116,6 +118,7 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 	const isArticle = contentType === 'Article';
 	const hasExtendedMostPop =
 		isArticle && window.guardian.config.switches.extendedMostPopular;
+	const isInArticleEndHeaderBiddingTest = isUserInTestGroup('commercial-article-end-header-bidding', 'variant');
 
 	return {
 		right: {
@@ -250,6 +253,12 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 			mobile: [getAdSize('mpu')],
 			desktop: [getAdSize('billboard')],
 		},
+		'article-end': {
+			// Add also the 0% test condition in here
+			mobile: isInUsa() && isInArticleEndHeaderBiddingTest ? [getAdSize('mpu')] : [],
+			tablet: isInUsa() && isInArticleEndHeaderBiddingTest ? [getAdSize('mpu')] : [],
+			desktop: isInUsa() && isInArticleEndHeaderBiddingTest ? [getAdSize('mpu')] : [],
+		}
 	};
 };
 

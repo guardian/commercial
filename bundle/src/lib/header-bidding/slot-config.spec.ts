@@ -1,6 +1,8 @@
 import type { SizeMapping } from '@guardian/commercial-core/ad-sizes';
 import { adSizes, createAdSize } from '@guardian/commercial-core/ad-sizes';
+import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { Advert } from '../../define/Advert';
+import { isUserInTestGroup } from '../../ab-testing';
 import { getHeaderBiddingAdSlots } from './slot-config';
 import type * as Utils from './utils';
 import { getBreakpointKey, shouldIncludeMobileSticky } from './utils';
@@ -16,6 +18,14 @@ jest.mock('./utils', () => {
 
 jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
+}));
+
+jest.mock('@guardian/commercial-core/geo/geo-utils', () => ({
+	isInUsa: jest.fn(),
+}));
+
+jest.mock('../../ab-testing', () => ({
+	isUserInTestGroup: jest.fn(),
 }));
 
 jest.mock('@guardian/commercial-core/targeting/teads-eligibility', () => ({
@@ -52,6 +62,11 @@ const buildAdvert = (name: string, sizes?: SizeMapping, id?: string) => {
 	elt.setAttribute('data-name', name);
 	return new Advert(elt, sizes);
 };
+
+const mockIsInUsa = isInUsa as jest.MockedFunction<typeof isInUsa>;
+const mockIsUserInTestGroup = isUserInTestGroup as jest.MockedFunction<
+	typeof isUserInTestGroup
+>;
 
 describe('getPrebidAdSlots', () => {
 	test('should return the correct top-above-nav slot at breakpoint D', () => {
@@ -114,6 +129,41 @@ describe('getPrebidAdSlots', () => {
 			{
 				key: 'mobile-sticky',
 				sizes: [createAdSize(320, 50), createAdSize(300, 50)],
+			},
+		]);
+	});
+
+	test.each([
+		['UK', false, true],
+		['USA control group', true, false],
+	] as const)(
+		'should not return an article-end slot for %s',
+		(_, inUsa, inTestGroup) => {
+			(getBreakpointKey as jest.Mock).mockReturnValue('M');
+			mockIsInUsa.mockReturnValue(inUsa);
+			mockIsUserInTestGroup.mockReturnValue(inTestGroup);
+
+			expect(
+				getHeaderBiddingAdSlots(
+					buildAdvert('article-end', { mobile: [adSizes.mpu] }),
+				),
+			).toEqual([]);
+		},
+	);
+
+	test('should return an article-end MPU slot for the USA variant group', () => {
+		(getBreakpointKey as jest.Mock).mockReturnValue('M');
+		mockIsInUsa.mockReturnValue(true);
+		mockIsUserInTestGroup.mockReturnValue(true);
+
+		expect(
+			getHeaderBiddingAdSlots(
+				buildAdvert('article-end', { mobile: [adSizes.mpu] }),
+			),
+		).toEqual([
+			{
+				key: 'article-end',
+				sizes: [createAdSize(300, 250)],
 			},
 		]);
 	});
