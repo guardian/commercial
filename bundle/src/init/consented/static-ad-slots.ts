@@ -16,7 +16,10 @@ import { removeDisabledSlots } from './remove-slots';
 const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 	const { contentType } = window.guardian.config.page;
 	const { name } = adSlot.dataset;
-	const isInArticleEndHeaderBiddingTest = isUserInTestGroup('commercial-article-end-header-bidding', 'variant');
+	const isInArticleEndHeaderBiddingTest = isUserInTestGroup(
+		'commercial-article-end-header-bidding',
+		'variant',
+	);
 
 	if (contentType === 'Gallery' && name?.includes('inline')) {
 		return {
@@ -51,7 +54,11 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 				};
 	}
 
-	if (name === 'article-end' && isInUsa() && isInArticleEndHeaderBiddingTest) {
+	if (
+		name === 'article-end' &&
+		isInUsa() &&
+		isInArticleEndHeaderBiddingTest
+	) {
 		return {
 			mobile: [adSizes.mpu],
 		};
