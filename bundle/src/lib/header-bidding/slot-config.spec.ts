@@ -1,8 +1,8 @@
 import type { SizeMapping } from '@guardian/commercial-core/ad-sizes';
 import { adSizes, createAdSize } from '@guardian/commercial-core/ad-sizes';
 import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
-import { Advert } from '../../define/Advert';
 import { isUserInTestGroup } from '../../ab-testing';
+import { Advert } from '../../define/Advert';
 import { getHeaderBiddingAdSlots } from './slot-config';
 import type * as Utils from './utils';
 import { getBreakpointKey, shouldIncludeMobileSticky } from './utils';

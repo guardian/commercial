@@ -1,6 +1,8 @@
 import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
+import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import type { Size } from 'prebid.js/dist/src/types/common';
+import { isUserInTestGroup } from '../../ab-testing';
 import type { Advert } from '../../define/Advert';
 import type {
 	HeaderBiddingSizeKey,
@@ -10,8 +12,6 @@ import type {
 	SlotFlatMap,
 } from './prebid-types';
 import { getBreakpointKey, shouldIncludeMobileSticky } from './utils';
-import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
-import { isUserInTestGroup } from '../../ab-testing';
 
 const getHbBreakpoint = () => {
 	switch (getBreakpointKey()) {

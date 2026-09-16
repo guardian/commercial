@@ -2,6 +2,7 @@ import type { SizeMapping } from '@guardian/commercial-core/ad-sizes';
 import { adSizes, createAdSize } from '@guardian/commercial-core/ad-sizes';
 import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { isNonNullable, log } from '@guardian/libs';
+import { isUserInTestGroup } from '../../ab-testing';
 import { createAdvert } from '../../define/create-advert';
 import { displayAds } from '../../display/display-ads';
 import { displayLazyAds } from '../../display/display-lazy-ads';
@@ -11,7 +12,6 @@ import { dfpEnv } from '../../lib/dfp/dfp-env';
 import { queueAdvert } from '../../lib/dfp/queue-advert';
 import { setupPrebidOnce } from './prepare-prebid';
 import { removeDisabledSlots } from './remove-slots';
-import { isUserInTestGroup } from '../../ab-testing';
 
 const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 	const { contentType } = window.guardian.config.page;
