@@ -257,7 +257,6 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 			desktop: [getAdSize('billboard')],
 		},
 		'article-end': {
-			// Add also the 0% test condition in here
 			mobile:
 				isInUsa() && isInArticleEndHeaderBiddingTest
 					? [getAdSize('mpu')]
