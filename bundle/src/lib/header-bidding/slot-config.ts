@@ -1,6 +1,8 @@
 import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
+import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import type { Size } from 'prebid.js/dist/src/types/common';
+import { isUserInTestGroup } from '../../ab-testing';
 import type { Advert } from '../../define/Advert';
 import type {
 	HeaderBiddingSizeKey,
@@ -116,6 +118,10 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 	const isArticle = contentType === 'Article';
 	const hasExtendedMostPop =
 		isArticle && window.guardian.config.switches.extendedMostPopular;
+	const isInArticleEndHeaderBiddingTest = isUserInTestGroup(
+		'commercial-article-end-header-bidding',
+		'variant',
+	);
 
 	return {
 		right: {
@@ -249,6 +255,20 @@ const getSlotSizeMapping = (): HeaderBiddingSizeMapping => {
 		'merchandising-high': {
 			mobile: [getAdSize('mpu')],
 			desktop: [getAdSize('billboard')],
+		},
+		'article-end': {
+			mobile:
+				isInUsa() && isInArticleEndHeaderBiddingTest
+					? [getAdSize('mpu')]
+					: [],
+			tablet:
+				isInUsa() && isInArticleEndHeaderBiddingTest
+					? [getAdSize('mpu')]
+					: [],
+			desktop:
+				isInUsa() && isInArticleEndHeaderBiddingTest
+					? [getAdSize('mpu')]
+					: [],
 		},
 	};
 };
