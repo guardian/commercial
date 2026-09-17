@@ -40,7 +40,7 @@
 		"@babel/preset-react": "8.0.1",
 		"@guardian/browserslist-config": "8.0.0",
 		"@guardian/commercial-core": "workspace:*",
-		"@guardian/consent-manager": "2.1.0",
+		"@guardian/consent-manager": "2.1.2",
 		"@guardian/core-web-vitals": "22.0.0",
 		"@guardian/identity-auth": "18.0.0",
 		"@guardian/identity-auth-frontend": "20.1.0",

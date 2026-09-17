@@ -49,7 +49,7 @@
 	},
 	"dependencies": {
 		"@guardian/libs": "33.0.0",
-		"@guardian/consent-manager": "2.1.0"
+		"@guardian/consent-manager": "2.1.2"
 	},
 	"devDependencies": {
 		"@guardian/ophan-tracker-js": "5.1.3",
