@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 35.1.1
+
+### Patch Changes
+
+- dc69ded: Added constant for APS timeout
+
 ## 35.1.0
 
 ### Minor Changes
