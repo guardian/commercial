@@ -188,7 +188,7 @@ describe('Advert', () => {
 			const ad = new Advert(slot);
 
 			const listener = jest.fn();
-			globalAdEvents.addEventListener('adStatusChange', listener);
+			globalAdEvents?.addEventListener('adStatusChange', listener);
 
 			ad.setStatus('loading', true);
 
@@ -201,7 +201,7 @@ describe('Advert', () => {
 				}),
 			);
 
-			globalAdEvents.removeEventListener('adStatusChange', listener);
+			globalAdEvents?.removeEventListener('adStatusChange', listener);
 		});
 		it('should dispatch adStatusChange on globalAdEvents when status changes on multiple adverts', () => {
 			const slot = document.createElement('div');
@@ -211,7 +211,7 @@ describe('Advert', () => {
 
 			const listener = jest.fn();
 
-			globalAdEvents.addEventListener('adStatusChange', listener);
+			globalAdEvents?.addEventListener('adStatusChange', listener);
 
 			ad1.setStatus('loading', true);
 			ad2.setStatus('loaded', true);
@@ -233,7 +233,7 @@ describe('Advert', () => {
 				}),
 			);
 
-			globalAdEvents.removeEventListener('adStatusChange', listener);
+			globalAdEvents?.removeEventListener('adStatusChange', listener);
 		});
 		it('should dispatch adStatusChange on globalAdEvents when multiple status changes on the same advert', () => {
 			const slot = document.createElement('div');
@@ -242,7 +242,7 @@ describe('Advert', () => {
 
 			const listener = jest.fn();
 
-			globalAdEvents.addEventListener('adStatusChange', listener);
+			globalAdEvents?.addEventListener('adStatusChange', listener);
 
 			ad1.setStatus('loading', true);
 			ad1.setStatus('rendered', true);
@@ -264,7 +264,7 @@ describe('Advert', () => {
 				}),
 			);
 
-			globalAdEvents.removeEventListener('adStatusChange', listener);
+			globalAdEvents?.removeEventListener('adStatusChange', listener);
 		});
 		it('should dispatch adStatusChange on globalAdEvents when listener is removed', () => {
 			const slot = document.createElement('div');
@@ -273,11 +273,11 @@ describe('Advert', () => {
 
 			const listener = jest.fn();
 
-			globalAdEvents.addEventListener('adStatusChange', listener);
+			globalAdEvents?.addEventListener('adStatusChange', listener);
 
 			ad.setStatus('loading', true);
 
-			globalAdEvents.removeEventListener('adStatusChange', listener);
+			globalAdEvents?.removeEventListener('adStatusChange', listener);
 			ad.setStatus('rendered', true);
 
 			expect(listener).toHaveBeenCalledTimes(1);
@@ -290,15 +290,15 @@ describe('Advert', () => {
 			const listener1 = jest.fn();
 			const listener2 = jest.fn();
 
-			globalAdEvents.addEventListener('adStatusChange', listener1);
-			globalAdEvents.addEventListener('adStatusChange', listener2);
+			globalAdEvents?.addEventListener('adStatusChange', listener1);
+			globalAdEvents?.addEventListener('adStatusChange', listener2);
 
 			ad.setStatus('loading', true);
 
 			expect(listener1).toHaveBeenCalledTimes(1);
 			expect(listener2).toHaveBeenCalledTimes(1);
-			globalAdEvents.removeEventListener('adStatusChange', listener1);
-			globalAdEvents.removeEventListener('adStatusChange', listener2);
+			globalAdEvents?.removeEventListener('adStatusChange', listener1);
+			globalAdEvents?.removeEventListener('adStatusChange', listener2);
 		});
 	});
 
