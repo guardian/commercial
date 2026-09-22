@@ -5,6 +5,7 @@ import type { ContainerOptions } from '../../lib/create-ad-slot';
 import {
 	adSlotContainerClass,
 	createAdSlot,
+	spacefinderAdSlotContainerClass,
 	wrapSlotInContainer,
 } from '../../lib/create-ad-slot';
 import {
@@ -128,7 +129,13 @@ const addDesktopInline1 = (fillSlot: FillAdSlot): Promise<boolean> => {
 	const insertAd: SpacefinderWriter = async (paras) => {
 		const slots = paras.slice(0, 1).map(async (para) => {
 			const name = 'inline1';
-			const slot = await insertSlotAtPara(para, name, 'inline', 'inline');
+			const slot = await insertSlotAtPara(
+				para,
+				name,
+				'inline',
+				'inline',
+				{ className: spacefinderAdSlotContainerClass },
+			);
 			await fillSlot(name, slot, additionalSizes);
 		});
 
@@ -181,6 +188,7 @@ const addDesktopRightRailAds = ({
 				getStickyContainerClassname(i),
 				'ad-slot-container--right-column', // float the ad to the right and sets max width and transparent background https://github.com/guardian/dotcom-rendering/blob/main/dotcom-rendering/src/lib/adStyles.ts#L161
 				standardArticleGrid && 'ad-slot-container--offset-right', // adds a negative margin to push the ad into the right rail, this isn't needed if the article body is full width
+				spacefinderAdSlotContainerClass, // Indicates that this is an ad slot container added via spacefinder
 			]
 				.filter(Boolean)
 				.join(' ');
@@ -272,6 +280,7 @@ const addMobileAndTabletInlineAds = (
 				name,
 				isMobile && i === 0 ? 'top-above-nav' : 'inline',
 				'inline',
+				{ className: spacefinderAdSlotContainerClass },
 			);
 
 			return fillSlot(
