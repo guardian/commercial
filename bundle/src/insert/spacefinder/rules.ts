@@ -1,4 +1,5 @@
 import { adSizes } from '@guardian/commercial-core/ad-sizes';
+import { isInAuOrNz } from '@guardian/commercial-core/geo/geo-utils';
 import { isUserInTestGroup } from '../../ab-testing';
 import { adSlotContainerClass } from '../../lib/create-ad-slot';
 import type { OpponentSelectorRules, SpacefinderRules } from './spacefinder';
@@ -8,7 +9,15 @@ const adSlotContainerSelector = `.${adSlotContainerClass}`;
 
 const isInRichLinkTest = isUserInTestGroup('commercial-rich-links', 'variant');
 
-const highValueSections = [
+const isInHighValueSectionsSet2Variant = isUserInTestGroup(
+	'commercial-spacefinder-highvalue-sections-set2',
+	'variant',
+);
+
+const isEligibleForHighValueSectionsSet2 =
+	isInHighValueSectionsSet2Variant && !isInAuOrNz();
+
+const originalHighValueSections = [
 	'business',
 	'environment',
 	'music',
@@ -26,7 +35,19 @@ const highValueSections = [
 	'sport',
 ];
 
-const isInHighValueSection = highValueSections.includes(
+const highValueSections = [
+	...originalHighValueSections,
+	...(isEligibleForHighValueSectionsSet2
+		? ['tv-and-radio', 'film', 'society', 'culture', 'food']
+		: []),
+];
+
+const isInHighValueSections = highValueSections.includes(
+	window.guardian.config.page.section,
+);
+
+// desktop only — excludes test sections so variant doesn't affect heading margins
+const isInOriginalHighValueSections = originalHighValueSections.includes(
 	window.guardian.config.page.section,
 );
 
@@ -52,7 +73,7 @@ const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
 
 const minDistanceBetweenRightRailAds = 500;
-const minDistanceBetweenInlineAds = isInHighValueSection ? 500 : 750;
+const minDistanceBetweenInlineAds = isInHighValueSections ? 500 : 750;
 
 const candidateSelector = ':scope > p, [data-spacefinder-role="nested"] > p';
 
@@ -77,7 +98,7 @@ const headingSelector = `:scope > h2, [data-spacefinder-role="nested"] > h2, :sc
 const desktopInline1OpponentSelectorRules: OpponentSelectorRules = {
 	[headingSelector]: {
 		marginBottom: 150, // don't place ads right after a heading
-		marginTop: isInHighValueSection ? 0 : 190,
+		marginTop: isInOriginalHighValueSections ? 0 : 190,
 	},
 	[adSlotContainerSelector]: {
 		marginBottom: 500,
