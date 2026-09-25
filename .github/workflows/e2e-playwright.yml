@@ -1,6 +1,7 @@
 name: E2E
 permissions:
   contents: read
+  id-token: write
 on:
   push:
     branches:
@@ -16,7 +17,7 @@ jobs:
   test:
     name: Playwright
     timeout-minutes: 30
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     strategy:
       fail-fast: false
       matrix:
@@ -29,21 +30,44 @@ jobs:
       - name: Set up Node
         uses: ./.github/actions/setup-node-env
 
-      # We always run our commercial code against the latest main of DCR
-      # This does make our tests sensitive to changes in DCR
-      # (e.g. imagine someone removes the top-above-nav slot from DCR)
-      # This is something we accept in order to easily test our own code
-      #
-      # Note we use the containerised version of DCR, published from:
-      # https://github.com/guardian/dotcom-rendering/blob/6a6df272/.github/workflows/container.yml
-      #
-      # The argument `--network host` is crucial here, as it means the container shares the networking stack of the host
-      # This makes the commercial dev server available from inside the container
-      # Note that GHA provides a service container feature, but it does not support this argument
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6.2.3
+        with:
+          role-to-assume: ${{ secrets.GU_ARTIFACTS_ROLE_ARN }}
+          aws-region: eu-west-1
+          mask-aws-account-id: 'true'
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2.1.6
+        with:
+          mask-password: 'true'
+
       - name: Start DCR in a container
         id: start-dcr-container
         continue-on-error: true
-        run: ./scripts/start_dcr_container.sh
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          IMAGE="$REGISTRY/guardian/dotcom-rendering:branch-main"
+
+          docker pull $IMAGE
+          docker run -d \
+            --network host \
+            -p 3030:3032 \
+            -e "PORT=3030" \
+            -e "COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js" \
+            $IMAGE
+
+      - name: Clear AWS credentials
+        if: always()
+        shell: bash
+        run: |
+          echo "AWS_ACCESS_KEY_ID=''" >>"$GITHUB_ENV"
+          echo "AWS_SECRET_ACCESS_KEY=''" >>"$GITHUB_ENV"
+          echo "AWS_SESSION_TOKEN=''" >>"$GITHUB_ENV"
+          echo "AWS_DEFAULT_REGION=''" >>"$GITHUB_ENV"
+          echo "AWS_REGION=''" >>"$GITHUB_ENV"
 
       - name: Report if "start DCR in a container" step failed
         if: ${{ steps.start-dcr-container.outcome == 'failure' }}
