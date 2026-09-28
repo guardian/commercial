@@ -48,6 +48,19 @@ jobs:
         with:
           mask-password: 'true'
 
+      # Clear AWS credentials (stored in environment variables) to avoid leaking them to any subsequent steps
+      # See https://github.com/aws-actions/configure-aws-credentials/issues/1308
+      # TODO abstract this into a reusable GitHub Action e.g. https://github.com/guardian/actions-publish-image
+      - name: AWS ECR clear credentials
+        if: always()
+        shell: bash
+        run: |
+          echo "AWS_ACCESS_KEY_ID=''" >>"$GITHUB_ENV"
+          echo "AWS_SECRET_ACCESS_KEY=''" >>"$GITHUB_ENV"
+          echo "AWS_SESSION_TOKEN=''" >>"$GITHUB_ENV"
+          echo "AWS_DEFAULT_REGION=''" >>"$GITHUB_ENV"
+          echo "AWS_REGION=''" >>"$GITHUB_ENV"
+
       # TODO abstract this into a reusable GitHub Action e.g. https://github.com/guardian/actions-publish-image
       - name: AWS ECR pull image
         id: ecr-pull
@@ -86,19 +99,6 @@ jobs:
             -e "DISABLE_LOGGING_AND_METRICS=true" \
             -e "COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js" \
             $IMAGE
-
-      # Clear AWS credentials (stored in environment variables) to avoid leaking them to any subsequent steps
-      # See https://github.com/aws-actions/configure-aws-credentials/issues/1308
-      # TODO abstract this into a reusable GitHub Action e.g. https://github.com/guardian/actions-publish-image
-      - name: AWS ECR clear credentials
-        if: always()
-        shell: bash
-        run: |
-          echo "AWS_ACCESS_KEY_ID=''" >>"$GITHUB_ENV"
-          echo "AWS_SECRET_ACCESS_KEY=''" >>"$GITHUB_ENV"
-          echo "AWS_SESSION_TOKEN=''" >>"$GITHUB_ENV"
-          echo "AWS_DEFAULT_REGION=''" >>"$GITHUB_ENV"
-          echo "AWS_REGION=''" >>"$GITHUB_ENV"
 
       - name: Report if "start DCR in a container" step failed
         if: ${{ steps.start-dcr-container.outcome == 'failure' }}
