@@ -1125,16 +1125,6 @@ describe('getOzonePlacementId', () => {
 		expect(getOzonePlacementId([[300, 250]])).toBe('3500028041');
 	});
 
-	test('should use the existing placementID for AU/NZ users outside the test group', () => {
-		isInAuOrNz.mockReturnValue(true);
-		getBreakpointKey.mockReturnValue('M');
-		containsMpu.mockReturnValue(true);
-		jest.mocked(isUserInTestGroup).mockReturnValue(false);
-		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline2')).toBe(
-			'1500001025',
-		);
-	});
-
 	test('should NOT return hangtime for non-inline2 mobile MPU slots', () => {
 		isInUsa.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');

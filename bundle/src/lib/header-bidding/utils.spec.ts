@@ -5,6 +5,7 @@ import {
 	getConsentFor as getConsentFor_,
 } from '@guardian/consent-manager';
 import type { CountryCode } from '@guardian/libs';
+import { isUserInTestGroup } from '../../ab-testing';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
@@ -71,6 +72,9 @@ jest.mock('lib/detect/detect-breakpoint', () => ({
 
 jest.mock('lib/should-load-ads', () => ({
 	shouldLoadAds: jest.fn(),
+}));
+jest.mock('../../ab-testing', () => ({
+	isUserInTestGroup: jest.fn(),
 }));
 
 const resetConfig = () => {
@@ -242,6 +246,26 @@ describe('Utils', () => {
 					getConsentFor.mockReturnValue(true);
 					expect(shouldInclude('oxd')).toBe(true);
 				}
+			});
+		});
+
+		describe('shouldIncludeOzone', () => {
+			test('should return false for AU/NZ users outside the test group', () => {
+				window.guardian.config.switches.prebidOzone = true;
+				getLocale.mockReturnValue('AU');
+				getConsentFor.mockReturnValue(true);
+				jest.mocked(isUserInTestGroup).mockReturnValue(false);
+
+				expect(shouldInclude('ozone')).toBe(false);
+			});
+
+			test('should return true for AU/NZ users in the test group', () => {
+				window.guardian.config.switches.prebidOzone = true;
+				getLocale.mockReturnValue('NZ');
+				getConsentFor.mockReturnValue(true);
+				jest.mocked(isUserInTestGroup).mockReturnValue(true);
+
+				expect(shouldInclude('ozone')).toBe(true);
 			});
 		});
 

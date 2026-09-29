@@ -375,9 +375,7 @@ const getOzonePlacementId = (
 	slotId?: string,
 	pageTargeting?: PageTargeting,
 ) => {
-	if (
-		isInAuOrNz()
-	) {
+	if (isInAuOrNz()) {
 		if (getBreakpointKey() === 'M') {
 			if (containsMobileLeaderboard(sizes)) {
 				return '3500028042';
