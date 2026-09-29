@@ -1,3 +1,4 @@
+import { log } from '@guardian/libs';
 import { flatten } from 'lodash-es';
 import type { Advert } from '../../../define/Advert';
 import type {
@@ -5,14 +6,15 @@ import type {
 	FetchBidResponse,
 } from '../../../types/global';
 import { reportError } from '../../error/report-error';
+import { getAuctionTimeoutValue } from '../../header_bidder_timeouts';
 import type { HeaderBiddingSlot, SlotFlatMap } from '../prebid-types';
 import { getHeaderBiddingAdSlots } from '../slot-config';
+import { shouldLoadA9 } from '../utils';
 
 /*
  * Amazon's header bidding javascript library
  * https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/javascript-guide/display.html
  */
-
 class A9AdUnit implements A9AdUnitInterface {
 	slotID: string;
 	slotName?: string;
@@ -28,9 +30,9 @@ class A9AdUnit implements A9AdUnitInterface {
 let initialised = false;
 let requestQueue = Promise.resolve();
 
-const bidderTimeout = 1500;
-
 const initialise = (): void => {
+	const auctionTimeout = getAuctionTimeoutValue();
+
 	if (!initialised && window.apstag) {
 		initialised = true;
 		const blockedBidders = window.guardian.config.page.isFront
@@ -42,7 +44,7 @@ const initialise = (): void => {
 		window.apstag.init({
 			pubID: window.guardian.config.page.a9PublisherId,
 			adServer: 'googletag',
-			bidTimeout: bidderTimeout,
+			bidTimeout: auctionTimeout,
 			blockedBidders,
 		});
 	}
@@ -52,6 +54,7 @@ const logA9BidResponse = (bidResponse: FetchBidResponse[]): void => {
 	window.guardian.commercial ??= {};
 	window.guardian.commercial.a9WinningBids ??= [];
 	window.guardian.commercial.a9WinningBids.push(...bidResponse);
+	log('commercial', 'A9 bid response:', bidResponse);
 };
 
 // slotFlatMap allows you to dynamically interfere with the PrebidSlot definition
@@ -60,11 +63,7 @@ const requestBids = async (
 	adverts: Advert[],
 	slotFlatMap?: SlotFlatMap,
 ): Promise<void> => {
-	if (!initialised) {
-		return requestQueue;
-	}
-
-	if (!window.guardian.config.switches.a9HeaderBidding) {
+	if (!shouldLoadA9() || !initialised) {
 		return requestQueue;
 	}
 

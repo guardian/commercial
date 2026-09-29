@@ -150,8 +150,7 @@ const getSpaceFillerRules = (
 };
 
 /**
- * Recursively looks at the next highest element
- * in the page until we find a content block.
+ * Recursively looks at the next highest element in the page until we find a content block.
  *
  * We cannot be sure that the element above the ad slot is a content
  * block, as there may be other types of elements inserted into the page.

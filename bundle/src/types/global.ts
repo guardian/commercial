@@ -91,6 +91,7 @@ type Stage = 'DEV' | 'CODE' | 'PROD';
 interface PageConfig extends CommercialPageConfig {
 	ajaxUrl?: string; // https://github.com/guardian/frontend/blob/33db7bbd/common/app/views/support/JavaScriptPage.scala#L72
 	assetsPath: string;
+	atoms?: string[];
 	author: string;
 	authorIds: string;
 	blogIds: string;

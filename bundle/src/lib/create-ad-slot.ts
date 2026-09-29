@@ -140,6 +140,8 @@ type ContainerOptions = {
 
 const adSlotContainerClass = 'ad-slot-container';
 
+const spacefinderAdSlotContainerClass = 'ad-slot-container-sf';
+
 const wrapSlotInContainer = (
 	adSlot: HTMLElement,
 	options: ContainerOptions = {},
@@ -177,6 +179,7 @@ const createAdSlot = (
 
 export {
 	adSlotContainerClass,
+	spacefinderAdSlotContainerClass,
 	concatSizeMappings,
 	createAdSlot,
 	wrapSlotInContainer,

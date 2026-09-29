@@ -10,12 +10,14 @@ import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
 	matchesBreakpoints as matchesBreakpoints_,
 } from '../detect/detect-breakpoint';
+import { shouldLoadAds } from '../should-load-ads';
 import {
 	getBreakpointKey,
 	getLargestSize,
 	removeFalsyValues,
 	shouldIncludeBidder,
 	shouldIncludeMobileSticky,
+	shouldLoadPrebid,
 	stripDfpAdPrefixFrom,
 	stripMobileSuffix,
 	stripTrailingNumbersAbove1,
@@ -65,6 +67,10 @@ jest.mock('@guardian/commercial-core/geo/get-locale', () => ({
 jest.mock('lib/detect/detect-breakpoint', () => ({
 	getCurrentTweakpoint: jest.fn(() => 'mobile'),
 	matchesBreakpoints: jest.fn(),
+}));
+
+jest.mock('lib/should-load-ads', () => ({
+	shouldLoadAds: jest.fn(),
 }));
 
 const resetConfig = () => {
@@ -470,6 +476,118 @@ describe('Utils', () => {
 			getLocale.mockReturnValue('US');
 			window.location.hash = '#mobile-sticky';
 			expect(shouldIncludeMobileSticky()).toBe(true);
+		});
+	});
+
+	describe('Header bidding', () => {
+		const originalUA = navigator.userAgent;
+		const fakeUserAgent = (userAgent?: string) => {
+			Object.defineProperty(navigator, 'userAgent', {
+				get: () => userAgent ?? originalUA,
+				configurable: true,
+			});
+		};
+
+		describe('shouldLoadPrebid', () => {
+			beforeEach(() => {
+				jest.resetAllMocks();
+				jest.mocked(shouldLoadAds).mockReturnValue(true);
+				fakeUserAgent();
+				window.guardian.config.switches = {};
+			});
+
+			it('should return true when Prebid switch is ON and advertising is on and ad-free is off', () => {
+				expect.hasAssertions();
+				window.guardian.config.switches = {
+					prebidHeaderBidding: true,
+				};
+				expect(shouldLoadPrebid()).toBe(true);
+			});
+
+			it('should return false when useragent is Google Web Preview', () => {
+				expect.hasAssertions();
+				window.guardian.config.switches = {
+					prebidHeaderBidding: true,
+				};
+				fakeUserAgent('Google Web Preview');
+
+				expect(shouldLoadPrebid()).toBe(false);
+			});
+
+			it('should return false when no header bidding switches are on', () => {
+				expect.hasAssertions();
+
+				window.guardian.config.switches = {
+					prebidHeaderBidding: false,
+				};
+
+				expect(shouldLoadPrebid()).toBe(false);
+			});
+
+			it('should return true when NOT in Canada', () => {
+				expect.hasAssertions();
+
+				window.guardian.config.switches = {
+					prebidHeaderBidding: true,
+				};
+
+				expect(shouldLoadPrebid()).toBe(true);
+			});
+
+			it('should return false when in Canada', () => {
+				expect.hasAssertions();
+
+				window.guardian.config.switches = {
+					prebidHeaderBidding: true,
+				};
+
+				(getLocale as jest.Mock).mockReturnValueOnce('CA');
+
+				expect(shouldLoadPrebid()).toBe(false);
+			});
+
+			it('should return false when advertising is switched off', () => {
+				expect.hasAssertions();
+
+				window.guardian.config.switches = {
+					prebidHeaderBidding: true,
+				};
+
+				jest.mocked(shouldLoadAds).mockReturnValue(false);
+
+				expect(shouldLoadPrebid()).toBe(false);
+			});
+
+			it('should return false when ads should not load', () => {
+				expect.hasAssertions();
+
+				jest.mocked(shouldLoadAds).mockReturnValue(false);
+				window.guardian.config.switches = {
+					prebidHeaderBidding: true,
+				};
+
+				expect(shouldLoadPrebid()).toBe(false);
+			});
+
+			it('should return false when the page has a pageskin', () => {
+				expect.hasAssertions();
+
+				window.guardian.config.switches = {
+					prebidHeaderBidding: true,
+				};
+				window.guardian.config.page.hasPageSkin = true;
+
+				expect(shouldLoadPrebid()).toBe(false);
+			});
+
+			it('should return true when the page has no pageskin', () => {
+				window.guardian.config.switches = {
+					prebidHeaderBidding: true,
+				};
+				window.guardian.config.page.hasPageSkin = false;
+
+				expect(shouldLoadPrebid()).toBe(true);
+			});
 		});
 	});
 });

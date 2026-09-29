@@ -1,9 +1,6 @@
 import type { AdSize } from '@guardian/commercial-core/ad-sizes';
 import { createAdSize } from '@guardian/commercial-core/ad-sizes';
-import {
-	PREBID_AUCTION_TIMEOUT,
-	PREBID_FAILSAFE_TIMEOUT,
-} from '@guardian/commercial-core/constants/prebid-timeouts';
+import { PREBID_FAILSAFE_TIMEOUT } from '@guardian/commercial-core/constants/header-bidding-timeouts';
 import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/consent-manager';
 import { onConsent } from '@guardian/consent-manager';
@@ -15,6 +12,7 @@ import type { UserSyncConfig } from 'prebid.js/dist/src/userSync';
 import { isUserInTestGroup } from '../../../ab-testing';
 import type { Advert } from '../../../define/Advert';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
+import { getAuctionTimeoutValue } from '../../header_bidder_timeouts';
 import { isUserLoggedIn } from '../../identity/api';
 import { getPageTargeting } from '../../page-targeting';
 import type { SlotFlatMap } from '../prebid-types';
@@ -23,6 +21,7 @@ import {
 	isSwitchedOn,
 	shouldIncludeBidder,
 	shouldIncludePermutive,
+	shouldLoadPrebid,
 	stripDfpAdPrefixFrom,
 } from '../utils';
 import { getGUAnalyticsConfig } from './analytics';
@@ -56,11 +55,13 @@ const initialise = async (
 		'holdback',
 	);
 
+	const auctionTimeout = getAuctionTimeoutValue();
+
 	window.pbjs.setConfig({
 		/**
 		 * The amount of time reserved for the auction
 		 */
-		bidderTimeout: PREBID_AUCTION_TIMEOUT,
+		bidderTimeout: auctionTimeout,
 		/**
 		 * Applying one global floor price of £0.10 for all bids.
 		 */
@@ -204,11 +205,7 @@ const requestBids = async (
 	adverts: Advert[],
 	slotFlatMap?: SlotFlatMap,
 ): Promise<void> => {
-	if (!initialised) {
-		return requestQueue;
-	}
-
-	if (!window.guardian.config.switches.prebidHeaderBidding) {
+	if (!shouldLoadPrebid() || !initialised) {
 		return requestQueue;
 	}
 
