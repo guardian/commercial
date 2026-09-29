@@ -48,6 +48,7 @@ import {
 } from '../../utils';
 import { getAppNexusDirectBidParams } from './appnexus';
 import { getMagniteSiteId, getMagniteZoneId } from './magnite';
+import { isUserInTestGroup } from '../../../../ab-testing';
 
 const isArticle = window.guardian.config.page.contentType === 'Article';
 const isDesktopAndArticle = getBreakpointKey() === 'D' && isArticle;
@@ -370,11 +371,27 @@ const getTeadsParams = (
 	return undefined;
 };
 
+const isInOzoneAuOrNzTestGroup = isUserInTestGroup("commercial-ozone-au-nz-adunit-ids", 'variant')
+
 const getOzonePlacementId = (
 	sizes: Size[],
 	slotId?: string,
 	pageTargeting?: PageTargeting,
 ) => {
+	if (isInOzoneAuOrNzTestGroup) {
+		if (isInAuOrNz()) {
+			if (getBreakpointKey() === 'M') {
+				if (containsMobileLeaderboard(sizes)) {
+					return '3500028042';
+				}
+				if (containsMpu(sizes)) {
+					return '3500028043';
+				}
+			}
+			return '3500028041';
+		}
+	}
+
 	if (slotId === 'dfp-ad--inline1') {
 		return '1500001169';
 	}
