@@ -11,6 +11,7 @@ import { type ConsentState, getConsentFor } from '@guardian/consent-manager';
 import { isString } from '@guardian/libs';
 import { once } from 'lodash-es';
 import type { Size } from 'prebid.js/dist/src/types/common';
+import { isUserInTestGroup } from '../../ab-testing';
 import { isGoogleProxy } from '../../lib/detect/detect-google-proxy';
 import { isSecureContactPage } from '../../lib/is-secure-contact';
 import { shouldLoadAds } from '../../lib/should-load-ads';
@@ -23,6 +24,10 @@ import type { BidderCode } from './prebid-types';
 
 type StringManipulation = (a: string, b: string) => string;
 type RegExpRecords = Record<string, RegExp | undefined>;
+
+const inAusOrNzAndNotInTest = () =>
+	isInAuOrNz() &&
+	!isUserInTestGroup('commercial-ozone-au-nz-adunit-ids', 'variant');
 
 const SUFFIX_REGEXPS: RegExpRecords = {};
 const stripSuffix: StringManipulation = (s, suffix) => {
@@ -201,7 +206,8 @@ export const shouldIncludeBidder =
 				return (
 					isSwitchedOn('prebidOzone') &&
 					getConsentFor('ozone', consentState) &&
-					!isInCanada()
+					!isInCanada() &&
+					!inAusOrNzAndNotInTest()
 				);
 			case 'pubmatic':
 				return (
