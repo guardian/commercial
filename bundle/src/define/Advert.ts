@@ -278,7 +278,7 @@ class Advert extends EventTarget {
 		this.dispatchEvent(
 			new CustomEvent('statusChange', { detail: { name, status } }),
 		);
-		globalAdEvents.dispatchEvent(
+		globalAdEvents?.dispatchEvent(
 			new CustomEvent('adStatusChange', {
 				detail: { advert: this, name, status },
 			}),
