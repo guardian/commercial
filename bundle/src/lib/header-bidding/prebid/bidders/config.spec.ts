@@ -1101,10 +1101,35 @@ describe('getOzonePlacementId', () => {
 		);
 	});
 
-	test('should return correct placementID for hangtime ads in inline2 in AUZ or NZ', () => {
+	test('should return the AUNZ placementID for mobile MPU ads', () => {
 		isInAuOrNz.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
+		jest.mocked(isUserInTestGroup).mockReturnValue(true);
+		expect(getOzonePlacementId([[300, 250]])).toBe('3500028043');
+	});
+
+	test('should return the AUNZ placementID for mobile sticky ads', () => {
+		isInAuOrNz.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMobileLeaderboard.mockReturnValue(true);
+		jest.mocked(isUserInTestGroup).mockReturnValue(true);
+		expect(getOzonePlacementId([[320, 50]])).toBe('3500028042');
+	});
+
+	test('should return the AUNZ placementID for non-mobile MPU and desktop ads', () => {
+		isInAuOrNz.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('D');
+		containsMpuOrDmpu.mockReturnValue(true);
+		jest.mocked(isUserInTestGroup).mockReturnValue(true);
+		expect(getOzonePlacementId([[300, 250]])).toBe('3500028041');
+	});
+
+	test('should use the existing placementID for AU/NZ users outside the test group', () => {
+		isInAuOrNz.mockReturnValue(true);
+		getBreakpointKey.mockReturnValue('M');
+		containsMpu.mockReturnValue(true);
+		jest.mocked(isUserInTestGroup).mockReturnValue(false);
 		expect(getOzonePlacementId([[300, 250]], 'dfp-ad--inline2')).toBe(
 			'1500001025',
 		);

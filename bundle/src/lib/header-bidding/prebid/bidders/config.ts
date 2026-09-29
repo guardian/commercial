@@ -10,6 +10,7 @@ import type { ConsentState } from '@guardian/consent-manager';
 import { log } from '@guardian/libs';
 import type { AdUnitBidDefinition } from 'prebid.js/dist/src/adUnits';
 import type { Size } from 'prebid.js/dist/src/types/common';
+import { isUserInTestGroup } from '../../../../ab-testing';
 import type { PrebidIndexSite } from '../../../../types/global';
 import { dfpEnv } from '../../../dfp/dfp-env';
 import { buildAppNexusTargetingObject } from '../../../page-targeting';
@@ -48,7 +49,6 @@ import {
 } from '../../utils';
 import { getAppNexusDirectBidParams } from './appnexus';
 import { getMagniteSiteId, getMagniteZoneId } from './magnite';
-import { isUserInTestGroup } from '../../../../ab-testing';
 
 const isArticle = window.guardian.config.page.contentType === 'Article';
 const isDesktopAndArticle = getBreakpointKey() === 'D' && isArticle;
@@ -371,25 +371,24 @@ const getTeadsParams = (
 	return undefined;
 };
 
-const isInOzoneAuOrNzTestGroup = isUserInTestGroup("commercial-ozone-au-nz-adunit-ids", 'variant')
-
 const getOzonePlacementId = (
 	sizes: Size[],
 	slotId?: string,
 	pageTargeting?: PageTargeting,
 ) => {
-	if (isInOzoneAuOrNzTestGroup) {
-		if (isInAuOrNz()) {
-			if (getBreakpointKey() === 'M') {
-				if (containsMobileLeaderboard(sizes)) {
-					return '3500028042';
-				}
-				if (containsMpu(sizes)) {
-					return '3500028043';
-				}
+	if (
+		isUserInTestGroup('commercial-ozone-au-nz-adunit-ids', 'variant') &&
+		isInAuOrNz()
+	) {
+		if (getBreakpointKey() === 'M') {
+			if (containsMobileLeaderboard(sizes)) {
+				return '3500028042';
 			}
-			return '3500028041';
+			if (containsMpu(sizes)) {
+				return '3500028043';
+			}
 		}
+		return '3500028041';
 	}
 
 	if (slotId === 'dfp-ad--inline1') {
