@@ -83,7 +83,7 @@ jobs:
       # This makes the commercial dev server available from inside the container
       # Note that GHA provides a service container feature, but it does not support this argument
       #
-      # `GU_STAGE=CI` configures DCR to reference JS assets from the local server, rather than the CDN.
+      # `GU_STAGE=CI` defaults DCR to reference JS assets from the local server, rather than the CDN.
       - name: Start DCR in a container
         id: start-dcr-container
         continue-on-error: true
