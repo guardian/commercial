@@ -112,7 +112,8 @@ const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
 
 const minDistanceBetweenRightRailAds = 500;
-const minDistanceBetweenInlineAds = isInHighValueSections || isInHighValueSectionsAusAndNz ? 500 : 750;
+const minDistanceBetweenInlineAds =
+	isInHighValueSections || isInHighValueSectionsAusAndNz ? 500 : 750;
 
 const candidateSelector = ':scope > p, [data-spacefinder-role="nested"] > p';
 
