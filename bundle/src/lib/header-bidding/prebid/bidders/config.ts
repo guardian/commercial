@@ -375,6 +375,18 @@ const getOzonePlacementId = (
 	slotId?: string,
 	pageTargeting?: PageTargeting,
 ) => {
+	if (isInAuOrNz()) {
+		if (getBreakpointKey() === 'M') {
+			if (containsMobileLeaderboard(sizes)) {
+				return '3500028042';
+			}
+			if (containsMpu(sizes)) {
+				return '3500028043';
+			}
+		}
+		return '3500028041';
+	}
+
 	if (slotId === 'dfp-ad--inline1') {
 		return '1500001169';
 	}
