@@ -14,8 +14,16 @@ const isInHighValueSectionsSet2Variant = isUserInTestGroup(
 	'variant',
 );
 
+const isInHighValueSectionsAusAndNzVariant = isUserInTestGroup(
+	'commercial-spacefinder-highvalue-sections-aus-and-nz',
+	'variant',
+);
+
 const isEligibleForHighValueSectionsSet2 =
 	isInHighValueSectionsSet2Variant && !isInAuOrNz();
+
+const isEligibleForHighValueSectionsAusAndNz =
+	isInHighValueSectionsAusAndNzVariant && isInAuOrNz();
 
 const originalHighValueSections = [
 	'business',
@@ -35,6 +43,28 @@ const originalHighValueSections = [
 	'sport',
 ];
 
+const AusAndNzSections = [
+	'global-development',
+	'media',
+	'society',
+	'books',
+	'technology',
+	'news',
+	'tv-and-radio',
+	'australia-news',
+	'food',
+	'uk-news',
+	'film',
+	'law',
+	'world',
+	'education',
+	'us-news',
+	'culture',
+	'fashion',
+	'profile',
+	'tone',
+];
+
 const highValueSections = [
 	...originalHighValueSections,
 	...(isEligibleForHighValueSectionsSet2
@@ -42,7 +72,16 @@ const highValueSections = [
 		: []),
 ];
 
+const highValueSectionsAusAndNz = [
+	...originalHighValueSections,
+	...(isEligibleForHighValueSectionsAusAndNz ? AusAndNzSections : []),
+];
+
 const isInHighValueSections = highValueSections.includes(
+	window.guardian.config.page.section,
+);
+
+const isInHighValueSectionsAusAndNz = highValueSectionsAusAndNz.includes(
 	window.guardian.config.page.section,
 );
 
@@ -73,7 +112,7 @@ const hasShowcaseMainElement =
 	window.guardian.config.page.hasShowcaseMainElement;
 
 const minDistanceBetweenRightRailAds = 500;
-const minDistanceBetweenInlineAds = isInHighValueSections ? 500 : 750;
+const minDistanceBetweenInlineAds = isInHighValueSections || isInHighValueSectionsAusAndNz ? 500 : 750;
 
 const candidateSelector = ':scope > p, [data-spacefinder-role="nested"] > p';
 
