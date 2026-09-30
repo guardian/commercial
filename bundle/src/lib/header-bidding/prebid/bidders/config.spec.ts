@@ -1105,7 +1105,6 @@ describe('getOzonePlacementId', () => {
 		isInAuOrNz.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMpu.mockReturnValue(true);
-		jest.mocked(isUserInTestGroup).mockReturnValue(true);
 		expect(getOzonePlacementId([[300, 250]])).toBe('3500028043');
 	});
 
@@ -1113,7 +1112,6 @@ describe('getOzonePlacementId', () => {
 		isInAuOrNz.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('M');
 		containsMobileLeaderboard.mockReturnValue(true);
-		jest.mocked(isUserInTestGroup).mockReturnValue(true);
 		expect(getOzonePlacementId([[320, 50]])).toBe('3500028042');
 	});
 
@@ -1121,7 +1119,6 @@ describe('getOzonePlacementId', () => {
 		isInAuOrNz.mockReturnValue(true);
 		getBreakpointKey.mockReturnValue('D');
 		containsMpuOrDmpu.mockReturnValue(true);
-		jest.mocked(isUserInTestGroup).mockReturnValue(true);
 		expect(getOzonePlacementId([[300, 250]])).toBe('3500028041');
 	});
 
