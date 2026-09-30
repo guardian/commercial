@@ -19,7 +19,6 @@ To develop the bundle locally on the bundle, run `pnpm serve` to start a local s
 
     `pnpm serve`
 
-
 #### Outside of a Dev Container
 
 1.  To point DCR to the local commercial bundle, in the `dotcom-rendering/dotcom-rendering` directory run:

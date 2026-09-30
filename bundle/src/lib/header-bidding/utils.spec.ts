@@ -5,7 +5,6 @@ import {
 	getConsentFor as getConsentFor_,
 } from '@guardian/consent-manager';
 import type { CountryCode } from '@guardian/libs';
-import { isUserInTestGroup } from '../../ab-testing';
 import type { SourceBreakpoint } from '../detect/detect-breakpoint';
 import {
 	getCurrentTweakpoint as getCurrentTweakpoint_,
@@ -229,7 +228,6 @@ describe('Utils', () => {
 					expect(shouldInclude('oxd')).toBe(true);
 				}
 			});
-
 			test('should return false if within US region', () => {
 				const testGeos: CountryCode[] = ['CA', 'US'];
 				for (const testGeo of testGeos) {
@@ -250,22 +248,49 @@ describe('Utils', () => {
 		});
 
 		describe('shouldIncludeOzone', () => {
-			test('should return false for AU/NZ users outside the test group', () => {
+			test('should return false if consent not given', () => {
 				window.guardian.config.switches.prebidOzone = true;
-				getLocale.mockReturnValue('AU');
-				getConsentFor.mockReturnValue(true);
-				jest.mocked(isUserInTestGroup).mockReturnValue(false);
-
+				getLocale.mockReturnValueOnce('GB');
+				getConsentFor.mockReturnValue(false);
 				expect(shouldInclude('ozone')).toBe(false);
 			});
-
-			test('should return true for AU/NZ users in the test group', () => {
+			test('should return false if within CA region', () => {
 				window.guardian.config.switches.prebidOzone = true;
-				getLocale.mockReturnValue('NZ');
+				getLocale.mockReturnValueOnce('CA');
 				getConsentFor.mockReturnValue(true);
-				jest.mocked(isUserInTestGroup).mockReturnValue(true);
-
+				expect(shouldInclude('ozone')).toBe(false);
+			});
+			test('should return true if geolocation is GB', () => {
+				window.guardian.config.switches.prebidOzone = true;
+				getLocale.mockReturnValueOnce('GB');
+				getConsentFor.mockReturnValue(true);
 				expect(shouldInclude('ozone')).toBe(true);
+			});
+			test('should return true if within AU region', () => {
+				const testGeos: CountryCode[] = ['NZ', 'AU'];
+				for (const testGeo of testGeos) {
+					window.guardian.config.switches.prebidOzone = true;
+					getLocale.mockReturnValue(testGeo);
+					getConsentFor.mockReturnValue(true);
+					expect(shouldInclude('ozone')).toBe(true);
+				}
+			});
+			test('should return true if within ROW region', () => {
+				const testGeos: CountryCode[] = [
+					'FK',
+					'GI',
+					'GG',
+					'IM',
+					'JE',
+					'SH',
+					'IE',
+				];
+				for (const testGeo of testGeos) {
+					window.guardian.config.switches.prebidOzone = true;
+					getLocale.mockReturnValueOnce(testGeo);
+					getConsentFor.mockReturnValue(true);
+					expect(shouldInclude('ozone')).toBe(true);
+				}
 			});
 		});
 
