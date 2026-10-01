@@ -1,6 +1,6 @@
+import { getPermutiveSegments } from '@guardian/commercial-core/permutive';
 import type { BidderScopedSettings } from 'prebid.js/dist/src/bidderSettings';
 import { overridePriceBucket } from '../price-config';
-import { getPermutiveSegments } from '@guardian/commercial-core/permutive';
 
 export const configureBidderSettings = (): BidderScopedSettings<string> => {
 	window.pbjs.setBidderConfig({
