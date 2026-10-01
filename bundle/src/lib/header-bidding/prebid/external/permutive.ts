@@ -8,7 +8,7 @@ export const configurePermutive = (consentState: ConsentState) => {
 	const includedAcBidders = (
 		[
 			'and',
-			'ix',
+			// 'ix',
 			'ozone',
 			'pubmatic',
 			'trustx',

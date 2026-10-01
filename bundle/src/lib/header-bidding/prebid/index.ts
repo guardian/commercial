@@ -26,7 +26,7 @@ import {
 } from '../utils';
 import { getGUAnalyticsConfig } from './analytics';
 import { bidderSettings as bidderSettingsForCriteo } from './bidders/criteo';
-import { bidderSettings as bidderSettingsForIx } from './bidders/ix';
+import { configureBidderSettings as bidderSettingsForIX } from './bidders/ix';
 import { bidderSettings as bidderSettingsForKargo } from './bidders/kargo';
 import { bidderSettings as bidderSettingsForOzone } from './bidders/ozone';
 import { configureBidderSettings as bidderSettingsForRubicon } from './bidders/rubicon';
@@ -106,7 +106,7 @@ const initialise = async (
 	// initialise enabled bidders
 	window.pbjs.bidderSettings = {
 		criteo: isBidderEnabled('criteo') ? bidderSettingsForCriteo : undefined,
-		ix: isBidderEnabled('ix') ? bidderSettingsForIx : undefined,
+		ix: isBidderEnabled('ix') ? bidderSettingsForIX() : undefined,
 		kargo: isBidderEnabled('kargo') ? bidderSettingsForKargo : undefined,
 		magnite: isBidderEnabled('rubicon')
 			? bidderSettingsForRubicon()
