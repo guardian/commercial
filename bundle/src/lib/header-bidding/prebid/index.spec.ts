@@ -179,7 +179,7 @@ describe('initialise', () => {
 						params: {
 							acBidders: [
 								'appnexus',
-								'ix',
+								// 'ix',
 								'ozone',
 								'pubmatic',
 								'trustx',
@@ -375,7 +375,7 @@ describe('initialise', () => {
 				jest
 					.fn()
 					.mockReturnValueOnce(true) // and (appnexus)
-					.mockReturnValueOnce(false) // ix
+					// .mockReturnValueOnce(false) // ix
 					.mockReturnValueOnce(true) // ozone
 					.mockReturnValueOnce(true) // pubmatic
 					.mockReturnValueOnce(false), // trustx
@@ -405,7 +405,7 @@ describe('initialise', () => {
 				jest
 					.fn()
 					.mockReturnValueOnce(true) // and (appnexus)
-					.mockReturnValueOnce(true) // ix
+					// .mockReturnValueOnce(true) // ix
 					.mockReturnValueOnce(true) // ozone
 					.mockReturnValueOnce(false) // pubmatic
 					.mockReturnValueOnce(true), // trustx
@@ -420,7 +420,7 @@ describe('initialise', () => {
 							params: {
 								acBidders: [
 									'appnexus',
-									'ix',
+									// 'ix',
 									'ozone',
 									'trustx',
 								],
