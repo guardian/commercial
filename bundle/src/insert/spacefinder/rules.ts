@@ -14,8 +14,16 @@ const isInHighValueSectionsSet2Variant = isUserInTestGroup(
 	'variant',
 );
 
+const isInHighValueSectionsAusAndNzVariant = isUserInTestGroup(
+	'commercial-spacefinder-highvalue-sections-aus-and-nz',
+	'variant',
+);
+
 const isEligibleForHighValueSectionsSet2 =
 	isInHighValueSectionsSet2Variant && !isInAuOrNz();
+
+const isEligibleForHighValueSectionsAusAndNz =
+	isInHighValueSectionsAusAndNzVariant && isInAuOrNz();
 
 const originalHighValueSections = [
 	'business',
@@ -35,11 +43,34 @@ const originalHighValueSections = [
 	'sport',
 ];
 
+const AusAndNzSections = [
+	'global-development',
+	'media',
+	'society',
+	'books',
+	'technology',
+	'news',
+	'tv-and-radio',
+	'australia-news',
+	'food',
+	'uk-news',
+	'film',
+	'law',
+	'world',
+	'education',
+	'us-news',
+	'culture',
+	'fashion',
+	'profile',
+	'tone',
+];
+
 const highValueSections = [
 	...originalHighValueSections,
 	...(isEligibleForHighValueSectionsSet2
 		? ['tv-and-radio', 'film', 'society', 'culture', 'food']
 		: []),
+	...(isEligibleForHighValueSectionsAusAndNz ? AusAndNzSections : []),
 ];
 
 const isInHighValueSections = highValueSections.includes(
