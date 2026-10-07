@@ -30,8 +30,8 @@ const articles = [
 		path: '/Article/https://www.theguardian.com/football/2024/feb/09/premier-league-10-things-to-look-out-for-this-weekend',
 		name: 'inlineSlots',
 		expectedSlotPositions: {
-			mobile: [7, 14, 20, 26, 32, 39, 46, 58],
-			tablet: [7, 14, 25, 37, 44, 56],
+			mobile: [7, 14, 20, 26, 32, 39, 46, 52, 59],
+			tablet: [7, 14, 25, 31, 38, 45, 57],
 			desktop: [14, 30, 43, 55],
 		},
 	},

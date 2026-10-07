@@ -2,6 +2,7 @@ import type { SizeMapping } from '@guardian/commercial-core/ad-sizes';
 import { adSizes, createAdSize } from '@guardian/commercial-core/ad-sizes';
 import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { isNonNullable, log } from '@guardian/libs';
+import { isUserInTestGroup } from '../../ab-testing';
 import { createAdvert } from '../../define/create-advert';
 import { displayAds } from '../../display/display-ads';
 import { displayLazyAds } from '../../display/display-lazy-ads';
@@ -15,6 +16,10 @@ import { removeDisabledSlots } from './remove-slots';
 const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 	const { contentType } = window.guardian.config.page;
 	const { name } = adSlot.dataset;
+	const isInArticleEndHeaderBiddingTest = isUserInTestGroup(
+		'commercial-article-end-header-bidding',
+		'variant',
+	);
 
 	if (contentType === 'Gallery' && name?.includes('inline')) {
 		return {
@@ -49,9 +54,13 @@ const decideAdditionalSizes = (adSlot: HTMLElement): SizeMapping => {
 				};
 	}
 
-	if (name === 'article-end' && isInUsa()) {
+	if (
+		name === 'article-end' &&
+		isInUsa() &&
+		isInArticleEndHeaderBiddingTest
+	) {
 		return {
-			mobile: [adSizes.fluid],
+			mobile: [adSizes.mpu],
 		};
 	}
 

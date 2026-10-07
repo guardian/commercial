@@ -27,6 +27,9 @@
       "version" : "latest",
       "moby" : false,
       "dockerDashComposeVersion" : "v2"
+    },
+    "ghcr.io/devcontainers/features/aws-cli:1.1.4" : {
+      
     }
   },
   "capAdd" : [
