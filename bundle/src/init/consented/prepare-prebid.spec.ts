@@ -108,6 +108,8 @@ const invalidWithoutConsent = {
 
 describe('init', () => {
 	beforeEach(() => {
+		/** jsdom mock for video play operation */
+		window.HTMLMediaElement.prototype.play = () => Promise.resolve();
 		jest.resetAllMocks();
 	});
 
