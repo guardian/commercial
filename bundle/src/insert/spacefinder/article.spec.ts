@@ -60,7 +60,6 @@ describe('Article Body Adverts', () => {
 		mockViewport(1300, 1300);
 		return init(fillAdSlot).then(() => {
 			expect(fillSpace).toHaveBeenCalledTimes(2);
-			console.log(fillSpace.mock.calls[0]?.[0]);
 			expect(fillSpace.mock.calls[0]?.[2]?.pass).toEqual('inline1');
 			expect(fillSpace.mock.calls[1]?.[2]?.pass).toEqual(
 				'subsequent-inlines',
