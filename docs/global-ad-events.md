@@ -29,7 +29,7 @@ Fired every time any ad slot changes status. All listeners receive every event â
 ### Listen for any ad rendering
 
 ```typescript
-globalAdEvents.addEventListener('adStatusChange', (event) => {
+globalAdEvents?.addEventListener('adStatusChange', (event) => {
 	const { advert, name } = event.detail;
 	if (name === 'rendered') {
 		console.log(`${advert.id} rendered`);
@@ -40,7 +40,7 @@ globalAdEvents.addEventListener('adStatusChange', (event) => {
 ### Listen for a specific ad slot
 
 ```typescript
-globalAdEvents.addEventListener('adStatusChange', (event) => {
+globalAdEvents?.addEventListener('adStatusChange', (event) => {
 	const { advert, name } = event.detail;
 	if (advert.id === 'dfp-ad--top-above-nav' && name === 'rendered') {
 		// React to the top ad rendering, e.g. resize the header
@@ -51,7 +51,7 @@ globalAdEvents.addEventListener('adStatusChange', (event) => {
 ### Listen once then stop
 
 ```typescript
-globalAdEvents.addEventListener(
+globalAdEvents?.addEventListener(
 	'adStatusChange',
 	(event) => {
 		const { name } = event.detail;
