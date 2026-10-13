@@ -1,5 +1,11 @@
 # @guardian/commercial-core
 
+## 35.1.2
+
+### Patch Changes
+
+- d0d6239: Add try catch around creating EventTarget for older browser compatibility
+
 ## 35.1.1
 
 ### Patch Changes
