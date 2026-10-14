@@ -72,6 +72,9 @@ jest.mock('lib/detect/detect-breakpoint', () => ({
 jest.mock('lib/should-load-ads', () => ({
 	shouldLoadAds: jest.fn(),
 }));
+jest.mock('../../ab-testing', () => ({
+	isUserInTestGroup: jest.fn(),
+}));
 
 const resetConfig = () => {
 	window.guardian.config.switches.prebidAppnexus = true;
@@ -225,7 +228,6 @@ describe('Utils', () => {
 					expect(shouldInclude('oxd')).toBe(true);
 				}
 			});
-
 			test('should return false if within US region', () => {
 				const testGeos: CountryCode[] = ['CA', 'US'];
 				for (const testGeo of testGeos) {
@@ -241,6 +243,53 @@ describe('Utils', () => {
 					getLocale.mockReturnValue(testGeo);
 					getConsentFor.mockReturnValue(true);
 					expect(shouldInclude('oxd')).toBe(true);
+				}
+			});
+		});
+
+		describe('shouldIncludeOzone', () => {
+			test('should return false if consent not given', () => {
+				window.guardian.config.switches.prebidOzone = true;
+				getLocale.mockReturnValueOnce('GB');
+				getConsentFor.mockReturnValue(false);
+				expect(shouldInclude('ozone')).toBe(false);
+			});
+			test('should return false if within CA region', () => {
+				window.guardian.config.switches.prebidOzone = true;
+				getLocale.mockReturnValueOnce('CA');
+				getConsentFor.mockReturnValue(true);
+				expect(shouldInclude('ozone')).toBe(false);
+			});
+			test('should return true if geolocation is GB', () => {
+				window.guardian.config.switches.prebidOzone = true;
+				getLocale.mockReturnValueOnce('GB');
+				getConsentFor.mockReturnValue(true);
+				expect(shouldInclude('ozone')).toBe(true);
+			});
+			test('should return true if within AU region', () => {
+				const testGeos: CountryCode[] = ['NZ', 'AU'];
+				for (const testGeo of testGeos) {
+					window.guardian.config.switches.prebidOzone = true;
+					getLocale.mockReturnValue(testGeo);
+					getConsentFor.mockReturnValue(true);
+					expect(shouldInclude('ozone')).toBe(true);
+				}
+			});
+			test('should return true if within ROW region', () => {
+				const testGeos: CountryCode[] = [
+					'FK',
+					'GI',
+					'GG',
+					'IM',
+					'JE',
+					'SH',
+					'IE',
+				];
+				for (const testGeo of testGeos) {
+					window.guardian.config.switches.prebidOzone = true;
+					getLocale.mockReturnValueOnce(testGeo);
+					getConsentFor.mockReturnValue(true);
+					expect(shouldInclude('ozone')).toBe(true);
 				}
 			});
 		});

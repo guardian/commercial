@@ -84,6 +84,9 @@ describe('createCommercialQueue', () => {
 	});
 
 	it('should handle errors in preloaded functions and continue executing others', () => {
+		const consoleErrorSpy = jest
+			.spyOn(console, 'error')
+			.mockImplementation(() => {});
 		const mockFn1 = jest.fn(() => {
 			throw new Error('Test error');
 		});
@@ -93,6 +96,11 @@ describe('createCommercialQueue', () => {
 		queue.flush();
 
 		// Verify that the first function throws an error but the second function is still executed
+		expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+		expect(consoleErrorSpy).toHaveBeenCalledWith(
+			'Error executing queue function during:',
+			new Error('Test error'),
+		);
 		expect(mockFn1).toHaveBeenCalledTimes(1);
 		expect(mockFn2).toHaveBeenCalledTimes(1);
 	});

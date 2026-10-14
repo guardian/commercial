@@ -201,8 +201,7 @@ export const shouldIncludeBidder =
 				return (
 					isSwitchedOn('prebidOzone') &&
 					getConsentFor('ozone', consentState) &&
-					!isInCanada() &&
-					!isInAuOrNz()
+					!isInCanada()
 				);
 			case 'pubmatic':
 				return (

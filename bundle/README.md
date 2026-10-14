@@ -12,13 +12,12 @@ To develop the bundle locally on the bundle, run `pnpm serve` to start a local s
 
 1.  Run DCR in a Docker container.
     You can do this by running the script `./scripts/start-dcr-container` or `pnpm run start-dcr`.
-    You can provide a commit hash as an argument to this script to run with a specific build, or leave blank to default to the build from the `main` branch.
-    The container image with a tag of the commit hash must be available in Github Container Registry for dotcom-rendering for this to work: https://github.com/guardian/dotcom-rendering/pkgs/container/dotcom-rendering
+    By default, the image from `main` is used. You can provide an alternative identifier as an argument to this script.
+    Alternative identifiers are listed in the comments of PRs to `guardian/dotcom-rendering`.
 
 2.  In another terminal start the commercial dev server to serve the local bundle:
 
     `pnpm serve`
-
 
 #### Outside of a Dev Container
 

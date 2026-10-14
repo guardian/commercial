@@ -49,12 +49,6 @@ const initialise = async (
 
 	const userSync: UserSyncConfig = await getUserSyncSettings(consentState);
 
-	// We're holding back 5% of users, who will not get any price floors applied
-	const canUsePriceFloors = !isUserInTestGroup(
-		'commercial-prebid-price-floor-holdback',
-		'holdback',
-	);
-
 	const auctionTimeout = getAuctionTimeoutValue();
 
 	window.pbjs.setConfig({
@@ -65,18 +59,14 @@ const initialise = async (
 		/**
 		 * Applying one global floor price of £0.10 for all bids.
 		 */
-		...(canUsePriceFloors
-			? {
-					floors: {
-						enabled: true,
-						data: {
-							schema: { fields: ['mediaType'] },
-							values: { banner: 0.1, video: 0.1 },
-							default: 0.1,
-						},
-					},
-				}
-			: {}),
+		floors: {
+			enabled: true,
+			data: {
+				schema: { fields: ['mediaType'] },
+				values: { banner: 0.1, video: 0.1 },
+				default: 0.1,
+			},
+		},
 		priceGranularity: 'custom',
 		customPriceBucket: priceGranularity,
 		enableTIDs: true,

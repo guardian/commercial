@@ -25,6 +25,7 @@ export const configurePermutive = (consentState: ConsentState) => {
 				name: 'permutive',
 				params: {
 					acBidders: includedAcBidders,
+					enforceVendorConsent: true,
 					...(includedAcBidders.includes('pubmatic')
 						? { overwrites: { pubmatic } }
 						: {}),

@@ -18,6 +18,9 @@ modules:
     - node
     - github-copilot
 
+features:
+    ghcr.io/devcontainers/features/aws-cli:1.1.4: {}
+
 # Optional: Ports to forward
 forwardPorts:
     - 3031 # commercial
@@ -40,7 +43,7 @@ postCreateCommand:
     - cmd: 'COREPACK_ENABLE_DOWNLOAD_PROMPT=0 mise x -- pnpm install --frozen-lockfile'
       workingDirectory: '${containerWorkspaceFolder}'
       logLine: 'install-project-dependencies'
-    
+
     - cmd: 'mise x -- pnpm exec playwright install chromium --with-deps'
       workingDirectory: '${containerWorkspaceFolder}/bundle'
       logLine: 'install-playwright-browsers'
