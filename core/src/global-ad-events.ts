@@ -4,11 +4,6 @@
  * needing direct access to `Advert` instances.
  * @see /docs/global-ad-events.md
  */
-let globalAdEvents: EventTarget | undefined;
-try {
-	globalAdEvents = new EventTarget();
-} catch {
-	// EventTarget is not supported
-}
+const globalAdEvents = new EventTarget();
 
 export { globalAdEvents };
