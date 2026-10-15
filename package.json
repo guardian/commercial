@@ -27,6 +27,7 @@
 		"tsc": "pnpm -r --parallel --aggregate-output tsc"
 	},
 	"devDependencies": {
+		"@babel/runtime": "8.0.0",
 		"@changesets/cli": "3.0.3",
 		"@guardian/eslint-config": "16.0.0",
 		"@guardian/prettier": "11.0.0",
