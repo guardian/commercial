@@ -2,6 +2,7 @@ import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/consent-manager';
 import { getConsentFor, onConsent } from '@guardian/consent-manager';
 import { loadScript, log } from '@guardian/libs';
+import { isUserInTestGroup } from '../../ab-testing';
 import { isSwitchedOn } from '../../lib/header-bidding/utils';
 import { getGoogleTagId, isUserLoggedIn } from '../../lib/identity/api';
 import { getPageTargeting } from '../../lib/page-targeting';
@@ -85,6 +86,33 @@ const handleLocalePermissions = (consentState: ConsentState) => {
 	}
 };
 
+const setPublisherProvidedSignalsConfig = (consentState: ConsentState) => {
+	if (!consentState.canTarget) {
+		return;
+	}
+
+	const isInAbTest = isUserInTestGroup(
+		'commercial-iab-taxonomy',
+		'variant',
+	);
+	if (!isInAbTest) {
+		return;
+	}
+
+	const { IABTaxonomy: taxonomy, IABTags: tags } = window.guardian.config.page.pageAdTargeting ?? {};
+	if (typeof taxonomy !== 'string' || taxonomy === '' || !tags?.length) {
+		return;
+	}
+
+	googletag.setConfig({
+		pps: {
+			taxonomies: {
+				[taxonomy]: { values: tags },
+			},
+		},
+	});
+};
+
 /* setPrivacySettings when the condition is met will keep the value false
  * but when the condition changes and is not met anymore
  * we need to reset it by passing null to clear the configuration
@@ -92,11 +120,11 @@ const handleLocalePermissions = (consentState: ConsentState) => {
 const disableChildDirectedTreatment = () =>
 	isSwitchedOn('disableChildDirected')
 		? window.googletag.pubads().setPrivacySettings({
-				childDirectedTreatment: false,
-			})
+			childDirectedTreatment: false,
+		})
 		: window.googletag.pubads().setPrivacySettings({
-				childDirectedTreatment: null,
-			});
+			childDirectedTreatment: null,
+		});
 
 const prepareGoogletag = (): Promise<void> => {
 	const setupAdvertising = async (): Promise<void> => {
@@ -106,6 +134,7 @@ const prepareGoogletag = (): Promise<void> => {
 
 		enableTargeting(consentState);
 		handleLocalePermissions(consentState);
+		setPublisherProvidedSignalsConfig(consentState);
 
 		// Prebid will already be loaded, and window.googletag is stubbed in `commercial.js`.
 		// Just load googletag - it's already added to the window by Prebid.
@@ -126,7 +155,7 @@ const prepareGoogletag = (): Promise<void> => {
 			// desktop browser, and Ddg is present for those using the mobile browser, so we filter out both.
 			loadScript(
 				window.guardian.config.page.libs?.googletag ??
-					'//securepubads.g.doubleclick.net/tag/js/gpt.js',
+				'//securepubads.g.doubleclick.net/tag/js/gpt.js',
 				{ async: false },
 			).catch((error: Error) => {
 				if (
