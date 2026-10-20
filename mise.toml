@@ -1,5 +1,5 @@
 [tools]
-"github:guardian/devenv" = "20260721-123412"
+"github:guardian/devenv" = "20260930-111347"
 nodejs = "24.21.0" # Must be in sync with .nvmrc
 
 [hooks]
