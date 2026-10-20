@@ -103,6 +103,8 @@ interface CommercialPageConfig {
 	libs?: {
 		googletag?: string;
 	};
+	IABTaxonomy?: string;
+	IABTags?: string[];
 }
 
 interface PageConfig extends CommercialPageConfig {
@@ -425,7 +427,7 @@ interface SafeFrameAPI {
 	};
 	host: {
 		Config: {
-			new (o: {
+			new(o: {
 				renderFile: string;
 				positions: Record<string, unknown>;
 			}): unknown;
@@ -471,7 +473,6 @@ type Admiral = (...args: AdmiralArg[]) => void;
 
 interface CoreGuardian {
 	config: Config;
-
 	commercialTimer?: EventTimer;
 	offlineCount?: number;
 	modules: {
@@ -492,38 +493,39 @@ interface CoreGuardian {
 }
 
 export type {
-	ConnectionType,
-	NetworkInformation,
-	OphanRecordFunction,
-	Indices,
-	Edition,
-	AdsConfigDisabled,
-	AdsConfigEnabled,
-	AdsConfigBasic,
-	AdsConfigUSNATorAus,
-	AdsConfigTCFV2,
-	AdsConfig,
-	AdTargetingBuilder,
-	Ophan,
-	Config,
 	AdBlockers,
-	ArticleCounts,
-	FetchBidResponse,
-	HeaderNotification,
-	OptOutInitializeOptions,
-	OptOutAdSlot,
-	Confiant,
-	Permutive,
-	Apstag,
-	ComscoreGlobals,
-	IasPET,
-	TeadsAnalytics,
-	SafeFrameAPI,
-	NSdkInstance,
-	Trac,
-	GoogleTagParams,
-	GoogleTrackConversionObject,
 	Admiral,
 	AdmiralEvent,
+	AdsConfig,
+	AdsConfigBasic,
+	AdsConfigDisabled,
+	AdsConfigEnabled,
+	AdsConfigTCFV2,
+	AdsConfigUSNATorAus,
+	AdTargetingBuilder,
+	Apstag,
+	ArticleCounts,
+	ComscoreGlobals,
+	Confiant,
+	Config,
+	ConnectionType,
 	CoreGuardian,
+	Edition,
+	FetchBidResponse,
+	GoogleTagParams,
+	GoogleTrackConversionObject,
+	HeaderNotification,
+	IasPET,
+	Indices,
+	NetworkInformation,
+	NSdkInstance,
+	Ophan,
+	OphanRecordFunction,
+	OptOutAdSlot,
+	OptOutInitializeOptions,
+	Permutive,
+	SafeFrameAPI,
+	TeadsAnalytics,
+	Trac
 };
+

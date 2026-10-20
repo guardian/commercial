@@ -147,6 +147,8 @@ const buildPageTargeting = ({
 		sensitive: page.isSensitive,
 		videoLength: page.videoDuration,
 		keywords: sharedAdTargeting.k ?? [],
+		IABTaxonomy: page.IABTaxonomy ?? "",
+		IABTags: page.IABTags ?? [],
 	});
 
 	const referrer = document.referrer || '';
@@ -205,4 +207,5 @@ const buildPageTargeting = ({
 };
 
 export { buildPageTargeting, filterValues, getLocalHour };
-export type { UserId, PageTargeting };
+export type { PageTargeting, UserId };
+

@@ -95,6 +95,15 @@ type ContentTargeting = {
 	 * [gam]: https://admanager.google.com/59666047#inventory/custom_targeting/detail/custom_key_id=13995840
 	 */
 	allkw: string[];
+
+	/**
+	 * IAB Taxonomy for contextual targeting
+	 */
+	IABTaxonomy: string;
+	/**
+	 * Tags for contextual targeting
+	 */
+	IABTags: string[];
 };
 
 /* -- Methods -- */
@@ -154,6 +163,8 @@ type Content = {
 	videoLength?: number;
 	webPublicationDate: number;
 	keywords: string[];
+	IABTaxonomy: string;
+	IABTags: string[];
 };
 
 const getContentTargeting = ({
@@ -165,6 +176,8 @@ const getContentTargeting = ({
 	videoLength,
 	webPublicationDate,
 	keywords,
+	IABTaxonomy,
+	IABTags,
 }: Content): ContentTargeting => {
 	const urlkw = getUrlKeywords(path);
 	return {
@@ -176,8 +189,11 @@ const getContentTargeting = ({
 		urlkw,
 		vl: videoLength ? getVideoLength(videoLength) : null,
 		allkw: concatUnique(urlkw, keywords),
+		IABTaxonomy,
+		IABTags,
 	};
 };
 
 export { getContentTargeting };
 export type { ContentTargeting };
+
