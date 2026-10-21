@@ -14,11 +14,13 @@ import { globalAdEvents } from '@guardian/commercial-core/global-ad-events';
 import { log } from '@guardian/libs';
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import type { Size } from 'prebid.js/dist/src/types/common';
+import { isUserInTest } from '../ab-testing';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import { a9 } from '../lib/header-bidding/a9/a9';
 import { prebid } from '../lib/header-bidding/prebid';
 import type { HeaderBiddingSlot } from '../lib/header-bidding/prebid-types';
+import { sdc } from '../lib/header-bidding/sdc/sdc';
 import { stripDfpAdPrefixFrom } from '../lib/header-bidding/utils';
 import { adQueue } from '../lib/timed-queue';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';
@@ -458,10 +460,18 @@ class Advert extends EventTarget {
 		if (this.headerBiddingBidRequest) {
 			return this.headerBiddingBidRequest;
 		}
-		const promise = Promise.all([
-			prebid.requestBids([this]),
-			a9.requestBids([this]),
-		]).then(() => Promise.resolve());
+		
+		const bidRequests = [
+			prebid.requestBids([this]), 
+			a9.requestBids([this])
+		];
+
+		const isInNBATest = isUserInTest('commercial-next-best-action');
+		if (this.name === 'inline1' && isInNBATest) {
+			bidRequests.push(sdc.requestBids([this]));
+		}
+
+		const promise = Promise.all(bidRequests).then(() => Promise.resolve());
 
 		this.headerBiddingBidRequest = promise;
 
