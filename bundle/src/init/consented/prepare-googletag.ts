@@ -4,6 +4,8 @@ import { getConsentFor, onConsent } from '@guardian/consent-manager';
 import { loadScript, log } from '@guardian/libs';
 import { isUserInTestGroup } from '../../ab-testing';
 import { isSwitchedOn } from '../../lib/header-bidding/utils';
+import type { DataScienceApiModelId, Taxonomy } from '../../lib/iabTaxonomyHelpers';
+import { convertIabTaxonomyTags } from '../../lib/iabTaxonomyHelpers';
 import { getGoogleTagId, isUserLoggedIn } from '../../lib/identity/api';
 import { getPageTargeting } from '../../lib/page-targeting';
 import { shouldLoadAds } from '../../lib/should-load-ads';
@@ -86,7 +88,8 @@ const handleLocalePermissions = (consentState: ConsentState) => {
 	}
 };
 
-const setPublisherProvidedSignalsConfig = (consentState: ConsentState) => {
+
+const setPublisherProvidedSignalsConfig = (consentState: ConsentState, taxonomy: Taxonomy, modelId: DataScienceApiModelId) => {
 	if (!consentState.canTarget) {
 		return;
 	}
@@ -99,21 +102,43 @@ const setPublisherProvidedSignalsConfig = (consentState: ConsentState) => {
 		return;
 	}
 
-	const { IABTaxonomy: taxonomy, IABTags: tags } = window.guardian.config.page.pageAdTargeting ?? {};
-	if (typeof taxonomy !== 'string' || taxonomy === '' || !tags?.length) {
+	const iabTaxonomyTagsRaw =
+		window.guardian.config.page.pageAdTargeting?.iabtaxonomytags;
+
+	if (
+		!Array.isArray(iabTaxonomyTagsRaw) ||
+		iabTaxonomyTagsRaw.length === 0 ||
+		!iabTaxonomyTagsRaw.every((tag) => typeof tag === 'string')
+	) {
 		return;
 	}
+
+	const exampleIabTaxonomyTagsRaw = [
+		"commercial/iab/primary_v1/9/155",
+		"commercial/iab/primary_v1/6/155",
+		"commercial/iab/primary_secondary_v1/9/155",
+		"commercial/iab/primary_secondary_v1/6/155"
+	]
+
+	const convertedTaxonomy = convertIabTaxonomyTags(exampleIabTaxonomyTagsRaw, taxonomy, modelId);
+	// const convertedTaxonomy = convertIabTaxonomyTags(iabTaxonomyTagsRaw, taxonomy, modelId);
+
+	console.log('Publisher provided signals config:', {
+		iabTaxonomyTagsRaw,
+		convertedTaxonomy,
+	});
 
 	googletag.setConfig({
 		pps: {
 			taxonomies: {
-				[taxonomy]: { values: tags },
+				[convertedTaxonomy.taxonomy]: { values: convertedTaxonomy.tags },
 			},
 		},
 	});
 };
 
-/* setPrivacySettings when the condition is met will keep the value false
+/**
+ * setPrivacySettings when the condition is met will keep the value false
  * but when the condition changes and is not met anymore
  * we need to reset it by passing null to clear the configuration
  */
@@ -134,7 +159,7 @@ const prepareGoogletag = (): Promise<void> => {
 
 		enableTargeting(consentState);
 		handleLocalePermissions(consentState);
-		setPublisherProvidedSignalsConfig(consentState);
+		setPublisherProvidedSignalsConfig(consentState, "IAB_CONTENT_2_1", "primary_v1");
 
 		// Prebid will already be loaded, and window.googletag is stubbed in `commercial.js`.
 		// Just load googletag - it's already added to the window by Prebid.
