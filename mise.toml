@@ -1,6 +1,6 @@
 [tools]
 "github:guardian/devenv" = "20260930-111347"
-nodejs = "24.22" # Must be in sync with .nvmrc
+nodejs = "24" # Must be in sync with .nvmrc
 
 [hooks]
 postinstall = 'npx corepack enable'
