@@ -61,7 +61,7 @@
 		"ts-jest": "29.4.14",
 		"tsc-alias": "1.9.7",
 		"type-fest": "5.10.0",
-		"typescript": "6.0.3"
+		"typescript": "7.0.2"
 	},
 	"publishConfig": {
 		"access": "public"
