@@ -1,12 +1,13 @@
+import { getLocale } from '@guardian/commercial-core/geo/get-locale';
+import type { ConsentState} from '@guardian/consent-manager';
+import { onConsent } from '@guardian/consent-manager';
+import { getCookie } from '@guardian/libs';
 import type {
 	Inline1Payload,
 	Inline1Props,
 } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { TestTracking } from '@guardian/support-dotcom-components/dist/shared/types/abTests/shared';
 import { isUserLoggedIn } from '../../identity/api';
-import { getLocale } from '@guardian/commercial-core/geo/get-locale';
-import { ConsentState, onConsent } from '@guardian/consent-manager';
-import { getCookie } from '@guardian/libs';
 
 interface ModuleData<PROPS> {
 	name: string;
