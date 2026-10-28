@@ -468,6 +468,7 @@ class Advert extends EventTarget {
 
 		const isInNBATest = isUserInTest('commercial-next-best-action');
 		if (this.name === 'inline1' && isInNBATest) {
+			console.log("You're in the Next Best Action test.");
 			bidRequests.push(sdc.requestBids([this]));
 		}
 
