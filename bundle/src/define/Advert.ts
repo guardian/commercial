@@ -460,10 +460,10 @@ class Advert extends EventTarget {
 		if (this.headerBiddingBidRequest) {
 			return this.headerBiddingBidRequest;
 		}
-		
+
 		const bidRequests = [
-			prebid.requestBids([this]), 
-			a9.requestBids([this])
+			prebid.requestBids([this]),
+			a9.requestBids([this]),
 		];
 
 		const isInNBATest = isUserInTest('commercial-next-best-action');
