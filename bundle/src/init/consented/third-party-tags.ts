@@ -11,6 +11,8 @@ import { inizio } from '../../lib/third-party-tags/inizio';
 import { permutive } from '../../lib/third-party-tags/permutive';
 import { remarketing } from '../../lib/third-party-tags/remarketing';
 import type { ThirdPartyTag } from '../../types/global';
+import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
+import { doubleVerify } from '../../lib/third-party-tags/doubleverify';
 
 const isIdentityPage = () =>
 	window.guardian.config.page.contentType === 'Identity' ||
@@ -45,6 +47,7 @@ const addScripts = (tags: ThirdPartyTag[]) => {
 	const frag = document.createDocumentFragment();
 	let hasScriptsToInsert = false;
 
+	console.log("TAGG", tags)
 	tags.forEach((tag) => {
 		if (tag.loaded === true) return;
 
@@ -102,6 +105,9 @@ const loadOther = (): Promise<void> => {
 		}),
 		ias({
 			shouldRun: window.guardian.config.switches.ias ?? false,
+		}),
+		doubleVerify({
+			shouldRun: true && isInUsa(),
 		}),
 		inizio({ shouldRun: window.guardian.config.switches.inizio ?? false }),
 	].filter((_) => _.shouldRun);
