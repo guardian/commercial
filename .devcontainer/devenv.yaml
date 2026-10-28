@@ -49,6 +49,10 @@ postCreateCommand:
       logLine: 'install-playwright-browsers'
 
 postStartCommand:
+    - cmd: "mise upgrade"
+      workingDirectory: '.'
+      logLine: 'mise-upgrade'
+
     - cmd: "echo 'Container started successfully'"
       workingDirectory: '.'
       logLine: 'container-start'
