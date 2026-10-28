@@ -1,5 +1,5 @@
 import { getLocale } from '@guardian/commercial-core/geo/get-locale';
-import type { ConsentState} from '@guardian/consent-manager';
+import type { ConsentState } from '@guardian/consent-manager';
 import { onConsent } from '@guardian/consent-manager';
 import { getCookie } from '@guardian/libs';
 import type {
@@ -19,7 +19,7 @@ interface ModuleDataResponse<PROPS> {
 		module: ModuleData<PROPS>;
 		meta: TestTracking;
 	};
-};
+}
 
 type ModuleType = 'inline1';
 
@@ -69,7 +69,8 @@ const getModuleData = async <PROPS>(
 	if (!response.ok) {
 		throw Error(
 			response.statusText ||
-			`Supporter Revenue ${type} | Api call returned HTTP status ${response.status}`);
+				`Supporter Revenue ${type} | Api call returned HTTP status ${response.status}`,
+		);
 	}
 	return await response.json();
 };
@@ -100,7 +101,8 @@ const getMvtId = (): number => {
 };
 
 const requestBids = async () => {
-	const sdcUrl = process.env.SDC_URL ?? 'https://contributions.guardianapis.com';
+	const sdcUrl =
+		process.env.SDC_URL ?? 'https://contributions.guardianapis.com';
 	const hasConsented = await getHasConsented();
 	const payload = {
 		targeting: {
@@ -108,7 +110,7 @@ const requestBids = async () => {
 			mvtId: getMvtId(),
 			countryCode: getLocale(),
 			sectionId: window.guardian.config.page.section,
-			tagIds: window.guardian.config.page.keywordIds.split(","),
+			tagIds: window.guardian.config.page.keywordIds.split(','),
 			pageId: window.guardian.config.page.pageId,
 			browserId: getBrowserId(hasConsented),
 			isSignedIn: await isUserLoggedIn(),
