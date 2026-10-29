@@ -1,9 +1,24 @@
 import { globalAdEvents } from '@guardian/commercial-core';
 import type * as AdSizesType from '@guardian/commercial-core/ad-sizes';
 import { slotSizeMappings as slotSizeMappings_ } from '@guardian/commercial-core/ad-sizes';
+import { isDvActive } from '../lib/third-party-tags/doubleverify-state';
 import { _, Advert, findSmallestAdHeightForSlot } from './Advert';
 
 const { getSlotSizeMapping } = _;
+
+const mockIsDvActive = isDvActive as jest.MockedFunction<typeof isDvActive>;
+
+jest.mock('../lib/header-bidding/prebid', () => ({
+	prebid: { requestBids: jest.fn(() => Promise.resolve()) },
+}));
+
+jest.mock('../lib/header-bidding/a9/a9', () => ({
+	a9: { requestBids: jest.fn(() => Promise.resolve()) },
+}));
+
+jest.mock('../lib/third-party-tags/doubleverify-state', () => ({
+	isDvActive: jest.fn(),
+}));
 
 jest.mock('define/init-slot-ias', () => ({
 	initSlotIas: jest.fn(() => Promise.resolve()),
@@ -83,6 +98,7 @@ describe('Advert', () => {
 			defineSlot() {
 				return googleSlot;
 			},
+			display: jest.fn(),
 			cmd: [],
 		};
 
@@ -428,6 +444,49 @@ describe('Advert', () => {
 
 			ad.setStatus('fetching', true);
 			expect(callback).toHaveBeenCalledTimes(1);
+		});
+	});
+
+	describe('load() with DoubleVerify', () => {
+		const loadAdvert = async () => {
+			const slot = document.createElement('div');
+			slot.id = 'dfp-ad--inline1';
+			slot.setAttribute('data-name', 'inline1');
+			const ad = new Advert(slot);
+			ad.load();
+			ad.setStatus('ready', true);
+			// let the awaited header bidding promise settle
+			await new Promise(process.nextTick);
+		};
+
+		it('should display the ad immediately when DV is not active', async () => {
+			mockIsDvActive.mockReturnValue(false);
+			window.onDvtagReady = jest.fn();
+
+			await loadAdvert();
+
+			expect(window.onDvtagReady).not.toHaveBeenCalled();
+			expect(window.googletag.display).toHaveBeenCalledWith(
+				'dfp-ad--inline1',
+			);
+		});
+
+		it('should wait for DV before displaying the ad when DV is active', async () => {
+			mockIsDvActive.mockReturnValue(true);
+			let dvReady: (() => void) | undefined;
+			window.onDvtagReady = jest.fn((callback?: () => void) => {
+				dvReady = callback;
+			});
+
+			await loadAdvert();
+
+			expect(window.googletag.display).not.toHaveBeenCalled();
+
+			dvReady?.();
+
+			expect(window.googletag.display).toHaveBeenCalledWith(
+				'dfp-ad--inline1',
+			);
 		});
 	});
 });
