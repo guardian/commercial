@@ -324,7 +324,7 @@ class Advert extends EventTarget {
 		if (matchingStatuses.length > 0) {
 			matchingStatuses.forEach((status) => void callback(status));
 			if (once) {
-				return { remove: () => { } };
+				return { remove: () => {} };
 			}
 		}
 
@@ -423,7 +423,8 @@ class Advert extends EventTarget {
 		// If the size mapping is still empty, throw an error as this should never happen
 		if (isSizeMappingEmpty(sizeMapping)) {
 			throw new Error(
-				`Tried to render ad slot '${this.node.dataset.name ?? ''
+				`Tried to render ad slot '${
+					this.node.dataset.name ?? ''
 				}' without any size mappings`,
 			);
 		}
@@ -511,7 +512,9 @@ class Advert extends EventTarget {
 				EventTimer.get().mark('prepareSlotEnd', this.name);
 				EventTimer.get().mark('fetchAdStart', this.name);
 				if (isDvActive()) {
-					window.onDvtagReady?.(() => { window.googletag.display(this.id) });
+					window.onDvtagReady?.(() => {
+						window.googletag.display(this.id);
+					});
 				} else {
 					window.googletag.display(this.id);
 				}
@@ -567,11 +570,12 @@ class Advert extends EventTarget {
 					}
 				}
 				if (isDvActive()) {
-					window.onDvtagReady?.(() => { window.googletag.pubads().refresh([this.slot]) });
+					window.onDvtagReady?.(() => {
+						window.googletag.pubads().refresh([this.slot]);
+					});
 				} else {
 					window.googletag.pubads().refresh([this.slot]);
 				}
-
 			});
 		});
 	}
