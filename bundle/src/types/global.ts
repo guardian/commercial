@@ -376,10 +376,16 @@ declare global {
 
 		__iasPET?: IasPET;
 
-		onDvtagReady?: (callback?: ()=>void, timeout?: number)=> void;
+		onDvtagReady?: (callback?: () => void, timeout?: number) => void;
 		dvtag?: {
-			cmd?: Array<() => void> | { push: (...fns: Array<() => void>) => void };
-			queueAdRequest?: (opt: { callback: (()=>void) | null, timeout: number, timestamp: number })=>void
+			cmd?:
+				| Array<() => void>
+				| { push: (...fns: Array<() => void>) => void };
+			queueAdRequest?: (opt: {
+				callback: (() => void) | null;
+				timeout: number;
+				timestamp: number;
+			}) => void;
 		};
 
 		teads_analytics?: TeadsAnalytics;
