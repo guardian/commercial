@@ -4,6 +4,7 @@ import { getConsentFor, onConsent } from '@guardian/consent-manager';
 import { loadScript, log } from '@guardian/libs';
 import { isUserInTestGroup } from '../../ab-testing';
 import { isSwitchedOn } from '../../lib/header-bidding/utils';
+import { extractRelevantIabTaxonomyTags } from '../../lib/iabTaxonomyHelpers';
 import { getGoogleTagId, isUserLoggedIn } from '../../lib/identity/api';
 import { getPageTargeting } from '../../lib/page-targeting';
 import { shouldLoadAds } from '../../lib/should-load-ads';
@@ -91,20 +92,44 @@ const setPublisherProvidedSignalsConfig = (consentState: ConsentState) => {
 		return;
 	}
 
-	const isInAbTest = isUserInTestGroup(
+	const isInPrimaryVariant = isUserInTestGroup(
 		'commercial-iab-taxonomy',
-		'variant',
+		'variant-primary',
 	);
+	const isInPrimarySecondaryVariant = isUserInTestGroup(
+		'commercial-iab-taxonomy',
+		'variant-primary-secondary',
+	);
+
+	const isInAbTest = isInPrimaryVariant || isInPrimarySecondaryVariant;
 	if (!isInAbTest) {
 		return;
 	}
 
-	const { IABTaxonomy: taxonomy, IABTags: tags } = window.guardian.config.page.pageAdTargeting ?? {};
-	if (typeof taxonomy !== 'string' || taxonomy === '' || !tags?.length) {
+	const iabTaxonomyData =
+		window.guardian.config.page.pageAdTargeting?.iabtaxonomytags;
+
+	if (
+		!Array.isArray(iabTaxonomyData) ||
+		iabTaxonomyData.length === 0 ||
+		!iabTaxonomyData.every((tag) => typeof tag === 'string')
+	) {
 		return;
 	}
 
-	googletag.setConfig({
+	/**
+	 * This is currently the only taxonomy supported by GAM.
+	 */
+	const taxonomy = 'IAB_CONTENT_2_2';
+
+	const variant = isInPrimaryVariant ? 'primary_v1' : 'primary_secondary_v1';
+	const tags = extractRelevantIabTaxonomyTags(
+		iabTaxonomyData,
+		variant,
+		taxonomy,
+	);
+
+	window.googletag.setConfig({
 		pps: {
 			taxonomies: {
 				[taxonomy]: { values: tags },
@@ -113,18 +138,19 @@ const setPublisherProvidedSignalsConfig = (consentState: ConsentState) => {
 	});
 };
 
-/* setPrivacySettings when the condition is met will keep the value false
+/**
+ * setPrivacySettings when the condition is met will keep the value false
  * but when the condition changes and is not met anymore
  * we need to reset it by passing null to clear the configuration
  */
 const disableChildDirectedTreatment = () =>
 	isSwitchedOn('disableChildDirected')
 		? window.googletag.pubads().setPrivacySettings({
-			childDirectedTreatment: false,
-		})
+				childDirectedTreatment: false,
+			})
 		: window.googletag.pubads().setPrivacySettings({
-			childDirectedTreatment: null,
-		});
+				childDirectedTreatment: null,
+			});
 
 const prepareGoogletag = (): Promise<void> => {
 	const setupAdvertising = async (): Promise<void> => {
@@ -155,7 +181,7 @@ const prepareGoogletag = (): Promise<void> => {
 			// desktop browser, and Ddg is present for those using the mobile browser, so we filter out both.
 			loadScript(
 				window.guardian.config.page.libs?.googletag ??
-				'//securepubads.g.doubleclick.net/tag/js/gpt.js',
+					'//securepubads.g.doubleclick.net/tag/js/gpt.js',
 				{ async: false },
 			).catch((error: Error) => {
 				if (

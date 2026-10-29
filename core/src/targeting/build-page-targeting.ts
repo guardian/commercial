@@ -22,16 +22,19 @@ type PageTargeting = PartialWithNulls<
 	{
 		ab: string[];
 		af: 't'; // Ad Free
+		allkw: string[]; // Concatenated urlkw and k so they can be used in the same targeting key reducing the number of keys
 		amtgrp: AdManagerGroup;
 		at: string; // Ad Test
 		bp: 'mobile' | 'tablet' | 'desktop'; // BreakPoint
 		cc: CountryCode; // Country Code
-		lh: string; // Local Hour
 		cmp_interaction: string;
 		consent_tcfv2: string;
 		dcre: TrueOrFalse; // DotCom-Rendering Eligible
 		fr: Frequency; // FRequency
+		iabTaxonomyTags: string[]; // IAB Taxonomy Tags
+		idp: string[]; // Id Providers
 		inskin: TrueOrFalse; // InSkin
+		lh: string; // Local Hour
 		pa: TrueOrFalse; // Personalised Ads consent
 		permutive: string[]; // predefined segment values
 		pv: string; // ophan Page View id
@@ -42,11 +45,9 @@ type PageTargeting = PartialWithNulls<
 		s: string; // site Section
 		sens: TrueOrFalse; // SenSitive
 		si: TrueOrFalse; // Signed In
-		idp: string[]; // Id Providers
 		skinsize: 'l' | 's';
 		urlkw: string[]; // URL KeyWords
 		vl: string; // Video Length
-		allkw: string[]; // Concatenated urlkw and k so they can be used in the same targeting key reducing the number of keys
 
 		// And more
 		[_: string]: string | string[];
@@ -205,4 +206,4 @@ const buildPageTargeting = ({
 };
 
 export { buildPageTargeting, filterValues, getLocalHour };
-export type { UserId, PageTargeting };
+export type { PageTargeting, UserId };

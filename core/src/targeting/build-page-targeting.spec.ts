@@ -151,6 +151,7 @@ describe('Build Page Targeting', () => {
 						co: ['gabrielle-chan'],
 						ct: 'video',
 						edition: 'us',
+						iabTaxonomyTags: '',
 						k: [
 							'prince-charles-letters',
 							'uk/uk',
