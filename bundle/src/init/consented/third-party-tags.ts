@@ -47,7 +47,6 @@ const addScripts = (tags: ThirdPartyTag[]) => {
 	const frag = document.createDocumentFragment();
 	let hasScriptsToInsert = false;
 
-	console.log("TAGG", tags)
 	tags.forEach((tag) => {
 		if (tag.loaded === true) return;
 
