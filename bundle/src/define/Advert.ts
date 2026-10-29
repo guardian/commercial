@@ -25,6 +25,7 @@ import { stripDfpAdPrefixFrom } from '../lib/header-bidding/utils';
 import { adQueue } from '../lib/timed-queue';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';
 import { refreshedAdSizes } from './refreshed-ad-sizes';
+import { isDvActive } from '../lib/third-party-tags/doubleverify-state';
 
 const stringToTuple = (size: string): [number, number] => {
 	const dimensions = size.split(',', 2).map(Number);
@@ -323,7 +324,7 @@ class Advert extends EventTarget {
 		if (matchingStatuses.length > 0) {
 			matchingStatuses.forEach((status) => void callback(status));
 			if (once) {
-				return { remove: () => {} };
+				return { remove: () => { } };
 			}
 		}
 
@@ -422,8 +423,7 @@ class Advert extends EventTarget {
 		// If the size mapping is still empty, throw an error as this should never happen
 		if (isSizeMappingEmpty(sizeMapping)) {
 			throw new Error(
-				`Tried to render ad slot '${
-					this.node.dataset.name ?? ''
+				`Tried to render ad slot '${this.node.dataset.name ?? ''
 				}' without any size mappings`,
 			);
 		}
@@ -510,7 +510,11 @@ class Advert extends EventTarget {
 
 				EventTimer.get().mark('prepareSlotEnd', this.name);
 				EventTimer.get().mark('fetchAdStart', this.name);
-				window.googletag.display(this.id);
+				if (isDvActive()) {
+					window.onDvtagReady?.(() => { window.googletag.display(this.id) });
+				} else {
+					window.googletag.display(this.id);
+				}
 			});
 		}, true);
 	}
@@ -562,7 +566,12 @@ class Advert extends EventTarget {
 						if (mapping) this.slot.defineSizeMapping(mapping);
 					}
 				}
-				window.googletag.pubads().refresh([this.slot]);
+				if (isDvActive()) {
+					window.onDvtagReady?.(() => { window.googletag.pubads().refresh([this.slot]) });
+				} else {
+					window.googletag.pubads().refresh([this.slot]);
+				}
+
 			});
 		});
 	}

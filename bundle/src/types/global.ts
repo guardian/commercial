@@ -376,6 +376,12 @@ declare global {
 
 		__iasPET?: IasPET;
 
+		onDvtagReady?: (callback?: ()=>void, timeout?: number)=> void;
+		dvtag?: {
+			cmd?: Array<() => void> | { push: (...fns: Array<() => void>) => void };
+			queueAdRequest?: (opt: { callback: (()=>void) | null, timeout: number, timestamp: number })=>void
+		};
+
 		teads_analytics?: TeadsAnalytics;
 
 		// https://www.iab.com/wp-content/uploads/2014/08/SafeFrames_v1.1_final.pdf
