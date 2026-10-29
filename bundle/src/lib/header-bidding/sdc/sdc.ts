@@ -123,6 +123,28 @@ const requestBids = async () => {
 		sdcUrl,
 		payload,
 	);
+	// TODO - set GAM targeting data for the SDC bid
+
+	// set up an event listener with the SDC data. This will be posted from the creative from GAM
+	window.addEventListener('gam-creative.sdc-render', () => {
+		// TODO - better way to get the element?
+		const slotElement = document.getElementById('dfp-ad--inline1');
+		if (slotElement) {
+			slotElement.dispatchEvent(
+				new CustomEvent('commercial.sdc-render', {
+					detail: { props: response.data?.module.props },
+					bubbles: true,
+				}),
+			);
+		}
+	});
+
+	// temporarily simulates the creative posting the event to the commercial bundle -
+	dispatchEvent(
+		new CustomEvent('gam-creative.sdc-render', {
+			detail: {},
+		}),
+	);
 
 	console.log(`Response From SDC: ${JSON.stringify(response)}`);
 };
