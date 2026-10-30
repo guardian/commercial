@@ -2,7 +2,9 @@ import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/consent-manager';
 import { getConsentFor, onConsent } from '@guardian/consent-manager';
 import { loadScript, log } from '@guardian/libs';
+import { isUserInTestGroup } from '../../ab-testing';
 import { isSwitchedOn } from '../../lib/header-bidding/utils';
+import { extractRelevantIabTaxonomyTags } from '../../lib/iabTaxonomyHelpers';
 import { getGoogleTagId, isUserLoggedIn } from '../../lib/identity/api';
 import { getPageTargeting } from '../../lib/page-targeting';
 import { shouldLoadAds } from '../../lib/should-load-ads';
@@ -85,7 +87,59 @@ const handleLocalePermissions = (consentState: ConsentState) => {
 	}
 };
 
-/* setPrivacySettings when the condition is met will keep the value false
+const setPublisherProvidedSignalsConfig = (consentState: ConsentState) => {
+	if (!consentState.canTarget) {
+		return;
+	}
+
+	const isInPrimaryVariant = isUserInTestGroup(
+		'commercial-iab-taxonomy',
+		'variant-primary',
+	);
+	const isInPrimarySecondaryVariant = isUserInTestGroup(
+		'commercial-iab-taxonomy',
+		'variant-primary-secondary',
+	);
+
+	const isInAbTest = isInPrimaryVariant || isInPrimarySecondaryVariant;
+	if (!isInAbTest) {
+		return;
+	}
+
+	const iabTaxonomyData =
+		window.guardian.config.page.pageAdTargeting?.iabtaxonomytags;
+
+	if (
+		!Array.isArray(iabTaxonomyData) ||
+		iabTaxonomyData.length === 0 ||
+		!iabTaxonomyData.every((tag) => typeof tag === 'string')
+	) {
+		return;
+	}
+
+	/**
+	 * This is currently the only taxonomy supported by GAM.
+	 */
+	const taxonomy = 'IAB_CONTENT_2_2';
+
+	const variant = isInPrimaryVariant ? 'primary_v1' : 'primary_secondary_v1';
+	const tags = extractRelevantIabTaxonomyTags(
+		iabTaxonomyData,
+		variant,
+		taxonomy,
+	);
+
+	window.googletag.setConfig({
+		pps: {
+			taxonomies: {
+				[taxonomy]: { values: tags },
+			},
+		},
+	});
+};
+
+/**
+ * setPrivacySettings when the condition is met will keep the value false
  * but when the condition changes and is not met anymore
  * we need to reset it by passing null to clear the configuration
  */
@@ -106,6 +160,7 @@ const prepareGoogletag = (): Promise<void> => {
 
 		enableTargeting(consentState);
 		handleLocalePermissions(consentState);
+		setPublisherProvidedSignalsConfig(consentState);
 
 		// Prebid will already be loaded, and window.googletag is stubbed in `commercial.js`.
 		// Just load googletag - it's already added to the window by Prebid.
