@@ -7,6 +7,8 @@ import type {
 	Inline1Props,
 } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { TestTracking } from '@guardian/support-dotcom-components/dist/shared/types/abTests/shared';
+import { adSlotIdPrefix } from '../../dfp/dfp-env-globals';
+import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedIn } from '../../identity/api';
 
 interface ModuleData<PROPS> {
@@ -127,16 +129,13 @@ const requestBids = async () => {
 
 	// set up an event listener with the SDC data. This will be posted from the creative from GAM
 	window.addEventListener('gam-creative.sdc-render', () => {
-		// TODO - better way to get the element?
-		const slotElement = document.getElementById('dfp-ad--inline1');
-		if (slotElement) {
-			slotElement.dispatchEvent(
-				new CustomEvent('commercial.sdc-render', {
-					detail: { props: response.data?.module.props },
-					bubbles: true,
-				}),
-			);
-		}
+		const slotElement = getAdvertById(`${adSlotIdPrefix}inline1`)?.node;
+		slotElement?.dispatchEvent(
+			new CustomEvent('commercial.sdc-render', {
+				detail: { props: response.data?.module.props },
+				bubbles: true,
+			}),
+		);
 	});
 
 	// temporarily simulates the creative posting the event to the commercial bundle -
