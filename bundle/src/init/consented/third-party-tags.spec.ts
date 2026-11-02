@@ -188,6 +188,12 @@ describe('third party tags', () => {
 			onLoad: jest.fn(),
 			name: 'permutive',
 		};
+		const fakeDoubleVerifyThirdPartyAdvertisingTag: ThirdPartyTag = {
+			shouldRun: true,
+			url: '//fakeDoubleVerifyThirdPartyAdvertisingTag.js',
+			onLoad: jest.fn(),
+			name: 'doubleVerify',
+		};
 		const fakeThirdPartyAdvertisingTag2: ThirdPartyTag = {
 			shouldRun: true,
 			url: '//fakeThirdPartyAdvertisingTag2.js',
@@ -203,6 +209,7 @@ describe('third party tags', () => {
 
 		beforeEach(() => {
 			fakeThirdPartyAdvertisingTag.loaded = undefined;
+			fakeDoubleVerifyThirdPartyAdvertisingTag.loaded = undefined;
 			fakeThirdPartyAdvertisingTag2.loaded = undefined;
 			fakeThirdPartyPerformanceTag.loaded = undefined;
 		});
@@ -235,6 +242,19 @@ describe('third party tags', () => {
 			mockGetConsentFor(true);
 			await _.insertScripts(
 				[fakeThirdPartyAdvertisingTag],
+				[fakeThirdPartyPerformanceTag],
+			);
+			expect(document.scripts.length).toBe(3);
+		});
+		it('should add DoubleVerify scripts to the document when USNAT regardless of consent', async () => {
+			mockOnConsent({
+				usnat: { ...usnatConsent, doNotSell: true },
+				canTarget: false,
+				framework: 'usnat',
+			});
+			mockGetConsentFor(false);
+			await _.insertScripts(
+				[fakeDoubleVerifyThirdPartyAdvertisingTag, fakeThirdPartyAdvertisingTag],
 				[fakeThirdPartyPerformanceTag],
 			);
 			expect(document.scripts.length).toBe(3);
