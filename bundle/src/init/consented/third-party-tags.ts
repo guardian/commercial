@@ -1,9 +1,11 @@
 /* A regionalised container for all the commercial tags. */
 
+import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { getConsentFor, onConsent } from '@guardian/consent-manager';
 import { isAdFree } from '../../lib/ad-free';
 import fastdom from '../../lib/fastdom-promise';
 import { isSecureContactPage } from '../../lib/is-secure-contact';
+import { doubleVerify } from '../../lib/third-party-tags/doubleverify';
 import { ias } from '../../lib/third-party-tags/ias';
 import { imrWorldwide } from '../../lib/third-party-tags/imr-worldwide';
 import { imrWorldwideLegacy } from '../../lib/third-party-tags/imr-worldwide-legacy';
@@ -11,8 +13,6 @@ import { inizio } from '../../lib/third-party-tags/inizio';
 import { permutive } from '../../lib/third-party-tags/permutive';
 import { remarketing } from '../../lib/third-party-tags/remarketing';
 import type { ThirdPartyTag } from '../../types/global';
-import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
-import { doubleVerify } from '../../lib/third-party-tags/doubleverify';
 
 const isIdentityPage = () =>
 	window.guardian.config.page.contentType === 'Identity' ||
@@ -85,6 +85,8 @@ const insertScripts = async (
 	const consentedAdvertisingServices = advertisingServices.filter(
 		(script) => {
 			if (script.name === undefined) return false;
+			// we do not need a consent check for doubleVerify as it's running in the US only
+			if(script.name === 'doubleVerify') return true;
 			return getConsentFor(script.name, consentState);
 		},
 	);
@@ -106,7 +108,7 @@ const loadOther = (): Promise<void> => {
 			shouldRun: window.guardian.config.switches.ias ?? false,
 		}),
 		doubleVerify({
-			shouldRun: true && isInUsa(),
+			shouldRun: (window.guardian.config.switches.ias ?? false) && isInUsa(),
 		}),
 		inizio({ shouldRun: window.guardian.config.switches.inizio ?? false }),
 	].filter((_) => _.shouldRun);

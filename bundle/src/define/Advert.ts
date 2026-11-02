@@ -22,10 +22,10 @@ import { prebid } from '../lib/header-bidding/prebid';
 import type { HeaderBiddingSlot } from '../lib/header-bidding/prebid-types';
 import { sdc } from '../lib/header-bidding/sdc/sdc';
 import { stripDfpAdPrefixFrom } from '../lib/header-bidding/utils';
+import { isDvActive } from '../lib/third-party-tags/doubleverify-state';
 import { adQueue } from '../lib/timed-queue';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';
 import { refreshedAdSizes } from './refreshed-ad-sizes';
-import { isDvActive } from '../lib/third-party-tags/doubleverify-state';
 
 const stringToTuple = (size: string): [number, number] => {
 	const dimensions = size.split(',', 2).map(Number);
