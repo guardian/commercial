@@ -7,6 +7,7 @@ export const installOnDvtagReady = (): void => {
 		const opt = { callback, timeout, timestamp: new Date().getTime() };
 		// @ts-expect-error
 		dvtag.cmd.push(function () {
+			// @ts-expect-error -- DV snippet uses bare dvtag global
 			dvtag.queueAdRequest(opt);
 		});
 		setTimeout(function () {
