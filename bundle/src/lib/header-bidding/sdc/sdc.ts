@@ -104,6 +104,7 @@ const requestBids = async () => {
 	const sdcUrl =
 		process.env.SDC_URL ?? 'https://contributions.guardianapis.com';
 	const hasConsented = await getHasConsented();
+	const isSignedIn = await isUserLoggedIn();
 	const payload = {
 		targeting: {
 			showSupportMessaging: getShowSupportMessaging(),
@@ -113,7 +114,7 @@ const requestBids = async () => {
 			tagIds: window.guardian.config.page.keywordIds.split(','),
 			pageId: window.guardian.config.page.pageId,
 			browserId: getBrowserId(hasConsented),
-			isSignedIn: await isUserLoggedIn(),
+			isSignedIn: isSignedIn,
 			hasConsented,
 		},
 	};
