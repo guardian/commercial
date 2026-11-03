@@ -184,6 +184,18 @@ const loadPage = async ({
 		},
 	);
 
+	// Ensures that the CMP loads in the US.
+	// The CMP is displayed in the US in only four states, including California.
+	if (region === 'US') {
+		page.context().addCookies([
+			{
+				name: 'GU_geo_country_region',
+				value: 'US-CA',
+				url: process.env.DCR_URL ?? 'http://localhost:3030',
+			},
+		]);
+	}
+
 	logUnfilledSlots(page);
 
 	if (LOG_COMMERCIAL) {
