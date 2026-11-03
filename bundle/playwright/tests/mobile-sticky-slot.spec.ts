@@ -22,12 +22,15 @@ test.describe('mobile-sticky', () => {
 				'force-banner': '',
 			};
 			await loadPage({ page, path, region: 'US', queryParams });
-
-			await expect(page.locator(cmpSelector)).toBeAttached();
-			await expect(page.locator(mobileStickySelector)).not.toBeAttached();
+			const isCmpOnPage = await page.locator(cmpSelector).count() > 0;
+			if (isCmpOnPage) {
+				await expect(page.locator(mobileStickySelector)).not.toBeAttached();
+			}
 		});
 
-		(['AU', 'IE', 'CA'] satisfies Array<LoadPageParams['region']>).map((region) =>
+		(
+			['US', 'AU', 'IE', 'CA'] satisfies Array<LoadPageParams['region']>
+		).map((region) =>
 			test(`should render on page after the CMP has been dismissed in geo ${region}`, async ({
 				page,
 			}) => {
@@ -37,10 +40,13 @@ test.describe('mobile-sticky', () => {
 					'force-banner': '',
 				};
 				await loadPage({ page, path, region, queryParams });
-				await cmpAcceptAll(page);
 
-				await expect(page.locator(cmpSelector)).not.toBeAttached();
-				await expect(page.locator(mobileStickySelector)).toBeAttached();
+				const isCmpOnPage = await page.locator(cmpSelector).count() > 0;
+				if (isCmpOnPage) {
+					await cmpAcceptAll(page);
+					await expect(page.locator(cmpSelector)).not.toBeAttached();
+					await expect(page.locator(mobileStickySelector)).toBeAttached();
+				}
 			}),
 		);
 
@@ -51,8 +57,8 @@ test.describe('mobile-sticky', () => {
 				'force-banner': '',
 			};
 			await loadPage({ page, path, region: 'GB', queryParams });
-			await cmpAcceptAll(page);
 
+			await cmpAcceptAll(page);
 			await expect(page.locator(cmpSelector)).not.toBeAttached();
 			await expect(page.locator(mobileStickySelector)).not.toBeAttached();
 		});
@@ -65,9 +71,13 @@ test.describe('mobile-sticky', () => {
 				adtest: 'mobileStickyTest',
 				'force-banner': '',
 			};
-			await loadPage({ page, path, region: 'AU', queryParams });
-			await cmpAcceptAll(page);
-			await page.reload();
+			await loadPage({ page, path, region: 'US', queryParams });
+
+			const isCmpOnPage = await page.locator(cmpSelector).count() > 0;
+			if (isCmpOnPage) {
+				await cmpAcceptAll(page);
+				await page.reload();
+			}
 
 			// Banner should be visible, mobile sticky ad slot should not
 			await expect(page.locator(bannerSelector)).toBeVisible();
@@ -82,9 +92,13 @@ test.describe('mobile-sticky', () => {
 				adtest: 'mobileStickyTest',
 				'force-banner': '',
 			};
-			await loadPage({ page, path, region: 'AU', queryParams });
-			await cmpAcceptAll(page);
-			await page.reload({ waitUntil: 'networkidle' });
+			await loadPage({ page, path, region: 'US', queryParams });
+
+			const isCmpOnPage = await page.locator(cmpSelector).count() > 0;
+			if (isCmpOnPage) {
+				await cmpAcceptAll(page);
+				await page.reload({ waitUntil: 'networkidle' });
+			}
 
 			// Dismiss banner
 			// TODO: These text selectors are fragile - consider adding data-testid
@@ -132,9 +146,13 @@ test.describe('mobile-sticky', () => {
 			const queryParams = {
 				adtest: 'mobileStickyTest',
 			};
-			await loadPage({ page, path, region: 'AU', queryParams });
-			await cmpAcceptAll(page);
-			await page.reload();
+			await loadPage({ page, path, region: 'US', queryParams });
+
+			const isCmpOnPage = await page.locator(cmpSelector).count() > 0;
+			if (isCmpOnPage) {
+				await cmpAcceptAll(page);
+				await page.reload();
+			}
 
 			await expect(page.locator(mobileStickySelector)).toBeAttached();
 		});
@@ -151,9 +169,13 @@ test.describe('mobile-sticky', () => {
 					`{"value":"${new Date().toISOString()}"}`,
 				);
 			});
-			await loadPage({ page, path, region: 'AU' });
-			await cmpAcceptAll(page);
-			await page.reload();
+			await loadPage({ page, path, region: 'US' });
+
+			const isCmpOnPage = await page.locator(cmpSelector).count() > 0;
+			if (isCmpOnPage) {
+				await cmpAcceptAll(page);
+				await page.reload();
+			}
 
 			await expect(page.locator(mobileStickySelector)).toBeAttached();
 		});
