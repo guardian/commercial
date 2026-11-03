@@ -31,7 +31,10 @@ const fillDynamicAdSlot = (
 			}
 
 			const advert = createAdvert(adSlot, additionalSizes, slotTargeting);
-			if (advert === null) return;
+			if (advert === null) {
+				resolve(null);
+				return;
+			}
 
 			dfpEnv.adverts.set(advert.id, advert);
 			displayAd(advert, forceDisplay);

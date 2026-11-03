@@ -33,6 +33,14 @@ To develop the bundle locally on the bundle, run `pnpm serve` to start a local s
 
 ### Testing locally with DCR
 
+To simulate an SDC inline1 support message, add `?simulate-inline1=true` to the
+page URL. When Commercial encounters `dfp-ad--inline1` during static or dynamic
+slot creation, it marks the slot as rendered and dispatches a bubbling
+`commercial.sdc-render` event with preview props. DCR remains responsible for
+rendering the message. Inline1 is not registered with GPT or queued for bidding,
+loading, or refresh, so GAM cannot subsequently collapse the preview. Other slots
+continue to load normally. This preview does not depend on SDC or GAM responses.
+
 To run the unit tests:
 
 `pnpm test`

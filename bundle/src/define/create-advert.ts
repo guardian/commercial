@@ -3,12 +3,18 @@ import { log } from '@guardian/libs';
 import { reportError } from '../lib/error/report-error';
 import { Advert } from './Advert';
 import { DefineSlotError } from './define-slot';
+import { renderInline1Preview } from './inline1-preview';
 
 const createAdvert = (
 	adSlot: HTMLElement,
 	additionalSizes?: SizeMapping,
 	slotTargeting?: Record<string, string>,
 ): Advert | null => {
+	// Do not define a GPT slot: SRA would request it even without display().
+	if (renderInline1Preview(adSlot)) {
+		return null;
+	}
+
 	try {
 		const advert = new Advert(adSlot, additionalSizes, slotTargeting);
 		return advert;
