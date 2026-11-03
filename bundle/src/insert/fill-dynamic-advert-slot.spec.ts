@@ -1,14 +1,23 @@
 import { Advert } from '../define/Advert';
 import { dfpEnv } from '../lib/dfp/dfp-env';
+import { inline1Response } from '../lib/header-bidding/sdc/fixtures';
+import { sdc } from '../lib/header-bidding/sdc/sdc';
 import { fillDynamicAdSlot } from './fill-dynamic-advert-slot';
 
 jest.mock('../define/Advert', () => ({
 	Advert: jest.fn(),
 }));
+jest.mock('../lib/header-bidding/sdc/sdc', () => ({
+	sdc: { getInline1Data: jest.fn() },
+}));
 
 describe('fillDynamicAdSlot inline1 preview', () => {
 	const originalUrl = window.location.href;
 	const originalGoogletag = window.googletag;
+
+	beforeEach(() => {
+		jest.mocked(sdc.getInline1Data).mockResolvedValue(inline1Response);
+	});
 
 	afterEach(() => {
 		window.history.replaceState(null, '', originalUrl);

@@ -1,19 +1,28 @@
+import { inline1Response } from '../lib/header-bidding/sdc/fixtures';
+import { sdc } from '../lib/header-bidding/sdc/sdc';
 import { Advert } from './Advert';
 import { createAdvert } from './create-advert';
 
 jest.mock('./Advert', () => ({
 	Advert: jest.fn(),
 }));
+jest.mock('../lib/header-bidding/sdc/sdc', () => ({
+	sdc: { getInline1Data: jest.fn() },
+}));
 
 describe('createAdvert inline1 preview', () => {
 	const originalUrl = window.location.href;
+
+	beforeEach(() => {
+		jest.mocked(sdc.getInline1Data).mockResolvedValue(inline1Response);
+	});
 
 	afterEach(() => {
 		window.history.replaceState(null, '', originalUrl);
 		document.body.innerHTML = '';
 	});
 
-	it('renders preview content without constructing a GPT-backed advert', () => {
+	it('renders preview content without constructing a GPT-backed advert', async () => {
 		window.history.replaceState(null, '', '/?simulate-inline1=true');
 		const element = document.createElement('div');
 		element.id = 'dfp-ad--inline1';
@@ -24,6 +33,7 @@ describe('createAdvert inline1 preview', () => {
 		element.addEventListener('commercial.sdc-render', render);
 
 		expect(createAdvert(element)).toBeNull();
+		await Promise.resolve();
 
 		expect(Advert).not.toHaveBeenCalled();
 		expect(render).toHaveBeenCalledTimes(1);

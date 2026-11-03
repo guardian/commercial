@@ -1,40 +1,44 @@
-const renderedPreviews = new WeakSet<HTMLElement>();
+import { reportError } from '../lib/error/report-error';
+import { sdc } from '../lib/header-bidding/sdc/sdc';
+
+const requestedPreviews = new WeakSet<HTMLElement>();
 
 export const renderInline1Preview = (element: HTMLElement): boolean => {
+	const simulate = new URLSearchParams(window.location.search).get(
+		'simulate-inline1',
+	);
 	if (
 		element.id !== 'dfp-ad--inline1' ||
-		new URLSearchParams(window.location.search).get('simulate-inline1') !==
-			'true'
+		(simulate !== '' && simulate !== 'true')
 	) {
 		return false;
 	}
 
-	if (renderedPreviews.has(element)) {
+	if (requestedPreviews.has(element)) {
 		return true;
 	}
 
-	renderedPreviews.add(element);
-	element.classList.add('ad-slot--rendered');
-	element.dispatchEvent(
-		new CustomEvent('commercial.sdc-render', {
-			detail: {
-				props: {
-					variant: {
-						name: 'control',
-						message: {
-							type: 'Inline1SupportMessage',
-							heading: 'Support fearless, independent journalism',
-							body: 'Please subscribe for unlimited access to our award-winning app and support the Guardian’s independent journalism.',
-							primaryCta: {
-								text: 'Support us',
-								baseUrl: '',
-							},
-						},
+	requestedPreviews.add(element);
+	void sdc
+		.getInline1Data()
+		.then((response) => {
+			if (!response.data) {
+				throw new Error('SDC returned no Inline1 test for the preview');
+			}
+
+			element.classList.add('ad-slot--rendered');
+			element.dispatchEvent(
+				new CustomEvent('commercial.sdc-render', {
+					detail: {
+						props: response.data.module.props,
 					},
-				},
-			},
-			bubbles: true,
-		}),
-	);
+					bubbles: true,
+				}),
+			);
+		})
+		.catch((error: unknown) => {
+			requestedPreviews.delete(element);
+			reportError(error, 'commercial', { slot: element.id });
+		});
 	return true;
 };

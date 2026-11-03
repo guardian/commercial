@@ -100,7 +100,7 @@ const getMvtId = (): number => {
 	return 0;
 };
 
-const requestBids = async () => {
+const getInline1Data = async (): Promise<ModuleDataResponse<Inline1Props>> => {
 	const sdcUrl =
 		process.env.SDC_URL ?? 'https://contributions.guardianapis.com';
 	const hasConsented = await getHasConsented();
@@ -125,9 +125,15 @@ const requestBids = async () => {
 		payload,
 	);
 
+	return response;
+};
+
+const requestBids = async (): Promise<void> => {
+	const response = await getInline1Data();
 	console.log(`Response From SDC: ${JSON.stringify(response)}`);
 };
 
 export const sdc = {
 	requestBids,
+	getInline1Data,
 };

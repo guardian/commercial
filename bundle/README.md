@@ -33,13 +33,21 @@ To develop the bundle locally on the bundle, run `pnpm serve` to start a local s
 
 ### Testing locally with DCR
 
-To simulate an SDC inline1 support message, add `?simulate-inline1=true` to the
-page URL. When Commercial encounters `dfp-ad--inline1` during static or dynamic
-slot creation, it marks the slot as rendered and dispatches a bubbling
-`commercial.sdc-render` event with preview props. DCR remains responsible for
-rendering the message. Inline1 is not registered with GPT or queued for bidding,
-loading, or refresh, so GAM cannot subsequently collapse the preview. Other slots
-continue to load normally. This preview does not depend on SDC or GAM responses.
+To render an SDC Inline1 test from the support admin console, add
+`?simulate-inline1` (or `?simulate-inline1=true`) to the page URL. When Commercial
+encounters `dfp-ad--inline1` during static or dynamic slot creation, it requests
+the selected test from SDC. To select a particular test/variant, append
+`&force-inline1=<selection>` or `&preview-inline1=<selection>`, using the selection
+from the support admin console. Without either parameter, SDC selects a test
+using the page's targeting.
+
+After SDC responds, Commercial marks the slot as rendered and dispatches a
+bubbling `commercial.sdc-render` event containing `data.module.props` from the
+response. DCR remains responsible for rendering the message. Inline1 is not
+registered with GPT or queued for bidding, loading, or refresh, so GAM cannot
+subsequently collapse the preview. Other slots continue to load normally. Failed
+requests or responses with no selected test are reported through Commercial's
+error reporting; they do not fall back to hardcoded content or GAM.
 
 To run the unit tests:
 
