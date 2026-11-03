@@ -7,6 +7,7 @@ import { adSlotIdPrefix } from '../dfp/dfp-env-globals';
 import { getAdvertById } from '../dfp/get-advert-by-id';
 import fastdom from '../fastdom-promise';
 import type { RegisterListener } from '../messenger';
+import { isDvActive } from '../third-party-tags/doubleverify-state';
 
 type PassbackMessagePayload = { source: string };
 
@@ -385,7 +386,15 @@ const initPassbackMessage = (register: RegisterListener): void => {
 							'commercial',
 							`Passback: displaying slot '${passbackElement.id}'`,
 						);
-						googletag.display(passbackElement.id);
+						if (isDvActive()) {
+							window.onDvtagReady?.(() => {
+								window.googletag.cmd.push(() => {
+									googletag.display(passbackElement.id);
+								});
+							});
+						} else {
+							googletag.display(passbackElement.id);
+						}
 					}
 				});
 			});
