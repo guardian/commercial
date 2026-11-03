@@ -22,9 +22,11 @@ test.describe('mobile-sticky', () => {
 				'force-banner': '',
 			};
 			await loadPage({ page, path, region: 'US', queryParams });
-			const isCmpOnPage = await page.locator(cmpSelector).count() > 0;
+			const isCmpOnPage = (await page.locator(cmpSelector).count()) > 0;
 			if (isCmpOnPage) {
-				await expect(page.locator(mobileStickySelector)).not.toBeAttached();
+				await expect(
+					page.locator(mobileStickySelector),
+				).not.toBeAttached();
 			}
 		});
 
@@ -41,11 +43,14 @@ test.describe('mobile-sticky', () => {
 				};
 				await loadPage({ page, path, region, queryParams });
 
-				const isCmpOnPage = await page.locator(cmpSelector).count() > 0;
+				const isCmpOnPage =
+					(await page.locator(cmpSelector).count()) > 0;
 				if (isCmpOnPage) {
 					await cmpAcceptAll(page);
 					await expect(page.locator(cmpSelector)).not.toBeAttached();
-					await expect(page.locator(mobileStickySelector)).toBeAttached();
+					await expect(
+						page.locator(mobileStickySelector),
+					).toBeAttached();
 				}
 			}),
 		);
@@ -73,7 +78,7 @@ test.describe('mobile-sticky', () => {
 			};
 			await loadPage({ page, path, region: 'US', queryParams });
 
-			const isCmpOnPage = await page.locator(cmpSelector).count() > 0;
+			const isCmpOnPage = (await page.locator(cmpSelector).count()) > 0;
 			if (isCmpOnPage) {
 				await cmpAcceptAll(page);
 				await page.reload();
@@ -94,7 +99,7 @@ test.describe('mobile-sticky', () => {
 			};
 			await loadPage({ page, path, region: 'US', queryParams });
 
-			const isCmpOnPage = await page.locator(cmpSelector).count() > 0;
+			const isCmpOnPage = (await page.locator(cmpSelector).count()) > 0;
 			if (isCmpOnPage) {
 				await cmpAcceptAll(page);
 				await page.reload({ waitUntil: 'networkidle' });
@@ -148,7 +153,7 @@ test.describe('mobile-sticky', () => {
 			};
 			await loadPage({ page, path, region: 'US', queryParams });
 
-			const isCmpOnPage = await page.locator(cmpSelector).count() > 0;
+			const isCmpOnPage = (await page.locator(cmpSelector).count()) > 0;
 			if (isCmpOnPage) {
 				await cmpAcceptAll(page);
 				await page.reload();
@@ -171,7 +176,7 @@ test.describe('mobile-sticky', () => {
 			});
 			await loadPage({ page, path, region: 'US' });
 
-			const isCmpOnPage = await page.locator(cmpSelector).count() > 0;
+			const isCmpOnPage = (await page.locator(cmpSelector).count()) > 0;
 			if (isCmpOnPage) {
 				await cmpAcceptAll(page);
 				await page.reload();
