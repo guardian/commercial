@@ -65,7 +65,7 @@ test.describe('mobile-sticky', () => {
 				adtest: 'mobileStickyTest',
 				'force-banner': '',
 			};
-			await loadPage({ page, path, region: 'US', queryParams });
+			await loadPage({ page, path, region: 'AU', queryParams });
 			await cmpAcceptAll(page);
 			await page.reload();
 
@@ -82,7 +82,7 @@ test.describe('mobile-sticky', () => {
 				adtest: 'mobileStickyTest',
 				'force-banner': '',
 			};
-			await loadPage({ page, path, region: 'US', queryParams });
+			await loadPage({ page, path, region: 'AU', queryParams });
 			await cmpAcceptAll(page);
 			await page.reload({ waitUntil: 'networkidle' });
 
@@ -132,7 +132,7 @@ test.describe('mobile-sticky', () => {
 			const queryParams = {
 				adtest: 'mobileStickyTest',
 			};
-			await loadPage({ page, path, region: 'US', queryParams });
+			await loadPage({ page, path, region: 'AU', queryParams });
 			await cmpAcceptAll(page);
 			await page.reload();
 
@@ -151,7 +151,7 @@ test.describe('mobile-sticky', () => {
 					`{"value":"${new Date().toISOString()}"}`,
 				);
 			});
-			await loadPage({ page, path, region: 'US' });
+			await loadPage({ page, path, region: 'AU' });
 			await cmpAcceptAll(page);
 			await page.reload();
 
