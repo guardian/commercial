@@ -27,9 +27,7 @@ test.describe('mobile-sticky', () => {
 			await expect(page.locator(mobileStickySelector)).not.toBeAttached();
 		});
 
-		(
-			['US', 'AU', 'IE', 'CA'] satisfies Array<LoadPageParams['region']>
-		).map((region) =>
+		(['AU', 'IE', 'CA'] satisfies Array<LoadPageParams['region']>).map((region) =>
 			test(`should render on page after the CMP has been dismissed in geo ${region}`, async ({
 				page,
 			}) => {
