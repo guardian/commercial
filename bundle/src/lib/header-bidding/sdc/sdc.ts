@@ -127,23 +127,35 @@ const requestBids = async () => {
 	);
 	// TODO - set GAM targeting data for the SDC bid
 
-	// set up an event listener with the SDC data. This will be posted from the creative from GAM
-	window.addEventListener('gam-creative.sdc-render', () => {
-		const slotElement = getAdvertById(`${adSlotIdPrefix}inline1`)?.node;
-		slotElement?.dispatchEvent(
-			new CustomEvent('commercial.sdc-render', {
-				detail: { props: response.data?.module.props },
-				bubbles: true,
+	if (response.data) {
+		const { props } = response.data.module;
+		// Set up a listener for an event that will be posted from the creative from GAM if SDC wins
+		window.addEventListener('gam-creative.sdc-render', () => {
+			// Now notify the DCR page. We dispatch an event *and* set it on the window object, in case the listener isn't ready yet
+			const slotId = `${adSlotIdPrefix}inline1`;
+			window.guardian.sdc = {
+				inline1: {
+					props,
+					slotId,
+				},
+			};
+			// Dispatch from the slot element
+			const slotElement = getAdvertById(slotId)?.node;
+			slotElement?.dispatchEvent(
+				new CustomEvent('commercial.sdc-render', {
+					detail: { props: response.data?.module.props },
+					bubbles: true,
+				}),
+			);
+		});
+
+		// temporarily simulates the creative posting the event to the commercial bundle -
+		dispatchEvent(
+			new CustomEvent('gam-creative.sdc-render', {
+				detail: {},
 			}),
 		);
-	});
-
-	// temporarily simulates the creative posting the event to the commercial bundle -
-	dispatchEvent(
-		new CustomEvent('gam-creative.sdc-render', {
-			detail: {},
-		}),
-	);
+	}
 
 	console.log(`Response From SDC: ${JSON.stringify(response)}`);
 };
