@@ -104,6 +104,7 @@ const config = {
 		}),
 		new DefinePlugin({
 			'process.env.COMMIT_SHA': JSON.stringify(gitCommitSHA()),
+			'process.env.SDC_URL': JSON.stringify(process.env.SDC_URL),
 		}),
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-call -- circular-dependency-plugin is not typed
 		new CircularDependencyPlugin({
