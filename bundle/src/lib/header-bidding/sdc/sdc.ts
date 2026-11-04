@@ -148,9 +148,9 @@ const requestBids = async (): Promise<void> => {
 
 // If SDC wins the auction then the creative posts a message, triggering this callback.
 // Here we post a custom event to the DCR page with the SDC data.
-const onCreativeRender = async (): Promise<Inline1Props | null> => {
+const onCreativeRender = async (): Promise<void> => {
 	const props = await bidPromise;
-	if (!props) return null;
+	if (!props) return;
 
 	const slotId = `${adSlotIdPrefix}inline1`;
 	// Set on the window as well as dispatching, in case DCR's listener isn't ready yet
@@ -161,10 +161,16 @@ const onCreativeRender = async (): Promise<Inline1Props | null> => {
 			bubbles: true,
 		}),
 	);
-	return props;
 };
 
 export const sdc = {
 	requestBids,
 	onCreativeRender,
+};
+
+// For testing
+export const _ = {
+	reset: (): void => {
+		bidPromise = undefined;
+	},
 };
