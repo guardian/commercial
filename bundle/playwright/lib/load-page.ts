@@ -1,7 +1,6 @@
 import type { Cookie } from '@playwright/test';
 import { type Page } from '@playwright/test';
-
-const ORIGIN = `http://localhost:3030`;
+import { ORIGIN } from '../../playwright.config';
 
 // Log commercial logs to playwight console
 const LOG_COMMERCIAL = false;
@@ -183,6 +182,18 @@ const loadPage = async ({
 			region,
 		},
 	);
+
+	// Ensures that the CMP loads in the US.
+	// The CMP is displayed in the US in only four states, including California.
+	if (region === 'US') {
+		page.context().addCookies([
+			{
+				name: 'GU_geo_country_region',
+				value: 'US-CA',
+				url: ORIGIN,
+			},
+		]);
+	}
 
 	logUnfilledSlots(page);
 
