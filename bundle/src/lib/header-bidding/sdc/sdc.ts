@@ -8,7 +8,6 @@ import type {
 } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { TestTracking } from '@guardian/support-dotcom-components/dist/shared/types/abTests/shared';
 import { adSlotIdPrefix } from '../../dfp/dfp-env-globals';
-import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { isUserLoggedIn } from '../../identity/api';
 
 interface ModuleData<PROPS> {
@@ -102,7 +101,7 @@ const getMvtId = (): number => {
 	return 0;
 };
 
-const requestBids = async () => {
+const fetchBid = async (): Promise<Inline1Props | null> => {
 	const sdcUrl =
 		process.env.SDC_URL ?? 'https://contributions.guardianapis.com';
 	const hasConsented = await getHasConsented();
@@ -127,39 +126,45 @@ const requestBids = async () => {
 	);
 	// TODO - set GAM targeting data for the SDC bid
 
-	if (response.data) {
-		const { props } = response.data.module;
-		// Set up a listener for an event that will be posted from the creative from GAM if SDC wins
-		window.addEventListener('gam-creative.sdc-render', () => {
-			// Now notify the DCR page. We dispatch an event *and* set it on the window object, in case the listener isn't ready yet
-			const slotId = `${adSlotIdPrefix}inline1`;
-			window.guardian.sdc = {
-				inline1: {
-					props,
-					slotId,
-				},
-			};
-			// Dispatch from the slot element
-			const slotElement = getAdvertById(slotId)?.node;
-			slotElement?.dispatchEvent(
-				new CustomEvent('commercial.sdc-render', {
-					detail: { props: response.data?.module.props },
-					bubbles: true,
-				}),
-			);
-		});
+	return response.data?.module.props ?? null;
+};
 
-		// temporarily simulates the creative posting the event to the commercial bundle -
-		dispatchEvent(
-			new CustomEvent('gam-creative.sdc-render', {
-				detail: {},
-			}),
-		);
+// Store the result of the request to SDC
+let bidPromise: Promise<Inline1Props | null> | undefined;
+
+const requestBids = async (): Promise<void> => {
+	// Only make the request once
+	if (bidPromise) {
+		await bidPromise;
+		return;
 	}
 
-	console.log(`Response From SDC: ${JSON.stringify(response)}`);
+	bidPromise = fetchBid().catch((error: unknown) => {
+		console.error('SDC bid request failed', error);
+		return null;
+	});
+	await bidPromise;
+};
+
+// If SDC wins the auction then the creative posts a message, triggering this callback.
+// Here we post a custom event to the DCR page with the SDC data.
+const onCreativeRender = async (): Promise<Inline1Props | null> => {
+	const props = await bidPromise;
+	if (!props) return null;
+
+	const slotId = `${adSlotIdPrefix}inline1`;
+	// Set on the window as well as dispatching, in case DCR's listener isn't ready yet
+	window.guardian.sdc = { inline1: { props, slotId } };
+	document.getElementById(slotId)?.dispatchEvent(
+		new CustomEvent('commercial.sdc-render', {
+			detail: { props },
+			bubbles: true,
+		}),
+	);
+	return props;
 };
 
 export const sdc = {
 	requestBids,
+	onCreativeRender,
 };
