@@ -23,7 +23,11 @@ describe('createAdvert inline1 preview', () => {
 	});
 
 	it('renders preview content without constructing a GPT-backed advert', async () => {
-		window.history.replaceState(null, '', '/?simulate-inline1=true');
+		window.history.replaceState(
+			null,
+			'',
+			'/?preview-inline1=draft-test%3Avariant',
+		);
 		const element = document.createElement('div');
 		element.id = 'dfp-ad--inline1';
 		document.body.appendChild(element);
@@ -46,7 +50,7 @@ describe('createAdvert inline1 preview', () => {
 		expect(render).toHaveBeenCalledTimes(1);
 	});
 
-	it.each(['', '?simulate-inline1=false'])(
+	it.each(['', '?force-inline1=admin-test%3Avariant'])(
 		'creates a normal Inline1 advert with query %s',
 		(query) => {
 			window.history.replaceState(null, '', `/${query}`);
@@ -59,7 +63,11 @@ describe('createAdvert inline1 preview', () => {
 	);
 
 	it('continues creating other adverts when the preview is enabled', () => {
-		window.history.replaceState(null, '', '/?simulate-inline1=true');
+		window.history.replaceState(
+			null,
+			'',
+			'/?preview-inline1=draft-test%3Avariant',
+		);
 		const element = document.createElement('div');
 		element.id = 'dfp-ad--inline2';
 

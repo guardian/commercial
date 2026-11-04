@@ -33,13 +33,10 @@ To develop the bundle locally on the bundle, run `pnpm serve` to start a local s
 
 ### Testing locally with DCR
 
-To render an SDC Inline1 test from the support admin console, add
-`?simulate-inline1` (or `?simulate-inline1=true`) to the page URL. When Commercial
-encounters `dfp-ad--inline1` during static or dynamic slot creation, it requests
-the selected test from SDC. To select a particular test/variant, append
-`&force-inline1=<selection>` or `&preview-inline1=<selection>`, using the selection
-from the support admin console. Without either parameter, SDC selects a test
-using the page's targeting.
+To render an SDC Inline1 preview from the support admin console, add
+`?preview-inline1=<selection>` to the page URL, using the selection from the
+support admin console. When Commercial encounters `dfp-ad--inline1` during static
+or dynamic slot creation, it requests that preview from SDC.
 
 After SDC responds, Commercial marks the slot as rendered and dispatches a
 bubbling `commercial.sdc-render` event containing `data.module.props` from the

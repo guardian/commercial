@@ -4,13 +4,10 @@ import { sdc } from '../lib/header-bidding/sdc/sdc';
 const requestedPreviews = new WeakSet<HTMLElement>();
 
 export const renderInline1Preview = (element: HTMLElement): boolean => {
-	const simulate = new URLSearchParams(window.location.search).get(
-		'simulate-inline1',
+	const preview = new URLSearchParams(window.location.search).get(
+		'preview-inline1',
 	);
-	if (
-		element.id !== 'dfp-ad--inline1' ||
-		(simulate !== '' && simulate !== 'true')
-	) {
+	if (element.id !== 'dfp-ad--inline1' || preview === null) {
 		return false;
 	}
 

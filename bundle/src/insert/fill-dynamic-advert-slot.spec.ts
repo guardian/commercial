@@ -30,7 +30,11 @@ describe('fillDynamicAdSlot inline1 preview', () => {
 	it.each([true, false])(
 		'resolves without queuing a GAM advert (forceDisplay: %s)',
 		async (forceDisplay) => {
-			window.history.replaceState(null, '', '/?simulate-inline1=true');
+			window.history.replaceState(
+				null,
+				'',
+				'/?preview-inline1=draft-test%3Avariant',
+			);
 			const commands: Array<() => void> = [];
 			// @ts-expect-error -- only the GPT command queue is needed for this test
 			window.googletag = { cmd: commands };

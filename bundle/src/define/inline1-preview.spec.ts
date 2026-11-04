@@ -29,7 +29,7 @@ describe('renderInline1Preview', () => {
 		jest.clearAllMocks();
 	});
 
-	it.each(['', '?simulate-inline1=false'])(
+	it.each(['', '?force-inline1=admin-test%3Avariant'])(
 		'does not render a preview with query %s',
 		(query) => {
 			window.history.replaceState(null, '', `/${query}`);
@@ -45,7 +45,7 @@ describe('renderInline1Preview', () => {
 		},
 	);
 
-	it.each(['?simulate-inline1', '?simulate-inline1=true'])(
+	it.each(['?preview-inline1=draft-test%3Avariant', '?preview-inline1='])(
 		'dispatches the selected SDC props in a bubbling event with query %s',
 		async (query) => {
 			window.history.replaceState(null, '', `/${query}`);
@@ -75,7 +75,11 @@ describe('renderInline1Preview', () => {
 	);
 
 	it('does not render a preview for another slot', () => {
-		window.history.replaceState(null, '', '/?simulate-inline1=true');
+		window.history.replaceState(
+			null,
+			'',
+			'/?preview-inline1=draft-test%3Avariant',
+		);
 		const element = document.createElement('div');
 		element.id = 'dfp-ad--inline2';
 		document.body.appendChild(element);
@@ -87,7 +91,11 @@ describe('renderInline1Preview', () => {
 	});
 
 	it('requests and renders each slot element only once', async () => {
-		window.history.replaceState(null, '', '/?simulate-inline1=true');
+		window.history.replaceState(
+			null,
+			'',
+			'/?preview-inline1=draft-test%3Avariant',
+		);
 		const element = document.createElement('div');
 		element.id = 'dfp-ad--inline1';
 		document.body.appendChild(element);
@@ -106,7 +114,11 @@ describe('renderInline1Preview', () => {
 		['an empty response', undefined],
 		['a failed request', new Error('SDC unavailable')],
 	])('reports %s without rendering hardcoded content', async (_, error) => {
-		window.history.replaceState(null, '', '/?simulate-inline1=true');
+		window.history.replaceState(
+			null,
+			'',
+			'/?preview-inline1=draft-test%3Avariant',
+		);
 		const element = document.createElement('div');
 		element.id = 'dfp-ad--inline1';
 		document.body.appendChild(element);

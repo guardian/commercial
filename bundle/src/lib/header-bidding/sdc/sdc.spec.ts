@@ -55,13 +55,10 @@ describe('SDC Inline1 data', () => {
 	});
 
 	it.each([
-		['?simulate-inline1', ''],
+		['', ''],
+		['?force-inline1=admin-test%3Avariant', '?force=admin-test%3Avariant'],
 		[
-			'?simulate-inline1&force-inline1=admin-test%3Avariant',
-			'?force=admin-test%3Avariant',
-		],
-		[
-			'?simulate-inline1&preview-inline1=draft-test%3Avariant',
+			'?preview-inline1=draft-test%3Avariant',
 			'?preview=draft-test%3Avariant',
 		],
 	])('returns the selected test for %s', async (query, expectedQuery) => {
