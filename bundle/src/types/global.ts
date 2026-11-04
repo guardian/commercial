@@ -17,10 +17,10 @@ import type {
 	Trac,
 } from '@guardian/commercial-core/types';
 import type { CustomClaims } from '@guardian/identity-auth';
+import type { Inline1Props } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { Advert, AdvertStatus } from '../define/Advert';
 import type { Queue } from '../lib/guardian-commercial-queue';
 import type { ThirdPartyTag } from '../lib/types';
-import { Inline1Props } from '@guardian/support-dotcom-components/dist/shared/types';
 
 type ServerSideABTest = `${string}${'Variant' | 'Control'}`;
 
