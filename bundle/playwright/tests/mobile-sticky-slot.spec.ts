@@ -108,21 +108,23 @@ test.describe('mobile-sticky', () => {
 			// Dismiss banner
 			// TODO: These text selectors are fragile - consider adding data-testid
 			// attributes if this test starts failing due to banner text changes
-			const twoStepBanner = page
+			const twoStepBannerCloseButton = page
 				.getByRole('alert')
 				.getByRole('button', { name: 'Collapse banner' });
 
-			const oneStepBanner = page
+			const oneStepBannerCloseButton = page
 				.getByRole('alert')
 				.getByRole('button', { name: 'Close' });
 
-			expect(twoStepBanner.or(oneStepBanner)).toBeVisible();
+			expect(twoStepBannerCloseButton.or(oneStepBannerCloseButton)).toBeVisible();
 
-			if (await twoStepBanner.isVisible()) {
-				await twoStepBanner.click();
+			try {
+				// Try closing the two step banner
+				await twoStepBannerCloseButton.click();
 				await page.getByText('Maybe later').click();
-			} else {
-				await oneStepBanner.click();
+			} catch {
+				// Otherwise it should be the one step banner
+				await oneStepBannerCloseButton.click();
 			}
 
 			// Banner hidden, ad slot should now appear
