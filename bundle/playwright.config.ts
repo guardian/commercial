@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
+export const ORIGIN = `http://localhost:3030`;
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
