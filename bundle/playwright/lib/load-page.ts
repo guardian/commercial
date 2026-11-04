@@ -1,7 +1,6 @@
 import type { Cookie } from '@playwright/test';
 import { type Page } from '@playwright/test';
-
-const ORIGIN = `http://localhost:3030`;
+import { ORIGIN } from '../../playwright.config';
 
 // Log commercial logs to playwight console
 const LOG_COMMERCIAL = false;
@@ -191,7 +190,7 @@ const loadPage = async ({
 			{
 				name: 'GU_geo_country_region',
 				value: 'US-CA',
-				url: process.env.DCR_URL ?? 'http://localhost:3030',
+				url: ORIGIN,
 			},
 		]);
 	}
