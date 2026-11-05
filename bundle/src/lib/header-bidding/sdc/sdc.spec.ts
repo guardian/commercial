@@ -93,8 +93,8 @@ describe('sdc', () => {
             mockFetch.mockResolvedValue(bidResponse);
             await sdc.requestBids();
 
-            const [, options] = mockFetch.mock.calls[0];
-            const sentBody = JSON.parse(options.body);
+            const fetchData = mockFetch.mock.calls[0];
+            const sentBody = JSON.parse(fetchData.body);
 
             expect(sentBody.targeting).toEqual({
                 showSupportMessaging: true,
