@@ -15,6 +15,7 @@ jest.mock('@guardian/libs', () => ({
 
 jest.mock('../../identity/api', () => ({
 	isUserLoggedIn: jest.fn().mockResolvedValue(false),
+    getAuthStatus: jest.fn().mockResolvedValue({ kind: 'SignedOut' }),
 }));
 
 const props = { heading: 'Support us' } as unknown as Inline1Props;
@@ -87,6 +88,25 @@ describe('sdc', () => {
 			await sdc.onCreativeRender();
 			expect(window.guardian.commercial?.sdc).toBeUndefined();
 		});
+
+        it('constructs and sends a targeting payload correctly', async () => {
+            mockFetch.mockResolvedValue(bidResponse);
+            await sdc.requestBids();
+
+            const [, options] = mockFetch.mock.calls[0];
+            const sentBody = JSON.parse(options.body);
+
+            expect(sentBody.targeting).toEqual({
+                showSupportMessaging: true,
+                mvtId: 0,
+                countryCode: 'GB',
+                sectionId: 'news',
+                tagIds: ['a', 'b'],
+                pageId: 'some/page',
+                isSignedIn: false,
+                hasConsented: true,
+            });
+        });
 	});
 
 	describe('onCreativeRender', () => {
