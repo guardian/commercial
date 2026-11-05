@@ -112,8 +112,7 @@ const getOptionsHeaders = (authStatus: SignedIn): RequestInit => {
 	};
 }
 
-const getAuthHeaders = async () => {
-	const hasConsented = await getHasConsented();
+const getAuthHeaders = async (hasConsented: boolean) => {
 	if (hasConsented) {
 		const authStatus = await getAuthStatus();
 		if (authStatus.kind === 'SignedIn') {
@@ -142,7 +141,7 @@ const fetchBid = async (): Promise<Inline1Props | null> => {
 		},
 	};
 
-	const authHeaders = await getAuthHeaders();
+	const authHeaders = await getAuthHeaders(hasConsented);
 
 	const response: ModuleDataResponse<Inline1Props> = await getModuleData(
 		'inline1',
