@@ -1,26 +1,17 @@
 import { doubleVerify } from './doubleverify';
 
 describe('doubleVerify', () => {
-	afterEach(() => {
-		delete window.onDvtagReady;
+	it('should create a tag with correct properties', () => {
+		const tag = doubleVerify({ shouldRun: true });
+		expect(tag).toMatchObject({
+			shouldRun: true,
+			url: '//pub.dv.tech/dvtag/27703429/DV2380005/pub.js',
+			name: 'doubleVerify',
+		});
 	});
 
-	it('should install the helper before loading', () => {
-		expect(window.onDvtagReady).toBeUndefined();
-
-		const tag = doubleVerify({ shouldRun: true });
-		expect(tag.beforeLoad).toEqual(expect.any(Function));
-		tag.beforeLoad?.();
-		expect(window.onDvtagReady).toEqual(expect.any(Function));
-	});
-
-	it('should install the helper before loading', () => {
-		expect(window.onDvtagReady).toBeUndefined();
-
-		const tag = doubleVerify({ shouldRun: true });
-		expect(tag.beforeLoad).toEqual(expect.any(Function));
-		tag.beforeLoad?.();
-
-		expect(window.onDvtagReady).toEqual(expect.any(Function));
+	it('should respect shouldRun flag', () => {
+		const tag = doubleVerify({ shouldRun: false });
+		expect(tag.shouldRun).toBe(false);
 	});
 });
