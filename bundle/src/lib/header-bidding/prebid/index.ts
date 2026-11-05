@@ -227,15 +227,26 @@ const requestBids = async (
 
 	const eventTimer = EventTimer.get();
 
-	const isInFailsafeTestGroup = isUserInTestGroup(
+	const isInFailsafeTestGroupVariantOne = isUserInTestGroup(
 		'commercial-prebid-failsafe-timeout',
-		'variant',
+		'variant-one',
 	);
+	const isInFailsafeTestGroupVariantTwo = isUserInTestGroup(
+		'commercial-prebid-failsafe-timeout',
+		'variant-two',
+	);
+	const isInFailsafeTestGroup =
+		isInFailsafeTestGroupVariantOne || isInFailsafeTestGroupVariantTwo;
 
 	// This is a reference rather than a value type so that scoping works correctly.
 	const hasBidsBackHandlerBeenCalled = { value: false };
 
 	if (isInFailsafeTestGroup) {
+		// Variant two of the AB test has a longer failsafe timeout than variant one.
+		const failsafeTimeout = isInFailsafeTestGroupVariantTwo
+			? PREBID_FAILSAFE_TIMEOUT + 1_000
+			: PREBID_FAILSAFE_TIMEOUT;
+
 		// This failsafe timeout is a safety net that invokes bidsBackHandler in case something goes wrong with Prebid.
 		setTimeout(function () {
 			void bidsBackHandler(
@@ -243,7 +254,7 @@ const requestBids = async (
 				eventTimer,
 				hasBidsBackHandlerBeenCalled,
 			);
-		}, PREBID_FAILSAFE_TIMEOUT);
+		}, failsafeTimeout);
 	}
 
 	requestQueue = requestQueue.then(
