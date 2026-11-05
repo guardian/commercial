@@ -73,7 +73,7 @@ describe('sdc', () => {
 
 			await expect(sdc.requestBids()).resolves.toBeUndefined();
 			await sdc.onCreativeRender();
-			expect(window.guardian.sdc).toBeUndefined();
+			expect(window.guardian.commercial?.sdc).toBeUndefined();
 		});
 
 		it('resolves rather than rejects on a non-ok response', async () => {
@@ -85,7 +85,7 @@ describe('sdc', () => {
 
 			await expect(sdc.requestBids()).resolves.toBeUndefined();
 			await sdc.onCreativeRender();
-			expect(window.guardian.sdc).toBeUndefined();
+			expect(window.guardian.commercial?.sdc).toBeUndefined();
 		});
 	});
 
@@ -99,7 +99,7 @@ describe('sdc', () => {
 
 			await sdc.onCreativeRender();
 
-			expect(window.guardian.sdc).toEqual({
+			expect(window.guardian.commercial?.sdc).toEqual({
 				inline1: { props, slotId: 'dfp-ad--inline1' },
 			});
 			expect(onRender).toHaveBeenCalledTimes(1);
@@ -114,7 +114,7 @@ describe('sdc', () => {
 
 			await sdc.onCreativeRender();
 
-			expect(window.guardian.sdc).toBeUndefined();
+			expect(window.guardian.commercial?.sdc).toBeUndefined();
 			expect(onRender).not.toHaveBeenCalled();
 		});
 
@@ -126,7 +126,7 @@ describe('sdc', () => {
 			await sdc.requestBids();
 
 			await sdc.onCreativeRender();
-			expect(window.guardian.sdc).toBeUndefined();
+			expect(window.guardian.commercial?.sdc).toBeUndefined();
 		});
 	});
 });

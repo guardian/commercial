@@ -324,6 +324,7 @@ interface Guardian extends CoreGuardian {
 			status: AdvertStatus | AdvertStatus[],
 			callback: (advert: Advert) => void,
 		) => void;
+		sdc?: { inline1?: { slotId: string; props: Inline1Props } };
 	};
 	notificationEventHistory?: HeaderNotification[][];
 	page: {
@@ -337,7 +338,6 @@ interface Guardian extends CoreGuardian {
 		videoDuration: number;
 		webPublicationDate: number;
 	};
-	sdc?: { inline1?: { slotId: string; props: Inline1Props } };
 }
 
 declare global {

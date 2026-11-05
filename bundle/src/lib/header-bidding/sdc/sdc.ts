@@ -155,7 +155,7 @@ const onCreativeRender = async (): Promise<void> => {
 
 	const slotId = `${adSlotIdPrefix}inline1`;
 	// Set on the window as well as dispatching, in case DCR's listener isn't ready yet
-	window.guardian.sdc = { inline1: { props, slotId } };
+	(window.guardian.commercial ??= {}).sdc = { inline1: { props, slotId } };
 	document.getElementById(slotId)?.dispatchEvent(
 		new CustomEvent('commercial.sdc-render', {
 			detail: { props },
