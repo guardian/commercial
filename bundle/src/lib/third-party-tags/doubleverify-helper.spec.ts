@@ -72,7 +72,7 @@ describe('installOnDvtagReady', () => {
 		},
 	);
 
-	it('should not call back again if DV has already consumed the callback', () => {
+	it('should call the callback only once when DV is ready', () => {
 		const commands: Array<() => void> = [];
 		window.dvtag = {
 			cmd: commands,
