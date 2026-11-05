@@ -15,6 +15,7 @@ import { log } from '@guardian/libs';
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import type { Size } from 'prebid.js/dist/src/types/common';
 import { isUserInTest } from '../ab-testing';
+import { isAdServingReady } from '../init/shared/init-ad-serving-ready';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import { a9 } from '../lib/header-bidding/a9/a9';
@@ -22,7 +23,6 @@ import { prebid } from '../lib/header-bidding/prebid';
 import type { HeaderBiddingSlot } from '../lib/header-bidding/prebid-types';
 import { sdc } from '../lib/header-bidding/sdc/sdc';
 import { stripDfpAdPrefixFrom } from '../lib/header-bidding/utils';
-import { isDvActive } from '../lib/third-party-tags/doubleverify-state';
 import { adQueue } from '../lib/timed-queue';
 import { buildGoogletagSizeMapping, defineSlot } from './define-slot';
 import { refreshedAdSizes } from './refreshed-ad-sizes';
@@ -511,13 +511,10 @@ class Advert extends EventTarget {
 
 				EventTimer.get().mark('prepareSlotEnd', this.name);
 				EventTimer.get().mark('fetchAdStart', this.name);
-				if (isDvActive()) {
-					window.onDvtagReady?.(() => {
-						window.googletag.display(this.id);
-					});
-				} else {
+
+				isAdServingReady(() => {
 					window.googletag.display(this.id);
-				}
+				});
 			});
 		}, true);
 	}
@@ -569,13 +566,9 @@ class Advert extends EventTarget {
 						if (mapping) this.slot.defineSizeMapping(mapping);
 					}
 				}
-				if (isDvActive()) {
-					window.onDvtagReady?.(() => {
-						window.googletag.pubads().refresh([this.slot]);
-					});
-				} else {
+				isAdServingReady(() => {
 					window.googletag.pubads().refresh([this.slot]);
-				}
+				});
 			});
 		});
 	}
