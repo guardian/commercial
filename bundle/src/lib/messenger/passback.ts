@@ -2,12 +2,12 @@ import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { AD_LABEL_HEIGHT } from '@guardian/commercial-core/constants/ad-label-height';
 import { log } from '@guardian/libs';
 import { breakpoints } from '@guardian/source/foundations';
+import { isAdServingReady } from '../../init/shared/init-ad-serving-ready';
 import { getCurrentBreakpoint } from '../detect/detect-breakpoint';
 import { adSlotIdPrefix } from '../dfp/dfp-env-globals';
 import { getAdvertById } from '../dfp/get-advert-by-id';
 import fastdom from '../fastdom-promise';
 import type { RegisterListener } from '../messenger';
-import { isDvActive } from '../third-party-tags/doubleverify-state';
 
 type PassbackMessagePayload = { source: string };
 
@@ -386,15 +386,9 @@ const initPassbackMessage = (register: RegisterListener): void => {
 							'commercial',
 							`Passback: displaying slot '${passbackElement.id}'`,
 						);
-						if (isDvActive()) {
-							window.onDvtagReady?.(() => {
-								window.googletag.cmd.push(() => {
-									googletag.display(passbackElement.id);
-								});
-							});
-						} else {
+						isAdServingReady(() => {
 							googletag.display(passbackElement.id);
-						}
+						});
 					}
 				});
 			});
