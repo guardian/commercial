@@ -2,13 +2,11 @@ export const installOnDvtagReady = (): void => {
 	/* eslint-disable -- dv code */
 	window.onDvtagReady = function (callback?: () => void, timeout = 750) {
 		window.dvtag = window.dvtag || {};
-		// @ts-expect-error
-		dvtag.cmd = dvtag.cmd || [];
+		window.dvtag.cmd = window.dvtag.cmd || [];
 		const opt = { callback, timeout, timestamp: new Date().getTime() };
-		// @ts-expect-error
-		dvtag.cmd.push(function () {
+		window.dvtag.cmd.push(function () {
 			// @ts-expect-error -- DV snippet uses bare dvtag global
-			dvtag.queueAdRequest(opt);
+			window.dvtag.queueAdRequest(opt);
 		});
 		setTimeout(function () {
 			const cb = opt.callback;
