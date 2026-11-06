@@ -1,4 +1,4 @@
-import type { Inline1Props } from '@guardian/support-dotcom-components/dist/shared/types';
+import type { Inline1Payload, Inline1Props } from "@guardian/support-dotcom-components/dist/shared/types";
 import { _, sdc } from './sdc';
 
 jest.mock('@guardian/commercial-core/geo/get-locale', () => ({
@@ -93,8 +93,9 @@ describe('sdc', () => {
             mockFetch.mockResolvedValue(bidResponse);
             await sdc.requestBids();
 
-            const fetchData = mockFetch.mock.calls[0];
-            const sentBody = JSON.parse(fetchData.body);
+            const call = mockFetch.mock.calls[0] as [string, RequestInit & { body: string }];
+            const params = call[1];
+            const sentBody = JSON.parse(params.body) as Inline1Payload;
 
             expect(sentBody.targeting).toEqual({
                 showSupportMessaging: true,
