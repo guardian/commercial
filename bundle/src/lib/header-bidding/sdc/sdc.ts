@@ -7,10 +7,10 @@ import type {
 	Inline1Props,
 } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { TestTracking } from '@guardian/support-dotcom-components/dist/shared/types/abTests/shared';
+import type { Advert } from '../../../define/Advert';
 import { adSlotIdPrefix } from '../../dfp/dfp-env-globals';
 import type { SignedIn } from '../../identity/api';
 import { getAuthStatus, isUserLoggedIn } from '../../identity/api';
-import { Advert } from '../../../define/Advert';
 
 interface ModuleData<PROPS> {
 	name: string;
@@ -183,7 +183,9 @@ const requestBids = async (advert: Advert): Promise<void> => {
 
 // If SDC wins the auction then the creative posts a message, triggering this callback.
 // Here we post a custom event to the DCR page with the SDC data.
-const onCreativeRender = async (event: unknown): Promise<void> => {
+const onCreativeRender = async (
+	event: Record<string, unknown> = {},
+): Promise<void> => {
 	log(
 		'commercial',
 		'[NBA] Event received from creative',
@@ -197,8 +199,8 @@ const onCreativeRender = async (event: unknown): Promise<void> => {
 	// Set on the window as well as dispatching, in case DCR's listener isn't ready yet
 	(window.guardian.commercial ??= {}).sdc = { inline1: { props, slotId } };
 	if (adSlotNode) {
-		adSlotNode?.setAttribute('data-label-show', 'false');
-		adSlotNode?.dispatchEvent(
+		adSlotNode.setAttribute('data-label-show', 'false');
+		adSlotNode.dispatchEvent(
 			new CustomEvent('commercial.sdc-render', {
 				detail: { props },
 				bubbles: true,
