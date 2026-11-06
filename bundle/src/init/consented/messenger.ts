@@ -11,6 +11,7 @@ import { initPassbackRefreshMessage } from '../../lib/messenger/passback-refresh
 import { initResetHeightMessage } from '../../lib/messenger/reset-height';
 import { initResizeMessage } from '../../lib/messenger/resize';
 import { initScrollMessage } from '../../lib/messenger/scroll';
+import { initSdcRenderMessage } from '../../lib/messenger/sdc-render';
 import { initTypeMessage } from '../../lib/messenger/type';
 import { initVideoProgressMessage } from '../../lib/messenger/video';
 import { initViewportMessage } from '../../lib/messenger/viewport';
@@ -30,6 +31,7 @@ export const initMessenger = (): void => {
 			initResetHeightMessage,
 			initResizeMessage,
 			initScrollMessage,
+			initSdcRenderMessage,
 			initTypeMessage,
 			initVideoProgressMessage,
 		],
