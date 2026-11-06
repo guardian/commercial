@@ -2,6 +2,7 @@ import type {
 	Inline1Payload,
 	Inline1Props,
 } from '@guardian/support-dotcom-components/dist/shared/types';
+import { Advert } from '../../../define/Advert';
 import type { AuthStatus } from '../../identity/api';
 import { getAuthStatus } from '../../identity/api';
 import { _, sdc } from './sdc';
@@ -16,6 +17,7 @@ jest.mock('@guardian/consent-manager', () => ({
 
 jest.mock('@guardian/libs', () => ({
 	getCookie: jest.fn().mockReturnValue(null),
+	...jest.requireActual('@guardian/libs'),
 }));
 
 jest.mock('../../identity/api', () => ({
@@ -36,7 +38,9 @@ const bidResponse = {
 const mockFetch = jest.fn();
 
 describe('sdc', () => {
-	let slot: HTMLElement;
+	let slot = document.createElement('div');
+	slot.id = 'dfp-ad--inline1';
+	let advert = new Advert(slot);
 
 	beforeEach(() => {
 		_.reset();
@@ -57,6 +61,7 @@ describe('sdc', () => {
 		slot = document.createElement('div');
 		slot.id = 'dfp-ad--inline1';
 		document.body.appendChild(slot);
+		advert = new Advert(slot);
 	});
 
 	afterEach(() => {
@@ -68,8 +73,11 @@ describe('sdc', () => {
 		it('only fetches once however many times it is called', async () => {
 			mockFetch.mockResolvedValue(bidResponse);
 
-			await Promise.all([sdc.requestBids(), sdc.requestBids()]);
-			await sdc.requestBids();
+			await Promise.all([
+				sdc.requestBids(advert),
+				sdc.requestBids(advert),
+			]);
+			await sdc.requestBids(advert);
 
 			expect(mockFetch).toHaveBeenCalledTimes(1);
 		});
@@ -77,7 +85,7 @@ describe('sdc', () => {
 		it('resolves rather than rejects when the request fails', async () => {
 			mockFetch.mockRejectedValue(new Error('network'));
 
-			await expect(sdc.requestBids()).resolves.toBeUndefined();
+			await expect(sdc.requestBids(advert)).resolves.toBeUndefined();
 			await sdc.onCreativeRender();
 			expect(window.guardian.commercial?.sdc).toBeUndefined();
 		});
@@ -89,14 +97,14 @@ describe('sdc', () => {
 				statusText: 'Server Error',
 			});
 
-			await expect(sdc.requestBids()).resolves.toBeUndefined();
+			await expect(sdc.requestBids(advert)).resolves.toBeUndefined();
 			await sdc.onCreativeRender();
 			expect(window.guardian.commercial?.sdc).toBeUndefined();
 		});
 
 		it('constructs and sends a targeting payload correctly', async () => {
 			mockFetch.mockResolvedValue(bidResponse);
-			await sdc.requestBids();
+			await sdc.requestBids(advert);
 
 			const call = mockFetch.mock.calls[0] as [
 				string,
@@ -126,7 +134,7 @@ describe('sdc', () => {
 				accessToken: { accessToken: testAccessToken },
 			} as unknown as AuthStatus);
 
-			await sdc.requestBids();
+			await sdc.requestBids(advert);
 
 			const call = mockFetch.mock.calls[0] as [
 				string,
@@ -145,7 +153,7 @@ describe('sdc', () => {
 	describe('onCreativeRender', () => {
 		it('returns the props, sets them on the window and notifies the slot', async () => {
 			mockFetch.mockResolvedValue(bidResponse);
-			await sdc.requestBids();
+			await sdc.requestBids(advert);
 
 			const onRender = jest.fn();
 			slot.addEventListener('commercial.sdc-render', onRender);
@@ -176,7 +184,7 @@ describe('sdc', () => {
 				ok: true,
 				json: () => Promise.resolve({}),
 			});
-			await sdc.requestBids();
+			await sdc.requestBids(advert);
 
 			await sdc.onCreativeRender();
 			expect(window.guardian.commercial?.sdc).toBeUndefined();
