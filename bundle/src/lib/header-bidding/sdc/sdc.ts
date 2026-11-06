@@ -1,7 +1,7 @@
 import { getLocale } from '@guardian/commercial-core/geo/get-locale';
 import type { ConsentState } from '@guardian/consent-manager';
 import { onConsent } from '@guardian/consent-manager';
-import { getCookie } from '@guardian/libs';
+import { getCookie, log } from '@guardian/libs';
 import type {
 	Inline1Payload,
 	Inline1Props,
@@ -10,6 +10,7 @@ import type { TestTracking } from '@guardian/support-dotcom-components/dist/shar
 import { adSlotIdPrefix } from '../../dfp/dfp-env-globals';
 import type { SignedIn } from '../../identity/api';
 import { getAuthStatus, isUserLoggedIn } from '../../identity/api';
+import { Advert } from '../../../define/Advert';
 
 interface ModuleData<PROPS> {
 	name: string;
@@ -71,7 +72,7 @@ const getModuleData = async <PROPS>(
 	if (!response.ok) {
 		throw Error(
 			response.statusText ||
-				`Supporter Revenue ${type} | Api call returned HTTP status ${response.status}`,
+			`Supporter Revenue ${type} | Api call returned HTTP status ${response.status}`,
 		);
 	}
 	return await response.json();
@@ -121,7 +122,7 @@ const getAuthHeaders = async (hasConsented: boolean) => {
 	return undefined;
 };
 
-const fetchBid = async (): Promise<Inline1Props | null> => {
+const fetchBid = async (advert: Advert): Promise<Inline1Props | null> => {
 	const sdcUrl =
 		process.env.SDC_URL ?? 'https://contributions.guardianapis.com';
 	const hasConsented = await getHasConsented();
@@ -148,7 +149,15 @@ const fetchBid = async (): Promise<Inline1Props | null> => {
 		payload,
 		authHeaders,
 	);
-	// TODO - set GAM targeting data for the SDC bid
+
+	log('commercial', '[NBA] SDC bid response', response);
+
+	// Set targeting on slot
+	advert.slot.setConfig({
+		targeting: {
+			nba_pb: '0.01',
+		},
+	});
 
 	return response.data?.module.props ?? null;
 };
@@ -156,15 +165,15 @@ const fetchBid = async (): Promise<Inline1Props | null> => {
 // Store the result of the request to SDC
 let bidPromise: Promise<Inline1Props | null> | undefined;
 
-const requestBids = async (): Promise<void> => {
+const requestBids = async (advert: Advert): Promise<void> => {
 	// Only make the request once
 	if (bidPromise) {
 		await bidPromise;
 		return;
 	}
 
-	bidPromise = fetchBid().catch((error: unknown) => {
-		console.error('SDC bid request failed', error);
+	bidPromise = fetchBid(advert).catch((error: unknown) => {
+		console.error('[NBA] SDC bid request failed', error);
 		return null;
 	});
 	await bidPromise;
@@ -172,19 +181,28 @@ const requestBids = async (): Promise<void> => {
 
 // If SDC wins the auction then the creative posts a message, triggering this callback.
 // Here we post a custom event to the DCR page with the SDC data.
-const onCreativeRender = async (): Promise<void> => {
+const onCreativeRender = async (event: unknown): Promise<void> => {
+	log(
+		'commercial',
+		'[NBA] Event received from creative',
+		JSON.stringify(event),
+	);
 	const props = await bidPromise;
 	if (!props) return;
 
 	const slotId = `${adSlotIdPrefix}inline1`;
+	const adSlotNode = document.getElementById(slotId);
 	// Set on the window as well as dispatching, in case DCR's listener isn't ready yet
 	(window.guardian.commercial ??= {}).sdc = { inline1: { props, slotId } };
-	document.getElementById(slotId)?.dispatchEvent(
-		new CustomEvent('commercial.sdc-render', {
-			detail: { props },
-			bubbles: true,
-		}),
-	);
+	if (adSlotNode) {
+		adSlotNode?.setAttribute('data-label-show', 'false');
+		adSlotNode?.dispatchEvent(
+			new CustomEvent('commercial.sdc-render', {
+				detail: { props },
+				bubbles: true,
+			}),
+		);
+	}
 };
 
 export const sdc = {
