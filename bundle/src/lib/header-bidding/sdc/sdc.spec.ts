@@ -1,4 +1,7 @@
-import type { Inline1Payload, Inline1Props } from "@guardian/support-dotcom-components/dist/shared/types";
+import type {
+	Inline1Payload,
+	Inline1Props,
+} from '@guardian/support-dotcom-components/dist/shared/types';
 import { _, sdc } from './sdc';
 
 jest.mock('@guardian/commercial-core/geo/get-locale', () => ({
@@ -15,7 +18,7 @@ jest.mock('@guardian/libs', () => ({
 
 jest.mock('../../identity/api', () => ({
 	isUserLoggedIn: jest.fn().mockResolvedValue(false),
-    getAuthStatus: jest.fn().mockResolvedValue({ kind: 'SignedOut' }),
+	getAuthStatus: jest.fn().mockResolvedValue({ kind: 'SignedOut' }),
 }));
 
 const props = { heading: 'Support us' } as unknown as Inline1Props;
@@ -89,25 +92,28 @@ describe('sdc', () => {
 			expect(window.guardian.commercial?.sdc).toBeUndefined();
 		});
 
-        it('constructs and sends a targeting payload correctly', async () => {
-            mockFetch.mockResolvedValue(bidResponse);
-            await sdc.requestBids();
+		it('constructs and sends a targeting payload correctly', async () => {
+			mockFetch.mockResolvedValue(bidResponse);
+			await sdc.requestBids();
 
-            const call = mockFetch.mock.calls[0] as [string, RequestInit & { body: string }];
-            const params = call[1];
-            const sentBody = JSON.parse(params.body) as Inline1Payload;
+			const call = mockFetch.mock.calls[0] as [
+				string,
+				RequestInit & { body: string },
+			];
+			const params = call[1];
+			const sentBody = JSON.parse(params.body) as Inline1Payload;
 
-            expect(sentBody.targeting).toEqual({
-                showSupportMessaging: true,
-                mvtId: 0,
-                countryCode: 'GB',
-                sectionId: 'news',
-                tagIds: ['a', 'b'],
-                pageId: 'some/page',
-                isSignedIn: false,
-                hasConsented: true,
-            });
-        });
+			expect(sentBody.targeting).toEqual({
+				showSupportMessaging: true,
+				mvtId: 0,
+				countryCode: 'GB',
+				sectionId: 'news',
+				tagIds: ['a', 'b'],
+				pageId: 'some/page',
+				isSignedIn: false,
+				hasConsented: true,
+			});
+		});
 	});
 
 	describe('onCreativeRender', () => {

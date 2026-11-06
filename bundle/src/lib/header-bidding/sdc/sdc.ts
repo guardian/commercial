@@ -102,7 +102,6 @@ const getMvtId = (): number => {
 	return 0;
 };
 
-
 const getOptionsHeaders = (authStatus: SignedIn): RequestInit => {
 	return {
 		headers: {
