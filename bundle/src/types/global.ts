@@ -87,6 +87,22 @@ interface LightboxImages {
 	images: Array<{ src: string }>;
 }
 
+type Newsletter = {
+	listId: number;
+	identityName: string;
+	name: string;
+	description: string;
+	frequency: string;
+	successDescription: string;
+	theme: string;
+	group: string;
+	category?: string;
+	regionFocus?: string;
+	illustrationCard?: string;
+	illustrationSquare?: string;
+	exampleUrl?: string;
+};
+
 type Stage = 'DEV' | 'CODE' | 'PROD';
 
 interface PageConfig extends CommercialPageConfig {
@@ -123,6 +139,7 @@ interface PageConfig extends CommercialPageConfig {
 	keywords: string;
 	lightboxImages?: LightboxImages;
 	pageId: string;
+	promotedNewsletter?: Newsletter;
 	publication: string;
 	revisionNumber: string; // https://github.com/guardian/frontend/blob/1b6f41c3/common/app/model/meta.scala#L388
 	section: string;
@@ -424,4 +441,5 @@ export type {
 	ThirdPartyTag,
 	CustomIdTokenClaims,
 	FetchBidResponse,
+	Newsletter,
 };

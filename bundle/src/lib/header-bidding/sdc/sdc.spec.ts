@@ -1,4 +1,5 @@
 import type { Inline1Props } from '@guardian/support-dotcom-components/dist/shared/types';
+import type { Newsletter } from '../../../types/global';
 import { _, sdc } from './sdc';
 
 jest.mock('@guardian/commercial-core/geo/get-locale', () => ({
@@ -30,6 +31,18 @@ const bidResponse = {
 const mockFetch = jest.fn();
 
 describe('sdc', () => {
+	const originalFetch = global.fetch;
+	const originalGuardian = window.guardian;
+	const newsletter: Newsletter = {
+		listId: 1,
+		identityName: 'test-newsletter',
+		name: 'Test newsletter',
+		description: 'Test description',
+		frequency: 'Weekly',
+		successDescription: 'Signed up',
+		theme: 'news',
+		group: 'news',
+	};
 	let slot: HTMLElement;
 
 	beforeEach(() => {
@@ -39,14 +52,19 @@ describe('sdc', () => {
 		jest.spyOn(console, 'error').mockImplementation(() => undefined);
 
 		window.guardian = {
+			...originalGuardian,
+			commercial: undefined,
 			config: {
+				...originalGuardian.config,
 				page: {
+					...originalGuardian.config.page,
 					section: 'news',
 					keywordIds: 'a,b',
 					pageId: 'some/page',
+					promotedNewsletter: undefined,
 				},
 			},
-		} as unknown as typeof window.guardian;
+		};
 
 		slot = document.createElement('div');
 		slot.id = 'dfp-ad--inline1';
@@ -55,10 +73,35 @@ describe('sdc', () => {
 
 	afterEach(() => {
 		slot.remove();
+		global.fetch = originalFetch;
+		window.guardian = originalGuardian;
 		jest.restoreAllMocks();
 	});
 
 	describe('requestBids', () => {
+		it.each([
+			{ promotedNewsletter: newsletter, hasNewsletterSignup: true },
+			{ promotedNewsletter: undefined, hasNewsletterSignup: false },
+		])(
+			'sends hasNewsletterSignup=$hasNewsletterSignup',
+			async ({ promotedNewsletter, hasNewsletterSignup }) => {
+				window.guardian.config.page.promotedNewsletter =
+					promotedNewsletter;
+				mockFetch.mockResolvedValue(bidResponse);
+
+				await sdc.requestBids();
+
+				expect(mockFetch).toHaveBeenCalledWith(
+					expect.any(String),
+					expect.objectContaining<{ body: unknown }>({
+						body: expect.stringContaining(
+							`"hasNewsletterSignup":${hasNewsletterSignup}`,
+						),
+					}),
+				);
+			},
+		);
+
 		it('only fetches once however many times it is called', async () => {
 			mockFetch.mockResolvedValue(bidResponse);
 
