@@ -8,6 +8,8 @@ import { loadScript } from '@guardian/libs';
 import type { Advert } from '../../define/Advert';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
+import { extractRelevantIabTaxonomyTags } from '../../lib/iabTaxonomyHelpers';
+import * as pageTargeting from '../../lib/page-targeting';
 import { shouldLoadAds } from '../../lib/should-load-ads';
 import { prepareGoogletag } from './prepare-googletag';
 import { fillStaticAdvertSlots } from './static-ad-slots';
@@ -146,11 +148,18 @@ jest.mock('lib/should-load-ads', () => ({
 	shouldLoadAds: jest.fn(),
 }));
 
+jest.mock('../../lib/iabTaxonomyHelpers', () => ({
+	extractRelevantIabTaxonomyTags: jest.fn(),
+}));
+
 const mockOnConsent = (consentState: ConsentState) =>
 	(onConsent as jest.Mock).mockReturnValueOnce(Promise.resolve(consentState));
 
 const mockGetConsentFor = (hasConsent: boolean) =>
 	(getConsentFor as jest.Mock).mockReturnValue(hasConsent);
+
+const mockExtractRelevantIabTaxonomyTags =
+	extractRelevantIabTaxonomyTags as jest.Mock;
 
 let $style: HTMLElement;
 const makeFakeEvent = (
@@ -605,6 +614,7 @@ describe('DFP', () => {
 			});
 		});
 	});
+
 	describe('restrictDataProcessing flag in USNAT', () => {
 		it('when USNAT consent is given', async () => {
 			mockOnConsent(usnatWithConsent);
@@ -623,6 +633,7 @@ describe('DFP', () => {
 			});
 		});
 	});
+
 	describe('load googletag', () => {
 		beforeEach(() => {
 			jest.clearAllMocks();
@@ -644,6 +655,7 @@ describe('DFP', () => {
 			expect(loadScript).toHaveBeenCalledTimes(0);
 		});
 	});
+
 	describe('disableChildDirected privacy settings', () => {
 		beforeEach(() => {
 			jest.clearAllMocks();
@@ -673,6 +685,121 @@ describe('DFP', () => {
 			expect(pubAds.setPrivacySettings).toHaveBeenCalledWith({
 				childDirectedTreatment: null,
 			});
+		});
+	});
+
+	describe('setPublisherProvidedSignalsConfig', () => {
+		const setupAbTestModule = ({ inVariant = false }) => {
+			window.guardian.config.isDotcomRendering = true;
+			window.guardian.modules.abTests = {
+				getParticipations: jest.fn(() => ({})),
+				isUserInTest: jest.fn(() => false),
+				isUserInTestGroup: jest.fn(() => inVariant),
+			};
+		};
+
+		afterEach(() => {
+			window.guardian.modules.abTests = undefined;
+			jest.restoreAllMocks();
+		});
+
+		const testIabTags = ['tag1', 'tag2', 'tag3'];
+
+		const testConsentState: Pick<ConsentState, 'tcfv2' | 'framework'> = {
+			tcfv2: {
+				consents: {},
+				vendorConsents: {},
+			} as unknown as ConsentState['tcfv2'],
+			framework: 'tcfv2',
+		};
+		const withoutConsent: ConsentState = {
+			...testConsentState,
+			canTarget: false,
+		};
+		const withConsent: ConsentState = {
+			...testConsentState,
+			canTarget: true,
+		};
+
+		it('should not call extractRelevantIabTaxonomyTags when user consent is not given', async () => {
+			setupAbTestModule({ inVariant: true });
+			mockOnConsent(withoutConsent);
+			window.guardian.config.page.pageAdTargeting = {
+				iabtaxonomytags: testIabTags,
+			};
+
+			await prepareGoogletag();
+
+			expect(mockExtractRelevantIabTaxonomyTags).not.toHaveBeenCalled();
+		});
+
+		it('should not call extractRelevantIabTaxonomyTags when user is not in test group', async () => {
+			setupAbTestModule({ inVariant: false });
+			mockOnConsent(withConsent);
+			mockGetConsentFor(true);
+			window.guardian.config.page.pageAdTargeting = {
+				iabtaxonomytags: testIabTags,
+			};
+
+			await prepareGoogletag();
+
+			expect(mockExtractRelevantIabTaxonomyTags).not.toHaveBeenCalled();
+		});
+
+		it('should not call extractRelevantIabTaxonomyTags when iabTaxonomyData is missing', async () => {
+			setupAbTestModule({ inVariant: true });
+			mockOnConsent(withConsent);
+			mockGetConsentFor(true);
+
+			await prepareGoogletag();
+
+			expect(mockExtractRelevantIabTaxonomyTags).not.toHaveBeenCalled();
+		});
+
+		it('should not call extractRelevantIabTaxonomyTags when iabTaxonomyData is empty', async () => {
+			setupAbTestModule({ inVariant: true });
+			mockOnConsent(withConsent);
+			mockGetConsentFor(true);
+			window.guardian.config.page.pageAdTargeting = {
+				iabtaxonomytags: [],
+			};
+
+			await prepareGoogletag();
+
+			expect(mockExtractRelevantIabTaxonomyTags).not.toHaveBeenCalled();
+		});
+
+		it('should not call extractRelevantIabTaxonomyTags when iabTaxonomyData is not an array', async () => {
+			setupAbTestModule({ inVariant: true });
+			mockOnConsent(withConsent);
+			mockGetConsentFor(true);
+			window.guardian.config.page.pageAdTargeting = {
+				iabtaxonomytags: 'tag1',
+			};
+
+			await prepareGoogletag();
+
+			expect(mockExtractRelevantIabTaxonomyTags).not.toHaveBeenCalled();
+		});
+
+		it('should call extractRelevantIabTaxonomyTags when in a test variant', async () => {
+			setupAbTestModule({ inVariant: true });
+			mockOnConsent(withConsent);
+			mockGetConsentFor(true);
+			window.guardian.config.page.pageAdTargeting = {
+				iabtaxonomytags: testIabTags,
+			};
+			jest.spyOn(pageTargeting, 'getPageTargeting').mockReturnValueOnce({
+				iabtaxonomytags: testIabTags,
+			});
+
+			await prepareGoogletag();
+
+			expect(mockExtractRelevantIabTaxonomyTags).toHaveBeenCalledWith(
+				testIabTags,
+				expect.any(String),
+				'IAB_CONTENT_2_2',
+			);
 		});
 	});
 });
