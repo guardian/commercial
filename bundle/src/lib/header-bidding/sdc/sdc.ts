@@ -8,7 +8,8 @@ import type {
 } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { TestTracking } from '@guardian/support-dotcom-components/dist/shared/types/abTests/shared';
 import { adSlotIdPrefix } from '../../dfp/dfp-env-globals';
-import { isUserLoggedIn } from '../../identity/api';
+import type { SignedIn } from '../../identity/api';
+import { getAuthStatus, isUserLoggedIn } from '../../identity/api';
 
 interface ModuleData<PROPS> {
 	name: string;
@@ -101,6 +102,25 @@ const getMvtId = (): number => {
 	return 0;
 };
 
+const getOptionsHeaders = (authStatus: SignedIn): RequestInit => {
+	return {
+		headers: {
+			Authorization: `Bearer ${authStatus.accessToken.accessToken}`,
+			'X-GU-IS-OAUTH': 'true',
+		},
+	};
+};
+
+const getAuthHeaders = async (hasConsented: boolean) => {
+	if (hasConsented) {
+		const authStatus = await getAuthStatus();
+		if (authStatus.kind === 'SignedIn') {
+			return getOptionsHeaders(authStatus).headers;
+		}
+	}
+	return undefined;
+};
+
 const fetchBid = async (): Promise<Inline1Props | null> => {
 	const sdcUrl =
 		process.env.SDC_URL ?? 'https://contributions.guardianapis.com';
@@ -115,15 +135,18 @@ const fetchBid = async (): Promise<Inline1Props | null> => {
 			tagIds: window.guardian.config.page.keywordIds.split(','),
 			pageId: window.guardian.config.page.pageId,
 			browserId: getBrowserId(hasConsented),
-			isSignedIn: isSignedIn,
+			isSignedIn,
 			hasConsented,
 		},
 	};
+
+	const authHeaders = await getAuthHeaders(hasConsented);
 
 	const response: ModuleDataResponse<Inline1Props> = await getModuleData(
 		'inline1',
 		sdcUrl,
 		payload,
+		authHeaders,
 	);
 	// TODO - set GAM targeting data for the SDC bid
 
