@@ -474,7 +474,7 @@ class Advert extends EventTarget {
 			isInNBATest
 		) {
 			console.log("You're in the Next Best Action test.");
-			bidRequests.push(sdc.requestBids());
+			bidRequests.push(sdc.requestBids(this));
 		}
 
 		const promise = Promise.all(bidRequests).then(() => Promise.resolve());
