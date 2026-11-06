@@ -116,7 +116,8 @@ const requestBids = async () => {
 			browserId: getBrowserId(hasConsented),
 			isSignedIn: isSignedIn,
 			hasConsented: hasConsented,
-			hasNewsletterSignup: window.guardian.config.page.promotedNewsletter !== undefined,
+			hasNewsletterSignup:
+				window.guardian.config.page.promotedNewsletter !== undefined,
 		},
 	};
 

@@ -102,7 +102,6 @@ type Newsletter = {
 	exampleUrl?: string;
 };
 
-
 type Stage = 'DEV' | 'CODE' | 'PROD';
 
 interface PageConfig extends CommercialPageConfig {
@@ -440,5 +439,5 @@ export type {
 	ThirdPartyTag,
 	CustomIdTokenClaims,
 	FetchBidResponse,
-	Newsletter
+	Newsletter,
 };
