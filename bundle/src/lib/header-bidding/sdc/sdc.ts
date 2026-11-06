@@ -115,7 +115,8 @@ const requestBids = async () => {
 			pageId: window.guardian.config.page.pageId,
 			browserId: getBrowserId(hasConsented),
 			isSignedIn: isSignedIn,
-			hasConsented,
+			hasConsented: hasConsented,
+			hasNewsletterSignup: window.guardian.config.page.promotedNewsletter !== undefined,
 		},
 	};
 
