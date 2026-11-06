@@ -15,6 +15,7 @@ import { log } from '@guardian/libs';
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import type { Size } from 'prebid.js/dist/src/types/common';
 import { isUserInTest } from '../ab-testing';
+import { isAdServingReady } from '../init/shared/init-ad-serving-ready';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import { a9 } from '../lib/header-bidding/a9/a9';
@@ -510,7 +511,10 @@ class Advert extends EventTarget {
 
 				EventTimer.get().mark('prepareSlotEnd', this.name);
 				EventTimer.get().mark('fetchAdStart', this.name);
-				window.googletag.display(this.id);
+
+				isAdServingReady(() => {
+					window.googletag.display(this.id);
+				});
 			});
 		}, true);
 	}
@@ -562,7 +566,9 @@ class Advert extends EventTarget {
 						if (mapping) this.slot.defineSizeMapping(mapping);
 					}
 				}
-				window.googletag.pubads().refresh([this.slot]);
+				isAdServingReady(() => {
+					window.googletag.pubads().refresh([this.slot]);
+				});
 			});
 		});
 	}
