@@ -1,9 +1,12 @@
 /* A regionalised container for all the commercial tags. */
 
+import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { getConsentFor, onConsent } from '@guardian/consent-manager';
+import { isUserInTestGroup } from '../../ab-testing';
 import { isAdFree } from '../../lib/ad-free';
 import fastdom from '../../lib/fastdom-promise';
 import { isSecureContactPage } from '../../lib/is-secure-contact';
+import { doubleVerify } from '../../lib/third-party-tags/doubleverify';
 import { ias } from '../../lib/third-party-tags/ias';
 import { imrWorldwide } from '../../lib/third-party-tags/imr-worldwide';
 import { imrWorldwideLegacy } from '../../lib/third-party-tags/imr-worldwide-legacy';
@@ -83,6 +86,8 @@ const insertScripts = async (
 	const consentedAdvertisingServices = advertisingServices.filter(
 		(script) => {
 			if (script.name === undefined) return false;
+			// we do not need a consent check for doubleVerify as it's running in the US only
+			if (script.name === 'doubleVerify') return true;
 			return getConsentFor(script.name, consentState);
 		},
 	);
@@ -93,6 +98,10 @@ const insertScripts = async (
 };
 
 const loadOther = (): Promise<void> => {
+	const isInDoubleVerifyTest = isUserInTestGroup(
+		'commercial-doubleVerify-ad-filter',
+		'enable',
+	);
 	const advertisingServices: ThirdPartyTag[] = [
 		remarketing({
 			shouldRun: window.guardian.config.switches.remarketing ?? false,
@@ -102,6 +111,12 @@ const loadOther = (): Promise<void> => {
 		}),
 		ias({
 			shouldRun: window.guardian.config.switches.ias ?? false,
+		}),
+		doubleVerify({
+			shouldRun:
+				(window.guardian.config.switches.doubleVerify ?? false) &&
+				isInUsa() &&
+				isInDoubleVerifyTest,
 		}),
 		inizio({ shouldRun: window.guardian.config.switches.inizio ?? false }),
 	].filter((_) => _.shouldRun);

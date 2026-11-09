@@ -18,6 +18,7 @@ import { initThirdPartyTags } from './consented/third-party-tags';
 import { initTrackGpcSignal } from './consented/track-gpc-signal';
 import { initTrackScrollDepth } from './consented/track-scroll-depth';
 import { initPages } from './pages';
+import { initAdServingReady } from './shared/init-ad-serving-ready';
 import { reloadPageOnConsentChange } from './shared/reload-page-on-consent-change';
 import { setAdTestCookie } from './shared/set-adtest-cookie';
 import { setAdTestInLabelsCookie } from './shared/set-adtest-in-labels-cookie';
@@ -34,6 +35,7 @@ const commercialModules = [
 	initTeadsCookieless,
 	initTrackScrollDepth,
 	initTrackGpcSignal,
+	initAdServingReady,
 	setAdTestCookie,
 	setAdTestInLabelsCookie,
 	reloadPageOnConsentChange,

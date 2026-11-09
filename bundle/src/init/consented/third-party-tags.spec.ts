@@ -1,8 +1,10 @@
+import { isInUsa } from '@guardian/commercial-core/geo/geo-utils';
 import { getConsentFor, onConsent } from '@guardian/consent-manager';
 import type {
 	ConsentState,
 	USNATConsentState,
 } from '@guardian/consent-manager';
+import { isUserInTestGroup } from '../../ab-testing';
 import { isAdFree } from '../../lib/ad-free';
 import type { ThirdPartyTag } from '../../types/global';
 import { _, initThirdPartyTags } from './third-party-tags';
@@ -17,6 +19,17 @@ jest.mock('@guardian/consent-manager', () => ({
 
 jest.mock('../../lib/ad-free', () => ({
 	isAdFree: jest.fn(),
+}));
+
+jest.mock('@guardian/commercial-core/geo/geo-utils', () => ({
+	...jest.requireActual<
+		typeof import('@guardian/commercial-core/geo/geo-utils')
+	>('@guardian/commercial-core/geo/geo-utils'),
+	isInUsa: jest.fn(),
+}));
+
+jest.mock('../../ab-testing', () => ({
+	isUserInTestGroup: jest.fn(),
 }));
 
 const tcfv2AllConsent = {
@@ -181,12 +194,118 @@ describe('third party tags', () => {
 		});
 	});
 
+	describe('loadOther', () => {
+		beforeEach(() => {
+			jest.resetAllMocks();
+			window.guardian.config.switches = {};
+		});
+
+		it('should load DoubleVerify for a US user in the variant with the switch enabled', async () => {
+			// Arrange: enable the switch, US location and variant membership
+			jest.mocked(isInUsa).mockReturnValue(true);
+			window.guardian.config.switches = {
+				doubleVerify: true,
+			};
+			mockOnConsent({
+				usnat: usnatConsent,
+				canTarget: true,
+				framework: 'usnat',
+			});
+			jest.mocked(isUserInTestGroup).mockReturnValue(true);
+
+			// Act: call _.loadOther()
+			await _.loadOther();
+			// Assert: check that the DV script was inserted
+			const scriptsArray = Array.from(document.scripts).map(
+				(script) => script.src,
+			);
+			expect(scriptsArray).toContain(
+				'http://pub.dv.tech/dvtag/27703429/DV2380005/pub.js',
+			);
+		});
+		it('should not load DoubleVerify for a US user in the variant with the switch disabled', async () => {
+			// Arrange: enable the switch, US location and variant membership
+			jest.mocked(isInUsa).mockReturnValue(true);
+			window.guardian.config.switches = {
+				doubleVerify: false,
+			};
+			mockOnConsent({
+				usnat: usnatConsent,
+				canTarget: true,
+				framework: 'usnat',
+			});
+			jest.mocked(isUserInTestGroup).mockReturnValue(true);
+
+			// Act: call _.loadOther()
+			await _.loadOther();
+			// Assert: check that the DV script was inserted
+			const scriptsArray = Array.from(document.scripts).map(
+				(script) => script.src,
+			);
+			expect(scriptsArray).not.toContain(
+				'http://pub.dv.tech/dvtag/27703429/DV2380005/pub.js',
+			);
+		});
+		it('should not load DoubleVerify for a non US user in the variant with the switch enabled', async () => {
+			// Arrange: enable the switch, US location and variant membership
+			jest.mocked(isInUsa).mockReturnValue(false);
+			window.guardian.config.switches = {
+				doubleVerify: true,
+			};
+			mockOnConsent({
+				usnat: usnatConsent,
+				canTarget: true,
+				framework: 'usnat',
+			});
+			jest.mocked(isUserInTestGroup).mockReturnValue(true);
+
+			// Act: call _.loadOther()
+			await _.loadOther();
+			// Assert: check that the DV script was inserted
+			const scriptsArray = Array.from(document.scripts).map(
+				(script) => script.src,
+			);
+			expect(scriptsArray).not.toContain(
+				'http://pub.dv.tech/dvtag/27703429/DV2380005/pub.js',
+			);
+		});
+		it('should not load DoubleVerify for a US not in the variant with the switch enabled', async () => {
+			// Arrange: enable the switch, US location and variant membership
+			jest.mocked(isInUsa).mockReturnValue(true);
+			window.guardian.config.switches = {
+				doubleVerify: true,
+			};
+			mockOnConsent({
+				usnat: usnatConsent,
+				canTarget: true,
+				framework: 'usnat',
+			});
+			jest.mocked(isUserInTestGroup).mockReturnValue(false);
+
+			// Act: call _.loadOther()
+			await _.loadOther();
+			// Assert: check that the DV script was inserted
+			const scriptsArray = Array.from(document.scripts).map(
+				(script) => script.src,
+			);
+			expect(scriptsArray).not.toContain(
+				'http://pub.dv.tech/dvtag/27703429/DV2380005/pub.js',
+			);
+		});
+	});
+
 	describe('insertScripts', () => {
 		const fakeThirdPartyAdvertisingTag: ThirdPartyTag = {
 			shouldRun: true,
 			url: '//fakeThirdPartyAdvertisingTag.js',
 			onLoad: jest.fn(),
 			name: 'permutive',
+		};
+		const fakeDoubleVerifyThirdPartyAdvertisingTag: ThirdPartyTag = {
+			shouldRun: true,
+			url: '//fakeDoubleVerifyThirdPartyAdvertisingTag.js',
+			onLoad: jest.fn(),
+			name: 'doubleVerify',
 		};
 		const fakeThirdPartyAdvertisingTag2: ThirdPartyTag = {
 			shouldRun: true,
@@ -203,6 +322,7 @@ describe('third party tags', () => {
 
 		beforeEach(() => {
 			fakeThirdPartyAdvertisingTag.loaded = undefined;
+			fakeDoubleVerifyThirdPartyAdvertisingTag.loaded = undefined;
 			fakeThirdPartyAdvertisingTag2.loaded = undefined;
 			fakeThirdPartyPerformanceTag.loaded = undefined;
 		});
@@ -235,6 +355,22 @@ describe('third party tags', () => {
 			mockGetConsentFor(true);
 			await _.insertScripts(
 				[fakeThirdPartyAdvertisingTag],
+				[fakeThirdPartyPerformanceTag],
+			);
+			expect(document.scripts.length).toBe(3);
+		});
+		it('should add DoubleVerify scripts to the document when USNAT regardless of consent', async () => {
+			mockOnConsent({
+				usnat: { ...usnatConsent, doNotSell: true },
+				canTarget: false,
+				framework: 'usnat',
+			});
+			mockGetConsentFor(false);
+			await _.insertScripts(
+				[
+					fakeDoubleVerifyThirdPartyAdvertisingTag,
+					fakeThirdPartyAdvertisingTag,
+				],
 				[fakeThirdPartyPerformanceTag],
 			);
 			expect(document.scripts.length).toBe(3);
