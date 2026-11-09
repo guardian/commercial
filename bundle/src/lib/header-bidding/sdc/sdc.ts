@@ -1,7 +1,7 @@
 import { getLocale } from '@guardian/commercial-core/geo/get-locale';
 import type { ConsentState } from '@guardian/consent-manager';
 import { onConsent } from '@guardian/consent-manager';
-import { getCookie, log } from '@guardian/libs';
+import { getCookie, isObject, log } from '@guardian/libs';
 import type {
 	Inline1Payload,
 	Inline1Props,
@@ -163,7 +163,7 @@ const setSlotTargeting = (advert: Advert, responseData: ModuleDataResponse<Inlin
 		targeting: {
 			// TODO - use bid from SDC response
 			nba_pb: '0.01',
-			nba_id: responseData?.meta.campaignId || ''
+			nba_id: responseData?.meta.campaignId ?? ''
 		},
 	});
 };
@@ -182,9 +182,8 @@ const requestBids = async (advert: Advert): Promise<void> => {
 		if (response.data) {
 			setSlotTargeting(advert, response.data);
 			return response.data.module.props;
-		} else {
-			return null;
 		}
+		return null;
 	})).catch((error: unknown) => {
 		console.error('[NBA] SDC bid request failed', error);
 		return null;
@@ -193,11 +192,26 @@ const requestBids = async (advert: Advert): Promise<void> => {
 	await bidPromise;
 };
 
+
+interface SdcRenderSpecs {
+	id?: string;
+	pb?: string;
+}
+
+const isValidSdcRenderMessage = (specs: unknown): specs is SdcRenderSpecs => {
+	return isObject(specs);
+};
+
+
 // If SDC wins the auction then the creative posts a message, triggering this callback.
 // Here we post a custom event to the DCR page with the SDC data.
 const onCreativeRender = async (
-	event: Record<string, unknown> = {},
+	event: unknown = {}
 ): Promise<void> => {
+	if (!isValidSdcRenderMessage(event)) {
+		return Promise.resolve();
+	}
+
 	log(
 		'commercial',
 		'[NBA] Event received from creative',

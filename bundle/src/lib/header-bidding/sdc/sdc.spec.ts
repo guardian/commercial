@@ -2,8 +2,8 @@ import type {
 	Inline1Payload,
 	Inline1Props,
 } from '@guardian/support-dotcom-components/dist/shared/types';
+import type { Advert } from '../../../define/Advert';
 import type { Newsletter } from '../../../types/global';
-import { Advert } from '../../../define/Advert';
 import type { AuthStatus } from '../../identity/api';
 import { getAuthStatus } from '../../identity/api';
 import { _, sdc } from './sdc';
