@@ -115,7 +115,6 @@ describe('Advert', () => {
 			const sdcSpy = jest
 				.spyOn(sdc, 'requestBids')
 				.mockResolvedValue(undefined);
-			jest.spyOn(console, 'log').mockImplementation();
 
 			try {
 				const slot = document.createElement('div');
