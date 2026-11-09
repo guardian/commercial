@@ -195,6 +195,37 @@ describe('sdc', () => {
 			);
 			expect(headers.get('X-GU-IS-OAUTH')).toBe('true');
 		});
+
+		it('sets corresponding GAM targeting for bid responses', async () => {
+			mockFetch.mockResolvedValue({
+				ok: true,
+				json: () =>
+					Promise.resolve({
+						data: {
+							module: { name: 'inline1', props },
+							meta: { campaignId: 'campaign-123' },
+						},
+					}),
+			});
+
+			await sdc.requestBids(advert);
+
+			expect(advert.slot.setConfig).toHaveBeenCalledTimes(1);
+			expect(advert.slot.setConfig).toHaveBeenCalledWith({
+				targeting: { nba_pb: '0.01', nba_id: 'campaign-123' },
+			});
+		});
+
+		it('does not set GAM targeting when SDC has no bid', async () => {
+			mockFetch.mockResolvedValue({
+				ok: true,
+				json: () => Promise.resolve({}),
+			});
+
+			await sdc.requestBids(advert);
+
+			expect(advert.slot.setConfig).not.toHaveBeenCalled();
+		});
 	});
 
 	describe('onCreativeRender', () => {
