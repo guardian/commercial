@@ -198,15 +198,12 @@ const onCreativeRender = async (
 	const adSlotNode = document.getElementById(slotId);
 	// Set on the window as well as dispatching, in case DCR's listener isn't ready yet
 	(window.guardian.commercial ??= {}).sdc = { inline1: { props, slotId } };
-	if (adSlotNode) {
-		adSlotNode.setAttribute('data-label-show', 'false');
-		adSlotNode.dispatchEvent(
-			new CustomEvent('commercial.sdc-render', {
-				detail: { props },
-				bubbles: true,
-			}),
-		);
-	}
+	adSlotNode?.dispatchEvent(
+		new CustomEvent('commercial.sdc-render', {
+			detail: { props },
+			bubbles: true,
+		}),
+	);
 };
 
 export const sdc = {

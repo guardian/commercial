@@ -13,7 +13,7 @@ const templatesWithoutLabels = [
 	10070367, // cAPI Multiple Supported
 	12490730, // CAPI Single Paid For
 	10070607, // cAPI Single Supported
-	// TODO - Add NBA creative template
+	12569070, // NBA Format 
 ];
 
 const shouldRenderLabel = (
