@@ -38,6 +38,9 @@ const bidResponse = {
 
 const mockFetch = jest.fn();
 
+const createStubAdvert = (): Advert =>
+	({ slot: { setConfig: jest.fn() } }) as unknown as Advert;
+
 describe('sdc', () => {
 	const originalFetch = global.fetch;
 	const originalGuardian = window.guardian;
@@ -52,9 +55,8 @@ describe('sdc', () => {
 		group: 'news',
 	};
 
-	let slot = document.createElement('div');
-	slot.id = 'dfp-ad--inline1';
-	let advert = new Advert(slot);
+	let slot: HTMLElement;
+	let advert: Advert;
 
 	beforeEach(() => {
 		_.reset();
@@ -80,7 +82,7 @@ describe('sdc', () => {
 		slot = document.createElement('div');
 		slot.id = 'dfp-ad--inline1';
 		document.body.appendChild(slot);
-		advert = new Advert(slot);
+		advert = createStubAdvert()
 	});
 
 	afterEach(() => {
@@ -101,7 +103,7 @@ describe('sdc', () => {
 					promotedNewsletter;
 				mockFetch.mockResolvedValue(bidResponse);
 
-				await sdc.requestBids();
+				await sdc.requestBids(advert);
 
 				expect(mockFetch).toHaveBeenCalledWith(
 					expect.any(String),
