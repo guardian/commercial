@@ -157,6 +157,7 @@ describe('sdc', () => {
 				pageId: 'some/page',
 				isSignedIn: false,
 				hasConsented: true,
+				hasNewsletterSignup: false,
 			});
 		});
 
