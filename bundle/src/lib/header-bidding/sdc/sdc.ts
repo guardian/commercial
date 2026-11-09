@@ -206,14 +206,7 @@ const requestBids = async (advert: Advert): Promise<void> => {
 
 // If SDC wins the auction then the creative posts a message, triggering this callback.
 // Here we post a custom event to the DCR page with the SDC data.
-const onCreativeRender = async (
-	event: Record<string, unknown> = {},
-): Promise<void> => {
-	log(
-		'commercial',
-		'[NBA] Event received from creative',
-		JSON.stringify(event),
-	);
+const onCreativeRender = async (): Promise<void> => {
 	const props = await bidPromise;
 	if (!props) return;
 
