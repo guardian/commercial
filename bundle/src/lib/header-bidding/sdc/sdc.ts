@@ -72,7 +72,7 @@ const getModuleData = async <PROPS>(
 	if (!response.ok) {
 		throw Error(
 			response.statusText ||
-			`Supporter Revenue ${type} | Api call returned HTTP status ${response.status}`,
+				`Supporter Revenue ${type} | Api call returned HTTP status ${response.status}`,
 		);
 	}
 	return await response.json();
@@ -122,7 +122,9 @@ const getAuthHeaders = async (hasConsented: boolean) => {
 	return undefined;
 };
 
-const fetchBid = async (advert: Advert): Promise<Inline1Props | null> => {
+const fetchBid = async (
+	advert: Advert,
+): Promise<ModuleDataResponse<Inline1Props>> => {
 	const sdcUrl =
 		process.env.SDC_URL ?? 'https://contributions.guardianapis.com';
 	const hasConsented = await getHasConsented();
@@ -159,11 +161,35 @@ const fetchBid = async (advert: Advert): Promise<Inline1Props | null> => {
 		},
 	});
 
-	return response.data?.module.props ?? null;
+	return response;
 };
+
+const setSlotTargeting = (
+	advert: Advert,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars -- bid not yet implemented
+	responseData: ModuleDataResponse<Inline1Props>['data'],
+): void => {
+	advert.slot.setConfig({
+		targeting: {
+			// TODO - use bid from SDC response
+			nba_pb: '0.01',
+		},
+	});
+};
+
+const withTimeout = <T>(promise: Promise<T>, ms: number): Promise<T> =>
+	new Promise<T>((resolve, reject) => {
+		const timer = setTimeout(
+			() => reject(new Error(`Timed out after ${ms}ms`)),
+			ms,
+		);
+		promise.then(resolve, reject).finally(() => clearTimeout(timer));
+	});
 
 // Store the result of the request to SDC
 let bidPromise: Promise<Inline1Props | null> | undefined;
+
+const SDC_TIMEOUT_IN_MILLIS = 1500;
 
 const requestBids = async (advert: Advert): Promise<void> => {
 	// Only make the request once
@@ -172,10 +198,18 @@ const requestBids = async (advert: Advert): Promise<void> => {
 		return;
 	}
 
-	bidPromise = fetchBid(advert).catch((error: unknown) => {
-		console.error('[NBA] SDC bid request failed', error);
-		return null;
-	});
+	bidPromise = withTimeout(fetchBid(advert), SDC_TIMEOUT_IN_MILLIS)
+		.then((response) => {
+			if (response.data) {
+				setSlotTargeting(advert, response.data);
+				return response.data.module.props;
+			}
+			return null;
+		})
+		.catch((error: unknown) => {
+			console.error('[NBA] SDC bid request failed', error);
+			return null;
+		});
 	await bidPromise;
 };
 
