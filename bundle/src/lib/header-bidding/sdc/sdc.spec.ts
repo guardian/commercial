@@ -2,7 +2,7 @@ import type {
 	Inline1Payload,
 	Inline1Props,
 } from '@guardian/support-dotcom-components/dist/shared/types';
-import { Advert } from '../../../define/Advert';
+import type { Advert } from '../../../define/Advert';
 import type { AuthStatus } from '../../identity/api';
 import { getAuthStatus } from '../../identity/api';
 import { _, sdc } from './sdc';
@@ -37,10 +37,12 @@ const bidResponse = {
 
 const mockFetch = jest.fn();
 
+const createStubAdvert = (): Advert =>
+	({ slot: { setConfig: jest.fn() } }) as unknown as Advert;
+
 describe('sdc', () => {
-	let slot = document.createElement('div');
-	slot.id = 'dfp-ad--inline1';
-	let advert = new Advert(slot);
+	let slot: HTMLElement;
+	let advert: Advert;
 
 	beforeEach(() => {
 		_.reset();
@@ -61,7 +63,7 @@ describe('sdc', () => {
 		slot = document.createElement('div');
 		slot.id = 'dfp-ad--inline1';
 		document.body.appendChild(slot);
-		advert = new Advert(slot);
+		advert = createStubAdvert();
 	});
 
 	afterEach(() => {
