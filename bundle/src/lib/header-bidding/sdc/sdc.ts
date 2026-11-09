@@ -135,8 +135,10 @@ const fetchBid = async (): Promise<Inline1Props | null> => {
 			tagIds: window.guardian.config.page.keywordIds.split(','),
 			pageId: window.guardian.config.page.pageId,
 			browserId: getBrowserId(hasConsented),
-			isSignedIn,
-			hasConsented,
+			isSignedIn: isSignedIn,
+			hasConsented: hasConsented,
+			hasNewsletterSignup:
+				window.guardian.config.page.promotedNewsletter !== undefined,
 		},
 	};
 
