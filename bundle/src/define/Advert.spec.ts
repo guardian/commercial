@@ -1,6 +1,10 @@
 import { globalAdEvents } from '@guardian/commercial-core';
 import type * as AdSizesType from '@guardian/commercial-core/ad-sizes';
 import { slotSizeMappings as slotSizeMappings_ } from '@guardian/commercial-core/ad-sizes';
+import * as abTesting from '../ab-testing';
+import { a9 } from '../lib/header-bidding/a9/a9';
+import { prebid } from '../lib/header-bidding/prebid';
+import { sdc } from '../lib/header-bidding/sdc/sdc';
 import { _, Advert, findSmallestAdHeightForSlot } from './Advert';
 
 const { getSlotSizeMapping } = _;
@@ -89,6 +93,46 @@ describe('Advert', () => {
 		// @ts-expect-error -- we’re making it a partial
 		window.googletag = partialGoogletag;
 	});
+
+	it.each([
+		['Article', 'inline1', true, true],
+		['LiveBlog', 'inline1', true, false],
+		['Network Front', 'inline1', true, false],
+		['Article', 'inline1', false, false],
+		['Article', 'inline2', true, false],
+	])(
+		'requests SDC bids for content type %s, slot %s, and experiment membership %s: %s',
+		async (contentType, slotName, isInTest, shouldRequestSDC) => {
+			const originalContentType = window.guardian.config.page.contentType;
+			window.guardian.config.page.contentType = contentType;
+			jest.spyOn(abTesting, 'isUserInTest').mockReturnValue(isInTest);
+			const prebidSpy = jest
+				.spyOn(prebid, 'requestBids')
+				.mockResolvedValue(undefined);
+			const a9Spy = jest
+				.spyOn(a9, 'requestBids')
+				.mockResolvedValue(undefined);
+			const sdcSpy = jest
+				.spyOn(sdc, 'requestBids')
+				.mockResolvedValue(undefined);
+
+			try {
+				const slot = document.createElement('div');
+				slot.id = `dfp-ad--${slotName}`;
+				slot.setAttribute('data-name', slotName);
+				const ad = new Advert(slot);
+
+				await ad.requestBids();
+
+				expect(sdcSpy).toHaveBeenCalledTimes(shouldRequestSDC ? 1 : 0);
+				expect(prebidSpy).toHaveBeenCalledWith([ad]);
+				expect(a9Spy).toHaveBeenCalledWith([ad]);
+			} finally {
+				window.guardian.config.page.contentType = originalContentType;
+				jest.restoreAllMocks();
+			}
+		},
+	);
 
 	it('should enable safeframe to expand in the top-above-nav slot', () => {
 		const slot = document.createElement('div');
