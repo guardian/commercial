@@ -1,4 +1,7 @@
-import type {	Inline1Payload,Inline1Props } from '@guardian/support-dotcom-components/dist/shared/types';
+import type {
+	Inline1Payload,
+	Inline1Props,
+} from '@guardian/support-dotcom-components/dist/shared/types';
 import type { Newsletter } from '../../../types/global';
 import type { AuthStatus } from '../../identity/api';
 import { getAuthStatus } from '../../identity/api';
