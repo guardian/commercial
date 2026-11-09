@@ -72,7 +72,7 @@ const getModuleData = async <PROPS>(
 	if (!response.ok) {
 		throw Error(
 			response.statusText ||
-			`Supporter Revenue ${type} | Api call returned HTTP status ${response.status}`,
+				`Supporter Revenue ${type} | Api call returned HTTP status ${response.status}`,
 		);
 	}
 	return await response.json();
@@ -122,7 +122,7 @@ const getAuthHeaders = async (hasConsented: boolean) => {
 	return undefined;
 };
 
-const fetchBid = async (advert: Advert): Promise<Inline1Props | null> => {
+const fetchBid = async (): Promise<ModuleDataResponse<Inline1Props>> => {
 	const sdcUrl =
 		process.env.SDC_URL ?? 'https://contributions.guardianapis.com';
 	const hasConsented = await getHasConsented();
@@ -154,14 +154,18 @@ const fetchBid = async (advert: Advert): Promise<Inline1Props | null> => {
 
 	log('commercial', '[NBA] SDC bid response', response);
 
+	return response
+};
+
+const setSlotTargeting = (advert: Advert, responseData: ModuleDataResponse<Inline1Props>['data']): void => {
 	// Set targeting on slot
 	advert.slot.setConfig({
 		targeting: {
-			nba_pb: '0.01',
+			// 		// TODO - use bid from SDC response
+			// 		nba_pb: '0.01',
+			// 		nba_id: responseData.meta.campaignId || ''
 		},
 	});
-
-	return response.data?.module.props ?? null;
 };
 
 // Store the result of the request to SDC
@@ -174,10 +178,18 @@ const requestBids = async (advert: Advert): Promise<void> => {
 		return;
 	}
 
-	bidPromise = fetchBid(advert).catch((error: unknown) => {
+	bidPromise = fetchBid().then((response => {
+		if (response.data) {
+			setSlotTargeting(advert, response.data);
+			return response.data.module.props;
+		} else {
+			return null;
+		}
+	})).catch((error: unknown) => {
 		console.error('[NBA] SDC bid request failed', error);
 		return null;
 	});
+
 	await bidPromise;
 };
 
