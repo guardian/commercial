@@ -122,9 +122,7 @@ const getAuthHeaders = async (hasConsented: boolean) => {
 	return undefined;
 };
 
-const fetchBid = async (
-	advert: Advert,
-): Promise<ModuleDataResponse<Inline1Props>> => {
+const fetchBid = async (): Promise<ModuleDataResponse<Inline1Props>> => {
 	const sdcUrl =
 		process.env.SDC_URL ?? 'https://contributions.guardianapis.com';
 	const hasConsented = await getHasConsented();
@@ -153,13 +151,6 @@ const fetchBid = async (
 	);
 
 	log('commercial', '[NBA] SDC bid response', response);
-
-	// Set targeting on slot
-	advert.slot.setConfig({
-		targeting: {
-			nba_pb: '0.01',
-		},
-	});
 
 	return response;
 };
@@ -198,7 +189,7 @@ const requestBids = async (advert: Advert): Promise<void> => {
 		return;
 	}
 
-	bidPromise = withTimeout(fetchBid(advert), SDC_TIMEOUT_IN_MILLIS)
+	bidPromise = withTimeout(fetchBid(), SDC_TIMEOUT_IN_MILLIS)
 		.then((response) => {
 			if (response.data) {
 				setSlotTargeting(advert, response.data);
@@ -248,6 +239,7 @@ export const sdc = {
 
 // For testing
 export const _ = {
+	SDC_TIMEOUT_IN_MILLIS,
 	reset: (): void => {
 		bidPromise = undefined;
 	},
