@@ -1,5 +1,7 @@
-import type { Inline1Props } from '@guardian/support-dotcom-components/dist/shared/types';
+import type {	Inline1Payload,Inline1Props } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { Newsletter } from '../../../types/global';
+import type { AuthStatus } from '../../identity/api';
+import { getAuthStatus } from '../../identity/api';
 import { _, sdc } from './sdc';
 
 jest.mock('@guardian/commercial-core/geo/get-locale', () => ({
@@ -16,6 +18,7 @@ jest.mock('@guardian/libs', () => ({
 
 jest.mock('../../identity/api', () => ({
 	isUserLoggedIn: jest.fn().mockResolvedValue(false),
+	getAuthStatus: jest.fn().mockResolvedValue({ kind: 'SignedOut' }),
 }));
 
 const props = { heading: 'Support us' } as unknown as Inline1Props;
@@ -129,6 +132,53 @@ describe('sdc', () => {
 			await expect(sdc.requestBids()).resolves.toBeUndefined();
 			await sdc.onCreativeRender();
 			expect(window.guardian.commercial?.sdc).toBeUndefined();
+		});
+
+		it('constructs and sends a targeting payload correctly', async () => {
+			mockFetch.mockResolvedValue(bidResponse);
+			await sdc.requestBids();
+
+			const call = mockFetch.mock.calls[0] as [
+				string,
+				RequestInit & { body: string },
+			];
+			const options = call[1];
+			const body = JSON.parse(options.body) as Inline1Payload;
+
+			expect(body.targeting).toEqual({
+				showSupportMessaging: true,
+				mvtId: 0,
+				countryCode: 'GB',
+				sectionId: 'news',
+				tagIds: ['a', 'b'],
+				pageId: 'some/page',
+				isSignedIn: false,
+				hasConsented: true,
+			});
+		});
+
+		it('adds correct auth headers if user is signed in', async () => {
+			mockFetch.mockResolvedValue(bidResponse);
+
+			const testAccessToken = 'Test Token';
+			jest.mocked(getAuthStatus).mockResolvedValueOnce({
+				kind: 'SignedIn',
+				accessToken: { accessToken: testAccessToken },
+			} as unknown as AuthStatus);
+
+			await sdc.requestBids();
+
+			const call = mockFetch.mock.calls[0] as [
+				string,
+				RequestInit & { body: string },
+			];
+			const options = call[1];
+			const headers = new Headers(options.headers);
+
+			expect(headers.get('Authorization')).toBe(
+				`Bearer ${testAccessToken}`,
+			);
+			expect(headers.get('X-GU-IS-OAUTH')).toBe('true');
 		});
 	});
 
