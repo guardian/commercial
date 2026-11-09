@@ -60,4 +60,4 @@ const getEmail = (): Promise<string | null> => {
 };
 
 export { getAuthStatus, isUserLoggedIn, getGoogleTagId, getEmail };
-export type { AuthStatus };
+export type { AuthStatus, SignedIn };

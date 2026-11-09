@@ -19,6 +19,7 @@ type MessageType =
 	| 'resize'
 	| 'set-ad-height'
 	| 'scroll'
+	| 'sdc-render'
 	| 'type'
 	| 'viewport'
 	| 'video-progress';

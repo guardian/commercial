@@ -17,6 +17,7 @@ import type {
 	Trac,
 } from '@guardian/commercial-core/types';
 import type { CustomClaims } from '@guardian/identity-auth';
+import type { Inline1Props } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { Advert, AdvertStatus } from '../define/Advert';
 import type { Queue } from '../lib/guardian-commercial-queue';
 import type { ThirdPartyTag } from '../lib/types';
@@ -323,6 +324,7 @@ interface Guardian extends CoreGuardian {
 			status: AdvertStatus | AdvertStatus[],
 			callback: (advert: Advert) => void,
 		) => void;
+		sdc?: { inline1?: { slotId: string; props: Inline1Props } };
 	};
 	notificationEventHistory?: HeaderNotification[][];
 	page: {
