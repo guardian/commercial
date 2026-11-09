@@ -72,7 +72,7 @@ const getModuleData = async <PROPS>(
 	if (!response.ok) {
 		throw Error(
 			response.statusText ||
-				`Supporter Revenue ${type} | Api call returned HTTP status ${response.status}`,
+			`Supporter Revenue ${type} | Api call returned HTTP status ${response.status}`,
 		);
 	}
 	return await response.json();
@@ -161,9 +161,9 @@ const setSlotTargeting = (advert: Advert, responseData: ModuleDataResponse<Inlin
 	// Set targeting on slot
 	advert.slot.setConfig({
 		targeting: {
-			// 		// TODO - use bid from SDC response
-			// 		nba_pb: '0.01',
-			// 		nba_id: responseData.meta.campaignId || ''
+			// TODO - use bid from SDC response
+			nba_pb: '0.01',
+			nba_id: responseData?.meta.campaignId || ''
 		},
 	});
 };
