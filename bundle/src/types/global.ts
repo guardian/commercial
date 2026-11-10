@@ -87,6 +87,22 @@ interface LightboxImages {
 	images: Array<{ src: string }>;
 }
 
+type Newsletter = {
+	listId: number;
+	identityName: string;
+	name: string;
+	description: string;
+	frequency: string;
+	successDescription: string;
+	theme: string;
+	group: string;
+	category?: string;
+	regionFocus?: string;
+	illustrationCard?: string;
+	illustrationSquare?: string;
+	exampleUrl?: string;
+};
+
 type Stage = 'DEV' | 'CODE' | 'PROD';
 
 interface PageConfig extends CommercialPageConfig {
@@ -123,6 +139,7 @@ interface PageConfig extends CommercialPageConfig {
 	keywords: string;
 	lightboxImages?: LightboxImages;
 	pageId: string;
+	promotedNewsletter?: Newsletter;
 	publication: string;
 	revisionNumber: string; // https://github.com/guardian/frontend/blob/1b6f41c3/common/app/model/meta.scala#L388
 	section: string;
@@ -378,6 +395,18 @@ declare global {
 
 		__iasPET?: IasPET;
 
+		onDvtagReady?: (callback?: () => void, timeout?: number) => void;
+		dvtag?: {
+			cmd?:
+				| Array<() => void>
+				| { push: (...fns: Array<() => void>) => void };
+			queueAdRequest?: (opt: {
+				callback: (() => void) | null;
+				timeout: number;
+				timestamp: number;
+			}) => void;
+		};
+
 		teads_analytics?: TeadsAnalytics;
 
 		// https://www.iab.com/wp-content/uploads/2014/08/SafeFrames_v1.1_final.pdf
@@ -424,4 +453,5 @@ export type {
 	ThirdPartyTag,
 	CustomIdTokenClaims,
 	FetchBidResponse,
+	Newsletter,
 };

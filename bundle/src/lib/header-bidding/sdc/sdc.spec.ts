@@ -3,6 +3,7 @@ import type {
 	Inline1Props,
 } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { Advert } from '../../../define/Advert';
+import type { Newsletter } from '../../../types/global';
 import type { AuthStatus } from '../../identity/api';
 import { getAuthStatus } from '../../identity/api';
 import { _, sdc } from './sdc';
@@ -41,6 +42,19 @@ const createStubAdvert = (): Advert =>
 	({ slot: { setConfig: jest.fn() } }) as unknown as Advert;
 
 describe('sdc', () => {
+	const originalFetch = global.fetch;
+	const originalGuardian = window.guardian;
+	const newsletter: Newsletter = {
+		listId: 1,
+		identityName: 'test-newsletter',
+		name: 'Test newsletter',
+		description: 'Test description',
+		frequency: 'Weekly',
+		successDescription: 'Signed up',
+		theme: 'news',
+		group: 'news',
+	};
+
 	let slot: HTMLElement;
 	let advert: Advert;
 
@@ -51,14 +65,19 @@ describe('sdc', () => {
 		jest.spyOn(console, 'error').mockImplementation(() => undefined);
 
 		window.guardian = {
+			...originalGuardian,
+			commercial: undefined,
 			config: {
+				...originalGuardian.config,
 				page: {
+					...originalGuardian.config.page,
 					section: 'news',
 					keywordIds: 'a,b',
 					pageId: 'some/page',
+					promotedNewsletter: undefined,
 				},
 			},
-		} as unknown as typeof window.guardian;
+		};
 
 		slot = document.createElement('div');
 		slot.id = 'dfp-ad--inline1';
@@ -68,10 +87,35 @@ describe('sdc', () => {
 
 	afterEach(() => {
 		slot.remove();
+		global.fetch = originalFetch;
+		window.guardian = originalGuardian;
 		jest.restoreAllMocks();
 	});
 
 	describe('requestBids', () => {
+		it.each([
+			{ promotedNewsletter: newsletter, hasNewsletterSignup: true },
+			{ promotedNewsletter: undefined, hasNewsletterSignup: false },
+		])(
+			'sends hasNewsletterSignup=$hasNewsletterSignup',
+			async ({ promotedNewsletter, hasNewsletterSignup }) => {
+				window.guardian.config.page.promotedNewsletter =
+					promotedNewsletter;
+				mockFetch.mockResolvedValue(bidResponse);
+
+				await sdc.requestBids(advert);
+
+				expect(mockFetch).toHaveBeenCalledWith(
+					expect.any(String),
+					expect.objectContaining<{ body: unknown }>({
+						body: expect.stringContaining(
+							`"hasNewsletterSignup":${hasNewsletterSignup}`,
+						),
+					}),
+				);
+			},
+		);
+
 		it('only fetches once however many times it is called', async () => {
 			mockFetch.mockResolvedValue(bidResponse);
 
@@ -158,6 +202,7 @@ describe('sdc', () => {
 				pageId: 'some/page',
 				isSignedIn: false,
 				hasConsented: true,
+				hasNewsletterSignup: false,
 			});
 		});
 
@@ -183,6 +228,37 @@ describe('sdc', () => {
 				`Bearer ${testAccessToken}`,
 			);
 			expect(headers.get('X-GU-IS-OAUTH')).toBe('true');
+		});
+
+		it('sets corresponding GAM targeting for bid responses', async () => {
+			mockFetch.mockResolvedValue({
+				ok: true,
+				json: () =>
+					Promise.resolve({
+						data: {
+							module: { name: 'inline1', props },
+							meta: { campaignId: 'campaign-123' },
+						},
+					}),
+			});
+
+			await sdc.requestBids(advert);
+
+			expect(advert.slot.setConfig).toHaveBeenCalledTimes(1);
+			expect(advert.slot.setConfig).toHaveBeenCalledWith({
+				targeting: { nba_pb: '0.01', nba_id: 'campaign-123' },
+			});
+		});
+
+		it('does not set GAM targeting when SDC has no bid', async () => {
+			mockFetch.mockResolvedValue({
+				ok: true,
+				json: () => Promise.resolve({}),
+			});
+
+			await sdc.requestBids(advert);
+
+			expect(advert.slot.setConfig).not.toHaveBeenCalled();
 		});
 	});
 

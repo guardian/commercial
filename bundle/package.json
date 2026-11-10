@@ -41,7 +41,7 @@
 		"@guardian/browserslist-config": "9.0.0",
 		"@guardian/commercial-core": "workspace:*",
 		"@guardian/support-dotcom-components": "11.1.4",
-		"@guardian/consent-manager": "2.1.2",
+		"@guardian/consent-manager": "2.2.0",
 		"@guardian/core-web-vitals": "22.0.0",
 		"@guardian/identity-auth": "18.0.0",
 		"@guardian/identity-auth-frontend": "20.1.0",
