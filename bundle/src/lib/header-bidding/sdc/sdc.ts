@@ -72,7 +72,7 @@ const getModuleData = async <PROPS>(
 	if (!response.ok) {
 		throw Error(
 			response.statusText ||
-			`Supporter Revenue ${type} | Api call returned HTTP status ${response.status}`,
+				`Supporter Revenue ${type} | Api call returned HTTP status ${response.status}`,
 		);
 	}
 	return await response.json();
@@ -154,16 +154,19 @@ const fetchBid = async (): Promise<ModuleDataResponse<Inline1Props>> => {
 
 	log('commercial', '[NBA] SDC bid response', response);
 
-	return response
+	return response;
 };
 
-const setSlotTargeting = (advert: Advert, responseData: ModuleDataResponse<Inline1Props>['data']): void => {
+const setSlotTargeting = (
+	advert: Advert,
+	responseData: ModuleDataResponse<Inline1Props>['data'],
+): void => {
 	// Set targeting on slot
 	advert.slot.setConfig({
 		targeting: {
 			// TODO - use bid from SDC response
 			nba_pb: '0.01',
-			nba_id: responseData?.meta.campaignId ?? ''
+			nba_id: responseData?.meta.campaignId ?? '',
 		},
 	});
 };
@@ -178,20 +181,21 @@ const requestBids = async (advert: Advert): Promise<void> => {
 		return;
 	}
 
-	bidPromise = fetchBid().then((response => {
-		if (response.data) {
-			setSlotTargeting(advert, response.data);
-			return response.data.module.props;
-		}
-		return null;
-	})).catch((error: unknown) => {
-		console.error('[NBA] SDC bid request failed', error);
-		return null;
-	});
+	bidPromise = fetchBid()
+		.then((response) => {
+			if (response.data) {
+				setSlotTargeting(advert, response.data);
+				return response.data.module.props;
+			}
+			return null;
+		})
+		.catch((error: unknown) => {
+			console.error('[NBA] SDC bid request failed', error);
+			return null;
+		});
 
 	await bidPromise;
 };
-
 
 interface SdcRenderSpecs {
 	id?: string;
@@ -202,12 +206,9 @@ const isValidSdcRenderMessage = (specs: unknown): specs is SdcRenderSpecs => {
 	return isObject(specs);
 };
 
-
 // If SDC wins the auction then the creative posts a message, triggering this callback.
 // Here we post a custom event to the DCR page with the SDC data.
-const onCreativeRender = async (
-	event: unknown = {}
-): Promise<void> => {
+const onCreativeRender = async (event: unknown = {}): Promise<void> => {
 	if (!isValidSdcRenderMessage(event)) {
 		return Promise.resolve();
 	}

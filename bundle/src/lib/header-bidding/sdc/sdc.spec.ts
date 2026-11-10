@@ -82,7 +82,7 @@ describe('sdc', () => {
 		slot = document.createElement('div');
 		slot.id = 'dfp-ad--inline1';
 		document.body.appendChild(slot);
-		advert = createStubAdvert()
+		advert = createStubAdvert();
 	});
 
 	afterEach(() => {
