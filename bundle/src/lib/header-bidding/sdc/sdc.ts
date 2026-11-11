@@ -171,8 +171,19 @@ const setSlotTargeting = (
 	});
 };
 
+const withTimeout = <T>(promise: Promise<T>, ms: number): Promise<T> =>
+	new Promise<T>((resolve, reject) => {
+		const timer = setTimeout(
+			() => reject(new Error(`Timed out after ${ms}ms`)),
+			ms,
+		);
+		promise.then(resolve, reject).finally(() => clearTimeout(timer));
+	});
+
 // Store the result of the request to SDC
 let bidPromise: Promise<Inline1Props | null> | undefined;
+
+const SDC_TIMEOUT_IN_MILLIS = 1500;
 
 const requestBids = async (advert: Advert): Promise<void> => {
 	// Only make the request once
@@ -181,7 +192,7 @@ const requestBids = async (advert: Advert): Promise<void> => {
 		return;
 	}
 
-	bidPromise = fetchBid()
+	bidPromise = withTimeout(fetchBid(), SDC_TIMEOUT_IN_MILLIS)
 		.then((response) => {
 			if (response.data) {
 				setSlotTargeting(advert, response.data);
@@ -240,6 +251,7 @@ export const sdc = {
 
 // For testing
 export const _ = {
+	SDC_TIMEOUT_IN_MILLIS,
 	reset: (): void => {
 		bidPromise = undefined;
 	},

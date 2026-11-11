@@ -148,6 +148,40 @@ describe('sdc', () => {
 			expect(window.guardian.commercial?.sdc).toBeUndefined();
 		});
 
+		describe('timeout', () => {
+			beforeEach(() => jest.useFakeTimers());
+			afterEach(() => jest.useRealTimers());
+
+			it('resolves at the timeout and ignores a response that arrives later', async () => {
+				let respond: (value: typeof bidResponse) => void = () =>
+					undefined;
+				mockFetch.mockReturnValue(
+					new Promise((resolve) => {
+						respond = resolve;
+					}),
+				);
+
+				const request = sdc.requestBids(advert);
+				await jest.advanceTimersByTimeAsync(_.SDC_TIMEOUT_IN_MILLIS);
+				await expect(request).resolves.toBeUndefined();
+
+				respond(bidResponse);
+				await jest.advanceTimersByTimeAsync(0);
+
+				expect(advert.slot.setConfig).not.toHaveBeenCalled();
+				await sdc.onCreativeRender();
+				expect(window.guardian.commercial?.sdc).toBeUndefined();
+			});
+
+			it('clears the timer when the request completes in time', async () => {
+				mockFetch.mockResolvedValue(bidResponse);
+
+				await sdc.requestBids(advert);
+
+				expect(jest.getTimerCount()).toBe(0);
+			});
+		});
+
 		it('constructs and sends a targeting payload correctly', async () => {
 			mockFetch.mockResolvedValue(bidResponse);
 			await sdc.requestBids(advert);
