@@ -129,6 +129,10 @@ const setPublisherProvidedSignalsConfig = (consentState: ConsentState) => {
 		taxonomy,
 	);
 
+	if (tags.length === 0) {
+		return;
+	}
+
 	window.googletag.setConfig({
 		pps: {
 			taxonomies: {
