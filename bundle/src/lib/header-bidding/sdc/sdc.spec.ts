@@ -42,6 +42,7 @@ const createStubAdvert = (): Advert =>
 	({ slot: { setConfig: jest.fn() } }) as unknown as Advert;
 
 describe('sdc', () => {
+	const originalUrl = window.location.href;
 	const originalFetch = global.fetch;
 	const originalGuardian = window.guardian;
 	const newsletter: Newsletter = {
@@ -86,6 +87,7 @@ describe('sdc', () => {
 	});
 
 	afterEach(() => {
+		window.history.replaceState(null, '', originalUrl);
 		slot.remove();
 		global.fetch = originalFetch;
 		window.guardian = originalGuardian;
@@ -93,6 +95,69 @@ describe('sdc', () => {
 	});
 
 	describe('requestBids', () => {
+		it.each([
+			['?preview-inline1=Testname:variantname', 'Testname:variantname'],
+			['?preview-inline1=Testname%3Avariantname', 'Testname:variantname'],
+			['?preview-inline1=', ''],
+		])('previews through GAM with query %s', async (query, selection) => {
+			window.history.replaceState(null, '', `/${query}`);
+			mockFetch.mockResolvedValue({
+				ok: true,
+				json: () =>
+					Promise.resolve({
+						data: {
+							module: { name: 'inline1', props },
+							meta: { campaignId: 'preview-campaign' },
+						},
+					}),
+			});
+			const onRender = jest.fn();
+			slot.addEventListener('commercial.sdc-render', onRender);
+
+			await sdc.requestBids(advert);
+
+			const [url] = mockFetch.mock.calls[0] as [string];
+			expect(new URL(url).searchParams.get('preview')).toBe(selection);
+			expect(advert.slot.setConfig).toHaveBeenCalledWith({
+				targeting: {
+					nba_pb: '0.01',
+					nba_id: 'preview-campaign',
+					at: 'nba',
+				},
+			});
+			expect(window.location.search).toBe(query);
+			expect(onRender).not.toHaveBeenCalled();
+			expect(window.guardian.commercial?.sdc).toBeUndefined();
+
+			await sdc.onCreativeRender({ id: 'preview-campaign' });
+
+			expect(onRender).toHaveBeenCalledTimes(1);
+			expect(window.guardian.commercial?.sdc).toEqual({
+				inline1: { props, slotId: 'dfp-ad--inline1' },
+			});
+		});
+
+		it.each(['empty', 'failed'])(
+			'does not set preview targeting for an %s bid',
+			async (result) => {
+				window.history.replaceState(null, '', '/?preview-inline1=test');
+				if (result === 'failed') {
+					mockFetch.mockRejectedValue(new Error('network'));
+				} else {
+					mockFetch.mockResolvedValue({
+						ok: true,
+						json: () => Promise.resolve({}),
+					});
+				}
+
+				await sdc.requestBids(advert);
+				await sdc.onCreativeRender();
+
+				expect(advert.slot.setConfig).not.toHaveBeenCalled();
+				expect(window.guardian.commercial?.sdc).toBeUndefined();
+			},
+		);
+
 		it.each([
 			{ promotedNewsletter: newsletter, hasNewsletterSignup: true },
 			{ promotedNewsletter: undefined, hasNewsletterSignup: false },
@@ -148,39 +213,47 @@ describe('sdc', () => {
 			expect(window.guardian.commercial?.sdc).toBeUndefined();
 		});
 
-		describe('timeout', () => {
-			beforeEach(() => jest.useFakeTimers());
-			afterEach(() => jest.useRealTimers());
+		describe.each(['', '?preview-inline1=test:variant'])(
+			'timeout %s',
+			(query) => {
+				beforeEach(() => {
+					jest.useFakeTimers();
+					window.history.replaceState(null, '', `/${query}`);
+				});
+				afterEach(() => jest.useRealTimers());
 
-			it('resolves at the timeout and ignores a response that arrives later', async () => {
-				let respond: (value: typeof bidResponse) => void = () =>
-					undefined;
-				mockFetch.mockReturnValue(
-					new Promise((resolve) => {
-						respond = resolve;
-					}),
-				);
+				it('resolves at the timeout and ignores a response that arrives later', async () => {
+					let respond: (value: typeof bidResponse) => void = () =>
+						undefined;
+					mockFetch.mockReturnValue(
+						new Promise((resolve) => {
+							respond = resolve;
+						}),
+					);
 
-				const request = sdc.requestBids(advert);
-				await jest.advanceTimersByTimeAsync(_.SDC_TIMEOUT_IN_MILLIS);
-				await expect(request).resolves.toBeUndefined();
+					const request = sdc.requestBids(advert);
+					await jest.advanceTimersByTimeAsync(
+						_.SDC_TIMEOUT_IN_MILLIS,
+					);
+					await expect(request).resolves.toBeUndefined();
 
-				respond(bidResponse);
-				await jest.advanceTimersByTimeAsync(0);
+					respond(bidResponse);
+					await jest.advanceTimersByTimeAsync(0);
 
-				expect(advert.slot.setConfig).not.toHaveBeenCalled();
-				await sdc.onCreativeRender();
-				expect(window.guardian.commercial?.sdc).toBeUndefined();
-			});
+					expect(advert.slot.setConfig).not.toHaveBeenCalled();
+					await sdc.onCreativeRender();
+					expect(window.guardian.commercial?.sdc).toBeUndefined();
+				});
 
-			it('clears the timer when the request completes in time', async () => {
-				mockFetch.mockResolvedValue(bidResponse);
+				it('clears the timer when the request completes in time', async () => {
+					mockFetch.mockResolvedValue(bidResponse);
 
-				await sdc.requestBids(advert);
+					await sdc.requestBids(advert);
 
-				expect(jest.getTimerCount()).toBe(0);
-			});
-		});
+					expect(jest.getTimerCount()).toBe(0);
+				});
+			},
+		);
 
 		it('constructs and sends a targeting payload correctly', async () => {
 			mockFetch.mockResolvedValue(bidResponse);

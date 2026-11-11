@@ -36,6 +36,7 @@ const getPreviewVariant = (type: ModuleType): string | null => {
 	return params.get(`preview-${type}`);
 };
 
+const isInline1Preview = (): boolean => getPreviewVariant('inline1') !== null;
 const buildSDCUrl = (baseUrl: string, type: ModuleType): string => {
 	const forcedVariant = getForcedVariant(type);
 	const previewVariant = getPreviewVariant(type);
@@ -44,7 +45,7 @@ const buildSDCUrl = (baseUrl: string, type: ModuleType): string => {
 	if (forcedVariant) {
 		queryParams.set('force', forcedVariant);
 	}
-	if (previewVariant) {
+	if (previewVariant !== null) {
 		queryParams.set('preview', previewVariant);
 	}
 
@@ -167,6 +168,7 @@ const setSlotTargeting = (
 			// TODO - use bid from SDC response
 			nba_pb: '0.01',
 			nba_id: responseData?.meta.campaignId ?? '',
+			...(isInline1Preview() ? { at: 'nba' } : {}),
 		},
 	});
 };
@@ -245,6 +247,7 @@ const onCreativeRender = async (event: unknown = {}): Promise<void> => {
 };
 
 export const sdc = {
+	isInline1Preview,
 	requestBids,
 	onCreativeRender,
 };

@@ -104,14 +104,21 @@ describe('Advert', () => {
 	});
 
 	it.each([
-		['Article', 'inline1', true, true],
-		['LiveBlog', 'inline1', true, false],
-		['Network Front', 'inline1', true, false],
-		['Article', 'inline1', false, false],
-		['Article', 'inline2', true, false],
+		['Article', 'inline1', true, '', true],
+		['LiveBlog', 'inline1', true, '', false],
+		['Network Front', 'inline1', true, '', false],
+		['Article', 'inline1', false, '', false],
+		['Article', 'inline2', true, '', false],
+		['Article', 'inline1', false, '?preview-inline1=test:variant', true],
+		['Article', 'inline1', false, '?preview-inline1=', true],
+		['Article', 'inline1', false, '?force-inline1=test:variant', false],
+		['Article', 'inline2', false, '?preview-inline1=test:variant', false],
+		['LiveBlog', 'inline1', false, '?preview-inline1=test:variant', false],
 	])(
-		'requests SDC bids for content type %s, slot %s, and experiment membership %s: %s',
-		async (contentType, slotName, isInTest, shouldRequestSDC) => {
+		'requests SDC bids for content type %s, slot %s, experiment membership %s, and query %s: %s',
+		async (contentType, slotName, isInTest, query, shouldRequestSDC) => {
+			const originalUrl = window.location.href;
+			window.history.replaceState(null, '', `/${query}`);
 			const originalContentType = window.guardian.config.page.contentType;
 			window.guardian.config.page.contentType = contentType;
 			jest.spyOn(abTesting, 'isUserInTest').mockReturnValue(isInTest);
@@ -136,7 +143,12 @@ describe('Advert', () => {
 				expect(sdcSpy).toHaveBeenCalledTimes(shouldRequestSDC ? 1 : 0);
 				expect(prebidSpy).toHaveBeenCalledWith([ad]);
 				expect(a9Spy).toHaveBeenCalledWith([ad]);
+				expect(window.location.search).toBe(query);
+				if (query.startsWith('?preview-inline1=') && shouldRequestSDC) {
+					expect(abTesting.isUserInTest).not.toHaveBeenCalled();
+				}
 			} finally {
+				window.history.replaceState(null, '', originalUrl);
 				window.guardian.config.page.contentType = originalContentType;
 				jest.restoreAllMocks();
 			}
@@ -482,6 +494,51 @@ describe('Advert', () => {
 			ad.setStatus('fetching', true);
 			expect(callback).toHaveBeenCalledTimes(1);
 		});
+	});
+
+	it('waits for SDC preview bidding before displaying Inline1 without experiment membership', async () => {
+		const originalUrl = window.location.href;
+		const originalContentType = window.guardian.config.page.contentType;
+		const originalDvReady = window.onDvtagReady;
+		window.history.replaceState(
+			null,
+			'',
+			'/?preview-inline1=Testname:variantname',
+		);
+		window.guardian.config.page.contentType = 'Article';
+		window.onDvtagReady = jest.fn((callback?: () => void) => callback?.());
+		jest.spyOn(abTesting, 'isUserInTest').mockReturnValue(false);
+		let finishBids!: () => void;
+		const sdcSpy = jest.spyOn(sdc, 'requestBids').mockReturnValue(
+			new Promise<void>((resolve) => {
+				finishBids = resolve;
+			}),
+		);
+
+		try {
+			const slot = document.createElement('div');
+			slot.id = 'dfp-ad--inline1';
+			slot.setAttribute('data-name', 'inline1');
+			const ad = new Advert(slot);
+
+			ad.load();
+			ad.setStatus('ready', true);
+			await new Promise(process.nextTick);
+
+			expect(sdcSpy).toHaveBeenCalledWith(ad);
+			expect(window.googletag.display).not.toHaveBeenCalled();
+
+			finishBids();
+			await new Promise(process.nextTick);
+
+			expect(window.googletag.display).toHaveBeenCalledWith(ad.id);
+			expect(abTesting.isUserInTest).not.toHaveBeenCalled();
+		} finally {
+			window.history.replaceState(null, '', originalUrl);
+			window.guardian.config.page.contentType = originalContentType;
+			window.onDvtagReady = originalDvReady;
+			jest.restoreAllMocks();
+		}
 	});
 
 	describe('load() with DoubleVerify', () => {
