@@ -1,3 +1,4 @@
+import { storage } from '@guardian/libs';
 import type {
 	Inline1Payload,
 	Inline1Props,
@@ -86,6 +87,7 @@ describe('sdc', () => {
 	});
 
 	afterEach(() => {
+		storage.local.clear();
 		slot.remove();
 		global.fetch = originalFetch;
 		window.guardian = originalGuardian;
@@ -183,6 +185,8 @@ describe('sdc', () => {
 		});
 
 		it('constructs and sends a targeting payload correctly', async () => {
+			const viewLog = [{ timestamp: 1700000000000, testName: 'test-a' }];
+			storage.local.set('gu.inline1.views', viewLog);
 			mockFetch.mockResolvedValue(bidResponse);
 			await sdc.requestBids(advert);
 
@@ -194,6 +198,7 @@ describe('sdc', () => {
 			const body = JSON.parse(options.body) as Inline1Payload;
 
 			expect(body.targeting).toEqual({
+				viewLog,
 				showSupportMessaging: true,
 				mvtId: 0,
 				countryCode: 'GB',
