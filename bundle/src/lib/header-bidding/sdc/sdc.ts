@@ -165,10 +165,9 @@ const setSlotTargeting = (
 	// Set targeting on slot
 	advert.slot.setConfig({
 		targeting: {
-			// TODO - use bid from SDC response
-			nba_pb: '0.01',
 			nba_id: responseData?.meta.campaignId ?? '',
-			...(isInline1Preview() ? { at: 'nba' } : {}),
+			// TODO - use bid from SDC response
+			...(isInline1Preview() ? { at: 'nba' } : { nba_pb: '0.01' }),
 		},
 	});
 };
