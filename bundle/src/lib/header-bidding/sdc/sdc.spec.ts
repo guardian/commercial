@@ -120,7 +120,6 @@ describe('sdc', () => {
 			expect(new URL(url).searchParams.get('preview')).toBe(selection);
 			expect(advert.slot.setConfig).toHaveBeenCalledWith({
 				targeting: {
-					nba_pb: '0.01',
 					nba_id: 'preview-campaign',
 					at: 'nba',
 				},
