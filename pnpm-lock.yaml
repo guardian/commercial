@@ -110,8 +110,8 @@ importers:
         specifier: 13.1.0
         version: 13.1.0(tslib@2.8.1)(typescript@6.0.3)
       '@guardian/support-dotcom-components':
-        specifier: 11.1.4
-        version: 11.1.4(@guardian/libs@33.0.0(@guardian/ophan-tracker-js@5.1.3)(tslib@2.8.1)(typescript@6.0.3))(@guardian/ophan-tracker-js@5.1.3)(zod@4.4.3)
+        specifier: 11.3.1
+        version: 11.3.1(@guardian/libs@33.0.0(@guardian/ophan-tracker-js@5.1.3)(tslib@2.8.1)(typescript@6.0.3))(@guardian/newsletter-types@5.0.0(tslib@2.8.1)(typescript@6.0.3))(@guardian/ophan-tracker-js@5.1.3)(zod@4.4.3)
       '@playwright/test':
         specifier: 1.63.0
         version: 1.63.0
@@ -1626,6 +1626,15 @@ packages:
       typescript:
         optional: true
 
+  '@guardian/newsletter-types@5.0.0':
+    resolution: {integrity: sha512-00bky7f8YteH25BQ26vwUe/Puy6Z6DGvDN3XQ+h40P0HvVKJ6ZZnVDtZd6GEruS0nKT+4LwBMPV7GH4T/0m+oQ==}
+    peerDependencies:
+      tslib: ^2.8.1
+      typescript: ~6.0.3
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   '@guardian/ophan-tracker-js@5.1.3':
     resolution: {integrity: sha512-H5yoc/XsCz+L7EM0ePcs5vP/4m7Uc0rX/I5rcKH4uhIbqiacxRfN3pIrqwKZdGG2FAZaHLVukRfOMwS4W0MkTA==}
     engines: {node: '>=16'}
@@ -1654,10 +1663,11 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/support-dotcom-components@11.1.4':
-    resolution: {integrity: sha512-hIqNxWDuaK41IOE9Ld1hcLRmytZSu+6XRwXozCk3GpXHuGcCyHiOXxgmAFXk/YBJzQrhgiRjqSpBUit71sPO7A==}
+  '@guardian/support-dotcom-components@11.3.1':
+    resolution: {integrity: sha512-mBv8gGkcV+diXdoe14N/GW7IYLeRZbJhmXAIoOAySBN2P0TPT0lx8E4sMICX7OmqTIvll9Pt5VoRPxvnvDZOMA==}
     peerDependencies:
       '@guardian/libs': ^22.0.0
+      '@guardian/newsletter-types': 5.0.0
       '@guardian/ophan-tracker-js': 2.8.0
       zod: ^4.1.12
 
@@ -7978,6 +7988,12 @@ snapshots:
     optionalDependencies:
       typescript: 6.0.3
 
+  '@guardian/newsletter-types@5.0.0(tslib@2.8.1)(typescript@6.0.3)':
+    dependencies:
+      tslib: 2.8.1
+    optionalDependencies:
+      typescript: 6.0.3
+
   '@guardian/ophan-tracker-js@5.1.3':
     dependencies:
       '@guardian/tsconfig': 1.0.1
@@ -7994,9 +8010,10 @@ snapshots:
     optionalDependencies:
       typescript: 6.0.3
 
-  '@guardian/support-dotcom-components@11.1.4(@guardian/libs@33.0.0(@guardian/ophan-tracker-js@5.1.3)(tslib@2.8.1)(typescript@6.0.3))(@guardian/ophan-tracker-js@5.1.3)(zod@4.4.3)':
+  '@guardian/support-dotcom-components@11.3.1(@guardian/libs@33.0.0(@guardian/ophan-tracker-js@5.1.3)(tslib@2.8.1)(typescript@6.0.3))(@guardian/newsletter-types@5.0.0(tslib@2.8.1)(typescript@6.0.3))(@guardian/ophan-tracker-js@5.1.3)(zod@4.4.3)':
     dependencies:
       '@guardian/libs': 33.0.0(@guardian/ophan-tracker-js@5.1.3)(tslib@2.8.1)(typescript@6.0.3)
+      '@guardian/newsletter-types': 5.0.0(tslib@2.8.1)(typescript@6.0.3)
       '@guardian/ophan-tracker-js': 5.1.3
       zod: 4.4.3
 
