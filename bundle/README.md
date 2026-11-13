@@ -31,6 +31,24 @@ To develop the bundle locally on the bundle, run `pnpm serve` to start a local s
 
     `pnpm serve`
 
+### Previewing SDC Inline1 through GAM
+
+Add `?preview-inline1=Testname:variantname` to an article URL, using the test and
+variant from the support admin console. Commercial requests SDC bids for Inline1
+without requiring Next Best Action experiment membership. It does not change
+the URL, reload the page, or set an adtest cookie.
+
+SDC receives the selection as its `preview` parameter. When SDC returns a bid,
+Commercial sets `at: 'nba'` alongside `nba_id`, omitting price targeting
+(`nba_pb`), on the Inline1 slot before its GAM request. This also applies when
+Inline1 is included in another slot's single-request auction. Failed, timed-out,
+or empty bids do not set preview
+targeting. Other slots and non-preview experiment behavior are unchanged.
+
+GAM must be configured to serve the NBA creative for `at=nba`; the creative's
+`sdc-render` message then triggers DCR rendering. Commercial does not bypass GAM
+or render the preview directly.
+
 ### Testing locally with DCR
 
 To run the unit tests:

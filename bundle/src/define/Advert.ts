@@ -467,13 +467,13 @@ class Advert extends EventTarget {
 			a9.requestBids([this]),
 		];
 
-		const isInNBATest = isUserInTest('commercial-next-best-action');
 		if (
 			this.name === 'inline1' &&
 			window.guardian.config.page.contentType === 'Article' &&
-			isInNBATest
+			(sdc.isInline1Preview() ||
+				isUserInTest('commercial-next-best-action'))
 		) {
-			console.log("You're in the Next Best Action test.");
+			console.log('Requesting a Next Best Action bid for Inline1.');
 			bidRequests.push(sdc.requestBids(this));
 		}
 
