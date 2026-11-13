@@ -5,7 +5,7 @@ import { getCookie, isObject, log, storage } from '@guardian/libs';
 import type {
 	Inline1Payload,
 	Inline1Props,
-	Inline1View,
+	MessageViewLog,
 } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { TestTracking } from '@guardian/support-dotcom-components/dist/shared/types/abTests/shared';
 import type { Advert } from '../../../define/Advert';
@@ -124,10 +124,10 @@ const getAuthHeaders = async (hasConsented: boolean) => {
 	return undefined;
 };
 
-const getViewLog = (): Inline1View[] => {
+const getViewLog = (): MessageViewLog => {
 	const item = storage.local.get('gu.inline1.views');
 	if (Array.isArray(item)) {
-		return item as Inline1View[];
+		return item as MessageViewLog;
 	}
 	return [];
 };
