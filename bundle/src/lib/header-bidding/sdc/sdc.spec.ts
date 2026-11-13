@@ -1,6 +1,8 @@
+import { storage } from '@guardian/libs';
 import type {
 	Inline1Payload,
 	Inline1Props,
+	MessageViewLog,
 } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { Advert } from '../../../define/Advert';
 import type { Newsletter } from '../../../types/global';
@@ -87,6 +89,7 @@ describe('sdc', () => {
 	});
 
 	afterEach(() => {
+		storage.local.clear();
 		window.history.replaceState(null, '', originalUrl);
 		slot.remove();
 		global.fetch = originalFetch;
@@ -255,6 +258,10 @@ describe('sdc', () => {
 		);
 
 		it('constructs and sends a targeting payload correctly', async () => {
+			const viewLog: MessageViewLog = [
+				{ date: 1700000000000, testId: 'test-a' },
+			];
+			storage.local.set('gu.inline1.views', viewLog);
 			mockFetch.mockResolvedValue(bidResponse);
 			await sdc.requestBids(advert);
 
@@ -266,6 +273,7 @@ describe('sdc', () => {
 			const body = JSON.parse(options.body) as Inline1Payload;
 
 			expect(body.targeting).toEqual({
+				viewLog,
 				showSupportMessaging: true,
 				mvtId: 0,
 				countryCode: 'GB',

@@ -1,10 +1,11 @@
 import { getLocale } from '@guardian/commercial-core/geo/get-locale';
 import type { ConsentState } from '@guardian/consent-manager';
 import { onConsent } from '@guardian/consent-manager';
-import { getCookie, isObject, log } from '@guardian/libs';
+import { getCookie, isObject, log, storage } from '@guardian/libs';
 import type {
 	Inline1Payload,
 	Inline1Props,
+	MessageViewLog,
 } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { TestTracking } from '@guardian/support-dotcom-components/dist/shared/types/abTests/shared';
 import type { Advert } from '../../../define/Advert';
@@ -123,6 +124,14 @@ const getAuthHeaders = async (hasConsented: boolean) => {
 	return undefined;
 };
 
+const getViewLog = (): MessageViewLog => {
+	const item = storage.local.get('gu.inline1.views');
+	if (Array.isArray(item)) {
+		return item as MessageViewLog;
+	}
+	return [];
+};
+
 const fetchBid = async (): Promise<ModuleDataResponse<Inline1Props>> => {
 	const sdcUrl =
 		process.env.SDC_URL ?? 'https://contributions.guardianapis.com';
@@ -141,6 +150,7 @@ const fetchBid = async (): Promise<ModuleDataResponse<Inline1Props>> => {
 			hasConsented: hasConsented,
 			hasNewsletterSignup:
 				window.guardian.config.page.promotedNewsletter !== undefined,
+			viewLog: getViewLog(),
 		},
 	};
 
