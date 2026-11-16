@@ -418,6 +418,10 @@ const getOzonePlacementId = (
 				return '1500001025';
 			}
 
+			if (slotId === 'dfp-ad--top-above-nav' && containsMpu(sizes)) {
+				return '1500001433';
+			}
+
 			if (containsMpu(sizes)) {
 				return '1500001036';
 			}
@@ -436,6 +440,10 @@ const getOzonePlacementId = (
 		// "Hangtime" - see comment above for details.
 		if (slotId === 'dfp-ad--inline2' && containsMpu(sizes)) {
 			return '1500001025';
+		}
+
+		if (slotId === 'dfp-ad--top-above-nav' && containsMpu(sizes)) {
+			return '1500001433';
 		}
 	}
 
