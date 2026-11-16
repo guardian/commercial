@@ -124,7 +124,7 @@ describe('sdc', () => {
 			expect(advert.slot.setConfig).toHaveBeenCalledWith({
 				targeting: {
 					nba_id: 'preview-campaign',
-					at: 'nba',
+					nba_preview: 'true',
 				},
 			});
 			expect(window.location.search).toBe(query);
