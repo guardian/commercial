@@ -28,10 +28,10 @@ jest.mock('../../identity/api', () => ({
 	getAuthStatus: jest.fn().mockResolvedValue({ kind: 'SignedOut' }),
 }));
 
-const mockCampaignCode = "testName:variantName"
+const mockCampaignCode = 'testName:variantName';
 const props = {
 	heading: 'Support us',
-	tracking: { campaignCode: mockCampaignCode }
+	tracking: { campaignCode: mockCampaignCode },
 } as unknown as Inline1Props;
 
 const bidResponse = {
@@ -117,8 +117,8 @@ describe('sdc', () => {
 							meta: { campaignCode: mockCampaignCode },
 						},
 						tracking: {
-							campaignCode: mockCampaignCode
-						}
+							campaignCode: mockCampaignCode,
+						},
 					}),
 			});
 			const onRender = jest.fn();
@@ -356,7 +356,7 @@ describe('sdc', () => {
 						data: {
 							module: { name: 'inline1', props },
 							meta: { campaignCode: mockCampaignCode },
-							bid: '0.01'
+							bid: '0.01',
 						},
 					}),
 			});
@@ -389,7 +389,7 @@ describe('sdc', () => {
 			const onRender = jest.fn();
 			slot.addEventListener('commercial.sdc-render', onRender);
 
-			await sdc.onCreativeRender({ id: "campaign-123" });
+			await sdc.onCreativeRender({ id: 'campaign-123' });
 
 			expect(window.guardian.commercial?.sdc).toEqual({
 				inline1: { props, slotId: 'dfp-ad--inline1' },

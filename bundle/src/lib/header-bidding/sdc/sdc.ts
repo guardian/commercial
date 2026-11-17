@@ -75,7 +75,7 @@ const getModuleData = async <PROPS>(
 	if (!response.ok) {
 		throw Error(
 			response.statusText ||
-			`Supporter Revenue ${type} | Api call returned HTTP status ${response.status}`,
+				`Supporter Revenue ${type} | Api call returned HTTP status ${response.status}`,
 		);
 	}
 	return await response.json();
@@ -187,9 +187,9 @@ const setSlotTargeting = (
 		advert.slot.setConfig({
 			targeting: {
 				nba_id: responseData.meta.campaignCode,
-				...(isPreview ?
-					{ nba_preview: 'true' } :
-					{ nba_pb: responseData.bid ?? '' }),
+				...(isPreview
+					? { nba_preview: 'true' }
+					: { nba_pb: responseData.bid ?? '' }),
 			},
 		});
 	}
