@@ -186,9 +186,10 @@ const setSlotTargeting = (
 		// Set targeting on slot
 		advert.slot.setConfig({
 			targeting: {
-				nba_pb: (!isPreview ? responseData.bid : '') ?? '',
 				nba_id: responseData.meta.campaignCode,
-				nba_preview: `${isPreview}`,
+				...(isPreview ?
+					{ nba_preview: 'true' } :
+					{ nba_pb: responseData.bid ?? '' }),
 			},
 		});
 	}
