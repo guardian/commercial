@@ -183,6 +183,37 @@ describe('sdc', () => {
 			},
 		);
 
+		it.each([
+			{ isDev: true, host: 'contributions.code.dev-guardianapis.com' },
+			{ isDev: false, host: 'contributions.guardianapis.com' },
+		])(
+			'requests $host when isDev=$isDev and SDC_URL is unset',
+			async ({ isDev, host }) => {
+				window.guardian.config.page.isDev = isDev;
+				mockFetch.mockResolvedValue(bidResponse);
+
+				await sdc.requestBids(advert);
+
+				const [url] = mockFetch.mock.calls[0] as [string];
+				expect(new URL(url).host).toBe(host);
+			},
+		);
+
+		it('prefers SDC_URL over the stage default', async () => {
+			process.env.SDC_URL = 'http://localhost:8082';
+			window.guardian.config.page.isDev = true;
+			mockFetch.mockResolvedValue(bidResponse);
+
+			try {
+				await sdc.requestBids(advert);
+			} finally {
+				delete process.env.SDC_URL;
+			}
+
+			const [url] = mockFetch.mock.calls[0] as [string];
+			expect(new URL(url).host).toBe('localhost:8082');
+		});
+
 		it('only fetches once however many times it is called', async () => {
 			mockFetch.mockResolvedValue(bidResponse);
 
