@@ -132,9 +132,16 @@ const getViewLog = (): MessageViewLog => {
 	return [];
 };
 
+const SDC_URL_CODE = 'https://contributions.code.dev-guardianapis.com';
+const SDC_URL_PROD = 'https://contributions.guardianapis.com';
+
+const getSdcUrl = (): string => {
+	if (process.env.SDC_URL) return process.env.SDC_URL;
+	return window.guardian.config.page.isDev ? SDC_URL_CODE : SDC_URL_PROD;
+};
+
 const fetchBid = async (): Promise<ModuleDataResponse<Inline1Props>> => {
-	const sdcUrl =
-		process.env.SDC_URL ?? 'https://contributions.guardianapis.com';
+	const sdcUrl = getSdcUrl();
 	const hasConsented = await getHasConsented();
 	const isSignedIn = await isUserLoggedIn();
 	const payload = {
