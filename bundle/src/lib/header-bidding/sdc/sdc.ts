@@ -262,7 +262,7 @@ const onCreativeRender = async (event: unknown = {}): Promise<void> => {
 	if (props.tracking.campaignCode !== event.id) {
 		log(
 			'commercial',
-			`ID from creative ${props.tracking.campaignCode} does not match SDC response ${event.id}`,
+			`ID from creative ${event.id} does not match SDC response ${props.tracking.campaignCode}`,
 		);
 		return;
 	}
