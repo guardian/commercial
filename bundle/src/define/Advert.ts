@@ -473,7 +473,7 @@ class Advert extends EventTarget {
 			(sdc.isInline1Preview() ||
 				isUserInTest('commercial-next-best-action'))
 		) {
-			console.log('Requesting a Next Best Action bid for Inline1.');
+			log('commercial', 'Requesting a Next Best Action bid for Inline1');
 			bidRequests.push(sdc.requestBids(this));
 		}
 
