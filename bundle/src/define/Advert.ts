@@ -15,7 +15,7 @@ import { log } from '@guardian/libs';
 import { breakpoints as sourceBreakpoints } from '@guardian/source/foundations';
 import type { Size } from 'prebid.js/dist/src/types/common';
 import { isUserInTest } from '../ab-testing';
-import { isAdServingReady } from '../init/shared/init-ad-serving-ready';
+import { isAdServingReady } from '../init/shared/is-ad-serving-ready';
 import { concatSizeMappings } from '../lib/create-ad-slot';
 import fastdom from '../lib/fastdom-promise';
 import { a9 } from '../lib/header-bidding/a9/a9';

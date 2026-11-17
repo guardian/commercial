@@ -2,7 +2,7 @@ import { adSizes } from '@guardian/commercial-core/ad-sizes';
 import { AD_LABEL_HEIGHT } from '@guardian/commercial-core/constants/ad-label-height';
 import { log } from '@guardian/libs';
 import { breakpoints } from '@guardian/source/foundations';
-import { isAdServingReady } from '../../init/shared/init-ad-serving-ready';
+import { isAdServingReady } from '../../init/shared/is-ad-serving-ready';
 import { getCurrentBreakpoint } from '../detect/detect-breakpoint';
 import { adSlotIdPrefix } from '../dfp/dfp-env-globals';
 import { getAdvertById } from '../dfp/get-advert-by-id';
