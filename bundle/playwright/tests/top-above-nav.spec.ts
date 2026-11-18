@@ -11,7 +11,17 @@ test.describe('top-above-nav slot', () => {
 
 			await cmpAcceptAll(page);
 
-			await waitForSlot(page, 'top-above-nav');
+			const isImmersive = await page.evaluate<boolean>(
+				'window.guardian.config.page.isImmersive',
+			);
+
+			if (!isImmersive) {
+				await waitForSlot(page, 'top-above-nav');
+			} else {
+				expect(
+					await page.locator('#dfp-ad--top-above-nav').isVisible(),
+				).toBeFalsy();
+			}
 		});
 	});
 });
