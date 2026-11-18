@@ -82,12 +82,14 @@ const getModuleData = async <PROPS>(
 };
 
 const userBenefitsDataIsUpToDate = (): boolean => {
-	const userBenefitsExpiryCookie = getCookie({ name: 'gu_user_benefits_expiry' });
+	const userBenefitsExpiryCookie = getCookie({
+		name: 'gu_user_benefits_expiry',
+	});
 	if (!userBenefitsExpiryCookie) return false;
 	const expiryTime = parseInt(userBenefitsExpiryCookie, 10);
 	const timeNow = new Date().getTime();
 	return timeNow < expiryTime;
-}
+};
 
 // Returns true if we should hide support messaging because the user is a supporter.
 // Checks the cookie that is set by the user benefits API upon signing in.
@@ -95,7 +97,9 @@ const userBenefitsDataIsUpToDate = (): boolean => {
 // including but not limited to recurring & one-off contributions,
 // paper & digital subscriptions, as well as user tiers (GU supporters/staff/partners/patrons).
 // https://github.com/guardian/support-service-lambdas/blob/6e6865f47af54c5b0e7af6408ad53500d18847e0/modules/product-benefits/src/productBenefit.ts#L25
-const hasHideSupportMessagingCookie = (isSignedIn: boolean): boolean | 'Pending' => {
+const hasHideSupportMessagingCookie = (
+	isSignedIn: boolean,
+): boolean | 'Pending' => {
 	const cookieVal = getCookie({ name: 'gu_hide_support_messaging' });
 
 	if (cookieVal) {
@@ -110,7 +114,7 @@ const hasHideSupportMessagingCookie = (isSignedIn: boolean): boolean | 'Pending'
 		return 'Pending';
 	}
 	return false;
-}
+};
 
 const getLastOneOffContributionTimestamp = (): number | undefined => {
 	// Support cookies - expects Unix epoch
@@ -128,7 +132,7 @@ const getLastOneOffContributionTimestamp = (): number | undefined => {
 		: 0;
 
 	return parsedDateFromSupport || undefined; // This guards against 'parsedDateFromSupport' being NaN
-}
+};
 
 const dateDiffDays = (from: number, to: number): number => {
 	const oneDayMs = 1000 * 60 * 60 * 24;
@@ -144,9 +148,11 @@ const isRecentOneOffContributor = (): boolean => {
 		return dateDiffDays(lastContributionDate, now) <= askPauseDays;
 	}
 	return false;
-}
+};
 
-const shouldHideSupportMessaging = (isSignedIn: boolean): boolean | 'Pending' => {
+const shouldHideSupportMessaging = (
+	isSignedIn: boolean,
+): boolean | 'Pending' => {
 	const hasCookie = hasHideSupportMessagingCookie(isSignedIn);
 
 	if (hasCookie === 'Pending') {
@@ -154,7 +160,7 @@ const shouldHideSupportMessaging = (isSignedIn: boolean): boolean | 'Pending' =>
 		// date so we don't know whether to show support messaging,
 		// default to hiding support messaging until we know
 		return true;
-	} 
+	}
 	return hasCookie || isRecentOneOffContributor();
 };
 
