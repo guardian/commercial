@@ -152,7 +152,7 @@ const shouldHideSupportMessaging = (isSignedIn: boolean): boolean | 'Pending' =>
 	if (hasCookie === 'Pending') {
 		// The user is logged in but their benefits data isn't up to
 		// date so we don't know whether to show support messaging,
-		// default to hiding support messaging until we know.
+		// default to hiding support messaging until we know
 		return true;
 	} 
 	return hasCookie || isRecentOneOffContributor();
