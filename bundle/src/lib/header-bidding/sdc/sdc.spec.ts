@@ -28,7 +28,11 @@ jest.mock('../../identity/api', () => ({
 	getAuthStatus: jest.fn().mockResolvedValue({ kind: 'SignedOut' }),
 }));
 
-const props = { heading: 'Support us' } as unknown as Inline1Props;
+const mockCampaignCode = 'testName:variantName';
+const props = {
+	heading: 'Support us',
+	tracking: { campaignCode: mockCampaignCode },
+} as unknown as Inline1Props;
 
 const bidResponse = {
 	ok: true,
@@ -110,7 +114,10 @@ describe('sdc', () => {
 					Promise.resolve({
 						data: {
 							module: { name: 'inline1', props },
-							meta: { campaignId: 'preview-campaign' },
+							meta: { campaignCode: mockCampaignCode },
+						},
+						tracking: {
+							campaignCode: mockCampaignCode,
 						},
 					}),
 			});
@@ -123,7 +130,7 @@ describe('sdc', () => {
 			expect(new URL(url).searchParams.get('preview')).toBe(selection);
 			expect(advert.slot.setConfig).toHaveBeenCalledWith({
 				targeting: {
-					nba_id: 'preview-campaign',
+					nba_id: mockCampaignCode,
 					nba_preview: 'true',
 				},
 			});
@@ -131,7 +138,7 @@ describe('sdc', () => {
 			expect(onRender).not.toHaveBeenCalled();
 			expect(window.guardian.commercial?.sdc).toBeUndefined();
 
-			await sdc.onCreativeRender({ id: 'preview-campaign' });
+			await sdc.onCreativeRender({ id: mockCampaignCode });
 
 			expect(onRender).toHaveBeenCalledTimes(1);
 			expect(window.guardian.commercial?.sdc).toEqual({
@@ -348,7 +355,8 @@ describe('sdc', () => {
 					Promise.resolve({
 						data: {
 							module: { name: 'inline1', props },
-							meta: { campaignId: 'campaign-123' },
+							meta: { campaignCode: mockCampaignCode },
+							bid: '0.01',
 						},
 					}),
 			});
@@ -357,7 +365,7 @@ describe('sdc', () => {
 
 			expect(advert.slot.setConfig).toHaveBeenCalledTimes(1);
 			expect(advert.slot.setConfig).toHaveBeenCalledWith({
-				targeting: { nba_pb: '0.01', nba_id: 'campaign-123' },
+				targeting: { nba_pb: '0.01', nba_id: mockCampaignCode },
 			});
 		});
 
@@ -381,7 +389,7 @@ describe('sdc', () => {
 			const onRender = jest.fn();
 			slot.addEventListener('commercial.sdc-render', onRender);
 
-			await sdc.onCreativeRender();
+			await sdc.onCreativeRender({ id: mockCampaignCode });
 
 			expect(window.guardian.commercial?.sdc).toEqual({
 				inline1: { props, slotId: 'dfp-ad--inline1' },
@@ -396,7 +404,7 @@ describe('sdc', () => {
 			const onRender = jest.fn();
 			slot.addEventListener('commercial.sdc-render', onRender);
 
-			await sdc.onCreativeRender();
+			await sdc.onCreativeRender({ id: mockCampaignCode });
 
 			expect(window.guardian.commercial?.sdc).toBeUndefined();
 			expect(onRender).not.toHaveBeenCalled();
@@ -409,7 +417,15 @@ describe('sdc', () => {
 			});
 			await sdc.requestBids(advert);
 
-			await sdc.onCreativeRender();
+			await sdc.onCreativeRender({ id: mockCampaignCode });
+			expect(window.guardian.commercial?.sdc).toBeUndefined();
+		});
+
+		it('returns null when the campaignCode does not match the event ID', async () => {
+			mockFetch.mockResolvedValue(bidResponse);
+			await sdc.requestBids(advert);
+
+			await sdc.onCreativeRender({ id: 'a-different-id' });
 			expect(window.guardian.commercial?.sdc).toBeUndefined();
 		});
 	});

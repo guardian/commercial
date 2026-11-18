@@ -6,8 +6,8 @@ import type {
 	Inline1Payload,
 	Inline1Props,
 	MessageViewLog,
+	TestTracking,
 } from '@guardian/support-dotcom-components/dist/shared/types';
-import type { TestTracking } from '@guardian/support-dotcom-components/dist/shared/types/abTests/shared';
 import type { Advert } from '../../../define/Advert';
 import { adSlotIdPrefix } from '../../dfp/dfp-env-globals';
 import type { SignedIn } from '../../identity/api';
@@ -22,6 +22,7 @@ interface ModuleDataResponse<PROPS> {
 	data?: {
 		module: ModuleData<PROPS>;
 		meta: TestTracking;
+		bid?: string;
 	};
 }
 
@@ -179,16 +180,19 @@ const setSlotTargeting = (
 	advert: Advert,
 	responseData: ModuleDataResponse<Inline1Props>['data'],
 ): void => {
-	// Set targeting on slot
-	advert.slot.setConfig({
-		targeting: {
-			nba_id: responseData?.meta.campaignId ?? '',
-			...(isInline1Preview()
-				? { nba_preview: 'true' }
-				: // TODO - use bid from SDC response
-					{ nba_pb: '0.01' }),
-		},
-	});
+	if (responseData) {
+		const isPreview = isInline1Preview();
+
+		// Set targeting on slot
+		advert.slot.setConfig({
+			targeting: {
+				nba_id: responseData.meta.campaignCode,
+				...(isPreview
+					? { nba_preview: 'true' }
+					: { nba_pb: responseData.bid ?? '' }),
+			},
+		});
+	}
 };
 
 const withTimeout = <T>(promise: Promise<T>, ms: number): Promise<T> =>
@@ -229,12 +233,12 @@ const requestBids = async (advert: Advert): Promise<void> => {
 };
 
 interface SdcRenderSpecs {
-	id?: string;
+	id: string;
 	pb?: string;
 }
 
 const isValidSdcRenderMessage = (specs: unknown): specs is SdcRenderSpecs => {
-	return isObject(specs);
+	return isObject(specs) && 'id' in specs;
 };
 
 // If SDC wins the auction then the creative posts a message, triggering this callback.
@@ -250,7 +254,18 @@ const onCreativeRender = async (event: unknown = {}): Promise<void> => {
 		JSON.stringify(event),
 	);
 	const props = await bidPromise;
-	if (!props) return;
+	if (!props) {
+		return;
+	}
+
+	// Check if the ID returned from the creative matches the intended ID of the campaign
+	if (props.tracking.campaignCode !== event.id) {
+		log(
+			'commercial',
+			`ID from creative ${event.id} does not match SDC response ${props.tracking.campaignCode}`,
+		);
+		return;
+	}
 
 	const slotId = `${adSlotIdPrefix}inline1`;
 	const adSlotNode = document.getElementById(slotId);
