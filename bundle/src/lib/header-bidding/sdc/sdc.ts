@@ -1,17 +1,21 @@
 import { getLocale } from '@guardian/commercial-core/geo/get-locale';
-import type { ConsentState } from '@guardian/consent-manager';
-import { onConsent } from '@guardian/consent-manager';
-import { getCookie, isObject, log, storage } from '@guardian/libs';
+import { isObject, log } from '@guardian/libs';
 import type {
 	Inline1Payload,
 	Inline1Props,
-	MessageViewLog,
 	TestTracking,
 } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { Advert } from '../../../define/Advert';
 import { adSlotIdPrefix } from '../../dfp/dfp-env-globals';
-import type { SignedIn } from '../../identity/api';
-import { getAuthStatus, isUserLoggedIn } from '../../identity/api';
+import { isUserLoggedIn } from '../../identity/api';
+import {
+	getAuthHeaders,
+	getBrowserId,
+	getHasConsented,
+	getMvtId,
+	getViewLog,
+	shouldHideSupportMessaging,
+} from './targeting';
 
 interface ModuleData<PROPS> {
 	name: string;
@@ -81,58 +85,6 @@ const getModuleData = async <PROPS>(
 	return await response.json();
 };
 
-const getHasConsented = (): Promise<boolean> =>
-	onConsent()
-		.then(({ canTarget }: ConsentState) => canTarget)
-		.catch(() => false);
-
-const getShowSupportMessaging = (): boolean => {
-	const cookieVal = getCookie({ name: 'gu_hide_support_messaging' });
-	return !cookieVal;
-};
-
-const getBrowserId = (userHasConsent: boolean): string | undefined => {
-	if (!userHasConsent) {
-		return undefined;
-	}
-	return getCookie({ name: 'bwid', shouldMemoize: true }) ?? undefined;
-};
-
-const getMvtId = (): number => {
-	const cookieVal = getCookie({ name: 'GU_mvt_id', shouldMemoize: true });
-	if (cookieVal) {
-		return Number(cookieVal);
-	}
-	return 0;
-};
-
-const getOptionsHeaders = (authStatus: SignedIn): RequestInit => {
-	return {
-		headers: {
-			Authorization: `Bearer ${authStatus.accessToken.accessToken}`,
-			'X-GU-IS-OAUTH': 'true',
-		},
-	};
-};
-
-const getAuthHeaders = async (hasConsented: boolean) => {
-	if (hasConsented) {
-		const authStatus = await getAuthStatus();
-		if (authStatus.kind === 'SignedIn') {
-			return getOptionsHeaders(authStatus).headers;
-		}
-	}
-	return undefined;
-};
-
-const getViewLog = (): MessageViewLog => {
-	const item = storage.local.get('gu.inline1.views');
-	if (Array.isArray(item)) {
-		return item as MessageViewLog;
-	}
-	return [];
-};
-
 const SDC_URL_CODE = 'https://contributions.code.dev-guardianapis.com';
 const SDC_URL_PROD = 'https://contributions.guardianapis.com';
 
@@ -147,7 +99,7 @@ const fetchBid = async (): Promise<ModuleDataResponse<Inline1Props>> => {
 	const isSignedIn = await isUserLoggedIn();
 	const payload = {
 		targeting: {
-			showSupportMessaging: getShowSupportMessaging(),
+			showSupportMessaging: !shouldHideSupportMessaging(isSignedIn),
 			mvtId: getMvtId(),
 			countryCode: getLocale(),
 			sectionId: window.guardian.config.page.section,

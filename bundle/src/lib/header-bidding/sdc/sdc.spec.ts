@@ -7,7 +7,7 @@ import type {
 import type { Advert } from '../../../define/Advert';
 import type { Newsletter } from '../../../types/global';
 import type { AuthStatus } from '../../identity/api';
-import { getAuthStatus } from '../../identity/api';
+import { getAuthStatus, isUserLoggedIn } from '../../identity/api';
 import { _, sdc } from './sdc';
 
 jest.mock('@guardian/commercial-core/geo/get-locale', () => ({
@@ -94,6 +94,13 @@ describe('sdc', () => {
 
 	afterEach(() => {
 		storage.local.clear();
+		// Clear all cookies
+		document.cookie.split(';').forEach((cookie) => {
+			const name = cookie.split('=')[0]?.trim();
+			if (name) {
+				document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+			}
+		});
 		window.history.replaceState(null, '', originalUrl);
 		slot.remove();
 		global.fetch = originalFetch;
@@ -346,6 +353,146 @@ describe('sdc', () => {
 				`Bearer ${testAccessToken}`,
 			);
 			expect(headers.get('X-GU-IS-OAUTH')).toBe('true');
+		});
+
+		it('correctly hides support messaging if cookie present', async () => {
+			const viewLog: MessageViewLog = [
+				{ date: 1700000000000, testId: 'test-a' },
+			];
+			storage.local.set('gu.inline1.views', viewLog);
+			mockFetch.mockResolvedValue(bidResponse);
+			document.cookie = 'gu_hide_support_messaging=true';
+
+			await sdc.requestBids(advert);
+
+			const call = mockFetch.mock.calls[0] as [
+				string,
+				RequestInit & { body: string },
+			];
+			const options = call[1];
+			const body = JSON.parse(options.body) as Inline1Payload;
+
+			expect(body.targeting).toEqual({
+				viewLog,
+				showSupportMessaging: false,
+				mvtId: 0,
+				countryCode: 'GB',
+				sectionId: 'news',
+				tagIds: ['a', 'b'],
+				pageId: 'some/page',
+				isSignedIn: false,
+				hasConsented: true,
+				hasNewsletterSignup: false,
+			});
+		});
+
+		it('correctly hides support messaging if user is a recent one off contributor', async () => {
+			const viewLog: MessageViewLog = [
+				{ date: 1700000000000, testId: 'test-a' },
+			];
+			storage.local.set('gu.inline1.views', viewLog);
+			mockFetch.mockResolvedValue(bidResponse);
+
+			document.cookie = `gu.contributions.contrib-timestamp=${Date.now()}`;
+
+			await sdc.requestBids(advert);
+
+			const call = mockFetch.mock.calls[0] as [
+				string,
+				RequestInit & { body: string },
+			];
+			const options = call[1];
+			const body = JSON.parse(options.body) as Inline1Payload;
+
+			expect(body.targeting).toEqual({
+				viewLog,
+				showSupportMessaging: false,
+				mvtId: 0,
+				countryCode: 'GB',
+				sectionId: 'news',
+				tagIds: ['a', 'b'],
+				pageId: 'some/page',
+				isSignedIn: false,
+				hasConsented: true,
+				hasNewsletterSignup: false,
+			});
+		});
+
+		it('correctly hides support messaging hide support messaging cookie is pending', async () => {
+			const viewLog: MessageViewLog = [
+				{ date: 1700000000000, testId: 'test-a' },
+			];
+			storage.local.set('gu.inline1.views', viewLog);
+			mockFetch.mockResolvedValue(bidResponse);
+
+			jest.mocked(isUserLoggedIn).mockResolvedValueOnce(true);
+
+			// gu_user_benefits_expiry is in the past so it has expired
+			const expirationTimestamp = new Date().getTime() - 100000000;
+			document.cookie = `gu_user_benefits_expiry=${expirationTimestamp}`;
+
+			await sdc.requestBids(advert);
+
+			const call = mockFetch.mock.calls[0] as [
+				string,
+				RequestInit & { body: string },
+			];
+			const options = call[1];
+			const body = JSON.parse(options.body) as Inline1Payload;
+
+			expect(body.targeting).toEqual({
+				viewLog,
+				showSupportMessaging: false,
+				mvtId: 0,
+				countryCode: 'GB',
+				sectionId: 'news',
+				tagIds: ['a', 'b'],
+				pageId: 'some/page',
+				isSignedIn: true,
+				hasConsented: true,
+				hasNewsletterSignup: false,
+			});
+		});
+
+		it('correctly shows support messaging if benefits are not pending and user is not a recent contributor', async () => {
+			const viewLog: MessageViewLog = [
+				{ date: 1700000000000, testId: 'test-a' },
+			];
+			storage.local.set('gu.inline1.views', viewLog);
+			mockFetch.mockResolvedValue(bidResponse);
+
+			jest.mocked(isUserLoggedIn).mockResolvedValueOnce(true);
+
+			// gu_user_benefits_expiry is in the future so it has not expired
+			const expirationTimestamp = new Date().getTime() + 100000000;
+			document.cookie = `gu_user_benefits_expiry=${expirationTimestamp}`;
+
+			// last contribution was over 90 days ago
+			const hundredDaysInMs = 100 * 24 * 60 * 60 * 1000;
+			const timestamp = Date.now() - hundredDaysInMs;
+			document.cookie = `gu.contributions.contrib-timestamp=${timestamp}`;
+
+			await sdc.requestBids(advert);
+
+			const call = mockFetch.mock.calls[0] as [
+				string,
+				RequestInit & { body: string },
+			];
+			const options = call[1];
+			const body = JSON.parse(options.body) as Inline1Payload;
+
+			expect(body.targeting).toEqual({
+				viewLog,
+				showSupportMessaging: true,
+				mvtId: 0,
+				countryCode: 'GB',
+				sectionId: 'news',
+				tagIds: ['a', 'b'],
+				pageId: 'some/page',
+				isSignedIn: true,
+				hasConsented: true,
+				hasNewsletterSignup: false,
+			});
 		});
 
 		it('sets corresponding GAM targeting for bid responses', async () => {
