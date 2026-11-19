@@ -1,9 +1,8 @@
 import { getLocale } from '@guardian/commercial-core/geo/get-locale';
-import { getCookie, isObject, log, storage } from '@guardian/libs';
+import { isObject, log } from '@guardian/libs';
 import type {
 	Inline1Payload,
 	Inline1Props,
-	MessageViewLog,
 	TestTracking,
 } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { Advert } from '../../../define/Advert';
@@ -11,9 +10,12 @@ import { adSlotIdPrefix } from '../../dfp/dfp-env-globals';
 import { isUserLoggedIn } from '../../identity/api';
 import {
 	getAuthHeaders,
+	getBrowserId,
 	getHasConsented,
+	getMvtId,
+	getViewLog,
 	shouldHideSupportMessaging,
-} from './contributions';
+} from './targeting';
 
 interface ModuleData<PROPS> {
 	name: string;
@@ -81,29 +83,6 @@ const getModuleData = async <PROPS>(
 		);
 	}
 	return await response.json();
-};
-
-const getBrowserId = (userHasConsent: boolean): string | undefined => {
-	if (!userHasConsent) {
-		return undefined;
-	}
-	return getCookie({ name: 'bwid', shouldMemoize: true }) ?? undefined;
-};
-
-const getMvtId = (): number => {
-	const cookieVal = getCookie({ name: 'GU_mvt_id', shouldMemoize: true });
-	if (cookieVal) {
-		return Number(cookieVal);
-	}
-	return 0;
-};
-
-const getViewLog = (): MessageViewLog => {
-	const item = storage.local.get('gu.inline1.views');
-	if (Array.isArray(item)) {
-		return item as MessageViewLog;
-	}
-	return [];
 };
 
 const SDC_URL_CODE = 'https://contributions.code.dev-guardianapis.com';

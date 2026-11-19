@@ -1,6 +1,7 @@
 import type { ConsentState } from '@guardian/consent-manager';
 import { onConsent } from '@guardian/consent-manager';
-import { getCookie } from '@guardian/libs';
+import { getCookie, storage } from '@guardian/libs';
+import type { MessageViewLog } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { SignedIn } from '../../identity/api';
 import { getAuthStatus } from '../../identity/api';
 
@@ -115,3 +116,26 @@ export const getHasConsented = (): Promise<boolean> =>
 	onConsent()
 		.then(({ canTarget }: ConsentState) => canTarget)
 		.catch(() => false);
+
+export const getBrowserId = (userHasConsent: boolean): string | undefined => {
+	if (!userHasConsent) {
+		return undefined;
+	}
+	return getCookie({ name: 'bwid', shouldMemoize: true }) ?? undefined;
+};
+
+export const getMvtId = (): number => {
+	const cookieVal = getCookie({ name: 'GU_mvt_id', shouldMemoize: true });
+	if (cookieVal) {
+		return Number(cookieVal);
+	}
+	return 0;
+};
+
+export const getViewLog = (): MessageViewLog => {
+	const item = storage.local.get('gu.inline1.views');
+	if (Array.isArray(item)) {
+		return item as MessageViewLog;
+	}
+	return [];
+};
