@@ -15,7 +15,7 @@ const isInHighValueSectionsSet2Variant = isUserInTestGroup(
 );
 
 const isInHighValueSectionsAusAndNzVariant = isUserInTestGroup(
-	'commercial-spacefinder-highvalue-sections-aus-and-nz',
+	'commercial-spacefinder-highvalue-sections-aus-nz',
 	'variant',
 );
 
