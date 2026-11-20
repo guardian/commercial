@@ -306,7 +306,14 @@ describe('sdc', () => {
 			const viewLog: MessageViewLog = [
 				{ date: 1700000000000, testId: 'test-a' },
 			];
+			const weeklyArticleHistory = [
+				{ week: 20000, count: 2, tags: { news: 1 } },
+			];
 			storage.local.set('gu.inline1.views', viewLog);
+			storage.local.set(
+				'gu.history.weeklyArticleCount',
+				weeklyArticleHistory,
+			);
 			mockFetch.mockResolvedValue(bidResponse);
 			await sdc.requestBids(advert);
 
@@ -319,6 +326,7 @@ describe('sdc', () => {
 
 			expect(body.targeting).toEqual({
 				viewLog,
+				weeklyArticleHistory,
 				showSupportMessaging: true,
 				mvtId: 0,
 				countryCode: 'GB',

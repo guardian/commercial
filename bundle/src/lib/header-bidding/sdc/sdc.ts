@@ -1,5 +1,6 @@
 import { getLocale } from '@guardian/commercial-core/geo/get-locale';
-import { isObject, log } from '@guardian/libs';
+import { isObject, log, storage } from '@guardian/libs';
+import { getWeeklyArticleHistory } from '@guardian/support-dotcom-components';
 import type {
 	Inline1Payload,
 	Inline1Props,
@@ -111,6 +112,7 @@ const fetchBid = async (): Promise<ModuleDataResponse<Inline1Props>> => {
 			hasNewsletterSignup:
 				window.guardian.config.page.promotedNewsletter !== undefined,
 			viewLog: getViewLog(),
+			weeklyArticleHistory: getWeeklyArticleHistory(storage.local),
 		},
 	};
 
