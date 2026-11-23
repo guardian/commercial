@@ -100,7 +100,7 @@ const insertScripts = async (
 const loadOther = (): Promise<void> => {
 	const isInDoubleVerifyTest = isUserInTestGroup(
 		'commercial-doubleVerify-ad-filter',
-		'enable',
+		'variant',
 	);
 	const advertisingServices: ThirdPartyTag[] = [
 		remarketing({
