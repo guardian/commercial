@@ -20,12 +20,6 @@ const commercialModules = [
 	initPages,
 ];
 
-const bootCommercialWhenReady = () => {
-	if (!!window.guardian.mustardCut || !!window.guardian.polyfilled) {
-		void bootCommercial(commercialModules);
-	} else {
-		window.guardian.queue.push(() => bootCommercial(commercialModules));
-	}
-};
+const bootCommercialWhenReady = () => window.guardian.queue.push(() => bootCommercial(commercialModules));
 
 export { bootCommercialWhenReady };

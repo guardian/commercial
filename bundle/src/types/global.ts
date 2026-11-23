@@ -324,8 +324,6 @@ interface Guardian extends CoreGuardian {
 	ophan?: Ophan;
 	config: Config;
 	queue: Array<() => Promise<void>>;
-	mustardCut?: boolean;
-	polyfilled?: boolean;
 	adBlockers: AdBlockers;
 	css: { onLoad: () => void; loaded: boolean };
 	articleCounts?: ArticleCounts;
