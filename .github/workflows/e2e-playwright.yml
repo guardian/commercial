@@ -69,6 +69,7 @@ jobs:
             -e "GU_STAGE=CI" \
             -e "DISABLE_LOGGING_AND_METRICS=true" \
             -e "COMMERCIAL_BUNDLE_URL=http://localhost:3031/graun.standalone.commercial.js" \
+            -e "SDC_URL=https://contributions.code.dev-guardianapis.com" \
             $IMAGE
 
       - name: Report if "start DCR in a container" step failed
@@ -85,7 +86,9 @@ jobs:
         working-directory: ./bundle
 
       - name: Start Commercial server
-        run: pnpm serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
+        run: |
+          SDC_URL=https://contributions.code.dev-guardianapis.com \
+          pnpm serve & npx wait-on -v -i 1000 http://localhost:3031/graun.standalone.commercial.js
         working-directory: ./bundle
 
       - name: Run Playwright

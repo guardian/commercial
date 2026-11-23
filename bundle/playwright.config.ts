@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 export const ORIGIN = `http://localhost:3030`;
 
 /**
