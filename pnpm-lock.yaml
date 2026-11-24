@@ -89,8 +89,8 @@ importers:
         specifier: workspace:*
         version: link:../core
       '@guardian/consent-manager':
-        specifier: 2.3.0
-        version: 2.3.0(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3)
+        specifier: 2.3.1
+        version: 2.3.1(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3)
       '@guardian/core-web-vitals':
         specifier: 22.0.0
         version: 22.0.0(@guardian/libs@33.0.0(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3))(tslib@2.8.1)(typescript@6.0.3)(web-vitals@5.2.0)
@@ -215,8 +215,8 @@ importers:
   core:
     dependencies:
       '@guardian/consent-manager':
-        specifier: 2.3.0
-        version: 2.3.0(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3)
+        specifier: 2.3.1
+        version: 2.3.1(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3)
       '@guardian/libs':
         specifier: 33.0.0
         version: 33.0.0(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3)
@@ -1559,8 +1559,8 @@ packages:
       browserslist: ^4.28.9
       tslib: ^2.8.1
 
-  '@guardian/consent-manager@2.3.0':
-    resolution: {integrity: sha512-mydX/MrvCGglT4QeGcmnsQve08hP9psBXMxC+hyUqUztNj+izu9CpqBPwNlYwB3zLyjefFb8caUBTXBByhemhg==}
+  '@guardian/consent-manager@2.3.1':
+    resolution: {integrity: sha512-QOZmsMETG9YMsg92/p4i78YCiZO8qUxvFf8EggSkccCyX6WnGZS1G8Q9PlNGFCNB8rRRP68V4ink6L4ETjLnfg==}
     peerDependencies:
       '@guardian/ophan-tracker-js': ^2.2.10
       tslib: ^2.8.1
@@ -7976,7 +7976,7 @@ snapshots:
       browserslist: 4.29.6
       tslib: 2.8.1
 
-  '@guardian/consent-manager@2.3.0(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3)':
+  '@guardian/consent-manager@2.3.1(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3)':
     dependencies:
       '@guardian/libs': 33.0.0(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3)
       '@guardian/ophan-tracker-js': 5.4.0
