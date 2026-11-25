@@ -8,8 +8,8 @@ import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { getParticipations } from '../ab-testing';
 import { isAdFree } from './ad-free';
+import { sdc } from './header-bidding/sdc/sdc';
 import { removeFalsyValues } from './header-bidding/utils';
-import { isInline1Preview } from './header-bidding/sdc/sdc';
 
 const formatAppNexusTargeting = (obj: Record<string, string | string[]>) => {
 	const asKeyValues = Object.entries(obj).map((entry) => {
@@ -70,7 +70,7 @@ const getPageTargeting = (
 			isSignedIn,
 			idProviders,
 		}),
-		...(isInline1Preview() ? { nba_preview: 'true' } : {}),
+		...(sdc.isInline1Preview() ? { nba_preview: 'true' } : {}),
 	};
 
 	// third-parties wish to access our page targeting, before the googletag script is loaded.

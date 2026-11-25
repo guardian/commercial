@@ -43,7 +43,7 @@ const getPreviewVariant = (type: ModuleType): string | null => {
 	return params.get(`preview-${type}`);
 };
 
-export const isInline1Preview = (): boolean =>
+const isInline1Preview = (): boolean =>
 	getPreviewVariant('inline1') !== null;
 const buildSDCUrl = (baseUrl: string, type: ModuleType): string => {
 	const forcedVariant = getForcedVariant(type);
