@@ -93,7 +93,7 @@ importers:
         version: 2.4.0(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3)
       '@guardian/core-web-vitals':
         specifier: 22.0.0
-        version: 22.0.0(@guardian/libs@33.0.0(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3))(tslib@2.8.1)(typescript@6.0.3)(web-vitals@5.2.0)
+        version: 22.0.0(@guardian/libs@33.0.0(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3))(tslib@2.8.1)(typescript@6.0.3)(web-vitals@6.2.3)
       '@guardian/identity-auth':
         specifier: 18.0.0
         version: 18.0.0(@guardian/libs@33.0.0(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3))(tslib@2.8.1)(typescript@6.0.3)
@@ -194,8 +194,8 @@ importers:
         specifier: 6.0.3
         version: 6.0.3
       web-vitals:
-        specifier: 5.2.0
-        version: 5.2.0
+        specifier: 6.2.3
+        version: 6.2.3
       webpack:
         specifier: 5.112.2
         version: 5.112.2(webpack-cli@7.3.1)
@@ -6072,8 +6072,8 @@ packages:
     resolution: {integrity: sha512-5H3Tce2GfzWbcr9VnSqyak2whFaONw4BdmI5BDnMXold4qSlCFd64XaMQESRh2vkDKmdUkv6rUo17UvZ9f9nXw==}
     engines: {node: '>=10.13.0'}
 
-  web-vitals@5.2.0:
-    resolution: {integrity: sha512-i2z98bEmaCqSDiHEDu+gHl/dmR4Q+TxFmG3/13KkMO+o8UxQzCqWaDRCiLgEa41nlO4VpXSI0ASa1xWmO9sBlA==}
+  web-vitals@6.2.3:
+    resolution: {integrity: sha512-Dmy+vdO1UPMqXiAtZSNayhl4f794Bxfd94W4HIj2HlYtczEQfEOon969memlcpcHrTuOKLa5baFjX7WbgmOq+A==}
 
   webidl-conversions@7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
@@ -7984,11 +7984,11 @@ snapshots:
     optionalDependencies:
       typescript: 6.0.3
 
-  '@guardian/core-web-vitals@22.0.0(@guardian/libs@33.0.0(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3))(tslib@2.8.1)(typescript@6.0.3)(web-vitals@5.2.0)':
+  '@guardian/core-web-vitals@22.0.0(@guardian/libs@33.0.0(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3))(tslib@2.8.1)(typescript@6.0.3)(web-vitals@6.2.3)':
     dependencies:
       '@guardian/libs': 33.0.0(@guardian/ophan-tracker-js@5.4.0)(tslib@2.8.1)(typescript@6.0.3)
       tslib: 2.8.1
-      web-vitals: 5.2.0
+      web-vitals: 6.2.3
     optionalDependencies:
       typescript: 6.0.3
 
@@ -13217,7 +13217,7 @@ snapshots:
     dependencies:
       graceful-fs: 4.2.12
 
-  web-vitals@5.2.0: {}
+  web-vitals@6.2.3: {}
 
   webidl-conversions@7.0.0: {}
 
