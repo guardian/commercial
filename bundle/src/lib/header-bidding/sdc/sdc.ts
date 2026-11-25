@@ -223,6 +223,7 @@ const onCreativeRender = async (event: unknown = {}): Promise<void> => {
 
 	const slotId = `${adSlotIdPrefix}inline1`;
 	const adSlotNode = document.getElementById(slotId);
+	adSlotNode?.removeAttribute('aria-hidden');
 	// Set on the window as well as dispatching, in case DCR's listener isn't ready yet
 	(window.guardian.commercial ??= {}).sdc = { inline1: { props, slotId } };
 	adSlotNode?.dispatchEvent(
