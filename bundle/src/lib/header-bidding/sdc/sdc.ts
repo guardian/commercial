@@ -141,9 +141,8 @@ const setSlotTargeting = (
 		advert.slot.setConfig({
 			targeting: {
 				nba_id: responseData.meta.campaignCode,
-				...(isPreview
-					? { nba_preview: 'true' }
-					: { nba_pb: responseData.bid ?? '' }),
+				// We don't send the bid amount for the preview functionality
+				...(!isPreview ? { nba_pb: responseData.bid ?? '' } : {}),
 			},
 		});
 	}

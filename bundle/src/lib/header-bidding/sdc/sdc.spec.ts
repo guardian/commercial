@@ -28,7 +28,7 @@ jest.mock('../../identity/api', () => ({
 	getAuthStatus: jest.fn().mockResolvedValue({ kind: 'SignedOut' }),
 }));
 
-const mockCampaignCode = 'testName:variantName';
+const mockCampaignCode = 'testName_variantName';
 const props = {
 	heading: 'Support us',
 	tracking: { campaignCode: mockCampaignCode },
@@ -122,6 +122,7 @@ describe('sdc', () => {
 						data: {
 							module: { name: 'inline1', props },
 							meta: { campaignCode: mockCampaignCode },
+							bid: 0.12,
 						},
 						tracking: {
 							campaignCode: mockCampaignCode,
@@ -138,9 +139,13 @@ describe('sdc', () => {
 			expect(advert.slot.setConfig).toHaveBeenCalledWith({
 				targeting: {
 					nba_id: mockCampaignCode,
-					nba_preview: 'true',
 				},
 			});
+			// expect(window.googletag.setConfig).toHaveBeenCalledWith({
+			// 	targeting: {
+			// 		nba_preview: 'true',
+			// 	},
+			// });
 			expect(window.location.search).toBe(query);
 			expect(onRender).not.toHaveBeenCalled();
 			expect(window.guardian.commercial?.sdc).toBeUndefined();

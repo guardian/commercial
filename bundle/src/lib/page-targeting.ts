@@ -8,6 +8,7 @@ import { log } from '@guardian/libs';
 import { once } from 'lodash-es';
 import { getParticipations } from '../ab-testing';
 import { isAdFree } from './ad-free';
+import { sdc } from './header-bidding/sdc/sdc';
 import { removeFalsyValues } from './header-bidding/utils';
 
 const formatAppNexusTargeting = (obj: Record<string, string | string[]>) => {
@@ -61,13 +62,16 @@ const getPageTargeting = (
 			? (userSync.userIds as UserId[])
 			: [];
 
-	const pageTargeting = buildPageTargeting({
-		adFree: isAdFree(),
-		abTestParticipations: getParticipations(),
-		consentState,
-		isSignedIn,
-		idProviders,
-	});
+	const pageTargeting = {
+		...buildPageTargeting({
+			adFree: isAdFree(),
+			abTestParticipations: getParticipations(),
+			consentState,
+			isSignedIn,
+			idProviders,
+		}),
+		...(sdc.isInline1Preview() ? { nba_preview: 'true' } : {}),
+	};
 
 	// third-parties wish to access our page targeting, before the googletag script is loaded.
 	page.appNexusPageTargeting = buildAppNexusTargeting(pageTargeting);
