@@ -28,7 +28,7 @@ jest.mock('../../identity/api', () => ({
 	getAuthStatus: jest.fn().mockResolvedValue({ kind: 'SignedOut' }),
 }));
 
-const mockCampaignCode = 'testName:variantName';
+const mockCampaignCode = 'testName_variantName';
 const props = {
 	heading: 'Support us',
 	tracking: { campaignCode: mockCampaignCode },
@@ -122,6 +122,7 @@ describe('sdc', () => {
 						data: {
 							module: { name: 'inline1', props },
 							meta: { campaignCode: mockCampaignCode },
+							bid: 0.12
 						},
 						tracking: {
 							campaignCode: mockCampaignCode,

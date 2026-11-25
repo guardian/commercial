@@ -43,7 +43,7 @@ const getPreviewVariant = (type: ModuleType): string | null => {
 	return params.get(`preview-${type}`);
 };
 
-const isInline1Preview = (): boolean => getPreviewVariant('inline1') !== null;
+export const isInline1Preview = (): boolean => getPreviewVariant('inline1') !== null;
 const buildSDCUrl = (baseUrl: string, type: ModuleType): string => {
 	const forcedVariant = getForcedVariant(type);
 	const previewVariant = getPreviewVariant(type);
@@ -136,12 +136,6 @@ const setSlotTargeting = (
 ): void => {
 	if (responseData) {
 		const isPreview = isInline1Preview();
-
-		if (isPreview) {
-			window.googletag.setConfig({
-				targeting: { nba_preview: 'true' },
-			});
-		}
 
 		// Set targeting on slot
 		advert.slot.setConfig({
