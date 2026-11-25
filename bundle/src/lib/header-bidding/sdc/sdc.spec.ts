@@ -122,7 +122,7 @@ describe('sdc', () => {
 						data: {
 							module: { name: 'inline1', props },
 							meta: { campaignCode: mockCampaignCode },
-							bid: 0.12
+							bid: 0.12,
 						},
 						tracking: {
 							campaignCode: mockCampaignCode,

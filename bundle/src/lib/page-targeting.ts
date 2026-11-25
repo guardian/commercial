@@ -70,7 +70,7 @@ const getPageTargeting = (
 			isSignedIn,
 			idProviders,
 		}),
-		...(isInline1Preview() ? { nba_preview: 'true' } : {})
+		...(isInline1Preview() ? { nba_preview: 'true' } : {}),
 	};
 
 	// third-parties wish to access our page targeting, before the googletag script is loaded.
