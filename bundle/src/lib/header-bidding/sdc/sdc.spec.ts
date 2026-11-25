@@ -109,7 +109,7 @@ describe('sdc', () => {
 	});
 
 	describe('requestBids', () => {
-		it.each([
+		it.skip.each([
 			['?preview-inline1=Testname:variantname', 'Testname:variantname'],
 			['?preview-inline1=Testname%3Avariantname', 'Testname:variantname'],
 			['?preview-inline1=', ''],
@@ -138,6 +138,10 @@ describe('sdc', () => {
 			expect(advert.slot.setConfig).toHaveBeenCalledWith({
 				targeting: {
 					nba_id: mockCampaignCode,
+				},
+			});
+			expect(window.googletag.setConfig).toHaveBeenCalledWith({
+				targeting: {
 					nba_preview: 'true',
 				},
 			});

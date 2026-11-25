@@ -43,7 +43,7 @@ const getPreviewVariant = (type: ModuleType): string | null => {
 	return params.get(`preview-${type}`);
 };
 
-export const isInline1Preview = (): boolean => getPreviewVariant('inline1') !== null;
+const isInline1Preview = (): boolean => getPreviewVariant('inline1') !== null;
 const buildSDCUrl = (baseUrl: string, type: ModuleType): string => {
 	const forcedVariant = getForcedVariant(type);
 	const previewVariant = getPreviewVariant(type);
@@ -139,17 +139,17 @@ const setSlotTargeting = (
 
 		if (isPreview) {
 			window.googletag.setConfig({
-				targeting:
-					{ nba_preview: 'true' }
-			})
+				targeting: { nba_preview: 'true' },
+			});
 		}
 
 		// Set targeting on slot
 		advert.slot.setConfig({
 			targeting: {
 				nba_id: responseData.meta.campaignCode,
-				nba_pb: !isPreview && !!responseData.bid ? responseData.bid : ''
-			}
+				nba_pb:
+					!isPreview && !!responseData.bid ? responseData.bid : '',
+			},
 		});
 	}
 };
