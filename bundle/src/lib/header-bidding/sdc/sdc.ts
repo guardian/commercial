@@ -137,10 +137,13 @@ const setSlotTargeting = (
 	if (responseData) {
 		const isPreview = isInline1Preview();
 
+		const { abTestName: testName, abTestVariant: variantName } =
+			responseData.meta;
+
 		// Set targeting on slot
 		advert.slot.setConfig({
 			targeting: {
-				nba_id: responseData.meta.campaignCode,
+				nba_id: `${testName}:${variantName}`,
 				...(isPreview
 					? { nba_preview: 'true' }
 					: { nba_pb: responseData.bid ?? '' }),
