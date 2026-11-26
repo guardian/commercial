@@ -1,7 +1,6 @@
 import { storage } from '@guardian/libs';
 import type {
 	Inline1Payload,
-	Inline1Props,
 	MessageViewLog,
 } from '@guardian/support-dotcom-components/dist/shared/types';
 import type { Advert } from '../../../define/Advert';
@@ -28,17 +27,29 @@ jest.mock('../../identity/api', () => ({
 	getAuthStatus: jest.fn().mockResolvedValue({ kind: 'SignedOut' }),
 }));
 
-const mockCampaignCode = 'testName:variantName';
-const props = {
-	heading: 'Support us',
-	tracking: { campaignCode: mockCampaignCode },
-} as unknown as Inline1Props;
-
-const bidResponse = {
+const mockBidResponseData = {
+	module: {
+		name: 'inline1',
+		props: {
+			heading: 'Support us',
+			tracking: {
+				campaignCode: 'Testname_variantname',
+				abTestName: 'Testname',
+				abTestVariant: 'variantname',
+			},
+		},
+	},
+	meta: {
+		campaignCode: 'Testname_variantname',
+		abTestName: 'Testname',
+		abTestVariant: 'variantname',
+	},
+};
+const mockBidResponse = {
 	ok: true,
 	json: () =>
 		Promise.resolve({
-			data: { module: { name: 'inline1', props }, meta: {} },
+			data: mockBidResponseData,
 		}),
 };
 
@@ -115,19 +126,7 @@ describe('sdc', () => {
 			['?preview-inline1=', ''],
 		])('previews through GAM with query %s', async (query, selection) => {
 			window.history.replaceState(null, '', `/${query}`);
-			mockFetch.mockResolvedValue({
-				ok: true,
-				json: () =>
-					Promise.resolve({
-						data: {
-							module: { name: 'inline1', props },
-							meta: { campaignCode: mockCampaignCode },
-						},
-						tracking: {
-							campaignCode: mockCampaignCode,
-						},
-					}),
-			});
+			mockFetch.mockResolvedValue(mockBidResponse);
 			const onRender = jest.fn();
 			slot.addEventListener('commercial.sdc-render', onRender);
 
@@ -137,7 +136,7 @@ describe('sdc', () => {
 			expect(new URL(url).searchParams.get('preview')).toBe(selection);
 			expect(advert.slot.setConfig).toHaveBeenCalledWith({
 				targeting: {
-					nba_id: mockCampaignCode,
+					nba_id: 'Testname:variantname',
 					nba_preview: 'true',
 				},
 			});
@@ -145,11 +144,14 @@ describe('sdc', () => {
 			expect(onRender).not.toHaveBeenCalled();
 			expect(window.guardian.commercial?.sdc).toBeUndefined();
 
-			await sdc.onCreativeRender({ id: mockCampaignCode });
+			await sdc.onCreativeRender({ id: 'Testname:variantname' });
 
 			expect(onRender).toHaveBeenCalledTimes(1);
 			expect(window.guardian.commercial?.sdc).toEqual({
-				inline1: { props, slotId: 'dfp-ad--inline1' },
+				inline1: {
+					props: mockBidResponseData.module.props,
+					slotId: 'dfp-ad--inline1',
+				},
 			});
 		});
 
@@ -182,7 +184,7 @@ describe('sdc', () => {
 			async ({ promotedNewsletter, hasNewsletterSignup }) => {
 				window.guardian.config.page.promotedNewsletter =
 					promotedNewsletter;
-				mockFetch.mockResolvedValue(bidResponse);
+				mockFetch.mockResolvedValue(mockBidResponse);
 
 				await sdc.requestBids(advert);
 
@@ -204,7 +206,7 @@ describe('sdc', () => {
 			'requests $host when isDev=$isDev and SDC_URL is unset',
 			async ({ isDev, host }) => {
 				window.guardian.config.page.isDev = isDev;
-				mockFetch.mockResolvedValue(bidResponse);
+				mockFetch.mockResolvedValue(mockBidResponse);
 
 				await sdc.requestBids(advert);
 
@@ -216,7 +218,7 @@ describe('sdc', () => {
 		it('prefers SDC_URL over the stage default', async () => {
 			process.env.SDC_URL = 'http://localhost:8082';
 			window.guardian.config.page.isDev = true;
-			mockFetch.mockResolvedValue(bidResponse);
+			mockFetch.mockResolvedValue(mockBidResponse);
 
 			try {
 				await sdc.requestBids(advert);
@@ -229,7 +231,7 @@ describe('sdc', () => {
 		});
 
 		it('only fetches once however many times it is called', async () => {
-			mockFetch.mockResolvedValue(bidResponse);
+			mockFetch.mockResolvedValue(mockBidResponse);
 
 			await Promise.all([
 				sdc.requestBids(advert),
@@ -270,7 +272,7 @@ describe('sdc', () => {
 				afterEach(() => jest.useRealTimers());
 
 				it('resolves at the timeout and ignores a response that arrives later', async () => {
-					let respond: (value: typeof bidResponse) => void = () =>
+					let respond: (value: typeof mockBidResponse) => void = () =>
 						undefined;
 					mockFetch.mockReturnValue(
 						new Promise((resolve) => {
@@ -284,7 +286,7 @@ describe('sdc', () => {
 					);
 					await expect(request).resolves.toBeUndefined();
 
-					respond(bidResponse);
+					respond(mockBidResponse);
 					await jest.advanceTimersByTimeAsync(0);
 
 					expect(advert.slot.setConfig).not.toHaveBeenCalled();
@@ -293,7 +295,7 @@ describe('sdc', () => {
 				});
 
 				it('clears the timer when the request completes in time', async () => {
-					mockFetch.mockResolvedValue(bidResponse);
+					mockFetch.mockResolvedValue(mockBidResponse);
 
 					await sdc.requestBids(advert);
 
@@ -314,7 +316,7 @@ describe('sdc', () => {
 				'gu.history.weeklyArticleCount',
 				weeklyArticleHistory,
 			);
-			mockFetch.mockResolvedValue(bidResponse);
+			mockFetch.mockResolvedValue(mockBidResponse);
 			await sdc.requestBids(advert);
 
 			const call = mockFetch.mock.calls[0] as [
@@ -340,7 +342,7 @@ describe('sdc', () => {
 		});
 
 		it('adds correct auth headers if user is signed in', async () => {
-			mockFetch.mockResolvedValue(bidResponse);
+			mockFetch.mockResolvedValue(mockBidResponse);
 
 			const testAccessToken = 'Test Token';
 			jest.mocked(getAuthStatus).mockResolvedValueOnce({
@@ -368,7 +370,7 @@ describe('sdc', () => {
 				{ date: 1700000000000, testId: 'test-a' },
 			];
 			storage.local.set('gu.inline1.views', viewLog);
-			mockFetch.mockResolvedValue(bidResponse);
+			mockFetch.mockResolvedValue(mockBidResponse);
 			document.cookie = 'gu_hide_support_messaging=true';
 
 			await sdc.requestBids(advert);
@@ -399,7 +401,7 @@ describe('sdc', () => {
 				{ date: 1700000000000, testId: 'test-a' },
 			];
 			storage.local.set('gu.inline1.views', viewLog);
-			mockFetch.mockResolvedValue(bidResponse);
+			mockFetch.mockResolvedValue(mockBidResponse);
 
 			document.cookie = `gu.contributions.contrib-timestamp=${Date.now()}`;
 
@@ -431,7 +433,7 @@ describe('sdc', () => {
 				{ date: 1700000000000, testId: 'test-a' },
 			];
 			storage.local.set('gu.inline1.views', viewLog);
-			mockFetch.mockResolvedValue(bidResponse);
+			mockFetch.mockResolvedValue(mockBidResponse);
 
 			jest.mocked(isUserLoggedIn).mockResolvedValueOnce(true);
 
@@ -467,7 +469,7 @@ describe('sdc', () => {
 				{ date: 1700000000000, testId: 'test-a' },
 			];
 			storage.local.set('gu.inline1.views', viewLog);
-			mockFetch.mockResolvedValue(bidResponse);
+			mockFetch.mockResolvedValue(mockBidResponse);
 
 			jest.mocked(isUserLoggedIn).mockResolvedValueOnce(true);
 
@@ -509,8 +511,7 @@ describe('sdc', () => {
 				json: () =>
 					Promise.resolve({
 						data: {
-							module: { name: 'inline1', props },
-							meta: { campaignCode: mockCampaignCode },
+							...mockBidResponseData,
 							bid: '0.01',
 						},
 					}),
@@ -520,7 +521,7 @@ describe('sdc', () => {
 
 			expect(advert.slot.setConfig).toHaveBeenCalledTimes(1);
 			expect(advert.slot.setConfig).toHaveBeenCalledWith({
-				targeting: { nba_pb: '0.01', nba_id: mockCampaignCode },
+				targeting: { nba_pb: '0.01', nba_id: 'Testname:variantname' },
 			});
 		});
 
@@ -538,28 +539,31 @@ describe('sdc', () => {
 
 	describe('onCreativeRender', () => {
 		it('returns the props, sets them on the window and notifies the slot', async () => {
-			mockFetch.mockResolvedValue(bidResponse);
+			mockFetch.mockResolvedValue(mockBidResponse);
 			await sdc.requestBids(advert);
 
 			const onRender = jest.fn();
 			slot.addEventListener('commercial.sdc-render', onRender);
 
-			await sdc.onCreativeRender({ id: mockCampaignCode });
+			await sdc.onCreativeRender({ id: 'Testname:variantname' });
 
 			expect(window.guardian.commercial?.sdc).toEqual({
-				inline1: { props, slotId: 'dfp-ad--inline1' },
+				inline1: {
+					props: mockBidResponseData.module.props,
+					slotId: 'dfp-ad--inline1',
+				},
 			});
 			expect(onRender).toHaveBeenCalledTimes(1);
 			expect(
 				(onRender.mock.calls[0] as [CustomEvent<unknown>])[0].detail,
-			).toEqual({ props });
+			).toEqual({ props: mockBidResponseData.module.props });
 		});
 
 		it('returns null and does nothing when no bid was requested', async () => {
 			const onRender = jest.fn();
 			slot.addEventListener('commercial.sdc-render', onRender);
 
-			await sdc.onCreativeRender({ id: mockCampaignCode });
+			await sdc.onCreativeRender({ id: 'Testname:variantname' });
 
 			expect(window.guardian.commercial?.sdc).toBeUndefined();
 			expect(onRender).not.toHaveBeenCalled();
@@ -572,12 +576,12 @@ describe('sdc', () => {
 			});
 			await sdc.requestBids(advert);
 
-			await sdc.onCreativeRender({ id: mockCampaignCode });
+			await sdc.onCreativeRender({ id: 'Testname:variantname' });
 			expect(window.guardian.commercial?.sdc).toBeUndefined();
 		});
 
 		it('returns null when the campaignCode does not match the event ID', async () => {
-			mockFetch.mockResolvedValue(bidResponse);
+			mockFetch.mockResolvedValue(mockBidResponse);
 			await sdc.requestBids(advert);
 
 			await sdc.onCreativeRender({ id: 'a-different-id' });
