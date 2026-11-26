@@ -1,7 +1,19 @@
-import { extractRelevantIabTaxonomyTags } from './iabTaxonomyHelpers';
+import {
+	extractRelevantIabTaxonomyTags,
+	mapTaxonomyToSegtax,
+} from './iab-taxonomy';
+
+describe('mapTaxonomyToSegtax', () => {
+	it('should map IAB_CONTENT_2_2 to segtax 6', () => {
+		expect(mapTaxonomyToSegtax('IAB_CONTENT_2_2')).toBe('6');
+	});
+
+	it('should map IAB_CONTENT_3_0 to segtax 7', () => {
+		expect(mapTaxonomyToSegtax('IAB_CONTENT_3_0')).toBe('7');
+	});
+});
 
 describe('extractRelevantIabTaxonomyTags', () => {
-	const taxonomy = 'IAB_CONTENT_2_2';
 	const model = 'primary_v1';
 
 	it('should generate IAB taxonomy tags for GAM correctly', () => {
@@ -12,7 +24,7 @@ describe('extractRelevantIabTaxonomyTags', () => {
 			'commercial/iab/primary_secondary_v1/6/104',
 		];
 
-		const result = extractRelevantIabTaxonomyTags(tags, model, taxonomy);
+		const result = extractRelevantIabTaxonomyTags(tags, model);
 
 		expect(result).toEqual(['102']);
 	});
@@ -23,7 +35,7 @@ describe('extractRelevantIabTaxonomyTags', () => {
 			'commercial/iab/primary_secondary_v1/6/104',
 		];
 
-		const result = extractRelevantIabTaxonomyTags(tags, model, taxonomy);
+		const result = extractRelevantIabTaxonomyTags(tags, model);
 
 		expect(result).toEqual([]);
 	});
@@ -31,7 +43,7 @@ describe('extractRelevantIabTaxonomyTags', () => {
 	it('should return an empty array when no tags provided', () => {
 		const tags: string[] = [];
 
-		const result = extractRelevantIabTaxonomyTags(tags, model, taxonomy);
+		const result = extractRelevantIabTaxonomyTags(tags, model);
 
 		expect(result).toEqual([]);
 	});
@@ -44,7 +56,7 @@ describe('extractRelevantIabTaxonomyTags', () => {
 			'commercial-iab-primary_v1-9-101',
 		];
 
-		const result = extractRelevantIabTaxonomyTags(tags, model, taxonomy);
+		const result = extractRelevantIabTaxonomyTags(tags, model);
 
 		expect(result).toEqual([]);
 	});

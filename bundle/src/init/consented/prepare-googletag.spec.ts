@@ -8,7 +8,7 @@ import { loadScript } from '@guardian/libs';
 import type { Advert } from '../../define/Advert';
 import { getCurrentBreakpoint as getCurrentBreakpoint_ } from '../../lib/detect/detect-breakpoint';
 import { dfpEnv } from '../../lib/dfp/dfp-env';
-import { extractRelevantIabTaxonomyTags } from '../../lib/iabTaxonomyHelpers';
+import { extractRelevantIabTaxonomyTags } from '../../lib/iab-taxonomy';
 import * as pageTargeting from '../../lib/page-targeting';
 import { shouldLoadAds } from '../../lib/should-load-ads';
 import { prepareGoogletag } from './prepare-googletag';
@@ -148,7 +148,7 @@ jest.mock('lib/should-load-ads', () => ({
 	shouldLoadAds: jest.fn(),
 }));
 
-jest.mock('../../lib/iabTaxonomyHelpers', () => ({
+jest.mock('../../lib/iab-taxonomy', () => ({
 	extractRelevantIabTaxonomyTags: jest.fn(),
 }));
 
@@ -798,7 +798,6 @@ describe('DFP', () => {
 			expect(mockExtractRelevantIabTaxonomyTags).toHaveBeenCalledWith(
 				testIabTags,
 				expect.any(String),
-				'IAB_CONTENT_2_2',
 			);
 		});
 	});
