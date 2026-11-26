@@ -13,6 +13,15 @@ import { isUserInTestGroup } from '../../../ab-testing';
 import type { Advert } from '../../../define/Advert';
 import { getAdvertById } from '../../dfp/get-advert-by-id';
 import { getAuctionTimeoutValue } from '../../header_bidder_timeouts';
+import {
+	CURRENT_TAXONOMY,
+	extractRelevantIabTaxonomyTags,
+	mapTaxonomyToSegtax,
+} from '../../iab-taxonomy';
+import {
+	getIabTaxonomyAbTestGroup,
+	isInIabTaxonomyTestVariant,
+} from '../../iab-taxonomy-ab-test';
 import { isUserLoggedIn } from '../../identity/api';
 import { getPageTargeting } from '../../page-targeting';
 import type { SlotFlatMap } from '../prebid-types';
@@ -93,6 +102,42 @@ const initialise = async (
 		pbjs.mergeConfig({
 			realTimeData: configurePermutive(consentState),
 		});
+	}
+
+	const iabTaxonomyAbTestGroup = getIabTaxonomyAbTestGroup();
+	const iabTaxonomyData =
+		window.guardian.config.page.pageAdTargeting?.iabtaxonomytags;
+
+	if (
+		isInIabTaxonomyTestVariant(iabTaxonomyAbTestGroup) &&
+		Array.isArray(iabTaxonomyData)
+	) {
+		const iabTaxonomyTags = extractRelevantIabTaxonomyTags(
+			iabTaxonomyData,
+			iabTaxonomyAbTestGroup,
+		);
+
+		if (iabTaxonomyTags.length > 0) {
+			const data = {
+				name: 'iab_content_taxonomy',
+				ext: {
+					segtax: mapTaxonomyToSegtax(CURRENT_TAXONOMY),
+				},
+				segment: iabTaxonomyTags.map((tag) => ({
+					id: tag,
+				})),
+			};
+
+			pbjs.mergeConfig({
+				ortb2: {
+					site: {
+						content: {
+							data: [data],
+						},
+					},
+				},
+			});
+		}
 	}
 
 	/**

@@ -4,6 +4,14 @@ import { hashEmailForClient } from '@guardian/commercial-core/email-hash';
 import { type ConsentState, getConsentFor } from '@guardian/consent-manager';
 import { pubmatic } from '../../__vendor/pubmatic';
 import { getAdvertById as getAdvertById_ } from '../../dfp/get-advert-by-id';
+import {
+	extractRelevantIabTaxonomyTags,
+	mapTaxonomyToSegtax,
+} from '../../iab-taxonomy';
+import {
+	getIabTaxonomyAbTestGroup,
+	isInIabTaxonomyTestVariant,
+} from '../../iab-taxonomy-ab-test';
 import { getEmail } from '../../identity/api';
 import { shouldIncludeBidder, shouldIncludePermutive } from '../utils';
 import { prebid } from '.';
@@ -47,6 +55,16 @@ jest.mock('@guardian/commercial-core/email-hash', () => ({
 
 jest.mock('../../../ab-testing', () => ({
 	isUserInTestGroup: jest.fn(),
+}));
+
+jest.mock('../../iab-taxonomy-ab-test', () => ({
+	getIabTaxonomyAbTestGroup: jest.fn().mockReturnValue(null),
+	isInIabTaxonomyTestVariant: jest.fn().mockReturnValue(false),
+}));
+
+jest.mock('../../iab-taxonomy', () => ({
+	extractRelevantIabTaxonomyTags: jest.fn().mockReturnValue([]),
+	mapTaxonomyToSegtax: jest.fn().mockReturnValue('6'),
 }));
 
 const mockGetConsentForID5 = (hasConsent: boolean) =>
@@ -601,4 +619,59 @@ describe('Prebid.js bidWon Events', () => {
 			expect(getAdvertById).not.toHaveBeenCalled();
 		},
 	);
+});
+
+describe('IAB taxonomy integration', () => {
+	beforeEach(() => {
+		jest.mocked(shouldIncludeBidder).mockReturnValue(
+			jest.fn().mockReturnValue(true),
+		);
+		window.guardian.config.page.pageAdTargeting = {
+			iabtaxonomytags: undefined,
+		};
+	});
+
+	test('should not include taxonomy data if not an array', async () => {
+		window.guardian.config.page.pageAdTargeting = {
+			iabtaxonomytags: 'not-an-array',
+		};
+
+		await prebid.initialise(window, mockConsentState);
+
+		const config = window.pbjs.getConfig();
+		expect(config?.ortb2?.site?.content?.data).toBeUndefined();
+	});
+
+	test('should not include taxonomy data if iabtaxonomytags array is empty', async () => {
+		window.guardian.config.page.pageAdTargeting = {
+			iabtaxonomytags: [],
+		};
+
+		await prebid.initialise(window, mockConsentState);
+
+		const config = window.pbjs.getConfig();
+		expect(config?.ortb2?.site?.content?.data).toBeUndefined();
+	});
+
+	test('prebid config should include IAB taxonomy data', async () => {
+		jest.mocked(getIabTaxonomyAbTestGroup).mockReturnValue('primary_v1');
+		jest.mocked(isInIabTaxonomyTestVariant).mockReturnValue(true);
+		jest.mocked(extractRelevantIabTaxonomyTags).mockReturnValue(['100']);
+		jest.mocked(mapTaxonomyToSegtax).mockReturnValue('6');
+
+		window.guardian.config.page.pageAdTargeting = {
+			iabtaxonomytags: ['100'],
+		};
+
+		await prebid.initialise(window, mockConsentState);
+
+		const config = window.pbjs.getConfig();
+		expect(config?.ortb2?.site?.content?.data).toEqual([
+			{
+				name: 'iab_content_taxonomy',
+				ext: { segtax: '6' },
+				segment: [{ id: '100' }],
+			},
+		]);
+	});
 });

@@ -2,9 +2,15 @@ import { EventTimer } from '@guardian/commercial-core/event-timer';
 import type { ConsentState } from '@guardian/consent-manager';
 import { getConsentFor, onConsent } from '@guardian/consent-manager';
 import { loadScript, log } from '@guardian/libs';
-import { isUserInTestGroup } from '../../ab-testing';
 import { isSwitchedOn } from '../../lib/header-bidding/utils';
-import { extractRelevantIabTaxonomyTags } from '../../lib/iabTaxonomyHelpers';
+import {
+	CURRENT_TAXONOMY,
+	extractRelevantIabTaxonomyTags,
+} from '../../lib/iab-taxonomy';
+import {
+	getIabTaxonomyAbTestGroup,
+	isInIabTaxonomyTestVariant,
+} from '../../lib/iab-taxonomy-ab-test';
 import { getGoogleTagId, isUserLoggedIn } from '../../lib/identity/api';
 import { getPageTargeting } from '../../lib/page-targeting';
 import { shouldLoadAds } from '../../lib/should-load-ads';
@@ -92,23 +98,14 @@ const setPublisherProvidedSignalsConfig = (consentState: ConsentState) => {
 		return;
 	}
 
-	const isInPrimaryVariant = isUserInTestGroup(
-		'commercial-iab-taxonomy',
-		'variant-primary',
-	);
-	const isInPrimarySecondaryVariant = isUserInTestGroup(
-		'commercial-iab-taxonomy',
-		'variant-primary-secondary',
-	);
-
-	const isInAbTest = isInPrimaryVariant || isInPrimarySecondaryVariant;
-	if (!isInAbTest) {
+	const iabTaxonomyAbTestGroup = getIabTaxonomyAbTestGroup();
+	const isInTestVariant = isInIabTaxonomyTestVariant(iabTaxonomyAbTestGroup);
+	if (!isInTestVariant) {
 		return;
 	}
 
 	const iabTaxonomyData =
 		window.guardian.config.page.pageAdTargeting?.iabtaxonomytags;
-
 	if (
 		!Array.isArray(iabTaxonomyData) ||
 		iabTaxonomyData.length === 0 ||
@@ -117,18 +114,10 @@ const setPublisherProvidedSignalsConfig = (consentState: ConsentState) => {
 		return;
 	}
 
-	/**
-	 * This is currently the only taxonomy supported by GAM.
-	 */
-	const taxonomy = 'IAB_CONTENT_2_2';
-
-	const variant = isInPrimaryVariant ? 'primary_v1' : 'primary_secondary_v1';
 	const tags = extractRelevantIabTaxonomyTags(
 		iabTaxonomyData,
-		variant,
-		taxonomy,
+		iabTaxonomyAbTestGroup,
 	);
-
 	if (tags.length === 0) {
 		return;
 	}
@@ -136,7 +125,7 @@ const setPublisherProvidedSignalsConfig = (consentState: ConsentState) => {
 	window.googletag.setConfig({
 		pps: {
 			taxonomies: {
-				[taxonomy]: { values: tags },
+				[CURRENT_TAXONOMY]: { values: tags },
 			},
 		},
 	});

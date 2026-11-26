@@ -13,52 +13,46 @@ const isDataScienceApiModel = (value: unknown): value is DataScienceApiModel =>
 	dataScienceApiModels.some((model) => model === value);
 
 /**
+ * https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/main/AdCOM%20v1.0%20FINAL.md#list_categorytaxonomies
+ * Maps segtax identifiers to their corresponding IAB taxonomy names.
+ */
+const SEGTAX_TO_TAXONOMY = {
+	'3': 'IAB_AD_PRODUCT_1_0',
+	'4': 'IAB_AUDIENCE_1_1',
+	'5': 'IAB_CONTENT_2_1',
+	'6': 'IAB_CONTENT_2_2',
+	'7': 'IAB_CONTENT_3_0',
+	'8': 'IAB_CONTENT_2_0',
+	'9': 'IAB_CONTENT_3_1',
+} as const;
+
+/**
  * Segment Taxonomies. Used as an identifier for a taxonomy.
  */
-const validSegtax = ['3', '4', '5', '6', '7', '8', '9'] as const;
-
-type Segtax = (typeof validSegtax)[number];
+type Segtax = keyof typeof SEGTAX_TO_TAXONOMY;
 
 const isSegtax = (value: unknown): value is Segtax =>
-	typeof value === 'string' && validSegtax.some((segtax) => segtax === value);
+	typeof value === 'string' && value in SEGTAX_TO_TAXONOMY;
 
 /**
  * Represents the list of taxonomies defined by the IAB for categorising content and audience.
  */
-const validTaxonomies = [
-	'IAB_AD_PRODUCT_1_0',
-	'IAB_AUDIENCE_1_1',
-	'IAB_CONTENT_2_1',
-	'IAB_CONTENT_2_2',
-	'IAB_CONTENT_3_0',
-	'IAB_CONTENT_2_0',
-	'IAB_CONTENT_3_1',
-] as const;
+type Taxonomy = (typeof SEGTAX_TO_TAXONOMY)[Segtax];
 
-type Taxonomy = (typeof validTaxonomies)[number];
+/**
+ * This is currently the only taxonomy supported by GAM.
+ */
+const CURRENT_TAXONOMY: Taxonomy = 'IAB_CONTENT_2_2';
 
-const isTaxonomy = (value: unknown): value is Taxonomy =>
-	typeof value === 'string' &&
-	validTaxonomies.some((taxonomy) => taxonomy === value);
+const mapSegtaxToTaxonomy = (segtax: Segtax): Taxonomy =>
+	SEGTAX_TO_TAXONOMY[segtax];
 
-// https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/main/AdCOM%20v1.0%20FINAL.md#list_categorytaxonomies
-const mapSegtaxToTaxonomy = (segtax: Segtax): Taxonomy => {
-	switch (segtax) {
-		case '3':
-			return 'IAB_AD_PRODUCT_1_0';
-		case '4':
-			return 'IAB_AUDIENCE_1_1';
-		case '5':
-			return 'IAB_CONTENT_2_1';
-		case '6':
-			return 'IAB_CONTENT_2_2';
-		case '7':
-			return 'IAB_CONTENT_3_0';
-		case '8':
-			return 'IAB_CONTENT_2_0';
-		case '9':
-			return 'IAB_CONTENT_3_1';
-	}
+const mapTaxonomyToSegtax = (taxonomy: Taxonomy): Segtax | undefined => {
+	const reverseMap = Object.fromEntries(
+		Object.entries(SEGTAX_TO_TAXONOMY).map(([key, val]) => [val, key]),
+	) as Record<Taxonomy, Segtax>;
+
+	return reverseMap[taxonomy];
 };
 
 /**
@@ -67,11 +61,11 @@ const mapSegtaxToTaxonomy = (segtax: Segtax): Taxonomy => {
  * - the model used by the Data Science API, e.g. 'primary_v1'
  *
  * iabTaxonomyData is expected to be in the form: commercial/iab/{model}/{segtax}/{tag}
+ * E.g 'commercial/iab/primary_v1/7/216'
  */
 const extractRelevantIabTaxonomyTags = (
 	iabTaxonomyData: string[],
 	model: DataScienceApiModel,
-	taxonomy: Taxonomy,
 ): string[] =>
 	iabTaxonomyData.reduce<string[]>((acc, raw) => {
 		const segments = raw.split('/');
@@ -90,7 +84,8 @@ const extractRelevantIabTaxonomyTags = (
 		const isCorrectModel =
 			isDataScienceApiModel(modelId) && modelId === model;
 		const isCorrectTaxonomy =
-			isSegtax(segtax) && mapSegtaxToTaxonomy(segtax) === taxonomy;
+			isSegtax(segtax) &&
+			mapSegtaxToTaxonomy(segtax) === CURRENT_TAXONOMY;
 
 		if (!isCorrectModel || !isCorrectTaxonomy) {
 			return acc;
@@ -100,8 +95,9 @@ const extractRelevantIabTaxonomyTags = (
 	}, []);
 
 export {
+	CURRENT_TAXONOMY,
 	extractRelevantIabTaxonomyTags,
-	isTaxonomy,
+	mapTaxonomyToSegtax,
 	type DataScienceApiModel,
 	type Segtax,
 	type Taxonomy,
