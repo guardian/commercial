@@ -137,10 +137,13 @@ const setSlotTargeting = (
 	if (responseData) {
 		const isPreview = isInline1Preview();
 
+		const { abTestName: testName, abTestVariant: variantName } =
+			responseData.meta;
+
 		// Set targeting on slot
 		advert.slot.setConfig({
 			targeting: {
-				nba_id: responseData.meta.campaignCode,
+				nba_id: `${testName}:${variantName}`,
 				...(isPreview
 					? { nba_preview: 'true' }
 					: { nba_pb: responseData.bid ?? '' }),
@@ -212,11 +215,12 @@ const onCreativeRender = async (event: unknown = {}): Promise<void> => {
 		return;
 	}
 
+	const expectedNbaId = `${props.tracking.abTestName}:${props.tracking.abTestVariant}`;
 	// Check if the ID returned from the creative matches the intended ID of the campaign
-	if (props.tracking.campaignCode !== event.id) {
+	if (expectedNbaId !== event.id) {
 		log(
 			'commercial',
-			`ID from creative ${event.id} does not match SDC response ${props.tracking.campaignCode}`,
+			`ID from creative ${event.id} does not match SDC response ${expectedNbaId}`,
 		);
 		return;
 	}
