@@ -102,12 +102,9 @@ export default [
 	},
 	{
 		files: ['cdk/**/*.ts'],
-		ignores: [
-			'bundle/src/**/*.ts',
-			'core/src/**/*.ts'
-		],
+		ignores: ['bundle/src/**/*.ts', 'core/src/**/*.ts'],
 		languageOptions: {
-			globals: globalConfigs.node
+			globals: globalConfigs.node,
 		},
 		rules,
 	},
