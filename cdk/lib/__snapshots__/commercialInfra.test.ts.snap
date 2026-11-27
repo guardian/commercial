@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`The CommercialInfra stack matches the snapshot 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuDeveloperPolicy",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Parameters": {
+    "SsmParameterValueorganisationaccountsartifactsC96584B6F00A464EAD1953AFF4B05118Parameter": {
+      "Default": "/organisation/accounts/artifacts",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "RunDCRLocallyPolicyA1BFBFFF": {
+      "Properties": {
+        "Description": "Run DCR locally for development on the commercial bundle",
+        "Path": "/developer-policy/guardian/commercial/frontend/INFRA/commercial-dcr-dev/",
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "ecr:BatchGetImage",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ecr:eu-west-1:",
+                    {
+                      "Ref": "SsmParameterValueorganisationaccountsartifactsC96584B6F00A464EAD1953AFF4B05118Parameter",
+                    },
+                    ":repository/guardian/dotcom-rendering",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "ssm:GetParameter",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:eu-west-1:",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/organisation/accounts/artifacts",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::ManagedPolicy",
+    },
+  },
+}
+`;
