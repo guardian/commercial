@@ -1,4 +1,4 @@
-import { GuStack, GuStackProps } from "@guardian/cdk/lib/constructs/core";
+import { GuStack, type GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuDeveloperPolicy } from "@guardian/cdk/lib/constructs/iam";
 import type { App } from "aws-cdk-lib";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
@@ -11,7 +11,6 @@ export class CommercialInfra extends GuStack {
       stack: props.stack,
       stage: props.stage
     });
-
 
     const artifactsAccountId = StringParameter.valueForStringParameter(
       this,

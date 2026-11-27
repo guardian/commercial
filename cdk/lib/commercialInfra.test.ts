@@ -1,6 +1,6 @@
+import { App } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import { CommercialInfra } from './commercialInfra';
-import { App } from 'aws-cdk-lib';
 
 describe('The CommercialInfra stack', () => {
   it('matches the snapshot', () => {

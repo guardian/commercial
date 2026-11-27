@@ -47,7 +47,7 @@ export default [
 	{},
 	{
 		files: ['bundle/src/**/*.ts'],
-		ignores: ['core/src/**/*.ts'],
+		ignores: ['core/src/**/*.ts', 'cdk'],
 		languageOptions: {
 			globals,
 		},
@@ -63,7 +63,7 @@ export default [
 	},
 	{
 		files: ['core/src/**/*.ts'],
-		ignores: ['bundle/src/**/*.ts'],
+		ignores: ['bundle/src/**/*.ts', 'cdk'],
 		languageOptions: {
 			globals,
 		},
@@ -99,6 +99,17 @@ export default [
 				},
 			},
 		},
+	},
+	{
+		files: ['cdk/**/*.ts'],
+		ignores: [
+			'bundle/src/**/*.ts',
+			'core/src/**/*.ts'
+		],
+		languageOptions: {
+			globals: globalConfigs.node
+		},
+		rules,
 	},
 	{
 		files: ['**/*.spec.ts'],
