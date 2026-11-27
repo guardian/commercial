@@ -3,6 +3,7 @@ stacks: [frontend]
 allowedStages:
   - CODE
   - PROD
+  - INFRA
 deployments:
   frontend-static/commercial:
     type: aws-s3
